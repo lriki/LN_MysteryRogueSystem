@@ -2908,12 +2908,12 @@ declare namespace JsonEx{
 /**
  * 
  */
-declare namespace rmmz_core.js{
+//declare namespace rmmz_core.js{
 	
 	/**
 	 * 
 	 */
-	interface Array {
+	declare interface Array {
 		
 		/**
 		 * 
@@ -2968,7 +2968,7 @@ declare namespace rmmz_core.js{
 	/**
 	 * 
 	 */
-	interface String {
+	declare interface String {
 		
 		/**
 		 * 
@@ -3013,12 +3013,12 @@ declare namespace rmmz_core.js{
 	/**
 	 * 
 	 */
-	interface Number {
+	declare interface Number {
 		
 		/**
 		 * 
 		 */
-		prototype : {
+		//prototype : {
 						
 			/**
 			 * Returns a number whose value is limited to the given range.
@@ -3054,13 +3054,13 @@ declare namespace rmmz_core.js{
 			 * @return  
 			 */
 			padZero(length : number): string;
-		}
+		//}
 	}
 	
 	/**
 	 * 
 	 */
-	interface Math {
+	declare interface Math {
 				
 		/**
 		 * Generates a random integer in the range (0, max-1).
@@ -3073,4 +3073,4 @@ declare namespace rmmz_core.js{
 		 */
 		randomInt(max : number): number;
 	}
-}
+//}

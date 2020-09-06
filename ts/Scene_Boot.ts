@@ -1,4 +1,4 @@
-import { RE_DataManager } from "./DataManager";
+import { RE_DataManager } from "./RE_DataManager";
 
 
 var _Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;

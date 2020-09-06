@@ -1,3 +1,4 @@
+import { RE_DataManager } from "./RE_DataManager";
 
 var _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
@@ -12,6 +13,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     console.log($dataMap);
     if ($dataMap.meta.LNRE_LandMap) {
         console.log("OK");
+        console.log(RE_DataManager.dataEnemyTableMap());
     }
 }
 
