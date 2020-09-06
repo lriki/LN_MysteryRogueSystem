@@ -1,8 +1,7 @@
-import { RE_DataManager } from "./RE_DataManager";
+import { RE_DataManager } from "./RE/RE_DataManager";
 
 var _Scene_Map_isReady = Scene_Map.prototype.isReady;
 Scene_Map.prototype.isReady = function() {
-
     if (RE_DataManager.landMapDataLoading) {
         if (DataManager.isMapLoaded()) {
             // Land 定義マップの読み込みがすべて終わった
@@ -28,8 +27,5 @@ Scene_Map.prototype.isReady = function() {
 
 var _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
 Scene_Map.prototype.onMapLoaded = function() {
-    console.log("--- _Scene_Map_onMapLoaded ---");
-    console.log("$dataMap", $dataMap);
-    console.log("RE_DataManager.dataLandDefinitionMap", RE_DataManager.dataLandDefinitionMap);
     return _Scene_Map_onMapLoaded.call(this);
 }

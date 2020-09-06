@@ -1,4 +1,5 @@
-import { RE_DataManager } from "./RE_DataManager";
+import { RE_DataManager } from "./RE/RE_DataManager";
+import { RE_Game } from "./RE/RE_Game";
 
 const _DataManager_loadMapData = DataManager.loadMapData;
 DataManager.loadMapData = function(mapId) {
@@ -16,19 +17,14 @@ DataManager.loadMapData = function(mapId) {
         this.loadDataFile("RE_dataItemTableMap", itemTable_filename);
         this.loadDataFile("RE_dataEnemyTableMap", enemyTable_filename);
         this.loadDataFile("RE_dataTrapTableMap", trapTable_ilename);
-        
-        console.log("Load def maps.");
     }
     else {
         RE_DataManager.landMapDataLoading = false;
     }
 };
 
-
-
 const _DataManager_isMapLoaded = DataManager.isMapLoaded;
 DataManager.isMapLoaded = function() {
-
     const result = _DataManager_isMapLoaded.call(DataManager);
     if (result) {
         if (RE_DataManager.landMapDataLoading) {
@@ -44,7 +40,10 @@ DataManager.isMapLoaded = function() {
     else {
         return false;
     }
-
-    this.checkError();
-    return !!$dataMap;
 };
+
+const _DataManager_createGameObjects = DataManager.createGameObjects;
+DataManager.createGameObjects = function() {
+    _DataManager_createGameObjects.call(DataManager);
+    RE_Game.createGameObjects();
+}

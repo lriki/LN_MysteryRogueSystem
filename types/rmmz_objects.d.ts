@@ -181,10 +181,6 @@ declare namespace Game_Map.prototype {
     // Game_Map.prototype.allTiles.!ret
     type AllTilesRet = Array<number>;
 }
-declare namespace Game_Event.prototype {
-    // Game_Event.prototype.isTriggerIn.!0
-    type IsTriggerIn0 = Array<number>;
-}
 declare namespace Game_Interpreter.prototype {
     // Game_Interpreter.prototype.iterateActorId.!1
     type IterateActorId1 = ((battler: Game_Actor) => void);

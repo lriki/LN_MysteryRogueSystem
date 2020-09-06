@@ -1,4 +1,4 @@
-import { assert } from "./Common";
+import { assert } from "../Common";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor } from "./RE_Data";
 
 export class RE_Data
