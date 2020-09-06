@@ -1,5 +1,5 @@
 import { assert } from "./Common";
-import { RE_Data_EntityKind } from "./Data";
+import { RE_Data_EntityKind, RE_Data_Actor } from "./Data";
 
 export class RE_Data
 {
@@ -20,11 +20,12 @@ export class RE_Data
     static MonsterKindId: number;
     
     
-    static itemGroups: RE_Data_EntityKind[];
+    static actors: RE_Data_Actor[] = [];
+    static entityKinds: RE_Data_EntityKind[] = [];
 
     static addEntityKind(name: string): number {
-        const newId = this.itemGroups.length + 1;
-        this.itemGroups.push({
+        const newId = this.entityKinds.length + 1;
+        this.entityKinds.push({
             id: newId,
             name: name
         });
@@ -55,6 +56,16 @@ export class RE_DataManager
         RE_Data.TrapKindId = RE_Data.addEntityKind("罠");
         RE_Data.FigurineKindId = RE_Data.addEntityKind("土偶");
         RE_Data.MonsterKindId = RE_Data.addEntityKind("モンスター");
+        
+        RE_Data.actors = $dataActors.map((x) => {
+            if (x) 
+                return {
+                    id: x.id ?? 0,
+                    name: x.name ?? "",
+                };
+            else
+                return { id: 0, name: "null" };
+        });
     }
 
 
