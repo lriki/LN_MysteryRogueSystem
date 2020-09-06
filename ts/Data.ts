@@ -81,3 +81,45 @@ export interface RE_Data_Actor
 
 
 
+
+
+/**
+ * ダンジョンや町ひとつ分。
+ */
+export interface RE_Data_Land
+{
+    /** ID (0 is Invalid). */
+    id : number;
+
+    /** Land に対応するツクール MapId. */
+    mapId: number;
+
+    /** EventTable MapId. */
+    eventTableMapId: number;
+    
+    /** ItemTable MapId. */
+    itemTableMapId: number;
+    
+    /** EnemeyTable MapId. */
+    enemyTableMapId: number;
+    
+    /** TrapTable MapId. */
+    trapTableMapId: number;
+
+    /** Land に含まれるフロア。要素数はダンジョンのフロア数に等しい。([0] is Invalid) */
+    //floorIds: number[];
+}
+
+/**
+ * フロアひとつ分。
+ * 
+ * 負荷軽減のため、各テーブルは Player がダンジョンに入った時にロードされる。
+ */
+export interface RE_Data_Floor
+{
+    /** ID (0 is Invalid). */
+    id : number;
+
+
+
+}

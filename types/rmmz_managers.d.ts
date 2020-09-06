@@ -3147,101 +3147,19 @@ declare namespace PluginManager{
 	function callCommand(self : any, pluginName : any, commandName : any, args : any): void;
 }
 
-/**
- * 
- */
-declare namespace $dataMap{
-		
-	/**
-	 * 
-	 */
-	export var data : Array<any>;
-		
-	/**
-	 * 
-	 */
-	export var events : Array<any>;
-		
-	/**
-	 * 
-	 */
-	export var width : number;
-		
-	/**
-	 * 
-	 */
-	export var height : number;
-		
-	/**
-	 * 
-	 */
-	export var scrollType : number;
-}
-
-/**
- * 
- */
-export declare var $gameTemp : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameSystem : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameScreen : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameTimer : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameMessage : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameSwitches : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameVariables : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameSelfSwitches : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameActors : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameParty : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameTroop : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gameMap : /*no type*/{};
-
-/**
- * 
- */
-export declare var $gamePlayer : /*no type*/{};
+declare var $gameTemp        : Game_Temp;
+declare var $gameSystem      : Game_System;
+declare var $gameScreen      : Game_Screen;
+declare var $gameTimer       : Game_Timer;
+declare var $gameMessage     : Game_Message;
+declare var $gameSwitches    : Game_Switches;
+declare var $gameVariables   : Game_Variables;
+declare var $gameSelfSwitches: Game_SelfSwitches;
+declare var $gameMap         : Game_Map;
+declare var $gameActors      : Game_Actors;
+declare var $gameParty       : Game_Party;
+declare var $gameTroop       : Game_Troop;
+declare var $gamePlayer      : Game_Player;
 
 /**
  * 
