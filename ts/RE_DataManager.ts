@@ -60,11 +60,10 @@ declare global {
 export class RE_DataManager
 {
     static landMapDataLoading: boolean = false;
+    static _dataLandDefinitionMap: IDataMap | undefined = undefined;
 
     static loadData(): void
     {
-        console.log("RE_DataManager.loadData");
-
         RE_Data.addEntityKind("null");
         RE_Data.WeaponKindId = RE_Data.addEntityKind("武器");
         RE_Data.ShieldKindId = RE_Data.addEntityKind("盾");
@@ -125,7 +124,7 @@ export class RE_DataManager
             }
         }
 
-        console.log("lands:", RE_Data.lands);
+        //console.log("lands:", RE_Data.lands);
     }
 
     static findLand(mapId: number): RE_Data_Land | undefined {
@@ -139,6 +138,10 @@ export class RE_DataManager
             return true;
         else
             return false;
+    }
+
+    static dataLandDefinitionMap(): IDataMap | undefined {
+        return this._dataLandDefinitionMap;
     }
 
     static dataEventTableMap(): IDataMap | undefined {

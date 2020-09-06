@@ -16,6 +16,8 @@ DataManager.loadMapData = function(mapId) {
         this.loadDataFile("RE_dataItemTableMap", itemTable_filename);
         this.loadDataFile("RE_dataEnemyTableMap", enemyTable_filename);
         this.loadDataFile("RE_dataTrapTableMap", trapTable_ilename);
+        
+        console.log("Load def maps.");
     }
     else {
         RE_DataManager.landMapDataLoading = false;
