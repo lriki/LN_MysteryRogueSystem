@@ -9,13 +9,54 @@
  * 
  * The superclass of all scenes within the game.
  */
-declare interface Scene_Base {
-		
+declare class Scene_Base {
+
 	/**
 	 * 
 	 * @return  
 	 */
-	new (): Scene_Base;
+    new(): Scene_Base;
+
+    initialize(): void;
+    create(): void;
+    isActive(): boolean;
+    isReady(): boolean;
+    start(): void;
+    update(): void;
+    stop(): void;
+    isStarted(): boolean;
+    isBusy(): boolean;
+    isFading(): boolean;
+    terminate(): void;
+    createWindowLayer(): void;
+    addWindow(window: Window_Base): void;
+    startFadeIn(duration: number, white: boolean): void;
+    startFadeOut(duration: number, white: boolean): void;
+    startFadeOut(): void;
+    updateColorFilter(): void;
+    updateFade(): void;
+    updateChildren(): void;
+    popScene(): void;
+    checkGameover(): void;
+    fadeOutAll(): void;
+    fadeSpeed(): number;
+    slowFadeSpeed(): number;
+    scaleSprite(): void;
+    centerSprite(sprite: Sprite_Base): void;
+    isBottomHelpMode(): boolean;
+    isBottomButtonMode(): boolean;
+    isRightInputMode(): boolean;
+    mainCommandWidth(): number;
+    buttonAreaTop(): number;
+    buttonAreaBottom(): number;
+    buttonAreaHeight(): number;
+    buttonY(): number;
+    calcWindowHeight(numLines: number, selectable: boolean): number;
+    requestAutosave(): void;
+    isAutosaveEnabled(): boolean;
+    executeAutosave(): void;
+    onAutosaveSuccess(): void;
+    onAutosaveFailure(): void;
 }
 
 
@@ -25,94 +66,94 @@ declare interface Scene_Base {
  * 
  * The scene class for initializing the entire game.
  */
-declare interface Scene_Boot {
-		
+declare class Scene_Boot {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	isReady(): boolean;
-		
-	/**
-	 * 
-	 */
-	onDatabaseLoaded(): void;
-		
-	/**
-	 * 
-	 */
-	setEncryptionInfo(): void;
-		
-	/**
-	 * 
-	 */
-	loadSystemImages(): void;
-		
-	/**
-	 * 
-	 */
-	loadPlayerData(): void;
-		
-	/**
-	 * 
-	 */
-	loadGameFonts(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isPlayerDataLoaded(): boolean;
-		
+    isReady(): boolean;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    onDatabaseLoaded(): void;
+
 	/**
 	 * 
 	 */
-	startNormalGame(): void;
-		
+    setEncryptionInfo(): void;
+
 	/**
 	 * 
 	 */
-	resizeScreen(): void;
-		
+    loadSystemImages(): void;
+
 	/**
 	 * 
 	 */
-	adjustBoxSize(): void;
-		
+    loadPlayerData(): void;
+
 	/**
 	 * 
 	 */
-	adjustWindow(): void;
-		
+    loadGameFonts(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isPlayerDataLoaded(): boolean;
+
 	/**
 	 * 
 	 */
-	updateDocumentTitle(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	checkPlayerLocation(): void;
+    startNormalGame(): void;
+
+	/**
+	 * 
+	 */
+    resizeScreen(): void;
+
+	/**
+	 * 
+	 */
+    adjustBoxSize(): void;
+
+	/**
+	 * 
+	 */
+    adjustWindow(): void;
+
+	/**
+	 * 
+	 */
+    updateDocumentTitle(): void;
+
+	/**
+	 * 
+	 */
+    checkPlayerLocation(): void;
 }
 
 /**
@@ -121,93 +162,93 @@ declare interface Scene_Boot {
  * 
  * The scene class of the title screen.
  */
-declare interface Scene_Title {
-		
+declare class Scene_Title {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	update(): void;
-		
+    update(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isBusy(): boolean;
-		
+    isBusy(): boolean;
+
 	/**
 	 * 
 	 */
-	terminate(): void;
-		
+    terminate(): void;
+
 	/**
 	 * 
 	 */
-	createBackground(): void;
-		
+    createBackground(): void;
+
 	/**
 	 * 
 	 */
-	createForeground(): void;
-		
+    createForeground(): void;
+
 	/**
 	 * 
 	 */
-	drawGameTitle(): void;
-		
+    drawGameTitle(): void;
+
 	/**
 	 * 
 	 */
-	adjustBackground(): void;
-		
+    adjustBackground(): void;
+
 	/**
 	 * 
 	 */
-	createCommandWindow(): void;
-		
+    createCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandWindowRect(): void;
-		
+    commandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	commandNewGame(): void;
-		
+    commandNewGame(): void;
+
 	/**
 	 * 
 	 */
-	commandContinue(): void;
-		
+    commandContinue(): void;
+
 	/**
 	 * 
 	 */
-	commandOptions(): void;
-		
+    commandOptions(): void;
+
 	/**
 	 * 
 	 */
-	playTitleMusic(): void;
+    playTitleMusic(): void;
 }
 
 /**
@@ -216,13 +257,13 @@ declare interface Scene_Title {
  * 
  * The superclass of Scene_Map and Scene_Battle.
  */
-declare interface Scene_Message {
-		
+declare class Scene_Message {
+
 	/**
 	 * 
 	 * @return  
 	 */
-	new (): Scene_Message;
+    new(): Scene_Message;
 }
 
 
@@ -232,348 +273,348 @@ declare interface Scene_Message {
  * 
  * The scene class of the map screen.
  */
-declare interface Scene_Map {
-		
+declare class Scene_Map {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	isReady(): /* !this._mapLoaded */ any;
-		
-	/**
-	 * 
-	 */
-	onMapLoaded(): void;
-		
-	/**
-	 * 
-	 */
-	onTransfer(): void;
-		
-	/**
-	 * 
-	 */
-	start(): void;
-		
-	/**
-	 * 
-	 */
-	onTransferEnd(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	shouldAutosave(): boolean;
-		
+    isReady(): /* !this._mapLoaded */ any;
+
 	/**
 	 * 
 	 */
-	update(): void;
-		
+    onMapLoaded(): void;
+
 	/**
 	 * 
 	 */
-	updateMainMultiply(): void;
-		
+    onTransfer(): void;
+
 	/**
 	 * 
 	 */
-	updateMain(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	isPlayerActive(): boolean;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	isFastForward(): boolean;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	stop(): void;
-		
+    onTransferEnd(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isBusy(): boolean;
-		
+    shouldAutosave(): boolean;
+
 	/**
 	 * 
 	 */
-	terminate(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	needsFadeIn(): boolean;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	needsSlowFadeOut(): /* Scene_Map.prototype.+Scene_Map */ any;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	updateWaitCount(): boolean;
-		
+    update(): void;
+
 	/**
 	 * 
 	 */
-	updateDestination(): void;
-		
+    updateMainMultiply(): void;
+
 	/**
 	 * 
 	 */
-	updateMenuButton(): void;
-		
-	/**
-	 * 
-	 */
-	hideMenuButton(): void;
-		
-	/**
-	 * 
-	 */
-	updateMapNameWindow(): void;
-		
+    updateMain(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isMenuEnabled(): boolean;
-		
+    isPlayerActive(): boolean;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isMapTouchOk(): boolean;
-		
+    isFastForward(): boolean;
+
 	/**
 	 * 
 	 */
-	processMapTouch(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	isAnyButtonPressed(): /* !this._menuButton */ any;
-		
-	/**
-	 * 
-	 */
-	onMapTouch(): void;
-		
+    stop(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isSceneChangeOk(): boolean;
-		
+    isBusy(): boolean;
+
 	/**
 	 * 
 	 */
-	updateScene(): void;
-		
-	/**
-	 * 
-	 */
-	createDisplayObjects(): void;
-		
-	/**
-	 * 
-	 */
-	createSpriteset(): void;
-		
-	/**
-	 * 
-	 */
-	createAllWindows(): void;
-		
-	/**
-	 * 
-	 */
-	createMapNameWindow(): void;
-		
-	/**
-	 * 
-	 */
-	mapNameWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createButtons(): void;
-		
-	/**
-	 * 
-	 */
-	createMenuButton(): void;
-		
-	/**
-	 * 
-	 */
-	updateTransferPlayer(): void;
-		
-	/**
-	 * 
-	 */
-	updateEncounter(): void;
-		
-	/**
-	 * 
-	 */
-	updateCallMenu(): void;
-		
+    terminate(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isMenuCalled(): boolean;
-		
-	/**
-	 * 
-	 */
-	callMenu(): void;
-		
-	/**
-	 * 
-	 */
-	updateCallDebug(): void;
-		
+    needsFadeIn(): boolean;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isDebugCalled(): boolean;
-		
+    needsSlowFadeOut(): /* Scene_Map.prototype.+Scene_Map */ any;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    updateWaitCount(): boolean;
+
 	/**
 	 * 
 	 */
-	fadeInForTransfer(): void;
-		
+    updateDestination(): void;
+
 	/**
 	 * 
 	 */
-	fadeOutForTransfer(): void;
-		
+    updateMenuButton(): void;
+
 	/**
 	 * 
 	 */
-	launchBattle(): void;
-		
+    hideMenuButton(): void;
+
 	/**
 	 * 
 	 */
-	stopAudioOnBattleStart(): void;
-		
+    updateMapNameWindow(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isMenuEnabled(): boolean;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isMapTouchOk(): boolean;
+
 	/**
 	 * 
 	 */
-	startEncounterEffect(): void;
-		
+    processMapTouch(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isAnyButtonPressed(): /* !this._menuButton */ any;
+
 	/**
 	 * 
 	 */
-	updateEncounterEffect(): void;
-		
+    onMapTouch(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isSceneChangeOk(): boolean;
+
 	/**
 	 * 
 	 */
-	snapForBattleBackground(): void;
-		
+    updateScene(): void;
+
+	/**
+	 * 
+	 */
+    createDisplayObjects(): void;
+
+	/**
+	 * 
+	 */
+    createSpriteset(): void;
+
+	/**
+	 * 
+	 */
+    createAllWindows(): void;
+
+	/**
+	 * 
+	 */
+    createMapNameWindow(): void;
+
+	/**
+	 * 
+	 */
+    mapNameWindowRect(): void;
+
+	/**
+	 * 
+	 */
+    createButtons(): void;
+
+	/**
+	 * 
+	 */
+    createMenuButton(): void;
+
+	/**
+	 * 
+	 */
+    updateTransferPlayer(): void;
+
+	/**
+	 * 
+	 */
+    updateEncounter(): void;
+
+	/**
+	 * 
+	 */
+    updateCallMenu(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isMenuCalled(): boolean;
+
+	/**
+	 * 
+	 */
+    callMenu(): void;
+
+	/**
+	 * 
+	 */
+    updateCallDebug(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    isDebugCalled(): boolean;
+
+	/**
+	 * 
+	 */
+    fadeInForTransfer(): void;
+
+	/**
+	 * 
+	 */
+    fadeOutForTransfer(): void;
+
+	/**
+	 * 
+	 */
+    launchBattle(): void;
+
+	/**
+	 * 
+	 */
+    stopAudioOnBattleStart(): void;
+
+	/**
+	 * 
+	 */
+    startEncounterEffect(): void;
+
+	/**
+	 * 
+	 */
+    updateEncounterEffect(): void;
+
+	/**
+	 * 
+	 */
+    snapForBattleBackground(): void;
+
 	/**
 	 * 
 	 * @param duration 
 	 */
-	startFlashForEncounter(duration : number): void;
-		
+    startFlashForEncounter(duration: number): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	encounterEffectSpeed(): number;
-		
+    encounterEffectSpeed(): number;
+
 	/**
 	 * 
 	 */
-	_waitCount : number;
-		
+    _waitCount: number;
+
 	/**
 	 * 
 	 */
-	_encounterEffectDuration : number;
-		
+    _encounterEffectDuration: number;
+
 	/**
 	 * 
 	 */
-	_mapLoaded : boolean;
-		
+    _mapLoaded: boolean;
+
 	/**
 	 * 
 	 */
-	_touchCount : number;
-		
+    _touchCount: number;
+
 	/**
 	 * 
 	 */
-	_menuEnabled : boolean;
-		
+    _menuEnabled: boolean;
+
 	/**
 	 * 
 	 */
-	_transfer : boolean;
-		
+    _transfer: boolean;
+
 	/**
 	 * 
 	 */
-	_lastMapWasNull : boolean;
-		
+    _lastMapWasNull: boolean;
+
 	/**
 	 * 
 	 */
-	menuCalling : boolean;
-		
+    menuCalling: boolean;
+
 	/**
 	 * 
 	 */
-	_spriteset : /*no type*/{};
-		
+    _spriteset: /*no type*/{};
+
 	/**
 	 * 
 	 */
-	_mapNameWindow : /*no type*/{};
-		
+    _mapNameWindow: /*no type*/{};
+
 	/**
 	 * 
 	 */
-	_menuButton : /*no type*/{};
+    _menuButton: /*no type*/{};
 }
 
 /**
@@ -582,13 +623,13 @@ declare interface Scene_Map {
  * 
  * The superclass of all the menu-type scenes.
  */
-declare interface Scene_MenuBase {
-		
+declare class Scene_MenuBase {
+
 	/**
 	 * 
 	 * @return  
 	 */
-	new (): Scene_MenuBase;
+    new(): Scene_MenuBase;
 }
 
 
@@ -598,113 +639,113 @@ declare interface Scene_MenuBase {
  * 
  * The scene class of the menu screen.
  */
-declare interface Scene_Menu {
-		
+declare class Scene_Menu {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	helpAreaHeight(): number;
-		
+    helpAreaHeight(): number;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	createCommandWindow(): void;
-		
+    createCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandWindowRect(): void;
-		
+    commandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createGoldWindow(): void;
-		
+    createGoldWindow(): void;
+
 	/**
 	 * 
 	 */
-	goldWindowRect(): void;
-		
+    goldWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createStatusWindow(): void;
-		
+    createStatusWindow(): void;
+
 	/**
 	 * 
 	 */
-	statusWindowRect(): void;
-		
+    statusWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	commandItem(): void;
-		
+    commandItem(): void;
+
 	/**
 	 * 
 	 */
-	commandPersonal(): void;
-		
+    commandPersonal(): void;
+
 	/**
 	 * 
 	 */
-	commandFormation(): void;
-		
+    commandFormation(): void;
+
 	/**
 	 * 
 	 */
-	commandOptions(): void;
-		
+    commandOptions(): void;
+
 	/**
 	 * 
 	 */
-	commandSave(): void;
-		
+    commandSave(): void;
+
 	/**
 	 * 
 	 */
-	commandGameEnd(): void;
-		
+    commandGameEnd(): void;
+
 	/**
 	 * 
 	 */
-	onPersonalOk(): void;
-		
+    onPersonalOk(): void;
+
 	/**
 	 * 
 	 */
-	onPersonalCancel(): void;
-		
+    onPersonalCancel(): void;
+
 	/**
 	 * 
 	 */
-	onFormationOk(): void;
-		
+    onFormationOk(): void;
+
 	/**
 	 * 
 	 */
-	onFormationCancel(): void;
+    onFormationCancel(): void;
 }
 
 /**
@@ -713,13 +754,13 @@ declare interface Scene_Menu {
  * 
  * The superclass of Scene_Item and Scene_Skill.
  */
-declare interface Scene_ItemBase {
-		
+declare class Scene_ItemBase {
+
 	/**
 	 * 
 	 * @return  
 	 */
-	new (): Scene_ItemBase;
+    new(): Scene_ItemBase;
 }
 
 
@@ -729,73 +770,73 @@ declare interface Scene_ItemBase {
  * 
  * The scene class of the item screen.
  */
-declare interface Scene_Item {
-		
+declare class Scene_Item {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	createCategoryWindow(): void;
-		
+    createCategoryWindow(): void;
+
 	/**
 	 * 
 	 */
-	categoryWindowRect(): void;
-		
+    categoryWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createItemWindow(): void;
-		
+    createItemWindow(): void;
+
 	/**
 	 * 
 	 */
-	itemWindowRect(): void;
-		
+    itemWindowRect(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	user(): Game_Actor;
-		
+    user(): Game_Actor;
+
 	/**
 	 * 
 	 */
-	onCategoryOk(): void;
-		
+    onCategoryOk(): void;
+
 	/**
 	 * 
 	 */
-	onItemOk(): void;
-		
+    onItemOk(): void;
+
 	/**
 	 * 
 	 */
-	onItemCancel(): void;
-		
+    onItemCancel(): void;
+
 	/**
 	 * 
 	 */
-	playSeForItem(): void;
-		
+    playSeForItem(): void;
+
 	/**
 	 * 
 	 */
-	useItem(): void;
+    useItem(): void;
 }
 
 /**
@@ -804,109 +845,109 @@ declare interface Scene_Item {
  * 
  * The scene class of the skill screen.
  */
-declare interface Scene_Skill {
-		
+declare class Scene_Skill {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	createSkillTypeWindow(): void;
-		
+    createSkillTypeWindow(): void;
+
 	/**
 	 * 
 	 */
-	skillTypeWindowRect(): void;
-		
+    skillTypeWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createStatusWindow(): void;
-		
+    createStatusWindow(): void;
+
 	/**
 	 * 
 	 */
-	statusWindowRect(): void;
-		
+    statusWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createItemWindow(): void;
-		
+    createItemWindow(): void;
+
 	/**
 	 * 
 	 */
-	itemWindowRect(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	needsPageButtons(): boolean;
-		
+    itemWindowRect(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	arePageButtonsEnabled(): boolean;
-		
+    needsPageButtons(): boolean;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    arePageButtonsEnabled(): boolean;
+
 	/**
 	 * 
 	 */
-	refreshActor(): void;
-		
+    refreshActor(): void;
+
 	/**
 	 * 
 	 */
-	user(): void;
-		
+    user(): void;
+
 	/**
 	 * 
 	 */
-	commandSkill(): void;
-		
+    commandSkill(): void;
+
 	/**
 	 * 
 	 */
-	onItemOk(): void;
-		
+    onItemOk(): void;
+
 	/**
 	 * 
 	 */
-	onItemCancel(): void;
-		
+    onItemCancel(): void;
+
 	/**
 	 * 
 	 */
-	playSeForItem(): void;
-		
+    playSeForItem(): void;
+
 	/**
 	 * 
 	 */
-	useItem(): void;
-		
+    useItem(): void;
+
 	/**
 	 * 
 	 */
-	onActorChange(): void;
+    onActorChange(): void;
 }
 
 /**
@@ -915,135 +956,135 @@ declare interface Scene_Skill {
  * 
  * The scene class of the equipment screen.
  */
-declare interface Scene_Equip {
-		
+declare class Scene_Equip {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	createStatusWindow(): void;
-		
+    createStatusWindow(): void;
+
 	/**
 	 * 
 	 */
-	statusWindowRect(): void;
-		
+    statusWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createCommandWindow(): void;
-		
+    createCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandWindowRect(): void;
-		
+    commandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createSlotWindow(): void;
-		
+    createSlotWindow(): void;
+
 	/**
 	 * 
 	 */
-	slotWindowRect(): void;
-		
+    slotWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createItemWindow(): void;
-		
+    createItemWindow(): void;
+
 	/**
 	 * 
 	 */
-	itemWindowRect(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	statusWidth(): number;
-		
+    itemWindowRect(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	needsPageButtons(): boolean;
-		
+    statusWidth(): number;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	arePageButtonsEnabled(): boolean;
-		
+    needsPageButtons(): boolean;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    arePageButtonsEnabled(): boolean;
+
 	/**
 	 * 
 	 */
-	refreshActor(): void;
-		
+    refreshActor(): void;
+
 	/**
 	 * 
 	 */
-	commandEquip(): void;
-		
+    commandEquip(): void;
+
 	/**
 	 * 
 	 */
-	commandOptimize(): void;
-		
+    commandOptimize(): void;
+
 	/**
 	 * 
 	 */
-	commandClear(): void;
-		
+    commandClear(): void;
+
 	/**
 	 * 
 	 */
-	onSlotOk(): void;
-		
+    onSlotOk(): void;
+
 	/**
 	 * 
 	 */
-	onSlotCancel(): void;
-		
+    onSlotCancel(): void;
+
 	/**
 	 * 
 	 */
-	onItemOk(): void;
-		
+    onItemOk(): void;
+
 	/**
 	 * 
 	 */
-	executeEquipChange(): void;
-		
+    executeEquipChange(): void;
+
 	/**
 	 * 
 	 */
-	onItemCancel(): void;
-		
+    onItemCancel(): void;
+
 	/**
 	 * 
 	 */
-	onActorChange(): void;
-		
+    onActorChange(): void;
+
 	/**
 	 * 
 	 */
-	hideItemWindow(): void;
+    hideItemWindow(): void;
 }
 
 /**
@@ -1052,105 +1093,105 @@ declare interface Scene_Equip {
  * 
  * The scene class of the status screen.
  */
-declare interface Scene_Status {
-		
+declare class Scene_Status {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	helpAreaHeight(): number;
-		
-	/**
-	 * 
-	 */
-	createProfileWindow(): void;
-		
-	/**
-	 * 
-	 */
-	profileWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createStatusWindow(): void;
-		
-	/**
-	 * 
-	 */
-	statusWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createStatusParamsWindow(): void;
-		
-	/**
-	 * 
-	 */
-	statusParamsWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createStatusEquipWindow(): void;
-		
-	/**
-	 * 
-	 */
-	statusEquipWindowRect(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	statusParamsWidth(): number;
-		
+    helpAreaHeight(): number;
+
 	/**
 	 * 
 	 */
-	statusParamsHeight(): void;
-		
+    createProfileWindow(): void;
+
 	/**
 	 * 
 	 */
-	profileHeight(): void;
-		
+    profileWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    createStatusWindow(): void;
+
+	/**
+	 * 
+	 */
+    statusWindowRect(): void;
+
+	/**
+	 * 
+	 */
+    createStatusParamsWindow(): void;
+
+	/**
+	 * 
+	 */
+    statusParamsWindowRect(): void;
+
+	/**
+	 * 
+	 */
+    createStatusEquipWindow(): void;
+
+	/**
+	 * 
+	 */
+    statusEquipWindowRect(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	needsPageButtons(): boolean;
-		
+    statusParamsWidth(): number;
+
 	/**
 	 * 
 	 */
-	refreshActor(): void;
-		
+    statusParamsHeight(): void;
+
 	/**
 	 * 
 	 */
-	onActorChange(): void;
+    profileHeight(): void;
+
+	/**
+	 * 
+	 */
+    start(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    needsPageButtons(): boolean;
+
+	/**
+	 * 
+	 */
+    refreshActor(): void;
+
+	/**
+	 * 
+	 */
+    onActorChange(): void;
 }
 
 /**
@@ -1159,49 +1200,49 @@ declare interface Scene_Status {
  * 
  * The scene class of the options screen.
  */
-declare interface Scene_Options {
-		
+declare class Scene_Options {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	terminate(): void;
-		
+    terminate(): void;
+
 	/**
 	 * 
 	 */
-	createOptionsWindow(): void;
-		
+    createOptionsWindow(): void;
+
 	/**
 	 * 
 	 */
-	optionsWindowRect(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	maxCommands(): number;
-		
+    optionsWindowRect(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	maxVisibleCommands(): number;
+    maxCommands(): number;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    maxVisibleCommands(): number;
 }
 
 /**
@@ -1210,13 +1251,13 @@ declare interface Scene_Options {
  * 
  * The superclass of Scene_Save and Scene_Load.
  */
-declare interface Scene_File {
-		
+declare class Scene_File {
+
 	/**
 	 * 
 	 * @return  
 	 */
-	new (): Scene_File;
+    new(): Scene_File;
 }
 
 
@@ -1226,55 +1267,55 @@ declare interface Scene_File {
  * 
  * The scene class of the save screen.
  */
-declare interface Scene_Save {
-		
+declare class Scene_Save {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	mode(): string;
-		
-	/**
-	 * 
-	 */
-	helpWindowText(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	firstSavefileId(): number;
-		
+    mode(): string;
+
 	/**
 	 * 
 	 */
-	onSavefileOk(): void;
-		
+    helpWindowText(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    firstSavefileId(): number;
+
+	/**
+	 * 
+	 */
+    onSavefileOk(): void;
+
 	/**
 	 * 
 	 * @param savefileId 
 	 */
-	executeSave(savefileId : any): void;
-		
+    executeSave(savefileId: any): void;
+
 	/**
 	 * 
 	 */
-	onSaveSuccess(): void;
-		
+    onSaveSuccess(): void;
+
 	/**
 	 * 
 	 */
-	onSaveFailure(): void;
+    onSaveFailure(): void;
 }
 
 /**
@@ -1283,65 +1324,65 @@ declare interface Scene_Save {
  * 
  * The scene class of the load screen.
  */
-declare interface Scene_Load {
-		
+declare class Scene_Load {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	terminate(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	mode(): string;
-		
-	/**
-	 * 
-	 */
-	helpWindowText(): void;
-		
+    terminate(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	firstSavefileId(): number;
-		
+    mode(): string;
+
 	/**
 	 * 
 	 */
-	onSavefileOk(): void;
-		
+    helpWindowText(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    firstSavefileId(): number;
+
+	/**
+	 * 
+	 */
+    onSavefileOk(): void;
+
 	/**
 	 * 
 	 * @param savefileId 
 	 */
-	executeLoad(savefileId : any): void;
-		
+    executeLoad(savefileId: any): void;
+
 	/**
 	 * 
 	 */
-	onLoadSuccess(): void;
-		
+    onLoadSuccess(): void;
+
 	/**
 	 * 
 	 */
-	onLoadFailure(): void;
-		
+    onLoadFailure(): void;
+
 	/**
 	 * 
 	 */
-	reloadMapIfUpdated(): void;
+    reloadMapIfUpdated(): void;
 }
 
 /**
@@ -1350,47 +1391,47 @@ declare interface Scene_Load {
  * 
  * The scene class of the game end screen.
  */
-declare interface Scene_GameEnd {
-		
+declare class Scene_GameEnd {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	stop(): void;
-		
+    stop(): void;
+
 	/**
 	 * 
 	 */
-	createBackground(): void;
-		
+    createBackground(): void;
+
 	/**
 	 * 
 	 */
-	createCommandWindow(): void;
-		
+    createCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandWindowRect(): void;
-		
+    commandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	commandToTitle(): void;
+    commandToTitle(): void;
 }
 
 /**
@@ -1399,226 +1440,226 @@ declare interface Scene_GameEnd {
  * 
  * The scene class of the shop screen.
  */
-declare interface Scene_Shop {
-		
+declare class Scene_Shop {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 * @param goods 
 	 * @param purchaseOnly 
 	 */
-	prepare(goods : any, purchaseOnly : any): void;
-		
+    prepare(goods: any, purchaseOnly: any): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	createGoldWindow(): void;
-		
+    createGoldWindow(): void;
+
 	/**
 	 * 
 	 */
-	goldWindowRect(): void;
-		
+    goldWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createCommandWindow(): void;
-		
+    createCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandWindowRect(): void;
-		
+    commandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createDummyWindow(): void;
-		
+    createDummyWindow(): void;
+
 	/**
 	 * 
 	 */
-	dummyWindowRect(): void;
-		
+    dummyWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createNumberWindow(): void;
-		
+    createNumberWindow(): void;
+
 	/**
 	 * 
 	 */
-	numberWindowRect(): void;
-		
+    numberWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createStatusWindow(): void;
-		
+    createStatusWindow(): void;
+
 	/**
 	 * 
 	 */
-	statusWindowRect(): void;
-		
+    statusWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createBuyWindow(): void;
-		
+    createBuyWindow(): void;
+
 	/**
 	 * 
 	 */
-	buyWindowRect(): void;
-		
+    buyWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createCategoryWindow(): void;
-		
+    createCategoryWindow(): void;
+
 	/**
 	 * 
 	 */
-	categoryWindowRect(): void;
-		
+    categoryWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createSellWindow(): void;
-		
+    createSellWindow(): void;
+
 	/**
 	 * 
 	 */
-	sellWindowRect(): void;
-		
+    sellWindowRect(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	statusWidth(): number;
-		
+    statusWidth(): number;
+
 	/**
 	 * 
 	 */
-	activateBuyWindow(): void;
-		
+    activateBuyWindow(): void;
+
 	/**
 	 * 
 	 */
-	activateSellWindow(): void;
-		
+    activateSellWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandBuy(): void;
-		
+    commandBuy(): void;
+
 	/**
 	 * 
 	 */
-	commandSell(): void;
-		
+    commandSell(): void;
+
 	/**
 	 * 
 	 */
-	onBuyOk(): void;
-		
+    onBuyOk(): void;
+
 	/**
 	 * 
 	 */
-	onBuyCancel(): void;
-		
+    onBuyCancel(): void;
+
 	/**
 	 * 
 	 */
-	onCategoryOk(): void;
-		
+    onCategoryOk(): void;
+
 	/**
 	 * 
 	 */
-	onCategoryCancel(): void;
-		
+    onCategoryCancel(): void;
+
 	/**
 	 * 
 	 */
-	onSellOk(): void;
-		
+    onSellOk(): void;
+
 	/**
 	 * 
 	 */
-	onSellCancel(): void;
-		
+    onSellCancel(): void;
+
 	/**
 	 * 
 	 */
-	onNumberOk(): void;
-		
+    onNumberOk(): void;
+
 	/**
 	 * 
 	 */
-	onNumberCancel(): void;
-		
+    onNumberCancel(): void;
+
 	/**
 	 * 
 	 * @param number 
 	 */
-	doBuy(number : number): void;
-		
+    doBuy(number: number): void;
+
 	/**
 	 * 
 	 * @param number 
 	 */
-	doSell(number : number): void;
-		
+    doSell(number: number): void;
+
 	/**
 	 * 
 	 */
-	endNumberInput(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	maxBuy(): number;
-		
+    endNumberInput(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	maxSell(): number;
-		
+    maxBuy(): number;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	money(): number;
-		
-	/**
-	 * 
-	 */
-	currencyUnit(): void;
-		
-	/**
-	 * 
-	 */
-	buyingPrice(): void;
-		
+    maxSell(): number;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	sellingPrice(): number;
+    money(): number;
+
+	/**
+	 * 
+	 */
+    currencyUnit(): void;
+
+	/**
+	 * 
+	 */
+    buyingPrice(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    sellingPrice(): number;
 }
 
 /**
@@ -1627,59 +1668,59 @@ declare interface Scene_Shop {
  * 
  * The scene class of the name input screen.
  */
-declare interface Scene_Name {
-		
+declare class Scene_Name {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 * @param actorId 
 	 * @param maxLength 
 	 */
-	prepare(actorId : any, maxLength : any): void;
-		
+    prepare(actorId: any, maxLength: any): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	createEditWindow(): void;
-		
+    createEditWindow(): void;
+
 	/**
 	 * 
 	 */
-	editWindowRect(): void;
-		
+    editWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	createInputWindow(): void;
-		
+    createInputWindow(): void;
+
 	/**
 	 * 
 	 */
-	inputWindowRect(): void;
-		
+    inputWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	onInputOk(): void;
+    onInputOk(): void;
 }
 
 /**
@@ -1688,79 +1729,79 @@ declare interface Scene_Name {
  * 
  * The scene class of the debug screen.
  */
-declare interface Scene_Debug {
-		
+declare class Scene_Debug {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	needsCancelButton(): boolean;
-		
-	/**
-	 * 
-	 */
-	createRangeWindow(): void;
-		
-	/**
-	 * 
-	 */
-	rangeWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createEditWindow(): void;
-		
-	/**
-	 * 
-	 */
-	editWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createDebugHelpWindow(): void;
-		
-	/**
-	 * 
-	 */
-	debugHelpWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	onRangeOk(): void;
-		
-	/**
-	 * 
-	 */
-	onEditCancel(): void;
-		
-	/**
-	 * 
-	 */
-	refreshHelpWindow(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	helpText(): string;
+    needsCancelButton(): boolean;
+
+	/**
+	 * 
+	 */
+    createRangeWindow(): void;
+
+	/**
+	 * 
+	 */
+    rangeWindowRect(): void;
+
+	/**
+	 * 
+	 */
+    createEditWindow(): void;
+
+	/**
+	 * 
+	 */
+    editWindowRect(): void;
+
+	/**
+	 * 
+	 */
+    createDebugHelpWindow(): void;
+
+	/**
+	 * 
+	 */
+    debugHelpWindowRect(): void;
+
+	/**
+	 * 
+	 */
+    onRangeOk(): void;
+
+	/**
+	 * 
+	 */
+    onEditCancel(): void;
+
+	/**
+	 * 
+	 */
+    refreshHelpWindow(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    helpText(): string;
 }
 
 /**
@@ -1769,430 +1810,430 @@ declare interface Scene_Debug {
  * 
  * The scene class of the battle screen.
  */
-declare interface Scene_Battle {
-		
+declare class Scene_Battle {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	update(): void;
-		
+    update(): void;
+
 	/**
 	 * 
 	 */
-	updateVisibility(): void;
-		
+    updateVisibility(): void;
+
 	/**
 	 * 
 	 */
-	updateBattleProcess(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	isTimeActive(): boolean;
-		
+    updateBattleProcess(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isAnyInputWindowActive(): /* !this._partyCommandWindow.active */ any;
-		
-	/**
-	 * 
-	 */
-	changeInputWindow(): void;
-		
-	/**
-	 * 
-	 */
-	stop(): void;
-		
-	/**
-	 * 
-	 */
-	terminate(): void;
-		
+    isTimeActive(): boolean;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	shouldAutosave(): /* Scene_Battle.prototype.+Scene_Battle */ any;
-		
+    isAnyInputWindowActive(): /* !this._partyCommandWindow.active */ any;
+
+	/**
+	 * 
+	 */
+    changeInputWindow(): void;
+
+	/**
+	 * 
+	 */
+    stop(): void;
+
+	/**
+	 * 
+	 */
+    terminate(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	needsSlowFadeOut(): any;
-		
-	/**
-	 * 
-	 */
-	updateLogWindowVisibility(): void;
-		
-	/**
-	 * 
-	 */
-	updateStatusWindowVisibility(): void;
-		
+    shouldAutosave(): /* Scene_Battle.prototype.+Scene_Battle */ any;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	shouldOpenStatusWindow(): boolean;
-		
+    needsSlowFadeOut(): any;
+
 	/**
 	 * 
 	 */
-	updateStatusWindowPosition(): void;
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	statusWindowX(): number;
-		
+    updateLogWindowVisibility(): void;
+
 	/**
 	 * 
 	 */
-	updateInputWindowVisibility(): void;
-		
+    updateStatusWindowVisibility(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	needsInputWindowChange(): boolean;
-		
+    shouldOpenStatusWindow(): boolean;
+
 	/**
 	 * 
 	 */
-	updateCancelButton(): void;
-		
-	/**
-	 * 
-	 */
-	createDisplayObjects(): void;
-		
-	/**
-	 * 
-	 */
-	createSpriteset(): void;
-		
-	/**
-	 * 
-	 */
-	createAllWindows(): void;
-		
-	/**
-	 * 
-	 */
-	createLogWindow(): void;
-		
-	/**
-	 * 
-	 */
-	logWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createStatusWindow(): void;
-		
-	/**
-	 * 
-	 */
-	statusWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createPartyCommandWindow(): void;
-		
-	/**
-	 * 
-	 */
-	partyCommandWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createActorCommandWindow(): void;
-		
-	/**
-	 * 
-	 */
-	actorCommandWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createHelpWindow(): void;
-		
-	/**
-	 * 
-	 */
-	helpWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createSkillWindow(): void;
-		
-	/**
-	 * 
-	 */
-	skillWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createItemWindow(): void;
-		
-	/**
-	 * 
-	 */
-	itemWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createActorWindow(): void;
-		
-	/**
-	 * 
-	 */
-	actorWindowRect(): void;
-		
-	/**
-	 * 
-	 */
-	createEnemyWindow(): void;
-		
-	/**
-	 * 
-	 */
-	enemyWindowRect(): void;
-		
+    updateStatusWindowPosition(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	helpAreaTop(): number;
-		
+    statusWindowX(): number;
+
 	/**
 	 * 
 	 */
-	helpAreaBottom(): void;
-		
+    updateInputWindowVisibility(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    needsInputWindowChange(): boolean;
+
 	/**
 	 * 
 	 */
-	helpAreaHeight(): void;
-		
+    updateCancelButton(): void;
+
 	/**
 	 * 
 	 */
-	buttonAreaTop(): void;
-		
+    createDisplayObjects(): void;
+
 	/**
 	 * 
 	 */
-	windowAreaHeight(): void;
-		
+    createSpriteset(): void;
+
 	/**
 	 * 
 	 */
-	createButtons(): void;
-		
+    createAllWindows(): void;
+
 	/**
 	 * 
 	 */
-	createCancelButton(): void;
-		
+    createLogWindow(): void;
+
 	/**
 	 * 
 	 */
-	closeCommandWindows(): void;
-		
+    logWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	hideSubInputWindows(): void;
-		
+    createStatusWindow(): void;
+
 	/**
 	 * 
 	 */
-	startPartyCommandSelection(): void;
-		
+    statusWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	commandFight(): void;
-		
+    createPartyCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandEscape(): void;
-		
+    partyCommandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	startActorCommandSelection(): void;
-		
+    createActorCommandWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandAttack(): void;
-		
+    actorCommandWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	commandSkill(): void;
-		
+    createHelpWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandGuard(): void;
-		
+    helpWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	commandItem(): void;
-		
+    createSkillWindow(): void;
+
 	/**
 	 * 
 	 */
-	commandCancel(): void;
-		
+    skillWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	selectNextCommand(): void;
-		
+    createItemWindow(): void;
+
 	/**
 	 * 
 	 */
-	selectPreviousCommand(): void;
-		
+    itemWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	startActorSelection(): void;
-		
+    createActorWindow(): void;
+
 	/**
 	 * 
 	 */
-	onActorOk(): void;
-		
+    actorWindowRect(): void;
+
 	/**
 	 * 
 	 */
-	onActorCancel(): void;
-		
+    createEnemyWindow(): void;
+
 	/**
 	 * 
 	 */
-	startEnemySelection(): void;
-		
+    enemyWindowRect(): void;
+
+	/**
+	 * 
+	 * @return  
+	 */
+    helpAreaTop(): number;
+
 	/**
 	 * 
 	 */
-	onEnemyOk(): void;
-		
+    helpAreaBottom(): void;
+
 	/**
 	 * 
 	 */
-	onEnemyCancel(): void;
-		
+    helpAreaHeight(): void;
+
 	/**
 	 * 
 	 */
-	onSkillOk(): void;
-		
+    buttonAreaTop(): void;
+
 	/**
 	 * 
 	 */
-	onSkillCancel(): void;
-		
+    windowAreaHeight(): void;
+
 	/**
 	 * 
 	 */
-	onItemOk(): void;
-		
+    createButtons(): void;
+
 	/**
 	 * 
 	 */
-	onItemCancel(): void;
-		
+    createCancelButton(): void;
+
 	/**
 	 * 
 	 */
-	onSelectAction(): void;
-		
+    closeCommandWindows(): void;
+
 	/**
 	 * 
 	 */
-	endCommandSelection(): void;
-		
+    hideSubInputWindows(): void;
+
 	/**
 	 * 
 	 */
-	_statusWindow : /*no type*/{};
-		
+    startPartyCommandSelection(): void;
+
 	/**
 	 * 
 	 */
-	_partyCommandWindow : /*no type*/{};
-		
+    commandFight(): void;
+
 	/**
 	 * 
 	 */
-	_actorCommandWindow : /*no type*/{};
-		
+    commandEscape(): void;
+
 	/**
 	 * 
 	 */
-	_helpWindow : /*no type*/{};
-		
+    startActorCommandSelection(): void;
+
 	/**
 	 * 
 	 */
-	_skillWindow : /*no type*/{};
-		
+    commandAttack(): void;
+
 	/**
 	 * 
 	 */
-	_itemWindow : /*no type*/{};
-		
+    commandSkill(): void;
+
 	/**
 	 * 
 	 */
-	_actorWindow : /*no type*/{};
-		
+    commandGuard(): void;
+
 	/**
 	 * 
 	 */
-	_enemyWindow : /*no type*/{};
+    commandItem(): void;
+
+	/**
+	 * 
+	 */
+    commandCancel(): void;
+
+	/**
+	 * 
+	 */
+    selectNextCommand(): void;
+
+	/**
+	 * 
+	 */
+    selectPreviousCommand(): void;
+
+	/**
+	 * 
+	 */
+    startActorSelection(): void;
+
+	/**
+	 * 
+	 */
+    onActorOk(): void;
+
+	/**
+	 * 
+	 */
+    onActorCancel(): void;
+
+	/**
+	 * 
+	 */
+    startEnemySelection(): void;
+
+	/**
+	 * 
+	 */
+    onEnemyOk(): void;
+
+	/**
+	 * 
+	 */
+    onEnemyCancel(): void;
+
+	/**
+	 * 
+	 */
+    onSkillOk(): void;
+
+	/**
+	 * 
+	 */
+    onSkillCancel(): void;
+
+	/**
+	 * 
+	 */
+    onItemOk(): void;
+
+	/**
+	 * 
+	 */
+    onItemCancel(): void;
+
+	/**
+	 * 
+	 */
+    onSelectAction(): void;
+
+	/**
+	 * 
+	 */
+    endCommandSelection(): void;
+
+	/**
+	 * 
+	 */
+    _statusWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _partyCommandWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _actorCommandWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _helpWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _skillWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _itemWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _actorWindow: /*no type*/{};
+
+	/**
+	 * 
+	 */
+    _enemyWindow: /*no type*/{};
 }
 
 /**
@@ -2201,66 +2242,66 @@ declare interface Scene_Battle {
  * 
  * The scene class of the game over screen.
  */
-declare interface Scene_Gameover {
-		
+declare class Scene_Gameover {
+
 	/**
 	 * 
 	 */
-	new ();
-		
+    new();
+
 	/**
 	 * 
 	 */
-	initialize(): void;
-		
+    initialize(): void;
+
 	/**
 	 * 
 	 */
-	create(): void;
-		
+    create(): void;
+
 	/**
 	 * 
 	 */
-	start(): void;
-		
+    start(): void;
+
 	/**
 	 * 
 	 */
-	update(): void;
-		
+    update(): void;
+
 	/**
 	 * 
 	 */
-	stop(): void;
-		
+    stop(): void;
+
 	/**
 	 * 
 	 */
-	terminate(): void;
-		
+    terminate(): void;
+
 	/**
 	 * 
 	 */
-	playGameoverMusic(): void;
-		
+    playGameoverMusic(): void;
+
 	/**
 	 * 
 	 */
-	createBackground(): void;
-		
+    createBackground(): void;
+
 	/**
 	 * 
 	 */
-	adjustBackground(): void;
-		
+    adjustBackground(): void;
+
 	/**
 	 * 
 	 * @return  
 	 */
-	isTriggered(): boolean;
-		
+    isTriggered(): boolean;
+
 	/**
 	 * 
 	 */
-	gotoTitle(): void;
+    gotoTitle(): void;
 }
