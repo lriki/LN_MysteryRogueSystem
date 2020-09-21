@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, RE_Data } from "./RE_Data";
+import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, RE_Data, REFloorMapKind } from "./RE_Data";
 
 
 declare global {  
@@ -79,11 +79,37 @@ export class RE_DataManager
         }
 
         // Floor 情報を作る
-        RE_Data.floors = new Array($dataMapInfos.length);
-        for (let i = 0; i < $dataMapInfos.length; i++) {
-            RE_Data.floors[i] = {
-                id: i
-            };
+        // ※フロア数を Land マップの width としているが、これは MapInfo から読み取ることはできず、
+        //   全マップを一度ロードする必要がある。しかしそうすると処理時間が大きくなってしまう。
+        //   ひとまず欠番は多くなるが、最大フロア数でデータを作ってみる。
+        {
+            // 固定マップ
+            RE_Data.floors = new Array($dataMapInfos.length + (RE_Data.lands.length * RE_Data.MAX_DUNGEON_FLOORS));
+            for (let i = 0; i < $dataMapInfos.length; i++) {
+                if (this.isFloorMap(i)) {
+                    RE_Data.floors[i] = {
+                        id: i,
+                        mapKind: REFloorMapKind.FixedMap,
+                    };
+                }
+                else {
+                    RE_Data.floors[i] = undefined;
+                }
+            }
+
+            // ランダムマップ
+            for (let i = 0; i < RE_Data.lands.length; i++) {
+                const beginFloorId = $dataMapInfos.length + (i * RE_Data.MAX_DUNGEON_FLOORS);
+                RE_Data.lands[i].floorIds = new Array(RE_Data.MAX_DUNGEON_FLOORS);
+                for (let iFloor = 0; iFloor < RE_Data.MAX_DUNGEON_FLOORS; iFloor++){
+                    const floorId = beginFloorId + iFloor;
+                    RE_Data.lands[i].floorIds[iFloor] = floorId;
+                    RE_Data.floors[floorId] = {
+                        id: floorId,
+                        mapKind: REFloorMapKind.RandomMap,
+                    };
+                }
+            }
         }
 
         //console.log("lands:", RE_Data.lands);
@@ -97,6 +123,14 @@ export class RE_DataManager
     static isLandMap(mapId: number) : boolean {
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("RELand:"))
+            return true;
+        else
+            return false;
+    }
+
+    static isFloorMap(mapId: number) : boolean {
+        const info = $dataMapInfos[mapId];
+        if (info && info.name && info.name.startsWith("REFloor:"))
             return true;
         else
             return false;

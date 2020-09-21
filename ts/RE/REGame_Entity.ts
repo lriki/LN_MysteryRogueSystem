@@ -52,6 +52,13 @@ export class RE_Game_Entity
     _iconName: string = '';
     _blockLayer: BlockLayer = BlockLayer.Unit;
 
+    // HC3 までは PositionalAttribute に持たせていたが、こっちに持ってきた。
+    // お店のセキュリティシステムなど、これらを使わない Entity もあるのだが、
+    // ほとんどの Entity が持つことになるパラメータなので、Attribute にするとコードが複雑になりすぎる。
+    floorId: number = 0;    /**< Entity が存在しているフロア */
+    x: number = 0;          /**< 論理 X 座標 */
+    y: number = 0;          /**< 論理 Y 座標 */
+
     _eventData: IDataMapEvent | undefined = undefined;
 
     static newEntity(): RE_Game_Entity {

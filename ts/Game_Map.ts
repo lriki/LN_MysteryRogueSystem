@@ -20,7 +20,9 @@ Game_Map.prototype.setup = function(mapId: number) {
     if (RE_DataManager.isLandMap(mapId)) {
         if (1)  // TODO: 固定マップの場合
         {
-            REGame.map.setupFixedMap();
+            REGame.map.setupFixedMap(mapId);
+
+            
             
         }
         $gamePlayer.hideFollowers();

@@ -3,7 +3,6 @@ import { RE_Game_Entity } from "./REGame_Entity";
 import { REGame_EntityFactory } from "./REGame_EntityFactory";
 import { REGame_Map } from "./REGame_Map";
 import { RE_Game_World } from "./REGame_World";
-import { REGame_PositionalAttribute } from "./REGame_Attribute";
 import { REGame_Core } from "./REGame_Core";
 import { RE_Data } from "./RE_Data";
 

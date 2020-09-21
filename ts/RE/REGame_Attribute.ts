@@ -26,10 +26,11 @@ export interface REGame_AttributeData {
  * Player がアイテムを持ったまま店から出たかをチェックしている。
  * ※店主が倒された等でいなくなってもドロボウは発動するので、店主と同じ Entity にするわけにはいかない。
  */
+/*
 export interface REGame_PositionalAttributeData extends REGame_AttributeData {
-    floorId: number;    /**< Entity が存在しているフロア */
-    x: number;          /**< 論理 X 座標 */
-    y: number;          /**< 論理 Y 座標 */
+    floorId: number;
+    x: number;
+    y: number;
 }
 export class REGame_PositionalAttribute extends REGame_Attribute {
     _data: REGame_PositionalAttributeData = {
@@ -41,12 +42,13 @@ export class REGame_PositionalAttribute extends REGame_Attribute {
         return this._data;
     }
 }
+*/
 
 /**
  * 行動順ルールのもと、1ターンの間に何らかの行動を起こす可能性があるもの。
  *
  * - 一般的なキャラクター (Player, Enemy, NPC)
  */
-export class RE_Game_UnitAttribute extends REGame_PositionalAttribute {
+export class RE_Game_UnitAttribute extends REGame_Attribute {
 }
 

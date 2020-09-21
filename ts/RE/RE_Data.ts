@@ -1,5 +1,11 @@
 
 
+export enum REFloorMapKind
+{
+    FixedMap,
+    RandomMap,
+}
+
 /**
  * [2020/9/6] 種別によるクラス分類はしない
  * ----------
@@ -106,8 +112,8 @@ export interface RE_Data_Land
     /** TrapTable MapId. */
     trapTableMapId: number;
 
-    /** Land に含まれるフロア。要素数はダンジョンのフロア数に等しい。([0] is Invalid) */
-    //floorIds: number[];
+    /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
+    floorIds: number[];
 }
 
 /**
@@ -120,12 +126,15 @@ export interface RE_Data_Floor
     /** ID (0 is Invalid). */
     id : number;
 
-
+    /** マップ生成 */
+    mapKind: REFloorMapKind;
 
 }
 
 export class RE_Data
 {
+    static readonly MAX_DUNGEON_FLOORS = 100;
+
     // Standard entity kinds.
     static WeaponKindId: number;
     static ShieldKindId: number;
@@ -146,7 +155,7 @@ export class RE_Data
     static actors: RE_Data_Actor[] = [];
     static entityKinds: RE_Data_EntityKind[] = [];
     static lands: RE_Data_Land[] = [];
-    static floors: RE_Data_Floor[] = [];    // MapId と一致する
+    static floors: (RE_Data_Floor | undefined)[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
 
     static addEntityKind(name: string): number {
         const newId = this.entityKinds.length + 1;
@@ -166,6 +175,7 @@ export class RE_Data
             itemTableMapId: 0,
             enemyTableMapId: 0,
             trapTableMapId: 0,
+            floorIds: [],
         });
         return newId;
     }
