@@ -123,3 +123,50 @@ export interface RE_Data_Floor
 
 
 }
+
+export class RE_Data
+{
+    // Standard entity kinds.
+    static WeaponKindId: number;
+    static ShieldKindId: number;
+    static ArrowKindId: number;
+    static BraceletKindId: number;
+    static FoodKindId: number;
+    static HerbKindId: number;
+    static ScrollKindId: number;
+    static WandKindId: number;
+    static PotKindId: number;
+    static DiscountTicketKindId: number;
+    static BuildingMaterialKindId: number;
+    static TrapKindId: number;
+    static FigurineKindId: number;
+    static MonsterKindId: number;
+    
+    
+    static actors: RE_Data_Actor[] = [];
+    static entityKinds: RE_Data_EntityKind[] = [];
+    static lands: RE_Data_Land[] = [];
+    static floors: RE_Data_Floor[] = [];    // MapId と一致する
+
+    static addEntityKind(name: string): number {
+        const newId = this.entityKinds.length + 1;
+        this.entityKinds.push({
+            id: newId,
+            name: name
+        });
+        return newId;
+    }
+    
+    static addLand(mapId: number): number {
+        const newId = this.lands.length + 1;
+        this.lands.push({
+            id: newId,
+            mapId: mapId,
+            eventTableMapId: 0,
+            itemTableMapId: 0,
+            enemyTableMapId: 0,
+            trapTableMapId: 0,
+        });
+        return newId;
+    }
+}

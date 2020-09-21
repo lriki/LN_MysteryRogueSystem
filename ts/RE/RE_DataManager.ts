@@ -1,52 +1,6 @@
 import { assert } from "../Common";
-import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor } from "./RE_Data";
+import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, RE_Data } from "./RE_Data";
 
-export class RE_Data
-{
-    // Standard entity kinds.
-    static WeaponKindId: number;
-    static ShieldKindId: number;
-    static ArrowKindId: number;
-    static BraceletKindId: number;
-    static FoodKindId: number;
-    static HerbKindId: number;
-    static ScrollKindId: number;
-    static WandKindId: number;
-    static PotKindId: number;
-    static DiscountTicketKindId: number;
-    static BuildingMaterialKindId: number;
-    static TrapKindId: number;
-    static FigurineKindId: number;
-    static MonsterKindId: number;
-    
-    
-    static actors: RE_Data_Actor[] = [];
-    static entityKinds: RE_Data_EntityKind[] = [];
-    static lands: RE_Data_Land[] = [];
-    static floors: RE_Data_Floor[] = [];
-
-    static addEntityKind(name: string): number {
-        const newId = this.entityKinds.length + 1;
-        this.entityKinds.push({
-            id: newId,
-            name: name
-        });
-        return newId;
-    }
-    
-    static addLand(mapId: number): number {
-        const newId = this.lands.length + 1;
-        this.lands.push({
-            id: newId,
-            mapId: mapId,
-            eventTableMapId: 0,
-            itemTableMapId: 0,
-            enemyTableMapId: 0,
-            trapTableMapId: 0,
-        });
-        return newId;
-    }
-}
 
 declare global {  
     interface Window {  
@@ -102,7 +56,7 @@ export class RE_DataManager
                 RE_Data.addLand(i);
             }
         }
-        // 次に parent が Land である Map から Floor 情報を作る
+        // 次に parent が Land である Map を、データテーブル用のマップとして関連付ける
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info) {
@@ -122,6 +76,14 @@ export class RE_DataManager
                     }
                 }
             }
+        }
+
+        // Floor 情報を作る
+        RE_Data.floors = new Array($dataMapInfos.length);
+        for (let i = 0; i < $dataMapInfos.length; i++) {
+            RE_Data.floors[i] = {
+                id: i
+            };
         }
 
         //console.log("lands:", RE_Data.lands);

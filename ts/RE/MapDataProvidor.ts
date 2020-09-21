@@ -53,8 +53,6 @@ export class MapDataProvidor
     }
 
     static onUpdateBlock(block: REGame_Block): void {
-        console.log("onUpdateBlock");
-        
         const tileIds = block.tileIds();
         if (tileIds) {
             this.setTileIds(block.x(), block.y(), tileIds);

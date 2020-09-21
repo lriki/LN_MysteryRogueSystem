@@ -3,7 +3,7 @@ import { RE_Game_UnitAttribute } from "./REGame_Attribute";
 
 
 
-export class RE_Game_EntityFactory {
+export class REGame_EntityFactory {
     static newActor(): RE_Game_Entity {
         const e = RE_Game_Entity.newEntity();
         e.attrbutes = [

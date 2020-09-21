@@ -5,36 +5,39 @@
  * @note 実装は interface ではなく class にしてみる。
  * interface だとシリアライズは楽だが、リフレクションが使えない。
  */
-export class RE_Game_Attribute
+export class REGame_Attribute
 {
-    data(): RE_Game_AttributeData {
+    data(): REGame_AttributeData {
         return {};
     }
 }
 
-export interface RE_Game_AttributeData {
+export interface REGame_AttributeData {
 }
 
 /**
  * 論理座標値を持ち、Map 上に配置される Entity の Attribute。
+ * 
+ * floorId と x, y で、Entity の存在している場所を一意に特定できる。
+ * ※floorId はダンジョンの階番号ではない。REData.floors の要素番号。
  * 
  * ほとんどの Entity が持つことになる Attribute だが、持たないものもある。
  * 代表的なものだと、お店のセキュリティシステム。これは座標は持たないがお店1つにつき1つ存在して、
  * Player がアイテムを持ったまま店から出たかをチェックしている。
  * ※店主が倒された等でいなくなってもドロボウは発動するので、店主と同じ Entity にするわけにはいかない。
  */
-export interface RE_Game_PositionalAttributeData extends RE_Game_AttributeData {
+export interface REGame_PositionalAttributeData extends REGame_AttributeData {
+    floorId: number;    /**< Entity が存在しているフロア */
     x: number;          /**< 論理 X 座標 */
     y: number;          /**< 論理 Y 座標 */
-    floorId: number;    /**< Entity が存在しているフロア */
 }
-export class RE_Game_PositionalAttribute extends RE_Game_Attribute {
-    _data: RE_Game_PositionalAttributeData = {
+export class REGame_PositionalAttribute extends REGame_Attribute {
+    _data: REGame_PositionalAttributeData = {
         x: 0,
         y: 0,
         floorId: 0,
     };
-    data(): RE_Game_AttributeData {
+    data(): REGame_AttributeData {
         return this._data;
     }
 }
@@ -44,6 +47,6 @@ export class RE_Game_PositionalAttribute extends RE_Game_Attribute {
  *
  * - 一般的なキャラクター (Player, Enemy, NPC)
  */
-export class RE_Game_UnitAttribute extends RE_Game_PositionalAttribute {
+export class RE_Game_UnitAttribute extends REGame_PositionalAttribute {
 }
 

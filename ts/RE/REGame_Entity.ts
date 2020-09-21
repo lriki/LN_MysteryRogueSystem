@@ -1,4 +1,4 @@
-import { RE_Game_Attribute } from "./REGame_Attribute";
+import { REGame_Attribute } from "./REGame_Attribute";
 import { RE_Game_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
 
@@ -39,7 +39,7 @@ enum BlockLayer
 export class RE_Game_Entity
 {
 
-    attrbutes: RE_Game_Attribute[] = [];
+    attrbutes: REGame_Attribute[] = [];
     behaviors: RE_Game_Behavior[] = [];
 
     _id: number = 0;
