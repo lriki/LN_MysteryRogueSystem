@@ -1,5 +1,6 @@
 import { RE_DataManager } from "./RE/RE_DataManager";
 import { assert } from "./Common";
+import { REGame } from "./RE/REGame";
 
 declare global {
     interface Game_Map {
@@ -16,12 +17,25 @@ Game_Map.prototype.setup = function(mapId: number) {
     //console.log("Game_Map initialized.", $gamePlayer._newX);
     //console.log($gamePlayer);
 
-    
+    if (RE_DataManager.isLandMap(mapId)) {
+        REGame.map.setupFixedMap();
+    }
+
+
+    /*
     console.log("OK");
+    console.log($dataMap.data?.length);
     this.setTileData(0, 0, 0, 1);
+    this.setTileData(0, 0, 1, 1);
+    this.setTileData(0, 0, 2, 1);
+    this.setTileData(0, 0, 3, 1);
+    this.setTileData(0, 0, 4, 1);
+    this.setTileData(0, 0, 5, 1);
+    */
 }
 
 
+    /*
 Game_Map.prototype.setTileData = function(x: number, y: number, z: number, value: number) : void {
     const width = this.width();
     const height = this.height();
@@ -32,4 +46,4 @@ Game_Map.prototype.setTileData = function(x: number, y: number, z: number, value
         data[(z * height + y) * width + x] = value;
     }
 }
-
+*/

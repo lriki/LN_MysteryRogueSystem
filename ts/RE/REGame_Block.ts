@@ -1,4 +1,5 @@
-import { RE_Game_Map } from "./RE_Game_Map";
+import { MapDataProvidor } from "./MapDataProvidor";
+import { REGame_Map } from "./REGame_Map";
 
 /**
  * GameBlock
@@ -35,9 +36,36 @@ import { RE_Game_Map } from "./RE_Game_Map";
  * elona みたいに固定マップの壊した壁が一定時間すると復活するようなものを実装するには必要になる。
  * 
  */
-export class RE_Game_Block
+export class REGame_Block
 {
-    constructor(map: RE_Game_Map) {
+    // 固定マップ等で、決まった ID のタイルを表示した場合はここに値を持たせておく。
+    // 常に持たせておくとデータ量もそれなりになるので、今はオプションにしておく。
+    // Note: [0] ... 地面 (A タイル)
+    // Note: [1,2,3] ... 装飾 (B, C タイル. "自動" モードでは後ろの番号から配置されていく)
+    private _tileIds: number[] | undefined;
 
+    private _x: number;
+    private _y: number;
+
+    constructor(map: REGame_Map, x: number, y: number) {
+        this._x = x;
+        this._y = y;
+    }
+
+    x(): number {
+        return this._x;
+    }
+
+    y(): number {
+        return this._y;
+    }
+
+    tileIds(): number[] | undefined {
+        return this._tileIds;
+    }
+
+    setTileIds(tileIds: number[]): void {
+        this._tileIds = tileIds;
+        MapDataProvidor.onUpdateBlock(this);
     }
 }

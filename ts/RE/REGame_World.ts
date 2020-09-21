@@ -1,4 +1,4 @@
-import { RE_Game_Entity } from "./RE_Game_Entity";
+import { RE_Game_Entity } from "./REGame_Entity";
 import { assert } from "ts/Common";
 
 /**

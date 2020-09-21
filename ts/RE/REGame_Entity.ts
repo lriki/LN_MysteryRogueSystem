@@ -1,6 +1,6 @@
-import { RE_Game_Attribute } from "./RE_Game_Attribute";
-import { RE_Game_Behavior } from "./RE_Game_Behavior";
-import { RE_Game } from "./RE_Game";
+import { RE_Game_Attribute } from "./REGame_Attribute";
+import { RE_Game_Behavior } from "./REGame_Behavior";
+import { REGame } from "./REGame";
 
 
 
@@ -56,7 +56,7 @@ export class RE_Game_Entity
 
     static newEntity(): RE_Game_Entity {
         const e = new RE_Game_Entity();
-        RE_Game.world._addEntity(e);
+        REGame.world._addEntity(e);
         return e;
     }
     
@@ -99,7 +99,7 @@ export class RE_Game_Entity
         // TODO: Test
         this._eventData = {
             id: 0,
-            name: "dynamc  event",
+            name: "dynamc event",
             note: "",
             pages: [
                 {

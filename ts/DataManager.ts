@@ -1,5 +1,6 @@
 import { RE_DataManager } from "./RE/RE_DataManager";
-import { RE_Game } from "./RE/RE_Game";
+import { REGame } from "./RE/REGame";
+import { REGameManager } from "./RE/REGameManager";
 
 const _DataManager_loadMapData = DataManager.loadMapData;
 DataManager.loadMapData = function(mapId) {
@@ -19,6 +20,7 @@ DataManager.loadMapData = function(mapId) {
         this.loadDataFile("RE_dataTrapTableMap", trapTable_ilename);
     }
     else {
+        REGame.map.clear();
         RE_DataManager.landMapDataLoading = false;
     }
 };
@@ -45,5 +47,5 @@ DataManager.isMapLoaded = function() {
 const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
     _DataManager_createGameObjects.call(DataManager);
-    RE_Game.createGameObjects();
+    REGameManager.createGameObjects();
 }
