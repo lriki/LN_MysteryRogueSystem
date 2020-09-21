@@ -131,11 +131,11 @@ export interface RE_Data_Floor
 
 }
 
-export class RE_Data
+export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
 
-    // Standard entity kinds.
+    // Standard entity kinds.s
     static WeaponKindId: number;
     static ShieldKindId: number;
     static ArrowKindId: number;

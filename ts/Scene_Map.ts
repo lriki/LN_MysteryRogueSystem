@@ -1,13 +1,13 @@
-import { RE_DataManager } from "./RE/RE_DataManager";
+import { REDataManager } from "./RE/REDataManager";
 
 var _Scene_Map_isReady = Scene_Map.prototype.isReady;
 Scene_Map.prototype.isReady = function() {
-    if (RE_DataManager.landMapDataLoading) {
+    if (REDataManager.landMapDataLoading) {
         if (DataManager.isMapLoaded()) {
             // Land 定義マップの読み込みがすべて終わった
             
             // 元の遷移先マップをバックアップ (Land 定義マップとして使う)
-            RE_DataManager._dataLandDefinitionMap = $dataMap
+            REDataManager._dataLandDefinitionMap = $dataMap
 
             // 固定マップを読み込む
             DataManager.loadMapData(1);

@@ -4,7 +4,7 @@ import { REGame_EntityFactory } from "./REGame_EntityFactory";
 import { REGame_Map } from "./REGame_Map";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";
-import { RE_Data } from "./RE_Data";
+import { REData } from "./REData";
 
 
 /**
@@ -18,7 +18,7 @@ export class REGameManager
         REGame.actorUnits = [];
 
         // Create unique units
-        RE_Data.actors.forEach(x => {
+        REData.actors.forEach(x => {
             const unit = REGame_EntityFactory.newActor();
             REGame.actorUnits.push(unit);
             

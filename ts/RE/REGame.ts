@@ -1,7 +1,7 @@
 import { REGame_Map } from "./REGame_Map";
 import { REGame_EntityFactory } from "./REGame_EntityFactory";
 import { RE_Game_UnitAttribute } from "./REGame_Attribute";
-import { RE_DataManager } from "./RE_DataManager";
+import { REDataManager } from "./REDataManager";
 import { RE_Game_Entity } from "./REGame_Entity";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";

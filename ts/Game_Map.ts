@@ -1,4 +1,4 @@
-import { RE_DataManager } from "./RE/RE_DataManager";
+import { REDataManager } from "./RE/REDataManager";
 import { assert } from "./Common";
 import { REGame } from "./RE/REGame";
 
@@ -17,12 +17,12 @@ Game_Map.prototype.setup = function(mapId: number) {
     //console.log("Game_Map initialized.", $gamePlayer._newX);
     //console.log($gamePlayer);
 
-    if (RE_DataManager.isLandMap(mapId)) {
+    if (REDataManager.isLandMap(mapId)) {
         if (1)  // TODO: 固定マップの場合
         {
             REGame.map.setupFixedMap(mapId);
 
-            
+
             
         }
         $gamePlayer.hideFollowers();

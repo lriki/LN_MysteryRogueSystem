@@ -2,7 +2,7 @@ import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Block } from "./REGame_Block";
 import { RE_Game_Entity } from "./REGame_Entity";
-import { REFloorMapKind, RE_Data } from "./RE_Data";
+import { REFloorMapKind, REData } from "./REData";
 
 
 
@@ -75,11 +75,11 @@ export class REGame_Map
     }
 
     isFixedMap(): boolean {
-        return RE_Data.floors[this._floorId]?.mapKind == REFloorMapKind.FixedMap;
+        return REData.floors[this._floorId]?.mapKind == REFloorMapKind.FixedMap;
     }
 
     isRandomMap(): boolean {
-        return RE_Data.floors[this._floorId]?.mapKind == REFloorMapKind.RandomMap;
+        return REData.floors[this._floorId]?.mapKind == REFloorMapKind.RandomMap;
     }
 
     block(x: number, y: number) : REGame_Block {
