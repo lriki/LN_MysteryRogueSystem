@@ -5,11 +5,11 @@ Command
 Action と Reaction
 ----------
 
-すべての行動は Query - Action - Reaction の組み (QAR-Sequence) によって実行される。例えば次のようになる。
+すべての行動は **Query - Action - Reaction - Result** の組み (QARR-Sequence) によって実行される。例えば次のようになる。
 
-- "(相手へ)攻撃できるか" - "(自分は)攻撃する" - "(相手は)攻撃される"
-- "(相手は)拾えるか" - "(自分は)拾う" - "(相手は)拾われる"
-- "(相手は)投げられるか" - "(自分は)投げる" - "(相手は)投げられる"
+- "(相手へ)攻撃できるか" - "(自分は)攻撃する" - "(相手は)攻撃される" - "攻撃は当たったか？"
+- "(相手は)拾えるか" - "(自分は)拾う" - "(相手は)拾われる" - "拾われたか？"
+- "(相手は)投げられるか" - "(自分は)投げる" - "(相手は)投げられる" - "投げられたか？"
 
 3 つの要素はそれぞれ Command として、同期または非同期通信の仕組みに乗って各 Entity 間をやりとりする。
 
@@ -20,29 +20,29 @@ Action と Reaction
 3. Dialog や AI から、操作対象の Entity に対して、ActionCommand を送信する。
 4. ActionCommand を受信した Behavior は、必要に応じてリソースや行動を消費し、目標の Entity に対して ReactionCommand を送信する。
 5. ReactionCommand を受信した Behavior は、各効果を発動したりダメージを適用したりする。ここから新たに QAR-Sequence が始まることもある。
+6. 送信元 Entity に対して、ResultCommand を返す。
+7. ResultCommand を受信した Behavior は、後処理を行う。
 
 Player が Enemy に攻撃するシーケンス例：
 
 ```plantuml
-Dialog -> Enemey: 1
+Dialog -> Enemey: 1 (Query)
 Dialog <- Enemey: 2
 Dialog -> Plyer: 3
+Plyer -> Plyer: 4 (Action)
 Enemey <- Plyer: 4
-Enemey -> Enemey: 5
+Enemey -> Enemey: 5 (Reaction)
+Enemey -> Plyer: 6
+Plyer -> Plyer: 7 (Result)
 ```
 
 > 実際に直接 Enemy にコマンドを飛ばすことは無く、「目の前の Block」へコマンドを飛ばすことになる。
 
-### Command の実行タイミング
-
-- Query: 同期
-- Action: 非同期
-- Reaction: 非同期
-
-
-### 留意点
+### Query
 
 Query では、実際に効果のある Reaction が行えるかではなく、何らかの Reaction を返す可能性があるかを返す。
+
+`ゲーム状態を一切状態を変更してはならない。`
 
 > e.g.) シレン2-聖域の巻物
 > Dialog から「拾う」を選択することはでき、「拾う」Action を起こすことで行動をひとつ消費する。
@@ -64,35 +64,40 @@ Query が返す情報はあくまで「参考情報」である点に注意。
 例えば、壁Behavior が "攻撃" Query に対して "処理しない" を返しても、Player は "空振り" という形で攻撃することができる。
 そのためこの場合だと、壁Behaviorは貫通属性の無い攻撃に対しては "何もせず処理" しないと、壁の中にいるモンスターに攻撃が通ってしまうことになる。
 
+### Action
+
+`他人の状態(Attribute)を変更してはならない。`
+
+### Reaction
+
+`他人の状態(Attribute)を変更してもかまわない。`
+
+### Result
+
+実行結果を、行動者にフィードバックする仕組み。Query 以外の Command はすべて非同期通信であるため、Reaction 送信元は、その結果を直ちに知ることはできない。
+
+`他人の状態(Attribute)を変更してはならない。`
+
+> e.g.) シレン2-つるはし
+> e.g.) シレン2-使い捨ての剣・盾
+> e.g.) シレン2-スパークソード
+> 壁を掘ったり、攻撃が "当たった" 結果として、一定確率で壊れてしまうような仕組みの実装に Result が必要となる。
 
 
+### Command の実行タイミング
 
-------------------
+- Query: 同期
+- Action: 非同期
+- Reaction: 非同期
+- Result: 非同期
 
-行動はできるだけ細かい単位にすること。壁掘りを例にすると、"攻撃" と "壁掘り" は分けて考える。
+Action, Reaction, Result は同期にすることはできない。代表的なものとしては、それぞれの実行タイミングで Dialog を表示する可能性があるため。
+Web検索するとよく出てくるローグのサンプルのほとんどは CUI であるため同期でも大きな問題にはならないのだが、GUI を持つとなるとアニメーション完了まで実行を待つようなケースも考慮しなければならない。
 
+> e.g.) シレン2-物知りの杖
+> これは魔法弾が当たった瞬間に Dialog を表示し、プレイヤーが何かボタンを押したらウィンドウを閉じてシーケンス実行を続ける。
+> 実行タイミングとしては Reaction の時。
 
-
-
-
-
-例：
-- Action は "拾う"、"投げる"。
-- Reaction は "拾われる"、"投げられる（飛ばされる）"。
-
-REGame_Behavior.onAction (旧HC3 onExecuteCommand)
-REGame_Behavior.onReaction (旧HC3 onExecuteReaction)
-
-### 実装ルール
-
-- onAction は、`他人の状態(Attribute)を変更してはならない。`
-- onReaction は、`他人の状態(Attribute)を変更してもかまわない。`
-
-
-### 実装例. 薬草を投げつけられてダメージを受けるゴーストタイプ
-
-- ...
-- 
-- 薬草Behavior は対象のタイプを知っていてはならない。
-
-
+> e.g.) シレン2-おしうり
+> エネミーフェーズでこちらに対してお店の処理をかけてくる。また、買ったかどうかでその後の動きがかわる。
+> すべて非同期で処理し、Result も返してあげる必要がある。
