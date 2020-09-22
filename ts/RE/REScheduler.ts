@@ -22,7 +22,7 @@ interface ActionInfo
 
 interface RunInfo
 {
-    units: ActionInfo[];
+    actions: ActionInfo[];
 };
 
 enum SchedulerPhase
@@ -62,6 +62,8 @@ export class REScheduler
     private _phase: SchedulerPhase = SchedulerPhase.TurnStarting;
     private _units: UnitInfo[] = [];
     private _runs: RunInfo[] = [];
+    private _currentRun: number = 0;
+    private _currentUnit: number = 0;
 
     constructor() {
     }
@@ -94,7 +96,7 @@ export class REScheduler
                 //sweepCollapseList();
     
                 //m_commandContext->beginCommandChain();
-                //stepSimulationInternal();
+                this.stepSimulationInternal();
             }
         }
     }
@@ -156,30 +158,91 @@ export class REScheduler
             }
         });
         
+        this._currentRun = 0;
+        this._phase = SchedulerPhase.RunStarting
     }
     
     private update_RunStarting(): void {
-
+        this._currentUnit = 0;
+        this._phase = SchedulerPhase.ManualAction;
     }
     
     private update_ManualAction(): void {
+        const run = this._runs[this._currentRun];
+        const action = run.actions[this._currentUnit];
+        const unit = action.unit;
 
+        if (unit.unit) {
+            if (unit.attr.manualMovement()) {
+                // TODO:
+                assert(0);
+            }
+        }
+
+        // 全 Unit 分処理を終えたら次の Phase へ
+        this._currentUnit++;
+        if (this._currentUnit >= run.actions.length) {
+            this._currentUnit = 0;
+            this._phase = SchedulerPhase.AIMinorAction;
+        }
     }
     
     private update_AIMinorAction(): void {
+        const run = this._runs[this._currentRun];
+        const action = run.actions[this._currentUnit];
+        const unit = action.unit;
 
+        if (unit.unit) {
+            if (!unit.attr.manualMovement()) {
+                // TODO:
+                assert(0);
+            }
+        }
+
+        // 全 Unit 分処理を終えたら次の Phase へ
+        this._currentUnit++;
+        if (this._currentUnit >= run.actions.length) {
+            this._currentUnit = 0;
+            this._phase = SchedulerPhase.AIMajorAction;
+        }
     }
     
     private update_AIMajorAction(): void {
+        const run = this._runs[this._currentRun];
+        const action = run.actions[this._currentUnit];
+        const unit = action.unit;
 
+        if (unit.unit) {
+            if (!unit.attr.manualMovement()) {
+                // TODO:
+                assert(0);
+            }
+        }
+
+        // 全 Unit 分処理を終えたら次の Phase へ
+        this._currentUnit++;
+        if (this._currentUnit >= run.actions.length) {
+            this._currentUnit = 0;
+            this._phase = SchedulerPhase.RunEnding;
+        }
     }
     
     private update_RunEnding(): void {
-
+        this._currentRun++;
+        if (this._currentRun >= this._runs.length) {
+            this._phase = SchedulerPhase.TurnEnding;
+        }
+        else {
+            this._phase = SchedulerPhase.RunStarting;
+        }
     }
     
     private update_TurnEnding(): void {
 
+        // ターン終了時に、Animation が残っていればすべて掃き出す
+        //executeAnimationQueue(true);
+
+        this._phase = SchedulerPhase.TurnStarting;
     }
 
     private buildOrderTable(): void {
@@ -220,7 +283,7 @@ export class REScheduler
         this._units.forEach(unit => {
             if (unit.attr.manualMovement()) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].units.push({
+                    this._runs[i].actions.push({
                         unit: unit,
                         actionCount: 1,
                     });
@@ -232,7 +295,7 @@ export class REScheduler
         this._units.forEach(unit => {
             if (!unit.attr.manualMovement() && unit.actionCount >= 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].units.push({
+                    this._runs[i].actions.push({
                         unit: unit,
                         actionCount: 1,
                     });
@@ -244,12 +307,14 @@ export class REScheduler
         this._units.forEach(unit => {
             if (!unit.attr.manualMovement() && unit.actionCount < 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[this._runs.length - 1 - i].units.push({  	// 後ろから詰めていく
+                    this._runs[this._runs.length - 1 - i].actions.push({  	// 後ろから詰めていく
                         unit: unit,
                         actionCount: 1,
                     });
                 }
             }
         });
+
+        // TODO: Merge
     }
 }
