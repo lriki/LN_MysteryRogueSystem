@@ -49,6 +49,41 @@ export class REGame_PositionalAttribute extends REGame_Attribute {
  *
  * - 一般的なキャラクター (Player, Enemy, NPC)
  */
-export class RE_Game_UnitAttribute extends REGame_Attribute {
+export interface REGame_UnitAttributeData extends REGame_AttributeData {
+    factionId: number;
+    speedLevel: number;     // 0 が基本、1は倍速。2は2倍速。-1は鈍足。
+    waitTurnCount: number;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
+    manualMovement: boolean;    // マニュアル操作するかどうか。
+    actionTokenCount: number;
+}
+export class REGame_UnitAttribute extends REGame_Attribute {
+
+    factionId(): number { return this._data.factionId; }
+    setFactionId(value: number): REGame_UnitAttribute { this._data.factionId = value; return this; }
+
+    speedLevel(): number { return this._data.speedLevel; }
+    setSpeedLevel(value: number): REGame_UnitAttribute { this._data.speedLevel = value; return this; }
+
+    waitTurnCount(): number { return this._data.waitTurnCount; }
+    setWaitTurnCount(value: number): REGame_UnitAttribute { this._data.waitTurnCount = value; return this; }
+
+    manualMovement(): boolean { return this._data.manualMovement; }
+    setManualMovement(value: boolean): REGame_UnitAttribute { this._data.manualMovement = value; return this; }
+
+    actionTokenCount(): number { return this._data.actionTokenCount; }
+    setActionTokenCount(value: number): REGame_UnitAttribute { this._data.actionTokenCount = value; return this; }
+
+    _data: REGame_UnitAttributeData = {
+        factionId: 0,
+        speedLevel: 0,
+        waitTurnCount: 0,
+        manualMovement: false,
+        actionTokenCount: 0,
+    };
+    data(): REGame_AttributeData {
+        return this._data;
+    }
+    
+    
 }
 

@@ -48,7 +48,7 @@ export interface RE_Data_Entity
 export interface RE_Data_EntityKind
 {
     /** ID (0 is Invalid). */
-    id : number;
+    id: number;
 
     /** Name. */
     name: string;
@@ -60,7 +60,7 @@ export interface RE_Data_EntityKind
 export interface RE_Data_EntityFeature
 {
     /** ID (0 is Invalid). */
-    id : number;
+    id: number;
 
     /** Name. */
     name: string;
@@ -77,7 +77,7 @@ export interface RE_Data_EntityFeature
 export interface RE_Data_Actor
 {
     /** ID (0 is Invalid). */
-    id : number;
+    id: number;
 
     /** Name. */
     name: string;
@@ -95,7 +95,7 @@ export interface RE_Data_Actor
 export interface RE_Data_Land
 {
     /** ID (0 is Invalid). */
-    id : number;
+    id: number;
 
     /** Land に対応するツクール MapId. */
     mapId: number;
@@ -124,18 +124,33 @@ export interface RE_Data_Land
 export interface RE_Data_Floor
 {
     /** ID (0 is Invalid). */
-    id : number;
+    id: number;
 
     /** マップ生成 */
     mapKind: REFloorMapKind;
 
 }
 
+/**
+ * 勢力
+ */
+export interface REData_Faction
+{
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+
+    /** 行動順 */
+    schedulingOrder: number;
+}
+
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
 
-    // Standard entity kinds.s
+    // Standard entity kinds.
     static WeaponKindId: number;
     static ShieldKindId: number;
     static ArrowKindId: number;
@@ -151,11 +166,15 @@ export class REData
     static FigurineKindId: number;
     static MonsterKindId: number;
     
+    // Common defineds.
+    static ActorDefaultFactionId: number = 1;
+    static EnemeyDefaultFactionId: number = 2;
     
     static actors: RE_Data_Actor[] = [];
     static entityKinds: RE_Data_EntityKind[] = [];
     static lands: RE_Data_Land[] = [];
     static floors: (RE_Data_Floor | undefined)[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
+    static factions: REData_Faction[] = [];
 
     static addEntityKind(name: string): number {
         const newId = this.entityKinds.length + 1;

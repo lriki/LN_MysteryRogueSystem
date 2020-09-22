@@ -3,6 +3,7 @@ import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Block } from "./REGame_Block";
 import { RE_Game_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "./REData";
+import { REGame } from "./REGame";
 
 
 
@@ -90,7 +91,12 @@ export class REGame_Map
             return this._blocks[y * this._width + x];
         }
     }
-    //_data: RE_Game_Data;
+
+    entities(): RE_Game_Entity[] {
+        return this._entityIds
+            .map(id => { return REGame.world.entity(id); })
+            .filter((e): e is RE_Game_Entity => { return e != undefined; });
+    }
 
     _addEntity(entity: RE_Game_Entity): void {
         assert(entity.floorId != this.floorId());

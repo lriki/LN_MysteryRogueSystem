@@ -35,5 +35,9 @@ export class REGameManager
         console.log("c: ", c);
         */
     }
+
+    static visualRunning(): boolean {
+        return true;
+    }
 }
 
