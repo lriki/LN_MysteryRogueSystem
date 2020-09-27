@@ -68,11 +68,9 @@ Query が返す情報はあくまで「参考情報」である点に注意。�
 
 ### Action
 
-`他人の状態(Attribute)を変更してはならない。`
 
 ### Reaction
 
-`他人の状態(Attribute)を変更してもかまわない。`
 
 ### Result
 
@@ -137,6 +135,27 @@ Web検索するとよく出てくるローグのサンプルのほとんどは C
 > e.g.) シレン2-おしうり
 > エネミーフェーズでこちらに対してお店の処理をかけてくる。また、買ったかどうかでその後の動きがかわる。
 > すべて非同期で処理し、Result も返してあげる必要がある。
+
+onPreAction, onPreReaction
+----------
+
+onAction(reciver側), onReaction(target側) を実行する前の実行可否を判断するための仕組み。
+
+postCommand() で送信される Command の実行前に呼び出される。
+
+なお、postCommand() は actor と reactor をうけとり、これらの処理をまとめて行う。
+実際の実行順は、
+
+1. onPreAction
+2. onPreReaction
+3. onAction
+4. onReaction
+
+> [2020/9/27] 必要になった経緯:
+> アイテムを「置く」とき、アイテム側(target側) の種類によってどのように置かれるか変わることがあるため。
+> シレン2の没データ "土偶アイテム" は、「置く」と足元ではなく目の前に土偶が出現する。これは普通のアイテムとは動作が異なる。
+
+
 
 
 [deprecated: see EffectContext] コマンドチェーン
