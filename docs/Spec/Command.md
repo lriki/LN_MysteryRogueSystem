@@ -5,7 +5,16 @@ Command
 Action と Reaction
 ----------
 
-すべての行動は **Query - Action - Reaction - Result** の組み (QARR-Sequence) によって実行される。例えば次のようになる。
+~~すべての行動は **Query - Action - Reaction - Result** の組み (QARR-Sequence) によって実行される。例えば次のようになる。~~
+すべての行動は **Query - Action - Reaction** の組み (QARR-Sequence) によって実行される。
+
+> [2020/9/27] Result は無し。EffectContext で代用する。
+> 以下の例で攻撃されたかどうかを、Command を発行した Behavior 自身へ返す仕組みを考えていたが、別の Behavior で結果を受けとって何かしたいこともある。
+> 例えば攻撃が当たらなかったときに、次のような動きになる Behavior が考えられる。
+> - 次回攻撃は必中状態にする
+> - 一歩下がる AI
+
+例えば次のようになる。
 
 - "(相手へ)攻撃できるか" - "(自分は)攻撃する" - "(相手は)攻撃される" - "攻撃は当たったか？"
 - "(相手は)拾えるか" - "(自分は)拾う" - "(相手は)拾われる" - "拾われたか？"
@@ -59,7 +68,7 @@ Aボタンは状況に応じて、多岐にわたる Action を実行できる�
 > なおこのケースでは、モンスター側が自分が今いる地形を確認して攻撃を受けないように Reaction するのはNG.
 > 地形によって攻撃が通らなくなる似たような仕組みとして、シレン5等の "扉" がある。地形側でガードするべき。
 
-Query が返す情報はあくまで「参考情報」である点に注意。
+Query が返す情報はあくまで「参考情報」である点に注意。ガードが必要な場合は必ず Action または Reaction で対策すること。
 
 例えば、壁Behavior が "攻撃" Query に対して "処理しない" を返しても、Player は "空振り" という形で攻撃することができる。
 そのためこの場合だと、壁Behaviorは貫通属性の無い攻撃に対しては "何もせず処理" しないと、壁の中にいるモンスターに攻撃が通ってしまうことになる。
@@ -72,7 +81,7 @@ Query が返す情報はあくまで「参考情報」である点に注意。
 
 `他人の状態(Attribute)を変更してもかまわない。`
 
-### Result
+### ~~Result~~
 
 実行結果を、行動者にフィードバックする仕組み。Query 以外の Command はすべて非同期通信であるため、Reaction 送信元は、その結果を直ちに知ることはできない。
 
@@ -129,14 +138,14 @@ Behavior クラスを派生させて、以下のメソッドを実装する必�
 
 - Behavior.onQuery
 - Behavior.onAction
-- Behavior.onReaction
+- Behavior.onReceiverReaction
 - Behavior.onResult (もしかしたら onAction で Prmise 使うかも)
 
 Behavior のインスタンスは Entity にアタッチして利用し、onQuery, onAction, onResult はアタッチされた Entity のコマンド受信に反応して呼び出される。
 
-onReaction だけは、onAction から送信した相手 Entity を処理するために呼び出される点に注意。
+onReceiverReaction だけは、onAction から送信した相手 Entity を処理するために呼び出される点に注意。
 
-> NOTE: 以前までは onReaction は存在せず、代わりに アクション側Behavior と、非アクション側Behavior の2種類を用意していた。
+> NOTE: 以前までは onReceiverReaction は存在せず、代わりに アクション側Behavior と、非アクション側Behavior の2種類を用意していた。
 > しかしこうすると関連する処理が離れたクラスに実装されてるため、ただでさえ複雑になりがちなコードの見通しが悪くなる。
 > 
 > さらに、非アクション側Behavior を実質すべての Entity に割り当てる必要があったりと、設定漏れの危険が非常に大きくなる。

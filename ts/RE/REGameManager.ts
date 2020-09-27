@@ -5,6 +5,8 @@ import { REGame_Map } from "./REGame_Map";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";
 import { REData } from "./REData";
+import { REScheduler } from "./REScheduler";
+import { REGame_UnitAttribute } from "./REGame_Attribute";
 
 
 /**
@@ -12,6 +14,7 @@ import { REData } from "./REData";
 export class REGameManager
 {
     static createGameObjects(): void {
+        REGame.scheduler = new REScheduler();
         REGame.core = new REGame_Core();
         REGame.world = new RE_Game_World();
         REGame.map = new REGame_Map();
@@ -27,6 +30,13 @@ export class REGameManager
             //}
         });
 
+        // 1 番 Actor をデフォルトで操作可能とする
+        const firstActor = REGame.actorUnits[0];
+        const unit = firstActor.findAttribute(REGame_UnitAttribute);
+        if (unit) {
+            unit.setManualMovement(true);
+        }
+
 /*
         let a = RE_Game_EntityFactory.newActor();
         let b = a.findAttribute(RE_Game_UnitAttribute);
@@ -37,7 +47,11 @@ export class REGameManager
     }
 
     static visualRunning(): boolean {
-        return true;
+        return false;
+    }
+
+    static update(): void {
+        REGame.scheduler.stepSimulation();
     }
 }
 

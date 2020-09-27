@@ -146,25 +146,42 @@ export interface REData_Faction
     schedulingOrder: number;
 }
 
+/**
+ * 拾う、投げる、などの行動の種類
+ * 
+ * Command と密接に関係し、Command の種類 (というより発動の基点) を示すために使用する。
+ * また、UI 状に表示される "ひろう" "なげる" といった表示名もここで定義する。
+ * 
+ * Command は dynamic なデータ構造だが、こちらは static.
+ */
+export interface REData_Action
+{
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+}
+
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
 
     // Standard entity kinds.
-    static WeaponKindId: number;
-    static ShieldKindId: number;
-    static ArrowKindId: number;
-    static BraceletKindId: number;
-    static FoodKindId: number;
-    static HerbKindId: number;
-    static ScrollKindId: number;
-    static WandKindId: number;
-    static PotKindId: number;
-    static DiscountTicketKindId: number;
-    static BuildingMaterialKindId: number;
-    static TrapKindId: number;
-    static FigurineKindId: number;
-    static MonsterKindId: number;
+    static WeaponKindId: number;            // 武器
+    static ShieldKindId: number;            // 盾
+    static ArrowKindId: number;             // 矢
+    static BraceletKindId: number;          // 腕輪
+    static FoodKindId: number;              // 食料
+    static HerbKindId: number;              // 草
+    static ScrollKindId: number;            // 巻物
+    static WandKindId: number;              // 杖
+    static PotKindId: number;               // 壺
+    static DiscountTicketKindId: number;    // 割引券
+    static BuildingMaterialKindId: number;  // 建材
+    static TrapKindId: number;              // 罠
+    static FigurineKindId: number;          // 土偶
+    static MonsterKindId: number;           // モンスター
     
     // Common defineds.
     static ActorDefaultFactionId: number = 1;
@@ -175,6 +192,7 @@ export class REData
     static lands: RE_Data_Land[] = [];
     static floors: (RE_Data_Floor | undefined)[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
+    static actions: REData_Action[] = [{id: 0, name: 'null'}];
 
     static addEntityKind(name: string): number {
         const newId = this.entityKinds.length + 1;
@@ -198,4 +216,42 @@ export class REData
         });
         return newId;
     }
+    
+    static addAction(name: string): number {
+        const newId = this.actions.length + 1;
+        this.actions.push({
+            id: newId,
+            name: name
+        });
+        return newId;
+    }
+
+    
+    //----------------------------------------
+    // Standard Actions.
+    /**
+     * 拾う
+     * 
+     * 
+     * - 優先度A: 聖域の巻物に乗った時 : "聖域の巻物 はぴったりと ゆかに はりついていて ひろえない。"
+     * - 優先度A: 聖域の巻物を拾おうとした時 : "聖域の巻物 はぴったりと ゆかに はりついていて ひろえない。"
+     * - 優先度B: 持ち物一杯で乗った時： "持ち物が いっぱいで ひろえない。" "XXXX に のった。"
+     * - 優先度B: 持ち物一杯で拾おうとした時： "持ち物が いっぱいで ひろえない。" "XXXX に のった。"
+     * 
+     * インベントリに直接入れるのか、壺に入れるのか、といった区別をする必要があるので、データ的な取得を行うのは sender 側でなければならない。
+     * 
+     * onResult の仕組みが必要となるが、例えば手封じの壺など「アイテムを拾えない」というような状態異常を考える場合、sender の onResult の前に
+     * 状態異常の onResult が割り込みをかけられなければならない。
+     * またトドの壺のように離れたところにあるアイテムを拾うようなケースも考えられる。
+     * いろいろなケースを考えると、拾う動作ひとつとっても EffectContext が必要になってくる。
+     *
+     *
+     */
+    static PickActionId: number;
+
+    /** 置く */
+    static PutActionId: number;
+
+    /** 交換 ※「拾う」>「置く」を1手で行う。また、それとは表示メッセージが異なる場合がある */
+    static ExchangeActionId: number;
 }

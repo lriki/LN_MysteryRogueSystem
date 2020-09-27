@@ -35,6 +35,8 @@ export class REDataManager
         REData.TrapKindId = REData.addEntityKind("罠");
         REData.FigurineKindId = REData.addEntityKind("土偶");
         REData.MonsterKindId = REData.addEntityKind("モンスター");
+
+        REData.addAction();
         
         // Import Actors
         REData.actors = $dataActors.map((x) => {

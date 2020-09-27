@@ -5,6 +5,7 @@ import { REDataManager } from "./REDataManager";
 import { RE_Game_Entity } from "./REGame_Entity";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";
+import { REScheduler } from "./REScheduler";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -15,6 +16,7 @@ export class REGame
 {
     static readonly TILE_LAYER_COUNT: number = 6;
 
+    static scheduler: REScheduler;
     static core: REGame_Core;
     static world: RE_Game_World;
     static map: REGame_Map;

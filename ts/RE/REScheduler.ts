@@ -1,4 +1,4 @@
-import { assert } from "ts/Common";
+import { assert, Log } from "../Common";
 import { RECommandContext } from "./RECommandContext";
 import { REData } from "./REData";
 import { REGame } from "./REGame";
@@ -88,7 +88,6 @@ export class REScheduler
                 break;
             }
 
-            
             if (this._commandContext.isRunning()) {
                 //this._commandContext.processCommand();
             }
@@ -131,6 +130,8 @@ export class REScheduler
     }
     
     private update_TurnStarting(): void {
+        Log.d("s update_TurnStarting");
+
         this.buildOrderTable();
         
         // ターン開始時の各 unit の設定更新
@@ -159,15 +160,23 @@ export class REScheduler
         });
         
         this._currentRun = 0;
-        this._phase = SchedulerPhase.RunStarting
+        this._phase = SchedulerPhase.RunStarting;
+
+        Log.d("e update_TurnStarting");
     }
     
     private update_RunStarting(): void {
+        Log.d("s update_RunStarting");
+
         this._currentUnit = 0;
         this._phase = SchedulerPhase.ManualAction;
+
+        Log.d("e update_RunStarting");
     }
     
     private update_ManualAction(): void {
+        Log.d("update_ManualAction started.");
+
         const run = this._runs[this._currentRun];
         const action = run.actions[this._currentUnit];
         const unit = action.unit;
@@ -184,6 +193,10 @@ export class REScheduler
         if (this._currentUnit >= run.actions.length) {
             this._currentUnit = 0;
             this._phase = SchedulerPhase.AIMinorAction;
+            Log.d("update_ManualAction finish.");
+        }
+        else {
+            Log.d("update_ManualAction continued.");
         }
     }
     
@@ -278,6 +291,9 @@ export class REScheduler
         this._units = this._units.sort((a, b) => { return REData.factions[a.attr.factionId()].schedulingOrder - REData.factions[b.attr.factionId()].schedulingOrder; });
 
         this._runs = new Array(runCount);
+        for (let i = 0; i < this._runs.length; i++) {
+            this._runs[i] = { actions: []};
+        }
 
         // Faction にかかわらず、マニュアル操作 Unit は最優先で追加する
         this._units.forEach(unit => {
@@ -314,6 +330,9 @@ export class REScheduler
                 }
             }
         });
+
+        //console.log("unis:", this._units);
+        //console.log("runs:", this._runs);
 
         // TODO: Merge
     }

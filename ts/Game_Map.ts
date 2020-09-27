@@ -1,10 +1,11 @@
 import { REDataManager } from "./RE/REDataManager";
-import { assert } from "./Common";
 import { REGame } from "./RE/REGame";
+import { REGameManager } from "./RE/REGameManager";
 
 declare global {
     interface Game_Map {
-        setTileData(x: number, y: number, z: number, value: number): void;
+        isRESystemMap(): boolean;
+        //setTileData(x: number, y: number, z: number, value: number): void;
     }
 }
 
@@ -54,3 +55,16 @@ Game_Map.prototype.setTileData = function(x: number, y: number, z: number, value
     }
 }
 */
+
+var _Game_Map_update = Game_Map.prototype.update;
+Game_Map.prototype.update = function(sceneActive: boolean) {
+    _Game_Map_update.call(this, sceneActive);
+
+    if (this.isRESystemMap()) {
+        REGameManager.update();
+    }
+}
+
+Game_Map.prototype.isRESystemMap = function(): boolean {
+    return REGame.map.isValid();
+}
