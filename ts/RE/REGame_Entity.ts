@@ -145,8 +145,7 @@ export class RE_Game_Entity
         return REResponse.Pass;
     }
 
-    // 継承 & 誤用防止
-    private constructor() {
+    constructor() {
 
         // TODO: Test
         this._eventData = {
