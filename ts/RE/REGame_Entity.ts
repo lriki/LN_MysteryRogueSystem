@@ -1,6 +1,7 @@
 import { REGame_Attribute } from "./REGame_Attribute";
 import { RE_Game_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
+import { RECommand, REResponse } from "./RECommand";
 
 
 
@@ -98,6 +99,50 @@ export class RE_Game_Entity
         else
             return undefined;
             */
+    }
+
+    _sendPreAction(cmd: RECommand): REResponse {
+        
+        for (let i = 0; i < this.behaviors.length; i++) {
+            const r = this.behaviors[i].onPreAction(cmd);
+            if (r != REResponse.Pass) {
+                return r;
+            }
+        }
+        return REResponse.Pass;
+    }
+
+    _sendPreRection(cmd: RECommand): REResponse {
+        
+        for (let i = 0; i < this.behaviors.length; i++) {
+            const r = this.behaviors[i].onPreReaction(cmd);
+            if (r != REResponse.Pass) {
+                return r;
+            }
+        }
+        return REResponse.Pass;
+    }
+
+    _sendAction(cmd: RECommand): REResponse {
+        
+        for (let i = 0; i < this.behaviors.length; i++) {
+            const r = this.behaviors[i].onPreAction(cmd);
+            if (r != REResponse.Pass) {
+                return r;
+            }
+        }
+        return REResponse.Pass;
+    }
+
+    _sendReaction(cmd: RECommand): REResponse {
+        
+        for (let i = 0; i < this.behaviors.length; i++) {
+            const r = this.behaviors[i].onPreReaction(cmd);
+            if (r != REResponse.Pass) {
+                return r;
+            }
+        }
+        return REResponse.Pass;
     }
 
     // 継承 & 誤用防止
