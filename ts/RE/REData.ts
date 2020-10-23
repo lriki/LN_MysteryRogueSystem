@@ -163,6 +163,28 @@ export interface REData_Action
     name: string;
 }
 
+/**
+ * REData_Sequel
+ *
+ * シミュレーション進行中に発生した、VisualAction を、View に伝えるためのデータ構造。
+ * これ自体が具体的なスプライトの動作を定義するわけではない。
+ * 「歩行」を再生するべき、「攻撃」を再生するべき、といったタイミングで作られる。
+ * 
+ * なお、歩行は複数アクターが並列で再生できる仕組みを作るのには、イベント発生タイミングを直接 View が
+ * 購読してアニメ開始する方法では不可能。（Schedular が View の visualRunning() を監視している都合上不可能）
+ * なので、アニメ再生系のイベントは一度キューに入れておいて、全アクターの歩行の処理が完了したら
+ * 一斉にアニメーションさせるような流れを組む必要がある。
+ * そのキューに入れる単位が REData_Sequel.
+ */
+export interface REData_Sequel
+{
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+}
+
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
@@ -193,6 +215,7 @@ export class REData
     static floors: (RE_Data_Floor | undefined)[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: REData_Action[] = [{id: 0, name: 'null'}];
+    static sequels: REData_Sequel[] = [{id: 0, name: 'null'}];
 
     static addEntityKind(name: string): number {
         const newId = this.entityKinds.length + 1;
@@ -379,4 +402,27 @@ export class REData
      * 必要な時に識別できるように Command 化しておく。
      */
     static IdentifyActionId: number;
+
+
+
+
+
+
+
+    //----------------------------------------
+    // Sequels.
+
+    /** 移動 */
+    static MoveSequel: number;
+    
+    /** 移動 */
+    static MoveSequel: number;
+    
+    /** 
+     * 倒されたとき
+     * 
+     * Sequel はあくまで演出が目的なので、仮に CollapseSequel の発行を忘れたときでも
+     * 演出が表示されないだけで Entity は消される等処理される。
+     */
+    static CollapseSequel: number;
 }
