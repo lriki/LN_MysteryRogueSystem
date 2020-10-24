@@ -13,6 +13,12 @@
 import { RECommand, REResponse } from "./RECommand";
 import { RECommandContext } from "./RECommandContext";
 
+export enum DecisionPhase {
+    Manual,
+    AIMinor,
+    AIMajor,
+}
+
 // see: 実装FAQ-Command-Behavior.md
 export class RE_Game_Behavior
 {
@@ -20,9 +26,7 @@ export class RE_Game_Behavior
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onManualDecision(context: RECommandContext): void {}
-    onAIMinorDecision(context: RECommandContext): void {}
-    onAIMajorDecision(context: RECommandContext): void {}
+    onDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
     onPreAction(cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(cmd: RECommand): REResponse { return REResponse.Pass; }

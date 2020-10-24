@@ -4,6 +4,7 @@ import { REData } from "./REData";
 import { REGame } from "./REGame";
 import { REGameManager } from "./REGameManager";
 import { REGame_UnitAttribute } from "./REGame_Attribute";
+import { DecisionPhase } from "./REGame_Behavior";
 import { REGame_Entity } from "./REGame_Entity";
 
 
@@ -183,9 +184,7 @@ export class REScheduler
 
         if (unit.unit) {
             if (unit.attr.manualMovement()) {
-                
-                // TODO:
-                assert(0);
+                unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
             }
         }
 

@@ -1,7 +1,8 @@
 import { REGame_Attribute } from "./REGame_Attribute";
-import { RE_Game_Behavior } from "./REGame_Behavior";
+import { DecisionPhase, RE_Game_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "./RECommand";
+import { RECommandContext } from "./RECommandContext";
 
 
 
@@ -41,7 +42,7 @@ export class REGame_Entity
 {
 
     attrbutes: REGame_Attribute[] = [];
-    behaviors: RE_Game_Behavior[] = [];
+    private _behaviors: RE_Game_Behavior[] = [];
 
     _id: number = 0;
     _destroyed: boolean = false;
@@ -67,6 +68,10 @@ export class REGame_Entity
     //    REGame.world._addEntity(e);
     //    return e;
     //}
+
+    behaviors(): RE_Game_Behavior[] {
+        return this._behaviors;
+    }
     
     /** 
      * 動的に生成した Game_Event が参照する EventData.
@@ -101,48 +106,34 @@ export class REGame_Entity
             */
     }
 
-    _sendPreAction(cmd: RECommand): REResponse {
-        
-        for (let i = 0; i < this.behaviors.length; i++) {
-            const r = this.behaviors[i].onPreAction(cmd);
+    _callBehaviorIterationHelper(func: (b: RE_Game_Behavior) => REResponse): REResponse {
+        for (let i = 0; i < this._behaviors.length; i++) {
+            const r = func(this._behaviors[i]);//this._behaviors[i].onPreAction(cmd);
             if (r != REResponse.Pass) {
                 return r;
             }
         }
         return REResponse.Pass;
+    }
+
+    _callDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {
+        return this._callBehaviorIterationHelper(b => b.onDecisionPhase(context, phase));
+     }
+
+    _sendPreAction(cmd: RECommand): REResponse {
+        return this._callBehaviorIterationHelper(b => b.onPreAction(cmd));
     }
 
     _sendPreRection(cmd: RECommand): REResponse {
-        
-        for (let i = 0; i < this.behaviors.length; i++) {
-            const r = this.behaviors[i].onPreReaction(cmd);
-            if (r != REResponse.Pass) {
-                return r;
-            }
-        }
-        return REResponse.Pass;
+        return this._callBehaviorIterationHelper(b => b.onPreReaction(cmd));
     }
 
     _sendAction(cmd: RECommand): REResponse {
-        
-        for (let i = 0; i < this.behaviors.length; i++) {
-            const r = this.behaviors[i].onPreAction(cmd);
-            if (r != REResponse.Pass) {
-                return r;
-            }
-        }
-        return REResponse.Pass;
+        return this._callBehaviorIterationHelper(b => b.onPreAction(cmd));
     }
 
     _sendReaction(cmd: RECommand): REResponse {
-        
-        for (let i = 0; i < this.behaviors.length; i++) {
-            const r = this.behaviors[i].onPreReaction(cmd);
-            if (r != REResponse.Pass) {
-                return r;
-            }
-        }
-        return REResponse.Pass;
+        return this._callBehaviorIterationHelper(b => b.onPreReaction(cmd));
     }
 
     constructor() {
