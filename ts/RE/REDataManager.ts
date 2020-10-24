@@ -3,16 +3,18 @@ import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData,
 
 
 declare global {  
-    interface Window {  
+    interface Window {
+        RE_databaseMap: IDataMap | undefined,
         RE_dataEventTableMap: IDataMap | undefined,
         RE_dataItemTableMap: IDataMap | undefined,
         RE_dataEnemyTableMap: IDataMap | undefined,
         RE_dataTrapTableMap: IDataMap | undefined,
-    }  
-}  
+    }
+}
 
 export class REDataManager
 {
+    static databaseMapId: number = 0;
     static landMapDataLoading: boolean = false;
     static _dataLandDefinitionMap: IDataMap | undefined = undefined;
 
@@ -94,6 +96,9 @@ export class REDataManager
                         mapKind: REFloorMapKind.FixedMap,
                     };
                 }
+                else if (this.isDatabaseMap(i)) {
+                    this.databaseMapId = i;
+                }
                 else {
                     REData.floors[i] = undefined;
                 }
@@ -129,6 +134,14 @@ export class REDataManager
     static findLand(mapId: number): RE_Data_Land | undefined {
         const land = REData.lands.find(x => x.mapId == mapId);
         return land;
+    }
+
+    static isDatabaseMap(mapId: number) : boolean {
+        const info = $dataMapInfos[mapId];
+        if (info && info.name && info.name.startsWith("REDatabase"))
+            return true;
+        else
+            return false;
     }
 
     static isLandMap(mapId: number) : boolean {

@@ -10432,6 +10432,8 @@ declare class Game_Event extends Game_Character {
      */
     new();
 
+    constructor(mapId: any, eventId: any): void;
+
     /**
      * 
      * @param mapId 

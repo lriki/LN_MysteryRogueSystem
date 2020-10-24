@@ -11,7 +11,7 @@ Scene_Map.prototype.isReady = function() {
             REDataManager._dataLandDefinitionMap = $dataMap
 
             // 固定マップを読み込む
-            DataManager.loadMapData(1);
+            DataManager.loadMapData(1); // TODO: id
 
             // Reload. まだ読み込み完了していない扱いにする
             return false;

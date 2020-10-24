@@ -51,7 +51,7 @@ export class REGameManager
     }
 
     static update(): void {
-        REGame.scheduler.stepSimulation();
+        //REGame.scheduler.stepSimulation();
     }
 }
 
