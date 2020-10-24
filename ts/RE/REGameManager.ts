@@ -18,12 +18,12 @@ export class REGameManager
         REGame.core = new REGame_Core();
         REGame.world = new RE_Game_World();
         REGame.map = new REGame_Map();
-        REGame.actorUnits = [];
+        REGame.uniqueActorUnits = [];
 
         // Create unique units
         REData.actors.forEach(x => {
             const unit = REGame_EntityFactory.newActor();
-            REGame.actorUnits.push(unit);
+            REGame.uniqueActorUnits.push(unit);
             
             //const attr = unit.findAttribute(REGame_PositionalAttribute);
             //if (attr) {
@@ -31,7 +31,7 @@ export class REGameManager
         });
 
         // 1 番 Actor をデフォルトで操作可能とする
-        const firstActor = REGame.actorUnits[0];
+        const firstActor = REGame.uniqueActorUnits[0];
         const unit = firstActor.findAttribute(REGame_UnitAttribute);
         if (unit) {
             unit.setManualMovement(true);
@@ -51,7 +51,7 @@ export class REGameManager
     }
 
     static update(): void {
-        //REGame.scheduler.stepSimulation();
+        REGame.scheduler.stepSimulation();
     }
 }
 

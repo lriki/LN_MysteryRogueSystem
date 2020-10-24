@@ -20,7 +20,7 @@ export class REGame
     static core: REGame_Core;
     static world: RE_Game_World;
     static map: REGame_Map;
-    static actorUnits: REGame_Entity[] = [];
+    static uniqueActorUnits: REGame_Entity[] = [];
 
 
 

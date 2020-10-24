@@ -56,17 +56,17 @@ export class REGame_Entity
     // HC3 までは PositionalAttribute に持たせていたが、こっちに持ってきた。
     // お店のセキュリティシステムなど、これらを使わない Entity もあるのだが、
     // ほとんどの Entity が持つことになるパラメータなので、Attribute にするとコードが複雑になりすぎる。
-    floorId: number = 0;    /**< Entity が存在しているフロア */
+    floorId: number = 0;    /**< Entity が存在しているフロア。0 は無効値 & 異常値。直接変更禁止。transfarMap を使うこと */
     x: number = 0;          /**< 論理 X 座標 */
     y: number = 0;          /**< 論理 Y 座標 */
 
     _eventData: IDataMapEvent | undefined = undefined;
 
-    static newEntity(): REGame_Entity {
-        const e = new REGame_Entity();
-        REGame.world._addEntity(e);
-        return e;
-    }
+    //static newEntity(): REGame_Entity {
+    //    const e = new REGame_Entity();
+    //    REGame.world._addEntity(e);
+    //    return e;
+    //}
     
     /** 
      * 動的に生成した Game_Event が参照する EventData.

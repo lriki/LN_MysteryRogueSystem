@@ -39,8 +39,6 @@ export class REGame_Map
     public signalEntityLeaved: ((entity: REGame_Entity) => void) | undefined;
 
     constructor() {
-        this.signalEntityEntered = (x) => {};
-        this.signalEntityLeaved = (x) => {};
     }
 
     setupEmptyMap(floorId: number, width: number, height: number) {
@@ -115,6 +113,20 @@ export class REGame_Map
         assert(entity.floorId != this.floorId());
         this._entityIds.push(entity._id);
         entity.floorId = this.floorId();
+
+        if (this.signalEntityEntered) {
+            this.signalEntityEntered(entity);
+        }
+    }
+
+    _removeEntity(entity: REGame_Entity): void {
+        assert(entity.floorId == this.floorId());
+        this._entityIds = this._entityIds.filter(x => x != entity._id);
+        entity.floorId = 0;
+        
+        if (this.signalEntityLeaved) {
+            this.signalEntityLeaved(entity);
+        }
     }
 
     // TODO: Fuzzy とかで、x, y に配置できなければ周辺を探すとか

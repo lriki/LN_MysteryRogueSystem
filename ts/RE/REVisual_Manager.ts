@@ -11,6 +11,11 @@ export class REVisual_Manager
     constructor() {
         REGame.map.signalEntityEntered = this.handlleEntityEnteredMap;
         REGame.map.signalEntityLeaved = this.handlleEntityLeavedMap;
+
+        // init 時点の map 上にいる Entity から Visual を作る
+        REGame.map.entities().forEach(x => {
+            this.createVisual(x);
+        });
     }
 
     findEntityVisualByRMMZEventId(rmmzEventId: number): REVisual_Entity | undefined {
@@ -33,8 +38,7 @@ export class REVisual_Manager
     }
 
     private handlleEntityEnteredMap(entity: REGame_Entity) {
-        //const visual = new REVisual_Entity(entity);
-        //this._visualEntities.push(visual);
+        this.createVisual(entity);
     }
 
     private handlleEntityLeavedMap(entity: REGame_Entity) {
@@ -42,6 +46,12 @@ export class REVisual_Manager
         if (index >= 0) {
             this._visualEntities.splice(index, 1);
         }
+    }
+
+    private createVisual(entity: REGame_Entity) {
+        const event = $gameMap.spawnREEvent();
+        const visual = new REVisual_Entity(entity, event.rmmzEventId());
+        this._visualEntities.push(visual);
     }
 }
 

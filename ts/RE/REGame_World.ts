@@ -13,7 +13,17 @@ export class RE_Game_World
         return this._entities[id];
     }
 
-    _addEntity(entity: REGame_Entity): void {
+    spawnEntity(floorId: number, x: number, y: number): REGame_Entity {
+        const entity = new REGame_Entity();
+        //entity.floorId = floorId;
+        //entity.x = x;
+        //entity.y = y;
+        this._registerEntity(entity);
+        this._transfarEntity(entity, floorId, x, y);
+        return entity;
+    }
+
+    private _registerEntity(entity: REGame_Entity): void {
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._entities.findIndex(x => x == undefined);
@@ -37,25 +47,22 @@ export class RE_Game_World
      *   - 座標は常に 0,0 へ移動し、成功する。ほかの Entity とは重なるが、ランダムマップ生成時に再配置される。
      */
     _transfarEntity(entity: REGame_Entity, floorId: number, x: number, y: number): boolean {
-        if (REGame.map.floorId() == floorId) {
+        if (REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
+            // 現在マップからの離脱
+            REGame.map._removeEntity(entity);
+        }
+
+        if (REGame.map.floorId() == floorId) {x
             // 現在表示中のマップへの移動
             REGame.map._addEntity(entity);
             REGame.map._locateEntityFuzzy(entity, x, y);
             return true;    // TODO: 移動できないときの処理
         }
-        else if (REGame.map.isFixedMap()) {
-            // 非表示の固定マップへの移動
-            assert(0);
-            return false;
-        }
-        else if (REGame.map.isRandomMap()) {
-            // 非表示のランダムマップへの移動
-            assert(0);
-            return false;
-        }
         else {
-            assert(0);
-            return false;
+            entity.floorId = floorId;
+            entity.x = y;
+            entity.x = y;
+            return true;
         }
     }
 

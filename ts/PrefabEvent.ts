@@ -54,14 +54,15 @@ Game_CharacterBase.prototype.isRESpritePrepared = function() {
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(/*eventData: IDataMapEvent*/): void;
+        spawnREEvent(/*eventData: IDataMapEvent*/): Game_REPrefabEvent;
     }
 }
 
 Game_Map.prototype.spawnREEvent = function(/*eventData: IDataMapEvent*/) {
     const eventId = this._events.length;
     var event = new Game_REPrefabEvent(this._mapId, eventId);
-    this._events[eventId]  = event;
+    this._events[eventId] = event;
+    return event;
 };
 
 Game_Map.prototype.getREPrefabEvents = function(): Game_CharacterBase[] {

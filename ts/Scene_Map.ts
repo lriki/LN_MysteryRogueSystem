@@ -31,13 +31,20 @@ Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
 }
 
+var _Scene_Map_start = Scene_Map.prototype.start;
+Scene_Map.prototype.start = function() {
+    _Scene_Map_start.call(this);
+
+    REVisual.initialize();
+}
+/*
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
     _Scene_Map_createDisplayObjects.call(this);
 
     REVisual.initialize();
 };
-
+*/
 var _Scene_Map_terminate = Scene_Map.prototype.terminate;
 Scene_Battle.prototype.terminate = function() {
     _Scene_Map_terminate.call(this);

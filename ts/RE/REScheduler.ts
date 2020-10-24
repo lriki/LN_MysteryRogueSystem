@@ -183,6 +183,7 @@ export class REScheduler
 
         if (unit.unit) {
             if (unit.attr.manualMovement()) {
+                
                 // TODO:
                 assert(0);
             }
