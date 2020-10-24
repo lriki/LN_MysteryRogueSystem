@@ -1,5 +1,5 @@
 import { REGame_Attribute } from "./REGame_Attribute";
-import { DecisionPhase, RE_Game_Behavior } from "./REGame_Behavior";
+import { DecisionPhase, REGame_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "./RECommand";
 import { RECommandContext } from "./RECommandContext";
@@ -42,7 +42,7 @@ export class REGame_Entity
 {
 
     attrbutes: REGame_Attribute[] = [];
-    private _behaviors: RE_Game_Behavior[] = [];
+    private _behaviors: REGame_Behavior[] = [];
 
     _id: number = 0;
     _destroyed: boolean = false;
@@ -69,8 +69,12 @@ export class REGame_Entity
     //    return e;
     //}
 
-    behaviors(): RE_Game_Behavior[] {
+    behaviors(): REGame_Behavior[] {
         return this._behaviors;
+    }
+
+    addBehavior(value: REGame_Behavior) {
+        this._behaviors.push(value);
     }
     
     /** 
@@ -106,7 +110,7 @@ export class REGame_Entity
             */
     }
 
-    _callBehaviorIterationHelper(func: (b: RE_Game_Behavior) => REResponse): REResponse {
+    _callBehaviorIterationHelper(func: (b: REGame_Behavior) => REResponse): REResponse {
         for (let i = 0; i < this._behaviors.length; i++) {
             const r = func(this._behaviors[i]);//this._behaviors[i].onPreAction(cmd);
             if (r != REResponse.Pass) {

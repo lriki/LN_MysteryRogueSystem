@@ -20,7 +20,7 @@ export enum DecisionPhase {
 }
 
 // see: 実装FAQ-Command-Behavior.md
-export class RE_Game_Behavior
+export class REGame_Behavior
 {
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
