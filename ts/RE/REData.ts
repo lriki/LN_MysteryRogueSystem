@@ -281,6 +281,11 @@ export class REData
     static ThrowActionId: number;
     
     /**
+     * 放り投げる
+     */
+    static FlungActionId: number;
+
+    /**
      * 撃つ
      * 
      * 矢束の数を減らすなど、単なる「投げる」とは異なるので分ける必要がある。
