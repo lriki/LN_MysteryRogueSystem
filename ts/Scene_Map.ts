@@ -1,4 +1,5 @@
 import { REDataManager } from "./RE/REDataManager";
+import { REVisual } from "./RE/REVisual";
 
 var _Scene_Map_isReady = Scene_Map.prototype.isReady;
 Scene_Map.prototype.isReady = function() {
@@ -28,4 +29,18 @@ Scene_Map.prototype.isReady = function() {
 var _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
 Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
+}
+
+var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
+Scene_Map.prototype.createDisplayObjects = function() {
+    _Scene_Map_createDisplayObjects.call(this);
+
+    REVisual.initialize();
+};
+
+var _Scene_Map_terminate = Scene_Map.prototype.terminate;
+Scene_Battle.prototype.terminate = function() {
+    _Scene_Map_terminate.call(this);
+
+    REVisual.finalize();
 }

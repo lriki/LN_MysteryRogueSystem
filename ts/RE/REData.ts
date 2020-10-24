@@ -420,9 +420,6 @@ export class REData
     /** 移動 */
     static MoveSequel: number;
     
-    /** 移動 */
-    static MoveSequel: number;
-    
     /** 
      * 倒されたとき
      * 

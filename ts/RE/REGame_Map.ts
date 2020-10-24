@@ -15,8 +15,10 @@ export interface RE_Game_Data
 }
 
 /**
- * アクティブなマップオブジェクト。
- * インスタンスは1つだけ存在する。
+ * アクティブなマップオブジェクト。インスタンスは1つだけ存在する。
+ * 
+ * Map 遷移が行われたとき、World に存在する Entity のうち、
+ * この Map 上にいることになっている Entity は、自動的に追加される。
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
@@ -29,6 +31,17 @@ export class REGame_Map
     private _entityIds: number[] = [];      // マップ内に登場している Entity
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
+
+    /** Entity が Map に入った時に呼び出される。 */
+    public signalEntityEntered: ((entity: RE_Game_Entity) => void) | undefined;
+
+    /** Entity が Map から離れた時に呼び出される。 */
+    public signalEntityLeaved: ((entity: RE_Game_Entity) => void) | undefined;
+
+    constructor() {
+        this.signalEntityEntered = (x) => {};
+        this.signalEntityLeaved = (x) => {};
+    }
 
     setupEmptyMap(floorId: number, width: number, height: number) {
         this._floorId = floorId;
