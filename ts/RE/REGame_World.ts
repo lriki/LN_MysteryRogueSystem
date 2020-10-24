@@ -1,4 +1,4 @@
-import { RE_Game_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "./REGame_Entity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 
@@ -7,13 +7,13 @@ import { REGame } from "./REGame";
  */
 export class RE_Game_World
 {
-    private _entities: (RE_Game_Entity | undefined)[] = [];
+    private _entities: (REGame_Entity | undefined)[] = [];
 
-    entity(id: number): RE_Game_Entity | undefined {
+    entity(id: number): REGame_Entity | undefined {
         return this._entities[id];
     }
 
-    _addEntity(entity: RE_Game_Entity): void {
+    _addEntity(entity: REGame_Entity): void {
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._entities.findIndex(x => x == undefined);
@@ -36,7 +36,7 @@ export class RE_Game_World
      * - 表示中以外のマップ(ランダムマップ)へ移動した場合、
      *   - 座標は常に 0,0 へ移動し、成功する。ほかの Entity とは重なるが、ランダムマップ生成時に再配置される。
      */
-    _transfarEntity(entity: RE_Game_Entity, floorId: number, x: number, y: number): boolean {
+    _transfarEntity(entity: REGame_Entity, floorId: number, x: number, y: number): boolean {
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
             REGame.map._addEntity(entity);

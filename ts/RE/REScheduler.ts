@@ -4,12 +4,12 @@ import { REData } from "./REData";
 import { REGame } from "./REGame";
 import { REGameManager } from "./REGameManager";
 import { REGame_UnitAttribute } from "./REGame_Attribute";
-import { RE_Game_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "./REGame_Entity";
 
 
 interface UnitInfo
 {
-    unit: RE_Game_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
+    unit: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
     attr: REGame_UnitAttribute;     // cache for avoiding repeated find.
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }

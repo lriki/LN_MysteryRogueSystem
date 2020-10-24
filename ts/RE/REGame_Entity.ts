@@ -37,7 +37,7 @@ enum BlockLayer
  * - アイテム変化するモンスターは自身の種別を変更することになるが、それだと BlockLayer を変更することと変わらない。
  * - アイテムとして持っている土偶を立てたときは、振舞いは Item から Unit に変わる。これも結局状態変更することと変わらない。
  */
-export class RE_Game_Entity
+export class REGame_Entity
 {
 
     attrbutes: REGame_Attribute[] = [];
@@ -62,8 +62,8 @@ export class RE_Game_Entity
 
     _eventData: IDataMapEvent | undefined = undefined;
 
-    static newEntity(): RE_Game_Entity {
-        const e = new RE_Game_Entity();
+    static newEntity(): REGame_Entity {
+        const e = new REGame_Entity();
         REGame.world._addEntity(e);
         return e;
     }

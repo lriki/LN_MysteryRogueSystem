@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "./RECommand";
 import { REData, REData_Action } from "./REData";
-import { RE_Game_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "./REGame_Entity";
 
 
 type RECCMessage = () => REResponse;
@@ -12,7 +12,7 @@ export class RECommandContext
     private _messageList: RECCMessage[] = [];
     private _lastResponce: REResponse = REResponse.Pass;
 
-    postAction(action: REData_Action, actor: RE_Game_Entity, reactor: RE_Game_Entity, cmd?: RECommand) {
+    postAction(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity, cmd?: RECommand) {
         const actualCommand = cmd ? cmd : new RECommand();
         actualCommand.setup(action, actor, reactor);
 

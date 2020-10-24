@@ -1,5 +1,5 @@
 import { REGame } from "./REGame";
-import { RE_Game_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "./REGame_Entity";
 
 /**
  */
@@ -24,11 +24,11 @@ export class REVisual_Manager
         REGame.map.signalEntityLeaved = undefined;
     }
 
-    private handlleEntityEnteredMap(entity: RE_Game_Entity) {
+    private handlleEntityEnteredMap(entity: REGame_Entity) {
 
     }
 
-    private handlleEntityLeavedMap(entity: RE_Game_Entity) {
+    private handlleEntityLeavedMap(entity: REGame_Entity) {
 
     }
 }

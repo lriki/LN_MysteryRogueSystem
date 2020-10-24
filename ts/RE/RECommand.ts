@@ -1,5 +1,5 @@
 import { REData, REData_Action } from "./REData";
-import { RE_Game_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "./REGame_Entity";
 
 /** RECommand の処理結果 */
 export enum REResponse
@@ -17,10 +17,10 @@ export enum REResponse
 export class RECommand
 {
     private _action: REData_Action = REData.actions[0];
-    private _actor: RE_Game_Entity | undefined;
-    private _reactor: RE_Game_Entity | undefined;
+    private _actor: REGame_Entity | undefined;
+    private _reactor: REGame_Entity | undefined;
 
-    setup(action: REData_Action, actor: RE_Game_Entity, reactor: RE_Game_Entity) {
+    setup(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity) {
         this._action = action;
         this._actor = actor;
         this._reactor = reactor;
@@ -30,10 +30,10 @@ export class RECommand
     action(): REData_Action { return this._action; }
 
     /** Action 側 Entity */
-    actor(): RE_Game_Entity | undefined { return this._actor; }
+    actor(): REGame_Entity | undefined { return this._actor; }
 
     /** Reaction 側 Entity */
-    reactor(): RE_Game_Entity | undefined { return this._reactor; }
+    reactor(): REGame_Entity | undefined { return this._reactor; }
 }
 
 

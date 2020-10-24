@@ -1,7 +1,7 @@
 import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Block } from "./REGame_Block";
-import { RE_Game_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "./REData";
 import { REGame } from "./REGame";
 
@@ -33,10 +33,10 @@ export class REGame_Map
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
     /** Entity が Map に入った時に呼び出される。 */
-    public signalEntityEntered: ((entity: RE_Game_Entity) => void) | undefined;
+    public signalEntityEntered: ((entity: REGame_Entity) => void) | undefined;
 
     /** Entity が Map から離れた時に呼び出される。 */
-    public signalEntityLeaved: ((entity: RE_Game_Entity) => void) | undefined;
+    public signalEntityLeaved: ((entity: REGame_Entity) => void) | undefined;
 
     constructor() {
         this.signalEntityEntered = (x) => {};
@@ -105,20 +105,20 @@ export class REGame_Map
         }
     }
 
-    entities(): RE_Game_Entity[] {
+    entities(): REGame_Entity[] {
         return this._entityIds
             .map(id => { return REGame.world.entity(id); })
-            .filter((e): e is RE_Game_Entity => { return e != undefined; });
+            .filter((e): e is REGame_Entity => { return e != undefined; });
     }
 
-    _addEntity(entity: RE_Game_Entity): void {
+    _addEntity(entity: REGame_Entity): void {
         assert(entity.floorId != this.floorId());
         this._entityIds.push(entity._id);
         entity.floorId = this.floorId();
     }
 
     // TODO: Fuzzy とかで、x, y に配置できなければ周辺を探すとか
-    _locateEntityFuzzy(entity: RE_Game_Entity, x: number, y: number): void {
+    _locateEntityFuzzy(entity: REGame_Entity, x: number, y: number): void {
         assert(entity.floorId == this.floorId());
         entity.x = x;
         entity.y = y;
