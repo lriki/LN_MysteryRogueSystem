@@ -1,6 +1,7 @@
 import { assert, Log } from "../Common";
 import { RECommandContext } from "./RECommandContext";
 import { REData } from "./REData";
+import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "./REGame";
 import { REGameManager } from "./REGameManager";
 import { REGame_UnitAttribute } from "./REGame_Attribute";
@@ -59,14 +60,25 @@ enum SchedulerPhase
  */
 export class REScheduler
 {
-    private _commandContext: RECommandContext = new RECommandContext();
+    private _commandContext: RECommandContext;
+    //rivate _dialogModel: REDialog | undefined;
+    private _dialogContext: REDialogContext;
+
     private _phase: SchedulerPhase = SchedulerPhase.TurnStarting;
     private _units: UnitInfo[] = [];
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
     private _currentUnit: number = 0;
 
+    /** Dialog が開かれたとき。 */
+    public signalDialogOpend: ((context: REDialogContext) => void) | undefined;
+
+    /** Dialog が閉じられたとき。 */
+    public signalDialogClosed: ((context: REDialogContext) => void) | undefined;
+
     constructor() {
+        this._commandContext = new RECommandContext(this);
+        this._dialogContext = new REDialogContext(this, this._commandContext);
     }
 
     stepSimulation(): void {
@@ -88,9 +100,20 @@ export class REScheduler
             if (!this._commandContext.isRunning() && REGameManager.visualRunning()) {
                 break;
             }
+            
 
-            if (this._commandContext.isRunning()) {
-                //this._commandContext.processCommand();
+
+            // Dialog の処理はイベント実行よりも優先する。
+            // 行商人の処理など。
+            if (this._dialogContext._hasDialogModel()) {
+                this._dialogContext._update();
+                // Dialog 表示中は後続コマンドを実行しない
+                break;
+            }
+
+
+            if (this._commandContext._process()) {
+                // コマンド実行中
             }
             else {
                 //sweepCollapseList();
@@ -336,4 +359,26 @@ export class REScheduler
 
         // TODO: Merge
     }
+
+    _openDialogModel(value: REDialog) {
+        this._dialogContext._setDialogModel(value);
+
+        if (this.signalDialogOpend) {
+            this.signalDialogOpend(this._dialogContext);
+        }
+    }
+
+    _closeDialogModel() {
+        this._dialogContext._setDialogModel(null);
+
+        if (this.signalDialogClosed) {
+            this.signalDialogClosed(this._dialogContext);
+        }
+    }
+
+    _getDialogContext() {
+        return this._dialogContext;
+    }
+
+
 }

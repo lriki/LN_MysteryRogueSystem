@@ -1,6 +1,8 @@
 import { RECommand, REResponse } from "./RECommand";
 import { REData, REData_Action } from "./REData";
+import { REDialog } from "./REDialog";
 import { REGame_Entity } from "./REGame_Entity";
+import { REScheduler } from "./REScheduler";
 
 
 type RECCMessage = () => REResponse;
@@ -8,9 +10,16 @@ type RECCMessage = () => REResponse;
 
 export class RECommandContext
 {
+    private _owner: REScheduler;
     private _visualAnimationWaiting: boolean = false;
-    private _messageList: RECCMessage[] = [];
+    private _recodingCommandList: RECCMessage[] = [];
+    private _runningCommandList: RECCMessage[] = [];
+    private _messageIndex: number = 0;
     private _lastResponce: REResponse = REResponse.Pass;
+
+    constructor(owner: REScheduler) {
+        this._owner = owner;
+    }
 
     postAction(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity, cmd?: RECommand) {
         const actualCommand = cmd ? cmd : new RECommand();
@@ -19,33 +28,40 @@ export class RECommandContext
         const m1 = () => {
             return actor._sendPreAction(actualCommand);
         }
-        this._messageList.push(m1);
+        this._recodingCommandList.push(m1);
 
         const m2 = () => {
-            if (this._lastResponce == REResponse.Pass)
+            if (this._lastResponce == REResponse.Pass)  // m1 で未処理なら send
                 return reactor._sendPreRection(actualCommand);
             else
                 return this._lastResponce;
         }
-        this._messageList.push(m2);
+        this._recodingCommandList.push(m2);
 
         const m3 = () => {
-            if (this._lastResponce == REResponse.Pass)
+            if (this._lastResponce == REResponse.Pass)  // m2 で未処理なら send
                 return actor._sendAction(actualCommand);
             else
                 return this._lastResponce;
         }
-        this._messageList.push(m3);
+        this._recodingCommandList.push(m3);
 
         const m4 = () => {
-            if (this._lastResponce == REResponse.Pass)
+            if (this._lastResponce == REResponse.Pass)  // m3 で未処理なら send
                 return reactor._sendReaction(actualCommand);
             else
                 return this._lastResponce;
         }
-        this._messageList.push(m4);
+        this._recodingCommandList.push(m4);
     }
 
+    openDialog(dialogModel: REDialog): void {
+        const m1 = () => {
+            this._owner._openDialogModel(dialogModel);
+            return REResponse.Consumed;
+        }
+        this._recodingCommandList.push(m1);
+    }
 
     visualAnimationWaiting(): boolean {
         return this._visualAnimationWaiting;
@@ -56,10 +72,47 @@ export class RECommandContext
     }
     
     isRunning(): boolean {
-        return false;   // TODO:
+        return this._messageIndex < this._runningCommandList.length;
     }
 
+    _process(): boolean {
+        if (this.isRunning()) {
+            // コマンドリスト実行中
+            this._processCommand();
+        }
+        
+        if (!this.isRunning() && this._recodingCommandList.length > 0) {
+            // _runningCommandList は終了したが、_recodingCommandList に次のコマンドチェーンが溜まっていればそれの実行を始める
+            this._submit();
+        }
 
+        // _runningCommandList にも _recodingCommandList にもコマンドが無ければ false を返して、スケジューリングフェーズを次に進める
+        return this.isRunning();
+    }
+
+    _processCommand() {
+        if (this.isRunning()) {
+            const message = this._runningCommandList[this._messageIndex];
+            const response = message();
+    
+            if (this._owner._getDialogContext()._hasDialogModel()) {
+                // もし command の実行で Dialog が表示されたときは index を進めない。
+                // Dialog が閉じたときに進める。
+            }
+            else {
+                this._messageIndex++;
+            }
+        }
+    }
+
+    _submit() {
+        // swap
+        [this._runningCommandList, this._recodingCommandList] = [this._recodingCommandList, this._runningCommandList];
+
+        // clear
+        this._recodingCommandList.splice(0);
+        this._messageIndex = 0;
+    }
 
 }
 
