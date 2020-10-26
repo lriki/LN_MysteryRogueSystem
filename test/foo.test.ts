@@ -1,0 +1,18 @@
+//import { sum } from '../foo';
+
+import "rmmzx"
+//import { REDataManager } from "ts/RE/REDataManager";
+
+test('basic', () => {
+    console.log("BASIC TEST!!!!");
+    const a: IDataTrait = {code: 1, 
+        dataId: 3,
+        value: 4};
+
+    //REDataManager.loadData();
+    //expect(sum()).toBe(0);
+});
+
+test('basic again', () => {
+    //expect(sum(1, 2)).toBe(3);
+});

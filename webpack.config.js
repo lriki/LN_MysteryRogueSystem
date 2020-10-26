@@ -1,7 +1,9 @@
 
 const webpack = require('webpack');
 const fs = require('fs');
+const path = require('path');
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const METADATA = fs.readFileSync("./plugin-description.txt").toString();
 
@@ -14,7 +16,13 @@ module.exports = {
         filename: './js/plugins/LN_RoguelikeEngine.js'
     },
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['.ts', '.js'],
+        
+        plugins: [new TsconfigPathsPlugin( { configFile: 'tsconfig.json' } )]
+        //roots: [ path.resolve(__dirname, '.') ]
+        //alias: {
+        //    "@rmmz": "./rmmz/index.d.ts",
+        //}
     },
     module: {
         rules: [

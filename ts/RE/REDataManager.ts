@@ -1,3 +1,4 @@
+//import 'types/index.d.ts'
 import { assert } from "../Common";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 
