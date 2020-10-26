@@ -6,11 +6,11 @@
         "outDir": "dist",
         "strict": true,
 
-        // https://qiita.com/tetradice/items/b89a5dd41fcebf96379e
+        // NOTE: https://qiita.com/tetradice/items/b89a5dd41fcebf96379e
         "baseUrl": "./",
-        "paths": {"rmmz": ["types/*"]},
+        //"paths": {"rmmz": ["types/*"]},
         //"paths": {"rpgmaker-mz": ["types/rpgmaker-mz"]},
-        //"typeRoots": ["./node_modules/@types", "./types"],
+        "typeRoots" : ["./node_modules/@types", "./@types"],
 
         "lib": [
             //"es6", "dom"

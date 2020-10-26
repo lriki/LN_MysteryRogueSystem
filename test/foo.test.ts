@@ -1,6 +1,11 @@
 //import { sum } from '../foo';
 
-import "rmmzx"
+import { REDataManager } from "ts/RE/REDataManager";
+
+//import "../types/rmmz_data"
+//import "types/rmmz_data"
+//import "@types/rmmz_data"
+//import "rmmz_data"
 //import { REDataManager } from "ts/RE/REDataManager";
 
 test('basic', () => {
@@ -9,7 +14,7 @@ test('basic', () => {
         dataId: 3,
         value: 4};
 
-    //REDataManager.loadData();
+    REDataManager.loadData();
     //expect(sum()).toBe(0);
 });
 

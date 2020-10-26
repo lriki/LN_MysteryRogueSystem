@@ -12,6 +12,9 @@ module.exports = {
     "moduleNameMapper": {
         "^ts/(.*)": "<rootDir>/ts/$1"
     },
+
+    "moduleDirectories": ["node_modules", "."],
+
     "globals": {
         "ts-jest": {
             "tsconfig": "tsconfig.json"
