@@ -4,7 +4,10 @@ import { REDialogVisual } from "./REDialogVisual";
 export class REManualActionDialogVisual extends REDialogVisual {
 
     onUpdate(context: REDialogContext) {
-        console.log("REManualActionDialogVisual.update");
+        if (Input.dir8 != 0) {
+            //context.commandContext().postAction()
+            console.log("dir", Input.dir8);
+        }
     }
 }
 

@@ -23,6 +23,10 @@ export class REDialogContext
             throw new Error("_dialogModel");
     }
 
+    commandContext(): RECommandContext {
+        return this._commandContext;
+    }
+
     closeDialog() {
         this._owner._closeDialogModel();
     }

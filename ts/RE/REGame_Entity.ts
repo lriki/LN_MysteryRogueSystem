@@ -61,6 +61,10 @@ export class REGame_Entity
     x: number = 0;          /**< 論理 X 座標 */
     y: number = 0;          /**< 論理 Y 座標 */
 
+    // 以下、一時的に Entity に直接持たせてる Attr. 利用率とかで、別途 Attr クラスに分けたりする。
+    dir: number = 2;        // Numpad Dir
+
+
     _eventData: IDataMapEvent | undefined = undefined;
 
     //static newEntity(): REGame_Entity {
