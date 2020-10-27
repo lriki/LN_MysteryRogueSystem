@@ -1,3 +1,5 @@
+import { REDirectionChangeCommand } from "ts/commands/REDirectionChangeCommand";
+import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
 import { REGameManager } from "ts/RE/REGameManager";
@@ -24,6 +26,14 @@ test('basic', () => {
     // マニュアル操作の Dialog が開かれている
     const dialogContext = REGame.scheduler._getDialogContext();
     expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
+
+    // 向き変更。行動を消費せず Dialog を閉じる
+    const commandContext = REGame.scheduler.commandContext();
+    commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, new REDirectionChangeCommand(9));
+    dialogContext.closeDialog(false);
+    
+    // シミュレーション実行。行動の消費が無いので、
+    REGameManager.update();
 });
 
 test('basic again', () => {

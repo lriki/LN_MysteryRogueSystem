@@ -1,4 +1,4 @@
-import { RECommand } from "ts/system/RECommand";
+import { RECommand } from "../system/RECommand";
 
 
 export class REDirectionChangeCommand extends RECommand {

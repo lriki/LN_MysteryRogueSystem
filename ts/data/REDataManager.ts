@@ -48,6 +48,9 @@ export class REDataManager
                 { id: 3, name: 'Neutral', schedulingOrder: 3 },
             ]
         }
+
+        // Actions
+        REData.DirectionChangeActionId = REData.addAction("DirectionChange");
     }
 
     static loadData(): void

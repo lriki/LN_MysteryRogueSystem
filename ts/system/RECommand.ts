@@ -20,7 +20,7 @@ export class RECommand
     private _actor: REGame_Entity | undefined;
     private _reactor: REGame_Entity | undefined;
 
-    setup(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity) {
+    setup(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity | undefined) {
         this._action = action;
         this._actor = actor;
         this._reactor = reactor;

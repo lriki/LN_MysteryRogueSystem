@@ -7,7 +7,6 @@ import { DecisionPhase, REGame_Behavior } from "../RE/REGame_Behavior";
 export class REGame_DecisionBehavior extends REGame_Behavior
 {
     onDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {
-        console.log("onDecisionPhase");
         context.openDialog(new REManualActionDialog());
         return REResponse.Consumed;
     }

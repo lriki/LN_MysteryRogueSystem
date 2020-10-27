@@ -27,8 +27,11 @@ export class REDialogContext
         return this._commandContext;
     }
 
-    closeDialog() {
+    closeDialog(consumeAction: boolean) {
         this._owner._closeDialogModel();
+        if (consumeAction) {
+            this._commandContext._next();
+        }
     }
 
     _setDialogModel(value: REDialog | null) {

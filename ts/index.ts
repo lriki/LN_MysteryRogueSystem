@@ -5,7 +5,7 @@ import './DataManager';
 import './Game_Player';
 import './Game_Event';
 import './Game_Map';
-import './RE/REData';
+import './data/REData';
 import './data/REDataManager';
 import './RE/REGame_Entity';
 import './RE/REGame_EntityFactory';

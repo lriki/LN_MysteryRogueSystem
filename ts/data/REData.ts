@@ -302,6 +302,10 @@ export class REData
     
     //----------------------------------------
     // Standard Actions.
+
+    static DirectionChangeActionId: number;
+
+
     /**
      * 拾おうとしている・拾われようとしている・拾う・拾われた
      * 

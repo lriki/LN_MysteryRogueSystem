@@ -26,12 +26,14 @@ export class REGameManager
 
         // Create unique units
         REData.actors.forEach(x => {
-            const unit = REGame_EntityFactory.newActor();
-            REGame.uniqueActorUnits.push(unit);
-            
-            //const attr = unit.findAttribute(REGame_PositionalAttribute);
-            //if (attr) {
-            //}
+            if (x.id > 0) {
+                const unit = REGame_EntityFactory.newActor();
+                REGame.uniqueActorUnits.push(unit);
+                
+                //const attr = unit.findAttribute(REGame_PositionalAttribute);
+                //if (attr) {
+                //}
+            }
         });
 
         // 1 番 Actor をデフォルトで操作可能とする

@@ -3,12 +3,18 @@ import { assert } from "../Common";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { REGame_Behavior } from "../RE/REGame_Behavior";
+import { REData } from "ts/data/REData";
+import { REDirectionChangeCommand } from "ts/commands/REDirectionChangeCommand";
 
 /**
  * 
  */
 export class REUnitBehavior extends REGame_Behavior {
     onAction(cmd: RECommand): REResponse {
+
+        if (cmd.action().id == REData.DirectionChangeActionId) {
+            console.log("dir!!!!!!!!!!!!!!!!!!", (cmd as REDirectionChangeCommand).direction());
+        }
 
         return REResponse.Pass;
     }

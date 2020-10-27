@@ -7,6 +7,7 @@ import { REGameManager } from "../RE/REGameManager";
 import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { DecisionPhase } from "../RE/REGame_Behavior";
 import { REGame_Entity } from "../RE/REGame_Entity";
+import { REResponse } from "./RECommand";
 
 
 interface UnitInfo
@@ -79,6 +80,10 @@ export class REScheduler
     constructor() {
         this._commandContext = new RECommandContext(this);
         this._dialogContext = new REDialogContext(this, this._commandContext);
+    }
+
+    commandContext(): RECommandContext {
+        return this._commandContext;
     }
 
     stepSimulation(): void {
@@ -205,21 +210,28 @@ export class REScheduler
         const action = run.actions[this._currentUnit];
         const unit = action.unit;
 
+        let responce = REResponse.Pass;
         if (unit.unit) {
             if (unit.attr.manualMovement()) {
-                unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
+                console.log("!!!!!!!_callDecisionPhase");
+                responce = unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
             }
         }
 
-        // 全 Unit 分処理を終えたら次の Phase へ
-        this._currentUnit++;
-        if (this._currentUnit >= run.actions.length) {
-            this._currentUnit = 0;
-            this._phase = SchedulerPhase.AIMinorAction;
-            Log.d("update_ManualAction finish.");
+        if (responce == REResponse.Consumed) {
+            // 
         }
         else {
-            Log.d("update_ManualAction continued.");
+            // 全 Unit 分処理を終えたら次の Phase へ
+            this._currentUnit++;
+            if (this._currentUnit >= run.actions.length) {
+                this._currentUnit = 0;
+                this._phase = SchedulerPhase.AIMinorAction;
+                Log.d("update_ManualAction finish.");
+            }
+            else {
+                Log.d("update_ManualAction continued.");
+            }
         }
     }
     
@@ -360,6 +372,7 @@ export class REScheduler
         //console.log("runs:", this._runs);
 
         // TODO: Merge
+
     }
 
     _openDialogModel(value: REDialog) {

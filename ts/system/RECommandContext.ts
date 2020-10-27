@@ -21,7 +21,7 @@ export class RECommandContext
         this._owner = owner;
     }
 
-    postAction(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity, cmd?: RECommand) {
+    postAction(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity | undefined, cmd?: RECommand) {
         const actualCommand = cmd ? cmd : new RECommand();
         actualCommand.setup(action, actor, reactor);
 
@@ -30,13 +30,15 @@ export class RECommandContext
         }
         this._recodingCommandList.push(m1);
 
-        const m2 = () => {
-            if (this._lastResponce == REResponse.Pass)  // m1 で未処理なら send
-                return reactor._sendPreRection(actualCommand);
-            else
-                return this._lastResponce;
+        if (reactor) {
+            const m2 = () => {
+                if (this._lastResponce == REResponse.Pass)  // m1 で未処理なら send
+                    return reactor._sendPreRection(actualCommand);
+                else
+                    return this._lastResponce;
+            }
+            this._recodingCommandList.push(m2);
         }
-        this._recodingCommandList.push(m2);
 
         const m3 = () => {
             if (this._lastResponce == REResponse.Pass)  // m2 で未処理なら send
@@ -46,13 +48,15 @@ export class RECommandContext
         }
         this._recodingCommandList.push(m3);
 
-        const m4 = () => {
-            if (this._lastResponce == REResponse.Pass)  // m3 で未処理なら send
-                return reactor._sendReaction(actualCommand);
-            else
-                return this._lastResponce;
+        if (reactor) {
+            const m4 = () => {
+                if (this._lastResponce == REResponse.Pass)  // m3 で未処理なら send
+                    return reactor._sendReaction(actualCommand);
+                else
+                    return this._lastResponce;
+            }
+            this._recodingCommandList.push(m4);
         }
-        this._recodingCommandList.push(m4);
     }
 
     openDialog(dialogModel: REDialog): void {
@@ -97,12 +101,16 @@ export class RECommandContext
     
             if (this._owner._getDialogContext()._hasDialogModel()) {
                 // もし command の実行で Dialog が表示されたときは index を進めない。
-                // Dialog が閉じたときに進める。
+                // Dialog が閉じたときに進めるが、例えば矢弾を装備したとき等はターンの消費しないので進めない。
             }
             else {
-                this._messageIndex++;
+                this._next();
             }
         }
+    }
+
+    _next() {
+        this._messageIndex++;
     }
 
     _submit() {

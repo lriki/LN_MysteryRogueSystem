@@ -8,7 +8,7 @@ import { REGame_DecisionBehavior } from "../behaviors/REDecisionBehavior";
 
 export class REGame_EntityFactory {
     static newActor(): REGame_Entity {
-        const e = REGame.world.spawnEntity(1, 0, 0); //REGame_Entity.newEntity();
+        const e = REGame.world.spawnEntity();
         e.attrbutes = [
             new REGame_UnitAttribute()
                 .setFactionId(REData.ActorDefaultFactionId),

@@ -9,6 +9,10 @@ export class RE_Game_World
 {
     private _entities: (REGame_Entity | undefined)[] = [];
 
+    constructor() {
+        this.spawnEntity();  // [0] dummy entity
+    }
+
     entity(id: number): REGame_Entity {
         const e = this._entities[id];
         if (e)
@@ -17,13 +21,9 @@ export class RE_Game_World
             throw new Error("Invalid entity. id:" + id);
     }
 
-    spawnEntity(floorId: number, x: number, y: number): REGame_Entity {
+    spawnEntity(): REGame_Entity {
         const entity = new REGame_Entity();
-        //entity.floorId = floorId;
-        //entity.x = x;
-        //entity.y = y;
         this._registerEntity(entity);
-        this._transfarEntity(entity, floorId, x, y);
         return entity;
     }
 
@@ -39,6 +39,7 @@ export class RE_Game_World
             entity._id = index;
             this._entities[index] = entity;
         }
+        console.log("_registerEntity", entity._id);
     }
 
     /**
@@ -95,7 +96,7 @@ export class RE_Game_World
 
     // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
     enterEntitiesToCurrentMap() {
-        for (let i = 0; i < this._entities.length; i++) {
+        for (let i = 1; i < this._entities.length; i++) {
             const entity = this._entities[i];
             if (entity) {
                 if (REGame.map.floorId() == entity.floorId) {

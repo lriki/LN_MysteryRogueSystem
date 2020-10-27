@@ -121,6 +121,7 @@ export class REGame_Map
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
+        assert(entity._id > 0);
 
         this._entityIds.push(entity._id);
 
