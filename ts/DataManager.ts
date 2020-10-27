@@ -1,4 +1,4 @@
-import { REDataManager } from "./RE/REDataManager";
+import { REDataManager } from "./data/REDataManager";
 import { REGame } from "./RE/REGame";
 import { REGameManager } from "./RE/REGameManager";
 import { RMMZIntegration } from "./RMMZIntegration";

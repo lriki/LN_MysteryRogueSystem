@@ -73,6 +73,10 @@ export class REGame_Entity
     //    return e;
     //}
 
+    id(): number {
+        return this._id;
+    }
+
     behaviors(): REGame_Behavior[] {
         return this._behaviors;
     }

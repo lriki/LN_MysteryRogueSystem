@@ -9,8 +9,12 @@ export class RE_Game_World
 {
     private _entities: (REGame_Entity | undefined)[] = [];
 
-    entity(id: number): REGame_Entity | undefined {
-        return this._entities[id];
+    entity(id: number): REGame_Entity {
+        const e = this._entities[id];
+        if (e)
+            return e;
+        else
+            throw new Error("Invalid entity. id:" + id);
     }
 
     spawnEntity(floorId: number, x: number, y: number): REGame_Entity {
@@ -26,7 +30,7 @@ export class RE_Game_World
     private _registerEntity(entity: REGame_Entity): void {
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
-        const index = this._entities.findIndex(x => x == undefined);
+        const index = this._entities.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
             entity._id = this._entities.length;
             this._entities.push(entity);
@@ -56,14 +60,20 @@ export class RE_Game_World
             // 現在表示中のマップへの移動
             REGame.map._addEntity(entity);
             REGame.map._locateEntityFuzzy(entity, x, y);
-            return true;    // TODO: 移動できないときの処理
         }
         else {
             entity.floorId = floorId;
             entity.x = x;
             entity.y = y;
-            return true;
         }
+
+        // Camera が注視している Entity が別マップへ移動したら、マップ遷移
+        if (REGame.camera.focusedEntityId() == entity.id() &&
+            REGame.map.floorId() != entity.floorId) {
+            REGame.camera.reserveFloorTransferToFocusedEntity();
+        }
+
+        return true;
     }
 
     update(): void {
@@ -75,6 +85,22 @@ export class RE_Game_World
             const entity = this._entities[i];
             if (entity && entity.isDestroyed()) {
                 this._entities[i] = undefined;
+
+                if (REGame.camera.focusedEntityId() == entity._id) {
+                    REGame.camera.clearFocus();
+                }
+            }
+        }
+    }
+
+    // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
+    enterEntitiesToCurrentMap() {
+        for (let i = 0; i < this._entities.length; i++) {
+            const entity = this._entities[i];
+            if (entity) {
+                if (REGame.map.floorId() == entity.floorId) {
+                    REGame.map._addEntity(entity);
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-import { REDataManager } from "./RE/REDataManager";
+import { REDataManager } from "./data/REDataManager";
 import { REVisual } from "./RE/REVisual";
 
 var _Scene_Map_isReady = Scene_Map.prototype.isReady;

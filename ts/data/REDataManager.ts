@@ -39,6 +39,15 @@ export class REDataManager
         REData.FigurineKindId = REData.addEntityKind("土偶");
         REData.MonsterKindId = REData.addEntityKind("モンスター");
 
+        // Factions
+        {
+            REData.factions = [
+                { id: 0, name: '', schedulingOrder: 9999 },
+                { id: 1, name: 'Friends', schedulingOrder: 1 },
+                { id: 2, name: 'Enemy', schedulingOrder: 2 },
+                { id: 3, name: 'Neutral', schedulingOrder: 3 },
+            ]
+        }
     }
 
     static loadData(): void
@@ -128,14 +137,6 @@ export class REDataManager
             }
         }
 
-        // Factions
-        {
-            REData.factions = [
-                { id: 0, name: '', schedulingOrder: 0 },
-                { id: 1, name: 'Friends', schedulingOrder: 1 },
-                { id: 2, name: 'Enemy', schedulingOrder: 2 },
-            ]
-        }
 
         //console.log("lands:", RE_Data.lands);
     }

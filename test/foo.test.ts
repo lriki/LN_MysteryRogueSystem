@@ -1,32 +1,29 @@
-//import { sum } from '../foo';
-
-import { REDataManager } from "ts/RE/REDataManager";
+import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
 import { REGameManager } from "ts/RE/REGameManager";
 import { TestEnv } from "./TestEnv";
 
-//import "../types/rmmz_data"
-//import "types/rmmz_data"
-//import "@types/rmmz_data"
-//import "rmmz_data"
-//import { REDataManager } from "ts/RE/REDataManager";
-
 TestEnv.setupDatabase();
 
 test('basic', () => {
+    // NewGame.
     REGameManager.createGameObjects();
-    //REGame.map.setup(1);    // floorID: 1
 
+    // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
+    const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
+    REGame.world._transfarEntity(actor1, 1, 5, 5);
 
+    // RMMZ で使うときはこのあたりで $dataMap をロードしたりする
 
+    // マップ遷移確定。実際にランダムマップ等が生成され、Entity が配置される。
+    REGameManager.performFloorTransfer();
 
-    console.log("BASIC TEST!!!!");
-    const a: IDataTrait = {code: 1, 
-        dataId: 3,
-        value: 4};
+    // シミュレーション 1 回実行
+    REGameManager.update();
 
-    //REDataManager.loadData();
-    //expect(sum()).toBe(0);
+    // マニュアル操作の Dialog が開かれている
+    const dialogContext = REGame.scheduler._getDialogContext();
+    expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
 });
 
 test('basic again', () => {

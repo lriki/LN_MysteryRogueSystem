@@ -1,5 +1,5 @@
-import { REData, REFloorMapKind } from "ts/RE/REData";
-import { REDataManager } from "ts/RE/REDataManager";
+import { REData, REFloorMapKind } from "ts/data/REData";
+import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/RE/REGame";
 import { REIntegration } from "ts/RE/REIntegration";
 import { REMapBuilder } from "ts/RE/REMapBuilder";
@@ -27,7 +27,16 @@ export class TestEnv {
 }
 
 export class TestEnvIntegration extends REIntegration {
+    onReserveTransferFloor(floorId: number): void {
+        // TestEnv では全部動的生成するのでファイルロードは不要
+    }
     onLoadFixedMap(builder: REMapBuilder): void {
-        throw new Error("Method not implemented.");
+        if (builder.floorId() == 1) {
+            // 50x50 の空マップ
+            builder.reset(50, 50);
+        }
+        else {
+            throw new Error("Method not implemented.");
+        }
     }
 }

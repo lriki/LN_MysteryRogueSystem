@@ -2,7 +2,7 @@ import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Block } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
-import { REFloorMapKind, REData } from "./REData";
+import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REMapBuilder } from "./REMapBuilder";
 
@@ -43,6 +43,7 @@ export class REGame_Map
     }
 
     setup(floorId: number) {
+        assert(this._entityIds.length == 0);
         this._floorId = floorId;
         const builder = new REMapBuilder(this);
         REGame.integration.onLoadFixedMap(builder);
@@ -117,9 +118,11 @@ export class REGame_Map
     }
 
     _addEntity(entity: REGame_Entity): void {
-        assert(entity.floorId != this.floorId());
+        // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
+        // floorId は外部で設定済みであることを前提とする。
+        assert(entity.floorId == this.floorId());
+
         this._entityIds.push(entity._id);
-        entity.floorId = this.floorId();
 
         if (this.signalEntityEntered) {
             this.signalEntityEntered(entity);
@@ -134,6 +137,19 @@ export class REGame_Map
         if (this.signalEntityLeaved) {
             this.signalEntityLeaved(entity);
         }
+    }
+
+    _removeAllEntities(): void {
+        this._entityIds.forEach(x => {
+            const entity = REGame.world.entity(x);
+            entity.floorId = 0;
+
+            if (this.signalEntityLeaved) {
+                this.signalEntityLeaved(entity);
+            }
+        });
+
+        this._entityIds = [];
     }
 
     // TODO: Fuzzy とかで、x, y に配置できなければ周辺を探すとか

@@ -1,4 +1,4 @@
-import { REData, REData_Action } from "./REData";
+import { REData, REData_Action } from "../data/REData";
 import { REGame_Entity } from "./REGame_Entity";
 
 /** RECommand の処理結果 */

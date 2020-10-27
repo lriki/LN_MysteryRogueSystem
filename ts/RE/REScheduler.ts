@@ -1,6 +1,6 @@
 import { assert, Log } from "../Common";
 import { RECommandContext } from "./RECommandContext";
-import { REData } from "./REData";
+import { REData } from "../data/REData";
 import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "./REGame";
 import { REGameManager } from "./REGameManager";
@@ -291,6 +291,8 @@ export class REScheduler
             REGame.map.entities().forEach(entity => {
                 const attr = entity.findAttribute(REGame_UnitAttribute);
                 if (attr) {
+                    assert(attr.factionId() > 0);
+
                     let actionCount = attr.speedLevel() + 1;
                     
                     // 鈍足状態の対応

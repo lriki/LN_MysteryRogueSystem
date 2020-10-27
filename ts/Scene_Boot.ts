@@ -1,4 +1,4 @@
-import { REDataManager } from "./RE/REDataManager";
+import { REDataManager } from "./data/REDataManager";
 
 var _Scene_Boot_isReady = Scene_Boot.prototype.isReady;
 Scene_Boot.prototype.isReady = function() {
