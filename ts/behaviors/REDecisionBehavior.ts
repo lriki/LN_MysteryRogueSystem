@@ -1,7 +1,7 @@
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { assert } from "../Common";
-import { REResponse } from "../RE/RECommand";
-import { RECommandContext } from "../RE/RECommandContext";
+import { REResponse } from "../system/RECommand";
+import { RECommandContext } from "../system/RECommandContext";
 import { DecisionPhase, REGame_Behavior } from "../RE/REGame_Behavior";
 
 export class REGame_DecisionBehavior extends REGame_Behavior

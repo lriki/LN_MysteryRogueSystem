@@ -4,7 +4,7 @@ import { REGame_Block } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
-import { REMapBuilder } from "./REMapBuilder";
+import { REMapBuilder } from "../system/REMapBuilder";
 
 
 

@@ -1,5 +1,5 @@
-import { REIntegration } from "./RE/REIntegration";
-import { REMapBuilder } from "./RE/REMapBuilder";
+import { REIntegration } from "./system/REIntegration";
+import { REMapBuilder } from "./system/REMapBuilder";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferFloor(floorId: number): void {

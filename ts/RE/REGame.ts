@@ -5,8 +5,8 @@ import { REDataManager } from "../data/REDataManager";
 import { REGame_Entity } from "./REGame_Entity";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";
-import { REScheduler } from "./REScheduler";
-import { REIntegration } from "./REIntegration";
+import { REScheduler } from "../system/REScheduler";
+import { REIntegration } from "../system/REIntegration";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 

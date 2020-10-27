@@ -1,8 +1,8 @@
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/RE/REGame";
-import { REIntegration } from "ts/RE/REIntegration";
-import { REMapBuilder } from "ts/RE/REMapBuilder";
+import { REIntegration } from "ts/system/REIntegration";
+import { REMapBuilder } from "ts/system/REMapBuilder";
 
 export class TestEnv {
     static setupDatabase() {

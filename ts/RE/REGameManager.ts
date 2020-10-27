@@ -5,7 +5,7 @@ import { REGame_Map } from "./REGame_Map";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";
 import { REData } from "../data/REData";
-import { REScheduler } from "./REScheduler";
+import { REScheduler } from "../system/REScheduler";
 import { REGame_UnitAttribute } from "./REGame_Attribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "ts/objects/REGame_System";

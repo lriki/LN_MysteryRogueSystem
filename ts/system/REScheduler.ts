@@ -2,11 +2,11 @@ import { assert, Log } from "../Common";
 import { RECommandContext } from "./RECommandContext";
 import { REData } from "../data/REData";
 import { REDialog, REDialogContext } from "./REDialog";
-import { REGame } from "./REGame";
-import { REGameManager } from "./REGameManager";
-import { REGame_UnitAttribute } from "./REGame_Attribute";
-import { DecisionPhase } from "./REGame_Behavior";
-import { REGame_Entity } from "./REGame_Entity";
+import { REGame } from "../RE/REGame";
+import { REGameManager } from "../RE/REGameManager";
+import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
+import { DecisionPhase } from "../RE/REGame_Behavior";
+import { REGame_Entity } from "../RE/REGame_Entity";
 
 
 interface UnitInfo

@@ -10,8 +10,8 @@
  * Player, Enemy 共に Position は持つが、それをキー入力で更新するのか、AI で更新するのかは異なる。
  */
 
-import { RECommand, REResponse } from "./RECommand";
-import { RECommandContext } from "./RECommandContext";
+import { RECommand, REResponse } from "../system/RECommand";
+import { RECommandContext } from "../system/RECommandContext";
 
 export enum DecisionPhase {
     Manual,

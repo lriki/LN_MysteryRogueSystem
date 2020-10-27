@@ -1,7 +1,7 @@
 import { RECommand, REResponse } from "./RECommand";
-import { REData, REData_Action } from "./REData";
+import { REData, REData_Action } from "../data/REData";
 import { REDialog } from "./REDialog";
-import { REGame_Entity } from "./REGame_Entity";
+import { REGame_Entity } from "../RE/REGame_Entity";
 import { REScheduler } from "./REScheduler";
 
 

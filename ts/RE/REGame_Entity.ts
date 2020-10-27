@@ -1,8 +1,8 @@
 import { REGame_Attribute } from "./REGame_Attribute";
 import { DecisionPhase, REGame_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
-import { RECommand, REResponse } from "./RECommand";
-import { RECommandContext } from "./RECommandContext";
+import { RECommand, REResponse } from "../system/RECommand";
+import { RECommandContext } from "../system/RECommandContext";
 
 
 

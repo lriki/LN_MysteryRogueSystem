@@ -2,7 +2,7 @@ import { assert } from "ts/Common";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { REManualActionDialogVisual } from "ts/visual/REManualActionDialogVisual";
-import { REDialogContext } from "./REDialog";
+import { REDialogContext } from "../system/REDialog";
 import { REGame } from "./REGame";
 import { REGame_Entity } from "./REGame_Entity";
 import { REVisual_Entity } from "./REVisual_Entity";

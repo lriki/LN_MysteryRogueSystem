@@ -1,4 +1,4 @@
-import { REGame_Map } from "./REGame_Map";
+import { REGame_Map } from "../RE/REGame_Map";
 
 /**
  * 地形生成を行うモジュールに対して、マップデータへのアクセスを提供するクラス。
