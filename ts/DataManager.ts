@@ -1,6 +1,7 @@
 import { REDataManager } from "./RE/REDataManager";
 import { REGame } from "./RE/REGame";
 import { REGameManager } from "./RE/REGameManager";
+import { RMMZIntegration } from "./RMMZIntegration";
 
 const _DataManager_loadMapData = DataManager.loadMapData;
 DataManager.loadMapData = function(mapId) {
@@ -47,5 +48,7 @@ DataManager.isMapLoaded = function() {
 const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
     _DataManager_createGameObjects.call(DataManager);
+
+    REGame.integration = new RMMZIntegration();
     REGameManager.createGameObjects();
 }

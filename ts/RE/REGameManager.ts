@@ -7,6 +7,7 @@ import { REGame_Core } from "./REGame_Core";
 import { REData } from "./REData";
 import { REScheduler } from "./REScheduler";
 import { REGame_UnitAttribute } from "./REGame_Attribute";
+import { REGame_Camera } from "./REGame_Camera";
 
 
 /**
@@ -18,6 +19,7 @@ export class REGameManager
         REGame.core = new REGame_Core();
         REGame.world = new RE_Game_World();
         REGame.map = new REGame_Map();
+        REGame.camera = new REGame_Camera();
         REGame.uniqueActorUnits = [];
 
         // Create unique units

@@ -19,9 +19,9 @@ export class REDataManager
     static landMapDataLoading: boolean = false;
     static _dataLandDefinitionMap: IDataMap | undefined = undefined;
 
-    static loadData(): void
-    {
-        REData.addEntityKind("null");
+    static setupCommonData() {
+        REData.reset();
+        
         REData.WeaponKindId = REData.addEntityKind("武器");
         REData.ShieldKindId = REData.addEntityKind("盾");
         REData.ArrowKindId = REData.addEntityKind("矢");
@@ -38,6 +38,12 @@ export class REDataManager
         REData.TrapKindId = REData.addEntityKind("罠");
         REData.FigurineKindId = REData.addEntityKind("土偶");
         REData.MonsterKindId = REData.addEntityKind("モンスター");
+
+    }
+
+    static loadData(): void
+    {
+        this.setupCommonData();
 
         //REData.addAction();
         
@@ -94,6 +100,7 @@ export class REDataManager
                 if (this.isFloorMap(i)) {
                     REData.floors[i] = {
                         id: i,
+                        mapId: i,
                         mapKind: REFloorMapKind.FixedMap,
                     };
                 }
@@ -101,7 +108,7 @@ export class REDataManager
                     this.databaseMapId = i;
                 }
                 else {
-                    REData.floors[i] = undefined;
+                    REData.floors[i].id = 0;
                 }
             }
 
@@ -114,6 +121,7 @@ export class REDataManager
                     REData.lands[i].floorIds[iFloor] = floorId;
                     REData.floors[floorId] = {
                         id: floorId,
+                        mapId: 0,
                         mapKind: REFloorMapKind.RandomMap,
                     };
                 }

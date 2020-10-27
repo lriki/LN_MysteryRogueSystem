@@ -60,8 +60,8 @@ export class RE_Game_World
         }
         else {
             entity.floorId = floorId;
-            entity.x = y;
-            entity.x = y;
+            entity.x = x;
+            entity.y = y;
             return true;
         }
     }

@@ -2353,12 +2353,12 @@ declare namespace Input{
 	/**
 	 * 
 	 */
-	export var _dir4 : number;
+	export var dir4 : number;
 		
 	/**
 	 * 
 	 */
-	export var _dir8 : number;
+	export var dir8 : number;
 		
 	/**
 	 * 

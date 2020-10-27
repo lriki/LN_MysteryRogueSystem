@@ -39,11 +39,16 @@ export interface RE_Data_Entity
 /**
  * Entity の種別
  * 
+ * 持ち物一覧のアイコンと考えるとわかりやすい。
+ * 武器、巻物といった一般的なアイテムの他、モンスターを持ち歩くこともできる。
+ * 
+ * 勢力を表すものではない点に注意。例えば種別 "Monster" は、敵にも味方にもなれる。
+ * 
+ * 
+ * 
  * [2020/9/6] 
  * ----------
  * 元々は ItemGroup としていたが、もっと抽象的なものにする必要があった。
- * 持ち物一覧のアイコンと考えるとわかりやすい。
- * 武器、巻物といった一般的なアイテムの他、モンスターを持ち歩くこともできる。
  */
 export interface RE_Data_EntityKind
 {
@@ -126,6 +131,9 @@ export interface RE_Data_Floor
     /** ID (0 is Invalid). */
     id: number;
 
+    /** RMMZ mapID. (0 is RandomMap) */
+    mapId: number;
+
     /** マップ生成 */
     mapKind: REFloorMapKind;
 
@@ -190,6 +198,7 @@ export class REData
     static readonly MAX_DUNGEON_FLOORS = 100;
 
     // Standard entity kinds.
+    //static OtherKindId: number;             // その他・未分類
     static WeaponKindId: number;            // 武器
     static ShieldKindId: number;            // 盾
     static ArrowKindId: number;             // 矢
@@ -209,13 +218,23 @@ export class REData
     static ActorDefaultFactionId: number = 1;
     static EnemeyDefaultFactionId: number = 2;
     
-    static actors: RE_Data_Actor[] = [];
     static entityKinds: RE_Data_EntityKind[] = [];
+    static actors: RE_Data_Actor[] = [];
     static lands: RE_Data_Land[] = [];
-    static floors: (RE_Data_Floor | undefined)[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
+    static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: REData_Action[] = [{id: 0, name: 'null'}];
     static sequels: REData_Sequel[] = [{id: 0, name: 'null'}];
+
+    static reset() {
+        this.entityKinds = [{ id: 0, name: 'null' }];
+        this.actors = [{ id: 0, name: 'null' }];
+        this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
+        this.floors = [{ id: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap }];
+        this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
+        this.actions = [{id: 0, name: 'null'}];
+        this.sequels = [{id: 0, name: 'null'}];
+    }
 
     static addEntityKind(name: string): number {
         const newId = this.entityKinds.length + 1;
@@ -226,6 +245,23 @@ export class REData
         return newId;
     }
     
+    /**
+     * Add actor.
+     * @param mapId : RMMZ mapID
+     */
+    static addActor(name: string): number {
+        const newId = this.actors.length + 1;
+        this.actors.push({
+            id: newId,
+            name: name,
+        });
+        return newId;
+    }
+
+    /**
+     * Add land.
+     * @param mapId : RMMZ mapID
+     */
     static addLand(mapId: number): number {
         const newId = this.lands.length + 1;
         this.lands.push({
@@ -236,6 +272,20 @@ export class REData
             enemyTableMapId: 0,
             trapTableMapId: 0,
             floorIds: [],
+        });
+        return newId;
+    }
+    
+    /**
+     * Add floor.
+     * @param mapId : RMMZ mapID
+     */
+    static addFloor(mapId: number, kind: REFloorMapKind): number {
+        const newId = this.floors.length + 1;
+        this.floors.push({
+            id: newId,
+            mapId: mapId,
+            mapKind: kind,
         });
         return newId;
     }

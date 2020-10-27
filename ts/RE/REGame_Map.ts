@@ -4,6 +4,7 @@ import { REGame_Block } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "./REData";
 import { REGame } from "./REGame";
+import { REMapBuilder } from "./REMapBuilder";
 
 
 
@@ -41,8 +42,13 @@ export class REGame_Map
     constructor() {
     }
 
-    setupEmptyMap(floorId: number, width: number, height: number) {
+    setup(floorId: number) {
         this._floorId = floorId;
+        const builder = new REMapBuilder(this);
+        REGame.integration.onLoadFixedMap(builder);
+    }
+
+    setupEmptyMap(width: number, height: number) {
         this._width = width;
         this._height = height;
 
@@ -57,7 +63,8 @@ export class REGame_Map
      * 現在の $dataMap の情報をもとに、固定マップを作る。
      */
     setupFixedMap(floorId: number): void {
-        this.setupEmptyMap(floorId, $dataMap.width ?? 1, $dataMap.height ?? 1);
+        this._floorId = floorId;
+        this.setupEmptyMap($dataMap.width ?? 1, $dataMap.height ?? 1);
         
         this._blocks.forEach(block => {
             block.setTileIds(MapDataProvidor.tileIds(block.x(), block.y()));
