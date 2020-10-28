@@ -10,7 +10,8 @@ export class RE_Game_World
     private _entities: (REGame_Entity | undefined)[] = [];
 
     constructor() {
-        this.spawnEntity();  // [0] dummy entity
+        const e = this.spawnEntity();  // [0] dummy entity
+        e._name = "null";
     }
 
     entity(id: number): REGame_Entity {
@@ -57,7 +58,7 @@ export class RE_Game_World
             REGame.map._removeEntity(entity);
         }
 
-        if (REGame.map.floorId() == floorId) {x
+        if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
             REGame.map._addEntity(entity);
             REGame.map._locateEntityFuzzy(entity, x, y);

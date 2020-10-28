@@ -45,6 +45,7 @@ export class REGame_Entity
     private _behaviors: REGame_Behavior[] = [];
 
     _id: number = 0;
+    _name: string = ""; // 主にデバッグ用
     _destroyed: boolean = false;
 
     // HC3 で作ってた CommonAttribute はこっちに持ってきた。

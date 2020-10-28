@@ -15,6 +15,8 @@ import { REGame_System } from "ts/objects/REGame_System";
  */
 export class REGameManager
 {
+    // DataManager.createGameObjects に従って呼び出される。
+    // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。
     static createGameObjects(): void {
         REGame.scheduler = new REScheduler();
         REGame.core = new REGame_Core();
@@ -28,6 +30,9 @@ export class REGameManager
         REData.actors.forEach(x => {
             if (x.id > 0) {
                 const unit = REGame_EntityFactory.newActor();
+                unit.floorId = x.initialFloorId;
+                unit.x = x.initialX;
+                unit.y = x.initialY;
                 REGame.uniqueActorUnits.push(unit);
                 
                 //const attr = unit.findAttribute(REGame_PositionalAttribute);
@@ -38,6 +43,7 @@ export class REGameManager
 
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.uniqueActorUnits[0];
+        REGame.core.mainPlayerEntiyId = firstActor._id;
         REGame.system._mainPlayerEntityId = firstActor._id;
         const unit = firstActor.findAttribute(REGame_UnitAttribute);
         if (unit) {

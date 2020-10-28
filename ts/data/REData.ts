@@ -87,7 +87,14 @@ export interface RE_Data_Actor
     /** Name. */
     name: string;
 
-
+    /** 初期配置フロア */
+    initialFloorId: number;
+    
+    /** 初期配置 X */
+    initialX: number;
+    
+    /** 初期配置 Y */
+    initialY: number;
 }
 
 
@@ -228,7 +235,7 @@ export class REData
 
     static reset() {
         this.entityKinds = [{ id: 0, name: 'null' }];
-        this.actors = [{ id: 0, name: 'null' }];
+        this.actors = [{ id: 0, name: 'null', initialFloorId: 0, initialX: 0, initialY: 0 }];
         this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
@@ -254,6 +261,9 @@ export class REData
         this.actors.push({
             id: newId,
             name: name,
+            initialFloorId: 0,
+            initialX: 0,
+            initialY: 0,
         });
         return newId;
     }

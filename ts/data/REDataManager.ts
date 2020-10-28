@@ -60,15 +60,15 @@ export class REDataManager
         //REData.addAction();
         
         // Import Actors
-        REData.actors = $dataActors.map((x) => {
-            if (x) 
-                return {
-                    id: x.id ?? 0,
-                    name: x.name ?? "",
-                };
-            else
-                return { id: 0, name: "null" };
+        $dataActors.forEach(x => {
+            if (x) {
+                REData.addActor(x.name ?? "");
+            }
         });
+        // 1番アクターの初期フロアを、RMMZプレイヤーの初期位置にする
+        REData.actors[1].initialFloorId = $dataSystem.startMapId ?? 0;
+        REData.actors[1].initialX = $dataSystem.startX ?? 0;
+        REData.actors[1].initialY = $dataSystem.startY ?? 0;
 
         // Import Lands
         // 最初に Land を作る
@@ -120,7 +120,11 @@ export class REDataManager
                     this.databaseMapId = i;
                 }
                 else {
-                    REData.floors[i].id = 0;
+                    REData.floors[i] = {
+                        id: 0,
+                        mapId: 0,
+                        mapKind: REFloorMapKind.FixedMap,
+                    }
                 }
             }
 
@@ -139,9 +143,6 @@ export class REDataManager
                 }
             }
         }
-
-
-        //console.log("lands:", RE_Data.lands);
     }
 
     static findLand(mapId: number): RE_Data_Land | undefined {
