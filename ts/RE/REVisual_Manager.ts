@@ -1,10 +1,15 @@
 import { assert } from "ts/Common";
+import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
+import { Vector2 } from "ts/math/Vector2";
 import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { REManualActionDialogVisual } from "ts/visual/REManualActionDialogVisual";
+import { REVisualSequel, REVisualSequel_Move } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
 import { REGame } from "./REGame";
 import { REGame_Entity } from "./REGame_Entity";
+import { REGame_Sequel } from "./REGame_Sequel";
+import { REVisual } from "./REVisual";
 import { REVisual_Entity } from "./REVisual_Entity";
 
 /**
@@ -13,6 +18,8 @@ export class REVisual_Manager
 {
     private _visualEntities: REVisual_Entity[] = [];
     private _dialogVisual: REDialogVisual | null;
+    private _tileSize: Vector2 = new Vector2(48, 48);
+    private _visualSequelFactory: (() => REVisualSequel)[] = [];
     
     constructor() {
         this._dialogVisual = null;
@@ -25,6 +32,16 @@ export class REVisual_Manager
         REGame.map.entities().forEach(x => {
             this.createVisual(x);
         });
+
+        this._visualSequelFactory[REData.MoveSequel] = () => new REVisualSequel_Move();
+    }
+
+    tileSize(): Vector2 {
+        return this._tileSize;
+    }
+
+    findEntityVisualByEntity(entity: REGame_Entity): REVisual_Entity | undefined {
+        return this._visualEntities.find(x => x.entity().id() == entity.id());
     }
 
     findEntityVisualByRMMZEventId(rmmzEventId: number): REVisual_Entity | undefined {
@@ -50,6 +67,16 @@ export class REVisual_Manager
         REGame.map.signalEntityLeaved = undefined;
         REGame.scheduler.signalDialogOpend = undefined;
         REGame.scheduler.signalDialogClosed = undefined;
+    }
+
+    createVisualSequel(sequel: REGame_Sequel): REVisualSequel {
+        const factory = this._visualSequelFactory[sequel.sequelId()];
+        if (factory) {
+            return factory();
+        }
+        else {
+            throw new Error();
+        }
     }
 
     private handlleEntityEnteredMap(entity: REGame_Entity) {

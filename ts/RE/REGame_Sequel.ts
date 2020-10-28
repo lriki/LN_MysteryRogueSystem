@@ -22,6 +22,10 @@ export class REGame_Sequel {
         return this._entity;
     }
 
+    sequelId(): number {
+        return this._sequelId;
+    }
+
     data(): REData_Sequel {
         return REData.sequels[this._sequelId];
     }
