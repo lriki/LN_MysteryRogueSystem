@@ -31,5 +31,5 @@ export class REGame_Behavior
     onPreAction(cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(cmd: RECommand): REResponse { return REResponse.Pass; }
-    onRection(cmd: RECommand): REResponse { return REResponse.Pass; }
+    onReaction(cmd: RECommand): REResponse { return REResponse.Pass; }
 }

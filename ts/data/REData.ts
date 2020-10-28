@@ -237,7 +237,7 @@ export class REData
     }
 
     static addEntityKind(name: string): number {
-        const newId = this.entityKinds.length + 1;
+        const newId = this.entityKinds.length;
         this.entityKinds.push({
             id: newId,
             name: name
@@ -250,7 +250,7 @@ export class REData
      * @param mapId : RMMZ mapID
      */
     static addActor(name: string): number {
-        const newId = this.actors.length + 1;
+        const newId = this.actors.length;
         this.actors.push({
             id: newId,
             name: name,
@@ -263,7 +263,7 @@ export class REData
      * @param mapId : RMMZ mapID
      */
     static addLand(mapId: number): number {
-        const newId = this.lands.length + 1;
+        const newId = this.lands.length;
         this.lands.push({
             id: newId,
             mapId: mapId,
@@ -281,7 +281,7 @@ export class REData
      * @param mapId : RMMZ mapID
      */
     static addFloor(mapId: number, kind: REFloorMapKind): number {
-        const newId = this.floors.length + 1;
+        const newId = this.floors.length;
         this.floors.push({
             id: newId,
             mapId: mapId,
@@ -291,7 +291,7 @@ export class REData
     }
     
     static addAction(name: string): number {
-        const newId = this.actions.length + 1;
+        const newId = this.actions.length;
         this.actions.push({
             id: newId,
             name: name

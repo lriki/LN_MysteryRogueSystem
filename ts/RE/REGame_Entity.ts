@@ -141,11 +141,11 @@ export class REGame_Entity
     }
 
     _sendAction(cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onPreAction(cmd));
+        return this._callBehaviorIterationHelper(b => b.onAction(cmd));
     }
 
     _sendReaction(cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onPreReaction(cmd));
+        return this._callBehaviorIterationHelper(b => b.onReaction(cmd));
     }
 
     constructor() {

@@ -3,6 +3,7 @@ import { REData, REData_Action } from "../data/REData";
 import { REDialog } from "./REDialog";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { REScheduler } from "./REScheduler";
+import { assert } from "ts/Common";
 
 
 type RECCMessage = () => REResponse;
@@ -22,6 +23,8 @@ export class RECommandContext
     }
 
     postAction(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity | undefined, cmd?: RECommand) {
+        assert(action);
+
         const actualCommand = cmd ? cmd : new RECommand();
         actualCommand.setup(action, actor, reactor);
 

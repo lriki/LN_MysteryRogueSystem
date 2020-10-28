@@ -105,8 +105,6 @@ export class REScheduler
             if (!this._commandContext.isRunning() && REGameManager.visualRunning()) {
                 break;
             }
-            
-
 
             // Dialog の処理はイベント実行よりも優先する。
             // 行商人の処理など。
@@ -115,7 +113,6 @@ export class REScheduler
                 // Dialog 表示中は後続コマンドを実行しない
                 break;
             }
-
 
             if (this._commandContext._process()) {
                 // コマンド実行中
@@ -202,36 +199,59 @@ export class REScheduler
 
         Log.d("e update_RunStarting");
     }
+
+    nextActionUnit() {
+        //const run = this._runs[this._currentRun];
+
+        // 全 Unit 分処理を終えたら次の Phase へ
+        this._currentUnit++;
+        /*
+        if (this._currentUnit >= run.actions.length) {
+            this._currentUnit = 0;
+
+            switch (this._phase) {
+                case SchedulerPhase.ManualAction:
+                    this._phase = SchedulerPhase.AIMinorAction;
+                    break;
+                case SchedulerPhase.AIMinorAction:
+                    this._phase = SchedulerPhase.AIMajorAction;
+                    break;
+                case SchedulerPhase.AIMinorAction:
+                    this._phase = SchedulerPhase.RunEnding;
+                    break;
+                default:
+                    assert(0);
+                    break;
+            }
+            
+            return false;
+        }
+        else {
+            return true;
+        }
+        */
+    }
     
     private update_ManualAction(): void {
         Log.d("update_ManualAction started.");
 
         const run = this._runs[this._currentRun];
+        if (this._currentUnit >= run.actions.length) {
+            this._currentUnit = 0;
+            this._phase = SchedulerPhase.AIMinorAction;
+            return;
+        }
+
+
         const action = run.actions[this._currentUnit];
         const unit = action.unit;
 
-        let responce = REResponse.Pass;
-        if (unit.unit) {
-            if (unit.attr.manualMovement()) {
-                console.log("!!!!!!!_callDecisionPhase");
-                responce = unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
-            }
-        }
-
-        if (responce == REResponse.Consumed) {
-            // 
+        if (unit.unit && unit.attr.manualMovement()) {
+            console.log("!!!!!!!_callDecisionPhase");
+            unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
         }
         else {
-            // 全 Unit 分処理を終えたら次の Phase へ
-            this._currentUnit++;
-            if (this._currentUnit >= run.actions.length) {
-                this._currentUnit = 0;
-                this._phase = SchedulerPhase.AIMinorAction;
-                Log.d("update_ManualAction finish.");
-            }
-            else {
-                Log.d("update_ManualAction continued.");
-            }
+            this.nextActionUnit();
         }
     }
     

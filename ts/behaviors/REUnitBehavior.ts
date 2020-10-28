@@ -13,7 +13,8 @@ export class REUnitBehavior extends REGame_Behavior {
     onAction(cmd: RECommand): REResponse {
 
         if (cmd.action().id == REData.DirectionChangeActionId) {
-            console.log("dir!!!!!!!!!!!!!!!!!!", (cmd as REDirectionChangeCommand).direction());
+            cmd.actor().dir = (cmd as REDirectionChangeCommand).direction();
+            return REResponse.Consumed;
         }
 
         return REResponse.Pass;

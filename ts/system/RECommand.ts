@@ -30,7 +30,12 @@ export class RECommand
     action(): REData_Action { return this._action; }
 
     /** Action 側 Entity */
-    actor(): REGame_Entity | undefined { return this._actor; }
+    actor(): REGame_Entity {
+        if (this._actor)
+            return this._actor;
+        else
+            throw new Error();
+    }
 
     /** Reaction 側 Entity */
     reactor(): REGame_Entity | undefined { return this._reactor; }

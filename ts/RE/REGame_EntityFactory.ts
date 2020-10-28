@@ -3,6 +3,7 @@ import { REGame_UnitAttribute } from "./REGame_Attribute";
 import { REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REGame_DecisionBehavior } from "../behaviors/REDecisionBehavior";
+import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
 
 
 
@@ -14,6 +15,7 @@ export class REGame_EntityFactory {
                 .setFactionId(REData.ActorDefaultFactionId),
         ]
         e.addBehavior(new REGame_DecisionBehavior());
+        e.addBehavior(new REUnitBehavior());
         return e;
     }
 }

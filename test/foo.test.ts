@@ -3,6 +3,7 @@ import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
 import { REGameManager } from "ts/RE/REGameManager";
+import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { TestEnv } from "./TestEnv";
 
 TestEnv.setupDatabase();
@@ -25,15 +26,27 @@ test('basic', () => {
 
     // マニュアル操作の Dialog が開かれている
     const dialogContext = REGame.scheduler._getDialogContext();
-    expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
+    const dialog1 = dialogContext.dialog();
+    expect((dialog1 instanceof REManualActionDialog)).toBe(true);
 
     // 向き変更。行動を消費せず Dialog を閉じる
     const commandContext = REGame.scheduler.commandContext();
     commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, new REDirectionChangeCommand(9));
     dialogContext.closeDialog(false);
+
+    // この時点では向きは変更されていない
+    expect(actor1.dir != 9).toBe(true);
     
-    // シミュレーション実行。行動の消費が無いので、
+    // シミュレーション実行。
     REGameManager.update();
+    
+    // 行動の消費が無いので、再び ManualActionDialog が開かれる。
+    // しかし一度閉じているので、違うインスタンスで開かれている。
+    expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
+    expect((dialog1 != dialogContext.dialog())).toBe(true);
+
+    // この時点では向きは変更されている
+    expect(actor1.dir).toBe(9);
 });
 
 test('basic again', () => {
