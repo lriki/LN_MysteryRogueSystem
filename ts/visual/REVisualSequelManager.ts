@@ -1,3 +1,4 @@
+import { RESequelSet } from "../RE/REGame_Sequel";
 
 
 /**
@@ -9,15 +10,17 @@ export interface REVisualSequelRun {
 
 
 export class REVisualSequelManager {
+    private _activeSequelSet: RESequelSet | undefined;
 
-    setup(set: RESequelSet) {
-        
+    setup(sequelSet: RESequelSet) {
+        this._activeSequelSet = sequelSet;
+
     }
 
 
 
-	void setup(rogue::SequelStage* sequelStage);
-	void update(float elapsedSeconds);
+	//void setup(rogue::SequelStage* sequelStage);
+	//void update(float elapsedSeconds);
 	//bool isLogicalRunning() const;
 }
 

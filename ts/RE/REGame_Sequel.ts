@@ -1,10 +1,11 @@
-import { REData, REData_Sequel } from "./REData";
+import { assert } from "ts/Common";
+import { REData, REData_Sequel } from "../data/REData";
 import { REGame_Entity } from "./REGame_Entity";
 
 /**
  * Sequel
  * 
- * 
+ * Sequel 個別にデータを持たせたいときに利用予定 (継承よりはフィールドに持たせた方がいいかも)
  */
 export class REGame_Sequel {
     private _entity: REGame_Entity;
@@ -31,9 +32,63 @@ export class REGame_Sequel {
 }
 
 /**
- * 並列実行の単位。同時実行できる Sequel はまとめてひとつの SequelRun に属する。
+ * ある Entity に連続適用する Sequel のリスト。
+ * 
+ * 倍速移動などで、複数の Sequel が追加されることがある。
  */
-export type RESequelRun = REGame_Sequel[];
+export class RESequelClip {
+    private _sequels: REGame_Sequel[];
+
+    constructor(firstItem: REGame_Sequel) {
+        this._sequels = [firstItem];
+    }
+
+    sequels(): readonly REGame_Sequel[] {
+        return this._sequels;
+    }
+
+    entity(): REGame_Entity {
+        return this._sequels[0].entity();
+    }
+
+    isParallel(): boolean {
+        return this._sequels[0].isParallel();
+    }
+
+    add(sequel: REGame_Sequel) {
+        this._sequels.push(sequel);
+    }
+}
+
+/**
+ * 並列実行の単位。同時実行できる RESequelClip はまとめてひとつの SequelRun に属する。
+ */
+export class RESequelRun {
+    private _clips: RESequelClip[];
+
+    constructor(firstItem: REGame_Sequel) {
+        this._clips = [new RESequelClip(firstItem)];
+    }
+
+    clips(): readonly RESequelClip[] {
+        return this._clips;
+    }
+
+    isParallel(): boolean {
+        return this._clips[0].isParallel();
+    }
+
+    add(sequel: REGame_Sequel) {
+        assert(sequel.isParallel() == this.isParallel());
+        const index = this._clips.findIndex(x => x.entity() == sequel.entity());
+        if (index < 0) {
+            this._clips.push(new RESequelClip(sequel));
+        }
+        else {
+            this._clips[index].add(sequel);
+        }
+    }
+}
 
 /**
  * 一連のコマンドチェーン内で発生した Sequel を、並列実行などを考慮して整理して保持する。
@@ -44,6 +99,10 @@ export class RESequelSet {
 
     constructor() {
         this._runs = [];
+    }
+
+    runs(): readonly RESequelRun[] {
+        return this._runs;
     }
 
     reset() {
@@ -62,8 +121,7 @@ export class RESequelSet {
         }
         else {
             const lastRun = this._runs[this._runs.length - 1];
-            const lastSequel = lastRun[lastRun.length - 1];
-            if (!lastSequel.isParallel()) {
+            if (!lastRun.isParallel()) {
                 // 並列 Sequel を追加しようとしたが、追加済みの終端は非並列だった。
                 // 新しい Run へ追加する。
                 newRun = true;
@@ -74,10 +132,10 @@ export class RESequelSet {
         }
 
         if (newRun) {
-            this._runs.push([sequel]);
+            this._runs.push(new RESequelRun(sequel));
         }
         else {
-            this._runs[this._runs.length - 1].push(sequel);
+            this._runs[this._runs.length - 1].add(sequel);
         }
     }
 }
