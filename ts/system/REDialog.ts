@@ -1,5 +1,6 @@
 
 import { assert } from "ts/Common";
+import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RECommand, REResponse } from "./RECommand";
 import { RECommandContext } from "./RECommandContext";
 import { REScheduler } from "./REScheduler";
@@ -8,12 +9,17 @@ export class REDialogContext
 {
     private _owner: REScheduler;
     private _commandContext: RECommandContext;
+    private _causeEntity: REGame_Entity | undefined;
     private _dialogModel: REDialog | null;
 
     constructor(owner: REScheduler, commandContext: RECommandContext) {
         this._owner = owner;
         this._commandContext = commandContext;
         this._dialogModel = null;
+    }
+
+    causeEntity(): REGame_Entity | undefined {
+        return this._causeEntity;
     }
 
     dialog(): REDialog {
@@ -33,6 +39,10 @@ export class REDialogContext
         if (consumeAction) {
             this._owner.nextActionUnit();
         }
+    }
+
+    setCauseEntity(value: REGame_Entity) {
+        this._causeEntity = value;
     }
 
     _setDialogModel(value: REDialog | null) {

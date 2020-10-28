@@ -62,9 +62,9 @@ export class RECommandContext
         }
     }
 
-    openDialog(dialogModel: REDialog): void {
+    openDialog(causeEntity: REGame_Entity, dialogModel: REDialog): void {
         const m1 = () => {
-            this._owner._openDialogModel(dialogModel);
+            this._owner._openDialogModel(causeEntity, dialogModel);
             return REResponse.Consumed;
         }
         this._recodingCommandList.push(m1);

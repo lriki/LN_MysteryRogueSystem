@@ -5,6 +5,10 @@ import { REGame_Entity } from "./REGame_Entity";
 import { REVisual } from "./REVisual";
 
 /**
+ * Entity の「見た目」を表現するためのクラス。
+ * 
+ * RMMZ 向けのこのクラスの実装では、直接 Sprite を出したりするわけではない点に注意。
+ * Mnager からのインスタンス生成と同時に、動的に Game_Event が生成され、このクラスはその Game_Event を操作する。
  */
 export class REVisual_Entity
 {
@@ -23,7 +27,7 @@ export class REVisual_Entity
         this._rmmzEventId = rmmzEventId;
         this._spriteIndex = -1;
         this._sequelContext = new REVisualSequelContext();
-        this._position = new Vector2(0, 0);
+        this._position = new Vector2(entity.x, entity.y);
     }
 
     entity(): REGame_Entity {
@@ -44,13 +48,19 @@ export class REVisual_Entity
 
     _update() {
 
+        
         if (this._rmmzEventId > 0) {
             const tileSize = REVisual.manager.tileSize();
             const event = $gameMap.event(this._rmmzEventId);
 
-            event._realX = (this._position.x * tileSize.x) + (tileSize.x  / 2);
-            event._realY = (this._position.y * tileSize.y) + (tileSize.y  / 2);
+            // 姿勢同期
+            event._x = this._position.x;
+            event._y = this._position.y;
+            event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
+            event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
+            event.setDirection(this._entity.dir);
         }
+        
     }
 }
 

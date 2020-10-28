@@ -12,6 +12,7 @@
 
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
+import { REGame_Entity } from "./REGame_Entity";
 
 export enum DecisionPhase {
     Manual,
@@ -26,7 +27,7 @@ export class REGame_Behavior
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
+    onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
     onPreAction(cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(cmd: RECommand): REResponse { return REResponse.Pass; }

@@ -63,7 +63,7 @@ export class REGame_Entity
     y: number = 0;          /**< 論理 Y 座標 */
 
     // 以下、一時的に Entity に直接持たせてる Attr. 利用率とかで、別途 Attr クラスに分けたりする。
-    dir: number = 2;        // Numpad Dir
+    dir: number = 4;        // Numpad Dir
 
 
     _eventData: IDataMapEvent | undefined = undefined;
@@ -130,7 +130,7 @@ export class REGame_Entity
     }
 
     _callDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onDecisionPhase(context, phase));
+        return this._callBehaviorIterationHelper(b => b.onDecisionPhase(this, context, phase));
      }
 
     _sendPreAction(cmd: RECommand): REResponse {

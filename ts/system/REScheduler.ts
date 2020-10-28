@@ -395,7 +395,8 @@ export class REScheduler
 
     }
 
-    _openDialogModel(value: REDialog) {
+    _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {
+        this._dialogContext.setCauseEntity(causeEntity);
         this._dialogContext._setDialogModel(value);
 
         if (this.signalDialogOpend) {
