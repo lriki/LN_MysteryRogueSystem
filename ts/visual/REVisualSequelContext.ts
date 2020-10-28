@@ -1,5 +1,5 @@
 import { REGame_Sequel, RESequelClip } from "ts/RE/REGame_Sequel";
-import { REVisual } from "ts/RE/REVisual";
+import { REVisual } from "../visual/REVisual";
 import { REVisualSequel } from "./REVisualSequel";
 
 export class REVisualSequelContext {

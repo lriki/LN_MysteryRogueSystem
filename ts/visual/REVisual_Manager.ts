@@ -6,9 +6,9 @@ import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { REManualActionDialogVisual } from "ts/visual/REManualActionDialogVisual";
 import { REVisualSequel, REVisualSequel_Move } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
-import { REGame } from "./REGame";
-import { REGame_Entity } from "./REGame_Entity";
-import { REGame_Sequel } from "./REGame_Sequel";
+import { REGame } from "../RE/REGame";
+import { REGame_Entity } from "../RE/REGame_Entity";
+import { REGame_Sequel } from "../RE/REGame_Sequel";
 import { REVisual } from "./REVisual";
 import { REVisual_Entity } from "./REVisual_Entity";
 

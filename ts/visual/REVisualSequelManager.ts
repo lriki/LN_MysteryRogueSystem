@@ -1,5 +1,5 @@
-import { REVisual_Entity } from "ts/RE/REVisual_Entity";
-import { REVisual_Manager } from "ts/RE/REVisual_Manager";
+import { REVisual_Entity } from "../visual/REVisual_Entity";
+import { REVisual_Manager } from "./REVisual_Manager";
 import { RESequelSet } from "../RE/REGame_Sequel";
 
 

@@ -1,5 +1,5 @@
 import { assert } from './Common';
-import { REVisual } from './RE/REVisual';
+import { REVisual } from './visual/REVisual';
 
 class Game_REPrefabEvent extends Game_Event {
     private _rmmzEventId: number;
