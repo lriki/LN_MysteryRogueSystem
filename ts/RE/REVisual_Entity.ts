@@ -8,11 +8,13 @@ export class REVisual_Entity
     private _entity: REGame_Entity; // EntityVisual が存在する間、Entity は必ず存在していると考えてよい
     private _rmmzEventId: number;
     private _spriteIndex: number;   // Spriteset_Map._characterSprites の index
+    private _sequelContext: REVisualSequelContext;
 
     constructor(entity: REGame_Entity, rmmzEventId: number) {
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;
         this._spriteIndex = -1;
+        this._sequelContext = new REVisualSequelContext();
     }
 
     entity(): REGame_Entity {
