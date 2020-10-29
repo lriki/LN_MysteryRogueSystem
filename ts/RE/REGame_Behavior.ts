@@ -33,10 +33,10 @@ export class REGame_Behavior {
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
-    onPreAction(cmd: RECommand): REResponse { return REResponse.Pass; }
-    onPreReaction(cmd: RECommand): REResponse { return REResponse.Pass; }
-    onAction(cmd: RECommand): REResponse { return REResponse.Pass; }
-    onReaction(cmd: RECommand): REResponse { return REResponse.Pass; }
+    onPreAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onPreReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
 
 
     

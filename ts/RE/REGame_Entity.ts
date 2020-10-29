@@ -137,7 +137,7 @@ export class REGame_Entity
                 return value;
             }
         }
-        return RESystem.propertyData[propertyId];
+        return RESystem.propertyData[propertyId].defaultValue;
     }
 
     _callBehaviorIterationHelper(func: (b: REGame_Behavior) => REResponse): REResponse {
@@ -154,20 +154,20 @@ export class REGame_Entity
         return this._callBehaviorIterationHelper(b => b.onDecisionPhase(this, context, phase));
     }
 
-    _sendPreAction(cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onPreAction(cmd));
+    _sendPreAction(context: RECommandContext, cmd: RECommand): REResponse {
+        return this._callBehaviorIterationHelper(b => b.onPreAction(this, context, cmd));
     }
 
-    _sendPreRection(cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onPreReaction(cmd));
+    _sendPreRection(context: RECommandContext, cmd: RECommand): REResponse {
+        return this._callBehaviorIterationHelper(b => b.onPreReaction(this, context, cmd));
     }
 
-    _sendAction(cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onAction(cmd));
+    _sendAction(context: RECommandContext, cmd: RECommand): REResponse {
+        return this._callBehaviorIterationHelper(b => b.onAction(this, context, cmd));
     }
 
-    _sendReaction(cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onReaction(cmd));
+    _sendReaction(context: RECommandContext, cmd: RECommand): REResponse {
+        return this._callBehaviorIterationHelper(b => b.onReaction(this, context, cmd));
     }
 
     constructor() {

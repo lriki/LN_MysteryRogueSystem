@@ -29,14 +29,14 @@ export class RECommandContext
         actualCommand.setup(action, actor, reactor);
 
         const m1 = () => {
-            return actor._sendPreAction(actualCommand);
+            return actor._sendPreAction(this, actualCommand);
         }
         this._recodingCommandList.push(m1);
 
         if (reactor) {
             const m2 = () => {
                 if (this._lastResponce == REResponse.Pass)  // m1 で未処理なら send
-                    return reactor._sendPreRection(actualCommand);
+                    return reactor._sendPreRection(this, actualCommand);
                 else
                     return this._lastResponce;
             }
@@ -45,7 +45,7 @@ export class RECommandContext
 
         const m3 = () => {
             if (this._lastResponce == REResponse.Pass)  // m2 で未処理なら send
-                return actor._sendAction(actualCommand);
+                return actor._sendAction(this, actualCommand);
             else
                 return this._lastResponce;
         }
@@ -54,7 +54,7 @@ export class RECommandContext
         if (reactor) {
             const m4 = () => {
                 if (this._lastResponce == REResponse.Pass)  // m3 で未処理なら send
-                    return reactor._sendReaction(actualCommand);
+                    return reactor._sendReaction(this, actualCommand);
                 else
                     return this._lastResponce;
             }

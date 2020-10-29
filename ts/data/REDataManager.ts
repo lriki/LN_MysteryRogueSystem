@@ -60,6 +60,7 @@ export class REDataManager
 
         // Actions
         REData.DirectionChangeActionId = REData.addAction("DirectionChange");
+        REData.MoveToAdjacentActionId = REData.addAction("MoveToAdjacent");
     }
 
     static loadData(): void

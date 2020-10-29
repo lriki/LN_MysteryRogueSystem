@@ -335,6 +335,9 @@ export class REData
 
     static DirectionChangeActionId: number;
 
+    /** 隣接タイルへの移動 */
+    static MoveToAdjacentActionId: number;
+
 
     /**
      * 拾おうとしている・拾われようとしている・拾う・拾われた

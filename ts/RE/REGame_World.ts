@@ -40,7 +40,6 @@ export class RE_Game_World
             entity._id = index;
             this._entities[index] = entity;
         }
-        console.log("_registerEntity", entity._id);
     }
 
     /**

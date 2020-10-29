@@ -6,6 +6,9 @@ import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REMapBuilder } from "../system/REMapBuilder";
 import { REGame_EntityFactory } from "./REGame_EntityFactory";
+import { Helpers } from "ts/system/Helpers";
+import { RESequelSet } from "./REGame_Sequel";
+import { RESystem } from "ts/system/RESystem";
 
 
 
@@ -194,12 +197,46 @@ export class REGame_Map
         return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
     }
     
-    canLeaving(block: REGame_Block, entity: REGame_Entity, layer: BlockLayerKind): boolean
-    {
+    canLeaving(block: REGame_Block, entity: REGame_Entity): boolean {
         // TODO: 壁抜けや浮遊状態で変わる
         return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
     }
     
+    checkPassage(entity: REGame_Entity, dir: number, toLayer?: BlockLayerKind): boolean {
+        const offset = Helpers.dirToTileOffset(dir);
+        const oldBlock = this.block(entity.x, entity.y);
+        const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
 
+        const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
+
+        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, entity, layer)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * タイル間移動
+     * 
+     * 指定位置の Tile と Entity のみをもとに、移動可否判定を行いつつ移動する。
+     * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
+     */
+    moveEntity(entity: REGame_Entity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+        const oldBlock = this.block(entity.x, entity.y);
+        const newBlock = this.block(x, y);
+
+        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, entity, toLayer)) {
+            oldBlock.removeEntity(entity);
+            entity.x = x;
+            entity.y = y;
+            newBlock.addEntity(toLayer, entity);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
 

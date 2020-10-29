@@ -1,4 +1,4 @@
-import { REDirectionChangeCommand } from "ts/commands/REDirectionChangeCommand";
+import { REDirectionChangeCommand, REMoveToAdjacentCommand } from "ts/commands/REDirectionChangeCommand";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
@@ -23,30 +23,44 @@ test('basic', () => {
 
     // シミュレーション 1 回実行
     REGameManager.update();
-
-    // マニュアル操作の Dialog が開かれている
-    const dialogContext = REGame.scheduler._getDialogContext();
-    const dialog1 = dialogContext.dialog();
-    expect((dialog1 instanceof REManualActionDialog)).toBe(true);
-
-    // 向き変更。行動を消費せず Dialog を閉じる
+    
     const commandContext = REGame.scheduler.commandContext();
-    commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, new REDirectionChangeCommand(9));
-    dialogContext.closeDialog(false);
-
-    // この時点では向きは変更されていない
-    expect(actor1.dir != 9).toBe(true);
+    const dialogContext = REGame.scheduler._getDialogContext();
     
-    // シミュレーション実行。
+    {
+        // マニュアル操作の Dialog が開かれている
+        const dialog1 = dialogContext.dialog();
+        expect((dialog1 instanceof REManualActionDialog)).toBe(true);
+    
+        // 向き変更。行動を消費せず Dialog を閉じる
+        commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, new REDirectionChangeCommand(9));
+        dialogContext.closeDialog(false);
+    
+        // この時点では向きは変更されていない
+        expect(actor1.dir != 9).toBe(true);
+        
+        // シミュレーション実行
+        REGameManager.update();
+        
+        // 行動の消費が無いので、再び ManualActionDialog が開かれる。
+        // しかし一度閉じているので、違うインスタンスで開かれている。
+        expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
+        expect((dialog1 != dialogContext.dialog())).toBe(true);
+    
+        // この時点では向きは変更されている
+        expect(actor1.dir).toBe(9);
+    
+    }
+
+    // 移動
+    commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], actor1, undefined, new REMoveToAdjacentCommand(5, 6));
+    dialogContext.closeDialog(true);
+
+    // シミュレーション実行
     REGameManager.update();
-    
-    // 行動の消費が無いので、再び ManualActionDialog が開かれる。
-    // しかし一度閉じているので、違うインスタンスで開かれている。
-    expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
-    expect((dialog1 != dialogContext.dialog())).toBe(true);
 
-    // この時点では向きは変更されている
-    expect(actor1.dir).toBe(9);
+    expect(actor1.x).toBe(5);
+    expect(actor1.y).toBe(6);
 });
 
 test('basic again', () => {
