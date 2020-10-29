@@ -8,9 +8,10 @@ import { REVisualSequel, REVisualSequel_Move } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
 import { REGame } from "../RE/REGame";
 import { REGame_Entity } from "../RE/REGame_Entity";
-import { REGame_Sequel } from "../RE/REGame_Sequel";
+import { REGame_Sequel, RESequelSet } from "../RE/REGame_Sequel";
 import { REVisual } from "./REVisual";
 import { REVisual_Entity } from "./REVisual_Entity";
+import { REVisualSequelManager } from "./REVisualSequelManager";
 
 /**
  */
@@ -20,6 +21,7 @@ export class REVisual_Manager
     private _dialogVisual: REDialogVisual | null;
     private _tileSize: Vector2 = new Vector2(48, 48);
     private _visualSequelFactory: (() => REVisualSequel)[] = [];
+    private _sequelManager: REVisualSequelManager = new REVisualSequelManager(this);
     
     constructor() {
         this._dialogVisual = null;
@@ -27,6 +29,7 @@ export class REVisual_Manager
         REGame.map.signalEntityLeaved = (x) => this.handlleEntityLeavedMap(x);
         REGame.scheduler.signalDialogOpend = (x) => this.handleDialogOpend(x);
         REGame.scheduler.signalDialogClosed = () => this.handleDialogClosed();
+        REGame.scheduler.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
 
         // init 時点の map 上にいる Entity から Visual を作る
         REGame.map.entities().forEach(x => {
@@ -53,6 +56,8 @@ export class REVisual_Manager
     }
 
     update(): void {
+        this._sequelManager.update();
+
         this._visualEntities.forEach(x => {
             x._update();
         });
@@ -103,6 +108,10 @@ export class REVisual_Manager
             this._dialogVisual.onClose();
             this._dialogVisual = null;
         }
+    }
+
+    private handleFlushSequelSet(sequelSet: RESequelSet) {
+        this._sequelManager.setup(sequelSet);
     }
 
     private createVisual(entity: REGame_Entity) {

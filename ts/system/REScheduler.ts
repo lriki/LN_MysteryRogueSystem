@@ -8,6 +8,7 @@ import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { DecisionPhase } from "../RE/REGame_Behavior";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { REResponse } from "./RECommand";
+import { REGame_Sequel, RESequelSet } from "ts/RE/REGame_Sequel";
 
 
 interface UnitInfo
@@ -70,12 +71,16 @@ export class REScheduler
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
     private _currentUnit: number = 0;
+    private _sequelSet: RESequelSet = new RESequelSet();
 
     /** Dialog が開かれたとき。 */
     public signalDialogOpend: ((context: REDialogContext) => void) | undefined;
 
     /** Dialog が閉じられたとき。 */
     public signalDialogClosed: ((context: REDialogContext) => void) | undefined;
+    
+    /**  */
+    public signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
 
     constructor() {
         this._commandContext = new RECommandContext(this);
@@ -114,15 +119,30 @@ export class REScheduler
                 break;
             }
 
-            if (this._commandContext._process()) {
-                // コマンド実行中
+            if (this._commandContext.isRunning()) {
+                this._commandContext._processCommand();
+
+                if (!this._commandContext.isRunning()) {
+                    // _processCommand() の後で isRunning が落ちていたら、
+                    // 実行中コマンドリストの実行が完了した。
+
+                    // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
+                    // もし歩行など並列のみであればあとでまとめて実行したので不要。
+                    if (!this._sequelSet.isAllParallel()) {
+                        this.flushSequelSet();
+                    }
+                }
             }
-            else {
-                //sweepCollapseList();
-    
-                //m_commandContext->beginCommandChain();
-                this.stepSimulationInternal();
+
+            if (this._commandContext.isRunning()) {
+                // コマンド実行中。まだフェーズを進ませない
+                break;
             }
+
+            //sweepCollapseList();
+
+            //m_commandContext->beginCommandChain();
+            this.stepSimulationInternal();
         }
     }
 
@@ -233,7 +253,6 @@ export class REScheduler
     }
     
     private update_ManualAction(): void {
-        Log.d("update_ManualAction started.");
 
         const run = this._runs[this._currentRun];
         if (this._currentUnit >= run.actions.length) {
@@ -249,6 +268,10 @@ export class REScheduler
         if (unit.unit && unit.attr.manualMovement()) {
             console.log("!!!!!!!_callDecisionPhase");
             unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
+            
+
+            // swap
+            this._commandContext._submit();
         }
         else {
             this.nextActionUnit();
@@ -307,8 +330,8 @@ export class REScheduler
     
     private update_TurnEnding(): void {
 
-        // ターン終了時に、Animation が残っていればすべて掃き出す
-        //executeAnimationQueue(true);
+        // ターン終了時に Sequel が残っていればすべて掃き出す
+        this.flushSequelSet();
 
         this._phase = SchedulerPhase.TurnStarting;
     }
@@ -416,5 +439,16 @@ export class REScheduler
         return this._dialogContext;
     }
 
+    addSequel(sequel: REGame_Sequel) {
+        this._sequelSet.addSequel(sequel);
+    }
+
+    flushSequelSet() {
+        console.log("lush", this._sequelSet);
+        if (this.signalFlushSequelSet && !this._sequelSet.isEmpty()) {
+            console.log("ddd");
+            this.signalFlushSequelSet(this._sequelSet);
+        }
+    }
 
 }

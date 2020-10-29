@@ -57,7 +57,7 @@ export class REManualActionDialogVisual extends REDialogVisual {
             if (dir != 0) {
                 commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, new REDirectionChangeCommand(dir));
             }
-            commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], entity, undefined, new REMoveToAdjacentCommand(x, y));
+            commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], entity, undefined, new REMoveToAdjacentCommand(entity.x + x, entity.y + y));
             context.closeDialog(true);
             return;
         }

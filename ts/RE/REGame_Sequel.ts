@@ -100,17 +100,31 @@ export class RESequelRun {
  */
 export class RESequelSet {
     private _runs: RESequelRun[];
+    private _allParallel: boolean;
+    private _isEmpty: boolean;
 
     constructor() {
         this._runs = [];
+        this._allParallel = true;
+        this._isEmpty = true;
     }
 
     runs(): readonly RESequelRun[] {
         return this._runs;
     }
 
+    isAllParallel() : boolean {
+        return this._allParallel;
+    }
+
+    isEmpty() : boolean {
+        return this._isEmpty;
+    }
+
     reset() {
         this._runs.splice(0);
+        this._allParallel = true;
+        this._isEmpty = true;
     }
 
     addSequel(sequel: REGame_Sequel) {
@@ -141,6 +155,11 @@ export class RESequelSet {
         else {
             this._runs[this._runs.length - 1].add(sequel);
         }
+
+        if (!sequel.isParallel()) {
+            this._allParallel = false;
+        }
+        this._isEmpty = false;
     }
 }
 

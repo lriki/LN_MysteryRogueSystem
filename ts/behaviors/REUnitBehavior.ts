@@ -22,8 +22,13 @@ export class REUnitBehavior extends REGame_Behavior {
         }
 
         if (cmd.action().id == REData.MoveToAdjacentActionId) {
+            
+
             const c = (cmd as REMoveToAdjacentCommand);
+
             if (REGame.map.moveEntity(entity, c.x(), c.y(), entity.queryProperty(RESystem.properties.homeLayer))) {
+
+                context.postSequel(entity, REData.MoveSequel);
 
                 return REResponse.Consumed;
             }

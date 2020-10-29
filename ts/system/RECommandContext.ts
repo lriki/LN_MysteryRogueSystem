@@ -70,6 +70,11 @@ export class RECommandContext
         this._recodingCommandList.push(m1);
     }
 
+    postSequel(entity: REGame_Entity, sequelId: number) {
+
+    }
+
+
     visualAnimationWaiting(): boolean {
         return this._visualAnimationWaiting;
     }
@@ -82,11 +87,18 @@ export class RECommandContext
         return this._messageIndex < this._runningCommandList.length;
     }
 
+    /*
     _process(): boolean {
         if (this.isRunning()) {
             // コマンドリスト実行中
             this._processCommand();
+            
+            if (!this.isRunning()) {
+                // 実行終了。
+                this._owner.
+            }
         }
+
         
         if (!this.isRunning() && this._recodingCommandList.length > 0) {
             // _runningCommandList は終了したが、_recodingCommandList に次のコマンドチェーンが溜まっていればそれの実行を始める
@@ -96,6 +108,7 @@ export class RECommandContext
         // _runningCommandList にも _recodingCommandList にもコマンドが無ければ false を返して、スケジューリングフェーズを次に進める
         return this.isRunning();
     }
+    */
 
     _processCommand() {
         if (this.isRunning()) {
