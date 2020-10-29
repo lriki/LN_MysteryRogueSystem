@@ -65,6 +65,7 @@ export class REGame_Map
 
             // TileEntity 追加
             const tile = REGame_EntityFactory.newTile(TileKind.Floor);
+            tile.floorId = this._floorId;
             this.markAdhocEntity(tile);
             this._addEntity(tile);
             this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
@@ -188,6 +189,17 @@ export class REGame_Map
     }
 
 
+    canEntering(block: REGame_Block, entity: REGame_Entity, layer: BlockLayerKind): boolean {
+        // TODO: 壁抜けや浮遊状態で変わる
+        return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
+    }
+    
+    canLeaving(block: REGame_Block, entity: REGame_Entity, layer: BlockLayerKind): boolean
+    {
+        // TODO: 壁抜けや浮遊状態で変わる
+        return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
+    }
+    
 
 }
 

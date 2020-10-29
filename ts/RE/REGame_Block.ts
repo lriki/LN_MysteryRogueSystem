@@ -1,3 +1,4 @@
+import { RETileAttribute } from "ts/attributes/RETileAttribute";
 import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Entity } from "./REGame_Entity";
@@ -22,6 +23,10 @@ export enum BlockLayerKind {
 
 class REBlockLayer {
     private _entities: REGame_Entity[] = [];
+
+    entities(): readonly REGame_Entity[] {
+        return this._entities;
+    }
 
     isContains(entity: REGame_Entity): boolean {
         return this._entities.includes(entity);
@@ -184,10 +189,29 @@ export class REGame_Block
         MapDataProvidor.onUpdateBlock(this);
     }
 
+    tile(): REGame_Entity {
+        return this._layers[BlockLayerKind.Terrain].entities()[0];
+    }
+
+    tileKind(): TileKind {
+        const attr = this.tile().findAttribute(RETileAttribute);
+        return attr ? attr.tileKind() : TileKind.Void;
+    }
+
+    layers(): readonly REBlockLayer[] {
+        return this._layers;
+    }
+
     addEntity(layerKind: BlockLayerKind, entity: REGame_Entity) {
         const layer = this._layers[layerKind];
-        assert(layer.isContains(entity));
-        assert(!layer.isOccupied());
+        assert(!layer.isContains(entity));  // 複数追加禁止
+        assert(!layer.isOccupied());        // 既に占有されている時は追加禁止
+
+        if (layerKind == BlockLayerKind.Terrain) {
+            // Tile Layer への複数追加は禁止
+            assert(this._layers[layerKind].entities().length == 0);
+        }
+
         layer.addEntity(entity);
     }
 

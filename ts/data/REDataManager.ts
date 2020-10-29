@@ -24,10 +24,12 @@ export class REDataManager
         REData.reset();
 
         // Parameters
-        RESystem.parameters.hp = REData.addParameter("HP");
-        RESystem.parameters.atk = REData.addParameter("ATK");
-        RESystem.parameters.def = REData.addParameter("DEF");
-        RESystem.parameters.satiety = REData.addParameter("満腹度");
+        RESystem.parameters = {
+            hp: REData.addParameter("HP"),
+            atk: REData.addParameter("ATK"),
+            def: REData.addParameter("DEF"),
+            satiety: REData.addParameter("満腹度"),
+        };
         
         REData.WeaponKindId = REData.addEntityKind("武器");
         REData.ShieldKindId = REData.addEntityKind("盾");
