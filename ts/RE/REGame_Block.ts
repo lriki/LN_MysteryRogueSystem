@@ -1,5 +1,76 @@
+import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
+import { REGame_Entity } from "./REGame_Entity";
 import { REGame_Map } from "./REGame_Map";
+
+export enum BlockLayerKind {
+	/** 地形情報。壁・水路など。 */
+	Terrain = 0,
+
+	/** 地表に落ちているもの。アイテム・ワナ・階段など。 */
+	Ground = 1,
+
+	/** ユニット。PC・仲間・モンスター・土偶など。 */
+	Unit = 2,
+
+	/** 発射物。矢、魔法弾、吹き飛ばされたUnitなど。 */
+    Projectile = 3,
+    
+    /** お店のセキュリティシステムなど、非表示だが Entity として存在するもの。 */
+    System = 4,
+}
+
+class REBlockLayer {
+    private _entities: REGame_Entity[] = [];
+
+    isContains(entity: REGame_Entity): boolean {
+        return this._entities.includes(entity);
+    }
+
+    isOccupied(): boolean {
+        return this._entities.some(x => x.blockOccupied);
+    }
+
+    addEntity(entity: REGame_Entity) {
+        this._entities.push(entity);
+    }
+
+    removeEntity(entity: REGame_Entity): boolean {
+        const index = this._entities.indexOf(entity);
+        if (index >= 0) {
+            this._entities.splice(index, 1);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    removeAllEntites() {
+        this._entities.splice(0);
+    }
+}
+
+/** Tile Entity の性質 */
+export enum TileKind {
+    /** 中空 */
+    Void,
+
+    /** 床 */
+    Floor,
+
+    /** 壁 */
+    Wall,
+
+    /** 壊れない壁 */
+    HardWall,
+
+    /** 水路 */
+    Water,
+
+//	/** マップの外周の壊せない壁。配列外を示すダミー要素。 */
+//	BorderWall,
+}
 
 /**
  * GameBlock
@@ -85,12 +156,15 @@ export class REGame_Block
     // Note: [1,2,3] ... 装飾 (B, C タイル. "自動" モードでは後ろの番号から配置されていく)
     private _tileIds: number[] | undefined;
 
+    private _layers: REBlockLayer[];
+
     private _x: number;
     private _y: number;
 
     constructor(map: REGame_Map, x: number, y: number) {
         this._x = x;
         this._y = y;
+        this._layers = [new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer()];
     }
 
     x(): number {
@@ -108,5 +182,26 @@ export class REGame_Block
     setTileIds(tileIds: number[]): void {
         this._tileIds = tileIds;
         MapDataProvidor.onUpdateBlock(this);
+    }
+
+    addEntity(layerKind: BlockLayerKind, entity: REGame_Entity) {
+        const layer = this._layers[layerKind];
+        assert(layer.isContains(entity));
+        assert(!layer.isOccupied());
+        layer.addEntity(entity);
+    }
+
+    removeEntity(entity: REGame_Entity) {
+        for (let i = 0; i < this._layers.length; i++) {
+            if (this._layers[i].removeEntity(entity)) {
+                return;
+            }
+        }
+    }
+
+    removeAllEntites() {
+        for (let i = 0; i < this._layers.length; i++) {
+            this._layers[i].removeAllEntites();
+        }
     }
 }

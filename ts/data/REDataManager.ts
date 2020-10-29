@@ -1,4 +1,5 @@
 //import 'types/index.d.ts'
+import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 
@@ -21,6 +22,12 @@ export class REDataManager
 
     static setupCommonData() {
         REData.reset();
+
+        // Parameters
+        RESystem.parameters.hp = REData.addParameter("HP");
+        RESystem.parameters.atk = REData.addParameter("ATK");
+        RESystem.parameters.def = REData.addParameter("DEF");
+        RESystem.parameters.satiety = REData.addParameter("満腹度");
         
         REData.WeaponKindId = REData.addEntityKind("武器");
         REData.ShieldKindId = REData.addEntityKind("盾");

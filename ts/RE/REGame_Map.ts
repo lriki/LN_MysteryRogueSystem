@@ -1,10 +1,11 @@
 import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
-import { REGame_Block } from "./REGame_Block";
+import { BlockLayerKind, REGame_Block, TileKind } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REMapBuilder } from "../system/REMapBuilder";
+import { REGame_EntityFactory } from "./REGame_EntityFactory";
 
 
 
@@ -30,6 +31,7 @@ export class REGame_Map
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
     private _entityIds: number[] = [];      // マップ内に登場している Entity
+    private _adhocEntityIds: number[] = [];
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
@@ -50,6 +52,9 @@ export class REGame_Map
     }
 
     setupEmptyMap(width: number, height: number) {
+        assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
+        assert(this._adhocEntityIds.length == 0);   // 外部で releaseMap してから setup すること
+
         this._width = width;
         this._height = height;
 
@@ -57,7 +62,18 @@ export class REGame_Map
         this._blocks = new Array<REGame_Block>(count);
         for (let i = 0; i < count; i++) {
             this._blocks[i] = new REGame_Block(this, i % this._width, i / this._width);
+
+            // TileEntity 追加
+            const tile = REGame_EntityFactory.newTile(TileKind.Floor);
+            this.markAdhocEntity(tile);
+            this._addEntity(tile);
+            this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
         }
+    }
+
+    releaseMap() {
+        this.destroyAdhocEntities();
+        this._removeAllEntities();
     }
 
     /**
@@ -140,6 +156,17 @@ export class REGame_Map
         }
     }
 
+    /** エンティティを、このマップのみの AdhocEntity としてマークする */
+    markAdhocEntity(entity: REGame_Entity) {
+        this._adhocEntityIds.push(entity.id());
+    }
+
+    destroyAdhocEntities() {
+        this._adhocEntityIds.forEach(x => {
+            REGame.world.entity(x).destroy();
+        })
+    }
+
     _removeAllEntities(): void {
         this._entityIds.forEach(x => {
             const entity = REGame.world.entity(x);
@@ -159,5 +186,8 @@ export class REGame_Map
         entity.x = x;
         entity.y = y;
     }
+
+
+
 }
 

@@ -21,8 +21,12 @@ export enum DecisionPhase {
 }
 
 // see: 実装FAQ-Command-Behavior.md
-export class REGame_Behavior
-{
+export class REGame_Behavior {
+    // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
+    // propertyId: see EntityProperties
+    // undefined を返した場合は後続の Behavior の onQueryProperty() を呼び出し続ける。
+    onQueryProperty(propertyId: number): any { return undefined; }
+
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
@@ -33,4 +37,29 @@ export class REGame_Behavior
     onPreReaction(cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(cmd: RECommand): REResponse { return REResponse.Pass; }
     onReaction(cmd: RECommand): REResponse { return REResponse.Pass; }
+
+
+    
 }
+
+/*
+例：聖域の巻物を拾うとき
+----------
+### player.onPreAction
+Player に Attach されている Behavior の onPreAction.
+自分の状態を元に行動の可否を決める。
+もし Player が手封じ状態であれば実行不能。メッセージを表示して Cancel。ターンを消費。
+
+### item.onPreReaction
+Item に Attach されている Behavior の onPreReaction.
+もし床に張り付いている状態であれば実行不能。メッセージを表示して Cancel。ターンを消費。
+拾うときにアイテムをモンスター化したいとかもここ。
+
+### player.onAction
+ItemEntity を Map から取り除き、インベントリに追加する。
+持ち物が一杯だった場合はメッセージを表示して Cancel。ターンを消費。
+
+
+
+
+*/

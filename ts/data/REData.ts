@@ -200,6 +200,15 @@ export interface REData_Sequel
     name: string;
 }
 
+export interface REData_Parameter
+{
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+}
+
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
@@ -232,6 +241,7 @@ export class REData
     static factions: REData_Faction[] = [];
     static actions: REData_Action[] = [{id: 0, name: 'null'}];
     static sequels: REData_Sequel[] = [{id: 0, name: 'null'}];
+    static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
 
     static reset() {
         this.entityKinds = [{ id: 0, name: 'null' }];
@@ -241,6 +251,7 @@ export class REData
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
         this.actions = [{id: 0, name: 'null'}];
         this.sequels = [{id: 0, name: 'null'}];
+        this.parameters = [{id: 0, name: 'null'}];
     }
 
     static addEntityKind(name: string): number {
@@ -303,6 +314,15 @@ export class REData
     static addAction(name: string): number {
         const newId = this.actions.length;
         this.actions.push({
+            id: newId,
+            name: name
+        });
+        return newId;
+    }
+
+    static addParameter(name: string): number {
+        const newId = this.parameters.length;
+        this.parameters.push({
             id: newId,
             name: name
         });

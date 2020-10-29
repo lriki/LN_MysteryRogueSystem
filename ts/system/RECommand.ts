@@ -10,6 +10,9 @@ export enum REResponse
     /** RECommand はハンドリングされませんでした。続けて後続の Behavior に RECommand を通知します。 */
     Pass,
 
+    /** 状態異常の制限により、目的の処理を実行できなかったことを示します。後続の Behavior に RECommand は通知されません。 */
+    Canceled,
+
     //Aborted,
 }
 

@@ -3,6 +3,8 @@ import { DecisionPhase, REGame_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
+import { BlockLayerKind } from "./REGame_Block";
+import { RESystem } from "ts/system/RESystem";
 
 
 
@@ -62,9 +64,13 @@ export class REGame_Entity
     x: number = 0;          /**< 論理 X 座標 */
     y: number = 0;          /**< 論理 Y 座標 */
 
+    //--------------------
     // 以下、一時的に Entity に直接持たせてる Attr. 利用率とかで、別途 Attr クラスに分けたりする。
+
     dir: number = 4;        // Numpad Dir
 
+    // Block を占有するかどうか
+    blockOccupied: boolean = true;
 
     _eventData: IDataMapEvent | undefined = undefined;
 
@@ -76,6 +82,11 @@ export class REGame_Entity
 
     id(): number {
         return this._id;
+    }
+
+    addAttribute(value: REGame_Attribute) {
+        this.attrbutes.push(value);
+        return this;
     }
 
     behaviors(): REGame_Behavior[] {
@@ -119,6 +130,16 @@ export class REGame_Entity
             */
     }
 
+    queryProperty(propertyId: number): any {
+        for (let i = 0; i < this._behaviors.length; i++) {
+            const value = this._behaviors[i].onQueryProperty(propertyId);
+            if (value !== undefined) {
+                return value;
+            }
+        }
+        return RESystem.propertyData[propertyId];
+    }
+
     _callBehaviorIterationHelper(func: (b: REGame_Behavior) => REResponse): REResponse {
         for (let i = 0; i < this._behaviors.length; i++) {
             const r = func(this._behaviors[i]);//this._behaviors[i].onPreAction(cmd);
@@ -131,7 +152,7 @@ export class REGame_Entity
 
     _callDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {
         return this._callBehaviorIterationHelper(b => b.onDecisionPhase(this, context, phase));
-     }
+    }
 
     _sendPreAction(cmd: RECommand): REResponse {
         return this._callBehaviorIterationHelper(b => b.onPreAction(cmd));
