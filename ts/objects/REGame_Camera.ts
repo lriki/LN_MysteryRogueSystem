@@ -1,5 +1,5 @@
 import { REGame_Map } from "../RE/REGame_Map";
-import { REGame_EntityFactory } from "../system/REGame_EntityFactory";
+import { REEntityFactory } from "../system/REEntityFactory";
 import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { RE_Game_World } from "../RE/REGame_World";

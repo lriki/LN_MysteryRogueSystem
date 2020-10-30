@@ -7,7 +7,7 @@ import { REUnitBehavior } from "../behaviors/REUnitBehavior";
 import { RETileAttribute } from "../attributes/RETileAttribute";
 import { TileKind } from "../RE/REGame_Block";
 
-export class REGame_EntityFactory {
+export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
         const entity = REGame.world.spawnEntity();
         entity.addAttribute(new RETileAttribute().setTileKind(kind));

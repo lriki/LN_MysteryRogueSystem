@@ -1,6 +1,6 @@
 import { REGame } from "../RE/REGame";
 import { REGame_Entity } from "../RE/REGame_Entity";
-import { REGame_EntityFactory } from "./REGame_EntityFactory";
+import { REEntityFactory } from "./REEntityFactory";
 import { REGame_Map } from "../RE/REGame_Map";
 import { RE_Game_World } from "../RE/REGame_World";
 import { REGame_Core } from "../RE/REGame_Core";
@@ -29,7 +29,7 @@ export class REGameManager
         // Create unique units
         REData.actors.forEach(x => {
             if (x.id > 0) {
-                const unit = REGame_EntityFactory.newActor();
+                const unit = REEntityFactory.newActor();
                 unit.floorId = x.initialFloorId;
                 unit.x = x.initialX;
                 unit.y = x.initialY;

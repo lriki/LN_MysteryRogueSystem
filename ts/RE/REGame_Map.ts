@@ -5,7 +5,7 @@ import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REMapBuilder } from "../system/REMapBuilder";
-import { REGame_EntityFactory } from "../system/REGame_EntityFactory";
+import { REEntityFactory } from "../system/REEntityFactory";
 import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
@@ -67,7 +67,7 @@ export class REGame_Map
             this._blocks[i] = new REGame_Block(this, i % this._width, i / this._width);
 
             // TileEntity 追加
-            const tile = REGame_EntityFactory.newTile(TileKind.Floor);
+            const tile = REEntityFactory.newTile(TileKind.Floor);
             tile.floorId = this._floorId;
             this.markAdhocEntity(tile);
             this._addEntity(tile);
