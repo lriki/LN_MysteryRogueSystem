@@ -52,7 +52,7 @@ export class REVisual_Manager
     }
 
     visualRunning(): boolean {
-        return false;
+        return this._sequelManager.isRunning();
     }
 
     update(): void {

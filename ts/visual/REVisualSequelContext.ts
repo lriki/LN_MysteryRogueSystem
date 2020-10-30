@@ -1,6 +1,7 @@
 import { REGame_Sequel, RESequelClip } from "ts/RE/REGame_Sequel";
 import { REVisual } from "../visual/REVisual";
 import { REVisualSequel } from "./REVisualSequel";
+import { REVisual_Entity } from "./REVisual_Entity";
 
 export class REVisualSequelContext {
     private _clip: RESequelClip | undefined;
@@ -66,9 +67,9 @@ export class REVisualSequelContext {
         this._cuurentFinished = false;
     }
 
-    _update() {
+    _update(entity: REVisual_Entity) {
         if (this._currentVisualSequel) {
-            this._currentVisualSequel.onUpdate(this);
+            this._currentVisualSequel.onUpdate(entity, this);
             this._frameCount += 1;
             
             if (this._cuurentFinished) {

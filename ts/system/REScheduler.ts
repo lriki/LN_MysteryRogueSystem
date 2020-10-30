@@ -95,8 +95,15 @@ export class REScheduler
 
         while (true) {
             // Sequel 終了待ち
+            if (REGame.integration.onCheckVisualSequelRunning()) {
+                // Sequel 実行中
+                
+                Log.d(" Sequel 実行中");
+                break;
+            }
+            /*
             if (this._commandContext.visualAnimationWaiting()) {
-                if (REGameManager.visualRunning()) {
+                if (REGame.integration.onCheckVisualSequelRunning()) {
                     // Sequel 実行中
                     break;
                 }
@@ -105,9 +112,10 @@ export class REScheduler
                     this._commandContext.clearVisualAnimationWaiting();
                 }
             }
+            */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!this._commandContext.isRunning() && REGameManager.visualRunning()) {
+            if (!this._commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
                 break;
             }
 
@@ -125,12 +133,12 @@ export class REScheduler
                 if (!this._commandContext.isRunning()) {
                     // _processCommand() の後で isRunning が落ちていたら、
                     // 実行中コマンドリストの実行が完了した。
+                }
 
-                    // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
-                    // もし歩行など並列のみであればあとでまとめて実行したので不要。
-                    if (!this._sequelSet.isAllParallel()) {
-                        this.flushSequelSet();
-                    }
+                // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
+                // もし歩行など並列のみであればあとでまとめて実行したので不要。
+                if (!this._sequelSet.isAllParallel()) {
+                    this.flushSequelSet();
                 }
             }
 
@@ -177,7 +185,7 @@ export class REScheduler
     }
     
     private update_TurnStarting(): void {
-        Log.d("s update_TurnStarting");
+        Log.d("========== [TurnStarting] ==========");
 
         this.buildOrderTable();
         
@@ -330,6 +338,7 @@ export class REScheduler
     }
     
     private update_TurnEnding(): void {
+        console.log("update_TurnEnding flushSequelSet");
 
         // ターン終了時に Sequel が残っていればすべて掃き出す
         this.flushSequelSet();
@@ -445,10 +454,15 @@ export class REScheduler
     }
 
     flushSequelSet() {
-        console.log("lush", this._sequelSet);
-        if (this.signalFlushSequelSet && !this._sequelSet.isEmpty()) {
-            console.log("ddd");
-            this.signalFlushSequelSet(this._sequelSet);
+        Log.d("[FlushSequel]");
+
+        if (!this._sequelSet.isEmpty()) {
+            if (this.signalFlushSequelSet) {
+                this.signalFlushSequelSet(this._sequelSet);
+            }
+            REGame.integration.onFlushSequelSet(this._sequelSet);
+
+            this._sequelSet = new RESequelSet();
         }
     }
 

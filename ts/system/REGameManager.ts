@@ -60,10 +60,6 @@ export class REGameManager
         */
     }
 
-    static visualRunning(): boolean {
-        return false;
-    }
-
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
             // マップ構築

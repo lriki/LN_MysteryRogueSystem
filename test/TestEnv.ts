@@ -1,10 +1,13 @@
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/RE/REGame";
+import { RESequelSet } from "ts/RE/REGame_Sequel";
 import { REIntegration } from "ts/system/REIntegration";
 import { REMapBuilder } from "ts/system/REMapBuilder";
 
 export class TestEnv {
+    static activeSequelSet: RESequelSet;
+
     static setupDatabase() {
         REData.reset();
         REDataManager.setupCommonData();
@@ -38,5 +41,11 @@ export class TestEnvIntegration extends REIntegration {
         else {
             throw new Error("Method not implemented.");
         }
+    }
+    onFlushSequelSet(sequelSet: RESequelSet): void {
+        TestEnv.activeSequelSet = sequelSet;
+    }
+    onCheckVisualSequelRunning(): boolean {
+        return false;
     }
 }

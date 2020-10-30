@@ -1,9 +1,10 @@
 import { REVisualSequelContext } from "./REVisualSequelContext";
+import { REVisual_Entity } from "./REVisual_Entity";
 
 
 
 export abstract class REVisualSequel {
-    abstract onUpdate(context: REVisualSequelContext): void;
+    abstract onUpdate(entity: REVisual_Entity, context: REVisualSequelContext): void;
 }
 
 
@@ -12,8 +13,14 @@ export abstract class REVisualSequel {
  * そうしないと、途中で立ち寄ったブロックを補完するようなアニメーションが表現できない。
  */
 export class REVisualSequel_Move extends REVisualSequel {
-    onUpdate(context: REVisualSequelContext): void {
+    onUpdate(entity: REVisual_Entity, context: REVisualSequelContext): void {
 
+        console.log("onUpdate", context.frameCount());
+
+        if (context.frameCount() > 60) {
+            entity.resetPosition();
+            context.end();
+        }
     }
 }
 

@@ -69,6 +69,9 @@ test('basic', () => {
 
     expect(actor1.x).toBe(5);
     expect(actor1.y).toBe(6);
+
+    expect(TestEnv.activeSequelSet.runs().length).toBe(1);
+    expect(TestEnv.activeSequelSet.runs()[0].clips().length).toBe(1);
 });
 
 test('EntitySaveLoad', () => {

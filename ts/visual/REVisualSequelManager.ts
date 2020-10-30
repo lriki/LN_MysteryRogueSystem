@@ -22,45 +22,55 @@ export class REVisualSequelManager {
     }
 
     setup(sequelSet: RESequelSet) {
-        console.log("setup", sequelSet);
-
         this._activeSequelSet = sequelSet;
         this._currentSequelRun = -1;
         this._runningVisuals.splice(0);
+        this.update();
+        
+        console.log("setup", this._activeSequelSet);
     }
 
     update() {
-        this.attemptStartAnimation();
-    }
-
-    private attemptStartAnimation() {
         if (this._activeSequelSet) {
-            if (this._currentSequelRun < 0) {
-                // initial
-                this._currentSequelRun = 0;
-            }
-            else if (this.isLogicalCompleted()) {
-                // 再生中のものがすべて完了していれば次へ
-                this._currentSequelRun += 1;
-            }
-
             const runs = this._activeSequelSet.runs();
-            if (this._currentSequelRun < runs.length) {
-                // 次の Run を開始する
-                const run = runs[this._currentSequelRun];
-                run.clips().forEach(x => {
-                    const visual = this._manager.findEntityVisualByEntity(x.entity());
-                    if (visual) {
-                        visual.sequelContext()._start(x);
-                    }
-                });
-            }
-            else {
+            if (this._currentSequelRun >= runs.length && this.isLogicalCompleted()) {
                 // すべてのアニメーションが終了した
                 this._runningVisuals.splice(0);
                 this._activeSequelSet = undefined;
             }
+            else {
+                let next = -1;
+                if (this._currentSequelRun < 0) {
+                    // initial
+                    next= 0;
+                }
+                else if (this.isLogicalCompleted()) {
+                    // 再生中のものがすべて完了していれば次へ
+                    next = this._currentSequelRun + 1;
+                }
+    
+                // 毎フレームは実行しないようにしたい。
+                // initial か、this.isLogicalCompleted()=true のときだけ実行したい。
+                if (next >= 0) {
+                    this._currentSequelRun = next;
+                    if (this._currentSequelRun < runs.length) {
+                        // 次の Run を開始する
+                        const run = runs[this._currentSequelRun];
+                        run.clips().forEach(x => {
+                            const visual = this._manager.findEntityVisualByEntity(x.entity());
+                            if (visual) {
+                                visual.sequelContext()._start(x);
+                                this._runningVisuals.push(visual);
+                            }
+                        });
+                    }
+                }
+            }
         }
+    }
+
+    isRunning(): boolean {
+        return this._activeSequelSet != undefined;
     }
 
     // 現在実行中の Run に含まれる Visual (_runningVisuals) の Sequel が、

@@ -32,6 +32,9 @@ export class REUnitBehavior extends REGame_Behavior {
 
                 context.postSequel(entity, REData.MoveSequel);
 
+                
+                console.log("moved", entity.x, entity.y);
+
                 return REResponse.Consumed;
             }
             

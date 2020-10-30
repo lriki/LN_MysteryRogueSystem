@@ -38,6 +38,11 @@ export class REVisual_Entity
         return this._rmmzEventId;
     }
 
+    resetPosition() {
+        this._position.x = this._entity.x;
+        this._position.y = this._entity.y;
+    }
+
     sequelContext(): REVisualSequelContext {
         return this._sequelContext;
     }
@@ -47,7 +52,7 @@ export class REVisual_Entity
     }
 
     _update() {
-
+        this._sequelContext._update(this);
         
         if (this._rmmzEventId > 0) {
             const tileSize = REVisual.manager.tileSize();
