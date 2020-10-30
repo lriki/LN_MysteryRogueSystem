@@ -60,7 +60,7 @@ test('basic', () => {
     }
 
     // 移動
-    const args2: REMoveToAdjacentArgs = { x: 5, y: 6 };
+    const args2: REMoveToAdjacentArgs = { direction: 2 };
     commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], actor1, undefined, args2);
     dialogContext.closeDialog(true);
 

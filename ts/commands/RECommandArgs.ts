@@ -1,7 +1,6 @@
 
 export interface REMoveToAdjacentArgs {
-    x: number;
-    y: number;
+    direction: number;
 }
 
 export interface REDirectionChangeArgs {

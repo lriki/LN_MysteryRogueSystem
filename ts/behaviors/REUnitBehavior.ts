@@ -9,6 +9,7 @@ import { REGame } from "ts/RE/REGame";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
+import { Helpers } from "ts/system/Helpers";
 
 /**
  * 
@@ -25,8 +26,9 @@ export class REUnitBehavior extends REGame_Behavior {
             
 
             const args = (cmd.args() as REMoveToAdjacentArgs);
+            const offset = Helpers.dirToTileOffset(args.direction);
 
-            if (REGame.map.moveEntity(entity, args.x, args.y, entity.queryProperty(RESystem.properties.homeLayer))) {
+            if (REGame.map.moveEntity(entity, entity.x + offset.x, entity.y + offset.y, entity.queryProperty(RESystem.properties.homeLayer))) {
 
                 context.postSequel(entity, REData.MoveSequel);
 

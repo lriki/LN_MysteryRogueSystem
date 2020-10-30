@@ -18,47 +18,14 @@ export class REManualActionDialogVisual extends REDialogVisual {
         //}
 
         
-        let x = 0;
-        let y = 0;
         let dir = Input.dir8;
-
-        switch (Input.dir8) {
-            case 1:
-                x = -1;
-                y = 1;
-                break;
-            case 2:
-                y = 1;
-                break;
-            case 3:
-                x = 1;
-                y = 1;
-                break;
-            case 4:
-                x = -1;
-                break;
-            case 6:
-                x = 1;
-                break;
-            case 7:
-                x = -1;
-                y = -1;
-                break;
-            case 8:
-                y = -1;
-                break;
-            case 9:
-                x = 1;
-                y = -1;
-                break;
-        }
         
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
                 const args: REDirectionChangeArgs = { direction: dir };
                 commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, args);
             }
-            const args: REMoveToAdjacentArgs = { x: entity.x + x, y: entity.y + y };
+            const args: REMoveToAdjacentArgs = { direction: dir };
             commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], entity, undefined, args);
             context.closeDialog(true);
             return;
