@@ -22,11 +22,10 @@ export class RECommandContext
         this._owner = owner;
     }
 
-    postAction(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
-        assert(action);
+    postAction(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
+        assert(actionId > 0);
 
-        const actualCommand = new RECommand();
-        actualCommand.setup(action, actor, reactor, args);
+        const actualCommand = new RECommand(actionId, actor, reactor, args);
 
         const m1 = () => {
             return actor._sendPreAction(this, actualCommand);

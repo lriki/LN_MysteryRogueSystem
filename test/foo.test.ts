@@ -40,7 +40,7 @@ test('basic', () => {
     
         // 向き変更。行動を消費せず Dialog を閉じる
         const args1: REDirectionChangeArgs = { direction: 9 };
-        commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, args1);
+        commandContext.postAction(REData.DirectionChangeActionId, actor1, undefined, args1);
         dialogContext.closeDialog(false);
     
         // この時点では向きは変更されていない
@@ -61,7 +61,7 @@ test('basic', () => {
 
     // 移動
     const args2: REMoveToAdjacentArgs = { direction: 2 };
-    commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], actor1, undefined, args2);
+    commandContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, args2);
     dialogContext.closeDialog(true);
 
     // シミュレーション実行

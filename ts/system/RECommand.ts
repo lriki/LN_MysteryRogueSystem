@@ -19,20 +19,20 @@ export enum REResponse
 /** Command 表現及び引数 */
 export class RECommand  // sealed
 {
-    private _action: REData_Action = REData.actions[0];
-    private _actor: REGame_Entity | undefined;
+    private _actionId: number;
+    private _actor: REGame_Entity;
     private _reactor: REGame_Entity | undefined;
     private _args: any;
 
-    setup(action: REData_Action, actor: REGame_Entity, reactor: REGame_Entity | undefined, args: any) {
-        this._action = action;
+    constructor(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args: any) {
+        this._actionId = actionId;
         this._actor = actor;
         this._reactor = reactor;
         this._args = args;
     }
 
     /** この Command の発生元となった Action */
-    action(): REData_Action { return this._action; }
+    action(): REData_Action { return REData.actions[this._actionId]; }
 
     args(): any { return this._args; }
 

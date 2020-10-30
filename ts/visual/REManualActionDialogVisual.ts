@@ -23,10 +23,10 @@ export class REManualActionDialogVisual extends REDialogVisual {
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
                 const args: REDirectionChangeArgs = { direction: dir };
-                commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, args);
+                commandContext.postAction(REData.DirectionChangeActionId, entity, undefined, args);
             }
             const args: REMoveToAdjacentArgs = { direction: dir };
-            commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], entity, undefined, args);
+            commandContext.postAction(REData.MoveToAdjacentActionId, entity, undefined, args);
             context.closeDialog(true);
             return;
         }
