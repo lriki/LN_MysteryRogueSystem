@@ -1,9 +1,15 @@
+// NOTE:
+//   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
+
+import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
 import { REDirectionChangeCommand, REMoveToAdjacentCommand } from "ts/commands/REDirectionChangeCommand";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
-import { REGameManager } from "ts/RE/REGameManager";
+import { REGameManager } from "ts/system/REGameManager";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
+import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 
 TestEnv.setupDatabase();
@@ -63,6 +69,48 @@ test('basic', () => {
     expect(actor1.y).toBe(6);
 });
 
-test('basic again', () => {
-    //expect(sum(1, 2)).toBe(3);
+test('EntitySaveLoad', () => {
+    let contentsString = "";
+
+    // Save
+    {
+        const actor1 = new REGame_Entity();
+
+        // Entity Property
+        actor1._id = 1;
+        actor1.x = 55;
+
+        // Attributes
+        const a1 = RESystem.createAttribute(RESystem.attributes.unit) as REGame_UnitAttribute;
+        a1.setSpeedLevel(2);
+        actor1.addAttribute(a1);
+
+        // Behaviors
+        const b1 = RESystem.createBehavior(RESystem.behaviors.unit) as REUnitBehavior;
+        actor1.addBehavior(b1);
+
+        const contents1 = actor1.makeSaveContents();
+        contentsString = JSON.stringify(contents1);
+    }
+
+    // Load
+    {
+        const actor2 = new REGame_Entity();
+        const contents2 = JSON.parse(contentsString);
+        actor2.extractSaveContents(contents2);
+        
+        // Entity Property
+        expect(actor2.id()).toBe(1);
+        expect(actor2.x).toBe(55);
+
+        // Attributes
+        const a1 = actor2.findAttribute(REGame_UnitAttribute);
+        expect(actor2.attrbutes.length).toBe(1);
+        expect(a1).toBeDefined();
+        expect(a1?.speedLevel()).toBe(2);
+
+        // Behaviors
+        expect(actor2.behaviors().length).toBe(1);
+        expect(actor2.behaviors()[0]).toBeInstanceOf(REUnitBehavior);
+    }
 });

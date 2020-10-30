@@ -1,3 +1,6 @@
+import { REGame_Attribute } from "ts/RE/REGame_Attribute";
+import { REGame_Behavior } from "ts/RE/REGame_Behavior";
+import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 
 
 export enum REFloorMapKind
@@ -242,6 +245,11 @@ export class REData
     static actions: REData_Action[] = [{id: 0, name: 'null'}];
     static sequels: REData_Sequel[] = [{id: 0, name: 'null'}];
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
+    static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
+    static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
+
+    static _attributeFactories: (() => REGame_Attribute)[] = [];
+    static _behaviorFactories: (() => REGame_Behavior)[] = [];
 
     static reset() {
         this.entityKinds = [{ id: 0, name: 'null' }];
@@ -252,6 +260,10 @@ export class REData
         this.actions = [{id: 0, name: 'null'}];
         this.sequels = [{id: 0, name: 'null'}];
         this.parameters = [{id: 0, name: 'null'}];
+        this.attributes = [{id: 0, name: 'null'}];
+        this.behaviors = [{id: 0, name: 'null'}];
+        this._attributeFactories = [() => new REGame_Attribute()];
+        this._behaviorFactories = [() => new REGame_Behavior()];
     }
 
     static addEntityKind(name: string): number {
@@ -329,6 +341,25 @@ export class REData
         return newId;
     }
 
+    static addAttribute(name: string, factory: (() => REGame_Attribute)): number {
+        const newId = this.attributes.length;
+        this.attributes.push({
+            id: newId,
+            name: name,
+        });
+        this._attributeFactories.push(factory);
+        return newId;
+    }
+    
+    static addBehavior(name: string, factory: (() => REGame_Behavior)): number {
+        const newId = this.behaviors.length;
+        this.behaviors.push({
+            id: newId,
+            name: name,
+        });
+        this._behaviorFactories.push(factory);
+        return newId;
+    }
     
     //----------------------------------------
     // Standard Actions.

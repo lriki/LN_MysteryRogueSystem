@@ -1,6 +1,6 @@
 import { REDataManager } from "./data/REDataManager";
 import { REGame } from "./RE/REGame";
-import { REGameManager } from "./RE/REGameManager";
+import { REGameManager } from "./system/REGameManager";
 
 declare global {
     interface Game_Map {

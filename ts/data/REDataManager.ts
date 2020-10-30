@@ -1,4 +1,8 @@
 //import 'types/index.d.ts'
+import { RETileAttribute } from "ts/attributes/RETileAttribute";
+import { REGame_DecisionBehavior } from "ts/behaviors/REDecisionBehavior";
+import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
+import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
@@ -61,6 +65,18 @@ export class REDataManager
         // Actions
         REData.DirectionChangeActionId = REData.addAction("DirectionChange");
         REData.MoveToAdjacentActionId = REData.addAction("MoveToAdjacent");
+
+        // Attributes
+        RESystem.attributes = {
+            tile: REData.addAttribute("Tile", () => new RETileAttribute()),
+            unit: REData.addAttribute("Unit", () => new REGame_UnitAttribute()),
+        };
+
+        // Behaviors
+        RESystem.behaviors = {
+            decision: REData.addBehavior("Decision", () => new REGame_DecisionBehavior()),
+            unit: REData.addBehavior("Unit", () => new REUnitBehavior()),
+        };
     }
 
     static loadData(): void

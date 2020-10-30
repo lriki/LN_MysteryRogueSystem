@@ -11,4 +11,10 @@ export class Helpers {
     static dirToTileOffset(dir: number): Vector2 {
         return this._dirToTileOffsetTable[dir];
     }
+/*
+    static createObject(classname: string) {
+        const c = Function('return (' + classname + ')')();
+        return new c();
+    }
+    */
 }

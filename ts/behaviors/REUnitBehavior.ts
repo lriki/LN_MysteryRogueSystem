@@ -5,7 +5,7 @@ import { RECommandContext } from "../system/RECommandContext";
 import { REGame_Behavior } from "../RE/REGame_Behavior";
 import { REData } from "ts/data/REData";
 import { REDirectionChangeCommand, REMoveToAdjacentCommand } from "ts/commands/REDirectionChangeCommand";
-import { REGameManager } from "ts/RE/REGameManager";
+import { REGameManager } from "ts/system/REGameManager";
 import { REGame } from "ts/RE/REGame";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";

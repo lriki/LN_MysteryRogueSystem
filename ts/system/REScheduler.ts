@@ -3,7 +3,7 @@ import { RECommandContext } from "./RECommandContext";
 import { REData } from "../data/REData";
 import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "../RE/REGame";
-import { REGameManager } from "../RE/REGameManager";
+import { REGameManager } from "./REGameManager";
 import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { DecisionPhase } from "../RE/REGame_Behavior";
 import { REGame_Entity } from "../RE/REGame_Entity";
@@ -136,13 +136,14 @@ export class REScheduler
 
             if (this._commandContext.isRunning()) {
                 // コマンド実行中。まだフェーズを進ませない
-                break;
+            }
+            else {
+                //sweepCollapseList();
+    
+                //m_commandContext->beginCommandChain();
+                this.stepSimulationInternal();
             }
 
-            //sweepCollapseList();
-
-            //m_commandContext->beginCommandChain();
-            this.stepSimulationInternal();
         }
     }
 

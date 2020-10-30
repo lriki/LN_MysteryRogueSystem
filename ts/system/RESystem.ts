@@ -1,3 +1,4 @@
+import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 
 export interface EntityProperty {
@@ -21,6 +22,16 @@ export interface BasicParameters {
     satiety: number;    // 満腹度
 }
 
+export interface BasicAttributes {
+    tile: number;
+    unit: number;
+}
+
+export interface BasicBehaviors {
+    decision: number;
+    unit: number;
+}
+
 export class RESystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
@@ -32,5 +43,19 @@ export class RESystem {
     }
 
     static parameters: BasicParameters;
+    static attributes: BasicAttributes;
+    static behaviors: BasicBehaviors;
+
+    static createAttribute(dataId: number) {
+        const i = REData._attributeFactories[dataId]();
+        i.dataId = dataId;
+        return i;
+    }
+
+    static createBehavior(dataId: number) {
+        const i = REData._behaviorFactories[dataId]();
+        i.dataId = dataId;
+        return i;
+    }
 }
 

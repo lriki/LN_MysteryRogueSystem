@@ -8,7 +8,7 @@ import './Game_Map';
 import './data/REData';
 import './data/REDataManager';
 import './RE/REGame_Entity';
-import './RE/REGame_EntityFactory';
+import './system/REGame_EntityFactory';
 import './RE/REGame_Map';
 import './RE/REGame_Core';
 import './Scene_Boot';

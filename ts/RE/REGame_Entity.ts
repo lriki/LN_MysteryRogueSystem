@@ -223,5 +223,31 @@ export class REGame_Entity
             y: 0,
         }
     }
+
+    makeSaveContents(): any {
+        let contents: any = {};
+        contents.id = this._id;
+        contents.floorId = this.floorId;
+        contents.x = this.x;
+        contents.y = this.y;
+        contents.attrbutes = this.attrbutes;
+        contents.behaviors = this._behaviors.map(x => x.dataId);
+        return contents;
+    }
+
+    extractSaveContents(contents: any) {
+        this._id = contents.id;
+        this.floorId = contents.floorId;
+        this.x = contents.x;
+        this.y = contents.y;
+        this.attrbutes = contents.attrbutes.map((x: any) => {
+            const i = RESystem.createAttribute(x.dataId);
+            Object.assign(i, x);
+            return i;
+        });
+        this._behaviors = contents.behaviors.map((x: number) => {
+            return RESystem.createBehavior(x);
+        });
+    }
 }
 

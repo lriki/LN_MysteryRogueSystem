@@ -22,6 +22,8 @@ export enum DecisionPhase {
 
 // see: 実装FAQ-Command-Behavior.md
 export class REGame_Behavior {
+    dataId: number = 0;
+
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
     // propertyId: see EntityProperties
     // undefined を返した場合は後続の Behavior の onQueryProperty() を呼び出し続ける。

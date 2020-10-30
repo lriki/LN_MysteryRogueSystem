@@ -5,7 +5,7 @@ import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REMapBuilder } from "../system/REMapBuilder";
-import { REGame_EntityFactory } from "./REGame_EntityFactory";
+import { REGame_EntityFactory } from "../system/REGame_EntityFactory";
 import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
