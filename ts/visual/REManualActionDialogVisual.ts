@@ -1,4 +1,5 @@
-import { REDirectionChangeCommand, REMoveToAdjacentCommand } from "ts/commands/REDirectionChangeCommand";
+import { REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
+import { REDirectionChangeArgs } from "ts/commands/REDirectionChangeCommand";
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/RE/REGame";
 import { REDialogContext } from "../system/REDialog";
@@ -55,9 +56,11 @@ export class REManualActionDialogVisual extends REDialogVisual {
         
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
-                commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, new REDirectionChangeCommand(dir));
+                const args: REDirectionChangeArgs = { direction: dir };
+                commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, args);
             }
-            commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], entity, undefined, new REMoveToAdjacentCommand(entity.x + x, entity.y + y));
+            const args: REMoveToAdjacentArgs = { x: entity.x + x, y: entity.y + y };
+            commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], entity, undefined, args);
             context.closeDialog(true);
             return;
         }

@@ -2,7 +2,7 @@
 //   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
 
 import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
-import { REDirectionChangeCommand, REMoveToAdjacentCommand } from "ts/commands/REDirectionChangeCommand";
+import { REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
@@ -11,6 +11,7 @@ import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
+import { REDirectionChangeArgs } from "ts/commands/REDirectionChangeCommand";
 
 TestEnv.setupDatabase();
 
@@ -39,7 +40,8 @@ test('basic', () => {
         expect((dialog1 instanceof REManualActionDialog)).toBe(true);
     
         // 向き変更。行動を消費せず Dialog を閉じる
-        commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, new REDirectionChangeCommand(9));
+        const args1: REDirectionChangeArgs = { direction: 9 };
+        commandContext.postAction(REData.actions[REData.DirectionChangeActionId], actor1, undefined, args1);
         dialogContext.closeDialog(false);
     
         // この時点では向きは変更されていない
@@ -59,7 +61,8 @@ test('basic', () => {
     }
 
     // 移動
-    commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], actor1, undefined, new REMoveToAdjacentCommand(5, 6));
+    const args2: REMoveToAdjacentArgs = { x: 5, y: 6 };
+    commandContext.postAction(REData.actions[REData.MoveToAdjacentActionId], actor1, undefined, args2);
     dialogContext.closeDialog(true);
 
     // シミュレーション実行

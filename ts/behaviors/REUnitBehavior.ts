@@ -4,11 +4,12 @@ import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { REGame_Behavior } from "../RE/REGame_Behavior";
 import { REData } from "ts/data/REData";
-import { REDirectionChangeCommand, REMoveToAdjacentCommand } from "ts/commands/REDirectionChangeCommand";
 import { REGameManager } from "ts/system/REGameManager";
 import { REGame } from "ts/RE/REGame";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
+import { REDirectionChangeArgs } from "ts/commands/REDirectionChangeCommand";
+import { REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 
 /**
  * 
@@ -17,16 +18,16 @@ export class REUnitBehavior extends REGame_Behavior {
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
 
         if (cmd.action().id == REData.DirectionChangeActionId) {
-            cmd.actor().dir = (cmd as REDirectionChangeCommand).direction();
+            cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
             return REResponse.Consumed;
         }
 
         if (cmd.action().id == REData.MoveToAdjacentActionId) {
             
 
-            const c = (cmd as REMoveToAdjacentCommand);
+            const args = (cmd.args() as REMoveToAdjacentArgs);
 
-            if (REGame.map.moveEntity(entity, c.x(), c.y(), entity.queryProperty(RESystem.properties.homeLayer))) {
+            if (REGame.map.moveEntity(entity, args.x, args.y, entity.queryProperty(RESystem.properties.homeLayer))) {
 
                 context.postSequel(entity, REData.MoveSequel);
 
