@@ -2,7 +2,7 @@
 //   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
 
 import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
-import { REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
+import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
@@ -11,7 +11,6 @@ import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { REDirectionChangeArgs } from "ts/commands/REDirectionChangeCommand";
 
 TestEnv.setupDatabase();
 

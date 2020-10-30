@@ -8,8 +8,7 @@ import { REGameManager } from "ts/system/REGameManager";
 import { REGame } from "ts/RE/REGame";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
-import { REDirectionChangeArgs } from "ts/commands/REDirectionChangeCommand";
-import { REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
+import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 
 /**
  * 

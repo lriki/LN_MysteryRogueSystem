@@ -1,5 +1,4 @@
-import { REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
-import { REDirectionChangeArgs } from "ts/commands/REDirectionChangeCommand";
+import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/RE/REGame";
 import { REDialogContext } from "../system/REDialog";
