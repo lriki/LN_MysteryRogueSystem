@@ -18,17 +18,15 @@ import { REVisualSequelManager } from "./REVisualSequelManager";
 export class REVisual_Manager
 {
     private _visualEntities: REVisual_Entity[] = [];
-    private _dialogVisual: REDialogVisual | null;
+    //private _dialogVisual: REDialogVisual | null;
     private _tileSize: Vector2 = new Vector2(48, 48);
     private _visualSequelFactory: (() => REVisualSequel)[] = [];
     private _sequelManager: REVisualSequelManager = new REVisualSequelManager(this);
     
     constructor() {
-        this._dialogVisual = null;
+        //this._dialogVisual = null;
         REGame.map.signalEntityEntered = (x) => this.handlleEntityEnteredMap(x);
         REGame.map.signalEntityLeaved = (x) => this.handlleEntityLeavedMap(x);
-        REGame.scheduler.signalDialogOpend = (x) => this.handleDialogOpend(x);
-        REGame.scheduler.signalDialogClosed = () => this.handleDialogClosed();
         REGame.scheduler.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
 
         // init 時点の map 上にいる Entity から Visual を作る
@@ -56,9 +54,9 @@ export class REVisual_Manager
     }
 
     perUpdate(): void {
-        if (this._dialogVisual !== null) {
-            this._dialogVisual.onUpdate(REGame.scheduler._getDialogContext());
-        }
+        //if (this._dialogVisual !== null) {
+        //    this._dialogVisual.onUpdate(REGame.scheduler._getDialogContext());
+        //}
     }
 
     update(): void {
@@ -77,8 +75,6 @@ export class REVisual_Manager
     _finalize() {
         REGame.map.signalEntityEntered = undefined;
         REGame.map.signalEntityLeaved = undefined;
-        REGame.scheduler.signalDialogOpend = undefined;
-        REGame.scheduler.signalDialogClosed = undefined;
     }
 
     createVisualSequel(sequel: REGame_Sequel): REVisualSequel {
@@ -102,19 +98,20 @@ export class REVisual_Manager
         }
     }
 
-    private handleDialogOpend(context: REDialogContext) {
-        assert(!this._dialogVisual);
+    handleDialogOpend(context: REDialogContext): REDialogVisual | undefined {
+        //assert(!this._dialogVisual);
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
-            this._dialogVisual = new REManualActionDialogVisual();
+            return new REManualActionDialogVisual();
         // AI 用の Dialog を開いた時など、UI を伴わないものもある
+        return undefined;
     }
 
-    private handleDialogClosed() {
-        if (this._dialogVisual) {
-            this._dialogVisual.onClose();
-            this._dialogVisual = null;
-        }
+    handleDialogClosed(context: REDialogContext) {
+        //if (this._dialogVisual) {
+        //    this._dialogVisual.onClose();
+        //    this._dialogVisual = null;
+        //}
     }
 
     private handleFlushSequelSet(sequelSet: RESequelSet) {

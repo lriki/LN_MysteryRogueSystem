@@ -72,12 +72,6 @@ export class REScheduler
     private _currentRun: number = 0;
     private _currentUnit: number = 0;
     private _sequelSet: RESequelSet = new RESequelSet();
-
-    /** Dialog が開かれたとき。 */
-    public signalDialogOpend: ((context: REDialogContext) => void) | undefined;
-
-    /** Dialog が閉じられたとき。 */
-    public signalDialogClosed: ((context: REDialogContext) => void) | undefined;
     
     /**  */
     public signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
@@ -123,8 +117,16 @@ export class REScheduler
             // 行商人の処理など。
             if (this._dialogContext._hasDialogModel()) {
                 this._dialogContext._update();
-                // Dialog 表示中は後続コマンドを実行しない
-                break;
+
+                if (this._dialogContext._hasDialogModel()) {
+                    // Dialog 表示中は後続コマンドを実行しない
+                    break;
+                }
+                else {
+                    // update() で Dialog が Close された。
+                    // すぐに post されたコマンドの実行を始める。
+                    // こうしておかないと、移動 Sequel 開始までに 1Frame 空いてしまうため、一瞬遅延してみえてしまう。
+                }
             }
 
             if (this._commandContext.isRunning()) {
@@ -431,18 +433,17 @@ export class REScheduler
     _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {
         this._dialogContext.setCauseEntity(causeEntity);
         this._dialogContext._setDialogModel(value);
-
-        if (this.signalDialogOpend) {
-            this.signalDialogOpend(this._dialogContext);
-        }
+        const visual = REGame.integration.onDialogOpend(this._dialogContext);
+        this._dialogContext._visual = visual;
     }
 
     _closeDialogModel() {
         this._dialogContext._setDialogModel(null);
-
-        if (this.signalDialogClosed) {
-            this.signalDialogClosed(this._dialogContext);
+        if (this._dialogContext._visual) {
+            this._dialogContext._visual.onClose();
+            this._dialogContext._visual = undefined;
         }
+        REGame.integration.onDialogClosed(this._dialogContext);
     }
 
     _getDialogContext() {

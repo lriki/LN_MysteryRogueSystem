@@ -86,7 +86,6 @@ declare global {
 var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
     this._prefabSpriteIdRE = Sprite._counter + 1;
-    console.log("this._prefabSpriteIdRE", this._prefabSpriteIdRE);
     _Spriteset_Map_createCharacters.call(this);
 };
 
@@ -106,9 +105,8 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabEvent) {
     event.setSpritePrepared(true);
-    var sprite      = new Sprite_Character(event as unknown as Game_Character);
+    var sprite = new Sprite_Character(event as unknown as Game_Character);
 
-    //sprite.spriteId = this._prefabSpriteIdRE;
     const spriteIndex = this._characterSprites.length;
     this._characterSprites.push(sprite);
 

@@ -2,8 +2,10 @@ import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/RE/REGame";
 import { RESequelSet } from "ts/RE/REGame_Sequel";
+import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
 import { REMapBuilder } from "ts/system/REMapBuilder";
+import { REDialogVisual } from "ts/visual/REDialogVisual";
 
 export class TestEnv {
     static activeSequelSet: RESequelSet;
@@ -47,5 +49,10 @@ export class TestEnvIntegration extends REIntegration {
     }
     onCheckVisualSequelRunning(): boolean {
         return false;
+    }
+    onDialogOpend(context: REDialogContext): REDialogVisual | undefined {
+        return undefined;
+    }
+    onDialogClosed(context: REDialogContext): void {
     }
 }

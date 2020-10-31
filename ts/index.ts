@@ -13,3 +13,4 @@ import './RE/REGame_Map';
 import './RE/REGame_Core';
 import './Scene_Boot';
 import './Scene_Map';
+import './Sprite_Character'

@@ -1,6 +1,8 @@
 import { RESequelSet } from "./RE/REGame_Sequel";
+import { REDialogContext } from "./system/REDialog";
 import { REIntegration } from "./system/REIntegration";
 import { REMapBuilder } from "./system/REMapBuilder";
+import { REDialogVisual } from "./visual/REDialogVisual";
 import { REVisual } from "./visual/REVisual";
 
 export class RMMZIntegration extends REIntegration {
@@ -15,5 +17,11 @@ export class RMMZIntegration extends REIntegration {
     
     onCheckVisualSequelRunning(): boolean {
         return REVisual.manager.visualRunning();
+    }
+    onDialogOpend(context: REDialogContext): REDialogVisual | undefined {
+        return REVisual.manager.handleDialogOpend(context);
+    }
+    onDialogClosed(context: REDialogContext): void {
+        REVisual.manager.handleDialogClosed(context);
     }
 }

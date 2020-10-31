@@ -33,11 +33,12 @@ export class REVisualSequel_Move extends REVisualSequel {
             context.frameCount() > 30) {    // 速度に何か異常があっても、時間経過で必ず終了させる
             visual.resetPosition();
             context.end();
-            console.log("end", d);
+            console.log("move end", visual.position());
         }
         else {
             //const v = Vector2.mul(Vector2.sign(d), speed);
             visual.setPosition(Vector2.add(visual.position(), velocity));
+            console.log("move seq", visual.position());
         }
     }
 }
