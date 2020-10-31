@@ -57,6 +57,8 @@ export class REGame_Entity
     _iconName: string = '';
     _blockLayer: BlockLayer = BlockLayer.Unit;
 
+    prefabKey: { kind: number, id: number } = { kind: 0, id: 0 };
+
     // HC3 までは PositionalAttribute に持たせていたが、こっちに持ってきた。
     // お店のセキュリティシステムなど、これらを使わない Entity もあるのだが、
     // ほとんどの Entity が持つことになるパラメータなので、Attribute にするとコードが複雑になりすぎる。
@@ -72,7 +74,6 @@ export class REGame_Entity
     // Block を占有するかどうか
     blockOccupied: boolean = true;
 
-    _eventData: IDataMapEvent | undefined = undefined;
 
     //static newEntity(): REGame_Entity {
     //    const e = new REGame_Entity();
@@ -101,9 +102,9 @@ export class REGame_Entity
      * 動的に生成した Game_Event が参照する EventData.
      * 頻繁にアクセスされる可能性があるので Attribute ではなくこちらに持たせている。
      */
-    eventData(): IDataMapEvent | undefined {
-        return this._eventData;
-    }
+    //eventData(): IDataMapEvent | undefined {
+    //    return this._eventData;
+    //}
 
     isDestroyed(): boolean {
         return this._destroyed;
@@ -172,56 +173,6 @@ export class REGame_Entity
 
     constructor() {
 
-        // TODO: Test
-        this._eventData = {
-            id: 0,
-            name: "dynamc event",
-            note: "",
-            pages: [
-                {
-                    conditions: {
-                        actorId: 1,
-                        actorValid: false,
-                        itemId: 1,
-                        itemValid: false,
-                        selfSwitchCh: "A",
-                        selfSwitchValid: false,
-                        switch1Id: 1,
-                        switch1Valid: false,
-                        switch2Id: 1,
-                        switch2Valid: false,
-                        variableId: 1,
-                        variableValid: false,
-                        variableValue: 1,
-                    },
-                    directionFix: false,
-                    image: {
-                        tileId: 0,
-                        characterName: "Actor1",
-                        direction: 2,
-                        pattern: 0,
-                        characterIndex: 1
-                    },
-                    list: [],
-                    moveFrequency: 3,
-                    moveRoute: {
-                        list: [],
-                        repeat: true,
-                        skippable: false,
-                        wait: false,
-                    },
-                    moveSpeed: 3,
-                    moveType: 0,
-                    priorityType: 1,
-                    stepAnime: false,
-                    through: false,
-                    trigger: 0,
-                    walkAnime: true,
-                }
-            ],
-            x: 0,
-            y: 0,
-        }
     }
 
     makeSaveContents(): any {

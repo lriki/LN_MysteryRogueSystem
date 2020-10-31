@@ -35,22 +35,25 @@ export class REDataManager
             satiety: REData.addParameter("満腹度"),
         };
         
-        REData.WeaponKindId = REData.addEntityKind("武器");
-        REData.ShieldKindId = REData.addEntityKind("盾");
-        REData.ArrowKindId = REData.addEntityKind("矢");
-        //RE_Data.addEntityKind("石");
-        //RE_Data.addEntityKind("弾");
-        REData.BraceletKindId = REData.addEntityKind("腕輪");
-        REData.FoodKindId = REData.addEntityKind("食料");
-        REData.HerbKindId = REData.addEntityKind("草");
-        REData.ScrollKindId = REData.addEntityKind("巻物");
-        REData.WandKindId = REData.addEntityKind("杖");
-        REData.PotKindId = REData.addEntityKind("壺");
-        REData.DiscountTicketKindId = REData.addEntityKind("割引券");
-        REData.BuildingMaterialKindId = REData.addEntityKind("材料");
-        REData.TrapKindId = REData.addEntityKind("罠");
-        REData.FigurineKindId = REData.addEntityKind("土偶");
-        REData.MonsterKindId = REData.addEntityKind("モンスター");
+        RESystem.entityKinds = {
+            actor: REData.addEntityKind("Actor", "Actor"),
+            WeaponKindId: REData.addEntityKind("武器", "Weapon"),
+            ShieldKindId: REData.addEntityKind("盾", "Shield"),
+            ArrowKindId: REData.addEntityKind("矢", "Arrow"),
+            //RE_Data.addEntityKind("石"),
+            //RE_Data.addEntityKind("弾"),
+            BraceletKindId: REData.addEntityKind("腕輪", "Bracelet"),
+            FoodKindId: REData.addEntityKind("食料", "Food"),
+            HerbKindId: REData.addEntityKind("草", "Herb"),
+            ScrollKindId: REData.addEntityKind("巻物", "Scroll"),
+            WandKindId: REData.addEntityKind("杖", "Wand"),
+            PotKindId: REData.addEntityKind("壺", "Pot"),
+            DiscountTicketKindId: REData.addEntityKind("割引券", "DiscountTicket"),
+            BuildingMaterialKindId: REData.addEntityKind("材料", "BuildingMaterial"),
+            TrapKindId: REData.addEntityKind("罠", "Trap"),
+            FigurineKindId: REData.addEntityKind("土偶", "Figurine"),
+            MonsterKindId: REData.addEntityKind("モンスター", "Monster"),
+        };
 
         // Factions
         {
@@ -218,5 +221,9 @@ export class REDataManager
 
     static dataTrapTableMap(): IDataMap | undefined {
         return window["RE_dataTrapTableMap"];
+    }
+
+    static databaseMap(): IDataMap | undefined {
+        return window["RE_databaseMap"];
     }
 }

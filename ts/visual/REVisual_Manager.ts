@@ -12,6 +12,7 @@ import { REGame_Sequel, RESequelSet } from "../RE/REGame_Sequel";
 import { REVisual } from "./REVisual";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { REVisualSequelManager } from "./REVisualSequelManager";
+import { REDataManager } from "ts/data/REDataManager";
 
 /**
  */
@@ -119,8 +120,79 @@ export class REVisual_Manager
     }
 
     private createVisual(entity: REGame_Entity) {
-        const event = $gameMap.spawnREEvent();
-        const visual = new REVisual_Entity(entity, event.rmmzEventId());
+        const databaseMap = REDataManager.databaseMap();
+        if (!databaseMap || !databaseMap.events) {
+            throw new Error();
+        }
+
+        
+        let eventData: IDataMapEvent;
+        console.log(entity.prefabKey);
+        if (entity.prefabKey.kind > 0) {
+            const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
+            const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
+            if (index >= 0) {
+                eventData = databaseMap.events[index];
+            }
+            else {
+                throw new Error(`${prefabKey} not found in REDatabase map.`);
+            }
+        }
+        else {
+            eventData = {
+                id: 0,
+                name: "null",
+                note: "",
+                pages: [
+                    {
+                        conditions: {
+                            actorId: 1,
+                            actorValid: false,
+                            itemId: 1,
+                            itemValid: false,
+                            selfSwitchCh: "A",
+                            selfSwitchValid: false,
+                            switch1Id: 1,
+                            switch1Valid: false,
+                            switch2Id: 1,
+                            switch2Valid: false,
+                            variableId: 1,
+                            variableValid: false,
+                            variableValue: 1,
+                        },
+                        directionFix: false,
+                        image: {
+                            tileId: 0,
+                            characterName: "",
+                            direction: 2,
+                            pattern: 0,
+                            characterIndex: 1
+                        },
+                        list: [],
+                        moveFrequency: 3,
+                        moveRoute: {
+                            list: [],
+                            repeat: true,
+                            skippable: false,
+                            wait: false,
+                        },
+                        moveSpeed: 3,
+                        moveType: 0,
+                        priorityType: 1,
+                        stepAnime: false,
+                        through: false,
+                        trigger: 0,
+                        walkAnime: true,
+                    }
+                ],
+                x: 0,
+                y: 0,
+            };
+        }
+
+        const event = $gameMap.spawnREEvent(eventData);
+
+        const visual = new REVisual_Entity(entity, event.eventId());
         this._visualEntities.push(visual);
     }
 }

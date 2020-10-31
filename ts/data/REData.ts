@@ -42,8 +42,12 @@ export interface RE_Data_Entity
 /**
  * Entity の種別
  * 
+ * Prefab 検索やソートキーなどで使われる。
  * 持ち物一覧のアイコンと考えるとわかりやすい。
  * 武器、巻物といった一般的なアイテムの他、モンスターを持ち歩くこともできる。
+ * 
+ * アイテム化け能力をもつモンスターなどにより、適宜オーバーライドされることはあるが、
+ * Entity 1つに対して一意の表現となる。（「武器かつ盾」といった表現に使うものではない）
  * 
  * 勢力を表すものではない点に注意。例えば種別 "Monster" は、敵にも味方にもなれる。
  * 
@@ -60,6 +64,9 @@ export interface RE_Data_EntityKind
 
     /** Name. */
     name: string;
+
+    /** prefabKind. */
+    prefabKind: string;
 
     
 }
@@ -216,22 +223,6 @@ export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
 
-    // Standard entity kinds.
-    //static OtherKindId: number;             // その他・未分類
-    static WeaponKindId: number;            // 武器
-    static ShieldKindId: number;            // 盾
-    static ArrowKindId: number;             // 矢
-    static BraceletKindId: number;          // 腕輪
-    static FoodKindId: number;              // 食料
-    static HerbKindId: number;              // 草
-    static ScrollKindId: number;            // 巻物
-    static WandKindId: number;              // 杖
-    static PotKindId: number;               // 壺
-    static DiscountTicketKindId: number;    // 割引券
-    static BuildingMaterialKindId: number;  // 建材
-    static TrapKindId: number;              // 罠
-    static FigurineKindId: number;          // 土偶
-    static MonsterKindId: number;           // モンスター
     
     // Common defineds.
     static ActorDefaultFactionId: number = 1;
@@ -252,7 +243,7 @@ export class REData
     static _behaviorFactories: (() => REGame_Behavior)[] = [];
 
     static reset() {
-        this.entityKinds = [{ id: 0, name: 'null' }];
+        this.entityKinds = [{ id: 0, name: 'null', prefabKind: "" }];
         this.actors = [{ id: 0, name: 'null', initialFloorId: 0, initialX: 0, initialY: 0 }];
         this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap }];
@@ -266,11 +257,12 @@ export class REData
         this._behaviorFactories = [() => new REGame_Behavior()];
     }
 
-    static addEntityKind(name: string): number {
+    static addEntityKind(name: string, prefabKind: string): number {
         const newId = this.entityKinds.length;
         this.entityKinds.push({
             id: newId,
-            name: name
+            name: name,
+            prefabKind: prefabKind,
         });
         return newId;
     }

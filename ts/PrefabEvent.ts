@@ -1,19 +1,21 @@
 import { assert } from './Common';
+import { REDataManager } from './data/REDataManager';
 import { REVisual } from './visual/REVisual';
 
 class Game_REPrefabEvent extends Game_Event {
-    private _rmmzEventId: number;
+    private _databaseMapEventId: number;
     private _spritePrepared: boolean;
 
     constructor(mapId: number, eventId: number) {
-        super(mapId, 1);
-        this._rmmzEventId = eventId;
+        // "REDatabase" のマップのイベントとして扱う。
+        // セルフスイッチをコントロールするときに参照される。
+        super(REDataManager.databaseMapId, eventId);
+        this._databaseMapEventId = 1;
         this._spritePrepared = false;
-        this.locate(0, 3);  // TODO: test
     }
 
-    rmmzEventId(): number {
-        return this._rmmzEventId;
+    databaseMapEventId(): number {
+        return this._databaseMapEventId;
     }
     
     isREPrefab(): boolean {
@@ -54,12 +56,22 @@ Game_CharacterBase.prototype.isRESpritePrepared = function() {
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(/*eventData: IDataMapEvent*/): Game_REPrefabEvent;
+        spawnREEvent(eventData: IDataMapEvent): Game_REPrefabEvent;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(/*eventData: IDataMapEvent*/) {
+Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent) {
+    if (!$dataMap.events) {
+        throw new Error();
+    }
+
+    // 新しい Game_Event ID を発行
     const eventId = this._events.length;
+
+    // 新しい Game_Event に対応する IDataMapEvent を登録する。
+    // こうしておかないと、Game_Event のコンストラクタの locate で例外する。
+    $dataMap.events[eventId] = eventData;
+
     var event = new Game_REPrefabEvent(this._mapId, eventId);
     this._events[eventId] = event;
     return event;
@@ -114,7 +126,7 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
     t.addChild(sprite);
 
     // Visual と Sprite を関連付ける
-    const visual = REVisual.manager.findEntityVisualByRMMZEventId(event.rmmzEventId());
+    const visual = REVisual.manager.findEntityVisualByRMMZEventId(event.eventId());
     visual?._setSpriteIndex(spriteIndex);
 };
 

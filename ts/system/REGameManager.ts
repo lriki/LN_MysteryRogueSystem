@@ -9,6 +9,7 @@ import { REScheduler } from "./REScheduler";
 import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
+import { RESystem } from "./RESystem";
 
 
 /**
@@ -30,6 +31,8 @@ export class REGameManager
         REData.actors.forEach(x => {
             if (x.id > 0) {
                 const unit = REEntityFactory.newActor();
+                unit.prefabKey.kind = RESystem.entityKinds.actor;
+                unit.prefabKey.id = x.id;
                 unit.floorId = x.initialFloorId;
                 unit.x = x.initialX;
                 unit.y = x.initialY;
