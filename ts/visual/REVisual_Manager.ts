@@ -127,7 +127,7 @@ export class REVisual_Manager
 
         
         let eventData: IDataMapEvent;
-        if (entity.prefabKey.kind > 0) {
+        if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
             const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
             const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
             if (index >= 0) {
@@ -135,6 +135,15 @@ export class REVisual_Manager
             }
             else {
                 throw new Error(`${prefabKey} not found in REDatabase map.`);
+            }
+        }
+        else if (entity.prefabKey.kind == 0 && entity.prefabKey.id > 0) {
+            // 固定マップ用。現在マップに出現しているイベントから作る
+            if ($dataMap.events) {
+                eventData = $dataMap.events[entity.prefabKey.id];
+            }
+            else {
+                throw new Error();
             }
         }
         else {

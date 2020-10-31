@@ -1,3 +1,4 @@
+import { REGame } from "./RE/REGame";
 import { TileKind } from "./RE/REGame_Block";
 import { RESequelSet } from "./RE/REGame_Sequel";
 import { REDialogContext } from "./system/REDialog";
@@ -26,6 +27,11 @@ export class RMMZIntegration extends REIntegration {
                 }
             }
         }
+
+        // 固定マップ上のイベントを Entity として出現させる
+        $dataMap.events?.forEach(x => {
+            //REGame.world.spawnEntity()
+        });
     }
     onFlushSequelSet(sequelSet: RESequelSet): void {
     }

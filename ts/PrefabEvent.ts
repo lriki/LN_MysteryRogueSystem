@@ -6,11 +6,11 @@ class Game_REPrefabEvent extends Game_Event {
     private _databaseMapEventId: number;
     private _spritePrepared: boolean;
 
-    constructor(mapId: number, eventId: number) {
+    constructor(mapId: number, dataMapId: number, eventId: number) {
         console.log("Game_REPrefabEvent", eventId);
         // "REDatabase" のマップのイベントとして扱う。
         // セルフスイッチをコントロールするときに参照される。
-        super(REDataManager.databaseMapId, eventId);
+        super(dataMapId, eventId);
         this._databaseMapEventId = 1;
         this._spritePrepared = false;
         console.log("Game_REPrefabEvent", this);
@@ -59,10 +59,11 @@ declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
         spawnREEvent(eventData: IDataMapEvent): Game_REPrefabEvent;
+        //spawnREEventFromCurrentMapEvent(eventId: number): Game_REPrefabEvent;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent) {
+Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent): Game_REPrefabEvent {
     if (!$dataMap.events) {
         throw new Error();
     }
@@ -74,16 +75,25 @@ Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent) {
     // こうしておかないと、Game_Event のコンストラクタの locate で例外する。
     $dataMap.events[eventId] = eventData;
 
-    var event = new Game_REPrefabEvent(this._mapId, eventId);
+    var event = new Game_REPrefabEvent(this._mapId, REDataManager.databaseMapId, eventId);
     this._events[eventId] = event;
     return event;
-};
+}
+
+/*
+Game_Map.prototype.spawnREEventFromCurrentMapEvent = function(eventId: number): Game_REPrefabEvent {
+    var event = new Game_REPrefabEvent(this._mapId, this._mapId, eventId);
+    this._events[eventId] = event;
+    return event;
+}
+*/
 
 Game_Map.prototype.getREPrefabEvents = function(): Game_CharacterBase[] {
     return this.events().filter(function(event: Game_CharacterBase) {
         return event.isREPrefab();
     });
-};
+}
+
 
 //==============================================================================
 // Spriteset_Map
