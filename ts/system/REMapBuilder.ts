@@ -1,3 +1,6 @@
+import { RETileAttribute } from "ts/attributes/RETileAttribute";
+import { assert } from "ts/Common";
+import { TileKind } from "ts/RE/REGame_Block";
 import { REGame_Map } from "../RE/REGame_Map";
 
 /**
@@ -15,7 +18,26 @@ export class REMapBuilder {
         return this._map.floorId();
     }
 
+    width(): number {
+        return this._map.width();
+    }
+
+    height(): number {
+        return this._map.height();
+    }
+
     reset(width: number, height: number) {
         this._map.setupEmptyMap(width, height);
+    }
+
+    setTileKind(x: number, y: number, value: TileKind) {
+        if (x < 0 || this.width() <= x || y < 0 || this.height() <= y) {
+            throw new Error();
+        }
+
+        const tile = this._map.block(x, y).tile();
+        const attr = tile.findAttribute(RETileAttribute);
+        assert(attr);
+        attr.setTileKind(value);
     }
 }

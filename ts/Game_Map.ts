@@ -21,7 +21,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     if (REDataManager.isLandMap(mapId)) {
         if (1)  // TODO: 固定マップの場合
         {
-            REGame.map.setupFixedMap(mapId);
+            REGame.map.setup(mapId);
 
 
             

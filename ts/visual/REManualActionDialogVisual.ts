@@ -16,8 +16,6 @@ export class REManualActionDialogVisual extends REDialogVisual {
         //    commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, new REDirectionChangeCommand(Input.dir8));
         //    context.closeDialog(false); // 行動消費無しで close
         //}
-
-        
         let dir = Input.dir8;
         
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {

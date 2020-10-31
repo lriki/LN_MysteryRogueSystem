@@ -11,6 +11,7 @@ import { REGame_Block } from "./REGame_Block";
  * 単なる書き込みの他、ランダムダンジョンでは Block 種別から壁や床のタイル ID を求めたうえで
  * Data_Map.data への書き込んだり、オートタイルの解決などを行う。
  */
+// deprecated
 export class MapDataProvidor
 {
     static tileId(x: number, y: number, z: number): number {

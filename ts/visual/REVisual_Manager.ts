@@ -127,7 +127,6 @@ export class REVisual_Manager
 
         
         let eventData: IDataMapEvent;
-        console.log(entity.prefabKey);
         if (entity.prefabKey.kind > 0) {
             const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
             const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
@@ -139,6 +138,9 @@ export class REVisual_Manager
             }
         }
         else {
+            // Tile などは Visual を作らない
+            return;
+            /*
             eventData = {
                 id: 0,
                 name: "null",
@@ -188,6 +190,7 @@ export class REVisual_Manager
                 x: 0,
                 y: 0,
             };
+            */
         }
 
         const event = $gameMap.spawnREEvent(eventData);

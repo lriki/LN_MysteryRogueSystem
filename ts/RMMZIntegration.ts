@@ -1,3 +1,4 @@
+import { TileKind } from "./RE/REGame_Block";
 import { RESequelSet } from "./RE/REGame_Sequel";
 import { REDialogContext } from "./system/REDialog";
 import { REIntegration } from "./system/REIntegration";
@@ -10,7 +11,21 @@ export class RMMZIntegration extends REIntegration {
         throw new Error("Method not implemented.");
     }
     onLoadFixedMap(builder: REMapBuilder): void {
-        throw new Error("Method not implemented.");
+        if (!$dataMap) {
+            throw new Error();
+        }
+        builder.reset($dataMap.width ?? 10, $dataMap.height ?? 10);
+
+        for (let y = 0; y < builder.height(); y++) {
+            for (let x = 0; x < builder.width(); x++) {
+                if ($gameMap.checkPassage(x, y, 0xF)) {
+                    builder.setTileKind(x, y, TileKind.Floor);
+                }
+                else {
+                    builder.setTileKind(x, y, TileKind.HardWall);
+                }
+            }
+        }
     }
     onFlushSequelSet(sequelSet: RESequelSet): void {
     }

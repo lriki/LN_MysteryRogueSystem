@@ -80,18 +80,6 @@ export class REGame_Map
         this._removeAllEntities();
     }
 
-    /**
-     * 現在の $dataMap の情報をもとに、固定マップを作る。
-     */
-    setupFixedMap(floorId: number): void {
-        this._floorId = floorId;
-        this.setupEmptyMap($dataMap.width ?? 1, $dataMap.height ?? 1);
-        
-        this._blocks.forEach(block => {
-            block.setTileIds(MapDataProvidor.tileIds(block.x(), block.y()));
-        });
-    }
-
     clear(): void {
         this._width = 0;
         this._height = 0;

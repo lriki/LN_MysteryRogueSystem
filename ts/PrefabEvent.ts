@@ -7,11 +7,13 @@ class Game_REPrefabEvent extends Game_Event {
     private _spritePrepared: boolean;
 
     constructor(mapId: number, eventId: number) {
+        console.log("Game_REPrefabEvent", eventId);
         // "REDatabase" のマップのイベントとして扱う。
         // セルフスイッチをコントロールするときに参照される。
         super(REDataManager.databaseMapId, eventId);
         this._databaseMapEventId = 1;
         this._spritePrepared = false;
+        console.log("Game_REPrefabEvent", this);
     }
 
     databaseMapEventId(): number {

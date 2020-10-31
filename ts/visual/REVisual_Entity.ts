@@ -62,7 +62,7 @@ export class REVisual_Entity
     _update() {
         this._sequelContext._update();
         
-        if (this._rmmzEventId > 0) {
+        if (this._rmmzEventId >= 0) {
             const tileSize = REVisual.manager.tileSize();
             const event = $gameMap.event(this._rmmzEventId);
 
@@ -72,8 +72,8 @@ export class REVisual_Entity
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
+            
         }
-        
     }
 }
 
