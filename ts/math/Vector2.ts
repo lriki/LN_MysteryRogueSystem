@@ -10,6 +10,10 @@ export class Vector2 {
         this.y = y;
     }
 
+    static clone(value: Vector2): Vector2 {
+        return new Vector2(value.x, value.y);
+    }
+
     static add(a: Vector2, b: number): Vector2;
     static add(a: Vector2, b: Vector2): Vector2;
     static add(a: Vector2, b: any): Vector2 {
@@ -52,5 +56,12 @@ export class Vector2 {
         else {
             return new Vector2(a.x / b.x, a.y / b.y);
         }
+    }
+    
+    static sign(value: Vector2): Vector2
+    {
+        return new Vector2(
+            (value.x < 0.0) ? -1.0 : ((value.x > 0.0) ? 1.0 : 0.0),
+            (value.y < 0.0) ? -1.0 : ((value.y > 0.0) ? 1.0 : 0.0));
     }
 }

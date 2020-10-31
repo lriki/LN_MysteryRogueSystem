@@ -55,16 +55,23 @@ export class REVisual_Manager
         return this._sequelManager.isRunning();
     }
 
+    perUpdate(): void {
+        if (this._dialogVisual !== null) {
+            this._dialogVisual.onUpdate(REGame.scheduler._getDialogContext());
+        }
+    }
+
     update(): void {
         this._sequelManager.update();
+        this._sequelManager.postUpdate();
 
         this._visualEntities.forEach(x => {
             x._update();
         });
 
-        if (this._dialogVisual !== null) {
-            this._dialogVisual.onUpdate(REGame.scheduler._getDialogContext());
-        }
+        this._sequelManager.update();
+        this._sequelManager.postUpdate();
+
     }
 
     _finalize() {

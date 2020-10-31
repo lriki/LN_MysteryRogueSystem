@@ -69,6 +69,18 @@ export class REVisualSequelManager {
         }
     }
 
+    postUpdate() {
+        if (this._activeSequelSet) {
+            const runs = this._activeSequelSet.runs();
+            if (this._currentSequelRun >= runs.length && this.isLogicalCompleted()) {
+                // すべてのアニメーションが終了した
+                this._runningVisuals.splice(0);
+                this._activeSequelSet = undefined;
+                console.log("!!!!!!!!!FIN");
+            }
+        }
+    }
+
     isRunning(): boolean {
         return this._activeSequelSet != undefined;
     }

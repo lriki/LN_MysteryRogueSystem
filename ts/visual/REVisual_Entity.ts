@@ -26,7 +26,7 @@ export class REVisual_Entity
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;
         this._spriteIndex = -1;
-        this._sequelContext = new REVisualSequelContext();
+        this._sequelContext = new REVisualSequelContext(this);
         this._position = new Vector2(entity.x, entity.y);
     }
 
@@ -36,6 +36,14 @@ export class REVisual_Entity
 
     rmmzEventId(): number {
         return this._rmmzEventId;
+    }
+
+    position(): Vector2 {
+        return this._position;
+    }
+
+    setPosition(value: Vector2): void {
+        this._position = value;
     }
 
     resetPosition() {
@@ -52,7 +60,7 @@ export class REVisual_Entity
     }
 
     _update() {
-        this._sequelContext._update(this);
+        this._sequelContext._update();
         
         if (this._rmmzEventId > 0) {
             const tileSize = REVisual.manager.tileSize();

@@ -1,9 +1,11 @@
+import { Vector2 } from "ts/math/Vector2";
 import { REGame_Sequel, RESequelClip } from "ts/RE/REGame_Sequel";
 import { REVisual } from "../visual/REVisual";
 import { REVisualSequel } from "./REVisualSequel";
 import { REVisual_Entity } from "./REVisual_Entity";
 
 export class REVisualSequelContext {
+    private _entityVisual: REVisual_Entity;
     private _clip: RESequelClip | undefined;
     private _currentClip: number = 0;
     private _frameCount: number = 0;
@@ -11,6 +13,11 @@ export class REVisualSequelContext {
     private _cuurentFinished: boolean = false;
     private _cancellationLocked : boolean = false;
     private _currentVisualSequel: REVisualSequel | undefined;
+    private _startPosition: Vector2 = new Vector2(0, 0);
+
+    constructor(entityVisual: REVisual_Entity) {
+        this._entityVisual = entityVisual;
+    }
     
     frameCount(): number {
         return this._frameCount;
@@ -18,6 +25,11 @@ export class REVisualSequelContext {
     
     timeScale(): number {
         return this._timeScale;
+    }
+
+    /** Sequel 開始時の Visual の position */
+    startPosition(): Vector2 {
+        return this._startPosition;
     }
     
     finished(): boolean {
@@ -65,11 +77,15 @@ export class REVisualSequelContext {
         this._frameCount = 0;
         this._cancellationLocked = true;
         this._cuurentFinished = false;
+        this._startPosition = Vector2.clone(this._entityVisual.position());
+
+        
+        console.log("_startSequel");
     }
 
-    _update(entity: REVisual_Entity) {
+    _update() {
         if (this._currentVisualSequel) {
-            this._currentVisualSequel.onUpdate(entity, this);
+            this._currentVisualSequel.onUpdate(this._entityVisual, this);
             this._frameCount += 1;
             
             if (this._cuurentFinished) {

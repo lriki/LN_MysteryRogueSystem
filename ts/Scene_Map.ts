@@ -54,7 +54,18 @@ Scene_Battle.prototype.terminate = function() {
 
 var _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
+    
+    if (Input.dir8 != 0) {
+        console.log(">>>>update");
+    }
+    
+    REVisual.manager.perUpdate();
+
     _Scene_Map_update.call(this);
 
     REVisual.manager.update();
+
+    if (Input.dir8 != 0) {
+        console.log("<<<<update end");
+    }
 }
