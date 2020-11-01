@@ -22,6 +22,12 @@ export class RE_Game_World
             throw new Error("Invalid entity. id:" + id);
     }
 
+    /**
+     * 新しい Entity を World 内に生成する。
+     * 
+     * 生成された Entity はいずれの Floor にも属さない状態となっている。
+     * 出現させるには transfarEntity() を呼び出す必要がある。
+     */
     spawnEntity(): REGame_Entity {
         const entity = new REGame_Entity();
         this._registerEntity(entity);
@@ -59,6 +65,7 @@ export class RE_Game_World
 
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
+            entity.floorId = floorId;
             REGame.map._addEntity(entity);
             REGame.map._locateEntityFuzzy(entity, x, y);
         }

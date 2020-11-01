@@ -10465,7 +10465,7 @@ declare class Game_Event extends Game_Character {
     /**
      * 
      */
-    list(): void;
+    list(): IDataList[];
 
     /**
      * 

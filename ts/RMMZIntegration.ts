@@ -1,7 +1,9 @@
 import { REGame } from "./RE/REGame";
 import { TileKind } from "./RE/REGame_Block";
 import { RESequelSet } from "./RE/REGame_Sequel";
+import { RMMZHelper } from "./rmmz/RMMZHelper";
 import { REDialogContext } from "./system/REDialog";
+import { REEntityFactory } from "./system/REEntityFactory";
 import { REIntegration } from "./system/REIntegration";
 import { REMapBuilder } from "./system/REMapBuilder";
 import { REDialogVisual } from "./visual/REDialogVisual";
@@ -29,8 +31,16 @@ export class RMMZIntegration extends REIntegration {
         }
 
         // 固定マップ上のイベントを Entity として出現させる
-        $dataMap.events?.forEach(x => {
-            //REGame.world.spawnEntity()
+        $gameMap.events().forEach((e: Game_Event) => {
+            if (e) {
+                const metadata = RMMZHelper.readEntityMetadata(e);
+                if (metadata.entity) {
+                    const entity = REEntityFactory.newEntityFromName(metadata.entity);
+                    entity.prefabKey = { kind: 0, id: e.eventId() };
+                    REGame.world._transfarEntity(entity, REGame.map.floorId(), e.x, e.y);
+                    REGame.map.markAdhocEntity(entity);
+                }
+            }
         });
     }
     onFlushSequelSet(sequelSet: RESequelSet): void {

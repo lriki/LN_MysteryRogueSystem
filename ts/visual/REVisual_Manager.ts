@@ -125,13 +125,13 @@ export class REVisual_Manager
             throw new Error();
         }
 
-        
-        let eventData: IDataMapEvent;
+        let event: Game_Event;
         if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
             const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
             const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
             if (index >= 0) {
-                eventData = databaseMap.events[index];
+                const eventData = databaseMap.events[index];
+                event = $gameMap.spawnREEvent(eventData);
             }
             else {
                 throw new Error(`${prefabKey} not found in REDatabase map.`);
@@ -139,12 +139,7 @@ export class REVisual_Manager
         }
         else if (entity.prefabKey.kind == 0 && entity.prefabKey.id > 0) {
             // 固定マップ用。現在マップに出現しているイベントから作る
-            if ($dataMap.events) {
-                eventData = $dataMap.events[entity.prefabKey.id];
-            }
-            else {
-                throw new Error();
-            }
+            event = $gameMap.event(entity.prefabKey.id);
         }
         else {
             // Tile などは Visual を作らない
@@ -202,7 +197,6 @@ export class REVisual_Manager
             */
         }
 
-        const event = $gameMap.spawnREEvent(eventData);
 
         const visual = new REVisual_Entity(entity, event.eventId());
         this._visualEntities.push(visual);
