@@ -3,6 +3,7 @@ import { REData } from "ts/data/REData";
 import { REGame } from "ts/RE/REGame";
 import { REDialogContext } from "../system/REDialog";
 import { REDialogVisual } from "./REDialogVisual";
+import { Scene_Footing } from "./scenes/Scene_Footing";
 
 export class REManualActionDialogVisual extends REDialogVisual {
 
@@ -10,6 +11,9 @@ export class REManualActionDialogVisual extends REDialogVisual {
         const commandContext = context.commandContext();
         const entity = context.causeEntity();
         if (!entity) return;
+
+        console.log("SceneManager.push(Scene_Footing)");
+        SceneManager.push(Scene_Footing);
 
         //if (Input.dir8 != 0 && Input.dir8 != entity.dir) {
         //    const commandContext = context.commandContext();

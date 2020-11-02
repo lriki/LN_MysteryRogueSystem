@@ -35,6 +35,8 @@ var _Scene_Map_start = Scene_Map.prototype.start;
 Scene_Map.prototype.start = function() {
     _Scene_Map_start.call(this);
 
+    console.log("Scene_Map.prototype.start");
+
     REVisual.initialize();
 }
 /*

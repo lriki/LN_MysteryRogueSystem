@@ -18,6 +18,11 @@ import { RECommandContext } from "ts/system/RECommandContext";
  * できれば Item や階段の Behavior 側の「乗られた」Reaction で、
  * 「次の Player Dialog Open時に表示したいユーザビリティアクション」みたいなものを、PlayerEntity の set して実現したいところ。
  * set はしてるけど、次に Player が行動不能だったりしたら破棄するだけ。
+ * 
+ * …と考えてみたが、階段上へ移動 → モンスターの吹き飛ばしで階段上以外へ移動 → そのあとは UI 表示しない といこともあるので、この対策が何か必要。
+ * 
+ * HC4 の時に実装したリアクションコマンド形式がいいかも。
+ * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
 export class REExitPointBehavior extends REGame_Behavior {
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {

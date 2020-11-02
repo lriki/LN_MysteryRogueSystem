@@ -286,7 +286,7 @@ declare namespace Window_BattleLog{
  * 
  * The superclass of all windows within the game.
  */
-declare interface Window_Base {
+declare class Window_Base {
 		
 	/**
 	 * 
@@ -768,7 +768,7 @@ declare interface Window_Base {
  * 
  * The window class with scroll functions.
  */
-declare interface Window_Scrollable extends Window_Base {
+declare class Window_Scrollable extends Window_Base {
 		
 	/**
 	 * 
@@ -985,7 +985,7 @@ declare interface Window_Scrollable extends Window_Base {
  * 
  * The window class with cursor movement functions.
  */
-declare interface Window_Selectable extends Window_Scrollable {
+declare class Window_Selectable extends Window_Scrollable {
 		
 	/**
 	 * 
@@ -1497,12 +1497,14 @@ declare interface Window_Selectable extends Window_Scrollable {
  * 
  * The superclass of windows for selecting a command.
  */
-declare interface Window_Command extends Window_Selectable {
-		
+declare class Window_Command extends Window_Selectable {
+	constructor(rect : Rectangle);
+
 	/**
 	 * 
 	 */
 	new ();
+
 		
 	/**
 	 * 
@@ -1671,7 +1673,8 @@ declare interface Window_HorzCommand extends Window_Command {
  * 
  * The window for displaying the description of the selected item.
  */
-declare interface Window_Help extends Window_Base {
+declare class Window_Help extends Window_Base {
+	constructor(rect: Rectangle);
 		
 	/**
 	 * 

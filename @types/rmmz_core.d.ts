@@ -842,13 +842,15 @@ declare interface Point {
  * @param {number} width - The width of the rectangle.
  * @param {number} height - The height of the rectangle.
  */
-declare interface Rectangle {
+declare class Rectangle {
 		
 	/**
 	 * 
 	 * @return  
 	 */
 	new (): Rectangle;
+
+	constructor(x: number, y: number, width: number, height: number);
 }
 
 

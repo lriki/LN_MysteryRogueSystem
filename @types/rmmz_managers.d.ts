@@ -2294,7 +2294,8 @@ declare namespace SceneManager{
 	 * 
 	 * @param sceneClass 
 	 */
-	function push(sceneClass : (() => void) | (() => void)): void;
+	function push(sceneClass : any): void;
+	//function push(sceneClass : (() => void) | (() => void)): void;
 		
 	/**
 	 * 

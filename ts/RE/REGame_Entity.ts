@@ -74,6 +74,11 @@ export class REGame_Entity
     // Block を占有するかどうか
     blockOccupied: boolean = true;
 
+    // 隣接移動直後の DialogOpend かどうか。
+    // 階段などの Entity に対しては足元コマンドを自動表示したりする。
+    // ユーザビリティのためだけに参照する点に注意。セーブデータをロードした直後はウィンドウを表示したりしたくないので、セーブデータに含まれる。
+    immediatelyAfterAdjacentMoving: boolean = false;
+    
 
     //static newEntity(): REGame_Entity {
     //    const e = new REGame_Entity();

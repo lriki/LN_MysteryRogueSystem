@@ -92,7 +92,6 @@ export class REScheduler
             if (REGame.integration.onCheckVisualSequelRunning()) {
                 // Sequel 実行中
                 
-                Log.d(" Sequel 実行中");
                 break;
             }
             /*

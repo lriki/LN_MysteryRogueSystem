@@ -623,7 +623,7 @@ declare class Scene_Map {
  * 
  * The superclass of all the menu-type scenes.
  */
-declare class Scene_MenuBase {
+declare class Scene_MenuBase extends Scene_Base {
 
 	/**
 	 * 
