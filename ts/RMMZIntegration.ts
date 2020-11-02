@@ -47,12 +47,20 @@ export class RMMZIntegration extends REIntegration {
     }
     
     onCheckVisualSequelRunning(): boolean {
-        return REVisual.manager.visualRunning();
+        if (REVisual.entityVisualSet)
+            return REVisual.entityVisualSet.visualRunning();
+        else
+            return false;
     }
     onDialogOpend(context: REDialogContext): REDialogVisual | undefined {
-        return REVisual.manager.handleDialogOpend(context);
+        if (REVisual.manager)
+            return REVisual.manager.handleDialogOpend(context);
+        else
+            return undefined;
     }
     onDialogClosed(context: REDialogContext): void {
-        REVisual.manager.handleDialogClosed(context);
+        if (REVisual.manager) {
+            REVisual.manager.handleDialogClosed(context);
+        }
     }
 }

@@ -117,6 +117,11 @@ export class REScheduler
             if (this._dialogContext._hasDialogModel()) {
                 this._dialogContext._update();
 
+                const entity = this._dialogContext.causeEntity();
+                if (entity) {
+                    entity.immediatelyAfterAdjacentMoving = false;
+                }
+
                 if (this._dialogContext._hasDialogModel()) {
                     // Dialog 表示中は後続コマンドを実行しない
                     break;

@@ -1,3 +1,4 @@
+import { assert } from "ts/Common";
 import { Vector2 } from "ts/math/Vector2";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
 import { REData, REData_Sequel } from "../data/REData";
@@ -60,6 +61,8 @@ export class REVisual_Entity
     }
 
     _update() {
+        assert(REVisual.manager);
+
         this._sequelContext._update();
         
         if (this._rmmzEventId >= 0) {

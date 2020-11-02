@@ -128,6 +128,8 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
 };
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabEvent) {
+    assert(REVisual.manager);
+    
     event.setSpritePrepared(true);
     var sprite = new Sprite_Character(event as unknown as Game_Character);
 
@@ -138,7 +140,9 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
     t.addChild(sprite);
 
     // Visual と Sprite を関連付ける
-    const visual = REVisual.manager.findEntityVisualByRMMZEventId(event.eventId());
-    visual?._setSpriteIndex(spriteIndex);
+    if (REVisual.entityVisualSet) {
+        const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
+        visual?._setSpriteIndex(spriteIndex);
+    }
 };
 

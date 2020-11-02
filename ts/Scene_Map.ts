@@ -1,5 +1,13 @@
+import { assert } from "./Common";
 import { REDataManager } from "./data/REDataManager";
+import { REEntityVisualSet } from "./visual/REEntityVisualSet";
 import { REVisual } from "./visual/REVisual";
+
+declare global {
+    interface Scene_Map {
+        //_entityVisualSet: REEntityVisualSet | undefined;
+    }
+}
 
 var _Scene_Map_isReady = Scene_Map.prototype.isReady;
 Scene_Map.prototype.isReady = function() {
@@ -31,43 +39,41 @@ Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
 }
 
-var _Scene_Map_start = Scene_Map.prototype.start;
-Scene_Map.prototype.start = function() {
-    _Scene_Map_start.call(this);
+var _Scene_Map_create = Scene_Map.prototype.create;
+Scene_Map.prototype.create = function() {
+    _Scene_Map_create.call(this);
 
-    console.log("Scene_Map.prototype.start");
+    console.log("Scene_Map.prototype.create");
 
     REVisual.initialize();
 }
-/*
+
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
-    _Scene_Map_createDisplayObjects.call(this);
+    // ベースの createDisplayObjects() では update() 一度呼ばれるため、先にインスタンスを作っておく
+    assert(!REVisual.entityVisualSet);
+    REVisual.entityVisualSet = new REEntityVisualSet();
 
-    REVisual.initialize();
+    _Scene_Map_createDisplayObjects.call(this);
 };
-*/
+
 var _Scene_Map_terminate = Scene_Map.prototype.terminate;
-Scene_Battle.prototype.terminate = function() {
+Scene_Map.prototype.terminate = function() {
     _Scene_Map_terminate.call(this);
+
+    console.log("Scene_Map.prototype.terminate");
+
+    if (REVisual.entityVisualSet) {
+        REVisual.entityVisualSet.ternimate();
+        REVisual.entityVisualSet = undefined;
+    }
 
     REVisual.finalize();
 }
 
 var _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
-    
-    if (Input.dir8 != 0) {
-        console.log(">>>>update");
-    }
-    
-    REVisual.manager.perUpdate();
-
     _Scene_Map_update.call(this);
 
-    REVisual.manager.update();
-
-    if (Input.dir8 != 0) {
-        console.log("<<<<update end");
-    }
+    REVisual.entityVisualSet?.update();
 }

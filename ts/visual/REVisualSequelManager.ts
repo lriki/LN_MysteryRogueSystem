@@ -1,24 +1,18 @@
 import { REVisual_Entity } from "../visual/REVisual_Entity";
 import { REVisual_Manager } from "./REVisual_Manager";
 import { RESequelSet } from "../RE/REGame_Sequel";
+import { REEntityVisualSet } from "./REEntityVisualSet";
 
-
-/**
- * 同時に並列実行する VisualSequel の集合
- */
-export interface REVisualSequelRun {
-    
-}
 
 
 export class REVisualSequelManager {
-    private _manager: REVisual_Manager;
+    private _entityVisualSet: REEntityVisualSet;
     private _activeSequelSet: RESequelSet | undefined;
     private _currentSequelRun: number = -1;
     private _runningVisuals: REVisual_Entity[] = [];
 
-    constructor(manager: REVisual_Manager) {
-        this._manager = manager;
+    constructor(entityVisualSet: REEntityVisualSet) {
+        this._entityVisualSet = entityVisualSet;
     }
 
     setup(sequelSet: RESequelSet) {
@@ -57,7 +51,7 @@ export class REVisualSequelManager {
                         // 次の Run を開始する
                         const run = runs[this._currentSequelRun];
                         run.clips().forEach(x => {
-                            const visual = this._manager.findEntityVisualByEntity(x.entity());
+                            const visual = this._entityVisualSet.findEntityVisualByEntity(x.entity());
                             if (visual) {
                                 visual.sequelContext()._start(x);
                                 this._runningVisuals.push(visual);

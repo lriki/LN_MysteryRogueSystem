@@ -73,14 +73,13 @@ export class REVisualSequelContext {
     }
 
     _startSequel(sequel: REGame_Sequel) {
+        if (!REVisual.manager) throw new Error();
+
         this._currentVisualSequel = REVisual.manager.createVisualSequel(sequel);
         this._frameCount = 0;
         this._cancellationLocked = true;
         this._cuurentFinished = false;
         this._startPosition = Vector2.clone(this._entityVisual.position());
-
-        
-        console.log("_startSequel");
     }
 
     _update() {

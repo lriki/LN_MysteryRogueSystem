@@ -12,8 +12,11 @@ export class REManualActionDialogVisual extends REDialogVisual {
         const entity = context.causeEntity();
         if (!entity) return;
 
-        console.log("SceneManager.push(Scene_Footing)");
-        SceneManager.push(Scene_Footing);
+        if (entity.immediatelyAfterAdjacentMoving) {
+            console.log("SceneManager.push(Scene_Footing)");
+            SceneManager.push(Scene_Footing);
+            return;
+        }
 
         //if (Input.dir8 != 0 && Input.dir8 != entity.dir) {
         //    const commandContext = context.commandContext();
