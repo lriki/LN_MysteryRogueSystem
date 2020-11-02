@@ -38,12 +38,6 @@ export class REGame_Map
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
-    /** Entity が Map に入った時に呼び出される。 */
-    public signalEntityEntered: ((entity: REGame_Entity) => void) | undefined;
-
-    /** Entity が Map から離れた時に呼び出される。 */
-    public signalEntityLeaved: ((entity: REGame_Entity) => void) | undefined;
-
     constructor() {
     }
 
@@ -133,9 +127,7 @@ export class REGame_Map
 
         this._entityIds.push(entity._id);
 
-        if (this.signalEntityEntered) {
-            this.signalEntityEntered(entity);
-        }
+        REGame.integration.onEntityEnteredMap(entity);
     }
 
     _removeEntity(entity: REGame_Entity): void {
@@ -143,9 +135,7 @@ export class REGame_Map
         this._entityIds = this._entityIds.filter(x => x != entity._id);
         entity.floorId = 0;
         
-        if (this.signalEntityLeaved) {
-            this.signalEntityLeaved(entity);
-        }
+        REGame.integration.onEntityLeavedMap(entity);
     }
 
     /** エンティティを、このマップのみの AdhocEntity としてマークする */
@@ -163,10 +153,7 @@ export class REGame_Map
         this._entityIds.forEach(x => {
             const entity = REGame.world.entity(x);
             entity.floorId = 0;
-
-            if (this.signalEntityLeaved) {
-                this.signalEntityLeaved(entity);
-            }
+            REGame.integration.onEntityLeavedMap(entity);
         });
 
         this._entityIds = [];

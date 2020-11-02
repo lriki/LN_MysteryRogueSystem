@@ -1,6 +1,7 @@
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/RE/REGame";
+import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESequelSet } from "ts/RE/REGame_Sequel";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
@@ -54,5 +55,9 @@ export class TestEnvIntegration extends REIntegration {
         return undefined;
     }
     onDialogClosed(context: REDialogContext): void {
+    }
+    onEntityEnteredMap(entity: REGame_Entity): void {
+    }
+    onEntityLeavedMap(entity: REGame_Entity): void {
     }
 }

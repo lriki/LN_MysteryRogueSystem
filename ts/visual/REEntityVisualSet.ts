@@ -22,8 +22,6 @@ export class REEntityVisualSet {
     constructor() {
         this._visualEntities = [];
         this._sequelManager = new REVisualSequelManager(this);
-        REGame.map.signalEntityEntered = (x) => this.handlleEntityEnteredMap(x);
-        REGame.map.signalEntityLeaved = (x) => this.handlleEntityLeavedMap(x);
         REGame.scheduler.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
         // init 時点の map 上にいる Entity から Visual を作る
@@ -60,12 +58,8 @@ export class REEntityVisualSet {
     visualRunning(): boolean {
         return this._sequelManager.isRunning();
     }
-    
-    private handlleEntityEnteredMap(entity: REGame_Entity) {
-        this.createVisual(entity);
-    }
 
-    private handlleEntityLeavedMap(entity: REGame_Entity) {
+    deleteVisual(entity: REGame_Entity) {
         const index = this._visualEntities.findIndex(x => x.entity() == entity);
         if (index >= 0) {
             this._visualEntities.splice(index, 1);
@@ -76,23 +70,15 @@ export class REEntityVisualSet {
         this._sequelManager.setup(sequelSet);
     }
     
-    private createVisual(entity: REGame_Entity) {
+    createVisual(entity: REGame_Entity) {
         const databaseMap = REDataManager.databaseMap();
         if (!databaseMap || !databaseMap.events) {
             throw new Error();
         }
 
-        let event: Game_Event;
+        let event: Game_Event | undefined = undefined;
         if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
-            const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
-            const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
-            if (index >= 0) {
-                const eventData = databaseMap.events[index];
-                event = $gameMap.spawnREEvent(eventData);
-            }
-            else {
-                throw new Error(`${prefabKey} not found in REDatabase map.`);
-            }
+            event = $gameMap.event(entity.rmmzEventId);
         }
         else if (entity.prefabKey.kind == 0 && entity.prefabKey.id > 0) {
             // 固定マップ用。現在マップに出現しているイベントから作る
@@ -152,6 +138,10 @@ export class REEntityVisualSet {
                 y: 0,
             };
             */
+        }
+
+        if (!event) {
+            throw new Error();
         }
 
 

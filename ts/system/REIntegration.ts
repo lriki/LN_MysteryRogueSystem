@@ -1,3 +1,4 @@
+import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESequelSet } from "ts/RE/REGame_Sequel";
 import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { REDialogContext } from "./REDialog";
@@ -22,4 +23,9 @@ export abstract class REIntegration {
     /** Dialog が閉じられたとき。 */
     abstract onDialogClosed(context: REDialogContext): void;
 
+    /** Entity が Map 上に出現したとき。 */
+    abstract onEntityEnteredMap(entity: REGame_Entity): void;
+
+    /** Entity が Map から離れたとき。 */
+    abstract onEntityLeavedMap(entity: REGame_Entity): void;
 }

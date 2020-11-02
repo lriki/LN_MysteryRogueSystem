@@ -34,8 +34,6 @@ export class REVisual_Manager
     }
 
     _finalize() {
-        REGame.map.signalEntityEntered = undefined;
-        REGame.map.signalEntityLeaved = undefined;
     }
 
     createVisualSequel(sequel: REGame_Sequel): REVisualSequel {

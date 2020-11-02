@@ -58,6 +58,7 @@ export class REGame_Entity
     _blockLayer: BlockLayer = BlockLayer.Unit;
 
     prefabKey: { kind: number, id: number } = { kind: 0, id: 0 };
+    rmmzEventId: number = 0;
 
     // HC3 までは PositionalAttribute に持たせていたが、こっちに持ってきた。
     // お店のセキュリティシステムなど、これらを使わない Entity もあるのだが、
