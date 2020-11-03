@@ -11,6 +11,8 @@
  */
 declare class Scene_Base {
 
+	_windowLayer: WindowLayer;
+
 	/**
 	 * 
 	 * @return  

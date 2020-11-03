@@ -2054,7 +2054,7 @@ declare namespace SceneManager{
 	/**
 	 * 
 	 */
-	export var _scene : SceneManager._previousClass;
+	export var _scene : Scene_Base;//SceneManager._previousClass;
 		
 	/**
 	 * 

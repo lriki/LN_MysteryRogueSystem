@@ -2,6 +2,8 @@ import { REDataManager } from "./data/REDataManager";
 import { REGame } from "./RE/REGame";
 import { REGameManager } from "./system/REGameManager";
 import { RMMZIntegration } from "./RMMZIntegration";
+import { REData, REFloorMapKind } from "./data/REData";
+import { assert } from "./Common";
 
 /*
  [2020/11/2] マップ読み込みメモ
@@ -49,40 +51,52 @@ import { RMMZIntegration } from "./RMMZIntegration";
 
 const _DataManager_loadMapData = DataManager.loadMapData;
 DataManager.loadMapData = function(mapId) {
-    _DataManager_loadMapData.call(DataManager, mapId);
 
-    const land = REDataManager.findLand(mapId);
-    if (land) {
-        // Land マップである場合、関係するマップデータをすべて読み込む
+    const floor = REDataManager.floor(mapId);
+
+    if (floor.landId > 0) {
+        const land = REData.lands[floor.landId];
+        assert(land);
+
+        // ダンジョンフロアである場合、関係するマップデータをすべて読み込む
         REDataManager.landMapDataLoading = true;    // DataManager.isMapLoaded で追加データの読み込みもチェックするようにする
+        REDataManager.loadingMapId = mapId;
 
-        if (REDataManager.loadedLandMapId != mapId) {
+        // 今いる Land 以外へ遷移したときは、データテーブルをロードする
+        if (REDataManager.loadedLandId != land.id) {
+            const land_filename = `Map${land.mapId.padZero(3)}.json`;
             const eventTable_filename = `Map${land.eventTableMapId.padZero(3)}.json`;
             const itemTable_filename = `Map${land.itemTableMapId.padZero(3)}.json`;
             const enemyTable_filename = `Map${land.enemyTableMapId.padZero(3)}.json`;
-            const trapTable_ilename = `Map${land.trapTableMapId.padZero(3)}.json`;
+            const trapTable_filename = `Map${land.trapTableMapId.padZero(3)}.json`;
+            this.loadDataFile("RE_dataLandMap", land_filename);
             this.loadDataFile("RE_dataEventTableMap", eventTable_filename);
             this.loadDataFile("RE_dataItemTableMap", itemTable_filename);
             this.loadDataFile("RE_dataEnemyTableMap", enemyTable_filename);
-            this.loadDataFile("RE_dataTrapTableMap", trapTable_ilename);
-            REDataManager.loadedLandMapId = mapId;
+            this.loadDataFile("RE_dataTrapTableMap", trapTable_filename);
+            REDataManager.loadedLandId = land.id;
         }
         else {
             // 同じ Land 内の Floor 間遷移。Land 情報をロードする必要はない。
         }
-    }
-    else if (REDataManager.isFloorMap(mapId)) {
-        // ↑の "if (land)" からの一連の Land 情報を呼んだあと、実際のマップへ遷移するとき、ここへ来る。
-        // REDataManager.landMapDataLoading は true で維持。
-        // 実際のロードは Scene_Map.isReady で。
-        REDataManager.loadedFloorMapId = mapId;
-        REDataManager.landMapDataLoading = false;
+
+        if (floor.mapKind == REFloorMapKind.FixedMap) {
+            // 固定マップへの直接遷移。
+            // この場合は通常のマップ読み込みを行う。
+            _DataManager_loadMapData.call(DataManager, mapId);
+        }
+        else {
+            // ランダム・シャッフルマップへの遷移は、現在のフロアに応じてロードするマップがかわるため、
+            // Land 情報のロードが終わったあとに行う。(=> Scene_Map.prototype.isReady)
+        }
     }
     else {
+        // 普通のマップ
         REGame.map.clear();
         REDataManager.landMapDataLoading = false;
+        _DataManager_loadMapData.call(DataManager, mapId);
     }
-};
+}
 
 // Scene_Map.isReady() から呼ばれる
 const _DataManager_isMapLoaded = DataManager.isMapLoaded;
@@ -90,7 +104,8 @@ DataManager.isMapLoaded = function() {
     const result = _DataManager_isMapLoaded.call(DataManager);
     if (result) {
         if (REDataManager.landMapDataLoading) {
-            return !!window["RE_dataEventTableMap"] &&
+            return !!window["RE_dataLandMap"] &&
+                   !!window["RE_dataEventTableMap"] &&
                    !!window["RE_dataItemTableMap"] &&
                    !!window["RE_dataEnemyTableMap"] &&
                    !!window["RE_dataTrapTableMap"];

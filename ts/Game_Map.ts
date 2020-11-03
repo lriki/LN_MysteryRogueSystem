@@ -18,7 +18,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     //console.log("Game_Map initialized.", $gamePlayer._newX);
     //console.log($gamePlayer);
 
-    if (REDataManager.isLandMap(mapId)) {
+    if (REDataManager.isRESystemMap(mapId)) {
         if (1)  // TODO: 固定マップの場合
         {
             REGame.map.setup(mapId);

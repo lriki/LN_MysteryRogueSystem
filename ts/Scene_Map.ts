@@ -1,4 +1,5 @@
 import { assert } from "./Common";
+import { REData, REFloorMapKind } from "./data/REData";
 import { REDataManager } from "./data/REDataManager";
 import { REEntityVisualSet } from "./visual/REEntityVisualSet";
 import { REVisual } from "./visual/REVisual";
@@ -15,14 +16,24 @@ Scene_Map.prototype.isReady = function() {
         if (DataManager.isMapLoaded()) {
             // Land 定義マップの読み込みがすべて終わった
             
-            // 元の遷移先マップをバックアップ (Land 定義マップとして使う)
-            REDataManager._dataLandDefinitionMap = $dataMap
+            if (REData.floors[REDataManager.loadingMapId].mapKind == REFloorMapKind.FixedMap) {
+                // イベントなどから固定マップへ直接遷移した場合はここに来る。
+                // この場合はベースの DataManger.loadMapData によってマップデータロード済みなので、特に何かする必要はない。
+                REDataManager.loadedFloorMapId = REDataManager.loadingMapId;
+                REDataManager.landMapDataLoading = false;
+
+                // これを呼んでおかないと、コアスクリプト内で必要なオブジェクトが作成されない。
+                return _Scene_Map_isReady.call(this);
+            }
+            else {
+                throw new Error("Not implemented.");
+                // Reload. まだ読み込み完了していない扱いにする
+                return false;
+            }
 
             // 固定マップを読み込む
-            DataManager.loadMapData(1); // TODO: id
+            //DataManager.loadMapData(1); // TODO: id
 
-            // Reload. まだ読み込み完了していない扱いにする
-            return false;
         }
         else {
             // Land 定義マップの読み込み中
@@ -43,8 +54,6 @@ var _Scene_Map_create = Scene_Map.prototype.create;
 Scene_Map.prototype.create = function() {
     _Scene_Map_create.call(this);
 
-    console.log("Scene_Map.prototype.create");
-
     REVisual.initialize();
 }
 
@@ -60,8 +69,6 @@ Scene_Map.prototype.createDisplayObjects = function() {
 var _Scene_Map_terminate = Scene_Map.prototype.terminate;
 Scene_Map.prototype.terminate = function() {
     _Scene_Map_terminate.call(this);
-
-    console.log("Scene_Map.prototype.terminate");
 
     if (REVisual.entityVisualSet) {
         REVisual.entityVisualSet.ternimate();

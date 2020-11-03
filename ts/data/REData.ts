@@ -5,7 +5,11 @@ import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 
 export enum REFloorMapKind
 {
+    // データ定義用のマップ。ここへの遷移は禁止
+    Land,
+
     FixedMap,
+    ShuffleMap,
     RandomMap,
 }
 
