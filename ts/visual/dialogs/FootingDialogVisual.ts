@@ -21,7 +21,6 @@ export namespace RE {
             const y = 100;
             const cw = 200;
 
-            console.log("FootingDialogVisual.onCreate");
             this._entityNameWindow = new Window_Help(new Rectangle(0, y, Graphics.boxWidth - cw, 100));
             this._entityNameWindow.setText("階段");
             this.addWindow(this._entityNameWindow);

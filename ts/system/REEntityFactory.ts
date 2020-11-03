@@ -26,12 +26,24 @@ export class REEntityFactory {
         return e;
     }
 
+    static newMonster(monsterId: number): REGame_Entity {
+        const e = REGame.world.spawnEntity();
+        e.attrbutes = [
+            new REGame_UnitAttribute()
+                .setFactionId(REData.EnemeyDefaultFactionId),
+        ]
+        e.addBehavior(new REGame_DecisionBehavior());
+        e.addBehavior(new REUnitBehavior());
+        return e;
+    }
+
     static newExitPoint(): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(new REExitPointBehavior());
         return e;
     }
 
+    /*
     static newEntityFromName(name: string): REGame_Entity {
         switch (name) {
             case "ExitPoint":
@@ -40,5 +52,6 @@ export class REEntityFactory {
                 throw new Error("Invalid entity name: " + name);
         }
     }
+    */
 }
 

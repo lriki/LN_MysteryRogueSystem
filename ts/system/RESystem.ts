@@ -37,9 +37,43 @@ export interface EntityProperties {
 
 export interface BasicParameters {
     hp: number;         // HP
-    atk: number;        // ちから, 武器攻撃力
-    def: number;        // 防具防御力
+    mp: number;         // Magic Points
+    tp: number;         // Tactical Points
+    mhp: number;    // Maximum Hit Points
+    mmp: number;    // Maximum Magic Points
+    atk: number;        // ATtacK power. ちから, 武器攻撃力
+    def: number;        // DEFense power. 防具防御力
+    mat: number;    // Magic ATtack power
+    mdf: number;    // Magic DeFense power
+    agi: number;    // AGIlity
+    luk: number;    // LUcK
+
+    // xparam
+    /*
+    hit: number;    // HIT rate
+    eva: number;    // EVAsion rate
+    cri: number;    // CRItical rate
+    cev: number;    // Critical EVasion rate
+    mev: number;    // Magic EVasion rate
+    mrf: number;    // Magic ReFlection rate
+    cnt: number;    // CouNTer attack rate
+    hrg: number;    // Hp ReGeneration rate
+    mrg: number;    // Mp ReGeneration rate
+    trg: number;    // Tp ReGeneration rate
+    tgr: number;    // TarGet Rate
+    grd: number;    // GuaRD effect rate
+    rec: number;    // RECovery effect rate
+    pha: number;    // PHArmacology
+    mcr: number;    // Mp Cost Rate
+    tcr: number;    // Tp Charge Rate
+    pdr: number;    // Physical Damage Rate
+    mdr: number;    // Magic Damage Rate
+    fdr: number;    // Floor Damage Rate
+    exr: number;    // EXperience Rate
+    */
+
     satiety: number;    // 満腹度
+
 }
 
 export interface BasicAttributes {

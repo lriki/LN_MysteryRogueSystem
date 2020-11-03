@@ -5,7 +5,7 @@ import { REGame } from "./RE/REGame";
 import { TileKind } from "./RE/REGame_Block";
 import { REGame_Entity } from "./RE/REGame_Entity";
 import { RESequelSet } from "./RE/REGame_Sequel";
-import { RMMZHelper } from "./rmmz/RMMZHelper";
+import { RMMZEventEntityMetadata, RMMZHelper } from "./rmmz/RMMZHelper";
 import { REDialogContext } from "./system/REDialog";
 import { REEntityFactory } from "./system/REEntityFactory";
 import { REIntegration } from "./system/REIntegration";
@@ -37,7 +37,7 @@ export class RMMZIntegration extends REIntegration {
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityMetadata) {
                 if (e._entityMetadata.entity) {
-                    const entity = REEntityFactory.newEntityFromName(e._entityMetadata.entity);
+                    const entity = this.newEntity(e._entityMetadata);
                     entity.prefabKey = { kind: 0, id: e.eventId() };
                     entity.rmmzEventId = e.eventId();
                     REGame.world._transfarEntity(entity, REGame.map.floorId(), e.x, e.y);
@@ -107,5 +107,16 @@ export class RMMZIntegration extends REIntegration {
 
     onEntityLeavedMap(entity: REGame_Entity): void {
         REVisual.entityVisualSet?.deleteVisual(entity);
+    }
+
+    private newEntity(data: RMMZEventEntityMetadata): REGame_Entity {
+        switch (data.entity) {
+            case "ExitPoint":
+                return REEntityFactory.newExitPoint();
+            case "Enemy":
+                return REEntityFactory.newMonster(data.enemyId);
+            default:
+                throw new Error("Invalid entity name: " + name);
+        }
     }
 }

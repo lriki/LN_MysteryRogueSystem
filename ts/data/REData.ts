@@ -111,6 +111,26 @@ export interface RE_Data_Actor
     initialY: number;
 }
 
+/**
+ * モンスターデータ。
+ * 
+ * RMMZ の Enemy と同じ意味のデータだが、味方勢力に属することもあるので "Enemy" という言葉の意味とちょっと違くなる。
+ * ひとまず "Monster" という言葉を採用。
+ */
+export interface RE_Data_Monster
+{
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name. */
+    name: string;
+
+    /** 取得経験値 */
+    exp: number;
+
+    /** 各基本パラメータ (index は BasicParameters) */
+    params: number[];
+}
 
 
 
@@ -240,6 +260,7 @@ export class REData
     
     static entityKinds: RE_Data_EntityKind[] = [];
     static actors: RE_Data_Actor[] = [];
+    static monsters: RE_Data_Monster[] = [];
     static lands: RE_Data_Land[] = [];
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
@@ -255,6 +276,7 @@ export class REData
     static reset() {
         this.entityKinds = [{ id: 0, name: 'null', prefabKind: "" }];
         this.actors = [{ id: 0, name: 'null', initialFloorId: 0, initialX: 0, initialY: 0 }];
+        this.monsters = [{ id: 0, name: 'null', exp: 0, params:[] }];
         this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
@@ -279,7 +301,6 @@ export class REData
     
     /**
      * Add actor.
-     * @param mapId : RMMZ mapID
      */
     static addActor(name: string): number {
         const newId = this.actors.length;
@@ -289,6 +310,20 @@ export class REData
             initialFloorId: 0,
             initialX: 0,
             initialY: 0,
+        });
+        return newId;
+    }
+    
+    /**
+     * Add Monster.
+     */
+    static addMonster(name: string): number {
+        const newId = this.monsters.length;
+        this.monsters.push({
+            id: newId,
+            name: name,
+            exp: 0,
+            params: [],
         });
         return newId;
     }

@@ -35,8 +35,17 @@ export class REDataManager
         // Parameters
         RESystem.parameters = {
             hp: REData.addParameter("HP"),
+            mp: REData.addParameter("MP"),
+            tp: REData.addParameter("TP"),
+            mhp: REData.addParameter("MHP"),
+            mmp: REData.addParameter("MMP"),
             atk: REData.addParameter("ATK"),
             def: REData.addParameter("DEF"),
+            mat: REData.addParameter("MAT"),
+            mdf: REData.addParameter("MDF"),
+            agi: REData.addParameter("AGI"),
+            luk: REData.addParameter("LUK"),
+
             satiety: REData.addParameter("満腹度"),
         };
         
@@ -104,6 +113,30 @@ export class REDataManager
         REData.actors[1].initialFloorId = $dataSystem.startMapId ?? 0;
         REData.actors[1].initialX = $dataSystem.startX ?? 0;
         REData.actors[1].initialY = $dataSystem.startY ?? 0;
+
+        // Import Monsters
+        $dataEnemies.forEach(x => {
+            if (x) {
+                const id = REData.addMonster(x.name ?? "");
+                const monster = REData.monsters[id];
+                monster.exp = x.exp ?? 0;
+                if (x.params) {
+                    // see: Object.defineProperties
+                    monster.params[RESystem.parameters.mhp] = x.params[0];
+                    monster.params[RESystem.parameters.mmp] = x.params[1];
+                    monster.params[RESystem.parameters.atk] = x.params[2];
+                    monster.params[RESystem.parameters.def] = x.params[3];
+                    monster.params[RESystem.parameters.mat] = x.params[4];
+                    monster.params[RESystem.parameters.mdf] = x.params[5];
+                    monster.params[RESystem.parameters.agi] = x.params[6];
+                    monster.params[RESystem.parameters.luk] = x.params[7];
+                }
+            }
+        });
+
+        console.log($dataEnemies);
+        console.log(REData.monsters);
+
 
         // Import Lands
         // 最初に Land を作る
