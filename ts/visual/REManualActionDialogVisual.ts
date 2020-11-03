@@ -1,10 +1,11 @@
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
+import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/RE/REGame";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REDialogContext } from "../system/REDialog";
+import { RE } from "./dialogs/FootingDialogVisual";
 import { REDialogVisualWindowLayer } from "./REDialogVisual";
-import { Scene_Footing } from "./scenes/Scene_Footing";
 
 export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
 
@@ -16,11 +17,13 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         if (entity.immediatelyAfterAdjacentMoving) {
             const block = REGame.map.block(entity.x, entity.y);
             const layer = block.layer(BlockLayerKind.Ground);
-            console.log("block:", block);
-            console.log("layer:", layer);
-            const actions = layer.entities().flatMap(x => x.queryActions());
+            const targetEntities = layer.entities();
+            assert(targetEntities.length <= 1);    // TODO: 多種類は未対応
+            const targetEntity = targetEntities[0];
+            const actions = targetEntities.flatMap(x => x.queryActions());
             if (actions.length > 0) {
                 console.log("SceneManager.push(Scene_Footing)", actions);
+                this.push(new RE.FootingDialogVisual(targetEntity, actions));
                 //SceneManager.push(Scene_Footing);
                 return;
             }

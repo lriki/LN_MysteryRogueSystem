@@ -1,7 +1,21 @@
+import { assert } from "ts/Common";
+import { REGame } from "ts/RE/REGame";
+import { RECommandContext } from "ts/system/RECommandContext";
 import { REDialogContext } from "../system/REDialog";
+import { REVisual } from "./REVisual";
 
 export class REDialogVisualWindowLayer {
     _started: boolean = false;
+    _navigator: REDialogVisualNavigator | undefined;
+    _windows: Window_Base[] = [];
+
+    protected dialogContext(): REDialogContext {
+        return REGame.scheduler._getDialogContext();
+    }
+
+    protected commandContext(): RECommandContext {
+        return REGame.scheduler.commandContext();
+    }
 
     // SubDialog が push されたとき
     onCreate() {
@@ -28,7 +42,36 @@ export class REDialogVisualWindowLayer {
 
     // ウィンドウ破棄とかはここで
     onDestroy() {
+        console.log("onDestroy");
+        this._windows.forEach(x => {
+            console.log("Window destroy:", x);
+            x.destroy(undefined);
+        });
+    }
 
+    protected addWindow(window: Window_Base) {
+        SceneManager._scene.addWindow(window);
+        this._windows.push(window);
+    }
+
+    protected removeWindow(window: Window_Base) {
+        throw new Error("Not implemented.");
+        //const windowLayer = SceneManager._scene._windowLayer as any;
+        //windowLayer.removeChild(window);
+    }
+    
+    protected push(dialog: REDialogVisualWindowLayer) {
+        REVisual.manager?._dialogNavigator.push(dialog);
+    }
+
+    protected pop() {
+        REVisual.manager?._dialogNavigator.pop();
+    }
+
+    protected doneDialog(consumeAction: boolean) {
+        assert(this._navigator);
+        this._navigator.clear();
+        return this.dialogContext().closeDialog(consumeAction);
     }
 }
 
@@ -51,6 +94,7 @@ export class REDialogVisualNavigator {
 
     push(dialog: REDialogVisualWindowLayer): void {
         this._nextScene = dialog;
+        dialog._navigator = this;
 
         if (this._scene) {
             this._scene.onStop();
@@ -66,6 +110,16 @@ export class REDialogVisualNavigator {
     }
 
     clear(): void {
+        if (this._scene) {
+            this._scene.onStop();
+            this._scene.onClose();
+            this._scene.onDestroy();
+        }
+        if (this._nextScene) {
+            this._nextScene.onStop();
+            this._nextScene.onClose();
+            this._nextScene.onDestroy();
+        }
         for (let i = this._dialogs.length - 1; i >= 0; i--) {
             this._dialogs[i].onStop();
             this._dialogs[i].onClose();

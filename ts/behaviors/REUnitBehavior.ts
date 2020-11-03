@@ -22,7 +22,7 @@ export class REUnitBehavior extends REGame_Behavior {
             return REResponse.Consumed;
         }
 
-        if (cmd.action().id == REData.MoveToAdjacentActionId) {
+        else if (cmd.action().id == REData.MoveToAdjacentActionId) {
             
 
             const args = (cmd.args() as REMoveToAdjacentArgs);
@@ -37,6 +37,9 @@ export class REUnitBehavior extends REGame_Behavior {
                 return REResponse.Consumed;
             }
             
+        }
+        else if (cmd.action().id == REData.ProceedFloorActionId) {
+            console.log("★");
         }
         
         return REResponse.Pass;
