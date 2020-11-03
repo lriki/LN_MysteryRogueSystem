@@ -10,7 +10,7 @@ export class REVisual
     static entityVisualSet: REEntityVisualSet | undefined;
 
     static initialize() {
-        assert(!this.manager);
+        this.finalize();
         this.manager = new REVisual_Manager();
     }
 

@@ -50,11 +50,13 @@ Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
 }
 
+// マップ切り替えのたびに呼び出される。
+// Scene_Map.updateTransferPlayer() でマップ遷移を検出すると、
+// goto(Scene_Map) で別インスタンスの Scene_Map へ遷移する。
 var _Scene_Map_create = Scene_Map.prototype.create;
 Scene_Map.prototype.create = function() {
     _Scene_Map_create.call(this);
 
-    REVisual.initialize();
 }
 
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
@@ -75,7 +77,7 @@ Scene_Map.prototype.terminate = function() {
         REVisual.entityVisualSet = undefined;
     }
 
-    REVisual.finalize();
+    //REVisual.finalize();
 }
 
 var _Scene_Map_update = Scene_Map.prototype.update;

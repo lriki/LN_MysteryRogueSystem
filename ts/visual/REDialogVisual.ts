@@ -90,6 +90,10 @@ export class REDialogVisualNavigator {
         this._dialogs = [];
     }
 
+    isEmpty(): boolean {
+        return !this._scene && !this._nextScene && this._dialogs.length == 0;
+    }
+
     push(dialog: REDialogVisualWindowLayer): void {
         this._nextScene = dialog;
         dialog._navigator = this;

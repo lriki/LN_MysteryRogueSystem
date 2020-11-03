@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { ActionId, REData } from "ts/data/REData";
+import { RE } from "ts/dialogs/EventExecutionDialog";
 import { REGame_System } from "ts/objects/REGame_System";
 import { REGame } from "ts/RE/REGame";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
@@ -54,7 +55,8 @@ export class REExitPointBehavior extends REGame_Behavior {
                 assert(0);  // TODO: Not implemeted.
             }
             else {
-                event.start();
+                context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));
+                //event.start();
             }
 
 

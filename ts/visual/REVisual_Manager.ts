@@ -13,6 +13,8 @@ import { REVisual } from "./REVisual";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REDataManager } from "ts/data/REDataManager";
+import { RE } from "ts/dialogs/EventExecutionDialog";
+import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 
 /**
  */
@@ -52,6 +54,8 @@ export class REVisual_Manager
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
             this._dialogNavigator.push(new REManualActionDialogVisual());
+        else if (d instanceof RE.EventExecutionDialog)
+            this._dialogNavigator.push(new REEventExecutionDialogVisual());
 
         // AI 用の Dialog を開いた時など、UI を伴わないものもある
         //return undefined;

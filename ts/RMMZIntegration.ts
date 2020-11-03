@@ -61,11 +61,18 @@ export class RMMZIntegration extends REIntegration {
     }
     
     onUpdateDialog(context: REDialogContext): void {
-        REVisual.manager?._dialogNavigator.update(context);
+        const manager = REVisual.manager;
+        if (manager) {
+            assert(!manager._dialogNavigator.isEmpty());
+            manager._dialogNavigator.update(context);
+        }
     }
 
     onDialogClosed(context: REDialogContext): void {
-        REVisual.manager?.closeDialog(context);
+        const manager = REVisual.manager;
+        if (manager) {
+            manager.closeDialog(context);
+        }
     }
     
     onEntityEnteredMap(entity: REGame_Entity): void {
