@@ -3,16 +3,16 @@ import { REData } from "ts/data/REData";
 import { REGame } from "ts/RE/REGame";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REDialogContext } from "../system/REDialog";
-import { REDialogVisual } from "./REDialogVisual";
+import { REDialogVisualWindowLayer } from "./REDialogVisual";
 import { Scene_Footing } from "./scenes/Scene_Footing";
 
-export class REManualActionDialogVisual extends REDialogVisual {
+export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
 
     onUpdate(context: REDialogContext) {
         const commandContext = context.commandContext();
         const entity = context.causeEntity();
         if (!entity) return;
-
+        
         if (entity.immediatelyAfterAdjacentMoving) {
             const block = REGame.map.block(entity.x, entity.y);
             const layer = block.layer(BlockLayerKind.Ground);
@@ -21,11 +21,10 @@ export class REManualActionDialogVisual extends REDialogVisual {
             const actions = layer.entities().flatMap(x => x.queryActions());
             if (actions.length > 0) {
                 console.log("SceneManager.push(Scene_Footing)", actions);
-                SceneManager.push(Scene_Footing);
+                //SceneManager.push(Scene_Footing);
                 return;
             }
         }
-        console.log("REManualActionDialogVisual.onUpdate");
 
         //if (Input.dir8 != 0 && Input.dir8 != entity.dir) {
         //    const commandContext = context.commandContext();

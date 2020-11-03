@@ -436,16 +436,17 @@ export class REScheduler
     _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {
         this._dialogContext.setCauseEntity(causeEntity);
         this._dialogContext._setDialogModel(value);
-        const visual = REGame.integration.onDialogOpend(this._dialogContext);
-        this._dialogContext._visual = visual;
+        REGame.integration.onDialogOpend(this._dialogContext);
+        //const visual = 
+        //this._dialogContext._visual = visual;
     }
 
     _closeDialogModel() {
         this._dialogContext._setDialogModel(null);
-        if (this._dialogContext._visual) {
-            this._dialogContext._visual.onClose();
-            this._dialogContext._visual = undefined;
-        }
+        //if (this._dialogContext._visual) {
+        //    this._dialogContext._visual.onClose();
+        //    this._dialogContext._visual = undefined;
+        //}
         REGame.integration.onDialogClosed(this._dialogContext);
     }
 

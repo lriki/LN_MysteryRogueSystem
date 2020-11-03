@@ -2,7 +2,7 @@ import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { Vector2 } from "ts/math/Vector2";
-import { REDialogVisual } from "ts/visual/REDialogVisual";
+import { REDialogVisualNavigator } from "ts/visual/REDialogVisual";
 import { REManualActionDialogVisual } from "ts/visual/REManualActionDialogVisual";
 import { REVisualSequel, REVisualSequel_Move } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
@@ -21,6 +21,7 @@ export class REVisual_Manager
     //private _dialogVisual: REDialogVisual | null;
     private _tileSize: Vector2 = new Vector2(48, 48);
     private _visualSequelFactory: (() => REVisualSequel)[] = [];
+    _dialogNavigator: REDialogVisualNavigator = new REDialogVisualNavigator();
     
     constructor() {
         //this._dialogVisual = null;
@@ -46,16 +47,18 @@ export class REVisual_Manager
         }
     }
 
-    handleDialogOpend(context: REDialogContext): REDialogVisual | undefined {
+    openDialog(context: REDialogContext): void {
         //assert(!this._dialogVisual);
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
-            return new REManualActionDialogVisual();
+            this._dialogNavigator.push(new REManualActionDialogVisual());
+
         // AI 用の Dialog を開いた時など、UI を伴わないものもある
-        return undefined;
+        //return undefined;
     }
 
-    handleDialogClosed(context: REDialogContext) {
+    closeDialog(context: REDialogContext) {
+        this._dialogNavigator.clear();
         //if (this._dialogVisual) {
         //    this._dialogVisual.onClose();
         //    this._dialogVisual = null;

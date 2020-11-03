@@ -1,6 +1,6 @@
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESequelSet } from "ts/RE/REGame_Sequel";
-import { REDialogVisual } from "ts/visual/REDialogVisual";
+//import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { REDialogContext } from "./REDialog";
 import { REMapBuilder } from "./REMapBuilder";
 
@@ -18,7 +18,9 @@ export abstract class REIntegration {
     abstract onCheckVisualSequelRunning(): boolean;
     
     /** Dialog が開かれたとき。 */
-    abstract onDialogOpend(context: REDialogContext): REDialogVisual | undefined;
+    abstract onDialogOpend(context: REDialogContext): void;
+
+    abstract onUpdateDialog(context: REDialogContext): void;
 
     /** Dialog が閉じられたとき。 */
     abstract onDialogClosed(context: REDialogContext): void;

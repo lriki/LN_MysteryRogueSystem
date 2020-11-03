@@ -10,7 +10,6 @@ import { REDialogContext } from "./system/REDialog";
 import { REEntityFactory } from "./system/REEntityFactory";
 import { REIntegration } from "./system/REIntegration";
 import { REMapBuilder } from "./system/REMapBuilder";
-import { REDialogVisual } from "./visual/REDialogVisual";
 import { REVisual } from "./visual/REVisual";
 
 export class RMMZIntegration extends REIntegration {
@@ -58,17 +57,16 @@ export class RMMZIntegration extends REIntegration {
             return false;
     }
     
-    onDialogOpend(context: REDialogContext): REDialogVisual | undefined {
-        if (REVisual.manager)
-            return REVisual.manager.handleDialogOpend(context);
-        else
-            return undefined;
+    onDialogOpend(context: REDialogContext): void {
+        REVisual.manager?.openDialog(context);
+    }
+    
+    onUpdateDialog(context: REDialogContext): void {
+        REVisual.manager?._dialogNavigator.update(context);
     }
 
     onDialogClosed(context: REDialogContext): void {
-        if (REVisual.manager) {
-            REVisual.manager.handleDialogClosed(context);
-        }
+        REVisual.manager?.closeDialog(context);
     }
     
     onEntityEnteredMap(entity: REGame_Entity): void {

@@ -1,7 +1,8 @@
 
 import { assert } from "ts/Common";
+import { REGame } from "ts/RE/REGame";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { REDialogVisual } from "ts/visual/REDialogVisual";
+//import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { RECommand, REResponse } from "./RECommand";
 import { RECommandContext } from "./RECommandContext";
 import { REScheduler } from "./REScheduler";
@@ -12,7 +13,7 @@ export class REDialogContext
     private _commandContext: RECommandContext;
     private _causeEntity: REGame_Entity | undefined;
     private _dialogModel: REDialog | null;
-    _visual: REDialogVisual | undefined;
+    //_visual: REDialogVisual | undefined;
 
     constructor(owner: REScheduler, commandContext: RECommandContext) {
         this._owner = owner;
@@ -58,9 +59,11 @@ export class REDialogContext
     _update() {
         assert(this._dialogModel !== null);
         this._dialogModel.onUpdate(this);
-        if (this._visual) {
-            this._visual.onUpdate(this);
-        }
+        REGame.integration.onUpdateDialog(this);
+
+        //if (this._visual) {
+        //    this._visual.onUpdate(this);
+        //}
     }
 }
 
