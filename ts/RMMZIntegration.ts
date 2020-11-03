@@ -35,10 +35,9 @@ export class RMMZIntegration extends REIntegration {
 
         // 固定マップ上のイベントを Entity として出現させる
         $gameMap.events().forEach((e: Game_Event) => {
-            if (e) {
-                const metadata = RMMZHelper.readEntityMetadata(e);
-                if (metadata.entity) {
-                    const entity = REEntityFactory.newEntityFromName(metadata.entity);
+            if (e && e._entityMetadata) {
+                if (e._entityMetadata.entity) {
+                    const entity = REEntityFactory.newEntityFromName(e._entityMetadata.entity);
                     entity.prefabKey = { kind: 0, id: e.eventId() };
                     entity.rmmzEventId = e.eventId();
                     REGame.world._transfarEntity(entity, REGame.map.floorId(), e.x, e.y);
@@ -101,8 +100,5 @@ export class RMMZIntegration extends REIntegration {
 
     onEntityLeavedMap(entity: REGame_Entity): void {
         REVisual.entityVisualSet?.deleteVisual(entity);
-
-        // TODO: イベントを消す
-        throw new Error("Method not implemented.");
     }
 }

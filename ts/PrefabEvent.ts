@@ -23,6 +23,10 @@ class Game_REPrefabEvent extends Game_Event {
     isREPrefab(): boolean {
         return true;
     }
+
+    isREExtinct(): boolean {
+        return this._erased;
+    }
     
     isRESpritePrepared(): boolean {
         return this._spritePrepared;
@@ -41,6 +45,7 @@ declare global {
     interface Game_CharacterBase {
         isREPrefab(): boolean;
         isRESpritePrepared(): boolean;
+        isREExtinct(): boolean;
     }
 }
 
@@ -49,6 +54,10 @@ Game_CharacterBase.prototype.isREPrefab = function() {
 };
 
 Game_CharacterBase.prototype.isRESpritePrepared = function() {
+    return false;
+};
+
+Game_CharacterBase.prototype.isREExtinct = function() {
     return false;
 };
 
@@ -94,6 +103,26 @@ Game_Map.prototype.getREPrefabEvents = function(): Game_CharacterBase[] {
     });
 }
 
+//==============================================================================
+// Sprite_Character
+
+declare global {
+    interface Sprite_Character {
+        _prefabSpriteIdRE: number;
+
+        isRECharacterExtinct(): boolean;
+        endAllEffect(): void;
+        removeREPrefabEventSprite(index: number): void;
+    }
+}
+
+Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
+    return this._character.isREExtinct();
+};
+
+Sprite_Character.prototype.endAllEffect = function() {
+    // TODO: https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/EventReSpawn.js
+};
 
 //==============================================================================
 // Spriteset_Map
@@ -104,6 +133,7 @@ declare global {
 
         updateREPrefabEvent(): void;
         makeREPrefabEventSprite(event: Game_REPrefabEvent): void;
+        removeREPrefabEventSprite(index: number): void;
     }
 }
 
@@ -125,6 +155,13 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
             this.makeREPrefabEventSprite(event as unknown as Game_REPrefabEvent);
         }
     });
+    
+    for (var i = 0, n = this._characterSprites.length; i < n; i++) {
+        if (this._characterSprites[i].isRECharacterExtinct()) {
+            this.removeREPrefabEventSprite(i--);
+            n--;
+        }
+    }
 };
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabEvent) {
@@ -145,4 +182,14 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
         visual?._setSpriteIndex(spriteIndex);
     }
 };
+
+Spriteset_Map.prototype.removeREPrefabEventSprite = function(index: number) {
+    var sprite = this._characterSprites[index];
+    this._characterSprites.splice(index, 1);
+    sprite.endAllEffect();
+
+    const t: any = this._tilemap;
+    t.removeChild(sprite);
+};
+
 

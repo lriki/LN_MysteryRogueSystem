@@ -62,6 +62,16 @@ export class REEntityVisualSet {
     deleteVisual(entity: REGame_Entity) {
         const index = this._visualEntities.findIndex(x => x.entity() == entity);
         if (index >= 0) {
+            const visual = this._visualEntities[index];
+
+            // Game_Event の削除フラグを立てる。
+            // 次の Spriteset_Map で、実際に動的 Sprite が削除される。
+            $gameMap.event(visual.rmmzEventId()).erase();
+            
+            // NOTE: このメソッドはマップ遷移時の全開放時もよばれるが、
+            // そのときはマップ遷移後に Spriteset_Map が新しいインスタンスで new されるため、
+            // ↑の erase() の意味もあまりないが、影響はないため現状とする。
+
             this._visualEntities.splice(index, 1);
         }
     }

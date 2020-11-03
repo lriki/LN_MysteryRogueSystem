@@ -12,7 +12,10 @@ Game_Player.prototype.performTransfer = function() {
     // $gameMap.setup() などはオリジナルの処理の中で行われる
     _Game_Player_performTransfer.call(this);
 
-    // RE Floor への移動
+    // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済み。
+    // transfarEntity で Player 操作中の Entity も別マップへ移動する。
+    // この中で、Camera が Player を注視していれば Camera も Floor を移動することで、
+    // REシステムとしてのマップ遷移も行われる。
     if (oldIsTransferring && REGame.map.isValid()) {
         const playerEntity = REGame.world.entity(REGame.core.mainPlayerEntiyId);
         if (playerEntity) {

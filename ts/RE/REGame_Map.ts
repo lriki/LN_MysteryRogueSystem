@@ -72,9 +72,6 @@ export class REGame_Map
     releaseMap() {
         this.destroyAdhocEntities();
         this._removeAllEntities();
-    }
-
-    clear(): void {
         this._width = 0;
         this._height = 0;
         this._blocks = [];
@@ -147,6 +144,7 @@ export class REGame_Map
         this._adhocEntityIds.forEach(x => {
             REGame.world.entity(x).destroy();
         })
+        this._adhocEntityIds = [];
     }
 
     _removeAllEntities(): void {

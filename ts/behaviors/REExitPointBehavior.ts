@@ -1,5 +1,7 @@
+import { assert } from "ts/Common";
 import { ActionId, REData } from "ts/data/REData";
 import { REGame_System } from "ts/objects/REGame_System";
+import { REGame } from "ts/RE/REGame";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
@@ -41,7 +43,23 @@ export class REExitPointBehavior extends REGame_Behavior {
     }
     
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
-        console.log("REExitPointBehavior.onReaction")
+
+        if (cmd.action().id == REData.ProceedFloorActionId) {
+            const event = $gameMap.event(entity.rmmzEventId);
+            
+            //console.log("transfar", actor);
+            console.log("event", event);
+
+            if (event.isREPrefab()) {
+                assert(0);  // TODO: Not implemeted.
+            }
+            else {
+                event.start();
+            }
+
+
+        }
+
         return REResponse.Pass;
     }
 }

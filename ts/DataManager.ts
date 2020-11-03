@@ -92,7 +92,7 @@ DataManager.loadMapData = function(mapId) {
     }
     else {
         // 普通のマップ
-        REGame.map.clear();
+        REGame.map.releaseMap();
         REDataManager.landMapDataLoading = false;
         _DataManager_loadMapData.call(DataManager, mapId);
     }

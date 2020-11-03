@@ -11,7 +11,14 @@ declare global {
 
 var _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
+
+    // 先に REMap をクリーンアップしておく。
+    // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
+    // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
+    REGame.map.releaseMap();
+
     _Game_Map_setup.call(this, mapId);
+
 
     // この時点ではまだ Player は locate() されていないので、
     // 位置をとりたければ _newX, _newY を見る必要がある。
@@ -60,7 +67,8 @@ var _Game_Map_update = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
 
-    if (this.isRESystemMap()) {
+    if (this.isRESystemMap() &&
+        !this.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
         REGameManager.update();
     }
 }

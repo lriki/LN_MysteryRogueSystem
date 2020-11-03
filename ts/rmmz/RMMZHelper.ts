@@ -5,8 +5,7 @@ export interface RMMZEventEntityMetadata {
 }
 
 export class RMMZHelper {
-    static readEntityMetadata(event: Game_Event): RMMZEventEntityMetadata {
-        let metadata: RMMZEventEntityMetadata = {};
+    static readEntityMetadata(event: Game_Event): RMMZEventEntityMetadata | undefined {
 
         if (event._pageIndex >= 0) {
             let list = event.list();
@@ -28,12 +27,13 @@ export class RMMZHelper {
                         block.indexOf("{"),
                         block.indexOf("}") + 1);
 
+                    let metadata: RMMZEventEntityMetadata = {};
                     eval(`metadata = ${block}`);
+                    return metadata;
                 }
             }
         }
-
-        return metadata;
+        return undefined;
     }
 }
 

@@ -7307,7 +7307,7 @@ declare class Game_Map {
      * @param eventId 
      * @return  
      */
-    event(eventId: number): /* !this._events.<i> */ any;
+    event(eventId: number): Game_Event;
 
     /**
      * 
@@ -8473,7 +8473,7 @@ declare class Game_CharacterBase {
      * 
      * @return  
      */
-    checkEventTriggerTouch(): boolean;
+    //checkEventTriggerTouch(): boolean;
 
     /**
      * 
@@ -8617,12 +8617,12 @@ declare class Game_Character extends Game_CharacterBase {
     /**
      * 
      */
-    new();
+    //new();
 
     /**
      * 
      */
-    initialize(): void;
+    //initialize(): void;
 
     /**
      * 
@@ -9394,7 +9394,7 @@ declare class Game_Player extends Game_Character {
      * @param x 
      * @param y 
      */
-    checkEventTriggerTouch(x: any, y: any): void;
+    //checkEventTriggerTouch(x: any, y: any): void;
 
     /**
      * 
@@ -10439,7 +10439,7 @@ declare class Game_Event extends Game_Character {
      * @param mapId 
      * @param eventId 
      */
-    initialize(mapId: any, eventId: any): void;
+    //initialize(mapId: any, eventId: any): void;
 
     /**
      * 
@@ -10615,7 +10615,7 @@ declare class Game_Event extends Game_Character {
      * @param x 
      * @param y 
      */
-    checkEventTriggerTouch(x: any, y: any): void;
+    //checkEventTriggerTouch(x: any, y: any): void;
 
     /**
      * 
