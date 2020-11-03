@@ -5,6 +5,7 @@ import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { BlockLayerKind } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
+import { ActionId } from "ts/data/REData";
 
 
 
@@ -145,6 +146,14 @@ export class REGame_Entity
             }
         }
         return RESystem.propertyData[propertyId].defaultValue;
+    }
+
+    queryActions(): ActionId[] {
+        let result: ActionId[] = [];    // TODO: あとで flatMap() 使うようにしたい
+        for (let i = 0; i < this._behaviors.length; i++) {
+            result = result.concat(this._behaviors[i].onQueryActions());
+        }
+        return result;
     }
 
     _callBehaviorIterationHelper(func: (b: REGame_Behavior) => REResponse): REResponse {

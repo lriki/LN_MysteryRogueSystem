@@ -2,9 +2,10 @@
     "compilerOptions": {
         "module": "commonjs",
         //"target": "es6",
-        "target": "es5",
+        "target": "es5",    // es2015
         "outDir": "dist",
         "strict": true,
+        "esModuleInterop": true,
 
         // NOTE: https://qiita.com/tetradice/items/b89a5dd41fcebf96379e
         "baseUrl": "./",
@@ -13,8 +14,9 @@
         "typeRoots" : ["./node_modules/@types", "./@types"],
 
         "lib": [
-            //"es6", "dom"
+            "es6",
             "es5",
+            "es2019",
             "dom",
             "es2015.promise",
             "es2015"

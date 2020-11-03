@@ -159,14 +159,6 @@ export class REGame_Map
         this._entityIds = [];
     }
 
-    // TODO: Fuzzy とかで、x, y に配置できなければ周辺を探すとか
-    _locateEntityFuzzy(entity: REGame_Entity, x: number, y: number): void {
-        assert(entity.floorId == this.floorId());
-        entity.x = x;
-        entity.y = y;
-    }
-
-
     canEntering(block: REGame_Block, entity: REGame_Entity, layer: BlockLayerKind): boolean {
         // TODO: 壁抜けや浮遊状態で変わる
         return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
@@ -193,12 +185,15 @@ export class REGame_Map
     }
 
     /**
-     * タイル間移動
+     * 移動可能判定を伴うタイル間移動
      * 
-     * 指定位置の Tile と Entity のみをもとに、移動可否判定を行いつつ移動する。
+     * 指定位置の Block と Entity のみをもとに、移動可否判定を行いつつ移動する。
+     * 
      * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
      */
     moveEntity(entity: REGame_Entity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+        assert(entity.floorId == this.floorId());
+        
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(x, y);
 
@@ -212,6 +207,26 @@ export class REGame_Map
         else {
             return false;
         }
+    }
+
+    /**
+     * Entity の位置設定
+     * 
+     * moveEntity() と異なり、移動可能判定を行わずに強制移動する。
+     * マップ生成時の Entity 配置や、ワープ移動などで使用する。
+     */
+    locateEntity(entity: REGame_Entity, x: number, y: number, toLayer?: BlockLayerKind): void {
+        assert(entity.floorId == this.floorId());
+
+        const oldBlock = this.block(entity.x, entity.y);
+        const newBlock = this.block(x, y);
+        
+        const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
+
+        oldBlock.removeEntity(entity);
+        entity.x = x;
+        entity.y = y;
+        newBlock.addEntity(layer, entity);
     }
 }
 

@@ -23,6 +23,9 @@ export class REDataManager
     static databaseMapId: number = 0;
     static landMapDataLoading: boolean = false;
     static _dataLandDefinitionMap: IDataMap | undefined = undefined;
+    
+    static loadedLandMapId: number = 0;
+    static loadedFloorMapId: number = 0;
 
     static setupCommonData() {
         REData.reset();
@@ -68,6 +71,7 @@ export class REDataManager
         // Actions
         REData.DirectionChangeActionId = REData.addAction("DirectionChange");
         REData.MoveToAdjacentActionId = REData.addAction("MoveToAdjacent");
+        REData.ProceedFloorActionId = REData.addAction("すすむ");
 
         // Attributes
         RESystem.attributes = {
@@ -108,7 +112,10 @@ export class REDataManager
                 REData.addLand(i);
             }
         }
-        // 次に parent が Land である Map を、データテーブル用のマップとして関連付ける
+
+
+
+        // parent が Land である Map を、データテーブル用のマップとして関連付ける
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info) {
@@ -126,6 +133,9 @@ export class REDataManager
                     else if (info.name?.startsWith("Trap")) {
                         land.trapTableMapId = i;
                     }
+                    else {
+                        // 固定マップ or シャッフルマップ用のテンプレートマップ
+                    }
                 }
             }
         }
@@ -138,19 +148,25 @@ export class REDataManager
             // 固定マップ
             REData.floors = new Array($dataMapInfos.length + (REData.lands.length * REData.MAX_DUNGEON_FLOORS));
             for (let i = 0; i < $dataMapInfos.length; i++) {
-                if (this.isFloorMap(i)) {
+                const info = $dataMapInfos[i];
+                const land = REData.lands.find(x => info && info.parentId && x.mapId == info.parentId);
+
+                if (this.isDatabaseMap(i)) {
+                    this.databaseMapId = i;
+                }
+                else if (land) {
+                    // Land の子マップを Floor として採用
                     REData.floors[i] = {
                         id: i,
+                        landId: land.id,
                         mapId: i,
                         mapKind: REFloorMapKind.FixedMap,
                     };
                 }
-                else if (this.isDatabaseMap(i)) {
-                    this.databaseMapId = i;
-                }
                 else {
                     REData.floors[i] = {
                         id: 0,
+                        landId: 0,
                         mapId: 0,
                         mapKind: REFloorMapKind.FixedMap,
                     }
@@ -166,6 +182,7 @@ export class REDataManager
                     REData.lands[i].floorIds[iFloor] = floorId;
                     REData.floors[floorId] = {
                         id: floorId,
+                        landId: REData.lands[i].id,
                         mapId: 0,
                         mapKind: REFloorMapKind.RandomMap,
                     };
@@ -177,6 +194,10 @@ export class REDataManager
     static findLand(mapId: number): RE_Data_Land | undefined {
         const land = REData.lands.find(x => x.mapId == mapId);
         return land;
+    }
+
+    static floor(mapId: number): RE_Data_Floor | undefined {
+        return REData.floors[mapId];
     }
 
     static isDatabaseMap(mapId: number) : boolean {
@@ -196,11 +217,14 @@ export class REDataManager
     }
 
     static isFloorMap(mapId: number) : boolean {
+        return REData.floors[mapId].landId > 0;
+        /*
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("REFloor:"))
             return true;
         else
             return false;
+        */
     }
 
     static dataLandDefinitionMap(): IDataMap | undefined {

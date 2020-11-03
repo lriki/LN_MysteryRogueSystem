@@ -10,6 +10,7 @@
  * Player, Enemy 共に Position は持つが、それをキー入力で更新するのか、AI で更新するのかは異なる。
  */
 
+import { ActionId } from "ts/data/REData";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { REGame_Entity } from "./REGame_Entity";
@@ -28,6 +29,9 @@ export class REGame_Behavior {
     // propertyId: see EntityProperties
     // undefined を返した場合は後続の Behavior の onQueryProperty() を呼び出し続ける。
     onQueryProperty(propertyId: number): any { return undefined; }
+
+    // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
+    onQueryActions(): ActionId[] { return []; }
 
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、

@@ -1,7 +1,11 @@
+import { ActionId, REData } from "ts/data/REData";
+import { REGame_System } from "ts/objects/REGame_System";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
+import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
+import { RESystem } from "ts/system/RESystem";
 
 /**
  * [2020/11/1] NOTE: Player が乗ったときの UI 表示タイミング
@@ -25,6 +29,17 @@ import { RECommandContext } from "ts/system/RECommandContext";
  * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
 export class REExitPointBehavior extends REGame_Behavior {
+    onQueryProperty(propertyId: number): any {
+        if (propertyId == RESystem.properties.homeLayer)
+            return BlockLayerKind.Ground;
+        else
+            super.onQueryProperty(propertyId);
+    }
+
+    onQueryActions(): ActionId[] {
+        return [REData.ProceedFloorActionId];
+    }
+    
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         console.log("REExitPointBehavior.onReaction")
         return REResponse.Pass;

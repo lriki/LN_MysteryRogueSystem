@@ -22,6 +22,8 @@ export enum BlockLayerKind {
 }
 
 class REBlockLayer {
+    // 同一レイヤーに、同時に複数の Entity は存在可能。
+    // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
     private _entities: REGame_Entity[] = [];
 
     entities(): readonly REGame_Entity[] {
@@ -200,6 +202,10 @@ export class REGame_Block
 
     layers(): readonly REBlockLayer[] {
         return this._layers;
+    }
+
+    layer(kind: BlockLayerKind): REBlockLayer {
+        return this._layers[kind];
     }
 
     addEntity(layerKind: BlockLayerKind, entity: REGame_Entity) {

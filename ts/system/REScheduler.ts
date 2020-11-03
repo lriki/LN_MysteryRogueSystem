@@ -86,7 +86,6 @@ export class REScheduler
     }
 
     stepSimulation(): void {
-
         while (true) {
             // Sequel 終了待ち
             if (REGame.integration.onCheckVisualSequelRunning()) {

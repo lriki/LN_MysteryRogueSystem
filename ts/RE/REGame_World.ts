@@ -67,7 +67,7 @@ export class RE_Game_World
             // 現在表示中のマップへの移動
             entity.floorId = floorId;
             REGame.map._addEntity(entity);
-            REGame.map._locateEntityFuzzy(entity, x, y);
+            REGame.map.locateEntity(entity, x, y);
         }
         else {
             entity.floorId = floorId;

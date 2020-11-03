@@ -148,11 +148,15 @@ export interface RE_Data_Floor
     /** ID (0 is Invalid). */
     id: number;
 
+    /** Parent Land. */
+    landId: number;
+
     /** RMMZ mapID. (0 is RandomMap) */
     mapId: number;
 
     /** マップ生成 */
     mapKind: REFloorMapKind;
+    
 
 }
 
@@ -171,6 +175,8 @@ export interface REData_Faction
     schedulingOrder: number;
 }
 
+export type ActionId = number;
+
 /**
  * 拾う、投げる、などの行動の種類
  * 
@@ -185,7 +191,7 @@ export interface REData_Action
     id: number;
 
     /** Name */
-    name: string;
+    displayName: string;
 }
 
 /**
@@ -233,7 +239,7 @@ export class REData
     static lands: RE_Data_Land[] = [];
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
-    static actions: REData_Action[] = [{id: 0, name: 'null'}];
+    static actions: REData_Action[] = [{id: 0, displayName: 'null'}];
     static sequels: REData_Sequel[] = [{id: 0, name: 'null'}];
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
@@ -246,9 +252,9 @@ export class REData
         this.entityKinds = [{ id: 0, name: 'null', prefabKind: "" }];
         this.actors = [{ id: 0, name: 'null', initialFloorId: 0, initialX: 0, initialY: 0 }];
         this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
-        this.floors = [{ id: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap }];
+        this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
-        this.actions = [{id: 0, name: 'null'}];
+        this.actions = [{id: 0, displayName: 'null'}];
         this.sequels = [{id: 0, name: 'null'}];
         this.parameters = [{id: 0, name: 'null'}];
         this.attributes = [{id: 0, name: 'null'}];
@@ -305,21 +311,22 @@ export class REData
      * Add floor.
      * @param mapId : RMMZ mapID
      */
-    static addFloor(mapId: number, kind: REFloorMapKind): number {
+    static addFloor(mapId: number, landId: number, kind: REFloorMapKind): number {
         const newId = this.floors.length;
         this.floors.push({
             id: newId,
             mapId: mapId,
+            landId: landId,
             mapKind: kind,
         });
         return newId;
     }
     
-    static addAction(name: string): number {
+    static addAction(displayName: string): number {
         const newId = this.actions.length;
         this.actions.push({
             id: newId,
-            name: name
+            displayName: displayName
         });
         return newId;
     }
@@ -469,6 +476,14 @@ export class REData
 
     /** 捨てる */
     static TrashActionId: number;
+
+    // TODO: ↓このあたりは言葉がちがうだけでやることは同じなので、グループ化できるようにしてみたい
+    /** 進む */
+    static ProceedFloorActionId: number;
+    /** 降りる */
+    //static StairsDownActionId: number;
+    /** 登る */
+    //static StairsUpActionId: number;
 
     //----------------------------------------
     // Item Actions.

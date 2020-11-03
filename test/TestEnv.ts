@@ -21,9 +21,9 @@ export class TestEnv {
         REData.addLand(3);
 
         // Floors
-        REData.addFloor(4, REFloorMapKind.FixedMap);
-        REData.addFloor(5, REFloorMapKind.FixedMap);
-        REData.addFloor(6, REFloorMapKind.FixedMap);
+        REData.addFloor(4, 1, REFloorMapKind.FixedMap);
+        REData.addFloor(5, 1, REFloorMapKind.FixedMap);
+        REData.addFloor(6, 1, REFloorMapKind.FixedMap);
 
         // Unique Entitise
         REData.addActor("Unique1");

@@ -10,6 +10,7 @@ import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
+import { assert } from "ts/Common";
 
 
 /**
