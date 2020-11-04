@@ -39,8 +39,8 @@ export class REDialogContext
     closeDialog(consumeAction: boolean) {
         this._owner._closeDialogModel();
         this._commandContext._next();
-        if (consumeAction) {
-            this._owner.nextActionUnit();
+        if (consumeAction && this._causeEntity) {
+            this._owner.consumeActionToken(this._causeEntity);
         }
     }
 

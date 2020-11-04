@@ -55,7 +55,7 @@ export interface REGame_UnitAttributeData extends REGame_AttributeData {
 }
 export class REGame_UnitAttribute extends REGame_Attribute {
     _factionId: number = 0;
-    _speedLevel: number = 0;     // 0 が基本、1は倍速。2は2倍速。-1は鈍足。
+    _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
     _actionTokenCount: number = 0;

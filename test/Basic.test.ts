@@ -11,6 +11,7 @@ import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
+import { REEntityFactory } from "ts/system/REEntityFactory";
 
 TestEnv.setupDatabase();
 
@@ -125,4 +126,151 @@ test('EntitySaveLoad', () => {
         expect(actor2.behaviors().length).toBe(1);
         expect(actor2.behaviors()[0]).toBeInstanceOf(REUnitBehavior);
     }
+});
+
+
+
+test('TurnOrderTable', () => {
+    //--------------------
+    // 準備
+    REGameManager.createGameObjects();
+
+    // actor1 - x1 速
+    const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
+    actor1._name = "actor1";
+    actor1.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(1);
+    REGame.world._transfarEntity(actor1, 1, 1, 1);
+
+    // enemy1 - x1 速
+    const enemy1 = REEntityFactory.newMonster(1);
+    enemy1._name = "enemy1";
+    enemy1.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(1);
+    REGame.world._transfarEntity(enemy1, 1, 1, 2);
+
+    // enemy2 - x1 速
+    const enemy2 = REEntityFactory.newMonster(1);
+    enemy2._name = "enemy2";
+    enemy2.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(1);
+    REGame.world._transfarEntity(enemy2, 1, 1, 3);
+
+    // enemy3 - x2 速
+    const enemy3 = REEntityFactory.newMonster(1);
+    enemy3._name = "enemy3";
+    enemy3.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(2);
+    REGame.world._transfarEntity(enemy3, 1, 1, 4);
+
+    // enemy4 - x2 速
+    const enemy4 = REEntityFactory.newMonster(1);
+    enemy4._name = "enemy4";
+    enemy4.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(2);
+    REGame.world._transfarEntity(enemy4, 1, 1, 5);
+
+    // enemy5 - x3 速
+    const enemy5 = REEntityFactory.newMonster(1);
+    enemy5._name = "enemy5";
+    enemy5.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(3);
+    REGame.world._transfarEntity(enemy5, 1, 1, 6);
+
+    // enemy6 - x3 速
+    const enemy6 = REEntityFactory.newMonster(1);
+    enemy6._name = "enemy6";
+    enemy6.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(3);
+    REGame.world._transfarEntity(enemy6, 1, 1, 7);
+
+    // enemy7 - x0.5 速
+    const enemy7 = REEntityFactory.newMonster(1);
+    enemy7._name = "enemy7";
+    enemy7.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(-1);
+    REGame.world._transfarEntity(enemy7, 1, 1, 8);
+
+    // enemy8 - x0.5 速
+    const enemy8 = REEntityFactory.newMonster(1);
+    enemy8._name = "enemy8";
+    enemy8.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(-1);
+    REGame.world._transfarEntity(enemy8, 1, 1, 9);
+
+    REGameManager.performFloorTransfer();
+    REGameManager.update();
+
+    //--------------------
+    // 最初の行動予定順をチェック
+    {
+        const runs = REGame.scheduler.actionScheduleTable();
+        expect(runs.length).toBe(3);    // map 上の Entity のうち最大速度はx3なので、Run は3つ。
+
+        const run0 = runs[0].actions;
+        expect(run0.length).toBe(5);
+        expect(run0[0].unit.unit).toEqual(actor1);  // 先頭は Player
+        expect(run0[1].unit.unit).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
+        expect(run0[2].unit.unit).toEqual(enemy4);
+        expect(run0[3].unit.unit).toEqual(enemy5);
+        expect(run0[4].unit.unit).toEqual(enemy6);
+
+        const run1 = runs[1].actions;
+        expect(run1.length).toBe(4);
+        expect(run1[0].unit.unit).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
+        expect(run1[1].unit.unit).toEqual(enemy4);
+        expect(run1[2].unit.unit).toEqual(enemy5);
+        expect(run1[3].unit.unit).toEqual(enemy6);
+
+        // 最後の Run には、x2速以上の余りと、x1速以下の Entity が積まれている
+        const run2 = runs[2].actions;
+        expect(run2.length).toBe(6);
+        expect(run2[0].unit.unit).toEqual(enemy5);  // x3 優先
+        expect(run2[1].unit.unit).toEqual(enemy6);  // x3 優先
+        expect(run2[2].unit.unit).toEqual(enemy1);  // x1
+        expect(run2[3].unit.unit).toEqual(enemy2);  // x1
+        expect(run2[4].unit.unit).toEqual(enemy7);  // x0.5 鈍足でも x1 と同じく、行動予定は積む
+        expect(run2[5].unit.unit).toEqual(enemy8);  // x0.5 鈍足でも x1 と同じく、行動予定は積む
+    }
+
+    const commandContext = REGame.scheduler.commandContext();
+    const dialogContext = REGame.scheduler._getDialogContext();
+    
+    //--------------------
+    // 移動量から実際に行動した数を判断する
+    {
+        // player を右へ移動
+        commandContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.closeDialog(true);
+
+        console.log("-------------------------------------");
+    
+        // AI行動決定
+        REGameManager.update();
+    
+        // 移動後座標チェック
+        expect(actor1.x).toBe(2);
+        expect(enemy1.x).toBe(2);
+        expect(enemy2.x).toBe(2);
+        expect(enemy3.x).toBe(3);
+        expect(enemy4.x).toBe(3);
+        expect(enemy5.x).toBe(4);
+        expect(enemy6.x).toBe(4);
+        expect(enemy7.x).toBe(2);
+        expect(enemy8.x).toBe(2);
+    }
+/*
+    //--------------------
+    // 2ターン目。x0.5速の Entity は移動しない
+    {
+        // player を右へ移動
+        commandContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.closeDialog(true);
+    
+        // AI行動決定
+        REGameManager.update();
+    
+        // 移動後座標チェック
+        expect(actor1.x).toBe(3);
+        expect(enemy1.x).toBe(3);
+        expect(enemy2.x).toBe(3);
+        expect(enemy3.x).toBe(5);
+        expect(enemy4.x).toBe(5);
+        expect(enemy5.x).toBe(7);
+        expect(enemy6.x).toBe(7);
+        expect(enemy7.x).toBe(2);
+        expect(enemy8.x).toBe(2);
+    }
+*/
 });

@@ -5,6 +5,7 @@ import { REGame_Entity } from "../RE/REGame_Entity";
 import { REScheduler } from "./REScheduler";
 import { assert, Log } from "ts/Common";
 import { REGame_Sequel } from "ts/RE/REGame_Sequel";
+import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -80,7 +81,6 @@ export class RECommandContext
             return REResponse.Consumed;
         };
         this._recodingCommandList.push({ name: "openDialog", func: m1 });
-
         Log.postCommand("openDialog");
     }
 
@@ -91,9 +91,18 @@ export class RECommandContext
             this._visualAnimationWaiting = true;
             return REResponse.Consumed;
         };
-        this._recodingCommandList.push({ name: "postSequel", func: m1 });
+        this._recodingCommandList.push({ name: "Sequel", func: m1 });
+        Log.postCommand("Sequel");
+    }
 
-        Log.postCommand("postSequel");
+    postConsumeActionToken(entity: REGame_Entity): void {
+        const m1 = () => {
+            Log.doCommand("ConsumeActionToken");
+            this._owner.consumeActionToken(entity);
+            return REResponse.Consumed;
+        };
+        this._recodingCommandList.push({ name: "ConsumeActionToken", func: m1 });
+        Log.postCommand("ConsumeActionToken");
     }
 
     visualAnimationWaiting(): boolean {

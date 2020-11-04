@@ -26,6 +26,11 @@ export class TestEnv {
 
         // Unique Entitise
         REData.addActor("Unique1");
+
+        // Enemies
+        REData.addMonster("Enemy1");
+        REData.addMonster("Enemy2");
+        REData.addMonster("Enemy3");
         
         REGame.integration = new TestEnvIntegration();
     }
@@ -55,7 +60,6 @@ export class TestEnvIntegration extends REIntegration {
     onDialogClosed(context: REDialogContext): void {
     }
     onUpdateDialog(context: REDialogContext): void {
-        throw new Error("Method not implemented.");
     }
     onEntityEnteredMap(entity: REGame_Entity): void {
     }

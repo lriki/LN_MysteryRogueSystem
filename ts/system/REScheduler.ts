@@ -11,20 +11,20 @@ import { REResponse } from "./RECommand";
 import { REGame_Sequel, RESequelSet } from "ts/RE/REGame_Sequel";
 
 
-interface UnitInfo
+export interface UnitInfo
 {
     unit: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
     attr: REGame_UnitAttribute;     // cache for avoiding repeated find.
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
 
-interface ActionInfo
+export interface ActionInfo
 {
     unit: UnitInfo;         // 行動させたい unit
     actionCount: number;    // 何回連続行動するか。Run のマージなどで 0 になることもある。
 };
 
-interface RunInfo
+export interface RunInfo
 {
     actions: ActionInfo[];
 };
@@ -83,6 +83,10 @@ export class REScheduler
 
     commandContext(): RECommandContext {
         return this._commandContext;
+    }
+
+    actionScheduleTable(): RunInfo[] {
+        return this._runs;
     }
 
     stepSimulation(): void {
@@ -234,6 +238,14 @@ export class REScheduler
         Log.d("e update_RunStarting");
     }
 
+    
+    consumeActionToken(entity: REGame_Entity): void {
+        const attr = entity.findAttribute(REGame_UnitAttribute);
+        assert(attr);
+        attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
+        this.nextActionUnit();
+    }
+
     nextActionUnit() {
         //const run = this._runs[this._currentRun];
 
@@ -279,8 +291,7 @@ export class REScheduler
         const action = run.actions[this._currentUnit];
         const unit = action.unit;
 
-        if (unit.unit && unit.attr.manualMovement()) {
-            console.log("!!!!!!!_callDecisionPhase");
+        if (unit.unit && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
             unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
             
 
@@ -294,45 +305,73 @@ export class REScheduler
     
     private update_AIMinorAction(): void {
         const run = this._runs[this._currentRun];
-        const action = run.actions[this._currentUnit];
-        const unit = action.unit;
-
-        if (unit.unit) {
-            if (!unit.attr.manualMovement()) {
-                // TODO:
-                assert(0);
-            }
-        }
-
-        // 全 Unit 分処理を終えたら次の Phase へ
-        this._currentUnit++;
         if (this._currentUnit >= run.actions.length) {
             this._currentUnit = 0;
             this._phase = SchedulerPhase.AIMajorAction;
+            return;
         }
+
+        const action = run.actions[this._currentUnit];
+        const unit = action.unit;
+
+        if (unit.unit && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+
+            const response = unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.AIMinor);
+            if (response == REResponse.Consumed) {
+                // CommandContext.postConsumeActionToken() などで行動消費することを期待する
+                this._commandContext._submit();
+            }
+            else {
+                // 何も行動しなかった
+                this.consumeActionToken(unit.unit);
+            }
+        }
+        else {
+            // このフェーズで行動決定するべき Entity ではなかった。そのままフェーズを進める。
+            this.nextActionUnit();
+        }
+
+
+        // 全 Unit 分処理を終えたら次の Phase へ
+        //this._currentUnit++;
+        //if (this._currentUnit >= run.actions.length) {
+        //    this._currentUnit = 0;
+        //    this._phase = SchedulerPhase.AIMajorAction;
+        //}
     }
     
     private update_AIMajorAction(): void {
         const run = this._runs[this._currentRun];
-        const action = run.actions[this._currentUnit];
-        const unit = action.unit;
-
-        if (unit.unit) {
-            if (!unit.attr.manualMovement()) {
-                // TODO:
-                assert(0);
-            }
-        }
-
-        // 全 Unit 分処理を終えたら次の Phase へ
-        this._currentUnit++;
         if (this._currentUnit >= run.actions.length) {
             this._currentUnit = 0;
             this._phase = SchedulerPhase.RunEnding;
+            return;
         }
+
+        const action = run.actions[this._currentUnit];
+        const unit = action.unit;
+
+        let consumed = false;
+        if (unit.unit && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+            const response = unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.AIMajor);
+            if (response == REResponse.Consumed) {
+                // CommandContext.postConsumeActionToken() などで行動消費することを期待する
+                this._commandContext._submit();
+            }
+            else {
+                // 何も行動しなかった
+                this.consumeActionToken(unit.unit);
+            }
+        }
+        else {
+            // このフェーズで行動決定するべき Entity ではなかった。そのままフェーズを進める。
+            this.nextActionUnit();
+        }
+
     }
     
     private update_RunEnding(): void {
+        console.log("update_RunEnding");
         this._currentRun++;
         if (this._currentRun >= this._runs.length) {
             this._phase = SchedulerPhase.TurnEnding;
@@ -362,11 +401,12 @@ export class REScheduler
                 const attr = entity.findAttribute(REGame_UnitAttribute);
                 if (attr) {
                     assert(attr.factionId() > 0);
+                    assert(attr.speedLevel() != 0);
 
-                    let actionCount = attr.speedLevel() + 1;
+                    let actionCount = attr.speedLevel();
                     
                     // 鈍足状態の対応
-                    if (actionCount <= 0) {
+                    if (actionCount < 0) {
                         actionCount = 1;
                     }
 

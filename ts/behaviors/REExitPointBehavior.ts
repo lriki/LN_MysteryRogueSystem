@@ -46,20 +46,9 @@ export class REExitPointBehavior extends REGame_Behavior {
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
 
         if (cmd.action().id == REData.ProceedFloorActionId) {
-            const event = $gameMap.event(entity.rmmzEventId);
-            
-            //console.log("transfar", actor);
-            console.log("event", event);
-
-            if (event.isREPrefab()) {
-                assert(0);  // TODO: Not implemeted.
-            }
-            else {
-                context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));
-                //event.start();
-            }
-
-
+            //const event = $gameMap.event(entity.rmmzEventId);
+        
+            context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));
         }
 
         return REResponse.Pass;
