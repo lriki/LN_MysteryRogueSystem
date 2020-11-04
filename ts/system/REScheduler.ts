@@ -18,15 +18,15 @@ export interface UnitInfo
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
 
-export interface ActionInfo
+export interface RunStepInfo
 {
     unit: UnitInfo;         // 行動させたい unit
-    actionCount: number;    // 何回連続行動するか。Run のマージなどで 0 になることもある。
+    iterationCount: number;    // 何回連続行動できるか。Run のマージなどで 0 になることもある。
 };
 
 export interface RunInfo
 {
-    actions: ActionInfo[];
+    steps: RunStepInfo[];
 };
 
 enum SchedulerPhase
@@ -281,14 +281,14 @@ export class REScheduler
     private update_ManualAction(): void {
 
         const run = this._runs[this._currentRun];
-        if (this._currentUnit >= run.actions.length) {
+        if (this._currentUnit >= run.steps.length) {
             this._currentUnit = 0;
             this._phase = SchedulerPhase.AIMinorAction;
             return;
         }
 
 
-        const action = run.actions[this._currentUnit];
+        const action = run.steps[this._currentUnit];
         const unit = action.unit;
 
         if (unit.unit && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
@@ -305,13 +305,13 @@ export class REScheduler
     
     private update_AIMinorAction(): void {
         const run = this._runs[this._currentRun];
-        if (this._currentUnit >= run.actions.length) {
+        if (this._currentUnit >= run.steps.length) {
             this._currentUnit = 0;
             this._phase = SchedulerPhase.AIMajorAction;
             return;
         }
 
-        const action = run.actions[this._currentUnit];
+        const action = run.steps[this._currentUnit];
         const unit = action.unit;
 
         if (unit.unit && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
@@ -342,13 +342,13 @@ export class REScheduler
     
     private update_AIMajorAction(): void {
         const run = this._runs[this._currentRun];
-        if (this._currentUnit >= run.actions.length) {
+        if (this._currentUnit >= run.steps.length) {
             this._currentUnit = 0;
             this._phase = SchedulerPhase.RunEnding;
             return;
         }
 
-        const action = run.actions[this._currentUnit];
+        const action = run.steps[this._currentUnit];
         const unit = action.unit;
 
         let consumed = false;
@@ -427,16 +427,16 @@ export class REScheduler
 
         this._runs = new Array(runCount);
         for (let i = 0; i < this._runs.length; i++) {
-            this._runs[i] = { actions: []};
+            this._runs[i] = { steps: []};
         }
 
         // Faction にかかわらず、マニュアル操作 Unit は最優先で追加する
         this._units.forEach(unit => {
             if (unit.attr.manualMovement()) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].actions.push({
+                    this._runs[i].steps.push({
                         unit: unit,
-                        actionCount: 1,
+                        iterationCount: 1,
                     });
                 }
             }
@@ -446,9 +446,9 @@ export class REScheduler
         this._units.forEach(unit => {
             if (!unit.attr.manualMovement() && unit.actionCount >= 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].actions.push({
+                    this._runs[i].steps.push({
                         unit: unit,
-                        actionCount: 1,
+                        iterationCount: 1,
                     });
                 }
             }
@@ -458,9 +458,9 @@ export class REScheduler
         this._units.forEach(unit => {
             if (!unit.attr.manualMovement() && unit.actionCount < 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[this._runs.length - 1 - i].actions.push({  	// 後ろから詰めていく
+                    this._runs[this._runs.length - 1 - i].steps.push({  	// 後ろから詰めていく
                         unit: unit,
-                        actionCount: 1,
+                        iterationCount: 1,
                     });
                 }
             }
@@ -469,8 +469,51 @@ export class REScheduler
         //console.log("unis:", this._units);
         //console.log("runs:", this._runs);
 
-        // TODO: Merge
+        // Merge
+        {
+            const flatSteps = this._runs.flatMap(x => x.steps);
+    
+            for (let i1 = flatSteps.length - 1; i1 >= 0; i1--) {
+                const step1 = flatSteps[i1];
+    
+                // step1 の前方を検索
+                for (let i2 = i1 - 1; i2 >= 0; i2--) {
+                    const step2 = flatSteps[i2];
+    
+                    if (step2.unit.attr.factionId() != step1.unit.attr.factionId()) {
+                        // 別勢力の行動予定が見つかったら終了
+                        break;
+                    }
+    
+                    if (step2.unit.unit == step1.unit.unit) {
+                        // 勢力をまたがずに同一 entity の行動予定が見つかったら、
+                        // そちらへ iterationCount をマージする。
+                        step2.iterationCount += step1.iterationCount;
+                        step1.iterationCount = 0;
+                        break;
+                    }
+                }
+            }
+        }
 
+    }
+
+    _foreachRunSteps(start: RunStepInfo, func: (step: RunStepInfo) => boolean) {
+        let each = false;
+        for (let i = 0; i < this._runs.length; i++) {
+            const run = this._runs[i];
+            for (let j = 0; j < run.steps.length; j++) {
+                if (!each && run.steps[i] == start) {
+                    each = true;
+                }
+
+                if (each) {
+                    if (!func(run.steps[i])) {
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {

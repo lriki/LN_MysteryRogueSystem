@@ -198,7 +198,7 @@ test('TurnOrderTable', () => {
         const runs = REGame.scheduler.actionScheduleTable();
         expect(runs.length).toBe(3);    // map 上の Entity のうち最大速度はx3なので、Run は3つ。
 
-        const run0 = runs[0].actions;
+        const run0 = runs[0].steps;
         expect(run0.length).toBe(5);
         expect(run0[0].unit.unit).toEqual(actor1);  // 先頭は Player
         expect(run0[1].unit.unit).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
@@ -206,7 +206,7 @@ test('TurnOrderTable', () => {
         expect(run0[3].unit.unit).toEqual(enemy5);
         expect(run0[4].unit.unit).toEqual(enemy6);
 
-        const run1 = runs[1].actions;
+        const run1 = runs[1].steps;
         expect(run1.length).toBe(4);
         expect(run1[0].unit.unit).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
         expect(run1[1].unit.unit).toEqual(enemy4);
@@ -214,7 +214,7 @@ test('TurnOrderTable', () => {
         expect(run1[3].unit.unit).toEqual(enemy6);
 
         // 最後の Run には、x2速以上の余りと、x1速以下の Entity が積まれている
-        const run2 = runs[2].actions;
+        const run2 = runs[2].steps;
         expect(run2.length).toBe(6);
         expect(run2[0].unit.unit).toEqual(enemy5);  // x3 優先
         expect(run2[1].unit.unit).toEqual(enemy6);  // x3 優先
