@@ -13,7 +13,7 @@ import { REGame_Sequel, RESequelSet } from "ts/RE/REGame_Sequel";
 
 export interface UnitInfo
 {
-    unit: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
+    entity: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
     attr: REGame_UnitAttribute;     // cache for avoiding repeated find.
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
@@ -43,6 +43,7 @@ enum SchedulerPhase
 
     /**
      * AI 行動フェーズ 1
+     * モンスターの移動・攻撃対象決定
      */
     AIMinorAction,
 
@@ -70,8 +71,10 @@ export class REScheduler
     private _units: UnitInfo[] = [];
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
-    private _currentUnit: number = 0;
+    private _currentStep: number = 0;
     private _sequelSet: RESequelSet = new RESequelSet();
+
+    _actionConsumed: boolean = false;
     
     /**  */
     public signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
@@ -232,8 +235,14 @@ export class REScheduler
     private update_RunStarting(): void {
         Log.d("s update_RunStarting");
 
-        this._currentUnit = 0;
+        this._currentStep = -1;
         this._phase = SchedulerPhase.ManualAction;
+
+        this._runs.forEach(run => {
+            run.steps.forEach(step => {
+                step.unit.attr._targetingEntityId = 0;
+            });
+        })
 
         Log.d("e update_RunStarting");
     }
@@ -243,131 +252,139 @@ export class REScheduler
         const attr = entity.findAttribute(REGame_UnitAttribute);
         assert(attr);
         attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
-        this.nextActionUnit();
+        //this.nextActionUnit();
+        this._actionConsumed = true;
     }
 
+    /*
     nextActionUnit() {
-        //const run = this._runs[this._currentRun];
+        const run = this._runs[this._currentRun];
+        const step = run.steps[this._currentStep];
 
-        // 全 Unit 分処理を終えたら次の Phase へ
-        this._currentUnit++;
-        /*
-        if (this._currentUnit >= run.actions.length) {
-            this._currentUnit = 0;
-
-            switch (this._phase) {
-                case SchedulerPhase.ManualAction:
-                    this._phase = SchedulerPhase.AIMinorAction;
-                    break;
-                case SchedulerPhase.AIMinorAction:
-                    this._phase = SchedulerPhase.AIMajorAction;
-                    break;
-                case SchedulerPhase.AIMinorAction:
-                    this._phase = SchedulerPhase.RunEnding;
-                    break;
-                default:
-                    assert(0);
-                    break;
+        if (this._phase == SchedulerPhase.AIMinorAction && step.unit.attr._targetingEntityId > 0) {
+            // 
+            this._currentStep++;
+        }
+        else {
+            if (step.iterationCount > 0) {
+                step.iterationCount--;
+                console.log("decl iterationCount:", step.iterationCount, step.unit.unit?._name);
+                console.trace();
             }
             
-            return false;
+            if (step.iterationCount <= 0) {
+                this._currentStep++;
+            }
+        }
+        
+
+    }
+    */
+    
+
+    private prepareActionPhase(): void {
+        const run = this._runs[this._currentRun];
+
+        if (this._currentStep < 0) {
+            // 初回
+            this._currentStep++;
         }
         else {
-            return true;
+            // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
+            if (this._actionConsumed) {
+                // 行動トークンを消費する行動がとられた。
+                const step = run.steps[this._currentStep];
+                step.iterationCount--;
+                if (step.iterationCount <= 0) {
+                    this._currentStep++;
+                }
+                else {
+                    // まだ iterationCount が残っているので、同じ Step を再び実行する
+                }
+            }
+            else {
+                // 向き変更のみなど、行動トークンは消費しなかった
+            }
         }
-        */
     }
-    
+
     private update_ManualAction(): void {
+        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
+        this.prepareActionPhase();
 
         const run = this._runs[this._currentRun];
-        if (this._currentUnit >= run.steps.length) {
-            this._currentUnit = 0;
-            this._phase = SchedulerPhase.AIMinorAction;
-            return;
-        }
-
-
-        const action = run.steps[this._currentUnit];
-        const unit = action.unit;
-
-        if (unit.unit && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
+        while (true) {
+            if (this._currentStep >= run.steps.length) {
+                this._currentStep = -1;
+                this._phase = SchedulerPhase.AIMinorAction;
+                return;
+            }
             
-
-            // swap
-            this._commandContext._submit();
-        }
-        else {
-            this.nextActionUnit();
+            const step = run.steps[this._currentStep];
+            const unit = step.unit;
+            if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+                unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
+                this._commandContext._submit(); // swap
+                return;
+            }
+            else {
+                // このフェーズでは実行できない step だった。次の step へ。
+                this._currentStep++;
+            }
         }
     }
     
     private update_AIMinorAction(): void {
+        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
+        this.prepareActionPhase();
+
         const run = this._runs[this._currentRun];
-        if (this._currentUnit >= run.steps.length) {
-            this._currentUnit = 0;
-            this._phase = SchedulerPhase.AIMajorAction;
-            return;
-        }
-
-        const action = run.steps[this._currentUnit];
-        const unit = action.unit;
-
-        if (unit.unit && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-
-            const response = unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.AIMinor);
-            if (response == REResponse.Consumed) {
-                // CommandContext.postConsumeActionToken() などで行動消費することを期待する
-                this._commandContext._submit();
+        while (true) {
+            if (this._currentStep >= run.steps.length) {
+                this._currentStep = -1;
+                this._phase = SchedulerPhase.AIMajorAction;
+                return;
+            }
+            
+            const step = run.steps[this._currentStep];
+            const unit = step.unit;
+            if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
+                unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
+                unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.AIMinor);
+                this._commandContext._submit(); // swap
+                return;
             }
             else {
-                // 何も行動しなかった
-                this.consumeActionToken(unit.unit);
+                // このフェーズでは実行できない step だった。次の step へ。
+                this._currentStep++;
             }
         }
-        else {
-            // このフェーズで行動決定するべき Entity ではなかった。そのままフェーズを進める。
-            this.nextActionUnit();
-        }
-
-
-        // 全 Unit 分処理を終えたら次の Phase へ
-        //this._currentUnit++;
-        //if (this._currentUnit >= run.actions.length) {
-        //    this._currentUnit = 0;
-        //    this._phase = SchedulerPhase.AIMajorAction;
-        //}
     }
     
     private update_AIMajorAction(): void {
+        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
+        this.prepareActionPhase();
+
         const run = this._runs[this._currentRun];
-        if (this._currentUnit >= run.steps.length) {
-            this._currentUnit = 0;
-            this._phase = SchedulerPhase.RunEnding;
-            return;
-        }
-
-        const action = run.steps[this._currentUnit];
-        const unit = action.unit;
-
-        let consumed = false;
-        if (unit.unit && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            const response = unit.unit._callDecisionPhase(this._commandContext, DecisionPhase.AIMajor);
-            if (response == REResponse.Consumed) {
-                // CommandContext.postConsumeActionToken() などで行動消費することを期待する
-                this._commandContext._submit();
+        while (true) {
+            if (this._currentStep >= run.steps.length) {
+                this._currentStep = -1;
+                this._phase = SchedulerPhase.RunEnding;
+                return;
+            }
+            
+            const step = run.steps[this._currentStep];
+            const unit = step.unit;
+            if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+                unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.AIMajor);
+                this._commandContext._submit(); // swap
+                return;
             }
             else {
-                // 何も行動しなかった
-                this.consumeActionToken(unit.unit);
+                // このフェーズでは実行できない step だった。次の step へ。
+                this._currentStep++;
             }
         }
-        else {
-            // このフェーズで行動決定するべき Entity ではなかった。そのままフェーズを進める。
-            this.nextActionUnit();
-        }
-
     }
     
     private update_RunEnding(): void {
@@ -411,7 +428,7 @@ export class REScheduler
                     }
 
                     this._units.push({
-                        unit: entity,
+                        entity: entity,
                         attr: attr, 
                         actionCount: actionCount
                     });
@@ -485,7 +502,7 @@ export class REScheduler
                         break;
                     }
     
-                    if (step2.unit.unit == step1.unit.unit) {
+                    if (step2.unit.entity == step1.unit.entity) {
                         // 勢力をまたがずに同一 entity の行動予定が見つかったら、
                         // そちらへ iterationCount をマージする。
                         step2.iterationCount += step1.iterationCount;

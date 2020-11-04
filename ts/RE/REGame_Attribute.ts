@@ -59,6 +59,7 @@ export class REGame_UnitAttribute extends REGame_Attribute {
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
     _actionTokenCount: number = 0;
+    _targetingEntityId: number = 0;   // AIMinor Phase で、攻撃対象を確定したかどうか。以降、Run 内では iterationCount が残っていても MinorAction を行わない
 
     factionId(): number { return this._factionId; }
     setFactionId(value: number): REGame_UnitAttribute { this._factionId = value; return this; }
