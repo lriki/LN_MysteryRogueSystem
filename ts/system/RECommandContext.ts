@@ -87,6 +87,7 @@ export class RECommandContext
     }
 
     postSequel(entity: REGame_Entity, sequelId: number) {
+        assert(sequelId > 0);
         const m1 = () => {
             Log.doCommand("Sequel");
             this._owner.addSequel(new REGame_Sequel(entity, sequelId));
