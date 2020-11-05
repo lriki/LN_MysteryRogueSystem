@@ -86,6 +86,20 @@ export interface BasicBehaviors {
     unit: number;
 }
 
+export interface BasicSequels {
+    /** 移動 */
+    MoveSequel: number;
+    
+    /** 
+     * 倒されたとき
+     * 
+     * Sequel はあくまで演出が目的なので、仮に CollapseSequel の発行を忘れたときでも
+     * 演出が表示されないだけで Entity は消される等処理される。
+     */
+    CollapseSequel: number;
+}
+
+
 export class RESystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
@@ -100,6 +114,7 @@ export class RESystem {
     static parameters: BasicParameters;
     static attributes: BasicAttributes;
     static behaviors: BasicBehaviors;
+    static sequels: BasicSequels;
 
     static createAttribute(dataId: number) {
         const i = REData._attributeFactories[dataId]();

@@ -15,7 +15,7 @@ export class REGame_Sequel {
     constructor(entity: REGame_Entity, sequelId: number) {
         this._entity = entity;
         this._sequelId = sequelId;
-        this._parallel = false;
+        this._parallel = REData.sequels[this._sequelId].parallel;
     }
 
     entity(): REGame_Entity {

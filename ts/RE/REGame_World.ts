@@ -1,6 +1,7 @@
 import { REGame_Entity } from "./REGame_Entity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
+import { Random } from "ts/math/Random";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -8,6 +9,7 @@ import { REGame } from "./REGame";
 export class RE_Game_World
 {
     private _entities: (REGame_Entity | undefined)[] = [];
+    private _random: Random = new Random(Math.floor(Math.random() * 65535) + 1);
 
     constructor() {
         const e = this.spawnEntity();  // [0] dummy entity
@@ -20,6 +22,10 @@ export class RE_Game_World
             return e;
         else
             throw new Error("Invalid entity. id:" + id);
+    }
+
+    random(): Random {
+        return this._random;
     }
 
     /**

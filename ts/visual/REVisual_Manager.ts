@@ -15,6 +15,7 @@ import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REDataManager } from "ts/data/REDataManager";
 import { RE } from "ts/dialogs/EventExecutionDialog";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
+import { RESystem } from "ts/system/RESystem";
 
 /**
  */
@@ -29,7 +30,7 @@ export class REVisual_Manager
         //this._dialogVisual = null;
 
 
-        this._visualSequelFactory[REData.MoveSequel] = () => new REVisualSequel_Move();
+        this._visualSequelFactory[RESystem.sequels.MoveSequel] = () => new REVisualSequel_Move();
     }
 
     tileSize(): Vector2 {

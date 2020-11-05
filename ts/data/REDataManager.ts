@@ -95,6 +95,13 @@ export class REDataManager
             decision: REData.addBehavior("Decision", () => new REGame_DecisionBehavior()),
             unit: REData.addBehavior("Unit", () => new REUnitBehavior()),
         };
+
+        // Sequels
+        RESystem.sequels = {
+            MoveSequel: REData.addSequel("Move"),
+            CollapseSequel: REData.addSequel("Collapse"),
+        };
+        REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
     }
 
     static loadData(): void

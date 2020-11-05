@@ -29,7 +29,7 @@ export class REUnitBehavior extends REGame_Behavior {
             const offset = Helpers.dirToTileOffset(args.direction);
 
             if (REGame.map.moveEntity(entity, entity.x + offset.x, entity.y + offset.y, entity.queryProperty(RESystem.properties.homeLayer))) {
-                context.postSequel(entity, REData.MoveSequel);
+                context.postSequel(entity, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 entity.immediatelyAfterAdjacentMoving = true;

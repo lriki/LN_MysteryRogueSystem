@@ -22,8 +22,13 @@ export class REGame_DecisionBehavior extends REGame_Behavior
             return REResponse.Consumed;
         }
         else if (phase == DecisionPhase.AIMinor) {
-            // TODO: とりあえず右へ移動するだけ
-            let dir = 6;
+            // 右へ移動するだけ
+            //const dir = 6;
+
+            // ランダム移動
+            const table = [1,2,3,4,6,7,8,9];
+            const dir = table[REGame.world.random().nextIntWithMax(8)];
+
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
                 context.postAction(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
                 context.postAction(REData.MoveToAdjacentActionId, entity, undefined, { direction: dir });

@@ -8442,7 +8442,7 @@ declare class Game_CharacterBase {
      * 
      * @return  
      */
-    characterName(): /* !this._characterName */ any;
+    characterName(): /* !this._characterName */ string;
 
     /**
      * 

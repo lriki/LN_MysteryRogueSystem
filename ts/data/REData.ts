@@ -238,6 +238,8 @@ export interface REData_Sequel
 
     /** Name */
     name: string;
+
+    parallel: boolean;
 }
 
 export interface REData_Parameter
@@ -265,7 +267,7 @@ export class REData
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: REData_Action[] = [{id: 0, displayName: 'null'}];
-    static sequels: REData_Sequel[] = [{id: 0, name: 'null'}];
+    static sequels: REData_Sequel[] = [{id: 0, name: 'null', parallel: false}];
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
@@ -281,7 +283,7 @@ export class REData
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
         this.actions = [{id: 0, displayName: 'null'}];
-        this.sequels = [{id: 0, name: 'null'}];
+        this.sequels = [{id: 0, name: 'null', parallel: false}];
         this.parameters = [{id: 0, name: 'null'}];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
@@ -396,6 +398,16 @@ export class REData
             name: name,
         });
         this._behaviorFactories.push(factory);
+        return newId;
+    }
+
+    static addSequel(name: string): number {
+        const newId = this.sequels.length;
+        this.sequels.push({
+            id: newId,
+            name: name,
+            parallel: false,
+        });
         return newId;
     }
     
@@ -577,18 +589,4 @@ export class REData
 
 
 
-
-    //----------------------------------------
-    // Sequels.
-
-    /** 移動 */
-    static MoveSequel: number;
-    
-    /** 
-     * 倒されたとき
-     * 
-     * Sequel はあくまで演出が目的なので、仮に CollapseSequel の発行を忘れたときでも
-     * 演出が表示されないだけで Entity は消される等処理される。
-     */
-    static CollapseSequel: number;
 }
