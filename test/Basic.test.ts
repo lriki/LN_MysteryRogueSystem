@@ -33,7 +33,6 @@ test('basic', () => {
     // シミュレーション 1 回実行
     REGameManager.update();
     
-    const commandContext = REGame.scheduler.commandContext();
     const dialogContext = REGame.scheduler._getDialogContext();
     
     // 方向転換してみる (ターン消費無し)
@@ -44,7 +43,7 @@ test('basic', () => {
     
         // 向き変更。行動を消費せず Dialog を閉じる
         const args1: REDirectionChangeArgs = { direction: 9 };
-        commandContext.postAction(REData.DirectionChangeActionId, actor1, undefined, args1);
+        dialogContext.postAction(REData.DirectionChangeActionId, actor1, undefined, args1);
         dialogContext.closeDialog(false);
     
         // この時点では向きは変更されていない
@@ -66,7 +65,7 @@ test('basic', () => {
     // 一歩下に移動してみる (ターン消費あり)
     {
         const args2: REMoveToAdjacentArgs = { direction: 2 };
-        commandContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, args2);
+        dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, args2);
         dialogContext.closeDialog(true);
     
         // シミュレーション実行。実際に移動が行われる
@@ -239,14 +238,13 @@ test('TurnOrderTable', () => {
         expect(run2[5].iterationCount).toEqual(1);
     }
 
-    const commandContext = REGame.scheduler.commandContext();
     const dialogContext = REGame.scheduler._getDialogContext();
     
     //--------------------
     // 移動量から実際に行動した数を判断する
     {
         // player を右へ移動
-        commandContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
         dialogContext.closeDialog(true);
 
         console.log("-------------------------------------");
@@ -270,7 +268,7 @@ test('TurnOrderTable', () => {
     // 2ターン目
     {
         // player を右へ移動
-        commandContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
         dialogContext.closeDialog(true);
     
         // AI行動決定

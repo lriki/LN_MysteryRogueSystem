@@ -10,7 +10,6 @@ import { REDialogVisualWindowLayer } from "./REDialogVisual";
 export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
 
     onUpdate(context: REDialogContext) {
-        const commandContext = context.commandContext();
         const entity = context.causeEntity();
         if (!entity) return;
         
@@ -30,8 +29,7 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         }
 
         //if (Input.dir8 != 0 && Input.dir8 != entity.dir) {
-        //    const commandContext = context.commandContext();
-        //    commandContext.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, new REDirectionChangeCommand(Input.dir8));
+        //    context.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, new REDirectionChangeCommand(Input.dir8));
         //    context.closeDialog(false); // 行動消費無しで close
         //}
         let dir = Input.dir8;
@@ -39,10 +37,10 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
                 const args: REDirectionChangeArgs = { direction: dir };
-                commandContext.postAction(REData.DirectionChangeActionId, entity, undefined, args);
+                context.postAction(REData.DirectionChangeActionId, entity, undefined, args);
             }
             const args: REMoveToAdjacentArgs = { direction: dir };
-            commandContext.postAction(REData.MoveToAdjacentActionId, entity, undefined, args);
+            context.postAction(REData.MoveToAdjacentActionId, entity, undefined, args);
             context.closeDialog(true);
             return;
         }

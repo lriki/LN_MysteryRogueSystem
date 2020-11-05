@@ -6,6 +6,8 @@ import { REScheduler } from "./REScheduler";
 import { assert, Log } from "ts/Common";
 import { REGame_Sequel } from "ts/RE/REGame_Sequel";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
+import { REGame } from "ts/RE/REGame";
+import { RERecordingCommandType } from "./RECommandRecorder";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -70,7 +72,7 @@ export class RECommandContext
             };
             this._recodingCommandList.push({ name: "sendReaction", func: m4 });
         }
-        
+
         Log.postCommand("postAction");
     }
 

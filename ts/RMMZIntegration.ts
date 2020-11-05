@@ -114,7 +114,7 @@ export class RMMZIntegration extends REIntegration {
             case "ExitPoint":
                 return REEntityFactory.newExitPoint();
             case "Enemy":
-                return REEntityFactory.newMonster(data.enemyId);
+                return REEntityFactory.newMonster(data.enemyId ?? 0);
             default:
                 throw new Error("Invalid entity name: " + name);
         }

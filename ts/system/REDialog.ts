@@ -5,6 +5,7 @@ import { REGame_Entity } from "ts/RE/REGame_Entity";
 //import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { RECommand, REResponse } from "./RECommand";
 import { RECommandContext } from "./RECommandContext";
+import { RERecordingCommandType } from "./RECommandRecorder";
 import { REScheduler } from "./REScheduler";
 
 export class REDialogContext
@@ -36,12 +37,41 @@ export class REDialogContext
         return this._commandContext;
     }
 
+    
+    postAction(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
+        this._commandContext.postAction(actionId, actor, reactor, args);
+        
+        if (REGame.recorder.isRecording()) {
+            REGame.recorder.push({
+                type: RERecordingCommandType.Action,
+                data: {
+                    actionId: actionId,
+                    actorEntityId: actor.id(),
+                    reactorEntityId: (reactor) ? reactor.id() : 0,
+                    args: args,
+                }
+            });
+        }
+        
+    }
+
     closeDialog(consumeAction: boolean) {
+        if (consumeAction && this._causeEntity) {
+            //this._owner.consumeActionToken(this._causeEntity);
+            this._commandContext.postConsumeActionToken(this._causeEntity);
+            
+            if (REGame.recorder.isRecording()) {
+                REGame.recorder.push({
+                    type: RERecordingCommandType.ConsumeActionToken,
+                    data: {
+                        entityId: this._causeEntity.id(),
+                    }
+                });
+            }
+        
+        }
         this._owner._closeDialogModel();
         this._commandContext._next();
-        if (consumeAction && this._causeEntity) {
-            this._owner.consumeActionToken(this._causeEntity);
-        }
     }
 
     setCauseEntity(value: REGame_Entity) {
@@ -58,8 +88,11 @@ export class REDialogContext
 
     _update() {
         assert(this._dialogModel !== null);
+
+        //REGame.recorder._recording = true;
         this._dialogModel.onUpdate(this);
         REGame.integration.onUpdateDialog(this);
+        //REGame.recorder._recording = false;
 
         //if (this._visual) {
         //    this._visual.onUpdate(this);

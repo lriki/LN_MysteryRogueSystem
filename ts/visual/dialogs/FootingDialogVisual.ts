@@ -38,7 +38,7 @@ export namespace RE {
             const entity = this.dialogContext().causeEntity();
             assert(entity);
 
-            this.commandContext().postAction(this._actions[index], entity, this._targetEntity);
+            this.dialogContext().postAction(this._actions[index], entity, this._targetEntity);
             this.doneDialog(true);
         }
     }

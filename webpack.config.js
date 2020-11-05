@@ -11,6 +11,7 @@ module.exports = {
     //mode: 'production',
     mode: 'development',
     entry: './ts/index.ts',
+    target: 'node',
     output: {
         path: __dirname,
         filename: './js/plugins/LN_RoguelikeEngine.js'

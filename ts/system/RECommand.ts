@@ -46,6 +46,10 @@ export class RECommand  // sealed
 
     /** Reaction 側 Entity */
     reactor(): REGame_Entity | undefined { return this._reactor; }
+
+    save(): string {
+        return JSON.stringify({ act: this._actionId, args: this.args });
+    }
 }
 
 

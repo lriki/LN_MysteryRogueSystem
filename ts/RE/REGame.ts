@@ -9,6 +9,7 @@ import { REScheduler } from "../system/REScheduler";
 import { REIntegration } from "../system/REIntegration";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
+import { RECommandRecorder } from "ts/system/RECommandRecorder";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -27,7 +28,7 @@ export class REGame
     static map: REGame_Map;
     static camera: REGame_Camera;
     static uniqueActorUnits: REGame_Entity[] = [];
-
+    static recorder: RECommandRecorder;
 
 
 }

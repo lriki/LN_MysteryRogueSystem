@@ -11,6 +11,7 @@ import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
 import { assert } from "ts/Common";
+import { RECommandRecorder } from "./RECommandRecorder";
 
 
 /**
@@ -27,6 +28,7 @@ export class REGameManager
         REGame.map = new REGame_Map();
         REGame.camera = new REGame_Camera();
         REGame.uniqueActorUnits = [];
+        REGame.recorder = new RECommandRecorder();
 
         // Create unique units
         REData.actors.forEach(x => {

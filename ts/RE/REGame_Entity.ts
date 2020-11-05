@@ -7,7 +7,7 @@ import { BlockLayerKind } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
 
-
+export type EntityId = number;
 
 enum BlockLayer
 {

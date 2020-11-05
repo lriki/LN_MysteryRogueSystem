@@ -13,9 +13,9 @@ export class REDialogVisualWindowLayer {
         return REGame.scheduler._getDialogContext();
     }
 
-    protected commandContext(): RECommandContext {
-        return REGame.scheduler.commandContext();
-    }
+    //protected commandContext(): RECommandContext {
+    //    return REGame.scheduler.commandContext();
+    //}
 
     // SubDialog が push されたとき
     onCreate() {
