@@ -7,6 +7,7 @@ import { RECommand, REResponse } from "./RECommand";
 import { RECommandContext } from "./RECommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { REScheduler } from "./REScheduler";
+import { RESystem } from "./RESystem";
 
 export class REDialogContext
 {
@@ -91,7 +92,7 @@ export class REDialogContext
 
         //REGame.recorder._recording = true;
         this._dialogModel.onUpdate(this);
-        REGame.integration.onUpdateDialog(this);
+        RESystem.integration.onUpdateDialog(this);
         //REGame.recorder._recording = false;
 
         //if (this._visual) {

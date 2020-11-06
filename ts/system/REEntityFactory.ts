@@ -21,8 +21,8 @@ export class REEntityFactory {
             new REGame_UnitAttribute()
                 .setFactionId(REData.ActorDefaultFactionId),
         ]
-        e.addBehavior(new REGame_DecisionBehavior());
-        e.addBehavior(new REUnitBehavior());
+        e.addBasicBehavior(new REGame_DecisionBehavior());
+        e.addBasicBehavior(new REUnitBehavior());
         return e;
     }
 
@@ -32,14 +32,14 @@ export class REEntityFactory {
             new REGame_UnitAttribute()
                 .setFactionId(REData.EnemeyDefaultFactionId),
         ]
-        e.addBehavior(new REGame_DecisionBehavior());
-        e.addBehavior(new REUnitBehavior());
+        e.addBasicBehavior(new REGame_DecisionBehavior());
+        e.addBasicBehavior(new REUnitBehavior());
         return e;
     }
 
     static newExitPoint(): REGame_Entity {
         const e = REGame.world.spawnEntity();
-        e.addBehavior(new REExitPointBehavior());
+        e.addBasicBehavior(new REExitPointBehavior());
         return e;
     }
 

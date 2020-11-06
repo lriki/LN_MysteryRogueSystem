@@ -1,5 +1,6 @@
 import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
+import { REIntegration } from "./REIntegration";
 
 export interface EntityKinds {
     actor: number;
@@ -110,11 +111,15 @@ export class RESystem {
         homeLayer: 1,
     }
 
+    // Database
     static entityKinds: EntityKinds;
     static parameters: BasicParameters;
     static attributes: BasicAttributes;
     static behaviors: BasicBehaviors;
     static sequels: BasicSequels;
+
+    
+    static integration: REIntegration;
 
     static createAttribute(dataId: number) {
         const i = REData._attributeFactories[dataId]();

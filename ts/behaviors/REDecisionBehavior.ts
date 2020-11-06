@@ -23,11 +23,11 @@ export class REGame_DecisionBehavior extends REGame_Behavior
         }
         else if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
-            //const dir = 6;
+            let dir = 6;
 
             // ランダム移動
-            const table = [1,2,3,4,6,7,8,9];
-            const dir = table[REGame.world.random().nextIntWithMax(8)];
+            //const table = [1,2,3,4,6,7,8,9];
+            //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
                 context.postAction(REData.DirectionChangeActionId, entity, undefined, { direction: dir });

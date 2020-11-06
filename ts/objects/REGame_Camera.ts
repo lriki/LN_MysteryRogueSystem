@@ -4,6 +4,7 @@ import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { RE_Game_World } from "../RE/REGame_World";
 import { REGame } from "ts/RE/REGame";
+import { RESystem } from "ts/system/RESystem";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -52,7 +53,7 @@ export class REGame_Camera
         this._transferingNewFloorId = floorId;
         this._transferingNewX = x;
         this._transferingNewY = y;
-        REGame.integration.onReserveTransferFloor(floorId);
+        RESystem.integration.onReserveTransferFloor(floorId);
     }
 
     clearFloorTransfering() {

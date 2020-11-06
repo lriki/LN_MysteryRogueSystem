@@ -45,7 +45,8 @@ export class REGame_Entity
 {
 
     attrbutes: REGame_Attribute[] = [];
-    private _behaviors: REGame_Behavior[] = [];
+    private _basicBehaviors: REGame_Behavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
+    //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
     _id: number = 0;
     _name: string = ""; // 主にデバッグ用
@@ -97,13 +98,28 @@ export class REGame_Entity
         return this;
     }
 
-    behaviors(): REGame_Behavior[] {
-        return this._behaviors;
+    basicBehaviors(): REGame_Behavior[] {
+        return this._basicBehaviors;
     }
 
-    addBehavior(value: REGame_Behavior) {
-        this._behaviors.push(value);
+    addBasicBehavior(value: REGame_Behavior) {
+        this._basicBehaviors.unshift(value);
     }
+
+    //addAdhocBehavior(value: REGame_Behavior) {
+    //    this._adhocBehaviors.unshift(value);
+    //}
+
+    addBehavior(value: REGame_Behavior) {
+        this._basicBehaviors.unshift(value);
+    }
+
+    removeBehavior(value: REGame_Behavior) {
+        const index = this._basicBehaviors.findIndex(x => x == value);
+        if (index >= 0) this._basicBehaviors.splice(index, 1);
+    }
+
+
     
     /** 
      * 動的に生成した Game_Event が参照する EventData.
@@ -139,8 +155,8 @@ export class REGame_Entity
     }
 
     queryProperty(propertyId: number): any {
-        for (let i = 0; i < this._behaviors.length; i++) {
-            const value = this._behaviors[i].onQueryProperty(propertyId);
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            const value = this._basicBehaviors[i].onQueryProperty(propertyId);
             if (value !== undefined) {
                 return value;
             }
@@ -150,15 +166,15 @@ export class REGame_Entity
 
     queryActions(): ActionId[] {
         let result: ActionId[] = [];    // TODO: あとで flatMap() 使うようにしたい
-        for (let i = 0; i < this._behaviors.length; i++) {
-            result = result.concat(this._behaviors[i].onQueryActions());
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            result = result.concat(this._basicBehaviors[i].onQueryActions());
         }
         return result;
     }
 
     _callBehaviorIterationHelper(func: (b: REGame_Behavior) => REResponse): REResponse {
-        for (let i = 0; i < this._behaviors.length; i++) {
-            const r = func(this._behaviors[i]);//this._behaviors[i].onPreAction(cmd);
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            const r = func(this._basicBehaviors[i]);//this._behaviors[i].onPreAction(cmd);
             if (r != REResponse.Pass) {
                 return r;
             }
@@ -197,7 +213,7 @@ export class REGame_Entity
         contents.x = this.x;
         contents.y = this.y;
         contents.attrbutes = this.attrbutes;
-        contents.behaviors = this._behaviors.map(x => x.dataId);
+        contents.behaviors = this._basicBehaviors.map(x => x.dataId);
         return contents;
     }
 
@@ -211,7 +227,7 @@ export class REGame_Entity
             Object.assign(i, x);
             return i;
         });
-        this._behaviors = contents.behaviors.map((x: number) => {
+        this._basicBehaviors = contents.behaviors.map((x: number) => {
             return RESystem.createBehavior(x);
         });
     }

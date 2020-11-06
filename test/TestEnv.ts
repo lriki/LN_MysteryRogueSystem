@@ -6,6 +6,7 @@ import { RESequelSet } from "ts/RE/REGame_Sequel";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
 import { REMapBuilder } from "ts/system/REMapBuilder";
+import { RESystem } from "ts/system/RESystem";
 
 export class TestEnv {
     static activeSequelSet: RESequelSet;
@@ -32,7 +33,7 @@ export class TestEnv {
         REData.addMonster("Enemy2");
         REData.addMonster("Enemy3");
         
-        REGame.integration = new TestEnvIntegration();
+        RESystem.integration = new TestEnvIntegration();
     }
 }
 

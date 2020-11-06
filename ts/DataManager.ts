@@ -5,6 +5,7 @@ import { RMMZIntegration } from "./RMMZIntegration";
 import { REData, REFloorMapKind } from "./data/REData";
 import { assert } from "./Common";
 import { REVisual } from "./visual/REVisual";
+import { RESystem } from "./system/RESystem";
 
 /*
  [2020/11/2] マップ読み込みメモ
@@ -127,6 +128,6 @@ DataManager.createGameObjects = function() {
 
     
     REVisual.initialize();
-    REGame.integration = new RMMZIntegration();
+    RESystem.integration = new RMMZIntegration();
     REGameManager.createGameObjects();
 }

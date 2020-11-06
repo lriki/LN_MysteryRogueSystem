@@ -45,7 +45,7 @@ export class REGame_Map
         assert(this._entityIds.length == 0);
         this._floorId = floorId;
         const builder = new REMapBuilder(this);
-        REGame.integration.onLoadFixedMap(builder);
+        RESystem.integration.onLoadFixedMap(builder);
     }
 
     setupEmptyMap(width: number, height: number) {
@@ -124,7 +124,7 @@ export class REGame_Map
 
         this._entityIds.push(entity._id);
 
-        REGame.integration.onEntityEnteredMap(entity);
+        RESystem.integration.onEntityEnteredMap(entity);
     }
 
     _removeEntity(entity: REGame_Entity): void {
@@ -132,7 +132,7 @@ export class REGame_Map
         this._entityIds = this._entityIds.filter(x => x != entity._id);
         entity.floorId = 0;
         
-        REGame.integration.onEntityLeavedMap(entity);
+        RESystem.integration.onEntityLeavedMap(entity);
     }
 
     /** エンティティを、このマップのみの AdhocEntity としてマークする */
@@ -151,7 +151,7 @@ export class REGame_Map
         this._entityIds.forEach(x => {
             const entity = REGame.world.entity(x);
             entity.floorId = 0;
-            REGame.integration.onEntityLeavedMap(entity);
+            RESystem.integration.onEntityLeavedMap(entity);
         });
 
         this._entityIds = [];

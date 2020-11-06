@@ -99,7 +99,7 @@ test('EntitySaveLoad', () => {
 
         // Behaviors
         const b1 = RESystem.createBehavior(RESystem.behaviors.unit) as REUnitBehavior;
-        actor1.addBehavior(b1);
+        actor1.addBasicBehavior(b1);
 
         const contents1 = actor1.makeSaveContents();
         contentsString = JSON.stringify(contents1);
@@ -122,8 +122,8 @@ test('EntitySaveLoad', () => {
         expect(a1?.speedLevel()).toBe(2);
 
         // Behaviors
-        expect(actor2.behaviors().length).toBe(1);
-        expect(actor2.behaviors()[0]).toBeInstanceOf(REUnitBehavior);
+        expect(actor2.basicBehaviors().length).toBe(1);
+        expect(actor2.basicBehaviors()[0]).toBeInstanceOf(REUnitBehavior);
     }
 });
 

@@ -9,6 +9,7 @@ import { DecisionPhase } from "../RE/REGame_Behavior";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { REResponse } from "./RECommand";
 import { REGame_Sequel, RESequelSet } from "ts/RE/REGame_Sequel";
+import { RESystem } from "./RESystem";
 
 
 export interface UnitInfo
@@ -95,14 +96,14 @@ export class REScheduler
     stepSimulation(): void {
         while (true) {
             // Sequel 終了待ち
-            if (REGame.integration.onCheckVisualSequelRunning()) {
+            if (RESystem.integration.onCheckVisualSequelRunning()) {
                 // Sequel 実行中
                 
                 break;
             }
             /*
             if (this._commandContext.visualAnimationWaiting()) {
-                if (REGame.integration.onCheckVisualSequelRunning()) {
+                if (RESystem.integration.onCheckVisualSequelRunning()) {
                     // Sequel 実行中
                     break;
                 }
@@ -114,7 +115,7 @@ export class REScheduler
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!this._commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
+            if (!this._commandContext.isRunning() && RESystem.integration.onCheckVisualSequelRunning()) {
                 break;
             }
 
@@ -536,7 +537,7 @@ export class REScheduler
     _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {
         this._dialogContext.setCauseEntity(causeEntity);
         this._dialogContext._setDialogModel(value);
-        REGame.integration.onDialogOpend(this._dialogContext);
+        RESystem.integration.onDialogOpend(this._dialogContext);
         //const visual = 
         //this._dialogContext._visual = visual;
     }
@@ -547,7 +548,7 @@ export class REScheduler
         //    this._dialogContext._visual.onClose();
         //    this._dialogContext._visual = undefined;
         //}
-        REGame.integration.onDialogClosed(this._dialogContext);
+        RESystem.integration.onDialogClosed(this._dialogContext);
     }
 
     _getDialogContext() {
@@ -565,7 +566,7 @@ export class REScheduler
             if (this.signalFlushSequelSet) {
                 this.signalFlushSequelSet(this._sequelSet);
             }
-            REGame.integration.onFlushSequelSet(this._sequelSet);
+            RESystem.integration.onFlushSequelSet(this._sequelSet);
 
             this._sequelSet = new RESequelSet();
         }
