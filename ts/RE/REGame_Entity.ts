@@ -6,6 +6,7 @@ import { RECommandContext } from "../system/RECommandContext";
 import { BlockLayerKind } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
+import { LState } from "ts/objects/State";
 
 export type EntityId = number;
 
@@ -47,6 +48,8 @@ export class REGame_Entity
     attrbutes: REGame_Attribute[] = [];
     private _basicBehaviors: REGame_Behavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
     //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
+
+    private _states: LState[] = [];
 
     _id: number = 0;
     _name: string = ""; // 主にデバッグ用
@@ -119,6 +122,14 @@ export class REGame_Entity
         if (index >= 0) this._basicBehaviors.splice(index, 1);
     }
 
+    addState(value: LState) {
+        this._states.unshift(value);
+    }
+
+    removeState(value: LState) {
+        const index = this._states.findIndex(x => x == value);
+        if (index >= 0) this._states.splice(index, 1);
+    }
 
     
     /** 
@@ -182,24 +193,36 @@ export class REGame_Entity
         return REResponse.Pass;
     }
 
+    _callStateIterationHelper(func: (x: LState) => REResponse): REResponse {
+        for (let i = 0; i < this._states.length; i++) {
+            const r = func(this._states[i]);
+            if (r != REResponse.Pass) {
+                return r;
+            }
+        }
+        return REResponse.Pass;
+    }
+
     _callDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onDecisionPhase(this, context, phase));
+        let r = this._callStateIterationHelper(x => x.onDecisionPhase(this, context, phase));
+        if (r != REResponse.Pass) return r;
+        return this._callBehaviorIterationHelper(x => x.onDecisionPhase(this, context, phase));
     }
 
     _sendPreAction(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onPreAction(this, context, cmd));
+        return this._callBehaviorIterationHelper(x => x.onPreAction(this, context, cmd));
     }
 
     _sendPreRection(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onPreReaction(this, context, cmd));
+        return this._callBehaviorIterationHelper(x => x.onPreReaction(this, context, cmd));
     }
 
     _sendAction(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onAction(this, context, cmd));
+        return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
     _sendReaction(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(b => b.onReaction(this, context, cmd));
+        return this._callBehaviorIterationHelper(x => x.onReaction(this, context, cmd));
     }
 
     constructor() {

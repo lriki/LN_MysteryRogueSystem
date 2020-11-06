@@ -1,3 +1,4 @@
+import { LState } from "ts/objects/State";
 import { REGame_Attribute } from "ts/RE/REGame_Attribute";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
@@ -251,6 +252,16 @@ export interface REData_Parameter
     name: string;
 }
 
+export interface DState {
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+}
+
+export type DStateId = number;
+
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
@@ -271,9 +282,11 @@ export class REData
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
+    static states: DState[] = [];
 
     static _attributeFactories: (() => REGame_Attribute)[] = [];
     static _behaviorFactories: (() => REGame_Behavior)[] = [];
+    static _stateFactories: (() => LState)[] = [];
 
     static reset() {
         this.entityKinds = [{ id: 0, name: 'null', prefabKind: "" }];
@@ -287,6 +300,7 @@ export class REData
         this.parameters = [{id: 0, name: 'null'}];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
+        this.states = [{id: 0, name: 'null'}];
         this._attributeFactories = [() => new REGame_Attribute()];
         this._behaviorFactories = [() => new REGame_Behavior()];
     }
@@ -398,6 +412,16 @@ export class REData
             name: name,
         });
         this._behaviorFactories.push(factory);
+        return newId;
+    }
+    
+    static addState(name: string, factory: (() => LState)): number {
+        const newId = this.states.length;
+        this.states.push({
+            id: newId,
+            name: name,
+        });
+        this._stateFactories[newId] = factory;
         return newId;
     }
 

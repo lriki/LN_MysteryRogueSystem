@@ -1,4 +1,4 @@
-import { REData } from "ts/data/REData";
+import { DStateId, REData } from "ts/data/REData";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REIntegration } from "./REIntegration";
 
@@ -87,6 +87,25 @@ export interface BasicBehaviors {
     unit: number;
 }
 
+export interface BasicStates {
+    speedDown: DStateId,    // 鈍足
+    speedUp: DStateId,      // 倍速
+    confusion: DStateId,    // 混乱
+    sleep: DStateId,        // 睡眠
+    blind: DStateId,        // 目つぶし
+    paralysis: DStateId,    // かなしばり
+    sealed: DStateId,       // 封印
+    substitute: DStateId,   // 身代わり
+    transparent: DStateId,  // 透明
+    sightThrough: DStateId, // 透視
+    sharpEar: DStateId,     // 地獄耳
+    clairvoyant: DStateId,  // 千里眼
+    deception: DStateId,    // まどわし
+    mouthClosed: DStateId,  // くちなし
+
+    debug_MoveRight: DStateId,
+}
+
 export interface BasicSequels {
     /** 移動 */
     MoveSequel: number;
@@ -116,8 +135,9 @@ export class RESystem {
     static parameters: BasicParameters;
     static attributes: BasicAttributes;
     static behaviors: BasicBehaviors;
+    static states: BasicStates;
     static sequels: BasicSequels;
-
+    
     
     static integration: REIntegration;
 
@@ -130,6 +150,12 @@ export class RESystem {
     static createBehavior(dataId: number) {
         const i = REData._behaviorFactories[dataId]();
         i.dataId = dataId;
+        return i;
+    }
+
+    static createState(dataId: DStateId) {
+        const i = REData._stateFactories[dataId]();
+        i._dataId = dataId;
         return i;
     }
 }

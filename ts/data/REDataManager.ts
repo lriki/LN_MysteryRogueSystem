@@ -2,6 +2,7 @@
 import { RETileAttribute } from "ts/attributes/RETileAttribute";
 import { REGame_DecisionBehavior } from "ts/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
+import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
@@ -95,6 +96,26 @@ export class REDataManager
             decision: REData.addBehavior("Decision", () => new REGame_DecisionBehavior()),
             unit: REData.addBehavior("Unit", () => new REUnitBehavior()),
         };
+
+        // States
+        RESystem.states = {
+            speedDown: 0,
+            speedUp: 0,
+            confusion: 0,
+            sleep: 0,
+            blind: 0,
+            paralysis: 0,
+            sealed: 0,
+            substitute: 0,
+            transparent: 0,
+            sightThrough: 0,
+            sharpEar: 0,
+            clairvoyant: 0,
+            deception: 0,
+            mouthClosed: 0,
+            debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
+        };
+
 
         // Sequels
         RESystem.sequels = {
