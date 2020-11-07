@@ -8,6 +8,7 @@ export class REVisual
 {
     static manager: REVisual_Manager | undefined;
     static entityVisualSet: REEntityVisualSet | undefined;
+    static spriteset: Spriteset_Map | undefined;
 
     static initialize() {
         this.finalize();

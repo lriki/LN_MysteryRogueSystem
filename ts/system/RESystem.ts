@@ -110,6 +110,8 @@ export interface BasicSequels {
     /** 移動 */
     MoveSequel: number;
     
+    attack: number;
+
     /** 
      * 倒されたとき
      * 

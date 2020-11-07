@@ -84,6 +84,7 @@ export class REDataManager
         REData.DirectionChangeActionId = REData.addAction("DirectionChange");
         REData.MoveToAdjacentActionId = REData.addAction("MoveToAdjacent");
         REData.ProceedFloorActionId = REData.addAction("すすむ");
+        REData.AttackActionId = REData.addAction("Attack");
 
         // Attributes
         RESystem.attributes = {
@@ -120,6 +121,7 @@ export class REDataManager
         // Sequels
         RESystem.sequels = {
             MoveSequel: REData.addSequel("Move"),
+            attack: REData.addSequel("attack"),
             CollapseSequel: REData.addSequel("Collapse"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;

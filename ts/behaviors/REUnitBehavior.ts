@@ -41,6 +41,9 @@ export class REUnitBehavior extends REGame_Behavior {
         else if (cmd.action().id == REData.ProceedFloorActionId) {
             console.log("★");
         }
+        else if (cmd.action().id == REData.AttackActionId) {
+            context.postSequel(entity, RESystem.sequels.attack);
+        }
         
         return REResponse.Pass;
     }

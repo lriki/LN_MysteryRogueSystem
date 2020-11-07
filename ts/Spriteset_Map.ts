@@ -1,6 +1,14 @@
 
 
 import { assert } from './Common';
+import { REVisual } from './visual/REVisual';
+
+
+var _Spriteset_Map_prototype_createCharacters = Spriteset_Map.prototype.createCharacters;
+Spriteset_Map.prototype.createCharacters = function() {
+    _Spriteset_Map_prototype_createCharacters.call(this);
+    REVisual.spriteset = this;
+};
 
 /*
 declare global {
@@ -10,12 +18,6 @@ declare global {
     }
 }
 
-var _Spriteset_Map_prototype_createCharacters = Spriteset_Map.prototype.createCharacters;
-Spriteset_Map.prototype.createCharacters = function() {
-    _Spriteset_Map_prototype_createCharacters.call(this);
-    $gameMap.setSpawnMapSkillEffectEventHandler(this.onSpawnMapSkillEffectEvent.bind(this));
-    $gameMap.setDespawnMapSkillEffectEventHandler(this.onDespawnMapSkillEffectEvent.bind(this));
-};
 
 
 Spriteset_Map.prototype.onSpawnMapSkillEffectEvent = function(event: Game_Event) {

@@ -34,6 +34,7 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         //}
         let dir = Input.dir8;
         
+        // 移動
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
                 const args: REDirectionChangeArgs = { direction: dir };
@@ -44,7 +45,12 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
             context.closeDialog(true);
             return;
         }
-
+        // オートアクション
+        else if (Input.isTriggered("ok")) {
+            context.postAction(REData.AttackActionId, entity, undefined);
+            context.closeDialog(true);
+            return;
+        }
     }
 }
 

@@ -610,7 +610,10 @@ export class REData
 
 
 
+    //----------------------------------------
+    // Combat Actions.
 
-
+    
+    static AttackActionId: number;
 
 }

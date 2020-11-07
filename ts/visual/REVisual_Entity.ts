@@ -39,6 +39,10 @@ export class REVisual_Entity
         return this._rmmzEventId;
     }
 
+    rmmzSprite(): Sprite_Character | undefined {
+        return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._spriteIndex] : undefined;
+    }
+
     position(): Vector2 {
         return this._position;
     }
