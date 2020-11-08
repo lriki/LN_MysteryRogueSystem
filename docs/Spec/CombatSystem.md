@@ -33,6 +33,11 @@ EffectContext 自身が Entity の Sequel を起動したり、座標を動か�
     - reactor は Block 内から検索した Unit.
     - actor は、効果を与える、という視点だと Unit でも武器でも構わない。ただ参照方向は Unit -> 武器 なので、actor を 武器 とすると、それを振っている人を求めることができない。
 
+矢や魔法弾も同じような仕組み。攻撃側の Behavior で相手に対して直接ダメージ適用することはなく、
+1. EffectContext を作る
+2. 効果適用Action に乗せて目の前の Block へ post
+3. 相手側で受け取ってヒット判定・ダメージ適用
+4. 結果を feedback 通じて攻撃側へ返す
 
 
 ステート (状態異常・状態変化)

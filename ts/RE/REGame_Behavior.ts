@@ -11,6 +11,7 @@
  */
 
 import { ActionId } from "ts/data/REData";
+import { REEffectContext } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { REGame_Entity } from "./REGame_Entity";
@@ -45,7 +46,7 @@ export class REGame_Behavior {
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
 
 
-    
+    onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
 }
 
 /*
