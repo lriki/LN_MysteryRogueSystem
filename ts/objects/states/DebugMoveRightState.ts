@@ -4,7 +4,7 @@ import { DecisionPhase } from "ts/RE/REGame_Behavior";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { LState } from "../State";
+import { LState } from "./State";
 
 export class LDebugMoveRightState extends LState {
 

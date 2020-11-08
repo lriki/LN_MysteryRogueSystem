@@ -33,6 +33,7 @@ export class REGame_Behavior {
 
     // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
     onQueryActions(): ActionId[] { return []; }
+    onQueryReactions(): ActionId[] { return []; }
 
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、

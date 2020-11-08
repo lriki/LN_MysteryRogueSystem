@@ -16,6 +16,6 @@ export class Log
     }
 
     static doCommand(text: string) {
-        //console.log(`%c[Do: ${text}]`, "color: fuchsia");
+        console.log(`%c[Do: ${text}]`, "color: fuchsia");
     }
 }

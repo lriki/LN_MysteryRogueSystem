@@ -1,4 +1,4 @@
-import { LState } from "ts/objects/State";
+import { LState } from "ts/objects/states/State";
 import { REGame_Attribute } from "ts/RE/REGame_Attribute";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { isParameter } from "typescript";

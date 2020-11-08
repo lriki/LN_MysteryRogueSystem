@@ -6,7 +6,7 @@ import { RECommandContext } from "../system/RECommandContext";
 import { BlockLayerKind } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
-import { LState } from "ts/objects/State";
+import { LState } from "ts/objects/states/State";
 
 export type EntityId = number;
 
@@ -49,7 +49,6 @@ export class REGame_Entity
     private _basicBehaviors: REGame_Behavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
     //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
-    private _states: LState[] = [];
 
     _id: number = 0;
     _name: string = ""; // 主にデバッグ用
@@ -85,6 +84,9 @@ export class REGame_Entity
     // ユーザビリティのためだけに参照する点に注意。セーブデータをロードした直後はウィンドウを表示したりしたくないので、セーブデータに含まれる。
     immediatelyAfterAdjacentMoving: boolean = false;
     
+    // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
+    // とりあえず Entity に持たせて様子見。
+    private _states: LState[] = [];
 
     //static newEntity(): REGame_Entity {
     //    const e = new REGame_Entity();
@@ -179,6 +181,14 @@ export class REGame_Entity
         let result: ActionId[] = [];    // TODO: あとで flatMap() 使うようにしたい
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             result = result.concat(this._basicBehaviors[i].onQueryActions());
+        }
+        return result;
+    }
+
+    queryReactions(): ActionId[] {
+        let result: ActionId[] = [];    // TODO: あとで flatMap() 使うようにしたい
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            result = result.concat(this._basicBehaviors[i].onQueryReactions());
         }
         return result;
     }

@@ -3,7 +3,7 @@ import { assert } from "../../Common";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
 import { REGame_Behavior } from "../../RE/REGame_Behavior";
-import { REData } from "ts/data/REData";
+import { ActionId, REData } from "ts/data/REData";
 import { REGameManager } from "ts/system/REGameManager";
 import { REGame } from "ts/RE/REGame";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
@@ -15,6 +15,10 @@ import { Helpers } from "ts/system/Helpers";
  * 
  */
 export class REUnitBehavior extends REGame_Behavior {
+    onQueryReactions(): ActionId[] {
+        return [REData.AttackActionId];
+    }
+
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
 
         if (cmd.action().id == REData.DirectionChangeActionId) {
@@ -43,21 +47,43 @@ export class REUnitBehavior extends REGame_Behavior {
         }
         else if (cmd.action().id == REData.AttackActionId) {
             console.log("AttackAction");
-            // [通常攻撃] スキル発動
-            context.postPerformSkill(entity, REData.AttackActionId);
 
 
-            /*
+
+
             context.postSequel(entity, RESystem.sequels.attack);
+            /*
 
-            const front = Helpers.makeEntityFrontPosition(entity, 1);
-            const block = REGame.map.block(front.x, front.y);
 
             context.postActionToBlock();
             */
             
+           return REResponse.Consumed;
         }
         
+        return REResponse.Pass;
+    }
+
+    
+    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+        if (cmd.action().id == REData.AttackActionId) {
+            console.log("onReaction AttackAction");
+
+
+
+
+            context.postSequel(entity, RESystem.sequels.attack);
+            /*
+
+
+            context.postActionToBlock();
+            */
+
+           entity.destroy();
+            
+            return REResponse.Consumed;
+        }
+
         return REResponse.Pass;
     }
 }

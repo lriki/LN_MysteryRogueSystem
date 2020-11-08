@@ -24,7 +24,8 @@ export class RECommandContext
     private _recodingCommandList: RECCMessage[] = [];
     private _runningCommandList: RECCMessage[] = [];
     private _messageIndex: number = 0;
-    private _lastResponce: REResponse = REResponse.Pass;
+    private _lastActorResponce: REResponse = REResponse.Pass;
+    private _lastReactorResponce: REResponse = REResponse.Pass;
     private _commandChainRunning: boolean = false;
 
     constructor(owner: REScheduler) {
@@ -44,34 +45,34 @@ export class RECommandContext
 
         if (reactor) {
             const m2 = () => {
-                if (this._lastResponce == REResponse.Pass) {  // m1 で未処理なら send
+                if (this._lastActorResponce == REResponse.Pass) {  // m1 で未処理なら send
                     Log.doCommand("PreRection");
                     return reactor._sendPreRection(this, actualCommand);
                 }
                 else
-                    return this._lastResponce;
+                    return this._lastActorResponce;
             };
             this._recodingCommandList.push({ name: "sendPreRection", func: m2 });
         }
 
         const m3 = () => {
-            if (this._lastResponce == REResponse.Pass) {  // m2 で未処理なら send
+            if (this._lastActorResponce == REResponse.Pass) {  // m2 で未処理なら send
                 Log.doCommand("Action");
                 return actor._sendAction(this, actualCommand);
             }
             else
-                return this._lastResponce;
+                return this._lastActorResponce;
         };
         this._recodingCommandList.push({ name: "sendAction", func: m3 });
 
         if (reactor) {
             const m4 = () => {
-                if (this._lastResponce == REResponse.Pass) {  // m3 で未処理なら send
+                if (this._lastActorResponce == REResponse.Pass) {  // m3 で未処理なら send
                     Log.doCommand("Reaction");
                     return reactor._sendReaction(this, actualCommand);
                 }
                 else
-                    return this._lastResponce;
+                    return this._lastActorResponce;
             };
             this._recodingCommandList.push({ name: "sendReaction", func: m4 });
         }
@@ -79,19 +80,25 @@ export class RECommandContext
         Log.postCommand("postAction");
     }
     
+    /*
     postActionToBlock(actionId: number, actor: REGame_Entity, block: REGame_Block, args?: any) {
         // 送信対象検索
-        let reactor = undefined;
-        const layers = block.layers();
-        for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
-            reactor = layers[iLayer].entities().find(entity => entity.queryActions().find(x => x == actionId) != undefined);
-            if (reactor) break;
-        }
+        let reactor = thi;
         if (!reactor) {
             return;
         }
 
         this.postAction(actionId, actor, reactor, args);
+    }
+    */
+
+    findReactorEntityInBlock(block: REGame_Block, actionId: number): REGame_Entity | undefined {
+        const layers = block.layers();
+        for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
+            const reactor = layers[iLayer].entities().find(entity => entity.queryReactions().find(x => x == actionId) != undefined);
+            if (reactor) return reactor;
+        }
+        return undefined;
     }
 
     openDialog(causeEntity: REGame_Entity, dialogModel: REDialog): void {

@@ -47,7 +47,9 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         }
         // オートアクション
         else if (Input.isTriggered("ok")) {
-            context.postAction(REData.AttackActionId, entity, undefined);
+            
+            // [通常攻撃] スキル発動
+            context.commandContext().postPerformSkill(entity, REData.AttackActionId);
             context.closeDialog(true);
             return;
         }
