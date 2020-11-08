@@ -2,11 +2,11 @@ import { REGame_Entity } from "../RE/REGame_Entity";
 import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { REData } from "../data/REData";
 import { REGame } from "../RE/REGame";
-import { REGame_DecisionBehavior } from "../behaviors/REDecisionBehavior";
-import { REUnitBehavior } from "../behaviors/REUnitBehavior";
-import { RETileAttribute } from "../attributes/RETileAttribute";
+import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
+import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
+import { RETileAttribute } from "../objects/attributes/RETileAttribute";
 import { TileKind } from "../RE/REGame_Block";
-import { REExitPointBehavior } from "ts/behaviors/REExitPointBehavior";
+import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {

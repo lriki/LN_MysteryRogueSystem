@@ -1,7 +1,11 @@
 import { LState } from "ts/objects/State";
 import { REGame_Attribute } from "ts/RE/REGame_Attribute";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
+import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
+
+export type ParameterDataId = number;
+export type SkillDataId = number;
 
 
 export enum REFloorMapKind
@@ -130,7 +134,7 @@ export interface RE_Data_Monster
     exp: number;
 
     /** 各基本パラメータ (index は BasicParameters) */
-    params: number[];
+    params: ParameterDataId[];
 }
 
 
@@ -260,6 +264,17 @@ export interface DState {
     name: string;
 }
 
+export interface DSkill {
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+
+    /** Cost */
+    paramCosts: ParameterDataId[];
+}
+
 export type DStateId = number;
 
 export class REData
@@ -270,6 +285,9 @@ export class REData
     // Common defineds.
     static ActorDefaultFactionId: number = 1;
     static EnemeyDefaultFactionId: number = 2;
+
+    static NormalAttackSkillId: number = 1;
+
     
     static entityKinds: RE_Data_EntityKind[] = [];
     static actors: RE_Data_Actor[] = [];
@@ -282,6 +300,7 @@ export class REData
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
+    static skills: DSkill[] = [];
     static states: DState[] = [];
 
     static _attributeFactories: (() => REGame_Attribute)[] = [];
@@ -300,6 +319,7 @@ export class REData
         this.parameters = [{id: 0, name: 'null'}];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
+        this.skills = [{id: 0, name: 'null', paramCosts: []}];
         this.states = [{id: 0, name: 'null'}];
         this._attributeFactories = [() => new REGame_Attribute()];
         this._behaviorFactories = [() => new REGame_Behavior()];
@@ -412,6 +432,16 @@ export class REData
             name: name,
         });
         this._behaviorFactories.push(factory);
+        return newId;
+    }
+    
+    static addSkill(name: string): number {
+        const newId = this.skills.length;
+        this.skills.push({
+            id: newId,
+            name: name,
+            paramCosts: [],
+        });
         return newId;
     }
     

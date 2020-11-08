@@ -1,4 +1,4 @@
-import { RETileAttribute } from "ts/attributes/RETileAttribute";
+import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Entity } from "./REGame_Entity";

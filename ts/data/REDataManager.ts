@@ -1,7 +1,7 @@
 //import 'types/index.d.ts'
-import { RETileAttribute } from "ts/attributes/RETileAttribute";
-import { REGame_DecisionBehavior } from "ts/behaviors/REDecisionBehavior";
-import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
+import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
+import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { RESystem } from "ts/system/RESystem";
@@ -136,13 +136,23 @@ export class REDataManager
         // Import Actors
         $dataActors.forEach(x => {
             if (x) {
-                REData.addActor(x.name ?? "");
+                REData.addActor(x.name ?? "null");
             }
         });
         // 1番アクターの初期フロアを、RMMZプレイヤーの初期位置にする
         REData.actors[1].initialFloorId = $dataSystem.startMapId ?? 0;
         REData.actors[1].initialX = $dataSystem.startX ?? 0;
         REData.actors[1].initialY = $dataSystem.startY ?? 0;
+
+        // Import Skills
+        $dataSkills.forEach(x => {
+            if (x) {
+                const id = REData.addSkill(x.name ?? "null");
+                const skill = REData.skills[id];
+                skill.paramCosts[RESystem.parameters.mp] = x.mpCost ?? 0;
+                skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
+            }
+        });
 
         // Import Monsters
         $dataEnemies.forEach(x => {
@@ -163,10 +173,6 @@ export class REDataManager
                 }
             }
         });
-
-        console.log($dataEnemies);
-        console.log(REData.monsters);
-
 
         // Import Lands
         // 最初に Land を作る

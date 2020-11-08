@@ -1,7 +1,7 @@
 // NOTE:
 //   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
 
-import { REUnitBehavior } from "ts/behaviors/REUnitBehavior";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";

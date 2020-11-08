@@ -1,8 +1,8 @@
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
-import { assert } from "../Common";
-import { RECommand, REResponse } from "../system/RECommand";
-import { RECommandContext } from "../system/RECommandContext";
-import { REGame_Behavior } from "../RE/REGame_Behavior";
+import { assert } from "../../Common";
+import { RECommand, REResponse } from "../../system/RECommand";
+import { RECommandContext } from "../../system/RECommandContext";
+import { REGame_Behavior } from "../../RE/REGame_Behavior";
 import { REData } from "ts/data/REData";
 import { REGameManager } from "ts/system/REGameManager";
 import { REGame } from "ts/RE/REGame";
@@ -42,7 +42,20 @@ export class REUnitBehavior extends REGame_Behavior {
             console.log("★");
         }
         else if (cmd.action().id == REData.AttackActionId) {
+            console.log("AttackAction");
+            // [通常攻撃] スキル発動
+            context.postPerformSkill(entity, REData.AttackActionId);
+
+
+            /*
             context.postSequel(entity, RESystem.sequels.attack);
+
+            const front = Helpers.makeEntityFrontPosition(entity, 1);
+            const block = REGame.map.block(front.x, front.y);
+
+            context.postActionToBlock();
+            */
+            
         }
         
         return REResponse.Pass;

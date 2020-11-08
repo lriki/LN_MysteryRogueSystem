@@ -1,4 +1,4 @@
-import { RETileAttribute } from "ts/attributes/RETileAttribute";
+import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { assert } from "ts/Common";
 import { TileKind } from "ts/RE/REGame_Block";
 import { REGame_Map } from "../RE/REGame_Map";

@@ -12,6 +12,7 @@ import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
 import { assert } from "ts/Common";
 import { RECommandRecorder } from "./RECommandRecorder";
+import { VNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 
 
 /**
@@ -46,6 +47,9 @@ export class REGameManager
                 //}
             }
         });
+
+        // TODO: とりあえずまずは全部同じにしてテスト
+        RESystem.skillBehaviors = REData.skills.map(x => new VNormalAttackSkillBehavior());
 
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.uniqueActorUnits[0];

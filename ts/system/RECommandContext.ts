@@ -1,5 +1,5 @@
 import { RECommand, REResponse } from "./RECommand";
-import { REData, REData_Action } from "../data/REData";
+import { REData, REData_Action, SkillDataId } from "../data/REData";
 import { REDialog } from "./REDialog";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { REScheduler } from "./REScheduler";
@@ -8,6 +8,9 @@ import { REGame_Sequel } from "ts/RE/REGame_Sequel";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { REGame } from "ts/RE/REGame";
 import { RERecordingCommandType } from "./RECommandRecorder";
+import { REEffectContext } from "./REEffectContext";
+import { REGame_Block } from "ts/RE/REGame_Block";
+import { RESystem } from "./RESystem";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -75,6 +78,21 @@ export class RECommandContext
 
         Log.postCommand("postAction");
     }
+    
+    postActionToBlock(actionId: number, actor: REGame_Entity, block: REGame_Block, args?: any) {
+        // 送信対象検索
+        let reactor = undefined;
+        const layers = block.layers();
+        for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
+            reactor = layers[iLayer].entities().find(entity => entity.queryActions().find(x => x == actionId) != undefined);
+            if (reactor) break;
+        }
+        if (!reactor) {
+            return;
+        }
+
+        this.postAction(actionId, actor, reactor, args);
+    }
 
     openDialog(causeEntity: REGame_Entity, dialogModel: REDialog): void {
         const m1 = () => {
@@ -107,6 +125,31 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "ConsumeActionToken", func: m1 });
         Log.postCommand("ConsumeActionToken");
     }
+
+    postPerformSkill(performer: REGame_Entity, skillId: SkillDataId): void {
+        const m1 = () => {
+            Log.doCommand("PerformSkill");
+            RESystem.skillBehaviors[skillId].onPerforme(performer, this);
+            return REResponse.Consumed;
+        };
+        this._recodingCommandList.push({ name: "PerformSkill", func: m1 });
+        Log.postCommand("PerformSkill");
+    }
+
+    // Skill や Item などの効果適用。
+    // MP cost など発動可能判定は呼び出す前に済ませること。
+    postApplyEffect(context: REEffectContext): void {
+        const m1 = () => {
+            Log.doCommand("ApplyEffect");
+            // TODO:
+            return REResponse.Consumed;
+        };
+        this._recodingCommandList.push({ name: "ApplyEffect", func: m1 });
+        Log.postCommand("ApplyEffect");
+    }
+
+
+
 
     visualAnimationWaiting(): boolean {
         return this._visualAnimationWaiting;
