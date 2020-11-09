@@ -14,3 +14,4 @@ import './RE/REGame_Core';
 import './Scene_Boot';
 import './Scene_Map';
 import './Sprite_Character'
+import './Spriteset_Map'

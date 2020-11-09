@@ -39,6 +39,10 @@ export class REVisual_Entity
         return this._rmmzEventId;
     }
 
+    rmmzEvent(): Game_Event {
+        return $gameMap.event(this._rmmzEventId);
+    }
+
     rmmzSprite(): Sprite_Character | undefined {
         return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._spriteIndex] : undefined;
     }

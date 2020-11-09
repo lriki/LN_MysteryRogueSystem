@@ -43,11 +43,16 @@ class Game_REPrefabEvent extends Game_Event {
 
 declare global {
     interface Game_CharacterBase {
+        isREEvent(): boolean;   // Event であるか。他のプラグインとの競合回避のため、RE プレフィックスをつけている。
         isREPrefab(): boolean;
         isRESpritePrepared(): boolean;
         isREExtinct(): boolean;
     }
 }
+
+Game_CharacterBase.prototype.isREEvent = function() {
+    return false;
+};
 
 Game_CharacterBase.prototype.isREPrefab = function() {
     return false;
@@ -59,6 +64,19 @@ Game_CharacterBase.prototype.isRESpritePrepared = function() {
 
 Game_CharacterBase.prototype.isREExtinct = function() {
     return false;
+};
+
+//==============================================================================
+// Game_Event
+
+declare global {
+    interface Game_Event {
+        isREEvent(): boolean;
+    }
+}
+
+Game_Event.prototype.isREEvent = function() {
+    return true;
 };
 
 //==============================================================================
@@ -141,6 +159,18 @@ var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
     this._prefabSpriteIdRE = Sprite._counter + 1;
     _Spriteset_Map_createCharacters.call(this);
+
+    
+    // Visual と Sprite を関連付ける
+    if (REVisual.entityVisualSet) {
+        this._characterSprites.forEach((sprite, index) => {
+            if (REVisual.entityVisualSet && sprite._character.isREEvent()) {
+                const event = (sprite._character as Game_Event);
+                const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
+                visual?._setSpriteIndex(index);
+            }
+        });
+    }
 };
 
 var _Spriteset_Map_update = Spriteset_Map.prototype.update;

@@ -123,6 +123,17 @@ export class RECommandContext
         Log.postCommand("Sequel");
     }
 
+    postDestroy(entity: REGame_Entity) {
+        const m1 = () => {
+            Log.doCommand("Destroy");
+            entity.destroy();
+            return REResponse.Consumed;
+        };
+        this._recodingCommandList.push({ name: "Destroy", func: m1 });
+        Log.postCommand("Destroy");
+    }
+    
+
     postConsumeActionToken(entity: REGame_Entity): void {
         const m1 = () => {
             Log.doCommand("ConsumeActionToken");

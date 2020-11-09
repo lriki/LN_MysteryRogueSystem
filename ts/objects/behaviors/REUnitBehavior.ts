@@ -72,14 +72,14 @@ export class REUnitBehavior extends REGame_Behavior {
 
 
 
-            context.postSequel(entity, RESystem.sequels.attack);
+            context.postSequel(entity, RESystem.sequels.CollapseSequel);
             /*
 
 
             context.postActionToBlock();
             */
 
-            entity.destroy();
+            context.postDestroy(entity);
             
             return REResponse.Consumed;
         }
