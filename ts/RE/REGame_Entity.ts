@@ -7,8 +7,7 @@ import { BlockLayerKind } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
 import { LState } from "ts/objects/states/State";
-
-export type EntityId = number;
+import { EntityId } from "ts/system/EntityId";
 
 enum BlockLayer
 {
@@ -50,7 +49,7 @@ export class REGame_Entity
     //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
 
-    _id: number = 0;
+    _id: EntityId = { index: 0, key: 0 };
     _name: string = ""; // 主にデバッグ用
     _destroyed: boolean = false;
 
@@ -94,7 +93,7 @@ export class REGame_Entity
     //    return e;
     //}
 
-    id(): number {
+    id(): EntityId {
         return this._id;
     }
 

@@ -7,6 +7,8 @@ import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
 import { RETileAttribute } from "../objects/attributes/RETileAttribute";
 import { TileKind } from "../RE/REGame_Block";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
+import { DStateId } from "ts/data/DState";
+import { LGenericState } from "ts/objects/states/LGenericState";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -40,6 +42,14 @@ export class REEntityFactory {
     static newExitPoint(): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new REExitPointBehavior());
+        return e;
+    }
+
+    static newState(stateId: DStateId): REGame_Entity {
+        const e = REGame.world.spawnEntity();
+        const b = new LGenericState();
+        b._stateId = stateId;
+        e.addBasicBehavior(b);
         return e;
     }
 

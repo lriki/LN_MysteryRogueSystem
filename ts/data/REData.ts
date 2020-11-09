@@ -3,6 +3,7 @@ import { REGame_Attribute } from "ts/RE/REGame_Attribute";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
+import { DState } from "./DState";
 
 export type ParameterDataId = number;
 export type SkillDataId = number;
@@ -256,14 +257,6 @@ export interface REData_Parameter
     name: string;
 }
 
-export interface DState {
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name */
-    name: string;
-}
-
 export interface DSkill {
     /** ID (0 is Invalid). */
     id: number;
@@ -275,7 +268,6 @@ export interface DSkill {
     paramCosts: ParameterDataId[];
 }
 
-export type DStateId = number;
 
 export class REData
 {
@@ -320,7 +312,7 @@ export class REData
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
         this.skills = [{id: 0, name: 'null', paramCosts: []}];
-        this.states = [{id: 0, name: 'null'}];
+        this.states = [{id: 0, name: 'null', restriction: 0}];
         this._attributeFactories = [() => new REGame_Attribute()];
         this._behaviorFactories = [() => new REGame_Behavior()];
     }
@@ -450,6 +442,7 @@ export class REData
         this.states.push({
             id: newId,
             name: name,
+            restriction: 0,
         });
         this._stateFactories[newId] = factory;
         return newId;

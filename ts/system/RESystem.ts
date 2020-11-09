@@ -1,4 +1,5 @@
-import { DStateId, REData } from "ts/data/REData";
+import { DStateId } from "ts/data/DState";
+import { REData } from "ts/data/REData";
 import { VSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REIntegration } from "./REIntegration";
@@ -86,9 +87,11 @@ export interface BasicAttributes {
 export interface BasicBehaviors {
     decision: number;
     unit: number;
+    genericState: number;
 }
 
 export interface BasicStates {
+    dead: DStateId,         // 戦闘不能
     speedDown: DStateId,    // 鈍足
     speedUp: DStateId,      // 倍速
     confusion: DStateId,    // 混乱
@@ -158,10 +161,12 @@ export class RESystem {
         return i;
     }
 
+    /*
     static createState(dataId: DStateId) {
         const i = REData._stateFactories[dataId]();
         i._dataId = dataId;
         return i;
     }
+    */
 }
 

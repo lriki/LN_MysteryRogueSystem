@@ -89,7 +89,8 @@ test('EntitySaveLoad', () => {
         const actor1 = new REGame_Entity();
 
         // Entity Property
-        actor1._id = 1;
+        actor1._id.index = 1;
+        actor1._id.key = 111;
         actor1.x = 55;
 
         // Attributes
@@ -112,7 +113,8 @@ test('EntitySaveLoad', () => {
         actor2.extractSaveContents(contents2);
         
         // Entity Property
-        expect(actor2.id()).toBe(1);
+        expect(actor2.id().index).toBe(1);
+        expect(actor2.id().key).toBe(111);
         expect(actor2.x).toBe(55);
 
         // Attributes

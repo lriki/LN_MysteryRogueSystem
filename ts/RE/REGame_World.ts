@@ -45,11 +45,13 @@ export class RE_Game_World
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._entities.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
-            entity._id = this._entities.length;
+            entity._id.index = this._entities.length;
+            entity._id.key = this._random.nextInt();
             this._entities.push(entity);
         }
         else {
-            entity._id = index;
+            entity._id.index = index;
+            entity._id.key = this._random.nextInt();
             this._entities[index] = entity;
         }
     }
@@ -82,7 +84,7 @@ export class RE_Game_World
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (REGame.camera.focusedEntityId() == entity.id() &&
+        if (REGame.camera.focusedEntityId() == entity.id().index &&
             REGame.map.floorId() != entity.floorId) {
             REGame.camera.reserveFloorTransferToFocusedEntity();
         }
@@ -100,7 +102,7 @@ export class RE_Game_World
             if (entity && entity.isDestroyed()) {
                 this._entities[i] = undefined;
 
-                if (REGame.camera.focusedEntityId() == entity._id) {
+                if (REGame.camera.focusedEntityId() == entity.id().index) {
                     REGame.camera.clearFocus();
                 }
             }
