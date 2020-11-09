@@ -2,6 +2,7 @@ import { REGame_Entity } from "./REGame_Entity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { Random } from "ts/math/Random";
+import { EntityId, eqaulsEntityId } from "ts/system/EntityId";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -16,9 +17,9 @@ export class RE_Game_World
         e._name = "null";
     }
 
-    entity(id: number): REGame_Entity {
-        const e = this._entities[id];
-        if (e)
+    entity(id: EntityId): REGame_Entity {
+        const e = this._entities[id.index];
+        if (e && e.id().key == id.key)
             return e;
         else
             throw new Error("Invalid entity. id:" + id);
@@ -84,7 +85,7 @@ export class RE_Game_World
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (REGame.camera.focusedEntityId() == entity.id().index &&
+        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id()) &&
             REGame.map.floorId() != entity.floorId) {
             REGame.camera.reserveFloorTransferToFocusedEntity();
         }
@@ -92,17 +93,20 @@ export class RE_Game_World
         return true;
     }
 
-    update(): void {
-        this._removeDestroyesEntities();
-    }
-
     _removeDestroyesEntities(): void {
         for (let i = 0; i < this._entities.length; i++) {
             const entity = this._entities[i];
             if (entity && entity.isDestroyed()) {
+
+                if (entity.floorId == REGame.map.floorId()) {
+                    REGame.map._removeEntity(entity);
+                }
+
+                REGame.scheduler.invalidateEntity(entity);
+
                 this._entities[i] = undefined;
 
-                if (REGame.camera.focusedEntityId() == entity.id().index) {
+                if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {
                     REGame.camera.clearFocus();
                 }
             }

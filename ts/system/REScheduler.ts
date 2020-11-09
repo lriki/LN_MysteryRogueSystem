@@ -159,7 +159,7 @@ export class REScheduler
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
-                //sweepCollapseList();
+                REGame.world._removeDestroyesEntities();
     
                 //m_commandContext->beginCommandChain();
                 this.stepSimulationInternal();
@@ -513,7 +513,14 @@ export class REScheduler
                 }
             }
         }
+    }
 
+    invalidateEntity(entity: REGame_Entity) {
+        const index = this._units.findIndex(x => x.entity == entity);
+        if (index >= 0) {
+            console.log("invalidate", entity);
+            this._units[index].entity = undefined;
+        }
     }
 
     _foreachRunSteps(start: RunStepInfo, func: (step: RunStepInfo) => boolean) {

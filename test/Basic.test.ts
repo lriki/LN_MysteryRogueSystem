@@ -12,6 +12,7 @@ import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
+import { EntityId } from "ts/system/EntityId";
 
 TestEnv.setupDatabase();
 

@@ -64,6 +64,8 @@ export class REEntityVisualSet {
         if (index >= 0) {
             const visual = this._visualEntities[index];
 
+            this._sequelManager.removeVisual(visual);
+            
             // Game_Event の削除フラグを立てる。
             // 次の Spriteset_Map で、実際に動的 Sprite が削除される。
             $gameMap.event(visual.rmmzEventId()).erase();
@@ -73,6 +75,7 @@ export class REEntityVisualSet {
             // ↑の erase() の意味もあまりないが、影響はないため現状とする。
 
             this._visualEntities.splice(index, 1);
+
         }
     }
 

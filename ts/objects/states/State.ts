@@ -1,3 +1,4 @@
+import { DStateId } from "ts/data/DState";
 import { ActionId } from "ts/data/REData";
 import { DecisionPhase, REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
@@ -10,9 +11,9 @@ import { RECommandContext } from "ts/system/RECommandContext";
  * 各メソッドは Behavior と同一
  */
 export class LState extends REGame_Behavior {
-    //_dataId: DStateId = 0;
+    _dataId: DStateId = 0;
     
-    /*
+    
     onQueryProperty(propertyId: number): any { return undefined; }
 
     onQueryActions(): ActionId[] { return []; }
@@ -23,7 +24,7 @@ export class LState extends REGame_Behavior {
     onPreReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    */
+    
 }
 
 /*

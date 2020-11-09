@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import { assert } from 'ts/Common';
 import { ActionId } from 'ts/data/REData';
-import { EntityId } from 'ts/RE/REGame_Entity';
+import { EntityId } from './EntityId';
 import { RECommand } from './RECommand';
 
 export enum RERecordingCommandType {

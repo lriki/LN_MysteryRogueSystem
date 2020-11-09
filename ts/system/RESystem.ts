@@ -161,12 +161,12 @@ export class RESystem {
         return i;
     }
 
-    /*
+    
     static createState(dataId: DStateId) {
         const i = REData._stateFactories[dataId]();
         i._dataId = dataId;
         return i;
     }
-    */
+    
 }
 

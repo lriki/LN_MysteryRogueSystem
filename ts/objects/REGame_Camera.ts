@@ -5,6 +5,7 @@ import { REGame_Entity } from "../RE/REGame_Entity";
 import { RE_Game_World } from "../RE/REGame_World";
 import { REGame } from "ts/RE/REGame";
 import { RESystem } from "ts/system/RESystem";
+import { EntityId } from "ts/system/EntityId";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -13,12 +14,12 @@ import { RESystem } from "ts/system/RESystem";
  */
 export class REGame_Camera
 {
-    private _focusedEntityId: number = 0;
+    private _focusedEntityId: EntityId = {index: 0, key: 0};
     private _transferingNewFloorId: number = 0;
     private _transferingNewX: number = 0;
     private _transferingNewY: number = 0;
 
-    focusedEntityId(): number {
+    focusedEntityId(): EntityId {
         return this._focusedEntityId;
     }
 
@@ -31,7 +32,7 @@ export class REGame_Camera
     }
 
     clearFocus() {
-        this._focusedEntityId = 0;
+        this._focusedEntityId = {index: 0, key: 0};
     }
 
     isFloorTransfering(): boolean {

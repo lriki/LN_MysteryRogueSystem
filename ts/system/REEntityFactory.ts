@@ -48,7 +48,7 @@ export class REEntityFactory {
     static newState(stateId: DStateId): REGame_Entity {
         const e = REGame.world.spawnEntity();
         const b = new LGenericState();
-        b._stateId = stateId;
+        b._dataId = stateId;
         e.addBasicBehavior(b);
         return e;
     }

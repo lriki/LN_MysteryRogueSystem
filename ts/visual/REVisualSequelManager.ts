@@ -20,8 +20,6 @@ export class REVisualSequelManager {
         this._currentSequelRun = -1;
         this._runningVisuals.splice(0);
         this.update();
-        
-        console.log("setup", this._activeSequelSet);
     }
 
     update() {
@@ -70,13 +68,20 @@ export class REVisualSequelManager {
                 // すべてのアニメーションが終了した
                 this._runningVisuals.splice(0);
                 this._activeSequelSet = undefined;
-                console.log("!!!!!!!!!FIN");
             }
         }
     }
 
     isRunning(): boolean {
         return this._activeSequelSet != undefined;
+    }
+
+    // 再生中の途中削除など
+    removeVisual(visual: REVisual_Entity) {
+        const index = this._runningVisuals.indexOf(visual);
+        if (index >= 0) {
+            this._runningVisuals.splice(index, 1);
+        }
     }
 
     // 現在実行中の Run に含まれる Visual (_runningVisuals) の Sequel が、

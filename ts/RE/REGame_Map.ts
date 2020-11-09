@@ -9,6 +9,7 @@ import { REEntityFactory } from "../system/REEntityFactory";
 import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
+import { EntityId } from "ts/system/EntityId";
 
 
 
@@ -33,8 +34,8 @@ export class REGame_Map
     private _width: number = 0;
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
-    private _entityIds: number[] = [];      // マップ内に登場している Entity
-    private _adhocEntityIds: number[] = [];
+    private _entityIds: EntityId[] = [];      // マップ内に登場している Entity
+    private _adhocEntityIds: EntityId[] = [];
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
@@ -120,7 +121,7 @@ export class REGame_Map
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
-        assert(entity._id > 0);
+        assert(entity._id.index > 0);
 
         this._entityIds.push(entity._id);
 

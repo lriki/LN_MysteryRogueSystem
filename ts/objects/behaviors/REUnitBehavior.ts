@@ -79,7 +79,7 @@ export class REUnitBehavior extends REGame_Behavior {
             context.postActionToBlock();
             */
 
-           entity.destroy();
+            entity.destroy();
             
             return REResponse.Consumed;
         }
