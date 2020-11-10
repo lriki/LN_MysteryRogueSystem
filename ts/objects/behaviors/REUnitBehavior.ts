@@ -58,7 +58,7 @@ export class REUnitBehavior extends REGame_Behavior {
             context.postActionToBlock();
             */
             
-           return REResponse.Consumed;
+            return REResponse.Consumed;
         }
         
         return REResponse.Pass;

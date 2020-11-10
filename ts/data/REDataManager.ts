@@ -34,6 +34,11 @@ export class REDataManager
     static setupCommonData() {
         REData.reset();
 
+        REData.system = {
+            elements: $dataSystem.elements ?? [],
+            equipTypes: $dataSystem.equipTypes ?? [],
+        };
+
         // Parameters
         RESystem.parameters = {
             hp: REData.addParameter("HP"),

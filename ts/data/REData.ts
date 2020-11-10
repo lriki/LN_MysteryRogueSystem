@@ -4,9 +4,10 @@ import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
+import { DSystem } from "./DSystem";
+import { DSkill } from "./DSkill";
 
 export type ParameterDataId = number;
-export type SkillDataId = number;
 
 
 export enum REFloorMapKind
@@ -257,18 +258,6 @@ export interface REData_Parameter
     name: string;
 }
 
-export interface DSkill {
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name */
-    name: string;
-
-    /** Cost */
-    paramCosts: ParameterDataId[];
-}
-
-
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
@@ -280,7 +269,7 @@ export class REData
 
     static NormalAttackSkillId: number = 1;
 
-    
+    static system: DSystem;
     static entityKinds: RE_Data_EntityKind[] = [];
     static actors: RE_Data_Actor[] = [];
     static monsters: RE_Data_Monster[] = [];
