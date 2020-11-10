@@ -1,5 +1,5 @@
 import { RECommand, REResponse } from "./RECommand";
-import { REData, REData_Action, SkillDataId } from "../data/REData";
+import { REData, REData_Action } from "../data/REData";
 import { REDialog } from "./REDialog";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { REScheduler } from "./REScheduler";
@@ -11,6 +11,7 @@ import { RERecordingCommandType } from "./RECommandRecorder";
 import { REEffectContext } from "./REEffectContext";
 import { REGame_Block } from "ts/RE/REGame_Block";
 import { RESystem } from "./RESystem";
+import { SkillDataId } from "ts/data/DSkill";
 
 interface RECCMessage {
     name: string;   // for debug

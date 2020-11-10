@@ -61,6 +61,9 @@ export class REGame_UnitAttribute extends REGame_Attribute {
     _actionTokenCount: number = 0;
     _targetingEntityId: number = 0;   // AIMinor Phase で、攻撃対象を確定したかどうか。以降、Run 内では iterationCount が残っていても MinorAction を行わない
 
+    // Battler params
+    
+
     factionId(): number { return this._factionId; }
     setFactionId(value: number): REGame_UnitAttribute { this._factionId = value; return this; }
 

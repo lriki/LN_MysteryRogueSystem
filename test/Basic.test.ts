@@ -7,7 +7,7 @@ import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
 import { REGameManager } from "ts/system/REGameManager";
-import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
+import { REGame_Attribute, REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
@@ -15,6 +15,14 @@ import { REEntityFactory } from "ts/system/REEntityFactory";
 import { EntityId } from "ts/system/EntityId";
 
 TestEnv.setupDatabase();
+/*
+class BattlerAttr extends REGame_Attribute {
+
+}
+class ActorAttr extends BattlerAttr {
+    
+}
+*/
 
 test('basic', () => {
     // NewGame.
@@ -22,6 +30,9 @@ test('basic', () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
+    //actor1.addAttribute(new ActorAttr());
+    //const aa = actor1.findAttribute(BattlerAttr);
+    //console.log("aa", aa);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
     REGame.world._transfarEntity(actor1, 1, 5, 5);

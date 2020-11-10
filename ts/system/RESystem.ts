@@ -38,6 +38,7 @@ export interface EntityProperties {
     homeLayer: number;
 }
 
+// Battler 自身が持つパラメータ
 export interface BasicParameters {
     hp: number;         // HP
     mp: number;         // Magic Points
@@ -51,7 +52,7 @@ export interface BasicParameters {
     agi: number;    // AGIlity
     luk: number;    // LUcK
 
-    // xparam
+    // xparam 装備やステートによって変動するパラメータ
     /*
     hit: number;    // HIT rate
     eva: number;    // EVAsion rate

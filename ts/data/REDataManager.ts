@@ -7,6 +7,7 @@ import { LGenericState } from "ts/objects/states/LGenericState";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
+import { DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 
 
@@ -34,10 +35,6 @@ export class REDataManager
     static setupCommonData() {
         REData.reset();
 
-        REData.system = {
-            elements: $dataSystem.elements ?? [],
-            equipTypes: $dataSystem.equipTypes ?? [],
-        };
 
         // Parameters
         RESystem.parameters = {
@@ -138,13 +135,28 @@ export class REDataManager
     static loadData(): void
     {
         this.setupCommonData();
-
-        //REData.addAction();
         
+        REData.system = {
+            elements: $dataSystem.elements ?? [],
+            equipTypes: $dataSystem.equipTypes ?? [],
+        };
+        
+        // Import Classws
+        $dataClasses.forEach(x => {
+            if (x) {
+                const id = REData.addClass(x.name ?? "null");
+                const c = REData.classes[id];
+                c.expParams = x.expParams ?? [];
+                c.params = x.params ?? [];
+            }
+        });
+
         // Import Actors
         $dataActors.forEach(x => {
             if (x) {
-                REData.addActor(x.name ?? "null");
+                const id = REData.addActor(x.name ?? "null");
+                const actor = REData.actors[id];
+                actor.classId = x.classId ?? 0;
             }
         });
         // 1番アクターの初期フロアを、RMMZプレイヤーの初期位置にする
@@ -159,6 +171,46 @@ export class REDataManager
                 const skill = REData.skills[id];
                 skill.paramCosts[RESystem.parameters.mp] = x.mpCost ?? 0;
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
+                if (x.damage && (x.damage.type ?? 0) > 0) {
+                    skill.critical = x.damage.critical ?? false;
+                    let parameterId = 0;
+                    let applyType = DParameterEffectApplyType.Damage;
+                    switch (x.damage.type) {
+                        case 1: // HPダメージ
+                            parameterId = RESystem.parameters.hp;
+                            applyType = DParameterEffectApplyType.Damage;
+                            break;
+                        case 2: // MPダメージ
+                            parameterId = RESystem.parameters.mp;
+                            applyType = DParameterEffectApplyType.Damage;
+                            break;
+                        case 3: // HP回復
+                            parameterId = RESystem.parameters.hp;
+                            applyType = DParameterEffectApplyType.Recover;
+                            break;
+                        case 4: // MP回復
+                            parameterId = RESystem.parameters.mp;
+                            applyType = DParameterEffectApplyType.Recover;
+                            break;
+                        case 5: // HP吸収
+                            parameterId = RESystem.parameters.hp;
+                            applyType = DParameterEffectApplyType.Drain;
+                            break;
+                        case 6: // MP吸収
+                            parameterId = RESystem.parameters.mp;
+                            applyType = DParameterEffectApplyType.Drain;
+                            break;
+                        default:
+                            throw new Error();
+                    }
+                    skill.parameterEffects = [{
+                        parameterId: parameterId,
+                        elementId: x.damage.elementId ?? 0,
+                        formula: x.damage.formula ?? "0",
+                        applyType: applyType,
+                        variance: x.damage.variance ?? 0,
+                    }];
+                }
             }
         });
 

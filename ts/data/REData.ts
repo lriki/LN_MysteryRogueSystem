@@ -6,6 +6,7 @@ import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
+import { DClass, DClassId } from "./DClass";
 
 export type ParameterDataId = number;
 
@@ -116,6 +117,8 @@ export interface RE_Data_Actor
     
     /** 初期配置 Y */
     initialY: number;
+
+    classId: DClassId;
 }
 
 /**
@@ -271,6 +274,7 @@ export class REData
 
     static system: DSystem;
     static entityKinds: RE_Data_EntityKind[] = [];
+    static classes: DClass[] = [];
     static actors: RE_Data_Actor[] = [];
     static monsters: RE_Data_Monster[] = [];
     static lands: RE_Data_Land[] = [];
@@ -290,7 +294,13 @@ export class REData
 
     static reset() {
         this.entityKinds = [{ id: 0, name: 'null', prefabKind: "" }];
-        this.actors = [{ id: 0, name: 'null', initialFloorId: 0, initialX: 0, initialY: 0 }];
+
+        this.classes = [];
+        this.addClass("null");
+
+        this.actors = [];
+        this.addActor("null");
+
         this.monsters = [{ id: 0, name: 'null', exp: 0, params:[] }];
         this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
@@ -300,7 +310,8 @@ export class REData
         this.parameters = [{id: 0, name: 'null'}];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
-        this.skills = [{id: 0, name: 'null', paramCosts: []}];
+        this.skills = [];
+        this.addSkill("null");
         this.states = [{id: 0, name: 'null', restriction: 0}];
         this._attributeFactories = [() => new REGame_Attribute()];
         this._behaviorFactories = [() => new REGame_Behavior()];
@@ -317,6 +328,20 @@ export class REData
     }
     
     /**
+     * Add class.
+     */
+    static addClass(name: string): number {
+        const newId = this.classes.length;
+        this.classes.push({
+            id: newId,
+            name: name,
+            expParams: [],
+            params: [],
+        });
+        return newId;
+    }
+
+    /**
      * Add actor.
      */
     static addActor(name: string): number {
@@ -327,6 +352,7 @@ export class REData
             initialFloorId: 0,
             initialX: 0,
             initialY: 0,
+            classId: 0,
         });
         return newId;
     }
@@ -422,6 +448,8 @@ export class REData
             id: newId,
             name: name,
             paramCosts: [],
+            critical: false,
+            parameterEffects: [],
         });
         return newId;
     }
