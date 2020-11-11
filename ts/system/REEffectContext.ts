@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DUnitEffect } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
 import { ParameterDataId, REData } from "ts/data/REData";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
@@ -7,12 +8,14 @@ import { REGame_Entity } from "ts/RE/REGame_Entity";
 // 攻撃側
 export class SEffectorFact {
     _subject: REGame_Entity;
+    _effect: DUnitEffect;
     _participants: REGame_Entity[] = [];
     _actualParams: number[] = [];
 
 
-    constructor(subject: REGame_Entity) {
+    constructor(subject: REGame_Entity, effect: DUnitEffect) {
         this._subject = subject;
+        this._effect = effect;
 
         this._subject.basicBehaviors().forEach(x => {
             x.onCollectEffector(this._subject, this);

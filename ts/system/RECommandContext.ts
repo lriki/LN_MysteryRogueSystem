@@ -68,12 +68,9 @@ export class RECommandContext
 
         if (reactor) {
             const m4 = () => {
-                if (this._lastActorResponce == REResponse.Pass) {  // m3 で未処理なら send
-                    Log.doCommand("Reaction");
-                    return reactor._sendReaction(this, actualCommand);
-                }
-                else
-                    return this._lastActorResponce;
+                // onReaction はひとつ前の実行が Pass ではなくても実行する
+                Log.doCommand("Reaction");
+                return reactor._sendReaction(this, actualCommand);
             };
             this._recodingCommandList.push({ name: "sendReaction", func: m4 });
         }

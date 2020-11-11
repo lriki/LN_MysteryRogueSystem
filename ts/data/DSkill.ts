@@ -22,16 +22,7 @@ export interface DParameterEffect {
     variance: number;
 }
 
-export interface DSkill {
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name */
-    name: string;
-
-    /** Cost */
-    paramCosts: ParameterDataId[];
-
+export interface DUnitEffect {
     
     /**
      * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
@@ -46,5 +37,19 @@ export interface DSkill {
      * IDataSkill.damage
      */
     parameterEffects: DParameterEffect[];
+}
+
+
+export interface DSkill {
+    /** ID (0 is Invalid). */
+    id: number;
+
+    /** Name */
+    name: string;
+
+    /** Cost */
+    paramCosts: ParameterDataId[];
+
+    effect: DUnitEffect;
 }
 
