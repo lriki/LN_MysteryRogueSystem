@@ -139,7 +139,7 @@ export interface RE_Data_Monster
     exp: number;
 
     /** 各基本パラメータ (index は BasicParameters) */
-    params: ParameterDataId[];
+    idealParams: ParameterDataId[];
 }
 
 
@@ -301,13 +301,13 @@ export class REData
         this.actors = [];
         this.addActor("null");
 
-        this.monsters = [{ id: 0, name: 'null', exp: 0, params:[] }];
+        this.monsters = [{ id: 0, name: 'null', exp: 0, idealParams:[] }];
         this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
         this.actions = [{id: 0, displayName: 'null'}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];
-        this.parameters = [{id: 0, name: 'null'}];
+        this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
         this.skills = [];
@@ -366,7 +366,7 @@ export class REData
             id: newId,
             name: name,
             exp: 0,
-            params: [],
+            idealParams: [],
         });
         return newId;
     }

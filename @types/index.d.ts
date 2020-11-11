@@ -10,9 +10,9 @@ declare interface IDataSound
 
 declare interface IDataTrait
 {
-    code?: number;
-    dataId?: number;
-    value?: number;
+    code: number;
+    dataId: number;
+    value: number;
 }
 
 declare interface IDataActor

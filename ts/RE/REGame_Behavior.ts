@@ -49,7 +49,7 @@ export class REGame_Behavior {
 
 
 
-    onCollectEffector(data: SEffectorFact): void {}
+    onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {}
     onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
 }
 

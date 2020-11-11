@@ -1,5 +1,6 @@
+import { assert } from "ts/Common";
 import { ParameterEffectType } from "ts/data/DSystem";
-import { ParameterDataId } from "ts/data/REData";
+import { ParameterDataId, REData } from "ts/data/REData";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 
 
@@ -7,17 +8,27 @@ import { REGame_Entity } from "ts/RE/REGame_Entity";
 export class SEffectorFact {
     _subject: REGame_Entity;
     _participants: REGame_Entity[] = [];
+    _actualParams: number[] = [];
 
 
     constructor(subject: REGame_Entity) {
         this._subject = subject;
 
         this._subject.basicBehaviors().forEach(x => {
-            x.onCollectEffector(this);
+            x.onCollectEffector(this._subject, this);
         });
     }
 
+    setActualParam(paramId: ParameterDataId, value: number): void {
+        this._actualParams[paramId] = value;
+    }
+
+    actualParams(paramId: ParameterDataId): number {
+        return this._actualParams[paramId];
+    }
+
     addParticipant(entity: REGame_Entity) {
+        assert(entity != this._subject);
         this._participants.push(entity);
     }
 
@@ -40,6 +51,10 @@ export class SEffectorFact {
 
 }
 
+// ターゲット側
+export class SEffecteeResult {
+
+}
 
 /**
  * ダメージや状態異常、バフの適用など、パラメータ操作に関わる一連の処理を行う。
@@ -51,6 +66,18 @@ export class SEffectorFact {
  *   状態異常をダメージに変換するようなエネミーを設計するときには Effector 側が積んだ Effect を変更することになる。
  *   そのためインスタンスは別にしないと、同時攻撃で他の攻撃対象に影響が出てしまうことがある。
  * - インスタンスは Command に乗せて持ち回り、コマンドチェーン内で必ず Apply する。外には出ない。(そうしないと Attr に保存するような事態になるので)
+ * 
+ * 
+ * [2020/11/11] 複数ターゲットへの攻撃をひとつの EffectContext にまとめるべき？
+ * ----------
+ * 分けた場合、1つの対象への処理が終わったすぐ後に、フィードバックの処理を始めることができる。
+ * 例えば、3体まとめて攻撃するとき、1体目に攻撃したときに反撃をもらい倒れてしまったとき、後続を攻撃するか、といった具合。
+ * …でもこのケースだと EffectContext の中で戦闘不能を判断できるか。やる・やらないは別として。
+ * 
+ * とにかく一度に複数対象へのダメージ適用を「中断」する可能性があるか？ということ。
+ * そうかんがえると「ほとんど無い」
+ * EffectContext 自体が複数対象へのダメージ適用をサポートしたとしても、
+ * もしそのような中断がやりたければひとつずつインスタンス作って addTarget すればいいだけなので、まとめる方向で作ってよさそう。
  */
 export class REEffectContext {
     // 適用側 (攻撃側) の関係者。

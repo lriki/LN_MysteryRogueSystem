@@ -40,17 +40,17 @@ export interface EntityProperties {
 
 // Battler 自身が持つパラメータ
 export interface BasicParameters {
-    hp: number;         // HP
-    mp: number;         // Magic Points
-    tp: number;         // Tactical Points
-    mhp: number;    // Maximum Hit Points
-    mmp: number;    // Maximum Magic Points
+    // RMMZ 基礎パラメータ。(Game_Battler.params(x)) 並び順が一致するようにしておく。
+    hp: number;    // HP / Maximum Hit Points
+    mp: number;    // Magic Points / Maximum Magic Points
     atk: number;        // ATtacK power. ちから, 武器攻撃力
     def: number;        // DEFense power. 防具防御力
     mat: number;    // Magic ATtack power
     mdf: number;    // Magic DeFense power
     agi: number;    // AGIlity
     luk: number;    // LUcK
+
+    tp: number;         // Tactical Points
 
     // xparam 装備やステートによって変動するパラメータ
     /*

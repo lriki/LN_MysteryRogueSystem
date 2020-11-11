@@ -40,9 +40,6 @@ export class REDataManager
         RESystem.parameters = {
             hp: REData.addParameter("HP"),
             mp: REData.addParameter("MP"),
-            tp: REData.addParameter("TP"),
-            mhp: REData.addParameter("MHP"),
-            mmp: REData.addParameter("MMP"),
             atk: REData.addParameter("ATK"),
             def: REData.addParameter("DEF"),
             mat: REData.addParameter("MAT"),
@@ -50,8 +47,19 @@ export class REDataManager
             agi: REData.addParameter("AGI"),
             luk: REData.addParameter("LUK"),
 
+            tp: REData.addParameter("TP"),
+
             satiety: REData.addParameter("満腹度"),
         };
+        // RMMZ のパラメータID との一致を検証
+        assert(RESystem.parameters.hp === 0);
+        assert(RESystem.parameters.mp === 1);
+        assert(RESystem.parameters.atk === 2);
+        assert(RESystem.parameters.def === 3);
+        assert(RESystem.parameters.mat === 4);
+        assert(RESystem.parameters.mdf === 5);
+        assert(RESystem.parameters.agi === 6);
+        assert(RESystem.parameters.luk === 7);
         
         RESystem.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
@@ -222,14 +230,14 @@ export class REDataManager
                 monster.exp = x.exp ?? 0;
                 if (x.params) {
                     // see: Object.defineProperties
-                    monster.params[RESystem.parameters.mhp] = x.params[0];
-                    monster.params[RESystem.parameters.mmp] = x.params[1];
-                    monster.params[RESystem.parameters.atk] = x.params[2];
-                    monster.params[RESystem.parameters.def] = x.params[3];
-                    monster.params[RESystem.parameters.mat] = x.params[4];
-                    monster.params[RESystem.parameters.mdf] = x.params[5];
-                    monster.params[RESystem.parameters.agi] = x.params[6];
-                    monster.params[RESystem.parameters.luk] = x.params[7];
+                    monster.idealParams[RESystem.parameters.hp] = x.params[0];
+                    monster.idealParams[RESystem.parameters.mp] = x.params[1];
+                    monster.idealParams[RESystem.parameters.atk] = x.params[2];
+                    monster.idealParams[RESystem.parameters.def] = x.params[3];
+                    monster.idealParams[RESystem.parameters.mat] = x.params[4];
+                    monster.idealParams[RESystem.parameters.mdf] = x.params[5];
+                    monster.idealParams[RESystem.parameters.agi] = x.params[6];
+                    monster.idealParams[RESystem.parameters.luk] = x.params[7];
                 }
             }
         });
