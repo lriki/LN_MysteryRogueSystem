@@ -286,7 +286,7 @@ declare namespace Window_BattleLog{
  * 
  * The superclass of all windows within the game.
  */
-declare class Window_Base {
+declare class Window_Base extends Window {
 		
 	/**
 	 * 
@@ -338,7 +338,7 @@ declare class Window_Base {
 	/**
 	 * 
 	 */
-	baseTextRect(): void;
+	baseTextRect(): Rectangle;
 		
 	/**
 	 * 

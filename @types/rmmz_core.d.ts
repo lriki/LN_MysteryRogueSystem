@@ -851,6 +851,11 @@ declare class Rectangle {
 	new (): Rectangle;
 
 	constructor(x: number, y: number, width: number, height: number);
+
+	x: number;
+	y: number;
+	width: number;
+	height: number;
 }
 
 
@@ -1657,13 +1662,15 @@ declare interface ScreenSprite {
  * @class
  * @extends PIXI.Container
  */
-declare interface Window {
+declare class Window {
 		
 	/**
 	 * 
 	 * @return  
 	 */
 	new (): Window;
+
+	contents: Bitmap;
 }
 
 
