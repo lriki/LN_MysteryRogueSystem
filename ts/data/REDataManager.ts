@@ -180,7 +180,7 @@ export class REDataManager
                 skill.paramCosts[RESystem.parameters.mp] = x.mpCost ?? 0;
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
                 if (x.damage && (x.damage.type ?? 0) > 0) {
-                    skill.critical = x.damage.critical ?? false;
+                    skill.effect.critical = x.damage.critical ?? false;
                     let parameterId = 0;
                     let applyType = DParameterEffectApplyType.Damage;
                     switch (x.damage.type) {
@@ -211,7 +211,7 @@ export class REDataManager
                         default:
                             throw new Error();
                     }
-                    skill.parameterEffects = [{
+                    skill.effect.parameterEffects = [{
                         parameterId: parameterId,
                         elementId: x.damage.elementId ?? 0,
                         formula: x.damage.formula ?? "0",

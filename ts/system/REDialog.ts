@@ -40,7 +40,7 @@ export class REDialogContext
 
     
     postAction(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
-        this._commandContext.postAction(actionId, actor, reactor, args);
+        this._commandContext.postActionTwoWay(actionId, actor, reactor, args);
         
         if (REGame.recorder.isRecording()) {
             REGame.recorder.push({

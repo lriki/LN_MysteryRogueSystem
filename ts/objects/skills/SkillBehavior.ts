@@ -17,7 +17,7 @@ export class VNormalAttackSkillBehavior extends VSkillBehavior {
         const reacor = context.findReactorEntityInBlock(block, REData.AttackActionId);
         
         
-        context.postAction(REData.AttackActionId, entity, reacor);
+        context.postActionTwoWay(REData.AttackActionId, entity, reacor);
     }
 }
 

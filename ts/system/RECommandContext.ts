@@ -33,7 +33,13 @@ export class RECommandContext
         this._owner = owner;
     }
 
-    postAction(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
+    /**
+     * postActionTwoWay
+     * 
+     *  [拾う] など、reactor 側の状態等によって actor 側が目的を達成できない可能性がある Action で使用する。
+     * （例えば、床に張り付いた巻物を拾おうとするときは、reactor 側が onPreReaction で Action をはじく）
+     */
+    postActionTwoWay(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
         assert(actionId > 0);
 
         const actualCommand = new RECommand(actionId, actor, reactor, args);
@@ -76,6 +82,36 @@ export class RECommandContext
         }
 
         Log.postCommand("postAction");
+    }
+    
+    /**
+     * postActionOneWay
+     * 
+     * [攻撃] など、reactor 側の状態に関係なく actor 側が実行できる Action で使用する。
+     */
+    postActionOneWay(actionId: number, actor: REGame_Entity, args?: any) {
+        assert(actionId > 0);
+        
+        const actualCommand = new RECommand(actionId, actor, undefined, args);
+
+        const m1 = () => {
+            Log.doCommand("PreAction");
+            return actor._sendPreAction(this, actualCommand);
+        };
+        this._recodingCommandList.push({ name: "sendPreAction", func: m1 });
+
+        const m3 = () => {
+            if (this._lastActorResponce == REResponse.Pass) {
+                Log.doCommand("Action");
+                return actor._sendAction(this, actualCommand);
+            }
+            else {
+                return this._lastActorResponce;
+            }
+        };
+        this._recodingCommandList.push({ name: "sendAction", func: m3 });
+
+        Log.postCommand("ActionOneWay");
     }
     
     /*

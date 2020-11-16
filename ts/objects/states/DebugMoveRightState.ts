@@ -19,8 +19,8 @@ export class LDebugMoveRightState extends LState {
         //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-            context.postAction(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
-            context.postAction(REData.MoveToAdjacentActionId, entity, undefined, { direction: dir });
+            context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
+            context.postActionTwoWay(REData.MoveToAdjacentActionId, entity, undefined, { direction: dir });
         }
         context.postConsumeActionToken(entity);
         return REResponse.Consumed;

@@ -448,8 +448,10 @@ export class REData
             id: newId,
             name: name,
             paramCosts: [],
-            critical: false,
-            parameterEffects: [],
+            effect: {
+                critical: false,
+                parameterEffects: [],
+            }
         });
         return newId;
     }
