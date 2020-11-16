@@ -30,7 +30,8 @@ export namespace RE {
                 this._commandWindow?.setHandler(`index:${i}`, () => this.doAction(i));
             });
             this._commandWindow.setHandler("cancel", () => this.pop());
-            this.addWindow(this._commandWindow);
+            if (this._commandWindow)
+                this.addWindow(this._commandWindow);
     
         }
 

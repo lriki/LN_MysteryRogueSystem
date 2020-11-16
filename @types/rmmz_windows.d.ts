@@ -290,14 +290,9 @@ declare class Window_Base extends Window {
 		
 	/**
 	 * 
-	 */
-	new ();
-		
-	/**
-	 * 
 	 * @param rect 
 	 */
-	initialize(rect : /* Window_Base.prototype.+Window_NumberInput */ any): void;
+	constructor(rect : /* Window_Base.prototype.+Window_NumberInput */ any);
 		
 	/**
 	 * 
@@ -772,14 +767,9 @@ declare class Window_Scrollable extends Window_Base {
 		
 	/**
 	 * 
-	 */
-	new ();
-		
-	/**
-	 * 
 	 * @param rect 
 	 */
-	initialize(rect : any): void;
+	constructor(rect : any);
 		
 	/**
 	 * 
@@ -790,13 +780,13 @@ declare class Window_Scrollable extends Window_Base {
 	 * 
 	 * @return  
 	 */
-	scrollX(): /* !this._scrollX */ any;
+	scrollX(): number;
 		
 	/**
 	 * 
 	 * @return  
 	 */
-	scrollY(): /* !this._scrollY */ any;
+	scrollY(): number;
 		
 	/**
 	 * 
@@ -1498,20 +1488,13 @@ declare class Window_Selectable extends Window_Scrollable {
  * The superclass of windows for selecting a command.
  */
 declare class Window_Command extends Window_Selectable {
-	constructor(rect : Rectangle);
 
-	/**
-	 * 
-	 */
-	new ();
-
-		
 	/**
 	 * 
 	 * @param rect 
 	 */
-	initialize(rect : any): void;
-		
+	constructor(rect : Rectangle);
+
 	/**
 	 * 
 	 * @return  
