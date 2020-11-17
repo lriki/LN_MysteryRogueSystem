@@ -12,12 +12,7 @@ export class VNormalAttackSkillBehavior extends VSkillBehavior {
     onPerforme(entity: REGame_Entity, context: RECommandContext): void {
         console.log("VNormalAttackSkillBehavior");
         
-        const front = Helpers.makeEntityFrontPosition(entity, 1);
-        const block = REGame.map.block(front.x, front.y);
-        const reacor = context.findReactorEntityInBlock(block, REData.AttackActionId);
-        
-        
-        context.postActionTwoWay(REData.AttackActionId, entity, reacor);
+        context.postActionOneWay(REData.AttackActionId, entity);
     }
 }
 

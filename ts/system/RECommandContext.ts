@@ -114,6 +114,34 @@ export class RECommandContext
         Log.postCommand("ActionOneWay");
     }
     
+    /**
+     * 
+     */
+    postReaction(actionId: number, reactor: REGame_Entity, args?: any) {
+        assert(actionId > 0);
+        
+        const actualCommand = new RECommand(actionId, reactor, undefined, args);
+
+        const m1 = () => {
+            Log.doCommand("PreReaction");
+            return reactor._sendPreRection(this, actualCommand);
+        };
+        this._recodingCommandList.push({ name: "sendPreAction", func: m1 });
+
+        const m3 = () => {
+            if (this._lastActorResponce == REResponse.Pass) {
+                Log.doCommand("Reaction");
+                return reactor._sendReaction(this, actualCommand);
+            }
+            else {
+                return this._lastActorResponce;
+            }
+        };
+        this._recodingCommandList.push({ name: "sendReaction", func: m3 });
+
+        Log.postCommand("Reaction");
+    }
+
     /*
     postActionToBlock(actionId: number, actor: REGame_Entity, block: REGame_Block, args?: any) {
         // 送信対象検索

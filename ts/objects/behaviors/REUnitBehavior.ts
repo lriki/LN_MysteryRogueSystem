@@ -49,9 +49,16 @@ export class REUnitBehavior extends REGame_Behavior {
             console.log("AttackAction");
 
 
-
-
             context.postSequel(entity, RESystem.sequels.attack);
+
+
+            const front = Helpers.makeEntityFrontPosition(entity, 1);
+            const block = REGame.map.block(front.x, front.y);
+            const reacor = context.findReactorEntityInBlock(block, REData.AttackActionId);
+            if (reacor) {
+                context.postReaction(REData.AttackActionId, reacor);
+            }
+
             /*
 
 
