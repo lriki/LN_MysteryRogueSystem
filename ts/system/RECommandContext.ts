@@ -209,7 +209,7 @@ export class RECommandContext
     postPerformSkill(performer: REGame_Entity, skillId: SkillDataId): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
-            RESystem.skillBehaviors[skillId].onPerforme(performer, this);
+            RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
             return REResponse.Consumed;
         };
         this._recodingCommandList.push({ name: "PerformSkill", func: m1 });

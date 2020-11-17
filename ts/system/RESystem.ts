@@ -1,6 +1,6 @@
 import { DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
-import { VSkillBehavior } from "ts/objects/skills/SkillBehavior";
+import { LSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REIntegration } from "./REIntegration";
 
@@ -148,7 +148,7 @@ export class RESystem {
     
     static integration: REIntegration;
 
-    static skillBehaviors: VSkillBehavior[];
+    static skillBehaviors: LSkillBehavior[];
 
     static createAttribute(dataId: number) {
         const i = REData._attributeFactories[dataId]();

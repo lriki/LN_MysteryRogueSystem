@@ -1,6 +1,7 @@
+import { DClass } from "ts/data/DClass";
 import { DParameterEffect } from "ts/data/DSkill";
 import { DTraits } from "ts/data/DTraits";
-import { ParameterDataId } from "ts/data/REData";
+import { ParameterDataId, REData } from "ts/data/REData";
 import { REGame_Attribute } from "ts/RE/REGame_Attribute";
 import { RESystem } from "ts/system/RESystem";
 
@@ -15,6 +16,11 @@ export class LBattlerAttribute extends REGame_Attribute {
     _actualParams: number[] = [];       // 現在値
     _idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     _buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
+
+    // Game_BattlerBase.prototype.clearParamPlus
+    clearParamPlus(): void {
+        this._idealParamPlus = [0, 0, 0, 0, 0, 0, 0, 0];
+    };
 
     setActualParam(paramId: ParameterDataId, value: number): void {
         this._actualParams[paramId] = value;
@@ -101,3 +107,104 @@ export class LBattlerAttribute extends REGame_Attribute {
         this.setActualParam(RESystem.parameters.tp, this.actualParam(RESystem.parameters.tp).clamp(0, mtp));
     };
 }
+/**
+ */
+export class LActorAttribute extends LBattlerAttribute {
+    _actorId: number = 0;
+    _classId: number = 0;
+    _level: number = 0;
+    _exp: number[] = [];
+
+    // Game_Actor.prototype.setup
+    setup(actorId: number): void {
+        const actor = REData.actors[actorId];
+        const cls = REData.classes[actor.classId];
+        
+        this._actorId = actorId;
+        //this._name = actor.name;
+        //this._nickname = actor.nickname;
+        //this._profile = actor.profile;
+        this._classId = actor.classId;
+        this._level = actor.initialLevel;
+        this.initExp();
+        this.initSkills();
+        this.initEquips(actor.equips);
+        this.clearParamPlus();
+        //this.recoverAll();
+    }
+
+    // Game_Actor.prototype.initExp
+    initExp() {
+        this._exp[this._classId] = this.currentLevelExp();
+    }
+    
+    // Game_Actor.prototype.currentExp
+    currentExp(): number {
+        return this._exp[this._classId];
+    }
+    
+    // Game_Actor.prototype.currentLevelExp
+    currentLevelExp(): number {
+        return this.expForLevel(this._level);
+    }
+    
+    // Game_Actor.prototype.expForLevel
+    expForLevel(level: number): number {
+        const c = this.currentClass();
+        const basis = c.expParams[0];
+        const extra = c.expParams[1];
+        const acc_a = c.expParams[2];
+        const acc_b = c.expParams[3];
+        return Math.round(
+            (basis * Math.pow(level - 1, 0.9 + acc_a / 250) * level * (level + 1)) /
+                (6 + Math.pow(level, 2) / 50 / acc_b) +
+                (level - 1) * extra
+        );
+    }
+
+    // Game_Actor.prototype.currentClass
+    currentClass(): DClass {
+        return REData.classes[this._classId];
+    }
+    
+    // Game_Actor.prototype.initSkills
+    initSkills(): void {
+        this._skills = [];
+        for (const learning of this.currentClass().learnings) {
+            if (learning.level <= this._level) {
+                this.learnSkill(learning.skillId);
+            }
+        }
+    }
+
+    // Game_Actor.prototype.initEquips
+    initEquips(equips: ): void {
+        const slots = this.equipSlots();
+        const maxSlots = slots.length;
+        this._equips = [];
+        for (let i = 0; i < maxSlots; i++) {
+            this._equips[i] = new Game_Item();
+        }
+        for (let j = 0; j < equips.length; j++) {
+            if (j < maxSlots) {
+                this._equips[j].setEquip(slots[j] === 1, equips[j]);
+            }
+        }
+        this.releaseUnequippableItems(true);
+        this.refresh();
+    }
+
+    // Game_Actor.prototype.learnSkill
+    learnSkill(skillId: number): void {
+        if (!this.isLearnedSkill(skillId)) {
+            this._skills.push(skillId);
+            this._skills.sort((a, b) => a - b);
+        }
+    }
+
+    // Game_Actor.prototype.isLearnedSkill
+    isLearnedSkill(skillId: number): boolean {
+        return this._skills.includes(skillId);
+    };
+}
+

@@ -22,7 +22,7 @@ export interface DParameterEffect {
     variance: number;
 }
 
-export interface DUnitEffect {
+export interface DEffect {
     
     /**
      * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
@@ -50,6 +50,6 @@ export interface DSkill {
     /** Cost */
     paramCosts: ParameterDataId[];
 
-    effect: DUnitEffect;
+    effect: DEffect;
 }
 
