@@ -43,7 +43,7 @@ export class REDialogVisualWindowLayer {
     // ウィンドウ破棄とかはここで
     onDestroy() {
         this._windows.forEach(x => {
-            x.destroy(undefined);
+            x.destroy();
         });
     }
 

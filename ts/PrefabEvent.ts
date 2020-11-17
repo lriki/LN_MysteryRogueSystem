@@ -157,7 +157,7 @@ declare global {
 
 var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
-    this._prefabSpriteIdRE = Sprite._counter + 1;
+    this._prefabSpriteIdRE = this._counter + 1;
     _Spriteset_Map_createCharacters.call(this);
 
     
