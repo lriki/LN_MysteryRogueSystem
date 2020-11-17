@@ -119,6 +119,7 @@ export interface RE_Data_Actor
     initialY: number;
 
     classId: DClassId;
+    initialLevel: number;
 }
 
 /**
@@ -353,6 +354,7 @@ export class REData
             initialX: 0,
             initialY: 0,
             classId: 0,
+            initialLevel: 0,
         });
         return newId;
     }

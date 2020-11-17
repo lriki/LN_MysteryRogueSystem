@@ -127,8 +127,8 @@ export class LActorAttribute extends LBattlerAttribute {
         this._classId = actor.classId;
         this._level = actor.initialLevel;
         this.initExp();
-        this.initSkills();
-        this.initEquips(actor.equips);
+        //this.initSkills();
+        //this.initEquips(actor.equips);
         this.clearParamPlus();
         //this.recoverAll();
     }
@@ -169,16 +169,21 @@ export class LActorAttribute extends LBattlerAttribute {
     
     // Game_Actor.prototype.initSkills
     initSkills(): void {
+        throw new Error("Not implemented.");
+        /*
         this._skills = [];
         for (const learning of this.currentClass().learnings) {
             if (learning.level <= this._level) {
                 this.learnSkill(learning.skillId);
             }
         }
+        */
     }
 
     // Game_Actor.prototype.initEquips
-    initEquips(equips: ): void {
+    initEquips(equips: number[]): void {
+        throw new Error("Not implemented.");
+        /*
         const slots = this.equipSlots();
         const maxSlots = slots.length;
         this._equips = [];
@@ -192,19 +197,26 @@ export class LActorAttribute extends LBattlerAttribute {
         }
         this.releaseUnequippableItems(true);
         this.refresh();
+        */
     }
 
     // Game_Actor.prototype.learnSkill
     learnSkill(skillId: number): void {
+        throw new Error("Not implemented.");
+        /*
         if (!this.isLearnedSkill(skillId)) {
             this._skills.push(skillId);
             this._skills.sort((a, b) => a - b);
         }
+        */
     }
 
     // Game_Actor.prototype.isLearnedSkill
     isLearnedSkill(skillId: number): boolean {
+        throw new Error("Not implemented.");
+        /*
         return this._skills.includes(skillId);
+        */
     };
 }
 

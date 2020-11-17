@@ -165,6 +165,7 @@ export class REDataManager
                 const id = REData.addActor(x.name ?? "null");
                 const actor = REData.actors[id];
                 actor.classId = x.classId ?? 0;
+                actor.initialLevel = x.initialLevel ?? 1;
             }
         });
         // 1番アクターの初期フロアを、RMMZプレイヤーの初期位置にする
