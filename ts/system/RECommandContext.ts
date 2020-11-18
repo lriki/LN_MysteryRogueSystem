@@ -42,7 +42,7 @@ export class RECommandContext
     postActionTwoWay(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
         assert(actionId > 0);
 
-        const actualCommand = new RECommand(actionId, actor, reactor, args);
+        const actualCommand = new RECommand(actionId, actor, reactor, undefined, args);
 
         const m1 = () => {
             Log.doCommand("PreAction");
@@ -89,10 +89,10 @@ export class RECommandContext
      * 
      * [攻撃] など、reactor 側の状態に関係なく actor 側が実行できる Action で使用する。
      */
-    postActionOneWay(actionId: number, actor: REGame_Entity, args?: any) {
+    postActionOneWay(actionId: number, actor: REGame_Entity, effectContext: REEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
-        const actualCommand = new RECommand(actionId, actor, undefined, args);
+        const actualCommand = new RECommand(actionId, actor, undefined, effectContext, args);
 
         const m1 = () => {
             Log.doCommand("PreAction");
@@ -117,10 +117,10 @@ export class RECommandContext
     /**
      * 
      */
-    postReaction(actionId: number, reactor: REGame_Entity, args?: any) {
+    postReaction(actionId: number, reactor: REGame_Entity, effectContext: REEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
-        const actualCommand = new RECommand(actionId, reactor, undefined, args);
+        const actualCommand = new RECommand(actionId, reactor, undefined, effectContext, args);
 
         const m1 = () => {
             Log.doCommand("PreReaction");

@@ -3,6 +3,7 @@ import { DEffect } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
 import { ParameterDataId, REData } from "ts/data/REData";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { SActionResult } from "./SActionResult";
 
 
 // 攻撃側
@@ -70,6 +71,17 @@ export class SEffecteeResult {
  *   そのためインスタンスは別にしないと、同時攻撃で他の攻撃対象に影響が出てしまうことがある。
  * - インスタンスは Command に乗せて持ち回り、コマンドチェーン内で必ず Apply する。外には出ない。(そうしないと Attr に保存するような事態になるので)
  * 
+ * 戦闘不能について
+ * ----------
+ * ツクールの仕様にできるだけ寄せてみる。ツクールの仕様は…
+ * - 戦闘不能ステートID は Game_Battler.deathStateId() で取得 (1)
+ * - Game_Battler.refresh() で、HP が 0 であれば deathState が追加される。
+ * - Game_BattlerBase.addNewState() で、で、deathState が追加されたら die() が呼ばれ HP 0 になる。
+ * - Game_Battler.removeState() で、deathState が取り除かれたら revivie() が呼ばれ HP 1 になる。
+ * - refresh() はダメージ適用や装備変更など様々なタイミングで呼び出される。
+ *   - Game_Action.apply() > executeHpDamage() > Game_Battler.gainHp() > setHp() > refresh() 等。
+ * 
+ * 
  * 
  * [2020/11/11] 複数ターゲットへの攻撃をひとつの EffectContext にまとめるべき？
  * ----------
@@ -103,6 +115,11 @@ export class REEffectContext {
         this._effectors.push(effector);
     }
     
+    apply(target: REGame_Entity): SActionResult {
+        const result = new SActionResult();
+
+        return result;
+    }
 
 }
 

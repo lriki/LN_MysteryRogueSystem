@@ -2,6 +2,40 @@
 ==========
 
 
+[2020/11/18] Entity とするまでもないのでは？Behavior でいいのでは？
+----------
+
+例えば、
+- SleepStateBehavior をアタッチする
+- onAttach() とかで SleepStateAttribue をアタッチして、経過ターン数はここでカウントする
+とか。
+
+→ ダメ。というか、同じ状態異常が与えられたときに経過ターン数をリセットするのが割と一般的な実装だけど、それをやるのがかなり面倒になる。
+
+…と思ったけど別に Attribute と Behavior を一つにまとめた SleepStateBehavior にしてもいいし、Behavior < StateBehavior < SleepStateBehavior という継承関係にして、
+StateBehavior に経過ターンやステートID保持など共通処理を持たせてもかまわない。
+
+Entity にするメリットは、
+- Behavior を後から追加できる
+…くらいか。
+State 自体をターン経過で悪化させたり、別 State に変化させたりするのは Behavior でもできる。
+
+例えば、毒とマヒの効果を同時に持ったステートを作りたいとき、普通の毒BehaviorとマヒBehaviorをアタッチすればいいような感じになる。
+…でも経過ターンの管理は単一の Attr でやったほうがいいので、この時は１つの共有 Attr と複数の Behavior をひとつの Entity が持つことになる。
+
+よく考えてみるとこれはツクールの State のデータ構造とほとんど同じ。
+Trait=Behaviorになってるだけ。
+
+ただこれだと Static な Behavior にしてしまえばよくなる。
+Entity にする必要なし。現時点の SkillBehavior と似たような感じ。
+
+でもそれで十分かもしれない。
+State に対して Dynamic に Trait を追加したいようなことはまずない。
+というか、それをやりたいなら別の State を ActorEntity に追加する。
+逆に複雑になりすぎそう。
+
+
+
 [2020/11/9] State を Entity とする？
 ----------
 

@@ -56,7 +56,7 @@ export class REUnitBehavior extends REGame_Behavior {
             const block = REGame.map.block(front.x, front.y);
             const reacor = context.findReactorEntityInBlock(block, REData.AttackActionId);
             if (reacor) {
-                context.postReaction(REData.AttackActionId, reacor);
+                context.postReaction(REData.AttackActionId, reacor, cmd.effectContext());
             }
 
             /*
