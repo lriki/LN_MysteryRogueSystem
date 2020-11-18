@@ -88,7 +88,7 @@ export class REEffectContext {
     //
     // 矢弾や魔法弾を打った場合、その Projectile Entity も effectors に含まれる。
     // なお、魔法反射や吹き飛ばし移動は Command 側で処理する。EffectContext はあくまでパラメータの変化に関係する処理のみを行う。
-    private _effectors: REGame_Entity[] = [];
+    private _effectors: SEffectorFact[] = [];
 
     // 経験値など、報酬に関わるフィードバックを得る人。
     // 基本は effectors と同じだが、反射や投げ返しを行ったときは経験値を得る人が変わるため、その対応のために必要となる。
@@ -99,11 +99,10 @@ export class REEffectContext {
     private _effectees: REGame_Entity[] = [];
 
     
-    
-
-    buildEffectors() {
-
+    addEffector(effector: SEffectorFact) {
+        this._effectors.push(effector);
     }
+    
 
 }
 
