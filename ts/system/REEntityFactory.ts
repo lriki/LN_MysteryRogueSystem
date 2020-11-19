@@ -8,7 +8,6 @@ import { RETileAttribute } from "../objects/attributes/RETileAttribute";
 import { TileKind } from "../RE/REGame_Block";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { DStateId } from "ts/data/DState";
-import { LGenericState } from "ts/objects/states/LGenericState";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LBattlerAttribute } from "ts/objects/attributes/LBattlerAttribute";
 
@@ -48,14 +47,6 @@ export class REEntityFactory {
     static newExitPoint(): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new REExitPointBehavior());
-        return e;
-    }
-
-    static newState(stateId: DStateId): REGame_Entity {
-        const e = REGame.world.spawnEntity();
-        const b = new LGenericState();
-        b._dataId = stateId;
-        e.addBasicBehavior(b);
         return e;
     }
 

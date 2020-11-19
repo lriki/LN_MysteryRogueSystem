@@ -13,6 +13,7 @@ import { RESystem } from "./RESystem";
 import { assert } from "ts/Common";
 import { RECommandRecorder } from "./RECommandRecorder";
 import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
+import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 
 
 /**
@@ -50,6 +51,8 @@ export class REGameManager
 
         // TODO: とりあえずまずは全部同じにしてテスト
         RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
+        RESystem.stateBehaviors = [];
+        RESystem.stateBehaviors[RESystem.states.debug_MoveRight] = new LDebugMoveRightState();
 
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.uniqueActorUnits[0];

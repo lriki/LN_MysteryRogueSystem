@@ -6,8 +6,9 @@ import { RECommandContext } from "../system/RECommandContext";
 import { BlockLayerKind } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
-import { LState } from "ts/objects/states/State";
+import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { EntityId } from "ts/system/EntityId";
+import { DState, DStateId } from "ts/data/DState";
 
 enum BlockLayer
 {
@@ -85,7 +86,7 @@ export class REGame_Entity
     
     // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
     // とりあえず Entity に持たせて様子見。
-    private _states: LState[] = [];
+    private _states: DStateId[] = [];
 
     //static newEntity(): REGame_Entity {
     //    const e = new REGame_Entity();
@@ -123,13 +124,16 @@ export class REGame_Entity
         if (index >= 0) this._basicBehaviors.splice(index, 1);
     }
 
-    addState(value: LState) {
-        this._states.unshift(value);
+    addState(stateId: DStateId) {
+        this._states.unshift(stateId);
     }
 
-    removeState(value: LState) {
-        const index = this._states.findIndex(x => x == value);
-        if (index >= 0) this._states.splice(index, 1);
+    removeState(stateId: DStateId) {
+        this._states.remove(stateId);
+        //this._states.remove(stateId);
+        //delete this._stateTurns[stateId];
+        //const index = this._states.findIndex(x => x == value);
+        //if (index >= 0) this._states.splice(index, 1);
     }
 
     
@@ -202,9 +206,9 @@ export class REGame_Entity
         return REResponse.Pass;
     }
 
-    _callStateIterationHelper(func: (x: LState) => REResponse): REResponse {
+    _callStateIterationHelper(func: (x: LStateBehavior) => REResponse): REResponse {
         for (let i = 0; i < this._states.length; i++) {
-            const r = func(this._states[i]);
+            const r = func(RESystem.stateBehaviors[this._states[i]]);
             if (r != REResponse.Pass) {
                 return r;
             }

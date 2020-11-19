@@ -1,6 +1,7 @@
 import { DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { LSkillBehavior } from "ts/objects/skills/SkillBehavior";
+import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
 import { REIntegration } from "./REIntegration";
 
@@ -88,11 +89,12 @@ export interface BasicAttributes {
 export interface BasicBehaviors {
     decision: number;
     unit: number;
-    genericState: number;
+    //genericState: number;
 }
 
 export interface BasicStates {
     dead: DStateId,         // 戦闘不能
+    /*
     speedDown: DStateId,    // 鈍足
     speedUp: DStateId,      // 倍速
     confusion: DStateId,    // 混乱
@@ -107,7 +109,7 @@ export interface BasicStates {
     clairvoyant: DStateId,  // 千里眼
     deception: DStateId,    // まどわし
     mouthClosed: DStateId,  // くちなし
-
+    */
     debug_MoveRight: DStateId,
 }
 
@@ -149,6 +151,7 @@ export class RESystem {
     static integration: REIntegration;
 
     static skillBehaviors: LSkillBehavior[];
+    static stateBehaviors: LStateBehavior[];
 
     static createAttribute(dataId: number) {
         const i = REData._attributeFactories[dataId]();
@@ -161,13 +164,5 @@ export class RESystem {
         i.dataId = dataId;
         return i;
     }
-
-    
-    static createState(dataId: DStateId) {
-        const i = REData._stateFactories[dataId]();
-        i._dataId = dataId;
-        return i;
-    }
-    
 }
 

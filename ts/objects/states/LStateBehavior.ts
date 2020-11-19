@@ -10,8 +10,8 @@ import { RECommandContext } from "ts/system/RECommandContext";
  * 
  * 各メソッドは Behavior と同一
  */
-export class LState extends REGame_Behavior {
-    _dataId: DStateId = 0;
+export class LStateBehavior {
+    //_dataId: DStateId = 0;
     
     
     onQueryProperty(propertyId: number): any { return undefined; }

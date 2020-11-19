@@ -4,9 +4,9 @@ import { DecisionPhase } from "ts/RE/REGame_Behavior";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { LState } from "./State";
+import { LStateBehavior } from "./LStateBehavior";
 
-export class LDebugMoveRightState extends LState {
+export class LDebugMoveRightState extends LStateBehavior {
 
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
         console.log("★LDebugMoveRightState")
