@@ -9,6 +9,7 @@ import { ActionId } from "ts/data/REData";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { EntityId } from "ts/system/EntityId";
 import { DState, DStateId } from "ts/data/DState";
+import { assert } from "ts/Common";
 
 enum BlockLayer
 {
@@ -99,7 +100,9 @@ export class REGame_Entity
     }
 
     addAttribute(value: REGame_Attribute) {
+        assert(value._ownerEntityId.index == 0);
         this.attrbutes.push(value);
+        value._ownerEntityId = this._id;
         return this;
     }
 

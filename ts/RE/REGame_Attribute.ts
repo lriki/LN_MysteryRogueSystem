@@ -1,3 +1,7 @@
+import { assert } from "ts/Common";
+import { EntityId } from "ts/system/EntityId";
+import { REGame } from "./REGame";
+import { REGame_Entity } from "./REGame_Entity";
 
 /**
  * データのみ保持する。
@@ -8,9 +12,15 @@
 export class REGame_Attribute
 {
     dataId: number = 0;
+    _ownerEntityId: EntityId = { index: 0, key: 0 };
 
     data(): REGame_AttributeData {
         return {};
+    }
+
+    entity(): REGame_Entity {
+        assert(this._ownerEntityId.index > 0);
+        return REGame.world.entity(this._ownerEntityId);
     }
 }
 

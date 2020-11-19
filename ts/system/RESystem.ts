@@ -1,5 +1,5 @@
 import { DStateId } from "ts/data/DState";
-import { REData } from "ts/data/REData";
+import { ParameterDataId, REData } from "ts/data/REData";
 import { LSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
@@ -42,16 +42,16 @@ export interface EntityProperties {
 // Battler 自身が持つパラメータ
 export interface BasicParameters {
     // RMMZ 基礎パラメータ。(Game_Battler.params(x)) 並び順が一致するようにしておく。
-    hp: number;    // HP / Maximum Hit Points
-    mp: number;    // Magic Points / Maximum Magic Points
-    atk: number;        // ATtacK power. ちから, 武器攻撃力
-    def: number;        // DEFense power. 防具防御力
-    mat: number;    // Magic ATtack power
-    mdf: number;    // Magic DeFense power
-    agi: number;    // AGIlity
-    luk: number;    // LUcK
+    hp: ParameterDataId;    // HP / Maximum Hit Points
+    mp: ParameterDataId;    // Magic Points / Maximum Magic Points
+    atk: ParameterDataId;        // ATtacK power. ちから, 武器攻撃力
+    def: ParameterDataId;        // DEFense power. 防具防御力
+    mat: ParameterDataId;    // Magic ATtack power
+    mdf: ParameterDataId;    // Magic DeFense power
+    agi: ParameterDataId;    // AGIlity
+    luk: ParameterDataId;    // LUcK
 
-    tp: number;         // Tactical Points
+    tp: ParameterDataId;         // Tactical Points
 
     // xparam 装備やステートによって変動するパラメータ
     /*

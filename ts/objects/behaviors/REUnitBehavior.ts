@@ -77,7 +77,7 @@ export class REUnitBehavior extends REGame_Behavior {
             console.log("onReaction AttackAction");
 
 
-
+            cmd.effectContext()?.apply(entity);
 
             context.postSequel(entity, RESystem.sequels.CollapseSequel);
             /*

@@ -12,7 +12,8 @@ import { RESystem } from "ts/system/RESystem";
  * 
  */
 export class LBattlerAttribute extends REGame_Attribute {
-    // 以下 param の index は ParameterDataId. RMMZ の param index とは異なるが、mhp,mmp,atk,def,mat,mdf,agi,luk のインデックスとは一致する。
+    // 以下 param の index は ParameterDataId.
+    // RMMZ の param index とは異なるが、mhp,mmp,atk,def,mat,mdf,agi,luk のインデックスとは一致する。
     _actualParams: number[] = [];       // 現在値
     _idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     _buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
@@ -22,14 +23,22 @@ export class LBattlerAttribute extends REGame_Attribute {
         this._idealParamPlus = [0, 0, 0, 0, 0, 0, 0, 0];
     };
 
-    setActualParam(paramId: ParameterDataId, value: number): void {
-        this._actualParams[paramId] = value;
-    }
-
     actualParam(paramId: ParameterDataId): number {
         return this._actualParams[paramId] ?? 0;
     }
 
+    setActualParam(paramId: ParameterDataId, value: number): void {
+        this._actualParams[paramId] = value;
+        this.refresh();
+    }
+    
+    gainActualParam(paramId: ParameterDataId, value: number): void {
+        this.setActualParam(paramId, this.actualParam(paramId) + value);
+    }
+
+    // 上限値。
+    // システム上、HP,MP 等のほか、攻撃力、満腹度など様々なパラメータの減少が発生するため、
+    // RMMZ のような _hp, _mp, _tp といったフィールドは用意せず、すべて同じように扱う。
     // Game_BattlerBase.prototype.param
     idealParam(paramId: ParameterDataId): number {
         const value =
@@ -94,18 +103,30 @@ export class LBattlerAttribute extends REGame_Attribute {
     };
 
     // Game_BattlerBase.prototype.refresh
+    // Game_Battler.prototype.refresh
     refresh() {
         //for (const stateId of this.stateResistSet()) {
         //    this.eraseState(stateId);
         //}
 
+
+        // TODO: 全パラメータ
         const mhp = this.idealParam(RESystem.parameters.hp);
         const mmp = this.idealParam(RESystem.parameters.mp);
         const mtp = this.idealParam(RESystem.parameters.tp);
         this.setActualParam(RESystem.parameters.hp, this.actualParam(RESystem.parameters.hp).clamp(0, mhp));
         this.setActualParam(RESystem.parameters.mp, this.actualParam(RESystem.parameters.mp).clamp(0, mmp));
         this.setActualParam(RESystem.parameters.tp, this.actualParam(RESystem.parameters.tp).clamp(0, mtp));
-    };
+    
+        
+        const entity = this.entity();
+        if (this.actualParam(RESystem.parameters.hp) === 0) {
+            entity.addState(RESystem.states.dead);
+        } else {
+            entity.removeState(RESystem.states.dead);
+        }
+    
+    }
 }
 /**
  */

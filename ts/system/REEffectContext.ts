@@ -2,7 +2,9 @@ import { assert } from "ts/Common";
 import { DEffect } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
 import { ParameterDataId, REData } from "ts/data/REData";
+import { LBattlerAttribute } from "ts/objects/attributes/LBattlerAttribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { RESystem } from "./RESystem";
 import { SActionResult } from "./SActionResult";
 
 
@@ -115,12 +117,24 @@ export class REEffectContext {
         this._effectors.push(effector);
     }
     
+    // Game_Action.prototype.apply
     apply(target: REGame_Entity): SActionResult {
         const result = new SActionResult();
+
+        const value = 10000;
+        this.executeDamage(target, value);
 
         return result;
     }
 
+    // Game_Action.prototype.executeDamage
+    private executeDamage(target: REGame_Entity, value: number): void {
+        const attr = target.findAttribute(LBattlerAttribute);
+        assert(attr);
+
+        attr.gainActualParam(RESystem.parameters.hp, -value);
+
+    };
 }
 
 export class REffectResult {
