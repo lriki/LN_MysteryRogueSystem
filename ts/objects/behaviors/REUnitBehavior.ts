@@ -79,14 +79,6 @@ export class REUnitBehavior extends REGame_Behavior {
 
             cmd.effectContext()?.apply(entity);
 
-            context.postSequel(entity, RESystem.sequels.CollapseSequel);
-            /*
-
-
-            context.postActionToBlock();
-            */
-
-            context.postDestroy(entity);
             
             return REResponse.Consumed;
         }

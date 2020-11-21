@@ -1,5 +1,6 @@
 import { DClass } from "ts/data/DClass";
 import { DParameterEffect } from "ts/data/DSkill";
+import { DStateId } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
 import { ParameterDataId, REData } from "ts/data/REData";
 import { REGame_Attribute } from "ts/RE/REGame_Attribute";
@@ -18,9 +19,38 @@ export class LBattlerAttribute extends REGame_Attribute {
     _idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     _buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
 
+    constructor() {
+        super();
+        this._actualParams[RESystem.parameters.hp] = 1;
+        this._actualParams[RESystem.parameters.mp] = 1;
+        this._actualParams[RESystem.parameters.tp] = 1;
+        this._actualParams[RESystem.parameters.atk] = 1;
+        this._actualParams[RESystem.parameters.def] = 1;
+        this._actualParams[RESystem.parameters.mat] = 1;
+        this._actualParams[RESystem.parameters.mdf] = 1;
+        this._actualParams[RESystem.parameters.agi] = 1;
+        this._actualParams[RESystem.parameters.luk] = 1;
+
+        this._idealParamPlus[RESystem.parameters.hp] = 1;
+        this._idealParamPlus[RESystem.parameters.mp] = 1;
+        this._idealParamPlus[RESystem.parameters.tp] = 1;
+        this._idealParamPlus[RESystem.parameters.atk] = 1;
+        this._idealParamPlus[RESystem.parameters.def] = 1;
+        this._idealParamPlus[RESystem.parameters.mat] = 1;
+        this._idealParamPlus[RESystem.parameters.mdf] = 1;
+        this._idealParamPlus[RESystem.parameters.agi] = 1;
+        this._idealParamPlus[RESystem.parameters.luk] = 1;
+
+        for (let [key, value] of Object.entries(RESystem.parameters)) {
+            this._actualParams[value] = 1
+            this._idealParamPlus[value] = 1
+            this._buffs[value] = 0
+          }
+    }
+
     // Game_BattlerBase.prototype.clearParamPlus
     clearParamPlus(): void {
-        this._idealParamPlus = [0, 0, 0, 0, 0, 0, 0, 0];
+        
     };
 
     actualParam(paramId: ParameterDataId): number {
@@ -100,7 +130,18 @@ export class LBattlerAttribute extends REGame_Attribute {
     // Game_BattlerBase.prototype.traitsPi
     traitsPi(code: number, id: number): number {
         return this.traitsWithId(code, id).reduce((r, trait) => r * trait.value, 1);
-    };
+    }
+
+    // Game_BattlerBase.prototype.isStateAffected
+    isStateAffected(stateId: DStateId): boolean {
+        const entity = this.entity();
+        return entity._states.includes(stateId);
+    }
+    
+    // Game_BattlerBase.prototype.isDeathStateAffected
+    isDeathStateAffected(): boolean {
+        return this.isStateAffected(RESystem.states.dead);
+    }
 
     // Game_BattlerBase.prototype.refresh
     // Game_Battler.prototype.refresh
@@ -109,23 +150,39 @@ export class LBattlerAttribute extends REGame_Attribute {
         //    this.eraseState(stateId);
         //}
 
+        console.log("_idealParamPlus:", this._idealParamPlus);
+        console.log("_actualParams:", this._actualParams);
+        const hp = this.actualParam(RESystem.parameters.hp);
+        console.log("RESystem.parameters.hp:", RESystem.parameters.hp);
+        console.log("hp:", hp);
+        console.log("hp:", hp.clamp(0, 1));
 
         // TODO: 全パラメータ
+        // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
         const mhp = this.idealParam(RESystem.parameters.hp);
         const mmp = this.idealParam(RESystem.parameters.mp);
         const mtp = this.idealParam(RESystem.parameters.tp);
-        this.setActualParam(RESystem.parameters.hp, this.actualParam(RESystem.parameters.hp).clamp(0, mhp));
-        this.setActualParam(RESystem.parameters.mp, this.actualParam(RESystem.parameters.mp).clamp(0, mmp));
-        this.setActualParam(RESystem.parameters.tp, this.actualParam(RESystem.parameters.tp).clamp(0, mtp));
+        console.log("mmp:", mmp);
+        this._actualParams[RESystem.parameters.hp] = this.actualParam(RESystem.parameters.hp).clamp(0, mhp);
+        this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
+        this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
     
+        console.log("_actualParams:", this._actualParams);
         
+
         const entity = this.entity();
         if (this.actualParam(RESystem.parameters.hp) === 0) {
+            console.log("!!!DEAD!!!");
             entity.addState(RESystem.states.dead);
         } else {
             entity.removeState(RESystem.states.dead);
         }
     
+        
+
+        //context.postSequel(entity, RESystem.sequels.CollapseSequel);
+
+        //context.postDestroy(entity);
     }
 }
 /**

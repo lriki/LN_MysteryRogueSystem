@@ -10,10 +10,13 @@
  * Player, Enemy 共に Position は持つが、それをキー入力で更新するのか、AI で更新するのかは異なる。
  */
 
+import { assert } from "ts/Common";
 import { ActionId } from "ts/data/REData";
+import { EntityId } from "ts/system/EntityId";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
+import { REGame } from "./REGame";
 import { REGame_Entity } from "./REGame_Entity";
 
 export enum DecisionPhase {
@@ -25,6 +28,12 @@ export enum DecisionPhase {
 // see: 実装FAQ-Command-Behavior.md
 export class REGame_Behavior {
     dataId: number = 0;
+    _ownerEntityId: EntityId = { index: 0, key: 0 };
+    
+    entity(): REGame_Entity {
+        assert(this._ownerEntityId.index > 0);
+        return REGame.world.entity(this._ownerEntityId);
+    }
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
     // propertyId: see EntityProperties
@@ -51,6 +60,9 @@ export class REGame_Behavior {
 
     onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {}
     onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
+
+    /** 1行動消費単位の終了時点 */
+    onTurnEnd(context: RECommandContext): REResponse { return REResponse.Pass; }
 }
 
 /*

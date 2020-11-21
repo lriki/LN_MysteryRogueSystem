@@ -20,11 +20,9 @@ export class REEntityFactory {
 
     static newActor(): REGame_Entity {
         const e = REGame.world.spawnEntity();
-        e.attrbutes = [
-            new REGame_UnitAttribute()
-                .setFactionId(REData.ActorDefaultFactionId),
-            new LBattlerAttribute(),
-        ]
+        e.addAttribute(new REGame_UnitAttribute()
+            .setFactionId(REData.ActorDefaultFactionId));
+        e.addAttribute(new LBattlerAttribute());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
         e.addBasicBehavior(new LBattlerBehavior());
@@ -33,11 +31,9 @@ export class REEntityFactory {
 
     static newMonster(monsterId: number): REGame_Entity {
         const e = REGame.world.spawnEntity();
-        e.attrbutes = [
-            new REGame_UnitAttribute()
-                .setFactionId(REData.EnemeyDefaultFactionId),
-            new LBattlerAttribute(),
-        ]
+        e.addAttribute(new REGame_UnitAttribute()
+            .setFactionId(REData.ActorDefaultFactionId));
+        e.addAttribute(new LBattlerAttribute());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
         e.addBasicBehavior(new LBattlerBehavior());

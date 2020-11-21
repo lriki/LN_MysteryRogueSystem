@@ -87,7 +87,7 @@ export class REGame_Entity
     
     // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
     // とりあえず Entity に持たせて様子見。
-    private _states: DStateId[] = [];
+    _states: DStateId[] = [];
 
     //static newEntity(): REGame_Entity {
     //    const e = new REGame_Entity();
@@ -112,6 +112,7 @@ export class REGame_Entity
 
     addBasicBehavior(value: REGame_Behavior) {
         this._basicBehaviors.unshift(value);
+        value._ownerEntityId = this._id;
     }
 
     //addAdhocBehavior(value: REGame_Behavior) {

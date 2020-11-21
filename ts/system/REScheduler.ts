@@ -32,7 +32,7 @@ export interface RunInfo
 
 enum SchedulerPhase
 {
-    TurnStarting,
+    PartStarting,
 
     RunStarting,
 
@@ -55,7 +55,7 @@ enum SchedulerPhase
 
     RunEnding,
 
-    TurnEnding,
+    PartEnding,
 }
 
 
@@ -68,7 +68,8 @@ export class REScheduler
     //rivate _dialogModel: REDialog | undefined;
     private _dialogContext: REDialogContext;
 
-    private _phase: SchedulerPhase = SchedulerPhase.TurnStarting;
+    private _phase: SchedulerPhase = SchedulerPhase.PartStarting;
+    private _actorEntities: REGame_Entity[] = [];   // Part 中に行動する全 Entity
     private _units: UnitInfo[] = [];
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
@@ -170,8 +171,8 @@ export class REScheduler
 
     private stepSimulationInternal(): void {
         switch (this._phase) {
-            case SchedulerPhase.TurnStarting:
-                this.update_TurnStarting();
+            case SchedulerPhase.PartStarting:
+                this.update_PartStarting();
                 break;
             case SchedulerPhase.RunStarting:
                 this.update_RunStarting();
@@ -188,8 +189,8 @@ export class REScheduler
             case SchedulerPhase.RunEnding:
                 this.update_RunEnding();
                 break;
-            case SchedulerPhase.TurnEnding:
-                this.update_TurnEnding();
+            case SchedulerPhase.PartEnding:
+                this.update_PartEnding();
                 break;
             default:
                 assert(0);
@@ -197,8 +198,8 @@ export class REScheduler
         }
     }
     
-    private update_TurnStarting(): void {
-        Log.d("========== [TurnStarting] ==========");
+    private update_PartStarting(): void {
+        Log.d("========== [PartStarting] ==========");
 
         this.buildOrderTable();
         
@@ -230,7 +231,7 @@ export class REScheduler
         this._currentRun = 0;
         this._phase = SchedulerPhase.RunStarting;
 
-        Log.d("e update_TurnStarting");
+        Log.d("e update_PartStarting");
     }
     
     private update_RunStarting(): void {
@@ -296,6 +297,7 @@ export class REScheduler
                 // 行動トークンを消費する行動がとられた。
                 const step = run.steps[this._currentStep];
                 step.iterationCount--;
+                this.onTurnEnd(step);
                 if (step.iterationCount <= 0) {
                     this._currentStep++;
                 }
@@ -392,23 +394,33 @@ export class REScheduler
         console.log("update_RunEnding");
         this._currentRun++;
         if (this._currentRun >= this._runs.length) {
-            this._phase = SchedulerPhase.TurnEnding;
+            this._phase = SchedulerPhase.PartEnding;
         }
         else {
             this._phase = SchedulerPhase.RunStarting;
         }
     }
     
-    private update_TurnEnding(): void {
-        console.log("update_TurnEnding flushSequelSet");
+    private update_PartEnding(): void {
+        console.log("update_PartEnding flushSequelSet");
 
         // ターン終了時に Sequel が残っていればすべて掃き出す
         this.flushSequelSet();
 
-        this._phase = SchedulerPhase.TurnStarting;
+        this._phase = SchedulerPhase.PartStarting;
+    }
+
+    // 1行動トークンの消費を終えたタイミング。
+    // 手番が終了し、次の人へ手番が移る直前。
+    // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
+    private onTurnEnd(step: RunStepInfo): void {
+        this._actorEntities.forEach(entity => {
+            entity._callBehaviorIterationHelper(behavior => behavior.onTurnEnd(this._commandContext));
+        });
     }
 
     private buildOrderTable(): void {
+        this._actorEntities = [];
         this._units = [];
 
         let runCount = 0;
@@ -436,6 +448,8 @@ export class REScheduler
 
                     // このターン内の最大行動回数 (phase 数) を調べる
                     runCount = Math.max(runCount, actionCount);
+
+                    this._actorEntities.push(entity);
                 }
             });
         }
@@ -520,6 +534,8 @@ export class REScheduler
         if (index >= 0) {
             console.log("invalidate", entity);
             this._units[index].entity = undefined;
+            
+            this._actorEntities = this._actorEntities.filter(x => x != entity);
         }
     }
 
