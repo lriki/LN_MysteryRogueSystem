@@ -165,13 +165,16 @@ export class REGame_Entity
             }
         }
         return undefined;
-        /*
-        const r = this.attrbutes.find(x => x.constructor.toString() === Text.name);
-        if (r)
-            return r as unknown as T;
-        else
-            return undefined;
-            */
+    }
+    
+    findBehavior<T>(ctor: { new(...args: any[]): T }): T | undefined {
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            const a = this._basicBehaviors[i];
+            if (a instanceof ctor) {
+                return a as T;
+            }
+        }
+        return undefined;
     }
 
     queryProperty(propertyId: number): any {

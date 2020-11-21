@@ -9,7 +9,6 @@ import { TileKind } from "../RE/REGame_Block";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { DStateId } from "ts/data/DState";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
-import { LBattlerAttribute } from "ts/objects/attributes/LBattlerAttribute";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -22,7 +21,6 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new REGame_UnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
-        e.addAttribute(new LBattlerAttribute());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
         e.addBasicBehavior(new LBattlerBehavior());
@@ -33,7 +31,6 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new REGame_UnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
-        e.addAttribute(new LBattlerAttribute());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
         e.addBasicBehavior(new LBattlerBehavior());
