@@ -153,6 +153,11 @@ export class RESystem {
     static skillBehaviors: LSkillBehavior[];
     static stateBehaviors: LStateBehavior[];
 
+    // 冒険結果の表示中かどうか
+    static challengeResultShowing: boolean = false;
+
+
+
     static createAttribute(dataId: number) {
         const i = REData._attributeFactories[dataId]();
         i.dataId = dataId;

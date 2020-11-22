@@ -1,6 +1,8 @@
 import { assert } from "./Common";
 import { REData, REFloorMapKind } from "./data/REData";
 import { REDataManager } from "./data/REDataManager";
+import { RMMZIntegration } from "./RMMZIntegration";
+import { RESystem } from "./system/RESystem";
 import { REEntityVisualSet } from "./visual/REEntityVisualSet";
 import { REVisual } from "./visual/REVisual";
 
@@ -61,11 +63,19 @@ Scene_Map.prototype.create = function() {
 
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
-    // ベースの createDisplayObjects() では update() 一度呼ばれるため、先にインスタンスを作っておく
+    
+    REVisual.initialize(this);
+    RESystem.integration = new RMMZIntegration();
+
+    // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく
     assert(!REVisual.entityVisualSet);
     REVisual.entityVisualSet = new REEntityVisualSet();
 
     _Scene_Map_createDisplayObjects.call(this);
+    
+    // REVisual の中で Window を作りたいが、ベースの createWindowLayer() を先に実行しておく必要がある。
+    // その後 createWindows() を呼び出す。
+    REVisual.createWindows();
 };
 
 var _Scene_Map_terminate = Scene_Map.prototype.terminate;
@@ -77,7 +87,7 @@ Scene_Map.prototype.terminate = function() {
         REVisual.entityVisualSet = undefined;
     }
 
-    //REVisual.finalize();
+    REVisual.finalize();
 }
 
 var _Scene_Map_update = Scene_Map.prototype.update;

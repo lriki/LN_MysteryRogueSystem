@@ -7152,16 +7152,8 @@ declare class Game_Troop extends Game_Unit {
  * determination functions.
  */
 declare class Game_Map {
-
-    /**
-     * 
-     */
-    new();
-
-    /**
-     * 
-     */
-    initialize(): void;
+    _interpreter: Game_Interpreter;
+    constructor();
 
     /**
      * 
@@ -11892,7 +11884,7 @@ declare class Game_Interpreter {
     /**
      * 
      */
-    pluginCommand(): void;
+    pluginCommand(command: string, args: string[]): void;
 
     /**
      * Plugin Command

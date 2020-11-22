@@ -275,17 +275,8 @@ declare class Scene_Message {
  * 
  * The scene class of the map screen.
  */
-declare class Scene_Map {
-
-	/**
-	 * 
-	 */
-    new();
-
-	/**
-	 * 
-	 */
-    initialize(): void;
+declare class Scene_Map extends Scene_Base {
+    constructor();
 
 	/**
 	 * 

@@ -16,6 +16,13 @@
  * @help test.
  *
  * MIT License
+ *
+ *
+ * @command REEx.GoalDungeon
+ * @text REEx.GoalDungeon
+ * @desc Sets text to display as a picture.
+ *       After this, execute "Show Picture" without specifying an image.
+ *
  */
  
 

@@ -126,8 +126,5 @@ const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
     _DataManager_createGameObjects.call(DataManager);
 
-    
-    REVisual.initialize();
-    RESystem.integration = new RMMZIntegration();
     REGameManager.createGameObjects();
 }
