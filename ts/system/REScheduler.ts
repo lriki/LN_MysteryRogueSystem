@@ -94,6 +94,21 @@ export class REScheduler
         return this._runs;
     }
 
+    // マップ切り替え時など。
+    // DialogContext はクリアしない。RMMZ イベント実行のための Dialog が動いている可能性があるため。
+    clear() {
+        this._commandContext.clear();
+        this._phase = SchedulerPhase.PartStarting;
+        this._actorEntities = [];
+        this._units = [];
+        this._runs = [];
+        this._currentRun = 0;
+        this._currentStep = 0;
+        this._sequelSet = new RESequelSet();
+        this._actionConsumed = false;
+        Log.d("ResetScheduler");
+    }
+
     stepSimulation(): void {
         while (true) {
             // Sequel 終了待ち
@@ -251,6 +266,7 @@ export class REScheduler
 
     
     consumeActionToken(entity: REGame_Entity): void {
+        console.log("entity", entity);
         const attr = entity.findAttribute(REGame_UnitAttribute);
         assert(attr);
         attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る

@@ -6,6 +6,7 @@ import { RE_Game_World } from "../RE/REGame_World";
 import { REGame } from "ts/RE/REGame";
 import { RESystem } from "ts/system/RESystem";
 import { EntityId } from "ts/system/EntityId";
+import { Log } from "ts/Common";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -55,6 +56,7 @@ export class REGame_Camera
         this._transferingNewX = x;
         this._transferingNewY = y;
         RESystem.integration.onReserveTransferFloor(floorId);
+        Log.d("ReserveFloorTransfer");
     }
 
     clearFloorTransfering() {

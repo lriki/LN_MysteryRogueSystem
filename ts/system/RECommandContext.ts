@@ -33,6 +33,18 @@ export class RECommandContext
         this._owner = owner;
     }
 
+    // マップ切り替え時に実行
+    clear() {
+        this._visualAnimationWaiting = false;
+        
+        this._recodingCommandList = [];
+        this._runningCommandList = [];
+        this._messageIndex = 0;
+        this._lastActorResponce = REResponse.Pass;
+        this._lastReactorResponce = REResponse.Pass;
+        this._commandChainRunning = false;
+    }
+
     /**
      * postActionTwoWay
      * 

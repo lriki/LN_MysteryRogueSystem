@@ -63,9 +63,6 @@ Scene_Map.prototype.create = function() {
 
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
-    
-    REVisual.initialize(this);
-    RESystem.integration = new RMMZIntegration();
 
     // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく
     assert(!REVisual.entityVisualSet);
@@ -75,7 +72,7 @@ Scene_Map.prototype.createDisplayObjects = function() {
     
     // REVisual の中で Window を作りたいが、ベースの createWindowLayer() を先に実行しておく必要がある。
     // その後 createWindows() を呼び出す。
-    REVisual.createWindows();
+    REVisual.onSceneChanged(this);
 };
 
 var _Scene_Map_terminate = Scene_Map.prototype.terminate;
@@ -86,8 +83,6 @@ Scene_Map.prototype.terminate = function() {
         REVisual.entityVisualSet.ternimate();
         REVisual.entityVisualSet = undefined;
     }
-
-    REVisual.finalize();
 }
 
 var _Scene_Map_update = Scene_Map.prototype.update;

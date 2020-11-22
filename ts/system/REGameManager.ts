@@ -10,7 +10,7 @@ import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
-import { assert } from "ts/Common";
+import { assert, Log } from "ts/Common";
 import { RECommandRecorder } from "./RECommandRecorder";
 import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
@@ -79,8 +79,10 @@ export class REGameManager
             REGame.map._removeAllEntities();
             REGame.map.setup(REGame.camera.transferingNewFloorId());
             REGame.world.enterEntitiesToCurrentMap();
+            REGame.scheduler.clear();
 
             REGame.camera.clearFloorTransfering();
+            Log.d("PerformFloorTransfer");
         }
     }
 

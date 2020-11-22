@@ -55,7 +55,6 @@ export class REVisual_Manager
     }
 
     openDialog(context: REDialogContext): void {
-        //assert(!this._dialogVisual);
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
             this._dialogNavigator.push(new REManualActionDialogVisual());

@@ -31,10 +31,9 @@ Game_Interpreter.prototype.updateWaitMode = function(): boolean {
 
 const pluginName: string = "LN_RoguelikeEngine";
 
-PluginManager.registerCommand(pluginName, "REEx.GoalDungeon", (args: any) => {
-    console.log("REEx.GoalDungeon");
+PluginManager.registerCommand(pluginName, "RESystem.ShowChallengeResult", (args: any) => {
     RESystem.challengeResultShowing = true;
     $gameMap._interpreter.setWaitMode("REResultWinodw");
 });
-  
+
 

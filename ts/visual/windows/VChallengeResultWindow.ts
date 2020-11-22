@@ -80,7 +80,7 @@ export class VChallengeResultWindow extends Window_Base {
     }
 
     private drawResultSummary(x: number, y: number, w: number) {
-        const text = "\\c[2]緑燐の森 \\c[0]を無事にクリアした！"
+        const text = "\\c[2]緑燐の丘 \\c[0]を無事にクリアした！"
         this.drawTextEx(text, x, y, w);
     }
     

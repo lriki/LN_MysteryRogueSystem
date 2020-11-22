@@ -1,7 +1,7 @@
 [
 null,
 {"id":1,"expanded":false,"name":"緑燐の丘 1F","order":12,"parentId":11,"scrollX":411.55555555555554,"scrollY":320.8888888888889},
-{"id":2,"expanded":true,"name":"最奥部屋","order":14,"parentId":14,"scrollX":0,"scrollY":0},
+{"id":2,"expanded":true,"name":"最奥部屋","order":15,"parentId":14,"scrollX":0,"scrollY":0},
 {"id":3,"expanded":true,"name":"RELand:ダンジョン1","order":4,"parentId":14,"scrollX":0,"scrollY":0},
 {"id":4,"expanded":true,"name":"EnemyTable","order":5,"parentId":3,"scrollX":0,"scrollY":0},
 {"id":5,"expanded":false,"name":"ItemTable","order":6,"parentId":3,"scrollX":0,"scrollY":0},
@@ -13,5 +13,6 @@ null,
 {"id":11,"expanded":true,"name":"[FixedMaps]","order":11,"parentId":3,"scrollX":0,"scrollY":0},
 {"id":12,"expanded":false,"name":"緑燐の丘 2F","order":13,"parentId":11,"scrollX":0,"scrollY":0},
 {"id":13,"expanded":false,"name":"拠点マップ","order":2,"parentId":0,"scrollX":0,"scrollY":0},
-{"id":14,"expanded":true,"name":"ちょっと不思議なダンジョン","order":3,"parentId":0,"scrollX":0,"scrollY":0}
+{"id":14,"expanded":true,"name":"ちょっと不思議なダンジョン","order":3,"parentId":0,"scrollX":0,"scrollY":0},
+{"id":15,"expanded":false,"name":"REExitMap","order":14,"parentId":3,"scrollX":0,"scrollY":0}
 ]
