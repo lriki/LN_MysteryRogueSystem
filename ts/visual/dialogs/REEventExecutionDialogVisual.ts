@@ -1,7 +1,5 @@
-import { assert } from "ts/Common";
-import { ActionId, REData } from "ts/data/REData";
+
 import { RE } from "ts/dialogs/EventExecutionDialog";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { REDialogContext } from "ts/system/REDialog";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
 

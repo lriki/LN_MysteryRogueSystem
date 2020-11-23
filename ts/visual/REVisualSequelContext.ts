@@ -1,5 +1,5 @@
 import { Vector2 } from "ts/math/Vector2";
-import { REGame_Sequel, RESequelClip } from "ts/RE/REGame_Sequel";
+import { REGame_Sequel, RESequelClip } from "ts/objects/REGame_Sequel";
 import { REVisual } from "../visual/REVisual";
 import { REVisualSequel } from "./REVisualSequel";
 import { REVisual_Entity } from "./REVisual_Entity";

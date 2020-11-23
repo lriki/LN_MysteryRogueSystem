@@ -1,8 +1,7 @@
 import { REData } from "ts/data/REData";
-import { REGame } from "ts/RE/REGame";
-import { DecisionPhase } from "ts/RE/REGame_Behavior";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { Helpers } from "ts/system/Helpers";
+import { REGame } from "ts/objects/REGame";
+import { DecisionPhase } from "ts/objects/behaviors/LBehavior";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { LStateBehavior } from "./LStateBehavior";

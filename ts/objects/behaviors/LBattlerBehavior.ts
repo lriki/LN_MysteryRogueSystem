@@ -3,15 +3,15 @@ import { DClass } from "ts/data/DClass";
 import { DStateId } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
 import { ParameterDataId, REData } from "ts/data/REData";
-import { REGame } from "ts/RE/REGame";
-import { REGame_Behavior } from "ts/RE/REGame_Behavior";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { REGame } from "../REGame";
+import { LBehavior } from "ts/objects/behaviors/LBehavior";
+import { REGame_Entity } from "../REGame_Entity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 
-export class LBattlerBehavior extends REGame_Behavior {
+export class LBattlerBehavior extends LBehavior {
     
     // 以下 param の index は ParameterDataId.
     // RMMZ の param index とは異なるが、mhp,mmp,atk,def,mat,mdf,agi,luk のインデックスとは一致する。

@@ -14,10 +14,10 @@ import { assert } from "ts/Common";
 import { ActionId } from "ts/data/REData";
 import { EntityId } from "ts/system/EntityId";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
-import { RECommand, REResponse } from "../system/RECommand";
-import { RECommandContext } from "../system/RECommandContext";
-import { REGame } from "./REGame";
-import { REGame_Entity } from "./REGame_Entity";
+import { RECommand, REResponse } from "../../system/RECommand";
+import { RECommandContext } from "../../system/RECommandContext";
+import { REGame } from "..//REGame";
+import { REGame_Entity } from "../REGame_Entity";
 
 export enum DecisionPhase {
     Manual,
@@ -26,7 +26,7 @@ export enum DecisionPhase {
 }
 
 // see: 実装FAQ-Command-Behavior.md
-export class REGame_Behavior {
+export class LBehavior {
     dataId: number = 0;
     _ownerEntityId: EntityId = { index: 0, key: 0 };
     

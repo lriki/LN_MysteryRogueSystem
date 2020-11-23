@@ -1,7 +1,7 @@
 import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { assert } from "ts/Common";
-import { TileKind } from "ts/RE/REGame_Block";
-import { REGame_Map } from "../RE/REGame_Map";
+import { TileKind } from "ts/objects/REGame_Block";
+import { REGame_Map } from "../objects/REGame_Map";
 
 /**
  * 地形生成を行うモジュールに対して、マップデータへのアクセスを提供するクラス。

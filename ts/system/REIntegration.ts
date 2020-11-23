@@ -1,6 +1,5 @@
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { RESequelSet } from "ts/RE/REGame_Sequel";
-//import { REDialogVisual } from "ts/visual/REDialogVisual";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "./REDialog";
 import { REMapBuilder } from "./REMapBuilder";
 

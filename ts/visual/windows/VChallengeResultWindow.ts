@@ -1,5 +1,5 @@
 import { DTextManager } from "ts/data/DTextManager";
-import { RESystem } from "ts/system/RESystem";
+import { REGame } from "ts/objects/REGame";
 
 export class VChallengeResultWindow extends Window_Base {
     _text: string;
@@ -16,13 +16,13 @@ export class VChallengeResultWindow extends Window_Base {
         super.update();
 
         if (!this.isOpen()) {
-            if (RESystem.challengeResultShowing) {
+            if (REGame.challengeResultShowing) {
                 this.open();
             }
         }
         else {
             if (this.isTriggered()) {
-                RESystem.challengeResultShowing = false;
+                REGame.challengeResultShowing = false;
                 this.close();
             }
         }

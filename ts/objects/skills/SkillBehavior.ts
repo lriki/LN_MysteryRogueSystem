@@ -1,8 +1,6 @@
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
-import { REGame } from "ts/RE/REGame";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { Helpers } from "ts/system/Helpers";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 

@@ -1,9 +1,9 @@
-import { REGame_Map } from "../RE/REGame_Map";
+import { REGame_Map } from "./REGame_Map";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
-import { REGame_Entity } from "../RE/REGame_Entity";
-import { RE_Game_World } from "../RE/REGame_World";
-import { REGame } from "ts/RE/REGame";
+import { REGame_Entity } from "./REGame_Entity";
+import { RE_Game_World } from "./REGame_World";
+import { REGame } from "./REGame";
 import { RESystem } from "ts/system/RESystem";
 import { EntityId } from "ts/system/EntityId";
 import { Log } from "ts/Common";

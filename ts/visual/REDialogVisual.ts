@@ -1,6 +1,5 @@
 import { assert } from "ts/Common";
-import { REGame } from "ts/RE/REGame";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { REGame } from "ts/objects/REGame";
 import { REDialogContext } from "../system/REDialog";
 import { REVisual } from "./REVisual";
 

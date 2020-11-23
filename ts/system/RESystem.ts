@@ -1,9 +1,9 @@
 import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { DStateId } from "ts/data/DState";
 import { ParameterDataId, REData } from "ts/data/REData";
-import { LSkillBehavior } from "ts/objects/skills/SkillBehavior";
-import { LStateBehavior } from "ts/objects/states/LStateBehavior";
-import { BlockLayerKind } from "ts/RE/REGame_Block";
+import { LSkillBehavior } from "../objects/skills/SkillBehavior";
+import { LStateBehavior } from "../objects/states/LStateBehavior";
+import { BlockLayerKind } from "../objects/REGame_Block";
 import { REIntegration } from "./REIntegration";
 
 export interface EntityKinds {
@@ -158,9 +158,6 @@ export class RESystem {
 
     static skillBehaviors: LSkillBehavior[];
     static stateBehaviors: LStateBehavior[];
-
-    // 冒険結果の表示中かどうか
-    static challengeResultShowing: boolean = false;
 
 
 

@@ -1,4 +1,4 @@
-import { TileKind } from "../../RE/REGame_Block";
+import { TileKind } from "../REGame_Block";
 import { LAttributeData, LAttribute } from "./LAttribute";
 
 interface RETileAttributeData extends LAttributeData {

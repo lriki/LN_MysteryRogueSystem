@@ -1,12 +1,9 @@
-import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
-import { assert } from "../../Common";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { REGame_Behavior } from "../../RE/REGame_Behavior";
+import { LBehavior } from "./LBehavior";
 import { ActionId, REData } from "ts/data/REData";
-import { REGameManager } from "ts/system/REGameManager";
-import { REGame } from "ts/RE/REGame";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { REGame } from "../REGame";
+import { REGame_Entity } from "../REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { Helpers } from "ts/system/Helpers";
@@ -14,7 +11,7 @@ import { Helpers } from "ts/system/Helpers";
 /**
  * 
  */
-export class REUnitBehavior extends REGame_Behavior {
+export class REUnitBehavior extends LBehavior {
     onQueryReactions(): ActionId[] {
         return [REData.AttackActionId];
     }

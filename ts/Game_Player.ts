@@ -1,4 +1,4 @@
-import { REGame } from "./RE/REGame";
+import { REGame } from "./objects/REGame";
 
 var _Game_Player_initMembers = Game_Player.prototype.initMembers;
 Game_Player.prototype.initMembers = function() {

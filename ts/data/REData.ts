@@ -1,6 +1,6 @@
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { LAttribute } from "ts/objects/attributes/LAttribute";
-import { REGame_Behavior } from "ts/RE/REGame_Behavior";
+import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
@@ -292,7 +292,7 @@ export class REData
     static states: DState[] = [];
 
     static _attributeFactories: (() => LAttribute)[] = [];
-    static _behaviorFactories: (() => REGame_Behavior)[] = [];
+    static _behaviorFactories: (() => LBehavior)[] = [];
     static _stateFactories: (() => LStateBehavior)[] = [];
 
     static reset() {
@@ -317,7 +317,7 @@ export class REData
         this.addSkill("null");
         this.states = [{id: 0, name: 'null', restriction: 0}];
         this._attributeFactories = [() => new LAttribute()];
-        this._behaviorFactories = [() => new REGame_Behavior()];
+        this._behaviorFactories = [() => new LBehavior()];
     }
 
     static addEntityKind(name: string, prefabKind: string): number {
@@ -437,7 +437,7 @@ export class REData
         return newId;
     }
     
-    static addBehavior(name: string, factory: (() => REGame_Behavior)): number {
+    static addBehavior(name: string, factory: (() => LBehavior)): number {
         const newId = this.behaviors.length;
         this.behaviors.push({
             id: newId,

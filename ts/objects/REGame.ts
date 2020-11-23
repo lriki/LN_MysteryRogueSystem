@@ -28,6 +28,9 @@ export class REGame
     static uniqueActorUnits: REGame_Entity[] = [];
     static recorder: RECommandRecorder;
 
+    // 冒険結果の表示中かどうか
+    static challengeResultShowing: boolean = false;
+
 
 }
 

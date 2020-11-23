@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { EntityId } from "ts/system/EntityId";
-import { REGame } from "../../RE/REGame";
-import { REGame_Entity } from "../../RE/REGame_Entity";
+import { REGame } from "..//REGame";
+import { REGame_Entity } from "../REGame_Entity";
 
 /**
  * データのみ保持する。

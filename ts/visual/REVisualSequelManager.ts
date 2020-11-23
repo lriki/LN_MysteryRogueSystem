@@ -1,9 +1,6 @@
 import { REVisual_Entity } from "../visual/REVisual_Entity";
-import { REVisual_Manager } from "./REVisual_Manager";
-import { RESequelSet } from "../RE/REGame_Sequel";
+import { RESequelSet } from "../objects/REGame_Sequel";
 import { REEntityVisualSet } from "./REEntityVisualSet";
-
-
 
 export class REVisualSequelManager {
     private _entityVisualSet: REEntityVisualSet;

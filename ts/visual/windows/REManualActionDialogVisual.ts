@@ -1,12 +1,12 @@
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
-import { REGame } from "ts/RE/REGame";
-import { BlockLayerKind } from "ts/RE/REGame_Block";
+import { REGame } from "ts/objects/REGame";
+import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { RESystem } from "ts/system/RESystem";
-import { REDialogContext } from "../system/REDialog";
-import { RE } from "./dialogs/FootingDialogVisual";
-import { REDialogVisualWindowLayer } from "./REDialogVisual";
+import { REDialogContext } from "../../system/REDialog";
+import { RE } from "../dialogs/FootingDialogVisual";
+import { REDialogVisualWindowLayer } from "../REDialogVisual";
 
 export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
 

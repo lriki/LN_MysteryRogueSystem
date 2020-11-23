@@ -1,11 +1,9 @@
-import { assert } from "ts/Common";
+
 import { ActionId, REData } from "ts/data/REData";
 import { RE } from "ts/dialogs/EventExecutionDialog";
-import { REGame_System } from "ts/objects/REGame_System";
-import { REGame } from "ts/RE/REGame";
-import { REGame_Behavior } from "ts/RE/REGame_Behavior";
-import { BlockLayerKind } from "ts/RE/REGame_Block";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { LBehavior } from "ts/objects/behaviors/LBehavior";
+import { BlockLayerKind } from "ts/objects/REGame_Block";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
@@ -31,7 +29,7 @@ import { RESystem } from "ts/system/RESystem";
  * HC4 の時に実装したリアクションコマンド形式がいいかも。
  * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
-export class REExitPointBehavior extends REGame_Behavior {
+export class REExitPointBehavior extends LBehavior {
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.homeLayer)
             return BlockLayerKind.Ground;

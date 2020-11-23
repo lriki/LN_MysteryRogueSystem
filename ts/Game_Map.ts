@@ -1,5 +1,5 @@
 import { REDataManager } from "./data/REDataManager";
-import { REGame } from "./RE/REGame";
+import { REGame } from "./objects/REGame";
 import { REGameManager } from "./system/REGameManager";
 
 declare global {

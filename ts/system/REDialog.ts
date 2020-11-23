@@ -1,10 +1,8 @@
 
 import { assert } from "ts/Common";
-import { REGame } from "ts/RE/REGame";
+import { REGame } from "../objects/REGame";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-//import { REDialogVisual } from "ts/visual/REDialogVisual";
-import { RECommand, REResponse } from "./RECommand";
+import { REGame_Entity } from "../objects/REGame_Entity";
 import { RECommandContext } from "./RECommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { REScheduler } from "./REScheduler";

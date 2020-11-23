@@ -1,5 +1,5 @@
 import { LAttribute } from "../objects/attributes/LAttribute";
-import { DecisionPhase, REGame_Behavior } from "./REGame_Behavior";
+import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
@@ -47,7 +47,7 @@ export class REGame_Entity
 {
 
     attrbutes: LAttribute[] = [];
-    private _basicBehaviors: REGame_Behavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
+    private _basicBehaviors: LBehavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
     //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
 
@@ -106,11 +106,11 @@ export class REGame_Entity
         return this;
     }
 
-    basicBehaviors(): REGame_Behavior[] {
+    basicBehaviors(): LBehavior[] {
         return this._basicBehaviors;
     }
 
-    addBasicBehavior(value: REGame_Behavior) {
+    addBasicBehavior(value: LBehavior) {
         this._basicBehaviors.unshift(value);
         value._ownerEntityId = this._id;
     }
@@ -119,11 +119,11 @@ export class REGame_Entity
     //    this._adhocBehaviors.unshift(value);
     //}
 
-    addBehavior(value: REGame_Behavior) {
+    addBehavior(value: LBehavior) {
         this._basicBehaviors.unshift(value);
     }
 
-    removeBehavior(value: REGame_Behavior) {
+    removeBehavior(value: LBehavior) {
         const index = this._basicBehaviors.findIndex(x => x == value);
         if (index >= 0) this._basicBehaviors.splice(index, 1);
     }
@@ -230,7 +230,7 @@ export class REGame_Entity
         return result;
     }
 
-    _callBehaviorIterationHelper(func: (b: REGame_Behavior) => REResponse): REResponse {
+    _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             const r = func(this._basicBehaviors[i]);//this._behaviors[i].onPreAction(cmd);
             if (r != REResponse.Pass) {

@@ -3,7 +3,7 @@ import { DEffect } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
 import { ParameterDataId, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "./RESystem";
 import { SActionResult } from "./SActionResult";
 

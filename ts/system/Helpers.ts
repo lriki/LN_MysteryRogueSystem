@@ -1,5 +1,5 @@
 import { Vector2 } from "ts/math/Vector2";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 
 export class Helpers {
     private static _dirToTileOffsetTable: Vector2[] =  [

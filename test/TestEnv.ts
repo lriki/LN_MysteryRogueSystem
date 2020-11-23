@@ -1,8 +1,7 @@
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
-import { REGame } from "ts/RE/REGame";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { RESequelSet } from "ts/RE/REGame_Sequel";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
 import { REMapBuilder } from "ts/system/REMapBuilder";

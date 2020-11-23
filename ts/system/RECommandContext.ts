@@ -1,14 +1,12 @@
 import { RECommand, REResponse } from "./RECommand";
-import { REData, REData_Action } from "../data/REData";
 import { REDialog } from "./REDialog";
-import { REGame_Entity } from "../RE/REGame_Entity";
+import { REGame_Entity } from "../objects/REGame_Entity";
 import { REScheduler } from "./REScheduler";
 import { assert, Log } from "ts/Common";
-import { REGame_Sequel } from "ts/RE/REGame_Sequel";
-import { REGame } from "ts/RE/REGame";
-import { RERecordingCommandType } from "./RECommandRecorder";
+import { REGame_Sequel } from "../objects/REGame_Sequel";
+import { REGame } from "../objects/REGame";
 import { REEffectContext } from "./REEffectContext";
-import { REGame_Block } from "ts/RE/REGame_Block";
+import { REGame_Block } from "../objects/REGame_Block";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 

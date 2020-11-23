@@ -1,19 +1,18 @@
-import { REGame } from "../RE/REGame";
-import { REGame_Entity } from "../RE/REGame_Entity";
+import { REGame } from "../objects/REGame";
 import { REEntityFactory } from "./REEntityFactory";
-import { REGame_Map } from "../RE/REGame_Map";
-import { RE_Game_World } from "../RE/REGame_World";
-import { REGame_Core } from "../RE/REGame_Core";
+import { REGame_Map } from "../objects/REGame_Map";
+import { RE_Game_World } from "../objects/REGame_World";
+import { REGame_Core } from "../objects/REGame_Core";
 import { REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
-import { assert, Log } from "ts/Common";
 import { RECommandRecorder } from "./RECommandRecorder";
 import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
+import { Log } from "ts/Common";
 
 
 /**

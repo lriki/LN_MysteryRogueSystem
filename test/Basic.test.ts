@@ -5,14 +5,13 @@ import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
-import { REGame } from "ts/RE/REGame";
+import { REGame } from "ts/objects/REGame";
 import { REGameManager } from "ts/system/REGameManager";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
-import { EntityId } from "ts/system/EntityId";
 
 TestEnv.setupDatabase();
 /*

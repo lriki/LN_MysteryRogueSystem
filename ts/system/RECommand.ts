@@ -1,5 +1,5 @@
 import { REData, REData_Action } from "../data/REData";
-import { REGame_Entity } from "../RE/REGame_Entity";
+import { REGame_Entity } from "../objects/REGame_Entity";
 import { REEffectContext } from "./REEffectContext";
 
 /** RECommand の処理結果 */

@@ -1,4 +1,5 @@
-import { RESystem } from "ts/system/RESystem";
+import { REGame } from "../objects/REGame";
+
 
 var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
 Game_Interpreter.prototype.pluginCommand = function(command: string, args: string[]) {
@@ -22,7 +23,7 @@ Game_Interpreter.prototype.pluginCommand = function(command: string, args: strin
 var _Game_Interpreter_updateWaitMode = Game_Interpreter.prototype.updateWaitMode;
 Game_Interpreter.prototype.updateWaitMode = function(): boolean {
     if (this._waitMode == "REResultWinodw") {
-        return RESystem.challengeResultShowing;
+        return REGame.challengeResultShowing;
     }
     else {
         return _Game_Interpreter_updateWaitMode.call(this);
@@ -32,7 +33,7 @@ Game_Interpreter.prototype.updateWaitMode = function(): boolean {
 const pluginName: string = "LN_RoguelikeEngine";
 
 PluginManager.registerCommand(pluginName, "RESystem.ShowChallengeResult", (args: any) => {
-    RESystem.challengeResultShowing = true;
+    REGame.challengeResultShowing = true;
     $gameMap._interpreter.setWaitMode("REResultWinodw");
 });
 

@@ -1,18 +1,11 @@
-import { assert } from "ts/Common";
-import { REData } from "ts/data/REData";
+
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { Vector2 } from "ts/math/Vector2";
 import { REDialogVisualNavigator } from "ts/visual/REDialogVisual";
-import { REManualActionDialogVisual } from "ts/visual/REManualActionDialogVisual";
+import { REManualActionDialogVisual } from "ts/visual/windows/REManualActionDialogVisual";
 import { REVisualSequel, REVisualSequel_Move } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
-import { REGame } from "../RE/REGame";
-import { REGame_Entity } from "../RE/REGame_Entity";
-import { REGame_Sequel, RESequelSet } from "../RE/REGame_Sequel";
-import { REVisual } from "./REVisual";
-import { REVisual_Entity } from "./REVisual_Entity";
-import { REVisualSequelManager } from "./REVisualSequelManager";
-import { REDataManager } from "ts/data/REDataManager";
+import { REGame_Sequel } from "../objects/REGame_Sequel";
 import { RE } from "ts/dialogs/EventExecutionDialog";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { RESystem } from "ts/system/RESystem";

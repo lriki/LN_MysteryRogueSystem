@@ -1,13 +1,12 @@
-import { REGame_Entity } from "../RE/REGame_Entity";
+import { REGame_Entity } from "../objects/REGame_Entity";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REData } from "../data/REData";
-import { REGame } from "../RE/REGame";
+import { REGame } from "../objects/REGame";
 import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
 import { RETileAttribute } from "../objects/attributes/RETileAttribute";
-import { TileKind } from "../RE/REGame_Block";
+import { TileKind } from "../objects/REGame_Block";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
-import { DStateId } from "ts/data/DState";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 
 export class REEntityFactory {

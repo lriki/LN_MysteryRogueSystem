@@ -1,13 +1,12 @@
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
-import { assert } from "../../Common";
 import { REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { DecisionPhase, REGame_Behavior } from "../../RE/REGame_Behavior";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { REGame } from "ts/RE/REGame";
+import { DecisionPhase, LBehavior } from "./LBehavior";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { REGame } from "ts/objects/REGame";
 import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
-import { BlockLayerKind } from "ts/RE/REGame_Block";
+import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 
 /**
@@ -16,7 +15,7 @@ import { RESystem } from "ts/system/RESystem";
  * この Behavior は標準的な行動決定のみ行う。
  * 状態異常による行動制限(&経過ターンのデクリメント)・暴走は、状態異常の Behavior 側で onDecisionPhase() をフックして実装する。
  */
-export class REGame_DecisionBehavior extends REGame_Behavior
+export class REGame_DecisionBehavior extends LBehavior
 {
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
 

@@ -1,8 +1,7 @@
 import { assert } from "ts/Common";
 import { Vector2 } from "ts/math/Vector2";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
-import { REData, REData_Sequel } from "../data/REData";
-import { REGame_Entity } from "../RE/REGame_Entity";
+import { REGame_Entity } from "../objects/REGame_Entity";
 import { REVisual } from "./REVisual";
 
 /**

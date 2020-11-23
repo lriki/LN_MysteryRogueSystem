@@ -1,11 +1,11 @@
 import { assert } from "./Common";
 import { REData } from "./data/REData";
 import { REDataManager } from "./data/REDataManager";
-import { REGame } from "./RE/REGame";
-import { TileKind } from "./RE/REGame_Block";
-import { REGame_Entity } from "./RE/REGame_Entity";
-import { RESequelSet } from "./RE/REGame_Sequel";
-import { RMMZEventEntityMetadata, RMMZHelper } from "./rmmz/RMMZHelper";
+import { REGame } from "./objects/REGame";
+import { TileKind } from "./objects/REGame_Block";
+import { REGame_Entity } from "./objects/REGame_Entity";
+import { RESequelSet } from "./objects/REGame_Sequel";
+import { RMMZEventEntityMetadata } from "./rmmz/RMMZHelper";
 import { REDialogContext } from "./system/REDialog";
 import { REEntityFactory } from "./system/REEntityFactory";
 import { REIntegration } from "./system/REIntegration";

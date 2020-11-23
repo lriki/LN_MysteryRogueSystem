@@ -1,8 +1,8 @@
 import { REData } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
-import { REGame } from "ts/RE/REGame";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
-import { RESequelSet } from "ts/RE/REGame_Sequel";
+import { REGame } from "ts/objects/REGame";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
 

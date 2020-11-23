@@ -10,10 +10,10 @@ import './rmmz/Game_Message';
 import './data/REData';
 import './data/REDataManager';
 import './data/DTextManager';
-import './RE/REGame_Entity';
+import './objects/REGame_Entity';
+import './objects/REGame_Map';
+import './objects/REGame_Core';
 import './system/REEntityFactory';
-import './RE/REGame_Map';
-import './RE/REGame_Core';
 import './Scene_Boot';
 import './Scene_Map';
 import './Sprite_Character'

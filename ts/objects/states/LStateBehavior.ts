@@ -1,9 +1,9 @@
-import { DStateId } from "ts/data/DState";
+
 import { ActionId } from "ts/data/REData";
-import { DecisionPhase, REGame_Behavior } from "ts/RE/REGame_Behavior";
-import { REGame_Entity } from "ts/RE/REGame_Entity";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
+import { DecisionPhase } from "../behaviors/LBehavior";
 
 /**
  * State
