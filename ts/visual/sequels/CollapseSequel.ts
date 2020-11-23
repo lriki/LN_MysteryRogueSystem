@@ -16,6 +16,8 @@ export class VCollapseSequel extends REVisualSequel {
             event.setOpacity(255.0 * (effectDuration / 24));
             event.setBlendMode(PIXI.BLEND_MODES.ADD);
         }
+        
+        console.log("VCollapseSequel:", event);
         /*
         if (sprite) {
             sprite.blendMode = PIXI.BLEND_MODES.ADD;

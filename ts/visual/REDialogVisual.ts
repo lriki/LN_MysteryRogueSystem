@@ -63,7 +63,6 @@ export class REDialogVisualWindowLayer {
     }
 
     protected pop() {
-        console.log("pop????");
         REVisual.manager?._dialogNavigator.pop();
     }
 

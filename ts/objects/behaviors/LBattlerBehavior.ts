@@ -190,12 +190,12 @@ export class LBattlerBehavior extends REGame_Behavior {
 
         const entity = this.entity();
         if (this.isDeathStateAffected()) {
+            context.postSequel(entity, RESystem.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
                 context.postTransferFloor(entity, REGame.map.land().exitMapId);
             }
             else {
-                context.postSequel(entity, RESystem.sequels.CollapseSequel);
     
                 context.postDestroy(entity);
             }

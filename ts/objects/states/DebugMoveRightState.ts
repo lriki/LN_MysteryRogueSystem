@@ -10,7 +10,6 @@ import { LStateBehavior } from "./LStateBehavior";
 export class LDebugMoveRightState extends LStateBehavior {
 
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
-        console.log("★LDebugMoveRightState")
         
         // 右へ移動するだけ
         let dir = 6;

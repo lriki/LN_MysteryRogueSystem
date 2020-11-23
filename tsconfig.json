@@ -13,6 +13,9 @@
         //"paths": {"rpgmaker-mz": ["types/rpgmaker-mz"]},
         "typeRoots" : ["./node_modules/@types", "./@types"],
 
+        // for Debug
+        "sourceMap": true,
+
         "lib": [
             "es6",
             "es5",

@@ -117,6 +117,14 @@ export class REScheduler
                 
                 break;
             }
+
+            if (REGame.camera.isFloorTransfering()) {
+                // マップ遷移中。
+                // postTransferFloor() の実行によって遷移が発生した場合は一度実行ループを抜けておかないと、
+                // 遷移が実際に行われる前に次のコマンド実行に進んでしまう。
+                break;
+            }
+
             /*
             if (this._commandContext.visualAnimationWaiting()) {
                 if (RESystem.integration.onCheckVisualSequelRunning()) {
@@ -266,7 +274,6 @@ export class REScheduler
 
     
     consumeActionToken(entity: REGame_Entity): void {
-        console.log("entity", entity);
         const attr = entity.findAttribute(REGame_UnitAttribute);
         assert(attr);
         attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
@@ -407,7 +414,6 @@ export class REScheduler
     }
     
     private update_RunEnding(): void {
-        console.log("update_RunEnding");
         this._currentRun++;
         if (this._currentRun >= this._runs.length) {
             this._phase = SchedulerPhase.PartEnding;
@@ -418,7 +424,6 @@ export class REScheduler
     }
     
     private update_PartEnding(): void {
-        console.log("update_PartEnding flushSequelSet");
 
         // ターン終了時に Sequel が残っていればすべて掃き出す
         this.flushSequelSet();
@@ -548,7 +553,6 @@ export class REScheduler
     invalidateEntity(entity: REGame_Entity) {
         const index = this._units.findIndex(x => x.entity == entity);
         if (index >= 0) {
-            console.log("invalidate", entity);
             this._units[index].entity = undefined;
             
             this._actorEntities = this._actorEntities.filter(x => x != entity);
