@@ -1,5 +1,5 @@
-import { REGame_Attribute } from "ts/RE/REGame_Attribute";
+import { LAttribute } from "ts/objects/attributes/LAttribute";
 
-export class LSkillInventory extends REGame_Attribute {
+export class LSkillInventory extends LAttribute {
 
 }

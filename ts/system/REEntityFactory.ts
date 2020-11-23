@@ -1,5 +1,5 @@
 import { REGame_Entity } from "../RE/REGame_Entity";
-import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
+import { LUnitAttribute } from "../objects/attributes/LAttribute";
 import { REData } from "../data/REData";
 import { REGame } from "../RE/REGame";
 import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
@@ -19,7 +19,7 @@ export class REEntityFactory {
 
     static newActor(): REGame_Entity {
         const e = REGame.world.spawnEntity();
-        e.addAttribute(new REGame_UnitAttribute()
+        e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
@@ -29,7 +29,7 @@ export class REEntityFactory {
 
     static newMonster(monsterId: number): REGame_Entity {
         const e = REGame.world.spawnEntity();
-        e.addAttribute(new REGame_UnitAttribute()
+        e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());

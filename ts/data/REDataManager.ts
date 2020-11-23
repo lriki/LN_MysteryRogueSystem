@@ -4,7 +4,7 @@ import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
-import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
+import { LUnitAttribute } from "ts/objects/attributes/LAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DParameterEffectApplyType } from "./DSkill";
@@ -106,7 +106,7 @@ export class REDataManager
         // Attributes
         RESystem.attributes = {
             tile: REData.addAttribute("Tile", () => new RETileAttribute()),
-            unit: REData.addAttribute("Unit", () => new REGame_UnitAttribute()),
+            unit: REData.addAttribute("Unit", () => new LUnitAttribute()),
         };
 
         // Behaviors

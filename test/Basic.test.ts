@@ -7,7 +7,7 @@ import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
 import { REGameManager } from "ts/system/REGameManager";
-import { REGame_Attribute, REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
+import { LAttribute, LUnitAttribute } from "ts/objects/attributes/LAttribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
@@ -106,7 +106,7 @@ test('EntitySaveLoad', () => {
         actor1.x = 55;
 
         // Attributes
-        const a1 = RESystem.createAttribute(RESystem.attributes.unit) as REGame_UnitAttribute;
+        const a1 = RESystem.createAttribute(RESystem.attributes.unit) as LUnitAttribute;
         a1.setSpeedLevel(2);
         actor1.addAttribute(a1);
 
@@ -130,7 +130,7 @@ test('EntitySaveLoad', () => {
         expect(actor2.x).toBe(55);
 
         // Attributes
-        const a1 = actor2.findAttribute(REGame_UnitAttribute);
+        const a1 = actor2.findAttribute(LUnitAttribute);
         expect(actor2.attrbutes.length).toBe(1);
         expect(a1).toBeDefined();
         expect(a1?.speedLevel()).toBe(2);
@@ -149,62 +149,62 @@ test('TurnOrderTable', () => {
     // actor1 - x1 速
     const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
     actor1._name = "actor1";
-    actor1.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(1);
+    actor1.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
     REGame.world._transferEntity(actor1, 1, 1, 1);
 
     // enemy1 - x1 速
     const enemy1 = REEntityFactory.newMonster(1);
     enemy1._name = "enemy1";
-    enemy1.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(1);
+    enemy1.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
     enemy1.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy1, 1, 1, 2);
 
     // enemy2 - x1 速
     const enemy2 = REEntityFactory.newMonster(1);
     enemy2._name = "enemy2";
-    enemy2.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(1);
+    enemy2.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
     enemy2.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy2, 1, 1, 3);
 
     // enemy3 - x2 速
     const enemy3 = REEntityFactory.newMonster(1);
     enemy3._name = "enemy3";
-    enemy3.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(2);
+    enemy3.findAttribute(LUnitAttribute)?.setSpeedLevel(2);
     enemy3.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy3, 1, 1, 4);
 
     // enemy4 - x2 速
     const enemy4 = REEntityFactory.newMonster(1);
     enemy4._name = "enemy4";
-    enemy4.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(2);
+    enemy4.findAttribute(LUnitAttribute)?.setSpeedLevel(2);
     enemy4.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy4, 1, 1, 5);
 
     // enemy5 - x3 速
     const enemy5 = REEntityFactory.newMonster(1);
     enemy5._name = "enemy5";
-    enemy5.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(3);
+    enemy5.findAttribute(LUnitAttribute)?.setSpeedLevel(3);
     enemy5.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy5, 1, 1, 6);
 
     // enemy6 - x3 速
     const enemy6 = REEntityFactory.newMonster(1);
     enemy6._name = "enemy6";
-    enemy6.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(3);
+    enemy6.findAttribute(LUnitAttribute)?.setSpeedLevel(3);
     enemy6.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy6, 1, 1, 7);
 
     // enemy7 - x0.5 速
     const enemy7 = REEntityFactory.newMonster(1);
     enemy7._name = "enemy7";
-    enemy7.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(-1);
+    enemy7.findAttribute(LUnitAttribute)?.setSpeedLevel(-1);
     enemy7.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy7, 1, 1, 8);
 
     // enemy8 - x0.5 速
     const enemy8 = REEntityFactory.newMonster(1);
     enemy8._name = "enemy8";
-    enemy8.findAttribute(REGame_UnitAttribute)?.setSpeedLevel(-1);
+    enemy8.findAttribute(LUnitAttribute)?.setSpeedLevel(-1);
     enemy8.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy8, 1, 1, 9);
 

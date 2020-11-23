@@ -1,7 +1,7 @@
 
 import { assert } from "ts/Common";
 import { REGame } from "ts/RE/REGame";
-import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
+import { LUnitAttribute } from "ts/objects/attributes/LAttribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 //import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { RECommand, REResponse } from "./RECommand";
@@ -63,7 +63,7 @@ export class REDialogContext
 
             // RMMZイベント起動Dialog では、causeEntity が「階段Entity」等になることがある。
             // 行動順が回らない Entity の ActionToken を消費することはできないのでガードする。
-            if (this._causeEntity.findAttribute(REGame_UnitAttribute)) {
+            if (this._causeEntity.findAttribute(LUnitAttribute)) {
                 this._commandContext.postConsumeActionToken(this._causeEntity);
             }
             

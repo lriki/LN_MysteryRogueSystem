@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { EntityId } from "ts/system/EntityId";
-import { REGame } from "./REGame";
-import { REGame_Entity } from "./REGame_Entity";
+import { REGame } from "../../RE/REGame";
+import { REGame_Entity } from "../../RE/REGame_Entity";
 
 /**
  * データのみ保持する。
@@ -9,12 +9,12 @@ import { REGame_Entity } from "./REGame_Entity";
  * @note 実装は interface ではなく class にしてみる。
  * interface だとシリアライズは楽だが、リフレクションが使えない。
  */
-export class REGame_Attribute
+export class LAttribute
 {
     dataId: number = 0;
     _ownerEntityId: EntityId = { index: 0, key: 0 };
 
-    data(): REGame_AttributeData {
+    data(): LAttributeData {
         return {};
     }
 
@@ -24,7 +24,7 @@ export class REGame_Attribute
     }
 }
 
-export interface REGame_AttributeData {
+export interface LAttributeData {
 }
 
 /**
@@ -61,9 +61,9 @@ export class REGame_PositionalAttribute extends REGame_Attribute {
  *
  * - 一般的なキャラクター (Player, Enemy, NPC)
  */
-export interface REGame_UnitAttributeData extends REGame_AttributeData {
+export interface LUnitAttributeData extends LAttributeData {
 }
-export class REGame_UnitAttribute extends REGame_Attribute {
+export class LUnitAttribute extends LAttribute {
     _factionId: number = 0;
     _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
@@ -75,18 +75,18 @@ export class REGame_UnitAttribute extends REGame_Attribute {
     
 
     factionId(): number { return this._factionId; }
-    setFactionId(value: number): REGame_UnitAttribute { this._factionId = value; return this; }
+    setFactionId(value: number): LUnitAttribute { this._factionId = value; return this; }
 
     speedLevel(): number { return this._speedLevel; }
-    setSpeedLevel(value: number): REGame_UnitAttribute { this._speedLevel = value; return this; }
+    setSpeedLevel(value: number): LUnitAttribute { this._speedLevel = value; return this; }
 
     waitTurnCount(): number { return this._waitTurnCount; }
-    setWaitTurnCount(value: number): REGame_UnitAttribute { this._waitTurnCount = value; return this; }
+    setWaitTurnCount(value: number): LUnitAttribute { this._waitTurnCount = value; return this; }
 
     manualMovement(): boolean { return this._manualMovement; }
-    setManualMovement(value: boolean): REGame_UnitAttribute { this._manualMovement = value; return this; }
+    setManualMovement(value: boolean): LUnitAttribute { this._manualMovement = value; return this; }
 
     actionTokenCount(): number { return this._actionTokenCount; }
-    setActionTokenCount(value: number): REGame_UnitAttribute { this._actionTokenCount = value; return this; }
+    setActionTokenCount(value: number): LUnitAttribute { this._actionTokenCount = value; return this; }
 }
 

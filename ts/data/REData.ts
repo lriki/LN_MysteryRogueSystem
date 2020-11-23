@@ -1,5 +1,5 @@
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
-import { REGame_Attribute } from "ts/RE/REGame_Attribute";
+import { LAttribute } from "ts/objects/attributes/LAttribute";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
@@ -291,7 +291,7 @@ export class REData
     static skills: DSkill[] = [];
     static states: DState[] = [];
 
-    static _attributeFactories: (() => REGame_Attribute)[] = [];
+    static _attributeFactories: (() => LAttribute)[] = [];
     static _behaviorFactories: (() => REGame_Behavior)[] = [];
     static _stateFactories: (() => LStateBehavior)[] = [];
 
@@ -316,7 +316,7 @@ export class REData
         this.skills = [];
         this.addSkill("null");
         this.states = [{id: 0, name: 'null', restriction: 0}];
-        this._attributeFactories = [() => new REGame_Attribute()];
+        this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new REGame_Behavior()];
     }
 
@@ -427,7 +427,7 @@ export class REData
         return newId;
     }
 
-    static addAttribute(name: string, factory: (() => REGame_Attribute)): number {
+    static addAttribute(name: string, factory: (() => LAttribute)): number {
         const newId = this.attributes.length;
         this.attributes.push({
             id: newId,

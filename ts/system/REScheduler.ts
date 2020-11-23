@@ -4,7 +4,7 @@ import { REData } from "../data/REData";
 import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "../RE/REGame";
 import { REGameManager } from "./REGameManager";
-import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
+import { LUnitAttribute } from "../objects/attributes/LAttribute";
 import { DecisionPhase } from "../RE/REGame_Behavior";
 import { REGame_Entity } from "../RE/REGame_Entity";
 import { REResponse } from "./RECommand";
@@ -15,7 +15,7 @@ import { RESystem } from "./RESystem";
 export interface UnitInfo
 {
     entity: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
-    attr: REGame_UnitAttribute;     // cache for avoiding repeated find.
+    attr: LUnitAttribute;     // cache for avoiding repeated find.
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
 
@@ -274,7 +274,7 @@ export class REScheduler
 
     
     consumeActionToken(entity: REGame_Entity): void {
-        const attr = entity.findAttribute(REGame_UnitAttribute);
+        const attr = entity.findAttribute(LUnitAttribute);
         assert(attr);
         attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
         //this.nextActionUnit();
@@ -449,7 +449,7 @@ export class REScheduler
         // 行動できるすべての entity を集める
         {
             REGame.map.entities().forEach(entity => {
-                const attr = entity.findAttribute(REGame_UnitAttribute);
+                const attr = entity.findAttribute(LUnitAttribute);
                 if (attr) {
                     assert(attr.factionId() > 0);
                     assert(attr.speedLevel() != 0);

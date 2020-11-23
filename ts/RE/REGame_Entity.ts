@@ -1,4 +1,4 @@
-import { REGame_Attribute } from "./REGame_Attribute";
+import { LAttribute } from "../objects/attributes/LAttribute";
 import { DecisionPhase, REGame_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
@@ -46,7 +46,7 @@ enum BlockLayer
 export class REGame_Entity
 {
 
-    attrbutes: REGame_Attribute[] = [];
+    attrbutes: LAttribute[] = [];
     private _basicBehaviors: REGame_Behavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
     //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
@@ -99,7 +99,7 @@ export class REGame_Entity
         return this._id;
     }
 
-    addAttribute(value: REGame_Attribute) {
+    addAttribute(value: LAttribute) {
         assert(value._ownerEntityId.index == 0);
         this.attrbutes.push(value);
         value._ownerEntityId = this._id;

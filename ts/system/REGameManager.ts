@@ -6,7 +6,7 @@ import { RE_Game_World } from "../RE/REGame_World";
 import { REGame_Core } from "../RE/REGame_Core";
 import { REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
-import { REGame_UnitAttribute } from "../RE/REGame_Attribute";
+import { LUnitAttribute } from "../objects/attributes/LAttribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
@@ -58,7 +58,7 @@ export class REGameManager
         const firstActor = REGame.uniqueActorUnits[0];
         REGame.core.mainPlayerEntiyId = firstActor._id;
         REGame.system._mainPlayerEntityId = firstActor._id;
-        const unit = firstActor.findAttribute(REGame_UnitAttribute);
+        const unit = firstActor.findAttribute(LUnitAttribute);
         if (unit) {
             unit.setManualMovement(true);
         }

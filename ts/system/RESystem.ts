@@ -177,3 +177,7 @@ export class RESystem {
     }
 }
 
+
+
+
+//declare var $RE_system : RESystem;
