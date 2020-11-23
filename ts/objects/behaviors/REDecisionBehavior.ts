@@ -6,6 +6,9 @@ import { DecisionPhase, REGame_Behavior } from "../../RE/REGame_Behavior";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { REGame } from "ts/RE/REGame";
 import { REData } from "ts/data/REData";
+import { Helpers } from "ts/system/Helpers";
+import { BlockLayerKind } from "ts/RE/REGame_Block";
+import { RESystem } from "ts/system/RESystem";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -23,11 +26,25 @@ export class REGame_DecisionBehavior extends REGame_Behavior
         }
         else if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
-            //let dir = 6;
+            let dir = 6;
 
             // ランダム移動
-            const table = [1,2,3,4,6,7,8,9];
-            const dir = table[REGame.world.random().nextIntWithMax(8)];
+            //const table = [1,2,3,4,6,7,8,9];
+            //const dir = table[REGame.world.random().nextIntWithMax(8)];
+
+            const front = Helpers.makeFrontPosition(entity.x, entity.y, dir, 1);
+            const e = REGame.map.block(front).aliveEntity(BlockLayerKind.Unit);
+            console.log("front", front);
+            console.log("AAAAAAAAAA", REGame.map.block(front));
+            console.log("AAAAAAAAAA", e);
+            if (e) {
+                context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
+
+                console.log("AAAAAAAAAA Attack");
+                // 通常攻撃
+                context.postPerformSkill(entity, RESystem.skills.normalAttack);
+                return REResponse.Consumed;
+            }
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
                 context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });

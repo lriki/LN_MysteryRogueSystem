@@ -65,8 +65,11 @@ export class RE_Game_World
      *   - 移動先の同一 BlockLayer に別の Entity がいた場合、移動は失敗する。
      * - 表示中以外のマップ(ランダムマップ)へ移動した場合、
      *   - 座標は常に 0,0 へ移動し、成功する。ほかの Entity とは重なるが、ランダムマップ生成時に再配置される。
+     * 
+     * 直ちに座標を変更するため、コマンドチェーン実行内からの呼び出しは禁止。
+     * CommandContext.postTransferFloor() を使うこと。
      */
-    _transfarEntity(entity: REGame_Entity, floorId: number, x: number, y: number): boolean {
+    _transferEntity(entity: REGame_Entity, floorId: number, x: number, y: number): boolean {
         if (REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);

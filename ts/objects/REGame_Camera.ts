@@ -47,15 +47,15 @@ export class REGame_Camera
     reserveFloorTransferToFocusedEntity() {
         const entity = this.focusedEntity();
         if (entity) {
-            this.reserveFloorTransfer(entity.floorId, entity.x, entity.y);
+            this.reserveFloorTransfer(entity.floorId, entity.x, entity.y, 2);
         }
     }
 
-    reserveFloorTransfer(floorId: number, x: number, y: number) {
+    reserveFloorTransfer(floorId: number, x: number, y: number, d: number) {
         this._transferingNewFloorId = floorId;
         this._transferingNewX = x;
         this._transferingNewY = y;
-        RESystem.integration.onReserveTransferFloor(floorId);
+        RESystem.integration.onReserveTransferFloor(floorId, x, y, d);
         Log.d("ReserveFloorTransfer");
     }
 

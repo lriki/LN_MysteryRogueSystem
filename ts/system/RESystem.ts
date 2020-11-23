@@ -1,3 +1,4 @@
+import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { DStateId } from "ts/data/DState";
 import { ParameterDataId, REData } from "ts/data/REData";
 import { LSkillBehavior } from "ts/objects/skills/SkillBehavior";
@@ -128,6 +129,10 @@ export interface BasicSequels {
     CollapseSequel: number;
 }
 
+export interface BasicSkills {
+    normalAttack: DSkillDataId;
+}
+
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -146,6 +151,7 @@ export class RESystem {
     static behaviors: BasicBehaviors;
     static states: BasicStates;
     static sequels: BasicSequels;
+    static skills: BasicSkills;
     
     
     static integration: REIntegration;

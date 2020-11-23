@@ -1,6 +1,6 @@
 import { ParameterDataId } from "./REData";
 
-export type SkillDataId = number;
+export type DSkillDataId = number;
 
 export enum DParameterEffectApplyType {
     Damage,
@@ -42,7 +42,7 @@ export interface DEffect {
 
 export interface DSkill {
     /** ID (0 is Invalid). */
-    id: number;
+    id: DSkillDataId;
 
     /** Name */
     name: string;

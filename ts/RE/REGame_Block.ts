@@ -234,4 +234,9 @@ export class REGame_Block
             this._layers[i].removeAllEntites();
         }
     }
+
+    aliveEntity(layer: BlockLayerKind): REGame_Entity | undefined {
+        const l = this._layers[layer];
+        return l.entities().find(x => x.isAlive());
+    }
 }

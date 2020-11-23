@@ -13,9 +13,10 @@ import { REMapBuilder } from "./system/REMapBuilder";
 import { REVisual } from "./visual/REVisual";
 
 export class RMMZIntegration extends REIntegration {
-    onReserveTransferFloor(floorId: number): void {
-        throw new Error("Method not implemented.");
+    onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void {
+        $gamePlayer.reserveTransfer(floorId, x, y, d, 0);
     }
+
     onLoadFixedMap(builder: REMapBuilder): void {
         if (!$dataMap) {
             throw new Error();
@@ -40,7 +41,7 @@ export class RMMZIntegration extends REIntegration {
                     const entity = this.newEntity(e._entityMetadata);
                     entity.prefabKey = { kind: 0, id: e.eventId() };
                     entity.rmmzEventId = e.eventId();
-                    REGame.world._transfarEntity(entity, REGame.map.floorId(), e.x, e.y);
+                    REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
                     REGame.map.markAdhocEntity(entity);
                 }
             }
@@ -50,6 +51,11 @@ export class RMMZIntegration extends REIntegration {
     }
     
     onCheckVisualSequelRunning(): boolean {
+        if (SceneManager.isCurrentSceneBusy()) {
+            // マップ遷移などのフェード中
+            return true;
+        }
+
         if (REVisual.entityVisualSet)
             return REVisual.entityVisualSet.visualRunning();
         else

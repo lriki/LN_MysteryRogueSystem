@@ -3,6 +3,7 @@ import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/RE/REGame";
 import { BlockLayerKind } from "ts/RE/REGame_Block";
+import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../system/REDialog";
 import { RE } from "./dialogs/FootingDialogVisual";
 import { REDialogVisualWindowLayer } from "./REDialogVisual";
@@ -49,7 +50,7 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         else if (Input.isTriggered("ok")) {
             
             // [通常攻撃] スキル発動
-            context.commandContext().postPerformSkill(entity, REData.AttackActionId);
+            context.commandContext().postPerformSkill(entity, RESystem.skills.normalAttack);
             context.closeDialog(true);
             return;
         }

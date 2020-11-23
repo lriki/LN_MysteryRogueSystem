@@ -3,7 +3,7 @@ import { DecisionPhase, REGame_Behavior } from "./REGame_Behavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
-import { BlockLayerKind } from "./REGame_Block";
+import { BlockLayerKind, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
@@ -149,11 +149,38 @@ export class REGame_Entity
     //    return this._eventData;
     //}
 
+    /**
+     * ゲーム全体にわたって絶対に破棄 (destroy) されることの無い Entity (UniqueEntity) であるかどうか
+     * 
+     * Player や (ダンジョンを抜けても状態を保持する)仲間などが該当する。
+     * これらはダンジョン内で倒れてもマップから "除外" されるだけで "破棄" されることはない。
+     * 
+     * UniqueEntity のインベントリに入れられたアイテム等は UniqueEntity ではないので注意。
+     */
+    isUnique(): boolean {
+        return REGame.uniqueActorUnits.includes(this);
+    }
+
+    /**
+     * Entity が機能を果たせる状態にあるか（破棄準備状態であるか）
+     * 
+     * HP0 となっても直ちに破棄準備状態となるわけではなく、例えば復活草の効果を受けて回復することがある。
+     * その他、仮に不死の Entity がいる場合、HP が 0 になろうともマップにとどまる限りは false となるべき。
+     * 
+     * そのためこの値が true の場合は、Entity が完全に機能を停止して World から取り除かれようとしていることを示す。
+     * 各種処理で、こういった Entity を存在しないものとして扱うためにこのフラグを確認する。
+     */
+    isAlive(): boolean {
+        return !this._destroyed;
+    }
+
+    /** isAlive() の逆 */
     isDestroyed(): boolean {
         return this._destroyed;
     }
 
     destroy(): void {
+        assert(!this.isUnique());
         this._destroyed = true;
     }
 

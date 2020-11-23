@@ -9,7 +9,7 @@ export abstract class REIntegration {
      * フロアを移動するときに呼び出される。
      * @param floorId 
      */
-    abstract onReserveTransferFloor(floorId: number): void;
+    abstract onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void;
 
     abstract onLoadFixedMap(builder: REMapBuilder): void;
 

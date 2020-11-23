@@ -122,6 +122,10 @@ export class REDataManager
             CollapseSequel: REData.addSequel("Collapse"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
+        
+        RESystem.skills = {
+            normalAttack:1,
+        }
     }
 
     static loadData(): void
@@ -270,6 +274,9 @@ export class REDataManager
                     }
                     else if (info.name?.startsWith("Trap")) {
                         land.trapTableMapId = i;
+                    }
+                    else if (info.name?.includes("RE-ExitMap")) {
+                        land.exitMapId = i;
                     }
                     else {
                         // 固定マップ or シャッフルマップ用のテンプレートマップ

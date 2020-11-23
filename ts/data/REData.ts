@@ -169,6 +169,8 @@ export interface RE_Data_Land
     /** TrapTable MapId. */
     trapTableMapId: number;
 
+    exitMapId: number;
+
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
     floorIds: number[];
 }
@@ -303,7 +305,7 @@ export class REData
         this.addActor("null");
 
         this.monsters = [{ id: 0, name: 'null', exp: 0, idealParams:[] }];
-        this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, floorIds: [] }];
+        this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, exitMapId:0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
         this.actions = [{id: 0, displayName: 'null'}];
@@ -386,6 +388,7 @@ export class REData
             itemTableMapId: 0,
             enemyTableMapId: 0,
             trapTableMapId: 0,
+            exitMapId: 0,
             floorIds: [],
         });
         return newId;

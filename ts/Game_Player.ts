@@ -28,7 +28,7 @@ Game_Player.prototype.performTransfer = function() {
     if (oldIsTransferring && REGame.map.isValid()) {
         const playerEntity = REGame.world.entity(REGame.core.mainPlayerEntiyId);
         if (playerEntity) {
-            REGame.world._transfarEntity(playerEntity, REGame.map.floorId(), this.x, this.y);
+            REGame.world._transferEntity(playerEntity, REGame.map.floorId(), this.x, this.y);
         }
     }
 }

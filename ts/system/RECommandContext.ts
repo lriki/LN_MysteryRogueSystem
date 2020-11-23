@@ -11,7 +11,7 @@ import { RERecordingCommandType } from "./RECommandRecorder";
 import { REEffectContext } from "./REEffectContext";
 import { REGame_Block } from "ts/RE/REGame_Block";
 import { RESystem } from "./RESystem";
-import { SkillDataId } from "ts/data/DSkill";
+import { DSkillDataId } from "ts/data/DSkill";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -206,6 +206,24 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "Destroy", func: m1 });
         Log.postCommand("Destroy");
     }
+
+    /**
+     * フロア移動
+     * @param entity 
+     * @param floorId 
+     * @param x 
+     * @param y 
+     * @param d 
+     */
+    postTransferFloor(entity: REGame_Entity, floorId: number, x: number = 0, y:number = 0, d: number = 0) {
+        const m1 = () => {
+            Log.doCommand("TransferFloor");
+            REGame.world._transferEntity(entity, floorId, x, y);
+            return REResponse.Consumed;
+        };
+        this._recodingCommandList.push({ name: "TransferFloor", func: m1 });
+        Log.postCommand("TransferFloor");
+    }
     
 
     postConsumeActionToken(entity: REGame_Entity): void {
@@ -218,7 +236,7 @@ export class RECommandContext
         Log.postCommand("ConsumeActionToken");
     }
 
-    postPerformSkill(performer: REGame_Entity, skillId: SkillDataId): void {
+    postPerformSkill(performer: REGame_Entity, skillId: DSkillDataId): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
             RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);

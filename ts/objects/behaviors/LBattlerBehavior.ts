@@ -3,6 +3,7 @@ import { DClass } from "ts/data/DClass";
 import { DStateId } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
 import { ParameterDataId, REData } from "ts/data/REData";
+import { REGame } from "ts/RE/REGame";
 import { REGame_Behavior } from "ts/RE/REGame_Behavior";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { REResponse } from "ts/system/RECommand";
@@ -186,14 +187,18 @@ export class LBattlerBehavior extends REGame_Behavior {
     
     
     onTurnEnd(context: RECommandContext): REResponse {
-        console.log("onTurnEnd");
 
         const entity = this.entity();
         if (this.isDeathStateAffected()) {
             
-            context.postSequel(entity, RESystem.sequels.CollapseSequel);
-
-            context.postDestroy(entity);
+            if (entity.isUnique()) {
+                context.postTransferFloor(entity, REGame.map.land().exitMapId);
+            }
+            else {
+                context.postSequel(entity, RESystem.sequels.CollapseSequel);
+    
+                context.postDestroy(entity);
+            }
         }
         
         return REResponse.Pass;
