@@ -58,18 +58,20 @@ declare interface IDataEffect
     value1?: number;
     value2?: number;
 }
+declare interface IDataDamage
+{
+    critical: boolean;
+    elementId: number;
+    formula: string;
+    type: number;
+    variance: number;
+}
 
 declare interface IDataSkill
 {
     id?: number;
     animationId?: number;
-    damage?: {
-        critical?: boolean;
-        elementId?: number;
-        formula?: string;
-        type?: number;
-        variance?: number;
-    }
+    damage: IDataDamage;
     description?: string;
     effects?: IDataEffect[];
     hitType?: number;
@@ -108,13 +110,7 @@ declare interface IDataItem extends IDataAllItem
 {
     animationId?: number;
     consumable?: boolean;
-    damage?: {
-        critical?: boolean;
-        elementId?: number;
-        formula?: string;
-        type?: number;
-        variance?: number;
-    }
+    damage: IDataDamage;
     effects?: IDataEffect[];
     hitType?: number;
     itypeId?: number;

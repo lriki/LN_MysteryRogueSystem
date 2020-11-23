@@ -14,6 +14,16 @@ import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { Log } from "ts/Common";
 
+type Constructor<T = {}> = new (...args: any[]) => T;
+
+
+function Unit<TBase extends Constructor>(Base: TBase) {
+    return class extends Base {
+      timestamp = Date.now();
+    };
+  }
+
+
 
 /**
  */

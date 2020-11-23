@@ -60,7 +60,7 @@ export class REGame_Entity
     // Attribute よりはこっちに置いた方がいいだろう。
     _displayName: string = '';
     _iconName: string = '';
-    _blockLayer: BlockLayer = BlockLayer.Unit;
+    //_blockLayer: BlockLayer = BlockLayer.Unit;
 
     prefabKey: { kind: number, id: number } = { kind: 0, id: 0 };
     rmmzEventId: number = 0;

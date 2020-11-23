@@ -7,7 +7,7 @@ import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
-import { DParameterEffectApplyType } from "./DSkill";
+import { DEffect, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 
 
@@ -183,48 +183,23 @@ export class REDataManager
                 const skill = REData.skills[id];
                 skill.paramCosts[RESystem.parameters.mp] = x.mpCost ?? 0;
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
-                if (x.damage && (x.damage.type ?? 0) > 0) {
-                    skill.effect.critical = x.damage.critical ?? false;
-                    let parameterId = 0;
-                    let applyType = DParameterEffectApplyType.Damage;
-                    switch (x.damage.type) {
-                        case 1: // HPダメージ
-                            parameterId = RESystem.parameters.hp;
-                            applyType = DParameterEffectApplyType.Damage;
-                            break;
-                        case 2: // MPダメージ
-                            parameterId = RESystem.parameters.mp;
-                            applyType = DParameterEffectApplyType.Damage;
-                            break;
-                        case 3: // HP回復
-                            parameterId = RESystem.parameters.hp;
-                            applyType = DParameterEffectApplyType.Recover;
-                            break;
-                        case 4: // MP回復
-                            parameterId = RESystem.parameters.mp;
-                            applyType = DParameterEffectApplyType.Recover;
-                            break;
-                        case 5: // HP吸収
-                            parameterId = RESystem.parameters.hp;
-                            applyType = DParameterEffectApplyType.Drain;
-                            break;
-                        case 6: // MP吸収
-                            parameterId = RESystem.parameters.mp;
-                            applyType = DParameterEffectApplyType.Drain;
-                            break;
-                        default:
-                            throw new Error();
-                    }
-                    skill.effect.parameterEffects = [{
-                        parameterId: parameterId,
-                        elementId: x.damage.elementId ?? 0,
-                        formula: x.damage.formula ?? "0",
-                        applyType: applyType,
-                        variance: x.damage.variance ?? 0,
-                    }];
+                if ((x.damage.type ?? 0) > 0) {
+                    skill.effect = this.makeEffect(x.damage);
                 }
             }
         });
+
+        // Import Item
+        $dataItems.forEach(x => {
+            if (x) {
+                const id = REData.addItem(x.name ?? "null");
+                const item = REData.items[id];
+                if ((x.damage.type ?? 0) > 0) {
+                    item.effect = this.makeEffect(x.damage);
+                }
+            }
+        });
+        RESystem.items.autoSupplyFood = 2;
 
         // Import Monsters
         $dataEnemies.forEach(x => {
@@ -372,6 +347,49 @@ export class REDataManager
                 }
             }
         }
+    }
+
+    static makeEffect(damage: IDataDamage): DEffect {
+        let parameterId = 0;
+        let applyType = DParameterEffectApplyType.Damage;
+        switch (damage.type) {
+            case 1: // HPダメージ
+                parameterId = RESystem.parameters.hp;
+                applyType = DParameterEffectApplyType.Damage;
+                break;
+            case 2: // MPダメージ
+                parameterId = RESystem.parameters.mp;
+                applyType = DParameterEffectApplyType.Damage;
+                break;
+            case 3: // HP回復
+                parameterId = RESystem.parameters.hp;
+                applyType = DParameterEffectApplyType.Recover;
+                break;
+            case 4: // MP回復
+                parameterId = RESystem.parameters.mp;
+                applyType = DParameterEffectApplyType.Recover;
+                break;
+            case 5: // HP吸収
+                parameterId = RESystem.parameters.hp;
+                applyType = DParameterEffectApplyType.Drain;
+                break;
+            case 6: // MP吸収
+                parameterId = RESystem.parameters.mp;
+                applyType = DParameterEffectApplyType.Drain;
+                break;
+            default:
+                throw new Error();
+        }
+        return {
+            critical: damage.critical ?? false,
+            parameterEffects: [{
+                parameterId: parameterId,
+                elementId: damage.elementId ?? 0,
+                formula: damage.formula ?? "0",
+                applyType: applyType,
+                variance: damage.variance ?? 0,
+            }]
+        };
     }
 
     static floor(mapId: number): RE_Data_Floor {

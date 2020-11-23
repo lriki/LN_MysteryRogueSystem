@@ -7,6 +7,7 @@ import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
 import { DClass, DClassId } from "./DClass";
+import { DItem } from "./DItem";
 
 export type ParameterDataId = number;
 
@@ -289,6 +290,7 @@ export class REData
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static skills: DSkill[] = [];
+    static items: DItem[] = [];
     static states: DState[] = [];
 
     static _attributeFactories: (() => LAttribute)[] = [];
@@ -313,8 +315,13 @@ export class REData
         this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
+
         this.skills = [];
         this.addSkill("null");
+
+        this.items = [];
+        this.addItem("null");
+
         this.states = [{id: 0, name: 'null', restriction: 0}];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
@@ -453,6 +460,19 @@ export class REData
             id: newId,
             name: name,
             paramCosts: [],
+            effect: {
+                critical: false,
+                parameterEffects: [],
+            }
+        });
+        return newId;
+    }
+    
+    static addItem(name: string): number {
+        const newId = this.items.length;
+        this.items.push({
+            id: newId,
+            name: name,
             effect: {
                 critical: false,
                 parameterEffects: [],

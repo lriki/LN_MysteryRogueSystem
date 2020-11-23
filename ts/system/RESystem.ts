@@ -5,6 +5,7 @@ import { LSkillBehavior } from "../objects/skills/SkillBehavior";
 import { LStateBehavior } from "../objects/states/LStateBehavior";
 import { BlockLayerKind } from "../objects/REGame_Block";
 import { REIntegration } from "./REIntegration";
+import { DItemDataId } from "ts/data/DItem";
 
 export interface EntityKinds {
     actor: number;
@@ -31,12 +32,15 @@ export interface EntityProperty {
     defaultValue: any;
 }
 
-// Entity の基本プロパティのうち、Behavior によってオーバーライドされることがあるもの
+// Entity の基本プロパティのうち、Behavior によってオーバーライドされることがあるもの。
+// 特に、他の状態に依存して変わる可能性がある状態を返すために使う。
 export interface EntityProperties {
     // Entity が Map に配置されるとき、どのレイヤーを基本とするか。
     // Ground, Unit, System のいずれか。
     // NOTE: Entity の種別等で決定できないので、フィールドで持たせている。
-    //       代表的なのはアイテム擬態モンスター。自分の状態によってレイヤーが変わる。
+    //       - やりすごし状態は、自身をアイテム化する状態異常として表現する。（やり過ごしを投げ当てる他、技によってもやり過ごし状態になる）
+    //       - アイテム擬態モンスターは正体を現しているかによってレイヤーが変わる。
+    //       - 土偶は落とすとアイテム、立てるとUnitのようにふるまう
     homeLayer: number;
 }
 
@@ -133,6 +137,11 @@ export interface BasicSkills {
     normalAttack: DSkillDataId;
 }
 
+export interface BasicItems {
+    /** ダンジョン突入時に自動的に追加される食糧アイテム */
+    autoSupplyFood: DItemDataId;
+}
+
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -152,6 +161,7 @@ export class RESystem {
     static states: BasicStates;
     static sequels: BasicSequels;
     static skills: BasicSkills;
+    static items: BasicItems;
     
     
     static integration: REIntegration;

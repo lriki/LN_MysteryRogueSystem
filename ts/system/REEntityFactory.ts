@@ -36,6 +36,12 @@ export class REEntityFactory {
         return e;
     }
 
+    static newItem(itemId: number): REGame_Entity {
+        const e = REGame.world.spawnEntity();
+        e.addBasicBehavior(new REUnitBehavior());
+        return e;
+    }
+
     static newExitPoint(): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new REExitPointBehavior());

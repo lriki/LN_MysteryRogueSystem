@@ -4,6 +4,7 @@ export interface RMMZEventEntityMetadata {
     entity?: string;
 
     enemyId?: number;
+    itemId?: number;
 }
 
 export class RMMZHelper {
