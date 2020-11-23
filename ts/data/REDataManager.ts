@@ -3,6 +3,7 @@ import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
+import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { REGame_UnitAttribute } from "ts/RE/REGame_Attribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
@@ -92,7 +93,7 @@ export class REDataManager
 
         // States
         RESystem.states = {
-            dead: 1,//REData.addState("Dead", () => new LGenericState()),
+            dead: REData.addState("Dead", () => new LStateBehavior()),
             debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
         };
 

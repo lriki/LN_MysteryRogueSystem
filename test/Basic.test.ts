@@ -25,10 +25,6 @@ class ActorAttr extends BattlerAttr {
 */
 
 test('basic', () => {
-    const ggg = new Game_Battler();
-    console.log("Game_Battler", ggg);
-
-
     // NewGame.
     REGameManager.createGameObjects();
 
