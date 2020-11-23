@@ -5,7 +5,6 @@ import { REGame_Entity } from "../RE/REGame_Entity";
 import { REScheduler } from "./REScheduler";
 import { assert, Log } from "ts/Common";
 import { REGame_Sequel } from "ts/RE/REGame_Sequel";
-import { LUnitAttribute } from "ts/objects/attributes/LAttribute";
 import { REGame } from "ts/RE/REGame";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { REEffectContext } from "./REEffectContext";

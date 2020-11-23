@@ -7,7 +7,7 @@ import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/RE/REGame";
 import { REGameManager } from "ts/system/REGameManager";
-import { LAttribute, LUnitAttribute } from "ts/objects/attributes/LAttribute";
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";

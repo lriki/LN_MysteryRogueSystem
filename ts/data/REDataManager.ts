@@ -4,7 +4,7 @@ import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
-import { LUnitAttribute } from "ts/objects/attributes/LAttribute";
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DParameterEffectApplyType } from "./DSkill";

@@ -1,6 +1,5 @@
 import { REGame_Map } from "./REGame_Map";
 import { REEntityFactory } from "../system/REEntityFactory";
-import { LUnitAttribute } from "../objects/attributes/LAttribute";
 import { REDataManager } from "../data/REDataManager";
 import { REGame_Entity } from "./REGame_Entity";
 import { RE_Game_World } from "./REGame_World";

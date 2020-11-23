@@ -1,7 +1,7 @@
 
 import { assert } from "ts/Common";
 import { REGame } from "ts/RE/REGame";
-import { LUnitAttribute } from "ts/objects/attributes/LAttribute";
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame_Entity } from "ts/RE/REGame_Entity";
 //import { REDialogVisual } from "ts/visual/REDialogVisual";
 import { RECommand, REResponse } from "./RECommand";

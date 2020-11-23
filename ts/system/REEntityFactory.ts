@@ -1,5 +1,5 @@
 import { REGame_Entity } from "../RE/REGame_Entity";
-import { LUnitAttribute } from "../objects/attributes/LAttribute";
+import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REData } from "../data/REData";
 import { REGame } from "../RE/REGame";
 import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";

@@ -6,7 +6,7 @@ import { RE_Game_World } from "../RE/REGame_World";
 import { REGame_Core } from "../RE/REGame_Core";
 import { REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
-import { LUnitAttribute } from "../objects/attributes/LAttribute";
+import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
