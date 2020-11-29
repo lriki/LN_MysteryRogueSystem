@@ -2,7 +2,7 @@ import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { BlockLayerKind, REGame_Block, TileKind } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
-import { REFloorMapKind, REData, RE_Data_Land } from "../data/REData";
+import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REMapBuilder } from "../system/REMapBuilder";
 import { REEntityFactory } from "../system/REEntityFactory";
@@ -11,6 +11,7 @@ import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { EntityId } from "ts/system/EntityId";
 import { Vector2 } from "ts/math/Vector2";
+import { DLand } from "ts/data/DLand";
 
 
 
@@ -87,7 +88,7 @@ export class REGame_Map
         return this._floorId;
     }
 
-    land(): RE_Data_Land {
+    land(): DLand {
         return REData.lands[REData.floors[this._floorId].landId];
     }
 

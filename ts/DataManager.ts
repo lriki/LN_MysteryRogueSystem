@@ -63,7 +63,7 @@ DataManager.loadMapData = function(mapId) {
 
         // 今いる Land 以外へ遷移したときは、データテーブルをロードする
         if (REDataManager.loadedLandId != land.id) {
-            const land_filename = `Map${land.mapId.padZero(3)}.json`;
+            const land_filename = `Map${land.rmmzMapId.padZero(3)}.json`;
             const eventTable_filename = `Map${land.eventTableMapId.padZero(3)}.json`;
             const itemTable_filename = `Map${land.itemTableMapId.padZero(3)}.json`;
             const enemyTable_filename = `Map${land.enemyTableMapId.padZero(3)}.json`;

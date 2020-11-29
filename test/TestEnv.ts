@@ -7,6 +7,17 @@ import { REIntegration } from "ts/system/REIntegration";
 import { REMapBuilder } from "ts/system/REMapBuilder";
 import { RESystem } from "ts/system/RESystem";
 
+declare global {
+    interface Number {
+        clamp(min: number, max: number): number;
+    }
+}
+
+Number.prototype.clamp = function(min: number, max: number): number{
+    const num = (this as Number).valueOf();
+    return Math.min(Math.max(num, min), max);
+};
+
 export class TestEnv {
     static activeSequelSet: RESequelSet;
 
@@ -15,14 +26,46 @@ export class TestEnv {
         REDataManager.setupCommonData();
 
         // Lands
-        let landId = REData.addLand(1);
-        REData.addLand(2);
-        REData.addLand(3);
+        REData.addLand({
+            id: -1,
+            rmmzMapId: 1,
+            eventTableMapId: 0,
+            itemTableMapId: 0,
+            enemyTableMapId: 0,
+            trapTableMapId: 0,
+            exitEMMZMapId: 1001,
+            floorIds: [],
+        });
+        REData.addLand({
+            id: -1,
+            rmmzMapId: 2,
+            eventTableMapId: 0,
+            itemTableMapId: 0,
+            enemyTableMapId: 0,
+            trapTableMapId: 0,
+            exitEMMZMapId: 1002,
+            floorIds: [],
+        });
+        REData.addLand({
+            id: -1,
+            rmmzMapId: 3,
+            eventTableMapId: 0,
+            itemTableMapId: 0,
+            enemyTableMapId: 0,
+            trapTableMapId: 0,
+            exitEMMZMapId: 1003,
+            floorIds: [],
+        });
 
         // Floors
         REData.addFloor(4, 1, REFloorMapKind.FixedMap);
         REData.addFloor(5, 1, REFloorMapKind.FixedMap);
         REData.addFloor(6, 1, REFloorMapKind.FixedMap);
+
+        // Skills
+        {
+            const id = REData.addSkill("NormalAttack");
+        }
 
         // Unique Entitise
         REData.addActor("Unique1");

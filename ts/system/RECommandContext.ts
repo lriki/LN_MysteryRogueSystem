@@ -302,6 +302,10 @@ export class RECommandContext
         return this._messageIndex < this._runningCommandList.length;
     }
 
+    isRecordingListEmpty(): boolean {
+        return this._recodingCommandList.length == 0;
+    }
+
     /*
     _process(): boolean {
         if (this.isRunning()) {

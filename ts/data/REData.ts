@@ -8,6 +8,7 @@ import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
 import { DClass, DClassId } from "./DClass";
 import { DItem } from "./DItem";
+import { DLand } from "./DLand";
 
 export type ParameterDataId = number;
 
@@ -148,35 +149,6 @@ export interface RE_Data_Monster
 
 
 /**
- * ダンジョンや町ひとつ分。
- */
-export interface RE_Data_Land
-{
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Land に対応するツクール MapId. */
-    mapId: number;
-
-    /** EventTable MapId. */
-    eventTableMapId: number;
-    
-    /** ItemTable MapId. */
-    itemTableMapId: number;
-    
-    /** EnemeyTable MapId. */
-    enemyTableMapId: number;
-    
-    /** TrapTable MapId. */
-    trapTableMapId: number;
-
-    exitMapId: number;
-
-    /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
-    floorIds: number[];
-}
-
-/**
  * フロアひとつ分。
  * 
  * 負荷軽減のため、各テーブルは Player がダンジョンに入った時にロードされる。
@@ -281,7 +253,7 @@ export class REData
     static classes: DClass[] = [];
     static actors: RE_Data_Actor[] = [];
     static monsters: RE_Data_Monster[] = [];
-    static lands: RE_Data_Land[] = [];
+    static lands: DLand[] = [];
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: REData_Action[] = [{id: 0, displayName: 'null'}];
@@ -307,7 +279,7 @@ export class REData
         this.addActor("null");
 
         this.monsters = [{ id: 0, name: 'null', exp: 0, idealParams:[] }];
-        this.lands = [{ id: 0, mapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, exitMapId:0, floorIds: [] }];
+        this.lands = [{ id: 0, rmmzMapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, exitEMMZMapId:0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
         this.actions = [{id: 0, displayName: 'null'}];
@@ -384,20 +356,11 @@ export class REData
 
     /**
      * Add land.
-     * @param mapId : RMMZ mapID
      */
-    static addLand(mapId: number): number {
+    static addLand(data: DLand): number {
         const newId = this.lands.length;
-        this.lands.push({
-            id: newId,
-            mapId: mapId,
-            eventTableMapId: 0,
-            itemTableMapId: 0,
-            enemyTableMapId: 0,
-            trapTableMapId: 0,
-            exitMapId: 0,
-            floorIds: [],
-        });
+        data.id = newId;
+        this.lands.push(data);
         return newId;
     }
     

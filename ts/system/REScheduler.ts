@@ -176,6 +176,15 @@ export class REScheduler
                     this.flushSequelSet();
                 }
             }
+            else {
+                // 実行予約が溜まっているなら submit して実行開始する。
+                // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
+                //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
+                //   そもそもいつ呼び出すべきなのか分かりづらいので、submit の呼び出しは一元化する。
+                if (!this._commandContext.isRecordingListEmpty()) {
+                    this._commandContext._submit(); // swap
+                }
+            }
 
             if (this._commandContext.isRunning()) {
                 // コマンド実行中。まだフェーズを進ませない
@@ -349,7 +358,7 @@ export class REScheduler
             const unit = step.unit;
             if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
                 unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
-                this._commandContext._submit(); // swap
+                //this._commandContext._submit(); // swap
                 return;
             }
             else {
@@ -376,7 +385,7 @@ export class REScheduler
             if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
                 unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
                 unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.AIMinor);
-                this._commandContext._submit(); // swap
+                //this._commandContext._submit(); // swap
                 return;
             }
             else {
@@ -402,7 +411,7 @@ export class REScheduler
             const unit = step.unit;
             if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
                 unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.AIMajor);
-                this._commandContext._submit(); // swap
+                //this._commandContext._submit(); // swap
                 return;
             }
             else {

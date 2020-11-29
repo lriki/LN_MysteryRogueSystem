@@ -8,7 +8,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DEffect, DParameterEffectApplyType } from "./DSkill";
-import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Land, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
+import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 
 
 declare global {  
@@ -226,11 +226,19 @@ export class REDataManager
 
         // Import Lands
         // 最初に Land を作る
-        REData.addLand(0); // dummy
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info && info.name?.startsWith("RELand:")) {
-                REData.addLand(i);
+                REData.addLand({
+                    id: -1,
+                    rmmzMapId: i,
+                    eventTableMapId: 0,
+                    itemTableMapId: 0,
+                    enemyTableMapId: 0,
+                    trapTableMapId: 0,
+                    exitEMMZMapId: 0,
+                    floorIds: [],
+                });
             }
         }
 
@@ -240,7 +248,7 @@ export class REDataManager
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info) {
-                const land = REData.lands.find(x => info.parentId && x.mapId == info.parentId);
+                const land = REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId);
                 if (land) {
                     if (info.name?.startsWith("Event")) {
                         land.eventTableMapId = i;
@@ -255,7 +263,7 @@ export class REDataManager
                         land.trapTableMapId = i;
                     }
                     else if (info.name?.includes("RE-ExitMap")) {
-                        land.exitMapId = i;
+                        land.exitEMMZMapId = i;
                     }
                     else {
                         // 固定マップ or シャッフルマップ用のテンプレートマップ
@@ -277,13 +285,13 @@ export class REDataManager
                     this.databaseMapId = i;
                 }
                 else if (info && info.name?.startsWith("RELand:")) {
-                    const land = REData.lands.find(x => x.mapId == i);
+                    const land = REData.lands.find(x => x.rmmzMapId == i);
                     assert(land);
                     REData.floors[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
                 }
                 else if (info && info.parentId) {
                     const parentInfo = $dataMapInfos[info.parentId];
-                    const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.mapId == parentInfo.parentId);
+                    const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
                     if (land) {
                         let kind = undefined;
                         if (parentInfo.name == "[RandomMaps]") {

@@ -193,7 +193,7 @@ export class LBattlerBehavior extends LBehavior {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
-                context.postTransferFloor(entity, REGame.map.land().exitMapId);
+                context.postTransferFloor(entity, REGame.map.land().exitEMMZMapId);
             }
             else {
     
