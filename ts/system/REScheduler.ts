@@ -325,6 +325,7 @@ export class REScheduler
                 else {
                     // まだ iterationCount が残っているので、同じ Step を再び実行する
                 }
+                this._actionConsumed = false;
             }
             else {
                 // 向き変更のみなど、行動トークンは消費しなかった

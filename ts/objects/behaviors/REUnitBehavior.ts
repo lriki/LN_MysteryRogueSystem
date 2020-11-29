@@ -1,23 +1,31 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { LBehavior } from "./LBehavior";
+import { LBehavior, onPrePickUpReaction } from "./LBehavior";
 import { ActionId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { Helpers } from "ts/system/Helpers";
+import { BlockLayerKind } from "../REGame_Block";
+import { LInventoryBehavior } from "./LInventoryBehavior";
 
 /**
  * 
  */
 export class REUnitBehavior extends LBehavior {
+    
+    onQueryProperty(propertyId: number): any {
+        console.log("REUnitBehavior.onQueryProperty");
+        return BlockLayerKind.Unit;
+    }
+    
     onQueryReactions(): ActionId[] {
         return [REData.AttackActionId];
     }
 
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
-
+        
         if (cmd.action().id == REData.DirectionChangeActionId) {
             cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
             return REResponse.Consumed;
@@ -64,7 +72,40 @@ export class REUnitBehavior extends LBehavior {
             
             return REResponse.Consumed;
         }
-        
+        else if (cmd.action().id == REData.PickActionId) {
+
+            //console.log("func.call s");
+            //const s: Symbol = onPrePickUpReaction;
+            //const func = this[s];//Object.getPrototypeOf(this).onQueryProperty;
+            //func.call(this, context);
+            //console.log("func.call e");
+            const inventory = entity.findBehavior(LInventoryBehavior);
+            if (inventory) {
+            
+                const block = REGame.map.block(entity.x, entity.y);
+                const layer = block.layer(BlockLayerKind.Ground);
+                const targetEntities = layer.entities();
+                if (targetEntities.length >= 1) {
+                    const targetEntity = targetEntities[0];
+    
+                    
+                    console.log("AA pick post");
+                    context.post(
+                        targetEntity, onPrePickUpReaction,
+                        (responce: REResponse, targetEntity: REGame_Entity, context: RECommandContext) => {
+                            REGame.map._removeEntity(targetEntity);
+                            inventory.addEntity(targetEntity);
+                            
+                            console.log("PICK!!!!!");
+                        });
+    
+                }
+    
+                console.log("AA pick");
+
+            }
+        }
+
         return REResponse.Pass;
     }
 

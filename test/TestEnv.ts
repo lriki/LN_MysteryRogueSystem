@@ -15,7 +15,7 @@ export class TestEnv {
         REDataManager.setupCommonData();
 
         // Lands
-        REData.addLand(1);
+        let landId = REData.addLand(1);
         REData.addLand(2);
         REData.addLand(3);
 

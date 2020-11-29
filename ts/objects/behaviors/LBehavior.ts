@@ -25,6 +25,8 @@ export enum DecisionPhase {
     AIMajor,
 }
 
+export const onPrePickUpReaction = Symbol("onPicking");
+
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {
     dataId: number = 0;
@@ -33,6 +35,10 @@ export class LBehavior {
     entity(): REGame_Entity {
         assert(this._ownerEntityId.index > 0);
         return REGame.world.entity(this._ownerEntityId);
+    }
+
+    [onPrePickUpReaction](entity: REGame_Entity, context: RECommandContext): REResponse {
+        return REResponse.Pass;
     }
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。

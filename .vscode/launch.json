@@ -23,7 +23,10 @@
                 // debugの際はcacheを無効にした。
                 // cacheを無効にすると、2倍くらい遅くなるらしい。
                 "--no-cache",
-                "--coverage", "false"
+                "--coverage", "false",
+
+                // 個別テスト実行
+                "-t", "DamageAndGameover"
               ],
               "cwd": "${workspaceRoot}",
               "console": "integratedTerminal",

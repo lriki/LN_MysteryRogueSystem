@@ -100,9 +100,10 @@ export class REDataManager
         // Actions
         REData.DirectionChangeActionId = REData.addAction("DirectionChange");
         REData.MoveToAdjacentActionId = REData.addAction("MoveToAdjacent");
+        REData.PickActionId = REData.addAction("Pick");
         REData.ProceedFloorActionId = REData.addAction("すすむ");
         REData.AttackActionId = REData.addAction("Attack");
-
+        
         // Attributes
         RESystem.attributes = {
             tile: REData.addAttribute("Tile", () => new RETileAttribute()),
@@ -199,7 +200,9 @@ export class REDataManager
                 }
             }
         });
-        RESystem.items.autoSupplyFood = 2;
+        RESystem.items = {
+            autoSupplyFood: 2,
+        };
 
         // Import Monsters
         $dataEnemies.forEach(x => {

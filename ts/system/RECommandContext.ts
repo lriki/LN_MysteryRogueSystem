@@ -9,11 +9,14 @@ import { REEffectContext } from "./REEffectContext";
 import { REGame_Block } from "../objects/REGame_Block";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
+import { LBehavior } from "ts/objects/behaviors/LBehavior";
 
 interface RECCMessage {
     name: string;   // for debug
     func: () => REResponse;
 }
+
+export type ActionResultCallback = (response: REResponse, entity: REGame_Entity, context: RECommandContext) => void;
 
 export class RECommandContext
 {
@@ -149,6 +152,35 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "sendReaction", func: m3 });
 
         Log.postCommand("Reaction");
+    }
+
+    post<TSym extends symbol>(entity: REGame_Entity, symbol: TSym, result: ActionResultCallback): void {
+        const m1 = () => {
+            const response = entity._callBehaviorIterationHelper((behavior: LBehavior) => {
+                const func = (behavior as any)[symbol];
+                if (func) {
+                    const r1 = func.call(behavior, entity, this);
+                    if (r1 != REResponse.Pass) {
+                        // 何らかの形でコマンドが処理された
+                        result(r1, entity, this);
+                    }
+                    return r1;
+                }
+                else {
+                    return REResponse.Pass;
+                }
+            });
+
+            if (response == REResponse.Pass) {
+                // コマンドが処理されなかった
+                result(response, entity, this);
+            }
+
+            return REResponse.Consumed;
+
+        };
+        this._recodingCommandList.push({ name: "Post", func: m1 });
+        Log.postCommand("Post");
     }
 
     /*

@@ -33,15 +33,12 @@ export class REGame_DecisionBehavior extends LBehavior
 
             const front = Helpers.makeFrontPosition(entity.x, entity.y, dir, 1);
             const e = REGame.map.block(front).aliveEntity(BlockLayerKind.Unit);
-            console.log("front", front);
-            console.log("AAAAAAAAAA", REGame.map.block(front));
-            console.log("AAAAAAAAAA", e);
             if (e) {
                 context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
 
-                console.log("AAAAAAAAAA Attack");
                 // 通常攻撃
                 context.postPerformSkill(entity, RESystem.skills.normalAttack);
+                context.postConsumeActionToken(entity);
                 return REResponse.Consumed;
             }
 

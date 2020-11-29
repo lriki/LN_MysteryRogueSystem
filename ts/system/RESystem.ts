@@ -146,7 +146,7 @@ export interface BasicItems {
 export class RESystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
-        { id: 1, defaultValue: BlockLayerKind.Unit }
+        { id: 1, defaultValue: BlockLayerKind.Ground }
     ];
 
     static properties: EntityProperties = {

@@ -14,6 +14,7 @@ import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 
 TestEnv.setupDatabase();
+
 /*
 class BattlerAttr extends REGame_Attribute {
 
@@ -265,8 +266,6 @@ test('TurnOrderTable', () => {
         // player を右へ移動
         dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
         dialogContext.closeDialog(true);
-
-        console.log("-------------------------------------");
     
         // AI行動決定
         REGameManager.update();
