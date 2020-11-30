@@ -7,6 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../../system/REDialog";
 import { RE } from "./FootingDialogVisual";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
+import { VMenuDialog } from "./VMenuDialog";
 
 export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
 
@@ -59,6 +60,11 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
             // [通常攻撃] スキル発動
             context.commandContext().postPerformSkill(entity, RESystem.skills.normalAttack);
             context.closeDialog(true);
+            return;
+        }
+
+        if (Input.isTriggered("menu")) {
+            this.push(new VMenuDialog(entity));
             return;
         }
     }

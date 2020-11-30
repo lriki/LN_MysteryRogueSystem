@@ -60,11 +60,16 @@
 
 import { assert } from "ts/Common";
 import { EntityId, eqaulsEntityId } from "ts/system/EntityId"
+import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LBehavior } from "./LBehavior"
 
 export class LInventoryBehavior extends LBehavior {
     private _entities: EntityId[] = [];
+
+    public entities(): REGame_Entity[] {
+        return this._entities.map(x => REGame.world.entity(x));
+    }
 
     public addEntity(entity: REGame_Entity) {
         const id = entity.id();

@@ -1,27 +1,38 @@
 
+import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
-import { Window_Location } from "../windows/Window_Location";
+import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
+import { VItemListDialog } from "./VItemListDialog";
 
-export namespace RE {
-    export class VMenuDialog extends REDialogVisualWindowLayer {
-        _targetEntity: REGame_Entity;
-        _locationWindow: Window_Location | undefined;
+export class VMenuDialog extends REDialogVisualWindowLayer {
+    _entity: REGame_Entity;
+    _commandWindow: VMenuCommandWindow | undefined;
 
-        constructor(targetEntity: REGame_Entity) {
-            super();
-            this._targetEntity = targetEntity;
-        }
-        
-        onCreate() {
-
-
-            const y = 100;
-            const cw = 200;
-            this._locationWindow = new Window_Location(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-            this.addWindow(this._locationWindow);
+    constructor(entity: REGame_Entity) {
+        super();
+        this._entity = entity;
+    }
     
-        }
+    onCreate() {
 
+
+        const y = 100;
+        const cw = 200;
+        this._commandWindow = new VMenuCommandWindow(new Rectangle(0, y, cw, 200));
+        this.addWindow(this._commandWindow);
+
+        
+        this._commandWindow.setHandler("item", this.commandItem.bind(this));
+        this._commandWindow.setHandler("cancel", () => this.pop());
+    }
+
+
+    commandItem() {
+        const inventory = this._entity.findBehavior(LInventoryBehavior);
+        if (inventory) {
+            this.push(new VItemListDialog(this._entity, inventory));
+        }
     }
 }
+

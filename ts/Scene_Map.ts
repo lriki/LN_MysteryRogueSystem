@@ -91,3 +91,12 @@ Scene_Map.prototype.update = function() {
 
     REVisual.entityVisualSet?.update();
 }
+
+// RE Map 内では RMMZ 通常のメニューを禁止する
+var _Scene_Map_isMenuCalled = Scene_Map.prototype.isMenuCalled;
+Scene_Map.prototype.isMenuCalled = function() {
+    if ($gameMap.isRESystemMap())
+        return false;
+    else
+        return _Scene_Map_isMenuCalled.call(this);
+};
