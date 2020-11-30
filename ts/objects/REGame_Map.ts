@@ -190,15 +190,7 @@ export class REGame_Map
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
-
-
-
         const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
-
-        console.log("canLeaving?", this.canLeaving(oldBlock, entity));
-        console.log("canEntering?", this.canEntering(newBlock, entity, layer));
-        console.log("layer", layer);
-        console.log("newBlock", newBlock);
 
         if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, entity, layer)) {
             return true;

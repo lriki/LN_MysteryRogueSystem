@@ -10,15 +10,12 @@ export abstract class LSkillBehavior {
 
 export class LNormalAttackSkillBehavior extends LSkillBehavior {
     onPerforme(skillId: DSkillDataId, entity: REGame_Entity, context: RECommandContext): void {
-        console.log("LNormalAttackSkillBehavior");
 
         const skill = REData.skills[skillId];
         const effector = new SEffectorFact(entity, skill.effect);
         const effectContext = new REEffectContext();
         effectContext.addEffector(effector);
         
-
-        console.log("effector:", effector);
         
         context.postActionOneWay(REData.AttackActionId, entity, effectContext);
     }

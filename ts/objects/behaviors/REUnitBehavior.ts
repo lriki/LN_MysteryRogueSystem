@@ -16,7 +16,6 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 export class REUnitBehavior extends LBehavior {
     
     onQueryProperty(propertyId: number): any {
-        console.log("REUnitBehavior.onQueryProperty");
         return BlockLayerKind.Unit;
     }
     

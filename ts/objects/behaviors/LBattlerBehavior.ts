@@ -142,26 +142,17 @@ export class LBattlerBehavior extends LBehavior {
         //    this.eraseState(stateId);
         //}
 
-        console.log("_idealParamPlus:", this._idealParamPlus);
-        console.log("_actualParams:", this._actualParams);
         const hp = this.actualParam(RESystem.parameters.hp);
-        console.log("RESystem.parameters.hp:", RESystem.parameters.hp);
-        console.log("hp:", hp);
-        console.log("hp:", hp.clamp(0, 1));
 
         // TODO: 全パラメータ
         // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
         const mhp = this.idealParam(RESystem.parameters.hp);
         const mmp = this.idealParam(RESystem.parameters.mp);
         const mtp = this.idealParam(RESystem.parameters.tp);
-        console.log("mmp:", mmp);
         this._actualParams[RESystem.parameters.hp] = this.actualParam(RESystem.parameters.hp).clamp(0, mhp);
         this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
         this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
     
-        console.log("_actualParams:", this._actualParams);
-        
-
         const entity = this.entity();
         if (this.actualParam(RESystem.parameters.hp) === 0) {
             console.log("!!!DEAD!!!");

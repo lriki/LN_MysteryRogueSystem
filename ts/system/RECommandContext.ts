@@ -18,6 +18,10 @@ interface RECCMessage {
 
 export type ActionResultCallback = (response: REResponse, entity: REGame_Entity, context: RECommandContext) => void;
 
+/**
+ * 
+ * 
+ */
 export class RECommandContext
 {
     private _owner: REScheduler;

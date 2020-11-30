@@ -13,7 +13,13 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 
-TestEnv.setupDatabase();
+
+beforeAll(() => {
+    TestEnv.setupDatabase();
+});
+
+afterAll(() => {
+});
 
 /*
 class BattlerAttr extends REGame_Attribute {

@@ -6,9 +6,12 @@ import { REGameManager } from "ts/system/REGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 
+beforeAll(() => {
+    TestEnv.setupDatabase();
+});
 
-
-TestEnv.setupDatabase();
+afterAll(() => {
+});
 
 test('DamageAndGameover', () => {
     //--------------------
