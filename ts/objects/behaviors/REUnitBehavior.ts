@@ -96,8 +96,9 @@ export class REUnitBehavior extends LBehavior {
                             REGame.map._removeEntity(targetEntity);
                             inventory.addEntity(targetEntity);
 
-                            REGame.message.add(tr("{0} は {1} をひろった", "a", "b"));
-                            //REGame.message.add("PICK!");
+                            context.postMessage(tr("{0} は {1} をひろった1", "a", "b"));
+                            context.postMessage(tr("{0} は {1} をひろった2", "a", "b"));
+                            context.postMessage(tr("{0} は {1} をひろった3", "a", "b"));
                             
                             console.log("PICK!!!!!");
                         });

@@ -21,7 +21,6 @@ interface TextState {
  * see LMessage
  */
 export class VMessageWindow extends Window_Base {
-
     private _message: LMessage;
     private _background: number = 0;
     private _positionType: number = 2;
@@ -36,6 +35,8 @@ export class VMessageWindow extends Window_Base {
     private _choiceListWindow: Window_ChoiceList | undefined;
     private _numberInputWindow: Window_NumberInput | undefined;
     private _eventItemWindow: Window_EventItem | undefined;
+
+    private _autoCloseCount: number = 0;
 
     constructor(message: LMessage, rect: Rectangle) {
         super(rect);
@@ -55,6 +56,7 @@ export class VMessageWindow extends Window_Base {
         this._choiceListWindow = undefined;
         this._numberInputWindow = undefined;
         this._eventItemWindow = undefined;
+        this._autoCloseCount = 0;
         this.clearFlags();
     }
     
@@ -195,6 +197,17 @@ export class VMessageWindow extends Window_Base {
         if (this.isAnySubWindowActive()) {
             return true;
         }
+
+        if (this._autoCloseCount > 0) {
+            this._autoCloseCount--;
+            if (this._autoCloseCount == 0) {
+                if (!this._textState) {
+                    this.terminateMessage();
+                }
+            }
+            return true;
+        }
+
         if (this.pause) {
             if (this.isTriggered()) {
                 Input.update();
@@ -364,6 +377,7 @@ export class VMessageWindow extends Window_Base {
         this._lineShowFast = false;
         Window_Base.prototype.processNewLine.call(this, textState);
         if (this.needsNewPage(textState)) {
+            // ウィンドウに収まらない行数のテキスト表示時の改ページウェイト
             this.startPause();
         }
     }
@@ -428,7 +442,14 @@ export class VMessageWindow extends Window_Base {
     }
     
     private startPause() {
+
+        //console.log("TextState", this._textState);
         this.startWait(10);
-        this.pause = true;
+        //this.pause = true;
+
+        this._autoCloseCount = 30;
     }
+    
+    //private startPause() {
+    //}
 }
