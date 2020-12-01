@@ -6781,14 +6781,3 @@ declare interface Window_DebugEdit extends Window_Selectable {
 	 */
 	openness : number;
 }
-
-/**
- * 
- */
-declare var Bitmap : {
-		
-	/**
-	 * 
-	 */
-	paintOpacity : number;
-}
