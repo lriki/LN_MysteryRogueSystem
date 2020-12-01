@@ -13,6 +13,7 @@ import { RECommandRecorder } from "./RECommandRecorder";
 import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { Log } from "ts/Common";
+import { LMessage } from "ts/objects/LMessage";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -40,6 +41,7 @@ export class REGameManager
         REGame.camera = new REGame_Camera();
         REGame.uniqueActorUnits = [];
         REGame.recorder = new RECommandRecorder();
+        REGame.message = new LMessage();
 
         // Create unique units
         REData.actors.forEach(x => {

@@ -187,6 +187,8 @@ export class RECommandContext
         Log.postCommand("Post");
     }
 
+
+
     /*
     postActionToBlock(actionId: number, actor: REGame_Entity, block: REGame_Block, args?: any) {
         // 送信対象検索
@@ -238,6 +240,16 @@ export class RECommandContext
         };
         this._recodingCommandList.push({ name: "Destroy", func: m1 });
         Log.postCommand("Destroy");
+    }
+
+    postMessage(text: string) {
+        const m1 = () => {
+            Log.doCommand("Message");
+            REGame.message.add(text);
+            return REResponse.Consumed;
+        };
+        this._recodingCommandList.push({ name: "Message", func: m1 });
+        Log.postCommand("Message");
     }
 
     /**

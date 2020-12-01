@@ -7,7 +7,7 @@ import { BlockLayerKind, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
-import { EntityId } from "ts/system/EntityId";
+import { EntityId, eqaulsEntityId } from "ts/system/EntityId";
 import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 
@@ -159,6 +159,16 @@ export class REGame_Entity
      */
     isUnique(): boolean {
         return REGame.uniqueActorUnits.includes(this);
+    }
+
+    /**
+     * フォーカスされている Entity であるか。
+     * 
+     * フォーカス=操作中と考えてよい。
+     * メッセージ表示時に主語を省略するといった処理で参照する。
+     */
+    isFocused(): boolean {
+        return eqaulsEntityId(REGame.camera.focusedEntityId(), this._id);
     }
 
     /**

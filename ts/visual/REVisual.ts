@@ -1,7 +1,10 @@
 import { assert } from "ts/Common";
+import { REGame } from "ts/objects/REGame";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisual_Manager } from "./REVisual_Manager";
+import { VMessageWindowSet } from "./VMessageWindowSet";
 import { VChallengeResultWindow } from "./windows/VChallengeResultWindow";
+import { VMessageWindow } from "./windows/VMessageWindow";
 
 /**
  * REシステムと RMMZ の橋渡しを行うモジュールのルートクラス。
@@ -20,7 +23,8 @@ export class REVisual
     static scene: Scene_Map;
     static entityVisualSet: REEntityVisualSet | undefined;
     static spriteset: Spriteset_Map | undefined;
-    static _challengeResultWindow: VChallengeResultWindow;// = new VChallengeResultWindow(rect);
+    static _challengeResultWindow: VChallengeResultWindow;
+    static _messageWindowSet: VMessageWindowSet;
 
     static initialize() {
         this.finalize();
@@ -33,6 +37,8 @@ export class REVisual
         // createWindows
         this._challengeResultWindow = new VChallengeResultWindow();
         this.scene.addWindow(this._challengeResultWindow);
+
+        this._messageWindowSet = new VMessageWindowSet(scene);
     }
 
     static finalize() {

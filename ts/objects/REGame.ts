@@ -9,6 +9,7 @@ import { REIntegration } from "../system/REIntegration";
 import { REGame_Camera } from "../objects/REGame_Camera";
 import { REGame_System } from "../objects/REGame_System";
 import { RECommandRecorder } from "ts/system/RECommandRecorder";
+import { LMessage } from "./LMessage";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -27,6 +28,7 @@ export class REGame
     static camera: REGame_Camera;
     static uniqueActorUnits: REGame_Entity[] = [];
     static recorder: RECommandRecorder;
+    static message: LMessage;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;

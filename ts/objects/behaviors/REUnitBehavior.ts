@@ -9,6 +9,7 @@ import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/REComma
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../REGame_Block";
 import { LInventoryBehavior } from "./LInventoryBehavior";
+import { tr } from "ts/Common";
 
 /**
  * 
@@ -94,6 +95,9 @@ export class REUnitBehavior extends LBehavior {
                         (responce: REResponse, targetEntity: REGame_Entity, context: RECommandContext) => {
                             REGame.map._removeEntity(targetEntity);
                             inventory.addEntity(targetEntity);
+
+                            REGame.message.add(tr("{0} は {1} をひろった", "a", "b"));
+                            //REGame.message.add("PICK!");
                             
                             console.log("PICK!!!!!");
                         });
