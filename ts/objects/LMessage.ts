@@ -10,6 +10,14 @@ export type ChoiceCallback = (n: number) => void;
  * 
  * そのため RESystem のログウィンドウをメッセージウィンドウと別に作るには、
  * Game_Message と Window_Message 相当のクラスを自分で定義する必要がある。
+ * 
+ * [2020/12/2]
+ * ----------
+ * ログウィンドウを作ろうとしてツクールデフォルトの Window_Message を移植してきたが、
+ * それでは機能が足りなかったためいったん作業を中断する。
+ * ログウィンドウは > VMessageLogWindow
+ * 
+ * こちらのクラス自体はメッセージウィンドウを複数表示したりするときにも利用できるので、とりあえず残しておく。
  */
 export class LMessage {
     private _texts: string[];

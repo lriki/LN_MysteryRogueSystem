@@ -1,3 +1,4 @@
+import { assert } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 
 
@@ -37,6 +38,8 @@ export class VMessageWindow extends Window_Base {
     private _eventItemWindow: Window_EventItem | undefined;
 
     private _autoCloseCount: number = 0;
+    private _lineSpriteCache: Sprite[] = [];
+    private _lineSpriteView: Sprite[] = [];
 
     constructor(message: LMessage, rect: Rectangle) {
         super(rect);
@@ -452,4 +455,26 @@ export class VMessageWindow extends Window_Base {
     
     //private startPause() {
     //}
+
+
+    private startNewLineScroll() {
+
+    }
+
+    private acquireLineSprite(): Sprite {
+        if (this._lineSpriteCache.length > 0) {
+            const sprite = this._lineSpriteCache.pop();
+            assert(sprite);
+            return sprite;
+        }
+        else {
+            const bitmap = new Bitmap(this.width, this.lineHeight());
+            const sprite = new Sprite(bitmap);
+            return sprite;
+        }
+    }
+
+    private releaseLineSprite(sprite: Sprite): void {
+        this._lineSpriteCache.push(sprite);
+    }
 }
