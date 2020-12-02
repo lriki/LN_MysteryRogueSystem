@@ -14,6 +14,7 @@ import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
+import { LMessageHistory } from "ts/objects/LMessageHistory";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -41,6 +42,7 @@ export class REGameManager
         REGame.camera = new REGame_Camera();
         REGame.uniqueActorUnits = [];
         REGame.recorder = new RECommandRecorder();
+        REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
 
         // Create unique units

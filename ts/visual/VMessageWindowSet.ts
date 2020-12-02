@@ -1,4 +1,5 @@
 import { REGame } from "ts/objects/REGame";
+import { VMessageLogWindow } from "./windows/VMessageLogWindow";
 import { VMessageWindow } from "./windows/VMessageWindow";
 
 
@@ -8,11 +9,14 @@ import { VMessageWindow } from "./windows/VMessageWindow";
 export class VMessageWindowSet {
 
     private _scene: Scene_Map;
+    private _logWindow: VMessageLogWindow;
     private _messageWindow: VMessageWindow;
 
     constructor(scene: Scene_Map) {
         this._scene = scene;
+        this._logWindow = new VMessageLogWindow(REGame.messageHistory, this.messageWindowRect());
         this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());
+        this._scene.addWindow(this._logWindow);
         this._scene.addWindow(this._messageWindow);
     }
 

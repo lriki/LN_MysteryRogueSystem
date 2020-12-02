@@ -245,7 +245,7 @@ export class RECommandContext
     postMessage(text: string) {
         const m1 = () => {
             Log.doCommand("Message");
-            REGame.message.add(text);
+            REGame.messageHistory.add(text);
             return REResponse.Consumed;
         };
         this._recodingCommandList.push({ name: "Message", func: m1 });
