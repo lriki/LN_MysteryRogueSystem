@@ -96,9 +96,11 @@ export class REUnitBehavior extends LBehavior {
                             REGame.map._removeEntity(targetEntity);
                             inventory.addEntity(targetEntity);
 
-                            context.postMessage(tr("{0} は {1} をひろった1", "a", "b"));
-                            context.postMessage(tr("{0} は {1} をひろった2", "a", "b"));
-                            context.postMessage(tr("{0} は {1} をひろった3", "a", "b"));
+                            context.postMessage(tr("{0} は {1} をひろった", "LRIKI", "\\I[256]\\C[3]おにぎり\\C[0]"));
+
+                            if (inventory.entities().length == 3) {
+                                context.postMessage(tr("おなかがすいてきた…"));
+                            }
                             
                             console.log("PICK!!!!!");
                         });

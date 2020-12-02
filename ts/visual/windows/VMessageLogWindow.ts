@@ -36,6 +36,7 @@ export class VMessageLogWindow extends Window_Base {
     private _maxLines: number = 2;
 
     private _autoCloseCount: number = 0;
+    private _autoCloseCountMax: number = 120;
     private _lineSpriteCache: Sprite[] = [];
     private _textLines: TextLineState[] = [];
 
@@ -133,7 +134,12 @@ export class VMessageLogWindow extends Window_Base {
 
                 this._textLines[this._textLines.length - 1].sprite.visible = true;
 
-                this._autoCloseCount = 60;
+                // スクロール完了時点の座標で、次回スクロール時の始点を確定する
+                this._textLines.forEach(line => {
+                    line.scrollStartY = line.sprite.y;
+                });
+
+                this._autoCloseCount = this._autoCloseCountMax;
                 return false;
             }
             else {
@@ -147,7 +153,6 @@ export class VMessageLogWindow extends Window_Base {
 
     private startNewMessageAndScroll() {
         const text = this._message.texts()[this._lastViewLineIndex + 1];
-        console.log("startNewMessageAndScroll", text);
 
         const textState: TextLineState = (this.createTextState(text, 0, 0, 0) as TextLineState);
         textState.x = this.newLineX(textState);
@@ -186,6 +191,7 @@ export class VMessageLogWindow extends Window_Base {
         else {
             // 一度に複数行が add されたときに一度に表示せず、一行ずつすこし時間をおいて表示してみる
             this.startWait(10);
+            this._autoCloseCount = this._autoCloseCountMax;
         }
 
         
@@ -224,6 +230,7 @@ export class VMessageLogWindow extends Window_Base {
         this._textLines.forEach(line => {
             this.releaseLineSprite(line.sprite);
         })
+        this._textLines = [];
     }
     
     private onEndOfText() {
@@ -313,7 +320,7 @@ export class VMessageLogWindow extends Window_Base {
             const ph = ImageManager.iconHeight;
             const sx = (iconIndex % 16) * pw;
             const sy = Math.floor(iconIndex / 16) * ph;
-            this.contents.blt(bitmap, sx, sy, pw, ph, x, y, pw, ph);
+            textState.sprite.bitmap.blt(bitmap, sx, sy, pw, ph, x, y, pw, ph);
         }
         textState.x += ImageManager.iconWidth + 4;
     }
@@ -326,7 +333,7 @@ export class VMessageLogWindow extends Window_Base {
         if (this._autoCloseCount > 0) {
             this._autoCloseCount--;
             if (this._autoCloseCount <= 0) {
-                //this.close();
+                this.terminateMessage();
             }
         }
     }
@@ -335,6 +342,7 @@ export class VMessageLogWindow extends Window_Base {
         if (this._lineSpriteCache.length > 0) {
             const sprite = this._lineSpriteCache.pop();
             assert(sprite);
+            sprite.bitmap.clear();
             return sprite;
         }
         else {
@@ -347,6 +355,7 @@ export class VMessageLogWindow extends Window_Base {
     }
 
     private releaseLineSprite(sprite: Sprite): void {
+        sprite.visible = false;
         this._lineSpriteCache.push(sprite);
     }
 }

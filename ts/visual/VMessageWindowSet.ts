@@ -29,11 +29,12 @@ export class VMessageWindowSet {
     }
 
     private messageWindowRect(): Rectangle {
+        const padding = 30;
         const ww = Graphics.boxWidth;
-        const wh = this.calcWindowHeight(3, false) + 8;
+        const wh = this.calcWindowHeight(2, false) + 8;
         const wx = (Graphics.boxWidth - ww) / 2;
-        const wy = 0;
-        return new Rectangle(wx, wy, ww, wh);
+        const wy = Graphics.boxHeight - wh;
+        return new Rectangle(wx + padding, wy - padding, ww - padding * 2, wh);
     }
     
 }
