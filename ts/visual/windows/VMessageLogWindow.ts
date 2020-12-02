@@ -1,9 +1,11 @@
 import { assert } from "ts/Common";
+import { linear } from "ts/math/Math";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
 
 
-interface TextState {
+// TextState の拡張
+interface TextLineState {
     text: string;
     index: number;
     x: number;
@@ -17,11 +19,9 @@ interface TextState {
     drawing: boolean;
     outputWidth: number;
     outputHeight: number;
-}
-
-interface TextLine {
-    textState: TextState;
+    
     sprite: Sprite;
+    scrollStartY: number;
 }
 
 /**
@@ -32,10 +32,12 @@ export class VMessageLogWindow extends Window_Base {
     private _autoScroll: boolean = true;
     private _lastViewLineIndex: number = -1;
     private _autoScrollCount: number = 0;
+    private _autoScrollCountMax: number = 10;
+    private _maxLines: number = 2;
 
     private _autoCloseCount: number = 0;
     private _lineSpriteCache: Sprite[] = [];
-    private _textLines: TextLine[] = [];
+    private _textLines: TextLineState[] = [];
 
     constructor(message: LMessageHistory, rect: Rectangle) {
         super(rect);
@@ -49,6 +51,14 @@ export class VMessageLogWindow extends Window_Base {
         this._autoCloseCount = 0;
         this._autoScrollCount = 0;
     }
+
+    private maxLines(): number {
+        return this._maxLines;
+    }
+
+    //private lineHeight(): number {
+     //   return this.itemHeight();
+    //}
     
     // override
     update() {
@@ -108,11 +118,21 @@ export class VMessageLogWindow extends Window_Base {
     private updateAutoScroll(): boolean {
         if (this._autoScrollCount > 0) {
             this._autoScrollCount--;
+
+            const t = this._autoScrollCountMax - this._autoScrollCount;
+            const dy = -linear(t, 0, this.lineHeight(), this._autoScrollCountMax);
             this._textLines.forEach(line => {
-                line.sprite.y -= 1;
+                line.sprite.y = line.scrollStartY + dy;
             });
 
             if (this._autoScrollCount == 0) {
+                // 1 Line scroll end
+                const line = this._textLines.shift();
+                assert(line);
+                this.releaseLineSprite(line.sprite);
+
+                this._textLines[this._textLines.length - 1].sprite.visible = true;
+
                 this._autoCloseCount = 60;
                 return false;
             }
@@ -127,17 +147,20 @@ export class VMessageLogWindow extends Window_Base {
 
     private startNewMessageAndScroll() {
         const text = this._message.texts()[this._lastViewLineIndex + 1];
+        console.log("startNewMessageAndScroll", text);
 
-        const textState: TextState = (this.createTextState(text, 0, 0, 0) as TextState);
+        const textState: TextLineState = (this.createTextState(text, 0, 0, 0) as TextLineState);
         textState.x = this.newLineX(textState);
         textState.startX = textState.x;
         textState.y = 0;
-        textState.height = this.calcTextHeight(textState);
+        textState.height = this.lineHeight();//this.calcTextHeight(textState);
 
         const lineSprite = this.acquireLineSprite();
         lineSprite.bitmap.clear();
+        //lineSprite.bitmap.drawText(text, 0, 0, 100, 30, "left");
         lineSprite.x = 0;
         lineSprite.height = textState.height;
+        lineSprite.visible = true;
 
         // 新しい行スプライトの追加位置
         const lastSprite = (this._textLines.length > 0) ? this._textLines[this._textLines.length - 1].sprite : undefined;
@@ -148,60 +171,47 @@ export class VMessageLogWindow extends Window_Base {
             lineSprite.y = 0;
         }
 
-        const textLine: TextLine = {
-            textState: textState,
-            sprite: lineSprite,
-        };
-        this._textLines.push(textLine);
+        textState.sprite = lineSprite;
+        textState.scrollStartY = lineSprite.y;
 
-        this._autoScrollCount = 10;
+        this._textLines.push(textState);
 
+        this._lastViewLineIndex++;
+
+        if (this._textLines.length > this.maxLines()) {
+            // Start scroll
+            this._autoScrollCount = this._autoScrollCountMax;
+            lineSprite.visible = false;
+        }
+        else {
+            // 一度に複数行が add されたときに一度に表示せず、一行ずつすこし時間をおいて表示してみる
+            this.startWait(10);
+        }
+
+        
         // Window_Message.updateMessage の処理
         {
             
             while (!this.isEndOfText(textState)) {
-                this.updateShowFast();
                 this.processCharacter(textState);
-                if (this.shouldBreakHere(textState)) {
-                    break;
-                }
+                //if (this.shouldBreakHere(textState)) {
+                //    console.log("break?");
+                //    break;
+                //}
             }
             this.flushTextState(textState);
             if (this.isEndOfText(textState) && !this.pause) {
                 this.onEndOfText();
             }
         }
+        
 
-        //this.open();
+        this.open();
     }
     
-    private newLineX(textState: TextState) {
+    private newLineX(textState: TextLineState) {
         const margin = 4;
         return textState.rtl ? this.innerWidth - margin : margin;
-    }
-
-    private shouldBreakHere(textState: TextState) {
-        if (this.canBreakHere(textState)) {
-            // 基本的に、1行一気に書く
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    private canBreakHere(textState: TextState) {
-        if (!this.isEndOfText(textState)) {
-            const c = textState.text[textState.index];
-            if (c.charCodeAt(0) >= 0xdc00 && c.charCodeAt(0) <= 0xdfff) {
-                // surrogate pair
-                return false;
-            }
-            if (textState.rtl && c.charCodeAt(0) > 0x20) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private canScrollStart() {
@@ -220,26 +230,25 @@ export class VMessageLogWindow extends Window_Base {
         // Window_Message.onEndOfText() では選択肢など入力の開始処理を行っていたが、ここでは不要
     }
     
-    private updateShowFast() {
-        // Window_Message.updateShowFast() ではキーが押されたら一度に書くことを始めていたが、ここでは不要
-    }
-    
     // override
-    processControlCharacter(textState: TextState, c: string) {
+    processControlCharacter(textState: TextLineState, c: string) {
         Window_Base.prototype.processControlCharacter.call(this, textState, c);
         if (c === "\f") {
             throw new Error("NewPage not supported.");
         }
     }
     
-    private isEndOfText(textState: TextState) {
+    private isEndOfText(textState: TextLineState) {
         return textState.index >= textState.text.length;
     }
     
     
     // override
-    processEscapeCharacter(code: string, textState: TextState) {
+    processEscapeCharacter(code: string, textState: TextLineState) {
         switch (code) {
+            case "C":   // override, textColor の対象を行 Sprite にする
+                textState.sprite.bitmap.textColor = ColorManager.textColor((this.obtainEscapeParam(textState)));
+                break;
             case "$":
                 throw new Error("GoldWindow not supported.");
                 break;
@@ -270,7 +279,45 @@ export class VMessageLogWindow extends Window_Base {
                 break;
         }
     }
-    
+        
+    // override
+    // drawText() の対象を行 Sprite にする
+    flushTextState(textState: TextLineState): void {
+        const text = textState.buffer;
+        const rtl = textState.rtl;
+        const width = this.textWidth(text);
+        const height = textState.height;
+        const x = rtl ? textState.x - width : textState.x;
+        const y = textState.y;
+        if (textState.drawing) {
+            textState.sprite.bitmap.drawText(text, x, y, width, height, "left");
+        }
+        textState.x += rtl ? -width : width;
+        textState.buffer = this.createTextBuffer(rtl);
+        const outputWidth = Math.abs(textState.x - textState.startX);
+        if (textState.outputWidth < outputWidth) {
+            textState.outputWidth = outputWidth;
+        }
+        textState.outputHeight = y - textState.startY + height;
+    }
+
+    // override
+    // drawIcon の対象を行 Sprite にする
+    processDrawIcon(iconIndex: number, textState: TextLineState) {
+        if (textState.drawing) {
+            const x = textState.x + 2;
+            const y = textState.y + 2;
+            // Window_Base.prototype.drawIcon
+            const bitmap = ImageManager.loadSystem("IconSet");
+            const pw = ImageManager.iconWidth;
+            const ph = ImageManager.iconHeight;
+            const sx = (iconIndex % 16) * pw;
+            const sy = Math.floor(iconIndex / 16) * ph;
+            this.contents.blt(bitmap, sx, sy, pw, ph, x, y, pw, ph);
+        }
+        textState.x += ImageManager.iconWidth + 4;
+    }
+
     private startWait(count: number) {
         this._waitCount = count;
     }
@@ -279,7 +326,7 @@ export class VMessageLogWindow extends Window_Base {
         if (this._autoCloseCount > 0) {
             this._autoCloseCount--;
             if (this._autoCloseCount <= 0) {
-                this.close();
+                //this.close();
             }
         }
     }
@@ -292,7 +339,9 @@ export class VMessageLogWindow extends Window_Base {
         }
         else {
             const bitmap = new Bitmap(this.width, this.lineHeight());
+            bitmap.fontSize = $gameSystem.mainFontSize();
             const sprite = new Sprite(bitmap);
+            this._clientArea.addChild(sprite);
             return sprite;
         }
     }

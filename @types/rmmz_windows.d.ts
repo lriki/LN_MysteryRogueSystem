@@ -31,7 +31,9 @@ declare class Window extends PIXI.Container {
     public pause: boolean;
     public upArrowVisible: boolean;
     public width: number;
-    public windowskin: Bitmap;
+	public windowskin: Bitmap;
+
+	_clientArea: Sprite;
 
     constructor();
 

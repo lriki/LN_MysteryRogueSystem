@@ -30,7 +30,7 @@ export class VMessageWindowSet {
 
     private messageWindowRect(): Rectangle {
         const ww = Graphics.boxWidth;
-        const wh = this.calcWindowHeight(2, false) + 8;
+        const wh = this.calcWindowHeight(3, false) + 8;
         const wx = (Graphics.boxWidth - ww) / 2;
         const wy = 0;
         return new Rectangle(wx, wy, ww, wh);

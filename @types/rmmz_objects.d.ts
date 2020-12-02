@@ -819,7 +819,7 @@ declare class Game_System {
     /**
      * 
      */
-    mainFontSize(): void;
+    mainFontSize(): number;
 
     /**
      * 
