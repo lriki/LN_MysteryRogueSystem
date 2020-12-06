@@ -5,7 +5,7 @@ import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../../system/REDialog";
-import { RE } from "./FootingDialogVisual";
+import { VFeetDialog } from "./VFeetDialog";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VMenuDialog } from "./VMenuDialog";
 
@@ -31,7 +31,7 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
                     context.closeDialog(false);
                 }
                 else {
-                    this.push(new RE.FootingDialogVisual(targetEntity, actions));
+                    this.push(new VFeetDialog(targetEntity, actions));
                 }
                 return;
             }
