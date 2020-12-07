@@ -1,3 +1,4 @@
+import { DBasics } from "ts/data/DBasics";
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
@@ -17,7 +18,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
         effectContext.addEffector(effector);
         
         
-        context.postActionOneWay(REData.AttackActionId, entity, effectContext);
+        context.postActionOneWay(DBasics.actions.AttackActionId, entity, effectContext);
     }
 }
 

@@ -1,3 +1,4 @@
+import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
@@ -34,7 +35,7 @@ test('DamageAndGameover', () => {
     
     // player を左へ移動
     const dialogContext = REGame.scheduler._getDialogContext();
-    dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 4 });
+    dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 4 });
     dialogContext.closeDialog(true);
     
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される

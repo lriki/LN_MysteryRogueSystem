@@ -110,7 +110,7 @@ export class REScheduler
     stepSimulation(): void {
         while (true) {
             // Sequel 終了待ち
-            if (RESystem.integration.onCheckVisualSequelRunning()) {
+            if (REGame.integration.onCheckVisualSequelRunning()) {
                 // Sequel 実行中
                 
                 break;
@@ -137,7 +137,7 @@ export class REScheduler
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!this._commandContext.isRunning() && RESystem.integration.onCheckVisualSequelRunning()) {
+            if (!this._commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
                 break;
             }
 
@@ -588,7 +588,7 @@ export class REScheduler
     _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {
         this._dialogContext.setCauseEntity(causeEntity);
         this._dialogContext._setDialogModel(value);
-        RESystem.integration.onDialogOpend(this._dialogContext);
+        REGame.integration.onDialogOpend(this._dialogContext);
         //const visual = 
         //this._dialogContext._visual = visual;
     }
@@ -599,7 +599,7 @@ export class REScheduler
         //    this._dialogContext._visual.onClose();
         //    this._dialogContext._visual = undefined;
         //}
-        RESystem.integration.onDialogClosed(this._dialogContext);
+        REGame.integration.onDialogClosed(this._dialogContext);
     }
 
     _getDialogContext() {
@@ -617,7 +617,7 @@ export class REScheduler
             if (this.signalFlushSequelSet) {
                 this.signalFlushSequelSet(this._sequelSet);
             }
-            RESystem.integration.onFlushSequelSet(this._sequelSet);
+            REGame.integration.onFlushSequelSet(this._sequelSet);
 
             this._sequelSet = new RESequelSet();
         }

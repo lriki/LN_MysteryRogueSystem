@@ -5,6 +5,7 @@ import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { LStateBehavior } from "./LStateBehavior";
+import { DBasics } from "ts/data/DBasics";
 
 export class LDebugMoveRightState extends LStateBehavior {
 
@@ -20,8 +21,8 @@ export class LDebugMoveRightState extends LStateBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
-                context.postActionTwoWay(REData.MoveToAdjacentActionId, entity, undefined, { direction: dir });
+                context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
+                context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
             }
             context.postConsumeActionToken(entity);
             return REResponse.Consumed;

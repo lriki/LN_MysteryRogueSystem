@@ -1,3 +1,4 @@
+import { DBasics } from "ts/data/DBasics";
 import { ActionId, REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
@@ -22,7 +23,7 @@ export class LCommonBehavior extends LBehavior {
     }
 
     onQueryActions(): ActionId[] {
-        return [REData.PickActionId];
+        return [DBasics.actions.PickActionId];
     }
 
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {

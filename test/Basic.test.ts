@@ -12,6 +12,7 @@ import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
+import { DBasics } from "ts/data/DBasics";
 
 
 beforeAll(() => {
@@ -61,7 +62,7 @@ test('basic', () => {
     
         // 向き変更。行動を消費せず Dialog を閉じる
         const args1: REDirectionChangeArgs = { direction: 9 };
-        dialogContext.postAction(REData.DirectionChangeActionId, actor1, undefined, args1);
+        dialogContext.postAction(DBasics.actions.DirectionChangeActionId, actor1, undefined, args1);
         dialogContext.closeDialog(false);
     
         // この時点では向きは変更されていない
@@ -83,7 +84,7 @@ test('basic', () => {
     // 一歩下に移動してみる (ターン消費あり)
     {
         const args2: REMoveToAdjacentArgs = { direction: 2 };
-        dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, args2);
+        dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, args2);
         dialogContext.closeDialog(true);
     
         // シミュレーション実行。実際に移動が行われる
@@ -270,7 +271,7 @@ test('TurnOrderTable', () => {
     // 移動量から実際に行動した数を判断する
     {
         // player を右へ移動
-        dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
         dialogContext.closeDialog(true);
     
         // AI行動決定
@@ -292,7 +293,7 @@ test('TurnOrderTable', () => {
     // 2ターン目
     {
         // player を右へ移動
-        dialogContext.postAction(REData.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
         dialogContext.closeDialog(true);
     
         // AI行動決定

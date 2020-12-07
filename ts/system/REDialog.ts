@@ -96,7 +96,7 @@ export class REDialogContext
 
         //REGame.recorder._recording = true;
         this._dialogModel.onUpdate(this);
-        RESystem.integration.onUpdateDialog(this);
+        REGame.integration.onUpdateDialog(this);
         //REGame.recorder._recording = false;
 
         //if (this._visual) {

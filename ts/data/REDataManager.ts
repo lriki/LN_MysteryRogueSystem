@@ -9,6 +9,7 @@ import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DEffect, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
+import { DBasics } from "./DBasics";
 
 
 declare global {  
@@ -98,11 +99,38 @@ export class REDataManager
         };
 
         // Actions
-        REData.DirectionChangeActionId = REData.addAction("DirectionChange");
-        REData.MoveToAdjacentActionId = REData.addAction("MoveToAdjacent");
-        REData.PickActionId = REData.addAction("Pick");
-        REData.ProceedFloorActionId = REData.addAction("すすむ");
-        REData.AttackActionId = REData.addAction("Attack");
+        DBasics.actions = {
+            DirectionChangeActionId: REData.addAction("DirectionChange"),
+            MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
+            PickActionId: REData.addAction("Pick"),
+            PutActionId: REData.addAction("Put"),
+            ExchangeActionId: REData.addAction("Exchange"),
+            ThrowActionId: REData.addAction("Throw"),
+            FlungActionId: REData.addAction("Flung"),
+            ShootingActionId: REData.addAction("Shooting"),
+            CollideActionId: REData.addAction("Collide"),
+            AffectActionId: REData.addAction("Affect"),
+            RollActionId: REData.addAction("Roll"),
+            FallActionId: REData.addAction("Fall"),
+            DropActionId: REData.addAction("Drop"),
+            StepOnActionId: REData.addAction("StepOn"),
+            TrashActionId: REData.addAction("Trash"),
+            ProceedFloorActionId: REData.addAction("すすむ"),
+            //StairsDownActionId: REData.addAction("StairsDown"),
+            //StairsUpActionId: REData.addAction("StairsUp"),
+            EquipActionId: REData.addAction("Equip"),
+            EquipOffActionId: REData.addAction("EquipOff"),
+            EatActionId: REData.addAction("Eat"),
+            TakeActionId: REData.addAction("Take"),
+            BiteActionId: REData.addAction("Bite"),
+            ReadActionId: REData.addAction("Read"),
+            SwingActionId: REData.addAction("Swing"),
+            PushActionId: REData.addAction("Push"),
+            PutInActionId: REData.addAction("PickIn"),
+            PickOutActionId: REData.addAction("PickOut"),
+            IdentifyActionId: REData.addAction("Identify"),
+            AttackActionId: REData.addAction("Attack"),
+        };
         
         // Attributes
         RESystem.attributes = {

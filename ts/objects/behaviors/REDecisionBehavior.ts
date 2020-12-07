@@ -8,6 +8,7 @@ import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { RESystem } from "ts/system/RESystem";
+import { DBasics } from "ts/data/DBasics";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -34,7 +35,7 @@ export class REGame_DecisionBehavior extends LBehavior
             const front = Helpers.makeFrontPosition(entity.x, entity.y, dir, 1);
             const e = REGame.map.block(front).aliveEntity(BlockLayerKind.Unit);
             if (e) {
-                context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
+                context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
 
                 // 通常攻撃
                 context.postPerformSkill(entity, RESystem.skills.normalAttack);
@@ -43,8 +44,8 @@ export class REGame_DecisionBehavior extends LBehavior
             }
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                context.postActionTwoWay(REData.DirectionChangeActionId, entity, undefined, { direction: dir });
-                context.postActionTwoWay(REData.MoveToAdjacentActionId, entity, undefined, { direction: dir });
+                context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
+                context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
             }
             context.postConsumeActionToken(entity);
             return REResponse.Consumed;

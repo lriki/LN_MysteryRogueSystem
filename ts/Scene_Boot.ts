@@ -1,4 +1,5 @@
 import { REDataManager } from "./data/REDataManager";
+import { REGame } from "./objects/REGame";
 import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "./system/RESystem";
 import { REVisual } from "./visual/REVisual";
@@ -23,7 +24,7 @@ Scene_Boot.prototype.onDatabaseLoaded = function() {
     REDataManager.loadData();
     
     REVisual.initialize();
-    RESystem.integration = new RMMZIntegration();
+    REGame.integration = new RMMZIntegration();
 
     // Database マップ読み込み開始
     const filename = `Map${REDataManager.databaseMapId.padZero(3)}.json`;

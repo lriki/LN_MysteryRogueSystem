@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
@@ -25,7 +26,7 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
         this._itemListWindow = new VItemListWindow(this._inventory, new Rectangle(0, y, Graphics.boxWidth - cw, 400));
         this.addWindow(this._itemListWindow);
 
-        const actions = [REData.PickActionId, REData.AttackActionId];
+        const actions = [DBasics.actions.PickActionId, DBasics.actions.AttackActionId];
         this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200), actions);
         this.addWindow(this._commandWindow);
 

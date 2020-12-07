@@ -21,6 +21,7 @@ export class REGame
 {
     static readonly TILE_LAYER_COUNT: number = 6;
 
+    static integration: REIntegration;
     static scheduler: REScheduler;
     static core: REGame_Core;
     static system: REGame_System;

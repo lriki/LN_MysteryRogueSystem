@@ -8,6 +8,7 @@ import { REDialogContext } from "../../system/REDialog";
 import { VFeetDialog } from "./VFeetDialog";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VMenuDialog } from "./VMenuDialog";
+import { DBasics } from "ts/data/DBasics";
 
 export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
 
@@ -23,9 +24,9 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
             const targetEntity = targetEntities[0]; // 足元
             const actions = targetEntities.flatMap(x => x.queryActions());
             if (actions.length > 0) {
-                if (actions.includes(REData.PickActionId)) {
+                if (actions.includes(DBasics.actions.PickActionId)) {
                     // 歩行移動時に足元に拾えるものがあれば取得試行
-                    context.postAction(REData.PickActionId, entity, undefined);
+                    context.postAction(DBasics.actions.PickActionId, entity, undefined);
                     // 行動を消費せずに、一度 Dialog を終了する。
                     // 終了しないと、post したコマンドチェーンがうごかない。
                     context.closeDialog(false);
@@ -47,10 +48,10 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
         if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
                 const args: REDirectionChangeArgs = { direction: dir };
-                context.postAction(REData.DirectionChangeActionId, entity, undefined, args);
+                context.postAction(DBasics.actions.DirectionChangeActionId, entity, undefined, args);
             }
             const args: REMoveToAdjacentArgs = { direction: dir };
-            context.postAction(REData.MoveToAdjacentActionId, entity, undefined, args);
+            context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);
             context.closeDialog(true);
             return;
         }

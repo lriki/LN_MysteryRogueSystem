@@ -10,6 +10,7 @@ import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../REGame_Block";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { tr } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 
 /**
  * 
@@ -21,17 +22,17 @@ export class REUnitBehavior extends LBehavior {
     }
     
     onQueryReactions(): ActionId[] {
-        return [REData.AttackActionId];
+        return [DBasics.actions.AttackActionId];
     }
 
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         
-        if (cmd.action().id == REData.DirectionChangeActionId) {
+        if (cmd.action().id == DBasics.actions.DirectionChangeActionId) {
             cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
             return REResponse.Consumed;
         }
 
-        else if (cmd.action().id == REData.MoveToAdjacentActionId) {
+        else if (cmd.action().id == DBasics.actions.MoveToAdjacentActionId) {
             
 
             const args = (cmd.args() as REMoveToAdjacentArgs);
@@ -47,10 +48,10 @@ export class REUnitBehavior extends LBehavior {
             }
             
         }
-        else if (cmd.action().id == REData.ProceedFloorActionId) {
+        else if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
             console.log("★");
         }
-        else if (cmd.action().id == REData.AttackActionId) {
+        else if (cmd.action().id == DBasics.actions.AttackActionId) {
             console.log("AttackAction");
 
 
@@ -59,9 +60,9 @@ export class REUnitBehavior extends LBehavior {
 
             const front = Helpers.makeEntityFrontPosition(entity, 1);
             const block = REGame.map.block(front.x, front.y);
-            const reacor = context.findReactorEntityInBlock(block, REData.AttackActionId);
+            const reacor = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
             if (reacor) {
-                context.postReaction(REData.AttackActionId, reacor, cmd.effectContext());
+                context.postReaction(DBasics.actions.AttackActionId, reacor, cmd.effectContext());
             }
 
             /*
@@ -72,7 +73,7 @@ export class REUnitBehavior extends LBehavior {
             
             return REResponse.Consumed;
         }
-        else if (cmd.action().id == REData.PickActionId) {
+        else if (cmd.action().id == DBasics.actions.PickActionId) {
 
             //console.log("func.call s");
             //const s: Symbol = onPrePickUpReaction;
@@ -117,7 +118,7 @@ export class REUnitBehavior extends LBehavior {
 
     
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
-        if (cmd.action().id == REData.AttackActionId) {
+        if (cmd.action().id == DBasics.actions.AttackActionId) {
             console.log("onReaction AttackAction");
 
 

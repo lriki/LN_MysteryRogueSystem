@@ -1,4 +1,5 @@
 
+import { DBasics } from "ts/data/DBasics";
 import { ActionId, REData } from "ts/data/REData";
 import { RE } from "ts/dialogs/EventExecutionDialog";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
@@ -38,12 +39,12 @@ export class REExitPointBehavior extends LBehavior {
     }
 
     onQueryActions(): ActionId[] {
-        return [REData.ProceedFloorActionId];
+        return [DBasics.actions.ProceedFloorActionId];
     }
     
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
 
-        if (cmd.action().id == REData.ProceedFloorActionId) {
+        if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
             //const event = $gameMap.event(entity.rmmzEventId);
         
             context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));

@@ -1,5 +1,6 @@
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
+import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "ts/system/REDialog";
@@ -75,7 +76,7 @@ export class TestEnv {
         REData.addMonster("Enemy2");
         REData.addMonster("Enemy3");
         
-        RESystem.integration = new TestEnvIntegration();
+        REGame.integration = new TestEnvIntegration();
     }
 }
 
