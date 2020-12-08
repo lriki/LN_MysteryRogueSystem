@@ -63,8 +63,9 @@ export class LBehavior {
     onQueryProperty(propertyId: number): any { return undefined; }
 
     // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
-    onQueryActions(): ActionId[] { return []; }
-    onQueryReactions(): ActionId[] { return []; }
+    // 主に UI 表示で使用するもので、Action を実行したときに "成功" するかどうかは気にしない。
+    onQueryActions(actions: ActionId[]): ActionId[] { return actions; }
+    onQueryReactions(actions: ActionId[]): ActionId[] { return actions; }
 
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、

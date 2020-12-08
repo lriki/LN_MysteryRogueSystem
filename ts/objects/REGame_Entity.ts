@@ -10,6 +10,7 @@ import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { EntityId, eqaulsEntityId } from "ts/system/EntityId";
 import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 
 enum BlockLayer
 {
@@ -225,17 +226,28 @@ export class REGame_Entity
     }
 
     queryActions(): ActionId[] {
-        let result: ActionId[] = [];    // TODO: あとで flatMap() 使うようにしたい
+        let result: ActionId[] = [];
+        
         for (let i = 0; i < this._basicBehaviors.length; i++) {
-            result = result.concat(this._basicBehaviors[i].onQueryActions());
+            result = this._basicBehaviors[i].onQueryActions(result);
         }
         return result;
     }
 
     queryReactions(): ActionId[] {
-        let result: ActionId[] = [];    // TODO: あとで flatMap() 使うようにしたい
+        // 既定では、すべての Entity は Item として Map に存在できる。
+        // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
+        let result: ActionId[] = [
+            DBasics.actions.PickActionId,
+            DBasics.actions.PutActionId,
+            DBasics.actions.ExchangeActionId,
+            DBasics.actions.ThrowActionId,
+            DBasics.actions.FallActionId,
+            DBasics.actions.DropActionId,
+        ];
+
         for (let i = 0; i < this._basicBehaviors.length; i++) {
-            result = result.concat(this._basicBehaviors[i].onQueryReactions());
+            result = this._basicBehaviors[i].onQueryReactions(result);
         }
         return result;
     }

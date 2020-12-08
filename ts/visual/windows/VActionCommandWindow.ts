@@ -36,25 +36,31 @@ NOTE: 「土」は「説明」、しかない。保存の壺に入れられた�
  */
 export class VActionCommandWindow extends Window_Command {
 
-    _actions: ActionId[];
+    _actions: ActionId[] = [];
 
-    constructor(rect: Rectangle, actions: ActionId[]) {
+    constructor(rect: Rectangle) {
         super(rect);
+        this.openness = 0;
 
         // Window_Command を利用する場合、コマンドリストは makeCommandList() で生成するべき。
         // しかしこのメソッドはベースのコンストラクタからも呼ばれるため、先に this._actions を初期化することができない。
         // そのためここで設定後、refresh() することでコマンドリストを再構築している。
-        this._actions = actions;
+        //this._actions = actions;
         this.refresh();
     };
+
+    setActionList(actions: ActionId[]): void {
+        this._actions = actions;
+        this.refresh();
+    }
     
     makeCommandList(): void {
         if (this._actions) {
             this._actions.forEach((x, i) => {
-                this.addCommand(REData.actions[x].displayName, `index:${i}`, true, undefined);
+                this.addCommand(REData.actions[x].displayName, `action:${x}`, true, undefined);
             });
-            this.addCommand(TextManager.command(22), "cancel", true, undefined);
         }
+        this.addCommand(TextManager.command(22), "cancel", true, undefined);
     };
     
     processOk(): void {

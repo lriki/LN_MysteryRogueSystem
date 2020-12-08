@@ -15,16 +15,17 @@ export class VMenuDialog extends REDialogVisualWindowLayer {
     }
     
     onCreate() {
-
-
         const y = 100;
         const cw = 200;
         this._commandWindow = new VMenuCommandWindow(new Rectangle(0, y, cw, 200));
         this.addWindow(this._commandWindow);
 
-        
         this._commandWindow.setHandler("item", this.commandItem.bind(this));
         this._commandWindow.setHandler("cancel", () => this.pop());
+    }
+    
+    onStart() {
+        this._commandWindow?.activate();
     }
 
 

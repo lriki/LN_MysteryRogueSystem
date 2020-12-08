@@ -4,7 +4,9 @@ import { REDialogContext } from "../system/REDialog";
 import { REVisual } from "./REVisual";
 
 export class REDialogVisualWindowLayer {
+    _created: boolean = false;
     _started: boolean = false;
+    _destroying: boolean = false;
     _navigator: REDialogVisualNavigator | undefined;
     _windows: Window_Base[] = [];
 
@@ -16,12 +18,12 @@ export class REDialogVisualWindowLayer {
     //    return REGame.scheduler.commandContext();
     //}
 
-    // SubDialog が push されたとき
+    // push されたあと、最初の onUpdate の前
     onCreate() {
 
     }
 
-    // SubDialog が push されたとき
+    // push または Sub が pop されてアクティブになった時
     onStart() {
 
     }
@@ -39,11 +41,17 @@ export class REDialogVisualWindowLayer {
 
     }
 
-    // ウィンドウ破棄とかはここで
     onDestroy() {
+    }
+
+    destroy() {
+        this.onDestroy();
+
         this._windows.forEach(x => {
             x.destroy();
         });
+
+        this._destroying = false;
     }
 
     protected addWindow(window: Window_Base) {
@@ -94,6 +102,10 @@ export class REDialogVisualNavigator {
     }
 
     push(dialog: REDialogVisualWindowLayer): void {
+        if (this._scene) {
+            this._dialogs.push(this._scene);
+        }
+
         this._nextScene = dialog;
         dialog._navigator = this;
 
@@ -103,28 +115,31 @@ export class REDialogVisualNavigator {
     }
     
     pop(): void {
+        console.log("pop1", this);
         this._nextScene = this._dialogs.pop();
 
         if (this._scene) {
             this._scene.onStop();
+            this._scene._destroying = true;
         }
+        console.log("pop2", this);
     }
 
     clear(): void {
         if (this._scene) {
             this._scene.onStop();
             this._scene.onClose();
-            this._scene.onDestroy();
+            this._scene.destroy();
         }
         if (this._nextScene) {
             this._nextScene.onStop();
             this._nextScene.onClose();
-            this._nextScene.onDestroy();
+            this._nextScene.destroy();
         }
         for (let i = this._dialogs.length - 1; i >= 0; i--) {
             this._dialogs[i].onStop();
             this._dialogs[i].onClose();
-            this._dialogs[i].onDestroy();
+            this._dialogs[i].destroy();
         }
         this._dialogs = [];
         this._scene = undefined;
@@ -138,27 +153,33 @@ export class REDialogVisualNavigator {
 
     private changeScene(): void {
         if (this._nextScene) {
-            if (this._scene) {
-                this._scene.onDestroy();
+            if (this._scene && this._scene._destroying) {
+                this._scene.destroy();
             }
             this._scene = this._nextScene;
             this._nextScene = undefined;
             if (this._scene) {
-                this._scene.onCreate();
+                if (!this._scene._created) {
+                    this._scene.onCreate();
+                    this._scene._created = true;
+                }
+                this._scene.onStart();
             }
         }
     }
 
     private updateScene(context: REDialogContext): void {
         if (this._scene) {
+            this._scene.onUpdate(context);
+            /*
             if (this._scene._started) {
                 this._scene.onUpdate(context);
             }
             else {
                 this._scene._started = true;
                 this._scene.onStart();
-                this._scene.onUpdate(context);
             }
+            */
         }
     }
     

@@ -16,8 +16,12 @@ export class VItemListWindow extends Window_Selectable {
         this._inventory = inventory;
         this._entities = inventory.entities();
         this.refresh();
-    };
+    }
     
+    item(): REGame_Entity {
+        return this.itemAt(this.index());
+    }
+
     // override
     maxCols(): number {
         return 1;
@@ -68,10 +72,6 @@ export class VItemListWindow extends Window_Selectable {
     
     private numberWidth(): number {
         return this.textWidth("000");
-    };
-
-    private item(): REGame_Entity {
-        return this.itemAt(this.index());
     }
 
     private itemAt(index: number): REGame_Entity {
