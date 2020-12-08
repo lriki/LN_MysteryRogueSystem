@@ -79,7 +79,6 @@ export class VItemListWindow extends Window_Selectable {
     }
 
     private makeItemList(): void {
-        console.log("makeItemList");
     }
     
     private drawEntityItemName(item: REGame_Entity, x: number, y: number, width: number): void {

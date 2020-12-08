@@ -47,7 +47,7 @@ export class VActionCommandWindow extends Window_Command {
         // そのためここで設定後、refresh() することでコマンドリストを再構築している。
         //this._actions = actions;
         this.refresh();
-    };
+    }
 
     setActionList(actions: ActionId[]): void {
         this._actions = actions;
@@ -61,11 +61,10 @@ export class VActionCommandWindow extends Window_Command {
             });
         }
         this.addCommand(TextManager.command(22), "cancel", true, undefined);
-    };
+    }
     
     processOk(): void {
-        console.log("processOk");
         super.processOk();
-    };
+    }
 }
 
