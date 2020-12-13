@@ -16,7 +16,7 @@ interface RECCMessage {
     func: () => REResponse;
 }
 
-export type ActionResultCallback = (response: REResponse, entity: REGame_Entity, context: RECommandContext) => void;
+export type ActionResultCallback = (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => void;
 
 /**
  * 

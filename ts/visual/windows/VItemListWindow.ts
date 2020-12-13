@@ -18,7 +18,7 @@ export class VItemListWindow extends Window_Selectable {
         this.refresh();
     }
     
-    item(): REGame_Entity {
+    selectedItem(): REGame_Entity {
         return this.itemAt(this.index());
     }
 

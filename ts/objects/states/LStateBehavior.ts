@@ -16,7 +16,7 @@ export class LStateBehavior {
     
     onQueryProperty(propertyId: number): any { return undefined; }
 
-    onQueryActions(): ActionId[] { return []; }
+    //onQueryActions(): ActionId[] { return []; }
 
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 

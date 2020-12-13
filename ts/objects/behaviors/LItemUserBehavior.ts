@@ -10,11 +10,6 @@ import { LBehavior } from "./LBehavior";
  * 
  */
 export class LItemUserBehavior extends LBehavior {
-    /*
-    onQueryReactions(): ActionId[] {
-        return [REData.AttackActionId];
-    }
-    */
 
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         return super.onAction(entity, context, cmd);

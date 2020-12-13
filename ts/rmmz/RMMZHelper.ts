@@ -3,8 +3,7 @@ export interface RMMZEventEntityMetadata {
     /** Entity Prefab の種別。EntityFactory から生成するためのキー。 */
     entity?: string;
 
-    enemyId?: number;
-    itemId?: number;
+    id?: number;
 }
 
 export class RMMZHelper {

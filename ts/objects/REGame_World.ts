@@ -78,7 +78,7 @@ export class RE_Game_World
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
             entity.floorId = floorId;
-            REGame.map._addEntity(entity);
+            REGame.map._addEntityInternal(entity);
             REGame.map.locateEntity(entity, x, y);
         }
         else {
@@ -122,7 +122,7 @@ export class RE_Game_World
             const entity = this._entities[i];
             if (entity) {
                 if (REGame.map.floorId() == entity.floorId) {
-                    REGame.map._addEntity(entity);
+                    REGame.map._addEntityInternal(entity);
                 }
             }
         }

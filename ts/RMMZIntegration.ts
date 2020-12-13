@@ -1,4 +1,5 @@
 import { assert } from "./Common";
+import { DBasics } from "./data/DBasics";
 import { REData } from "./data/REData";
 import { REDataManager } from "./data/REDataManager";
 import { REGame } from "./objects/REGame";
@@ -39,8 +40,9 @@ export class RMMZIntegration extends REIntegration {
             if (e && e._entityMetadata) {
                 if (e._entityMetadata.entity) {
                     const entity = this.newEntity(e._entityMetadata);
-                    entity.prefabKey = { kind: 0, id: e.eventId() };
+                    entity.prefabKey = { kind: REData.getEntityKindsId(e._entityMetadata.entity), id: e._entityMetadata.id ?? 0 };
                     entity.rmmzEventId = e.eventId();
+                    entity.inhabitsCurrentFloor = true;
                     REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
                     REGame.map.markAdhocEntity(entity);
                 }
@@ -86,22 +88,28 @@ export class RMMZIntegration extends REIntegration {
         assert(databaseMap);
         assert(databaseMap.events);
         
-        //  entity に対応する動的イベントを新たに生成する
+        console.log("onEntityEnteredMap", entity.prefabKey);
+
         if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
-            const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
-            const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
-            if (index >= 0) {
-                const eventData = databaseMap.events[index];
-                const event = $gameMap.spawnREEvent(eventData);
-                entity.rmmzEventId = event.eventId();
+            if (entity.inhabitsCurrentFloor) {
+                // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
+                // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
             }
             else {
-                throw new Error(`${prefabKey} not found in REDatabase map.`);
+                // Prefab 検索
+                const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
+                const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
+                if (index >= 0) {
+                    //  entity に対応する動的イベントを新たに生成する
+                    const eventData = databaseMap.events[index];
+                    const event = $gameMap.spawnREEvent(eventData);
+                    entity.rmmzEventId = event.eventId();
+                    console.log("spawn", event);
+                }
+                else {
+                    throw new Error(`${prefabKey} not found in REDatabase map.`);
+                }
             }
-        }
-        else if (entity.prefabKey.kind == 0 && entity.prefabKey.id > 0) {
-            // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
-            // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
         }
         else {
             // Tile などは RMMZ のイベント化する必要はない
@@ -113,18 +121,22 @@ export class RMMZIntegration extends REIntegration {
 
     onEntityLeavedMap(entity: REGame_Entity): void {
         REVisual.entityVisualSet?.deleteVisual(entity);
+
+        // RMMZ Event との関連付けを解除
+        entity.inhabitsCurrentFloor = false;
+        entity.rmmzEventId = 0;
     }
 
     private newEntity(data: RMMZEventEntityMetadata): REGame_Entity {
         switch (data.entity) {
             case "ExitPoint":
                 return REEntityFactory.newExitPoint();
-            case "Enemy":
-                return REEntityFactory.newMonster(data.enemyId ?? 0);
-            case "Item":
-                return REEntityFactory.newItem(data.itemId ?? 0);
+            case "Monster":
+                return REEntityFactory.newMonster(data.id ?? 0);
+            case "Food":
+                return REEntityFactory.newItem(data.id ?? 0);
             default:
-                throw new Error("Invalid entity name: " + name);
+                throw new Error("Invalid entity name: " + data.entity);
         }
     }
 }

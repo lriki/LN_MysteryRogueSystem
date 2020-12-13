@@ -38,8 +38,10 @@ export class REExitPointBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
 
-    onQueryActions(): ActionId[] {
-        return [DBasics.actions.ProceedFloorActionId];
+    onQueryActions(actions: ActionId[]): ActionId[] {
+        return actions.concat([
+            DBasics.actions.ProceedFloorActionId,
+        ]);
     }
     
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {

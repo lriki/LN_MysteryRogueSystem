@@ -8,7 +8,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DEffect, DParameterEffectApplyType } from "./DSkill";
-import { RE_Data_EntityKind, RE_Data_Actor, RE_Data_Floor, REData, REFloorMapKind } from "./REData";
+import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 
 
@@ -62,7 +62,7 @@ export class REDataManager
         assert(RESystem.parameters.agi === 6);
         assert(RESystem.parameters.luk === 7);
         
-        RESystem.entityKinds = {
+        DBasics.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
             WeaponKindId: REData.addEntityKind("武器", "Weapon"),
             ShieldKindId: REData.addEntityKind("盾", "Shield"),
@@ -80,6 +80,7 @@ export class REDataManager
             TrapKindId: REData.addEntityKind("罠", "Trap"),
             FigurineKindId: REData.addEntityKind("土偶", "Figurine"),
             MonsterKindId: REData.addEntityKind("モンスター", "Monster"),
+            exitPoint: REData.addEntityKind("出口", "ExitPoint"),
         };
 
         // Factions
@@ -103,9 +104,9 @@ export class REDataManager
             DirectionChangeActionId: REData.addAction("DirectionChange"),
             MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
             PickActionId: REData.addAction("Pick"),
-            PutActionId: REData.addAction("Put"),
-            ExchangeActionId: REData.addAction("Exchange"),
-            ThrowActionId: REData.addAction("Throw"),
+            PutActionId: REData.addAction("置く"),//"Put"),
+            ExchangeActionId: REData.addAction("交換"),//"Exchange"),
+            ThrowActionId: REData.addAction("投げる"),//"Throw"),
             FlungActionId: REData.addAction("Flung"),
             ShootingActionId: REData.addAction("Shooting"),
             CollideActionId: REData.addAction("Collide"),

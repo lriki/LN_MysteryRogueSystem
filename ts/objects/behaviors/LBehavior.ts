@@ -42,6 +42,7 @@ export enum DecisionPhase {
 }
 
 export const onPrePickUpReaction = Symbol("onPicking");
+export const onPrePutReaction = Symbol("onPrePutReaction");
 
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {

@@ -30,13 +30,21 @@ NOTE: 「土」は「説明」、しかない。保存の壺に入れられた�
 
 */
 
+export type ActionCommandHandler = (actionId: ActionId) => void;
+
+
+export interface ActionCommand
+{
+    actionId: ActionId;
+    handler: ActionCommandHandler;
+}
 
 /**
  * [足元]
  */
 export class VActionCommandWindow extends Window_Command {
 
-    _actions: ActionId[] = [];
+    _actions: ActionCommand[] = [];
 
     constructor(rect: Rectangle) {
         super(rect);
@@ -49,15 +57,35 @@ export class VActionCommandWindow extends Window_Command {
         this.refresh();
     }
 
+    /*
     setActionList(actions: ActionId[]): void {
         this._actions = actions;
+        this.refresh();
+    }
+    */
+
+    clear(): void {
+        this._actions = [];
+        this.refresh();
+    }
+
+    setActionList2(actions: ActionCommand[]): void {
+        this._actions = actions;
+        this.refresh();
+    }
+
+    addActionCommand(action: ActionId, handler: ActionCommandHandler): void {
+        this.setHandler(`action:${action}`, () => handler(action));
         this.refresh();
     }
     
     makeCommandList(): void {
         if (this._actions) {
             this._actions.forEach((x, i) => {
-                this.addCommand(REData.actions[x].displayName, `action:${x}`, true, undefined);
+                this.addCommand(REData.actions[x.actionId].displayName, `action:${x.actionId}`, true, undefined);
+                this.setHandler(`action:${x.actionId}`, () => {
+                    x.handler(x.actionId);
+                });
             });
         }
         this.addCommand(TextManager.command(22), "cancel", true, undefined);

@@ -6,7 +6,7 @@ import { LStateBehavior } from "../objects/states/LStateBehavior";
 import { BlockLayerKind } from "../objects/REGame_Block";
 import { REIntegration } from "./REIntegration";
 import { DItemDataId } from "ts/data/DItem";
-import { EntityKinds } from "ts/data/predefineds/DBasicEntityKinds";
+import { BasicEntityKinds } from "ts/data/predefineds/DBasicEntityKinds";
 import { BasicParameters } from "ts/data/predefineds/DBasicParameters";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
 import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
@@ -49,7 +49,6 @@ export class RESystem {
     }
 
     // Database
-    static entityKinds: EntityKinds;
     static parameters: BasicParameters;
     static attributes: BasicAttributes;
     static behaviors: BasicBehaviors;

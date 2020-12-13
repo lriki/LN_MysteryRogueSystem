@@ -1,17 +1,17 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
+import { ActionId, REData } from "ts/data/REData";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REDialogContext } from "ts/system/REDialog";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
-import { VActionCommandWindow } from "../windows/VActionCommandWindow";
+import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 
 export class VItemListDialog extends REDialogVisualWindowLayer {
     _actorEntity: REGame_Entity;
     _inventory: LInventoryBehavior;
-    _itemListWindow: VItemListWindow | undefined;
+    _itemListWindow: VItemListWindow;// | undefined;
     _commandWindow: VActionCommandWindow | undefined;
 
     /**
@@ -27,23 +27,26 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
         super();
         this._actorEntity = actorEntity;
         this._inventory = inventory;
+        
+        const y = 100;
+        const cw = 200;
+        this._itemListWindow = new VItemListWindow(this._inventory, new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow.setHandler("ok", this.onItemOk.bind(this));
+        this._itemListWindow.setHandler("cancel", this.onItemCancel.bind(this));
+        this._itemListWindow.forceSelect(0);
+        this.addWindow(this._itemListWindow);
     }
     
     onCreate() {
         const y = 100;
         const cw = 200;
 
-        this._itemListWindow = new VItemListWindow(this._inventory, new Rectangle(10, y, Graphics.boxWidth - cw, 400));
-        this._itemListWindow.setHandler("ok", this.onItemOk.bind(this));
-        this._itemListWindow.setHandler("cancel", this.onItemCancel.bind(this));
-        this.addWindow(this._itemListWindow);
 
         //const actions = [DBasics.actions.PickActionId, DBasics.actions.AttackActionId];
         this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
         this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
         this.addWindow(this._commandWindow);
 
-        this._itemListWindow.forceSelect(0);
         this.activateItemWindow();
     }
     
@@ -53,19 +56,25 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
     onItemOk(): void {
         if (this._itemListWindow && this._commandWindow) {
 
-            const itemEntity = this._itemListWindow.item();
+            const itemEntity = this._itemListWindow.selectedItem();
 
             // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
             // 実際に実行できる Action のリストができる。
             const actorActions = this._actorEntity.queryActions();
             const actualActions = itemEntity.queryReactions().filter(actionId => actorActions.includes(actionId));
-            
-            this._commandWindow.setActionList(actualActions);
+            const self = this;
+            this._commandWindow.setActionList2(actualActions.map(actionId => {
+                return {
+                    actionId: actionId,
+                    handler: (x) => self.onAction(x),
+                };
+            }));
 
             this._itemListWindow.deactivate();
             this._commandWindow.openness = 255;
             this._commandWindow.activate();
         }
+        console.log("onItemOk", this);
     }
         
     onItemCancel(): void {
@@ -77,6 +86,14 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
             this._itemListWindow.activate();
             this._commandWindow.deactivate();
             this._commandWindow.openness = 0;
+        }
+    }
+
+    onAction(actionId: ActionId): void {
+        if (this._itemListWindow) {
+            const itemEntity = this._itemListWindow.selectedItem();
+            this.dialogContext().postAction(actionId, this._actorEntity, itemEntity);
+            this.doneDialog(true);
         }
     }
 

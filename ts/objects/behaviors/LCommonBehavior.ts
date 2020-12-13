@@ -3,7 +3,7 @@ import { ActionId, REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REGame_Entity } from "../REGame_Entity";
-import { LBehavior, onPrePickUpReaction } from "./LBehavior";
+import { LBehavior, onPrePickUpReaction, onPrePutReaction } from "./LBehavior";
 
 
 
@@ -22,8 +22,17 @@ export class LCommonBehavior extends LBehavior {
         return REResponse.Consumed; // 無条件でOK
     }
 
-    onQueryActions(): ActionId[] {
-        return [DBasics.actions.PickActionId];
+    // 置かれようとしている
+    // この時点で座標は確定していないため、ここで GroundLayer に置くことができるか確認することはできない。
+    [onPrePutReaction](entity: REGame_Entity, context: RECommandContext): REResponse {
+        console.log("LCommonBehavior.onPrePutReaction");
+        return REResponse.Consumed; // 無条件でOK
+    }
+
+    onQueryActions(actions: ActionId[]): ActionId[] {
+        return actions.concat([
+            DBasics.actions.PickActionId,
+        ]);
     }
 
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {

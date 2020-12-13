@@ -1,4 +1,6 @@
+import { DEntityKindId } from "./DEntityKind";
 import { DBasicActions } from "./predefineds/DBasicActions";
+import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 
 
 /**
@@ -7,5 +9,6 @@ import { DBasicActions } from "./predefineds/DBasicActions";
 export class DBasics
 {
     static actions: DBasicActions;
+    static entityKinds: BasicEntityKinds;
 }
 

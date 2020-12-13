@@ -67,7 +67,7 @@ export class REGame_Map
             const tile = REEntityFactory.newTile(TileKind.Floor);
             tile.floorId = this._floorId;
             this.markAdhocEntity(tile);
-            this._addEntity(tile);
+            this._addEntityInternal(tile);
             this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
         }
     }
@@ -135,7 +135,7 @@ export class REGame_Map
             .filter((e): e is REGame_Entity => { return e != undefined; });
     }
 
-    _addEntity(entity: REGame_Entity): void {
+    _addEntityInternal(entity: REGame_Entity): void {
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
@@ -146,10 +146,30 @@ export class REGame_Map
         REGame.integration.onEntityEnteredMap(entity);
     }
 
+    /**
+     * Entity を現在の Floor の指定座標に登場させる。
+     * @param entity 
+     * @param x 
+     * @param y 
+     * 既に現在の Floor 上に登場済みの Entity に対してこのメソッドを呼び出すと失敗する。
+     */
+    appearEntity(entity: REGame_Entity, x: number, y: number): void {
+        assert(entity.floorId == 0);
+        entity.floorId= this.floorId();
+        //entity.x = x;
+        //entity.y = y;
+        this.locateEntity(entity, x, y);
+        this._addEntityInternal(entity);
+    }
+
     _removeEntity(entity: REGame_Entity): void {
         assert(entity.floorId == this.floorId());
         this._entityIds = this._entityIds.filter(x => x != entity._id);
         entity.floorId = 0;
+
+        const block = this.block(entity.x, entity.y);
+        const result = block.removeEntity(entity);
+        assert(result);
         
         REGame.integration.onEntityLeavedMap(entity);
     }
@@ -186,6 +206,9 @@ export class REGame_Map
         return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
     }
     
+    // NOTE: 斜め移動の禁止は、隣接タイルや Entity が、自分の角を斜め移動可能とするか、で検知したほうがいいかも。
+    // シレン5石像の洞窟の石像は、Entity扱いだが斜め移動禁止。
+    // ちなみに、丸太の罠等では斜めすり抜けできる。
     checkPassage(entity: REGame_Entity, dir: number, toLayer?: BlockLayerKind): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
@@ -238,9 +261,6 @@ export class REGame_Map
         const newBlock = this.block(x, y);
         
         const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
-
-        console.log("locate:", layer);
-        console.log("entity:", entity);
 
         oldBlock.removeEntity(entity);
         entity.x = x;

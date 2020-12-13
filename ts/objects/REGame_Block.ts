@@ -30,6 +30,17 @@ class REBlockLayer {
         return this._entities;
     }
 
+    firstEntity(): REGame_Entity | undefined {
+        if (this._entities.length > 0)
+            return this._entities[0];
+        else
+            return undefined;
+    }
+
+    isContainsAnyEntity(): boolean {
+        return this._entities.length > 0;
+    }
+
     isContains(entity: REGame_Entity): boolean {
         return this._entities.includes(entity);
     }
@@ -163,7 +174,7 @@ export class REGame_Block
     // Note: [1,2,3] ... 装飾 (B, C タイル. "自動" モードでは後ろの番号から配置されていく)
     private _tileIds: number[] | undefined;
 
-    private _layers: REBlockLayer[];
+    private _layers: REBlockLayer[];    // 要素番号は BlockLayerKind
 
     private _x: number;
     private _y: number;
@@ -221,12 +232,13 @@ export class REGame_Block
         layer.addEntity(entity);
     }
 
-    removeEntity(entity: REGame_Entity) {
+    removeEntity(entity: REGame_Entity): boolean {
         for (let i = 0; i < this._layers.length; i++) {
             if (this._layers[i].removeEntity(entity)) {
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     removeAllEntites() {
@@ -238,5 +250,14 @@ export class REGame_Block
     aliveEntity(layer: BlockLayerKind): REGame_Entity | undefined {
         const l = this._layers[layer];
         return l.entities().find(x => x.isAlive());
+    }
+
+    /** Entity が含まれている Layer を検索する */
+    findEntityLayerKind(entity: REGame_Entity): BlockLayerKind | undefined {
+        const index = this._layers.findIndex(x => x.isContains(entity));
+        if (index >= 0)
+            return index;
+        else
+            return undefined;
     }
 }

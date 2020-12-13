@@ -15,6 +15,7 @@ import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
+import { DBasics } from "ts/data/DBasics";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -49,7 +50,7 @@ export class REGameManager
         REData.actors.forEach(x => {
             if (x.id > 0) {
                 const unit = REEntityFactory.newActor();
-                unit.prefabKey.kind = RESystem.entityKinds.actor;
+                unit.prefabKey.kind = DBasics.entityKinds.actor;
                 unit.prefabKey.id = x.id;
                 unit.floorId = x.initialFloorId;
                 unit.x = x.initialX;

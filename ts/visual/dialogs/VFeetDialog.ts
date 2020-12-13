@@ -28,10 +28,12 @@ export class VFeetDialog extends REDialogVisualWindowLayer {
         this.addWindow(this._entityNameWindow);
 
         this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-        this._commandWindow.setActionList(this._actions);
-        this._actions.forEach((x, i) => {
-            this._commandWindow?.setHandler(`action:${x}`, () => this.doAction(i));
-        });
+        this._commandWindow.setActionList2(this._actions.map(actionId => {
+            return {
+                actionId: actionId,
+                handler: this.doAction,
+            };
+        }));
         this._commandWindow.setHandler("cancel", () => this.pop());
         if (this._commandWindow)
             this.addWindow(this._commandWindow);

@@ -11,6 +11,7 @@ import { EntityId, eqaulsEntityId } from "ts/system/EntityId";
 import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
+import { DEntityKindId } from "ts/data/DEntityKind";
 
 enum BlockLayer
 {
@@ -63,13 +64,35 @@ export class REGame_Entity
     _iconName: string = '';
     //_blockLayer: BlockLayer = BlockLayer.Unit;
 
-    prefabKey: { kind: number, id: number } = { kind: 0, id: 0 };
+    prefabKey: { kind: DEntityKindId, id: number } = { kind: 0, id: 0 };
     rmmzEventId: number = 0;
+
+    /**
+     * 固定マップにおいて、エディタで配置したイベントを元に作られた Entity であるかどうか。
+     * 
+     * 基本的には Database マップの Event をコピーして使いたいが、固定の出口、固定NPC、その他未知の固定イベントの設置は考えられる。
+     * 特に固定出口はツクールのエディタから「場所移動」によって遷移先を決めるのに都合がよいため、静的 Event と Entity は関連付けておきたい。
+     * 
+     * 注意点としては、一度 map から離れると静的 Event との関連付けが解除されること。
+     * 例えば固定のアイテムが落ちていたとして、それを拾って再び置いたときは、Entity は同一だが異なる動的 Event と関連付けられる。
+     * 仮に階段をインベントリに入れてからまた置くと、「場所移動」実行内容が定義されている Event との関連付けが解除されるため、移動ができなくなる。
+     * これは現状の仕様とする。
+     */
+    inhabitsCurrentFloor :boolean = false;
 
     // HC3 までは PositionalAttribute に持たせていたが、こっちに持ってきた。
     // お店のセキュリティシステムなど、これらを使わない Entity もあるのだが、
     // ほとんどの Entity が持つことになるパラメータなので、Attribute にするとコードが複雑になりすぎる。
-    floorId: number = 0;    /**< Entity が存在しているフロア。0 は無効値 & 異常値。直接変更禁止。transfarMap を使うこと */
+
+    /**
+     * Entity が存在しているフロア。
+     * 
+     * 0 は、World には存在しているがいずれの Floor(Map) 上にもいないことを示し、
+     * これは通常、別 Entity の Inventory の中にいる状態。
+     * 
+     * 直接変更禁止。transfarMap を使うこと
+     */
+    floorId: number = 0;
     x: number = 0;          /**< 論理 X 座標 */
     y: number = 0;          /**< 論理 Y 座標 */
 
@@ -190,6 +213,20 @@ export class REGame_Entity
         return this._destroyed;
     }
 
+    /**
+     * この Entity が GroundLayer 上に存在しているかを確認する。
+     * Map 上に出現していても、Ground 以外のレイヤーに存在している場合は false を返す。
+     */
+    isOnGround(): boolean {
+        if (this.floorId > 0) {
+            const block = REGame.map.block(this.x, this.y);
+            return block.findEntityLayerKind(this) == BlockLayerKind.Ground;
+        }
+        else {
+            return false;
+        }
+    }
+
     destroy(): void {
         assert(!this.isUnique());
         this._destroyed = true;
@@ -238,13 +275,20 @@ export class REGame_Entity
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
         let result: ActionId[] = [
-            DBasics.actions.PickActionId,
-            DBasics.actions.PutActionId,
-            DBasics.actions.ExchangeActionId,
+            //DBasics.actions.ExchangeActionId,
             DBasics.actions.ThrowActionId,
             DBasics.actions.FallActionId,
             DBasics.actions.DropActionId,
         ];
+
+        if (this.isOnGround()) {
+            // Ground Layer 上に存在していれば、拾われる可能性がある
+            result.push(DBasics.actions.PickActionId);
+        }
+        else {
+            result.push(DBasics.actions.PutActionId);
+        }
+
 
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             result = this._basicBehaviors[i].onQueryReactions(result);

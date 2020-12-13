@@ -9,7 +9,7 @@ import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/REComma
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../REGame_Block";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { tr } from "ts/Common";
+import { assert, tr } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 
 /**
@@ -21,8 +21,19 @@ export class REUnitBehavior extends LBehavior {
         return BlockLayerKind.Unit;
     }
     
-    onQueryReactions(): ActionId[] {
-        return [DBasics.actions.AttackActionId];
+    onQueryActions(actions: ActionId[]): ActionId[] {
+        return actions.concat([
+            DBasics.actions.PickActionId,
+            DBasics.actions.PutActionId,
+            //DBasics.actions.ExchangeActionId,
+            DBasics.actions.ThrowActionId,
+        ]);
+    }
+
+    onQueryReactions(actions: ActionId[]): ActionId[] {
+        return actions.concat([
+            DBasics.actions.AttackActionId
+        ]);
     }
 
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
@@ -90,7 +101,6 @@ export class REUnitBehavior extends LBehavior {
                     const targetEntity = targetEntities[0];
     
                     
-                    console.log("AA pick post");
                     context.post(
                         targetEntity, onPrePickUpReaction,
                         (responce: REResponse, targetEntity: REGame_Entity, context: RECommandContext) => {
@@ -102,15 +112,38 @@ export class REUnitBehavior extends LBehavior {
                             if (inventory.entities().length == 3) {
                                 context.postMessage(tr("おなかがすいてきた…"));
                             }
-                            
-                            console.log("PICK!!!!!");
                         });
     
                 }
-    
-                console.log("AA pick");
 
             }
+        }
+        else if (cmd.action().id == DBasics.actions.PutActionId) {
+            const itemEntity = cmd.reactor();
+            const inventory = entity.findBehavior(LInventoryBehavior);
+            assert(itemEntity);
+            assert(inventory);
+            
+            const block = REGame.map.block(entity.x, entity.y);
+            const layer = block.layer(BlockLayerKind.Ground);
+            if (!layer.isContainsAnyEntity()) {
+                // 足元に置けそうなら試行
+                context.post(
+                    itemEntity, onPrePickUpReaction,
+                    (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                        inventory.removeEntity(reactor);
+                        REGame.map.appearEntity(reactor, entity.x, entity.y);
+
+                        context.postMessage(tr("{0} を置いた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
+
+                    });
+            }
+            else {
+                context.postMessage(tr("置けなかった。"));
+            }
+
+    
+            return REResponse.Consumed;
         }
 
         return REResponse.Pass;
