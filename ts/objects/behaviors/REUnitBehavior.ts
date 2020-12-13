@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { LBehavior, onPrePickUpReaction } from "./LBehavior";
+import { LBehavior, onPrePickUpReaction, onThrowReaction } from "./LBehavior";
 import { ActionId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
@@ -36,7 +36,7 @@ export class REUnitBehavior extends LBehavior {
         ]);
     }
 
-    onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onAction(actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         
         if (cmd.action().id == DBasics.actions.DirectionChangeActionId) {
             cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
@@ -49,11 +49,11 @@ export class REUnitBehavior extends LBehavior {
             const args = (cmd.args() as REMoveToAdjacentArgs);
             const offset = Helpers.dirToTileOffset(args.direction);
 
-            if (REGame.map.moveEntity(entity, entity.x + offset.x, entity.y + offset.y, entity.queryProperty(RESystem.properties.homeLayer))) {
-                context.postSequel(entity, RESystem.sequels.MoveSequel);
+            if (REGame.map.moveEntity(actor, actor.x + offset.x, actor.y + offset.y, actor.queryProperty(RESystem.properties.homeLayer))) {
+                context.postSequel(actor, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
-                entity.immediatelyAfterAdjacentMoving = true;
+                actor.immediatelyAfterAdjacentMoving = true;
                 
                 return REResponse.Consumed;
             }
@@ -66,10 +66,10 @@ export class REUnitBehavior extends LBehavior {
             console.log("AttackAction");
 
 
-            context.postSequel(entity, RESystem.sequels.attack);
+            context.postSequel(actor, RESystem.sequels.attack);
 
 
-            const front = Helpers.makeEntityFrontPosition(entity, 1);
+            const front = Helpers.makeEntityFrontPosition(actor, 1);
             const block = REGame.map.block(front.x, front.y);
             const reacor = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
             if (reacor) {
@@ -86,21 +86,22 @@ export class REUnitBehavior extends LBehavior {
         }
         else if (cmd.action().id == DBasics.actions.PickActionId) {
 
-            const inventory = entity.findBehavior(LInventoryBehavior);
+            const inventory = actor.findBehavior(LInventoryBehavior);
             if (inventory) {
             
-                const block = REGame.map.block(entity.x, entity.y);
+                const block = REGame.map.block(actor.x, actor.y);
                 const layer = block.layer(BlockLayerKind.Ground);
                 const targetEntities = layer.entities();
 
                 if (targetEntities.length >= 1) {
-                    const targetEntity = targetEntities[0];
+                    const itemEntity = targetEntities[0];
     
                     context.post(
-                        targetEntity, onPrePickUpReaction,
-                        (responce: REResponse, targetEntity: REGame_Entity, context: RECommandContext) => {
-                            REGame.map._removeEntity(targetEntity);
-                            inventory.addEntity(targetEntity);
+                        itemEntity, onPrePickUpReaction,
+                        (responce: REResponse, itemEntity: REGame_Entity, context: RECommandContext) => {
+                            REGame.map._removeEntity(itemEntity);
+                            inventory.addEntity(itemEntity);
+                            itemEntity.setParentEntity(actor);
 
                             context.postMessage(tr("{0} は {1} をひろった", "LRIKI", "\\I[256]\\C[3]おにぎり\\C[0]"));
 
@@ -115,11 +116,11 @@ export class REUnitBehavior extends LBehavior {
         }
         else if (cmd.action().id == DBasics.actions.PutActionId) {
             const itemEntity = cmd.reactor();
-            const inventory = entity.findBehavior(LInventoryBehavior);
+            const inventory = actor.findBehavior(LInventoryBehavior);
             assert(itemEntity);
             assert(inventory);
             
-            const block = REGame.map.block(entity.x, entity.y);
+            const block = REGame.map.block(actor.x, actor.y);
             const layer = block.layer(BlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
@@ -127,7 +128,7 @@ export class REUnitBehavior extends LBehavior {
                     itemEntity, onPrePickUpReaction,
                     (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
                         inventory.removeEntity(reactor);
-                        REGame.map.appearEntity(reactor, entity.x, entity.y);
+                        REGame.map.appearEntity(reactor, actor.x, actor.y);
 
                         context.postMessage(tr("{0} を置いた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
                     });
@@ -135,8 +136,36 @@ export class REUnitBehavior extends LBehavior {
             else {
                 context.postMessage(tr("置けなかった。"));
             }
+            return REResponse.Consumed;
+        }
+        else if (cmd.action().id == DBasics.actions.ThrowActionId) {
+            // [投げる] は便利コマンドのようなもの。
+            // 具体的にどのように振舞うのか (直線に飛ぶのか、放物線状に動くのか、転がるのか) を決めるのは相手側
 
-    
+            const itemEntity = cmd.reactor();
+            //const inventory = actor.findBehavior(LInventoryBehavior);
+            assert(itemEntity);
+            //assert(inventory);
+
+            // まずは itemEntity を、Inventory や Map から外してみる
+            context.postRemoveFromWhereabouts(
+                itemEntity,
+                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                    if (responce == REResponse.Pass) {
+                        
+                    }
+                });
+            
+            /*
+            context.post(
+                itemEntity, onThrowReaction,
+                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                    inventory.removeEntity(reactor);
+                    REGame.map.appearEntity(reactor, actor.x, actor.y);
+
+                    context.postMessage(tr("{0} を投げた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
+                });
+                */
             return REResponse.Consumed;
         }
 

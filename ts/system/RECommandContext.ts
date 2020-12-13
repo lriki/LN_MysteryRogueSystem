@@ -16,7 +16,7 @@ interface RECCMessage {
     func: () => REResponse;
 }
 
-export type ActionResultCallback = (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => void;
+export type CommandResultCallback = (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => void;
 
 /**
  * 
@@ -158,7 +158,7 @@ export class RECommandContext
         Log.postCommand("Reaction");
     }
 
-    post<TSym extends symbol>(entity: REGame_Entity, symbol: TSym, result: ActionResultCallback): void {
+    post<TSym extends symbol>(entity: REGame_Entity, symbol: TSym, result: CommandResultCallback): void {
         const m1 = () => {
             const response = entity._callBehaviorIterationHelper((behavior: LBehavior) => {
                 const func = (behavior as any)[symbol];
@@ -303,6 +303,16 @@ export class RECommandContext
         Log.postCommand("ApplyEffect");
     }
 
+    postRemoveFromWhereabouts(entity: REGame_Entity, result: CommandResultCallback): void {
+        const m1 = () => {
+            Log.doCommand("RemoveFromWhereabouts");
+            const response = entity.callRemoveFromWhereabouts(this);
+            result(response, entity, this);
+            return response;
+        };
+        this._recodingCommandList.push({ name: "RemoveFromWhereabouts", func: m1 });
+        Log.postCommand("RemoveFromWhereabouts");
+    }
 
 
 

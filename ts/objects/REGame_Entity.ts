@@ -65,6 +65,14 @@ export class REGame_Entity
     _iconName: string = '';
     //_blockLayer: BlockLayer = BlockLayer.Unit;
 
+    /**
+     * 親 Entity。
+     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
+     * 
+     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
+     */
+    _parentEntityId: EntityId = { index: 0, key: 0 };
+
     prefabKey: { kind: DEntityKindId, id: number } = { kind: 0, id: 0 };
     rmmzEventId: number = 0;
 
@@ -124,6 +132,24 @@ export class REGame_Entity
         return this._id;
     }
 
+    setParentEntity(entity: REGame_Entity | undefined): void {
+        if (entity) {
+            this._parentEntityId = entity.id();
+        }
+        else {
+            this._parentEntityId = { index: 0, key: 0 };
+        }
+    }
+
+    parentEntity(): REGame_Entity | undefined {
+        if (this._parentEntityId.index > 0) {
+            return REGame.world.entity(this._parentEntityId);
+        }
+        else {
+            return undefined;
+        }
+    }
+
     addAttribute(value: LAttribute) {
         assert(value._ownerEntityId.index == 0);
         this.attrbutes.push(value);
@@ -163,6 +189,30 @@ export class REGame_Entity
         //delete this._stateTurns[stateId];
         //const index = this._states.findIndex(x => x == value);
         //if (index >= 0) this._states.splice(index, 1);
+    }
+
+    /**
+     * Entity が存在している場所から除外する。
+     * 
+     * 何らかの Inventory に入っているならそこから、Map 上に出現しているならその Block から除外する。
+     * 除外された UniqueEntity 以外の Entity は、そのターンの間にいずれかから参照を得ない場合 GC によって削除される。
+     */
+    callRemoveFromWhereabouts(context: RECommandContext): REResponse {
+        const parent = this.parentEntity();
+        if (parent) {
+            const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
+                return behavior.onRemoveEntityFromWhereabouts(context, this);
+            });
+            assert(this._parentEntityId.index == 0);
+            return response;
+        }
+        else if (this.floorId > 0) {
+            REGame.map._removeEntity(this);
+            return REResponse.Consumed;
+        }
+        else {
+            throw new Error();
+        }
     }
 
     
@@ -302,7 +352,8 @@ export class REGame_Entity
     }
 
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
-        for (let i = 0; i < this._basicBehaviors.length; i++) {
+        //for (let i = 0; i < this._basicBehaviors.length; i++) {
+        for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
             const r = func(this._basicBehaviors[i]);//this._behaviors[i].onPreAction(cmd);
             if (r != REResponse.Pass) {
                 return r;

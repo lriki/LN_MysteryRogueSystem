@@ -43,6 +43,7 @@ export enum DecisionPhase {
 
 export const onPrePickUpReaction = Symbol("onPicking");
 export const onPrePutReaction = Symbol("onPrePutReaction");
+export const onThrowReaction = Symbol("onThrowReaction");
 
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {
@@ -53,6 +54,8 @@ export class LBehavior {
         assert(this._ownerEntityId.index > 0);
         return REGame.world.entity(this._ownerEntityId);
     }
+
+    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse { return REResponse.Pass; }
 
     [onPrePickUpReaction](entity: REGame_Entity, context: RECommandContext): REResponse {
         return REResponse.Pass;
