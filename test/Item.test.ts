@@ -18,36 +18,36 @@ afterAll(() => {
 });
 
 test('PickAndPut', () => {
-    //--------------------
-    // 準備
+    // New Game
     REGameManager.createGameObjects();
 
-    // actor1
+    // actor1 配置
     const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
     actor1._name = "actor1";
     REGame.world._transferEntity(actor1, 1, 5, 1);  // (5, 1) へ配置
 
-    // item1
+    // item1 生成&配置
     const item1 = REEntityFactory.newItem(1);
     item1._name = "item1";
-    REGame.world._transferEntity(item1, 1, 6, 1);  // (6, 1) へ配置。デフォルトの追加先レイヤーは Ground.
+    REGame.world._transferEntity(item1, 1, 6, 1);  // (6, 1) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
     // マップ移動
     REGameManager.performFloorTransfer();
-    REGameManager.update();
+
+    REGameManager.update(); // Advance Simulation --------------------------------------------------
     
     // player を右へ移動
     const dialogContext = REGame.scheduler._getDialogContext();
     dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
-    dialogContext.closeDialog(true);
+    dialogContext.closeDialog(true);    // 行動確定
     
-    REGameManager.update(); // Step Simulation --------------------------------------------------
+    REGameManager.update(); // Advance Simulation --------------------------------------------------
 
     // 足元のアイテムを拾う
     dialogContext.postAction(DBasics.actions.PickActionId, actor1, undefined);
-    dialogContext.closeDialog(true);
+    dialogContext.closeDialog(true);    // 行動確定
     
-    REGameManager.update(); // Step Simulation --------------------------------------------------
+    REGameManager.update(); // Advance Simulation --------------------------------------------------
 
     const inventory = actor1.findBehavior(LInventoryBehavior);
     assert(inventory);
@@ -62,9 +62,9 @@ test('PickAndPut', () => {
 
     // item1 を置く
     dialogContext.postAction(DBasics.actions.PutActionId, actor1, item1);
-    dialogContext.closeDialog(true);
+    dialogContext.closeDialog(true);    // 行動確定
 
-    REGameManager.update(); // Step Simulation --------------------------------------------------
+    REGameManager.update(); // Advance Simulation --------------------------------------------------
 
     // item1 は Map 上に追加されている
     expect(block.layer(BlockLayerKind.Ground).isContains(item1)).toBe(true);
