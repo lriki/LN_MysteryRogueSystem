@@ -37,9 +37,6 @@ test('basic', () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
-    //actor1.addAttribute(new ActorAttr());
-    //const aa = actor1.findAttribute(BattlerAttr);
-    //console.log("aa", aa);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
     REGame.world._transferEntity(actor1, 1, 5, 5);

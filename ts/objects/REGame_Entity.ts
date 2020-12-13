@@ -12,6 +12,7 @@ import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
+import { RETileAttribute } from "./attributes/RETileAttribute";
 
 enum BlockLayer
 {
@@ -225,6 +226,10 @@ export class REGame_Entity
         else {
             return false;
         }
+    }
+
+    isTile(): boolean {
+        return this.findAttribute(RETileAttribute) != undefined;
     }
 
     destroy(): void {

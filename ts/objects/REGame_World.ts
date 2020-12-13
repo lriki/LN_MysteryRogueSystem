@@ -70,7 +70,7 @@ export class RE_Game_World
      * CommandContext.postTransferFloor() を使うこと。
      */
     _transferEntity(entity: REGame_Entity, floorId: number, x: number, y: number): boolean {
-        if (REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
+        if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);
         }
@@ -78,8 +78,8 @@ export class RE_Game_World
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
             entity.floorId = floorId;
-            REGame.map._addEntityInternal(entity);
             REGame.map.locateEntity(entity, x, y);
+            REGame.map._addEntityInternal(entity);
         }
         else {
             entity.floorId = floorId;
@@ -121,8 +121,8 @@ export class RE_Game_World
         for (let i = 1; i < this._entities.length; i++) {
             const entity = this._entities[i];
             if (entity) {
-                if (REGame.map.floorId() == entity.floorId) {
-                    REGame.map._addEntityInternal(entity);
+                if (REGame.map.floorId() == entity.floorId && !entity.isTile()) {
+                    REGame.map._reappearEntity(entity);
                 }
             }
         }

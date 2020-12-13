@@ -81,7 +81,7 @@ export class REGame_Map
     }
 
     isValid(): boolean {
-        return this._width > 0;
+        return this._floorId > 0 && this._width > 0;
     }
 
     floorId(): number {
@@ -156,9 +156,19 @@ export class REGame_Map
     appearEntity(entity: REGame_Entity, x: number, y: number): void {
         assert(entity.floorId == 0);
         entity.floorId= this.floorId();
-        //entity.x = x;
-        //entity.y = y;
         this.locateEntity(entity, x, y);
+        this._addEntityInternal(entity);
+    }
+
+    // appearEntity の、マップ遷移時用
+    _reappearEntity(entity: REGame_Entity): void {
+        assert(entity.floorId == this.floorId());
+        assert(!entity.isTile());   // Tile は setup で追加済みのため、間違って追加されないようにチェック
+        
+        const block = this.block(entity.x, entity.y);
+        const layer = entity.queryProperty(RESystem.properties.homeLayer);
+        block.addEntity(layer, entity);
+
         this._addEntityInternal(entity);
     }
 

@@ -86,21 +86,16 @@ export class REUnitBehavior extends LBehavior {
         }
         else if (cmd.action().id == DBasics.actions.PickActionId) {
 
-            //console.log("func.call s");
-            //const s: Symbol = onPrePickUpReaction;
-            //const func = this[s];//Object.getPrototypeOf(this).onQueryProperty;
-            //func.call(this, context);
-            //console.log("func.call e");
             const inventory = entity.findBehavior(LInventoryBehavior);
             if (inventory) {
             
                 const block = REGame.map.block(entity.x, entity.y);
                 const layer = block.layer(BlockLayerKind.Ground);
                 const targetEntities = layer.entities();
+
                 if (targetEntities.length >= 1) {
                     const targetEntity = targetEntities[0];
     
-                    
                     context.post(
                         targetEntity, onPrePickUpReaction,
                         (responce: REResponse, targetEntity: REGame_Entity, context: RECommandContext) => {
@@ -135,7 +130,6 @@ export class REUnitBehavior extends LBehavior {
                         REGame.map.appearEntity(reactor, entity.x, entity.y);
 
                         context.postMessage(tr("{0} を置いた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
-
                     });
             }
             else {
