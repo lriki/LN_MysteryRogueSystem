@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { LBehavior, onPrePickUpReaction, onThrowReaction } from "./LBehavior";
+import { LBehavior, onPrePickUpReaction, onPreThrowReaction, onThrowReaction } from "./LBehavior";
 import { ActionId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
@@ -11,6 +11,7 @@ import { BlockLayerKind } from "../REGame_Block";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, tr } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
+import { LCommonBehavior } from "./LCommonBehavior";
 
 /**
  * 
@@ -97,17 +98,12 @@ export class REUnitBehavior extends LBehavior {
                     const itemEntity = targetEntities[0];
     
                     context.post(
-                        itemEntity, onPrePickUpReaction,
+                        itemEntity, actor, undefined, onPrePickUpReaction,
                         (responce: REResponse, itemEntity: REGame_Entity, context: RECommandContext) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
-                            itemEntity.setParentEntity(actor);
 
                             context.postMessage(tr("{0} は {1} をひろった", "LRIKI", "\\I[256]\\C[3]おにぎり\\C[0]"));
-
-                            if (inventory.entities().length == 3) {
-                                context.postMessage(tr("おなかがすいてきた…"));
-                            }
                         });
     
                 }
@@ -125,7 +121,7 @@ export class REUnitBehavior extends LBehavior {
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
                 context.post(
-                    itemEntity, onPrePickUpReaction,
+                    itemEntity, actor, undefined, onPrePickUpReaction,
                     (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
                         inventory.removeEntity(reactor);
                         REGame.map.appearEntity(reactor, actor.x, actor.y);
@@ -147,6 +143,28 @@ export class REUnitBehavior extends LBehavior {
             assert(itemEntity);
             //assert(inventory);
 
+            context.post(
+                itemEntity, actor, undefined, onPreThrowReaction,
+                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                    if (responce == REResponse.Pass) {
+                        itemEntity.callRemoveFromWhereabouts(context);
+
+                        itemEntity.x = actor.x;
+                        itemEntity.y = actor.y;
+
+
+                        context.post(
+                            itemEntity, actor, undefined, onThrowReaction,
+                            (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                                if (responce == REResponse.Pass) {
+                                    context.postMessage(tr("{0} を投げた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
+                                }
+                            });
+
+                    }
+                });
+
+                /*
             // まずは itemEntity を、Inventory や Map から外してみる
             context.postRemoveFromWhereabouts(
                 itemEntity,
@@ -155,16 +173,9 @@ export class REUnitBehavior extends LBehavior {
                         
                     }
                 });
+                */
             
             /*
-            context.post(
-                itemEntity, onThrowReaction,
-                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
-                    inventory.removeEntity(reactor);
-                    REGame.map.appearEntity(reactor, actor.x, actor.y);
-
-                    context.postMessage(tr("{0} を投げた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
-                });
                 */
             return REResponse.Consumed;
         }

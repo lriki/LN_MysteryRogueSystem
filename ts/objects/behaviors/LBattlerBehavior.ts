@@ -126,7 +126,7 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.isStateAffected
     isStateAffected(stateId: DStateId): boolean {
-        const entity = this.entity();
+        const entity = this.ownerEntity();
         return entity._states.includes(stateId);
     }
     
@@ -153,7 +153,7 @@ export class LBattlerBehavior extends LBehavior {
         this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
         this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
     
-        const entity = this.entity();
+        const entity = this.ownerEntity();
         if (this.actualParam(RESystem.parameters.hp) === 0) {
             console.log("!!!DEAD!!!");
             entity.addState(RESystem.states.dead);
@@ -179,7 +179,7 @@ export class LBattlerBehavior extends LBehavior {
     
     onTurnEnd(context: RECommandContext): REResponse {
 
-        const entity = this.entity();
+        const entity = this.ownerEntity();
         if (this.isDeathStateAffected()) {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);
             

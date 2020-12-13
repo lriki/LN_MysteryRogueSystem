@@ -143,6 +143,7 @@ export class REGame_Entity
 
     parentEntity(): REGame_Entity | undefined {
         if (this._parentEntityId.index > 0) {
+            console.log("parentEntity?", this._parentEntityId);
             return REGame.world.entity(this._parentEntityId);
         }
         else {
@@ -203,7 +204,7 @@ export class REGame_Entity
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
                 return behavior.onRemoveEntityFromWhereabouts(context, this);
             });
-            assert(this._parentEntityId.index == 0);
+            assert(this._parentEntityId.index == 0);    // 何らか削除されているはず
             return response;
         }
         else if (this.floorId > 0) {

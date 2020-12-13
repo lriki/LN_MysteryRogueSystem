@@ -3,7 +3,7 @@ import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { Vector2 } from "ts/math/Vector2";
 import { REDialogVisualNavigator } from "ts/visual/REDialogVisual";
 import { REManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
-import { REVisualSequel, REVisualSequel_Move } from "ts/visual/REVisualSequel";
+import { REVisualSequel } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
 import { REGame_Sequel } from "../objects/REGame_Sequel";
 import { RE } from "ts/dialogs/EventExecutionDialog";
@@ -11,6 +11,8 @@ import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVi
 import { RESystem } from "ts/system/RESystem";
 import { VCollapseSequel } from "./sequels/CollapseSequel";
 import { VAttackSequel } from "./sequels/AttackSequel";
+import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
+import { REVisualSequel_Move } from "./sequels/VMoveSequel";
 
 /**
  */
@@ -26,6 +28,7 @@ export class REVisual_Manager
 
 
         this._visualSequelFactory[RESystem.sequels.MoveSequel] = () => new REVisualSequel_Move();
+        this._visualSequelFactory[RESystem.sequels.blowMoveSequel] = () => new VBlowMoveSequel();
         this._visualSequelFactory[RESystem.sequels.attack] = () => new VAttackSequel();
         this._visualSequelFactory[RESystem.sequels.CollapseSequel] = () => new VCollapseSequel();
     }

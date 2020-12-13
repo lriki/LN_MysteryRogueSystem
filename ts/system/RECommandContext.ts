@@ -9,7 +9,7 @@ import { REEffectContext } from "./REEffectContext";
 import { REGame_Block } from "../objects/REGame_Block";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
-import { LBehavior } from "ts/objects/behaviors/LBehavior";
+import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -158,15 +158,18 @@ export class RECommandContext
         Log.postCommand("Reaction");
     }
 
-    post<TSym extends symbol>(entity: REGame_Entity, symbol: TSym, result: CommandResultCallback): void {
+    post<TSym extends symbol>(target: REGame_Entity, sender: REGame_Entity, args: any, symbol: TSym, result?: CommandResultCallback): void {
         const m1 = () => {
-            const response = entity._callBehaviorIterationHelper((behavior: LBehavior) => {
+            const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
                 const func = (behavior as any)[symbol];
                 if (func) {
-                    const r1 = func.call(behavior, entity, this);
+                    const args2: CommandArgs = { self: target, sender: sender, args: args };
+                    const r1 = func.call(behavior, args2, this);
                     if (r1 != REResponse.Pass) {
                         // 何らかの形でコマンドが処理された
-                        result(r1, entity, this);
+                        if (result) {
+                            result(r1, target, this);
+                        }
                     }
                     return r1;
                 }
@@ -177,7 +180,9 @@ export class RECommandContext
 
             if (response == REResponse.Pass) {
                 // コマンドが処理されなかった
-                result(response, entity, this);
+                if (result) {
+                    result(response, target, this);
+                }
             }
 
             return REResponse.Consumed;
@@ -303,6 +308,7 @@ export class RECommandContext
         Log.postCommand("ApplyEffect");
     }
 
+    /*
     postRemoveFromWhereabouts(entity: REGame_Entity, result: CommandResultCallback): void {
         const m1 = () => {
             Log.doCommand("RemoveFromWhereabouts");
@@ -313,6 +319,7 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "RemoveFromWhereabouts", func: m1 });
         Log.postCommand("RemoveFromWhereabouts");
     }
+    */
 
 
 

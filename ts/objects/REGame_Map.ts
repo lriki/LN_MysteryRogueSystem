@@ -153,10 +153,10 @@ export class REGame_Map
      * @param y 
      * 既に現在の Floor 上に登場済みの Entity に対してこのメソッドを呼び出すと失敗する。
      */
-    appearEntity(entity: REGame_Entity, x: number, y: number): void {
+    appearEntity(entity: REGame_Entity, x: number, y: number, layer?: BlockLayerKind): void {
         assert(entity.floorId == 0);
         entity.floorId= this.floorId();
-        this.locateEntity(entity, x, y);
+        this.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
     }
 

@@ -11,13 +11,10 @@ export class VAttackSequel extends REVisualSequel {
         const offset = Helpers.dirToTileOffset(entity.dir);
 
         visual.setPosition(Vector2.add(context.startPosition(), Vector2.mul(offset,0.4)));
-
-        console.log("!!!!!!VAttackSequel: ", context.frameCount(), visual.position());
         
         if (context.frameCount() > 10) {
             visual.resetPosition();
             context.end();
-            console.log("!!!!!!VAttackSequel end: ", visual.position());
         }
     }
 }

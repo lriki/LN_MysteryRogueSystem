@@ -3,6 +3,9 @@
 export interface BasicSequels {
     /** 移動 */
     MoveSequel: number;
+
+    /** 吹き飛ばされ移動 */
+    blowMoveSequel: number;
     
     attack: number;
 

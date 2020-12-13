@@ -60,6 +60,8 @@
 
 import { assert } from "ts/Common";
 import { EntityId, eqaulsEntityId } from "ts/system/EntityId"
+import { REResponse } from "ts/system/RECommand";
+import { RECommandContext } from "ts/system/RECommandContext";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LBehavior } from "./LBehavior"
@@ -72,16 +74,36 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     public addEntity(entity: REGame_Entity) {
+        assert(!entity.parentEntity());
+
         const id = entity.id();
         assert(this._entities.find(x => eqaulsEntityId(x, id)) === undefined);
         this._entities.push(id);
+        
+        entity.setParentEntity(this.ownerEntity());
     }
 
     public removeEntity(entity: REGame_Entity) {
+        assert(entity.parentEntity() == this.ownerEntity());
+
         const id = entity.id();
         const index = this._entities.findIndex(x => eqaulsEntityId(x, id));
         assert(index >= 0);
         this._entities.splice(index, 1);
+        
+        entity.setParentEntity(undefined);
+    }
+
+    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse {
+        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
+        if (index >= 0) {
+            assert(entity.parentEntity() == this.ownerEntity());
+            entity.setParentEntity(undefined);
+            
+            this._entities.splice(index, 1);
+        }
+
+        return REResponse.Pass;
     }
 }
 

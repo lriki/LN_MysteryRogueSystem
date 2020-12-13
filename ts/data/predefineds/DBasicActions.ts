@@ -10,6 +10,8 @@ export interface DBasicActions
     /** 隣接タイルへの移動 */
     MoveToAdjacentActionId: number;
 
+    //moveToAdjacentAsProjectile: number;
+
 
     /**
      * 拾おうとしている・拾われようとしている・拾う・拾われた

@@ -103,6 +103,7 @@ export class REDataManager
         DBasics.actions = {
             DirectionChangeActionId: REData.addAction("DirectionChange"),
             MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
+            //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
             PickActionId: REData.addAction("Pick"),
             PutActionId: REData.addAction("置く"),//"Put"),
             ExchangeActionId: REData.addAction("交換"),//"Exchange"),
@@ -149,6 +150,7 @@ export class REDataManager
         // Sequels
         RESystem.sequels = {
             MoveSequel: REData.addSequel("Move"),
+            blowMoveSequel: REData.addSequel("BlowMove"),
             attack: REData.addSequel("attack"),
             CollapseSequel: REData.addSequel("Collapse"),
         };

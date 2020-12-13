@@ -41,23 +41,31 @@ export enum DecisionPhase {
     AIMajor,
 }
 
+export interface CommandArgs {
+    self: REGame_Entity,
+    sender: REGame_Entity,
+    args: any,
+};
+
 export const onPrePickUpReaction = Symbol("onPicking");
 export const onPrePutReaction = Symbol("onPrePutReaction");
+export const onPreThrowReaction = Symbol("onPreThrowReaction");
 export const onThrowReaction = Symbol("onThrowReaction");
+export const onMoveAsProjectile = Symbol("onMoveAsProjectile");
 
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {
     dataId: number = 0;
     _ownerEntityId: EntityId = { index: 0, key: 0 };
     
-    entity(): REGame_Entity {
+    ownerEntity(): REGame_Entity {
         assert(this._ownerEntityId.index > 0);
         return REGame.world.entity(this._ownerEntityId);
     }
 
     onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse { return REResponse.Pass; }
 
-    [onPrePickUpReaction](entity: REGame_Entity, context: RECommandContext): REResponse {
+    [onPrePickUpReaction](args: CommandArgs, context: RECommandContext): REResponse {
         return REResponse.Pass;
     }
 
