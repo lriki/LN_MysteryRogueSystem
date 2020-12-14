@@ -10,7 +10,7 @@ export interface BasicEntityKinds {
     ArrowKindId: DEntityKindId;             // 矢
     BraceletKindId: DEntityKindId;          // 腕輪
     FoodKindId: DEntityKindId;              // 食料
-    HerbKindId: DEntityKindId;              // 草
+    grass: DEntityKindId;              // 草
     ScrollKindId: DEntityKindId;            // 巻物
     WandKindId: DEntityKindId;              // 杖
     PotKindId: DEntityKindId;               // 壺

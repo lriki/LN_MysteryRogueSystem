@@ -16,6 +16,17 @@ export interface EntityProperties {
     //       - アイテム擬態モンスターは正体を現しているかによってレイヤーが変わる。
     //       - 土偶は落とすとアイテム、立てるとUnitのようにふるまう
     homeLayer: number;
+
+    /**
+     * Entity が Item であるときに返す ItemId.
+     * 
+     * プロパティにするべきか悩み中ではあるけど、少なくとも識別システムを運用するうえでは、
+     * Entity から何らかのひとつの ItemId を返してもらう必要がある。
+     * アイテム擬態モンスターの Entity も itemId を返すようになる。
+     * 
+     * デフォルトは 0 で、アイテムではないことを示す。
+     */
+    itemId: number;
 }
 
 

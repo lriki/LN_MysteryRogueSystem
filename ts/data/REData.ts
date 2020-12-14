@@ -414,6 +414,7 @@ export class REData
         this.items.push({
             id: newId,
             name: name,
+            iconIndex: 0,
             effect: {
                 critical: false,
                 parameterEffects: [],

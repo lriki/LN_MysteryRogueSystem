@@ -88,8 +88,9 @@ export class VItemListWindow extends Window_Selectable {
             const itemWidth = Math.max(0, width - textMargin);
             this.resetTextColor();
             //this.drawIcon(item.iconIndex, x, iconY);
-            this.drawIcon(176, x, iconY);
-            this.drawText("おにぎり", x + textMargin, y, itemWidth, "left");
+            //this.drawIcon(176, x, iconY);
+            //this.drawText("おにぎり", x + textMargin, y, itemWidth, "left");
+            this.drawTextEx(REGame.identifyer.makeDisplayText(item), x, y, itemWidth);
         }
     }
 

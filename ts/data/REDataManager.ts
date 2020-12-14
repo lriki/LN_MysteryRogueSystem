@@ -71,7 +71,7 @@ export class REDataManager
             //RE_Data.addEntityKind("弾"),
             BraceletKindId: REData.addEntityKind("腕輪", "Bracelet"),
             FoodKindId: REData.addEntityKind("食料", "Food"),
-            HerbKindId: REData.addEntityKind("草", "Herb"),
+            grass: REData.addEntityKind("草", "Grass"),
             ScrollKindId: REData.addEntityKind("巻物", "Scroll"),
             WandKindId: REData.addEntityKind("杖", "Wand"),
             PotKindId: REData.addEntityKind("壺", "Pot"),
@@ -226,6 +226,7 @@ export class REDataManager
             if (x) {
                 const id = REData.addItem(x.name ?? "null");
                 const item = REData.items[id];
+                item.iconIndex = x.iconIndex ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
                 }

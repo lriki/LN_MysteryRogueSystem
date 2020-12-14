@@ -11,6 +11,7 @@ import { REGame_System } from "../objects/REGame_System";
 import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
+import { LIdentifyer } from "./LIdentifyer";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -32,6 +33,7 @@ export class REGame
     static recorder: RECommandRecorder;
     static messageHistory: LMessageHistory;
     static message: LMessage;
+    static identifyer: LIdentifyer;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;

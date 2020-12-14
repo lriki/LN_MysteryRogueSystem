@@ -41,11 +41,13 @@ export interface BasicStates {
 export class RESystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
-        { id: 1, defaultValue: BlockLayerKind.Ground }
+        { id: 1, defaultValue: BlockLayerKind.Ground },  // homeLayer
+        { id: 2, defaultValue: 0 },  // itemId
     ];
 
     static properties: EntityProperties = {
         homeLayer: 1,
+        itemId: 2,
     }
 
     // Database

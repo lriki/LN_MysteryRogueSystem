@@ -102,8 +102,7 @@ export class REUnitBehavior extends LBehavior {
                         (responce: REResponse, itemEntity: REGame_Entity, context: RECommandContext) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
-
-                            context.postMessage(tr("{0} は {1} をひろった", "LRIKI", "\\I[256]\\C[3]おにぎり\\C[0]"));
+                            context.postMessage(tr("{0} は {1} をひろった", "LRIKI", REGame.identifyer.makeDisplayText(itemEntity)));
                         });
     
                 }
@@ -126,7 +125,7 @@ export class REUnitBehavior extends LBehavior {
                         inventory.removeEntity(reactor);
                         REGame.map.appearEntity(reactor, actor.x, actor.y);
 
-                        context.postMessage(tr("{0} を置いた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
+                        context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
                     });
             }
             else {
@@ -157,7 +156,7 @@ export class REUnitBehavior extends LBehavior {
                             itemEntity, actor, undefined, onThrowReaction,
                             (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
                                 if (responce == REResponse.Pass) {
-                                    context.postMessage(tr("{0} を投げた。", "\\I[256]\\C[3]おにぎり\\C[0]"));
+                                    context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                                 }
                             });
 

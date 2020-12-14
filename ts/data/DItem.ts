@@ -9,6 +9,8 @@ export interface DItem {
     /** Name */
     name: string;
 
+    iconIndex: number;
+
     effect: DEffect;
 }
 

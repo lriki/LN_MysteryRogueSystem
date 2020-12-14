@@ -11,6 +11,7 @@ import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
+import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -46,6 +47,7 @@ export class REEntityFactory {
     static newItem(itemId: number): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
+        e.addBasicBehavior(new LItemBehavior(itemId));
         return e;
     }
 

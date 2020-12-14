@@ -16,6 +16,7 @@ import { Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
 import { DBasics } from "ts/data/DBasics";
+import { LIdentifyer } from "ts/objects/LIdentifyer";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -45,6 +46,7 @@ export class REGameManager
         REGame.recorder = new RECommandRecorder();
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
+        REGame.identifyer = new LIdentifyer();
 
         // Create unique units
         REData.actors.forEach(x => {

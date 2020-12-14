@@ -6,7 +6,7 @@ import { REGame } from "./objects/REGame";
 import { TileKind } from "./objects/REGame_Block";
 import { REGame_Entity } from "./objects/REGame_Entity";
 import { RESequelSet } from "./objects/REGame_Sequel";
-import { RMMZEventEntityMetadata } from "./rmmz/RMMZHelper";
+import { RMMZEventEntityMetadata, RMMZHelper } from "./rmmz/RMMZHelper";
 import { REDialogContext } from "./system/REDialog";
 import { REEntityFactory } from "./system/REEntityFactory";
 import { REIntegration } from "./system/REIntegration";
@@ -38,14 +38,12 @@ export class RMMZIntegration extends REIntegration {
         // 固定マップ上のイベントを Entity として出現させる
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityMetadata) {
-                if (e._entityMetadata.entity) {
-                    const entity = this.newEntity(e._entityMetadata);
-                    entity.prefabKey = { kind: REData.getEntityKindsId(e._entityMetadata.entity), id: e._entityMetadata.id ?? 0 };
-                    entity.rmmzEventId = e.eventId();
-                    entity.inhabitsCurrentFloor = true;
-                    REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
-                    REGame.map.markAdhocEntity(entity);
-                }
+                const entity = this.newEntity(e._entityMetadata);
+                entity.prefabKey = { kind: REData.getEntityKindsId(e._entityMetadata.prefabKind), id: e._entityMetadata.prefabIndex };
+                entity.rmmzEventId = e.eventId();
+                entity.inhabitsCurrentFloor = true;
+                REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
+                REGame.map.markAdhocEntity(entity);
             }
         });
     }
@@ -87,8 +85,6 @@ export class RMMZIntegration extends REIntegration {
         const databaseMap = REDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
-        
-        console.log("onEntityEnteredMap", entity.prefabKey);
 
         if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
             if (entity.inhabitsCurrentFloor) {
@@ -97,18 +93,12 @@ export class RMMZIntegration extends REIntegration {
             }
             else {
                 // Prefab 検索
-                const prefabKey = `${REData.entityKinds[entity.prefabKey.kind].prefabKind}:${entity.prefabKey.id}`;
-                const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabKey : false);
-                if (index >= 0) {
-                    //  entity に対応する動的イベントを新たに生成する
-                    const eventData = databaseMap.events[index];
-                    const event = $gameMap.spawnREEvent(eventData);
-                    entity.rmmzEventId = event.eventId();
-                    console.log("spawn", event);
-                }
-                else {
-                    throw new Error(`${prefabKey} not found in REDatabase map.`);
-                }
+                const prefabKey = this.makePrefavNameFromKindId(entity.prefabKey.kind, entity.prefabKey.id);
+                const eventData = this.getPrefabEventData(prefabKey);
+
+                //  entity に対応する動的イベントを新たに生成する
+                const event = $gameMap.spawnREEvent(eventData);
+                entity.rmmzEventId = event.eventId();
             }
         }
         else {
@@ -127,16 +117,44 @@ export class RMMZIntegration extends REIntegration {
         entity.rmmzEventId = 0;
     }
 
+    private makePrefavNameFromKindId(kindId: number, index: number): string {
+        return `${REData.entityKinds[kindId].prefabKind}:${index}`;
+    }
+    
+    private makePrefavNameFromKindName(kind: string, index: number): string {
+        return `${kind}:${index}`;
+    }
+
+    private getPrefabEventData(prefabName: string): IDataMapEvent {
+        const databaseMap = REDataManager.databaseMap();
+        assert(databaseMap);
+        assert(databaseMap.events);
+
+        const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabName : false);
+        if (index >= 0) {
+            return databaseMap.events[index];
+        }
+        else {
+            throw new Error(`${prefabName} not found in REDatabase map.`);
+        }
+    }
+
     private newEntity(data: RMMZEventEntityMetadata): REGame_Entity {
-        switch (data.entity) {
+        const prefabEventData = this.getPrefabEventData(this.makePrefavNameFromKindName(data.prefabKind, data.prefabIndex));
+        console.log(prefabEventData);
+        const prefabData = RMMZHelper.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
+        assert(prefabData);
+
+        switch (data.prefabKind) {
             case "ExitPoint":
                 return REEntityFactory.newExitPoint();
             case "Monster":
-                return REEntityFactory.newMonster(data.id ?? 0);
+                return REEntityFactory.newMonster(prefabData.enemyId ?? 0);
+            case "Grass":
             case "Food":
-                return REEntityFactory.newItem(data.id ?? 0);
+                return REEntityFactory.newItem(prefabData.itemId ?? 0);
             default:
-                throw new Error("Invalid entity name: " + data.entity);
+                throw new Error("Invalid entity name: " + data.prefabKind);
         }
     }
 }

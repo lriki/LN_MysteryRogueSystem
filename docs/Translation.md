@@ -8,6 +8,8 @@
 | 水路の角 | Corner of water terrain |
 | 走る(Bダッシュ) | Dashing |
 | 回復 | Heal |
+| 識別(する) | Identifiy |
+| 未識別 | Unidentified |
 
 エンティティ
 ----------
@@ -40,6 +42,8 @@
 | 飲む | Use |
 | 振る | Wave |
 | 読む | Read |
+| (壺を)のぞく | Peek |
+| (壺に)入れる | Insert |
 
 ### 倉庫
 |   |   |
@@ -126,6 +130,13 @@
 | 目薬草 | Perception Grass |
 | 睡眠草 | Sleepy Grass |
 | ドラゴン草 | Dragon Grass |
+| 毒草 | Poison Grass |
+| 胃縮小の種 | Stomach Shrinker |
+| 胃拡張の種 | Stomach Expander |
+| 毒消し草 | Antidote Grass |
+| パワーアップ草 | Power Up Grass |
+
+
 
 ### 杖
 |   |   |
@@ -141,6 +152,12 @@
 | 真空切りの巻物 | Vacuum Slash Scroll |
 | バクスイの巻物 | Slumber Scroll |
 | 天の恵みの巻物 | Fate Scroll |
+| 識別の巻物 | Identify Scroll |
+
+### 壺
+|   |   |
+|---|---|
+| 識別の壺 | Identify Pot |
 
 ワナ
 ----------
