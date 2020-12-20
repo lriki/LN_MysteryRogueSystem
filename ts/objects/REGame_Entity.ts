@@ -143,7 +143,6 @@ export class REGame_Entity
 
     parentEntity(): REGame_Entity | undefined {
         if (this._parentEntityId.index > 0) {
-            console.log("parentEntity?", this._parentEntityId);
             return REGame.world.entity(this._parentEntityId);
         }
         else {
@@ -163,7 +162,7 @@ export class REGame_Entity
     }
 
     addBasicBehavior(value: LBehavior) {
-        this._basicBehaviors.unshift(value);
+        this._basicBehaviors.push(value);
         value._ownerEntityId = this._id;
     }
 
@@ -321,7 +320,7 @@ export class REGame_Entity
     queryActions(): ActionId[] {
         let result: ActionId[] = [];
         
-        for (let i = 0; i < this._basicBehaviors.length; i++) {
+        for (let i = 0; i < this._basicBehaviors.length; i++) { // 前方から
             result = this._basicBehaviors[i].onQueryActions(result);
         }
         return result;

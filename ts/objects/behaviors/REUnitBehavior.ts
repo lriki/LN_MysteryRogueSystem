@@ -17,6 +17,10 @@ import { LCommonBehavior } from "./LCommonBehavior";
  * 
  */
 export class REUnitBehavior extends LBehavior {
+
+    // 歩行移動したため、足元にある Entity に対して処理が必要かどうか。
+    // アイテムを拾おうとしたり、罠の起動判定を行ったりする。
+    private _requiredFeetProcess: boolean = false;
     
     onQueryProperty(propertyId: number): any {
         return BlockLayerKind.Unit;
@@ -55,6 +59,7 @@ export class REUnitBehavior extends LBehavior {
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 actor.immediatelyAfterAdjacentMoving = true;
+                this._requiredFeetProcess = true;
                 
                 return REResponse.Consumed;
             }

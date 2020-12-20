@@ -58,8 +58,8 @@ export class LIdentifyer {
         const itemId = entity.queryProperty(RESystem.properties.itemId) as number;
         if (itemId > 0) {
             const item = REData.items[itemId];
-            return new LEntityDescription(item.iconIndex, "白い草", DescriptionHighlightLevel.UserIdentified);
-            //return new LEntityDescription(item.iconIndex, item.name, DescriptionHighlightLevel.Identified);
+            //return new LEntityDescription(item.iconIndex, "白い草", DescriptionHighlightLevel.UserIdentified);
+            return new LEntityDescription(item.iconIndex, item.name, DescriptionHighlightLevel.Identified);
         }
         else {
             throw new Error("NotImplemented");

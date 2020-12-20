@@ -153,6 +153,8 @@ export class RMMZIntegration extends REIntegration {
             case "Grass":
             case "Food":
                 return REEntityFactory.newItem(prefabData.itemId ?? 0);
+            case "Trap":
+                return REEntityFactory.newTrap(prefabData.itemId ?? 0);
             default:
                 throw new Error("Invalid entity name: " + data.prefabKind);
         }

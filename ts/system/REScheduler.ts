@@ -8,6 +8,7 @@ import { DecisionPhase } from "../objects/behaviors/LBehavior";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { REGame_Sequel, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
+import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_ManualAction } from "./RESchedulerPhase";
 
 
 export interface UnitInfo
@@ -38,18 +39,19 @@ enum SchedulerPhase
      * マニュアル入力
      * Dialog が close すると、次の Phase に進む。
      */
-    ManualAction,
+    //ManualAction,
 
     /**
      * AI 行動フェーズ 1
      * モンスターの移動・攻撃対象決定
      */
-    AIMinorAction,
+    //AIMinorAction,
 
     /**
      * AI 行動フェーズ 2
      */
-    AIMajorAction,
+    //AIMajorAction,
+    Processing,
 
     RunEnding,
 
@@ -74,6 +76,9 @@ export class REScheduler
     private _currentStep: number = 0;
     private _sequelSet: RESequelSet = new RESequelSet();
 
+    private _phases: RESchedulerPhase[];
+    private _currentPhaseIndex: number = 0;
+
     _actionConsumed: boolean = false;
     
     /**  */
@@ -82,6 +87,12 @@ export class REScheduler
     constructor() {
         this._commandContext = new RECommandContext(this);
         this._dialogContext = new REDialogContext(this, this._commandContext);
+
+        this._phases = [
+            new RESchedulerPhase_ManualAction(),
+            new RESchedulerPhase_AIMinorAction(),
+            new RESchedulerPhase_AIMajorAction(),
+        ];
     }
 
     commandContext(): RECommandContext {
@@ -207,14 +218,8 @@ export class REScheduler
             case SchedulerPhase.RunStarting:
                 this.update_RunStarting();
                 break;
-            case SchedulerPhase.ManualAction:
-                this.update_ManualAction();
-                break;
-            case SchedulerPhase.AIMinorAction:
-                this.update_AIMinorAction();
-                break;
-            case SchedulerPhase.AIMajorAction:
-                this.update_AIMajorAction();
+            case SchedulerPhase.Processing:
+                this.update_ProcessPhase();
                 break;
             case SchedulerPhase.RunEnding:
                 this.update_RunEnding();
@@ -268,7 +273,8 @@ export class REScheduler
         Log.d("s update_RunStarting");
 
         this._currentStep = -1;
-        this._phase = SchedulerPhase.ManualAction;
+        this._phase = SchedulerPhase.Processing;
+        this._currentPhaseIndex = 0;
 
         this._runs.forEach(run => {
             run.steps.forEach(step => {
@@ -342,23 +348,25 @@ export class REScheduler
         }
     }
 
-    private update_ManualAction(): void {
+    private update_ProcessPhase(): void {
         // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
         this.prepareActionPhase();
 
+        const phase = this._phases[this._currentPhaseIndex];
         const run = this._runs[this._currentRun];
         while (true) {
             if (this._currentStep >= run.steps.length) {
                 this._currentStep = -1;
-                this._phase = SchedulerPhase.AIMinorAction;
+                this._currentPhaseIndex++;
+                if (this._currentPhaseIndex >= this._phases.length) {
+                    this._phase = SchedulerPhase.RunEnding;
+                }
                 return;
             }
             
             const step = run.steps[this._currentStep];
             const unit = step.unit;
-            if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-                unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.Manual);
-                //this._commandContext._submit(); // swap
+            if (phase.onProcess(this, unit)) {
                 return;
             }
             else {
@@ -367,59 +375,8 @@ export class REScheduler
             }
         }
     }
+
     
-    private update_AIMinorAction(): void {
-        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
-        this.prepareActionPhase();
-
-        const run = this._runs[this._currentRun];
-        while (true) {
-            if (this._currentStep >= run.steps.length) {
-                this._currentStep = -1;
-                this._phase = SchedulerPhase.AIMajorAction;
-                return;
-            }
-            
-            const step = run.steps[this._currentStep];
-            const unit = step.unit;
-            if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
-                unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
-                unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.AIMinor);
-                //this._commandContext._submit(); // swap
-                return;
-            }
-            else {
-                // このフェーズでは実行できない step だった。次の step へ。
-                this._currentStep++;
-            }
-        }
-    }
-    
-    private update_AIMajorAction(): void {
-        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
-        this.prepareActionPhase();
-
-        const run = this._runs[this._currentRun];
-        while (true) {
-            if (this._currentStep >= run.steps.length) {
-                this._currentStep = -1;
-                this._phase = SchedulerPhase.RunEnding;
-                return;
-            }
-            
-            const step = run.steps[this._currentStep];
-            const unit = step.unit;
-            if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-                unit.entity._callDecisionPhase(this._commandContext, DecisionPhase.AIMajor);
-                //this._commandContext._submit(); // swap
-                return;
-            }
-            else {
-                // このフェーズでは実行できない step だった。次の step へ。
-                this._currentStep++;
-            }
-        }
-    }
     
     private update_RunEnding(): void {
         this._currentRun++;

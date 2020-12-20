@@ -12,6 +12,7 @@ import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
+import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -48,6 +49,14 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new LItemBehavior(itemId));
+        return e;
+    }
+
+    static newTrap(itemId: number): REGame_Entity {
+        const e = REGame.world.spawnEntity();
+        e.addBasicBehavior(new LCommonBehavior());
+        e.addBasicBehavior(new LItemBehavior(itemId));
+        e.addBasicBehavior(new LTrapBehavior());
         return e;
     }
 
