@@ -52,6 +52,8 @@ export const onPrePutReaction = Symbol("onPrePutReaction");
 export const onPreThrowReaction = Symbol("onPreThrowReaction");
 export const onThrowReaction = Symbol("onThrowReaction");
 export const onMoveAsProjectile = Symbol("onMoveAsProjectile");
+export const onWalkedOnTopAction = Symbol("onWalkedOnTopAction");
+export const onWalkedOnTopReaction = Symbol("onWalkedOnTopReaction");
 
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {

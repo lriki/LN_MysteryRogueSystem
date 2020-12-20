@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { LBehavior, onPrePickUpReaction, onPreThrowReaction, onThrowReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onPrePickUpReaction, onPreThrowReaction, onThrowReaction, onWalkedOnTopAction } from "./LBehavior";
 import { ActionId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
@@ -21,6 +21,10 @@ export class REUnitBehavior extends LBehavior {
     // 歩行移動したため、足元にある Entity に対して処理が必要かどうか。
     // アイテムを拾おうとしたり、罠の起動判定を行ったりする。
     private _requiredFeetProcess: boolean = false;
+
+    public requiredFeetProcess(): boolean {
+        return this._requiredFeetProcess;
+    }
     
     onQueryProperty(propertyId: number): any {
         return BlockLayerKind.Unit;
@@ -190,8 +194,6 @@ export class REUnitBehavior extends LBehavior {
     
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         if (cmd.action().id == DBasics.actions.AttackActionId) {
-            console.log("onReaction AttackAction");
-
 
             cmd.effectContext()?.apply(entity);
 
@@ -199,6 +201,11 @@ export class REUnitBehavior extends LBehavior {
             return REResponse.Consumed;
         }
 
+        return REResponse.Pass;
+    }
+    
+    [onWalkedOnTopAction](args: CommandArgs, context: RECommandContext): REResponse {
+        console.log("onWalkedOnTopAction");
         return REResponse.Pass;
     }
 }

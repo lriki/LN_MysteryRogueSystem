@@ -4,17 +4,19 @@ import { REData } from "../data/REData";
 import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "../objects/REGame";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
-import { DecisionPhase } from "../objects/behaviors/LBehavior";
+import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { REGame_Sequel, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
-import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_ManualAction } from "./RESchedulerPhase";
+import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction } from "./RESchedulerPhase";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 
 
 export interface UnitInfo
 {
     entity: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
     attr: LUnitAttribute;     // cache for avoiding repeated find.
+    behavior: REUnitBehavior;
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
 
@@ -91,6 +93,7 @@ export class REScheduler
         this._phases = [
             new RESchedulerPhase_ManualAction(),
             new RESchedulerPhase_AIMinorAction(),
+            new RESchedulerPhase_CheckFeetMoved(),
             new RESchedulerPhase_AIMajorAction(),
         ];
     }
@@ -275,6 +278,7 @@ export class REScheduler
         this._currentStep = -1;
         this._phase = SchedulerPhase.Processing;
         this._currentPhaseIndex = 0;
+        this._phases[this._currentPhaseIndex].onStart(this);
 
         this._runs.forEach(run => {
             run.steps.forEach(step => {
@@ -361,6 +365,9 @@ export class REScheduler
                 if (this._currentPhaseIndex >= this._phases.length) {
                     this._phase = SchedulerPhase.RunEnding;
                 }
+                else {
+                    this._phases[this._currentPhaseIndex].onStart(this);
+                }
                 return;
             }
             
@@ -415,7 +422,8 @@ export class REScheduler
         {
             REGame.map.entities().forEach(entity => {
                 const attr = entity.findAttribute(LUnitAttribute);
-                if (attr) {
+                const behavior = entity.findBehavior(REUnitBehavior);
+                if (attr && behavior) {
                     assert(attr.factionId() > 0);
                     assert(attr.speedLevel() != 0);
 
@@ -429,6 +437,7 @@ export class REScheduler
                     this._units.push({
                         entity: entity,
                         attr: attr, 
+                        behavior: behavior,
                         actionCount: actionCount
                     });
 
