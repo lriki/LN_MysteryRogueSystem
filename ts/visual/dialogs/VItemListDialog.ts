@@ -74,7 +74,6 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
             this._commandWindow.openness = 255;
             this._commandWindow.activate();
         }
-        console.log("onItemOk", this);
     }
         
     onItemCancel(): void {

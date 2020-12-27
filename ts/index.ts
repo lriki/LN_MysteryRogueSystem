@@ -18,3 +18,5 @@ import './Scene_Boot';
 import './Scene_Map';
 import './Sprite_Character'
 import './Spriteset_Map'
+import './rmmz/PluginCommands'
+
