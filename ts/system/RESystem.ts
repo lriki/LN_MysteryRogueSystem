@@ -13,6 +13,7 @@ import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
 import { BasicItems } from "ts/data/predefineds/DBasicItems";
 import { BasicAttributes, BasicBehaviors } from "ts/data/predefineds/DBasicBehaviors";
 import { EntityProperties, EntityProperty } from "ts/data/predefineds/DBasicProperties";
+import { SSequelContext } from "./SSequelContext";
 
 export interface BasicStates {
     dead: DStateId,         // 戦闘不能
@@ -49,6 +50,9 @@ export class RESystem {
         homeLayer: 1,
         itemId: 2,
     }
+
+    // System
+    static sequelContext: SSequelContext;
 
     // Database
     static parameters: BasicParameters;

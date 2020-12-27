@@ -10,6 +10,7 @@ import { REGame_Sequel, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
 import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction } from "./RESchedulerPhase";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { SSequelContext } from "./SSequelContext";
 
 
 export interface UnitInfo
@@ -76,17 +77,14 @@ export class REScheduler
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
     private _currentStep: number = 0;
-    private _sequelSet: RESequelSet = new RESequelSet();
 
     private _phases: RESchedulerPhase[];
     private _currentPhaseIndex: number = 0;
 
     
-    /**  */
-    public signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
 
     constructor() {
-        this._commandContext = new RECommandContext(this);
+        this._commandContext = new RECommandContext(RESystem.sequelContext, this);
         this._dialogContext = new REDialogContext(this, this._commandContext);
 
         this._phases = [
@@ -108,6 +106,7 @@ export class REScheduler
     // マップ切り替え時など。
     // DialogContext はクリアしない。RMMZ イベント実行のための Dialog が動いている可能性があるため。
     clear() {
+        RESystem.sequelContext.clear();
         this._commandContext.clear();
         this._phase = SchedulerPhase.PartStarting;
         this._actorEntities = [];
@@ -115,7 +114,6 @@ export class REScheduler
         this._runs = [];
         this._currentRun = 0;
         this._currentStep = 0;
-        this._sequelSet = new RESequelSet();
         Log.d("ResetScheduler");
     }
 
@@ -182,11 +180,7 @@ export class REScheduler
                     // 実行中コマンドリストの実行が完了した。
                 }
 
-                // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
-                // もし歩行など並列のみであればあとでまとめて実行したので不要。
-                if (!this._sequelSet.isAllParallel()) {
-                    this.flushSequelSet();
-                }
+                RESystem.sequelContext.attemptFlush();
             }
             else {
                 // 実行予約が溜まっているなら submit して実行開始する。
@@ -288,13 +282,6 @@ export class REScheduler
     }
 
     
-    consumeActionToken(entity: REGame_Entity): void {
-        const attr = entity.findAttribute(LUnitAttribute);
-        assert(attr);
-        attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
-        //this.nextActionUnit();
-        entity._actionConsumed = true;
-    }
 
     /*
     nextActionUnit() {
@@ -401,7 +388,7 @@ export class REScheduler
     private update_PartEnding(): void {
 
         // ターン終了時に Sequel が残っていればすべて掃き出す
-        this.flushSequelSet();
+        RESystem.sequelContext.flushSequelSet();
 
         this._phase = SchedulerPhase.PartStarting;
     }
@@ -573,23 +560,6 @@ export class REScheduler
 
     _getDialogContext() {
         return this._dialogContext;
-    }
-
-    addSequel(sequel: REGame_Sequel) {
-        this._sequelSet.addSequel(sequel);
-    }
-
-    flushSequelSet() {
-        Log.d("[FlushSequel]");
-
-        if (!this._sequelSet.isEmpty()) {
-            if (this.signalFlushSequelSet) {
-                this.signalFlushSequelSet(this._sequelSet);
-            }
-            REGame.integration.onFlushSequelSet(this._sequelSet);
-
-            this._sequelSet = new RESequelSet();
-        }
     }
 
 }

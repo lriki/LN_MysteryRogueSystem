@@ -11,6 +11,7 @@ import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
+import { SSequelContext } from "./SSequelContext";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -25,6 +26,7 @@ export type CommandResultCallback = (response: REResponse, reactor: REGame_Entit
  */
 export class RECommandContext
 {
+    private _sequelContext: SSequelContext;
     private _owner: REScheduler;
     private _visualAnimationWaiting: boolean = false;   // 不要かも
     private _recodingCommandList: RECCMessage[] = [];
@@ -34,7 +36,8 @@ export class RECommandContext
     private _lastReactorResponce: REResponse = REResponse.Pass;
     private _commandChainRunning: boolean = false;
 
-    constructor(owner: REScheduler) {
+    constructor(sequelContext: SSequelContext, owner: REScheduler) {
+        this._sequelContext = sequelContext;
         this._owner = owner;
     }
 
@@ -230,7 +233,7 @@ export class RECommandContext
         assert(sequelId > 0);
         const m1 = () => {
             Log.doCommand("Sequel");
-            this._owner.addSequel(new REGame_Sequel(entity, sequelId));
+            this._sequelContext.addSequel(new REGame_Sequel(entity, sequelId));
             this._visualAnimationWaiting = true;
             return REResponse.Consumed;
         };

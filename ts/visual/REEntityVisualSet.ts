@@ -22,7 +22,7 @@ export class REEntityVisualSet {
     constructor() {
         this._visualEntities = [];
         this._sequelManager = new REVisualSequelManager(this);
-        REGame.scheduler.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
+        REGame.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
         // init 時点の map 上にいる Entity から Visual を作る
         REGame.map.entities().forEach(x => {

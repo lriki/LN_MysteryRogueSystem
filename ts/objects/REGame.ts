@@ -12,6 +12,7 @@ import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
+import { RESequelSet } from "./REGame_Sequel";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -38,6 +39,7 @@ export class REGame
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;
 
-
+    /**  */
+    static signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
 }
 

@@ -2,6 +2,7 @@ import { DecisionPhase, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/ob
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { REScheduler, UnitInfo } from "./REScheduler";
+import { RESystem } from "./RESystem";
 
 
 
@@ -48,7 +49,7 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
     
     onStart(scheduler: REScheduler): void {
-        scheduler.flushSequelSet();
+        RESystem.sequelContext.flushSequelSet();
     }
     
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {

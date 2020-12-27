@@ -57,8 +57,6 @@ export class REDialogContext
 
     closeDialog(consumeAction: boolean) {
         if (consumeAction && this._causeEntity) {
-            //this._owner.consumeActionToken(this._causeEntity);
-
             // RMMZイベント起動Dialog では、causeEntity が「階段Entity」等になることがある。
             // 行動順が回らない Entity の ActionToken を消費することはできないのでガードする。
             if (this._causeEntity.findAttribute(LUnitAttribute)) {
