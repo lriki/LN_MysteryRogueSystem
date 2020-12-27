@@ -18,6 +18,8 @@ import { LMessageHistory } from "ts/objects/LMessageHistory";
 import { DBasics } from "ts/data/DBasics";
 import { LIdentifyer } from "ts/objects/LIdentifyer";
 import { SSequelContext } from "./SSequelContext";
+import { RECommandContext } from "./RECommandContext";
+import { REDialogContext } from "./REDialog";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -38,6 +40,8 @@ export class REGameManager
     // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。
     static createGameObjects(): void {
         RESystem.sequelContext = new SSequelContext();
+        RESystem.commandContext = new RECommandContext(RESystem.sequelContext);
+        RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
         REGame.scheduler = new REScheduler();
         REGame.core = new REGame_Core();
         REGame.system = new REGame_System();

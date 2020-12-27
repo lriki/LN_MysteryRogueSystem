@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { ActionId } from "ts/data/REData";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { RESystem } from "ts/system/RESystem";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
 
@@ -42,10 +43,10 @@ export class VFeetDialog extends REDialogVisualWindowLayer {
     }
 
     private onAction(actionId: ActionId) {
-        const entity = this.dialogContext().causeEntity();
+        const entity = RESystem.dialogContext.causeEntity();
         assert(entity);
 
-        this.dialogContext().postAction(actionId, entity, this._targetEntity);
+        RESystem.dialogContext.postAction(actionId, entity, this._targetEntity);
         this.doneDialog(true);
     }
 }

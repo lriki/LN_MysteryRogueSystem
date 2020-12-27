@@ -49,7 +49,7 @@ test('basic', () => {
     // シミュレーション 1 回実行
     REGameManager.update();
     
-    const dialogContext = REGame.scheduler._getDialogContext();
+    const dialogContext = RESystem.dialogContext;
     
     // 方向転換してみる (ターン消費無し)
     {
@@ -262,7 +262,7 @@ test('TurnOrderTable', () => {
         expect(run2[5].iterationCount).toEqual(1);
     }
 
-    const dialogContext = REGame.scheduler._getDialogContext();
+    const dialogContext = RESystem.dialogContext;
     
     //--------------------
     // 移動量から実際に行動した数を判断する

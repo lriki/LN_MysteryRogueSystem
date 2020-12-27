@@ -67,10 +67,6 @@ enum SchedulerPhase
  */
 export class REScheduler
 {
-    private _commandContext: RECommandContext;
-    //rivate _dialogModel: REDialog | undefined;
-    private _dialogContext: REDialogContext;
-
     private _phase: SchedulerPhase = SchedulerPhase.PartStarting;
     private _actorEntities: REGame_Entity[] = [];   // Part 中に行動する全 Entity
     private _units: UnitInfo[] = [];
@@ -84,8 +80,6 @@ export class REScheduler
     
 
     constructor() {
-        this._commandContext = new RECommandContext(RESystem.sequelContext, this);
-        this._dialogContext = new REDialogContext(this, this._commandContext);
 
         this._phases = [
             new RESchedulerPhase_ManualAction(),
@@ -93,10 +87,6 @@ export class REScheduler
             new RESchedulerPhase_CheckFeetMoved(),
             new RESchedulerPhase_AIMajorAction(),
         ];
-    }
-
-    commandContext(): RECommandContext {
-        return this._commandContext;
     }
 
     actionScheduleTable(): RunInfo[] {
@@ -107,7 +97,7 @@ export class REScheduler
     // DialogContext はクリアしない。RMMZ イベント実行のための Dialog が動いている可能性があるため。
     clear() {
         RESystem.sequelContext.clear();
-        this._commandContext.clear();
+        RESystem.commandContext.clear();
         this._phase = SchedulerPhase.PartStarting;
         this._actorEntities = [];
         this._units = [];
@@ -134,34 +124,34 @@ export class REScheduler
             }
 
             /*
-            if (this._commandContext.visualAnimationWaiting()) {
+            if (RESystem.commandContext.visualAnimationWaiting()) {
                 if (RESystem.integration.onCheckVisualSequelRunning()) {
                     // Sequel 実行中
                     break;
                 }
                 else {
                     // Sequel 終了
-                    this._commandContext.clearVisualAnimationWaiting();
+                    RESystem.commandContext.clearVisualAnimationWaiting();
                 }
             }
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!this._commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
+            if (!RESystem.commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
                 break;
             }
 
             // Dialog の処理はイベント実行よりも優先する。
             // 行商人の処理など。
-            if (this._dialogContext._hasDialogModel()) {
-                this._dialogContext._update();
+            if (RESystem.dialogContext._hasDialogModel()) {
+                RESystem.dialogContext._update();
 
-                const entity = this._dialogContext.causeEntity();
+                const entity = RESystem.dialogContext.causeEntity();
                 if (entity) {
                     entity.immediatelyAfterAdjacentMoving = false;
                 }
 
-                if (this._dialogContext._hasDialogModel()) {
+                if (RESystem.dialogContext._hasDialogModel()) {
                     // Dialog 表示中は後続コマンドを実行しない
                     break;
                 }
@@ -172,10 +162,10 @@ export class REScheduler
                 }
             }
 
-            if (this._commandContext.isRunning()) {
-                this._commandContext._processCommand();
+            if (RESystem.commandContext.isRunning()) {
+                RESystem.commandContext._processCommand();
 
-                if (!this._commandContext.isRunning()) {
+                if (!RESystem.commandContext.isRunning()) {
                     // _processCommand() の後で isRunning が落ちていたら、
                     // 実行中コマンドリストの実行が完了した。
                 }
@@ -187,12 +177,12 @@ export class REScheduler
                 // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
                 //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
                 //   そもそもいつ呼び出すべきなのか分かりづらいので、submit の呼び出しは一元化する。
-                if (!this._commandContext.isRecordingListEmpty()) {
-                    this._commandContext._submit(); // swap
+                if (!RESystem.commandContext.isRecordingListEmpty()) {
+                    RESystem.commandContext._submit(); // swap
                 }
             }
 
-            if (this._commandContext.isRunning()) {
+            if (RESystem.commandContext.isRunning()) {
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
@@ -398,7 +388,7 @@ export class REScheduler
     // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
     private onTurnEnd(step: RunStepInfo): void {
         this._actorEntities.forEach(entity => {
-            entity._callBehaviorIterationHelper(behavior => behavior.onTurnEnd(this._commandContext));
+            entity._callBehaviorIterationHelper(behavior => behavior.onTurnEnd(RESystem.commandContext));
         });
     }
 
@@ -540,26 +530,4 @@ export class REScheduler
             }
         }
     }
-
-    _openDialogModel(causeEntity: REGame_Entity, value: REDialog) {
-        this._dialogContext.setCauseEntity(causeEntity);
-        this._dialogContext._setDialogModel(value);
-        REGame.integration.onDialogOpend(this._dialogContext);
-        //const visual = 
-        //this._dialogContext._visual = visual;
-    }
-
-    _closeDialogModel() {
-        this._dialogContext._setDialogModel(null);
-        //if (this._dialogContext._visual) {
-        //    this._dialogContext._visual.onClose();
-        //    this._dialogContext._visual = undefined;
-        //}
-        REGame.integration.onDialogClosed(this._dialogContext);
-    }
-
-    _getDialogContext() {
-        return this._dialogContext;
-    }
-
 }

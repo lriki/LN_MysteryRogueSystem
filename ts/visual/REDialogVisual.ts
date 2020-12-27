@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { RECommandContext } from "ts/system/RECommandContext";
+import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../system/REDialog";
 import { REVisual } from "./REVisual";
 
@@ -10,14 +11,6 @@ export class REDialogVisualWindowLayer {
     _destroying: boolean = false;
     _navigator: REDialogVisualNavigator | undefined;
     _windows: Window_Base[] = [];
-
-    protected commandContext(): RECommandContext {
-        return REGame.scheduler.commandContext();
-    }
-
-    protected dialogContext(): REDialogContext {
-        return REGame.scheduler._getDialogContext();
-    }
 
     //protected commandContext(): RECommandContext {
     //    return REGame.scheduler.commandContext();
@@ -82,7 +75,7 @@ export class REDialogVisualWindowLayer {
     protected doneDialog(consumeAction: boolean) {
         assert(this._navigator);
         this._navigator.clear();
-        return this.dialogContext().closeDialog(consumeAction);
+        return RESystem.dialogContext.closeDialog(consumeAction);
     }
 }
 

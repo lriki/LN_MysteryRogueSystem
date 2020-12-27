@@ -4,6 +4,7 @@ import { ActionId, REData } from "ts/data/REData";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REDialogContext } from "ts/system/REDialog";
+import { RESystem } from "ts/system/RESystem";
 import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
@@ -91,7 +92,7 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
     onAction(actionId: ActionId): void {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
-            this.dialogContext().postAction(actionId, this._actorEntity, itemEntity);
+            RESystem.dialogContext.postAction(actionId, this._actorEntity, itemEntity);
             this.doneDialog(true);
         }
     }

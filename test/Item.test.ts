@@ -37,7 +37,7 @@ test('PickAndPut', () => {
     REGameManager.update(); // Advance Simulation --------------------------------------------------
     
     // player を右へ移動
-    const dialogContext = REGame.scheduler._getDialogContext();
+    const dialogContext = RESystem.dialogContext;
     dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
     dialogContext.closeDialog(true);    // 行動確定
     

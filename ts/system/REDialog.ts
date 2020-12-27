@@ -10,14 +10,12 @@ import { RESystem } from "./RESystem";
 
 export class REDialogContext
 {
-    private _owner: REScheduler;
     private _commandContext: RECommandContext;
     private _causeEntity: REGame_Entity | undefined;
     private _dialogModel: REDialog | null;
     //_visual: REDialogVisual | undefined;
 
-    constructor(owner: REScheduler, commandContext: RECommandContext) {
-        this._owner = owner;
+    constructor(commandContext: RECommandContext) {
         this._commandContext = commandContext;
         this._dialogModel = null;
     }
@@ -73,7 +71,8 @@ export class REDialogContext
             }
         
         }
-        this._owner._closeDialogModel();
+        this._setDialogModel(null);
+        REGame.integration.onDialogClosed(this);
         this._commandContext._next();
     }
 

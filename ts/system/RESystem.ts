@@ -14,6 +14,8 @@ import { BasicItems } from "ts/data/predefineds/DBasicItems";
 import { BasicAttributes, BasicBehaviors } from "ts/data/predefineds/DBasicBehaviors";
 import { EntityProperties, EntityProperty } from "ts/data/predefineds/DBasicProperties";
 import { SSequelContext } from "./SSequelContext";
+import { RECommandContext } from "./RECommandContext";
+import { REDialogContext } from "./REDialog";
 
 export interface BasicStates {
     dead: DStateId,         // 戦闘不能
@@ -53,6 +55,8 @@ export class RESystem {
 
     // System
     static sequelContext: SSequelContext;
+    static commandContext: RECommandContext;
+    static dialogContext: REDialogContext;
 
     // Database
     static parameters: BasicParameters;

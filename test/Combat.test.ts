@@ -34,7 +34,7 @@ test('DamageAndGameover', () => {
     REGameManager.update();
     
     // player を左へ移動
-    const dialogContext = REGame.scheduler._getDialogContext();
+    const dialogContext = RESystem.dialogContext;
     dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 4 });
     dialogContext.closeDialog(true);
     

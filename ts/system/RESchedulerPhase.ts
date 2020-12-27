@@ -19,7 +19,7 @@ export abstract class RESchedulerPhase {
 export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            unit.entity._callDecisionPhase(scheduler.commandContext(), DecisionPhase.Manual);
+            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
             return true;
         }
         else {
@@ -35,7 +35,7 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
         
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
             unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
-            unit.entity._callDecisionPhase(scheduler.commandContext(), DecisionPhase.AIMinor);
+            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
             return true;
         }
         else {
@@ -59,7 +59,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
             const layer = block.layer(BlockLayerKind.Ground);
             const reactor = layer.firstEntity();
             if (reactor) {
-                const c = scheduler.commandContext();
+                const c = RESystem.commandContext;
                 c.post(actor, reactor, undefined, onWalkedOnTopAction);
                 c.post(reactor, actor, undefined, onWalkedOnTopReaction);
             }
@@ -71,7 +71,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            unit.entity._callDecisionPhase(scheduler.commandContext(), DecisionPhase.AIMajor);
+            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
             return true;
         }
         else {

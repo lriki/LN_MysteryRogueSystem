@@ -27,7 +27,6 @@ export type CommandResultCallback = (response: REResponse, reactor: REGame_Entit
 export class RECommandContext
 {
     private _sequelContext: SSequelContext;
-    private _owner: REScheduler;
     private _visualAnimationWaiting: boolean = false;   // 不要かも
     private _recodingCommandList: RECCMessage[] = [];
     private _runningCommandList: RECCMessage[] = [];
@@ -36,9 +35,8 @@ export class RECommandContext
     private _lastReactorResponce: REResponse = REResponse.Pass;
     private _commandChainRunning: boolean = false;
 
-    constructor(sequelContext: SSequelContext, owner: REScheduler) {
+    constructor(sequelContext: SSequelContext) {
         this._sequelContext = sequelContext;
-        this._owner = owner;
     }
 
     // マップ切り替え時に実行
@@ -222,7 +220,11 @@ export class RECommandContext
     openDialog(causeEntity: REGame_Entity, dialogModel: REDialog): void {
         const m1 = () => {
             Log.doCommand("OpenDialog");
-            this._owner._openDialogModel(causeEntity, dialogModel);
+            
+            RESystem.dialogContext.setCauseEntity(causeEntity);
+            RESystem.dialogContext._setDialogModel(dialogModel);
+            REGame.integration.onDialogOpend(RESystem.dialogContext);
+
             return REResponse.Consumed;
         };
         this._recodingCommandList.push({ name: "openDialog", func: m1 });
@@ -377,7 +379,7 @@ export class RECommandContext
             const message = this._runningCommandList[this._messageIndex];
             const response = message.func();
     
-            if (this._owner._getDialogContext()._hasDialogModel()) {
+            if (RESystem.dialogContext._hasDialogModel()) {
                 // もし command の実行で Dialog が表示されたときは index を進めない。
                 // Dialog が閉じたときに進めるが、例えば矢弾を装備したとき等はターンの消費しないので進めない。
             }
