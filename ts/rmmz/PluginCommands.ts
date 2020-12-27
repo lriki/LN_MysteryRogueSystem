@@ -1,5 +1,8 @@
+import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
+import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
 import { REGame } from "ts/objects/REGame";
+import { RESystem } from "ts/system/RESystem";
 import { VWarehouseDialog } from "ts/visual/dialogs/VWarehouseDialog";
 import { REVisual } from "ts/visual/REVisual";
 import { Scene_Warehouse } from "./Scene_Warehouse";
@@ -18,7 +21,10 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
     }
     
     if (REVisual.manager) {
-        const warehouseEntity = REGame.uniqueActorUnits[actorId - 1];
-        REVisual.manager._dialogNavigator.push(new VWarehouseDialog(warehouseEntity));
+        //const warehouseEntity = REGame.uniqueActorUnits[actorId - 1];
+        const actorEntity = REGame.camera.focusedEntity();
+        assert(actorEntity);
+        RESystem.commandContext.openDialog(actorEntity, new LWarehouseDialog(actorId));
+        //REVisual.manager._dialogNavigator.push(new VWarehouseDialog(warehouseEntity));
     }
 });

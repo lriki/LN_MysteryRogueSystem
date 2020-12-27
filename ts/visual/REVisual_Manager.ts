@@ -13,6 +13,8 @@ import { VCollapseSequel } from "./sequels/CollapseSequel";
 import { VAttackSequel } from "./sequels/AttackSequel";
 import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
 import { REVisualSequel_Move } from "./sequels/VMoveSequel";
+import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
+import { VWarehouseDialog } from "./dialogs/VWarehouseDialog";
 
 /**
  */
@@ -51,13 +53,15 @@ export class REVisual_Manager
     }
 
     openDialog(context: REDialogContext): void {
-        console.log("!! openDialog");
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
             this._dialogNavigator.push(new REManualActionDialogVisual());
         else if (d instanceof RE.EventExecutionDialog)
             this._dialogNavigator.push(new REEventExecutionDialogVisual());
+        else if (d instanceof LWarehouseDialog)
+            this._dialogNavigator.push(new VWarehouseDialog(d));
 
+            
         // AI 用の Dialog を開いた時など、UI を伴わないものもある
         //return undefined;
     }
