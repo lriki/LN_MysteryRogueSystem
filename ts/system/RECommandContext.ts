@@ -10,6 +10,7 @@ import { REGame_Block } from "../objects/REGame_Block";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -277,9 +278,15 @@ export class RECommandContext
     
 
     postConsumeActionToken(entity: REGame_Entity): void {
+        const attr = entity.findAttribute(LUnitAttribute);
+        assert(attr);
+
         const m1 = () => {
             Log.doCommand("ConsumeActionToken");
-            this._owner.consumeActionToken(entity);
+            
+            attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
+            entity._actionConsumed = true;
+
             return REResponse.Consumed;
         };
         this._recodingCommandList.push({ name: "ConsumeActionToken", func: m1 });

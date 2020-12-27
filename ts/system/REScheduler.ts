@@ -81,7 +81,6 @@ export class REScheduler
     private _phases: RESchedulerPhase[];
     private _currentPhaseIndex: number = 0;
 
-    _actionConsumed: boolean = false;
     
     /**  */
     public signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
@@ -117,7 +116,6 @@ export class REScheduler
         this._currentRun = 0;
         this._currentStep = 0;
         this._sequelSet = new RESequelSet();
-        this._actionConsumed = false;
         Log.d("ResetScheduler");
     }
 
@@ -295,7 +293,7 @@ export class REScheduler
         assert(attr);
         attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
         //this.nextActionUnit();
-        this._actionConsumed = true;
+        entity._actionConsumed = true;
     }
 
     /*
@@ -332,10 +330,12 @@ export class REScheduler
             this._currentStep++;
         }
         else {
+            const step = run.steps[this._currentStep];
+            const next = !step.unit.entity || step.unit.entity._actionConsumed;
+
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
-            if (this._actionConsumed) {
-                // 行動トークンを消費する行動がとられた。
-                const step = run.steps[this._currentStep];
+            if (next) {
+                // 行動トークンを消費する行動がとられた。または、無効化されている
                 step.iterationCount--;
                 this.onTurnEnd(step);
                 if (step.iterationCount <= 0) {
@@ -344,7 +344,10 @@ export class REScheduler
                 else {
                     // まだ iterationCount が残っているので、同じ Step を再び実行する
                 }
-                this._actionConsumed = false;
+
+                if (step.unit.entity) {
+                    step.unit.entity._actionConsumed = false;
+                }
             }
             else {
                 // 向き変更のみなど、行動トークンは消費しなかった

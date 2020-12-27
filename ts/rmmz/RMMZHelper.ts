@@ -49,7 +49,10 @@ export class RMMZHelper {
                     eval(`rawData = ${block}`);
 
                     if (rawData) {
-                        console.log("rawData", rawData);
+                        if (!rawData.prefab) {
+                            throw new Error(`Event#${event.eventId()} - @REEntity.prefab not specified.`);
+                        }
+    
                         const tokens = rawData.prefab.split(":");
 
                         return {

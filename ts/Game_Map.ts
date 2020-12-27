@@ -35,18 +35,6 @@ Game_Map.prototype.setup = function(mapId: number) {
         }
         $gamePlayer.hideFollowers();
     }
-
-
-    /*
-    console.log("OK");
-    console.log($dataMap.data?.length);
-    this.setTileData(0, 0, 0, 1);
-    this.setTileData(0, 0, 1, 1);
-    this.setTileData(0, 0, 2, 1);
-    this.setTileData(0, 0, 3, 1);
-    this.setTileData(0, 0, 4, 1);
-    this.setTileData(0, 0, 5, 1);
-    */
 }
 
 

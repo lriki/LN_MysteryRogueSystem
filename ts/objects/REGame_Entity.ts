@@ -122,6 +122,9 @@ export class REGame_Entity
     // とりあえず Entity に持たせて様子見。
     _states: DStateId[] = [];
 
+    
+    _actionConsumed: boolean = false;
+
     //static newEntity(): REGame_Entity {
     //    const e = new REGame_Entity();
     //    REGame.world._addEntity(e);
@@ -305,6 +308,12 @@ export class REGame_Entity
             }
         }
         return undefined;
+    }
+
+    getBehavior<T>(ctor: { new(...args: any[]): T }): T {
+        const b = this.findBehavior<T>(ctor);
+        if (!b) throw new Error();
+        return b;
     }
 
     queryProperty(propertyId: number): any {
