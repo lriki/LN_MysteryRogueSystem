@@ -351,6 +351,10 @@ export class RECommandContext
         return this._recodingCommandList.length == 0;
     }
 
+    isEmpty(): boolean {
+        return !this.isRunning() && this.isRecordingListEmpty();
+    }
+
     /*
     _process(): boolean {
         if (this.isRunning()) {
@@ -381,7 +385,7 @@ export class RECommandContext
     
             if (RESystem.dialogContext._hasDialogModel()) {
                 // もし command の実行で Dialog が表示されたときは index を進めない。
-                // Dialog が閉じたときに進めるが、例えば矢弾を装備したとき等はターンの消費しないので進めない。
+                // Dialog が閉じたときに進める。
             }
             else {
                 this._next();

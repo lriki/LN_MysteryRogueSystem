@@ -47,7 +47,7 @@ test('basic', () => {
     REGameManager.performFloorTransfer();
 
     // シミュレーション 1 回実行
-    REGameManager.update();
+    REGame.scheduler.stepSimulation();
     
     const dialogContext = RESystem.dialogContext;
     
@@ -66,7 +66,7 @@ test('basic', () => {
         expect(actor1.dir != 9).toBe(true);
         
         // シミュレーション実行
-        REGameManager.update();
+        REGame.scheduler.stepSimulation();
         
         // 行動の消費が無いので、再び ManualActionDialog が開かれる。
         // しかし一度閉じているので、違うインスタンスで開かれている。
@@ -85,7 +85,7 @@ test('basic', () => {
         dialogContext.closeDialog(true);
     
         // シミュレーション実行。実際に移動が行われる
-        REGameManager.update();
+        REGame.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.x).toBe(5);
@@ -213,7 +213,7 @@ test('TurnOrderTable', () => {
     REGame.world._transferEntity(enemy8, 1, 1, 9);
 
     REGameManager.performFloorTransfer();
-    REGameManager.update();
+    REGame.scheduler.stepSimulation();
 
     //--------------------
     // 最初の行動予定順をチェック
@@ -272,7 +272,7 @@ test('TurnOrderTable', () => {
         dialogContext.closeDialog(true);
     
         // AI行動決定
-        REGameManager.update();
+        REGame.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.x).toBe(2);
@@ -294,7 +294,7 @@ test('TurnOrderTable', () => {
         dialogContext.closeDialog(true);
     
         // AI行動決定
-        REGameManager.update();
+        REGame.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.x).toBe(3);

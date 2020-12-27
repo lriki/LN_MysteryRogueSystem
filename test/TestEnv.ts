@@ -68,6 +68,12 @@ export class TestEnv {
             const id = REData.addSkill("NormalAttack");
         }
 
+        // Items
+        {
+            const id = REData.addItem("薬草");
+
+        }
+
         // Unique Entitise
         REData.addActor("Unique1");
 

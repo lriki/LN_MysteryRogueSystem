@@ -31,7 +31,7 @@ test('DamageAndGameover', () => {
     REGame.world._transferEntity(enemy1, 1, 3, 1);  // (3, 1) へ配置
 
     REGameManager.performFloorTransfer();
-    REGameManager.update();
+    REGame.scheduler.stepSimulation();
     
     // player を左へ移動
     const dialogContext = RESystem.dialogContext;
@@ -41,7 +41,7 @@ test('DamageAndGameover', () => {
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される
     // onTurnEnd 時までに戦闘不能が回復されなければゲームオーバーとなり、
     // Land.exitRMMZMapId に設定されているマップへの遷移が発生する。
-    REGameManager.update();
+    REGame.scheduler.stepSimulation();
 
     // 遷移中。ツクール側で遷移処理が必要
     expect(REGame.camera.isFloorTransfering()).toBe(true);

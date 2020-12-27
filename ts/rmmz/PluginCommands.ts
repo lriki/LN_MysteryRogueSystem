@@ -1,5 +1,7 @@
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/objects/REGame";
+import { VWarehouseDialog } from "ts/visual/dialogs/VWarehouseDialog";
+import { REVisual } from "ts/visual/REVisual";
 import { Scene_Warehouse } from "./Scene_Warehouse";
 
 const pluginName: string = "LN_RoguelikeEngine";
@@ -15,10 +17,8 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
         throw new Error("RE.ShowWarehouse - Invalid 'actorId'.");
     }
     
-
-
-    console.log("RE.ShowWarehouse", args);
-
-    
-    //SceneManager.push(Scene_Warehouse);
+    if (REVisual.manager) {
+        const warehouseEntity = REGame.uniqueActorUnits[actorId - 1];
+        REVisual.manager._dialogNavigator.push(new VWarehouseDialog(warehouseEntity));
+    }
 });

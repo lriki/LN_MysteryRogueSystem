@@ -108,6 +108,8 @@ export class REScheduler
     }
 
     stepSimulation(): void {
+        const dialogContext = RESystem.dialogContext;
+
         while (true) {
             // Sequel 終了待ち
             if (REGame.integration.onCheckVisualSequelRunning()) {
@@ -143,15 +145,15 @@ export class REScheduler
 
             // Dialog の処理はイベント実行よりも優先する。
             // 行商人の処理など。
-            if (RESystem.dialogContext._hasDialogModel()) {
-                RESystem.dialogContext._update();
+            if (dialogContext._hasDialogModel()) {
+                dialogContext._update();
 
-                const entity = RESystem.dialogContext.causeEntity();
+                const entity = dialogContext.causeEntity();
                 if (entity) {
                     entity.immediatelyAfterAdjacentMoving = false;
                 }
 
-                if (RESystem.dialogContext._hasDialogModel()) {
+                if (dialogContext._hasDialogModel()) {
                     // Dialog 表示中は後続コマンドを実行しない
                     break;
                 }

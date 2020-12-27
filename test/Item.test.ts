@@ -34,20 +34,20 @@ test('PickAndPut', () => {
     // マップ移動
     REGameManager.performFloorTransfer();
 
-    REGameManager.update(); // Advance Simulation --------------------------------------------------
+    REGame.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
     dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
     dialogContext.closeDialog(true);    // 行動確定
     
-    REGameManager.update(); // Advance Simulation --------------------------------------------------
+    REGame.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 足元のアイテムを拾う
     dialogContext.postAction(DBasics.actions.PickActionId, actor1, undefined);
     dialogContext.closeDialog(true);    // 行動確定
     
-    REGameManager.update(); // Advance Simulation --------------------------------------------------
+    REGame.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     const inventory = actor1.findBehavior(LInventoryBehavior);
     assert(inventory);
@@ -64,7 +64,7 @@ test('PickAndPut', () => {
     dialogContext.postAction(DBasics.actions.PutActionId, actor1, item1);
     dialogContext.closeDialog(true);    // 行動確定
 
-    REGameManager.update(); // Advance Simulation --------------------------------------------------
+    REGame.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // item1 は Map 上に追加されている
     expect(block.layer(BlockLayerKind.Ground).isContains(item1)).toBe(true);

@@ -57,6 +57,7 @@ export class LIdentifyer {
     resolveDescription(entity: REGame_Entity): LEntityDescription {
         const itemId = entity.queryProperty(RESystem.properties.itemId) as number;
         if (itemId > 0) {
+            console.log("REData.items", REData.items);
             const item = REData.items[itemId];
             //return new LEntityDescription(item.iconIndex, "白い草", DescriptionHighlightLevel.UserIdentified);
             return new LEntityDescription(item.iconIndex, item.name, DescriptionHighlightLevel.Identified);

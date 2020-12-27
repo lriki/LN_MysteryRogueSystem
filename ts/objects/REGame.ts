@@ -13,6 +13,7 @@ import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
 import { RESequelSet } from "./REGame_Sequel";
+import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyCommandExecuteScheduler";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -25,6 +26,7 @@ export class REGame
 
     static integration: REIntegration;
     static scheduler: REScheduler;
+    static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
     static core: REGame_Core;
     static system: REGame_System;
     static world: RE_Game_World;

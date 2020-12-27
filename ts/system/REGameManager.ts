@@ -20,6 +20,7 @@ import { LIdentifyer } from "ts/objects/LIdentifyer";
 import { SSequelContext } from "./SSequelContext";
 import { RECommandContext } from "./RECommandContext";
 import { REDialogContext } from "./REDialog";
+import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -43,6 +44,7 @@ export class REGameManager
         RESystem.commandContext = new RECommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
         REGame.scheduler = new REScheduler();
+        REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.core = new REGame_Core();
         REGame.system = new REGame_System();
         REGame.world = new RE_Game_World();
@@ -108,14 +110,5 @@ export class REGameManager
         }
     }
 
-    static update(): void {
-        if (REGame.camera.isFloorTransfering()) {
-            // マップ遷移中はコアシステムとしては何もしない。
-            // performFloorTransfer() すること。
-            return;
-        }
-
-        REGame.scheduler.stepSimulation();
-    }
 }
 
