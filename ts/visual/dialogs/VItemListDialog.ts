@@ -51,7 +51,7 @@ export class VItemListDialog extends VSubDialog {
         this.activateItemWindow();
     }
     
-    onUpdate(context: REDialogContext) {
+    onUpdate() {
     }
 
     onItemOk(): void {
@@ -78,7 +78,7 @@ export class VItemListDialog extends VSubDialog {
     }
         
     onItemCancel(): void {
-        this.pop();
+        this.cancel();
     }
 
     onCommandCancel(): void {

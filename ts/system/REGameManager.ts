@@ -91,6 +91,7 @@ export class REGameManager
 
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
+
             // マップ構築
             REGame.map._removeAllEntities();
             REGame.map.setup(REGame.camera.transferingNewFloorId());

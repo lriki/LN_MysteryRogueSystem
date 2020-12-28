@@ -56,9 +56,17 @@ export const onWalkedOnTopAction = Symbol("onWalkedOnTopAction");
 export const onWalkedOnTopReaction = Symbol("onWalkedOnTopReaction");
 
 /**
+ * Response
+ * - Canceled : 呪い状態等のため、Inventory からアイテムを取り出すことはできない。
  */
 export const testPickOutItem = Symbol("testPickOutItem");
+
+/**
+ * Response
+ * - Canceled : 容量オーバーなどのため、アイテムを入れることができない。
+ */
 export const testPutInItem = Symbol("testPutInItem");
+
 /*
     NOTE: test** について
     指定された Command を実行できるかを確認する。

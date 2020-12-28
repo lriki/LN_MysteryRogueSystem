@@ -52,16 +52,12 @@ export class VWarehouseDialog extends VMainDialog {
         const user = this._model.userEntity();
         const inventory = this._model.warehouseEntity().getBehavior(LInventoryBehavior);
         this.openSubDialog(new VWarehouseWithdrawDialog(user, inventory), (result: any) => {
-
-        
-            console.log("handleWithdrawCommand");
-            //this._model.storeItems(result as REGame_Entity[]);
+            this._model.withdrawItems(result as REGame_Entity[]);
         });
     }
     
     private handleCancelCommand() {
-        this.pop();
-        RESystem.dialogContext.closeDialog(true);
+        this._model.close(true);
     }
 }
 

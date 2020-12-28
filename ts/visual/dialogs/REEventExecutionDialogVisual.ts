@@ -11,7 +11,7 @@ export class REEventExecutionDialogVisual extends VSubDialog {
         event.start();
     }
 
-    onUpdate(context: REDialogContext) {
+    onUpdate() {
         // マップ遷移後にもイベント実行を続けることもあるので、
         // $gameMap.event() は参照せずに $gameMap.isEventRunning() で実行中かを判断する。
         if (!$gameMap.isEventRunning()) {

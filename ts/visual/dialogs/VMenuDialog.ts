@@ -21,7 +21,7 @@ export class VMenuDialog extends VSubDialog {
         this.addWindow(this._commandWindow);
 
         this._commandWindow.setHandler("item", this.commandItem.bind(this));
-        this._commandWindow.setHandler("cancel", () => this.pop());
+        this._commandWindow.setHandler("cancel", () => this.cancel());
     }
     
     onStart() {

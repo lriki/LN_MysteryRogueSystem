@@ -4,6 +4,7 @@ import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../../system/REDialog";
 import { REVisual } from "../REVisual";
+import { VDialog } from "./VDialog";
 import { VMainDialog } from "./VMainDialog";
 import { VSubDialog } from "./VSubDialog";
 
@@ -18,24 +19,29 @@ export type DialogResultCallback = (result: any) => void;
  * このクラスはその対策として、Scene_Map 内でウィンドウの遷移管理を行う。
  */
 export class REDialogVisualNavigator {
-    _mainDialog: VMainDialog | undefined;
-    _subDialogs: VSubDialog[];
-    _scene: VSubDialog | undefined;
-    _nextScene: VSubDialog | undefined;
+    _subDialogs: VDialog[];
+    _scene: VDialog | undefined;
+    _nextScene: VDialog | undefined;
 
     constructor() {
         this._subDialogs = [];
     }
 
     isEmpty(): boolean {
-        return !this._mainDialog && !this._scene && !this._nextScene && this._subDialogs.length == 0;
+        return !this._scene && !this._nextScene && this._subDialogs.length == 0;
     }
 
     _openMainDialog(dialog: VMainDialog): void {
-        this._mainDialog = dialog;
+        assert(this.isEmpty());
+        this.push(dialog);
     }
 
-    push(dialog: VSubDialog): void {
+    _openSubDialog(dialog: VSubDialog): void {
+        assert(!this.isEmpty());
+        this.push(dialog);
+    }
+
+    push(dialog: VDialog): void {
         if (this._scene) {
             this._subDialogs.push(this._scene);
         }
@@ -48,19 +54,15 @@ export class REDialogVisualNavigator {
         }
     }
     
-    pop(result?: any): void {
+    pop(submit: boolean, result?: any): void {
         this._nextScene = this._subDialogs.pop();
 
         if (this._scene) {
             this._scene.onStop();
             this._scene._destroying = true;
 
-            if (this._scene._resultCallback) {
+            if (submit && this._scene._resultCallback) {
                 this._scene._resultCallback(result);
-            }
-
-            if (this._mainDialog) {
-                this._mainDialog._started = false;
             }
         }
 
@@ -70,22 +72,17 @@ export class REDialogVisualNavigator {
         if (this._scene) {
             this._scene.onStop();
             this._scene.onClose();
-            this._scene.destroy();
+            this._scene._destroy();
         }
         if (this._nextScene) {
             this._nextScene.onStop();
             this._nextScene.onClose();
-            this._nextScene.destroy();
+            this._nextScene._destroy();
         }
         for (let i = this._subDialogs.length - 1; i >= 0; i--) {
             this._subDialogs[i].onStop();
             this._subDialogs[i].onClose();
-            this._subDialogs[i].destroy();
-        }
-        if (this._mainDialog) {
-            this._mainDialog.onStop();
-            this._mainDialog.onClose();
-            this._mainDialog._destroy();
+            this._subDialogs[i]._destroy();
         }
         this._subDialogs = [];
         this._scene = undefined;
@@ -100,7 +97,7 @@ export class REDialogVisualNavigator {
     private changeScene(): void {
         if (this._nextScene) {
             if (this._scene && this._scene._destroying) {
-                this._scene.destroy();
+                this._scene._destroy();
             }
             this._scene = this._nextScene;
             this._nextScene = undefined;
@@ -112,21 +109,11 @@ export class REDialogVisualNavigator {
                 this._scene.onStart();
             }
         }
-        else if (this._mainDialog) {
-            if (!this._mainDialog._created) {
-                this._mainDialog.onCreate();
-                this._mainDialog._created = true;
-            }
-            if (!this._mainDialog._started) {
-                this._mainDialog.onStart();
-                this._mainDialog._started = true;
-            }
-        }
     }
 
     private updateScene(context: REDialogContext): void {
         if (this._scene) {
-            this._scene.onUpdate(context);
+            this._scene.onUpdate();
             /*
             if (this._scene._started) {
                 this._scene.onUpdate(context);
@@ -136,9 +123,6 @@ export class REDialogVisualNavigator {
                 this._scene.onStart();
             }
             */
-        }
-        else if (this._mainDialog) {
-            this._mainDialog.onUpdate();
         }
     }
     

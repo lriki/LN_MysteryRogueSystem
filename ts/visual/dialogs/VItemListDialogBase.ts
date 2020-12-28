@@ -33,7 +33,7 @@ export class VItemListDialogBase extends VSubDialog {
         this.activateItemWindow();
     }
     
-    onUpdate(context: REDialogContext) {
+    onUpdate() {
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
@@ -54,7 +54,7 @@ export class VItemListDialogBase extends VSubDialog {
     }
         
     private handleItemCancel(): void {
-        this.pop();
+        this.cancel();
     }
 
     private handleCommandCancel(): void {

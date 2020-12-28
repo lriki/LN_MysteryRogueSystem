@@ -41,14 +41,14 @@ export class LWarehouseDialog extends REDialog {
             RESystem.commandContext.post(user, user, item, testPickOutItem,
                 (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
                     console.log("1");
-                    if (response == REResponse.Succeeded) {
+                    if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
                         RESystem.commandContext.post(warehouse, warehouse, item, testPutInItem,
                             (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
                                 console.log("3");
-                                if (response == REResponse.Succeeded) {
+                                if (response != REResponse.Canceled) {
                                     console.log("4");
             
                                     // Item を移す
@@ -65,4 +65,39 @@ export class LWarehouseDialog extends REDialog {
         this.close(true);
     }
     
+    public withdrawItems(items: REGame_Entity[]): void {
+        const user = this.userEntity();
+        const warehouse = this.warehouseEntity();
+        const userInventory = user.getBehavior(LInventoryBehavior);
+        const warehouseInventory = warehouse.getBehavior(LInventoryBehavior);
+
+        items.forEach(item => {
+            console.log("0");
+            // Item を取り出せるか確認
+            RESystem.commandContext.post(warehouse, warehouse, item, testPickOutItem,
+                (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                    console.log("1");
+                    if (response != REResponse.Canceled) {
+                        console.log("2");
+
+                        // Item を格納できるか確認
+                        RESystem.commandContext.post(user, user, item, testPutInItem,
+                            (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                                console.log("3");
+                                if (response != REResponse.Canceled) {
+                                    console.log("4");
+            
+                                    // Item を移す
+                                    warehouseInventory.removeEntity(item);
+                                    userInventory.addEntity(item);
+
+                                    context.postMessage(tr("{0} を取り出した。", REGame.identifyer.makeDisplayText(item)));
+                                }
+                            });
+                    }
+                });
+        })
+
+        this.close(true);
+    }
 }

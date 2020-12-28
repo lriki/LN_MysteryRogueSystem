@@ -17,6 +17,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
     // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
     REGame.map.releaseMap();
+    REGame.messageHistory.clear();
 
     
     _Game_Map_setup.call(this, mapId);

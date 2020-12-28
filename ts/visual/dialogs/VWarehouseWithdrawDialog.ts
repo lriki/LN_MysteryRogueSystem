@@ -24,6 +24,6 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     }
     
     private handleWithdraw(items: [REGame_Entity]): void {
-        this.pop(items);
+        this.submit(items);
     }
 }

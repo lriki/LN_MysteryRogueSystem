@@ -37,7 +37,7 @@ export class VFeetDialog extends VSubDialog {
                 handler: (x) => self.onAction(x),
             };
         }));
-        this._commandWindow.setHandler("cancel", () => this.pop());
+        this._commandWindow.setHandler("cancel", () => this.cancel());
         this.addWindow(this._commandWindow);
         this._commandWindow.open();
     }

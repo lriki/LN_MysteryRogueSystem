@@ -38,7 +38,7 @@ export class VWarehouseStoreDialog extends VSubDialog {
         this.activateItemWindow();
     }
     
-    onUpdate(context: REDialogContext) {
+    onUpdate() {
     }
 
     private handleItemSubmit(): void {
@@ -57,7 +57,7 @@ export class VWarehouseStoreDialog extends VSubDialog {
     }
         
     private handleItemCancel(): void {
-        this.pop();
+        this.cancel();
     }
 
     private handleCommandCancel(): void {
@@ -69,7 +69,7 @@ export class VWarehouseStoreDialog extends VSubDialog {
     }
 
     private handleStore(items: [REGame_Entity]): void {
-        this.pop(items);
+        this.submit(items);
     }
 
     private activateItemWindow() {
