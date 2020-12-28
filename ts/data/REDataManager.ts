@@ -131,6 +131,7 @@ export class REDataManager
             PutInActionId: REData.addAction("PickIn"),
             PickOutActionId: REData.addAction("PickOut"),
             IdentifyActionId: REData.addAction("Identify"),
+            //passItem: REData.addAction("PassItem"),
             AttackActionId: REData.addAction("Attack"),
         };
         

@@ -57,7 +57,7 @@ export class VItemListDialog extends REDialogVisualWindowLayer {
     onItemOk(): void {
         if (this._itemListWindow && this._commandWindow) {
 
-            const itemEntity = this._itemListWindow.selectedItems();
+            const itemEntity = this._itemListWindow.selectedItem();
 
             // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
             // 実際に実行できる Action のリストができる。

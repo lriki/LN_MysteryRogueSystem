@@ -177,7 +177,10 @@ export interface DBasicActions
      */
     IdentifyActionId: number;
 
-
+    /**
+     * アイテムを渡す
+     */
+    //passItem: number;
 
     //----------------------------------------
     // Combat Actions.

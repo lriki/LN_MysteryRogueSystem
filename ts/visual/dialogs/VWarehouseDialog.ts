@@ -40,9 +40,11 @@ export class VWarehouseDialog extends REDialogVisualWindowLayer {
     private handleStoreCommand() {
         const user = this._model.userEntity();
         const inventory = user.getBehavior(LInventoryBehavior);
-        this.push(new VWarehouseStoreDialog(user, inventory));
+        this.push(new VWarehouseStoreDialog(user, inventory), (result: any) => {
+            this._model.storeItems(result as REGame_Entity[]);
+            this._navigator?.clear();
+        });
 
-        console.log("handleStoreCommand");
     }
 
     private handleWithdrawCommand() {

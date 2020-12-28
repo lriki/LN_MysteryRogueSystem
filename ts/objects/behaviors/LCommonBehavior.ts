@@ -26,13 +26,13 @@ export class LCommonBehavior extends LBehavior {
 
     // 拾われようとしている
     [onPrePickUpReaction](args: CommandArgs, context: RECommandContext): REResponse {
-        return REResponse.Consumed; // 無条件でOK
+        return REResponse.Succeeded; // 無条件でOK
     }
 
     // 置かれようとしている
     // この時点で座標は確定していないため、ここで GroundLayer に置くことができるか確認することはできない。
     [onPrePutReaction](args: CommandArgs, context: RECommandContext): REResponse {
-        return REResponse.Consumed; // 無条件でOK
+        return REResponse.Succeeded; // 無条件でOK
     }
     
     // 投げられた
@@ -79,7 +79,7 @@ export class LCommonBehavior extends LBehavior {
                 context.post(self, self, undefined, onMoveAsProjectile);
             }
                 
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
 
         return REResponse.Pass;

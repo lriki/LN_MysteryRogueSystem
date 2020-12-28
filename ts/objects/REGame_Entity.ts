@@ -211,7 +211,7 @@ export class REGame_Entity
         }
         else if (this.floorId > 0) {
             REGame.map._removeEntity(this);
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
         else {
             throw new Error();
@@ -361,24 +361,25 @@ export class REGame_Entity
     }
 
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
-        //for (let i = 0; i < this._basicBehaviors.length; i++) {
+        let response = REResponse.Pass;
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
-            const r = func(this._basicBehaviors[i]);//this._behaviors[i].onPreAction(cmd);
+            let r = func(this._basicBehaviors[i]);
             if (r != REResponse.Pass) {
-                return r;
+                response = r;
             }
         }
-        return REResponse.Pass;
+        return response;
     }
 
     _callStateIterationHelper(func: (x: LStateBehavior) => REResponse): REResponse {
+        let response = REResponse.Pass;
         for (let i = 0; i < this._states.length; i++) {
             const r = func(RESystem.stateBehaviors[this._states[i]]);
             if (r != REResponse.Pass) {
-                return r;
+                response = r;
             }
         }
-        return REResponse.Pass;
+        return response;
     }
 
     _callDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {

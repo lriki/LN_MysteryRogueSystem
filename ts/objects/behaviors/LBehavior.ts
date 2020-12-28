@@ -55,6 +55,31 @@ export const onMoveAsProjectile = Symbol("onMoveAsProjectile");
 export const onWalkedOnTopAction = Symbol("onWalkedOnTopAction");
 export const onWalkedOnTopReaction = Symbol("onWalkedOnTopReaction");
 
+/**
+ */
+export const testPickOutItem = Symbol("testPickOutItem");
+export const testPutInItem = Symbol("testPutInItem");
+/*
+    NOTE: test** について
+    指定された Command を実行できるかを確認する。
+    その際、呪いのため装備を外せない等の場合はメッセージログを通じてプレイヤーに見える形で表示する。
+
+    Command の実行可否にかかわらず、test** は "絶対に World(Entity) の状態を変えない" 点に注意。
+
+    なお、実行できる可能性のある Action を返すことが目的の queryActions() とは異なるので注意。
+
+
+    Pass : そもそも
+
+    [2020/12/28]
+    例えば倉庫でアイテムを移す処理で…
+    1. Player 側の都合を考慮して、Item が取り出せるか確認する。(呪いなど)
+    2. 倉庫 側の都合を考慮して、Item を格納できるか確認する。(容量など)
+    3. 上記双方が OK の場合、Item を移す。
+    1 と 2 について、倉庫側の処理で呪いの有無を判断するのは責任範囲的におかしいので、Command にしておきたい。
+    しかし、1 と 2 の時点では実際に Item を移していいのかはわからない。確認のみにとどめたい。
+*/
+
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {
     dataId: number = 0;

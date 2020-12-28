@@ -123,11 +123,12 @@ export class REDialogVisualNavigator {
         if (this._scene) {
             this._scene.onStop();
             this._scene._destroying = true;
+
+            if (this._scene._resultCallback) {
+                this._scene._resultCallback(result);
+            }
         }
 
-        if (this._nextScene && this._nextScene._resultCallback) {
-            this._nextScene._resultCallback(result);
-        }
     }
 
     clear(): void {

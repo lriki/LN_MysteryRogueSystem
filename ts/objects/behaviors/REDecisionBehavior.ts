@@ -22,7 +22,7 @@ export class REGame_DecisionBehavior extends LBehavior
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
             context.openDialog(entity, new REManualActionDialog());
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
         else if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
@@ -40,7 +40,7 @@ export class REGame_DecisionBehavior extends LBehavior
                 // 通常攻撃
                 context.postPerformSkill(entity, RESystem.skills.normalAttack);
                 context.postConsumeActionToken(entity);
-                return REResponse.Consumed;
+                return REResponse.Succeeded;
             }
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
@@ -48,7 +48,7 @@ export class REGame_DecisionBehavior extends LBehavior
                 context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
             }
             context.postConsumeActionToken(entity);
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
 
         return REResponse.Pass;

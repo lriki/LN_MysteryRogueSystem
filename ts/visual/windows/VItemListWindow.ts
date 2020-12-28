@@ -14,10 +14,15 @@ export class VItemListWindow extends Window_Selectable {
     constructor(inventory: LInventoryBehavior, rect: Rectangle) {
         super(rect);
         this._inventory = inventory;
+        console.log("inventory", inventory);
         this._entities = inventory.entities();
         this.refresh();
     }
     
+    selectedItem(): REGame_Entity {
+        return this.itemAt(this.index());
+    }
+
     selectedItems(): [REGame_Entity] {
         return [this.itemAt(this.index())];
     }

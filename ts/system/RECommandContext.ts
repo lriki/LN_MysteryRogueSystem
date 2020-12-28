@@ -167,12 +167,12 @@ export class RECommandContext
                 if (func) {
                     const args2: CommandArgs = { self: target, sender: sender, args: args };
                     const r1 = func.call(behavior, args2, this);
-                    if (r1 != REResponse.Pass) {
+                    //if (r1 != REResponse.Pass) {
                         // 何らかの形でコマンドが処理された
-                        if (result) {
-                            result(r1, target, this);
-                        }
-                    }
+                    //    if (result) {
+                    //        result(r1, target, this);
+                    //    }
+                    //}
                     return r1;
                 }
                 else {
@@ -180,14 +180,14 @@ export class RECommandContext
                 }
             });
 
-            if (response == REResponse.Pass) {
-                // コマンドが処理されなかった
+            //if (response == REResponse.Pass) {
+                //// コマンドが処理されなかった
                 if (result) {
                     result(response, target, this);
                 }
-            }
+            //}
 
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
 
         };
         this._recodingCommandList.push({ name: "Post", func: m1 });
@@ -225,7 +225,7 @@ export class RECommandContext
             RESystem.dialogContext._setDialogModel(dialogModel);
             REGame.integration.onDialogOpend(RESystem.dialogContext);
 
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "openDialog", func: m1 });
         Log.postCommand("openDialog");
@@ -237,7 +237,7 @@ export class RECommandContext
             Log.doCommand("Sequel");
             this._sequelContext.addSequel(new REGame_Sequel(entity, sequelId));
             this._visualAnimationWaiting = true;
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "Sequel", func: m1 });
         Log.postCommand("Sequel");
@@ -247,7 +247,7 @@ export class RECommandContext
         const m1 = () => {
             Log.doCommand("Destroy");
             entity.destroy();
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "Destroy", func: m1 });
         Log.postCommand("Destroy");
@@ -257,7 +257,7 @@ export class RECommandContext
         const m1 = () => {
             Log.doCommand("Message");
             REGame.messageHistory.add(text);
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "Message", func: m1 });
         Log.postCommand("Message");
@@ -275,7 +275,7 @@ export class RECommandContext
         const m1 = () => {
             Log.doCommand("TransferFloor");
             REGame.world._transferEntity(entity, floorId, x, y);
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "TransferFloor", func: m1 });
         Log.postCommand("TransferFloor");
@@ -292,7 +292,7 @@ export class RECommandContext
             attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
             entity._actionConsumed = true;
 
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "ConsumeActionToken", func: m1 });
         Log.postCommand("ConsumeActionToken");
@@ -302,7 +302,7 @@ export class RECommandContext
         const m1 = () => {
             Log.doCommand("PerformSkill");
             RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "PerformSkill", func: m1 });
         Log.postCommand("PerformSkill");
@@ -314,7 +314,7 @@ export class RECommandContext
         const m1 = () => {
             Log.doCommand("ApplyEffect");
             // TODO:
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "ApplyEffect", func: m1 });
         Log.postCommand("ApplyEffect");

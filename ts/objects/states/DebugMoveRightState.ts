@@ -25,7 +25,7 @@ export class LDebugMoveRightState extends LStateBehavior {
                 context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
             }
             context.postConsumeActionToken(entity);
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
 
         return super.onDecisionPhase(entity, context, phase);

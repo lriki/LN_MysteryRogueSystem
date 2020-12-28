@@ -21,8 +21,14 @@ export class RE_Game_World
         const e = this._entities[id.index];
         if (e && e.id().key == id.key)
             return e;
-        else
-            throw new Error("Invalid entity. id:" + id);
+        else {
+            if (!e) {
+                throw new Error(`Unregisterd entity. (id: [${id.index}, ${id.key}])`);
+            }
+            else {
+                throw new Error(`Destroyed entity. (id: [${id.index}, ${id.key}])`);
+            }
+        }
     }
 
     random(): Random {
@@ -107,6 +113,7 @@ export class RE_Game_World
 
                 REGame.scheduler.invalidateEntity(entity);
 
+                console.log("Entity removed", this._entities[i]);
                 this._entities[i] = undefined;
 
                 if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {

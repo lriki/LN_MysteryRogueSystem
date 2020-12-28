@@ -72,7 +72,6 @@ export class VWarehouseStoreDialog extends REDialogVisualWindowLayer {
 
     private handleStore(items: [REGame_Entity]): void {
         this.pop(items);
-        console.log("あずけた", items);
     }
 
     private activateItemWindow() {

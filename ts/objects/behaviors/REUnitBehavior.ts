@@ -49,7 +49,7 @@ export class REUnitBehavior extends LBehavior {
         
         if (cmd.action().id == DBasics.actions.DirectionChangeActionId) {
             cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
 
         else if (cmd.action().id == DBasics.actions.MoveToAdjacentActionId) {
@@ -65,7 +65,7 @@ export class REUnitBehavior extends LBehavior {
                 actor.immediatelyAfterAdjacentMoving = true;
                 this._requiredFeetProcess = true;
                 
-                return REResponse.Consumed;
+                return REResponse.Succeeded;
             }
             
         }
@@ -92,7 +92,7 @@ export class REUnitBehavior extends LBehavior {
             context.postActionToBlock();
             */
             
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
         else if (cmd.action().id == DBasics.actions.PickActionId) {
 
@@ -140,7 +140,7 @@ export class REUnitBehavior extends LBehavior {
             else {
                 context.postMessage(tr("置けなかった。"));
             }
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
         else if (cmd.action().id == DBasics.actions.ThrowActionId) {
             // [投げる] は便利コマンドのようなもの。
@@ -185,7 +185,7 @@ export class REUnitBehavior extends LBehavior {
             
             /*
                 */
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
 
         return REResponse.Pass;
@@ -198,7 +198,7 @@ export class REUnitBehavior extends LBehavior {
             cmd.effectContext()?.apply(entity);
 
             
-            return REResponse.Consumed;
+            return REResponse.Succeeded;
         }
 
         return REResponse.Pass;
