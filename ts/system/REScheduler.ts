@@ -109,6 +109,7 @@ export class REScheduler
 
     stepSimulation(): void {
         const dialogContext = RESystem.dialogContext;
+        const commandContext = RESystem.commandContext;
 
         while (true) {
             // Sequel 終了待ち
@@ -139,7 +140,7 @@ export class REScheduler
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!RESystem.commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
+            if (!commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
                 break;
             }
 
@@ -164,10 +165,10 @@ export class REScheduler
                 }
             }
 
-            if (RESystem.commandContext.isRunning()) {
-                RESystem.commandContext._processCommand();
+            if (commandContext.isRunning()) {
+                commandContext._processCommand();
 
-                if (!RESystem.commandContext.isRunning()) {
+                if (!commandContext.isRunning()) {
                     // _processCommand() の後で isRunning が落ちていたら、
                     // 実行中コマンドリストの実行が完了した。
                 }
@@ -179,12 +180,12 @@ export class REScheduler
                 // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
                 //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
                 //   そもそもいつ呼び出すべきなのか分かりづらいので、submit の呼び出しは一元化する。
-                if (!RESystem.commandContext.isRecordingListEmpty()) {
-                    RESystem.commandContext._submit(); // swap
+                if (!commandContext.isRecordingListEmpty()) {
+                    commandContext._submit(); // swap
                 }
             }
 
-            if (RESystem.commandContext.isRunning()) {
+            if (commandContext.isRunning()) {
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
@@ -475,8 +476,6 @@ export class REScheduler
             }
         });
 
-        //console.log("unis:", this._units);
-        //console.log("runs:", this._runs);
 
         // Merge
         {

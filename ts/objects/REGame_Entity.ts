@@ -12,7 +12,9 @@ import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
 import { RETileAttribute } from "./attributes/RETileAttribute";
-import { eqaulsObjectId, LObject } from "./LObject";
+import { eqaulsEntityId, LEntityId } from "./LObject";
+import { REGame_Map } from "./REGame_Map";
+import { TilingSprite } from "pixi.js";
 
 enum BlockLayer
 {
@@ -45,9 +47,69 @@ enum BlockLayer
  * BlockLayer は種別のような他の情報から求めるべきかもしれないが、Entity によっては固定されることは無い。
  * - アイテム変化するモンスターは自身の種別を変更することになるが、それだと BlockLayer を変更することと変わらない。
  * - アイテムとして持っている土偶を立てたときは、振舞いは Item から Unit に変わる。これも結局状態変更することと変わらない。
+ * 
+ * @note
+ * 以前オブジェクトの参照と寿命管理のために LObject をベースクラスとし、Entity だけではなく Map 等もその派生としていたことがあったが、
+ * セーブデータ作成や、World から Entity を検索するとき等の書き方が非常に煩雑になってしまったため廃止した。
  */
-export class REGame_Entity extends LObject
+export class REGame_Entity
 {
+    
+    private _id: LEntityId = { index: 0, key: 0 };
+    
+    /**
+     * 親 Entity。
+     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
+     * 
+     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
+     */
+    private _parentEntityId: LEntityId = { index: 0, key: 0 };
+    private _parentIsMap = false;
+
+    public id(): LEntityId {
+        return this._id;
+    }
+
+    public _setId(id: LEntityId): void  {
+        assert(id.index > 0);
+        this._id = id;
+    }
+
+    public parentid(): LEntityId {
+        return this._parentEntityId;
+    }
+
+    public hasParent(): boolean {
+        return this._parentEntityId.index > 0 || this._parentIsMap;
+    }
+
+    public parentIsMap(): boolean {
+        return this._parentIsMap;
+    }
+
+    public setParent(parent: REGame_Entity): void {
+        assert(!this._parentIsMap);
+        assert(!this.hasParent());
+
+        const parentId = parent.id();
+        assert(parentId.index > 0);     // ID を持たない親は設定できない
+        this._parentEntityId = parentId;
+    }
+
+    public setParentMap(parent: REGame_Map): void {
+        assert(this._parentEntityId.index == 0);
+        assert(!this.hasParent());
+        this._parentIsMap = true;
+    }
+
+    public clearParent(): void {
+        this._parentEntityId = { index: 0, key: 0 };
+        this._parentIsMap = false;
+    }
+
+
+
+    
 
     attrbutes: LAttribute[] = [];
     private _basicBehaviors: LBehavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
@@ -136,6 +198,7 @@ export class REGame_Entity extends LObject
     }
 
     addBasicBehavior(value: LBehavior) {
+        assert(this._id.index > 0);
         this._basicBehaviors.push(value);
         value._ownerEntityId = this._id;
     }
@@ -144,9 +207,9 @@ export class REGame_Entity extends LObject
     //    this._adhocBehaviors.unshift(value);
     //}
 
-    addBehavior(value: LBehavior) {
-        this._basicBehaviors.unshift(value);
-    }
+    //addBehavior(value: LBehavior) {
+    //    this._basicBehaviors.unshift(value);
+    //}
 
     removeBehavior(value: LBehavior) {
         const index = this._basicBehaviors.findIndex(x => x == value);
@@ -217,7 +280,7 @@ export class REGame_Entity extends LObject
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return eqaulsObjectId(REGame.camera.focusedEntityId(), this._id);
+        return eqaulsEntityId(REGame.camera.focusedEntityId(), this._id);
     }
 
     /**

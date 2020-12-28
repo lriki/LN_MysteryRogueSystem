@@ -11,7 +11,7 @@ import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DLand } from "ts/data/DLand";
-import { eqaulsObjectId, LObject, LObjectId } from "./LObject";
+import { eqaulsEntityId, LEntityId } from "./LObject";
 
 
 
@@ -30,18 +30,17 @@ export interface RE_Game_Data
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
-export class REGame_Map extends LObject
+export class REGame_Map
 {
     private _floorId: number = 0;
     private _width: number = 0;
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
-    private _entityIds: LObjectId[] = [];      // マップ内に登場している Entity
+    private _entityIds: LEntityId[] = [];      // マップ内に登場している Entity
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
     constructor() {
-        super();
     }
 
     setup(floorId: number) {
@@ -60,11 +59,15 @@ export class REGame_Map extends LObject
         const count = this._width * this._height;
         this._blocks = new Array<REGame_Block>(count);
         for (let i = 0; i < count; i++) {
-            this._blocks[i] = new REGame_Block(this, i % this._width, i / this._width);
+            const x = Math.trunc(i % this._width);
+            const y = Math.trunc(i / this._width);
+            this._blocks[i] = new REGame_Block(this, x, y);
 
             // TileEntity 追加
             const tile = REEntityFactory.newTile(TileKind.Floor);
             tile.floorId = this._floorId;
+            tile.x = x;
+            tile.y = y;
             this._addEntityInternal(tile);
             this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
         }
@@ -136,11 +139,11 @@ export class REGame_Map extends LObject
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
-        assert(entity._id.index > 0);
+        assert(entity.id().index > 0);
         assert(!entity.hasParent());
 
-        this._entityIds.push(entity._id);
-        entity.setParent(this);
+        this._entityIds.push(entity.id());
+        entity.setParentMap(this);
 
         REGame.integration.onEntityEnteredMap(entity);
     }
@@ -172,7 +175,7 @@ export class REGame_Map extends LObject
     }
 
     _removeEntity(entity: REGame_Entity): void {
-        this._entityIds = this._entityIds.filter(x => x != entity._id);
+        this._entityIds = this._entityIds.filter(x => !eqaulsEntityId(x, entity.id()));
         this._removeEntityHelper(entity);
     }
 
@@ -189,8 +192,8 @@ export class REGame_Map extends LObject
     }
 
     private _removeEntityHelper(entity: REGame_Entity) {
-        assert(eqaulsObjectId(this.id(), entity.parentid()));
-        entity.setParent(undefined);
+        assert(entity.parentIsMap());
+        entity.clearParent();
 
         assert(entity.floorId == this.floorId());
         entity.floorId = 0;

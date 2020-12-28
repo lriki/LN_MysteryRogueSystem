@@ -61,13 +61,13 @@
 import { assert } from "ts/Common";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { LObjectId, eqaulsObjectId } from "../LObject";
+import { LEntityId, eqaulsEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LBehavior } from "./LBehavior"
 
 export class LInventoryBehavior extends LBehavior {
-    private _entities: LObjectId[] = [];
+    private _entities: LEntityId[] = [];
 
     public entities(): REGame_Entity[] {
         return this._entities.map(x => REGame.world.entity(x));
@@ -77,7 +77,7 @@ export class LInventoryBehavior extends LBehavior {
         assert(!entity.parentEntity());
 
         const id = entity.id();
-        assert(this._entities.find(x => eqaulsObjectId(x, id)) === undefined);
+        assert(this._entities.find(x => eqaulsEntityId(x, id)) === undefined);
         this._entities.push(id);
         
         entity.setParent(this.ownerEntity());
@@ -87,18 +87,18 @@ export class LInventoryBehavior extends LBehavior {
         assert(entity.parentEntity() == this.ownerEntity());
 
         const id = entity.id();
-        const index = this._entities.findIndex(x => eqaulsObjectId(x, id));
+        const index = this._entities.findIndex(x => eqaulsEntityId(x, id));
         assert(index >= 0);
         this._entities.splice(index, 1);
         
-        entity.setParent(undefined);
+        entity.clearParent();
     }
 
     onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse {
-        const index = this._entities.findIndex(x => eqaulsObjectId(x, entity.id()));
+        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());
-            entity.setParent(undefined);
+            entity.clearParent();
             
             this._entities.splice(index, 1);
         }

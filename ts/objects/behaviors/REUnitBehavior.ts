@@ -205,7 +205,6 @@ export class REUnitBehavior extends LBehavior {
     }
     
     [onWalkedOnTopAction](args: CommandArgs, context: RECommandContext): REResponse {
-        console.log("onWalkedOnTopAction");
         return REResponse.Pass;
     }
 }

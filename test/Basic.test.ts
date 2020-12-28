@@ -105,8 +105,7 @@ test('EntitySaveLoad', () => {
         const actor1 = new REGame_Entity();
 
         // Entity Property
-        actor1._id.index = 1;
-        actor1._id.key = 111;
+        actor1._setId({ index: 1, key: 111 });
         actor1.x = 55;
 
         // Attributes

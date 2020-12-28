@@ -1,13 +1,20 @@
 import { assert } from "ts/Common";
 
 
-export interface LObjectId {
-    index: number;
-    key: number;
+export interface LEntityId {
+    readonly index: number;  // 0 is Invalid (dummy entity)
+    readonly key: number;
 }
 
-export function eqaulsObjectId(a: LObjectId, b: LObjectId): boolean {
+export function eqaulsEntityId(a: LEntityId, b: LEntityId): boolean {
     return a.index == b.index && a.key == b.key;
+}
+
+export function cloneEntityId(a: LEntityId): LEntityId {
+    return {
+        index: a.index,
+        key: a.key,
+    };
 }
 
 // Entity をフィールドに保持する人
@@ -24,22 +31,22 @@ export function eqaulsObjectId(a: LObjectId, b: LObjectId): boolean {
  * - 現在 Map の Adhoc Entity の Parent は Map となる。
  * - UniqueEntity の 
  */
-export class LObject {
-    _id: LObjectId = { index: 0, key: 0 };
-    
-    /**
-     * 親 Entity。
-     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
-     * 
-     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
-     */
-    _parentEntityId: LObjectId = { index: 0, key: 0 };
 
-    id(): LObjectId {
+/*
+ export class LObject {
+    _id: LEntityId = { index: 0, key: 0 };
+    
+    // 親 Entity。
+    // 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
+    // 
+    // GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
+    _parentEntityId: LEntityId = { index: 0, key: 0 };
+
+    id(): LEntityId {
         return this._id;
     }
 
-    parentid(): LObjectId {
+    parentid(): LEntityId {
         return this._parentEntityId;
     }
 
@@ -62,3 +69,4 @@ export class LObject {
     }
 }
 
+*/

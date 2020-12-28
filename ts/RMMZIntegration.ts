@@ -43,7 +43,7 @@ export class RMMZIntegration extends REIntegration {
                 entity.rmmzEventId = e.eventId();
                 entity.inhabitsCurrentFloor = true;
                 REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
-                console.log("EVENT ADD", entity);
+                assert(entity.parentIsMap());
             }
         });
     }

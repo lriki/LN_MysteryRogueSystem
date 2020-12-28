@@ -178,7 +178,6 @@ export class LBattlerBehavior extends LBehavior {
     
     
     onTurnEnd(context: RECommandContext): REResponse {
-
         const entity = this.ownerEntity();
         if (this.isDeathStateAffected()) {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);

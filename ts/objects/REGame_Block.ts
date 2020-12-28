@@ -3,7 +3,6 @@ import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Entity } from "./REGame_Entity";
 import { REGame_Map } from "./REGame_Map";
-import { LObject } from "./LObject";
 
 export enum BlockLayerKind {
 	/** 地形情報。壁・水路など。 */

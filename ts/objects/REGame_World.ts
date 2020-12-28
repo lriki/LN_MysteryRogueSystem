@@ -2,7 +2,7 @@ import { REGame_Entity } from "./REGame_Entity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { Random } from "ts/math/Random";
-import { LObjectId, eqaulsObjectId } from "./LObject";
+import { LEntityId, eqaulsEntityId } from "./LObject";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -13,11 +13,10 @@ export class RE_Game_World
     private _random: Random = new Random(Math.floor(Math.random() * 65535) + 1);
 
     constructor() {
-        const e = this.spawnEntity();  // [0] dummy entity
-        e._name = "null";
+        this._entities = [undefined];   // [0] dummy entity
     }
 
-    entity(id: LObjectId): REGame_Entity {
+    entity(id: LEntityId): REGame_Entity {
         const e = this._entities[id.index];
         if (e && e.id().key == id.key)
             return e;
@@ -52,13 +51,11 @@ export class RE_Game_World
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._entities.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
-            entity._id.index = this._entities.length;
-            entity._id.key = this._random.nextInt();
+            entity._setId({ index: this._entities.length, key : this._random.nextInt() });
             this._entities.push(entity);
         }
         else {
-            entity._id.index = index;
-            entity._id.key = this._random.nextInt();
+            entity._setId({ index: index, key : this._random.nextInt() });
             this._entities[index] = entity;
         }
     }
@@ -94,7 +91,7 @@ export class RE_Game_World
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (eqaulsObjectId(REGame.camera.focusedEntityId(), entity.id()) &&
+        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id()) &&
             REGame.map.floorId() != entity.floorId) {
             REGame.camera.reserveFloorTransferToFocusedEntity();
         }
@@ -103,10 +100,11 @@ export class RE_Game_World
     }
 
     _removeDestroyesEntities(): void {
-        for (let i = 0; i < this._entities.length; i++) {
+        for (let i = 1; i < this._entities.length; i++) {
             const entity = this._entities[i];
             if (entity) {
-                if (!entity.hasParent()) {
+                if (!entity.isUnique() && !entity.hasParent()) {
+                    // Unique Entity 以外で、いずれからの参照もない Entity は削除する
                     entity.destroy();
                 }
 
@@ -121,7 +119,7 @@ export class RE_Game_World
                     console.log("Entity removed", this._entities[i]);
                     this._entities[i] = undefined;
     
-                    if (eqaulsObjectId(REGame.camera.focusedEntityId(), entity.id())) {
+                    if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {
                         REGame.camera.clearFocus();
                     }
                 }
@@ -140,7 +138,7 @@ export class RE_Game_World
                 // それはここでは追加しない。
                 const isNoEnterd = !entity.hasParent();
 
-                if (REGame.map.floorId() == entity.floorId && !entity.isTile()) {
+                if (REGame.map.floorId() == entity.floorId && !entity.isTile() && isNoEnterd) {
                     REGame.map._reappearEntity(entity);
                 }
             }

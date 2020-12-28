@@ -6,7 +6,7 @@ import { RE_Game_World } from "./REGame_World";
 import { REGame } from "./REGame";
 import { RESystem } from "ts/system/RESystem";
 import { Log } from "ts/Common";
-import { LObjectId } from "./LObject";
+import { LEntityId } from "./LObject";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -15,12 +15,12 @@ import { LObjectId } from "./LObject";
  */
 export class REGame_Camera
 {
-    private _focusedEntityId: LObjectId = {index: 0, key: 0};
+    private _focusedEntityId: LEntityId = {index: 0, key: 0};
     private _transferingNewFloorId: number = 0;
     private _transferingNewX: number = 0;
     private _transferingNewY: number = 0;
 
-    focusedEntityId(): LObjectId {
+    focusedEntityId(): LEntityId {
         return this._focusedEntityId;
     }
 
@@ -29,7 +29,7 @@ export class REGame_Camera
     }
 
     focus(entity: REGame_Entity) {
-        this._focusedEntityId = entity._id;
+        this._focusedEntityId = entity.id();
     }
 
     clearFocus() {

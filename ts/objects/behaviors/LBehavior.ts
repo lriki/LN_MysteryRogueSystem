@@ -32,7 +32,7 @@ import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
 import { REGame } from "..//REGame";
-import { LObjectId } from "../LObject";
+import { LEntityId } from "../LObject";
 import { REGame_Entity } from "../REGame_Entity";
 
 export enum DecisionPhase {
@@ -83,7 +83,7 @@ export const testPutInItem = Symbol("testPutInItem");
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {
     dataId: number = 0;
-    _ownerEntityId: LObjectId = { index: 0, key: 0 };
+    _ownerEntityId: LEntityId = { index: 0, key: 0 };
     
     ownerEntity(): REGame_Entity {
         assert(this._ownerEntityId.index > 0);
