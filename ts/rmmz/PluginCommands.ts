@@ -21,10 +21,10 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
     }
     
     if (REVisual.manager) {
-        //const warehouseEntity = REGame.uniqueActorUnits[actorId - 1];
+        const warehouseEntity = REGame.uniqueActorUnits[actorId - 1];
         const actorEntity = REGame.camera.focusedEntity();
         assert(actorEntity);
-        RESystem.commandContext.openDialog(actorEntity, new LWarehouseDialog(actorId));
+        RESystem.commandContext.openDialog(actorEntity, new LWarehouseDialog(actorEntity.id(), warehouseEntity.id()));
         //REVisual.manager._dialogNavigator.push(new VWarehouseDialog(warehouseEntity));
     }
 });

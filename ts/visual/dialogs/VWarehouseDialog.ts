@@ -9,16 +9,17 @@ import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWindow";
 import { VItemListDialog } from "./VItemListDialog";
+import { VWarehouseStoreDialog } from "./VWarehouseStoreDialog";
 
 export class VWarehouseDialog extends REDialogVisualWindowLayer {
-    private _entity: REGame_Entity;
+    private _model: LWarehouseDialog;
     private _inventory: LInventoryBehavior;
     private _commandWindow: VWarehouseMenuCommandWindow;
 
     constructor(model: LWarehouseDialog) {
         super();
-        this._entity = REGame.uniqueActorUnits[model.warehouseActorId() - 1];
-        this._inventory = this._entity.getBehavior(LInventoryBehavior);
+        this._model = model;
+        this._inventory = this._model.userEntity().getBehavior(LInventoryBehavior);
         
         const y = 100;
         const cw = 200;
@@ -37,6 +38,10 @@ export class VWarehouseDialog extends REDialogVisualWindowLayer {
     }
 
     private handleStoreCommand() {
+        const user = this._model.userEntity();
+        const inventory = user.getBehavior(LInventoryBehavior);
+        this.push(new VWarehouseStoreDialog(user, inventory));
+
         console.log("handleStoreCommand");
     }
 

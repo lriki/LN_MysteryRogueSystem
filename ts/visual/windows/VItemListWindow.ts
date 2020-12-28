@@ -18,8 +18,8 @@ export class VItemListWindow extends Window_Selectable {
         this.refresh();
     }
     
-    selectedItem(): REGame_Entity {
-        return this.itemAt(this.index());
+    selectedItems(): [REGame_Entity] {
+        return [this.itemAt(this.index())];
     }
 
     // override

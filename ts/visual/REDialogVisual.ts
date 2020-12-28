@@ -5,12 +5,15 @@ import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../system/REDialog";
 import { REVisual } from "./REVisual";
 
+export type DialogResultCallback = (result: any) => void;
+
 export class REDialogVisualWindowLayer {
     _created: boolean = false;
     _started: boolean = false;
     _destroying: boolean = false;
     _navigator: REDialogVisualNavigator | undefined;
     _windows: Window_Base[] = [];
+    _resultCallback: DialogResultCallback | undefined;
 
     //protected commandContext(): RECommandContext {
     //    return REGame.scheduler.commandContext();
@@ -64,12 +67,13 @@ export class REDialogVisualWindowLayer {
         //windowLayer.removeChild(window);
     }
     
-    protected push(dialog: REDialogVisualWindowLayer) {
+    protected push(dialog: REDialogVisualWindowLayer, result?: DialogResultCallback) {
+        dialog._resultCallback = result;
         REVisual.manager?._dialogNavigator.push(dialog);
     }
 
-    protected pop() {
-        REVisual.manager?._dialogNavigator.pop();
+    protected pop(result?: any) {
+        REVisual.manager?._dialogNavigator.pop(result);
     }
 
     protected doneDialog(consumeAction: boolean) {
@@ -113,15 +117,17 @@ export class REDialogVisualNavigator {
         }
     }
     
-    pop(): void {
-        console.log("pop1", this);
+    pop(result?: any): void {
         this._nextScene = this._dialogs.pop();
 
         if (this._scene) {
             this._scene.onStop();
             this._scene._destroying = true;
         }
-        console.log("pop2", this);
+
+        if (this._nextScene && this._nextScene._resultCallback) {
+            this._nextScene._resultCallback(result);
+        }
     }
 
     clear(): void {
