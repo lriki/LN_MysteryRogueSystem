@@ -7,12 +7,12 @@ import { BlockLayerKind, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { ActionId } from "ts/data/REData";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
-import { EntityId, eqaulsEntityId } from "ts/system/EntityId";
 import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
 import { RETileAttribute } from "./attributes/RETileAttribute";
+import { eqaulsObjectId, LObject } from "./LObject";
 
 enum BlockLayer
 {
@@ -46,7 +46,7 @@ enum BlockLayer
  * - アイテム変化するモンスターは自身の種別を変更することになるが、それだと BlockLayer を変更することと変わらない。
  * - アイテムとして持っている土偶を立てたときは、振舞いは Item から Unit に変わる。これも結局状態変更することと変わらない。
  */
-export class REGame_Entity
+export class REGame_Entity extends LObject
 {
 
     attrbutes: LAttribute[] = [];
@@ -54,7 +54,6 @@ export class REGame_Entity
     //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
 
-    _id: EntityId = { index: 0, key: 0 };
     _name: string = ""; // 主にデバッグ用
     _destroyed: boolean = false;
 
@@ -64,14 +63,6 @@ export class REGame_Entity
     _displayName: string = '';
     _iconName: string = '';
     //_blockLayer: BlockLayer = BlockLayer.Unit;
-
-    /**
-     * 親 Entity。
-     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
-     * 
-     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
-     */
-    _parentEntityId: EntityId = { index: 0, key: 0 };
 
     prefabKey: { kind: DEntityKindId, id: number } = { kind: 0, id: 0 };
     rmmzEventId: number = 0;
@@ -122,27 +113,7 @@ export class REGame_Entity
     // とりあえず Entity に持たせて様子見。
     _states: DStateId[] = [];
 
-    
     _actionConsumed: boolean = false;
-
-    //static newEntity(): REGame_Entity {
-    //    const e = new REGame_Entity();
-    //    REGame.world._addEntity(e);
-    //    return e;
-    //}
-
-    id(): EntityId {
-        return this._id;
-    }
-
-    setParentEntity(entity: REGame_Entity | undefined): void {
-        if (entity) {
-            this._parentEntityId = entity.id();
-        }
-        else {
-            this._parentEntityId = { index: 0, key: 0 };
-        }
-    }
 
     parentEntity(): REGame_Entity | undefined {
         if (this._parentEntityId.index > 0) {
@@ -246,7 +217,7 @@ export class REGame_Entity
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return eqaulsEntityId(REGame.camera.focusedEntityId(), this._id);
+        return eqaulsObjectId(REGame.camera.focusedEntityId(), this._id);
     }
 
     /**
@@ -402,10 +373,6 @@ export class REGame_Entity
 
     _sendReaction(context: RECommandContext, cmd: RECommand): REResponse {
         return this._callBehaviorIterationHelper(x => x.onReaction(this, context, cmd));
-    }
-
-    constructor() {
-
     }
 
     makeSaveContents(): any {

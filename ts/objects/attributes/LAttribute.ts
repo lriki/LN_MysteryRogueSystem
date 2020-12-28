@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
-import { EntityId } from "ts/system/EntityId";
 import { REGame } from "..//REGame";
+import { LObjectId } from "../LObject";
 import { REGame_Entity } from "../REGame_Entity";
 
 /**
@@ -12,7 +12,7 @@ import { REGame_Entity } from "../REGame_Entity";
 export class LAttribute
 {
     dataId: number = 0;
-    _ownerEntityId: EntityId = { index: 0, key: 0 };
+    _ownerEntityId: LObjectId = { index: 0, key: 0 };
 
     data(): LAttributeData {
         return {};

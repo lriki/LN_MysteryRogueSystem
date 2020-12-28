@@ -59,15 +59,15 @@
  */
 
 import { assert } from "ts/Common";
-import { EntityId, eqaulsEntityId } from "ts/system/EntityId"
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
+import { LObjectId, eqaulsObjectId } from "../LObject";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LBehavior } from "./LBehavior"
 
 export class LInventoryBehavior extends LBehavior {
-    private _entities: EntityId[] = [];
+    private _entities: LObjectId[] = [];
 
     public entities(): REGame_Entity[] {
         return this._entities.map(x => REGame.world.entity(x));
@@ -77,28 +77,28 @@ export class LInventoryBehavior extends LBehavior {
         assert(!entity.parentEntity());
 
         const id = entity.id();
-        assert(this._entities.find(x => eqaulsEntityId(x, id)) === undefined);
+        assert(this._entities.find(x => eqaulsObjectId(x, id)) === undefined);
         this._entities.push(id);
         
-        entity.setParentEntity(this.ownerEntity());
+        entity.setParent(this.ownerEntity());
     }
 
     public removeEntity(entity: REGame_Entity) {
         assert(entity.parentEntity() == this.ownerEntity());
 
         const id = entity.id();
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, id));
+        const index = this._entities.findIndex(x => eqaulsObjectId(x, id));
         assert(index >= 0);
         this._entities.splice(index, 1);
         
-        entity.setParentEntity(undefined);
+        entity.setParent(undefined);
     }
 
     onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse {
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
+        const index = this._entities.findIndex(x => eqaulsObjectId(x, entity.id()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());
-            entity.setParentEntity(undefined);
+            entity.setParent(undefined);
             
             this._entities.splice(index, 1);
         }

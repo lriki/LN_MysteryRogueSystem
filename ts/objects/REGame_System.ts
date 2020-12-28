@@ -1,4 +1,4 @@
-import { EntityId } from "ts/system/EntityId";
+import { LObjectId } from "./LObject";
 
 /**
  * グローバル設定
@@ -6,7 +6,7 @@ import { EntityId } from "ts/system/EntityId";
 export class REGame_System {
 
     /**  */
-    _mainPlayerEntityId: EntityId = {index: 0, key: 0};
+    _mainPlayerEntityId: LObjectId = {index: 0, key: 0};
 
 
 }

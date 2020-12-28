@@ -9,9 +9,9 @@ import { REEntityFactory } from "../system/REEntityFactory";
 import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
-import { EntityId } from "ts/system/EntityId";
 import { Vector2 } from "ts/math/Vector2";
 import { DLand } from "ts/data/DLand";
+import { eqaulsObjectId, LObject, LObjectId } from "./LObject";
 
 
 
@@ -30,18 +30,19 @@ export interface RE_Game_Data
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
-export class REGame_Map
+export class REGame_Map extends LObject
 {
     private _floorId: number = 0;
     private _width: number = 0;
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
-    private _entityIds: EntityId[] = [];      // マップ内に登場している Entity
-    private _adhocEntityIds: EntityId[] = [];
+    private _entityIds: LObjectId[] = [];      // マップ内に登場している Entity
+    private _adhocEntityIds: LObjectId[] = [];
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
     constructor() {
+        super();
     }
 
     setup(floorId: number) {
@@ -180,13 +181,23 @@ export class REGame_Map
         const block = this.block(entity.x, entity.y);
         const result = block.removeEntity(entity);
         assert(result);
+
+        this._removeAdhocEntity(entity);
         
         REGame.integration.onEntityLeavedMap(entity);
     }
 
     /** エンティティを、このマップのみの AdhocEntity としてマークする */
     markAdhocEntity(entity: REGame_Entity) {
+        entity.setParent(this);
         this._adhocEntityIds.push(entity.id());
+    }
+
+    private _removeAdhocEntity(entity: REGame_Entity) {
+        const index = this._adhocEntityIds.findIndex(x => eqaulsObjectId(x, entity.id()));
+        if (index >= 0) {
+            this._adhocEntityIds.splice(index, 1);
+        }
     }
 
     destroyAdhocEntities() {

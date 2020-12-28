@@ -1,19 +1,19 @@
 import { tr } from "ts/Common";
 import { testPickOutItem, testPutInItem } from "ts/objects/behaviors/LBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
+import { LObjectId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
-import { EntityId } from "ts/system/EntityId";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { REDialog, REDialogContext } from "../system/REDialog";
 
 export class LWarehouseDialog extends REDialog {
-    private _userEntityId: EntityId;
-    private _warehouseEntityId: EntityId;
+    private _userEntityId: LObjectId;
+    private _warehouseEntityId: LObjectId;
 
-    public constructor(userEntityId: EntityId, warehouseEntityId: EntityId) {
+    public constructor(userEntityId: LObjectId, warehouseEntityId: LObjectId) {
         super();
         this._userEntityId = userEntityId;
         this._warehouseEntityId = warehouseEntityId;

@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import { assert } from 'ts/Common';
 import { ActionId } from 'ts/data/REData';
-import { EntityId } from './EntityId';
+import { LObjectId } from 'ts/objects/LObject';
 import { RECommand } from './RECommand';
 
 export enum RERecordingCommandType {
@@ -18,8 +18,8 @@ export interface RERecordingCommand {
 
 export interface RERecordingCommandArgs_Action {
     actionId: ActionId,
-    actorEntityId: EntityId,
-    reactorEntityId: EntityId,
+    actorEntityId: LObjectId,
+    reactorEntityId: LObjectId,
     args: any,
 }
 
