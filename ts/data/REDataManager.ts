@@ -204,10 +204,6 @@ export class REDataManager
                 actor.initialLevel = x.initialLevel ?? 1;
             }
         });
-        // 1番アクターの初期フロアを、RMMZプレイヤーの初期位置にする
-        REData.actors[1].initialFloorId = $dataSystem.startMapId ?? 0;
-        REData.actors[1].initialX = $dataSystem.startX ?? 0;
-        REData.actors[1].initialY = $dataSystem.startY ?? 0;
 
         // Import Skills
         $dataSkills.forEach(x => {

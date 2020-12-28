@@ -37,7 +37,6 @@ export class REGame_Map extends LObject
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
     private _entityIds: LObjectId[] = [];      // マップ内に登場している Entity
-    private _adhocEntityIds: LObjectId[] = [];
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
@@ -54,10 +53,9 @@ export class REGame_Map extends LObject
 
     setupEmptyMap(width: number, height: number) {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
-        assert(this._adhocEntityIds.length == 0);   // 外部で releaseMap してから setup すること
 
         this._width = width;
-        this._height = height;
+        this._height = height
 
         const count = this._width * this._height;
         this._blocks = new Array<REGame_Block>(count);
@@ -67,14 +65,12 @@ export class REGame_Map extends LObject
             // TileEntity 追加
             const tile = REEntityFactory.newTile(TileKind.Floor);
             tile.floorId = this._floorId;
-            this.markAdhocEntity(tile);
             this._addEntityInternal(tile);
             this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
         }
     }
 
     releaseMap() {
-        this.destroyAdhocEntities();
         this._removeAllEntities();
         this._width = 0;
         this._height = 0;
@@ -141,8 +137,10 @@ export class REGame_Map extends LObject
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
         assert(entity._id.index > 0);
+        assert(!entity.hasParent());
 
         this._entityIds.push(entity._id);
+        entity.setParent(this);
 
         REGame.integration.onEntityEnteredMap(entity);
     }
@@ -174,48 +172,39 @@ export class REGame_Map extends LObject
     }
 
     _removeEntity(entity: REGame_Entity): void {
-        assert(entity.floorId == this.floorId());
         this._entityIds = this._entityIds.filter(x => x != entity._id);
-        entity.floorId = 0;
-
-        const block = this.block(entity.x, entity.y);
-        const result = block.removeEntity(entity);
-        assert(result);
-
-        this._removeAdhocEntity(entity);
-        
-        REGame.integration.onEntityLeavedMap(entity);
-    }
-
-    /** エンティティを、このマップのみの AdhocEntity としてマークする */
-    markAdhocEntity(entity: REGame_Entity) {
-        entity.setParent(this);
-        this._adhocEntityIds.push(entity.id());
-    }
-
-    private _removeAdhocEntity(entity: REGame_Entity) {
-        const index = this._adhocEntityIds.findIndex(x => eqaulsObjectId(x, entity.id()));
-        if (index >= 0) {
-            this._adhocEntityIds.splice(index, 1);
-        }
-    }
-
-    destroyAdhocEntities() {
-        this._adhocEntityIds.forEach(x => {
-            REGame.world.entity(x).destroy();
-        })
-        this._adhocEntityIds = [];
+        this._removeEntityHelper(entity);
     }
 
     _removeAllEntities(): void {
         this._entityIds.forEach(x => {
             const entity = REGame.world.entity(x);
-            entity.floorId = 0;
-            REGame.integration.onEntityLeavedMap(entity);
+            this._removeEntityHelper(entity);
+            //_removeEntity(entity);
+            //entity.floorId = 0;
+            //REGame.integration.onEntityLeavedMap(entity);
         });
 
         this._entityIds = [];
     }
+
+    private _removeEntityHelper(entity: REGame_Entity) {
+        assert(eqaulsObjectId(this.id(), entity.parentid()));
+        entity.setParent(undefined);
+
+        assert(entity.floorId == this.floorId());
+        entity.floorId = 0;
+
+        const block = this.block(entity.x, entity.y);
+        const result = block.removeEntity(entity);
+        assert(result);
+        
+        REGame.integration.onEntityLeavedMap(entity);
+    }
+
+
+
+
 
     canEntering(block: REGame_Block, entity: REGame_Entity, layer: BlockLayerKind): boolean {
         // TODO: 壁抜けや浮遊状態で変わる

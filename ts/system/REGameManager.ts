@@ -12,7 +12,7 @@ import { RESystem } from "./RESystem";
 import { RECommandRecorder } from "./RECommandRecorder";
 import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
-import { Log } from "ts/Common";
+import { assert, Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
 import { DBasics } from "ts/data/DBasics";
@@ -66,10 +66,6 @@ export class REGameManager
                 unit.x = x.initialX;
                 unit.y = x.initialY;
                 REGame.uniqueActorUnits.push(unit);
-                
-                //const attr = unit.findAttribute(REGame_PositionalAttribute);
-                //if (attr) {
-                //}
             }
         });
 
@@ -88,13 +84,9 @@ export class REGameManager
         }
         REGame.camera.focus(firstActor);
 
-/*
-        let a = RE_Game_EntityFactory.newActor();
-        let b = a.findAttribute(RE_Game_UnitAttribute);
-        let c = a.findAttribute(RE_Game_PositionalAttribute);
-        console.log("b: ", b);
-        console.log("c: ", c);
-        */
+        // この時点で移動しようとしてはならない。
+        // RMMZ 側の Game_Player.performTransfer をフックする。
+        assert(!REGame.camera.isFloorTransfering());
     }
 
     static performFloorTransfer() {

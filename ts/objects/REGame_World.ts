@@ -105,21 +105,28 @@ export class RE_Game_World
     _removeDestroyesEntities(): void {
         for (let i = 0; i < this._entities.length; i++) {
             const entity = this._entities[i];
-            if (entity && entity.isDestroyed()) {
-
-                if (entity.floorId == REGame.map.floorId()) {
-                    REGame.map._removeEntity(entity);
+            if (entity) {
+                if (!entity.hasParent()) {
+                    entity.destroy();
                 }
 
-                REGame.scheduler.invalidateEntity(entity);
+                if (entity.isDestroyed()) {
 
-                console.log("Entity removed", this._entities[i]);
-                this._entities[i] = undefined;
-
-                if (eqaulsObjectId(REGame.camera.focusedEntityId(), entity.id())) {
-                    REGame.camera.clearFocus();
+                    if (entity.floorId == REGame.map.floorId()) {
+                        REGame.map._removeEntity(entity);
+                    }
+    
+                    REGame.scheduler.invalidateEntity(entity);
+    
+                    console.log("Entity removed", this._entities[i]);
+                    this._entities[i] = undefined;
+    
+                    if (eqaulsObjectId(REGame.camera.focusedEntityId(), entity.id())) {
+                        REGame.camera.clearFocus();
+                    }
                 }
             }
+
         }
     }
 
@@ -128,6 +135,11 @@ export class RE_Game_World
         for (let i = 1; i < this._entities.length; i++) {
             const entity = this._entities[i];
             if (entity) {
+                // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
+                // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
+                // それはここでは追加しない。
+                const isNoEnterd = !entity.hasParent();
+
                 if (REGame.map.floorId() == entity.floorId && !entity.isTile()) {
                     REGame.map._reappearEntity(entity);
                 }
