@@ -1,5 +1,5 @@
 import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
-import { REDialogVisualNavigator } from "ts/visual/REDialogVisual";
+import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
 
 export class Scene_Warehouse extends Scene_MenuBase {
     static dialogData: LWarehouseDialog;

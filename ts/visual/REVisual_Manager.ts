@@ -1,8 +1,8 @@
 
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { Vector2 } from "ts/math/Vector2";
-import { REDialogVisualNavigator } from "ts/visual/REDialogVisual";
-import { REManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
+import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
+import { VManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
 import { REVisualSequel } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
 import { REGame_Sequel } from "../objects/REGame_Sequel";
@@ -55,11 +55,11 @@ export class REVisual_Manager
     openDialog(context: REDialogContext): void {
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
-            this._dialogNavigator.push(new REManualActionDialogVisual());
+            this._dialogNavigator._openMainDialog(new VManualActionDialogVisual(d));
         else if (d instanceof RE.EventExecutionDialog)
             this._dialogNavigator.push(new REEventExecutionDialogVisual());
         else if (d instanceof LWarehouseDialog)
-            this._dialogNavigator.push(new VWarehouseDialog(d));
+            this._dialogNavigator._openMainDialog(new VWarehouseDialog(d));
 
             
         // AI 用の Dialog を開いた時など、UI を伴わないものもある

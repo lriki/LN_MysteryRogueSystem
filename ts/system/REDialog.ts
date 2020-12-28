@@ -112,4 +112,8 @@ export class REDialogContext
 export class REDialog
 {
     onUpdate(context: REDialogContext): void { }
+
+    public close(consumeAction: boolean): void {
+        return RESystem.dialogContext.closeDialog(consumeAction);
+    }
 }

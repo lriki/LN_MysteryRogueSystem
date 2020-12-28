@@ -5,13 +5,14 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
-import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWindow";
 import { VItemListDialog } from "./VItemListDialog";
 import { VWarehouseStoreDialog } from "./VWarehouseStoreDialog";
+import { VMainDialog } from "./VMainDialog";
+import { VWarehouseWithdrawDialog } from "./VWarehouseWithdrawDialog";
 
-export class VWarehouseDialog extends REDialogVisualWindowLayer {
+export class VWarehouseDialog extends VMainDialog {
     private _model: LWarehouseDialog;
     private _inventory: LInventoryBehavior;
     private _commandWindow: VWarehouseMenuCommandWindow;
@@ -40,15 +41,22 @@ export class VWarehouseDialog extends REDialogVisualWindowLayer {
     private handleStoreCommand() {
         const user = this._model.userEntity();
         const inventory = user.getBehavior(LInventoryBehavior);
-        this.push(new VWarehouseStoreDialog(user, inventory), (result: any) => {
+        this.openSubDialog(new VWarehouseStoreDialog(user, inventory), (result: any) => {
             this._model.storeItems(result as REGame_Entity[]);
-            this._navigator?.clear();
         });
 
     }
 
     private handleWithdrawCommand() {
-        console.log("handleWithdrawCommand");
+
+        const user = this._model.userEntity();
+        const inventory = this._model.warehouseEntity().getBehavior(LInventoryBehavior);
+        this.openSubDialog(new VWarehouseWithdrawDialog(user, inventory), (result: any) => {
+
+        
+            console.log("handleWithdrawCommand");
+            //this._model.storeItems(result as REGame_Entity[]);
+        });
     }
     
     private handleCancelCommand() {

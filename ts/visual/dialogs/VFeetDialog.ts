@@ -2,13 +2,13 @@ import { assert } from "ts/Common";
 import { ActionId } from "ts/data/REData";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
-import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
+import { VSubDialog } from "./VSubDialog";
 
 /**
  * [足元]
  */
-export class VFeetDialog extends REDialogVisualWindowLayer {
+export class VFeetDialog extends VSubDialog {
     _targetEntity: REGame_Entity;
     _actions: ActionId[];
     _entityNameWindow: Window_Help | undefined;

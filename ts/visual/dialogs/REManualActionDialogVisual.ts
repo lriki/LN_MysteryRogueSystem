@@ -6,13 +6,22 @@ import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../../system/REDialog";
 import { VFeetDialog } from "./VFeetDialog";
-import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VMenuDialog } from "./VMenuDialog";
 import { DBasics } from "ts/data/DBasics";
+import { VMainDialog } from "./VMainDialog";
+import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 
-export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
+export class VManualActionDialogVisual extends VMainDialog {
 
-    onUpdate(context: REDialogContext) {
+    private _model: REManualActionDialog;
+
+    public constructor(model: REManualActionDialog) {
+        super();
+        this._model = model;
+    }
+
+    onUpdate() {
+        const context = RESystem.dialogContext;
         const entity = context.causeEntity();
         if (!entity) return;
         
@@ -29,10 +38,10 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
                     context.postAction(DBasics.actions.PickActionId, entity, undefined);
                     // 行動を消費せずに、一度 Dialog を終了する。
                     // 終了しないと、post したコマンドチェーンがうごかない。
-                    context.closeDialog(false);
+                    this._model.close(false);
                 }
                 else {
-                    this.push(new VFeetDialog(targetEntity, actions));
+                    this.openSubDialog(new VFeetDialog(targetEntity, actions));
                 }
                 return;
             }
@@ -52,7 +61,7 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
             }
             const args: REMoveToAdjacentArgs = { direction: dir };
             context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);
-            context.closeDialog(true);
+            this._model.close(true);
             return;
         }
         // オートアクション
@@ -60,12 +69,12 @@ export class REManualActionDialogVisual extends REDialogVisualWindowLayer {
             
             // [通常攻撃] スキル発動
             context.commandContext().postPerformSkill(entity, RESystem.skills.normalAttack);
-            context.closeDialog(true);
+            this._model.close(true);
             return;
         }
 
         if (Input.isTriggered("menu")) {
-            this.push(new VMenuDialog(entity));
+            this.openSubDialog(new VMenuDialog(entity));
             return;
         }
     }

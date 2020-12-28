@@ -1,11 +1,11 @@
 
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
-import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VItemListDialog } from "./VItemListDialog";
+import { VSubDialog } from "./VSubDialog";
 
-export class VMenuDialog extends REDialogVisualWindowLayer {
+export class VMenuDialog extends VSubDialog {
     _entity: REGame_Entity;
     _commandWindow: VMenuCommandWindow | undefined;
 

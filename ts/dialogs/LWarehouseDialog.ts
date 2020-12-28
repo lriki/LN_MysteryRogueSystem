@@ -62,7 +62,7 @@ export class LWarehouseDialog extends REDialog {
                 });
         })
 
-        RESystem.dialogContext.closeDialog(true);
+        this.close(true);
     }
     
 }

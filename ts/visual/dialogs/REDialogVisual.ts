@@ -2,86 +2,12 @@ import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { REDialogContext } from "../system/REDialog";
-import { REVisual } from "./REVisual";
+import { REDialogContext } from "../../system/REDialog";
+import { REVisual } from "../REVisual";
+import { VMainDialog } from "./VMainDialog";
+import { VSubDialog } from "./VSubDialog";
 
 export type DialogResultCallback = (result: any) => void;
-
-export class REDialogVisualWindowLayer {
-    _created: boolean = false;
-    _started: boolean = false;
-    _destroying: boolean = false;
-    _navigator: REDialogVisualNavigator | undefined;
-    _windows: Window_Base[] = [];
-    _resultCallback: DialogResultCallback | undefined;
-
-    //protected commandContext(): RECommandContext {
-    //    return REGame.scheduler.commandContext();
-    //}
-
-    // push されたあと、最初の onUpdate の前
-    onCreate() {
-
-    }
-
-    // push または Sub が pop されてアクティブになった時
-    onStart() {
-
-    }
-
-    onUpdate(context: REDialogContext) {
-
-    }
-
-    onClose() {
-        
-    }
-
-    // SubDialog が push されたとき
-    onStop() {
-
-    }
-
-    onDestroy() {
-    }
-
-    destroy() {
-        this.onDestroy();
-
-        this._windows.forEach(x => {
-            x.destroy();
-        });
-
-        this._destroying = false;
-        console.log("destroy", this);
-    }
-
-    protected addWindow(window: Window_Base) {
-        SceneManager._scene.addWindow(window);
-        this._windows.push(window);
-    }
-
-    protected removeWindow(window: Window_Base) {
-        throw new Error("Not implemented.");
-        //const windowLayer = SceneManager._scene._windowLayer as any;
-        //windowLayer.removeChild(window);
-    }
-    
-    protected push(dialog: REDialogVisualWindowLayer, result?: DialogResultCallback) {
-        dialog._resultCallback = result;
-        REVisual.manager?._dialogNavigator.push(dialog);
-    }
-
-    protected pop(result?: any) {
-        REVisual.manager?._dialogNavigator.pop(result);
-    }
-
-    protected doneDialog(consumeAction: boolean) {
-        assert(this._navigator);
-        this._navigator.clear();
-        return RESystem.dialogContext.closeDialog(consumeAction);
-    }
-}
 
 /**
  * SceneManager と同じく、スタックで Sub Dialog を管理するクラス。
@@ -92,21 +18,26 @@ export class REDialogVisualWindowLayer {
  * このクラスはその対策として、Scene_Map 内でウィンドウの遷移管理を行う。
  */
 export class REDialogVisualNavigator {
-    _dialogs: REDialogVisualWindowLayer[];
-    _scene: REDialogVisualWindowLayer | undefined;
-    _nextScene: REDialogVisualWindowLayer | undefined;
+    _mainDialog: VMainDialog | undefined;
+    _subDialogs: VSubDialog[];
+    _scene: VSubDialog | undefined;
+    _nextScene: VSubDialog | undefined;
 
     constructor() {
-        this._dialogs = [];
+        this._subDialogs = [];
     }
 
     isEmpty(): boolean {
-        return !this._scene && !this._nextScene && this._dialogs.length == 0;
+        return !this._mainDialog && !this._scene && !this._nextScene && this._subDialogs.length == 0;
     }
 
-    push(dialog: REDialogVisualWindowLayer): void {
+    _openMainDialog(dialog: VMainDialog): void {
+        this._mainDialog = dialog;
+    }
+
+    push(dialog: VSubDialog): void {
         if (this._scene) {
-            this._dialogs.push(this._scene);
+            this._subDialogs.push(this._scene);
         }
 
         this._nextScene = dialog;
@@ -118,7 +49,7 @@ export class REDialogVisualNavigator {
     }
     
     pop(result?: any): void {
-        this._nextScene = this._dialogs.pop();
+        this._nextScene = this._subDialogs.pop();
 
         if (this._scene) {
             this._scene.onStop();
@@ -126,6 +57,10 @@ export class REDialogVisualNavigator {
 
             if (this._scene._resultCallback) {
                 this._scene._resultCallback(result);
+            }
+
+            if (this._mainDialog) {
+                this._mainDialog._started = false;
             }
         }
 
@@ -142,12 +77,17 @@ export class REDialogVisualNavigator {
             this._nextScene.onClose();
             this._nextScene.destroy();
         }
-        for (let i = this._dialogs.length - 1; i >= 0; i--) {
-            this._dialogs[i].onStop();
-            this._dialogs[i].onClose();
-            this._dialogs[i].destroy();
+        for (let i = this._subDialogs.length - 1; i >= 0; i--) {
+            this._subDialogs[i].onStop();
+            this._subDialogs[i].onClose();
+            this._subDialogs[i].destroy();
         }
-        this._dialogs = [];
+        if (this._mainDialog) {
+            this._mainDialog.onStop();
+            this._mainDialog.onClose();
+            this._mainDialog._destroy();
+        }
+        this._subDialogs = [];
         this._scene = undefined;
         this._nextScene = undefined;
     }
@@ -172,6 +112,16 @@ export class REDialogVisualNavigator {
                 this._scene.onStart();
             }
         }
+        else if (this._mainDialog) {
+            if (!this._mainDialog._created) {
+                this._mainDialog.onCreate();
+                this._mainDialog._created = true;
+            }
+            if (!this._mainDialog._started) {
+                this._mainDialog.onStart();
+                this._mainDialog._started = true;
+            }
+        }
     }
 
     private updateScene(context: REDialogContext): void {
@@ -186,6 +136,9 @@ export class REDialogVisualNavigator {
                 this._scene.onStart();
             }
             */
+        }
+        else if (this._mainDialog) {
+            this._mainDialog.onUpdate();
         }
     }
     

@@ -5,11 +5,11 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REDialogContext } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
-import { REDialogVisualWindowLayer } from "../REDialogVisual";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
+import { VSubDialog } from "./VSubDialog";
 
-export class VItemListDialog extends REDialogVisualWindowLayer {
+export class VItemListDialog extends VSubDialog {
     _actorEntity: REGame_Entity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;// | undefined;

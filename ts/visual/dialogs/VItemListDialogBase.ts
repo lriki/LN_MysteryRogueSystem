@@ -1,16 +1,11 @@
-import { assert, tr } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
-import { ActionId, REData } from "ts/data/REData";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { REDialogContext } from "ts/system/REDialog";
-import { RESystem } from "ts/system/RESystem";
-import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VSubDialog } from "./VSubDialog";
 
-export class VWarehouseStoreDialog extends VSubDialog {
+export class VItemListDialogBase extends VSubDialog {
     _actorEntity: REGame_Entity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;
@@ -41,13 +36,15 @@ export class VWarehouseStoreDialog extends VSubDialog {
     onUpdate(context: REDialogContext) {
     }
 
+    protected onMakeCommandList(window: VFlexCommandWindow): void {
+
+    }
+
     private handleItemSubmit(): void {
         if (this._itemListWindow && this._commandWindow) {
-            const items = this._itemListWindow.selectedItems();
 
             this._commandWindow.clear();
-            this._commandWindow.addSystemCommand(tr("預ける"), "store", () => this.handleStore(items));
-            this._commandWindow.refresh();
+            this.onMakeCommandList(this._commandWindow);
             this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
 
             this._itemListWindow.deactivate();
@@ -68,10 +65,6 @@ export class VWarehouseStoreDialog extends VSubDialog {
         }
     }
 
-    private handleStore(items: [REGame_Entity]): void {
-        this.pop(items);
-    }
-
     private activateItemWindow() {
         if (this._itemListWindow) {
             this._itemListWindow.refresh();
@@ -80,3 +73,4 @@ export class VWarehouseStoreDialog extends VSubDialog {
     };
 
 }
+
