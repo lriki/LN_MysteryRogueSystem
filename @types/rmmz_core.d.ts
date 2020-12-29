@@ -309,9 +309,41 @@ export class Sprite extends PIXI.Sprite {
 
 }
 
+export class Tilemap extends PIXI.Container {
+
+    public animationCount: number;
+    public flags: number[];
+    public height: number;
+    public horizontalWrap: boolean;
+    public origin: Point;
+    public verticalWrap: boolean;
+    public width: number;
+    public _tileWidth: number;
+	public _tileHeight: number;
+	public _upperLayer: Tilemap.Layer;
+
+    constructor();
+
+    public destroy(): void;
+    public isReady(): boolean;
+    public setBitmaps(bitmaps: Bitmap[]): void;
+    public setData(width: number, height: number, data: number[]): void;
+    public update(): void;
+	public updateTransform(): void;
+	
+	
+	_addSpot(startX: number, startY: number, x: number, y: number): void;
+	_readMapData(x: number, y: number, d: number): number;
+	_addTile(layer: Tilemap.Layer, tileId: number, dx: number, dy: number): void;
+}
 
 
+export namespace Tilemap {
 
+	class Layer extends PIXI.Container {
+
+	}
+}
 
 
 export interface Array<T> {
