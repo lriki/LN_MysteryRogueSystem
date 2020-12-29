@@ -15,6 +15,7 @@ import { RETileAttribute } from "./attributes/RETileAttribute";
 import { eqaulsEntityId, LEntityId } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
+import { LState } from "./states/LState";
 
 enum BlockLayer
 {
@@ -173,7 +174,7 @@ export class REGame_Entity
     
     // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
     // とりあえず Entity に持たせて様子見。
-    _states: DStateId[] = [];
+    _states: LState[] = [];
 
     _actionConsumed: boolean = false;
 
@@ -217,15 +218,24 @@ export class REGame_Entity
     }
 
     addState(stateId: DStateId) {
-        this._states.unshift(stateId);
+        const index = this._states.findIndex(s => s.stateId() == stateId);
+        if (index >= 0) {
+            this._states[index].recast();
+        }
+        else {
+            this._states.push(new LState(stateId));
+        }
     }
 
     removeState(stateId: DStateId) {
-        this._states.remove(stateId);
-        //this._states.remove(stateId);
-        //delete this._stateTurns[stateId];
-        //const index = this._states.findIndex(x => x == value);
-        //if (index >= 0) this._states.splice(index, 1);
+        const index = this._states.findIndex(s => s.stateId() == stateId);
+        if (index >= 0) {
+            this._states.splice(index, 1);
+        }
+    }
+    
+    public isStateAffected(stateId: DStateId): boolean {
+        return this._states.findIndex(s => s.stateId() == stateId) >= 0;
     }
 
     /**
@@ -405,13 +415,12 @@ export class REGame_Entity
         return response;
     }
 
+    // TODO: State と通常の Behavior を分けるのやめる。
+    // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
     _callStateIterationHelper(func: (x: LStateBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
-        for (let i = 0; i < this._states.length; i++) {
-            const r = func(RESystem.stateBehaviors[this._states[i]]);
-            if (r != REResponse.Pass) {
-                response = r;
-            }
+        for (let i = this._states.length - 1; i >= 0; i--) {
+            response = this._states[i]._callStateIterationHelper(func);
         }
         return response;
     }

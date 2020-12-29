@@ -10,8 +10,7 @@ import { DecisionPhase } from "../behaviors/LBehavior";
  * 
  * 各メソッドは Behavior と同一
  */
-// deprecated
-export class LStateBehavior {
+export class LStateTraitBehavior {
     //_dataId: DStateId = 0;
     
     
@@ -27,20 +26,3 @@ export class LStateBehavior {
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     
 }
-
-/*
-[2020/11/8] Note: State は Attribute+Behavior 相当の実装だけど、これらを一緒にする？
-----------
-
-### 一緒にする場合
-メソッドなどが勝手にシリアライズされないように、必要なフィールドのシリアライズを自分で実装する必要がある。
-→ 不要。見分けてくれる。
-
-### 分ける場合
-関係するデータと処理が別々のところにできることになるので、やや複雑になる。
-Attrbute を interface にしたいところだが、型情報がないと find できず使いづらい。
-
-
-
-*/
-

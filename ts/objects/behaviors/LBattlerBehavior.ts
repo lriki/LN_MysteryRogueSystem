@@ -128,7 +128,7 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.isStateAffected
     isStateAffected(stateId: DStateId): boolean {
         const entity = this.ownerEntity();
-        return entity._states.includes(stateId);
+        return entity.isStateAffected(stateId);
     }
     
     // Game_BattlerBase.prototype.isDeathStateAffected

@@ -45,6 +45,10 @@ export enum REResponse
     */
 }
 
+export function checkContinuousResponse(r: REResponse): boolean {
+    return r == REResponse.Pass;
+}
+
 /** Command 表現及び引数 */
 export class RECommand  // sealed
 {

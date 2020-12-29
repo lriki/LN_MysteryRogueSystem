@@ -11,6 +11,7 @@ import { DEffect, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, makeStateTraitsFromMeta } from "./DState";
+import { DBehaviorFactory } from "./DBehaviorFactory";
 
 
 declare global {  
@@ -414,6 +415,8 @@ export class REDataManager
                 }
             }
         }
+
+        DBehaviorFactory.setup();
     }
 
     static makeEffect(damage: IDataDamage): DEffect {

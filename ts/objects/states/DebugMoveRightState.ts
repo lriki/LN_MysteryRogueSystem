@@ -7,6 +7,7 @@ import { RECommandContext } from "ts/system/RECommandContext";
 import { LStateBehavior } from "./LStateBehavior";
 import { DBasics } from "ts/data/DBasics";
 
+// deprecated
 export class LDebugMoveRightState extends LStateBehavior {
 
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
