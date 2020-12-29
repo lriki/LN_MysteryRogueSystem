@@ -276,27 +276,27 @@ export class REDataManager
         // parent が Land である Map を、データテーブル用のマップとして関連付ける
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
-            if (info) {
-                const land = REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId);
-                if (land) {
-                    if (info.name?.startsWith("Event")) {
-                        land.eventTableMapId = i;
-                    }
-                    else if (info.name?.startsWith("Item")) {
-                        land.itemTableMapId = i;
-                    }
-                    else if (info.name?.startsWith("Enemy")) {
-                        land.enemyTableMapId = i;
-                    }
-                    else if (info.name?.startsWith("Trap")) {
-                        land.trapTableMapId = i;
-                    }
-                    else if (info.name?.includes("RE-ExitMap")) {
-                        land.exitEMMZMapId = i;
-                    }
-                    else {
-                        // 固定マップ or シャッフルマップ用のテンプレートマップ
-                    }
+            const parent = (info && info.parentId) ? $dataMapInfos[info.parentId] : undefined;
+            const land = (parent) ? REData.lands.find(x => parent.parentId && x.rmmzMapId == parent.parentId) : undefined;
+
+            if (parent && land && parent.name == "[Database]") {
+                if (info.name?.startsWith("EventTable")) {
+                    land.eventTableMapId = i;
+                }
+                else if (info.name?.startsWith("ItemTable")) {
+                    land.itemTableMapId = i;
+                }
+                else if (info.name?.startsWith("EnemyTable")) {
+                    land.enemyTableMapId = i;
+                }
+                else if (info.name?.startsWith("TrapTable")) {
+                    land.trapTableMapId = i;
+                }
+                else if (info.name?.includes("RE-ExitMap")) {
+                    land.exitEMMZMapId = i;
+                }
+                else {
+                    // 固定マップ or シャッフルマップ用のテンプレートマップ
                 }
             }
         }

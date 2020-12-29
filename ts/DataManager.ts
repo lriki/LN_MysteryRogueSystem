@@ -64,16 +64,25 @@ DataManager.loadMapData = function(mapId) {
         // 今いる Land 以外へ遷移したときは、データテーブルをロードする
         if (REDataManager.loadedLandId != land.id) {
             const land_filename = `Map${land.rmmzMapId.padZero(3)}.json`;
-            const eventTable_filename = `Map${land.eventTableMapId.padZero(3)}.json`;
-            const itemTable_filename = `Map${land.itemTableMapId.padZero(3)}.json`;
-            const enemyTable_filename = `Map${land.enemyTableMapId.padZero(3)}.json`;
-            const trapTable_filename = `Map${land.trapTableMapId.padZero(3)}.json`;
             this.loadDataFile("RE_dataLandMap", land_filename);
-            this.loadDataFile("RE_dataEventTableMap", eventTable_filename);
-            this.loadDataFile("RE_dataItemTableMap", itemTable_filename);
-            this.loadDataFile("RE_dataEnemyTableMap", enemyTable_filename);
-            this.loadDataFile("RE_dataTrapTableMap", trapTable_filename);
             REDataManager.loadedLandId = land.id;
+
+            if (land.eventTableMapId > 0) {
+                const eventTable_filename = `Map${land.eventTableMapId.padZero(3)}.json`;
+                this.loadDataFile("RE_dataEventTableMap", eventTable_filename);
+            }
+            if (land.itemTableMapId > 0) {
+                const itemTable_filename = `Map${land.itemTableMapId.padZero(3)}.json`;
+                this.loadDataFile("RE_dataItemTableMap", itemTable_filename);
+            }
+            if (land.enemyTableMapId > 0) {
+                const enemyTable_filename = `Map${land.enemyTableMapId.padZero(3)}.json`;
+                this.loadDataFile("RE_dataEnemyTableMap", enemyTable_filename);
+            }
+            if (land.trapTableMapId > 0) {
+                const trapTable_filename = `Map${land.trapTableMapId.padZero(3)}.json`;
+                this.loadDataFile("RE_dataTrapTableMap", trapTable_filename);
+            }
         }
         else {
             // 同じ Land 内の Floor 間遷移。Land 情報をロードする必要はない。
@@ -103,11 +112,24 @@ DataManager.isMapLoaded = function() {
     const result = _DataManager_isMapLoaded.call(DataManager);
     if (result) {
         if (REDataManager.landMapDataLoading) {
-            return !!window["RE_dataLandMap"] &&
-                   !!window["RE_dataEventTableMap"] &&
-                   !!window["RE_dataItemTableMap"] &&
-                   !!window["RE_dataEnemyTableMap"] &&
-                   !!window["RE_dataTrapTableMap"];
+            const land = REData.lands[REDataManager.loadedLandId];
+            if (!window["RE_dataLandMap"]) {
+                return false;
+            }
+            if (land.eventTableMapId > 0 && !window["RE_dataEventTableMap"]) {
+                return false;
+            }
+            if (land.itemTableMapId > 0 && !window["RE_dataItemTableMap"]) {
+                return false;
+            }
+            if (land.enemyTableMapId > 0 && !window["RE_dataEnemyTableMap"]) {
+                return false;
+            }
+            if (land.trapTableMapId > 0 && !window["RE_dataTrapTableMap"]) {
+                return false;
+            }
+
+            return true;
             // 続いて Scene_Map.isReady() で、固定マップなどのロードを行う
         }
         else {

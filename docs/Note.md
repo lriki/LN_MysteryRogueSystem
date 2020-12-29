@@ -1,6 +1,8 @@
 方針メモ
 ==========
 
+
+
 [2020/9/6] 
 ----------
 - 分裂
@@ -72,3 +74,12 @@ Refs:
 
 https://te4.org/wiki/Tales_of_Maj%27Eyal_Wiki
 https://te4.org/docs/t-engine4/1.4.8/index.html
+
+
+----------
+
+```
+choco install strawberryperl
+npm install -g cloc
+cloc ts --include-lang=TypeScript
+```
