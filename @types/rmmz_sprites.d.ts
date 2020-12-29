@@ -208,4 +208,27 @@ export class Spriteset_Map extends Spriteset_Base {
     animationBaseDelay(): number;
 }
 
+
+/**
+ * -----------------------------------------------------------------------------
+ * Sprite_Character
+ * 
+ * The sprite for displaying a character.
+ */
+export class Sprite_Character extends Sprite {
+    _character: Game_CharacterBase;
+        
+    constructor(character?: Game_CharacterBase);
+    initialize(character?: Game_CharacterBase): void;
+    setCharacter(character: Game_CharacterBase): void;
+    initMembers(): void;
+    checkCharacter():boolean;
+    characterPatternX(): number;
+    characterPatternY(): number;
+
+    widthHeight(): number;
+    patternHeight(): number;
+}
+
+
 }

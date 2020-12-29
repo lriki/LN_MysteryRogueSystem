@@ -131,24 +131,6 @@ declare class Sprite_Button {
     onClick(): void;
 }
 
-/**
- * -----------------------------------------------------------------------------
- * Sprite_Character
- * 
- * The sprite for displaying a character.
- */
-declare class Sprite_Character {
-    _character: Game_CharacterBase;
-        
-    constructor(character?: Game_CharacterBase);
-    initialize(character?: Game_CharacterBase): void;
-    setCharacter(character: Game_CharacterBase): void;
-    initMembers(): void;
-    checkCharacter():boolean;
-    characterPatternX(): number;
-    characterPatternY(): number;
-}
-
 
 /**
  * -----------------------------------------------------------------------------

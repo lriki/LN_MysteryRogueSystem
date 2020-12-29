@@ -188,6 +188,7 @@ export class REDataManager
                         key: x.meta ? x.meta["RE.Key"] : "",
                         displayName: x.name ?? "",
                         restriction: 0,
+                        iconIndex: x.iconIndex ?? 0,
                         traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
                     };
                     console.log("state", state);
@@ -199,6 +200,7 @@ export class REDataManager
                         displayName: "",
                         key: "",
                         restriction: 0,
+                        iconIndex: 0,
                         traits: [],
                     }
                 }

@@ -11,7 +11,7 @@ export class LState {
 
     public constructor(stateId: DStateId) {
         this._stateId = stateId;
-        this._behabiors = this.state().traits.map(traitId => DBehaviorFactory.createStateTraitBehavior(traitId));
+        this._behabiors = this.stateData().traits.map(traitId => DBehaviorFactory.createStateTraitBehavior(traitId));
         console.log("LState", this);
     }
 
@@ -19,7 +19,7 @@ export class LState {
         return this._stateId;
     }
 
-    public state(): DState {
+    public stateData(): DState {
         return REData.states[this._stateId];
     }
 

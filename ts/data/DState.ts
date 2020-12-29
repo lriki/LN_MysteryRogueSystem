@@ -15,6 +15,8 @@ export interface DState {
     /** Restriction */
     restriction: number;
 
+    iconIndex: number;
+
     traits: DStateTraitId[];
 }
 

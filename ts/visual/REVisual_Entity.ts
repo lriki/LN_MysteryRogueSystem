@@ -14,7 +14,7 @@ export class REVisual_Entity
 {
     private _entity: REGame_Entity; // EntityVisual が存在する間、Entity は必ず存在していると考えてよい
     private _rmmzEventId: number;
-    private _spriteIndex: number;   // Spriteset_Map._characterSprites の index
+    private _rmmzSpriteIndex: number;   // Spriteset_Map._characterSprites の index
     private _sequelContext: REVisualSequelContext;
 
     // 単位は Block 座標と等しい。px 単位ではない点に注意。
@@ -25,7 +25,7 @@ export class REVisual_Entity
     constructor(entity: REGame_Entity, rmmzEventId: number) {
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;
-        this._spriteIndex = -1;
+        this._rmmzSpriteIndex = -1;
         this._sequelContext = new REVisualSequelContext(this);
         this._position = new Vector2(entity.x, entity.y);
     }
@@ -43,7 +43,7 @@ export class REVisual_Entity
     }
 
     rmmzSprite(): Sprite_Character | undefined {
-        return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._spriteIndex] : undefined;
+        return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._rmmzSpriteIndex] : undefined;
     }
 
     position(): Vector2 {
@@ -64,7 +64,7 @@ export class REVisual_Entity
     }
 
     _setSpriteIndex(value: number) {
-        this._spriteIndex = value;
+        this._rmmzSpriteIndex = value;
     }
 
     _update() {
@@ -83,6 +83,12 @@ export class REVisual_Entity
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
             
+        }
+
+        const sprite = this.rmmzSprite();
+        if (sprite) {
+            const entity = this.entity();
+            sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
         }
     }
 }

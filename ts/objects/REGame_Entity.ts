@@ -233,6 +233,10 @@ export class REGame_Entity
             this._states.splice(index, 1);
         }
     }
+
+    public states(): readonly LState[] {
+        return this._states;
+    }
     
     public isStateAffected(stateId: DStateId): boolean {
         return this._states.findIndex(s => s.stateId() == stateId) >= 0;

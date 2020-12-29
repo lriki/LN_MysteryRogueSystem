@@ -121,26 +121,6 @@ Game_Map.prototype.getREPrefabEvents = function(): Game_CharacterBase[] {
     });
 }
 
-//==============================================================================
-// Sprite_Character
-
-declare global {
-    interface Sprite_Character {
-        _prefabSpriteIdRE: number;
-
-        isRECharacterExtinct(): boolean;
-        endAllEffect(): void;
-        removeREPrefabEventSprite(index: number): void;
-    }
-}
-
-Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
-    return this._character.isREExtinct();
-};
-
-Sprite_Character.prototype.endAllEffect = function() {
-    // TODO: https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/EventReSpawn.js
-};
 
 //==============================================================================
 // Spriteset_Map

@@ -266,7 +266,7 @@ export class REData
         this.items = [];
         this.addItem("null");
 
-        this.states = [{id: 0, key: "", displayName: 'null', restriction: 0, traits: []}];
+        this.states = [{id: 0, key: "", displayName: 'null', restriction: 0, iconIndex: 0, traits: []}];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
     }
@@ -432,6 +432,7 @@ export class REData
             key: "",
             displayName: name,
             restriction: 0,
+            iconIndex: 0,
             traits: [],
         });
         this._stateFactories[newId] = factory;
