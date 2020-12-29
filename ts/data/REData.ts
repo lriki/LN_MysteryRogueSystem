@@ -10,6 +10,7 @@ import { DClass, DClassId } from "./DClass";
 import { DItem } from "./DItem";
 import { DLand } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
+import { DStateTrait } from "./DStateTrait";
 
 export type ParameterDataId = number;
 
@@ -233,6 +234,7 @@ export class REData
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static skills: DSkill[] = [];
     static items: DItem[] = [];
+    static stateTraits: DStateTrait[] = [];
     static states: DState[] = [];
 
     static _attributeFactories: (() => LAttribute)[] = [];
@@ -264,7 +266,7 @@ export class REData
         this.items = [];
         this.addItem("null");
 
-        this.states = [{id: 0, name: 'null', restriction: 0}];
+        this.states = [{id: 0, key: "", displayName: 'null', restriction: 0, traits: []}];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
     }
@@ -427,8 +429,10 @@ export class REData
         const newId = this.states.length;
         this.states.push({
             id: newId,
-            name: name,
+            key: "",
+            displayName: name,
             restriction: 0,
+            traits: [],
         });
         this._stateFactories[newId] = factory;
         return newId;

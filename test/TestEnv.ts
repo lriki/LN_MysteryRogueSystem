@@ -1,8 +1,11 @@
+import { DBasics } from "ts/data/DBasics";
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
+import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
+import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
 import { REMapBuilder } from "ts/system/REMapBuilder";
@@ -62,6 +65,15 @@ export class TestEnv {
         REData.addFloor(4, 1, REFloorMapKind.FixedMap);
         REData.addFloor(5, 1, REFloorMapKind.FixedMap);
         REData.addFloor(6, 1, REFloorMapKind.FixedMap);
+
+        // States
+        {
+            DBasics.states = {
+                dead: REData.addState("Dead", () => new LStateBehavior()),
+                nap: 0,
+                debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
+            };
+        }
 
         // Skills
         {

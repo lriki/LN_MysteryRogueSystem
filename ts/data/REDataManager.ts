@@ -10,6 +10,7 @@ import { assert } from "../Common";
 import { DEffect, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
+import { DState, makeStateTraitsFromMeta } from "./DState";
 
 
 declare global {  
@@ -83,6 +84,18 @@ export class REDataManager
             exitPoint: REData.addEntityKind("出口", "ExitPoint"),
         };
 
+        // StateTraits
+        {
+            REData.stateTraits = [
+                { id: 0, name: "null" },
+                { id: 1, name: "RE.StateTrait.Nap" },
+            ];
+
+            DBasics.stateTraits = {
+                nap: 1,
+            };
+        }
+
         // Factions
         {
             REData.factions = [
@@ -92,12 +105,6 @@ export class REDataManager
                 { id: 3, name: 'Neutral', schedulingOrder: 3 },
             ]
         }
-
-        // States
-        RESystem.states = {
-            dead: REData.addState("Dead", () => new LStateBehavior()),
-            debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
-        };
 
         // Actions
         DBasics.actions = {
@@ -173,16 +180,36 @@ export class REDataManager
 
         // Import States
         {
-            /*
-            $dataStates.forEach(x => {
+            REData.states = $dataStates.map((x, i) => {
                 if (x) {
-                    const id = REData.addState(x.name ?? "null");
-                    const c = REData.classes[id];
-                    c.expParams = x.expParams ?? [];
-                    c.params = x.params ?? [];
+                    let state: DState = {
+                        id: i,
+                        key: x.meta ? x.meta["RE.Key"] : "",
+                        displayName: x.name ?? "",
+                        restriction: 0,
+                        traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
+                    };
+                    console.log("state", state);
+                    return state;
+                }
+                else {
+                    return {
+                        id: i,
+                        displayName: "",
+                        key: "",
+                        restriction: 0,
+                        traits: [],
+                    }
                 }
             });
-            */
+
+            // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
+            DBasics.states = {
+                dead: 1,//REData.addState("Dead", () => new LStateBehavior()),
+                nap: $dataStates.findIndex(x => x && x.meta && x.meta["RE.BasicState"] == "Nap"),
+                debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
+            };
+
         }
         
         // Import Classes

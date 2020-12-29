@@ -10,10 +10,13 @@ export interface RMMZEventEntityMetadata {
      */
     prefabKind: string;
     prefabIndex: number;
+
+    states: string[];
 }
 
 interface RMMZEventRawMetadata {
     prefab: string;
+    states: string[];
 }
 
 
@@ -58,6 +61,7 @@ export class RMMZHelper {
                         return {
                             prefabKind: tokens[0],
                             prefabIndex: Number(tokens[1]),
+                            states: rawData.states,
                         };
                     }
                     else {

@@ -44,6 +44,12 @@ export class RMMZIntegration extends REIntegration {
                 entity.inhabitsCurrentFloor = true;
                 REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
                 assert(entity.parentIsMap());
+
+                // 初期 state 付与
+                // TODO: 絶対に眠らないモンスターとかもいるので、Command にしたほうがいいかも。
+                e._entityMetadata.states.forEach(stateKey => {
+                    entity.addState(REData.states.findIndex(state => state.key == stateKey));
+                });
             }
         });
     }

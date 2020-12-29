@@ -10,6 +10,7 @@ import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
+import { DBasics } from "ts/data/DBasics";
 
 export class LBattlerBehavior extends LBehavior {
     
@@ -132,7 +133,7 @@ export class LBattlerBehavior extends LBehavior {
     
     // Game_BattlerBase.prototype.isDeathStateAffected
     isDeathStateAffected(): boolean {
-        return this.isStateAffected(RESystem.states.dead);
+        return this.isStateAffected(DBasics.states.dead);
     }
 
     // Game_BattlerBase.prototype.refresh
@@ -156,9 +157,9 @@ export class LBattlerBehavior extends LBehavior {
         const entity = this.ownerEntity();
         if (this.actualParam(RESystem.parameters.hp) === 0) {
             console.log("!!!DEAD!!!");
-            entity.addState(RESystem.states.dead);
+            entity.addState(DBasics.states.dead);
         } else {
-            entity.removeState(RESystem.states.dead);
+            entity.removeState(DBasics.states.dead);
         }
     
         
