@@ -10,6 +10,7 @@
 | 回復 | Heal |
 | 識別(する) | Identifiy |
 | 未識別 | Unidentified |
+| 通路 | Passageway |
 
 エンティティ
 ----------

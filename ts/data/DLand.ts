@@ -1,6 +1,7 @@
 
 
 export type DLandId = number;
+export type DFloorId = number;
 
 /**
  * ダンジョンや町ひとつ分。
@@ -28,6 +29,6 @@ export interface DLand
     exitEMMZMapId: number;
 
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
-    floorIds: number[];
+    floorIds: DFloorId[];
 }
 

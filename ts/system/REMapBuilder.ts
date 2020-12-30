@@ -7,6 +7,7 @@ import { REGame_Map } from "../objects/REGame_Map";
  * 地形生成を行うモジュールに対して、マップデータへのアクセスを提供するクラス。
  * 直接 REGame_Map に触れるのは危険 & 余計に気にする API が多すぎるので、ラップしたもの。
  */
+/*
 export class REMapBuilder {
     private _map: REGame_Map;
     
@@ -40,4 +41,6 @@ export class REMapBuilder {
         assert(attr);
         attr.setTileKind(value);
     }
+
 }
+*/

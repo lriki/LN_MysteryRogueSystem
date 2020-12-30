@@ -103,5 +103,24 @@ export class RMMZHelper {
         }
         return undefined;
     }
+
+    public static getRegionId(x: number, y: number): number {
+        if ($dataMap.data) {
+            const width = $dataMap.width ?? 0;
+            const height = $dataMap.height ?? 0;
+            return $dataMap.data[(5 * height + y) * width + x];
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public static setRegionId(x: number, y: number, regionId: number): void {
+        if ($dataMap.data) {
+            const width = $dataMap.width ?? 0;
+            const height = $dataMap.height ?? 0;
+            $dataMap.data[(5 * height + y) * width + x] = regionId;
+        }
+    }
 }
 

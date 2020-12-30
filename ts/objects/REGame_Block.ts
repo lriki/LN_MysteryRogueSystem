@@ -204,6 +204,8 @@ export class REGame_Block// extends LObject
     private _x: number;
     private _y: number;
 
+    _roomId: number = 0;
+
     constructor(map: REGame_Map, x: number, y: number) {
         this._x = x;
         this._y = y;

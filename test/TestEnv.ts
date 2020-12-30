@@ -1,6 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
+import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
@@ -8,8 +9,6 @@ import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
-import { REMapBuilder } from "ts/system/REMapBuilder";
-import { RESystem } from "ts/system/RESystem";
 
 declare global {
     interface Number {
@@ -102,15 +101,20 @@ export class TestEnvIntegration extends REIntegration {
     onReserveTransferFloor(floorId: number): void {
         // TestEnv では全部動的生成するのでファイルロードは不要
     }
-    onLoadFixedMap(builder: REMapBuilder): void {
-        if (builder.floorId() == 1) {
+
+    onLoadFixedMapData(map: FMap): void {
+        if (map.floorId() == 1) {
             // 50x50 の空マップ
-            builder.reset(50, 50);
+            map.reset(50, 50);
         }
         else {
             throw new Error("Method not implemented.");
         }
     }
+
+    onLoadFixedMapEvents(): void {
+    }
+
     onFlushSequelSet(sequelSet: RESequelSet): void {
         TestEnv.activeSequelSet = sequelSet;
     }

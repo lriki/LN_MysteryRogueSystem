@@ -2,15 +2,16 @@ import { assert } from "./Common";
 import { DBasics } from "./data/DBasics";
 import { REData } from "./data/REData";
 import { REDataManager } from "./data/REDataManager";
+import { FBlockComponent, FMap } from "./floorgen/FMapData";
 import { REGame } from "./objects/REGame";
 import { TileKind } from "./objects/REGame_Block";
 import { REGame_Entity } from "./objects/REGame_Entity";
 import { RESequelSet } from "./objects/REGame_Sequel";
+import { paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "./PluginParameters";
 import { RMMZEventEntityMetadata, RMMZHelper } from "./rmmz/RMMZHelper";
 import { REDialogContext } from "./system/REDialog";
 import { REEntityFactory } from "./system/REEntityFactory";
 import { REIntegration } from "./system/REIntegration";
-import { REMapBuilder } from "./system/REMapBuilder";
 import { REVisual } from "./visual/REVisual";
 
 export class RMMZIntegration extends REIntegration {
@@ -18,23 +19,35 @@ export class RMMZIntegration extends REIntegration {
         $gamePlayer.reserveTransfer(floorId, x, y, d, 0);
     }
 
-    onLoadFixedMap(builder: REMapBuilder): void {
+    onLoadFixedMapData(map: FMap): void {
         if (!$dataMap) {
             throw new Error();
         }
-        builder.reset($dataMap.width ?? 10, $dataMap.height ?? 10);
+        map.reset($dataMap.width ?? 10, $dataMap.height ?? 10);
 
-        for (let y = 0; y < builder.height(); y++) {
-            for (let x = 0; x < builder.width(); x++) {
+        for (let y = 0; y < map.height(); y++) {
+            for (let x = 0; x < map.width(); x++) {
+                const block = map.block(x, y);
+
                 if ($gameMap.checkPassage(x, y, 0xF)) {
-                    builder.setTileKind(x, y, TileKind.Floor);
+                    block.setTileKind(TileKind.Floor);
                 }
                 else {
-                    builder.setTileKind(x, y, TileKind.HardWall);
+                    block.setTileKind(TileKind.HardWall);
+                }
+
+                const regionId = RMMZHelper.getRegionId(x, y);
+                if (regionId == paramFixedMapRoomRegionId) {
+                    block.setComponent(FBlockComponent.Room);
+                }
+                else if (regionId == paramFixedMapPassagewayRegionId) {
+                    block.setComponent(FBlockComponent.Passageway);
                 }
             }
         }
+    }
 
+    onLoadFixedMapEvents(): void {
         // 固定マップ上のイベントを Entity として出現させる
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityMetadata) {
@@ -53,6 +66,7 @@ export class RMMZIntegration extends REIntegration {
             }
         });
     }
+
     onFlushSequelSet(sequelSet: RESequelSet): void {
     }
     

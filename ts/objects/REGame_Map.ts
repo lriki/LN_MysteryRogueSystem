@@ -4,7 +4,6 @@ import { BlockLayerKind, REGame_Block, TileKind } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
-import { REMapBuilder } from "../system/REMapBuilder";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
@@ -12,6 +11,8 @@ import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DLand } from "ts/data/DLand";
 import { eqaulsEntityId, LEntityId } from "./LObject";
+import { FMap } from "ts/floorgen/FMapData";
+import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 
 
 
@@ -46,8 +47,11 @@ export class REGame_Map
     setup(floorId: number) {
         assert(this._entityIds.length == 0);
         this._floorId = floorId;
-        const builder = new REMapBuilder(this);
-        REGame.integration.onLoadFixedMap(builder);
+        const data = new FMap(floorId);
+        REGame.integration.onLoadFixedMapData(data);
+        const builder = new FMapBuilder();
+        builder.build(data, this);
+        REGame.integration.onLoadFixedMapEvents();
     }
 
     setupEmptyMap(width: number, height: number) {

@@ -1,7 +1,7 @@
+import { FMap } from "ts/floorgen/FMapData";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "./REDialog";
-import { REMapBuilder } from "./REMapBuilder";
 
 export abstract class REIntegration {
     /**
@@ -10,7 +10,9 @@ export abstract class REIntegration {
      */
     abstract onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void;
 
-    abstract onLoadFixedMap(builder: REMapBuilder): void;
+    abstract onLoadFixedMapData(map: FMap): void;
+    
+    abstract onLoadFixedMapEvents(): void;
 
     abstract onFlushSequelSet(sequelSet: RESequelSet): void;
 

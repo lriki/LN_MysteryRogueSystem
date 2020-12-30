@@ -1,3 +1,4 @@
+import { REGame } from "ts/objects/REGame";
 
 const startTileId = 768;
 
@@ -19,10 +20,15 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
     const tileId3 = this._readMapData(mx, my, 3);
     const tileId4 = this._readMapData(mx, my, 4);
 
-    
+    if (REGame.map.isValid()) {
+        const block = REGame.map.block(mx, my);
+        if (block._roomId > 0) {
+            this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);
+        }
+    }
 
-    if (tileId5 == 8) {
         /*
+    if (tileId5 == 8) {
         console.log("m", mx, my);
         console.log("tileId5", tileId5);
         console.log("tileId0", tileId0);
@@ -31,12 +37,10 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
         console.log("tileId3", tileId3);
         console.log("tileId4", tileId4);
         throw new Error();
-        */
         this._addTile(this._upperLayer, startTileId + 1, dx, dy);
     }
 
     if (tileId5 == 1) {
-        /*
         console.log("m", mx, my);
         console.log("tileId5", tileId5);
         console.log("tileId0", tileId0);
@@ -45,7 +49,7 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
         console.log("tileId3", tileId3);
         console.log("tileId4", tileId4);
         throw new Error();
-        */
         this._addTile(this._upperLayer, startTileId + 10, dx, dy);
     }
+    */
 }
