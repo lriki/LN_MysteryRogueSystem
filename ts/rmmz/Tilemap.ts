@@ -20,7 +20,8 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
     const tileId3 = this._readMapData(mx, my, 3);
     const tileId4 = this._readMapData(mx, my, 4);
 
-    if (REGame.map.isValid()) {
+    //if (REGame.map.isValid()) {
+    if (0) {
         const block = REGame.map.block(mx, my);
         if (block._roomId > 0) {
             this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);

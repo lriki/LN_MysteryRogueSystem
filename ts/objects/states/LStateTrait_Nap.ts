@@ -12,6 +12,7 @@ import { REGame_Entity } from "../REGame_Entity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
 export class LStateTrait_Nap extends LStateTraitBehavior {
+    private _hostileEnterd: boolean = false;
     
     onAttached(): void {
         REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
@@ -33,9 +34,7 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
             const attr2 = entity.findAttribute(LUnitAttribute);
             assert(attr1 && attr2);
             if (REGameManager.isHostile(attr1.factionId(), attr2.factionId()) && e.newRoomId == roomId) {
-                console.log("!!!! onEvent !!", eventId, args, e);
-                console.log("block", block);
-                this.removeThisState();
+                this._hostileEnterd = true;
             }
         }
     }
@@ -48,8 +47,19 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
     }
     
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
-        // Skip action
-        context.postConsumeActionToken(entity);
-        return REResponse.Succeeded;
+        if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
+            if (this._hostileEnterd) {
+                console.log("removeThisState!!!");
+                this.removeThisState();
+            }
+            this._hostileEnterd = false;
+
+            return REResponse.Succeeded;
+        }
+        else {
+            // Skip action
+            context.postConsumeActionToken(entity);
+            return REResponse.Succeeded;
+        }
     }
 }

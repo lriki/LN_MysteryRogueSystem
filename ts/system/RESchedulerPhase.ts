@@ -68,6 +68,18 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
     }
 }
 
+// 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
+export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends RESchedulerPhase {
+    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+        if (unit.entity) {
+            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
+        }
+        // このフェーズでは通知のみを行う。
+        // トークンを消費するような行動をとってもらうことは無いので、そのまま次へ進む。
+        return false;
+    }
+}
+
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {

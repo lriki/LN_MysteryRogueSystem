@@ -8,7 +8,7 @@ import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { REGame_Sequel, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
-import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction } from "./RESchedulerPhase";
+import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_ResolveAdjacentAndMovingTarget } from "./RESchedulerPhase";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SSequelContext } from "./SSequelContext";
 
@@ -85,6 +85,7 @@ export class REScheduler
             new RESchedulerPhase_ManualAction(),
             new RESchedulerPhase_AIMinorAction(),
             new RESchedulerPhase_CheckFeetMoved(),
+            new RESchedulerPhase_ResolveAdjacentAndMovingTarget(),
             new RESchedulerPhase_AIMajorAction(),
         ];
     }

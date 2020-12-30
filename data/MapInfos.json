@@ -14,11 +14,11 @@ null,
 {"id":12,"expanded":false,"name":"緑燐の丘 2F","order":14,"parentId":11,"scrollX":0,"scrollY":0},
 {"id":13,"expanded":false,"name":"拠点マップ","order":2,"parentId":0,"scrollX":486.54545454545456,"scrollY":365.4545454545455},
 {"id":14,"expanded":true,"name":"ちょっと不思議なダンジョン","order":3,"parentId":0,"scrollX":486.54545454545456,"scrollY":304.3636363636364},
-{"id":15,"expanded":false,"name":"RE-ExitMap","order":15,"parentId":3,"scrollX":0,"scrollY":0},
+{"id":15,"expanded":false,"name":"RE-ExitMap","order":15,"parentId":3,"scrollX":486.54545454545456,"scrollY":304.3636363636364},
 {"id":16,"expanded":true,"name":"初心者の館","order":17,"parentId":0,"scrollX":0,"scrollY":0},
 {"id":17,"expanded":true,"name":"RELand:ダンジョン1","order":19,"parentId":16,"scrollX":0,"scrollY":0},
 {"id":18,"expanded":false,"name":"[Database]","order":5,"parentId":3,"scrollX":0,"scrollY":0},
 {"id":19,"expanded":true,"name":"[FixedMaps]","order":20,"parentId":17,"scrollX":0,"scrollY":0},
-{"id":20,"expanded":false,"name":"階段を目指せ！","order":21,"parentId":19,"scrollX":1193.4545454545455,"scrollY":348},
+{"id":20,"expanded":false,"name":"階段を目指せ！","order":21,"parentId":19,"scrollX":884.7272727272727,"scrollY":494.1818181818182},
 {"id":21,"expanded":false,"name":"入口","order":18,"parentId":16,"scrollX":0,"scrollY":0}
 ]
