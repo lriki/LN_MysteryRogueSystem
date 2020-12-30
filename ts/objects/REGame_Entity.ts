@@ -185,6 +185,7 @@ export class REGame_Entity
             REGame.world._unregisterBehavior(b);
         });
         this._basicBehaviors = [];
+        this.removeAllStates();
     }
 
     parentEntity(): REGame_Entity | undefined {
@@ -242,15 +243,25 @@ export class REGame_Entity
             this._states[index].recast();
         }
         else {
-            this._states.push(new LState(stateId));
+            const state = new LState(stateId);
+            this._states.push(state);
+            state.onAttached();
         }
     }
 
     removeState(stateId: DStateId) {
         const index = this._states.findIndex(s => s.stateId() == stateId);
         if (index >= 0) {
+            this._states[index].onDetached();
             this._states.splice(index, 1);
         }
+    }
+
+    removeAllStates() {
+        this._states.forEach(s => {
+            s.onDetached();
+        });
+        this._states = [];
     }
 
     public states(): readonly LState[] {

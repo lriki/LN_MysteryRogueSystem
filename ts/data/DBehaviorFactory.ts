@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { REGame } from "ts/objects/REGame";
 import { LStateTraitBehavior } from "ts/objects/states/LStateTraitBehavior"
 import { LStateTrait_Nap } from "ts/objects/states/LStateTrait_Nap";
 import { DBasics } from "./DBasics";
@@ -18,7 +19,9 @@ export class DBehaviorFactory {
     public static createStateTraitBehavior(id: DStateTraitId): LStateTraitBehavior {
         const f = this._stateTraitFactories[id];
         assert(f);
-        return f();
+        const behavior = f();
+        REGame.world._registerBehavior(behavior);
+        return behavior;
     }
 
     private static registerStateTrait(id: DStateTraitId, factory: DStateTraitBehaviorFactory) {

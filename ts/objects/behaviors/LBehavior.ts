@@ -27,6 +27,7 @@
  */
 
 import { assert } from "ts/Common";
+import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { ActionId } from "ts/data/REData";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
@@ -123,7 +124,7 @@ export class LBehavior {
 
     onAttached(): void {}
     onDetached(): void {}
-
+    onEvent(eventId: DEventId, args: any): void {}
 
 
 

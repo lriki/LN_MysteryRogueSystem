@@ -34,6 +34,20 @@ export class RE_Game_World
         }
     }
 
+    behavior(id: LBehaviorId): LBehavior {
+        const e = this._behaviors[id.index];
+        if (e && e.id().key == id.key)
+            return e;
+        else {
+            if (!e) {
+                throw new Error(`Unregisterd behavior. (id: [${id.index}, ${id.key}])`);
+            }
+            else {
+                throw new Error(`Destroyed behavior. (id: [${id.index}, ${id.key}])`);
+            }
+        }
+    }
+
     random(): Random {
         return this._random;
     }

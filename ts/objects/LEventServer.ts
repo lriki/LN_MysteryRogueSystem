@@ -2,6 +2,7 @@ import { assert } from "ts/Common";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
+import { REGame } from "./REGame";
 
 export type EventHandler = (args: any) => void;
 
@@ -9,7 +10,6 @@ export type EventHandler = (args: any) => void;
 interface EventSubscriber {
     eventId: DEventId,
     behaviorId: LBehaviorId,
-    handler: EventHandler,
 }
 
 
@@ -39,12 +39,11 @@ interface EventSubscriber {
 export class LEventServer {
     private _entries: EventSubscriber[] = [];
     
-    public subscribe(eventId: DEventId, behavior: LBehavior, handler: EventHandler) {
+    public subscribe(eventId: DEventId, behavior: LBehavior) {
         assert(behavior.isValid());
         this._entries.push({
             eventId: eventId,
             behaviorId: behavior.id(),
-            handler: handler,
         });
     }
 
@@ -59,7 +58,8 @@ export class LEventServer {
     send(eventId: DEventId, args: any): void {
         this._entries.forEach(e => {
             if (e.eventId == eventId) {
-                e.handler(args);
+                const b = REGame.world.behavior(e.behaviorId);
+                b.onEvent(eventId, args);
             }
         });
     }
