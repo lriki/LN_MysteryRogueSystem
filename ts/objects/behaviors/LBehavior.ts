@@ -35,6 +35,22 @@ import { REGame } from "..//REGame";
 import { LEntityId } from "../LObject";
 import { REGame_Entity } from "../REGame_Entity";
 
+export interface LBehaviorId {
+    readonly index: number;  // 0 is Invalid (dummy entity)
+    readonly key: number;
+}
+
+export function eqaulsEntityId(a: LBehaviorId, b: LBehaviorId): boolean {
+    return a.index == b.index && a.key == b.key;
+}
+
+export function cloneEntityId(a: LBehaviorId): LBehaviorId {
+    return {
+        index: a.index,
+        key: a.key,
+    };
+}
+
 export enum DecisionPhase {
     Manual,
     AIMinor,
@@ -90,6 +106,20 @@ export const testPutInItem = Symbol("testPutInItem");
 
 // see: 実装FAQ-Command-Behavior.md
 export class LBehavior {
+    private _id: LBehaviorId = { index: 0, key: 0 };
+    
+    public id(): LBehaviorId {
+        return this._id;
+    }
+
+    public _setId(id: LBehaviorId): void  {
+        assert(id.index > 0);
+        this._id = id;
+    }
+
+
+
+
     dataId: number = 0;
     _ownerEntityId: LEntityId = { index: 0, key: 0 };
     

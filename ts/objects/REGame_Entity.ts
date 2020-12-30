@@ -16,6 +16,7 @@ import { eqaulsEntityId, LEntityId } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
 import { LState } from "./states/LState";
+import { RE_Game_World } from "./REGame_World";
 
 enum BlockLayer
 {
@@ -178,6 +179,11 @@ export class REGame_Entity
 
     _actionConsumed: boolean = false;
 
+    _finalize(): void {
+        this._basicBehaviors.forEach(b => REGame.world._unregisterBehavior(b));
+        this._basicBehaviors = [];
+    }
+
     parentEntity(): REGame_Entity | undefined {
         if (this._parentEntityId.index > 0) {
             return REGame.world.entity(this._parentEntityId);
@@ -198,11 +204,16 @@ export class REGame_Entity
         return this._basicBehaviors;
     }
 
-    addBasicBehavior(value: LBehavior) {
+    addBasicBehavior(behavior: LBehavior) {
         assert(this._id.index > 0);
-        this._basicBehaviors.push(value);
-        value._ownerEntityId = this._id;
+        assert(behavior.id().index == 0);
+
+        REGame.world._registerBehavior(behavior);
+
+        this._basicBehaviors.push(behavior);
+        behavior._ownerEntityId = this._id;
     }
+    
 
     //addAdhocBehavior(value: REGame_Behavior) {
     //    this._adhocBehaviors.unshift(value);
@@ -212,9 +223,12 @@ export class REGame_Entity
     //    this._basicBehaviors.unshift(value);
     //}
 
-    removeBehavior(value: LBehavior) {
-        const index = this._basicBehaviors.findIndex(x => x == value);
-        if (index >= 0) this._basicBehaviors.splice(index, 1);
+    removeBehavior(behavior: LBehavior) {
+        const index = this._basicBehaviors.findIndex(x => x == behavior);
+        if (index >= 0) {
+            this._basicBehaviors.splice(index, 1);
+            REGame.world._unregisterBehavior(behavior);
+        }
     }
 
     addState(stateId: DStateId) {

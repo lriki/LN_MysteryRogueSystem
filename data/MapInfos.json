@@ -19,6 +19,6 @@ null,
 {"id":17,"expanded":true,"name":"RELand:ダンジョン1","order":19,"parentId":16,"scrollX":0,"scrollY":0},
 {"id":18,"expanded":false,"name":"[Database]","order":5,"parentId":3,"scrollX":0,"scrollY":0},
 {"id":19,"expanded":true,"name":"[FixedMaps]","order":20,"parentId":17,"scrollX":0,"scrollY":0},
-{"id":20,"expanded":false,"name":"階段を目指せ！","order":21,"parentId":19,"scrollX":486.54545454545456,"scrollY":356.72727272727275},
+{"id":20,"expanded":false,"name":"階段を目指せ！","order":21,"parentId":19,"scrollX":495.2727272727273,"scrollY":356.72727272727275},
 {"id":21,"expanded":false,"name":"入口","order":18,"parentId":16,"scrollX":0,"scrollY":0}
 ]

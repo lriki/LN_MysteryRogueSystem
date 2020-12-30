@@ -284,5 +284,11 @@ export class REGame_Map
         entity.y = y;
         newBlock.addEntity(layer, entity);
     }
+
+    private _postLocate(entity: REGame_Entity, oldBlock: REGame_Block, newBlock: REGame_Block) {
+        if (oldBlock._roomId != newBlock._roomId) {
+            
+        }
+    }
 }
 

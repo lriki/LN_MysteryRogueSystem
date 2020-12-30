@@ -46,7 +46,7 @@ export abstract class FMapBuildPass {
     public abstract execute(map: FMap): void;
 }
 
-
+// Room としてマークされているが、RoomId 未割り当ての Block を解決する。
 export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
     public execute(map: FMap): void {
         while (true) {

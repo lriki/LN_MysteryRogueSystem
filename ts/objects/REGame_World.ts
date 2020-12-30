@@ -3,6 +3,8 @@ import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { Random } from "ts/math/Random";
 import { LEntityId, eqaulsEntityId } from "./LObject";
+import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
+import { TilingSprite } from "pixi.js";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -10,10 +12,12 @@ import { LEntityId, eqaulsEntityId } from "./LObject";
 export class RE_Game_World
 {
     private _entities: (REGame_Entity | undefined)[] = [];
+    private _behaviors: (LBehavior | undefined)[] = [];
     private _random: Random = new Random(Math.floor(Math.random() * 65535) + 1);
 
     constructor() {
-        this._entities = [undefined];   // [0] dummy entity
+        this._entities = [undefined];   // [0] is dummy
+        this._behaviors = [undefined];   // [0] is dummy
     }
 
     entity(id: LEntityId): REGame_Entity {
@@ -60,6 +64,40 @@ export class RE_Game_World
         }
     }
 
+    _registerBehavior(behavior: LBehavior) {
+        // TODO: 空き場所を愚直に線形探索。
+        // 大量の Entity を扱うようになったら最適化する。
+        const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);
+        if (index < 0) {
+            behavior._setId({ index: this._behaviors.length, key : this._random.nextInt() });
+            this._behaviors.push(behavior);
+        }
+        else {
+            behavior._setId({ index: index, key : this._random.nextInt() });
+            this._behaviors[index] = behavior;
+        }
+    }
+
+    _unregisterBehavior(behavior: LBehavior) {
+        this._behaviors[behavior.id().index] = undefined;
+        behavior._setId({ index: 0, key : 0 });
+    }
+
+    /*
+    newBehavior<T>(ctor: { new(...args: any[]): T }): T {
+
+        // TODO: 空き場所を愚直に線形探索。
+        // 大量の Entity を扱うようになったら最適化する。
+        const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);
+        const newId: LBehaviorId = {
+            index: (index < 0) ? this._behaviors.length : index,
+            key : this._random.nextInt(),
+        }
+
+        const behavior = new T(newId);
+        this._behaviors[newId.index] = behavior;
+    }
+    */
     /**
      * Entity を指定した位置に移動する。
      * - 現在表示中のマップへ移動した場合、そのマップへ登場する。
@@ -116,7 +154,8 @@ export class RE_Game_World
     
                     REGame.scheduler.invalidateEntity(entity);
     
-                    console.log("Entity removed", this._entities[i]);
+                    console.log("Entity removed", entity);
+                    entity._finalize();
                     this._entities[i] = undefined;
     
                     if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {
