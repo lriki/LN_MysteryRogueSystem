@@ -1,5 +1,8 @@
+import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REGame_Sequel, RESequelClip } from "ts/objects/REGame_Sequel";
+import { RESystem } from "ts/system/RESystem";
+import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
 import { REVisualSequel } from "./REVisualSequel";
 import { REVisual_Entity } from "./REVisual_Entity";
@@ -14,6 +17,7 @@ export class REVisualSequelContext {
     private _cancellationLocked : boolean = false;
     private _currentVisualSequel: REVisualSequel | undefined;
     private _startPosition: Vector2 = new Vector2(0, 0);
+    private _currentIdleSequelId: DSequelId = 0;
 
     constructor(entityVisual: REVisual_Entity) {
         this._entityVisual = entityVisual;
@@ -34,7 +38,7 @@ export class REVisualSequelContext {
     
     finished(): boolean {
         if (this._clip) {
-            return this._cuurentFinished && this._currentClip < this._clip.sequels().length;
+            return this._cuurentFinished && this._currentClip >= this._clip.sequels().length;
         }
         else {
             return true;
@@ -58,7 +62,8 @@ export class REVisualSequelContext {
         this._clip = clip;
         this._currentClip = -1;
         this._timeScale = clip.sequels().length;
-        this._cuurentFinished = true;
+        this._cuurentFinished = false;
+        this._currentIdleSequelId = 0;
         this._next();
     }
 
@@ -67,17 +72,21 @@ export class REVisualSequelContext {
             this._currentClip++;
 
             if (this._currentClip < this._clip.sequels().length) {
-                this._startSequel(this._clip.sequels()[this._currentClip]);
+                this._startSequel(this._clip.sequels()[this._currentClip].sequelId());
+                this._cancellationLocked = true;    // end() 必須にする
+            }
+            else {
+                this._clip = undefined;
             }
         }
     }
 
-    _startSequel(sequel: REGame_Sequel) {
+    _startSequel(sequelId: DSequelId) {
         if (!REVisual.manager) throw new Error();
 
-        this._currentVisualSequel = REVisual.manager.createVisualSequel(sequel);
+        this._currentVisualSequel = REVisual.manager.createVisualSequel(sequelId);
         this._frameCount = 0;
-        this._cancellationLocked = true;
+        this._cancellationLocked = false;
         this._cuurentFinished = false;
         this._startPosition = Vector2.clone(this._entityVisual.position());
     }
@@ -93,9 +102,21 @@ export class REVisualSequelContext {
             }
         }
         
-        // current の Sequel は完了しているが、全体としては未完了の場合は次の Sequel に進む
-        if (this._cuurentFinished && !this.finished()) {
-            this._next();
+        if (this._clip) {
+            // current の Sequel は完了しているが、全体としては未完了の場合は次の Sequel に進む
+            if (this._cuurentFinished && this._currentClip < this._clip.sequels().length) {
+                this._next();
+            }
+        }
+
+        if (!this._clip) {
+            const id = this._entityVisual.getIdleSequelId();
+            if (this._currentIdleSequelId != id) {
+                this._currentIdleSequelId = id;
+                if (this._currentIdleSequelId != 0) {
+                    this._startSequel(id);
+                }
+            }
         }
     }
 }

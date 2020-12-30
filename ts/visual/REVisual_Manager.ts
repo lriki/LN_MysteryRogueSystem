@@ -15,6 +15,10 @@ import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
 import { REVisualSequel_Move } from "./sequels/VMoveSequel";
 import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
 import { VWarehouseDialog } from "./dialogs/VWarehouseDialog";
+import { DSequel, DSequelId } from "ts/data/DSequel";
+import { VIdleSequel } from "./sequels/VIdleSequel";
+import { REData } from "ts/data/REData";
+import { VAsleepSequel } from "./sequels/VAsleepSequel";
 
 /**
  */
@@ -29,10 +33,12 @@ export class REVisual_Manager
         //this._dialogVisual = null;
 
 
+        this._visualSequelFactory[RESystem.sequels.idle] = () => new VIdleSequel();
         this._visualSequelFactory[RESystem.sequels.MoveSequel] = () => new REVisualSequel_Move();
         this._visualSequelFactory[RESystem.sequels.blowMoveSequel] = () => new VBlowMoveSequel();
         this._visualSequelFactory[RESystem.sequels.attack] = () => new VAttackSequel();
         this._visualSequelFactory[RESystem.sequels.CollapseSequel] = () => new VCollapseSequel();
+        this._visualSequelFactory[RESystem.sequels.asleep] = () => new VAsleepSequel();
     }
 
     tileSize(): Vector2 {
@@ -42,13 +48,13 @@ export class REVisual_Manager
     _finalize() {
     }
 
-    createVisualSequel(sequel: REGame_Sequel): REVisualSequel {
-        const factory = this._visualSequelFactory[sequel.sequelId()];
+    createVisualSequel(sequelId: DSequelId): REVisualSequel {
+        const factory = this._visualSequelFactory[sequelId];
         if (factory) {
             return factory();
         }
         else {
-            throw new Error();
+            throw new Error(`Visual Sequel not registerd. (id: ${sequelId}, name: ${REData.sequels[sequelId].name})`);
         }
     }
 

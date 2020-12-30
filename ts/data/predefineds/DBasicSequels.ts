@@ -1,6 +1,8 @@
 
 
 export interface BasicSequels {
+    idle: number;
+
     /** 移動 */
     MoveSequel: number;
 
@@ -16,4 +18,7 @@ export interface BasicSequels {
      * 演出が表示されないだけで Entity は消される等処理される。
      */
     CollapseSequel: number;
+
+    /** 睡眠状態 (浅い眠り、特殊な浅い眠り、睡眠、バクスイ) */
+    asleep: number;
 }

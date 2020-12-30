@@ -22,6 +22,10 @@ export class LState {
     public stateData(): DState {
         return REData.states[this._stateId];
     }
+    
+    public behabiors(): readonly LStateTraitBehavior[] {
+        return this._behabiors;
+    }
 
     recast(): void {
         // 同じ state が add された

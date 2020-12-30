@@ -394,14 +394,30 @@ export class REGame_Entity
         return b;
     }
 
-    queryProperty(propertyId: number): any {
-        for (let i = 0; i < this._basicBehaviors.length; i++) {
-            const value = this._basicBehaviors[i].onQueryProperty(propertyId);
-            if (value !== undefined) {
-                return value;
+    private _iterateBehaviors(func: (x: LBehavior) => boolean) {
+        for (let i = this._states.length - 1; i >= 0; i--) {
+            const behabiors = this._states[i].behabiors();
+            for (let i2 = behabiors.length - 1; i2 >= 0; i2--) {
+                if (!func(behabiors[i2])) {
+                    return;
+                }
             }
         }
-        return RESystem.propertyData[propertyId].defaultValue;
+
+        for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
+            if (!func(this._basicBehaviors[i])) {
+                return;
+            }
+        }
+    }
+
+    queryProperty(propertyId: number): any {
+        let result: any = undefined;
+        this._iterateBehaviors(b => {
+            result = b.onQueryProperty(propertyId);
+            return result == undefined;
+        });
+        return result ?? RESystem.propertyData[propertyId].defaultValue;
     }
 
     queryActions(): ActionId[] {

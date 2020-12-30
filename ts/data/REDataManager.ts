@@ -165,16 +165,18 @@ export class REDataManager
 
         // Sequels
         RESystem.sequels = {
+            idle: REData.addSequel("idle"),
             MoveSequel: REData.addSequel("Move"),
             blowMoveSequel: REData.addSequel("BlowMove"),
             attack: REData.addSequel("attack"),
             CollapseSequel: REData.addSequel("Collapse"),
+            asleep: REData.addSequel("asleep"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         
         RESystem.skills = {
             normalAttack:1,
-        }
+        };
     }
 
     static loadData(): void

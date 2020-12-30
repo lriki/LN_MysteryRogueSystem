@@ -27,7 +27,10 @@ export class REUnitBehavior extends LBehavior {
     }
     
     onQueryProperty(propertyId: number): any {
-        return BlockLayerKind.Unit;
+        if (propertyId == RESystem.properties.homeLayer)
+            return BlockLayerKind.Unit;
+        else
+            super.onQueryProperty(propertyId);
     }
     
     onQueryActions(actions: ActionId[]): ActionId[] {
@@ -58,7 +61,11 @@ export class REUnitBehavior extends LBehavior {
             const args = (cmd.args() as REMoveToAdjacentArgs);
             const offset = Helpers.dirToTileOffset(args.direction);
 
-            if (REGame.map.moveEntity(actor, actor.x + offset.x, actor.y + offset.y, actor.queryProperty(RESystem.properties.homeLayer))) {
+            console.log("---------");
+            const layer = actor.queryProperty(RESystem.properties.homeLayer);
+            console.log("---------");
+            console.log("move layer", layer);
+            if (REGame.map.moveEntity(actor, actor.x + offset.x, actor.y + offset.y, layer)) {
                 context.postSequel(actor, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする

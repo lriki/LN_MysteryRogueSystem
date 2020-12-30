@@ -16,6 +16,7 @@ import './objects/REGame_Core';
 import './system/REEntityFactory';
 import './Scene_Boot';
 import './Scene_Map';
+import './rmmz/Game_CharacterBase'
 import './rmmz/Tilemap'
 import './Sprite_Character'
 import './Spriteset_Map'

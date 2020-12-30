@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
-import { REData, REData_Sequel } from "../data/REData";
+import { DSequel, DSequelId } from "ts/data/DSequel";
+import { REData } from "../data/REData";
 import { REGame_Entity } from "./REGame_Entity";
 
 /**
@@ -9,10 +10,10 @@ import { REGame_Entity } from "./REGame_Entity";
  */
 export class REGame_Sequel {
     private _entity: REGame_Entity;
-    private _sequelId: number;
+    private _sequelId: DSequelId;
     private _parallel: boolean;
 
-    constructor(entity: REGame_Entity, sequelId: number) {
+    constructor(entity: REGame_Entity, sequelId: DSequelId) {
         this._entity = entity;
         this._sequelId = sequelId;
         this._parallel = REData.sequels[this._sequelId].parallel;
@@ -22,11 +23,11 @@ export class REGame_Sequel {
         return this._entity;
     }
 
-    sequelId(): number {
+    sequelId(): DSequelId {
         return this._sequelId;
     }
 
-    data(): REData_Sequel {
+    data(): DSequel {
         return REData.sequels[this._sequelId];
     }
 

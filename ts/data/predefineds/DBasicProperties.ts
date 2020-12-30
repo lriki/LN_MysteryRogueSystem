@@ -1,3 +1,4 @@
+import { DSequel, DSequelId } from "../DSequel";
 
 
 
@@ -27,6 +28,13 @@ export interface EntityProperties {
      * デフォルトは 0 で、アイテムではないことを示す。
      */
     itemId: number;
+
+    /**
+     * Visual としての Idle 状態での再生 Sequel.
+     * 
+     * 状態異常等で変わる。
+     */
+    idleSequel: DSequelId,
 }
 
 

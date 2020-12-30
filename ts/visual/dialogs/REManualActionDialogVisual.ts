@@ -34,6 +34,10 @@ export class VManualActionDialogVisual extends VMainDialog {
             const actions = targetEntities.flatMap(x => x.queryActions());
             if (actions.length > 0) {
                 if (actions.includes(DBasics.actions.PickActionId)) {
+                    console.log("isOnGround?", entity.isOnGround());
+                    console.log("PickActionId?", entity);
+                    console.log("targetEntity", targetEntity);
+                    console.log("actions", actions);
                     // 歩行移動時に足元に拾えるものがあれば取得試行
                     context.postAction(DBasics.actions.PickActionId, entity, undefined);
                     // 行動を消費せずに、一度 Dialog を終了する。

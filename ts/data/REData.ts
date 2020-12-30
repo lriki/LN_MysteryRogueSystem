@@ -11,6 +11,7 @@ import { DItem } from "./DItem";
 import { DLand } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DStateTrait } from "./DStateTrait";
+import { DSequel } from "./DSequel";
 
 export type ParameterDataId = number;
 
@@ -175,30 +176,6 @@ export interface REData_Action
     displayName: string;
 }
 
-/**
- * REData_Sequel
- *
- * シミュレーション進行中に発生した、VisualAction を、View に伝えるためのデータ構造。
- * これ自体が具体的なスプライトの動作を定義するわけではない。
- * 「歩行」を再生するべき、「攻撃」を再生するべき、といったタイミングで作られる。
- * 
- * なお、歩行は複数アクターが並列で再生できる仕組みを作るのには、イベント発生タイミングを直接 View が
- * 購読してアニメ開始する方法では不可能。（Schedular が View の visualRunning() を監視している都合上不可能）
- * なので、アニメ再生系のイベントは一度キューに入れておいて、全アクターの歩行の処理が完了したら
- * 一斉にアニメーションさせるような流れを組む必要がある。
- * そのキューに入れる単位が REData_Sequel.
- */
-export interface REData_Sequel
-{
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name */
-    name: string;
-
-    parallel: boolean;
-}
-
 export interface REData_Parameter
 {
     /** ID (0 is Invalid). */
@@ -228,7 +205,7 @@ export class REData
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: REData_Action[] = [{id: 0, displayName: 'null'}];
-    static sequels: REData_Sequel[] = [{id: 0, name: 'null', parallel: false}];
+    static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
