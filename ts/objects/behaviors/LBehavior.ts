@@ -114,7 +114,7 @@ export class LBehavior {
     }
 
     public _setId(id: LBehaviorId): void  {
-        assert(id.index > 0);
+        //assert(id.index > 0);
         this._id = id;
     }
 

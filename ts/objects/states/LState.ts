@@ -1,18 +1,25 @@
+import { assert } from "ts/Common";
 import { DBehaviorFactory } from "ts/data/DBehaviorFactory";
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { REGame } from "../REGame";
+import { REGame_Entity } from "../REGame_Entity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
 export class LState {
+    private _ownerEntity: REGame_Entity | undefined;    // シリアライズしない
     private _stateId: DStateId;
     private _behabiors: LStateTraitBehavior[];
 
     public constructor(stateId: DStateId) {
         this._stateId = stateId;
-        this._behabiors = this.stateData().traits.map(traitId => DBehaviorFactory.createStateTraitBehavior(traitId));
+        this._behabiors = this.stateData().traits.map(traitId => {
+            const b = DBehaviorFactory.createStateTraitBehavior(traitId);
+            b._ownerState = this;
+            return b;
+        });
     }
 
     public stateId(): number {
@@ -27,12 +34,24 @@ export class LState {
         return this._behabiors;
     }
 
+    public ownerEntity(): REGame_Entity {
+        assert(this._ownerEntity);
+        return this._ownerEntity;
+    }
+
+    _setOwnerEntty(entity: REGame_Entity) {
+        this._ownerEntity = entity;
+    }
+
     recast(): void {
         // 同じ state が add された
 
     }
     onAttached(): void {
-        this._behabiors.forEach(b => b.onAttached());
+        this._behabiors.forEach(b => {
+            b._ownerEntityId = this.ownerEntity().id();
+            b.onAttached();
+        });
     }
 
     onDetached(): void {
@@ -42,7 +61,9 @@ export class LState {
         });
     }
 
-
+    public removeThisState(): void {
+        this.ownerEntity().removeState(this._stateId);
+    }
 
 
     

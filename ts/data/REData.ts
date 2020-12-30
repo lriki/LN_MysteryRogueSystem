@@ -142,13 +142,15 @@ export interface RE_Data_Floor
 
 }
 
+export type DFactionId = number;
+
 /**
  * 勢力
  */
 export interface REData_Faction
 {
     /** ID (0 is Invalid). */
-    id: number;
+    id: DFactionId;
 
     /** Name */
     name: string;

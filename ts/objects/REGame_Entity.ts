@@ -244,6 +244,7 @@ export class REGame_Entity
         }
         else {
             const state = new LState(stateId);
+            state._setOwnerEntty(this);
             this._states.push(state);
             state.onAttached();
         }

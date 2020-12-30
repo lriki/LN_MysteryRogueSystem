@@ -10,7 +10,7 @@ import { VSequelHelper } from "./VSequelHelper";
  */
 export class REVisualSequel_Move extends REVisualSequel {
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
-        VSequelHelper.updateWaitAnimPattern(visual);
+        VSequelHelper.updateStepAnimPattern(visual);
 
         // 移動は直線距離ではなく X Y 個別に計算する。
         // 斜め移動時に速度が上がる問題であるが、複数の Entity が同時に移動するとき、

@@ -3,7 +3,7 @@ import { REEntityFactory } from "./REEntityFactory";
 import { REGame_Map } from "../objects/REGame_Map";
 import { RE_Game_World } from "../objects/REGame_World";
 import { REGame_Core } from "../objects/REGame_Core";
-import { REData } from "../data/REData";
+import { DFactionId, REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REGame_Camera } from "../objects/REGame_Camera";
@@ -105,5 +105,8 @@ export class REGameManager
         }
     }
 
+    static isHostile(f1: DFactionId, f2: DFactionId): boolean {
+        return f1 != f2;    // TODO: 仲間がいない・・
+    }
 }
 

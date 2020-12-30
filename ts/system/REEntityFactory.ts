@@ -37,7 +37,7 @@ export class REEntityFactory {
     static newMonster(monsterId: number): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
-            .setFactionId(REData.ActorDefaultFactionId));
+            .setFactionId(REData.EnemeyDefaultFactionId));
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());

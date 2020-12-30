@@ -10,7 +10,7 @@ export class VIdleSequel extends REVisualSequel {
 
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
 
-        VSequelHelper.updateWaitAnimPattern(visual);
+        VSequelHelper.updateStepAnimPattern(visual);
     }
 }
 

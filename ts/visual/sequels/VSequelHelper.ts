@@ -3,7 +3,7 @@ import { REVisual_Entity } from "../REVisual_Entity";
 
 export class VSequelHelper {
 
-    static updateWaitAnimPattern(visual: REVisual_Entity): void {
+    static updateStepAnimPattern(visual: REVisual_Entity): void {
         const event = visual.rmmzEvent();
         if (event && event.hasStepAnime()) {
 
