@@ -14,6 +14,7 @@ import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
 import { RESequelSet } from "./REGame_Sequel";
 import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyCommandExecuteScheduler";
+import { LEventServer } from "./LEventServer";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -37,6 +38,7 @@ export class REGame
     static messageHistory: LMessageHistory;
     static message: LMessage;
     static identifyer: LIdentifyer;
+    static eventServer: LEventServer;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;

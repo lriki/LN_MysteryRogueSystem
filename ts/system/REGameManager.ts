@@ -21,6 +21,7 @@ import { SSequelContext } from "./SSequelContext";
 import { RECommandContext } from "./RECommandContext";
 import { REDialogContext } from "./REDialog";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
+import { LEventServer } from "ts/objects/LEventServer";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -55,6 +56,7 @@ export class REGameManager
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
         REGame.identifyer = new LIdentifyer();
+        REGame.eventServer = new LEventServer();
 
         // Create unique units
         REData.actors.forEach(x => {

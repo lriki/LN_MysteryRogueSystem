@@ -38,6 +38,13 @@ export class REDataManager
     static setupCommonData() {
         REData.reset();
 
+        // Events
+        {
+            DBasics.events = {
+                roomEnterd: 1,
+                roomLeaved: 2,
+            }
+        }
 
         // Parameters
         RESystem.parameters = {

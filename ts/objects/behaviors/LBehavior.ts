@@ -117,6 +117,13 @@ export class LBehavior {
         this._id = id;
     }
 
+    public isValid(): boolean {
+        return this._id.index > 0 && this._id.key != 0;
+    }
+
+    onAttached(): void {}
+    onDetached(): void {}
+
 
 
 

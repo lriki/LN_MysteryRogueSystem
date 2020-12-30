@@ -13,6 +13,8 @@ import { DLand } from "ts/data/DLand";
 import { eqaulsEntityId, LEntityId } from "./LObject";
 import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
+import { DBasics } from "ts/data/DBasics";
+import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 
 
 
@@ -258,6 +260,7 @@ export class REGame_Map
             entity.x = x;
             entity.y = y;
             newBlock.addEntity(toLayer, entity);
+            this._postLocate(entity, oldBlock, newBlock);
             return true;
         }
         else {
@@ -283,11 +286,18 @@ export class REGame_Map
         entity.x = x;
         entity.y = y;
         newBlock.addEntity(layer, entity);
+        this._postLocate(entity, oldBlock, newBlock);
     }
 
     private _postLocate(entity: REGame_Entity, oldBlock: REGame_Block, newBlock: REGame_Block) {
         if (oldBlock._roomId != newBlock._roomId) {
-            
+            const args: RoomEventArgs = {
+                entity: entity,
+                newRoomId: newBlock._roomId,
+                oldRoomId: oldBlock._roomId,
+            };
+            REGame.eventServer.send(DBasics.events.roomEnterd, args);
+            REGame.eventServer.send(DBasics.events.roomLeaved, args);
         }
     }
 }

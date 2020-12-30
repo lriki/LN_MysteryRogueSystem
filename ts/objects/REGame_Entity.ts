@@ -180,7 +180,10 @@ export class REGame_Entity
     _actionConsumed: boolean = false;
 
     _finalize(): void {
-        this._basicBehaviors.forEach(b => REGame.world._unregisterBehavior(b));
+        this._basicBehaviors.forEach(b => {
+            b.onDetached();
+            REGame.world._unregisterBehavior(b);
+        });
         this._basicBehaviors = [];
     }
 
@@ -212,6 +215,7 @@ export class REGame_Entity
 
         this._basicBehaviors.push(behavior);
         behavior._ownerEntityId = this._id;
+        behavior.onAttached();
     }
     
 
@@ -227,6 +231,7 @@ export class REGame_Entity
         const index = this._basicBehaviors.findIndex(x => x == behavior);
         if (index >= 0) {
             this._basicBehaviors.splice(index, 1);
+            behavior.onDetached();
             REGame.world._unregisterBehavior(behavior);
         }
     }

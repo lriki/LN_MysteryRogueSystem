@@ -1,6 +1,7 @@
 import { DEntityKindId } from "./DEntityKind";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
+import { DBasicEvents } from "./predefineds/DBasicEvents";
 import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicStateTraits } from "./predefineds/DBasicStateTraits";
 
@@ -10,6 +11,7 @@ import { DBasicStateTraits } from "./predefineds/DBasicStateTraits";
  */
 export class DBasics
 {
+    static events: DBasicEvents;
     static actions: DBasicActions;
     static entityKinds: BasicEntityKinds;
     static stateTraits: DBasicStateTraits;

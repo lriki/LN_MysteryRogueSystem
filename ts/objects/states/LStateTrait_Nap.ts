@@ -6,6 +6,18 @@ import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
 export class LStateTrait_Nap extends LStateTraitBehavior {
     
+    onAttached(): void {
+
+    }
+
+    onDetached(): void {
+
+    }
+
+    handleRoomEnterd(args: any) {
+        
+    }
+
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
         // Skip action
         context.postConsumeActionToken(entity);
