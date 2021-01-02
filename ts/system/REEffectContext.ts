@@ -57,11 +57,6 @@ export class SEffectorFact {
 
 }
 
-// ターゲット側
-export class SEffecteeResult {
-
-}
-
 /**
  * ダメージや状態異常、バフの適用など、パラメータ操作に関わる一連の処理を行う。
  * 
@@ -136,8 +131,3 @@ export class REEffectContext {
 
     };
 }
-
-export class REffectResult {
-    private _parameterValues: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
-}
-

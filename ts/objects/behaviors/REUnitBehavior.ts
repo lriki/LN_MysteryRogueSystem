@@ -61,10 +61,7 @@ export class REUnitBehavior extends LBehavior {
             const args = (cmd.args() as REMoveToAdjacentArgs);
             const offset = Helpers.dirToTileOffset(args.direction);
 
-            console.log("---------");
             const layer = actor.queryProperty(RESystem.properties.homeLayer);
-            console.log("---------");
-            console.log("move layer", layer);
             if (REGame.map.moveEntity(actor, actor.x + offset.x, actor.y + offset.y, layer)) {
                 context.postSequel(actor, RESystem.sequels.MoveSequel);
 
