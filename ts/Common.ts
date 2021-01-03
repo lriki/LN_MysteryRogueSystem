@@ -18,6 +18,11 @@ export function tr(text: string, ...keys: any[]): string {
     //return fuzzyFormat(text, keys);
 }
 
+export function tr2(text: string): string {
+    return text;
+}
+
+
 export class Log
 {
     static _enabled: boolean = false;

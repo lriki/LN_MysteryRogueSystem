@@ -27,7 +27,9 @@ export interface EntityProperties {
      * 
      * デフォルトは 0 で、アイテムではないことを示す。
      */
-    itemId: number;
+    itemId: number; // deprecated?: name
+
+    name: number;
 
     /**
      * Visual としての Idle 状態での再生 Sequel.
@@ -35,6 +37,7 @@ export interface EntityProperties {
      * 状態異常等で変わる。
      */
     idleSequel: DSequelId,
+
 }
 
 

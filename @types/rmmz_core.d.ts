@@ -364,6 +364,7 @@ export interface Number {
 
 export interface String {
 	padZero(length: number): string;
+	format(...args: any[]): string;
 }
 
 }

@@ -22,13 +22,15 @@ export class RESystem {
         { id: 0, defaultValue: undefined },
         { id: 1, defaultValue: BlockLayerKind.Ground },  // homeLayer
         { id: 2, defaultValue: 0 },  // itemId
-        { id: 3, defaultValue: 1 },  // idleSequel
+        { id: 3, defaultValue: "null" },  // name
+        { id: 4, defaultValue: 1 },  // idleSequel
     ];
 
     static properties: EntityProperties = {
         homeLayer: 1,
         itemId: 2,
-        idleSequel: 3,
+        name: 3,
+        idleSequel: 4,
     };
 
     // System

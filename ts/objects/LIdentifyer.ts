@@ -2,10 +2,12 @@ import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { REGame_Entity } from "./REGame_Entity";
 
-enum DescriptionHighlightLevel {
-    Identified = 0,         // 識別済み。白テキスト
-    Unidentified = 5,       // 未識別。黄テキスト
-    UserIdentified = 14,     // ユーザーから名指定済み。緑テキスト
+export enum DescriptionHighlightLevel {
+    Identified,         // 識別済み。白テキスト
+    Unidentified,       // 未識別。黄テキスト
+    UserIdentified,     // ユーザーから名指定済み。緑テキスト
+    UnitName,       //
+    Number,             // ダメージ値などの数字
 }
 
 /**
@@ -20,6 +22,14 @@ export class LEntityDescription {
     private _iconIndex: number;
     private _name: string;
     private _highlightLevel: DescriptionHighlightLevel;
+
+    private static _levelColorTable: number[] = [
+        0,  // Identified
+        14,  // Unidentified
+        3,  // UserIdentified
+        14,  // UnitName
+        23,  // Number
+    ];
     
     constructor(iconIndex: number, name: string, level: DescriptionHighlightLevel) {
         this._iconIndex = iconIndex;
@@ -36,7 +46,15 @@ export class LEntityDescription {
     }
 
     public displayText(): string {
-        return `\\I[${this._iconIndex}]\\C[${this._highlightLevel}]${this._name}\\C[0]`;
+        return `\\I[${this._iconIndex}]${LEntityDescription.makeDisplayText(this._name, this._highlightLevel)}`;
+    }
+    
+    static getColorNumber(level: DescriptionHighlightLevel): number {
+        return this._levelColorTable[level];
+    }
+
+    static makeDisplayText(name: string, level: DescriptionHighlightLevel): string {
+        return `\\C[${this.getColorNumber(level)}]${name}\\C[0]`;
     }
 }
 

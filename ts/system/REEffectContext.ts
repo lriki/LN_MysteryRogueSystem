@@ -5,7 +5,7 @@ import { ParameterDataId, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "./RESystem";
-import { SActionResult } from "./SActionResult";
+import { SEffectResult } from "./SEffectResult";
 
 
 // 攻撃側
@@ -113,21 +113,57 @@ export class REEffectContext {
     }
     
     // Game_Action.prototype.apply
-    apply(target: REGame_Entity): SActionResult {
-        const result = new SActionResult();
+    apply(target: REGame_Entity): SEffectResult {
+        const result = target._effectResult;
+        result.clear();
 
-        const value = 10000;
-        this.executeDamage(target, value);
+        result.used = false;
+        result.missed = false;
+        result.evaded = false;
+        result.physical = true;
+        result.drain = true;
+        result.critical = false;
+        result.success = true;
+        result.hpAffected = true;
+        result.success = true;
+        const value = 10;
+        this.executeDamage(target, value, result);
 
         return result;
     }
 
     // Game_Action.prototype.executeDamage
-    private executeDamage(target: REGame_Entity, value: number): void {
+    private executeDamage(target: REGame_Entity, value: number, result: SEffectResult): void {
         const b = target.findBehavior(LBattlerBehavior);
         assert(b);
 
         b.gainActualParam(RESystem.parameters.hp, -value);
 
-    };
+
+    }
+
+    // Game_Action.prototype.makeDamageValue
+    /*
+    makeDamageValue(target: LBattlerBehavior, critical: boolean) {
+        const item = this.item();
+        const baseValue = this.evalDamageFormula(target);
+        let value = baseValue * this.calcElementRate(target);
+        if (this.isPhysical()) {
+            value *= target.pdr;
+        }
+        if (this.isMagical()) {
+            value *= target.mdr;
+        }
+        if (baseValue < 0) {
+            value *= target.rec;
+        }
+        if (critical) {
+            value = this.applyCritical(value);
+        }
+        value = this.applyVariance(value, item.damage.variance);
+        value = this.applyGuard(value, target);
+        value = Math.round(value);
+        return value;
+    }
+    */
 }

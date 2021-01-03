@@ -198,6 +198,10 @@ export class REDataManager
                         displayName: x.name ?? "",
                         restriction: 0,
                         iconIndex: x.iconIndex ?? 0,
+                        message1: x.message1 ?? "",
+                        message2: x.message2 ?? "",
+                        message3: x.message3 ?? "",
+                        message4: x.message4 ?? "",
                         traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
                     };
                     console.log("state", state);
@@ -210,6 +214,10 @@ export class REDataManager
                         key: "",
                         restriction: 0,
                         iconIndex: 0,
+                        message1: "",
+                        message2: "",
+                        message3: "",
+                        message4: "",
                         traits: [],
                     }
                 }

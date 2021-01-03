@@ -17,6 +17,7 @@ import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
 import { LState } from "./states/LState";
 import { RE_Game_World } from "./REGame_World";
+import { SEffectResult } from "ts/system/SEffectResult";
 
 enum BlockLayer
 {
@@ -177,6 +178,9 @@ export class REGame_Entity
     // とりあえず Entity に持たせて様子見。
     _states: LState[] = [];
 
+    // _states を Entity に持たせているので、それに合わせてここに持たせる
+    _effectResult: SEffectResult = new SEffectResult();
+
     _actionConsumed: boolean = false;
 
     _finalize(): void {
@@ -247,6 +251,7 @@ export class REGame_Entity
             state._setOwnerEntty(this);
             this._states.push(state);
             state.onAttached();
+            this._effectResult.pushAddedState(stateId);
         }
     }
 
@@ -255,6 +260,7 @@ export class REGame_Entity
         if (index >= 0) {
             this._states[index].onDetached();
             this._states.splice(index, 1);
+            this._effectResult.pushRemovedState(stateId);
         }
     }
 

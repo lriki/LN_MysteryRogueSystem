@@ -17,6 +17,11 @@ export interface DState {
 
     iconIndex: number;
 
+    message1: string;
+    message2: string;
+    message3: string;
+    message4: string;
+
     traits: DStateTraitId[];
 }
 

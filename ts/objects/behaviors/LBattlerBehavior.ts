@@ -57,6 +57,8 @@ export class LBattlerBehavior extends LBehavior {
     
     gainActualParam(paramId: ParameterDataId, value: number): void {
         this.setActualParam(paramId, this.actualParam(paramId) + value);
+
+        this.ownerEntity()._effectResult.parameterDamags[RESystem.parameters.hp] = -value;
     }
 
     // 上限値。

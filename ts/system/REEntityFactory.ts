@@ -13,6 +13,7 @@ import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
+import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -42,6 +43,7 @@ export class REEntityFactory {
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
         e.addBasicBehavior(new LBattlerBehavior());
+        e.addBasicBehavior((new LEnemyBehavior()).init(monsterId));
         return e;
     }
 

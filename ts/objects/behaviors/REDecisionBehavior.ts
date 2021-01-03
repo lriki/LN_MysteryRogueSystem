@@ -26,7 +26,10 @@ export class REGame_DecisionBehavior extends LBehavior
         }
         else if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
-            let dir = 6;
+            //let dir = 6;
+
+            // 左へ移動するだけ
+            let dir = 4;
 
             // ランダム移動
             //const table = [1,2,3,4,6,7,8,9];

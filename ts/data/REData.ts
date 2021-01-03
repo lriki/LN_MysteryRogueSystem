@@ -12,6 +12,7 @@ import { DLand } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DStateTrait } from "./DStateTrait";
 import { DSequel } from "./DSequel";
+import { RE_Data_Monster } from "./DEnemy";
 
 export type ParameterDataId = number;
 
@@ -96,26 +97,6 @@ export interface RE_Data_Actor
     initialLevel: number;
 }
 
-/**
- * モンスターデータ。
- * 
- * RMMZ の Enemy と同じ意味のデータだが、味方勢力に属することもあるので "Enemy" という言葉の意味とちょっと違くなる。
- * ひとまず "Monster" という言葉を採用。
- */
-export interface RE_Data_Monster
-{
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name. */
-    name: string;
-
-    /** 取得経験値 */
-    exp: number;
-
-    /** 各基本パラメータ (index は BasicParameters) */
-    idealParams: ParameterDataId[];
-}
 
 
 
@@ -245,7 +226,7 @@ export class REData
         this.items = [];
         this.addItem("null");
 
-        this.states = [{id: 0, key: "", displayName: 'null', restriction: 0, iconIndex: 0, traits: []}];
+        this.states = [{id: 0, key: "", displayName: 'null', restriction: 0, iconIndex: 0, message1: "", message2: "", message3: "", message4: "", traits: []}];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
     }
@@ -412,6 +393,10 @@ export class REData
             displayName: name,
             restriction: 0,
             iconIndex: 0,
+            message1: "",
+            message2: "",
+            message3: "",
+            message4: "",
             traits: [],
         });
         this._stateFactories[newId] = factory;

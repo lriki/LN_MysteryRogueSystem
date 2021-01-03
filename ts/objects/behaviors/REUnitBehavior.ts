@@ -9,9 +9,11 @@ import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/REComma
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../REGame_Block";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { assert, tr } from "ts/Common";
+import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { LCommonBehavior } from "./LCommonBehavior";
+import { SMessageBuilder } from "ts/system/SMessageBuilder";
+import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 
 /**
  * 
@@ -199,10 +201,36 @@ export class REUnitBehavior extends LBehavior {
     onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         if (cmd.action().id == DBasics.actions.AttackActionId) {
 
-            cmd.effectContext()?.apply(entity);
+            const effectContext = cmd.effectContext();
+            if (effectContext) {
+                const result = effectContext.apply(entity);
+    
+                const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+                const hpDamage = result.parameterDamags[RESystem.parameters.hp];
+    
+                {
+                    const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
+                    context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
+                }
 
+                {
+                    
+                    const states = result.addedStateObjects();
+                    for (const state of states) {
+                        const stateText = state.message1;
+                        //const stateText = target.isActor() ? state.message1 : state.message2;
+                        context.postMessage(stateText.format(name));
+                    }
+                }
+    
+    
+    
+                //const fmt = tr2("%1 は倒れた。");
+                //const fmt = tr2("%1 は %2 の経験値を得た。");
+
+                return REResponse.Succeeded;
+            }
             
-            return REResponse.Succeeded;
         }
 
         return REResponse.Pass;
