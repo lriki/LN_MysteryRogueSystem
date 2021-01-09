@@ -1,6 +1,6 @@
 
+import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { ActionId, REData } from "ts/data/REData";
 import { RE } from "ts/dialogs/EventExecutionDialog";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
@@ -38,7 +38,7 @@ export class REExitPointBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
 
-    onQueryActions(actions: ActionId[]): ActionId[] {
+    onQueryActions(actions: DActionId[]): DActionId[] {
         return actions.concat([
             DBasics.actions.ProceedFloorActionId,
         ]);

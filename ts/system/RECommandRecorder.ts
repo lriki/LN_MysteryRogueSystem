@@ -1,7 +1,7 @@
 
 import * as fs from 'fs';
 import { assert } from 'ts/Common';
-import { ActionId } from 'ts/data/REData';
+import { DActionId } from 'ts/data/DAction';
 import { LEntityId } from 'ts/objects/LObject';
 import { RECommand } from './RECommand';
 
@@ -17,7 +17,7 @@ export interface RERecordingCommand {
 }
 
 export interface RERecordingCommandArgs_Action {
-    actionId: ActionId,
+    actionId: DActionId,
     actorEntityId: LEntityId,
     reactorEntityId: LEntityId,
     args: any,

@@ -1,12 +1,13 @@
-import { ActionId, REData } from "ts/data/REData";
+import { DActionId } from "ts/data/DAction";
+import { REData } from "ts/data/REData";
 
-export type ActionCommandHandler = (actionId: ActionId) => void;
+export type ActionCommandHandler = (actionId: DActionId) => void;
 
 export type SystemCommandHandler = (commandId: string) => void;
 
 export interface CommandInfo
 {
-    actionId: ActionId;     // 0 の場合はシステムコマンド
+    actionId: DActionId;     // 0 の場合はシステムコマンド
     displayText: string;
     commandId: string;
     actionHandler: ActionCommandHandler | undefined;
@@ -35,7 +36,7 @@ export class VFlexCommandWindow extends Window_Command {
         this.refresh();
     }
 
-    public addActionCommand(action: ActionId, handler: ActionCommandHandler): void {
+    public addActionCommand(action: DActionId, handler: ActionCommandHandler): void {
     }
 
     public addSystemCommand(text: string, commandId: string, systemHandler: SystemCommandHandler): void {

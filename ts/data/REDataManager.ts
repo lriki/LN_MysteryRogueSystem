@@ -12,6 +12,7 @@ import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, makeStateTraitsFromMeta } from "./DState";
 import { DBehaviorFactory } from "./DBehaviorFactory";
+import { DEquipmentType_Default } from "./DEquipmentType";
 
 
 declare global {  
@@ -116,6 +117,7 @@ export class REDataManager
 
         // Actions
         DBasics.actions = {
+            EquipActionId: REData.addAction("装備"),
             DirectionChangeActionId: REData.addAction("DirectionChange"),
             MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
             //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
@@ -135,7 +137,6 @@ export class REDataManager
             ProceedFloorActionId: REData.addAction("すすむ"),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
-            EquipActionId: REData.addAction("Equip"),
             EquipOffActionId: REData.addAction("EquipOff"),
             EatActionId: REData.addAction("Eat"),
             TakeActionId: REData.addAction("Take"),
@@ -185,8 +186,52 @@ export class REDataManager
         
         REData.system = {
             elements: $dataSystem.elements ?? [],
-            equipTypes: $dataSystem.equipTypes ?? [],
         };
+
+        if ($dataSystem.equipTypes) {
+            REData.equipmentParts = $dataSystem.equipTypes.map((x, i) => {
+                if (x) {
+                    return {
+                        id: i,
+                        name: x,
+                    };
+                }
+                else {
+                    return DEquipmentType_Default
+                }
+            });
+        }
+
+            /*
+        if ($dataSystem.equipTypes && $dataSystem.armorTypes) {
+            REData.rmmzWeaponTypeIdOffset = 0;
+            const weaponTypes = $dataSystem.equipTypes.map((x, i) => {
+                if (x) {
+                    return {
+                        id: i + REData.rmmzWeaponTypeIdOffset,
+                        name: x,
+                    };
+                }
+                else {
+                    return DEquipmentType_Default
+                }
+            });
+            REData.rmmzArmorTypeIdOffset = weaponTypes.length;
+            const armorTypes = $dataSystem.armorTypes.map((x, i) => {
+                if (x) {
+                    return {
+                        id: i + REData.rmmzArmorTypeIdOffset,
+                        name: x,
+                    };
+                }
+                else {
+                    return DEquipmentType_Default
+                }
+            });
+
+            REData.equipTypes = weaponTypes.concat(armorTypes);
+        }
+            */
 
         // Import States
         {
@@ -204,7 +249,6 @@ export class REDataManager
                         message4: x.message4 ?? "",
                         traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
                     };
-                    console.log("state", state);
                     return state;
                 }
                 else {
@@ -283,6 +327,10 @@ export class REDataManager
                 const id = REData.addItem(x.name ?? "null");
                 const item = REData.items[id];
                 item.iconIndex = x.iconIndex ?? 0;
+                item.equipmentParts = x.etypeId ? [x.etypeId] : [];
+            }
+            else {
+                REData.addItem("null");
             }
         });
         REData.armorDataIdOffset = REData.items.length;
@@ -291,11 +339,17 @@ export class REDataManager
                 const id = REData.addItem(x.name ?? "null");
                 const item = REData.items[id];
                 item.iconIndex = x.iconIndex ?? 0;
+                item.equipmentParts = x.etypeId ? [x.etypeId] : [];
+            }
+            else {
+                REData.addItem("null");
             }
         });
         RESystem.items = {
             autoSupplyFood: 2,
         };
+        
+        console.log("data",REData.items);
 
         // Import Monsters
         $dataEnemies.forEach(x => {

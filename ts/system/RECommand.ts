@@ -1,4 +1,5 @@
-import { REData, REData_Action } from "../data/REData";
+import { DAction } from "ts/data/DAction";
+import { REData } from "../data/REData";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { REEffectContext } from "./REEffectContext";
 
@@ -67,7 +68,7 @@ export class RECommand  // sealed
     }
 
     /** この Command の発生元となった Action */
-    action(): REData_Action { return REData.actions[this._actionId]; }
+    action(): DAction { return REData.actions[this._actionId]; }
 
     args(): any { return this._args; }
 

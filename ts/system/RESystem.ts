@@ -24,6 +24,7 @@ export class RESystem {
         { id: 2, defaultValue: 0 },  // itemId
         { id: 3, defaultValue: "null" },  // name
         { id: 4, defaultValue: 1 },  // idleSequel
+        { id: 5, defaultValue: [] },  // equipmentSlots
     ];
 
     static properties: EntityProperties = {
@@ -31,6 +32,7 @@ export class RESystem {
         itemId: 2,
         name: 3,
         idleSequel: 4,
+        equipmentSlots: 5,
     };
 
     // System

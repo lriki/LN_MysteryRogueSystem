@@ -1,9 +1,9 @@
 import { assert } from "ts/Common";
+import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { ActionId, REData } from "ts/data/REData";
+import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
-import { REDialogContext } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
@@ -36,6 +36,11 @@ export class VItemListDialog extends VSubDialog {
         this._itemListWindow.setHandler("cancel", this.onItemCancel.bind(this));
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
+
+        const equipmentUser = this._actorEntity.findBehavior(LEquipmentUserBehavior);
+        if (equipmentUser) {
+            this._itemListWindow.setEquipmentUser(equipmentUser);
+        }
     }
     
     onCreate() {
@@ -62,7 +67,10 @@ export class VItemListDialog extends VSubDialog {
             // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
             // 実際に実行できる Action のリストができる。
             const actorActions = this._actorEntity.queryActions();
-            const actualActions = itemEntity.queryReactions().filter(actionId => actorActions.includes(actionId));
+            const actualActions = itemEntity.queryReactions()
+                .filter(actionId => actorActions.includes(actionId))
+                .sort();    // ID順にソート
+            
             const self = this;
             this._commandWindow.setActionList2(actualActions.map(actionId => {
                 return {
@@ -89,7 +97,7 @@ export class VItemListDialog extends VSubDialog {
         }
     }
 
-    onAction(actionId: ActionId): void {
+    onAction(actionId: DActionId): void {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
             RESystem.dialogContext.postAction(actionId, this._actorEntity, itemEntity);

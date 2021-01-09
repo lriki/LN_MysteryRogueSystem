@@ -1,3 +1,4 @@
+import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
@@ -9,14 +10,18 @@ import { isThisTypeNode } from "typescript";
  */
 export class VItemListWindow extends Window_Selectable {
     private _inventory: LInventoryBehavior;
+    private _equipmentUser: LEquipmentUserBehavior | undefined;
     private _entities: REGame_Entity[];
 
     constructor(inventory: LInventoryBehavior, rect: Rectangle) {
         super(rect);
         this._inventory = inventory;
-        console.log("inventory", inventory);
         this._entities = inventory.entities();
         this.refresh();
+    }
+
+    public setEquipmentUser(equipmentUser: LEquipmentUserBehavior): void {
+        this._equipmentUser = equipmentUser;
     }
     
     selectedItem(): REGame_Entity {
@@ -92,10 +97,13 @@ export class VItemListWindow extends Window_Selectable {
             const textMargin = ImageManager.iconWidth + 4;
             const itemWidth = Math.max(0, width - textMargin);
             this.resetTextColor();
-            //this.drawIcon(item.iconIndex, x, iconY);
-            //this.drawIcon(176, x, iconY);
-            //this.drawText("おにぎり", x + textMargin, y, itemWidth, "left");
+
             this.drawTextEx(REGame.identifyer.makeDisplayText(item), x, y, itemWidth);
+
+            // 装備していればアイコンを表示する
+            if (this._equipmentUser && this._equipmentUser.isEquipped(item)) {
+                this.drawIcon(12, x, iconY);
+            }
         }
     }
 

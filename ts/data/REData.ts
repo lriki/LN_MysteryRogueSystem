@@ -7,12 +7,15 @@ import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
 import { DClass, DClassId } from "./DClass";
-import { DItem } from "./DItem";
+import { DItem, DItem_Default } from "./DItem";
 import { DLand } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DStateTrait } from "./DStateTrait";
 import { DSequel } from "./DSequel";
 import { RE_Data_Monster } from "./DEnemy";
+import { DAction } from "./DAction";
+import { DEquipmentType } from "./DEquipmentType";
+import { DEquipmentPart } from "./DEquipmentPart";
 
 export type ParameterDataId = number;
 
@@ -140,24 +143,6 @@ export interface REData_Faction
     schedulingOrder: number;
 }
 
-export type ActionId = number;
-
-/**
- * 拾う、投げる、などの行動の種類
- * 
- * Command と密接に関係し、Command の種類 (というより発動の基点) を示すために使用する。
- * また、UI 状に表示される "ひろう" "なげる" といった表示名もここで定義する。
- * 
- * Command は dynamic なデータ構造だが、こちらは static.
- */
-export interface REData_Action
-{
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name */
-    displayName: string;
-}
 
 export interface REData_Parameter
 {
@@ -180,6 +165,8 @@ export class REData
     static NormalAttackSkillId: number = 1;
 
     static system: DSystem;
+    //static equipTypes: DEquipmentType[] = [];
+    static equipmentParts: DEquipmentPart[] = [];
     static entityKinds: DEntityKind[] = [];
     static classes: DClass[] = [];
     static actors: RE_Data_Actor[] = [];
@@ -187,7 +174,7 @@ export class REData
     static lands: DLand[] = [];
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
-    static actions: REData_Action[] = [{id: 0, displayName: 'null'}];
+    static actions: DAction[] = [{id: 0, displayName: 'null'}];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
@@ -200,6 +187,8 @@ export class REData
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
     static armorDataIdOffset: number = 0;
+    //static rmmzWeaponTypeIdOffset: number = 0;
+    //static rmmzArmorTypeIdOffset: number = 0;
 
     static _attributeFactories: (() => LAttribute)[] = [];
     static _behaviorFactories: (() => LBehavior)[] = [];
@@ -378,13 +367,9 @@ export class REData
     static addItem(name: string): number {
         const newId = this.items.length;
         this.items.push({
+            ...DItem_Default,
             id: newId,
             name: name,
-            iconIndex: 0,
-            effect: {
-                critical: false,
-                parameterEffects: [],
-            }
         });
         return newId;
     }

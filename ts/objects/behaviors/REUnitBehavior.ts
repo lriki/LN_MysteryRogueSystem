@@ -1,7 +1,7 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
 import { CommandArgs, LBehavior, onPrePickUpReaction, onPreThrowReaction, onThrowReaction, onWalkedOnTopAction } from "./LBehavior";
-import { ActionId, REData } from "ts/data/REData";
+import { REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
@@ -14,6 +14,7 @@ import { DBasics } from "ts/data/DBasics";
 import { LCommonBehavior } from "./LCommonBehavior";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
+import { DActionId } from "ts/data/DAction";
 
 /**
  * 
@@ -35,7 +36,7 @@ export class REUnitBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
     
-    onQueryActions(actions: ActionId[]): ActionId[] {
+    onQueryActions(actions: DActionId[]): DActionId[] {
         return actions.concat([
             DBasics.actions.PickActionId,
             DBasics.actions.PutActionId,
@@ -44,7 +45,7 @@ export class REUnitBehavior extends LBehavior {
         ]);
     }
 
-    onQueryReactions(actions: ActionId[]): ActionId[] {
+    onQueryReactions(actions: DActionId[]): DActionId[] {
         return actions.concat([
             DBasics.actions.AttackActionId
         ]);

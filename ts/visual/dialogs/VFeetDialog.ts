@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { ActionId } from "ts/data/REData";
+import { DActionId } from "ts/data/DAction";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "ts/system/RESystem";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
@@ -10,11 +10,11 @@ import { VSubDialog } from "./VSubDialog";
  */
 export class VFeetDialog extends VSubDialog {
     _targetEntity: REGame_Entity;
-    _actions: ActionId[];
+    _actions: DActionId[];
     _entityNameWindow: Window_Help | undefined;
     _commandWindow: VActionCommandWindow | undefined;
 
-    constructor(targetEntity: REGame_Entity, actions: ActionId[]) {
+    constructor(targetEntity: REGame_Entity, actions: DActionId[]) {
         super();
         this._targetEntity = targetEntity;
         this._actions = actions;
@@ -42,7 +42,7 @@ export class VFeetDialog extends VSubDialog {
         this._commandWindow.open();
     }
 
-    private onAction(actionId: ActionId) {
+    private onAction(actionId: DActionId) {
         const entity = RESystem.dialogContext.causeEntity();
         assert(entity);
 

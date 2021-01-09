@@ -1,3 +1,4 @@
+import { DEquipmentPartId } from "./DEquipmentPart";
 import { DEffect } from "./DSkill";
 
 export type DItemDataId = number;
@@ -20,6 +21,20 @@ export interface DItem {
     iconIndex: number;
 
     effect: DEffect;
+
+    /** このアイテム(装備品) を装備できる部位 */
+    equipmentParts: DEquipmentPartId[];
 }
+
+export const DItem_Default: DItem = {
+    id: 0,
+    name: "null",
+    iconIndex: 0,
+    effect: {
+        critical: false,
+        parameterEffects: [],
+    },
+    equipmentParts: [],
+};
 
 

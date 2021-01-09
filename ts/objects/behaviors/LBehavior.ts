@@ -27,8 +27,8 @@
  */
 
 import { assert } from "ts/Common";
+import { DActionId } from "ts/data/DAction";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
-import { ActionId } from "ts/data/REData";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
@@ -150,8 +150,8 @@ export class LBehavior {
 
     // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
     // 主に UI 表示で使用するもので、Action を実行したときに "成功" するかどうかは気にしない。
-    onQueryActions(actions: ActionId[]): ActionId[] { return actions; }
-    onQueryReactions(actions: ActionId[]): ActionId[] { return actions; }
+    onQueryActions(actions: DActionId[]): DActionId[] { return actions; }
+    onQueryReactions(actions: DActionId[]): DActionId[] { return actions; }
 
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、

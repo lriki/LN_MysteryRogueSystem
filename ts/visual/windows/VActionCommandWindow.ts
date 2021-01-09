@@ -1,4 +1,5 @@
-import { ActionId, REData } from "ts/data/REData";
+import { DActionId } from "ts/data/DAction";
+import { REData } from "ts/data/REData";
 
 /*
 [2020/12/6] アイテムに対する Action
@@ -30,12 +31,12 @@ NOTE: 「土」は「説明」、しかない。保存の壺に入れられた�
 
 */
 
-export type ActionCommandHandler = (actionId: ActionId) => void;
+export type ActionCommandHandler = (actionId: DActionId) => void;
 
 
 export interface ActionCommand
 {
-    actionId: ActionId;
+    actionId: DActionId;
     handler: ActionCommandHandler;
 }
 
@@ -74,7 +75,7 @@ export class VActionCommandWindow extends Window_Command {
         this.refresh();
     }
 
-    addActionCommand(action: ActionId, handler: ActionCommandHandler): void {
+    addActionCommand(action: DActionId, handler: ActionCommandHandler): void {
         this.setHandler(`action:${action}`, () => handler(action));
         this.refresh();
     }

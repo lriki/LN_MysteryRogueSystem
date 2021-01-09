@@ -48,7 +48,7 @@ export class RMMZIntegration extends REIntegration {
     }
 
     onLoadFixedMapEvents(): void {
-        // 固定マップ上のイベントを Entity として出現させる
+        // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityMetadata) {
                 const entity = this.newEntity(e._entityMetadata);
@@ -171,9 +171,9 @@ export class RMMZIntegration extends REIntegration {
             case "Monster":
                 return REEntityFactory.newMonster(prefabData.enemyId ?? 0);
             case "Weapon":
-                return REEntityFactory.newItem((prefabData.weaponId ?? 0) + REData.weaponDataIdOffset);
+                return REEntityFactory.newEquipment((prefabData.weaponId ?? 0) + REData.weaponDataIdOffset);
             case "Shield":
-                return REEntityFactory.newItem((prefabData.armorId ?? 0) + REData.armorDataIdOffset);
+                return REEntityFactory.newEquipment((prefabData.armorId ?? 0) + REData.armorDataIdOffset);
             case "Grass":
             case "Food":
                 return REEntityFactory.newItem(prefabData.itemId ?? 0);

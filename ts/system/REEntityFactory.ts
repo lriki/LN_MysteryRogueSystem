@@ -14,6 +14,8 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
+import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
+import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -32,6 +34,7 @@ export class REEntityFactory {
         e.addBasicBehavior(new LBattlerBehavior());
         e.addBasicBehavior(new LInventoryBehavior());
         e.addBasicBehavior(new LItemUserBehavior());
+        e.addBasicBehavior(new LEquipmentUserBehavior());
         return e;
     }
 
@@ -51,6 +54,14 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new LItemBehavior(itemId));
+        return e;
+    }
+
+    static newEquipment(itemId: number): REGame_Entity {
+        const e = REGame.world.spawnEntity();
+        e.addBasicBehavior(new LCommonBehavior());
+        e.addBasicBehavior(new LItemBehavior(itemId));
+        e.addBasicBehavior(new LEquipmentBehavior());
         return e;
     }
 

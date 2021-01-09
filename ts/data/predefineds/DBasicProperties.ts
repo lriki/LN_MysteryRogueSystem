@@ -36,7 +36,12 @@ export interface EntityProperties {
      * 
      * 状態異常等で変わる。
      */
-    idleSequel: DSequelId,
+    idleSequel: number,
+
+    /**
+     * DEquipmentPartId[]
+     */
+    equipmentSlots: number;
 
 }
 

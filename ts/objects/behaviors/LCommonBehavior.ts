@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
+import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { ActionId, REData } from "ts/data/REData";
+import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
@@ -86,7 +87,7 @@ export class LCommonBehavior extends LBehavior {
     }
     
 
-    onQueryActions(actions: ActionId[]): ActionId[] {
+    onQueryActions(actions: DActionId[]): DActionId[] {
         return actions.concat([
             DBasics.actions.PickActionId,
         ]);

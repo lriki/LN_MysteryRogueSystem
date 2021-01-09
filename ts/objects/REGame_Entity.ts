@@ -5,7 +5,6 @@ import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { BlockLayerKind, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
-import { ActionId } from "ts/data/REData";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
@@ -18,6 +17,7 @@ import { TilingSprite } from "pixi.js";
 import { LState } from "./states/LState";
 import { RE_Game_World } from "./REGame_World";
 import { SEffectResult } from "ts/system/SEffectResult";
+import { DActionId } from "ts/data/DAction";
 
 enum BlockLayer
 {
@@ -401,6 +401,10 @@ export class REGame_Entity
         return b;
     }
 
+    hasBehavior<T>(ctor: { new(...args: any[]): T }): boolean {
+        return this.findBehavior<T>(ctor) != undefined;
+    }
+
     private _iterateBehaviors(func: (x: LBehavior) => boolean) {
         for (let i = this._states.length - 1; i >= 0; i--) {
             const behabiors = this._states[i].behabiors();
@@ -427,8 +431,8 @@ export class REGame_Entity
         return result ?? RESystem.propertyData[propertyId].defaultValue;
     }
 
-    queryActions(): ActionId[] {
-        let result: ActionId[] = [];
+    queryActions(): DActionId[] {
+        let result: DActionId[] = [];
         
         for (let i = 0; i < this._basicBehaviors.length; i++) { // 前方から
             result = this._basicBehaviors[i].onQueryActions(result);
@@ -436,10 +440,10 @@ export class REGame_Entity
         return result;
     }
 
-    queryReactions(): ActionId[] {
+    queryReactions(): DActionId[] {
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
-        let result: ActionId[] = [
+        let result: DActionId[] = [
             //DBasics.actions.ExchangeActionId,
             DBasics.actions.ThrowActionId,
             DBasics.actions.FallActionId,
