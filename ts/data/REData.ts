@@ -197,6 +197,10 @@ export class REData
     static stateTraits: DStateTrait[] = [];
     static states: DState[] = [];
 
+    static itemDataIdOffset: number = 0;
+    static weaponDataIdOffset: number = 0;
+    static armorDataIdOffset: number = 0;
+
     static _attributeFactories: (() => LAttribute)[] = [];
     static _behaviorFactories: (() => LBehavior)[] = [];
     static _stateFactories: (() => LStateBehavior)[] = [];

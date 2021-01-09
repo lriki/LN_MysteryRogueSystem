@@ -266,6 +266,7 @@ export class REDataManager
         });
 
         // Import Item
+        REData.itemDataIdOffset = REData.items.length;
         $dataItems.forEach(x => {
             if (x) {
                 const id = REData.addItem(x.name ?? "null");
@@ -274,6 +275,22 @@ export class REDataManager
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
                 }
+            }
+        });
+        REData.weaponDataIdOffset = REData.items.length;
+        $dataWeapons.forEach(x => {
+            if (x) {
+                const id = REData.addItem(x.name ?? "null");
+                const item = REData.items[id];
+                item.iconIndex = x.iconIndex ?? 0;
+            }
+        });
+        REData.armorDataIdOffset = REData.items.length;
+        $dataArmors.forEach(x => {
+            if (x) {
+                const id = REData.addItem(x.name ?? "null");
+                const item = REData.items[id];
+                item.iconIndex = x.iconIndex ?? 0;
             }
         });
         RESystem.items = {

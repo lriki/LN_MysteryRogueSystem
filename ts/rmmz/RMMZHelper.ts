@@ -21,6 +21,8 @@ interface RMMZEventRawMetadata {
 
 
 export interface RMMZEventPrefabMetadata {
+    weaponId?: number;
+    armorId?: number;
     itemId?: number;    // RMMZ データベース上の ItemId
     enemyId?: number;   // RMMZ データベース上の EnemyId
 }

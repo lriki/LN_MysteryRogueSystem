@@ -170,6 +170,10 @@ export class RMMZIntegration extends REIntegration {
                 return REEntityFactory.newExitPoint();
             case "Monster":
                 return REEntityFactory.newMonster(prefabData.enemyId ?? 0);
+            case "Weapon":
+                return REEntityFactory.newItem((prefabData.weaponId ?? 0) + REData.weaponDataIdOffset);
+            case "Shield":
+                return REEntityFactory.newItem((prefabData.armorId ?? 0) + REData.armorDataIdOffset);
             case "Grass":
             case "Food":
                 return REEntityFactory.newItem(prefabData.itemId ?? 0);
