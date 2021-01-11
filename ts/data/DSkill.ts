@@ -69,6 +69,30 @@ export enum DEffectScope {
     Everyone = 14,
 }
 
+
+export enum DEffectType {
+    /** なし */
+    None = 0,
+
+    /** HP ダメージ */
+    HpDamage = 1,
+
+    /** MP ダメージ */
+    MpDamage = 2,
+
+    /** HP 回復 */
+    HpRecover = 3,
+
+    /** MP 回復 */
+    MpRecover = 4,
+
+    /** HP 吸収 */
+    HpDrain = 5,
+
+    /** MP 吸収 */
+    MpDrain = 6
+}
+
 /**
  * RMMZ の Skill と Item の共通パラメータ
  */
@@ -83,7 +107,10 @@ export interface DEffect {
      */
     critical: boolean;
 
-    scope: DEffectScope;
+    //elementId: number;
+    //formula: string;
+    type: number;
+    //variance: number;
 
     /**
      * IDataSkill.damage
@@ -93,7 +120,6 @@ export interface DEffect {
 
 export const DEffect_Default: DEffect = {
     critical: false,
-    scope: 0,
     parameterEffects: [],
 };
 
@@ -108,6 +134,15 @@ export interface DSkill {
     /** Cost */
     paramCosts: ParameterDataId[];
 
+    scope: DEffectScope;
+
     effect: DEffect;
 }
 
+export const DSkill_Default: DSkill = {
+    id: 0,
+    name: "null",
+    paramCosts: [],
+    scope: DEffectScope.None,
+    effect: DEffect_Default,
+};

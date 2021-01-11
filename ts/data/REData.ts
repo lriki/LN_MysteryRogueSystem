@@ -5,7 +5,7 @@ import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
-import { DEffect_Default, DSkill } from "./DSkill";
+import { DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
 import { DClass, DClassId } from "./DClass";
 import { DItem, DItem_Default } from "./DItem";
 import { DLand } from "./DLand";
@@ -353,10 +353,9 @@ export class REData
     static addSkill(name: string): number {
         const newId = this.skills.length;
         this.skills.push({
+            ...DSkill_Default,
             id: newId,
             name: name,
-            paramCosts: [],
-            effect: DEffect_Default,
         });
         return newId;
     }

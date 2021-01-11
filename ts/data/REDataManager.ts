@@ -305,7 +305,7 @@ export class REDataManager
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     skill.effect = this.makeEffect(x.damage);
-                    skill.effect.scope = x.scope ?? DEffectScope.None;
+                    skill.scope = x.scope ?? DEffectScope.None;
                 }
             }
         });
@@ -319,7 +319,7 @@ export class REDataManager
                 item.iconIndex = x.iconIndex ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
-                    item.effect.scope = x.scope ?? DEffectScope.None;
+                    item.scope = x.scope ?? DEffectScope.None;
                 }
             }
         });
@@ -544,7 +544,6 @@ export class REDataManager
         }
         return {
             critical: damage.critical ?? false,
-            scope: DEffectScope.None,
             parameterEffects: [{
                 parameterId: parameterId,
                 elementId: damage.elementId ?? 0,

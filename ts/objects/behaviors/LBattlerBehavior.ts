@@ -171,6 +171,16 @@ export class LBattlerBehavior extends LBehavior {
         //context.postDestroy(entity);
     }
 
+    // Game_BattlerBase.prototype.isDead
+    public isDead(): boolean {
+        return this.isDeathStateAffected();
+    };
+    
+    // Game_BattlerBase.prototype.isAlive
+    public isAlive(): boolean {
+        return !this.isDeathStateAffected();
+    };
+
     //------------------------------------------------------------
     
     onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {

@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { DEffect } from "ts/data/DSkill";
+import { DEffect, DEffectScope } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
 import { ParameterDataId, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -108,6 +108,20 @@ export class REEffectContext {
     private _effectees: REGame_Entity[] = [];
 
     
+    private _targetEntity: REGame_Entity;
+    private _targetBattlerBehavior: LBattlerBehavior;
+
+    // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
+    private _scope: DEffectScope = 0;
+
+    constructor(scope: DEffectScope, target: REGame_Entity) {
+        this._scope = scope;
+        this._targetEntity = target;
+        this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
+    }
+    
+
+    
     addEffector(effector: SEffectorFact) {
         this._effectors.push(effector);
     }
@@ -117,7 +131,7 @@ export class REEffectContext {
         const result = target._effectResult;
         result.clear();
 
-        result.used = false;
+        result.used = this.testApply();
         result.missed = false;
         result.evaded = false;
         result.physical = true;
@@ -132,7 +146,7 @@ export class REEffectContext {
         return result;
     }
 
-    /*
+    
     // Game_Action.prototype.testApply
     private testApply(target): boolean {
         return (
@@ -145,16 +159,80 @@ export class REEffectContext {
     };
 
     // Game_Action.prototype.testLifeAndDeath
-    private testLifeAndDeath = function(target) {
+    private testLifeAndDeath(targetBattlerBehavior: LBattlerBehavior) {
         if (this.isForOpponent() || this.isForAliveFriend()) {
-            return target.isAlive();
+            return targetBattlerBehavior.isAlive();
         } else if (this.isForDeadFriend()) {
-            return target.isDead();
+            return targetBattlerBehavior.isDead();
         } else {
             return true;
         }
+    }
+    
+    // Game_Action.prototype.checkItemScope
+    private checkItemScope(list: DEffectScope[]) {
+        return list.includes(this._scope);
     };
-    */
+
+    // Game_Action.prototype.isForOpponent
+    private isForOpponent(): boolean {
+        return this.checkItemScope([
+            DEffectScope.Opponent_Single,
+            DEffectScope.Opponent_All,
+            DEffectScope.Opponent_Random_1,
+            DEffectScope.Opponent_Random_2,
+            DEffectScope.Opponent_Random_3,
+            DEffectScope.Opponent_Random_4,
+            DEffectScope.Everyone]);
+    }
+
+    // Game_Action.prototype.isForAliveFriend
+    private isForAliveFriend(): boolean {
+        return this.checkItemScope([
+            DEffectScope.Friend_Single_Alive,
+            DEffectScope.Friend_All_Alive,
+            DEffectScope.User,
+            DEffectScope.Everyone]);
+    }
+
+    // Game_Action.prototype.isForDeadFriend
+    private isForDeadFriend(): boolean {
+        return this.checkItemScope([
+            DEffectScope.Friend_Single_Dead,
+            DEffectScope.Friend_All_Dead]);
+    }
+    
+Game_Action.prototype.checkDamageType = function(list) {
+    return list.includes(this.item().damage.type);
+};
+
+Game_Action.prototype.isHpEffect = function() {
+    return this.checkDamageType([1, 3, 5]);
+};
+
+Game_Action.prototype.isMpEffect = function() {
+    return this.checkDamageType([2, 4, 6]);
+};
+
+Game_Action.prototype.isDamage = function() {
+    return this.checkDamageType([1, 2]);
+};
+
+Game_Action.prototype.isRecover = function() {
+    return this.checkDamageType([3, 4]);
+};
+
+Game_Action.prototype.isDrain = function() {
+    return this.checkDamageType([5, 6]);
+};
+
+Game_Action.prototype.isHpRecover = function() {
+    return this.checkDamageType([3]);
+};
+
+Game_Action.prototype.isMpRecover = function() {
+    return this.checkDamageType([4]);
+};
 
     // Game_Action.prototype.executeDamage
     private executeDamage(target: REGame_Entity, value: number, result: SEffectResult): void {

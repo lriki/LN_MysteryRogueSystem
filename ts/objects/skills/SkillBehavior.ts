@@ -32,7 +32,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                 const block = REGame.map.block(front.x, front.y);
                 const reacor = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
                 if (reacor) {
-                    const effectContext = new REEffectContext();
+                    const effectContext = new REEffectContext(skill.scope, reacor);
                     effectContext.addEffector(effector);
 
                     context.postReaction(DBasics.actions.AttackActionId, reacor, effectContext);
