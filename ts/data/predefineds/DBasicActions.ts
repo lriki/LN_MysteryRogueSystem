@@ -186,6 +186,6 @@ export interface DBasicActions
     // Combat Actions.
 
     
-    AttackActionId: number;
+    AttackActionId: number; // TODO: deprecated
 }
 

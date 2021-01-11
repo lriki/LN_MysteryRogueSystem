@@ -83,16 +83,6 @@ export class REUnitBehavior extends LBehavior {
             console.log("AttackAction");
 
 
-            context.postSequel(actor, RESystem.sequels.attack);
-
-
-            const front = Helpers.makeEntityFrontPosition(actor, 1);
-            const block = REGame.map.block(front.x, front.y);
-            const reacor = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
-            if (reacor) {
-                context.postReaction(DBasics.actions.AttackActionId, reacor, cmd.effectContext());
-            }
-
             /*
 
 

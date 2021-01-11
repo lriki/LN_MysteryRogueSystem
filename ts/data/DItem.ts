@@ -32,6 +32,7 @@ export const DItem_Default: DItem = {
     iconIndex: 0,
     effect: {
         critical: false,
+        scope: 0,
         parameterEffects: [],
     },
     equipmentParts: [],

@@ -22,6 +22,56 @@ export interface DParameterEffect {
     variance: number;
 }
 
+export enum DEffectScope {
+    /** なし */
+    None = 0,
+
+    /** 敵,単体 */
+    Opponent_Single = 1,
+
+    /** 敵,全体 */
+    Opponent_All = 2,
+
+    /** 敵,ランダム,1 */
+    Opponent_Random_1 = 3,
+
+    /** 敵,ランダム,2 */
+    Opponent_Random_2 = 4,
+
+    /** 敵,ランダム,3 */
+    Opponent_Random_3 = 5,
+
+    /** 敵,ランダム,4 */
+    Opponent_Random_4 = 6,
+
+    /** 味方,単体,生存 */
+    Friend_Single_Alive = 7,
+
+    /** 味方,全体,生存 */
+    Friend_All_Alive = 8,
+
+    /** 味方,単体,戦闘不能 */
+    Friend_Single_Dead = 9,
+
+    /** 味方,全体,戦闘不能 */
+    Friend_All_Dead = 10,
+
+    /** 使用者 */
+    User = 11,
+
+    /** 味方,単体,無条件 */
+    Friend_Single_Unconditional = 12,
+
+    /** 味方,全体,無条件 */
+    Friend_All_Unconditional = 13,
+
+    /** 敵と味方,全体 */
+    Everyone = 14,
+}
+
+/**
+ * RMMZ の Skill と Item の共通パラメータ
+ */
 export interface DEffect {
     
     /**
@@ -33,11 +83,19 @@ export interface DEffect {
      */
     critical: boolean;
 
+    scope: DEffectScope;
+
     /**
      * IDataSkill.damage
      */
     parameterEffects: DParameterEffect[];
 }
+
+export const DEffect_Default: DEffect = {
+    critical: false,
+    scope: 0,
+    parameterEffects: [],
+};
 
 
 export interface DSkill {

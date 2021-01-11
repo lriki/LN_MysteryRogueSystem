@@ -7,7 +7,7 @@ import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
-import { DEffect, DParameterEffectApplyType } from "./DSkill";
+import { DEffect, DEffectScope, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, makeStateTraitsFromMeta } from "./DState";
@@ -305,6 +305,7 @@ export class REDataManager
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     skill.effect = this.makeEffect(x.damage);
+                    skill.effect.scope = x.scope ?? DEffectScope.None;
                 }
             }
         });
@@ -318,6 +319,7 @@ export class REDataManager
                 item.iconIndex = x.iconIndex ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
+                    item.effect.scope = x.scope ?? DEffectScope.None;
                 }
             }
         });
@@ -542,6 +544,7 @@ export class REDataManager
         }
         return {
             critical: damage.critical ?? false,
+            scope: DEffectScope.None,
             parameterEffects: [{
                 parameterId: parameterId,
                 elementId: damage.elementId ?? 0,

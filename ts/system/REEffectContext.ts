@@ -132,6 +132,30 @@ export class REEffectContext {
         return result;
     }
 
+    /*
+    // Game_Action.prototype.testApply
+    private testApply(target): boolean {
+        return (
+            this.testLifeAndDeath(target) &&
+            ($gameParty.inBattle() ||
+                (this.isHpRecover() && target.hp < target.mhp) ||
+                (this.isMpRecover() && target.mp < target.mmp) ||
+                this.hasItemAnyValidEffects(target))
+        );
+    };
+
+    // Game_Action.prototype.testLifeAndDeath
+    private testLifeAndDeath = function(target) {
+        if (this.isForOpponent() || this.isForAliveFriend()) {
+            return target.isAlive();
+        } else if (this.isForDeadFriend()) {
+            return target.isDead();
+        } else {
+            return true;
+        }
+    };
+    */
+
     // Game_Action.prototype.executeDamage
     private executeDamage(target: REGame_Entity, value: number, result: SEffectResult): void {
         const b = target.findBehavior(LBattlerBehavior);
