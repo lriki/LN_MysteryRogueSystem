@@ -1,15 +1,23 @@
-import { ParameterDataId } from "./REData";
+import { DParameterId } from "./REData";
 
 export type DSkillDataId = number;
 
 export enum DParameterEffectApplyType {
+    /** なし */
+    None,
+
+    /** ダメージ */
     Damage,
+
+    /** 回復 */
     Recover,
+
+    /** 吸収 */
     Drain,
 }
 
 export interface DParameterEffect {
-    parameterId: ParameterDataId;
+    parameterId: DParameterId;
 
     elementId: number;  // (Index of DSystem.elements)
 
@@ -69,29 +77,12 @@ export enum DEffectScope {
     Everyone = 14,
 }
 
-
-export enum DEffectType {
-    /** なし */
-    None = 0,
-
-    /** HP ダメージ */
-    HpDamage = 1,
-
-    /** MP ダメージ */
-    MpDamage = 2,
-
-    /** HP 回復 */
-    HpRecover = 3,
-
-    /** MP 回復 */
-    MpRecover = 4,
-
-    /** HP 吸収 */
-    HpDrain = 5,
-
-    /** MP 吸収 */
-    MpDrain = 6
+export enum DEffectHitType {
+    Certain = 0,
+    Physical = 1,
+    Magical = 2,
 }
+
 
 /**
  * RMMZ の Skill と Item の共通パラメータ
@@ -107,19 +98,26 @@ export interface DEffect {
      */
     critical: boolean;
 
-    //elementId: number;
-    //formula: string;
-    type: number;
-    //variance: number;
+    /**
+     * IDataSkill.successRate
+     * IDataItem.successRate
+     * 整数値。0~100
+     */
+    successRate: number;
+
+    hitType: DEffectHitType;
 
     /**
      * IDataSkill.damage
+     * IDataItem.damage
      */
     parameterEffects: DParameterEffect[];
 }
 
 export const DEffect_Default: DEffect = {
     critical: false,
+    successRate: 100,
+    hitType: DEffectHitType.Certain,
     parameterEffects: [],
 };
 
@@ -132,7 +130,7 @@ export interface DSkill {
     name: string;
 
     /** Cost */
-    paramCosts: ParameterDataId[];
+    paramCosts: DParameterId[];
 
     scope: DEffectScope;
 

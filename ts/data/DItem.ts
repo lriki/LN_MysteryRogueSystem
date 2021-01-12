@@ -1,5 +1,5 @@
 import { DEquipmentPartId } from "./DEquipmentPart";
-import { DEffect, DEffectScope } from "./DSkill";
+import { DEffect, DEffectHitType, DEffectScope } from "./DSkill";
 
 export type DItemDataId = number;
 
@@ -26,6 +26,9 @@ export interface DItem {
 
     /** このアイテム(装備品) を装備できる部位 */
     equipmentParts: DEquipmentPartId[];
+
+    /** 装備したときに適用する Trait */
+    traits: IDataTrait[];
 }
 
 export const DItem_Default: DItem = {
@@ -35,9 +38,12 @@ export const DItem_Default: DItem = {
     scope: 0,
     effect: {
         critical: false,
+        successRate: 100,
+        hitType: DEffectHitType.Certain,
         parameterEffects: [],
     },
     equipmentParts: [],
+    traits: [],
 };
 
 

@@ -1,42 +1,232 @@
 import { assert } from "ts/Common";
-import { DEffect, DEffectScope } from "ts/data/DSkill";
+import { DEffect, DEffectHitType, DEffectScope, DParameterEffectApplyType } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
-import { ParameterDataId, REData } from "ts/data/REData";
+import { DParameterId, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESystem } from "./RESystem";
 import { SEffectResult } from "./SEffectResult";
 
 
+enum SParameterEffectApplyType {
+    None,
+    Damage,
+    Recover,
+}
+
+// 追加能力値。加算で計算する。
+enum DXParameter {
+    // HIT rate
+    hit = 0,
+
+    // EVAsion rate
+    eva = 1,
+
+    // CRItical rate
+    cri = 2,
+
+    // Critical EVasion rate
+    cev = 3,
+
+    // Magic EVasion rate
+    mev = 4,
+
+    // Magic ReFlection rate
+    mrf = 5,
+
+    // CouNTer attack rate
+    cnt = 6,
+
+    // Hp ReGeneration rate
+    hrg = 7,
+
+    // Mp ReGeneration rate
+    mrg = 8,
+
+    // Tp ReGeneration rate
+    trg = 9,
+}
+
+// 特殊能力値。乗算で計算する。
+enum DSParameter {
+    // TarGet Rate
+    tgr = 0,
+
+    // GuaRD effect rate
+    grd = 1,
+
+    // RECovery effect rate
+    rec = 2,
+
+    // PHArmacology
+    pha = 3,
+
+    // Mp Cost Rate
+    mcr = 4,
+
+    // Tp Charge Rate
+    tcr = 5,
+
+    // Physical Damage Rate
+    pdr = 6,
+
+    // Magic Damage Rate
+    mdr = 7,
+
+    // Floor Damage Rate
+    fdr = 8,
+
+    // EXperience Rate
+    exr = 9,
+}
+
+// DParameterEffect とよく似ているが、こちらは動的なデータとして扱うものの集合。
+// 例えば通常の武器は isDrain=falseでも、回復印が付いていたら isDrain=true にするなど、
+// 関連する情報を統合した最終的な Effect として作り上げるために使う。
+interface SParameterEffect {
+    
+    elementId: number;  // (Index of DSystem.elements)
+
+    formula: string;
+
+    /** IDataSkill.damage.type  */
+    applyType: SParameterEffectApplyType;
+
+    isDrain: boolean;
+
+    /** 分散度 */
+    variance: number;
+}
+
 // 攻撃側
 export class SEffectorFact {
-    _subject: REGame_Entity;
-    _effect: DEffect;
-    _participants: REGame_Entity[] = [];
-    _actualParams: number[] = [];
+    private _context: REEffectContext;
+    private _subject: REGame_Entity;
+    private _subjectEffect: DEffect;
+    private _subjectBattlerBehavior: LBattlerBehavior;
 
+    // 適用側 (攻撃側) の関係者。
+    // 攻撃発動Unit だけではなく、装備品(武器・防具・装飾品)、合成印など、ダメージ計算式やバフに影響するすべての Entity。
+    //
+    // 矢弾や魔法弾を打った場合、その Projectile Entity も effectors に含まれる。
+    // なお、魔法反射や吹き飛ばし移動は Command 側で処理する。EffectContext はあくまでパラメータの変化に関係する処理のみを行う。
+    private _effectors: REGame_Entity[] = [];
 
-    constructor(subject: REGame_Entity, effect: DEffect) {
+    // 以下、Behavior 持ち回りで編集される要素
+    private _actualParams: number[];
+    private _parameterEffects: SParameterEffect[];  // Index of DParameterDataId
+    private _hitType: DEffectHitType;
+    private _successRate: number;       // 0~100
+
+    public constructor(context: REEffectContext, subject: REGame_Entity, effect: DEffect) {
+        this._context = context;
         this._subject = subject;
-        this._effect = effect;
+        this._subjectEffect = effect;
+        this._subjectBattlerBehavior = subject.getBehavior(LBattlerBehavior);
 
+        // subject の現在値を初期パラメータとする。
+        // 装備品 Behavior はここへ値を加算したりする。
+        this._actualParams = [];
+        this._parameterEffects = [];
+        for (let i = 0; i < REData.parameters.length; i++) {
+            this._actualParams[i] = this._subjectBattlerBehavior.actualParam(i);
+            this._parameterEffects[i] = {
+                elementId: 0,
+                formula: "",
+                applyType: SParameterEffectApplyType.None,
+                isDrain: false,
+                variance: 0,
+            };
+        }
+
+        this._hitType = effect.hitType;
+        this._successRate = effect.successRate;
+
+        // Effect 展開
+        this._subjectEffect.parameterEffects.forEach(x => {
+            const d = this._parameterEffects[x.parameterId];
+            if (x.applyType != DParameterEffectApplyType.None) {
+                switch (x.applyType) {
+                    case DParameterEffectApplyType.Damage:
+                        d.applyType = SParameterEffectApplyType.Damage;
+                        d.isDrain = false;
+                        break;
+                    case DParameterEffectApplyType.Recover:
+                        d.applyType = SParameterEffectApplyType.Recover;
+                        d.isDrain = false;
+                        break;
+                    case DParameterEffectApplyType.Drain:
+                        d.applyType = SParameterEffectApplyType.Damage;
+                        d.isDrain = true;
+                        break;
+                    default:
+                        throw new Error();
+                }
+                d.elementId = x.elementId;
+                d.formula = x.formula;
+                d.variance = x.variance;
+            }
+        });
+        
         this._subject.basicBehaviors().forEach(x => {
             x.onCollectEffector(this._subject, this);
         });
     }
 
-    setActualParam(paramId: ParameterDataId, value: number): void {
-        this._actualParams[paramId] = value;
+    public subject(): REGame_Entity {
+        return this._subject;
     }
 
-    actualParams(paramId: ParameterDataId): number {
+    //--------------------
+    // onCollectEffector から使うもの
+
+    public addEffector(entity: REGame_Entity) {
+        this._effectors.push(entity);
+    }
+
+    //--------------------
+    // apply から使うもの
+
+    public actualParams(paramId: DParameterId): number {
         return this._actualParams[paramId];
     }
 
-    addParticipant(entity: REGame_Entity) {
-        assert(entity != this._subject);
-        this._participants.push(entity);
+    
+        
+    public isCertainHit(): boolean {
+        return this._hitType == DEffectHitType.Certain;
     }
+
+    public isPhysical(): boolean {
+        return this._hitType == DEffectHitType.Physical;
+    }
+
+    public isMagical(): boolean {
+        return this._hitType == DEffectHitType.Magical;
+    }
+
+    // 0.0~1.0
+    public hitRate(): number {
+        const successRate = this._successRate;
+        if (this.isPhysical()) {
+            return successRate * 0.01 * this.subject().hit;
+        } else {
+            return successRate * 0.01;
+        }
+    }
+
+    /*
+    public hasAnyValidParameterEffects(): boolean {
+        let count = 0;
+        for (let i = 0; i < REData.parameters.length; i++) {
+            const e = this._parameterEffects[i];
+            if (e.applyType != SParameterEffectApplyType.None) {
+
+            }
+        }
+
+    }
+    */
 
     /**
      * 
@@ -51,7 +241,7 @@ export class SEffectorFact {
      * 前方3方向など複数攻撃対象がいるばあいは個別にクリティカルが発生することになる。
      * 攻撃の発生元での会心判定は Action として行うこと。
      */
-    addParameterEffect(paramId: ParameterDataId, elementId: number, type: ParameterEffectType, variance: number, critical: boolean) {
+    addParameterEffect(paramId: DParameterId, elementId: number, type: ParameterEffectType, variance: number, critical: boolean) {
         
     }
 
@@ -92,12 +282,8 @@ export class SEffectorFact {
  * もしそのような中断がやりたければひとつずつインスタンス作って addTarget すればいいだけなので、まとめる方向で作ってよさそう。
  */
 export class REEffectContext {
-    // 適用側 (攻撃側) の関係者。
-    // 攻撃発動Unit だけではなく、装備品(武器・防具・装飾品)、合成印など、ダメージ計算式やバフに影響するすべての Entity。
-    //
-    // 矢弾や魔法弾を打った場合、その Projectile Entity も effectors に含まれる。
-    // なお、魔法反射や吹き飛ばし移動は Command 側で処理する。EffectContext はあくまでパラメータの変化に関係する処理のみを行う。
-    private _effectors: SEffectorFact[] = [];
+
+    private _effectorFact: SEffectorFact;
 
     // 経験値など、報酬に関わるフィードバックを得る人。
     // 基本は effectors と同じだが、反射や投げ返しを行ったときは経験値を得る人が変わるため、その対応のために必要となる。
@@ -114,25 +300,23 @@ export class REEffectContext {
     // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
     private _scope: DEffectScope = 0;
 
-    constructor(scope: DEffectScope, target: REGame_Entity) {
+    constructor(subject: REGame_Entity, scope: DEffectScope, effect: DEffect, target: REGame_Entity) {
+        this._effectorFact = new SEffectorFact(this, subject, effect);
         this._scope = scope;
         this._targetEntity = target;
         this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
     }
     
-
-    
-    addEffector(effector: SEffectorFact) {
-        this._effectors.push(effector);
-    }
-    
     // Game_Action.prototype.apply
     apply(target: REGame_Entity): SEffectResult {
+        
+
+
         const result = target._effectResult;
         result.clear();
 
-        result.used = this.testApply();
-        result.missed = false;
+        result.used = this.testApply(this._targetBattlerBehavior);
+        result.missed = result.used && Math.random() >= this.itemHit(target);
         result.evaded = false;
         result.physical = true;
         result.drain = true;
@@ -148,14 +332,10 @@ export class REEffectContext {
 
     
     // Game_Action.prototype.testApply
-    private testApply(target): boolean {
-        return (
-            this.testLifeAndDeath(target) &&
-            ($gameParty.inBattle() ||
-                (this.isHpRecover() && target.hp < target.mhp) ||
-                (this.isMpRecover() && target.mp < target.mmp) ||
-                this.hasItemAnyValidEffects(target))
-        );
+    private testApply(target: LBattlerBehavior): boolean {
+        // NOTE: コアスクリプトではバトル中かどうかで成否判定が変わったりするが、
+        // 本システムでは常に戦闘中のようにふるまう。
+        return this.testLifeAndDeath(target);
     };
 
     // Game_Action.prototype.testLifeAndDeath

@@ -168,6 +168,7 @@ export class LBehavior {
 
 
     onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {}
+    onCollectTraits(result: IDataTrait[]): void { }
     onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
 
     /** 1行動消費単位の終了時点 */

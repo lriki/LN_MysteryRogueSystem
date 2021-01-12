@@ -2,7 +2,7 @@ import { assert } from "ts/Common";
 import { DClass } from "ts/data/DClass";
 import { DStateId } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
-import { ParameterDataId, REData } from "ts/data/REData";
+import { DParameterId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { REGame_Entity } from "../REGame_Entity";
@@ -46,26 +46,26 @@ export class LBattlerBehavior extends LBehavior {
         }
     };
 
-    actualParam(paramId: ParameterDataId): number {
+    actualParam(paramId: DParameterId): number {
         return this._actualParams[paramId] ?? 0;
     }
 
-    setActualParam(paramId: ParameterDataId, value: number): void {
+    setActualParam(paramId: DParameterId, value: number): void {
         this._actualParams[paramId] = value;
         this.refresh();
     }
     
-    gainActualParam(paramId: ParameterDataId, value: number): void {
+    gainActualParam(paramId: DParameterId, value: number): void {
         this.setActualParam(paramId, this.actualParam(paramId) + value);
 
         this.ownerEntity()._effectResult.parameterDamags[RESystem.parameters.hp] = -value;
     }
 
-    // 上限値。
+    // 現在の上限値。
     // システム上、HP,MP 等のほか、攻撃力、満腹度など様々なパラメータの減少が発生するため、
     // RMMZ のような _hp, _mp, _tp といったフィールドは用意せず、すべて同じように扱う。
     // Game_BattlerBase.prototype.param
-    idealParam(paramId: ParameterDataId): number {
+    idealParam(paramId: DParameterId): number {
         const value =
             this.idealParamBasePlus(paramId) *
             this.idealParamRate(paramId) *
@@ -76,43 +76,47 @@ export class LBattlerBehavior extends LBehavior {
     };
 
     // Game_BattlerBase.prototype.paramBase
-    idealParamBase(paramId: ParameterDataId): number {
+    idealParamBase(paramId: DParameterId): number {
         return 0;
     }
 
     // Game_BattlerBase.prototype.paramPlus
-    idealParamPlus(paramId: ParameterDataId): number {
+    idealParamPlus(paramId: DParameterId): number {
         return this._idealParamPlus[paramId];
     }
 
     // Game_BattlerBase.prototype.paramBasePlus
-    idealParamBasePlus(paramId: ParameterDataId): number {
+    idealParamBasePlus(paramId: DParameterId): number {
         return Math.max(0, this.idealParamBase(paramId) + this.idealParamPlus(paramId));
     };
     
     // Game_BattlerBase.prototype.paramRate
-    idealParamRate(paramId: ParameterDataId): number {
+    idealParamRate(paramId: DParameterId): number {
         return this.traitsPi(DTraits.TRAIT_PARAM, paramId);
     };
 
     // Game_BattlerBase.prototype.paramBuffRate
-    paramBuffRate(paramId: ParameterDataId): number {
+    paramBuffRate(paramId: DParameterId): number {
         return this._buffs[paramId] * 0.25 + 1.0;
     };
     
+    // バフや成長によるパラメータ上限値の最小値。
+    // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMin
-    paramMin(paramId: ParameterDataId): number {
+    paramMin(paramId: DParameterId): number {
         return 0;
     };
     
+    // バフや成長によるパラメータ上限値の最大値。
+    // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMax
-    paramMax(paramId: ParameterDataId): number {
+    paramMax(paramId: DParameterId): number {
         return Infinity;
     };
 
     // Game_BattlerBase.prototype.allTraits
     allTraits(): IDataTrait[] {
-        return [];
+        return this.ownerEntity().collectTraits();
     };
 
     // Game_BattlerBase.prototype.traitsWithId
@@ -184,9 +188,6 @@ export class LBattlerBehavior extends LBehavior {
     //------------------------------------------------------------
     
     onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {
-        for (let i = 0; i < REData.parameters.length; i++) {
-            data.setActualParam(i, this.actualParam(i));
-        }
     }
     
     

@@ -7,7 +7,7 @@ import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
-import { DEffect, DEffectScope, DParameterEffectApplyType } from "./DSkill";
+import { DEffect, DEffectHitType, DEffectScope, DEffect_Default, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, makeStateTraitsFromMeta } from "./DState";
@@ -283,6 +283,7 @@ export class REDataManager
                 const c = REData.classes[id];
                 c.expParams = x.expParams ?? [];
                 c.params = x.params ?? [];
+                c.traits = x.traits ?? [];
             }
         });
 
@@ -293,6 +294,7 @@ export class REDataManager
                 const actor = REData.actors[id];
                 actor.classId = x.classId ?? 0;
                 actor.initialLevel = x.initialLevel ?? 1;
+                actor.traits = x.traits ?? [];
             }
         });
 
@@ -305,6 +307,8 @@ export class REDataManager
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     skill.effect = this.makeEffect(x.damage);
+                    skill.effect.successRate = x.successRate ?? 100;
+                    skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
                     skill.scope = x.scope ?? DEffectScope.None;
                 }
             }
@@ -319,6 +323,8 @@ export class REDataManager
                 item.iconIndex = x.iconIndex ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
+                    item.effect.successRate = x.successRate ?? 100;
+                    item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
                     item.scope = x.scope ?? DEffectScope.None;
                 }
             }
@@ -330,6 +336,7 @@ export class REDataManager
                 const item = REData.items[id];
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
+                item.traits = x.traits ?? [];
             }
             else {
                 REData.addItem("null");
@@ -342,6 +349,7 @@ export class REDataManager
                 const item = REData.items[id];
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
+                item.traits = x.traits ?? [];
             }
             else {
                 REData.addItem("null");
@@ -513,7 +521,7 @@ export class REDataManager
 
     static makeEffect(damage: IDataDamage): DEffect {
         let parameterId = 0;
-        let applyType = DParameterEffectApplyType.Damage;
+        let applyType = DParameterEffectApplyType.None;
         switch (damage.type) {
             case 1: // HPダメージ
                 parameterId = RESystem.parameters.hp;
@@ -543,6 +551,7 @@ export class REDataManager
                 throw new Error();
         }
         return {
+            ...DEffect_Default,
             critical: damage.critical ?? false,
             parameterEffects: [{
                 parameterId: parameterId,

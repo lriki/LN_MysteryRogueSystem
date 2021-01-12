@@ -13,4 +13,15 @@ export interface DClass {
 
     /** IDataClass.params -> mhp,mmp,atk,def,mat,mdf,agi,luk */
     params: number[][];
+
+    traits: IDataTrait[];
 }
+
+export const DClass_Default: DClass = {
+    id: 0,
+    name: "null",
+    expParams: [],
+    params: [],
+    traits: [],
+};
+

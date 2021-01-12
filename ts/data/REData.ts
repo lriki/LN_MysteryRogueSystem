@@ -6,7 +6,7 @@ import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
-import { DClass, DClassId } from "./DClass";
+import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem, DItem_Default } from "./DItem";
 import { DLand } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
@@ -16,8 +16,9 @@ import { RE_Data_Monster } from "./DEnemy";
 import { DAction } from "./DAction";
 import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
+import { RE_Data_Actor } from "./DActor";
 
-export type ParameterDataId = number;
+export type DParameterId = number;
 
 
 export enum REFloorMapKind
@@ -71,33 +72,6 @@ export interface RE_Data_EntityFeature
     name: string;
 
 
-}
-
-/**
- * Actor はゲームシナリオ全体を通して存在する一意の登場人物を表すデータ構造。
- * 
- * ツクールの Actor とほぼ同義で、そこからインポートして使う。
- * ただし、必ずしも味方であるとは限らない。
- */
-export interface RE_Data_Actor
-{
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name. */
-    name: string;
-
-    /** 初期配置フロア */
-    initialFloorId: number;
-    
-    /** 初期配置 X */
-    initialX: number;
-    
-    /** 初期配置 Y */
-    initialY: number;
-
-    classId: DClassId;
-    initialLevel: number;
 }
 
 
@@ -248,10 +222,9 @@ export class REData
     static addClass(name: string): number {
         const newId = this.classes.length;
         this.classes.push({
+            ...DClass_Default,
             id: newId,
             name: name,
-            expParams: [],
-            params: [],
         });
         return newId;
     }

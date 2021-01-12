@@ -1,6 +1,6 @@
 import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { DStateId } from "ts/data/DState";
-import { ParameterDataId, REData } from "ts/data/REData";
+import { DParameterId, REData } from "ts/data/REData";
 import { LSkillBehavior } from "../objects/skills/SkillBehavior";
 import { LStateBehavior } from "../objects/states/LStateBehavior";
 import { BlockLayerKind } from "../objects/REGame_Block";

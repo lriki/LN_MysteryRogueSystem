@@ -465,6 +465,15 @@ export class REGame_Entity
         return result;
     }
 
+    
+    public collectTraits(): IDataTrait[] {
+        const result: IDataTrait[] = [];
+        for (const b of this._basicBehaviors) {
+            b.onCollectTraits(result);
+        }
+        return result;
+    }
+
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {

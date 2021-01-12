@@ -1,4 +1,4 @@
-import { ParameterDataId } from "./REData";
+import { DParameterId } from "./REData";
 
 export type DEnemyId = number;
 
@@ -23,6 +23,6 @@ export interface RE_Data_Monster
     exp: number;
 
     /** 各基本パラメータ (index は BasicParameters) */
-    idealParams: ParameterDataId[];
+    idealParams: DParameterId[];
 }
 
