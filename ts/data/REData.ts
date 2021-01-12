@@ -16,7 +16,7 @@ import { RE_Data_Monster } from "./DEnemy";
 import { DAction } from "./DAction";
 import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
-import { RE_Data_Actor } from "./DActor";
+import { DActor_Default, RE_Data_Actor } from "./DActor";
 
 export type DParameterId = number;
 
@@ -235,13 +235,9 @@ export class REData
     static addActor(name: string): number {
         const newId = this.actors.length;
         this.actors.push({
+            ...DActor_Default,
             id: newId,
             name: name,
-            initialFloorId: 0,
-            initialX: 0,
-            initialY: 0,
-            classId: 0,
-            initialLevel: 0,
         });
         return newId;
     }
