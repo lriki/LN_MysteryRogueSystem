@@ -11,6 +11,8 @@ import { RECommandContext } from "ts/system/RECommandContext";
 import { SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
+import { DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
+import { RE_Data_Actor } from "ts/data/DActor";
 
 export class LBattlerBehavior extends LBehavior {
     
@@ -57,8 +59,6 @@ export class LBattlerBehavior extends LBehavior {
     
     gainActualParam(paramId: DParameterId, value: number): void {
         this.setActualParam(paramId, this.actualParam(paramId) + value);
-
-        this.ownerEntity()._effectResult.parameterDamags[RESystem.parameters.hp] = -value;
     }
 
     // 現在の上限値。
@@ -115,21 +115,68 @@ export class LBattlerBehavior extends LBehavior {
     };
 
     // Game_BattlerBase.prototype.allTraits
-    allTraits(): IDataTrait[] {
+    private allTraits(): IDataTrait[] {
         return this.ownerEntity().collectTraits();
     };
 
+    // Game_BattlerBase.prototype.traits
+    private traits(code: number): IDataTrait[] {
+        return this.allTraits().filter(trait => trait.code === code);
+    };
+
     // Game_BattlerBase.prototype.traitsWithId
-    traitsWithId(code: number, id: number): IDataTrait[] {
+    private traitsWithId(code: number, id: number): IDataTrait[] {
         return this.allTraits().filter(
             trait => trait.code === code && trait.dataId === id
         );
     };
 
     // Game_BattlerBase.prototype.traitsPi
-    traitsPi(code: number, id: number): number {
+    private traitsPi(code: number, id: number): number {
         return this.traitsWithId(code, id).reduce((r, trait) => r * trait.value, 1);
     }
+
+    // Game_BattlerBase.prototype.traitsSum
+    private traitsSum(code: number, id: number): number {
+        return this.traitsWithId(code, id).reduce((r, trait) => r + trait.value, 0);
+    }
+
+    // Game_BattlerBase.prototype.traitsSumAll
+    private traitsSumAll(code: number): number {
+        return this.traits(code).reduce((r, trait) => r + trait.value, 0);
+    };
+    
+    // Game_BattlerBase.prototype.traitsSet
+    private traitsSet(code: number): number[] {
+        const emptyNumbers: number[] = [];
+        return this.traits(code).reduce((r, trait) => r.concat(trait.dataId), emptyNumbers);
+    };
+
+    // Game_BattlerBase.prototype.xparam
+    public xparam(xparamId: DXParamId): number {
+        return this.traitsSum(DTraits.TRAIT_XPARAM, xparamId);
+    }
+    
+    // Game_BattlerBase.prototype.sparam
+    public sparam(sparamId: DSParamId): number  {
+        return this.traitsPi(DTraits.TRAIT_SPARAM, sparamId);
+    }
+
+    // Game_BattlerBase.prototype.elementRate
+    public elementRate(elementId: number): number {
+        return this.traitsPi(DTraits.TRAIT_ELEMENT_RATE, elementId);
+    }
+
+    // Game_BattlerBase.prototype.attackElements
+    public attackElements(): number[] {
+        return this.traitsSet(DTraits.TRAIT_ATTACK_ELEMENT);
+    }
+
+    // Game_BattlerBase.prototype.isGuard 
+    public isGuard(): boolean {
+        return false;
+    };
+
 
     // Game_BattlerBase.prototype.isStateAffected
     isStateAffected(stateId: DStateId): boolean {
@@ -207,6 +254,15 @@ export class LBattlerBehavior extends LBehavior {
         
         return REResponse.Pass;
     }
+
+
+
+    get atk(): number {
+        return this.actualParam(RESystem.parameters.atk);
+    }
+    get def(): number {
+        return this.actualParam(RESystem.parameters.def);
+    }
 }
 
 
@@ -217,6 +273,13 @@ export class LActorBehavior extends LBattlerBehavior {
     _classId: number = 0;
     _level: number = 0;
     _exp: number[] = [];
+
+    public constructor(actorId: number) {
+        super();
+        const actor = REData.actors[actorId];
+        this._actorId = actorId;
+        this._classId = actor.classId;
+    }
 
     // Game_Actor.prototype.setup
     setup(actorId: number): void {
@@ -263,6 +326,11 @@ export class LActorBehavior extends LBattlerBehavior {
                 (6 + Math.pow(level, 2) / 50 / acc_b) +
                 (level - 1) * extra
         );
+    }
+
+    // Game_Actor.prototype.actor
+    actor(): RE_Data_Actor {
+        return REData.actors[this._actorId];
     }
 
     // Game_Actor.prototype.currentClass
@@ -321,6 +389,23 @@ export class LActorBehavior extends LBattlerBehavior {
         return this._skills.includes(skillId);
         */
     };
+
+    // Game_Actor.prototype.paramBase 
+    idealParamBase(paramId: DParameterId): number {
+        console.log("this._level", this._level);
+        console.log("aa", this.currentClass().params[paramId]);
+        return this.currentClass().params[paramId][this._level];
+    }
+
+    onCollectTraits(result: IDataTrait[]): void {
+        super.onCollectTraits(result);
+        for (const t of this.actor().traits){
+            result.push(t);
+        }
+        for (const t of this.currentClass().traits){
+            result.push(t);
+        }
+    }
 }
 
 

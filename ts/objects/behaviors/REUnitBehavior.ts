@@ -197,7 +197,7 @@ export class REUnitBehavior extends LBehavior {
                 const result = effectContext.apply(entity);
     
                 const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
-                const hpDamage = result.parameterDamags[RESystem.parameters.hp];
+                const hpDamage = result.paramEffects[RESystem.parameters.hp].damag;
     
                 {
                     const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);

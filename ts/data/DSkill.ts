@@ -112,6 +112,12 @@ export interface DEffect {
      * IDataItem.damage
      */
     parameterEffects: DParameterEffect[];
+
+    /**
+     * IDataSkill.effects
+     * IDataItem.effects
+     */
+    specialEffects: IDataEffect[];
 }
 
 export const DEffect_Default: DEffect = {
@@ -119,6 +125,7 @@ export const DEffect_Default: DEffect = {
     successRate: 100,
     hitType: DEffectHitType.Certain,
     parameterEffects: [],
+    specialEffects: [],
 };
 
 

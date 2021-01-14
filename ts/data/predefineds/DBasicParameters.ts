@@ -1,5 +1,7 @@
 import { DParameterId } from "../REData";
 
+export type DXParamId = number;
+export type DSParamId = number;
 
 // Battler 自身が持つパラメータ。
 // Property との違いは、戦闘ダメージなどに関係するものを集めたものである、という点。すべて number で表される。
@@ -44,3 +46,69 @@ export interface BasicParameters {
 
 }
 
+
+// 追加能力値。加算で計算する。
+export interface DBasicXParams {
+    // HIT rate
+    hit: DXParamId,// = 0,
+
+    // EVAsion rate
+    eva: DXParamId,// = 1,
+
+    // CRItical rate
+    cri: DXParamId,// = 2,
+
+    // Critical EVasion rate
+    cev: DXParamId,// = 3,
+
+    // Magic EVasion rate
+    mev: DXParamId,// = 4,
+
+    // Magic ReFlection rate
+    mrf: DXParamId,// = 5,
+
+    // CouNTer attack rate
+    cnt: DXParamId,// = 6,
+
+    // Hp ReGeneration rate
+    hrg: DXParamId,// = 7,
+
+    // Mp ReGeneration rate
+    mrg: DXParamId,// = 8,
+
+    // Tp ReGeneration rate
+    trg: DXParamId,// = 9,
+}
+
+// 特殊能力値。乗算で計算する。
+export interface DBasicSParams {
+    // TarGet Rate
+    tgr: DSParamId,// = 0,
+
+    // GuaRD effect rate
+    grd: DSParamId,// = 1,
+
+    // RECovery effect rate
+    rec: DSParamId,// = 2,
+
+    // PHArmacology
+    pha: DSParamId,// = 3,
+
+    // Mp Cost Rate
+    mcr: DSParamId,// = 4,
+
+    // Tp Charge Rate
+    tcr: DSParamId,// = 5,
+
+    // Physical Damage Rate
+    pdr: DSParamId,// = 6,
+
+    // Magic Damage Rate
+    mdr: DSParamId,// = 7,
+
+    // Floor Damage Rate
+    fdr: DSParamId,// = 8,
+
+    // EXperience Rate
+    exr: DSParamId,// = 9,
+}

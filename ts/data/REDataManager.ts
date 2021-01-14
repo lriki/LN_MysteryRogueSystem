@@ -93,6 +93,32 @@ export class REDataManager
             exitPoint: REData.addEntityKind("出口", "ExitPoint"),
         };
 
+        DBasics.xparams = { // RMMZ と同じ配列
+            hit: 0,
+            eva: 1,
+            cri: 2,
+            cev: 3,
+            mev: 4,
+            mrf: 5,
+            cnt: 6,
+            hrg: 7,
+            mrg: 8,
+            trg: 9,
+        };
+
+        DBasics.sparams = { // RMMZ と同じ配列
+            tgr: 0,
+            grd: 1,
+            rec: 2,
+            pha: 3,
+            mcr: 4,
+            tcr: 5,
+            pdr: 6,
+            mdr: 7,
+            fdr: 8,
+            exr: 9,
+        };
+
         // StateTraits
         {
             REData.stateTraits = [
@@ -309,6 +335,7 @@ export class REDataManager
                     skill.effect = this.makeEffect(x.damage);
                     skill.effect.successRate = x.successRate ?? 100;
                     skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
+                    skill.effect.specialEffects = x.effects ?? [];
                     skill.scope = x.scope ?? DEffectScope.None;
                 }
             }
@@ -325,6 +352,7 @@ export class REDataManager
                     item.effect = this.makeEffect(x.damage);
                     item.effect.successRate = x.successRate ?? 100;
                     item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
+                    item.effect.specialEffects = x.effects ?? [];
                     item.scope = x.scope ?? DEffectScope.None;
                 }
             }

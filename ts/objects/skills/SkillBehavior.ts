@@ -16,7 +16,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
     onPerforme(skillId: DSkillDataId, entity: REGame_Entity, context: RECommandContext): void {
 
         const skill = REData.skills[skillId];
-        const effector = new SEffectorFact(entity, skill.effect);
+        ///const effector = new SEffectorFact(entity, skill.effect);
         
 
         // もともと UntBehavior.onAction() で AttackActionId をフックして処理していたが、こちらに持ってきた。
@@ -32,8 +32,8 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                 const block = REGame.map.block(front.x, front.y);
                 const reacor = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
                 if (reacor) {
-                    const effectContext = new REEffectContext(skill.scope, reacor);
-                    effectContext.addEffector(effector);
+                    const effectContext = new REEffectContext(entity, skill.scope, skill.effect, reacor);
+                    //effectContext.addEffector(effector);
 
                     context.postReaction(DBasics.actions.AttackActionId, reacor, effectContext);
                 }

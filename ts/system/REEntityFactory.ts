@@ -7,7 +7,7 @@ import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
 import { RETileAttribute } from "../objects/attributes/RETileAttribute";
 import { TileKind } from "../objects/REGame_Block";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
-import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
@@ -24,14 +24,14 @@ export class REEntityFactory {
         return entity;
     }
 
-    static newActor(): REGame_Entity {
+    static newActor(actorId: number): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
-        e.addBasicBehavior(new LBattlerBehavior());
+        e.addBasicBehavior(new LActorBehavior(actorId));
         e.addBasicBehavior(new LInventoryBehavior());
         e.addBasicBehavior(new LItemUserBehavior());
         e.addBasicBehavior(new LEquipmentUserBehavior());

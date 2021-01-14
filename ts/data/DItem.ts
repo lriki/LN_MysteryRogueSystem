@@ -1,5 +1,5 @@
 import { DEquipmentPartId } from "./DEquipmentPart";
-import { DEffect, DEffectHitType, DEffectScope } from "./DSkill";
+import { DEffect, DEffectHitType, DEffectScope, DEffect_Default } from "./DSkill";
 
 export type DItemDataId = number;
 
@@ -36,12 +36,7 @@ export const DItem_Default: DItem = {
     name: "null",
     iconIndex: 0,
     scope: 0,
-    effect: {
-        critical: false,
-        successRate: 100,
-        hitType: DEffectHitType.Certain,
-        parameterEffects: [],
-    },
+    effect: DEffect_Default,
     equipmentParts: [],
     traits: [],
 };

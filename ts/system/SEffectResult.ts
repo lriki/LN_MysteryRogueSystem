@@ -1,6 +1,12 @@
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 
+// Game_ActionResult.hpDamage, mpDamage, tpDamage
+export class SParamEffectResult {
+    damag: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
+    drain: boolean = false;
+}
+
 /**
  * 一度の Effect の適用結果。Visual で表示したいコンテンツのソースデータとなる。
  * メッセージに限らず、ポップアップやイメージ表情差分表示など、様々な Visual 表現に必要なすべてのデータを含む。
@@ -29,7 +35,7 @@ export class SEffectResult {
     // Game_Action.prototype.isPhysical 参照。
     physical: boolean = false;  // TODO: NotImplemented
 
-    drain: boolean = false;  // TODO: NotImplemented
+    //drain: boolean = false;  // TODO: NotImplemented
 
     // Game_Action.prototype.itemCri
     critical: boolean = false;  // TODO: NotImplemented
@@ -41,7 +47,8 @@ export class SEffectResult {
     // HP に関係する効果であったか。文字の色を変えたりする
     hpAffected = false;  // TODO: NotImplemented
 
-   parameterDamags: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
+    paramEffects: SParamEffectResult[] = [];
+    //parameterDamags: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
 
    addedStates: DStateId[] = [];
    removedStates: DStateId[] = [];
@@ -61,11 +68,10 @@ export class SEffectResult {
         this.missed = false;
         this.evaded = false;
         this.physical = false;
-        this.drain = false;
         this.critical = false;
         this.success = false;
         this.hpAffected = false;
-        this.parameterDamags = [];
+        this.paramEffects = [];
         this.addedStates = [];
         this.removedStates = [];
         //this.addedBuffs = [];
@@ -100,6 +106,11 @@ export class SEffectResult {
     // Game_ActionResult.prototype.addedStateObjects
     addedStateObjects(): DState[] {
         return this.addedStates.map(id => REData.states[id]);
+    }
+
+    // Game_Action.prototype.makeSuccess
+    public makeSuccess(): void {
+        this.success = true;
     }
 }
 
