@@ -18,27 +18,22 @@ export class LBattlerBehavior extends LBehavior {
     
     // 以下 param の index は ParameterDataId.
     // RMMZ の param index とは異なるが、mhp,mmp,atk,def,mat,mdf,agi,luk のインデックスとは一致する。
-    _actualParams: number[] = [];       // 現在値
+    //
+    // 現在値は、最大値からダメージ値を減算することで求める。
+    // 本システムは atk,def などのすべての基本パラメータは HP と同じように0~最大値の間で変化が起こるようになっているが、
+    // 増分計算だと装備品の有無やモンスターの特技などで変わるときにその前後の変化量から現在値を調整する処理が必要になり複雑になる。
+    _actualParamDamges: number[] = [];       // ダメージ値
     _idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     _buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
 
     constructor() {
         super();
-        this._actualParams[RESystem.parameters.hp] = 1;
-        this._actualParams[RESystem.parameters.mp] = 1;
-        this._actualParams[RESystem.parameters.tp] = 1;
-        this._actualParams[RESystem.parameters.atk] = 1;
-        this._actualParams[RESystem.parameters.def] = 1;
-        this._actualParams[RESystem.parameters.mat] = 1;
-        this._actualParams[RESystem.parameters.mdf] = 1;
-        this._actualParams[RESystem.parameters.agi] = 1;
-        this._actualParams[RESystem.parameters.luk] = 1;
 
-        for (let [key, value] of Object.entries(RESystem.parameters)) {
-            this._actualParams[value] = 1;
-            this._idealParamPlus[value] = 0;
-            this._buffs[value] = 0;
-          }
+        for (const param of REData.parameters) {
+            this._actualParamDamges[param.id] = 0;
+            this._idealParamPlus[param.id] = 0;
+            this._buffs[param.id] = 0;
+        }
     }
 
     // Game_BattlerBase.prototype.clearParamPlus
@@ -55,16 +50,17 @@ export class LBattlerBehavior extends LBehavior {
 
 
     actualParam(paramId: DParameterId): number {
-        return this._actualParams[paramId] ?? 0;
+        return this.idealParam(paramId) - this._actualParamDamges[paramId];
     }
 
-    setActualParam(paramId: DParameterId, value: number): void {
-        this._actualParams[paramId] = value;
-        this.refresh();
-    }
+    //setActualParam(paramId: DParameterId, value: number): void {
+    //    this._actualParams[paramId] = value;
+    //    this.refresh();
+    //}
     
     gainActualParam(paramId: DParameterId, value: number): void {
-        this.setActualParam(paramId, this.actualParam(paramId) + value);
+        this._actualParamDamges[paramId] -= value;
+        this.refresh();
     }
 
     // 現在の上限値。
@@ -204,16 +200,16 @@ export class LBattlerBehavior extends LBehavior {
 
         //const hp = this.actualParam(RESystem.parameters.hp);
 
-        console.log("refresh--------");
+        //console.log("refresh--------");
         // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
         for (const param of REData.parameters) {
             const max = this.idealParam(param.id);
-            console.log("max", max);
-            this._actualParams[param.id] = this.actualParam(param.id).clamp(0, max);
+            //console.log("max", max);
+            this._actualParamDamges[param.id] = this._actualParamDamges[param.id].clamp(0, max);//this.actualParam(param.id).clamp(0, max);
         }
 
         console.log("REData.parameters", REData.parameters);
-        console.log("refresssss _actualParams", this._actualParams);
+        console.log("refresssss _actualParams", this._actualParamDamges);
 
         // TODO: 全パラメータ
         //const mhp = this.idealParam(RESystem.parameters.hp);
@@ -244,7 +240,7 @@ export class LBattlerBehavior extends LBehavior {
         this.clearStates();
 
         for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
-            this._actualParams[paramId] = this.idealParam(paramId);
+            this._actualParamDamges[paramId] = 0;
         }
         
         this.refresh();
