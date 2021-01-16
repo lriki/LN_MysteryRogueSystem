@@ -48,6 +48,12 @@ export class LBattlerBehavior extends LBehavior {
         }
     };
 
+    // Game_BattlerBase.prototype.clearStates
+    private clearStates(): void {
+        this.ownerEntity().removeAllStates();
+    };
+
+
     actualParam(paramId: DParameterId): number {
         return this._actualParams[paramId] ?? 0;
     }
@@ -221,6 +227,17 @@ export class LBattlerBehavior extends LBehavior {
 
         //context.postDestroy(entity);
     }
+    
+    // Game_BattlerBase.prototype.recoverAll
+    public recoverAll(): void {
+        this.clearStates();
+
+        for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
+            this._actualParams[paramId] = this.idealParam(paramId);
+        }
+        
+        this.refresh();
+    };
 
     // Game_BattlerBase.prototype.isDead
     public isDead(): boolean {
@@ -274,30 +291,27 @@ export class LActorBehavior extends LBattlerBehavior {
     _level: number = 0;
     _exp: number[] = [];
 
+    // Game_Actor.prototype.setup
     public constructor(actorId: number) {
         super();
-        const actor = REData.actors[actorId];
         this._actorId = actorId;
-        this._classId = actor.classId;
     }
 
-    // Game_Actor.prototype.setup
-    setup(actorId: number): void {
-        const actor = REData.actors[actorId];
-        const cls = REData.classes[actor.classId];
-        
-        this._actorId = actorId;
+    onAttached(): void {
+        const actor = REData.actors[this._actorId];
+        this._classId = actor.classId;
+
         //this._name = actor.name;
         //this._nickname = actor.nickname;
         //this._profile = actor.profile;
-        this._classId = actor.classId;
         this._level = actor.initialLevel;
         this.initExp();
         //this.initSkills();
         //this.initEquips(actor.equips);
         this.clearParamPlus();
-        //this.recoverAll();
+        this.recoverAll();
     }
+
 
     // Game_Actor.prototype.initExp
     initExp() {
@@ -392,9 +406,8 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.paramBase 
     idealParamBase(paramId: DParameterId): number {
-        console.log("this._level", this._level);
-        console.log("aa", this.currentClass().params[paramId]);
-        return this.currentClass().params[paramId][this._level];
+        const p = this.currentClass().params[paramId];
+        return p ? p[this._level] : 0;
     }
 
     onCollectTraits(result: IDataTrait[]): void {
