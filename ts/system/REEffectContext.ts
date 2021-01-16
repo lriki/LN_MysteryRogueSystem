@@ -295,11 +295,6 @@ export class REEffectContext {
         result.physical = this._effectorFact.isPhysical();
         //result.hpAffected = true;
 
-        console.log("this._effectorFact", this._effectorFact);
-        console.log("result", result);
-        console.log("result.isHit()", result.isHit());
-        
-        
         if (result.isHit()) {
             if (this._effectorFact.hasParamDamage()) {
                 result.critical = Math.random() < this._effectorFact.criRate(this._targetBattlerBehavior);

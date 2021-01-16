@@ -87,8 +87,8 @@ export class LBattlerBehavior extends LBehavior {
     }
 
     // Game_BattlerBase.prototype.paramPlus
-    idealParamPlus(paramId: DParameterId): number {
-        return this._idealParamPlus[paramId];
+    idealParamPlus(parameterId: DParameterId): number {
+        return this._idealParamPlus[parameterId] + this.ownerEntity().queryIdealParameterPlus(parameterId);
     }
 
     // Game_BattlerBase.prototype.paramBasePlus
@@ -202,16 +202,26 @@ export class LBattlerBehavior extends LBehavior {
         //    this.eraseState(stateId);
         //}
 
-        const hp = this.actualParam(RESystem.parameters.hp);
+        //const hp = this.actualParam(RESystem.parameters.hp);
+
+        console.log("refresh--------");
+        // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
+        for (const param of REData.parameters) {
+            const max = this.idealParam(param.id);
+            console.log("max", max);
+            this._actualParams[param.id] = this.actualParam(param.id).clamp(0, max);
+        }
+
+        console.log("REData.parameters", REData.parameters);
+        console.log("refresssss _actualParams", this._actualParams);
 
         // TODO: 全パラメータ
-        // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
-        const mhp = this.idealParam(RESystem.parameters.hp);
-        const mmp = this.idealParam(RESystem.parameters.mp);
-        const mtp = this.idealParam(RESystem.parameters.tp);
-        this._actualParams[RESystem.parameters.hp] = this.actualParam(RESystem.parameters.hp).clamp(0, mhp);
-        this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
-        this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
+        //const mhp = this.idealParam(RESystem.parameters.hp);
+        //const mmp = this.idealParam(RESystem.parameters.mp);
+        //const mtp = this.idealParam(RESystem.parameters.tp);
+        //this._actualParams[RESystem.parameters.hp] = this.actualParam(RESystem.parameters.hp).clamp(0, mhp);
+        //this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
+        //this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
     
         const entity = this.ownerEntity();
         if (this.actualParam(RESystem.parameters.hp) === 0) {
@@ -230,6 +240,7 @@ export class LBattlerBehavior extends LBehavior {
     
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
+        console.log("recoverAll-------------------");
         this.clearStates();
 
         for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
@@ -254,6 +265,9 @@ export class LBattlerBehavior extends LBehavior {
     onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {
     }
     
+    onRefreshStatus(): void {
+        this.refresh();
+    }
     
     onTurnEnd(context: RECommandContext): REResponse {
         const entity = this.ownerEntity();

@@ -2,7 +2,7 @@ import { assert, tr2 } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DEquipmentPartId } from "ts/data/DEquipmentPart";
-import { REData } from "ts/data/REData";
+import { DParameterId, REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
@@ -38,9 +38,23 @@ NOTE:
     private _parts: SlotPart[] = [];
     
 
-    isEquipped(item: REGame_Entity): boolean {
+    public isEquipped(item: REGame_Entity): boolean {
         const entityId = item.id();
         return this._parts.findIndex(part => part && part.itemEntityIds.findIndex(id => eqaulsEntityId(id, entityId)) >= 0) >= 0;
+    }
+
+    public equippedItemEntities(): REGame_Entity[] {
+        const result: REGame_Entity[] = [];
+        for (const part of this._parts) {
+            if (part) {
+                for (const itemId of part.itemEntityIds) {
+                    if (itemId.index > 0) {
+                        result.push(REGame.world.entity(itemId));
+                    }
+                }
+            }
+        }
+        return result;
     }
     
     onQueryProperty(propertyId: number): any {
@@ -54,18 +68,15 @@ NOTE:
             super.onQueryProperty(propertyId);
     }
 
-    onQueryIdealParameterPlus(results: number[]) {
-        for (const part of this._parts) {
-            for (const itemId of part.itemEntityIds) {
-                const itemBehavior = REGame.world.entity(itemId).getBehavior(LItemBehavior);
-                if (itemBehavior) {
-                    itemBehavior.itemData().parameters.forEach((x, i) => {
-                        results[i] += x;
-                    });
-                }
-            }
-        }
-        return 0;
+    // Game_Actor.prototype.paramPlus
+    onQueryIdealParameterPlus(parameterId: DParameterId): number {
+        const a = this.equippedItemEntities().reduce((r, e) => {
+            const itemBehavior = e.getBehavior(LItemBehavior);
+            return r + (itemBehavior.itemData().parameters[parameterId] ?? 0);
+        }, 0);
+
+        console.log("onQueryIdealParameterPlus", parameterId, a);
+        return a;
     }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
@@ -111,7 +122,8 @@ NOTE:
             }
 
 
-            
+            console.log("refresssss");
+            this.ownerEntity().refreshStatus();
 
             context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             return REResponse.Succeeded;

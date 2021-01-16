@@ -18,7 +18,7 @@ import { LState } from "./states/LState";
 import { RE_Game_World } from "./REGame_World";
 import { SEffectResult } from "ts/system/SEffectResult";
 import { DActionId } from "ts/data/DAction";
-import { REData } from "ts/data/REData";
+import { DParameterId, REData } from "ts/data/REData";
 
 enum BlockLayer
 {
@@ -475,13 +475,12 @@ export class REGame_Entity
         return result;
     }
 
-    public collectIdealParameterPlus(): number[] {
-        const result: number[] = new Array<number>(REData.parameters.length);
-        result.fill(0);
-        for (const b of this._basicBehaviors) {
-            b.onQueryIdealParameterPlus(result);
-        }
-        return result;
+    public queryIdealParameterPlus(parameterId: DParameterId): number {
+        return this._basicBehaviors.reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
+    }
+
+    public refreshStatus(): void {
+        this._basicBehaviors.forEach(b => b.onRefreshStatus());
     }
 
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {

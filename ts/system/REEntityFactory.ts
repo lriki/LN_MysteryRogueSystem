@@ -31,10 +31,10 @@ export class REEntityFactory {
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
-        e.addBasicBehavior(new LActorBehavior(actorId));
         e.addBasicBehavior(new LInventoryBehavior());
         e.addBasicBehavior(new LItemUserBehavior());
         e.addBasicBehavior(new LEquipmentUserBehavior());
+        e.addBasicBehavior(new LActorBehavior(actorId));    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
         return e;
     }
 

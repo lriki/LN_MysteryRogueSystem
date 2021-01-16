@@ -41,6 +41,7 @@ export const DItem_Default: DItem = {
     scope: 0,
     effect: DEffect_Default,
     equipmentParts: [],
+    parameters: [],
     traits: [],
 }
 

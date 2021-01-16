@@ -150,12 +150,15 @@ export class LBehavior {
     onQueryProperty(propertyId: number): any { return undefined; }
 
     // results: index is DParameterId
-    onQueryIdealParameterPlus(results: number[]) { return 0; }
+    onQueryIdealParameterPlus(parameterId: DParameterId): number { return 0; }
 
     // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
     // 主に UI 表示で使用するもので、Action を実行したときに "成功" するかどうかは気にしない。
     onQueryActions(actions: DActionId[]): DActionId[] { return actions; }
     onQueryReactions(actions: DActionId[]): DActionId[] { return actions; }
+
+    
+    public onRefreshStatus(): void { }
 
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
