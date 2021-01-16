@@ -53,6 +53,20 @@ NOTE:
         else
             super.onQueryProperty(propertyId);
     }
+
+    onQueryIdealParameterPlus(results: number[]) {
+        for (const part of this._parts) {
+            for (const itemId of part.itemEntityIds) {
+                const itemBehavior = REGame.world.entity(itemId).getBehavior(LItemBehavior);
+                if (itemBehavior) {
+                    itemBehavior.itemData().parameters.forEach((x, i) => {
+                        results[i] += x;
+                    });
+                }
+            }
+        }
+        return 0;
+    }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
         actions.push(DBasics.actions.EquipActionId);

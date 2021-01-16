@@ -18,6 +18,7 @@ import { LState } from "./states/LState";
 import { RE_Game_World } from "./REGame_World";
 import { SEffectResult } from "ts/system/SEffectResult";
 import { DActionId } from "ts/data/DAction";
+import { REData } from "ts/data/REData";
 
 enum BlockLayer
 {
@@ -470,6 +471,15 @@ export class REGame_Entity
         const result: IDataTrait[] = [];
         for (const b of this._basicBehaviors) {
             b.onCollectTraits(result);
+        }
+        return result;
+    }
+
+    public collectIdealParameterPlus(): number[] {
+        const result: number[] = new Array<number>(REData.parameters.length);
+        result.fill(0);
+        for (const b of this._basicBehaviors) {
+            b.onQueryIdealParameterPlus(result);
         }
         return result;
     }

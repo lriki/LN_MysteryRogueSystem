@@ -364,6 +364,7 @@ export class REDataManager
                 const item = REData.items[id];
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
+                item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
             }
             else {
@@ -377,6 +378,7 @@ export class REDataManager
                 const item = REData.items[id];
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
+                item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
             }
             else {

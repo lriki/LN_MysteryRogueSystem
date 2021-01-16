@@ -419,6 +419,7 @@ export class LActorBehavior extends LBattlerBehavior {
             result.push(t);
         }
     }
+    
 }
 
 

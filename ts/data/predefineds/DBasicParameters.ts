@@ -7,14 +7,14 @@ export type DSParamId = number;
 // Property との違いは、戦闘ダメージなどに関係するものを集めたものである、という点。すべて number で表される。
 export interface BasicParameters {
     // RMMZ 基礎パラメータ。(Game_Battler.params(x)) 並び順が一致するようにしておく。
-    hp: DParameterId;    // HP / Maximum Hit Points
-    mp: DParameterId;    // Magic Points / Maximum Magic Points
-    atk: DParameterId;        // ATtacK power. ちから, 武器攻撃力
-    def: DParameterId;        // DEFense power. 防具防御力
-    mat: DParameterId;    // Magic ATtack power
-    mdf: DParameterId;    // Magic DeFense power
-    agi: DParameterId;    // AGIlity
-    luk: DParameterId;    // LUcK
+    hp: DParameterId; // = 0    // HP / Maximum Hit Points
+    mp: DParameterId; // = 1    // Magic Points / Maximum Magic Points
+    atk: DParameterId; // = 2        // ATtacK power. ちから, 武器攻撃力
+    def: DParameterId; // = 3        // DEFense power. 防具防御力
+    mat: DParameterId; // = 4    // Magic ATtack power
+    mdf: DParameterId; // = 5    // Magic DeFense power
+    agi: DParameterId; // = 6    // AGIlity
+    luk: DParameterId; // = 7    // LUcK
 
     tp: DParameterId;         // Tactical Points
 

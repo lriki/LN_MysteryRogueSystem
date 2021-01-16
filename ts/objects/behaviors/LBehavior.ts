@@ -29,6 +29,7 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
+import { DParameterId } from "ts/data/REData";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
@@ -147,6 +148,9 @@ export class LBehavior {
     // propertyId: see EntityProperties
     // undefined を返した場合は後続の Behavior の onQueryProperty() を呼び出し続ける。
     onQueryProperty(propertyId: number): any { return undefined; }
+
+    // results: index is DParameterId
+    onQueryIdealParameterPlus(results: number[]) { return 0; }
 
     // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
     // 主に UI 表示で使用するもので、Action を実行したときに "成功" するかどうかは気にしない。

@@ -27,6 +27,9 @@ export interface DItem {
     /** このアイテム(装備品) を装備できる部位 */
     equipmentParts: DEquipmentPartId[];
 
+    /** 装備したときに適用する parameters */
+    parameters: number[];
+
     /** 装備したときに適用する Trait */
     traits: IDataTrait[];
 }
@@ -39,6 +42,6 @@ export const DItem_Default: DItem = {
     effect: DEffect_Default,
     equipmentParts: [],
     traits: [],
-};
+}
 
 
