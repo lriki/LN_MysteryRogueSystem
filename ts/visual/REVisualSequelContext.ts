@@ -87,7 +87,7 @@ export class REVisualSequelContext {
                     break;
                 }
                 else if (unit instanceof SAnumationSequel) {
-                    this._startAnimation(unit.anumationlId());
+                    this._startAnimation(unit);
                     if (this._animationWaiting) {
                         break;
                     }
@@ -113,9 +113,11 @@ export class REVisualSequelContext {
         this._startPosition = Vector2.clone(this._entityVisual.position());
     }
 
-    private _startAnimation(animationlId: number) {
-        $gameTemp.requestAnimation([this._entityVisual.rmmzEvent()], animationlId, false);
-        this._animationWaiting = true;
+    private _startAnimation(unit: SAnumationSequel) {
+        $gameTemp.requestAnimation([this._entityVisual.rmmzEvent()], unit.anumationlId(), false);
+        if (unit.isWait()) {
+            this._animationWaiting = true;
+        }
     }
 
     _update() {

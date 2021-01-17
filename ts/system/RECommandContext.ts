@@ -245,10 +245,10 @@ export class RECommandContext
     }
     
     // 動きを伴わず、Animation だけ表示するのに使う。 Sequel 作るまでもないものとか。
-    postAnimation(entity: REGame_Entity, animationId: number) {
+    postAnimation(entity: REGame_Entity, animationId: number, wait: boolean) {
         const m1 = () => {
             Log.doCommand("Animation");
-            this._sequelContext.addSequel(new SAnumationSequel(entity, animationId));
+            this._sequelContext.addSequel(new SAnumationSequel(entity, animationId, wait));
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };

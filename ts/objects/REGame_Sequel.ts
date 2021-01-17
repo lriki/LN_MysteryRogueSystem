@@ -45,14 +45,20 @@ export class SSequel extends SSequelUnit {
 
 export class SAnumationSequel extends SSequelUnit {
     private _anumationlId: number;
+    private _isWait: boolean;
 
-    constructor(entity: REGame_Entity, anumationlId: number) {
-        super(entity, false);
+    public constructor(entity: REGame_Entity, anumationlId: number, wait: boolean) {
+        super(entity, !wait);   // wait するときは parallel にしない。してしまうと、直後に post したメッセージなどが先に進んでしまう。
         this._anumationlId = anumationlId;
+        this._isWait = wait;
     }
 
-    anumationlId(): DSequelId {
+    public anumationlId(): DSequelId {
         return this._anumationlId;
+    }
+
+    public isWait(): boolean {
+        return this._isWait;
     }
 }
 
