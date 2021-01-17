@@ -54,6 +54,7 @@ export function cloneEntityId(a: LBehaviorId): LBehaviorId {
 }
 
 export enum DecisionPhase {
+    Prepare,
     Manual,
     AIMinor,
     ResolveAdjacentAndMovingTarget,

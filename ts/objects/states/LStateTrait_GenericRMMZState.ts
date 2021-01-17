@@ -11,8 +11,7 @@ import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
-export class LStateTrait_Nap extends LStateTraitBehavior {
-    private _hostileEnterd: boolean = false;
+export class LStateTrait_GenericRMMZState extends LStateTraitBehavior {
     
     onAttached(): void {
         REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
@@ -20,23 +19,6 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
 
     onDetached(): void {
 
-    }
-
-    onEvent(eventId: DEventId, args: any): void {
-        // handleRoomEnterd
-        if (eventId == DBasics.events.roomEnterd) {
-            const entity = this.ownerEntity();
-            const block = REGame.map.block(entity.x, entity.y);
-            const roomId = block._roomId;
-
-            const e = (args as RoomEventArgs);
-            const attr1 = e.entity.findAttribute(LUnitAttribute);
-            const attr2 = entity.findAttribute(LUnitAttribute);
-            assert(attr1 && attr2);
-            if (REGameManager.isHostile(attr1.factionId(), attr2.factionId()) && e.newRoomId == roomId) {
-                this._hostileEnterd = true;
-            }
-        }
     }
 
     onQueryProperty(propertyId: number): any {
@@ -47,17 +29,12 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
     }
     
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
-        if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
-            if (this._hostileEnterd) {
-                this.removeThisState();
-            }
-            this._hostileEnterd = false;
-
+        if (phase == DecisionPhase.Prepare) {
+            console.log("DecisionPhase.Prepare");
+            context.postSkipPart(entity);
             return REResponse.Succeeded;
         }
         else {
-            // Skip action
-            context.postConsumeActionToken(entity);
             return REResponse.Succeeded;
         }
     }

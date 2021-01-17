@@ -33,6 +33,7 @@ export class LUnitAttribute extends LAttribute {
 
     actionTokenCount(): number { return this._actionTokenCount; }
     setActionTokenCount(value: number): LUnitAttribute { this._actionTokenCount = value; return this; }
+    clearActionTokenCount(): void { this._actionTokenCount = 0; }
 }
 
 

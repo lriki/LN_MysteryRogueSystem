@@ -9,6 +9,10 @@ export class SSequelContext {
         this._sequelSet = new RESequelSet();
     }
 
+    public isEmptySequelSet(): boolean {
+        return this._sequelSet.isEmpty();
+    }
+
     public attemptFlush(): void {
         // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
         // もし歩行など並列のみであればあとでまとめて実行したので不要。
@@ -24,7 +28,7 @@ export class SSequelContext {
     public flushSequelSet() {
         Log.d("[FlushSequel]");
 
-        if (!this._sequelSet.isEmpty()) {
+        if (!this.isEmptySequelSet()) {
             if (REGame.signalFlushSequelSet) {
                 REGame.signalFlushSequelSet(this._sequelSet);
             }

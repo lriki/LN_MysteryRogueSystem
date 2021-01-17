@@ -311,6 +311,22 @@ export class RECommandContext
         Log.postCommand("ConsumeActionToken");
     }
 
+    postSkipPart(entity: REGame_Entity): void {
+        const attr = entity.findAttribute(LUnitAttribute);
+        assert(attr);
+
+        const m1 = () => {
+            Log.doCommand("SkipPart");
+            
+            attr.clearActionTokenCount();
+            entity._actionConsumed = true;
+
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "SkipPart", func: m1 });
+        Log.postCommand("SkipPart");
+    }
+
     postPerformSkill(performer: REGame_Entity, skillId: DSkillDataId): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");

@@ -16,6 +16,16 @@ export abstract class RESchedulerPhase {
     abstract onProcess(scheduler: REScheduler, unit: UnitInfo): boolean;
 }
 
+export class RESchedulerPhase_Prepare extends RESchedulerPhase {
+    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+        if (unit.entity) {
+            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Prepare);
+        }
+        // このフェーズは通知のみ行うため、_actionConsumed は不要。通過するだけ。
+        return false;
+    }
+}
+
 export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {

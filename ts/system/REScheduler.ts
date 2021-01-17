@@ -8,7 +8,7 @@ import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { SSequelUnit, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
-import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_ResolveAdjacentAndMovingTarget } from "./RESchedulerPhase";
+import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget } from "./RESchedulerPhase";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SSequelContext } from "./SSequelContext";
 
@@ -76,12 +76,13 @@ export class REScheduler
 
     private _phases: RESchedulerPhase[];
     private _currentPhaseIndex: number = 0;
+    private _brace: boolean = false;
 
     
 
     constructor() {
-
         this._phases = [
+            new RESchedulerPhase_Prepare(),
             new RESchedulerPhase_ManualAction(),
             new RESchedulerPhase_AIMinorAction(),
             new RESchedulerPhase_CheckFeetMoved(),
@@ -126,6 +127,14 @@ export class REScheduler
                 // 遷移が実際に行われる前に次のコマンド実行に進んでしまう。
                 break;
             }
+
+            //if (this._brace) {
+            //    console.log("brace----");
+            //    this._brace = false;
+            //    break;
+            //}
+
+            //console.log("this._phase", this._phase);
 
             /*
             if (RESystem.commandContext.visualAnimationWaiting()) {
@@ -270,38 +279,10 @@ export class REScheduler
             run.steps.forEach(step => {
                 step.unit.attr._targetingEntityId = 0;
             });
-        })
+        });
 
         Log.d("e update_RunStarting");
     }
-
-    
-
-    /*
-    nextActionUnit() {
-        const run = this._runs[this._currentRun];
-        const step = run.steps[this._currentStep];
-
-        if (this._phase == SchedulerPhase.AIMinorAction && step.unit.attr._targetingEntityId > 0) {
-            // 
-            this._currentStep++;
-        }
-        else {
-            if (step.iterationCount > 0) {
-                step.iterationCount--;
-                console.log("decl iterationCount:", step.iterationCount, step.unit.unit?._name);
-                console.trace();
-            }
-            
-            if (step.iterationCount <= 0) {
-                this._currentStep++;
-            }
-        }
-        
-
-    }
-    */
-    
 
     private prepareActionPhase(): void {
         const run = this._runs[this._currentRun];
@@ -381,8 +362,13 @@ export class REScheduler
     
     private update_PartEnding(): void {
 
-        // ターン終了時に Sequel が残っていればすべて掃き出す
-        RESystem.sequelContext.flushSequelSet();
+        if (RESystem.sequelContext.isEmptySequelSet()) {
+            this._brace = true;
+        }
+        else {
+            // ターン終了時に Sequel が残っていればすべて掃き出す
+            RESystem.sequelContext.flushSequelSet();
+        }
 
         this._phase = SchedulerPhase.PartStarting;
     }

@@ -7,6 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
+import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
 
 export class LState {
     private _ownerEntity: REGame_Entity | undefined;    // シリアライズしない
@@ -15,11 +16,16 @@ export class LState {
 
     public constructor(stateId: DStateId) {
         this._stateId = stateId;
-        this._behabiors = this.stateData().traits.map(traitId => {
+        
+        const behavior = new LStateTrait_GenericRMMZState();
+        REGame.world._registerBehavior(behavior);
+
+        this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {
             const b = DBehaviorFactory.createStateTraitBehavior(traitId);
             b._ownerState = this;
             return b;
-        });
+        }));
+        console.log("this._behabiors", this._behabiors);
     }
 
     public stateId(): number {
