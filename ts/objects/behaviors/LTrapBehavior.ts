@@ -38,7 +38,6 @@ export class LTrapBehavior extends LBehavior {
     }
     
     [onWalkedOnTopReaction](e: CommandArgs, context: RECommandContext): REResponse {
-        console.log("onWalkedOnTopReaction", e);
 
 
         context.postMessage(tr("{0} を踏んだ！", this.trapName()));
@@ -48,9 +47,9 @@ export class LTrapBehavior extends LBehavior {
         const itemData = trapItem.itemData();
 
         const target = e.sender;
-        const effectContext = new REEffectContext(e.self, itemData.scope, itemData.effect, target);
+        const effectContext = new REEffectContext(e.self, itemData.scope, itemData.effect);
 
-        const result = effectContext.apply(entity);
+        const result = effectContext.apply(target);
 
 
         context.postAnimation(e.sender, 35, true);

@@ -333,11 +333,11 @@ export class REDataManager
                 skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     skill.effect = this.makeEffect(x.damage);
-                    skill.effect.successRate = x.successRate ?? 100;
-                    skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
-                    skill.effect.specialEffects = x.effects ?? [];
-                    skill.scope = x.scope ?? DEffectScope.None;
                 }
+                skill.effect.successRate = x.successRate ?? 100;
+                skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
+                skill.effect.specialEffects = x.effects ?? [];
+                skill.scope = x.scope ?? DEffectScope.None;
             }
         });
 
@@ -350,11 +350,11 @@ export class REDataManager
                 item.iconIndex = x.iconIndex ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
-                    item.effect.successRate = x.successRate ?? 100;
-                    item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
-                    item.effect.specialEffects = x.effects ?? [];
-                    item.scope = x.scope ?? DEffectScope.None;
                 }
+                item.effect.successRate = x.successRate ?? 100;
+                item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
+                item.effect.specialEffects = x.effects ?? [];
+                item.scope = x.scope ?? DEffectScope.None;
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
@@ -389,7 +389,6 @@ export class REDataManager
             autoSupplyFood: 2,
         };
         
-        console.log("data",REData.items);
 
         // Import Monsters
         $dataEnemies.forEach(x => {

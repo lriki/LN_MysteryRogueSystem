@@ -1,6 +1,7 @@
 
 export class DTraits {
     static TRAIT_ELEMENT_RATE = 11;
+    static TRAIT_STATE_RATE = 13;
 
     /**
      * Game_BattlerBase.TRAIT_PARAM

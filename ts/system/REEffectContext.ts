@@ -70,7 +70,7 @@ export class SEffectorFact {
     private _context: REEffectContext;
     private _subject: REGame_Entity;
     private _subjectEffect: DEffect;
-    private _subjectBattlerBehavior: LBattlerBehavior;
+    private _subjectBattlerBehavior: LBattlerBehavior | undefined;
 
     // 適用側 (攻撃側) の関係者。
     // 攻撃発動Unit だけではなく、装備品(武器・防具・装飾品)、合成印など、ダメージ計算式やバフに影響するすべての Entity。
@@ -89,14 +89,14 @@ export class SEffectorFact {
         this._context = context;
         this._subject = subject;
         this._subjectEffect = effect;
-        this._subjectBattlerBehavior = subject.getBehavior(LBattlerBehavior);
+        this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
 
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
         this._actualParams = [];
         this._parameterEffects = [];
         for (let i = 0; i < REData.parameters.length; i++) {
-            this._actualParams[i] = this._subjectBattlerBehavior.actualParam(i);
+            this._actualParams[i] = this._subjectBattlerBehavior ? this._subjectBattlerBehavior.actualParam(i) : 0;
             this._parameterEffects[i] = undefined;
         }
 
@@ -117,7 +117,7 @@ export class SEffectorFact {
         return this._subject;
     }
 
-    public subjectBehavior(): LBattlerBehavior {
+    public subjectBehavior(): LBattlerBehavior | undefined {
         return this._subjectBattlerBehavior;
     }
 
@@ -168,7 +168,9 @@ export class SEffectorFact {
     public hitRate(): number {
         const successRate = this._successRate;
         if (this.isPhysical()) {
-            return successRate * 0.01 * this.subjectBehavior().xparam(DBasics.xparams.hit);
+            const subjectBehavior = this.subjectBehavior();
+            const hit = (subjectBehavior) ? subjectBehavior.xparam(DBasics.xparams.hit) : 1.0;
+            return successRate * 0.01 * hit;
         } else {
             return successRate * 0.01;
         }
@@ -187,9 +189,20 @@ export class SEffectorFact {
 
     // Game_Action.prototype.itemCri
     public criRate(target: LBattlerBehavior): number {
+        const subjectBehavior = this.subjectBehavior();
+        const cri = (subjectBehavior) ? subjectBehavior.xparam(DBasics.xparams.cri) : 1.0;
+
         return this._subjectEffect.critical
-            ? this.subjectBehavior().xparam(DBasics.xparams.cri) * (1 - target.xparam(DBasics.xparams.cev))
+            ? cri * (1 - target.xparam(DBasics.xparams.cev))
             : 0;
+    };
+
+    // Game_Action.prototype.lukEffectRate
+    public lukEffectRate(target: LBattlerBehavior): number {
+        const subjectBehavior = this.subjectBehavior();
+        const subject_luk = subjectBehavior ? subjectBehavior.actualParam(RESystem.parameters.luk) : 0.0;
+        const target_luk = target.actualParam(RESystem.parameters.luk);
+        return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     };
 
     /*
@@ -272,54 +285,58 @@ export class REEffectContext {
     private _effectees: REGame_Entity[] = [];
 
     
-    private _targetEntity: REGame_Entity;
-    private _targetBattlerBehavior: LBattlerBehavior;
+    //private _targetEntity: REGame_Entity;
+    //private _targetBattlerBehavior: LBattlerBehavior;
 
     // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
     private _scope: DEffectScope = 0;
 
-    constructor(subject: REGame_Entity, scope: DEffectScope, effect: DEffect, target: REGame_Entity) {
+    constructor(subject: REGame_Entity, scope: DEffectScope, effect: DEffect) {
         this._effectorFact = new SEffectorFact(this, subject, effect);
         this._scope = scope;
-        this._targetEntity = target;
-        this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
+        //this._targetEntity = target;
+        //this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
     }
     
     // Game_Action.prototype.apply
     apply(target: REGame_Entity): SEffectResult {
+        const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
-        result.used = this.testApply(this._targetBattlerBehavior);
-        result.missed = result.used && Math.random() >= this._effectorFact.hitRate();
-        result.evaded = !result.missed && Math.random() < this._effectorFact.evaRate(this._targetBattlerBehavior);
-        result.physical = this._effectorFact.isPhysical();
-        //result.hpAffected = true;
 
-        if (result.isHit()) {
-            if (this._effectorFact.hasParamDamage()) {
-                result.critical = Math.random() < this._effectorFact.criRate(this._targetBattlerBehavior);
-            }
-            
-            // Damage
-            for (let i = 0; i < REData.parameters.length; i++) {
-
-                console.log("i", i);
-
-                const pe = this._effectorFact.parameterEffect(i);
-                console.log("pe", pe);
-                if (pe && pe.applyType != SParameterEffectApplyType.None) {
-                    const value = this.makeDamageValue(pe, this._targetBattlerBehavior, result.critical);
-                    this.executeDamage(pe, this._targetBattlerBehavior, value, result);
+        if (targetBattlerBehavior) {
+            result.used = this.testApply(targetBattlerBehavior);
+            result.missed = result.used && Math.random() >= this._effectorFact.hitRate();
+            result.evaded = !result.missed && Math.random() < this._effectorFact.evaRate(targetBattlerBehavior);
+            result.physical = this._effectorFact.isPhysical();
+            //result.hpAffected = true;
+    
+            console.log("result", result);
+            if (result.isHit()) {
+                if (this._effectorFact.hasParamDamage()) {
+                    result.critical = Math.random() < this._effectorFact.criRate(targetBattlerBehavior);
                 }
+                
+                // Damage
+                for (let i = 0; i < REData.parameters.length; i++) {
+                    const pe = this._effectorFact.parameterEffect(i);
+                    if (pe && pe.applyType != SParameterEffectApplyType.None) {
+                        const value = this.makeDamageValue(pe, targetBattlerBehavior, result.critical);
+                        this.executeDamage(pe, targetBattlerBehavior, value, result);
+                    }
+                }
+    
+                // Effect
+                for (const effect of this._effectorFact.subjectEffect().specialEffects) {
+                    this.applyItemEffect(targetBattlerBehavior, effect, result);
+                }
+                this.applyItemUserEffect(targetBattlerBehavior);
             }
-
-            // Effect
-            for (const effect of this._effectorFact.subjectEffect().specialEffects) {
-                this.applyItemEffect(this._targetBattlerBehavior, effect);
-            }
-            this.applyItemUserEffect(this._targetBattlerBehavior);
+            //this.updateLastTarget(target);
         }
-        //this.updateLastTarget(target);
+        else {
+            assert(0);
+        }
 
         return result;
     }
@@ -415,7 +432,9 @@ export class REEffectContext {
     // Game_Action.prototype.calcElementRate
     private calcElementRate(paramEffect: SParameterEffect, target: LBattlerBehavior): number {
         if (paramEffect.elementId < 0) {
-            return this.elementsMaxRate(target, this._effectorFact.subjectBehavior().attackElements());
+            const subjectBehavior = this._effectorFact.subjectBehavior();
+            const attackElements = subjectBehavior ? subjectBehavior.attackElements() : [];
+            return this.elementsMaxRate(target, attackElements);
         } else {
             return target.elementRate(paramEffect.elementId);
         }
@@ -494,12 +513,14 @@ export class REEffectContext {
             //if (this._reflectionTarget) {
             //    gainTarget = this._reflectionTarget;
             //}
-            gainTarget.gainActualParam(paramEffect.paramId, value);
+            if (gainTarget) {
+                gainTarget.gainActualParam(paramEffect.paramId, value);
+            }
         }
     }
 
     // Game_Action.prototype.applyItemEffect
-    public applyItemEffect(target: LBattlerBehavior, effect: IDataEffect): void {
+    public applyItemEffect(target: LBattlerBehavior, effect: IDataEffect, result: SEffectResult): void {
         switch (effect.code) {
             case DItemEffect.EFFECT_RECOVER_HP:
                 throw new Error("Not implemented.");
@@ -514,7 +535,7 @@ export class REEffectContext {
                 //this.itemEffectGainTp(target, effect);
                 break;
             case DItemEffect.EFFECT_ADD_STATE:
-                this.itemEffectAddState(target, effect);
+                this.itemEffectAddState(target, effect, result);
                 break;
             case DItemEffect.EFFECT_REMOVE_STATE:
                 throw new Error("Not implemented.");
@@ -556,19 +577,32 @@ export class REEffectContext {
     }
     
     // Game_Action.prototype.applyItemUserEffect
-    private applyItemUserEffect(target: LBattlerBehavior) {
+    private applyItemUserEffect(target: LBattlerBehavior): void {
         // TODO:
         //const value = Math.floor(this.item().tpGain * this.subject().tcr);
         //this.subject().gainSilentTp(value);
     }
 
     // Game_Action.prototype.itemEffectAddState
-    private itemEffectAddState(target: LBattlerBehavior, effect: IDataEffect) {
+    private itemEffectAddState(target: LBattlerBehavior, effect: IDataEffect, result: SEffectResult): void {
         if (effect.dataId === 0) {
             // ID=0 は "通常攻撃" という特殊な状態付加となる。
             // RESystem としては処理不要。
         } else {
-            throw new Error("Not implemented.");
+            this.itemEffectAddNormalState(target, effect, result);
         }
-    };
+    }
+
+    // Game_Action.prototype.itemEffectAddNormalState
+    private itemEffectAddNormalState(target: LBattlerBehavior, effect: IDataEffect, result: SEffectResult): void {
+        let chance = effect.value1;
+        if (!this._effectorFact.isCertainHit()) {
+            chance *= target.stateRate(effect.dataId);
+            chance *= this._effectorFact.lukEffectRate(target);
+        }
+        if (Math.random() < chance) {
+            target.ownerEntity().addState(effect.dataId);
+            result.makeSuccess();
+        }
+    }
 }

@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DClass } from "ts/data/DClass";
-import { DStateId } from "ts/data/DState";
+import { DState, DStateId, DStateRestriction } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
 import { DParameterId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
@@ -169,6 +169,12 @@ export class LBattlerBehavior extends LBehavior {
         return this.traitsPi(DTraits.TRAIT_ELEMENT_RATE, elementId);
     }
 
+    // ステート有効度
+    // Game_BattlerBase.prototype.stateRate
+    public stateRate(stateId: DStateId): number {
+        return this.traitsPi(DTraits.TRAIT_STATE_RATE, stateId);
+    };
+    
     // Game_BattlerBase.prototype.attackElements
     public attackElements(): number[] {
         return this.traitsSet(DTraits.TRAIT_ATTACK_ELEMENT);
@@ -189,6 +195,11 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.isDeathStateAffected
     isDeathStateAffected(): boolean {
         return this.isStateAffected(DBasics.states.dead);
+    }
+
+    // Game_BattlerBase.prototype.states
+    public states(): DState[] {
+        return this.ownerEntity()._states.map(s => REData.states[s.stateId()]);
     }
 
     // Game_BattlerBase.prototype.refresh
@@ -249,12 +260,25 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.isDead
     public isDead(): boolean {
         return this.isDeathStateAffected();
-    };
+    }
     
     // Game_BattlerBase.prototype.isAlive
     public isAlive(): boolean {
         return !this.isDeathStateAffected();
-    };
+    }
+
+
+
+    // Game_BattlerBase.prototype.restriction
+    public restriction(): DStateRestriction {
+        const restrictions = this.states().map(state => state.restriction);
+        return Math.max(0, ...restrictions);
+    }
+    
+    // Game_BattlerBase.prototype.restriction
+    public isRestricted(): boolean {
+        return this.restriction() > 0;
+    }
 
     //------------------------------------------------------------
     

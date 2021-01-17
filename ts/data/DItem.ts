@@ -39,7 +39,11 @@ export const DItem_Default: DItem = {
     name: "null",
     iconIndex: 0,
     scope: 0,
-    effect: DEffect_Default,
+    effect: {
+        ...DEffect_Default,
+        parameterEffects: [],
+        specialEffects: [],
+    },
     equipmentParts: [],
     parameters: [],
     traits: [],

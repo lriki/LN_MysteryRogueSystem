@@ -3,6 +3,10 @@ import { REData } from "./REData";
 
 export type DStateId = number;
 
+export enum DStateRestriction {
+
+}
+
 export interface DState {
     /** ID (0 is Invalid). */
     id: DStateId;

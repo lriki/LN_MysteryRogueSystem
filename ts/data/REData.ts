@@ -5,7 +5,7 @@ import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
-import { DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
+import { DEffectHitType, DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem, DItem_Default } from "./DItem";
 import { DLand } from "./DLand";
@@ -325,6 +325,13 @@ export class REData
             ...DSkill_Default,
             id: newId,
             name: name,
+            effect: {
+                critical: false,
+                successRate: 100,
+                hitType: DEffectHitType.Certain,
+                parameterEffects: [],
+                specialEffects: [],
+            },
         });
         return newId;
     }
@@ -335,6 +342,13 @@ export class REData
             ...DItem_Default,
             id: newId,
             name: name,
+            effect: {
+                critical: false,
+                successRate: 100,
+                hitType: DEffectHitType.Certain,
+                parameterEffects: [],
+                specialEffects: [],
+            },
         });
         return newId;
     }
