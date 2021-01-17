@@ -5,7 +5,7 @@ import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
 import { VManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
 import { REVisualSequel } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
-import { REGame_Sequel } from "../objects/REGame_Sequel";
+import { SSequelUnit } from "../objects/REGame_Sequel";
 import { RE } from "ts/dialogs/EventExecutionDialog";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { RESystem } from "ts/system/RESystem";

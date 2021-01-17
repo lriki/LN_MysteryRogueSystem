@@ -8,19 +8,30 @@ import { REGame_Entity } from "./REGame_Entity";
  * 
  * Sequel 個別にデータを持たせたいときに利用予定 (継承よりはフィールドに持たせた方がいいかも)
  */
-export class REGame_Sequel {
+export class SSequelUnit {
     private _entity: REGame_Entity;
-    private _sequelId: DSequelId;
     private _parallel: boolean;
 
-    constructor(entity: REGame_Entity, sequelId: DSequelId) {
+    constructor(entity: REGame_Entity, parallel: boolean) {
         this._entity = entity;
-        this._sequelId = sequelId;
-        this._parallel = REData.sequels[this._sequelId].parallel;
+        this._parallel = parallel;
     }
 
     entity(): REGame_Entity {
         return this._entity;
+    }
+
+    isParallel(): boolean {
+        return this._parallel;
+    }
+}
+
+export class SSequel extends SSequelUnit {
+    private _sequelId: DSequelId;
+
+    constructor(entity: REGame_Entity, sequelId: DSequelId) {
+        super(entity, REData.sequels[sequelId].parallel);
+        this._sequelId = sequelId;
     }
 
     sequelId(): DSequelId {
@@ -30,9 +41,18 @@ export class REGame_Sequel {
     data(): DSequel {
         return REData.sequels[this._sequelId];
     }
+}
 
-    isParallel(): boolean {
-        return this._parallel;
+export class SAnumationSequel extends SSequelUnit {
+    private _anumationlId: number;
+
+    constructor(entity: REGame_Entity, anumationlId: number) {
+        super(entity, false);
+        this._anumationlId = anumationlId;
+    }
+
+    anumationlId(): DSequelId {
+        return this._anumationlId;
     }
 }
 
@@ -42,13 +62,13 @@ export class REGame_Sequel {
  * 倍速移動などで、複数の Sequel が追加されることがある。
  */
 export class RESequelClip {
-    private _sequels: REGame_Sequel[];
+    private _sequels: SSequelUnit[];
 
-    constructor(firstItem: REGame_Sequel) {
+    constructor(firstItem: SSequelUnit) {
         this._sequels = [firstItem];
     }
 
-    sequels(): readonly REGame_Sequel[] {
+    sequels(): readonly SSequelUnit[] {
         return this._sequels;
     }
 
@@ -60,7 +80,7 @@ export class RESequelClip {
         return this._sequels[0].isParallel();
     }
 
-    add(sequel: REGame_Sequel) {
+    add(sequel: SSequelUnit) {
         this._sequels.push(sequel);
     }
 }
@@ -71,7 +91,7 @@ export class RESequelClip {
 export class RESequelRun {
     private _clips: RESequelClip[];
 
-    constructor(firstItem: REGame_Sequel) {
+    constructor(firstItem: SSequelUnit) {
         this._clips = [new RESequelClip(firstItem)];
     }
 
@@ -83,7 +103,7 @@ export class RESequelRun {
         return this._clips[0].isParallel();
     }
 
-    add(sequel: REGame_Sequel) {
+    add(sequel: SSequelUnit) {
         assert(sequel.isParallel() == this.isParallel());
         const index = this._clips.findIndex(x => x.entity() == sequel.entity());
         if (index < 0) {
@@ -128,7 +148,7 @@ export class RESequelSet {
         this._isEmpty = true;
     }
 
-    addSequel(sequel: REGame_Sequel) {
+    addSequel(sequel: SSequelUnit) {
         let newRun = false;
         if (this._runs.length == 0) {
             // 初回

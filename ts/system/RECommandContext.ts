@@ -3,7 +3,7 @@ import { REDialog } from "./REDialog";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { REScheduler } from "./REScheduler";
 import { assert, Log } from "ts/Common";
-import { REGame_Sequel } from "../objects/REGame_Sequel";
+import { SAnumationSequel, SSequel, SSequelUnit } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
 import { REEffectContext } from "./REEffectContext";
 import { REGame_Block } from "../objects/REGame_Block";
@@ -236,7 +236,7 @@ export class RECommandContext
         assert(sequelId > 0);
         const m1 = () => {
             Log.doCommand("Sequel");
-            this._sequelContext.addSequel(new REGame_Sequel(entity, sequelId));
+            this._sequelContext.addSequel(new SSequel(entity, sequelId));
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
@@ -248,7 +248,7 @@ export class RECommandContext
     postAnimation(entity: REGame_Entity, animationId: number) {
         const m1 = () => {
             Log.doCommand("Animation");
-            this._sequelContext.addSequel(new REGame_Sequel(entity, sequelId));
+            this._sequelContext.addSequel(new SAnumationSequel(entity, animationId));
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };

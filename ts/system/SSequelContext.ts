@@ -1,6 +1,6 @@
 import { Log } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Sequel, RESequelSet } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, RESequelSet } from "ts/objects/REGame_Sequel";
 
 export class SSequelContext {
     private _sequelSet: RESequelSet = new RESequelSet();
@@ -17,7 +17,7 @@ export class SSequelContext {
         }
     }
     
-    public addSequel(sequel: REGame_Sequel) {
+    public addSequel(sequel: SSequelUnit) {
         this._sequelSet.addSequel(sequel);
     }
 

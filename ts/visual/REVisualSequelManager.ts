@@ -85,7 +85,8 @@ export class REVisualSequelManager {
     // unlock されるまで実行されているか。
     private isLogicalCompleted(): boolean {
         for (let i = 0; i < this._runningVisuals.length; i++) {
-            if (this._runningVisuals[i].sequelContext().isCancellationLocked()) {
+            const c = this._runningVisuals[i].sequelContext();
+            if (c.isCancellationLocked() || c.isAnimationWaintng()) {
                 return false;
             }
         }

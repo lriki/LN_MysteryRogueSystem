@@ -1,6 +1,7 @@
+import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
-import { REGame_Sequel, RESequelClip } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, RESequelClip, SSequel, SAnumationSequel } from "ts/objects/REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
@@ -18,6 +19,7 @@ export class REVisualSequelContext {
     private _currentVisualSequel: REVisualSequel | undefined;
     private _startPosition: Vector2 = new Vector2(0, 0);
     private _currentIdleSequelId: DSequelId = 0;
+    private _animationWaiting = false;
 
     constructor(entityVisual: REVisual_Entity) {
         this._entityVisual = entityVisual;
@@ -38,7 +40,8 @@ export class REVisualSequelContext {
     
     finished(): boolean {
         if (this._clip) {
-            return this._cuurentFinished && this._currentClip >= this._clip.sequels().length;
+            const rmmzAnimationWainting = (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
+            return !rmmzAnimationWainting && this._cuurentFinished && this._currentClip >= this._clip.sequels().length;
         }
         else {
             return true;
@@ -47,6 +50,10 @@ export class REVisualSequelContext {
 
     isCancellationLocked(): boolean {
         return this._cancellationLocked;
+    }
+
+    isAnimationWaintng(): boolean {
+        return (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
     }
 
     unlockCancellation() {
@@ -68,15 +75,30 @@ export class REVisualSequelContext {
     }
 
     _next() {
-        if (this._clip) {
+        while (this._clip) {
             this._currentClip++;
+            this._animationWaiting = false;
 
             if (this._currentClip < this._clip.sequels().length) {
-                this._startSequel(this._clip.sequels()[this._currentClip].sequelId());
-                this._cancellationLocked = true;    // end() 必須にする
+                const unit = this._clip.sequels()[this._currentClip];
+                if (unit instanceof SSequel) {
+                    this._startSequel(unit.sequelId());
+                    this._cancellationLocked = true;    // end() 必須にする
+                    break;
+                }
+                else if (unit instanceof SAnumationSequel) {
+                    this._startAnimation(unit.anumationlId());
+                    if (this._animationWaiting) {
+                        break;
+                    }
+                }
+                else {
+                    assert(0);
+                }
             }
             else {
                 this._clip = undefined;
+                break;
             }
         }
     }
@@ -91,6 +113,11 @@ export class REVisualSequelContext {
         this._startPosition = Vector2.clone(this._entityVisual.position());
     }
 
+    private _startAnimation(animationlId: number) {
+        $gameTemp.requestAnimation([this._entityVisual.rmmzEvent()], animationlId, false);
+        this._animationWaiting = true;
+    }
+
     _update() {
         if (this._currentVisualSequel) {
             this._currentVisualSequel.onUpdate(this._entityVisual, this);
@@ -103,8 +130,10 @@ export class REVisualSequelContext {
         }
         
         if (this._clip) {
+            const rmmzAnimationWainting = (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
+
             // current の Sequel は完了しているが、全体としては未完了の場合は次の Sequel に進む
-            if (this._cuurentFinished && this._currentClip < this._clip.sequels().length) {
+            if (!rmmzAnimationWainting && this._cuurentFinished && this._currentClip < this._clip.sequels().length) {
                 this._next();
             }
         }

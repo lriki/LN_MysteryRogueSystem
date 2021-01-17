@@ -32,7 +32,10 @@ export class LTrapBehavior extends LBehavior {
     }
     
     [onWalkedOnTopReaction](e: CommandArgs, context: RECommandContext): REResponse {
+        console.log("onWalkedOnTopReaction", e);
+
         context.postMessage(tr("{0} を踏んだ！", this.trapName()));
+        context.postAnimation(e.sender, 35);
         context.postMessage(tr("しかし ワナには かからなかった。"));
         
         return REResponse.Pass;
