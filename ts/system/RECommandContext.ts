@@ -243,6 +243,18 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "Sequel", func: m1 });
         Log.postCommand("Sequel");
     }
+    
+    // 動きを伴わず、Animation だけ表示するのに使う。 Sequel 作るまでもないものとか。
+    postAnimation(entity: REGame_Entity, animationId: number) {
+        const m1 = () => {
+            Log.doCommand("Animation");
+            this._sequelContext.addSequel(new REGame_Sequel(entity, sequelId));
+            this._visualAnimationWaiting = true;
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "Animation", func: m1 });
+        Log.postCommand("Animation");
+    }
 
     postDestroy(entity: REGame_Entity) {
         const m1 = () => {
