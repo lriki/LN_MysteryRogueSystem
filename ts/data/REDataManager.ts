@@ -197,6 +197,7 @@ export class REDataManager
             blowMoveSequel: REData.addSequel("BlowMove"),
             attack: REData.addSequel("attack"),
             CollapseSequel: REData.addSequel("Collapse"),
+            commonStopped: REData.addSequel("commonStopped"),
             asleep: REData.addSequel("asleep"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;

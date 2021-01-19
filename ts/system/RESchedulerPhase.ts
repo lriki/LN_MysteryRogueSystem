@@ -73,6 +73,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
                 c.post(actor, reactor, undefined, onWalkedOnTopAction);
                 c.post(reactor, actor, undefined, onWalkedOnTopReaction);
             }
+            unit.behavior.clearFeetProcess();
         }
         return false;
     }

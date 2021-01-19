@@ -18,6 +18,7 @@ export class LState {
         this._stateId = stateId;
         
         const behavior = new LStateTrait_GenericRMMZState();
+        behavior._ownerState = this;
         REGame.world._registerBehavior(behavior);
 
         this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {

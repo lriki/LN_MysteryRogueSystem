@@ -19,6 +19,9 @@ export interface BasicSequels {
      */
     CollapseSequel: number;
 
+    /** デフォルトの行動制限状態 */
+    commonStopped: number;
+
     /** 睡眠状態 (浅い眠り、特殊な浅い眠り、睡眠、バクスイ) */
     asleep: number;
 }

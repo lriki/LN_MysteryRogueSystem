@@ -247,7 +247,6 @@ export class LBattlerBehavior extends LBehavior {
     
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
-        console.log("recoverAll-------------------");
         this.clearStates();
 
         for (let paramId = 0; paramId < REData.parameters.length; paramId++) {

@@ -29,6 +29,10 @@ export class REUnitBehavior extends LBehavior {
         return this._requiredFeetProcess;
     }
     
+    public clearFeetProcess(): void {
+        this._requiredFeetProcess = false;
+    }
+
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.homeLayer)
             return BlockLayerKind.Unit;

@@ -26,7 +26,7 @@ export class SSequelUnit {
     }
 }
 
-export class SSequel extends SSequelUnit {
+export class SMotionSequel extends SSequelUnit {
     private _sequelId: DSequelId;
 
     constructor(entity: REGame_Entity, sequelId: DSequelId) {
@@ -86,6 +86,10 @@ export class RESequelClip {
         return this._sequels[0].isParallel();
     }
 
+    public hasMotionSeque(): boolean {
+        return this._sequels.findIndex(s => (s instanceof SMotionSequel)) >= 0;
+    }
+
     add(sequel: SSequelUnit) {
         this._sequels.push(sequel);
     }
@@ -107,6 +111,10 @@ export class RESequelRun {
 
     isParallel(): boolean {
         return this._clips[0].isParallel();
+    }
+
+    public hasMotionSeque(): boolean {
+        return this._clips.findIndex(clip => clip.hasMotionSeque()) >= 0;
     }
 
     add(sequel: SSequelUnit) {

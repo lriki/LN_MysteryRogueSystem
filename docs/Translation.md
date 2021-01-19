@@ -171,4 +171,6 @@
 
 NOTE
 ----------
-http://shiren.wikifoundry.com/
+
+- http://shiren.wikifoundry.com/
+- http://chigai.fenecilla.com/rpg-abnormal-states/

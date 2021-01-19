@@ -409,6 +409,7 @@ export class REGame_Entity
     private _iterateBehaviors(func: (x: LBehavior) => boolean) {
         for (let i = this._states.length - 1; i >= 0; i--) {
             const behabiors = this._states[i].behabiors();
+            console.log("state behabiors", behabiors);
             for (let i2 = behabiors.length - 1; i2 >= 0; i2--) {
                 if (!func(behabiors[i2])) {
                     return;

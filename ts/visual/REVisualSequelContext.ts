@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
-import { SSequelUnit, RESequelClip, SSequel, SAnumationSequel } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel } from "ts/objects/REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
@@ -81,7 +81,7 @@ export class REVisualSequelContext {
 
             if (this._currentClip < this._clip.sequels().length) {
                 const unit = this._clip.sequels()[this._currentClip];
-                if (unit instanceof SSequel) {
+                if (unit instanceof SMotionSequel) {
                     this._startSequel(unit.sequelId());
                     this._cancellationLocked = true;    // end() 必須にする
                     break;
@@ -140,8 +140,9 @@ export class REVisualSequelContext {
             }
         }
 
-        if (!this._clip) {
+        if (!this._clip || !this._clip.hasMotionSeque()) {
             const id = this._entityVisual.getIdleSequelId();
+            
             if (this._currentIdleSequelId != id) {
                 this._currentIdleSequelId = id;
                 if (this._currentIdleSequelId != 0) {

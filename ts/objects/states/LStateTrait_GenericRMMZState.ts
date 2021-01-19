@@ -14,7 +14,8 @@ import { LStateTraitBehavior } from "./LStateTraitBehavior";
 export class LStateTrait_GenericRMMZState extends LStateTraitBehavior {
     
     onAttached(): void {
-        REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
+        //console.log("LStateTrait_GenericRMMZState");
+        //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
     }
 
     onDetached(): void {
@@ -22,6 +23,9 @@ export class LStateTrait_GenericRMMZState extends LStateTraitBehavior {
     }
 
     onQueryProperty(propertyId: number): any {
+        //console.log("LStateTrait_GenericRMMZState onQueryProperty");
+        //throw new Error("LStateTrait_Nap onQueryProperty");
+
         if (propertyId == RESystem.properties.idleSequel)
             return RESystem.sequels.asleep;
         else
@@ -30,7 +34,7 @@ export class LStateTrait_GenericRMMZState extends LStateTraitBehavior {
     
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
         if (phase == DecisionPhase.Prepare) {
-            console.log("DecisionPhase.Prepare");
+            //console.log("DecisionPhase.Prepare");
             context.postSkipPart(entity);
             return REResponse.Succeeded;
         }

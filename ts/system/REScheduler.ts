@@ -128,13 +128,10 @@ export class REScheduler
                 break;
             }
 
-            //if (this._brace) {
-            //    console.log("brace----");
-            //    this._brace = false;
-            //    break;
-            //}
-
-            //console.log("this._phase", this._phase);
+            if (this._brace) {
+                this._brace = false;
+                break;
+            }
 
             /*
             if (RESystem.commandContext.visualAnimationWaiting()) {

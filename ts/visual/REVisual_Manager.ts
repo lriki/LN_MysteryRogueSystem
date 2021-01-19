@@ -19,6 +19,7 @@ import { DSequel, DSequelId } from "ts/data/DSequel";
 import { VIdleSequel } from "./sequels/VIdleSequel";
 import { REData } from "ts/data/REData";
 import { VAsleepSequel } from "./sequels/VAsleepSequel";
+import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
 
 /**
  */
@@ -38,6 +39,7 @@ export class REVisual_Manager
         this._visualSequelFactory[RESystem.sequels.blowMoveSequel] = () => new VBlowMoveSequel();
         this._visualSequelFactory[RESystem.sequels.attack] = () => new VAttackSequel();
         this._visualSequelFactory[RESystem.sequels.CollapseSequel] = () => new VCollapseSequel();
+        this._visualSequelFactory[RESystem.sequels.commonStopped] = () => new VCommonStoppedSequel();
         this._visualSequelFactory[RESystem.sequels.asleep] = () => new VAsleepSequel();
     }
 
