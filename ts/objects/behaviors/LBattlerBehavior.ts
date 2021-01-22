@@ -135,6 +135,8 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.traitsPi
     private traitsPi(code: number, id: number): number {
+        console.log("allTraits", this.allTraits());
+        console.log("traitsWithId", this.traitsWithId(code, id));
         return this.traitsWithId(code, id).reduce((r, trait) => r * trait.value, 1);
     }
 

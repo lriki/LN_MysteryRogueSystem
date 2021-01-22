@@ -117,8 +117,8 @@ export class SEffectResult {
         this.success = true;
     }
 
+    // Window_BattleLog.prototype.displayActionResults
     public showResultMessages(context: RECommandContext, entity: REGame_Entity): void {
-        console.log("showResultMessages entity", entity);
 
         const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
         
@@ -139,6 +139,12 @@ export class SEffectResult {
                     context.postMessage(state.message1.format(name));
                 }
             }
+        }
+
+        
+        if (!this.success) {
+            const m = "%1には効かなかった！";
+            context.postMessage(m.format(name));
         }
     }
 }

@@ -79,7 +79,7 @@ export class REDataManager
             ArrowKindId: REData.addEntityKind("矢", "Arrow"),
             //RE_Data.addEntityKind("石"),
             //RE_Data.addEntityKind("弾"),
-            BraceletKindId: REData.addEntityKind("腕輪", "Bracelet"),
+            BraceletKindId: REData.addEntityKind("腕輪", "Ring"),
             FoodKindId: REData.addEntityKind("食料", "Food"),
             grass: REData.addEntityKind("草", "Grass"),
             ScrollKindId: REData.addEntityKind("巻物", "Scroll"),

@@ -2,6 +2,7 @@ import { assert, tr2 } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DEquipmentPartId } from "ts/data/DEquipmentPart";
+import { DItem } from "ts/data/DItem";
 import { DParameterId, REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
@@ -57,6 +58,10 @@ NOTE:
         return result;
     }
     
+    public equippedItems(): DItem[] {
+        return this.equippedItemEntities().map(x => x.getBehavior(LItemBehavior).itemData());
+    }
+    
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.equipmentSlots) {
             // TODO: とりあえず全部有効にして返してみる
@@ -84,6 +89,17 @@ NOTE:
         return actions;
     }
 
+    onCollectTraits(result: IDataTrait[]): void {
+        super.onCollectTraits(result);
+
+        for (const item of this.equippedItems()){
+            for (const trait of item.traits){
+                result.push(trait);
+            }
+        }
+
+        console.log("onCollectTrait5555555555555555");
+    }
     
     onAction(actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         

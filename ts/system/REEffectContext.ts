@@ -597,7 +597,10 @@ export class REEffectContext {
         let chance = effect.value1;
         if (!this._effectorFact.isCertainHit()) {
             chance *= target.stateRate(effect.dataId);
+            console.log("5555555555 dataId", effect.dataId);
+            console.log("5555555555 chance1", chance);
             chance *= this._effectorFact.lukEffectRate(target);
+            console.log("5555555555 chance2", chance);
         }
         if (Math.random() < chance) {
             target.ownerEntity().addState(effect.dataId);
