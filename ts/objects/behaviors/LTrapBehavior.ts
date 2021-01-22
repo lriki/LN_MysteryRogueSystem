@@ -49,11 +49,24 @@ export class LTrapBehavior extends LBehavior {
         const target = e.sender;
         const effectContext = new REEffectContext(e.self, itemData.scope, itemData.effect);
 
-        const result = effectContext.apply(target);
+
+
+
+        //console.log(result);
 
 
         context.postAnimation(e.sender, 35, true);
-        context.postMessage(tr("しかし ワナには かからなかった。"));
+
+        // TODO: ここでラムダ式も post して apply したい。
+
+        context.postCall(() => {
+            const result = effectContext.apply(target);
+            result.showResultMessages(context, target);
+        });
+
+
+
+        //context.postMessage(tr("しかし ワナには かからなかった。"));
         
         return REResponse.Pass;
     }

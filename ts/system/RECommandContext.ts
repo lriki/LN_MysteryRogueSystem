@@ -195,6 +195,16 @@ export class RECommandContext
         Log.postCommand("Post");
     }
 
+    postCall(func: () => void): void {
+        const m1 = () => {
+            Log.doCommand("Call");
+            func();
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "Call", func: m1 });
+        Log.postCommand("Call");
+    }
+
 
 
     /*
@@ -339,6 +349,7 @@ export class RECommandContext
 
     // Skill や Item などの効果適用。
     // MP cost など発動可能判定は呼び出す前に済ませること。
+    /*
     postApplyEffect(context: REEffectContext): void {
         const m1 = () => {
             Log.doCommand("ApplyEffect");
@@ -348,6 +359,7 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "ApplyEffect", func: m1 });
         Log.postCommand("ApplyEffect");
     }
+    */
 
     /*
     postRemoveFromWhereabouts(entity: REGame_Entity, result: CommandResultCallback): void {

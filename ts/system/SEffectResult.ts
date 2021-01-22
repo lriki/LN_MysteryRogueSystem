@@ -1,5 +1,9 @@
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
+import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
+import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { RECommandContext } from "./RECommandContext";
+import { SMessageBuilder } from "./SMessageBuilder";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class SParamEffectResult {
@@ -111,6 +115,31 @@ export class SEffectResult {
     // Game_Action.prototype.makeSuccess
     public makeSuccess(): void {
         this.success = true;
+    }
+
+    public showResultMessages(context: RECommandContext, entity: REGame_Entity): void {
+        console.log("showResultMessages entity", entity);
+
+        const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+        
+        // Game_Actor.prototype.showAddedStates
+        {
+            for (const stateId of this.addedStates) {
+                const state = REData.states[stateId];
+                if (state.message1) {
+                    context.postMessage(state.message1.format(name));
+                }
+            }
+        }
+        // Game_Actor.prototype.showRemovedStates
+        {
+            for (const stateId of this.removedStates) {
+                const state = REData.states[stateId];
+                if (state.message1) {
+                    context.postMessage(state.message1.format(name));
+                }
+            }
+        }
     }
 }
 
