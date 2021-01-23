@@ -50,7 +50,7 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
             }
             this._hostileEnterd = false;
 
-            return REResponse.Succeeded;
+            return REResponse.Pass;
         }
         else {
             // Skip action

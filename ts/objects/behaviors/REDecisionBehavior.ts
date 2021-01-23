@@ -30,6 +30,27 @@ export class REGame_DecisionBehavior extends LBehavior {
         }
         else if (phase == DecisionPhase.AIMinor) {
 
+            // http://twist.jpn.org/sfcsiren/index.php?%E3%82%BF%E3%83%BC%E3%83%B3%E3%81%AE%E9%A0%86%E7%95%AA
+            // の移動目標位置決定はもう少し後の Phase なのだが、敵対 Entity への移動目標位置決定はこの Phase で行う。
+            // こうしておかないと、Player の移動を追うように Enemy が移動できなくなる。
+            {
+                // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
+                const roomId = REGame.map.roomId(entity);
+                const target = REGame.map.entitiesInRoom(roomId)
+                    .filter(e => REGameManager.isHostile(entity, e))
+                    .sort((a, b) => Helpers.getDistance(entity, a) - Helpers.getDistance(entity, b))
+                    .find(e => REGameManager.isHostile(entity, e));
+                if (target) {
+                    this._targetPositionX = target.x;
+                    this._targetPositionY = target.y;
+                }
+                else {
+                    console.log("NotImplemented.");
+                    this._targetPositionX = -1;
+                    this._targetPositionY = -1;
+                }
+            }
+
             // 目的地が設定されている場合は移動可能
             if (this._targetPositionX >= 0 && this._targetPositionY >= 0) {
                 const dir = SAIHelper.findDirectionTo(entity, entity.x, entity.y, this._targetPositionX, this._targetPositionY);
@@ -90,26 +111,9 @@ export class REGame_DecisionBehavior extends LBehavior {
             return REResponse.Succeeded;
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
-            // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
-            const roomId = REGame.map.roomId(entity);
-            const target = REGame.map.entitiesInRoom(roomId)
-                .filter(e => REGameManager.isHostile(entity, e))
-                .sort((a, b) => Helpers.getDistance(entity, a) - Helpers.getDistance(entity, b))
-                .find(e => REGameManager.isHostile(entity, e));
-            console.log("ResolveAdjacentAndMovingTarget", entity, target);
-            if (target) {
-                this._targetPositionX = target.x;
-                this._targetPositionY = target.y;
-                console.log("aaa", this);
-            }
-            else {
-                console.log("NotImplemented.");
-                this._targetPositionX = -1;
-                this._targetPositionY = -1;
-            }
 
-
-            return REResponse.Succeeded;
+            // 後続をブロックする理由はない
+            return REResponse.Pass;
         }
 
         return REResponse.Pass;

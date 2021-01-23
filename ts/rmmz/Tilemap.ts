@@ -1,6 +1,6 @@
 import { REGame } from "ts/objects/REGame";
 
-const show = true;
+const show = false;
 const startTileId = 768;
 
 
