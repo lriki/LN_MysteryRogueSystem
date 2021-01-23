@@ -1,5 +1,6 @@
 import { REGame } from "ts/objects/REGame";
 
+const show = true;
 const startTileId = 768;
 
 
@@ -21,7 +22,7 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
     const tileId4 = this._readMapData(mx, my, 4);
 
     //if (REGame.map.isValid()) {
-    if (0) {
+    if (show) {
         const block = REGame.map.block(mx, my);
         if (block._roomId > 0) {
             this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);

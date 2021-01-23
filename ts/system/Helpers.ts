@@ -22,10 +22,11 @@ export class Helpers {
         const offset = this._dirToTileOffsetTable[entity.dir];
         return new Vector2(entity.x + offset.x * length, entity.y + offset.y * length);
     }
-/*
-    static createObject(classname: string) {
-        const c = Function('return (' + classname + ')')();
-        return new c();
+
+    // 2 つの Entity 間の直線距離を取得
+    static getDistance(entity1: REGame_Entity, entity2: REGame_Entity): number {
+        const x = entity1.x - entity2.x;
+        const y = entity1.y - entity2.y;
+        return Math.sqrt((x * x) + (y * y));
     }
-    */
 }

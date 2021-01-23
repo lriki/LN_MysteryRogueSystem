@@ -4,6 +4,8 @@ import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Entity } from "./REGame_Entity";
 import { REGame_Map } from "./REGame_Map";
 
+export type LRoomId = number;
+
 export enum BlockLayerKind {
 	/** 地形情報。壁・水路など。 */
 	Terrain = 0,
@@ -204,7 +206,7 @@ export class REGame_Block// extends LObject
     private _x: number;
     private _y: number;
 
-    _roomId: number = 0;
+    _roomId: LRoomId = 0;
 
     constructor(map: REGame_Map, x: number, y: number) {
         this._x = x;

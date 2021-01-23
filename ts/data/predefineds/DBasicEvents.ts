@@ -9,6 +9,7 @@ export interface RoomEventArgs {
 }
 
 export interface DBasicEvents {
+    /** 何らかの Entity が部屋に侵入した */
     roomEnterd: DEventId, // RoomEventArgs
     roomLeaved: DEventId, // RoomEventArgs
 }

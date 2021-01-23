@@ -173,6 +173,7 @@ export class RMMZIntegration extends REIntegration {
             case "Weapon":
                 return REEntityFactory.newEquipment((prefabData.weaponId ?? 0) + REData.weaponDataIdOffset);
             case "Shield":
+            case "Ring":
                 return REEntityFactory.newEquipment((prefabData.armorId ?? 0) + REData.armorDataIdOffset);
             case "Grass":
             case "Food":

@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
-import { BlockLayerKind, REGame_Block, TileKind } from "./REGame_Block";
+import { BlockLayerKind, LRoomId, REGame_Block, TileKind } from "./REGame_Block";
 import { REGame_Entity } from "./REGame_Entity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
@@ -135,10 +135,25 @@ export class REGame_Map
         }
     }
 
-    entities(): REGame_Entity[] {
+    public roomId(x: number, y: number): LRoomId;
+    public roomId(entity: REGame_Entity, _?: any): LRoomId;
+    public roomId(a1: any, a2: any): LRoomId {
+        if (a1 instanceof REGame_Entity) {
+            return this.roomId(a1.x, a1.y);
+        }
+        else {
+            return this.block(a1, a2)._roomId;
+        }
+    }
+
+    public entities(): REGame_Entity[] {
         return this._entityIds
             .map(id => { return REGame.world.entity(id); })
             .filter((e): e is REGame_Entity => { return e != undefined; });
+    }
+
+    public entitiesInRoom(roomId: LRoomId): REGame_Entity[] {
+        return this.entities().filter(entity => this.roomId(entity) == roomId);
     }
 
     _addEntityInternal(entity: REGame_Entity): void {
@@ -215,7 +230,7 @@ export class REGame_Map
 
 
 
-    canEntering(block: REGame_Block, entity: REGame_Entity, layer: BlockLayerKind): boolean {
+    canEntering(block: REGame_Block, layer: BlockLayerKind): boolean {
         // TODO: 壁抜けや浮遊状態で変わる
         return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
     }
@@ -234,7 +249,7 @@ export class REGame_Map
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
         const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
 
-        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, entity, layer)) {
+        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, layer)) {
             return true;
         }
         else {
@@ -255,7 +270,7 @@ export class REGame_Map
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(x, y);
 
-        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, entity, toLayer)) {
+        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, toLayer)) {
             oldBlock.removeEntity(entity);
             entity.x = x;
             entity.y = y;

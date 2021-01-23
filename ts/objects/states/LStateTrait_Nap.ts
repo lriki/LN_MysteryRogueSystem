@@ -30,10 +30,7 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
             const roomId = block._roomId;
 
             const e = (args as RoomEventArgs);
-            const attr1 = e.entity.findAttribute(LUnitAttribute);
-            const attr2 = entity.findAttribute(LUnitAttribute);
-            assert(attr1 && attr2);
-            if (REGameManager.isHostile(attr1.factionId(), attr2.factionId()) && e.newRoomId == roomId) {
+            if (REGameManager.isHostile(e.entity, entity) && e.newRoomId == roomId) {
                 this._hostileEnterd = true;
             }
         }

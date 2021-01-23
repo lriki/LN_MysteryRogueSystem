@@ -161,10 +161,6 @@ NOTE:
                 newParts[partId] = { itemEntityIds: [{index: 0, key: 0}] };
             } 
         });
-        
-        console.log("equipmentSlots", equipmentSlots);
-        console.log("newParts",newParts);
-        
 
         // 移し替える
         this._parts.forEach((x, i) => {
