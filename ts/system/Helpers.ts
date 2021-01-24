@@ -29,4 +29,11 @@ export class Helpers {
         const y = entity1.y - entity2.y;
         return Math.sqrt((x * x) + (y * y));
     }
+
+    // 2 つの Entity が隣接しているか確認する
+    public static checkAdjacent(entity1: REGame_Entity, entity2: REGame_Entity): boolean {
+        const dx = entity1.x - entity2.x;
+        const dy = entity1.y - entity2.y;
+        return (-1 <= dx && dx <= 1 && -1 <= dy && dy <= 1);
+    }
 }

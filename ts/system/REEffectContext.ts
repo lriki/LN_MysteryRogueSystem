@@ -501,7 +501,10 @@ export class REEffectContext {
         }
         this.gainDrainedParam(paramEffect, value);
 
-        console.log("damage", paramEffect.paramId, value);
+        //console.log("damage", paramEffect.paramId, value);
+        if (paramEffect.paramId == RESystem.parameters.hp) {
+            result.hpAffected = true;
+        }
     }
     
     // Game_Action.prototype.gainDrainedHp

@@ -6,6 +6,15 @@ export interface LEntityId {
     readonly key: number;
 }
 
+export const LEntityId_Empty: LEntityId = {
+    index: 0,
+    key: 0,
+};
+
+export function isEmptyEntityId(a: LEntityId): boolean {
+    return a.index == 0 && a.key == 0;
+}
+
 export function eqaulsEntityId(a: LEntityId, b: LEntityId): boolean {
     return a.index == b.index && a.key == b.key;
 }

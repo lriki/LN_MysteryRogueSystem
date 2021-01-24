@@ -199,6 +199,11 @@ export class REUnitBehavior extends LBehavior {
             const effectContext = cmd.effectContext();
             if (effectContext) {
                 const result = effectContext.apply(entity);
+                
+                console.log("result", result);
+
+                result.showResultMessages(context, entity);
+                /*
     
                 const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
                 const hpDamage = result.paramEffects[RESystem.parameters.hp].damag;
@@ -218,6 +223,7 @@ export class REUnitBehavior extends LBehavior {
                     }
                 }
     
+                */
     
     
                 //const fmt = tr2("%1 は倒れた。");

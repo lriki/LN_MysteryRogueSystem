@@ -11,6 +11,8 @@ import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
 import { REGameManager } from "ts/system/REGameManager";
 import { SAIHelper } from "ts/system/SAIHelper";
+import { isEmptyEntityId, LEntityId, LEntityId_Empty } from "../LObject";
+import { TilingSprite } from "pixi.js";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -21,6 +23,7 @@ import { SAIHelper } from "ts/system/SAIHelper";
 export class REGame_DecisionBehavior extends LBehavior {
     private _targetPositionX: number = -1;
     private _targetPositionY: number = -1;
+    private _attackTargetEntityId: LEntityId = LEntityId_Empty;
 
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
 
@@ -43,6 +46,11 @@ export class REGame_DecisionBehavior extends LBehavior {
                 if (target) {
                     this._targetPositionX = target.x;
                     this._targetPositionY = target.y;
+                    
+                    // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
+                    if (Helpers.checkAdjacent(entity, target)) {
+                        this._attackTargetEntityId = target.id();
+                    }
                 }
                 else {
                     console.log("NotImplemented.");
@@ -51,21 +59,19 @@ export class REGame_DecisionBehavior extends LBehavior {
                 }
             }
 
+            // 攻撃対象が設定されていれば、このフェーズでは何もしない
+            if (!isEmptyEntityId(this._attackTargetEntityId)) {
+                return REResponse.Pass;
+            }
             // 目的地が設定されている場合は移動可能
-            if (this._targetPositionX >= 0 && this._targetPositionY >= 0) {
+            else if (this._targetPositionX >= 0 && this._targetPositionY >= 0) {
                 const dir = SAIHelper.findDirectionTo(entity, entity.x, entity.y, this._targetPositionX, this._targetPositionY);
-                const front = Helpers.makeFrontPosition(entity.x, entity.y, dir, 1);
-                const e = REGame.map.block(front).aliveEntity(BlockLayerKind.Unit);
-                if (e) {
-                    context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
-
-                    // 通常攻撃
-                    // TODO: とりいそぎここで試す
-                    context.postPerformSkill(entity, RESystem.skills.normalAttack);
-                    context.postConsumeActionToken(entity);
-                    return REResponse.Succeeded;
-                }
-                else {
+                //const front = Helpers.makeFrontPosition(entity.x, entity.y, dir, 1);
+                //const e = REGame.map.block(front).aliveEntity(BlockLayerKind.Unit);
+                //if (e) {
+                //}
+                //else
+                {
                     if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
                         context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
                         context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
@@ -113,6 +119,38 @@ export class REGame_DecisionBehavior extends LBehavior {
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
 
             // 後続をブロックする理由はない
+            return REResponse.Pass;
+        }
+        else if (phase == DecisionPhase.AIMajor) {
+            
+            if (!isEmptyEntityId(this._attackTargetEntityId)) {
+
+                // 通常攻撃
+                {
+                    const target = REGame.world.entity(this._attackTargetEntityId);
+                    // 発動可否チェック。本当に隣接している？
+                    let valid = false;
+                    if (Helpers.checkAdjacent(entity, target)) {
+                        valid = true;
+                    }
+
+                    if (valid) {
+                        const dir = SAIHelper.entityDistanceToDir(entity, target);
+                        
+                        context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
+        
+                        context.postPerformSkill(entity, RESystem.skills.normalAttack);
+                        context.postConsumeActionToken(entity);
+                        return REResponse.Succeeded;
+                    }
+                    
+                }
+
+
+            }
+            else {
+
+            }
             return REResponse.Pass;
         }
 

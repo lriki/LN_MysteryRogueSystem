@@ -1,6 +1,7 @@
 import { DecisionPhase, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/behaviors/LBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
+import { REResponse } from "./RECommand";
 import { REScheduler, UnitInfo } from "./REScheduler";
 import { RESystem } from "./RESystem";
 
@@ -39,14 +40,18 @@ export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
     }
 }
 
+// モンスターの移動・攻撃対象決定
 export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
             unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
-            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
-            return true;
+            const response = unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
+            if (response == REResponse.Succeeded) 
+                return true;
+            else
+                return false;
         }
         else {
             // このフェーズでは実行できない step だった。次の step へ。
@@ -94,8 +99,11 @@ export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends REScheduler
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
-            return true;
+            const response = unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
+            if (response == REResponse.Succeeded) 
+                return true;
+            else
+                return false;
         }
         else {
             // このフェーズでは実行できない step だった。次の step へ。

@@ -1,8 +1,10 @@
+import { tr2 } from "ts/Common";
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RECommandContext } from "./RECommandContext";
+import { RESystem } from "./RESystem";
 import { SMessageBuilder } from "./SMessageBuilder";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
@@ -122,6 +124,18 @@ export class SEffectResult {
 
         const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
         
+        if (this.hpAffected)
+        {
+            
+            const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+            const hpDamage = this.paramEffects[RESystem.parameters.hp].damag;
+
+            {
+                const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
+                context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
+            }
+        }
+
         // Game_Actor.prototype.showAddedStates
         {
             for (const stateId of this.addedStates) {

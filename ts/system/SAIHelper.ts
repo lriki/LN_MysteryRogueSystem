@@ -55,6 +55,18 @@ export class SAIHelper {
         }
     }
 
+    public static distanceToDir(startX: number, startY: number, goalX: number, goalY: number): number {
+        const dx = goalX - startX;
+        const dy = goalY - startY;
+        return this.axisToDir(dx, dy);
+    }
+
+    public static entityDistanceToDir(start: REGame_Entity, target: REGame_Entity): number {
+        const dx = target.x - start.x;
+        const dy = target.y - start.y;
+        return this.axisToDir(dx, dy);
+    }
+
     public static findDirectionTo(entity: REGame_Entity, startX: number, startY: number, goalX: number, goalY: number): number {
         const dx = goalX - startX;
         const dy = goalY - startY;
