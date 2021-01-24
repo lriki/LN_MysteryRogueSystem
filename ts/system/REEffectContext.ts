@@ -170,6 +170,9 @@ export class SEffectorFact {
         if (this.isPhysical()) {
             const subjectBehavior = this.subjectBehavior();
             const hit = (subjectBehavior) ? subjectBehavior.xparam(DBasics.xparams.hit) : 1.0;
+            //console.log("successRate", successRate);
+            //console.log("subjectBehavior", subjectBehavior);
+            //console.log("hit", hit);
             return successRate * 0.01 * hit;
         } else {
             return successRate * 0.01;
@@ -309,8 +312,7 @@ export class REEffectContext {
             result.missed = result.used && Math.random() >= this._effectorFact.hitRate();
             result.evaded = !result.missed && Math.random() < this._effectorFact.evaRate(targetBattlerBehavior);
             result.physical = this._effectorFact.isPhysical();
-            //result.hpAffected = true;
-    
+
             if (result.isHit()) {
                 if (this._effectorFact.hasParamDamage()) {
                     result.critical = Math.random() < this._effectorFact.criRate(targetBattlerBehavior);
@@ -480,6 +482,7 @@ export class REEffectContext {
         //b.gainActualParam(RESystem.parameters.hp, -value);
 
 
+
         if (value === 0) {
             result.critical = false;
         }
@@ -600,10 +603,7 @@ export class REEffectContext {
         let chance = effect.value1;
         if (!this._effectorFact.isCertainHit()) {
             chance *= target.stateRate(effect.dataId);
-            console.log("5555555555 dataId", effect.dataId);
-            console.log("5555555555 chance1", chance);
             chance *= this._effectorFact.lukEffectRate(target);
-            console.log("5555555555 chance2", chance);
         }
         if (Math.random() < chance) {
             target.ownerEntity().addState(effect.dataId);

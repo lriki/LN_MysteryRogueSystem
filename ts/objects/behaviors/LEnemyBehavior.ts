@@ -3,12 +3,13 @@ import { DEnemyId, RE_Data_Monster } from "ts/data/DEnemy";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { isThisTypeNode } from "typescript";
+import { LBattlerBehavior } from "./LBattlerBehavior";
 import { LBehavior } from "./LBehavior";
 
 
 /**
  */
-export class LEnemyBehavior extends LBehavior {
+export class LEnemyBehavior extends LBattlerBehavior {
 
     private _enemyId: DEnemyId = 0;
 
@@ -34,6 +35,13 @@ export class LEnemyBehavior extends LBehavior {
             return this.enemyData().name;
         else
             super.onQueryProperty(propertyId);
+    }
+
+    onCollectTraits(result: IDataTrait[]): void {
+        super.onCollectTraits(result);
+        for (const t of this.enemyData().traits){
+            result.push(t);
+        }
     }
 }
 

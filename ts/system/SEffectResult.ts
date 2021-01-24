@@ -124,8 +124,10 @@ export class SEffectResult {
 
         const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
         
-        if (this.hpAffected)
-        {
+        if (this.missed) {
+            context.postMessage(tr2("外れた。"));
+        }
+        else if (this.hpAffected) {
             
             const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
             const hpDamage = this.paramEffects[RESystem.parameters.hp].damag;

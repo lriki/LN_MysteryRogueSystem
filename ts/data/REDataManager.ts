@@ -408,6 +408,7 @@ export class REDataManager
                     monster.idealParams[RESystem.parameters.agi] = x.params[6];
                     monster.idealParams[RESystem.parameters.luk] = x.params[7];
                 }
+                monster.traits = x.traits ?? [];
             }
         });
 

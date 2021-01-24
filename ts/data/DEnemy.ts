@@ -24,5 +24,7 @@ export interface RE_Data_Monster
 
     /** 各基本パラメータ (index は BasicParameters) */
     idealParams: DParameterId[];
+
+    traits: IDataTrait[];
 }
 

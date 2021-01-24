@@ -45,7 +45,7 @@ export class REEntityFactory {
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new REGame_DecisionBehavior());
         e.addBasicBehavior(new REUnitBehavior());
-        e.addBasicBehavior(new LBattlerBehavior());
+        //e.addBasicBehavior(new LBattlerBehavior());
         e.addBasicBehavior((new LEnemyBehavior()).init(monsterId));
         return e;
     }
