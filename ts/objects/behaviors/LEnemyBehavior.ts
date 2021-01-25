@@ -1,6 +1,6 @@
 
 import { DEnemyId, RE_Data_Monster } from "ts/data/DEnemy";
-import { REData } from "ts/data/REData";
+import { DParameterId, REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { isThisTypeNode } from "typescript";
 import { LBattlerBehavior } from "./LBattlerBehavior";
@@ -22,12 +22,22 @@ export class LEnemyBehavior extends LBattlerBehavior {
         return this;
     }
 
+    onAttached(): void {
+        this.recoverAll();
+    }
+
     public enemyId(): DEnemyId {
         return this._enemyId;
     }
 
     public enemyData(): RE_Data_Monster {
         return REData.monsters[this._enemyId];
+    }
+    
+
+    // Game_Enemy.prototype.paramBase
+    idealParamBase(paramId: DParameterId): number {
+        return this.enemyData().idealParams[paramId];
     }
 
     onQueryProperty(propertyId: number): any {

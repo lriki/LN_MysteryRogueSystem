@@ -33,6 +33,7 @@ export class SImmediatelyCommandExecuteScheduler {
             
             if (RESystem.commandContext.isRunning()) {
                 RESystem.commandContext._processCommand();
+                console.log("attemptFlush 2");
                 RESystem.sequelContext.attemptFlush();
             }
             else {

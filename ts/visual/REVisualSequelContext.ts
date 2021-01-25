@@ -111,6 +111,7 @@ export class REVisualSequelContext {
         this._cancellationLocked = false;
         this._cuurentFinished = false;
         this._startPosition = Vector2.clone(this._entityVisual.position());
+        console.log("_startSequel", sequelId);
     }
 
     private _startAnimation(unit: SAnumationSequel) {
@@ -131,21 +132,31 @@ export class REVisualSequelContext {
             }
         }
         
+        let idleRequested = false;
         if (this._clip) {
             const rmmzAnimationWainting = (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
+
+            // MotionSequel を持っていなければ Idle モーションを再生したい。 (AnimationSequel のみのとき)
+            idleRequested = !this._clip.hasMotionSeque();
 
             // current の Sequel は完了しているが、全体としては未完了の場合は次の Sequel に進む
             if (!rmmzAnimationWainting && this._cuurentFinished && this._currentClip < this._clip.sequels().length) {
                 this._next();
             }
         }
+        else {
+            idleRequested = true;
+        }
 
-        if (!this._clip || !this._clip.hasMotionSeque()) {
+
+
+        if (idleRequested) {
             const id = this._entityVisual.getIdleSequelId();
             
             if (this._currentIdleSequelId != id) {
                 this._currentIdleSequelId = id;
                 if (this._currentIdleSequelId != 0) {
+                    console.log("this._clip", this._clip);
                     this._startSequel(id);
                 }
             }
