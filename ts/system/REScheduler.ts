@@ -111,17 +111,13 @@ export class REScheduler
     }
 
     stepSimulation(): void {
-        console.log("----------stepSimulation----------");
         const dialogContext = RESystem.dialogContext;
         const commandContext = RESystem.commandContext;
 
         while (true) {
-            console.log("this._phase ", this._phase );
             // Sequel 終了待ち
             if (REGame.integration.onCheckVisualSequelRunning()) {
                 // Sequel 実行中
-                
-                console.log("-VisualSequelRunning");
                 break;
             }
 
@@ -129,13 +125,11 @@ export class REScheduler
                 // マップ遷移中。
                 // postTransferFloor() の実行によって遷移が発生した場合は一度実行ループを抜けておかないと、
                 // 遷移が実際に行われる前に次のコマンド実行に進んでしまう。
-                console.log("-isFloorTransfering");
                 break;
             }
 
             if (this._brace) {
                 this._brace = false;
-                console.log("-_brace");
                 break;
             }
 
@@ -154,7 +148,6 @@ export class REScheduler
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
             if (!commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
-                console.log("-x");
                 break;
             }
 
@@ -170,7 +163,6 @@ export class REScheduler
 
                 if (dialogContext._hasDialogModel()) {
                     // Dialog 表示中は後続コマンドを実行しない
-                    console.log("_hasDialogModel");
                     break;
                 }
                 else {
@@ -188,8 +180,7 @@ export class REScheduler
                     // 実行中コマンドリストの実行が完了した。
                 }
 
-                //console.log("attemptFlush 1");
-                //RESystem.sequelContext.attemptFlush();
+                RESystem.sequelContext.attemptFlush();
             }
             else {
                 // 実行予約が溜まっているなら submit して実行開始する。
@@ -379,12 +370,10 @@ export class REScheduler
         }
         else {
             // ターン終了時に Sequel が残っていればすべて掃き出す
-            console.log("flushSequelSet");
             RESystem.sequelContext.flushSequelSet();
         }
 
         this._phase = SchedulerPhase.PartStarting;
-        //console.log("update_PartEnding, this._phase");
     }
 
     // 1行動トークンの消費を終えたタイミング。

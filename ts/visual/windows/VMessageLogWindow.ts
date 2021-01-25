@@ -200,10 +200,6 @@ export class VMessageLogWindow extends Window_Base {
             
             while (!this.isEndOfText(textState)) {
                 this.processCharacter(textState);
-                //if (this.shouldBreakHere(textState)) {
-                //    console.log("break?");
-                //    break;
-                //}
             }
             this.flushTextState(textState);
             if (this.isEndOfText(textState) && !this.pause) {

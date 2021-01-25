@@ -163,7 +163,6 @@ export class RECommandContext
     post<TSym extends symbol>(target: REGame_Entity, sender: REGame_Entity, args: any, symbol: TSym, result?: CommandResultCallback): void {
         const m1 = () => {
             const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
-                console.log("post", symbol);
                 const func = (behavior as any)[symbol];
                 if (func) {
                     const args2: CommandArgs = { self: target, sender: sender, args: args };

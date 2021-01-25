@@ -6,7 +6,6 @@ export class SSequelContext {
     private _sequelSet: RESequelSet = new RESequelSet();
 
     public clear(): void {
-        console.log("SSequelContext clear");
         this._sequelSet = new RESequelSet();
     }
 
@@ -35,7 +34,6 @@ export class SSequelContext {
             }
             REGame.integration.onFlushSequelSet(this._sequelSet);
 
-            console.log("flushSequelSet in");
             this._sequelSet = new RESequelSet();
         }
     }

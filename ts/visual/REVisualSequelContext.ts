@@ -111,7 +111,6 @@ export class REVisualSequelContext {
         this._cancellationLocked = false;
         this._cuurentFinished = false;
         this._startPosition = Vector2.clone(this._entityVisual.position());
-        console.log("_startSequel", sequelId);
     }
 
     private _startAnimation(unit: SAnumationSequel) {
@@ -156,7 +155,6 @@ export class REVisualSequelContext {
             if (this._currentIdleSequelId != id) {
                 this._currentIdleSequelId = id;
                 if (this._currentIdleSequelId != 0) {
-                    console.log("this._clip", this._clip);
                     this._startSequel(id);
                 }
             }

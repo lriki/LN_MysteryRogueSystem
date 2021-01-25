@@ -446,7 +446,6 @@ export class VMessageWindow extends Window_Base {
     
     private startPause() {
 
-        //console.log("TextState", this._textState);
         this.startWait(10);
         //this.pause = true;
 
