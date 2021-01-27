@@ -23,6 +23,7 @@ import { REDialogContext } from "./REDialog";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "ts/objects/LEventServer";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { SMinimapData } from "./SMinimapData";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -58,6 +59,7 @@ export class REGameManager
         REGame.message = new LMessage();
         REGame.identifyer = new LIdentifyer();
         REGame.eventServer = new LEventServer();
+        REGame.minimapData = new SMinimapData();
 
         // Create unique units
         REData.actors.forEach(x => {

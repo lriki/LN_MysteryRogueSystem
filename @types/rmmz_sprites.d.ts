@@ -76,6 +76,7 @@ export class Spriteset_Map extends Spriteset_Base {
     _shadowSprite: Sprite;
     _destinationSprite: Sprite_Destination;
     _weather: Weather;
+    _baseSprite: Sprite;
 
     /**
      * 

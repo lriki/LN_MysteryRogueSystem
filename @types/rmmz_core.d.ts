@@ -311,6 +311,17 @@ export class Sprite extends PIXI.Sprite {
 
 export class Tilemap extends PIXI.Container {
 
+	public static TILE_ID_B: number;
+	public static TILE_ID_C: number;
+	public static TILE_ID_D: number;
+	public static TILE_ID_E: number;
+	public static TILE_ID_A5: number;
+	public static TILE_ID_A1: number;
+	public static TILE_ID_A2: number;
+	public static TILE_ID_A3: number;
+	public static TILE_ID_A4: number;
+	public static TILE_ID_MAX: number;
+
     public animationCount: number;
     public flags: number[];
     public height: number;
@@ -331,6 +342,7 @@ export class Tilemap extends PIXI.Container {
     public update(): void;
 	public updateTransform(): void;
 	
+	public setRendererId(id: number): void;
 	
 	_addSpot(startX: number, startY: number, x: number, y: number): void;
 	_readMapData(x: number, y: number, d: number): number;

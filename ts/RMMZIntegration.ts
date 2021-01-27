@@ -23,7 +23,10 @@ export class RMMZIntegration extends REIntegration {
         if (!$dataMap) {
             throw new Error();
         }
-        map.reset($dataMap.width ?? 10, $dataMap.height ?? 10);
+        const width = $dataMap.width ?? 10;
+        const height = $dataMap.height ?? 10;
+        map.reset(width, height);
+        REGame.minimapData.reset(width, height);
 
         for (let y = 0; y < map.height(); y++) {
             for (let x = 0; x < map.width(); x++) {
