@@ -37,6 +37,7 @@ export class FMapBuilder {
                 attr.setTileKind(kind);
 
                 mapBlock._roomId = dataBlock.roomId();
+                mapBlock._blockComponent = dataBlock.component();
             }
         }
     }

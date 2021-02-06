@@ -135,6 +135,15 @@ export class REGame_Map
         }
     }
 
+    public tryGetBlock(x: number, y: number): REGame_Block | undefined {
+        if (x < 0 || this._width <= x || y < 0 || this._height <= y) {
+            return undefined;
+        }
+        else {
+            return this._blocks[y * this._width + x];
+        }
+    }
+
     public roomId(x: number, y: number): LRoomId;
     public roomId(entity: REGame_Entity, _?: any): LRoomId;
     public roomId(a1: any, a2: any): LRoomId {

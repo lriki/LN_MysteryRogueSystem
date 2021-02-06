@@ -1,3 +1,4 @@
+import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 
 const show = false;
@@ -26,6 +27,9 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
         const block = REGame.map.block(mx, my);
         if (block._roomId > 0) {
             this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);
+        }
+        else if (block._blockComponent == FBlockComponent.Passageway) {
+            this._addTile(this._upperLayer, startTileId + 8, dx, dy);
         }
     }
 

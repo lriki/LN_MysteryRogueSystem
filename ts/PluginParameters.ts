@@ -5,7 +5,7 @@ var pluginName = 'LN_RoguelikeEngine';
 export var paramFixedMapRoomRegionId = 1;
 
 // 固定マップで通路をマークするためのリージョンID
-export var paramFixedMapPassagewayRegionId = 10;
+export var paramFixedMapPassagewayRegionId = 8;
 
 /*
 // 

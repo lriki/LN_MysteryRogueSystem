@@ -68,6 +68,8 @@ export class RMMZIntegration extends REIntegration {
                 });
             }
         });
+
+        REGame.minimapData.refresh();
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {

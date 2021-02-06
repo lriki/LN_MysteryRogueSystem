@@ -3,6 +3,7 @@ import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { REGame_Entity } from "./REGame_Entity";
 import { REGame_Map } from "./REGame_Map";
+import { FBlockComponent } from "ts/floorgen/FMapData";
 
 export type LRoomId = number;
 
@@ -207,6 +208,7 @@ export class REGame_Block// extends LObject
     private _y: number;
 
     _roomId: LRoomId = 0;
+    _blockComponent: FBlockComponent = FBlockComponent.None;
 
     constructor(map: REGame_Map, x: number, y: number) {
         this._x = x;
