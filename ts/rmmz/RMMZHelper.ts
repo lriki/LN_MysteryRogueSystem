@@ -167,7 +167,8 @@ export class RMMZHelper {
 
         
         0b101101101, // tileId: 0
-        0b101101101, // tileId: 0
+        0b111000111, // tileId: 0
+        0b111100100, // tileId: 0
     ];
     
     public static mapAutoTileId(dirBits: number): number {

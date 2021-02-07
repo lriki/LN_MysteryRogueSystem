@@ -60,6 +60,7 @@ Spriteset_Map.prototype.updateTilemap = function() {
         this._minimapTilemap.setData(minimap.width(), minimap.height(), minimap.data());
         minimap.clearTilemapResetNeeded();
     }
+    this._minimapTilemap.refresh();
 }
 
 /*

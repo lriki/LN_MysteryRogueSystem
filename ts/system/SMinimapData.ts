@@ -1,7 +1,15 @@
+import { assert } from "ts/Common";
 import { FBlockComponent } from "ts/floorgen/FMapData";
+import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
+import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
+import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
+import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
+import { eqaulsEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { TileKind } from "ts/objects/REGame_Block";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
+import { REGameManager } from "./REGameManager";
 
 enum SubTile {
     UL,
@@ -44,6 +52,8 @@ export class SMinimapData {
     public setData(x: number, y: number, z: number, value: number): void {
         if (!this.isValid(x, y, z)) throw new Error();
         this._data[(z * this._height + y) * this._width + x] = value;
+        
+        //$gameMap.data()[(z * this._height + y) * this._width + x] = value;
     }
 
     public isValid(x: number, y: number, z: number): boolean {
@@ -69,17 +79,62 @@ export class SMinimapData {
 
                 switch (block._blockComponent) {
                     default:
-                        //const bits = this.getAutoTileDirBits(x, y, FBlockComponent.None);
-                        //const tileId = RMMZHelper.mapAutoTileId(bits);
                         const tileId = this.getAutoTileId(x, y, FBlockComponent.None);
                         this.setData(x, y, 0, Tilemap.TILE_ID_A2 + tileId);
-                        
                         break;
                     case FBlockComponent.Room:
                     case FBlockComponent.Passageway:
                         this.setData(x, y, 0, Tilemap.TILE_ID_A5 + 1);
                         break;
                 }
+            }
+        }
+    }
+
+    //_count = 0;
+
+    public update() {
+        const map = REGame.map;
+        const width = map.width();
+        const height = map.height();
+        const player = REGame.camera.focusedEntity();
+        assert(player);
+
+        //console.log("_count", this._count, (this._count % 2));
+        //this._count++;
+        //this._tilemapResetNeeded = true;
+        // Clear
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                this.setData(x, y, 1, 0);
+            }
+        }
+
+        //this.setData(0, 0, 0, Tilemap.TILE_ID_A5 + 9 + (this._count % 2));
+
+        for (const entity of map.entities()) {
+            //if (entity == player) {
+            if (eqaulsEntityId(entity.id(), player.id())) {
+                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
+            }
+            else if (entity.hasBehavior(LTrapBehavior)) {
+                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
+            }
+            else if (entity.hasBehavior(LItemBehavior)) {
+                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
+            }
+            else if (entity.hasBehavior(LBattlerBehavior)) {
+                if (REGameManager.isHostile(player, entity)) {
+                    // 敵対勢力
+                    this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
+                }
+                else {
+                    // 中立 or 味方
+                    this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
+                }
+            }
+            else if (entity.hasBehavior(REExitPointBehavior)) {
+                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);
             }
         }
     }

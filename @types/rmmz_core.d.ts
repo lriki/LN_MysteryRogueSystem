@@ -341,6 +341,7 @@ export class Tilemap extends PIXI.Container {
     public setData(width: number, height: number, data: number[]): void;
     public update(): void;
 	public updateTransform(): void;
+	public refresh(): void;
 	
 	public setRendererId(id: number): void;
 	

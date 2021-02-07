@@ -80,7 +80,6 @@ NOTE:
             return r + (itemBehavior.itemData().parameters[parameterId] ?? 0);
         }, 0);
 
-        console.log("onQueryIdealParameterPlus", parameterId, a);
         return a;
     }
     
@@ -97,8 +96,6 @@ NOTE:
                 result.push(trait);
             }
         }
-
-        console.log("onCollectTrait5555555555555555");
     }
     
     onAction(actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {

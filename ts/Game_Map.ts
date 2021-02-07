@@ -38,6 +38,9 @@ Game_Map.prototype.setup = function(mapId: number) {
             assert(REGame.camera.isFloorTransfering());
             REGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
         }
+        else {
+            throw new Error();
+        }
 
             
         // この時点ではまだ Player は locate() されていないので、
@@ -92,6 +95,8 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
                 REGame.scheduler.stepSimulation();
             }
         }
+        
+        REGame.minimapData.update();
     }
     else {
         // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく

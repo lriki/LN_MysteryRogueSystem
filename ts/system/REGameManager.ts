@@ -100,6 +100,7 @@ export class REGameManager
             // マップ構築
             REGame.map._removeAllEntities();
             REGame.map.setup(REGame.camera.transferingNewFloorId());
+            
             REGame.world.enterEntitiesToCurrentMap();
             REGame.scheduler.clear();
 

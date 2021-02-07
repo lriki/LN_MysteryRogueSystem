@@ -168,7 +168,6 @@ export class RE_Game_World
     
                     REGame.scheduler.invalidateEntity(entity);
     
-                    console.log("Entity removed", entity);
                     entity._finalize();
                     this._entities[i] = undefined;
     
@@ -183,6 +182,9 @@ export class RE_Game_World
 
     // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
     enterEntitiesToCurrentMap() {
+        const player = REGame.camera.focusedEntity();
+        assert(player)
+
         for (let i = 1; i < this._entities.length; i++) {
             const entity = this._entities[i];
             if (entity) {
