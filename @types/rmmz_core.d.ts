@@ -3,6 +3,19 @@ import * as PIXI from "pixi.js";
 declare global {
 
 /**
+ * The point class.
+ * 
+ * @class
+ * @extends PIXI.Point
+ * @param {number} x - The x coordinate.
+ * @param {number} y - The y coordinate.
+ */
+export class Point  extends PIXI.Rectangle {
+		
+}
+
+
+/**
  * The rectangle class.
  * 
  * @class
@@ -321,6 +334,9 @@ export class Tilemap extends PIXI.Container {
 	public static TILE_ID_A3: number;
 	public static TILE_ID_A4: number;
 	public static TILE_ID_MAX: number;
+	public static FLOOR_AUTOTILE_TABLE: number[][][];
+	public static WALL_AUTOTILE_TABLE: number[][][];
+	
 
     public animationCount: number;
     public flags: number[];
@@ -332,6 +348,7 @@ export class Tilemap extends PIXI.Container {
     public _tileWidth: number;
 	public _tileHeight: number;
 	public _upperLayer: Tilemap.Layer;
+	public _margin: number;
 
     constructor();
 
@@ -348,13 +365,18 @@ export class Tilemap extends PIXI.Container {
 	_addSpot(startX: number, startY: number, x: number, y: number): void;
 	_readMapData(x: number, y: number, d: number): number;
 	_addTile(layer: Tilemap.Layer, tileId: number, dx: number, dy: number): void;
+	_addAutotile(layer: Tilemap.Layer, tileId: number, dx: number, dy: number): void;
+
+	static getAutotileKind(tileId: number): number;
+	static getAutotileShape(tileId: number): number;
+	static isTileA4(tileId: number): boolean;
 }
 
 
 export namespace Tilemap {
 
 	class Layer extends PIXI.Container {
-
+		public addRect(setNumber: number, sx: number, sy: number, dx: number, dy: number, w: number, h: number): void;
 	}
 }
 

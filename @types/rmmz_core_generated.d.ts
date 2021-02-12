@@ -792,24 +792,6 @@ declare namespace Graphics{
 }
 
 /**
- * The point class.
- * 
- * @class
- * @extends PIXI.Point
- * @param {number} x - The x coordinate.
- * @param {number} y - The y coordinate.
- */
-declare interface Point {
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	new (): Point;
-}
-
-
-/**
  * The sprite object for a tiling image.
  * 
  * @class

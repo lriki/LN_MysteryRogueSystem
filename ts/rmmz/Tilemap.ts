@@ -2,8 +2,81 @@ import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 
 const show = false;
+const showAutotileShapeId = false;
 const startTileId = 768;
 
+
+// 壁と隣接している床オートタイル用のテーブル
+const FLOOR_AUTOTILE_TABLE2: number[][][] = [
+    [[2, 4], [1, 4], [2, 3], [1, 3]],   // [0]
+    [[2, 0], [1, 4], [2, 3], [1, 3]],
+    [[2, 4], [3, 0], [2, 3], [1, 3]],
+    [[2, 0], [3, 0], [2, 3], [1, 3]],
+    [[2, 4], [1, 4], [2, 3], [3, 1]],
+    [[2, 0], [1, 4], [2, 3], [3, 1]],
+    [[2, 4], [3, 0], [2, 3], [3, 1]],
+    [[2, 0], [3, 0], [2, 3], [3, 1]],
+    [[2, 4], [1, 4], [2, 1], [1, 3]],   // [8]
+    [[2, 0], [1, 4], [2, 1], [1, 3]],
+    [[2, 4], [3, 0], [2, 1], [1, 3]],
+    [[2, 0], [3, 0], [2, 1], [1, 3]],
+    [[2, 4], [1, 4], [2, 1], [3, 1]],
+    [[2, 0], [1, 4], [2, 1], [3, 1]],
+    [[2, 4], [3, 0], [2, 1], [3, 1]],
+    [[2, 0], [3, 0], [2, 1], [3, 1]],
+    [[1/*0*/, 4], [1, 4], [0, 3], [1, 3]],   // [16]
+    [[0, 4], [3, 0], [0, 3], [1, 3]],
+    [[0, 4], [1, 4], [0, 3], [3, 1]],
+    [[0, 4], [3, 0], [0, 3], [3, 1]],
+    [[2, 2], [1, 2], [2, 3], [1, 3]],
+    [[2, 2], [1, 2], [2, 3], [3, 1]],
+    [[2, 2], [1, 2], [2, 1], [1, 3]],
+    [[2, 2], [1, 2], [2, 1], [3, 1]],
+    [[2, 4], [3, 4], [2, 3], [3, 3]],   // [24]
+    [[2, 4], [3, 4], [2, 1], [3, 3]],
+    [[2, 0], [3, 4], [2, 3], [3, 3]],
+    [[2, 0], [3, 4], [2, 1], [3, 3]],
+    [[2, 4], [1, 4], [2, 4/*5*/], [1, 4/*5*/]],   //28
+    [[2, 0], [1, 4], [2, 5], [1, 5]],
+    [[2, 4], [3, 0], [2, 5], [1, 5]],
+    [[2, 0], [3, 0], [2, 5], [1, 5]],
+    [[0, 4], [3, 4], [0, 3], [3, 3]],
+    [[2, 2], [1, 2], [2, 5], [1, 5]],
+    [[0, 2], [1, 2], [0, 3], [1, 3]],
+    [[0, 2], [1, 2], [0, 3], [3, 1]],
+    [[2, 2], [2, 2], [2, 3], [3, 3]],   //36
+    [[2, 2], [3, 2], [2, 1], [3, 3]],
+    [[2, 4], [3, 4], [2, 5], [3, 5]],
+    [[2, 0], [3, 4], [2, 5], [3, 5]],
+    [[0, 4], [1, 4], [0, 4], [1, 4]],   //40
+    [[0, 4], [3, 0], [0, 5], [1, 5]],
+    [[0, 2], [3, 2], [0, 3], [3, 3]],
+    [[0, 2], [1, 2], [0, 5], [1, 5]],
+    [[0, 4], [3, 4], [0, 5], [3, 5]],
+    [[2, 2], [3, 2], [2, 5], [3, 5]],
+    [[0, 2], [3, 2], [0, 5], [3, 5]],
+    [[0, 0], [1, 0], [0, 1], [1, 1]]
+];
+
+// 床と隣接している壁オートタイル用のテーブル
+const WALL_AUTOTILE_TABLE2: number[][][] = [
+    [[2, 2], [1, 2], [2, 1], [1, 1]],
+    [[0, 2], [1, 2], [0, 1], [1, 1]],
+    [[2, 0], [1, 0], [2, 1], [1, 1]],
+    [[0, 0], [1, 0], [0, 1], [1, 1]],
+    [[2, 2], [3, 2], [2, 1], [3, 1]],
+    [[0, 2], [3, 2], [0, 1], [3, 1]],
+    [[2, 0], [3, 0], [2, 1], [3, 1]],
+    [[0, 0], [3, 0], [0, 1], [3, 1]],
+    [[2, 2], [1, 2], [2, 3], [1, 3]],
+    [[0, 2], [1, 2], [0, 3], [1, 3]],
+    [[2, 0], [1, 0], [2, 3], [1, 3]],
+    [[1, 0], [1, 0], [0, 3], [1, 3]],   //11
+    [[2, 2], [3, 2], [2, 3], [3, 3]],
+    [[0, 2], [3, 2], [0, 3], [3, 3]],
+    [[2, 0], [3, 0], [2, 3], [3, 3]],
+    [[0, 0], [3, 0], [0, 3], [3, 3]]
+];
 
 const _Tilemap__addSpot = Tilemap.prototype._addSpot;
 Tilemap.prototype._addSpot = function(startX, startY, x, y) {
@@ -33,6 +106,11 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
         }
     }
 
+    if (showAutotileShapeId) {
+        const shape = Tilemap.getAutotileShape(tileId0);
+        this._addTile(this._upperLayer, startTileId + shape, dx, dy);
+    }
+
         /*
     if (tileId5 == 8) {
         console.log("m", mx, my);
@@ -58,4 +136,131 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
         this._addTile(this._upperLayer, startTileId + 10, dx, dy);
     }
     */
+}
+
+function isTileA4Floor(tileId: number): boolean {
+    const kind = Tilemap.getAutotileKind(tileId);
+    if (80 <= kind && kind <= 87) return true;
+    if (96 <= kind && kind <= 103) return true;
+    if (112 <= kind && kind <= 119) return true;
+    return false;
+}
+
+function isTileA4Wall(tileId: number): boolean {
+    const kind = Tilemap.getAutotileKind(tileId);
+    if (88 <= kind && kind <= 95) return true;
+    if (104 <= kind && kind <= 111) return true;
+    if (120 <= kind && kind <= 127) return true;
+    return false;
+}
+
+
+const _Tilemap__addAutotile = Tilemap.prototype._addAutotile;
+Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
+    const kind = Tilemap.getAutotileKind(tileId);
+
+    if (Tilemap.isTileA4(tileId)) {
+        const x = dx / this._tileWidth;
+        const y = dy / this._tileHeight;
+    
+        const ox = Math.ceil(this.origin.x);
+        const oy = Math.ceil(this.origin.y);
+        const startX = Math.floor((ox - this._margin) / this._tileWidth);
+        const startY = Math.floor((oy - this._margin) / this._tileHeight);
+        
+        const mx = startX + x;
+        const my = startY + y;
+
+
+        
+        const shape = Tilemap.getAutotileShape(tileId);
+        const tx = kind % 8;
+        const ty = Math.floor(kind / 8);
+        const w1 = this._tileWidth / 2;
+        const h1 = this._tileHeight / 2;
+        let autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
+
+        
+        // kind の予約枠は次の通り。
+        // - A1 は 0~15 (最大16個)
+        // - A2 は 16~47 (最大32個)
+        // - A3 は 48~80 (最大32個)
+        // - A4 は 80~127 (最大48個)
+        //
+        // tx,ty は、これらが横8個の論理的なグリッドに並んでいると考えた時のセル番号。
+        //
+        // A4 では、上面と側面は別の AutoTile kind で表現されている。
+        // A4 画像には横8個、縦6個の計 48 個の AutoTile が存在することになる。
+        
+
+
+        const setNumber = 3;
+        const bx = tx * 2;
+        const by = Math.floor((ty - 10) * 2.5 + (ty % 2 === 1 ? 0.5 : 0));
+        const syOffsets = [0, 0, 0, 0];
+        if (ty % 2 === 1) {
+            // 壁
+            autotileTable = Tilemap.WALL_AUTOTILE_TABLE;
+            syOffsets[0] = -h1;
+            syOffsets[1] = -h1;
+
+            if (shape == 11) {
+                if (mx > 0) {
+                    const tileId2 = this._readMapData(mx - 1, my, 0);
+                    if (isTileA4Floor(tileId2)) {
+                        autotileTable = WALL_AUTOTILE_TABLE2;
+                    }
+                }
+            }
+
+        }
+        else {
+            // 上面
+
+            if (shape == 16) {
+                if (mx > 0) {
+                    const tileId2 = this._readMapData(mx - 1, my, 0);
+                    if (isTileA4Wall(tileId2)) {
+                        autotileTable = FLOOR_AUTOTILE_TABLE2;
+                    }
+                }
+            }
+            else if (shape == 36) {
+                if (mx < this.width - 1) {
+                    const tileId2 = this._readMapData(mx + 1, my, 0);
+                    if (isTileA4Wall(tileId2)) {
+                        autotileTable = FLOOR_AUTOTILE_TABLE2;
+                    }
+                }
+            }
+            else if (shape == 28 || shape == 40) {
+                if (my < this.height - 1) {
+                    const tileId2 = this._readMapData(mx, my + 1, 0);
+                    if (isTileA4Wall(tileId2)) {
+                        autotileTable = FLOOR_AUTOTILE_TABLE2;
+                    }
+                }
+
+            }
+
+        }
+
+
+        
+        const table = autotileTable[shape];
+        for (let i = 0; i < 4; i++) {
+            const qsx = table[i][0];
+            const qsy = table[i][1];
+            const sx1 = (bx * 2 + qsx) * w1;
+            const sy1 = (by * 2 + qsy) * h1;
+            const dx1 = dx + (i % 2) * w1;
+            const dy1 = dy + Math.floor(i / 2) * h1;
+            layer.addRect(setNumber, sx1, sy1 + syOffsets[i], dx1, dy1, w1, h1);
+        }
+    }
+    else {
+        _Tilemap__addAutotile.call(this, layer, tileId, dx, dy);
+    }
+
+
 }
