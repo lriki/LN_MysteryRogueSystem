@@ -1,5 +1,5 @@
-import { REGame } from "./objects/REGame";
-import { REVisual } from "./visual/REVisual";
+import { REGame } from "../objects/REGame";
+import { REVisual } from "../visual/REVisual";
 
 var _Game_Player_initMembers = Game_Player.prototype.initMembers;
 Game_Player.prototype.initMembers = function() {

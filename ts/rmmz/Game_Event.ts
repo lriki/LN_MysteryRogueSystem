@@ -1,4 +1,4 @@
-import { RMMZEventEntityMetadata, RMMZHelper } from "./rmmz/RMMZHelper";
+import { RMMZEventEntityMetadata, RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Event {

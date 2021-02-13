@@ -1,10 +1,10 @@
-import { assert } from "./Common";
-import { REData, REFloorMapKind } from "./data/REData";
-import { REDataManager } from "./data/REDataManager";
+import { assert } from "../Common";
+import { REData, REFloorMapKind } from "../data/REData";
+import { REDataManager } from "../data/REDataManager";
 import { RMMZIntegration } from "./RMMZIntegration";
-import { RESystem } from "./system/RESystem";
-import { REEntityVisualSet } from "./visual/REEntityVisualSet";
-import { REVisual } from "./visual/REVisual";
+import { RESystem } from "../system/RESystem";
+import { REEntityVisualSet } from "../visual/REEntityVisualSet";
+import { REVisual } from "../visual/REVisual";
 
 declare global {
     interface Scene_Map {

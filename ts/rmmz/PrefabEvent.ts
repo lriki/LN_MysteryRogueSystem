@@ -1,6 +1,6 @@
-import { assert } from './Common';
-import { REDataManager } from './data/REDataManager';
-import { REVisual } from './visual/REVisual';
+import { assert } from '../Common';
+import { REDataManager } from '../data/REDataManager';
+import { REVisual } from '../visual/REVisual';
 
 class Game_REPrefabEvent extends Game_Event {
     private _databaseMapEventId: number;

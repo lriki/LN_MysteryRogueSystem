@@ -1,7 +1,7 @@
-import { assert, Log } from "./Common";
-import { REDataManager } from "./data/REDataManager";
-import { REGame } from "./objects/REGame";
-import { REGameManager } from "./system/REGameManager";
+import { assert, Log } from "../Common";
+import { REDataManager } from "../data/REDataManager";
+import { REGame } from "../objects/REGame";
+import { REGameManager } from "../system/REGameManager";
 
 declare global {
     interface Game_Map {

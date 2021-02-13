@@ -1,8 +1,8 @@
 
 
-import { assert } from './Common';
-import { REGame } from './objects/REGame';
-import { REVisual } from './visual/REVisual';
+import { assert } from '../Common';
+import { REGame } from '../objects/REGame';
+import { REVisual } from '../visual/REVisual';
 
 declare global {
     interface Spriteset_Map {

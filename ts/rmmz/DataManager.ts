@@ -1,8 +1,8 @@
-import { REDataManager } from "./data/REDataManager";
-import { REGame } from "./objects/REGame";
-import { REGameManager } from "./system/REGameManager";
-import { REData, REFloorMapKind } from "./data/REData";
-import { assert } from "./Common";
+import { REDataManager } from "../data/REDataManager";
+import { REGame } from "../objects/REGame";
+import { REGameManager } from "../system/REGameManager";
+import { REData, REFloorMapKind } from "../data/REData";
+import { assert } from "../Common";
 
 /*
  [2020/11/2] マップ読み込みメモ

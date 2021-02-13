@@ -1,8 +1,8 @@
-import { REDataManager } from "./data/REDataManager";
-import { REGame } from "./objects/REGame";
+import { REDataManager } from "../data/REDataManager";
+import { REGame } from "../objects/REGame";
 import { RMMZIntegration } from "./RMMZIntegration";
-import { RESystem } from "./system/RESystem";
-import { REVisual } from "./visual/REVisual";
+import { RESystem } from "../system/RESystem";
+import { REVisual } from "../visual/REVisual";
 
 /*
 import { ImGuiIO } from "../imgui-js/imgui";

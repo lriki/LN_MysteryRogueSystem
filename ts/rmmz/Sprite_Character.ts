@@ -1,4 +1,4 @@
-import { assert } from './Common';
+import { assert } from '../Common';
 
 declare global {
     interface Sprite_Character {
