@@ -11,6 +11,15 @@
 | 識別(する) | Identifiy |
 | 未識別 | Unidentified |
 | 通路 | Passageway |
+| (装備の) 強化 | Upgrade / Upgrading Weapons and Shields |
+| (装備の) 強化値 | Upgrade Value |
+| 祝福 | Blessed |
+| 封印 | Sealed |
+| 呪い | Cursed |
+| 合成 | Synthesis |
+| さびよけ | Rustproof |
+| 印 | Rune |
+
 
 エンティティ
 ----------
@@ -20,7 +29,7 @@
 | 階段 | Stairs |
 | 魔法弾 | Magic Ballets |
 
-メニュー
+メニュー・アクション
 ----------
 
 |   |   |
@@ -45,6 +54,8 @@
 | 読む | Read |
 | (壺を)のぞく | Peek |
 | (壺に)入れる | Insert |
+| (壺から)出す | Get |
+| (壺を)押す | Open |
 
 ### 倉庫
 |   |   |
@@ -80,7 +91,7 @@
 | 満腹度 | Fullness |
 
 
-状態異常・変化
+状態異常・変化 (status)
 ----------
 
 |   |   |
@@ -89,6 +100,8 @@
 | よく見え | Farseeing |
 | ゾワゾワ | Afraid |
 | バクスイ | Sound Asleep |
+| 山彦 | Reflective (status) |
+| 無敵 | Invincible (status) |
 
 アイテム
 ----------
@@ -135,16 +148,23 @@
 | 胃縮小の種 | Stomach Shrinker |
 | 胃拡張の種 | Stomach Expander |
 | 毒消し草 | Antidote Grass |
+| ちからの草 | Strength Grass |
+| 雑草 | Weeds |
 | パワーアップ草 | Power Up Grass |
+| すばやさ草 | Power Up Grass |
+| 無敵草 | Invincible Grass |
 
 
-
-### 杖
+### 杖 (staves)
 |   |   |
 |---|---|
 | かなしばりの杖 | Paralsis Staff |
 | 一時しのぎの杖 | Transient Staff |
 | 転ばぬ先の杖 | Pinning Staff |
+| 感電の杖 | Electric Staff |
+| ふきとばしの杖 | Knockback Staff |
+| トンネルの杖 | Boring Staff |
+| 土塊の杖 | Fort. Staff |
 
 ### 巻物
 |   |   |
@@ -154,20 +174,45 @@
 | バクスイの巻物 | Slumber Scroll |
 | 天の恵みの巻物 | Fate Scroll |
 | 識別の巻物 | Identify Scroll |
+| おはらいの巻物 | Exorcism Scroll |
+| 水がれの巻物 | Desert Scroll |
+| メッキの巻物 | Plating Scroll |
+| ワナ消しの巻物 | Trap Deletion Scroll |
 
 ### 壺
 |   |   |
 |---|---|
+| 保存の壺 | Presrvation Pot |
 | 識別の壺 | Identify Pot |
+| 山彦香の壺 | Reflection Pot |
+| 背中の壺 | Heal Pot |
+| おはらいの壺 | Exorcism Pot |
+| 合成の壺 | Synthesis Pot |
 
-ワナ
-----------
+### 札
+
+|   |   |
+|---|---|
+| 睡眠の札 | Sleep Talisman(s) |
+
+### ワナ
 
 
 |   |   |
 |---|---|
 | 大型地雷 | Big Explosion Trap |
 | 召喚の罠 | Summon Trap |
+| デロデロの罠 | Decay Trap |
+| 毒矢の罠 | Poison Arrow Trap |
+| 装備外しの罠 | Strip Trap |
+
+### 食料
+
+|   |   |
+|---|---|
+| くさったおにぎり | Rotten Onigiri |
+| 焼きおにぎり | Grilled Onigiri |
+
 
 NOTE
 ----------
