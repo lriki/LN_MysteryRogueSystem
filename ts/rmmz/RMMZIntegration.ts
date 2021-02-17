@@ -169,13 +169,14 @@ export class RMMZIntegration extends REIntegration {
         }
 
         if (prefabData.item) {
-            const data = REData.items.find(x => x.key == prefabData.item);
+            const data = REData.items.find(x => x.entity.key == prefabData.item);
             if (data) {
-                if (data.kind == "Weapon")
+                console.log("data", data);
+                if (data.entity.kind == "Weapon")
                     return REEntityFactory.newEquipment(data.id);
-                else if (data.kind == "Shield")
+                else if (data.entity.kind == "Shield")
                     return REEntityFactory.newEquipment(data.id);
-                else if (data.kind == "Trap")
+                else if (data.entity.kind == "Trap")
                     return REEntityFactory.newTrap(data.id);
                 else
                     return REEntityFactory.newItem(data.id);

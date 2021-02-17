@@ -14,6 +14,7 @@ import { DState, makeStateTraitsFromMeta } from "./DState";
 import { DBehaviorFactory } from "./DBehaviorFactory";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
+import { parseMetaToEntityProperties } from "./DEntityProperties";
 
 
 declare global {  
@@ -383,10 +384,7 @@ export class REDataManager
                 item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
                 item.effect.specialEffects = x.effects ?? [];
                 item.scope = x.scope ?? DEffectScope.None;
-                if (x.meta) {
-                    item.key = x.meta["RE-Key"];
-                    item.kind = x.meta["RE-Kind"];
-                }
+                item.entity = parseMetaToEntityProperties(x.meta);
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
@@ -398,10 +396,7 @@ export class REDataManager
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
-                if (x.meta) {
-                    item.key = x.meta["RE-Key"];
-                    item.kind = x.meta["RE-Kind"];
-                }
+                item.entity = parseMetaToEntityProperties(x.meta);
             }
             else {
                 REData.addItem("null");
@@ -416,10 +411,7 @@ export class REDataManager
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
-                if (x.meta) {
-                    item.key = x.meta["RE-Key"];
-                    item.kind = x.meta["RE-Kind"];
-                }
+                item.entity = parseMetaToEntityProperties(x.meta);
             }
             else {
                 REData.addItem("null");

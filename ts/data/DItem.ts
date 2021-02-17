@@ -1,3 +1,4 @@
+import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DEquipmentPartId } from "./DEquipmentPart";
 import { DEffect, DEffectHitType, DEffectScope, DEffect_Default } from "./DSkill";
 
@@ -15,8 +16,7 @@ export interface DItem {
     /** ID (0 is Invalid). */
     id: DItemDataId;
 
-    key: string;
-    kind: string;
+    entity: DEntityProperties;
 
     /** Name */
     name: string;
@@ -40,8 +40,7 @@ export interface DItem {
 export function DItem_Default(): DItem {
     return {
         id: 0,
-        key: "",
-        kind: "",
+        entity: DEntityProperties_Default(),
         name: "null",
         iconIndex: 0,
         scope: 0,
