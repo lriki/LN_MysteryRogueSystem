@@ -151,7 +151,7 @@
 | ちからの草 | Strength Grass |
 | 雑草 | Weeds |
 | パワーアップ草 | Power Up Grass |
-| すばやさ草 | Power Up Grass |
+| すばやさ草 | Swift Grass |
 | 無敵草 | Invincible Grass |
 
 
@@ -182,7 +182,7 @@
 ### 壺
 |   |   |
 |---|---|
-| 保存の壺 | Presrvation Pot |
+| 保存の壺 | Preservation Pot |
 | 識別の壺 | Identify Pot |
 | 山彦香の壺 | Reflection Pot |
 | 背中の壺 | Heal Pot |

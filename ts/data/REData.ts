@@ -17,6 +17,7 @@ import { DAction } from "./DAction";
 import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
 import { DActor_Default, RE_Data_Actor } from "./DActor";
+import { DAbility, DAbilityId } from "./DAbility";
 
 export type DParameterId = number;
 
@@ -157,6 +158,7 @@ export class REData
     static items: DItem[] = [];
     static stateTraits: DStateTrait[] = [];
     static states: DState[] = [];
+    static abilities: DAbility[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;

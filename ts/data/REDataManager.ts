@@ -13,6 +13,7 @@ import { DBasics } from "./DBasics";
 import { DState, makeStateTraitsFromMeta } from "./DState";
 import { DBehaviorFactory } from "./DBehaviorFactory";
 import { DEquipmentType_Default } from "./DEquipmentType";
+import { DAbility, DAbility_Default } from "./DAbility";
 
 
 declare global {  
@@ -301,6 +302,29 @@ export class REDataManager
                 debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
             };
 
+            
+            REData.abilities = $dataStates
+                .filter(state => !state || (state.meta && state.meta["RE-Kind"] == "Ability"))
+                .map((state, index) => {
+                    if (state) {
+                        const ability: DAbility = {
+                            id: index,
+                            key: state.meta["RE-Key"],
+                            reactions: {},
+                        };
+                        Object.keys(state.meta).forEach(key => {
+                            if (key.startsWith("RE-Reaction.")) {
+                                ability.reactions[key.substr(12)] = state.meta[key];
+                                // TODO: 複数指定の時は ; で分割したい
+                            }
+                        });
+                        return ability;
+                    }
+                    else {
+                        return DAbility_Default();
+                    }
+                });
+            console.log("REData.abilities", REData.abilities);
         }
         
         // Import Classes
