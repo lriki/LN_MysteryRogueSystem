@@ -8,8 +8,7 @@ export interface RMMZEventEntityMetadata {
      * これが無いと、拾われる → 置かれた の時に、Map 上に出現したときにどの Prefab を元に
      * RMMZ イベントを作ればよいのかわからなくなるため。
      */
-    prefabKind: string;
-    prefabIndex: number;
+    prefab: string;
 
     states: string[];
 }
@@ -20,9 +19,16 @@ interface RMMZEventRawMetadata {
 }
 
 export interface RMMZEventPrefabMetadata {
+    item?: string;
+    enemy?: string;
+
+    // deprecated
     weaponId?: number;
+    // deprecated
     armorId?: number;
+    // deprecated
     itemId?: number;    // RMMZ データベース上の ItemId
+    // deprecated
     enemyId?: number;   // RMMZ データベース上の EnemyId
 }
 
@@ -56,12 +62,8 @@ export class RMMZHelper {
                         if (!rawData.prefab) {
                             throw new Error(`Event#${event.eventId()} - @REEntity.prefab not specified.`);
                         }
-    
-                        const tokens = rawData.prefab.split(":");
-
                         return {
-                            prefabKind: tokens[0],
-                            prefabIndex: Number(tokens[1]),
+                            prefab: rawData.prefab,
                             states: rawData.states ?? [],
                         };
                     }
@@ -103,6 +105,14 @@ export class RMMZHelper {
             }
         }
         return undefined;
+    }
+
+    public static isExitPointPrefab(data: RMMZEventEntityMetadata): boolean {
+        return data.prefab.includes("ExitPoint");
+    }
+
+    public static isItemPrefab(data: RMMZEventPrefabMetadata): boolean {
+        return !!data.itemId;
     }
 
     public static getRegionId(x: number, y: number): number {

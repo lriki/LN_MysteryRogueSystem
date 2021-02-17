@@ -130,7 +130,7 @@ export class REGame_Entity
     _iconName: string = '';
     //_blockLayer: BlockLayer = BlockLayer.Unit;
 
-    prefabKey: { kind: DEntityKindId, id: number } = { kind: 0, id: 0 };
+    prefabKey: string | undefined = undefined;//{ kind: DEntityKindId, id: number } = { kind: 0, id: 0 };
     rmmzEventId: number = 0;
 
     /**

@@ -15,6 +15,9 @@ export interface DItem {
     /** ID (0 is Invalid). */
     id: DItemDataId;
 
+    key: string;
+    kind: string;
+
     /** Name */
     name: string;
 
@@ -34,19 +37,23 @@ export interface DItem {
     traits: IDataTrait[];
 }
 
-export const DItem_Default: DItem = {
-    id: 0,
-    name: "null",
-    iconIndex: 0,
-    scope: 0,
-    effect: {
-        ...DEffect_Default,
-        parameterEffects: [],
-        specialEffects: [],
-    },
-    equipmentParts: [],
-    parameters: [],
-    traits: [],
+export function DItem_Default(): DItem {
+    return {
+        id: 0,
+        key: "",
+        kind: "",
+        name: "null",
+        iconIndex: 0,
+        scope: 0,
+        effect: {
+            ...DEffect_Default,
+            parameterEffects: [],
+            specialEffects: [],
+        },
+        equipmentParts: [],
+        parameters: [],
+        traits: [],
+    };
 }
 
 

@@ -65,8 +65,7 @@ export class REGameManager
         REData.actors.forEach(x => {
             if (x.id > 0) {
                 const unit = REEntityFactory.newActor(x.id);
-                unit.prefabKey.kind = DBasics.entityKinds.actor;
-                unit.prefabKey.id = x.id;
+                unit.prefabKey = `Actor:${x.id}`;
                 unit.floorId = x.initialFloorId;
                 unit.x = x.initialX;
                 unit.y = x.initialY;

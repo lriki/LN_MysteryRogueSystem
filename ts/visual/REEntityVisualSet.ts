@@ -90,13 +90,13 @@ export class REEntityVisualSet {
         }
 
         let event: Game_Event | undefined = undefined;
-        if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
+        if (entity.rmmzEventId > 0) {
             event = $gameMap.event(entity.rmmzEventId);
         }
-        else if (entity.prefabKey.kind == 0 && entity.prefabKey.id > 0) {
+        //else if (entity.prefabKey.kind == 0 && entity.prefabKey.id > 0) {
             // 固定マップ用。現在マップに出現しているイベントから作る
-            event = $gameMap.event(entity.prefabKey.id);
-        }
+        //    event = $gameMap.event(entity.prefabKey.id);
+        //}
         else {
             // Tile などは Visual を作らない
             return;

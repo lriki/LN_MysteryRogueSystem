@@ -55,7 +55,7 @@ export class RMMZIntegration extends REIntegration {
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityMetadata) {
                 const entity = this.newEntity(e._entityMetadata);
-                entity.prefabKey = { kind: REData.getEntityKindsId(e._entityMetadata.prefabKind), id: e._entityMetadata.prefabIndex };
+                entity.prefabKey = e._entityMetadata.prefab;
                 entity.rmmzEventId = e.eventId();
                 entity.inhabitsCurrentFloor = true;
                 REGame.world._transferEntity(entity, REGame.map.floorId(), e.x, e.y);
@@ -111,15 +111,14 @@ export class RMMZIntegration extends REIntegration {
         assert(databaseMap);
         assert(databaseMap.events);
 
-        if (entity.prefabKey.kind > 0 && entity.prefabKey.id > 0) {
+        if (entity.prefabKey) {
             if (entity.inhabitsCurrentFloor) {
                 // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
                 // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
             }
             else {
                 // Prefab 検索
-                const prefabKey = this.makePrefavNameFromKindId(entity.prefabKey.kind, entity.prefabKey.id);
-                const eventData = this.getPrefabEventData(prefabKey);
+                const eventData = this.getPrefabEventData(entity.prefabKey);
 
                 //  entity に対応する動的イベントを新たに生成する
                 const event = $gameMap.spawnREEvent(eventData);
@@ -145,10 +144,6 @@ export class RMMZIntegration extends REIntegration {
     private makePrefavNameFromKindId(kindId: number, index: number): string {
         return `${REData.entityKinds[kindId].prefabKind}:${index}`;
     }
-    
-    private makePrefavNameFromKindName(kind: string, index: number): string {
-        return `${kind}:${index}`;
-    }
 
     private getPrefabEventData(prefabName: string): IDataMapEvent {
         const databaseMap = REDataManager.databaseMap();
@@ -165,28 +160,52 @@ export class RMMZIntegration extends REIntegration {
     }
 
     private newEntity(data: RMMZEventEntityMetadata): REGame_Entity {
-        const prefabEventData = this.getPrefabEventData(this.makePrefavNameFromKindName(data.prefabKind, data.prefabIndex));
-        console.log(prefabEventData);
+        const prefabEventData = this.getPrefabEventData(data.prefab);
         const prefabData = RMMZHelper.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
         assert(prefabData);
 
+        if (RMMZHelper.isExitPointPrefab(data)) {
+            return REEntityFactory.newExitPoint();
+        }
+
+        if (prefabData.item) {
+            const data = REData.items.find(x => x.key == prefabData.item);
+            if (data) {
+                if (data.kind == "Weapon")
+                    return REEntityFactory.newEquipment(data.id);
+                else if (data.kind == "Shield")
+                    return REEntityFactory.newEquipment(data.id);
+                else if (data.kind == "Trap")
+                    return REEntityFactory.newTrap(data.id);
+                else
+                    return REEntityFactory.newItem(data.id);
+            }
+            else
+                throw new Error("Invalid item key: " + prefabData.item);
+        }
+
+        if (prefabData.enemy) {
+            const data = REData.monsters.find(x => x.key == prefabData.enemy);
+            if (data)
+                return REEntityFactory.newMonster(data.id);
+            else
+                throw new Error("Invalid enemy key: " + prefabData.enemy);
+        }
+
+        throw new Error("Invalid prefab data key: " + prefabEventData.name);
+
+        /*
         switch (data.prefabKind) {
-            case "ExitPoint":
-                return REEntityFactory.newExitPoint();
-            case "Monster":
-                return REEntityFactory.newMonster(prefabData.enemyId ?? 0);
-            case "Weapon":
+            case "":
                 return REEntityFactory.newEquipment((prefabData.weaponId ?? 0) + REData.weaponDataIdOffset);
-            case "Shield":
+            case "":
             case "Ring":
                 return REEntityFactory.newEquipment((prefabData.armorId ?? 0) + REData.armorDataIdOffset);
-            case "Grass":
-            case "Food":
-                return REEntityFactory.newItem(prefabData.itemId ?? 0);
-            case "Trap":
-                return REEntityFactory.newTrap(prefabData.itemId ?? 0);
+            case 
+                
             default:
                 throw new Error("Invalid entity name: " + data.prefabKind);
         }
+        */
     }
 }

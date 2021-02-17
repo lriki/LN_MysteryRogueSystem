@@ -301,8 +301,10 @@ export class REDataManager
                 nap: $dataStates.findIndex(x => x && x.meta && x.meta["RE.BasicState"] == "Nap"),
                 debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
             };
+        }
 
-            
+        // Import Abilities
+        {
             REData.abilities = $dataStates
                 .filter(state => !state || (state.meta && state.meta["RE-Kind"] == "Ability"))
                 .map((state, index) => {
@@ -310,12 +312,14 @@ export class REDataManager
                         const ability: DAbility = {
                             id: index,
                             key: state.meta["RE-Key"],
-                            reactions: {},
+                            reactions: [],
                         };
                         Object.keys(state.meta).forEach(key => {
                             if (key.startsWith("RE-Reaction.")) {
-                                ability.reactions[key.substr(12)] = state.meta[key];
                                 // TODO: 複数指定の時は ; で分割したい
+                                ability.reactions.push({
+                                    command: key.substr(12),
+                                    script: state.meta[key]});
                             }
                         });
                         return ability;
@@ -324,7 +328,6 @@ export class REDataManager
                         return DAbility_Default();
                     }
                 });
-            console.log("REData.abilities", REData.abilities);
         }
         
         // Import Classes
@@ -380,6 +383,10 @@ export class REDataManager
                 item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
                 item.effect.specialEffects = x.effects ?? [];
                 item.scope = x.scope ?? DEffectScope.None;
+                if (x.meta) {
+                    item.key = x.meta["RE-Key"];
+                    item.kind = x.meta["RE-Kind"];
+                }
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
@@ -391,6 +398,10 @@ export class REDataManager
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
+                if (x.meta) {
+                    item.key = x.meta["RE-Key"];
+                    item.kind = x.meta["RE-Kind"];
+                }
             }
             else {
                 REData.addItem("null");
@@ -405,6 +416,10 @@ export class REDataManager
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
+                if (x.meta) {
+                    item.key = x.meta["RE-Key"];
+                    item.kind = x.meta["RE-Kind"];
+                }
             }
             else {
                 REData.addItem("null");
@@ -433,6 +448,7 @@ export class REDataManager
                     monster.idealParams[RESystem.parameters.luk] = x.params[7];
                 }
                 monster.traits = x.traits ?? [];
+                monster.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
             }
         });
 

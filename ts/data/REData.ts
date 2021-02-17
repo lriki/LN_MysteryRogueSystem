@@ -179,7 +179,7 @@ export class REData
         this.actors = [];
         this.addActor("null");
 
-        this.monsters = [{ id: 0, name: 'null', exp: 0, idealParams:[], traits: [] }];
+        this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
         this.lands = [{ id: 0, rmmzMapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, exitEMMZMapId:0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
@@ -251,6 +251,7 @@ export class REData
         const newId = this.monsters.length;
         this.monsters.push({
             id: newId,
+            key: "",
             name: name,
             exp: 0,
             idealParams: [],
@@ -342,7 +343,7 @@ export class REData
     static addItem(name: string): number {
         const newId = this.items.length;
         this.items.push({
-            ...DItem_Default,
+            ...DItem_Default(),
             id: newId,
             name: name,
             effect: {

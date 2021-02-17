@@ -16,6 +16,8 @@ export interface RE_Data_Monster
     /** ID (0 is Invalid). */
     id: DEnemyId;
 
+    key: string;
+
     /** Name. */
     name: string;
 
