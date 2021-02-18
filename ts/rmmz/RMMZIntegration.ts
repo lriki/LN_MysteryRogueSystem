@@ -13,6 +13,7 @@ import { REDialogContext } from "../system/REDialog";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { REIntegration } from "../system/REIntegration";
 import { REVisual } from "../visual/REVisual";
+import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void {
@@ -171,15 +172,18 @@ export class RMMZIntegration extends REIntegration {
         if (prefabData.item) {
             const data = REData.items.find(x => x.entity.key == prefabData.item);
             if (data) {
-                console.log("data", data);
+                let entity;
                 if (data.entity.kind == "Weapon")
-                    return REEntityFactory.newEquipment(data.id);
+                    entity = REEntityFactory.newEquipment(data.id);
                 else if (data.entity.kind == "Shield")
-                    return REEntityFactory.newEquipment(data.id);
+                    entity = REEntityFactory.newEquipment(data.id);
                 else if (data.entity.kind == "Trap")
-                    return REEntityFactory.newTrap(data.id);
+                    entity = REEntityFactory.newTrap(data.id);
                 else
-                    return REEntityFactory.newItem(data.id);
+                    entity = REEntityFactory.newItem(data.id);
+                
+                SBehaviorFactory.attachBehaviors(entity, data.entity.behaviors);
+                return entity;
             }
             else
                 throw new Error("Invalid item key: " + prefabData.item);
