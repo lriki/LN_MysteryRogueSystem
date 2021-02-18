@@ -61,7 +61,6 @@ export class REUnitBehavior extends LBehavior {
             cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
             return REResponse.Succeeded;
         }
-
         else if (cmd.action().id == DBasics.actions.MoveToAdjacentActionId) {
             
 
@@ -186,6 +185,16 @@ export class REUnitBehavior extends LBehavior {
             
             /*
                 */
+            return REResponse.Succeeded;
+        }
+        else if (cmd.action().id == DBasics.actions.WaveActionId) {
+            context.postSequel(actor, RESystem.sequels.attack);
+
+            const reactor = cmd.reactor();
+            if (reactor) {
+                context.postReaction(DBasics.actions.WaveActionId, reactor, cmd.effectContext());
+            }
+            
             return REResponse.Succeeded;
         }
 

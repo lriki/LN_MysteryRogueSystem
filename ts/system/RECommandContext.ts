@@ -103,14 +103,12 @@ export class RECommandContext
     }
     
     /**
-     * postActionOneWay
-     * 
-     * [攻撃] など、reactor 側の状態に関係なく actor 側が実行できる Action で使用する。
+     * カスタムの RE-Command のように、プラグインとして事前定義できないコマンド実行 Action の呼び出し
      */
-    postActionOneWay(actionId: number, actor: REGame_Entity, effectContext: REEffectContext | undefined, args?: any) {
+    postActionOneWay(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, effectContext: REEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
-        const actualCommand = new RECommand(actionId, actor, undefined, effectContext, args);
+        const actualCommand = new RECommand(actionId, actor, reactor, effectContext, args);
 
         const m1 = () => {
             Log.doCommand("PreAction");
@@ -203,20 +201,6 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "Call", func: m1 });
         Log.postCommand("Call");
     }
-
-
-
-    /*
-    postActionToBlock(actionId: number, actor: REGame_Entity, block: REGame_Block, args?: any) {
-        // 送信対象検索
-        let reactor = thi;
-        if (!reactor) {
-            return;
-        }
-
-        this.postAction(actionId, actor, reactor, args);
-    }
-    */
 
     findReactorEntityInBlock(block: REGame_Block, actionId: number): REGame_Entity | undefined {
         const layers = block.layers();

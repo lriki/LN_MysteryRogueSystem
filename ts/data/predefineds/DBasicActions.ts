@@ -158,7 +158,7 @@ export interface DBasicActions
     ReadActionId: number;
 
     /** [44] 振る */
-    SwingActionId: number;
+    WaveActionId: number;
 
     /** [45] 押す */
     PushActionId: number;

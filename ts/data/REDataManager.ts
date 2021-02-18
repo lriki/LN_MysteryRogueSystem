@@ -140,7 +140,7 @@ export class REDataManager
                 { id: 1, name: 'Friends', schedulingOrder: 1 },
                 { id: 2, name: 'Enemy', schedulingOrder: 2 },
                 { id: 3, name: 'Neutral', schedulingOrder: 3 },
-            ]
+            ];
         }
 
         // Actions
@@ -170,7 +170,7 @@ export class REDataManager
             TakeActionId: REData.addAction("Take"),
             BiteActionId: REData.addAction("Bite"),
             ReadActionId: REData.addAction("Read"),
-            SwingActionId: REData.addAction("Swing"),
+            WaveActionId: REData.addAction("Wave"),
             PushActionId: REData.addAction("Push"),
             PutInActionId: REData.addAction("PickIn"),
             PickOutActionId: REData.addAction("PickOut"),

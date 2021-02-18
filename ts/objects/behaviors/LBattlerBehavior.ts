@@ -13,6 +13,7 @@ import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
 import { DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
 import { RE_Data_Actor } from "ts/data/DActor";
+import { DActionId } from "ts/data/DAction";
 
 export class LBattlerBehavior extends LBehavior {
     
@@ -441,6 +442,12 @@ export class LActorBehavior extends LBattlerBehavior {
     idealParamBase(paramId: DParameterId): number {
         const p = this.currentClass().params[paramId];
         return p ? p[this._level] : 0;
+    }
+
+    
+    onQueryActions(actions: DActionId[]): DActionId[] {
+        actions.push(DBasics.actions.WaveActionId);
+        return actions;
     }
 
     onQueryProperty(propertyId: number): any {
