@@ -35,7 +35,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                     const effectContext = new REEffectContext(entity, skill.scope, skill.effect);
                     //effectContext.addEffector(effector);
 
-                    context.postReaction(DBasics.actions.AttackActionId, reacor, effectContext);
+                    context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                 }
             }
 

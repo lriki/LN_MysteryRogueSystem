@@ -94,7 +94,7 @@ export class RECommandContext
             const m4 = () => {
                 // onReaction はひとつ前の実行が Pass ではなくても実行する
                 Log.doCommand("Reaction");
-                return reactor._sendReaction(this, actualCommand);
+                return reactor._sendReaction(this, actor, actualCommand);
             };
             this._recodingCommandList.push({ name: "sendReaction", func: m4 });
         }
@@ -132,22 +132,27 @@ export class RECommandContext
     
     /**
      * 
+     * @param actionId 
+     * @param entity onReaction() を呼び出す entity
+     * @param actor 
+     * @param effectContext 
+     * @param args 
      */
-    postReaction(actionId: number, reactor: REGame_Entity, effectContext: REEffectContext | undefined, args?: any) {
+    postReaction(actionId: number, entity: REGame_Entity, actor: REGame_Entity, effectContext: REEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
-        const actualCommand = new RECommand(actionId, reactor, undefined, effectContext, args);
+        const actualCommand = new RECommand(actionId, entity, undefined, effectContext, args);
 
         const m1 = () => {
             Log.doCommand("PreReaction");
-            return reactor._sendPreRection(this, actualCommand);
+            return entity._sendPreRection(this, actualCommand);
         };
         this._recodingCommandList.push({ name: "sendPreAction", func: m1 });
 
         const m3 = () => {
             if (this._lastActorResponce == REResponse.Pass) {
                 Log.doCommand("Reaction");
-                return reactor._sendReaction(this, actualCommand);
+                return entity._sendReaction(this, actor, actualCommand);
             }
             else {
                 return this._lastActorResponce;

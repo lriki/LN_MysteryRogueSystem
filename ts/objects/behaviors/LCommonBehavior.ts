@@ -22,8 +22,21 @@ import { CommandArgs, LBehavior, onMoveAsProjectile, onPrePickUpReaction, onPreP
  */
 export class LCommonBehavior extends LBehavior {
     
-    blowDirection: number = 0;      // 吹き飛ばし方向   TODO: いらないかも
+    blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
+
+    public static startMoveAsProjectile(context: RECommandContext, entity: REGame_Entity, dir: number, distance: number): void {
+
+        const common = entity.findBehavior(LCommonBehavior);
+        assert(common);
+
+        // 普通のアイテムは吹き飛ばし扱いで移動開始
+        common.blowDirection = dir;
+        common.blowMoveCount = 5;
+        //entity.dir = args.sender.dir;
+        
+        context.post(entity, entity, undefined, onMoveAsProjectile);
+    }
 
     // 拾われようとしている
     [onPrePickUpReaction](args: CommandArgs, context: RECommandContext): REResponse {
@@ -38,21 +51,13 @@ export class LCommonBehavior extends LBehavior {
     
     // 投げられた
     [onThrowReaction](args: CommandArgs, context: RECommandContext): REResponse {
-        console.log("LCommonBehavior.onThrowReaction");
 
         const self = args.self;
 
         REGame.map.appearEntity(self, self.x, self.y, BlockLayerKind.Projectile);
 
-        const common = self.findBehavior(LCommonBehavior);
-        assert(common);
 
-        // 普通のアイテムは吹き飛ばし扱いで移動開始
-        common.blowDirection = args.sender.dir;
-        common.blowMoveCount = 5;
-        self.dir = args.sender.dir;
-        
-        context.post(self, self, undefined, onMoveAsProjectile);
+        LCommonBehavior.startMoveAsProjectile(context, self, args.sender.dir, 5);
 
         
         return REResponse.Pass;
@@ -98,8 +103,8 @@ export class LCommonBehavior extends LBehavior {
     }
 
     
-    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
-        return super.onReaction(entity, context, cmd);
+    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+        return super.onReaction(entity, actor, context, cmd);
     }
 }
 

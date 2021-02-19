@@ -23,7 +23,7 @@ export class LStateBehavior {
     onPreAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     
 }
 

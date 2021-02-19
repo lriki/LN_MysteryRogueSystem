@@ -144,6 +144,11 @@ export class REGame_Map
         }
     }
 
+    public isValidPosition(x: number, y: number): boolean {
+        return (0 <=  x|| x < this._width || 0 <= y || y < this._height);
+        //return (x < 0 || this._width <= x || y < 0 || this._height <= y);
+    }
+
     public roomId(x: number, y: number): LRoomId;
     public roomId(entity: REGame_Entity, _?: any): LRoomId;
     public roomId(a1: any, a2: any): LRoomId {
@@ -275,6 +280,10 @@ export class REGame_Map
      */
     moveEntity(entity: REGame_Entity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         assert(entity.floorId == this.floorId());
+
+        if (!this.isValidPosition(x, y)) {
+            return false;   // マップ外への移動
+        }
         
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(x, y);

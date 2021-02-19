@@ -16,8 +16,8 @@ export class LItemUserBehavior extends LBehavior {
     }
 
     
-    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
-        return super.onReaction(entity, context, cmd);
+    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+        return super.onReaction(entity, actor, context, cmd);
     }
 }
 

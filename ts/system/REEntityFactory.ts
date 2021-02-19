@@ -16,6 +16,7 @@ import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
+import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
 
 export class REEntityFactory {
     static newTile(kind: TileKind): REGame_Entity {
@@ -79,15 +80,12 @@ export class REEntityFactory {
         return e;
     }
 
-    /*
-    static newEntityFromName(name: string): REGame_Entity {
-        switch (name) {
-            case "ExitPoint":
-                return this.newExitPoint();
-            default:
-                throw new Error("Invalid entity name: " + name);
-        }
+    static newMagicBullet(): REGame_Entity {
+        const e = REGame.world.spawnEntity();
+        e.prefabKey = "pMagicBullet";
+        //e.addBasicBehavior(new LCommonBehavior());
+        e.addBasicBehavior(new LMagicBulletBehavior());
+        return e;
     }
-    */
 }
 

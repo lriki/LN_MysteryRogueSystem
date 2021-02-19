@@ -192,7 +192,7 @@ export class REUnitBehavior extends LBehavior {
 
             const reactor = cmd.reactor();
             if (reactor) {
-                context.postReaction(DBasics.actions.WaveActionId, reactor, cmd.effectContext());
+                context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
             }
             
             return REResponse.Succeeded;
@@ -202,7 +202,7 @@ export class REUnitBehavior extends LBehavior {
     }
 
     
-    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         if (cmd.action().id == DBasics.actions.AttackActionId) {
 
             const effectContext = cmd.effectContext();

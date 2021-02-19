@@ -522,8 +522,8 @@ export class REGame_Entity
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
-    _sendReaction(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(x => x.onReaction(this, context, cmd));
+    _sendReaction(context: RECommandContext, actor: REGame_Entity, cmd: RECommand): REResponse {
+        return this._callBehaviorIterationHelper(x => x.onReaction(this, actor, context, cmd));
     }
 
     makeSaveContents(): any {

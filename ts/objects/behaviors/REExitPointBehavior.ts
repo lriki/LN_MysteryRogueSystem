@@ -44,7 +44,7 @@ export class REExitPointBehavior extends LBehavior {
         ]);
     }
     
-    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
 
         if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
             //const event = $gameMap.event(entity.rmmzEventId);

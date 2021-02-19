@@ -74,6 +74,9 @@ export const onThrowReaction = Symbol("onThrowReaction");
 export const onMoveAsProjectile = Symbol("onMoveAsProjectile");
 export const onWalkedOnTopAction = Symbol("onWalkedOnTopAction");
 export const onWalkedOnTopReaction = Symbol("onWalkedOnTopReaction");
+export const onMoveAsMagicBullet = Symbol("onMoveAsMagicBullet");
+
+
 
 /**
  * Response
@@ -170,7 +173,7 @@ export class LBehavior {
     onPreAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
 
 
 
