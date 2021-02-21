@@ -250,6 +250,7 @@ export class REGame_Map
     }
     
     canLeaving(block: REGame_Block, entity: REGame_Entity): boolean {
+
         // TODO: 壁抜けや浮遊状態で変わる
         return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
     }

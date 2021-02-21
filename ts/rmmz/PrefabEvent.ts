@@ -167,7 +167,9 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
     });
     
     for (var i = 0, n = this._characterSprites.length; i < n; i++) {
-        if (this._characterSprites[i].isRECharacterExtinct()) {
+        const sprite = this._characterSprites[i];
+        
+        if (sprite.isRECharacterExtinct() && !sprite._character.isAnimationPlaying()) {
             this.removeREPrefabEventSprite(i--);
             n--;
         }

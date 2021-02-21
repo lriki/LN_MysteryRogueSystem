@@ -19,6 +19,8 @@ import { RE_Game_World } from "./REGame_World";
 import { SEffectResult } from "ts/system/SEffectResult";
 import { DActionId } from "ts/data/DAction";
 import { DParameterId, REData } from "ts/data/REData";
+import { LAbility } from "./abilities/LAbility";
+import { DAbilityId } from "ts/data/DAbility";
 
 enum BlockLayer
 {
@@ -178,6 +180,8 @@ export class REGame_Entity
     // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
     // とりあえず Entity に持たせて様子見。
     _states: LState[] = [];
+    
+    _abilities: LAbility[] = [];
 
     // _states を Entity に持たせているので、それに合わせてここに持たせる
     _effectResult: SEffectResult = new SEffectResult();
@@ -242,6 +246,9 @@ export class REGame_Entity
         }
     }
 
+    //--------------------------------------------------------------------------------
+    // State
+
     addState(stateId: DStateId) {
         const index = this._states.findIndex(s => s.stateId() == stateId);
         if (index >= 0) {
@@ -279,6 +286,45 @@ export class REGame_Entity
     public isStateAffected(stateId: DStateId): boolean {
         return this._states.findIndex(s => s.stateId() == stateId) >= 0;
     }
+
+    //--------------------------------------------------------------------------------
+    // LAbility
+
+    addAbility(abilityId: DAbilityId) {
+        const index = this._abilities.findIndex(s => s.abilityId() == abilityId);
+        if (index >= 0) {
+        }
+        else {
+            const state = new LAbility();
+            state.setup(abilityId, this);
+            this._abilities.push(state);
+            state.onAttached();
+            this._effectResult.pushAddedState(abilityId);
+        }
+    }
+
+    removeAbility(abilityId: DAbilityId) {
+        const index = this._abilities.findIndex(s => s.abilityId() == abilityId);
+        if (index >= 0) {
+            this._abilities[index].onDetached();
+            this._abilities.splice(index, 1);
+            this._effectResult.pushRemovedState(abilityId);
+        }
+    }
+
+    removeAllAbilities() {
+        this._abilities.forEach(s => {
+            s.onDetached();
+        });
+        this._abilities = [];
+    }
+
+    public abilities(): readonly LAbility[] {
+        return this._abilities;
+    }
+
+
+
 
     /**
      * Entity が存在している場所から除外する。
@@ -371,6 +417,9 @@ export class REGame_Entity
         return this.findAttribute(RETileAttribute) != undefined;
     }
 
+    /**
+     * Behavior から Entity を削除する場合、CommandContext.postDestroy() を使用してください。
+     */
     destroy(): void {
         assert(!this.isUnique());
         this._destroyed = true;
@@ -485,6 +534,14 @@ export class REGame_Entity
 
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
+        for (let i = this._abilities.length - 1; i >= 0; i--) {
+            for (const b of this._abilities[i].behabiors()) {
+                let r = func(b);
+                if (r != REResponse.Pass) {
+                    response = r;
+                }
+            }
+        }
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
             let r = func(this._basicBehaviors[i]);
             if (r != REResponse.Pass) {

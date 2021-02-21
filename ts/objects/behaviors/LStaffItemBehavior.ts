@@ -33,7 +33,7 @@ export class LStaffItemBehavior extends LBehavior {
     onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
         //const actor = cmd.actor()
         if (cmd.action().id == DBasics.actions.WaveActionId) {
-            const magicBullet = REEntityFactory.newMagicBullet();
+            const magicBullet = REEntityFactory.newMagicBullet(this.ownerEntity());
             REGame.map.appearEntity(magicBullet, actor.x, actor.y);
             magicBullet.dir = actor.dir;
 

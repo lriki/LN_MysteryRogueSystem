@@ -163,6 +163,9 @@ export class RECommandContext
         Log.postCommand("Reaction");
     }
 
+    // TODO: sender っていうのがすごくわかりづらい。
+    // target と sender は基本的に self で同一なのでそうして、
+    // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
     post<TSym extends symbol>(target: REGame_Entity, sender: REGame_Entity, args: any, symbol: TSym, result?: CommandResultCallback): void {
         const m1 = () => {
             const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {

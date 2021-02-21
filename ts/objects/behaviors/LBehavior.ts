@@ -90,6 +90,20 @@ export const testPickOutItem = Symbol("testPickOutItem");
  */
 export const testPutInItem = Symbol("testPutInItem");
 
+/**
+ * knockback 状態の別の Entity が衝突しようとしている
+ */
+export const onCollidePreReaction = Symbol("onCollidePreReaction");
+
+/**
+ * 自分が knockback 状態であり、何らかの別の Entity に衝突した
+ */
+export const onCollideAction = Symbol("onCollideAction");
+
+export interface CollideActionArgs {
+    dir: number;    // 飛翔中の Entity の移動方向。必ずしも Entity の向きと一致するわけではないため、Args として渡す必要がある。
+}
+
 /*
     NOTE: test** について
     指定された Command を実行できるかを確認する。

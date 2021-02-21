@@ -40,7 +40,7 @@ Sprite_Character.prototype.initMembers = function() {
     this._stateIcons = [];
     const bitmap = ImageManager.loadSystem("IconSet");
     this._stateIconSprite = new Sprite(bitmap);
-    this._stateIconSprite.visible = false;
+    this._stateIconSprite.visible = false;  // ちらつき回避
     this.addChild(this._stateIconSprite);
 }
 

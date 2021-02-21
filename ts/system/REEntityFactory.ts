@@ -55,6 +55,7 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new LItemBehavior(itemId));
+        e.addAbility(REData.abilities[1].id);  // TODO: Test
         return e;
     }
 
@@ -80,11 +81,14 @@ export class REEntityFactory {
         return e;
     }
 
-    static newMagicBullet(): REGame_Entity {
+    static newMagicBullet(ownerItem: REGame_Entity): REGame_Entity {
         const e = REGame.world.spawnEntity();
         e.prefabKey = "pMagicBullet";
         //e.addBasicBehavior(new LCommonBehavior());
-        e.addBasicBehavior(new LMagicBulletBehavior());
+
+        const b = new LMagicBulletBehavior();
+        b.setup(ownerItem);
+        e.addBasicBehavior(b);
         return e;
     }
 }

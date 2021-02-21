@@ -26,16 +26,20 @@ export class LCommonBehavior extends LBehavior {
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
 
     public static startMoveAsProjectile(context: RECommandContext, entity: REGame_Entity, dir: number, distance: number): void {
-
         const common = entity.findBehavior(LCommonBehavior);
         assert(common);
 
         // 普通のアイテムは吹き飛ばし扱いで移動開始
         common.blowDirection = dir;
-        common.blowMoveCount = 5;
+        common.blowMoveCount = distance;
         //entity.dir = args.sender.dir;
         
         context.post(entity, entity, undefined, onMoveAsProjectile);
+    }
+
+    private clearKnockback(): void {
+        this.blowDirection = 0;
+        this.blowMoveCount = 0;
     }
 
     // 拾われようとしている
@@ -69,9 +73,10 @@ export class LCommonBehavior extends LBehavior {
         
         const common = self.findBehavior(LCommonBehavior);
         assert(common);
+        assert(this.blowDirection != 0);
         
         //const args = (cmd.args() as REMoveToAdjacentArgs);
-        const offset = Helpers.dirToTileOffset(self.dir);
+        const offset = Helpers.dirToTileOffset(this.blowDirection);
 
         if (REGame.map.moveEntity(self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
@@ -80,6 +85,7 @@ export class LCommonBehavior extends LBehavior {
         
             if (common.blowMoveCount <= 0) {
                 // TODO: 落下
+                this.clearKnockback();
             }
             else {
                 context.post(self, self, undefined, onMoveAsProjectile);
@@ -87,6 +93,7 @@ export class LCommonBehavior extends LBehavior {
                 
             return REResponse.Succeeded;
         }
+        console.log("false");
 
         return REResponse.Pass;
     }
