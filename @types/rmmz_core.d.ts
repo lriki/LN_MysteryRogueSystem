@@ -360,8 +360,6 @@ export class Tilemap extends PIXI.Container {
 	public updateTransform(): void;
 	public refresh(): void;
 	
-	public setRendererId(id: number): void;
-	
 	_addSpot(startX: number, startY: number, x: number, y: number): void;
 	_readMapData(x: number, y: number, d: number): number;
 	_addTile(layer: Tilemap.Layer, tileId: number, dx: number, dy: number): void;
@@ -372,13 +370,30 @@ export class Tilemap extends PIXI.Container {
 	static isTileA4(tileId: number): boolean;
 }
 
+export namespace Tilemap {
+	class Renderer extends PIXI.ObjectRenderer {
+		//public constructor(...argArray: any[]);
+		public constructor(renderer: any);
+		
+	}
+}
 
 export namespace Tilemap {
 
 	class Layer extends PIXI.Container {
 		public addRect(setNumber: number, sx: number, sy: number, dx: number, dy: number, w: number, h: number): void;
+		public render(renderer: any): void;
+		public _updateIndexBuffer(): void;
+		public _updateVertexBuffer(): void;
+		
+		public _needsTexturesUpdate: boolean;
+		public _needsVertexUpdate: boolean;
+		public _vao: PIXI.Geometry;
+		public _elements: number[][];
+		public _state: any;
 	}
 }
+
 
 
 export interface Array<T> {

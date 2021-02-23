@@ -261,6 +261,62 @@ Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     else {
         _Tilemap__addAutotile.call(this, layer, tileId, dx, dy);
     }
-
-
 }
+
+//--------------------------------------------------------------------------------
+// 複数 Tilemap 対策
+
+declare global {
+    interface Tilemap {
+        setRendererId(id: number): void;
+
+        _lowerLayer: Tilemap.Layer;
+    }
+
+    namespace Tilemap {
+        interface Layer {
+            _rendererId: number;
+            _images: Bitmap[];
+        }
+    }
+}
+
+// RMMZ は複数の Tilemap を描画すると、Tileset を共有してしまう。
+// 通常のマップとは別に、ミニマップ描画用の Tilemap.Renderer を使うことで回避する。
+PIXI.Renderer.registerPlugin("rpgtilemap2", Tilemap.Renderer as any);
+
+Tilemap.prototype.setRendererId = function(id) {
+    this._lowerLayer._rendererId = id;
+};
+
+Tilemap.Layer.prototype.render = function(renderer: any) {
+    const gl = renderer.gl;
+    const tilemapRenderer = this._rendererId == 2 ? renderer.plugins.rpgtilemap : renderer.plugins.rpgtilemap2;
+    const shader = tilemapRenderer.getShader();
+    const matrix = shader.uniforms.uProjectionMatrix;
+    
+    renderer.batch.setObjectRenderer(tilemapRenderer);
+    renderer.projection.projectionMatrix.copyTo(matrix);
+    matrix.append(this.worldTransform);
+    renderer.shader.bind(shader);
+
+    if (this._needsTexturesUpdate) {
+        tilemapRenderer.updateTextures(renderer, this._images);
+        this._needsTexturesUpdate = false;
+    }
+    tilemapRenderer.bindTextures(renderer);
+    renderer.geometry.bind(this._vao, shader);
+    this._updateIndexBuffer();
+    if (this._needsVertexUpdate) {
+        this._updateVertexBuffer();
+        this._needsVertexUpdate = false;
+    }
+    renderer.geometry.updateBuffers();
+
+    const numElements = this._elements.length;
+    if (numElements > 0) {
+        renderer.state.set(this._state);
+        renderer.geometry.draw(gl.TRIANGLES, numElements * 6, 0);
+    }
+}
+

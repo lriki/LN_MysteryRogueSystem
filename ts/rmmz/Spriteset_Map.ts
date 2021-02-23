@@ -35,7 +35,7 @@ Spriteset_Map.prototype.createLowerLayer = function() {
     this._minimapTilemap.verticalWrap = $gameMap.isLoopVertical();
     this._baseSprite.addChild(this._minimapTilemap);
 
-    this._minimapTilemap.setRendererId(1);
+    this._minimapTilemap.setRendererId(2);
     
     const bitmaps = [];
     const tilesetNames = ["World_A1","RE-Minimap_A2","","","RE-Minimap_A5","World_B","World_C","",""];
