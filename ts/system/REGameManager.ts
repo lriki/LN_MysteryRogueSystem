@@ -24,6 +24,7 @@ import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecut
 import { LEventServer } from "ts/objects/LEventServer";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { SMinimapData } from "./SMinimapData";
+import { LFloorDirector } from "ts/objects/LFloorDirector";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -60,6 +61,7 @@ export class REGameManager
         REGame.identifyer = new LIdentifyer();
         REGame.eventServer = new LEventServer();
         REGame.minimapData = new SMinimapData();
+        REGame.floorDirector = new LFloorDirector();
 
         // Create unique units
         REData.actors.forEach(x => {

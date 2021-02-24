@@ -11,13 +11,13 @@ export class FMapBuilder {
     public constructor() {
         this._passes = [
             new FMapBuildPass_MakeRoomId(),
+            new FMapBuildPass_ResolveRoomShapes(),
         ];
     }
 
     public build(data: FMap, map: REGame_Map): void {
         // Apply passes
         this._passes.forEach(pass => pass.execute(data));
-
 
         const width = data.width();
         const height = data.height();
@@ -48,6 +48,7 @@ export abstract class FMapBuildPass {
 }
 
 // Room としてマークされているが、RoomId 未割り当ての Block を解決する。
+// 主に固定マップ用。
 export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
     public execute(map: FMap): void {
         while (true) {
@@ -104,3 +105,13 @@ export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
     }
 }
 
+
+// roomId が割り当てられている block を元に、Room の矩形を確定する。
+export class FMapBuildPass_ResolveRoomShapes extends FMapBuildPass {
+    public execute(map: FMap): void {
+        for (const block of map.blocks()) {
+            const room = map.rooms()[block.roomId()];
+            room.tryInfrateRect(block.x(), block.y());
+        }
+    }
+}

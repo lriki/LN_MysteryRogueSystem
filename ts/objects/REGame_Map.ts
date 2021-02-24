@@ -15,6 +15,7 @@ import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
+import { LRoom } from "./LRoom";
 
 
 
@@ -40,6 +41,7 @@ export class REGame_Map
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
     private _entityIds: LEntityId[] = [];      // マップ内に登場している Entity
+    private _rooms: LRoom[] = [];
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 

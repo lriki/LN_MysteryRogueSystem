@@ -269,7 +269,6 @@ Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
 declare global {
     interface Tilemap {
         setRendererId(id: number): void;
-
         _lowerLayer: Tilemap.Layer;
     }
 

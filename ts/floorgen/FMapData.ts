@@ -63,6 +63,10 @@ export class FMapBlock {
 
 export class FRoom {
     private _id: FRoomId;
+    private _x1: number = -1;   // 有効範囲内左上座標
+    private _y1: number = -1;   // 有効範囲内左上座標
+    private _x2: number = -1;   // 有効範囲内右下座標
+    private _y2: number = -1;   // 有効範囲内右下座標
 
     public constructor(id: FRoomId) {
         this._id = id;
@@ -70,6 +74,21 @@ export class FRoom {
 
     public id(): FRoomId {
         return this._id;
+    }
+
+    public tryInfrateRect(x: number, y: number): void {
+        if (this._x1 < 0) {
+            this._x1 = x;
+            this._y1 = y;
+            this._x2 = x;
+            this._y2 = y;
+        }
+        else {
+            this._x1 = Math.min(this._x1, x);
+            this._y1 = Math.min(this._y1, y);
+            this._x2 = Math.max(this._x2, x);
+            this._y2 = Math.max(this._y2, y);
+        }
     }
 }
 
@@ -128,6 +147,10 @@ export class FMap {
 
     public blocks(): readonly FMapBlock[] {
         return this._blocks;
+    }
+
+    public rooms(): readonly FRoom[] {
+        return this._rooms;
     }
 
     public newRoom(): FRoom {

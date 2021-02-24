@@ -16,6 +16,7 @@ import { RESequelSet } from "./REGame_Sequel";
 import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "./LEventServer";
 import { SMinimapData } from "ts/system/SMinimapData";
+import { LFloorDirector } from "./LFloorDirector";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -41,6 +42,7 @@ export class REGame
     static identifyer: LIdentifyer;
     static eventServer: LEventServer;
     static minimapData: SMinimapData;
+    static floorDirector: LFloorDirector;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;
