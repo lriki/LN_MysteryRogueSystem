@@ -6,6 +6,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
+import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../REGame_Block";
 import { REGame_Entity } from "../REGame_Entity";
@@ -78,7 +79,7 @@ export class LCommonBehavior extends LBehavior {
         //const args = (cmd.args() as REMoveToAdjacentArgs);
         const offset = Helpers.dirToTileOffset(this.blowDirection);
 
-        if (REGame.map.moveEntity(self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
+        if (SMomementCommon.moveEntity(context, self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;

@@ -136,11 +136,15 @@ export class REDataManager
         // Factions
         {
             REData.factions = [
-                { id: 0, name: '', schedulingOrder: 9999 },
-                { id: 1, name: 'Friends', schedulingOrder: 1 },
-                { id: 2, name: 'Enemy', schedulingOrder: 2 },
-                { id: 3, name: 'Neutral', schedulingOrder: 3 },
+                { id: 0, name: '', schedulingOrder: 9999, hostileBits: 0 },
+                { id: 1, name: 'Friends', schedulingOrder: 1, hostileBits: 0b0100 },
+                { id: 2, name: 'Enemy', schedulingOrder: 2, hostileBits: 0b0010 },
+                { id: 3, name: 'Neutral', schedulingOrder: 3, hostileBits: 0 },
             ];
+            DBasics.factions = {
+                player: 1,
+                enemy: 2,
+            };
         }
 
         // Actions
@@ -206,6 +210,16 @@ export class REDataManager
         
         RESystem.skills = {
             normalAttack:1,
+        };
+
+        REData.monsterHouses = [
+            { id: 0, name: "null" },
+            { id: 1, name: "Fixed" },
+            { id: 2, name: "Normal" },
+        ];
+        DBasics.monsterHouses = {
+            fixed: 1,
+            normal: 2,
         };
     }
 

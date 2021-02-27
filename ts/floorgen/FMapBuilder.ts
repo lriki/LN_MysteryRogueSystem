@@ -12,6 +12,7 @@ export class FMapBuilder {
         this._passes = [
             new FMapBuildPass_MakeRoomId(),
             new FMapBuildPass_ResolveRoomShapes(),
+            new FMapBuildPass_MarkMonsterHouse(),
         ];
     }
 
@@ -19,27 +20,6 @@ export class FMapBuilder {
         // Apply passes
         this._passes.forEach(pass => pass.execute(data));
 
-        const width = data.width();
-        const height = data.height();
-
-        map.setupEmptyMap(width, height);
-
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-                const dataBlock = data.block(x, y);
-                const mapBlock = map.block(x, y);
-
-                const kind = dataBlock.tileKind();
-                
-                const tile = mapBlock.tile();
-                const attr = tile.findAttribute(RETileAttribute);
-                assert(attr);
-                attr.setTileKind(kind);
-
-                mapBlock._roomId = dataBlock.roomId();
-                mapBlock._blockComponent = dataBlock.component();
-            }
-        }
     }
 }
 
@@ -115,3 +95,20 @@ export class FMapBuildPass_ResolveRoomShapes extends FMapBuildPass {
         }
     }
 }
+
+// Room の形状や、固定マップから設定された Block 情報などをもとにモンスターハウスとなる Room をマークする。
+export class FMapBuildPass_MarkMonsterHouse extends FMapBuildPass {
+    public execute(map: FMap): void {
+        // Room 内の Block に固定マップから指定された MonsterHouse フラグが設定されている場合、
+        // その Room を MonsterHouse とする。
+        for (const room of map.rooms()) {
+            room.forEachBlocks((block) => {
+                const mh = block.monsterHouseTypeId();
+                if (mh > 0 && room.monsterHouseTypeId() == 0) {
+                    room.setMonsterHouseTypeId(mh);
+                }
+            });
+        }
+    }
+}
+

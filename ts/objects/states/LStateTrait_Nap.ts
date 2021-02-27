@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEventId, RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
+import { Helpers } from "ts/system/Helpers";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REGameManager } from "ts/system/REGameManager";
@@ -30,7 +31,7 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
             const roomId = block._roomId;
 
             const e = (args as RoomEventArgs);
-            if (REGameManager.isHostile(e.entity, entity) && e.newRoomId == roomId) {
+            if (Helpers.isHostile(e.entity, entity) && e.newRoomId == roomId) {
                 this._hostileEnterd = true;
             }
         }

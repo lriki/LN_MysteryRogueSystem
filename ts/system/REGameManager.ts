@@ -109,23 +109,5 @@ export class REGameManager
             Log.d("PerformFloorTransfer");
         }
     }
-
-    // 敵対勢力化を確認
-    static isHostile(entity1: REGame_Entity, entity2: REGame_Entity): boolean {
-        const attr1 = entity1.findAttribute(LUnitAttribute);
-        const attr2 = entity2.findAttribute(LUnitAttribute);
-        if (attr1 && attr2) {
-            return this._isHostile(attr1.factionId(), attr2.factionId());
-        }
-        else {
-            // 判定不可能。中立扱い。
-            return false;
-        }
-    }
-
-
-    static _isHostile(f1: DFactionId, f2: DFactionId): boolean {
-        return f1 != f2;    // TODO: 仲間がいない・・
-    }
 }
 

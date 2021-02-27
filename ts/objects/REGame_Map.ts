@@ -15,7 +15,11 @@ import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
-import { LRoom } from "./LRoom";
+import { LRoom, MonsterHouseState } from "./LRoom";
+import { RETileAttribute } from "./attributes/RETileAttribute";
+import { LUnitAttribute } from "./attributes/LUnitAttribute";
+import { EmitFlags } from "typescript";
+import { LStructure } from "./structures/LStructure";
 
 
 
@@ -42,6 +46,7 @@ export class REGame_Map
     private _blocks: REGame_Block[] = [];
     private _entityIds: LEntityId[] = [];      // マップ内に登場している Entity
     private _rooms: LRoom[] = [];
+    private _structures: LStructure[] = [];
 
     private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
@@ -51,11 +56,7 @@ export class REGame_Map
     setup(floorId: number) {
         assert(this._entityIds.length == 0);
         this._floorId = floorId;
-        const data = new FMap(floorId);
-        REGame.integration.onLoadFixedMapData(data);
-        const builder = new FMapBuilder();
-        builder.build(data, this);
-        REGame.integration.onLoadFixedMapEvents();
+        this.build();
     }
 
     setupEmptyMap(width: number, height: number) {
@@ -81,6 +82,44 @@ export class REGame_Map
         }
     }
 
+    private build(): void {
+        const data = new FMap(this._floorId);
+        REGame.integration.onLoadFixedMapData(data);
+        const builder = new FMapBuilder();
+        builder.build(data, this);
+
+        {
+            const width = data.width();
+            const height = data.height();
+            this.setupEmptyMap(width, height);
+
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const dataBlock = data.block(x, y);
+                    const mapBlock = this.block(x, y);
+
+                    const kind = dataBlock.tileKind();
+                    
+                    const tile = mapBlock.tile();
+                    const attr = tile.findAttribute(RETileAttribute);
+                    assert(attr);
+                    attr.setTileKind(kind);
+
+                    mapBlock._roomId = dataBlock.roomId();
+                    mapBlock._blockComponent = dataBlock.component();
+                }
+            }
+
+            this._rooms = data.rooms().map(x => {
+                const r = new LRoom();
+                r.setup(x);
+                return r;
+            });
+        }
+
+        REGame.integration.onLoadFixedMapEvents();
+    }
+
     releaseMap() {
         this._removeAllEntities();
         this._width = 0;
@@ -94,6 +133,10 @@ export class REGame_Map
 
     floorId(): number {
         return this._floorId;
+    }
+
+    public rooms(): LRoom[] {
+        return this._rooms;
     }
 
     land(): DLand {
@@ -281,6 +324,7 @@ export class REGame_Map
      * 
      * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
      */
+    // deprecated
     moveEntity(entity: REGame_Entity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         assert(entity.floorId == this.floorId());
 
@@ -332,8 +376,18 @@ export class REGame_Map
                 newRoomId: newBlock._roomId,
                 oldRoomId: oldBlock._roomId,
             };
+
             REGame.eventServer.send(DBasics.events.roomEnterd, args);
             REGame.eventServer.send(DBasics.events.roomLeaved, args);
+        }
+    }
+
+    public updateLocatedResults(): void {
+        for (const entity of this.entities()) {
+            if (entity._located) {
+
+                entity._located = false;
+            }
         }
     }
 }

@@ -40,9 +40,9 @@ export class REGame_DecisionBehavior extends LBehavior {
                 // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
                 const roomId = REGame.map.roomId(entity);
                 const target = REGame.map.entitiesInRoom(roomId)
-                    .filter(e => REGameManager.isHostile(entity, e))
+                    .filter(e => Helpers.isHostile(entity, e))
                     .sort((a, b) => Helpers.getDistance(entity, a) - Helpers.getDistance(entity, b))
-                    .find(e => REGameManager.isHostile(entity, e));
+                    .find(e => Helpers.isHostile(entity, e));
                 if (target) {
                     this._targetPositionX = target.x;
                     this._targetPositionY = target.y;

@@ -257,6 +257,17 @@ export class RECommandContext
         Log.postCommand("Animation");
     }
 
+    postWaitSequel() {
+        const m1 = () => {
+            Log.doCommand("WaitSequel");
+            this._sequelContext.flushSequelSet();
+            this._visualAnimationWaiting = true;
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "WaitSequel", func: m1 });
+        Log.postCommand("WaitSequel");
+    }
+
     postDestroy(entity: REGame_Entity) {
         const m1 = () => {
             Log.doCommand("Destroy");

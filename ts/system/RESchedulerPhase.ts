@@ -1,6 +1,9 @@
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { DecisionPhase, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/behaviors/LBehavior";
+import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
+import { Helpers } from "./Helpers";
 import { REResponse } from "./RECommand";
 import { REScheduler, UnitInfo } from "./REScheduler";
 import { RESystem } from "./RESystem";
@@ -63,6 +66,9 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 
 // 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
 export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends RESchedulerPhase {
+    onStart(scheduler: REScheduler): void {
+    }
+
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
         if (unit.entity) {
             unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);

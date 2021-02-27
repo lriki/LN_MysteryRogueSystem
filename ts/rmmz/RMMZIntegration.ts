@@ -7,7 +7,7 @@ import { REGame } from "../objects/REGame";
 import { TileKind } from "../objects/REGame_Block";
 import { REGame_Entity } from "../objects/REGame_Entity";
 import { RESequelSet } from "../objects/REGame_Sequel";
-import { paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "../PluginParameters";
+import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "../PluginParameters";
 import { RMMZEventEntityMetadata, RMMZHelper } from "./RMMZHelper";
 import { REDialogContext } from "../system/REDialog";
 import { REEntityFactory } from "../system/REEntityFactory";
@@ -43,6 +43,10 @@ export class RMMZIntegration extends REIntegration {
                 const regionId = RMMZHelper.getRegionId(x, y);
                 if (regionId == paramFixedMapRoomRegionId) {
                     block.setComponent(FBlockComponent.Room);
+                }
+                else if (regionId == paramFixedMapMonsterHouseRoomRegionId) {
+                    block.setComponent(FBlockComponent.Room);
+                    block.setMonsterHouseTypeId(DBasics.monsterHouses.fixed);
                 }
                 else if (regionId == paramFixedMapPassagewayRegionId) {
                     block.setComponent(FBlockComponent.Passageway);

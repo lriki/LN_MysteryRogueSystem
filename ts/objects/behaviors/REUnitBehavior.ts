@@ -15,6 +15,7 @@ import { LCommonBehavior } from "./LCommonBehavior";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { DActionId } from "ts/data/DAction";
+import { SMomementCommon } from "ts/system/SMomementCommon";
 
 /**
  * 
@@ -68,7 +69,7 @@ export class REUnitBehavior extends LBehavior {
             const offset = Helpers.dirToTileOffset(args.direction);
 
             const layer = actor.queryProperty(RESystem.properties.homeLayer);
-            if (REGame.map.moveEntity(actor, actor.x + offset.x, actor.y + offset.y, layer)) {
+            if (SMomementCommon.moveEntity(context, actor, actor.x + offset.x, actor.y + offset.y, layer)) {
                 context.postSequel(actor, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする

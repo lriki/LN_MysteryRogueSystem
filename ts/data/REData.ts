@@ -18,6 +18,7 @@ import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
 import { DActor_Default, RE_Data_Actor } from "./DActor";
 import { DAbility, DAbilityId } from "./DAbility";
+import { DMonsterHouse } from "./DMonsterHouse";
 
 export type DParameterId = number;
 
@@ -116,6 +117,8 @@ export interface REData_Faction
 
     /** 行動順 */
     schedulingOrder: number;
+
+    hostileBits: number;
 }
 
 
@@ -159,6 +162,7 @@ export class REData
     static stateTraits: DStateTrait[] = [];
     static states: DState[] = [];
     static abilities: DAbility[] = [];
+    static monsterHouses: DMonsterHouse[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -182,7 +186,7 @@ export class REData
         this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
         this.lands = [{ id: 0, rmmzMapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, exitEMMZMapId:0, floorIds: [] }];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
-        this.factions = [{ id: 0, name: 'null', schedulingOrder: 0 }];
+        this.factions = [];
         this.actions = [{id: 0, displayName: 'null'}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];
         this.parameters = [];

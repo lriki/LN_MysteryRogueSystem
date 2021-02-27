@@ -21,6 +21,7 @@ import { DActionId } from "ts/data/DAction";
 import { DParameterId, REData } from "ts/data/REData";
 import { LAbility } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
+import { FlowFlags } from "typescript";
 
 enum BlockLayer
 {
@@ -187,6 +188,8 @@ export class REGame_Entity
     _effectResult: SEffectResult = new SEffectResult();
 
     _actionConsumed: boolean = false;
+
+    _located: boolean = false;
 
     _finalize(): void {
         this._basicBehaviors.forEach(b => {

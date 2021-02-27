@@ -9,6 +9,7 @@ import { eqaulsEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { TileKind } from "ts/objects/REGame_Block";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
+import { Helpers } from "./Helpers";
 import { REGameManager } from "./REGameManager";
 
 enum SubTile {
@@ -124,7 +125,7 @@ export class SMinimapData {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
             }
             else if (entity.hasBehavior(LBattlerBehavior)) {
-                if (REGameManager.isHostile(player, entity)) {
+                if (Helpers.isHostile(player, entity)) {
                     // 敵対勢力
                     this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
                 }

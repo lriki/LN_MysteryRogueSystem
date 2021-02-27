@@ -1,4 +1,5 @@
 import { DFloorId } from "ts/data/DLand";
+import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { TileKind } from "ts/objects/REGame_Block";
 
 export type FRoomId = number;   // 0 is invalid
@@ -14,7 +15,8 @@ export class FMapBlock {
     private _y;
     private _kind: TileKind;
     private _blockComponent: FBlockComponent;
-    private _roomId: FRoomId; 
+    private _roomId: FRoomId;
+    private _monsterHouseTypeId: DMonsterHouseId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
 
     public constructor(x: number, y: number) {
         this._x = x;
@@ -22,6 +24,7 @@ export class FMapBlock {
         this._kind = TileKind.Floor;
         this._blockComponent = FBlockComponent.None;
         this._roomId = 0;
+        this._monsterHouseTypeId = 0;
     }
 
     public x(): number {
@@ -48,6 +51,14 @@ export class FMapBlock {
         return this._blockComponent;
     }
 
+    public setMonsterHouseTypeId(value: DMonsterHouseId): void {
+        this._monsterHouseTypeId = value;
+    }
+
+    public monsterHouseTypeId(): DMonsterHouseId {
+        return this._monsterHouseTypeId;
+    }
+
     public setRoomId(value: FRoomId): void {
         this._roomId = value;
     }
@@ -62,13 +73,16 @@ export class FMapBlock {
 }
 
 export class FRoom {
+    private _map: FMap;
     private _id: FRoomId;
     private _x1: number = -1;   // 有効範囲内左上座標
     private _y1: number = -1;   // 有効範囲内左上座標
     private _x2: number = -1;   // 有効範囲内右下座標
     private _y2: number = -1;   // 有効範囲内右下座標
+    private _monsterHouseTypeId: DMonsterHouseId = 0;
 
-    public constructor(id: FRoomId) {
+    public constructor(map: FMap, id: FRoomId) {
+        this._map = map;
         this._id = id;
     }
 
@@ -76,7 +90,33 @@ export class FRoom {
         return this._id;
     }
 
+    public x1(): number {
+        return this._x1;
+    }
+
+    public y1(): number {
+        return this._y1;
+    }
+
+    public x2(): number {
+        return this._x2;
+    }
+
+    public y2(): number {
+        return this._y2;
+    }
+
+    public setMonsterHouseTypeId(value: DMonsterHouseId): void {
+        this._monsterHouseTypeId = value;
+    }
+
+    public monsterHouseTypeId(): DMonsterHouseId {
+        return this._monsterHouseTypeId;
+    }
+
     public tryInfrateRect(x: number, y: number): void {
+        if (this._id == 0) return;
+
         if (this._x1 < 0) {
             this._x1 = x;
             this._y1 = y;
@@ -88,6 +128,16 @@ export class FRoom {
             this._y1 = Math.min(this._y1, y);
             this._x2 = Math.max(this._x2, x);
             this._y2 = Math.max(this._y2, y);
+        }
+    }
+
+    public forEachBlocks(func: (block: FMapBlock) => void): void {
+        if (this._id == 0) return;
+        
+        for (let y = this._y1; y <= this._y2; y++) {
+            for (let x = this._x1; x <= this._x2; x++) {
+                func(this._map.block(x, y));
+            }
         }
     }
 }
@@ -117,7 +167,7 @@ export class FMap {
             const y = Math.trunc(i / this._width);
             this._blocks[i] = new FMapBlock(x, y);
         }
-        this._rooms = [new FRoom(0)];    // dummy
+        this._rooms = [new FRoom(this, 0)];    // dummy
     }
 
     public floorId(): DFloorId {
@@ -154,7 +204,7 @@ export class FMap {
     }
 
     public newRoom(): FRoom {
-        const room = new FRoom(this._rooms.length);
+        const room = new FRoom(this, this._rooms.length);
         this._rooms.push(room);
         return room;
     }
