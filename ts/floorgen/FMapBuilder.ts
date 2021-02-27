@@ -3,6 +3,7 @@ import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { TileKind } from "ts/objects/REGame_Block";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { FBlockComponent, FMap, FMapBlock } from "./FMapData";
+import { FMonsterHouseStructure } from "./FStructure";
 
 
 export class FMapBuilder {
@@ -100,12 +101,18 @@ export class FMapBuildPass_ResolveRoomShapes extends FMapBuildPass {
 export class FMapBuildPass_MarkMonsterHouse extends FMapBuildPass {
     public execute(map: FMap): void {
         // Room 内の Block に固定マップから指定された MonsterHouse フラグが設定されている場合、
-        // その Room を MonsterHouse とする。
+        // その Room をもとにして MonsterHouse を作る。
         for (const room of map.rooms()) {
             room.forEachBlocks((block) => {
                 const mh = block.monsterHouseTypeId();
-                if (mh > 0 && room.monsterHouseTypeId() == 0) {
-                    room.setMonsterHouseTypeId(mh);
+                if (mh > 0) {
+                    const structure = map.structures().find(s => s instanceof FMonsterHouseStructure && s.monsterHouseTypeId() == mh);
+                    if (structure) {
+                        // この部屋は MonsterHouse としてマーク済み
+                    }
+                    else {
+                        map.addStructure(new FMonsterHouseStructure(room.id(), mh));
+                    }
                 }
             });
         }

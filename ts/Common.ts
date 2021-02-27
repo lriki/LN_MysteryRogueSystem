@@ -25,7 +25,7 @@ export function tr2(text: string): string {
 
 export class Log
 {
-    static _enabled: boolean = true;
+    static _enabled: boolean = false;
 
     static d(text: string) {
         if (this._enabled) {

@@ -1,6 +1,7 @@
 import { DFloorId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { TileKind } from "ts/objects/REGame_Block";
+import { FStructure } from "./FStructure";
 
 export type FRoomId = number;   // 0 is invalid
 
@@ -79,7 +80,6 @@ export class FRoom {
     private _y1: number = -1;   // 有効範囲内左上座標
     private _x2: number = -1;   // 有効範囲内右下座標
     private _y2: number = -1;   // 有効範囲内右下座標
-    private _monsterHouseTypeId: DMonsterHouseId = 0;
 
     public constructor(map: FMap, id: FRoomId) {
         this._map = map;
@@ -104,14 +104,6 @@ export class FRoom {
 
     public y2(): number {
         return this._y2;
-    }
-
-    public setMonsterHouseTypeId(value: DMonsterHouseId): void {
-        this._monsterHouseTypeId = value;
-    }
-
-    public monsterHouseTypeId(): DMonsterHouseId {
-        return this._monsterHouseTypeId;
     }
 
     public tryInfrateRect(x: number, y: number): void {
@@ -149,6 +141,7 @@ export class FMap {
     private _height: number;
     private _blocks: FMapBlock[];
     private _rooms: FRoom[];
+    private _structures: FStructure[];
 
     public constructor(floorId: DFloorId) {
         this._floorId = floorId;
@@ -156,6 +149,7 @@ export class FMap {
         this._height = 0;
         this._blocks = [];
         this._rooms = [];
+        this._structures = [];
     }
 
     public reset(width: number, height: number) {
@@ -207,6 +201,14 @@ export class FMap {
         const room = new FRoom(this, this._rooms.length);
         this._rooms.push(room);
         return room;
+    }
+
+    public structures(): readonly FStructure[] {
+        return this._structures;
+    }
+
+    public addStructure(structure: FStructure): void {
+        this._structures.push(structure);
     }
 
     public isValid(x: number, y: number): boolean {

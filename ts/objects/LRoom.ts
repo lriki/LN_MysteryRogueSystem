@@ -18,9 +18,6 @@ export class LRoom {
     private _y1: number = -1;   // 有効範囲内左上座標
     private _x2: number = -1;   // 有効範囲内右下座標
     private _y2: number = -1;   // 有効範囲内右下座標
-    private _monsterHouseTypeId: DMonsterHouseId = 0;
-    private _monsterHouseFactionId: DFactionId = 0;
-    private _monsterHouseState: MonsterHouseState = MonsterHouseState.Sleeping;
 
     public setup(room: FRoom): void {
         this._roomId = room.id();
@@ -28,35 +25,10 @@ export class LRoom {
         this._y1 = room.y1();
         this._x2 = room.x2();
         this._y2 = room.y2();
-        this._monsterHouseTypeId = room.monsterHouseTypeId();
-        this._monsterHouseFactionId = DBasics.factions.enemy;
-        this._monsterHouseState = MonsterHouseState.Sleeping;
-    }
-
-    public monsterHouseTypeId(): DMonsterHouseId {
-        return this._monsterHouseTypeId;
-    }
-
-    public monsterHouseFactionId(): DFactionId {
-        return this._monsterHouseFactionId;
-    }
-
-    public monsterHouseState(): MonsterHouseState {
-        return this._monsterHouseState;
     }
 
     public contains(x: number, y: number): boolean {
         return this._x1 <= x && x <= this._x2 && this._y1 <= y && y <= this._y2;
-    }
-
-    public startMonsterHouse(context: RECommandContext): void {
-        assert(this._monsterHouseTypeId > 0);
-        assert(this._monsterHouseState == MonsterHouseState.Sleeping);
-
-        context.postWaitSequel();
-        context.postMessage("モンスターハウスだ！");
-
-        this._monsterHouseState = MonsterHouseState.Activated;
     }
     
     public forEachEntities(func: (entity: REGame_Entity) => void): void {

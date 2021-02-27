@@ -45,23 +45,10 @@ export class SMomementCommon {
                 oldRoomId: oldBlock._roomId,
             };
         
-            /*
-            const newRoom = map.rooms()[newBlock._roomId];
-            if (newRoom.monsterHouseTypeId() > 0) {
-                const attr = entity.findAttribute(LUnitAttribute);
-                // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
-                if (attr &&
-                    Helpers.isHostileFactionId(newRoom.monsterHouseFactionId(), attr.factionId()) &&
-                    newRoom.monsterHouseState() == MonsterHouseState.Sleeping) {
-                    newRoom.startMonsterHouse(context);
-                }
-            }
-            */
-
-            entity._located = true;
-
             REGame.eventServer.send(DBasics.events.roomEnterd, args);
             REGame.eventServer.send(DBasics.events.roomLeaved, args);
         }
+
+        entity._located = true;
     }
 }

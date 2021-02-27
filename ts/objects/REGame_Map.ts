@@ -20,6 +20,9 @@ import { RETileAttribute } from "./attributes/RETileAttribute";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
 import { EmitFlags } from "typescript";
 import { LStructure } from "./structures/LStructure";
+import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
+import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
+import { RECommandContext } from "ts/system/RECommandContext";
 
 
 
@@ -110,10 +113,23 @@ export class REGame_Map
                 }
             }
 
+            // Create Rooms
             this._rooms = data.rooms().map(x => {
                 const r = new LRoom();
                 r.setup(x);
                 return r;
+            });
+
+            // Create Structures
+            this._structures = data.structures().map(x => {
+                if (x instanceof FMonsterHouseStructure) {
+                    const s = new LMonsterHouseStructure();
+                    s.setup(x);
+                    return s;
+                }
+                else {
+                    throw new Error("Invalid Structure type.");
+                }
             });
         }
 
@@ -382,9 +398,13 @@ export class REGame_Map
         }
     }
 
-    public updateLocatedResults(): void {
+    public updateLocatedResults(context: RECommandContext): void {
         for (const entity of this.entities()) {
             if (entity._located) {
+
+                for (const s of this._structures) {
+                    s.onEntityLocated(context, entity);
+                }
 
                 entity._located = false;
             }

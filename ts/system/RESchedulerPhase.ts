@@ -67,6 +67,7 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 // 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
 export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends RESchedulerPhase {
     onStart(scheduler: REScheduler): void {
+        REGame.map.updateLocatedResults(RESystem.commandContext);
     }
 
     onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
