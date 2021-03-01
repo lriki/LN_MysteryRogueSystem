@@ -167,6 +167,16 @@ Spriteset_Map.prototype.updateShadow = function() {
                 ty1 -= VisibilityShadowTileSize / 2.0;
                 ty2 += VisibilityShadowTileSize / 2.0;
 
+                const roomId = focusedEntity.roomId();
+                if (roomId > 0) {
+                    const tw = $gameMap.tileWidth();
+                    const room = REGame.map.rooms()[roomId];
+                    tx1 = $gameMap.adjustX(room.x1()) * tw;
+                    tx2 = $gameMap.adjustX(room.x2()) * tw + tw;
+                    ty1 = $gameMap.adjustY(room.y1()) * tw;
+                    ty2 = $gameMap.adjustY(room.y2()) * tw + tw;
+                }
+
 
 
 
@@ -232,7 +242,7 @@ Spriteset_Map.prototype.updateShadow = function() {
                 this._visibilityShadowOuterSprites[6].position.set(osx2, osy1 + osh / 2.0);
                 this._visibilityShadowOuterSprites[8].position.set(osx1 + osw / 2.0, osy1);
 
-                const scale = 10.0;
+                const scale = 15.0;
                 this._visibilityShadowOuterSprites[2].scale.set(scale * 2, scale);
                 this._visibilityShadowOuterSprites[4].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整
                 this._visibilityShadowOuterSprites[6].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整

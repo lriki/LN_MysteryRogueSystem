@@ -27,6 +27,22 @@ export class LRoom {
         this._y2 = room.y2();
     }
 
+    public x1(): number {
+        return this._x1;
+    }
+
+    public y1(): number {
+        return this._y1;
+    }
+
+    public x2(): number {
+        return this._x2;
+    }
+
+    public y2(): number {
+        return this._y2;
+    }
+
     public contains(x: number, y: number): boolean {
         return this._x1 <= x && x <= this._x2 && this._y1 <= y && y <= this._y2;
     }

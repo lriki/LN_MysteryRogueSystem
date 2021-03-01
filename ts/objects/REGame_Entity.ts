@@ -3,7 +3,7 @@ import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
-import { BlockLayerKind, REGame_Block } from "./REGame_Block";
+import { BlockLayerKind, LRoomId, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
 import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { DState, DStateId } from "ts/data/DState";
@@ -22,6 +22,7 @@ import { DParameterId, REData } from "ts/data/REData";
 import { LAbility } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { FlowFlags } from "typescript";
+import { LRoom } from "./LRoom";
 
 enum BlockLayer
 {
@@ -401,24 +402,7 @@ export class REGame_Entity
     isDestroyed(): boolean {
         return this._destroyed;
     }
-
-    /**
-     * この Entity が GroundLayer 上に存在しているかを確認する。
-     * Map 上に出現していても、Ground 以外のレイヤーに存在している場合は false を返す。
-     */
-    isOnGround(): boolean {
-        if (this.floorId > 0) {
-            const block = REGame.map.block(this.x, this.y);
-            return block.findEntityLayerKind(this) == BlockLayerKind.Ground;
-        }
-        else {
-            return false;
-        }
-    }
-
-    isTile(): boolean {
-        return this.findAttribute(RETileAttribute) != undefined;
-    }
+    
 
     /**
      * Behavior から Entity を削除する場合、CommandContext.postDestroy() を使用してください。
@@ -610,6 +594,34 @@ export class REGame_Entity
         this._basicBehaviors = contents.behaviors.map((x: number) => {
             return RESystem.createBehavior(x);
         });
+    }
+
+    
+
+    //--------------------------------------------------------------------------------
+    // Map Utils
+
+    /**
+     * この Entity が GroundLayer 上に存在しているかを確認する。
+     * Map 上に出現していても、Ground 以外のレイヤーに存在している場合は false を返す。
+     */
+    isOnGround(): boolean {
+        if (this.floorId > 0) {
+            const block = REGame.map.block(this.x, this.y);
+            return block.findEntityLayerKind(this) == BlockLayerKind.Ground;
+        }
+        else {
+            return false;
+        }
+    }
+
+    isTile(): boolean {
+        return this.findAttribute(RETileAttribute) != undefined;
+    }
+
+    /** 0 is Invalid. */
+    public roomId(): LRoomId {
+        return REGame.map.block(this.x, this.y)._roomId;
     }
 }
 
