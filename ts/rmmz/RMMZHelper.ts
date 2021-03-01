@@ -127,14 +127,21 @@ export class RMMZHelper {
     }
 
     public static setRegionId(x: number, y: number, regionId: number): void {
+        //if ($dataMap.data) {
+        //    const width = $dataMap.width ?? 0;
+        //    const height = $dataMap.height ?? 0;
+        //    $dataMap.data[(5 * height + y) * width + x] = regionId;
+        //}
+        this.setRETileData(x, y, 5, regionId);
+    }
+
+    public static setRETileData(x: number, y: number, z: number, value: number): void {
         if ($dataMap.data) {
             const width = $dataMap.width ?? 0;
             const height = $dataMap.height ?? 0;
-            $dataMap.data[(5 * height + y) * width + x] = regionId;
+            $dataMap.data[(z * height + y) * width + x] = value;
         }
     }
-
-
 
     // https://www.f-sp.com/category/RPG%E3%83%84%E3%82%AF%E3%83%BC%E3%83%AB?page=1480575168
     // 異種タイルが 1

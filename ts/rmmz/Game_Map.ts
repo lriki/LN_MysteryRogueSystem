@@ -6,7 +6,6 @@ import { REGameManager } from "../system/REGameManager";
 declare global {
     interface Game_Map {
         isRESystemMap(): boolean;
-        //setTileData(x: number, y: number, z: number, value: number): void;
     }
 }
 
