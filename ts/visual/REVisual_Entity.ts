@@ -118,9 +118,10 @@ export class REVisual_Entity
                     }
                 }
 
-                const opacityFrames = 20;
+                const opacityFrames = 10;
                 const visible = this.isVisible();
                 if (this._prevVisibility != visible) {
+                    this._prevVisibility = visible;
                     if (visible) {
                         // フェードイン
                         this._visibilityOpacityStart = event.opacity();

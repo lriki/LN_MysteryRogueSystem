@@ -98,8 +98,8 @@ export class SMinimapData {
         const map = REGame.map;
         const width = map.width();
         const height = map.height();
-        const player = REGame.camera.focusedEntity();
-        assert(player);
+        const subject = REGame.camera.focusedEntity();
+        assert(subject);
 
         //console.log("_count", this._count, (this._count % 2));
         //this._count++;
@@ -114,8 +114,8 @@ export class SMinimapData {
         //this.setData(0, 0, 0, Tilemap.TILE_ID_A5 + 9 + (this._count % 2));
 
         for (const entity of map.entities()) {
-            //if (entity == player) {
-            if (eqaulsEntityId(entity.id(), player.id())) {
+            //if (entity == subject) {
+            if (eqaulsEntityId(entity.id(), subject.id())) {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
             }
             else if (entity.hasBehavior(LTrapBehavior)) {
@@ -125,9 +125,11 @@ export class SMinimapData {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
             }
             else if (entity.hasBehavior(LBattlerBehavior)) {
-                if (Helpers.isHostile(player, entity)) {
+                if (Helpers.isHostile(subject, entity)) {
                     // 敵対勢力
-                    this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
+                    if (Helpers.testVisibility(subject, entity)) {
+                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
+                    }
                 }
                 else {
                     // 中立 or 味方
