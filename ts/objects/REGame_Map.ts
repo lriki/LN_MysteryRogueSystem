@@ -155,6 +155,10 @@ export class REGame_Map
         return this._rooms;
     }
 
+    public room(roomId: LRoomId): LRoom {
+        return this._rooms[roomId];
+    }
+
     land(): DLand {
         return REData.lands[REData.floors[this._floorId].landId];
     }

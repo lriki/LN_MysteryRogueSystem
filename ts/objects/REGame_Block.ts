@@ -210,6 +210,8 @@ export class REGame_Block// extends LObject
     _roomId: LRoomId = 0;
     _blockComponent: FBlockComponent = FBlockComponent.None;
 
+    _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
+
     constructor(map: REGame_Map, x: number, y: number) {
         this._x = x;
         this._y = y;

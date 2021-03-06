@@ -29,6 +29,7 @@ export class SMinimapData {
     private _height: number = 0;
     private _data: number[] = [];
     private _tilemapResetNeeded: boolean = true;
+    private _refreshNeeded: boolean = false;
 
     public reset(width: number, height: number) {
         this._width = width;
@@ -69,6 +70,14 @@ export class SMinimapData {
         this._tilemapResetNeeded = false;
     }
 
+    public setRefreshNeeded(): void {
+        this._refreshNeeded = true;
+    }
+
+    //public isRefreshNeeded(): boolean {
+    //    return this._tilemapResetNeeded;
+    //}
+
     public refresh(): void {
         const map = REGame.map;
         const width = map.width();
@@ -81,15 +90,23 @@ export class SMinimapData {
                 switch (block._blockComponent) {
                     default:
                         const tileId = this.getAutoTileId(x, y, FBlockComponent.None);
-                        this.setData(x, y, 0, Tilemap.TILE_ID_A2 + tileId);
+
+                        if (block._passed)
+                            this.setData(x, y, 0, Tilemap.TILE_ID_A2 + tileId);
+                        else
+                            this.setData(x, y, 0, 0);
                         break;
                     case FBlockComponent.Room:
                     case FBlockComponent.Passageway:
-                        this.setData(x, y, 0, Tilemap.TILE_ID_A5 + 1);
+                        if (block._passed)
+                            this.setData(x, y, 0, Tilemap.TILE_ID_A5 + 1);
+                        else
+                            this.setData(x, y, 0, 0);
                         break;
                 }
             }
         }
+        this._refreshNeeded = false;
     }
 
     //_count = 0;
@@ -100,6 +117,10 @@ export class SMinimapData {
         const height = map.height();
         const subject = REGame.camera.focusedEntity();
         assert(subject);
+
+        if (this._refreshNeeded) {
+            this.refresh();
+        }
 
         //console.log("_count", this._count, (this._count % 2));
         //this._count++;
@@ -118,26 +139,28 @@ export class SMinimapData {
             if (eqaulsEntityId(entity.id(), subject.id())) {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
             }
-            else if (entity.hasBehavior(LTrapBehavior)) {
-                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
-            }
-            else if (entity.hasBehavior(LItemBehavior)) {
-                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
-            }
-            else if (entity.hasBehavior(LBattlerBehavior)) {
-                if (Helpers.isHostile(subject, entity)) {
-                    // 敵対勢力
-                    if (Helpers.testVisibility(subject, entity)) {
-                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
+            else {
+                if (Helpers.testVisibility(subject, entity)) {
+                    if (entity.hasBehavior(LTrapBehavior)) {
+                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
+                    }
+                    else if (entity.hasBehavior(LItemBehavior)) {
+                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
+                    }
+                    else if (entity.hasBehavior(LBattlerBehavior)) {
+                        if (Helpers.isHostile(subject, entity)) {
+                            // 敵対勢力
+                            this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
+                        }
+                        else {
+                            // 中立 or 味方
+                            this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
+                        }
+                    }
+                    else if (entity.hasBehavior(REExitPointBehavior)) {
+                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);
                     }
                 }
-                else {
-                    // 中立 or 味方
-                    this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
-                }
-            }
-            else if (entity.hasBehavior(REExitPointBehavior)) {
-                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);
             }
         }
     }

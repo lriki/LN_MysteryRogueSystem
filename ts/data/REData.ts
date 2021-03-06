@@ -119,6 +119,7 @@ export interface REData_Faction
     schedulingOrder: number;
 
     hostileBits: number;
+    friendBits: number;
 }
 
 
