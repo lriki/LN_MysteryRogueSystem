@@ -1,6 +1,9 @@
 import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
+import { REGame } from "ts/objects/REGame";
+import { REGame_Map } from "ts/objects/REGame_Map";
+import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
 import { REGame_Entity } from "../objects/REGame_Entity";
@@ -18,11 +21,18 @@ export class REVisual_Entity
     private _rmmzEventId: number;
     private _rmmzSpriteIndex: number;   // Spriteset_Map._characterSprites の index
     private _sequelContext: REVisualSequelContext;
+    private _initialUpdate: boolean = true;
 
     // 単位は Block 座標と等しい。px 単位ではない点に注意。
     // アニメーションを伴う場合、少数を扱うこともある。
     // 原点は Block の中央とする。
     private _position: Vector2;
+
+    //private _visibilityOpacity: number = 1.0;
+    private _visibilityOpacityStart: number = 1.0;
+    private _visibilityOpacityTarget: number = 1.0;
+    private _visibilityFrame: number = 0;
+    private _prevVisibility: boolean = true;
 
     constructor(entity: REGame_Entity, rmmzEventId: number) {
         this._entity = entity;
@@ -46,6 +56,11 @@ export class REVisual_Entity
 
     rmmzSprite(): Sprite_Character | undefined {
         return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._rmmzSpriteIndex] : undefined;
+    }
+
+    public isVisible(): boolean {
+        const focusedEntity = REGame.camera.focusedEntity()
+        return focusedEntity ? Helpers.testVisibility(focusedEntity, this._entity) : false;
     }
 
     position(): Vector2 {
@@ -88,12 +103,48 @@ export class REVisual_Entity
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
-        }
 
-        const sprite = this.rmmzSprite();
-        if (sprite) {
-            const entity = this.entity();
-            sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
+            
+            const sprite = this.rmmzSprite();
+            if (sprite) {
+                const entity = this.entity();
+                sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
+
+                if (this._initialUpdate) {
+                    this._initialUpdate = false;
+                    this._prevVisibility = this.isVisible();
+                    if (!this._prevVisibility) {
+                        event.setOpacity(0);
+                    }
+                }
+
+                const opacityFrames = 20;
+                const visible = this.isVisible();
+                if (this._prevVisibility != visible) {
+                    if (visible) {
+                        // フェードイン
+                        this._visibilityOpacityStart = event.opacity();
+                        this._visibilityOpacityTarget = 255;
+                        this._visibilityFrame = opacityFrames;
+                    }
+                    else {
+                        // フェードアウト
+                        this._visibilityOpacityStart = event.opacity();
+                        this._visibilityOpacityTarget = 0;
+                        this._visibilityFrame = opacityFrames;
+                    }
+                }
+
+                if (this._visibilityFrame > 0) {
+                    this._visibilityFrame--;
+                    if (this._visibilityFrame > 0) {
+                        event.setOpacity(Helpers.lerp(this._visibilityOpacityTarget, this._visibilityOpacityStart, this._visibilityFrame / opacityFrames));
+                    }
+                    else {
+                        event.setOpacity(this._visibilityOpacityTarget);
+                    }
+                }
+            }
         }
     }
 }

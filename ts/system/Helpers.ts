@@ -56,4 +56,18 @@ export class Helpers {
     public static isHostileFactionId(subject: DFactionId, target: DFactionId): boolean {
         return (REData.factions[subject].hostileBits & (1 << target)) != 0;
     }
+
+    public static testVisibility(subject: REGame_Entity, target: REGame_Entity): boolean {
+        if (Math.abs(subject.x - target.x) <= 1 && Math.abs(subject.y - target.y) <= 1) {
+            return true;
+        }
+        if (subject.roomId() == target.roomId()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static lerp(v1: number, v2: number, t: number): number {
+        return v1 + ((v2 - v1) * t);
+    }
 }
