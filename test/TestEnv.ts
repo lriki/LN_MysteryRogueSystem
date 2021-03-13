@@ -1,14 +1,15 @@
-import { DBasics } from "ts/data/DBasics";
+
+import fs from 'fs';
 import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { REGame_Entity } from "ts/objects/REGame_Entity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
-import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
-import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
+import { REGameManager } from "ts/system/REGameManager";
+import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 
 declare global {
     interface Number {
@@ -22,69 +23,43 @@ Number.prototype.clamp = function(min: number, max: number): number{
 };
 
 export class TestEnv {
+
+    public static FloorId_FlatMap50x50: number = -1;
+
+    private static _databaseFiles = [
+        { name: "$dataActors", src: "Actors.json" },
+        { name: "$dataClasses", src: "Classes.json" },
+        { name: "$dataSkills", src: "Skills.json" },
+        { name: "$dataItems", src: "Items.json" },
+        { name: "$dataWeapons", src: "Weapons.json" },
+        { name: "$dataArmors", src: "Armors.json" },
+        { name: "$dataEnemies", src: "Enemies.json" },
+        { name: "$dataTroops", src: "Troops.json" },
+        { name: "$dataStates", src: "States.json" },
+        { name: "$dataAnimations", src: "Animations.json" },
+        { name: "$dataTilesets", src: "Tilesets.json" },
+        { name: "$dataCommonEvents", src: "CommonEvents.json" },
+        { name: "$dataSystem", src: "System.json" },
+        { name: "$dataMapInfos", src: "MapInfos.json" }
+    ];
+
     static activeSequelSet: RESequelSet;
 
     static setupDatabase() {
+        this.loadRmmzDatabase();
         REData.reset();
-        REDataManager.setupCommonData();
-
-        // Lands
-        REData.addLand({
-            id: -1,
-            rmmzMapId: 1,
-            eventTableMapId: 0,
-            itemTableMapId: 0,
-            enemyTableMapId: 0,
-            trapTableMapId: 0,
-            exitEMMZMapId: 1001,
-            floorIds: [],
-        });
-        REData.addLand({
-            id: -1,
-            rmmzMapId: 2,
-            eventTableMapId: 0,
-            itemTableMapId: 0,
-            enemyTableMapId: 0,
-            trapTableMapId: 0,
-            exitEMMZMapId: 1002,
-            floorIds: [],
-        });
-        REData.addLand({
-            id: -1,
-            rmmzMapId: 3,
-            eventTableMapId: 0,
-            itemTableMapId: 0,
-            enemyTableMapId: 0,
-            trapTableMapId: 0,
-            exitEMMZMapId: 1003,
-            floorIds: [],
-        });
-
-        // Floors
-        REData.addFloor(4, 1, REFloorMapKind.FixedMap);
-        REData.addFloor(5, 1, REFloorMapKind.FixedMap);
-        REData.addFloor(6, 1, REFloorMapKind.FixedMap);
-
-        // States
+        REDataManager.loadData();
+        REGame.integration = new TestEnvIntegration();
+        //REDataManager.loadPrefabDatabaseMap();
         {
-            DBasics.states = {
-                dead: REData.addState("Dead", () => new LStateBehavior()),
-                nap: 0,
-                debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
-            };
+            // Database マップ読み込み開始
+            const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
+            this.loadDataFile("RE_databaseMap", filename);
         }
 
-        // Skills
-        {
-            const id = REData.addSkill("NormalAttack");
-        }
+        this.FloorId_FlatMap50x50 = $dataMapInfos.findIndex(x => x && x.name == "FlatMap50x50");
 
-        // Items
-        {
-            const id = REData.addItem("薬草");
-
-        }
-
+        /*
         // Unique Entitise
         REData.addActor("Unique1");
 
@@ -92,16 +67,96 @@ export class TestEnv {
         REData.addMonster("Enemy1");
         REData.addMonster("Enemy2");
         REData.addMonster("Enemy3");
+        */
         
-        REGame.integration = new TestEnvIntegration();
+    }
+
+    public static performFloorTransfer(): void {
+        // TODO: ランダムマップはまだ
+        this.loadMapData(REGame.camera.transferingNewFloorId());
+        REGameManager.performFloorTransfer();
+    }
+
+    private static loadRmmzDatabase(): void {
+        for (const databaseFile of this._databaseFiles) {
+            this.loadDataFile(databaseFile.name, databaseFile.src);
+        }
+    }
+        
+    // DataManager.loadDataFile
+    private static loadDataFile(name: string, src: string) {
+        (window as any)[name] = JSON.parse(fs.readFileSync("data/" + src).toString());
+        this.onLoad((window as any)[name]);
+    }
+    
+    // DataManager.loadMapData
+    private static loadMapData(mapId: number): void {
+        if (mapId > 0) {
+            const filename = `Map${this.padZero(mapId, 3)}.json`;
+            this.loadDataFile("$dataMap", filename);
+        } else {
+            throw new Error("Invalid map data.");
+        }
+    }
+
+    public static padZero(v: number, length: number) {
+        return String(v).padStart(length, "0");
+    }
+
+    //--------------------------------------------------
+    // DataManager の実装
+
+    private static onLoad(object: any) {
+        if (this.isMapObject(object)) {
+            this.extractMetadata(object);
+            this.extractArrayMetadata(object.events);
+        } else {
+            this.extractArrayMetadata(object);
+        }
+    }
+    
+    private static isMapObject(object: any): boolean {
+        return !!(object.data && object.events);
+    }
+
+    private static extractArrayMetadata(array: any) {
+        if (Array.isArray(array)) {
+            for (const data of array) {
+                if (data && "note" in data) {
+                    this.extractMetadata(data);
+                }
+            }
+        }
+    };
+
+    private static extractMetadata(data: any) {
+        const regExp = /<([^<>:]+)(:?)([^>]*)>/g;
+        data.meta = {};
+        for (;;) {
+            const match = regExp.exec(data.note);
+            if (match) {
+                if (match[2] === ":") {
+                    data.meta[match[1]] = match[3];
+                } else {
+                    data.meta[match[1]] = true;
+                }
+            } else {
+                break;
+            }
+        }
     }
 }
 
 export class TestEnvIntegration extends REIntegration {
     onReserveTransferFloor(floorId: number): void {
-        // TestEnv では全部動的生成するのでファイルロードは不要
+        // Test では Camera の transfar 情報を使うため設定不要
     }
 
+    onLoadFixedMapData(map: FMap): void {
+        SRmmzHelpers.buildFixedMapData(map);
+    }
+
+    /*
     onLoadFixedMapData(map: FMap): void {
         if (map.floorId() == 1) {
             // 50x50 の空マップ
@@ -111,24 +166,38 @@ export class TestEnvIntegration extends REIntegration {
             throw new Error("Method not implemented.");
         }
     }
+    */
 
     onLoadFixedMapEvents(): void {
+        SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData();
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {
+        // 実行結果確認用に保持するだけ
         TestEnv.activeSequelSet = sequelSet;
     }
     onCheckVisualSequelRunning(): boolean {
+        // Visual 表示は伴わない
         return false;
     }
+
     onDialogOpend(context: REDialogContext): void {
+        // Dialog の処理はテストコード内で行う
     }
+
     onDialogClosed(context: REDialogContext): void {
+        // Dialog の処理はテストコード内で行う
     }
+
     onUpdateDialog(context: REDialogContext): void {
+        // Dialog の処理はテストコード内で行う
     }
+
     onEntityEnteredMap(entity: REGame_Entity): void {
+        // Visual 表示は伴わない
     }
+
     onEntityLeavedMap(entity: REGame_Entity): void {
+        // Visual 表示は伴わない
     }
 }

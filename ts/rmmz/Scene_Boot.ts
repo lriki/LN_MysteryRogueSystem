@@ -102,9 +102,7 @@ Scene_Boot.prototype.onDatabaseLoaded = function() {
     REVisual.initialize();
     REGame.integration = new RMMZIntegration();
 
-    // Database マップ読み込み開始
-    const filename = `Map${REDataManager.databaseMapId.padZero(3)}.json`;
-    DataManager.loadDataFile("RE_databaseMap", filename);
+    REDataManager.loadPrefabDatabaseMap();
 
     //_init();
 }

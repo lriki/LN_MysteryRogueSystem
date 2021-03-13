@@ -577,7 +577,7 @@ export class REDataManager
             }
 
             // ランダムマップ
-            for (let i = 0; i < REData.lands.length; i++) {
+            for (let i = 1; i < REData.lands.length; i++) { // LandId=0 はダミーなので生成しない
                 const beginFloorId = $dataMapInfos.length + (i * REData.MAX_DUNGEON_FLOORS);
                 REData.lands[i].floorIds = new Array(REData.MAX_DUNGEON_FLOORS);
                 for (let iFloor = 0; iFloor < REData.MAX_DUNGEON_FLOORS; iFloor++){
@@ -594,6 +594,16 @@ export class REDataManager
         }
 
         DBehaviorFactory.setup();
+    }
+
+    public static loadPrefabDatabaseMap(): void {
+        // Database マップ読み込み開始
+        const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
+        DataManager.loadDataFile("RE_databaseMap", filename);
+    }
+
+    public static padZero(v: number, length: number) {
+        return String(v).padStart(length, "0");
     }
 
     static makeEffect(damage: IDataDamage): DEffect {

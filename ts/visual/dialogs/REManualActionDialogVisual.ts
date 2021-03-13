@@ -62,6 +62,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             const args: REMoveToAdjacentArgs = { direction: dir };
             context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);
             this._model.close(true);
+            //SceneManager._scene.executeAutosave();
             return;
         }
         // オートアクション

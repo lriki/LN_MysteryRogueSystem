@@ -240,13 +240,13 @@ declare interface IDataState
 
 declare interface IDataTileset
 {
-    id?: number;
-    flags?: number[];
-    mode?: number;
-    name?: string;
-    note?: string;
-    tilesetNames?: string[];
-    meta?: any;
+    id: number;
+    flags: number[];
+    mode: number;
+    name: string;
+    note: string;
+    tilesetNames: string[];
+    meta: any;
 }
 
 declare interface IDataList
@@ -418,14 +418,14 @@ declare interface IDataSystem
 
 declare interface IDataMapInfo
 {
-    id?: number;
-    expanded?: boolean;
-    name?: string;
-    order?: number;
-    parentId?: number;
-    scrollX?: number;
-    scrollY?: number;
-    meta?: any;
+    id: number;
+    expanded: boolean;
+    name: string;
+    order: number;
+    parentId: number;
+    scrollX: number;
+    scrollY: number;
+    meta: any;
 }
 
 declare interface IDataEncounterList
@@ -460,7 +460,7 @@ declare interface IDataMapEventPage
         pattern?: number;
         characterIndex?: number;
     }
-    list?: IDataList[];
+    list: IDataList[];
     moveFrequency?: number;
     moveRoute?: {
         list?: {
@@ -482,41 +482,41 @@ declare interface IDataMapEventPage
 
 declare interface IDataMapEvent
 {
-    id?: number;
-    name?: string;
-    note?: string;
-    pages?: IDataMapEventPage[];
-    x?: number;
-    y?: number;
+    id: number;
+    name: string;
+    note: string;
+    pages: IDataMapEventPage[];
+    x: number;
+    y: number;
 }
 
 declare interface IDataMap
 {
-    autoplayBgm?: boolean;
-    autoplayBgs?: boolean;
-    battleback1Name?: string;
-    battleback2Name?: string;
-    bgm?: IDataSound;
-    bgs?: IDataSound;
-    disableDashing?: boolean;
-    displayName?: string;
-    encounterList?: IDataEncounterList[];
-    encounterStep?: number;
-    height?: number;
-    note?: string;
-    parallaxLoopX?: boolean;
-    parallaxLoopY?: boolean;
-    parallaxName?: string;
-    parallaxShow?: boolean;
-    parallaxSx?: number;
-    parallaxSy?: number;
-    scrollType?: number;
-    specifyBattleback?: boolean;
-    tilesetId?: number;
-    width?: number;
-    data?: number[];
-    events?: IDataMapEvent[];
-    meta?: any;
+    autoplayBgm: boolean;
+    autoplayBgs: boolean;
+    battleback1Name: string;
+    battleback2Name: string;
+    bgm: IDataSound;
+    bgs: IDataSound;
+    disableDashing: boolean;
+    displayName: string;
+    encounterList: IDataEncounterList[];
+    encounterStep: number;
+    height: number;
+    note: string;
+    parallaxLoopX: boolean;
+    parallaxLoopY: boolean;
+    parallaxName: string;
+    parallaxShow: boolean;
+    parallaxSx: number;
+    parallaxSy: number;
+    scrollType: number;
+    specifyBattleback: boolean;
+    tilesetId: number;
+    width: number;
+    data: number[];
+    events: IDataMapEvent[];
+    meta: any;
 }
 
 declare var $dataActors      : IDataActor[];

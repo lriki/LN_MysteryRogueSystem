@@ -26,7 +26,6 @@ export class LState {
             b._ownerState = this;
             return b;
         }));
-        console.log("this._behabiors", this._behabiors);
     }
 
     public stateId(): number {

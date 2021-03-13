@@ -12,6 +12,17 @@ RPG ツクール MZ 用の、ターン性ローグライクシステムの開発
 ./build.ps1
 ```
 
+### テスト
+
+```sh
+npm run test
+
+# 個別実行
+npm run test -- -t Basic1
+```
+
+
+
 
 用語整理
 ----------

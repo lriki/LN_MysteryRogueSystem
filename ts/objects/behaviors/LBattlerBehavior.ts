@@ -220,9 +220,6 @@ export class LBattlerBehavior extends LBehavior {
             this._actualParamDamges[param.id] = this._actualParamDamges[param.id].clamp(0, max);//this.actualParam(param.id).clamp(0, max);
         }
 
-        console.log("REData.parameters", REData.parameters);
-        console.log("refresssss _actualParams", this._actualParamDamges);
-
         // TODO: 全パラメータ
         //const mhp = this.idealParam(RESystem.parameters.hp);
         //const mmp = this.idealParam(RESystem.parameters.mp);

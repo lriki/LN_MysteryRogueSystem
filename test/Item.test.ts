@@ -1,7 +1,5 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";

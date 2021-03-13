@@ -95,6 +95,8 @@ export class REGameManager
         assert(!REGame.camera.isFloorTransfering());
     }
 
+    
+    // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済みでなければならない。
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
 
@@ -112,7 +114,7 @@ export class REGameManager
     
     public static makeSaveContents(): any {
         let contents: any = {};
-        contents.world = REGame.world;
+        //contents.world = REGame.world;
         return contents;
     }
 

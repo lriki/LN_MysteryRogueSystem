@@ -1,4 +1,5 @@
-import { RMMZEventEntityMetadata, RMMZHelper } from "./RMMZHelper";
+import { RMMZEventEntityMetadata, SRmmzHelpers } from "ts/system/SRmmzHelpers";
+import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Event {
@@ -25,7 +26,7 @@ var _Game_Event_setupPageSettings = Game_Event.prototype.setupPageSettings;
 Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
-    this._entityMetadata = RMMZHelper.readEntityMetadata(this);
+    this._entityMetadata = SRmmzHelpers.readEntityMetadata(this);
 }
 
 Game_Event.prototype.isREEntity = function(): boolean {

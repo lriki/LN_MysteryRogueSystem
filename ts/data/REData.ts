@@ -83,7 +83,13 @@ export interface RE_Data_EntityFeature
 /**
  * フロアひとつ分。
  * 
- * 負荷軽減のため、各テーブルは Player がダンジョンに入った時にロードされる。
+ * インスタンスは REData.floors に格納され、$dataMapInfos.length 以下の ID はそれの ID、つまり RMMZ のマップ ID と等しい。
+ * それ以降には、ランダムダンジョンとしてのフロア情報が、最大階層の分だけ生成される。
+ * 例えば RMMZ で作成したマップの数が 100 個、Land の数が 3 個とすると、次のようになる。
+ * - 0~100: RMMZ マップと対応する Floor
+ * - 101~200: Land[1] の F1 ~ F100 (TODO: この数は、今は MAX_DUNGEON_FLOORS で固定)
+ * - 201~300: Land[2] の F1 ~ F100
+ * - 301~400: Land[3] の F1 ~ F100
  */
 export interface RE_Data_Floor
 {
@@ -389,6 +395,7 @@ export class REData
         });
         return newId;
     }
+    
     
 
 }

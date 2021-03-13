@@ -31,7 +31,7 @@ class ActorAttr extends BattlerAttr {
 }
 */
 
-test('basic', () => {
+test('Basic1', () => {
     // NewGame.
     REGameManager.createGameObjects();
 
@@ -39,12 +39,12 @@ test('basic', () => {
     const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
-    REGame.world._transferEntity(actor1, 1, 5, 5);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // 【RMMZ で使うときはこのあたりで $dataMap をロードしたりする】
 
     // マップ遷移確定。実際にランダムマップ等が生成され、Entity が配置される。
-    REGameManager.performFloorTransfer();
+    TestEnv.performFloorTransfer();
 
     // シミュレーション 1 回実行
     REGame.scheduler.stepSimulation();

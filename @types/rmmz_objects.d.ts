@@ -10452,7 +10452,7 @@ declare class Game_Event extends Game_Character {
     /**
      * 
      */
-    page(): void;
+    page(): IDataMapEventPage;
 
     /**
      * 
