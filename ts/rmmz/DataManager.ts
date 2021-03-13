@@ -147,3 +147,17 @@ DataManager.createGameObjects = function() {
 
     REGameManager.createGameObjects();
 }
+
+
+const _DataManager_makeSaveContents = DataManager.makeSaveContents;
+DataManager.makeSaveContents = function() {
+    const data = _DataManager_makeSaveContents.call(DataManager);
+    data.re = REGameManager.makeSaveContents();
+    return data;
+};
+
+const _DataManager_extractSaveContents = DataManager.extractSaveContents;
+DataManager.extractSaveContents = function(contents) {
+    _DataManager_extractSaveContents.call(DataManager, contents);
+}
+

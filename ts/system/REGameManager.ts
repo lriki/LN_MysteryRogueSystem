@@ -109,5 +109,14 @@ export class REGameManager
             Log.d("PerformFloorTransfer");
         }
     }
+    
+    public static makeSaveContents(): any {
+        let contents: any = {};
+        contents.world = REGame.world;
+        return contents;
+    }
+
+    public static extractSaveContents(contents: any) {
+    }
 }
 

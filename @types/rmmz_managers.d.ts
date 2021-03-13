@@ -581,7 +581,7 @@ declare namespace DataManager{
 	 * 
 	 * @return  
 	 */
-	function makeSaveContents(): DataManager.MakeSaveContentsRet;
+	function makeSaveContents(): any;//DataManager.MakeSaveContentsRet;
 		
 	/**
 	 * 
