@@ -4,6 +4,7 @@ import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
+import { LObject, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
@@ -17,13 +18,17 @@ import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
  * 
  * グループ化の仕組みにより、例えば "透視状態になるがハラヘリ速度が倍になる" といった
  * カスタマイズを施しやすくなる。
+ * 
+ * 振舞いは Ability と非常によく似ているが、State は RMMZ のステートと同じく状態異常を主に表すものであり、
+ * 特徴的なところだと "全快" するアイテムやイベントによってすべてでタッチされたりする。
  */
-export class LState {
+export class LState extends LObject {
     private _ownerEntity: REGame_Entity | undefined;    // シリアライズしない
     private _stateId: DStateId;
     private _behabiors: LStateTraitBehavior[];
 
     public constructor(stateId: DStateId) {
+        super(LObjectType.State);
         this._stateId = stateId;
         
         const behavior = new LStateTrait_GenericRMMZState();

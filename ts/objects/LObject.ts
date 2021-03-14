@@ -26,6 +26,35 @@ export function cloneEntityId(a: LEntityId): LEntityId {
     };
 }
 
+
+export enum LObjectType {
+    Entity,
+    State,
+    Ability,
+}
+
+/**
+ * Behavior を保持するクラスのベースクラス
+ * 
+ * [2021/3/14]
+ * ----------
+ * 現時点では、LEntity, LState, LAbility のベースクラスとなる。
+ * 
+ */
+export class LObject {
+    private _objectType: LObjectType;
+
+    protected constructor(objectType: LObjectType) {
+        this._objectType = objectType;
+    }
+
+    public objectType(): LObjectType {
+        return this._objectType;
+    }
+}
+
+
+
 // Entity をフィールドに保持する人
 /**
  * 

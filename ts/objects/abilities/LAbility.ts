@@ -1,13 +1,17 @@
 import { DAbilityId } from "ts/data/DAbility";
 import { LBehavior } from "../behaviors/LBehavior";
-import { LBehaviorBase } from "../LBehaviorBase";
-import { LEntityId } from "../LObject";
+import { LEntityId, LObject, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { REGame_Entity } from "../REGame_Entity";
 import { LKnockbackBehavior } from "./LKnockbackBehavior";
 
 
 /**
+ * Ability は Entity の各種行動や与・被Effect 時に追加の様々な効果を与えるもの。
+ * 
+ * 振舞いは State と非常によく似ているが、Ability は合成印や新種道具の効果を表すものであり、
+ * アイテムの詳細説明ウィンドウの効果欄に列挙されたりする。
+ * 
  * 
  * [2021/2/20] Ability は Entity にはしないの？
  * ----------
@@ -18,10 +22,14 @@ import { LKnockbackBehavior } from "./LKnockbackBehavior";
  * あと Entity としたとき、Behavior から ownerEntity をとるときにちょっと細工する必要があるのが不自然かも。
  * 
  */
-export class LAbility extends LBehaviorBase {
+export class LAbility extends LObject {
     private _abilityId: DAbilityId = 0;
     private _ownerEntityId: LEntityId = { index: 0, key: 0 };
     private _behabiors: LBehavior[] = [];
+
+    public constructor() {
+        super(LObjectType.Ability);
+    }
 
     public setup(abilityId: DAbilityId, owner: REGame_Entity): void {
         this._abilityId = abilityId;
