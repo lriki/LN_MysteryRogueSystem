@@ -300,16 +300,14 @@ export class REDataManager
                 }
             });
 
-            console.log("REData.states", REData.states);
-
             // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
             DBasics.states = {
                 dead: 1,//REData.addState("Dead", () => new LStateBehavior()),
                 nap: $dataStates.findIndex(x => x && x.meta && x.meta["RE-BasicState"] == "Nap"),
-                debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
+                debug_MoveRight: $dataStates.findIndex(x => x && x.meta && x.meta["RE-BasicState"] == "DebugMoveRight"),
             };
         }
-
+        
         // Import Abilities
         {
             REData.abilities = $dataStates

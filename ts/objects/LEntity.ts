@@ -229,9 +229,8 @@ export class LEntity extends LObject
 
     addBasicBehavior(behavior: LBehavior) {
         assert(this.id().index > 0);
-        assert(behavior.id().index == 0);
-
-        REGame.world._registerBehavior(behavior);
+        //assert(behavior.id().index == 0);
+        //REGame.world._registerBehavior(behavior);
 
         this._basicBehaviors.push(behavior);
         behavior._ownerEntityId = this.id();
