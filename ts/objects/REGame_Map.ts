@@ -240,10 +240,10 @@ export class REGame_Map
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
         assert(entity.id().index > 0);
-        assert(!entity.hasParent());
+        assert(!entity.hasOwner());
 
         this._entityIds.push(entity.id());
-        entity.setParentMap(this);
+        entity.setOwnerMap(this);
 
         REGame.integration.onEntityEnteredMap(entity);
     }
@@ -292,8 +292,8 @@ export class REGame_Map
     }
 
     private _removeEntityHelper(entity: LEntity) {
-        assert(entity.parentIsMap());
-        entity.clearParent();
+        assert(entity.ownerIsMap());
+        entity.clearOwner();
 
         assert(entity.floorId == this.floorId());
         entity.floorId = 0;

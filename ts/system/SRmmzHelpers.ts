@@ -155,7 +155,7 @@ export class SRmmzHelpers {
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
-        assert(entity.parentIsMap());
+        assert(entity.ownerIsMap());
 
         // 初期 state 付与
         // TODO: 絶対に眠らないモンスターとかもいるので、Command にしたほうがいいかも。

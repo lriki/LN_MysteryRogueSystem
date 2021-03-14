@@ -58,7 +58,7 @@ export class LObject {
     private readonly _objectType: LObjectType;
     private _objectId: LObjectId = { index: 0, key: 0 };
     private _destroyed: boolean = false;
-    private _parentEntityId: LObjectId = { index: 0, key: 0 };
+    private _ownerEntityId: LObjectId = { index: 0, key: 0 };
     
     protected constructor(objectType: LObjectType) {
         this._objectType = objectType;
@@ -81,27 +81,27 @@ export class LObject {
         return false;
     }
 
-    public hasParent(): boolean {
-        return this._parentEntityId.index > 0;
+    public hasOwner(): boolean {
+        return this._ownerEntityId.index > 0;
     }
 
     /**
      * 親 Entity。
      * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
      * 
-     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
+     * GC のタイミングで、owner がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
      */
-    public parentObjectId(): LObjectId {
-        return this._parentEntityId;
+    public ownerObjectId(): LObjectId {
+        return this._ownerEntityId;
     }
     
-    public parentObject(): LObject {
-        return REGame.world.object(this._parentEntityId);
+    public ownerObject(): LObject {
+        return REGame.world.object(this._ownerEntityId);
     }
 
     public ownerAs<T>(ctor: { new(...args: any[]): T }): T | undefined {
-        if (!this.hasParent()) return undefined;
-        const obj = this.parentObject();
+        if (!this.hasOwner()) return undefined;
+        const obj = this.ownerObject();
         if (obj instanceof ctor) {
             return obj as T;
         }
@@ -110,15 +110,15 @@ export class LObject {
         }
     }
 
-    public setParent(parent: LObject): void {
-        assert(!this.hasParent());
-        const parentId = parent.objectId();
-        assert(parentId.index > 0);     // ID を持たない親は設定できない
-        this._parentEntityId = parentId;
+    public setOwner(owner: LObject): void {
+        assert(!this.hasOwner());
+        const ownerId = owner.objectId();
+        assert(ownerId.index > 0);     // ID を持たない親は設定できない
+        this._ownerEntityId = ownerId;
     }
 
-    public clearParent(): void {
-        this._parentEntityId = { index: 0, key: 0 };
+    public clearOwner(): void {
+        this._ownerEntityId = { index: 0, key: 0 };
     }
     
     /** destroy が要求されているか */
@@ -138,59 +138,3 @@ export class LObject {
 
     }
 }
-
-
-
-// Entity をフィールドに保持する人
-/**
- * 
- * Parent Object について
- * ----------
- * 自分自身の Object の "居場所" を示すためのプロパティです。
- * 
- * 
- * 
- * 
- * NOTE:
- * - 現在 Map の Adhoc Entity の Parent は Map となる。
- * - UniqueEntity の 
- */
-
-/*
- export class LObject {
-    _id: LEntityId = { index: 0, key: 0 };
-    
-    // 親 Entity。
-    // 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
-    // 
-    // GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
-    _parentEntityId: LEntityId = { index: 0, key: 0 };
-
-    id(): LEntityId {
-        return this._id;
-    }
-
-    parentid(): LEntityId {
-        return this._parentEntityId;
-    }
-
-    hasParent(): boolean {
-        return this._parentEntityId.index > 0;
-    }
-
-    setParent(parent: LObject | undefined): void {
-        if (parent) {
-            assert(!this.hasParent());
-
-            const parentId = parent.id();
-            assert(parentId.index > 0);     // ID を持たない親は設定できない
-            this._parentEntityId = parentId;
-        }
-        else {
-            this._parentEntityId.index = 0;
-            this._parentEntityId.key = 0;
-        }
-    }
-}
-
-*/

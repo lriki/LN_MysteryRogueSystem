@@ -86,28 +86,28 @@ export class LEntity extends LObject
    //     return this._parentEntityId;
     //}
 
-    public hasParent(): boolean {
-        return super.hasParent() || this._parentIsMap;
+    public hasOwner(): boolean {
+        return super.hasOwner() || this._parentIsMap;
         //return this._parentEntityId.index > 0 || this._parentIsMap;
     }
 
-    public parentIsMap(): boolean {
+    public ownerIsMap(): boolean {
         return this._parentIsMap;
     }
 
-    public setParent(parent: LEntity): void {
+    public setOwner(owner: LEntity): void {
         assert(!this._parentIsMap);
-        super.setParent(parent);
+        super.setOwner(owner);
     }
 
-    public setParentMap(parent: REGame_Map): void {
-        assert(this.parentObjectId().index == 0);
-        assert(!this.hasParent());
+    public setOwnerMap(owner: REGame_Map): void {
+        assert(this.ownerObjectId().index == 0);
+        assert(!this.hasOwner());
         this._parentIsMap = true;
     }
 
-    public clearParent(): void {
-        super.clearParent();
+    public clearOwner(): void {
+        super.clearOwner();
         this._parentIsMap = false;
     }
 
@@ -207,8 +207,8 @@ export class LEntity extends LObject
     }
 
     parentEntity(): LEntity | undefined {
-        if (this.parentObjectId().index > 0) {
-            return REGame.world.entity(this.parentObjectId());
+        if (this.ownerObjectId().index > 0) {
+            return REGame.world.entity(this.ownerObjectId());
         }
         else {
             return undefined;
@@ -264,7 +264,7 @@ export class LEntity extends LObject
         }
         else {
             const state = new LState(stateId);
-            state.setParent(this);
+            state.setOwner(this);
             this._states.push(state);
             state.onAttached();
             this._effectResult.pushAddedState(stateId);
@@ -346,7 +346,7 @@ export class LEntity extends LObject
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
                 return behavior.onRemoveEntityFromWhereabouts(context, this);
             });
-            assert(this.parentObjectId().index == 0);    // 何らか削除されているはず
+            assert(this.ownerObjectId().index == 0);    // 何らか削除されているはず
             return response;
         }
         else if (this.floorId > 0) {

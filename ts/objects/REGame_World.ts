@@ -165,7 +165,7 @@ export class RE_Game_World
         for (let i = 1; i < this._objects.length; i++) {
             const obj = this._objects[i];
             if (obj) {
-                if (!obj.isUnique() && !obj.hasParent()) {
+                if (!obj.isUnique() && !obj.hasOwner()) {
                     // Unique Entity 以外で、いずれからの参照もない Entity は削除する
                     obj.destroy();
                 }
@@ -196,7 +196,7 @@ export class RE_Game_World
                 // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
                 // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
                 // それはここでは追加しない。
-                const isNoEnterd = !entity.hasParent();
+                const isNoEnterd = !entity.hasOwner();
 
                 if (REGame.map.floorId() == entity.floorId && !entity.isTile() && isNoEnterd) {
                     REGame.map._reappearEntity(entity);

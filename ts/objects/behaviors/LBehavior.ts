@@ -167,7 +167,7 @@ export class LBehavior {
         if (owner.objectType() == LObjectType.Ability ||
             owner.objectType() == LObjectType.State) {
             // Entity がフィールドに保持して参照する Object は、Entity までさかのぼって返す
-            const owner2 = owner.parentObject();
+            const owner2 = owner.ownerObject();
             assert(owner2.objectType() == LObjectType.Entity);
             return owner2 as LEntity;
         }

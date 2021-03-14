@@ -24,7 +24,7 @@ import { LKnockbackBehavior } from "./LKnockbackBehavior";
  */
 export class LAbility extends LObject {
     private _abilityId: DAbilityId = 0;
-    private _ownerEntityId: LEntityId = { index: 0, key: 0 };
+    //private _ownerEntityId: LEntityId = { index: 0, key: 0 };
     private _behabiors: LBehavior[] = [];
 
     public constructor() {
@@ -33,7 +33,7 @@ export class LAbility extends LObject {
 
     public setup(abilityId: DAbilityId, owner: LEntity): void {
         this._abilityId = abilityId;
-        this._ownerEntityId = owner.id();
+        this.setOwner(owner);
 
         // TODO: test
         this._behabiors = [new LKnockbackBehavior()];
