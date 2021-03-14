@@ -38,11 +38,42 @@ export interface DState {
     message3: string;
     message4: string;
 
+    // TODO: deprecated
     traits: DStateTraitId[];
+    behaviors: string[];
+}
+
+export function DState_makeDefault(): DState {
+    return {
+        id: 0,
+        displayName: "",
+        key: "",
+        restriction: 0,
+        iconIndex: 0,
+        message1: "",
+        message2: "",
+        message3: "",
+        message4: "",
+        traits: [],
+        behaviors: [],
+    }
 }
 
 export function makeStateTraitsFromMeta(meta: any): DStateTraitId[] {
     return REData.stateTraits
         .filter(trait => !!meta[trait.name])
         .map(trait => trait.id);
+}
+
+export function makeStateBehaviorsFromMeta(meta: any): string[] {
+    const b = meta["RE-Behavior"];
+    if (b) {
+        if (b instanceof Array) {
+            return b;
+        }
+        else {
+            return [b];
+        }
+    }
+    return [];
 }

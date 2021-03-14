@@ -10,7 +10,7 @@ import { assert } from "../Common";
 import { DEffect, DEffectHitType, DEffectScope, DEffect_Default, DParameterEffectApplyType } from "./DSkill";
 import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
-import { DState, makeStateTraitsFromMeta } from "./DState";
+import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
 import { DBehaviorFactory } from "./DBehaviorFactory";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
@@ -291,24 +291,16 @@ export class REDataManager
                         message3: x.message3 ?? "",
                         message4: x.message4 ?? "",
                         traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
+                        behaviors: x.meta ? makeStateBehaviorsFromMeta(x.meta) : [],
                     };
                     return state;
                 }
                 else {
-                    return {
-                        id: i,
-                        displayName: "",
-                        key: "",
-                        restriction: 0,
-                        iconIndex: 0,
-                        message1: "",
-                        message2: "",
-                        message3: "",
-                        message4: "",
-                        traits: [],
-                    }
+                    return { ...DState_makeDefault(), id: i };
                 }
             });
+
+            console.log("REData.states", REData.states);
 
             // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
             DBasics.states = {

@@ -161,3 +161,29 @@ DataManager.extractSaveContents = function(contents) {
     _DataManager_extractSaveContents.call(DataManager, contents);
 }
 
+// メモ欄に同じタグが複数あった場合、配列としてmetaプロパティに登録する。
+// https://makonet.sakura.ne.jp/rpg_tkool/Old/contents/MetaDataEx.js
+//const _DataManager_extractMetadata = DataManager.extractMetadata;
+DataManager.extractMetadata = function(data: any): void {
+    var re = /<([^<>:]+)(:?)([^>]*)>/g;
+    data.meta = {};
+    for (;;) {
+        var match = re.exec(data.note);
+        if (match) {
+            var value = (match[2] === ':') ? match[3] : true;
+            if (data.meta[match[1]]) {
+                if (data.meta[match[1]].constructor === Array) {
+                    data.meta[match[1]].push(value);
+                } else {
+                    var _value = data.meta[match[1]];
+                    data.meta[match[1]] = [_value, value];
+                }
+            } else {
+                data.meta[match[1]] = value;
+            }
+        } else {
+            break;
+        }
+    }
+}
+

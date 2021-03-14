@@ -3,7 +3,7 @@ import { LAttribute } from "ts/objects/attributes/LAttribute";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
-import { DState } from "./DState";
+import { DState, DState_makeDefault } from "./DState";
 import { DSystem } from "./DSystem";
 import { DEffectHitType, DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
@@ -206,7 +206,7 @@ export class REData
         this.items = [];
         this.addItem("null");
 
-        this.states = [{id: 0, key: "", displayName: 'null', restriction: 0, iconIndex: 0, message1: "", message2: "", message3: "", message4: "", traits: []}];
+        this.states = [DState_makeDefault()];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
     }
@@ -371,16 +371,8 @@ export class REData
     static addState(name: string, factory: (() => LStateBehavior)): number {
         const newId = this.states.length;
         this.states.push({
+            ...DState_makeDefault(),
             id: newId,
-            key: "",
-            displayName: name,
-            restriction: 0,
-            iconIndex: 0,
-            message1: "",
-            message2: "",
-            message3: "",
-            message4: "",
-            traits: [],
         });
         this._stateFactories[newId] = factory;
         return newId;
