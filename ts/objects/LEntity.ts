@@ -232,7 +232,7 @@ export class LEntity extends LObject
         //REGame.world._registerBehavior(behavior);
 
         this._basicBehaviors.push(behavior);
-        behavior._ownerEntityId = this.id();
+        behavior._setOwnerObjectId(this.id());
         behavior.onAttached();
     }
     
@@ -264,7 +264,7 @@ export class LEntity extends LObject
         }
         else {
             const state = new LState(stateId);
-            state._setOwnerEntty(this);
+            state.setParent(this);
             this._states.push(state);
             state.onAttached();
             this._effectResult.pushAddedState(stateId);

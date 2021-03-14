@@ -49,7 +49,7 @@ export class LAbility extends LObject {
 
     public onAttached(): void {
         this._behabiors.forEach(b => {
-            b._ownerEntityId = this._ownerEntityId;
+            b._setOwnerObjectId(this.objectId());
             b.onAttached();
         });
     }

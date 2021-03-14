@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { REGame } from "./REGame";
 
 
 export interface LEntityId {
@@ -94,6 +95,21 @@ export class LObject {
         return this._parentEntityId;
     }
     
+    public parentObject(): LObject {
+        return REGame.world.object(this._parentEntityId);
+    }
+
+    public ownerAs<T>(ctor: { new(...args: any[]): T }): T | undefined {
+        if (!this.hasParent()) return undefined;
+        const obj = this.parentObject();
+        if (obj instanceof ctor) {
+            return obj as T;
+        }
+        else {
+            return undefined;
+        }
+    }
+
     public setParent(parent: LObject): void {
         assert(!this.hasParent());
         const parentId = parent.objectId();

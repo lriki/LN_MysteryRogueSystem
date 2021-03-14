@@ -34,7 +34,7 @@ import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
 import { REGame } from "..//REGame";
-import { LEntityId } from "../LObject";
+import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 
 export interface LBehaviorId {
@@ -135,6 +135,7 @@ export interface CollideActionArgs {
  */
 export class LBehavior {
     private _id: LBehaviorId = { index: 0, key: 0 };
+    private _ownerObjectId: LObjectId = { index: 0, key: 0 };
     
     public id(): LBehaviorId {
         return this._id;
@@ -148,6 +149,36 @@ export class LBehavior {
         return this._id.index > 0 && this._id.key != 0;
     }
 
+    public _setOwnerObjectId(id: LObjectId): void {
+        assert(this._ownerObjectId.index == 0); // 初回設定のみ許可
+        this._ownerObjectId = id;
+    }
+
+    public ownerObjectId(): LObjectId {
+        return this._ownerObjectId;
+    }
+
+    public ownerObject(): LObject {
+        return REGame.world.object(this._ownerObjectId);
+    }
+
+    public ownerEntity(): LEntity {
+        const owner = this.ownerObject();
+        if (owner.objectType() == LObjectType.Ability ||
+            owner.objectType() == LObjectType.State) {
+            // Entity がフィールドに保持して参照する Object は、Entity までさかのぼって返す
+            const owner2 = owner.parentObject();
+            assert(owner2.objectType() == LObjectType.Entity);
+            return owner2 as LEntity;
+        }
+        else if (owner.objectType() == LObjectType.Entity) {
+            return owner as LEntity;
+        }
+        else {
+            throw new Error();
+        }
+    }
+
     onAttached(): void {}
     onDetached(): void {}
     onEvent(eventId: DEventId, args: any): void {}
@@ -155,12 +186,8 @@ export class LBehavior {
 
 
     dataId: number = 0;
-    _ownerEntityId: LEntityId = { index: 0, key: 0 };
+    //_ownerEntityId: LEntityId = { index: 0, key: 0 };
     
-    ownerEntity(): LEntity {
-        assert(this._ownerEntityId.index > 0);
-        return REGame.world.entity(this._ownerEntityId);
-    }
 
     onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 

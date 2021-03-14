@@ -9,6 +9,7 @@ import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
+import { REGame_Map } from "../REGame_Map";
 
 /**
  * Entity に着脱するステートの単位。
@@ -23,12 +24,13 @@ import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
  * 特徴的なところだと "全快" するアイテムやイベントによってすべてでタッチされたりする。
  */
 export class LState extends LObject {
-    private _ownerEntity: LEntity | undefined;    // シリアライズしない
+    //private _ownerEntity: LEntity | undefined;    // シリアライズしない
     private _stateId: DStateId;
     private _behabiors: LStateTraitBehavior[];
 
     public constructor(stateId: DStateId) {
         super(LObjectType.State);
+        REGame.world._registerObject(this);
         this._stateId = stateId;
         
         const behavior = new LStateTrait_GenericRMMZState();
@@ -40,13 +42,17 @@ export class LState extends LObject {
         //    b._ownerState = this;
         //    return b;
         //}));
+
         this._behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
             const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
             b._ownerState = this;
             return b;
         }));
 
-        console.log("this._behabiors", this._behabiors);
+        for (const b of this._behabiors) {
+            b._setOwnerObjectId(this.objectId());
+        }
+        
     }
 
     public stateId(): number {
@@ -61,14 +67,14 @@ export class LState extends LObject {
         return this._behabiors;
     }
 
-    public ownerEntity(): LEntity {
-        assert(this._ownerEntity);
-        return this._ownerEntity;
-    }
+    //public ownerEntity(): LEntity {
+    //    assert(this._ownerEntity);
+    //    return this._ownerEntity;
+    //}
 
-    _setOwnerEntty(entity: LEntity) {
-        this._ownerEntity = entity;
-    }
+    //_setOwnerEntty(entity: LEntity) {
+    //    this._ownerEntity = entity;
+    //}
 
     recast(): void {
         // 同じ state が add された
@@ -76,7 +82,8 @@ export class LState extends LObject {
     }
     onAttached(): void {
         this._behabiors.forEach(b => {
-            b._ownerEntityId = this.ownerEntity().id();
+            //b._ownerEntityId = this.ownerEntity().id();
+            //b._setOwnerObjectId(this.objectId());
             b.onAttached();
         });
     }
@@ -89,7 +96,10 @@ export class LState extends LObject {
     }
 
     public removeThisState(): void {
-        this.ownerEntity().removeState(this._stateId);
+        const entity = this.ownerAs(LEntity);
+        if (entity) {
+            entity.removeState(this._stateId);
+        }
     }
 
 

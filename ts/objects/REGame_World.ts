@@ -2,7 +2,7 @@ import { LEntity } from "./LEntity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { Random } from "ts/math/Random";
-import { LEntityId, eqaulsEntityId, LObject, LObjectType } from "./LObject";
+import { LEntityId, eqaulsEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { TilingSprite } from "pixi.js";
 
@@ -20,14 +20,11 @@ export class RE_Game_World
         this._objects = [undefined];   // [0] is dummy
         this._behaviors = [undefined];   // [0] is dummy
     }
-
-    entity(id: LEntityId): LEntity {
+    
+    object(id: LObjectId): LObject {
         const e = this._objects[id.index];
         if (e && e.objectId().key == id.key) {
-            if (e.objectType() == LObjectType.Entity)
-                return e as LEntity;
-            else
-                throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
+            return e as LEntity;
         }
         else {
             if (!e) {
@@ -37,6 +34,14 @@ export class RE_Game_World
                 throw new Error(`Destroyed entity. (id: [${id.index}, ${id.key}])`);
             }
         }
+    }
+
+    entity(id: LEntityId): LEntity {
+        const e = this.object(id);
+        if (e.objectType() == LObjectType.Entity)
+            return e as LEntity;
+        else
+            throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
     }
 
     behavior(id: LBehaviorId): LBehavior {
@@ -69,7 +74,7 @@ export class RE_Game_World
         return entity;
     }
 
-    private _registerObject(obj: LObject): void {
+    public _registerObject(obj: LObject): void {
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._objects.findIndex((x, i) => i > 0 && x == undefined);

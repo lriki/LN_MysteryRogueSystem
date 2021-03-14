@@ -23,7 +23,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     public trapName(): string {
-        const itemId = REGame.world.entity(this._ownerEntityId).queryProperty(RESystem.properties.itemId) as number;
+        const itemId = this.ownerEntity().queryProperty(RESystem.properties.itemId) as number;
         const item = REData.items[itemId];
         return item.name;
     }
