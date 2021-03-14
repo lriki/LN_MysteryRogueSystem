@@ -282,7 +282,7 @@ export class REDataManager
                 if (x) {
                     let state: DState = {
                         id: i,
-                        key: x.meta ? x.meta["RE.Key"] : "",
+                        key: x.meta ? x.meta["RE-Key"] : "",
                         displayName: x.name ?? "",
                         restriction: 0,
                         iconIndex: x.iconIndex ?? 0,
@@ -313,7 +313,7 @@ export class REDataManager
             // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
             DBasics.states = {
                 dead: 1,//REData.addState("Dead", () => new LStateBehavior()),
-                nap: $dataStates.findIndex(x => x && x.meta && x.meta["RE.BasicState"] == "Nap"),
+                nap: $dataStates.findIndex(x => x && x.meta && x.meta["RE-BasicState"] == "Nap"),
                 debug_MoveRight: REData.addState("debug_MoveRight", () => new LDebugMoveRightState()),
             };
         }

@@ -35,7 +35,8 @@ export class LStateTrait_GenericRMMZState extends LStateTraitBehavior {
     onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
         if (phase == DecisionPhase.Prepare) {
             //console.log("DecisionPhase.Prepare");
-            context.postSkipPart(entity);
+            // TEST: 行動スキップ
+            //context.postSkipPart(entity);
             return REResponse.Succeeded;
         }
         else {
