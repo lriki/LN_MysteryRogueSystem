@@ -531,7 +531,6 @@ export class LEntity extends LObject
 
     // TODO: State と通常の Behavior を分けるのやめる。
     // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
-    //_callStateIterationHelper(func: (x: LStateBehavior) => REResponse): REResponse {
     _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
         for (let i = this._states.length - 1; i >= 0; i--) {

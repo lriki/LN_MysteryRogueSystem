@@ -10,7 +10,6 @@ import { DEffect, DEffectHitType, DEffectScope, DEffect_Default, DParameterEffec
 import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
-import { DBehaviorFactory } from "./DBehaviorFactory";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
@@ -581,8 +580,6 @@ export class REDataManager
                 }
             }
         }
-
-        DBehaviorFactory.setup();
     }
 
     public static loadPrefabDatabaseMap(): void {

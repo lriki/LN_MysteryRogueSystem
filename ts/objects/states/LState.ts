@@ -1,5 +1,4 @@
 import { assert } from "ts/Common";
-import { DBehaviorFactory } from "ts/data/DBehaviorFactory";
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
