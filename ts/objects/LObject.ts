@@ -42,7 +42,7 @@ export enum LObjectType {
  * 
  */
 export class LObject {
-    private _objectType: LObjectType;
+    private readonly _objectType: LObjectType;
 
     protected constructor(objectType: LObjectType) {
         this._objectType = objectType;

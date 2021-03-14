@@ -125,7 +125,14 @@ export interface CollideActionArgs {
     しかし、1 と 2 の時点では実際に Item を移していいのかはわからない。確認のみにとどめたい。
 */
 
-// see: 実装FAQ-Command-Behavior.md
+/**
+ * Entity の動作を定義する
+ * 
+ * [2021/3/14]
+ * ----------
+ * 従来は派生クラスで State 用の StateBehavior や Ability 用の AbilityBehavior を作っていたが、これを禁止する。
+ * たとえば "ハラヘリ" という Behavior は "ハラヘリ状態異常" や "ハラヘリの腕輪" で共有できるようにしておくことで、カスタマイズ性を確保しておきたい。
+ */
 export class LBehavior {
     private _id: LBehaviorId = { index: 0, key: 0 };
     
@@ -134,7 +141,6 @@ export class LBehavior {
     }
 
     public _setId(id: LBehaviorId): void  {
-        //assert(id.index > 0);
         this._id = id;
     }
 
