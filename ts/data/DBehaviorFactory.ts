@@ -7,6 +7,7 @@ import { DStateTraitId } from "./DStateTrait";
 
 type DStateTraitBehaviorFactory = () => LStateTraitBehavior;
 
+// deprecated
 export class DBehaviorFactory {
 
     private static _stateTraitFactories: DStateTraitBehaviorFactory[];

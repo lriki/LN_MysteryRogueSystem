@@ -4,11 +4,10 @@ import { DecisionPhase } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { LStateBehavior } from "./LStateBehavior";
 import { DBasics } from "ts/data/DBasics";
+import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
-// deprecated
-export class LDebugMoveRightState extends LStateBehavior {
+export class LDebugMoveRightState extends LStateTraitBehavior {
 
     onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
         

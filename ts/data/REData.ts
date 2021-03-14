@@ -1,4 +1,3 @@
-import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { LAttribute } from "ts/objects/attributes/LAttribute";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { isParameter } from "typescript";
@@ -179,7 +178,6 @@ export class REData
 
     static _attributeFactories: (() => LAttribute)[] = [];
     static _behaviorFactories: (() => LBehavior)[] = [];
-    static _stateFactories: (() => LStateBehavior)[] = [];
 
     static reset() {
         this.entityKinds = [{ id: 0, displayName: 'null', prefabKind: "" }];
@@ -365,16 +363,6 @@ export class REData
                 specialEffects: [],
             },
         });
-        return newId;
-    }
-    
-    static addState(name: string, factory: (() => LStateBehavior)): number {
-        const newId = this.states.length;
-        this.states.push({
-            ...DState_makeDefault(),
-            id: newId,
-        });
-        this._stateFactories[newId] = factory;
         return newId;
     }
 

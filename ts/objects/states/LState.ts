@@ -9,6 +9,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
+import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 
 /**
  * Entity に着脱するステートの単位。
@@ -35,11 +36,18 @@ export class LState extends LObject {
         behavior._ownerState = this;
         REGame.world._registerBehavior(behavior);
 
-        this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {
-            const b = DBehaviorFactory.createStateTraitBehavior(traitId);
+       //this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {
+        //    const b = DBehaviorFactory.createStateTraitBehavior(traitId);
+        //    b._ownerState = this;
+        //    return b;
+        //}));
+        this._behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
+            const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
             b._ownerState = this;
             return b;
         }));
+
+        console.log("this._behabiors", this._behabiors);
     }
 
     public stateId(): number {

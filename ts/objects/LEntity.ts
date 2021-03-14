@@ -5,7 +5,6 @@ import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
 import { BlockLayerKind, LRoomId, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
-import { LStateBehavior } from "ts/objects/states/LStateBehavior";
 import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
@@ -532,7 +531,8 @@ export class LEntity extends LObject
 
     // TODO: State と通常の Behavior を分けるのやめる。
     // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
-    _callStateIterationHelper(func: (x: LStateBehavior) => REResponse): REResponse {
+    //_callStateIterationHelper(func: (x: LStateBehavior) => REResponse): REResponse {
+    _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
         for (let i = this._states.length - 1; i >= 0; i--) {
             response = this._states[i]._callStateIterationHelper(func);

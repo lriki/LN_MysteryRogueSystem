@@ -10,6 +10,7 @@ import { DecisionPhase } from "../behaviors/LBehavior";
  * 各メソッドは Behavior と同一
  */
 // deprecated
+/*
 export class LStateBehavior {
     //_dataId: DStateId = 0;
     
@@ -26,6 +27,7 @@ export class LStateBehavior {
     onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     
 }
+*/
 
 /*
 [2020/11/8] Note: State は Attribute+Behavior 相当の実装だけど、これらを一緒にする？
