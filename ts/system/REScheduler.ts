@@ -5,7 +5,7 @@ import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "../objects/REGame";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { SSequelUnit, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
 import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget } from "./RESchedulerPhase";
@@ -15,7 +15,7 @@ import { SSequelContext } from "./SSequelContext";
 
 export interface UnitInfo
 {
-    entity: REGame_Entity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
+    entity: LEntity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
     attr: LUnitAttribute;     // cache for avoiding repeated find.
     behavior: REUnitBehavior;
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
@@ -68,7 +68,7 @@ enum SchedulerPhase
 export class REScheduler
 {
     private _phase: SchedulerPhase = SchedulerPhase.PartStarting;
-    private _actorEntities: REGame_Entity[] = [];   // Part 中に行動する全 Entity
+    private _actorEntities: LEntity[] = [];   // Part 中に行動する全 Entity
     private _units: UnitInfo[] = [];
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
@@ -495,7 +495,7 @@ export class REScheduler
         }
     }
 
-    invalidateEntity(entity: REGame_Entity) {
+    invalidateEntity(entity: LEntity) {
         const index = this._units.findIndex(x => x.entity == entity);
         if (index >= 0) {
             this._units[index].entity = undefined;

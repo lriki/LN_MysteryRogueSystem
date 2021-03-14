@@ -1,6 +1,6 @@
 import { REGame_Map } from "./REGame_Map";
 import { REEntityFactory } from "../system/REEntityFactory";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 import { RE_Game_World } from "./REGame_World";
 import { LEntityId } from "./LObject";
 

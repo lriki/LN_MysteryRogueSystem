@@ -1,9 +1,9 @@
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "./RESystem";
 
 export class SMessageBuilder {
-    static makeTargetName(/*subject: REGame_Entity, */target: REGame_Entity): string {
+    static makeTargetName(/*subject: REGame_Entity, */target: LEntity): string {
         const watcher = REGame.camera.focusedEntity();// ?? subject;
         const name = target.queryProperty(RESystem.properties.name) as string;
 

@@ -4,7 +4,7 @@ import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LBehavior, onMoveAsMagicBullet } from "./LBehavior";
 
 
@@ -30,7 +30,7 @@ export class LStaffItemBehavior extends LBehavior {
     //}
 
     
-    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         //const actor = cmd.actor()
         if (cmd.action().id == DBasics.actions.WaveActionId) {
             const magicBullet = REEntityFactory.newMagicBullet(this.ownerEntity());

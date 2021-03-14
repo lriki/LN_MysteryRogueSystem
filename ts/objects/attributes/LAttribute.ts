@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { REGame } from "..//REGame";
 import { LEntityId } from "../LObject";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 
 /**
  * データのみ保持する。
@@ -18,7 +18,7 @@ export class LAttribute
         return {};
     }
 
-    entity(): REGame_Entity {
+    entity(): LEntity {
         assert(this._ownerEntityId.index > 0);
         return REGame.world.entity(this._ownerEntityId);
     }

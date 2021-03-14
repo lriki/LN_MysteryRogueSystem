@@ -5,7 +5,7 @@ import { DTraits } from "ts/data/DTraits";
 import { DParameterId, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { SEffectorFact } from "ts/system/REEffectContext";
@@ -279,7 +279,7 @@ export class LBattlerBehavior extends LBehavior {
 
     //------------------------------------------------------------
     
-    onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {
+    onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }
     
     onRefreshStatus(): void {

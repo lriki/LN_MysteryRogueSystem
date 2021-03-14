@@ -1,7 +1,7 @@
 import { REGame_Map } from "./REGame_Map";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { REDataManager } from "../data/REDataManager";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 import { RE_Game_World } from "./REGame_World";
 import { REGame_Core } from "./REGame_Core";
 import { REScheduler } from "../system/REScheduler";
@@ -35,7 +35,7 @@ export class REGame
     static world: RE_Game_World;
     static map: REGame_Map;
     static camera: REGame_Camera;
-    static uniqueActorUnits: REGame_Entity[] = [];
+    static uniqueActorUnits: LEntity[] = [];
     static recorder: RECommandRecorder;
     static messageHistory: LMessageHistory;
     static message: LMessage;

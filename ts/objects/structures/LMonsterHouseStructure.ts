@@ -9,7 +9,7 @@ import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { MonsterHouseState } from "../LRoom";
 import { REGame } from "../REGame";
 import { LRoomId } from "../REGame_Block";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 
 export class LMonsterHouseStructure extends LStructure {
@@ -47,7 +47,7 @@ export class LMonsterHouseStructure extends LStructure {
         this._monsterHouseState = MonsterHouseState.Activated;
     }
     
-    onEntityLocated(context: RECommandContext, entity: REGame_Entity): void {
+    onEntityLocated(context: RECommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
 

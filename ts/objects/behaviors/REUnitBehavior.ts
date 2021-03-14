@@ -3,7 +3,7 @@ import { RECommandContext } from "../../system/RECommandContext";
 import { CommandArgs, LBehavior, onPrePickUpReaction, onPreThrowReaction, onThrowReaction, onWalkedOnTopAction } from "./LBehavior";
 import { REData } from "ts/data/REData";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { Helpers } from "ts/system/Helpers";
@@ -56,7 +56,7 @@ export class REUnitBehavior extends LBehavior {
         ]);
     }
 
-    onAction(actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         
         if (cmd.action().id == DBasics.actions.DirectionChangeActionId) {
             cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
@@ -109,7 +109,7 @@ export class REUnitBehavior extends LBehavior {
     
                     context.post(
                         itemEntity, actor, undefined, onPrePickUpReaction,
-                        (responce: REResponse, itemEntity: REGame_Entity, context: RECommandContext) => {
+                        (responce: REResponse, itemEntity: LEntity, context: RECommandContext) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
                             context.postMessage(tr("{0} は {1} をひろった", "LRIKI", REGame.identifyer.makeDisplayText(itemEntity)));
@@ -131,7 +131,7 @@ export class REUnitBehavior extends LBehavior {
                 // 足元に置けそうなら試行
                 context.post(
                     itemEntity, actor, undefined, onPrePickUpReaction,
-                    (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                    (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
                         inventory.removeEntity(reactor);
                         REGame.map.appearEntity(reactor, actor.x, actor.y);
 
@@ -154,7 +154,7 @@ export class REUnitBehavior extends LBehavior {
 
             context.post(
                 itemEntity, actor, undefined, onPreThrowReaction,
-                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
                     if (responce == REResponse.Pass) {
                         itemEntity.callRemoveFromWhereabouts(context);
 
@@ -164,7 +164,7 @@ export class REUnitBehavior extends LBehavior {
 
                         context.post(
                             itemEntity, actor, undefined, onThrowReaction,
-                            (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                            (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
                                 if (responce == REResponse.Pass) {
                                     context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                                 }
@@ -203,7 +203,7 @@ export class REUnitBehavior extends LBehavior {
     }
 
     
-    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         if (cmd.action().id == DBasics.actions.AttackActionId) {
 
             const effectContext = cmd.effectContext();

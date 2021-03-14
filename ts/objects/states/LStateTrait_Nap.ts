@@ -9,7 +9,7 @@ import { RESystem } from "ts/system/RESystem";
 import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { DecisionPhase } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
 export class LStateTrait_Nap extends LStateTraitBehavior {
@@ -44,7 +44,7 @@ export class LStateTrait_Nap extends LStateTraitBehavior {
             return super.onQueryProperty(propertyId);
     }
     
-    onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
                 this.removeThisState();

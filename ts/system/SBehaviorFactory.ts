@@ -1,9 +1,9 @@
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LStaffItemBehavior } from "ts/objects/behaviors/LStaffItemBehavior";
 
 export class SBehaviorFactory {
-    public static attachBehaviors(entity: REGame_Entity, names: string[]): void {
+    public static attachBehaviors(entity: LEntity, names: string[]): void {
         names.forEach(name => {
             entity.addBasicBehavior(this.createBehavior(name));
         });

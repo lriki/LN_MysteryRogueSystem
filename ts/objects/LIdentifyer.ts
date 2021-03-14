@@ -1,6 +1,6 @@
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 
 export enum DescriptionHighlightLevel {
     Identified,         // 識別済み。白テキスト
@@ -72,7 +72,7 @@ interface IdentificationStatus {
  */
 export class LIdentifyer {
 
-    resolveDescription(entity: REGame_Entity): LEntityDescription {
+    resolveDescription(entity: LEntity): LEntityDescription {
         const itemId = entity.queryProperty(RESystem.properties.itemId) as number;
         if (itemId > 0) {
             const item = REData.items[itemId];
@@ -85,7 +85,7 @@ export class LIdentifyer {
     }
 
     // ユーティリティ
-    makeDisplayText(entity: REGame_Entity): string {
+    makeDisplayText(entity: LEntity): string {
         return this.resolveDescription(entity).displayText();
     }
 }

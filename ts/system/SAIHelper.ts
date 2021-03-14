@@ -1,5 +1,5 @@
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
@@ -61,13 +61,13 @@ export class SAIHelper {
         return this.axisToDir(dx, dy);
     }
 
-    public static entityDistanceToDir(start: REGame_Entity, target: REGame_Entity): number {
+    public static entityDistanceToDir(start: LEntity, target: LEntity): number {
         const dx = target.x - start.x;
         const dy = target.y - start.y;
         return this.axisToDir(dx, dy);
     }
 
-    public static findDirectionTo(entity: REGame_Entity, startX: number, startY: number, goalX: number, goalY: number): number {
+    public static findDirectionTo(entity: LEntity, startX: number, startY: number, goalX: number, goalY: number): number {
         const dx = goalX - startX;
         const dy = goalY - startY;
         const dir = this.axisToDir(dx, dy);

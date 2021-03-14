@@ -3,14 +3,14 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VSubDialog } from "./VSubDialog";
 
 export class VItemListDialog extends VSubDialog {
-    _actorEntity: REGame_Entity;
+    _actorEntity: LEntity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;// | undefined;
     _commandWindow: VActionCommandWindow | undefined;
@@ -24,7 +24,7 @@ export class VItemListDialog extends VSubDialog {
      * 必ずしも Inventory を持っている Entity ではない点に注意。
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
-    constructor(actorEntity: REGame_Entity, inventory: LInventoryBehavior) {
+    constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
         super();
         this._actorEntity = actorEntity;
         this._inventory = inventory;

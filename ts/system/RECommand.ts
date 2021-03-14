@@ -1,6 +1,6 @@
 import { DAction } from "ts/data/DAction";
 import { REData } from "../data/REData";
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { REEffectContext } from "./REEffectContext";
 
 /**
@@ -54,12 +54,12 @@ export function checkContinuousResponse(r: REResponse): boolean {
 export class RECommand  // sealed
 {
     private _actionId: number;
-    private _actor: REGame_Entity;
-    private _reactor: REGame_Entity | undefined;
+    private _actor: LEntity;
+    private _reactor: LEntity | undefined;
     private _effectContext: REEffectContext | undefined;
     private _args: any;
 
-    constructor(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, effectContext: REEffectContext | undefined, args: any) {
+    constructor(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: REEffectContext | undefined, args: any) {
         this._actionId = actionId;
         this._actor = actor;
         this._reactor = reactor;
@@ -73,7 +73,7 @@ export class RECommand  // sealed
     args(): any { return this._args; }
 
     /** Action 側 Entity */
-    actor(): REGame_Entity {
+    actor(): LEntity {
         if (this._actor)
             return this._actor;
         else
@@ -81,7 +81,7 @@ export class RECommand  // sealed
     }
 
     /** Reaction 側 Entity */
-    reactor(): REGame_Entity | undefined { return this._reactor; }
+    reactor(): LEntity | undefined { return this._reactor; }
 
     effectContext(): REEffectContext | undefined { return this._effectContext; }
 

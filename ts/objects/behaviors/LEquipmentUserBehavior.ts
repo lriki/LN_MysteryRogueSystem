@@ -9,7 +9,7 @@ import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { eqaulsEntityId, LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior";
 import { LEquipmentBehavior } from "./LEquipmentBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
@@ -39,13 +39,13 @@ NOTE:
     private _parts: SlotPart[] = [];
     
 
-    public isEquipped(item: REGame_Entity): boolean {
+    public isEquipped(item: LEntity): boolean {
         const entityId = item.id();
         return this._parts.findIndex(part => part && part.itemEntityIds.findIndex(id => eqaulsEntityId(id, entityId)) >= 0) >= 0;
     }
 
-    public equippedItemEntities(): REGame_Entity[] {
-        const result: REGame_Entity[] = [];
+    public equippedItemEntities(): LEntity[] {
+        const result: LEntity[] = [];
         for (const part of this._parts) {
             if (part) {
                 for (const itemId of part.itemEntityIds) {
@@ -98,7 +98,7 @@ NOTE:
         }
     }
     
-    onAction(actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         
         if (cmd.action().id == DBasics.actions.EquipActionId) {
             this.refreshSlots();

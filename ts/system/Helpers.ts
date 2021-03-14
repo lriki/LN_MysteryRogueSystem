@@ -2,7 +2,7 @@ import { DFactionId, REData } from "ts/data/REData";
 import { Vector2 } from "ts/math/Vector2";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 
 export class Helpers {
     private static _dirToTileOffsetTable: Vector2[] =  [
@@ -21,20 +21,20 @@ export class Helpers {
         return new Vector2(x + offset.x * length, y + offset.y * length);
     }
 
-    static makeEntityFrontPosition(entity: REGame_Entity, length: number): Vector2 {
+    static makeEntityFrontPosition(entity: LEntity, length: number): Vector2 {
         const offset = this._dirToTileOffsetTable[entity.dir];
         return new Vector2(entity.x + offset.x * length, entity.y + offset.y * length);
     }
 
     // 2 つの Entity 間の直線距離を取得
-    static getDistance(entity1: REGame_Entity, entity2: REGame_Entity): number {
+    static getDistance(entity1: LEntity, entity2: LEntity): number {
         const x = entity1.x - entity2.x;
         const y = entity1.y - entity2.y;
         return Math.sqrt((x * x) + (y * y));
     }
 
     // 2 つの Entity が隣接しているか確認する
-    public static checkAdjacent(entity1: REGame_Entity, entity2: REGame_Entity): boolean {
+    public static checkAdjacent(entity1: LEntity, entity2: LEntity): boolean {
         const dx = entity1.x - entity2.x;
         const dy = entity1.y - entity2.y;
         return (-1 <= dx && dx <= 1 && -1 <= dy && dy <= 1);
@@ -42,7 +42,7 @@ export class Helpers {
     
 
     // 敵対勢力であるかを確認
-    public static isHostile(subject: REGame_Entity, target: REGame_Entity): boolean {
+    public static isHostile(subject: LEntity, target: LEntity): boolean {
         const attr1 = subject.findAttribute(LUnitAttribute);
         const attr2 = target.findAttribute(LUnitAttribute);
         if (attr1 && attr2) {
@@ -56,7 +56,7 @@ export class Helpers {
 
     // 味方であるかを確認
     // (target が subject に対して中立である場合は false を返すので注意)
-    public static isFriend(subject: REGame_Entity, target: REGame_Entity): boolean {
+    public static isFriend(subject: LEntity, target: LEntity): boolean {
         const attr1 = subject.findAttribute(LUnitAttribute);
         const attr2 = target.findAttribute(LUnitAttribute);
         if (attr1 && attr2) {
@@ -77,7 +77,7 @@ export class Helpers {
         return (REData.factions[subject].friendBits & (1 << target)) != 0;
     }
 
-    public static testVisibility(subject: REGame_Entity, target: REGame_Entity): boolean {
+    public static testVisibility(subject: LEntity, target: LEntity): boolean {
         const targetBlock = REGame.map.block(target.x, target.y);
 
         // 見方は常に視認可能

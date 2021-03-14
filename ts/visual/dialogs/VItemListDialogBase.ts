@@ -1,17 +1,17 @@
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REDialogContext } from "ts/system/REDialog";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VSubDialog } from "./VSubDialog";
 
 export class VItemListDialogBase extends VSubDialog {
-    _actorEntity: REGame_Entity;
+    _actorEntity: LEntity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;
     _commandWindow: VFlexCommandWindow;
 
-    public constructor(actorEntity: REGame_Entity, inventory: LInventoryBehavior) {
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
         super();
         this._actorEntity = actorEntity;
         this._inventory = inventory;

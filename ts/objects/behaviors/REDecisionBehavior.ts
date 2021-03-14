@@ -2,7 +2,7 @@ import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
@@ -25,7 +25,7 @@ export class REGame_DecisionBehavior extends LBehavior {
     private _targetPositionY: number = -1;
     private _attackTargetEntityId: LEntityId = LEntityId_Empty;
 
-    onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
             context.openDialog(entity, new REManualActionDialog());

@@ -1,7 +1,7 @@
 import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { BlockLayerKind, LRoomId, REGame_Block, TileKind } from "./REGame_Block";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { REEntityFactory } from "../system/REEntityFactory";
@@ -215,9 +215,9 @@ export class REGame_Map
     }
 
     public roomId(x: number, y: number): LRoomId;
-    public roomId(entity: REGame_Entity, _?: any): LRoomId;
+    public roomId(entity: LEntity, _?: any): LRoomId;
     public roomId(a1: any, a2: any): LRoomId {
-        if (a1 instanceof REGame_Entity) {
+        if (a1 instanceof LEntity) {
             return this.roomId(a1.x, a1.y);
         }
         else {
@@ -225,17 +225,17 @@ export class REGame_Map
         }
     }
 
-    public entities(): REGame_Entity[] {
+    public entities(): LEntity[] {
         return this._entityIds
             .map(id => { return REGame.world.entity(id); })
-            .filter((e): e is REGame_Entity => { return e != undefined; });
+            .filter((e): e is LEntity => { return e != undefined; });
     }
 
-    public entitiesInRoom(roomId: LRoomId): REGame_Entity[] {
+    public entitiesInRoom(roomId: LRoomId): LEntity[] {
         return this.entities().filter(entity => this.roomId(entity) == roomId);
     }
 
-    _addEntityInternal(entity: REGame_Entity): void {
+    _addEntityInternal(entity: LEntity): void {
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
@@ -255,7 +255,7 @@ export class REGame_Map
      * @param y 
      * 既に現在の Floor 上に登場済みの Entity に対してこのメソッドを呼び出すと失敗する。
      */
-    appearEntity(entity: REGame_Entity, x: number, y: number, layer?: BlockLayerKind): void {
+    appearEntity(entity: LEntity, x: number, y: number, layer?: BlockLayerKind): void {
         assert(entity.floorId == 0);
         entity.floorId= this.floorId();
         this.locateEntity(entity, x, y, layer);
@@ -263,7 +263,7 @@ export class REGame_Map
     }
 
     // appearEntity の、マップ遷移時用
-    _reappearEntity(entity: REGame_Entity): void {
+    _reappearEntity(entity: LEntity): void {
         assert(entity.floorId == this.floorId());
         assert(!entity.isTile());   // Tile は setup で追加済みのため、間違って追加されないようにチェック
         
@@ -274,7 +274,7 @@ export class REGame_Map
         this._addEntityInternal(entity);
     }
 
-    _removeEntity(entity: REGame_Entity): void {
+    _removeEntity(entity: LEntity): void {
         this._entityIds = this._entityIds.filter(x => !eqaulsEntityId(x, entity.id()));
         this._removeEntityHelper(entity);
     }
@@ -291,7 +291,7 @@ export class REGame_Map
         this._entityIds = [];
     }
 
-    private _removeEntityHelper(entity: REGame_Entity) {
+    private _removeEntityHelper(entity: LEntity) {
         assert(entity.parentIsMap());
         entity.clearParent();
 
@@ -314,7 +314,7 @@ export class REGame_Map
         return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
     }
     
-    canLeaving(block: REGame_Block, entity: REGame_Entity): boolean {
+    canLeaving(block: REGame_Block, entity: LEntity): boolean {
 
         // TODO: 壁抜けや浮遊状態で変わる
         return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
@@ -323,7 +323,7 @@ export class REGame_Map
     // NOTE: 斜め移動の禁止は、隣接タイルや Entity が、自分の角を斜め移動可能とするか、で検知したほうがいいかも。
     // シレン5石像の洞窟の石像は、Entity扱いだが斜め移動禁止。
     // ちなみに、丸太の罠等では斜めすり抜けできる。
-    checkPassage(entity: REGame_Entity, dir: number, toLayer?: BlockLayerKind): boolean {
+    checkPassage(entity: LEntity, dir: number, toLayer?: BlockLayerKind): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
@@ -345,7 +345,7 @@ export class REGame_Map
      * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
      */
     // deprecated
-    moveEntity(entity: REGame_Entity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+    moveEntity(entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         assert(entity.floorId == this.floorId());
 
         if (!this.isValidPosition(x, y)) {
@@ -374,7 +374,7 @@ export class REGame_Map
      * moveEntity() と異なり、移動可能判定を行わずに強制移動する。
      * マップ生成時の Entity 配置や、ワープ移動などで使用する。
      */
-    locateEntity(entity: REGame_Entity, x: number, y: number, toLayer?: BlockLayerKind): void {
+    locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
         assert(entity.floorId == this.floorId());
 
         const oldBlock = this.block(entity.x, entity.y);
@@ -389,7 +389,7 @@ export class REGame_Map
         this._postLocate(entity, oldBlock, newBlock);
     }
 
-    private _postLocate(entity: REGame_Entity, oldBlock: REGame_Block, newBlock: REGame_Block) {
+    private _postLocate(entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block) {
         if (oldBlock._roomId != newBlock._roomId) {
             const args: RoomEventArgs = {
                 entity: entity,

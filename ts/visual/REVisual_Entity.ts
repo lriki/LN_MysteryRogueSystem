@@ -6,7 +6,7 @@ import { REGame_Map } from "ts/objects/REGame_Map";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
 
 /**
@@ -17,7 +17,7 @@ import { REVisual } from "./REVisual";
  */
 export class REVisual_Entity
 {
-    private _entity: REGame_Entity; // EntityVisual が存在する間、Entity は必ず存在していると考えてよい
+    private _entity: LEntity; // EntityVisual が存在する間、Entity は必ず存在していると考えてよい
     private _rmmzEventId: number;
     private _rmmzSpriteIndex: number;   // Spriteset_Map._characterSprites の index
     private _sequelContext: REVisualSequelContext;
@@ -34,7 +34,7 @@ export class REVisual_Entity
     private _visibilityFrame: number = 0;
     private _prevVisibility: boolean = true;
 
-    constructor(entity: REGame_Entity, rmmzEventId: number) {
+    constructor(entity: LEntity, rmmzEventId: number) {
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;
         this._rmmzSpriteIndex = -1;
@@ -42,7 +42,7 @@ export class REVisual_Entity
         this._position = new Vector2(entity.x, entity.y);
     }
 
-    entity(): REGame_Entity {
+    entity(): LEntity {
         return this._entity;
     }
 

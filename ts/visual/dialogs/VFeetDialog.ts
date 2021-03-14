@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
 import { VSubDialog } from "./VSubDialog";
@@ -9,12 +9,12 @@ import { VSubDialog } from "./VSubDialog";
  * [足元]
  */
 export class VFeetDialog extends VSubDialog {
-    _targetEntity: REGame_Entity;
+    _targetEntity: LEntity;
     _actions: DActionId[];
     _entityNameWindow: Window_Help | undefined;
     _commandWindow: VActionCommandWindow | undefined;
 
-    constructor(targetEntity: REGame_Entity, actions: DActionId[]) {
+    constructor(targetEntity: LEntity, actions: DActionId[]) {
         super();
         this._targetEntity = targetEntity;
         this._actions = actions;

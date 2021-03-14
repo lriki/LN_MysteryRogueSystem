@@ -9,7 +9,7 @@ import { REEffectContext } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { REGame } from "../REGame";
 import { REGame_Block } from "../REGame_Block";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 

@@ -1,7 +1,7 @@
 import { assert, tr } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REDialogContext } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
@@ -11,7 +11,7 @@ import { VItemListDialogBase } from "./VItemListDialogBase";
 
 export class VWarehouseWithdrawDialog extends VItemListDialogBase {
 
-    public constructor(actorEntity: REGame_Entity, inventory: LInventoryBehavior) {
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
         super(actorEntity, inventory);
     }
 
@@ -22,7 +22,7 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
         this._commandWindow.refresh();
     }
     
-    private handleWithdraw(items: [REGame_Entity]): void {
+    private handleWithdraw(items: [LEntity]): void {
         this.submit(items);
     }
 }

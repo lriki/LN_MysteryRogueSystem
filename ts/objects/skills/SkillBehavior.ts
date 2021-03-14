@@ -1,7 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "ts/system/Helpers";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
@@ -9,11 +9,11 @@ import { RESystem } from "ts/system/RESystem";
 import { REGame } from "../REGame";
 
 export abstract class LSkillBehavior {
-    abstract onPerforme(skillId: DSkillDataId, entity: REGame_Entity, context: RECommandContext): void;
+    abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: RECommandContext): void;
 }
 
 export class LNormalAttackSkillBehavior extends LSkillBehavior {
-    onPerforme(skillId: DSkillDataId, entity: REGame_Entity, context: RECommandContext): void {
+    onPerforme(skillId: DSkillDataId, entity: LEntity, context: RECommandContext): void {
 
         const skill = REData.skills[skillId];
         ///const effector = new SEffectorFact(entity, skill.effect);

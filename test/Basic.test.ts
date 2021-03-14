@@ -8,7 +8,7 @@ import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/objects/REGame";
 import { REGameManager } from "ts/system/REGameManager";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
@@ -269,7 +269,7 @@ test('EntitySaveLoad', () => {
 
     // Save
     {
-        const actor1 = new REGame_Entity();
+        const actor1 = new LEntity();
 
         // Entity Property
         actor1._setId({ index: 1, key: 111 });
@@ -290,7 +290,7 @@ test('EntitySaveLoad', () => {
 
     // Load
     {
-        const actor2 = new REGame_Entity();
+        const actor2 = new LEntity();
         const contents2 = JSON.parse(contentsString);
         actor2.extractSaveContents(contents2);
         

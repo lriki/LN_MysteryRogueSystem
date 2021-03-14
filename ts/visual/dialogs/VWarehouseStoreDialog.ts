@@ -1,7 +1,7 @@
 import { assert, tr } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REDialogContext } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
@@ -10,12 +10,12 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VSubDialog } from "./VSubDialog";
 
 export class VWarehouseStoreDialog extends VSubDialog {
-    _actorEntity: REGame_Entity;
+    _actorEntity: LEntity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;
     _commandWindow: VFlexCommandWindow;
 
-    public constructor(actorEntity: REGame_Entity, inventory: LInventoryBehavior) {
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
         super();
         this._actorEntity = actorEntity;
         this._inventory = inventory;
@@ -67,7 +67,7 @@ export class VWarehouseStoreDialog extends VSubDialog {
         }
     }
 
-    private handleStore(items: [REGame_Entity]): void {
+    private handleStore(items: [LEntity]): void {
         this.submit(items);
     }
 

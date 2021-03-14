@@ -9,7 +9,7 @@ import { RESystem } from "ts/system/RESystem";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../REGame_Block";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { CommandArgs, LBehavior, onMoveAsProjectile, onPrePickUpReaction, onPrePutReaction, onThrowReaction } from "./LBehavior";
 
 
@@ -26,7 +26,7 @@ export class LCommonBehavior extends LBehavior {
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
 
-    public static startMoveAsProjectile(context: RECommandContext, entity: REGame_Entity, dir: number, distance: number): void {
+    public static startMoveAsProjectile(context: RECommandContext, entity: LEntity, dir: number, distance: number): void {
         const common = entity.findBehavior(LCommonBehavior);
         assert(common);
 
@@ -106,12 +106,12 @@ export class LCommonBehavior extends LBehavior {
         ]);
     }
 
-    onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         return super.onAction(entity, context, cmd);
     }
 
     
-    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         return super.onReaction(entity, actor, context, cmd);
     }
 }

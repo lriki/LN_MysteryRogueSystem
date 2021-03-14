@@ -5,7 +5,7 @@ import { REDataManager } from "../data/REDataManager";
 import { FBlockComponent, FMap } from "../floorgen/FMapData";
 import { REGame } from "../objects/REGame";
 import { TileKind } from "../objects/REGame_Block";
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { RESequelSet } from "../objects/REGame_Sequel";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "../PluginParameters";
 import { RMMZHelper } from "./RMMZHelper";
@@ -69,7 +69,7 @@ export class RMMZIntegration extends REIntegration {
         }
     }
     
-    onEntityEnteredMap(entity: REGame_Entity): void {
+    onEntityEnteredMap(entity: LEntity): void {
         const databaseMap = REDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
@@ -96,7 +96,7 @@ export class RMMZIntegration extends REIntegration {
         REVisual.entityVisualSet?.createVisual(entity);
     }
 
-    onEntityLeavedMap(entity: REGame_Entity): void {
+    onEntityLeavedMap(entity: LEntity): void {
         REVisual.entityVisualSet?.deleteVisual(entity);
 
         // RMMZ Event との関連付けを解除

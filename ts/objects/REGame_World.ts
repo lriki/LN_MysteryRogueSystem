@@ -1,4 +1,4 @@
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { Random } from "ts/math/Random";
@@ -11,7 +11,7 @@ import { TilingSprite } from "pixi.js";
  */
 export class RE_Game_World
 {
-    private _entities: (REGame_Entity | undefined)[] = [];
+    private _entities: (LEntity | undefined)[] = [];
     private _behaviors: (LBehavior | undefined)[] = [];
     private _random: Random = new Random(Math.floor(Math.random() * 65535) + 1);
 
@@ -20,7 +20,7 @@ export class RE_Game_World
         this._behaviors = [undefined];   // [0] is dummy
     }
 
-    entity(id: LEntityId): REGame_Entity {
+    entity(id: LEntityId): LEntity {
         const e = this._entities[id.index];
         if (e && e.id().key == id.key)
             return e;
@@ -58,13 +58,13 @@ export class RE_Game_World
      * 生成された Entity はいずれの Floor にも属さない状態となっている。
      * 出現させるには transfarEntity() を呼び出す必要がある。
      */
-    spawnEntity(): REGame_Entity {
-        const entity = new REGame_Entity();
+    spawnEntity(): LEntity {
+        const entity = new LEntity();
         this._registerEntity(entity);
         return entity;
     }
 
-    private _registerEntity(entity: REGame_Entity): void {
+    private _registerEntity(entity: LEntity): void {
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._entities.findIndex((x, i) => i > 0 && x == undefined);
@@ -124,7 +124,7 @@ export class RE_Game_World
      * 直ちに座標を変更するため、コマンドチェーン実行内からの呼び出しは禁止。
      * CommandContext.postTransferFloor() を使うこと。
      */
-    _transferEntity(entity: REGame_Entity, floorId: number, x: number, y: number): boolean {
+    _transferEntity(entity: LEntity, floorId: number, x: number, y: number): boolean {
         if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);

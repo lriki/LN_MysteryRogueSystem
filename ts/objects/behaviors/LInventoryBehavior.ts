@@ -63,17 +63,17 @@ import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { LEntityId, eqaulsEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior"
 
 export class LInventoryBehavior extends LBehavior {
     private _entities: LEntityId[] = [];
 
-    public entities(): REGame_Entity[] {
+    public entities(): LEntity[] {
         return this._entities.map(x => REGame.world.entity(x));
     }
 
-    public addEntity(entity: REGame_Entity) {
+    public addEntity(entity: LEntity) {
         assert(!entity.parentEntity());
 
         const id = entity.id();
@@ -83,7 +83,7 @@ export class LInventoryBehavior extends LBehavior {
         entity.setParent(this.ownerEntity());
     }
 
-    public removeEntity(entity: REGame_Entity) {
+    public removeEntity(entity: LEntity) {
         assert(entity.parentEntity() == this.ownerEntity());
 
         const id = entity.id();
@@ -94,7 +94,7 @@ export class LInventoryBehavior extends LBehavior {
         entity.clearParent();
     }
 
-    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse {
+    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());

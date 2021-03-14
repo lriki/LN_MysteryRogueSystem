@@ -4,7 +4,7 @@ import { DBasics } from "ts/data/DBasics";
 import { RE } from "ts/dialogs/EventExecutionDialog";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
@@ -44,7 +44,7 @@ export class REExitPointBehavior extends LBehavior {
         ]);
     }
     
-    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse {
+    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
 
         if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
             //const event = $gameMap.event(entity.rmmzEventId);

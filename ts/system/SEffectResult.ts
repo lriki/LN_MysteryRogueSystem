@@ -2,7 +2,7 @@ import { tr2 } from "ts/Common";
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RECommandContext } from "./RECommandContext";
 import { RESystem } from "./RESystem";
 import { SMessageBuilder } from "./SMessageBuilder";
@@ -120,7 +120,7 @@ export class SEffectResult {
     }
 
     // Window_BattleLog.prototype.displayActionResults
-    public showResultMessages(context: RECommandContext, entity: REGame_Entity): void {
+    public showResultMessages(context: RECommandContext, entity: LEntity): void {
 
         const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
         

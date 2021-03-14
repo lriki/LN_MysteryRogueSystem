@@ -7,7 +7,7 @@ import { eqaulsEntityId } from "ts/objects/LObject";
 import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind, REGame_Block } from "ts/objects/REGame_Block";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { Helpers } from "./Helpers";
 import { RECommandContext } from "./RECommandContext";
@@ -15,7 +15,7 @@ import { RESystem } from "./RESystem";
 
 
 export class SMomementCommon {
-    public static moveEntity(context: RECommandContext, entity: REGame_Entity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+    public static moveEntity(context: RECommandContext, entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
         assert(entity.floorId == map.floorId());
 
@@ -39,7 +39,7 @@ export class SMomementCommon {
         }
     }
     
-    private static _postLocate(context: RECommandContext, entity: REGame_Entity, oldBlock: REGame_Block, newBlock: REGame_Block, map: REGame_Map) {
+    private static _postLocate(context: RECommandContext, entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block, map: REGame_Map) {
         if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {
             this.markPassed(map, newBlock);
         }

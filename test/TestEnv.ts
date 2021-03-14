@@ -4,7 +4,7 @@ import { REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
@@ -193,11 +193,11 @@ export class TestEnvIntegration extends REIntegration {
         // Dialog の処理はテストコード内で行う
     }
 
-    onEntityEnteredMap(entity: REGame_Entity): void {
+    onEntityEnteredMap(entity: LEntity): void {
         // Visual 表示は伴わない
     }
 
-    onEntityLeavedMap(entity: REGame_Entity): void {
+    onEntityLeavedMap(entity: LEntity): void {
         // Visual 表示は伴わない
     }
 }

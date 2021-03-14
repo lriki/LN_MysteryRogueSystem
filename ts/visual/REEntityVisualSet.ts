@@ -1,7 +1,7 @@
 import { REData } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
@@ -47,7 +47,7 @@ export class REEntityVisualSet {
 
     }
 
-    findEntityVisualByEntity(entity: REGame_Entity): REVisual_Entity | undefined {
+    findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined {
         return this._visualEntities.find(x => x.entity().id() == entity.id());
     }
 
@@ -59,7 +59,7 @@ export class REEntityVisualSet {
         return this._sequelManager.isRunning();
     }
 
-    deleteVisual(entity: REGame_Entity) {
+    deleteVisual(entity: LEntity) {
         const index = this._visualEntities.findIndex(x => x.entity() == entity);
         if (index >= 0) {
             const visual = this._visualEntities[index];
@@ -83,7 +83,7 @@ export class REEntityVisualSet {
         this._sequelManager.setup(sequelSet);
     }
     
-    createVisual(entity: REGame_Entity) {
+    createVisual(entity: LEntity) {
         const databaseMap = REDataManager.databaseMap();
         if (!databaseMap || !databaseMap.events) {
             throw new Error();

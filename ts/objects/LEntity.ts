@@ -1,5 +1,5 @@
-import { LAttribute } from "../objects/attributes/LAttribute";
-import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
+import { LAttribute } from "./attributes/LAttribute";
+import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
@@ -11,7 +11,7 @@ import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
 import { RETileAttribute } from "./attributes/RETileAttribute";
-import { eqaulsEntityId, LEntityId } from "./LObject";
+import { eqaulsEntityId, LEntityId, LObject, LObjectType } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
 import { LState } from "./states/LState";
@@ -60,7 +60,7 @@ enum BlockLayer
  * 以前オブジェクトの参照と寿命管理のために LObject をベースクラスとし、Entity だけではなく Map 等もその派生としていたことがあったが、
  * セーブデータ作成や、World から Entity を検索するとき等の書き方が非常に煩雑になってしまったため廃止した。
  */
-export class REGame_Entity
+export class LEntity extends LObject
 {
     
     private _id: LEntityId = { index: 0, key: 0 };
@@ -73,6 +73,10 @@ export class REGame_Entity
      */
     private _parentEntityId: LEntityId = { index: 0, key: 0 };
     private _parentIsMap = false;
+
+    public constructor() {
+        super(LObjectType.Entity);
+    }
 
     public id(): LEntityId {
         return this._id;
@@ -95,7 +99,7 @@ export class REGame_Entity
         return this._parentIsMap;
     }
 
-    public setParent(parent: REGame_Entity): void {
+    public setParent(parent: LEntity): void {
         assert(!this._parentIsMap);
         assert(!this.hasParent());
 
@@ -201,7 +205,7 @@ export class REGame_Entity
         this.removeAllStates();
     }
 
-    parentEntity(): REGame_Entity | undefined {
+    parentEntity(): LEntity | undefined {
         if (this._parentEntityId.index > 0) {
             return REGame.world.entity(this._parentEntityId);
         }
@@ -566,7 +570,7 @@ export class REGame_Entity
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
-    _sendReaction(context: RECommandContext, actor: REGame_Entity, cmd: RECommand): REResponse {
+    _sendReaction(context: RECommandContext, actor: LEntity, cmd: RECommand): REResponse {
         return this._callBehaviorIterationHelper(x => x.onReaction(this, actor, context, cmd));
     }
 

@@ -6,7 +6,7 @@ import { DEffect, DEffectHitType, DEffectScope, DParameterEffect, DParameterEffe
 import { ParameterEffectType } from "ts/data/DSystem";
 import { DParameterId, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "./RESystem";
 import { SEffectResult, SParamEffectResult } from "./SEffectResult";
 
@@ -68,7 +68,7 @@ export class SParameterEffect {
 // 攻撃側
 export class SEffectorFact {
     private _context: REEffectContext;
-    private _subject: REGame_Entity;
+    private _subject: LEntity;
     private _subjectEffect: DEffect;
     private _subjectBattlerBehavior: LBattlerBehavior | undefined;
 
@@ -77,7 +77,7 @@ export class SEffectorFact {
     //
     // 矢弾や魔法弾を打った場合、その Projectile Entity も effectors に含まれる。
     // なお、魔法反射や吹き飛ばし移動は Command 側で処理する。EffectContext はあくまでパラメータの変化に関係する処理のみを行う。
-    private _effectors: REGame_Entity[] = [];
+    private _effectors: LEntity[] = [];
 
     // 以下、Behavior 持ち回りで編集される要素
     private _actualParams: number[];
@@ -85,7 +85,7 @@ export class SEffectorFact {
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
 
-    public constructor(context: REEffectContext, subject: REGame_Entity, effect: DEffect) {
+    public constructor(context: REEffectContext, subject: LEntity, effect: DEffect) {
         this._context = context;
         this._subject = subject;
         this._subjectEffect = effect;
@@ -113,7 +113,7 @@ export class SEffectorFact {
         });
     }
 
-    public subject(): REGame_Entity {
+    public subject(): LEntity {
         return this._subject;
     }
 
@@ -129,7 +129,7 @@ export class SEffectorFact {
     //--------------------
     // onCollectEffector から使うもの
 
-    public addEffector(entity: REGame_Entity) {
+    public addEffector(entity: LEntity) {
         this._effectors.push(entity);
     }
 
@@ -281,11 +281,11 @@ export class REEffectContext {
 
     // 経験値など、報酬に関わるフィードバックを得る人。
     // 基本は effectors と同じだが、反射や投げ返しを行ったときは経験値を得る人が変わるため、その対応のために必要となる。
-    private _awarder: REGame_Entity[] = [];
+    private _awarder: LEntity[] = [];
 
     // 被適用側 (防御側) の関係者。AttackCommand を受け取ったときなど、ダメージ計算したい直前に構築する。
     // effectors と同じく、装備品なども含まれる。（サビなど修正値ダウンしたり、ひびが入ったり、燃えたりといった処理のため）
-    private _effectees: REGame_Entity[] = [];
+    private _effectees: LEntity[] = [];
 
     
     //private _targetEntity: REGame_Entity;
@@ -294,7 +294,7 @@ export class REEffectContext {
     // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
     private _scope: DEffectScope = 0;
 
-    constructor(subject: REGame_Entity, scope: DEffectScope, effect: DEffect) {
+    constructor(subject: LEntity, scope: DEffectScope, effect: DEffect) {
         this._effectorFact = new SEffectorFact(this, subject, effect);
         this._scope = scope;
         //this._targetEntity = target;
@@ -302,7 +302,7 @@ export class REEffectContext {
     }
     
     // Game_Action.prototype.apply
-    apply(target: REGame_Entity): SEffectResult {
+    apply(target: LEntity): SEffectResult {
         const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();

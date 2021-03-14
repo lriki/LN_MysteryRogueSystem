@@ -1,6 +1,6 @@
 
 import { assert } from "ts/Common";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";

@@ -8,7 +8,7 @@ import { SMomementCommon } from "ts/system/SMomementCommon";
 import { LEntityId, LEntityId_Empty } from "../LObject";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../REGame_Block";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsMagicBullet } from "./LBehavior";
 
 
@@ -17,7 +17,7 @@ import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePr
 export class LMagicBulletBehavior extends LBehavior {
     private _ownerItemEntityId: LEntityId = LEntityId_Empty;
 
-    public setup(ownerItem: REGame_Entity): void {
+    public setup(ownerItem: LEntity): void {
         this._ownerItemEntityId = ownerItem.id();
     }
 
@@ -47,7 +47,7 @@ export class LMagicBulletBehavior extends LBehavior {
 
                 context.post(
                     entity1, self, undefined, onCollidePreReaction,
-                    (response: REResponse, _: REGame_Entity, context: RECommandContext) => {
+                    (response: REResponse, _: LEntity, context: RECommandContext) => {
                         if (response == REResponse.Pass) {
 
                             // reactor 側ではじかれていなかったので CollideAction を呼び出す

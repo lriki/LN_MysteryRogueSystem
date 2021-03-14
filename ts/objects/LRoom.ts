@@ -6,7 +6,7 @@ import { FRoom } from "ts/floorgen/FMapData";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REGame } from "./REGame";
 import { REGame_Block, TileKind } from "./REGame_Block";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 
 export enum MonsterHouseState {
     Sleeping = 0,
@@ -48,7 +48,7 @@ export class LRoom {
         return this._x1 <= x && x <= this._x2 && this._y1 <= y && y <= this._y2;
     }
     
-    public forEachEntities(func: (entity: REGame_Entity) => void): void {
+    public forEachEntities(func: (entity: LEntity) => void): void {
         for (const entity of REGame.map.entities()) {
             if (this.contains(entity.x, entity.y)) {
                 func(entity);
@@ -56,7 +56,7 @@ export class LRoom {
         }
     }
     
-    public findEntityInRoom(func: (entity: REGame_Entity) => boolean): REGame_Entity | undefined {
+    public findEntityInRoom(func: (entity: LEntity) => boolean): LEntity | undefined {
         for (const entity of REGame.map.entities()) {
             if (this.contains(entity.x, entity.y)) {
                 if (func(entity)) {

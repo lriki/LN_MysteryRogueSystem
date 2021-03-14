@@ -1,5 +1,5 @@
 
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { DecisionPhase } from "../behaviors/LBehavior";
@@ -18,12 +18,12 @@ export class LStateBehavior {
 
     //onQueryActions(): ActionId[] { return []; }
 
-    onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
+    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
-    onPreAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onPreReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onPreAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onPreReaction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     
 }
 

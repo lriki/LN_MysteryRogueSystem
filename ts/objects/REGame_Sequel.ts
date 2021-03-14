@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { REData } from "../data/REData";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 
 /**
  * Sequel
@@ -9,15 +9,15 @@ import { REGame_Entity } from "./REGame_Entity";
  * Sequel 個別にデータを持たせたいときに利用予定 (継承よりはフィールドに持たせた方がいいかも)
  */
 export class SSequelUnit {
-    private _entity: REGame_Entity;
+    private _entity: LEntity;
     private _parallel: boolean;
 
-    constructor(entity: REGame_Entity, parallel: boolean) {
+    constructor(entity: LEntity, parallel: boolean) {
         this._entity = entity;
         this._parallel = parallel;
     }
 
-    entity(): REGame_Entity {
+    entity(): LEntity {
         return this._entity;
     }
 
@@ -29,7 +29,7 @@ export class SSequelUnit {
 export class SMotionSequel extends SSequelUnit {
     private _sequelId: DSequelId;
 
-    constructor(entity: REGame_Entity, sequelId: DSequelId) {
+    constructor(entity: LEntity, sequelId: DSequelId) {
         super(entity, REData.sequels[sequelId].parallel);
         this._sequelId = sequelId;
     }
@@ -47,7 +47,7 @@ export class SAnumationSequel extends SSequelUnit {
     private _anumationlId: number;
     private _isWait: boolean;
 
-    public constructor(entity: REGame_Entity, anumationlId: number, wait: boolean) {
+    public constructor(entity: LEntity, anumationlId: number, wait: boolean) {
         super(entity, !wait);   // wait するときは parallel にしない。してしまうと、直後に post したメッセージなどが先に進んでしまう。
         this._anumationlId = anumationlId;
         this._isWait = wait;
@@ -78,7 +78,7 @@ export class RESequelClip {
         return this._sequels;
     }
 
-    entity(): REGame_Entity {
+    entity(): LEntity {
         return this._sequels[0].entity();
     }
 

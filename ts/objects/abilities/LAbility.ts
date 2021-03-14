@@ -2,7 +2,7 @@ import { DAbilityId } from "ts/data/DAbility";
 import { LBehavior } from "../behaviors/LBehavior";
 import { LEntityId, LObject, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LKnockbackBehavior } from "./LKnockbackBehavior";
 
 
@@ -31,7 +31,7 @@ export class LAbility extends LObject {
         super(LObjectType.Ability);
     }
 
-    public setup(abilityId: DAbilityId, owner: REGame_Entity): void {
+    public setup(abilityId: DAbilityId, owner: LEntity): void {
         this._abilityId = abilityId;
         this._ownerEntityId = owner.id();
 

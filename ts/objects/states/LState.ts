@@ -6,7 +6,7 @@ import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { LObject, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
 
@@ -23,7 +23,7 @@ import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
  * 特徴的なところだと "全快" するアイテムやイベントによってすべてでタッチされたりする。
  */
 export class LState extends LObject {
-    private _ownerEntity: REGame_Entity | undefined;    // シリアライズしない
+    private _ownerEntity: LEntity | undefined;    // シリアライズしない
     private _stateId: DStateId;
     private _behabiors: LStateTraitBehavior[];
 
@@ -54,12 +54,12 @@ export class LState extends LObject {
         return this._behabiors;
     }
 
-    public ownerEntity(): REGame_Entity {
+    public ownerEntity(): LEntity {
         assert(this._ownerEntity);
         return this._ownerEntity;
     }
 
-    _setOwnerEntty(entity: REGame_Entity) {
+    _setOwnerEntty(entity: LEntity) {
         this._ownerEntity = entity;
     }
 

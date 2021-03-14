@@ -5,7 +5,7 @@ import { REDataManager } from "ts/data/REDataManager";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { TileKind } from "ts/objects/REGame_Block";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
 import { REEntityFactory } from "./REEntityFactory";
 import { SBehaviorFactory } from "./SBehaviorFactory";
@@ -179,7 +179,7 @@ export class SRmmzHelpers {
         }
     }
     
-    public static newEntity(data: RMMZEventEntityMetadata): REGame_Entity {
+    public static newEntity(data: RMMZEventEntityMetadata): LEntity {
         const prefabEventData = this.getPrefabEventData(data.prefab);
         const prefabData = this.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
         assert(prefabData);

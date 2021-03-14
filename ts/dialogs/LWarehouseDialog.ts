@@ -3,7 +3,7 @@ import { testPickOutItem, testPutInItem } from "ts/objects/behaviors/LBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
@@ -19,15 +19,15 @@ export class LWarehouseDialog extends REDialog {
         this._warehouseEntityId = warehouseEntityId;
     }
 
-    public userEntity(): REGame_Entity {
+    public userEntity(): LEntity {
         return REGame.world.entity(this._userEntityId);
     }
 
-    public warehouseEntity(): REGame_Entity {
+    public warehouseEntity(): LEntity {
         return REGame.world.entity(this._warehouseEntityId);
     }
 
-    public storeItems(items: REGame_Entity[]): void {
+    public storeItems(items: LEntity[]): void {
         const user = this.userEntity();
         const warehouse = this.warehouseEntity();
         const userInventory = user.getBehavior(LInventoryBehavior);
@@ -39,14 +39,14 @@ export class LWarehouseDialog extends REDialog {
             console.log("0");
             // Item を取り出せるか確認
             RESystem.commandContext.post(user, user, item, testPickOutItem,
-                (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                (response: REResponse, reactor: LEntity, context: RECommandContext) => {
                     console.log("1");
                     if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
                         RESystem.commandContext.post(warehouse, warehouse, item, testPutInItem,
-                            (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                            (response: REResponse, reactor: LEntity, context: RECommandContext) => {
                                 console.log("3");
                                 if (response != REResponse.Canceled) {
                                     console.log("4");
@@ -65,7 +65,7 @@ export class LWarehouseDialog extends REDialog {
         this.close(true);
     }
     
-    public withdrawItems(items: REGame_Entity[]): void {
+    public withdrawItems(items: LEntity[]): void {
         const user = this.userEntity();
         const warehouse = this.warehouseEntity();
         const userInventory = user.getBehavior(LInventoryBehavior);
@@ -75,14 +75,14 @@ export class LWarehouseDialog extends REDialog {
             console.log("0");
             // Item を取り出せるか確認
             RESystem.commandContext.post(warehouse, warehouse, item, testPickOutItem,
-                (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                (response: REResponse, reactor: LEntity, context: RECommandContext) => {
                     console.log("1");
                     if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
                         RESystem.commandContext.post(user, user, item, testPutInItem,
-                            (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                            (response: REResponse, reactor: LEntity, context: RECommandContext) => {
                                 console.log("3");
                                 if (response != REResponse.Canceled) {
                                     console.log("4");

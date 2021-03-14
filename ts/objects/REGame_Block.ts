@@ -1,7 +1,7 @@
 import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 import { REGame_Map } from "./REGame_Map";
 import { FBlockComponent } from "ts/floorgen/FMapData";
 
@@ -27,13 +27,13 @@ export enum BlockLayerKind {
 class REBlockLayer {
     // 同一レイヤーに、同時に複数の Entity は存在可能。
     // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
-    private _entities: REGame_Entity[] = [];
+    private _entities: LEntity[] = [];
 
-    entities(): readonly REGame_Entity[] {
+    entities(): readonly LEntity[] {
         return this._entities;
     }
 
-    firstEntity(): REGame_Entity | undefined {
+    firstEntity(): LEntity | undefined {
         if (this._entities.length > 0)
             return this._entities[0];
         else
@@ -44,7 +44,7 @@ class REBlockLayer {
         return this._entities.length > 0;
     }
 
-    isContains(entity: REGame_Entity): boolean {
+    isContains(entity: LEntity): boolean {
         return this._entities.includes(entity);
     }
 
@@ -52,11 +52,11 @@ class REBlockLayer {
         return this._entities.some(x => x.blockOccupied);
     }
 
-    addEntity(entity: REGame_Entity) {
+    addEntity(entity: LEntity) {
         this._entities.push(entity);
     }
 
-    removeEntity(entity: REGame_Entity): boolean {
+    removeEntity(entity: LEntity): boolean {
         const index = this._entities.indexOf(entity);
         if (index >= 0) {
             this._entities.splice(index, 1);
@@ -235,7 +235,7 @@ export class REGame_Block// extends LObject
         MapDataProvidor.onUpdateBlock(this);
     }
 
-    tile(): REGame_Entity {
+    tile(): LEntity {
         return this._layers[BlockLayerKind.Terrain].entities()[0];
     }
 
@@ -252,7 +252,7 @@ export class REGame_Block// extends LObject
         return this._layers[kind];
     }
 
-    addEntity(layerKind: BlockLayerKind, entity: REGame_Entity) {
+    addEntity(layerKind: BlockLayerKind, entity: LEntity) {
         const layer = this._layers[layerKind];
         assert(!layer.isContains(entity));  // 複数追加禁止
         assert(!layer.isOccupied());        // 既に占有されている時は追加禁止
@@ -265,7 +265,7 @@ export class REGame_Block// extends LObject
         layer.addEntity(entity);
     }
 
-    removeEntity(entity: REGame_Entity): boolean {
+    removeEntity(entity: LEntity): boolean {
         for (let i = 0; i < this._layers.length; i++) {
             if (this._layers[i].removeEntity(entity)) {
                 return true;
@@ -280,13 +280,13 @@ export class REGame_Block// extends LObject
         }
     }
 
-    aliveEntity(layer: BlockLayerKind): REGame_Entity | undefined {
+    aliveEntity(layer: BlockLayerKind): LEntity | undefined {
         const l = this._layers[layer];
         return l.entities().find(x => x.isAlive());
     }
 
     /** Entity が含まれている Layer を検索する */
-    findEntityLayerKind(entity: REGame_Entity): BlockLayerKind | undefined {
+    findEntityLayerKind(entity: LEntity): BlockLayerKind | undefined {
         const index = this._layers.findIndex(x => x.isContains(entity));
         if (index >= 0)
             return index;

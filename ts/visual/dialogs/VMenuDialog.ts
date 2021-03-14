@@ -1,15 +1,15 @@
 
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VItemListDialog } from "./VItemListDialog";
 import { VSubDialog } from "./VSubDialog";
 
 export class VMenuDialog extends VSubDialog {
-    _entity: REGame_Entity;
+    _entity: LEntity;
     _commandWindow: VMenuCommandWindow | undefined;
 
-    constructor(entity: REGame_Entity) {
+    constructor(entity: LEntity) {
         super();
         this._entity = entity;
     }

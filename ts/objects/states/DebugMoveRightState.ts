@@ -1,7 +1,7 @@
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/objects/REGame";
 import { DecisionPhase } from "ts/objects/behaviors/LBehavior";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { LStateBehavior } from "./LStateBehavior";
@@ -10,7 +10,7 @@ import { DBasics } from "ts/data/DBasics";
 // deprecated
 export class LDebugMoveRightState extends LStateBehavior {
 
-    onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ

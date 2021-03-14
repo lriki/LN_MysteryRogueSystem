@@ -10,7 +10,7 @@ import './rmmz/Game_Message';
 import './data/REData';
 import './data/REDataManager';
 import './data/DTextManager';
-import './objects/REGame_Entity';
+import './objects/LEntity';
 import './objects/REGame_Map';
 import './objects/REGame_Core';
 import './system/REEntityFactory';

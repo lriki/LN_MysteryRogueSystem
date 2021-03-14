@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "./RECommand";
 import { REDialog } from "./REDialog";
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { REScheduler } from "./REScheduler";
 import { assert, Log } from "ts/Common";
 import { SAnumationSequel, SMotionSequel, SSequelUnit } from "../objects/REGame_Sequel";
@@ -18,7 +18,7 @@ interface RECCMessage {
     func: () => REResponse;
 }
 
-export type CommandResultCallback = (response: REResponse, reactor: REGame_Entity, context: RECommandContext) => void;
+export type CommandResultCallback = (response: REResponse, reactor: LEntity, context: RECommandContext) => void;
 
 /**
  * 
@@ -57,7 +57,7 @@ export class RECommandContext
      *  [拾う] など、reactor 側の状態等によって actor 側が目的を達成できない可能性がある Action で使用する。
      * （例えば、床に張り付いた巻物を拾おうとするときは、reactor 側が onPreReaction で Action をはじく）
      */
-    postActionTwoWay(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
+    postActionTwoWay(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
         assert(actionId > 0);
 
         const actualCommand = new RECommand(actionId, actor, reactor, undefined, args);
@@ -105,7 +105,7 @@ export class RECommandContext
     /**
      * カスタムの RE-Command のように、プラグインとして事前定義できないコマンド実行 Action の呼び出し
      */
-    postActionOneWay(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, effectContext: REEffectContext | undefined, args?: any) {
+    postActionOneWay(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: REEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
         const actualCommand = new RECommand(actionId, actor, reactor, effectContext, args);
@@ -138,7 +138,7 @@ export class RECommandContext
      * @param effectContext 
      * @param args 
      */
-    postReaction(actionId: number, entity: REGame_Entity, actor: REGame_Entity, effectContext: REEffectContext | undefined, args?: any) {
+    postReaction(actionId: number, entity: LEntity, actor: LEntity, effectContext: REEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
         const actualCommand = new RECommand(actionId, entity, undefined, effectContext, args);
@@ -166,7 +166,7 @@ export class RECommandContext
     // TODO: sender っていうのがすごくわかりづらい。
     // target と sender は基本的に self で同一なのでそうして、
     // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
-    post<TSym extends symbol>(target: REGame_Entity, sender: REGame_Entity, args: any, symbol: TSym, result?: CommandResultCallback): void {
+    post<TSym extends symbol>(target: LEntity, sender: LEntity, args: any, symbol: TSym, result?: CommandResultCallback): void {
         const m1 = () => {
             const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
                 const func = (behavior as any)[symbol];
@@ -210,7 +210,7 @@ export class RECommandContext
         Log.postCommand("Call");
     }
 
-    findReactorEntityInBlock(block: REGame_Block, actionId: number): REGame_Entity | undefined {
+    findReactorEntityInBlock(block: REGame_Block, actionId: number): LEntity | undefined {
         const layers = block.layers();
         for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
             const reactor = layers[iLayer].entities().find(entity => entity.queryReactions().find(x => x == actionId) != undefined);
@@ -219,7 +219,7 @@ export class RECommandContext
         return undefined;
     }
 
-    openDialog(causeEntity: REGame_Entity, dialogModel: REDialog): void {
+    openDialog(causeEntity: LEntity, dialogModel: REDialog): void {
         const m1 = () => {
             Log.doCommand("OpenDialog");
             
@@ -233,7 +233,7 @@ export class RECommandContext
         Log.postCommand("openDialog");
     }
 
-    postSequel(entity: REGame_Entity, sequelId: number) {
+    postSequel(entity: LEntity, sequelId: number) {
         assert(sequelId > 0);
         const m1 = () => {
             Log.doCommand("Sequel");
@@ -246,7 +246,7 @@ export class RECommandContext
     }
     
     // 動きを伴わず、Animation だけ表示するのに使う。 Sequel 作るまでもないものとか。
-    postAnimation(entity: REGame_Entity, animationId: number, wait: boolean) {
+    postAnimation(entity: LEntity, animationId: number, wait: boolean) {
         const m1 = () => {
             Log.doCommand("Animation");
             this._sequelContext.addSequel(new SAnumationSequel(entity, animationId, wait));
@@ -268,7 +268,7 @@ export class RECommandContext
         Log.postCommand("WaitSequel");
     }
 
-    postDestroy(entity: REGame_Entity) {
+    postDestroy(entity: LEntity) {
         const m1 = () => {
             Log.doCommand("Destroy");
             entity.destroy();
@@ -296,7 +296,7 @@ export class RECommandContext
      * @param y 
      * @param d 
      */
-    postTransferFloor(entity: REGame_Entity, floorId: number, x: number = 0, y:number = 0, d: number = 0) {
+    postTransferFloor(entity: LEntity, floorId: number, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
             REGame.world._transferEntity(entity, floorId, x, y);
@@ -307,7 +307,7 @@ export class RECommandContext
     }
     
 
-    postConsumeActionToken(entity: REGame_Entity): void {
+    postConsumeActionToken(entity: LEntity): void {
         const attr = entity.findAttribute(LUnitAttribute);
         assert(attr);
 
@@ -323,7 +323,7 @@ export class RECommandContext
         Log.postCommand("ConsumeActionToken");
     }
 
-    postSkipPart(entity: REGame_Entity): void {
+    postSkipPart(entity: LEntity): void {
         const attr = entity.findAttribute(LUnitAttribute);
         assert(attr);
 
@@ -339,7 +339,7 @@ export class RECommandContext
         Log.postCommand("SkipPart");
     }
 
-    postPerformSkill(performer: REGame_Entity, skillId: DSkillDataId): void {
+    postPerformSkill(performer: LEntity, skillId: DSkillDataId): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
             RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);

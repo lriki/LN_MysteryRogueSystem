@@ -1,7 +1,7 @@
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { isThisTypeNode } from "typescript";
 
 
@@ -11,7 +11,7 @@ import { isThisTypeNode } from "typescript";
 export class VItemListWindow extends Window_Selectable {
     private _inventory: LInventoryBehavior;
     private _equipmentUser: LEquipmentUserBehavior | undefined;
-    private _entities: REGame_Entity[];
+    private _entities: LEntity[];
 
     constructor(inventory: LInventoryBehavior, rect: Rectangle) {
         super(rect);
@@ -24,11 +24,11 @@ export class VItemListWindow extends Window_Selectable {
         this._equipmentUser = equipmentUser;
     }
     
-    selectedItem(): REGame_Entity {
+    selectedItem(): LEntity {
         return this.itemAt(this.index());
     }
 
-    selectedItems(): [REGame_Entity] {
+    selectedItems(): [LEntity] {
         return [this.itemAt(this.index())];
     }
 
@@ -76,7 +76,7 @@ export class VItemListWindow extends Window_Selectable {
         }
     };
 
-    private isEnabled(item: REGame_Entity): boolean {
+    private isEnabled(item: LEntity): boolean {
         return true;
     }
     
@@ -84,14 +84,14 @@ export class VItemListWindow extends Window_Selectable {
         return this.textWidth("000");
     }
 
-    private itemAt(index: number): REGame_Entity {
+    private itemAt(index: number): LEntity {
         return this._entities[index];
     }
 
     private makeItemList(): void {
     }
     
-    private drawEntityItemName(item: REGame_Entity, x: number, y: number, width: number): void {
+    private drawEntityItemName(item: LEntity, x: number, y: number, width: number): void {
         if (item) {
             const iconY = y + (this.lineHeight() - ImageManager.iconHeight) / 2;
             const textMargin = ImageManager.iconWidth + 4;

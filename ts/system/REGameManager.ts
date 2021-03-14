@@ -22,7 +22,7 @@ import { RECommandContext } from "./RECommandContext";
 import { REDialogContext } from "./REDialog";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "ts/objects/LEventServer";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/objects/LFloorDirector";
 

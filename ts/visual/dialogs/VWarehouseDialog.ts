@@ -3,7 +3,7 @@ import { tr } from "ts/Common";
 import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWindow";
@@ -42,7 +42,7 @@ export class VWarehouseDialog extends VMainDialog {
         const user = this._model.userEntity();
         const inventory = user.getBehavior(LInventoryBehavior);
         this.openSubDialog(new VWarehouseStoreDialog(user, inventory), (result: any) => {
-            this._model.storeItems(result as REGame_Entity[]);
+            this._model.storeItems(result as LEntity[]);
         });
 
     }
@@ -52,7 +52,7 @@ export class VWarehouseDialog extends VMainDialog {
         const user = this._model.userEntity();
         const inventory = this._model.warehouseEntity().getBehavior(LInventoryBehavior);
         this.openSubDialog(new VWarehouseWithdrawDialog(user, inventory), (result: any) => {
-            this._model.withdrawItems(result as REGame_Entity[]);
+            this._model.withdrawItems(result as LEntity[]);
         });
     }
     

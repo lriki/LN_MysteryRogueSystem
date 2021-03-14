@@ -1,7 +1,7 @@
 import { REGame_Map } from "./REGame_Map";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
-import { REGame_Entity } from "./REGame_Entity";
+import { LEntity } from "./LEntity";
 import { RE_Game_World } from "./REGame_World";
 import { REGame } from "./REGame";
 import { RESystem } from "ts/system/RESystem";
@@ -24,11 +24,11 @@ export class REGame_Camera
         return this._focusedEntityId;
     }
 
-    focusedEntity(): REGame_Entity | undefined {
+    focusedEntity(): LEntity | undefined {
         return REGame.world.entity(this._focusedEntityId);
     }
 
-    focus(entity: REGame_Entity) {
+    focus(entity: LEntity) {
         this._focusedEntityId = entity.id();
     }
 

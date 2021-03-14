@@ -1,5 +1,5 @@
 import { FMap } from "ts/floorgen/FMapData";
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "./REDialog";
 
@@ -27,8 +27,8 @@ export abstract class REIntegration {
     abstract onDialogClosed(context: REDialogContext): void;
 
     /** Entity が Map 上に出現したとき。 */
-    abstract onEntityEnteredMap(entity: REGame_Entity): void;
+    abstract onEntityEnteredMap(entity: LEntity): void;
 
     /** Entity が Map から離れたとき。 */
-    abstract onEntityLeavedMap(entity: REGame_Entity): void;
+    abstract onEntityLeavedMap(entity: LEntity): void;
 }

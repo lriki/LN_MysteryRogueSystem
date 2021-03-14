@@ -1,9 +1,9 @@
-import { REGame_Entity } from "ts/objects/REGame_Entity";
+import { LEntity } from "ts/objects/LEntity";
 
 export type DEventId = number;
 
 export interface RoomEventArgs {
-    entity: REGame_Entity;
+    entity: LEntity;
     newRoomId: number,
     oldRoomId: number,
 }

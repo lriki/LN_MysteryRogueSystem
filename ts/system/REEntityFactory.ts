@@ -1,4 +1,4 @@
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REData } from "../data/REData";
 import { REGame } from "../objects/REGame";
@@ -19,13 +19,13 @@ import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehav
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
 
 export class REEntityFactory {
-    static newTile(kind: TileKind): REGame_Entity {
+    static newTile(kind: TileKind): LEntity {
         const entity = REGame.world.spawnEntity();
         entity.addAttribute(new RETileAttribute().setTileKind(kind));
         return entity;
     }
 
-    static newActor(actorId: number): REGame_Entity {
+    static newActor(actorId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
@@ -39,7 +39,7 @@ export class REEntityFactory {
         return e;
     }
 
-    static newMonster(monsterId: number): REGame_Entity {
+    static newMonster(monsterId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.EnemeyDefaultFactionId));
@@ -51,7 +51,7 @@ export class REEntityFactory {
         return e;
     }
 
-    static newItem(itemId: number): REGame_Entity {
+    static newItem(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new LItemBehavior(itemId));
@@ -59,7 +59,7 @@ export class REEntityFactory {
         return e;
     }
 
-    static newEquipment(itemId: number): REGame_Entity {
+    static newEquipment(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new LItemBehavior(itemId));
@@ -67,7 +67,7 @@ export class REEntityFactory {
         return e;
     }
 
-    static newTrap(itemId: number): REGame_Entity {
+    static newTrap(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new LCommonBehavior());
         e.addBasicBehavior(new LItemBehavior(itemId));
@@ -75,13 +75,13 @@ export class REEntityFactory {
         return e;
     }
 
-    static newExitPoint(): REGame_Entity {
+    static newExitPoint(): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBasicBehavior(new REExitPointBehavior());
         return e;
     }
 
-    static newMagicBullet(ownerItem: REGame_Entity): REGame_Entity {
+    static newMagicBullet(ownerItem: LEntity): LEntity {
         const e = REGame.world.spawnEntity();
         e.prefabKey = "pMagicBullet";
         //e.addBasicBehavior(new LCommonBehavior());

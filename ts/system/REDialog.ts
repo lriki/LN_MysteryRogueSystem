@@ -2,7 +2,7 @@
 import { assert } from "ts/Common";
 import { REGame } from "../objects/REGame";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { REGame_Entity } from "../objects/REGame_Entity";
+import { LEntity } from "../objects/LEntity";
 import { RECommandContext } from "./RECommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { REScheduler } from "./REScheduler";
@@ -11,7 +11,7 @@ import { RESystem } from "./RESystem";
 export class REDialogContext
 {
     private _commandContext: RECommandContext;
-    private _causeEntity: REGame_Entity | undefined;
+    private _causeEntity: LEntity | undefined;
     private _dialogModel: REDialog | null;
     //_visual: REDialogVisual | undefined;
 
@@ -20,7 +20,7 @@ export class REDialogContext
         this._dialogModel = null;
     }
 
-    causeEntity(): REGame_Entity | undefined {
+    causeEntity(): LEntity | undefined {
         return this._causeEntity;
     }
 
@@ -36,7 +36,7 @@ export class REDialogContext
     }
 
     
-    postAction(actionId: number, actor: REGame_Entity, reactor: REGame_Entity | undefined, args?: any) {
+    postAction(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
         //this._commandContext.postActionTwoWay(actionId, actor, reactor, args);
         this._commandContext.postActionOneWay(actionId, actor, reactor, undefined, args);
         
@@ -77,7 +77,7 @@ export class REDialogContext
         this._commandContext._next();
     }
 
-    setCauseEntity(value: REGame_Entity) {
+    setCauseEntity(value: LEntity) {
         this._causeEntity = value;
     }
 

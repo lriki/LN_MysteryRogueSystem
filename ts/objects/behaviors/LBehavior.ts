@@ -35,7 +35,7 @@ import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
 import { REGame } from "..//REGame";
 import { LEntityId } from "../LObject";
-import { REGame_Entity } from "../REGame_Entity";
+import { LEntity } from "../LEntity";
 
 export interface LBehaviorId {
     readonly index: number;  // 0 is Invalid (dummy entity)
@@ -62,8 +62,8 @@ export enum DecisionPhase {
 }
 
 export interface CommandArgs {
-    self: REGame_Entity,
-    sender: REGame_Entity,
+    self: LEntity,
+    sender: LEntity,
     args: any,
 };
 
@@ -151,12 +151,12 @@ export class LBehavior {
     dataId: number = 0;
     _ownerEntityId: LEntityId = { index: 0, key: 0 };
     
-    ownerEntity(): REGame_Entity {
+    ownerEntity(): LEntity {
         assert(this._ownerEntityId.index > 0);
         return REGame.world.entity(this._ownerEntityId);
     }
 
-    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: REGame_Entity): REResponse { return REResponse.Pass; }
+    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
     [onPrePickUpReaction](args: CommandArgs, context: RECommandContext): REResponse {
         return REResponse.Pass;
@@ -182,17 +182,17 @@ export class LBehavior {
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(entity: REGame_Entity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
+    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
-    onPreAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onPreReaction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onAction(entity: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onReaction(entity: REGame_Entity, actor: REGame_Entity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-
-
+    onPreAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onPreReaction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
 
 
-    onCollectEffector(owner: REGame_Entity, data: SEffectorFact): void {}
+
+
+    onCollectEffector(owner: LEntity, data: SEffectorFact): void {}
     onCollectTraits(result: IDataTrait[]): void { }
     onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
 
