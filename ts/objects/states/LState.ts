@@ -9,6 +9,15 @@ import { REGame_Entity } from "../REGame_Entity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
 
+/**
+ * Entity に着脱するステートの単位。
+ * 
+ * RE において State とは、StateBehavior をグループ化するもの。
+ * StateBehavior は仮眠、鈍足など具体的な処理を定義する。
+ * 
+ * グループ化の仕組みにより、例えば "透視状態になるがハラヘリ速度が倍になる" といった
+ * カスタマイズを施しやすくなる。
+ */
 export class LState {
     private _ownerEntity: REGame_Entity | undefined;    // シリアライズしない
     private _stateId: DStateId;

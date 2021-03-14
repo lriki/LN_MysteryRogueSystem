@@ -7,9 +7,9 @@ import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LState } from "./LState";
 
 /**
- * State
+ * LStateBehavior
  * 
- * 各メソッドは Behavior と同一
+ * 
  */
 export class LStateTraitBehavior extends LBehavior {
     _ownerState: LState | undefined;    // シリアライズしない
