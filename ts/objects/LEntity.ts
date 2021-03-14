@@ -63,36 +63,33 @@ enum BlockLayer
 export class LEntity extends LObject
 {
     
-    private _id: LEntityId = { index: 0, key: 0 };
+    //private _id: LEntityId = { index: 0, key: 0 };
     
-    /**
-     * 親 Entity。
-     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
-     * 
-     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
-     */
-    private _parentEntityId: LEntityId = { index: 0, key: 0 };
     private _parentIsMap = false;
 
     public constructor() {
         super(LObjectType.Entity);
     }
 
+    
     public id(): LEntityId {
-        return this._id;
+        //return this._id;
+        return this.objectId();
     }
 
-    public _setId(id: LEntityId): void  {
-        assert(id.index > 0);
-        this._id = id;
-    }
+    //public _setId(id: LEntityId): void  {
+    //    assert(id.index > 0);
+    //    this._id = id;
+    ///}
+    
 
-    public parentid(): LEntityId {
-        return this._parentEntityId;
-    }
+    //public parentid(): LEntityId {
+   //     return this._parentEntityId;
+    //}
 
     public hasParent(): boolean {
-        return this._parentEntityId.index > 0 || this._parentIsMap;
+        return super.hasParent() || this._parentIsMap;
+        //return this._parentEntityId.index > 0 || this._parentIsMap;
     }
 
     public parentIsMap(): boolean {
@@ -101,21 +98,17 @@ export class LEntity extends LObject
 
     public setParent(parent: LEntity): void {
         assert(!this._parentIsMap);
-        assert(!this.hasParent());
-
-        const parentId = parent.id();
-        assert(parentId.index > 0);     // ID を持たない親は設定できない
-        this._parentEntityId = parentId;
+        super.setParent(parent);
     }
 
     public setParentMap(parent: REGame_Map): void {
-        assert(this._parentEntityId.index == 0);
+        assert(this.parentObjectId().index == 0);
         assert(!this.hasParent());
         this._parentIsMap = true;
     }
 
     public clearParent(): void {
-        this._parentEntityId = { index: 0, key: 0 };
+        super.clearParent();
         this._parentIsMap = false;
     }
 
@@ -129,7 +122,6 @@ export class LEntity extends LObject
 
 
     _name: string = ""; // 主にデバッグ用
-    _destroyed: boolean = false;
 
     // HC3 で作ってた CommonAttribute はこっちに持ってきた。
     // これらは Entity ごとに一意であるべきで、Framework が必要としている必須パラメータ。
@@ -196,18 +188,28 @@ export class LEntity extends LObject
 
     _located: boolean = false;
 
-    _finalize(): void {
+    onFinalize(): void {
+        // 現在マップ上の Entity 削除
+        if (this.floorId == REGame.map.floorId()) {
+            REGame.map._removeEntity(this);
+        }
+        REGame.scheduler.invalidateEntity(this);
+
+
+
         this._basicBehaviors.forEach(b => {
             b.onDetached();
             REGame.world._unregisterBehavior(b);
         });
         this._basicBehaviors = [];
         this.removeAllStates();
+
+
     }
 
     parentEntity(): LEntity | undefined {
-        if (this._parentEntityId.index > 0) {
-            return REGame.world.entity(this._parentEntityId);
+        if (this.parentObjectId().index > 0) {
+            return REGame.world.entity(this.parentObjectId());
         }
         else {
             return undefined;
@@ -217,7 +219,7 @@ export class LEntity extends LObject
     addAttribute(value: LAttribute) {
         assert(value._ownerEntityId.index == 0);
         this.attrbutes.push(value);
-        value._ownerEntityId = this._id;
+        value._ownerEntityId = this.id();
         return this;
     }
 
@@ -226,13 +228,13 @@ export class LEntity extends LObject
     }
 
     addBasicBehavior(behavior: LBehavior) {
-        assert(this._id.index > 0);
+        assert(this.id().index > 0);
         assert(behavior.id().index == 0);
 
         REGame.world._registerBehavior(behavior);
 
         this._basicBehaviors.push(behavior);
-        behavior._ownerEntityId = this._id;
+        behavior._ownerEntityId = this.id();
         behavior.onAttached();
     }
     
@@ -346,7 +348,7 @@ export class LEntity extends LObject
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
                 return behavior.onRemoveEntityFromWhereabouts(context, this);
             });
-            assert(this._parentEntityId.index == 0);    // 何らか削除されているはず
+            assert(this.parentObjectId().index == 0);    // 何らか削除されているはず
             return response;
         }
         else if (this.floorId > 0) {
@@ -386,7 +388,7 @@ export class LEntity extends LObject
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return eqaulsEntityId(REGame.camera.focusedEntityId(), this._id);
+        return eqaulsEntityId(REGame.camera.focusedEntityId(), this.id());
     }
 
     /**
@@ -399,22 +401,9 @@ export class LEntity extends LObject
      * 各種処理で、こういった Entity を存在しないものとして扱うためにこのフラグを確認する。
      */
     isAlive(): boolean {
-        return !this._destroyed;
+        return !this.isDestroyed();
     }
 
-    /** isAlive() の逆 */
-    isDestroyed(): boolean {
-        return this._destroyed;
-    }
-    
-
-    /**
-     * Behavior から Entity を削除する場合、CommandContext.postDestroy() を使用してください。
-     */
-    destroy(): void {
-        assert(!this.isUnique());
-        this._destroyed = true;
-    }
 
     findAttribute<T>(ctor: { new(...args: any[]): T }): T | undefined {
         for (let i = 0; i < this.attrbutes.length; i++) {
@@ -576,7 +565,7 @@ export class LEntity extends LObject
 
     makeSaveContents(): any {
         let contents: any = {};
-        contents.id = this._id;
+        contents.id = this.id();
         contents.floorId = this.floorId;
         contents.x = this.x;
         contents.y = this.y;
@@ -586,7 +575,7 @@ export class LEntity extends LObject
     }
 
     extractSaveContents(contents: any) {
-        this._id = contents.id;
+        this._setObjectId(contents.id);
         this.floorId = contents.floorId;
         this.x = contents.x;
         this.y = contents.y;

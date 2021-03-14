@@ -272,7 +272,7 @@ test('EntitySaveLoad', () => {
         const actor1 = new LEntity();
 
         // Entity Property
-        actor1._setId({ index: 1, key: 111 });
+        actor1._setObjectId({ index: 1, key: 111 });
         actor1.x = 55;
 
         // Attributes

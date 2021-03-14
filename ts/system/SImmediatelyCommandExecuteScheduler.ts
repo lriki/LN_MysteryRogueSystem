@@ -50,7 +50,7 @@ export class SImmediatelyCommandExecuteScheduler {
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
-                REGame.world._removeDestroyesEntities();
+                REGame.world._removeDestroyedObjects();
             }
         }
     }

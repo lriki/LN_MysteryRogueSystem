@@ -2,7 +2,7 @@ import { LEntity } from "./LEntity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { Random } from "ts/math/Random";
-import { LEntityId, eqaulsEntityId } from "./LObject";
+import { LEntityId, eqaulsEntityId, LObject, LObjectType } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { TilingSprite } from "pixi.js";
 
@@ -11,19 +11,24 @@ import { TilingSprite } from "pixi.js";
  */
 export class RE_Game_World
 {
-    private _entities: (LEntity | undefined)[] = [];
+    //private _entities: (LEntity | undefined)[] = [];
+    private _objects: (LObject | undefined)[] = [];
     private _behaviors: (LBehavior | undefined)[] = [];
     private _random: Random = new Random(Math.floor(Math.random() * 65535) + 1);
 
     constructor() {
-        this._entities = [undefined];   // [0] is dummy
+        this._objects = [undefined];   // [0] is dummy
         this._behaviors = [undefined];   // [0] is dummy
     }
 
     entity(id: LEntityId): LEntity {
-        const e = this._entities[id.index];
-        if (e && e.id().key == id.key)
-            return e;
+        const e = this._objects[id.index];
+        if (e && e.objectId().key == id.key) {
+            if (e.objectType() == LObjectType.Entity)
+                return e as LEntity;
+            else
+                throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
+        }
         else {
             if (!e) {
                 throw new Error(`Unregisterd entity. (id: [${id.index}, ${id.key}])`);
@@ -60,21 +65,21 @@ export class RE_Game_World
      */
     spawnEntity(): LEntity {
         const entity = new LEntity();
-        this._registerEntity(entity);
+        this._registerObject(entity);
         return entity;
     }
 
-    private _registerEntity(entity: LEntity): void {
+    private _registerObject(obj: LObject): void {
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
-        const index = this._entities.findIndex((x, i) => i > 0 && x == undefined);
+        const index = this._objects.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
-            entity._setId({ index: this._entities.length, key : this._random.nextInt() });
-            this._entities.push(entity);
+            obj._setObjectId({ index: this._objects.length, key : this._random.nextInt() });
+            this._objects.push(obj);
         }
         else {
-            entity._setId({ index: index, key : this._random.nextInt() });
-            this._entities[index] = entity;
+            obj._setObjectId({ index: index, key : this._random.nextInt() });
+            this._objects[index] = obj;
         }
     }
 
@@ -151,27 +156,21 @@ export class RE_Game_World
         return true;
     }
 
-    _removeDestroyesEntities(): void {
-        for (let i = 1; i < this._entities.length; i++) {
-            const entity = this._entities[i];
-            if (entity) {
-                if (!entity.isUnique() && !entity.hasParent()) {
+    public _removeDestroyedObjects(): void {
+        for (let i = 1; i < this._objects.length; i++) {
+            const obj = this._objects[i];
+            if (obj) {
+                if (!obj.isUnique() && !obj.hasParent()) {
                     // Unique Entity 以外で、いずれからの参照もない Entity は削除する
-                    entity.destroy();
+                    obj.destroy();
                 }
 
-                if (entity.isDestroyed()) {
+                if (obj.isDestroyed()) {
 
-                    if (entity.floorId == REGame.map.floorId()) {
-                        REGame.map._removeEntity(entity);
-                    }
+                    obj.onFinalize();
+                    this._objects[i] = undefined;
     
-                    REGame.scheduler.invalidateEntity(entity);
-    
-                    entity._finalize();
-                    this._entities[i] = undefined;
-    
-                    if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {
+                    if (eqaulsEntityId(REGame.camera.focusedEntityId(), obj.objectId())) {
                         REGame.camera.clearFocus();
                     }
                 }
@@ -185,9 +184,10 @@ export class RE_Game_World
         const player = REGame.camera.focusedEntity();
         assert(player)
 
-        for (let i = 1; i < this._entities.length; i++) {
-            const entity = this._entities[i];
-            if (entity) {
+        for (let i = 1; i < this._objects.length; i++) {
+            const obj = this._objects[i];
+            if (obj && obj.objectType() == LObjectType.Entity) {
+                const entity = obj as LEntity;
                 // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
                 // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
                 // それはここでは追加しない。

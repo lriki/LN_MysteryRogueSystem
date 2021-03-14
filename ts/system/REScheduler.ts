@@ -196,7 +196,7 @@ export class REScheduler
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
-                REGame.world._removeDestroyesEntities();
+                REGame.world._removeDestroyedObjects();
     
                 //m_commandContext->beginCommandChain();
                 this.stepSimulationInternal();

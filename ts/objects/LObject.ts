@@ -27,6 +27,18 @@ export function cloneEntityId(a: LEntityId): LEntityId {
 }
 
 
+
+
+
+
+/*
+export interface LObjectId {
+    readonly index: number;  // 0 is Invalid (dummy entity)
+    readonly key: number;
+}
+*/
+export type LObjectId = LEntityId;
+
 export enum LObjectType {
     Entity,
     State,
@@ -43,13 +55,71 @@ export enum LObjectType {
  */
 export class LObject {
     private readonly _objectType: LObjectType;
-
+    private _objectId: LObjectId = { index: 0, key: 0 };
+    private _destroyed: boolean = false;
+    private _parentEntityId: LObjectId = { index: 0, key: 0 };
+    
     protected constructor(objectType: LObjectType) {
         this._objectType = objectType;
     }
 
     public objectType(): LObjectType {
         return this._objectType;
+    }
+
+    public objectId(): LObjectId {
+        return this._objectId;
+    }
+
+    public _setObjectId(id: LObjectId): void  {
+        assert(id.index > 0);
+        this._objectId = id;
+    }
+
+    public isUnique(): boolean {
+        return false;
+    }
+
+    public hasParent(): boolean {
+        return this._parentEntityId.index > 0;
+    }
+
+    /**
+     * 親 Entity。
+     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
+     * 
+     * GC のタイミングで、parent がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
+     */
+    public parentObjectId(): LObjectId {
+        return this._parentEntityId;
+    }
+    
+    public setParent(parent: LObject): void {
+        assert(!this.hasParent());
+        const parentId = parent.objectId();
+        assert(parentId.index > 0);     // ID を持たない親は設定できない
+        this._parentEntityId = parentId;
+    }
+
+    public clearParent(): void {
+        this._parentEntityId = { index: 0, key: 0 };
+    }
+    
+    /** destroy が要求されているか */
+    public isDestroyed(): boolean {
+        return this._destroyed;
+    }
+    
+    /**
+     * Behavior から Entity を削除する場合、CommandContext.postDestroy() を使用してください。
+     */
+    public destroy(): void {
+        assert(!this.isUnique());
+        this._destroyed = true;
+    }
+
+    public onFinalize(): void {
+
     }
 }
 
