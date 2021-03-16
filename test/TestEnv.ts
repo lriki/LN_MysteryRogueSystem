@@ -10,6 +10,7 @@ import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
 import { REGameManager } from "ts/system/REGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
+import "./Extension";
 
 declare global {
     interface Number {

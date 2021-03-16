@@ -54,10 +54,10 @@ export class LBattlerBehavior extends LBehavior {
         return this.idealParam(paramId) - this._actualParamDamges[paramId];
     }
 
-    //setActualParam(paramId: DParameterId, value: number): void {
-    //    this._actualParams[paramId] = value;
-    //    this.refresh();
-    //}
+    setActualDamgeParam(paramId: DParameterId, value: number): void {
+        this._actualParamDamges[paramId] = value;
+        this.refresh();
+    }
     
     gainActualParam(paramId: DParameterId, value: number): void {
         this._actualParamDamges[paramId] -= value;

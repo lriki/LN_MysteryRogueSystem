@@ -110,4 +110,8 @@ export class Helpers {
     public static lerp(v1: number, v2: number, t: number): number {
         return v1 + ((v2 - v1) * t);
     }
+
+    public static randomInt(max: number): number {
+        return Math.floor(max * Math.random());
+    }
 }

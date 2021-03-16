@@ -7,6 +7,7 @@ import { ParameterEffectType } from "ts/data/DSystem";
 import { DParameterId, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
+import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { SEffectResult, SParamEffectResult } from "./SEffectResult";
 
@@ -80,7 +81,7 @@ export class SEffectorFact {
     private _effectors: LEntity[] = [];
 
     // 以下、Behavior 持ち回りで編集される要素
-    private _actualParams: number[];
+    //private _subjectActualParams: number[];
     private _parameterEffects: (SParameterEffect | undefined)[];  // Index of DParameterDataId
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
@@ -93,10 +94,10 @@ export class SEffectorFact {
 
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
-        this._actualParams = [];
+        //this._subjectActualParams = [];
         this._parameterEffects = [];
         for (let i = 0; i < REData.parameters.length; i++) {
-            this._actualParams[i] = this._subjectBattlerBehavior ? this._subjectBattlerBehavior.actualParam(i) : 0;
+            //this._subjectActualParams[i] = this._subjectBattlerBehavior ? this._subjectBattlerBehavior.actualParam(i) : 0;
             this._parameterEffects[i] = undefined;
         }
 
@@ -136,9 +137,9 @@ export class SEffectorFact {
     //--------------------
     // apply から使うもの
 
-    public actualParams(paramId: DParameterId): number {
-        return this._actualParams[paramId];
-    }
+   // public actualParams(paramId: DParameterId): number {
+    //    return this._subjectActualParams[paramId];
+    //}
 
     public parameterEffect(paramId: DParameterId): SParameterEffect | undefined {
         return this._parameterEffects[paramId];
@@ -424,7 +425,8 @@ export class REEffectContext {
         try {
             const a = this._effectorFact.subjectBehavior(); // eslint-disable-line no-unused-vars
             const b = target; // eslint-disable-line no-unused-vars
-            const v = $gameVariables._data; // eslint-disable-line no-unused-vars
+            // UnitTest から実行される場合に備えて undefined チェック
+            const v = (typeof $gameVariables == "undefined") ? undefined : $gameVariables._data; // eslint-disable-line no-unused-vars
             const sign = paramEffect.isRecover() ? -1 : 1;
             const value = Math.max(eval(paramEffect.formula), 0) * sign;
             return isNaN(value) ? 0 : value;
@@ -462,7 +464,7 @@ export class REEffectContext {
     // Game_Action.prototype.applyVariance
     private applyVariance(damage: number, variance: number): number {
         const amp = Math.floor(Math.max((Math.abs(damage) * variance) / 100, 0));
-        const v = Math.randomInt(amp + 1) + Math.randomInt(amp + 1) - amp;
+        const v = Helpers.randomInt(amp + 1) + Helpers.randomInt(amp + 1) - amp;
         return damage >= 0 ? damage + v : damage - v;
     };
     

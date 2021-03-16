@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "TurnOrderTable"
+                "-t", "DamageAndGameover"
               ],
               "cwd": "${workspaceRoot}",
               "console": "integratedTerminal",
