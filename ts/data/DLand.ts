@@ -11,6 +11,8 @@ export interface DLand
     /** ID (0 is Invalid). */
     id: number;
 
+    name: string;
+
     /** Land に対応するツクール MapId. */
     rmmzMapId: number;
 
@@ -32,3 +34,16 @@ export interface DLand
     floorIds: DFloorId[];
 }
 
+export function DLand_Default(): DLand {
+    return {
+        id: 0,
+        name: "null",
+        rmmzMapId: 0,
+        eventTableMapId: 0,
+        itemTableMapId: 0,
+        enemyTableMapId: 0,
+        trapTableMapId: 0,
+        exitEMMZMapId:0,
+        floorIds: []
+    };
+}

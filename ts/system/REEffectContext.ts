@@ -309,9 +309,12 @@ export class REEffectContext {
         result.clear();
 
         if (targetBattlerBehavior) {
+            const hitRate = this._effectorFact.hitRate();
+            const evaRate = this._effectorFact.evaRate(targetBattlerBehavior);
+
             result.used = this.testApply(targetBattlerBehavior);
-            result.missed = result.used && Math.random() >= this._effectorFact.hitRate();
-            result.evaded = !result.missed && Math.random() < this._effectorFact.evaRate(targetBattlerBehavior);
+            result.missed = result.used && Math.random() >= hitRate;
+            result.evaded = !result.missed && Math.random() < evaRate;
             result.physical = this._effectorFact.isPhysical();
 
             if (result.isHit()) {

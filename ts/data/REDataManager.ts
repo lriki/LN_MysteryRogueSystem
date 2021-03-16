@@ -13,6 +13,7 @@ import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraits
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
+import { DLand_Default } from "./DLand";
 
 
 declare global {  
@@ -451,18 +452,16 @@ export class REDataManager
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info && info.name?.startsWith("RELand:")) {
-                REData.addLand({
-                    id: -1,
+                REData.lands.push({
+                    ...DLand_Default(),
+                    id: REData.lands.length,
+                    name: info.name,
                     rmmzMapId: i,
-                    eventTableMapId: 0,
-                    itemTableMapId: 0,
-                    enemyTableMapId: 0,
-                    trapTableMapId: 0,
-                    exitEMMZMapId: 0,
-                    floorIds: [],
                 });
             }
         }
+
+        
 
 
 
@@ -490,6 +489,15 @@ export class REDataManager
                 }
                 else {
                     // 固定マップ or シャッフルマップ用のテンプレートマップ
+                }
+            }
+        }
+
+        // 検証
+        for (const land of REData.lands) {
+            if (land.id > 0) {
+                if (land.exitEMMZMapId == 0) {
+                    throw new Error(`Land[${land.name}] is RE-ExitMap not defined.`);
                 }
             }
         }

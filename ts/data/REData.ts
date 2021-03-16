@@ -7,7 +7,7 @@ import { DSystem } from "./DSystem";
 import { DEffectHitType, DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem, DItem_Default } from "./DItem";
-import { DLand } from "./DLand";
+import { DLand, DLand_Default } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DStateTrait } from "./DStateTrait";
 import { DSequel } from "./DSequel";
@@ -155,7 +155,7 @@ export class REData
     static classes: DClass[] = [];
     static actors: RE_Data_Actor[] = [];
     static monsters: RE_Data_Monster[] = [];
-    static lands: DLand[] = [];
+    static lands: DLand[] = [DLand_Default()];
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: DAction[] = [{id: 0, displayName: 'null'}];
@@ -189,7 +189,7 @@ export class REData
         this.addActor("null");
 
         this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
-        this.lands = [{ id: 0, rmmzMapId: 0, eventTableMapId: 0, itemTableMapId: 0, enemyTableMapId: 0, trapTableMapId: 0, exitEMMZMapId:0, floorIds: [] }];
+        this.lands = [];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null'}];
@@ -269,16 +269,6 @@ export class REData
         return newId;
     }
 
-    /**
-     * Add land.
-     */
-    static addLand(data: DLand): number {
-        const newId = this.lands.length;
-        data.id = newId;
-        this.lands.push(data);
-        return newId;
-    }
-    
     /**
      * Add floor.
      * @param mapId : RMMZ mapID
