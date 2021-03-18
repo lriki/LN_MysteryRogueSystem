@@ -449,9 +449,10 @@ export class REDataManager
 
         // Import Lands
         // 最初に Land を作る
+        REData.lands.push(DLand_Default());
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
-            if (info && info.name?.startsWith("RELand:")) {
+            if (info && info.name?.startsWith("RE-Land:")) {
                 REData.lands.push({
                     ...DLand_Default(),
                     id: REData.lands.length,
@@ -461,7 +462,6 @@ export class REDataManager
             }
         }
 
-        
 
 
 
@@ -526,7 +526,7 @@ export class REDataManager
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
                 }
-                else if (info && info.name?.startsWith("RELand:")) {
+                else if (info && info.name?.startsWith("RE-Land:")) {
                     const land = REData.lands.find(x => x.rmmzMapId == i);
                     assert(land);
                     REData.floors[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
@@ -536,13 +536,13 @@ export class REDataManager
                     const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
                     if (land) {
                         let kind = undefined;
-                        if (parentInfo.name == "[RandomMaps]") {
+                        if (parentInfo.name.includes("[RandomMaps]")) {
                             kind = REFloorMapKind.RandomMap;
                         }
-                        else if (parentInfo.name == "[ShuffleMaps]") {
+                        else if (parentInfo.name.includes("[ShuffleMaps]")) {
                             kind = REFloorMapKind.ShuffleMap;
                         }
-                        else if (parentInfo.name == "[FixedMaps]") {
+                        else if (parentInfo.name.includes("RE-FixedMaps")) {
                             kind = REFloorMapKind.FixedMap;
                         }
 
@@ -583,6 +583,7 @@ export class REDataManager
                 }
                 */
             }
+
 
             // ランダムマップ
             for (let i = 1; i < REData.lands.length; i++) { // LandId=0 はダミーなので生成しない
@@ -670,7 +671,7 @@ export class REDataManager
 
     static isLandMap(mapId: number) : boolean {
         const info = $dataMapInfos[mapId];
-        if (info && info.name && info.name.startsWith("RELand:"))
+        if (info && info.name && info.name.startsWith("RE-Land:"))
             return true;
         else
             return false;
