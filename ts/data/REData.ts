@@ -367,5 +367,13 @@ export class REData
     }
     
     
+    static findItem(re_key: string): DItem | undefined {
+        return this.items.find(x => x.entity.key == re_key);
+    }
 
+    static getItem(re_key: string): DItem {
+        const d = this.findItem(re_key);
+        if (d) return d;
+        throw new Error(`Item "${re_key}" not found.`);
+    }
 }

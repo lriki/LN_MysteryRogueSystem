@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
+import { REData } from "ts/data/REData";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
@@ -22,15 +23,15 @@ test('PickAndPut', () => {
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
     actor1._name = "actor1";
-    REGame.world._transferEntity(actor1, 1, 5, 1);  // (5, 1) へ配置
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
-    const item1 = REEntityFactory.newItem(1);
+    const item1 = REEntityFactory.newItem(REData.getItem("kItem_Herb").id);
     item1._name = "item1";
-    REGame.world._transferEntity(item1, 1, 6, 1);  // (6, 1) へ配置。Item のデフォルトの追加先レイヤーは Ground.
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
     // マップ移動
-    REGameManager.performFloorTransfer();
+    TestEnv.performFloorTransfer();
 
     REGame.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -51,7 +52,7 @@ test('PickAndPut', () => {
     assert(inventory);
 
     // item1 は Map 上から外れている
-    const block = REGame.map.block(6, 1);
+    const block = REGame.map.block(6, 5);
     expect(block.layer(BlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている

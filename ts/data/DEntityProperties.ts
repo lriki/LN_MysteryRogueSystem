@@ -1,6 +1,8 @@
 
 export interface DEntityProperties {
+    /** RE-Key */
     key: string;
+
     kind: string;
     behaviors: string[];
     commands: string[];

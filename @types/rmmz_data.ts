@@ -108,18 +108,18 @@ declare interface IDataAllItem
 
 declare interface IDataItem extends IDataAllItem
 {
-    animationId?: number;
-    consumable?: boolean;
+    animationId: number;
+    consumable: boolean;
     damage: IDataDamage;
-    effects?: IDataEffect[];
-    hitType?: number;
-    itypeId?: number;
-    occasion?: number;
-    repeats?: number;
-    scope?: number;
-    speed?: number;
-    successRate?: number;
-    tpGain?: number;
+    effects: IDataEffect[];
+    hitType: number;
+    itypeId: number;
+    occasion: number;
+    repeats: number;
+    scope: number;
+    speed: number;
+    successRate: number;
+    tpGain: number;
 }
 
 declare interface IDataEquipItem extends IDataAllItem

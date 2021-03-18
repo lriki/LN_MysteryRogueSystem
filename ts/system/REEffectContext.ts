@@ -402,9 +402,6 @@ export class REEffectContext {
     private makeDamageValue(paramEffect: SParameterEffect, target: LBattlerBehavior, critical: boolean): number {
         const baseValue = this.evalDamageFormula(paramEffect, target);
         let value = baseValue * this.calcElementRate(paramEffect, target);
-        console.log("paramEffect", paramEffect);
-        console.log("baseValue", baseValue);
-        console.log("makeDamageValue", value);
         if (this._effectorFact.isPhysical()) {
             value *= target.sparam(DBasics.sparams.pdr);
         }
