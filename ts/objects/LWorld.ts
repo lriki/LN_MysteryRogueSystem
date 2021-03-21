@@ -9,7 +9,7 @@ import { TilingSprite } from "pixi.js";
 /**
  * 1ゲーム内に1インスタンス存在する。
  */
-export class RE_Game_World
+export class LWorld
 {
     //private _entities: (LEntity | undefined)[] = [];
     private _objects: (LObject | undefined)[] = [];

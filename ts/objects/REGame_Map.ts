@@ -144,6 +144,7 @@ export class REGame_Map
     }
 
     isValid(): boolean {
+        //console.log("isValid?", this._floorId, this._width);
         return this._floorId > 0 && this._width > 0;
     }
 

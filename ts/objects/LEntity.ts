@@ -13,7 +13,7 @@ import { eqaulsEntityId, LEntityId, LObject, LObjectType } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
 import { LState } from "./states/LState";
-import { RE_Game_World } from "./REGame_World";
+import { LWorld } from "./LWorld";
 import { SEffectResult } from "ts/system/SEffectResult";
 import { DActionId } from "ts/data/DAction";
 import { DParameterId, REData } from "ts/data/REData";

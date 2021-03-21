@@ -1,7 +1,7 @@
 import { REGame } from "../objects/REGame";
 import { REEntityFactory } from "./REEntityFactory";
 import { REGame_Map } from "../objects/REGame_Map";
-import { RE_Game_World } from "../objects/REGame_World";
+import { LWorld } from "../objects/LWorld";
 import { REGame_Core } from "../objects/REGame_Core";
 import { DFactionId, REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
@@ -51,7 +51,7 @@ export class REGameManager
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.core = new REGame_Core();
         REGame.system = new REGame_System();
-        REGame.world = new RE_Game_World();
+        REGame.world = new LWorld();
         REGame.map = new REGame_Map();
         REGame.camera = new REGame_Camera();
         REGame.uniqueActorUnits = [];
