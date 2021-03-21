@@ -21,4 +21,5 @@ import './rmmz/Tilemap'
 import './rmmz/Sprite_Character'
 import './rmmz/Spriteset_Map'
 import './rmmz/PluginCommands'
+import './rmmz/JsonEx'
 

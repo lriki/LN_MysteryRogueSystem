@@ -2,19 +2,18 @@ import { assert } from '../Common';
 import { REDataManager } from '../data/REDataManager';
 import { REVisual } from '../visual/REVisual';
 
-class Game_REPrefabEvent extends Game_Event {
+export class Game_REPrefabEvent extends Game_Event {
     private _databaseMapEventId: number;
     private _spritePrepared: boolean;
 
     constructor(mapId: number, dataMapId: number, eventId: number) {
-        console.log("Game_REPrefabEvent", eventId);
         // "REDatabase" のマップのイベントとして扱う。
         // セルフスイッチをコントロールするときに参照される。
         super(dataMapId, eventId);
         this._databaseMapEventId = 1;
         this._spritePrepared = false;
-        console.log("Game_REPrefabEvent", this);
     }
+    
 
     databaseMapEventId(): number {
         return this._databaseMapEventId;
@@ -137,13 +136,17 @@ declare global {
 
 var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
+    console.log("$gameMap.events()", $gameMap.events());
+
     this._prefabSpriteIdRE = this._counter + 1;
     _Spriteset_Map_createCharacters.call(this);
 
+    console.log("this._characterSprites", this._characterSprites);
     
     // Visual と Sprite を関連付ける
     if (REVisual.entityVisualSet) {
         this._characterSprites.forEach((sprite, index) => {
+            console.log("index", index);
             if (REVisual.entityVisualSet && sprite._character.isREEvent()) {
                 const event = (sprite._character as Game_Event);
                 const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());

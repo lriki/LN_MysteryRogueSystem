@@ -9,6 +9,19 @@ declare global {
     }
 }
 
+/*
+const _Game_Event_initialize = Game_Event.prototype.initialize;
+Game_Event.prototype.initialize = function(mapId: number, eventId: number) {
+    if (mapId > 0) {
+        _Game_Event_initialize.call(this, mapId, eventId);
+    }
+    else {
+        console.log("_Game_Event_initialize");
+        Game_Character.prototype.initialize.call(this);
+    }
+};
+*/
+
 var _Game_Event_initMembers = Game_Event.prototype.initMembers;
 Game_Event.prototype.initMembers = function() {
     _Game_Event_initMembers.call(this);

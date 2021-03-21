@@ -5,6 +5,7 @@ import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "../system/RESystem";
 import { REEntityVisualSet } from "../visual/REEntityVisualSet";
 import { REVisual } from "../visual/REVisual";
+import { Game_REPrefabEvent } from "./PrefabEvent";
 
 declare global {
     interface Scene_Map {
@@ -59,6 +60,14 @@ var _Scene_Map_create = Scene_Map.prototype.create;
 Scene_Map.prototype.create = function() {
     _Scene_Map_create.call(this);
 
+    const aa =  Game_REPrefabEvent.prototype;
+    console.log("prototype", aa);
+/*
+    console.log("window", window);
+    //new Game_REPrefabEvent();
+    const aa = (window as any)["PrefabEvent"];
+    console.log("PrefabEvent", aa);
+*/
 }
 
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
