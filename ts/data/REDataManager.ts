@@ -1,5 +1,4 @@
 //import 'types/index.d.ts'
-import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
@@ -184,7 +183,7 @@ export class REDataManager
         
         // Attributes
         RESystem.attributes = {
-            tile: REData.addAttribute("Tile", () => new RETileAttribute()),
+            //tile: REData.addAttribute("Tile", () => new RETileAttribute()),
             unit: REData.addAttribute("Unit", () => new LUnitAttribute()),
         };
 

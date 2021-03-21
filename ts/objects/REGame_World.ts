@@ -198,7 +198,7 @@ export class RE_Game_World
                 // それはここでは追加しない。
                 const isNoEnterd = !entity.hasOwner();
 
-                if (REGame.map.floorId() == entity.floorId && !entity.isTile() && isNoEnterd) {
+                if (REGame.map.floorId() == entity.floorId && isNoEnterd) {
                     REGame.map._reappearEntity(entity);
                 }
             }

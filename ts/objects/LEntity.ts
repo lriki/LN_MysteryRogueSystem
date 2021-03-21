@@ -9,7 +9,6 @@ import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
-import { RETileAttribute } from "./attributes/RETileAttribute";
 import { eqaulsEntityId, LEntityId, LObject, LObjectType } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
@@ -606,9 +605,9 @@ export class LEntity extends LObject
         }
     }
 
-    isTile(): boolean {
-        return this.findAttribute(RETileAttribute) != undefined;
-    }
+    //isTile(): boolean {
+    //    return this.findAttribute(RETileAttribute) != undefined;
+    //}
 
     /** 0 is Invalid. */
     public roomId(): LRoomId {

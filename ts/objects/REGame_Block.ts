@@ -1,4 +1,3 @@
-import { RETileAttribute } from "ts/objects/attributes/RETileAttribute";
 import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { LEntity } from "./LEntity";
@@ -211,8 +210,10 @@ export class REGame_Block// extends LObject
     _blockComponent: FBlockComponent = FBlockComponent.None;
 
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
+    
+    _tileKind: TileKind = TileKind.Floor;
 
-    constructor(map: REGame_Map, x: number, y: number) {
+    constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
         this._layers = [new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer()];
@@ -240,8 +241,9 @@ export class REGame_Block// extends LObject
     }
 
     tileKind(): TileKind {
-        const attr = this.tile().findAttribute(RETileAttribute);
-        return attr ? attr.tileKind() : TileKind.Void;
+        //const attr = this.tile().findAttribute(RETileAttribute);
+        //return attr ? attr.tileKind() : TileKind.Void;
+        return this._tileKind;
     }
 
     layers(): readonly REBlockLayer[] {

@@ -1,6 +1,7 @@
 import { TileKind } from "../REGame_Block";
 import { LAttributeData, LAttribute } from "./LAttribute";
 
+/*
 interface RETileAttributeData extends LAttributeData {
     tileKind: TileKind;
 }
@@ -16,3 +17,4 @@ export class RETileAttribute extends LAttribute {
         return this._data;
     }
 }
+*/

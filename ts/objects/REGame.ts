@@ -17,6 +17,7 @@ import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyComma
 import { LEventServer } from "./LEventServer";
 import { SMinimapData } from "ts/system/SMinimapData";
 import { LFloorDirector } from "./LFloorDirector";
+import { REGame_Block } from "./REGame_Block";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -46,6 +47,9 @@ export class REGame
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;
+
+    // マップ有効範囲外に存在するダミー要素
+    static borderWall: REGame_Block = new REGame_Block(-1, -1);
 
     /**  */
     static signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;

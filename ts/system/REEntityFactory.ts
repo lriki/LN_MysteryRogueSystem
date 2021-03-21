@@ -4,7 +4,6 @@ import { REData } from "../data/REData";
 import { REGame } from "../objects/REGame";
 import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
-import { RETileAttribute } from "../objects/attributes/RETileAttribute";
 import { TileKind } from "../objects/REGame_Block";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -19,12 +18,6 @@ import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehav
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
 
 export class REEntityFactory {
-    static newTile(kind: TileKind): LEntity {
-        const entity = REGame.world.spawnEntity();
-        entity.addAttribute(new RETileAttribute().setTileKind(kind));
-        return entity;
-    }
-
     static newActor(actorId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()

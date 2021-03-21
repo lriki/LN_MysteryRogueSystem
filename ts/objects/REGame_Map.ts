@@ -16,7 +16,6 @@ import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { LRoom, MonsterHouseState } from "./LRoom";
-import { RETileAttribute } from "./attributes/RETileAttribute";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
 import { EmitFlags } from "typescript";
 import { LStructure } from "./structures/LStructure";
@@ -51,7 +50,6 @@ export class REGame_Map
     private _rooms: LRoom[] = [];
     private _structures: LStructure[] = [];
 
-    private _borderWall: REGame_Block = new REGame_Block(this, -1, -1);   // マップ有効範囲外に存在するダミー要素
 
     constructor() {
     }
@@ -73,15 +71,16 @@ export class REGame_Map
         for (let i = 0; i < count; i++) {
             const x = Math.trunc(i % this._width);
             const y = Math.trunc(i / this._width);
-            this._blocks[i] = new REGame_Block(this, x, y);
+            this._blocks[i] = new REGame_Block(x, y);
 
             // TileEntity 追加
-            const tile = REEntityFactory.newTile(TileKind.Floor);
-            tile.floorId = this._floorId;
-            tile.x = x;
-            tile.y = y;
-            this._addEntityInternal(tile);
-            this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
+            //const tile = REEntityFactory.newTile(TileKind.Floor);
+            //tile.floorId = this._floorId;
+            //tile.x = x;
+            //tile.y = y;
+            //this._addEntityInternal(tile);
+            //this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
+            this._blocks[i]._tileKind = TileKind.Floor;
         }
     }
 
@@ -103,10 +102,11 @@ export class REGame_Map
 
                     const kind = dataBlock.tileKind();
                     
-                    const tile = mapBlock.tile();
-                    const attr = tile.findAttribute(RETileAttribute);
-                    assert(attr);
-                    attr.setTileKind(kind);
+                    //const tile = mapBlock.tile();
+                    //const attr = tile.findAttribute(RETileAttribute);
+                    //assert(attr);
+                    //attr.setTileKind(kind);
+                    mapBlock._tileKind = kind;
 
                     mapBlock._roomId = dataBlock.roomId();
                     mapBlock._blockComponent = dataBlock.component();
@@ -193,7 +193,7 @@ export class REGame_Map
         }
 
         if (x < 0 || this._width <= x || y < 0 || this._height <= y) {
-            return this._borderWall;
+            return REGame.borderWall;
         }
         else {
             return this._blocks[y * this._width + x];
@@ -265,7 +265,7 @@ export class REGame_Map
     // appearEntity の、マップ遷移時用
     _reappearEntity(entity: LEntity): void {
         assert(entity.floorId == this.floorId());
-        assert(!entity.isTile());   // Tile は setup で追加済みのため、間違って追加されないようにチェック
+        //assert(!entity.isTile());   // Tile は setup で追加済みのため、間違って追加されないようにチェック
         
         const block = this.block(entity.x, entity.y);
         const layer = entity.queryProperty(RESystem.properties.homeLayer);
