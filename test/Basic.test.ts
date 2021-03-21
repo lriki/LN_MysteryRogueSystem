@@ -295,8 +295,8 @@ test('EntitySaveLoad', () => {
         actor2.extractSaveContents(contents2);
         
         // Entity Property
-        expect(actor2.id().index).toBe(1);
-        expect(actor2.id().key).toBe(111);
+        expect(actor2.entityId().index).toBe(1);
+        expect(actor2.entityId().key).toBe(111);
         expect(actor2.x).toBe(55);
 
         // Attributes

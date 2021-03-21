@@ -40,7 +40,7 @@ export class SMomementCommon {
     }
     
     private static _postLocate(context: RECommandContext, entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block, map: REGame_Map) {
-        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id())) {
+        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.entityId())) {
             this.markPassed(map, newBlock);
         }
 

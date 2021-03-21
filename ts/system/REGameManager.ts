@@ -80,8 +80,8 @@ export class REGameManager
 
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.uniqueActorUnits[0];
-        REGame.core.mainPlayerEntiyId = firstActor.id();
-        REGame.system._mainPlayerEntityId = firstActor.id();
+        REGame.core.mainPlayerEntiyId = firstActor.entityId();
+        REGame.system._mainPlayerEntityId = firstActor.entityId();
         const unit = firstActor.findAttribute(LUnitAttribute);
         if (unit) {
             unit.setManualMovement(true);

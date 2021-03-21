@@ -69,25 +69,16 @@ export class LEntity extends LObject
         super(LObjectType.Entity);
     }
 
+    //----------------------------------------
+    // Object Reference Management
     
-    public id(): LEntityId {
+    public entityId(): LEntityId {
         //return this._id;
         return this.objectId();
     }
 
-    //public _setId(id: LEntityId): void  {
-    //    assert(id.index > 0);
-    //    this._id = id;
-    ///}
-    
-
-    //public parentid(): LEntityId {
-   //     return this._parentEntityId;
-    //}
-
     public hasOwner(): boolean {
         return super.hasOwner() || this._parentIsMap;
-        //return this._parentEntityId.index > 0 || this._parentIsMap;
     }
 
     public ownerIsMap(): boolean {
@@ -217,7 +208,7 @@ export class LEntity extends LObject
     addAttribute(value: LAttribute) {
         assert(value._ownerEntityId.index == 0);
         this.attrbutes.push(value);
-        value._ownerEntityId = this.id();
+        value._ownerEntityId = this.entityId();
         return this;
     }
 
@@ -226,12 +217,12 @@ export class LEntity extends LObject
     }
 
     addBasicBehavior(behavior: LBehavior) {
-        assert(this.id().index > 0);
+        assert(this.entityId().index > 0);
         //assert(behavior.id().index == 0);
         //REGame.world._registerBehavior(behavior);
 
         this._basicBehaviors.push(behavior);
-        behavior._setOwnerObjectId(this.id());
+        behavior._setOwnerObjectId(this.entityId());
         behavior.onAttached();
     }
     
@@ -385,7 +376,7 @@ export class LEntity extends LObject
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return eqaulsEntityId(REGame.camera.focusedEntityId(), this.id());
+        return eqaulsEntityId(REGame.camera.focusedEntityId(), this.entityId());
     }
 
     /**
@@ -562,7 +553,7 @@ export class LEntity extends LObject
 
     makeSaveContents(): any {
         let contents: any = {};
-        contents.id = this.id();
+        contents.id = this.entityId();
         contents.floorId = this.floorId;
         contents.x = this.x;
         contents.y = this.y;

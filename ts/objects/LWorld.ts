@@ -153,7 +153,7 @@ export class LWorld
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.id()) &&
+        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.entityId()) &&
             REGame.map.floorId() != entity.floorId) {
             REGame.camera.reserveFloorTransferToFocusedEntity();
         }

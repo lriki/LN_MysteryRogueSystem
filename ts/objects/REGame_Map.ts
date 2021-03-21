@@ -240,10 +240,10 @@ export class REGame_Map
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
-        assert(entity.id().index > 0);
+        assert(entity.entityId().index > 0);
         assert(!entity.hasOwner());
 
-        this._entityIds.push(entity.id());
+        this._entityIds.push(entity.entityId());
         entity.setOwnerMap(this);
 
         REGame.integration.onEntityEnteredMap(entity);
@@ -276,7 +276,7 @@ export class REGame_Map
     }
 
     _removeEntity(entity: LEntity): void {
-        this._entityIds = this._entityIds.filter(x => !eqaulsEntityId(x, entity.id()));
+        this._entityIds = this._entityIds.filter(x => !eqaulsEntityId(x, entity.entityId()));
         this._removeEntityHelper(entity);
     }
 

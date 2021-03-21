@@ -136,7 +136,7 @@ export class SMinimapData {
 
         for (const entity of map.entities()) {
             //if (entity == subject) {
-            if (eqaulsEntityId(entity.id(), subject.id())) {
+            if (eqaulsEntityId(entity.entityId(), subject.entityId())) {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
             }
             else {

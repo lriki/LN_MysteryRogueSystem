@@ -76,7 +76,7 @@ export class LInventoryBehavior extends LBehavior {
     public addEntity(entity: LEntity) {
         assert(!entity.parentEntity());
 
-        const id = entity.id();
+        const id = entity.entityId();
         assert(this._entities.find(x => eqaulsEntityId(x, id)) === undefined);
         this._entities.push(id);
         
@@ -86,7 +86,7 @@ export class LInventoryBehavior extends LBehavior {
     public removeEntity(entity: LEntity) {
         assert(entity.parentEntity() == this.ownerEntity());
 
-        const id = entity.id();
+        const id = entity.entityId();
         const index = this._entities.findIndex(x => eqaulsEntityId(x, id));
         assert(index >= 0);
         this._entities.splice(index, 1);
@@ -95,7 +95,7 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse {
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
+        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.entityId()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());
             entity.clearOwner();

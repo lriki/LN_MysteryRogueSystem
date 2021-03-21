@@ -49,7 +49,7 @@ export class REGame_DecisionBehavior extends LBehavior {
                     
                     // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
                     if (Helpers.checkAdjacent(entity, target)) {
-                        this._attackTargetEntityId = target.id();
+                        this._attackTargetEntityId = target.entityId();
                     }
                 }
                 else {

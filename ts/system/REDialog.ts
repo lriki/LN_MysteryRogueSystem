@@ -45,8 +45,8 @@ export class REDialogContext
                 type: RERecordingCommandType.Action,
                 data: {
                     actionId: actionId,
-                    actorEntityId: actor.id(),
-                    reactorEntityId: (reactor) ? reactor.id() : 0,
+                    actorEntityId: actor.entityId(),
+                    reactorEntityId: (reactor) ? reactor.entityId() : 0,
                     args: args,
                 }
             });
@@ -66,7 +66,7 @@ export class REDialogContext
                 REGame.recorder.push({
                     type: RERecordingCommandType.ConsumeActionToken,
                     data: {
-                        entityId: this._causeEntity.id(),
+                        entityId: this._causeEntity.entityId(),
                     }
                 });
             }

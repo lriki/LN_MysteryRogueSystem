@@ -18,7 +18,7 @@ export class LMagicBulletBehavior extends LBehavior {
     private _ownerItemEntityId: LEntityId = LEntityId_Empty;
 
     public setup(ownerItem: LEntity): void {
-        this._ownerItemEntityId = ownerItem.id();
+        this._ownerItemEntityId = ownerItem.entityId();
     }
 
     onQueryProperty(propertyId: number): any {

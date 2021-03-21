@@ -40,7 +40,7 @@ NOTE:
     
 
     public isEquipped(item: LEntity): boolean {
-        const entityId = item.id();
+        const entityId = item.entityId();
         return this._parts.findIndex(part => part && part.itemEntityIds.findIndex(id => eqaulsEntityId(id, entityId)) >= 0) >= 0;
     }
 
@@ -127,11 +127,11 @@ NOTE:
             // 空き Slot を探して格納する
             const freeIndex = slotList.findIndex(x => x.index == 0);
             if (freeIndex >= 0) {
-                slotList[freeIndex] = itemEntity.id();
+                slotList[freeIndex] = itemEntity.entityId();
             }
             else {
                 // 空きが無ければ 0 番と交換
-                slotList[0] = itemEntity.id();
+                slotList[0] = itemEntity.entityId();
             }
 
 

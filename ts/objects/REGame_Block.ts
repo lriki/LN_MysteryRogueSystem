@@ -46,7 +46,7 @@ export class REBlockLayer {
     }
 
     isContains(entity: LEntity): boolean {
-        return this._entities.findIndex(x => eqaulsEntityId(x, entity.id())) >= 0;
+        return this._entities.findIndex(x => eqaulsEntityId(x, entity.entityId())) >= 0;
     }
 
     isOccupied(): boolean {
@@ -54,11 +54,11 @@ export class REBlockLayer {
     }
 
     addEntity(entity: LEntity) {
-        this._entities.push(entity.id());
+        this._entities.push(entity.entityId());
     }
 
     removeEntity(entity: LEntity): boolean {
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
+        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.entityId()));
         if (index >= 0) {
             this._entities.splice(index, 1);
             return true;

@@ -29,7 +29,7 @@ export class REGame_Camera
     }
 
     focus(entity: LEntity) {
-        this._focusedEntityId = entity.id();
+        this._focusedEntityId = entity.entityId();
     }
 
     clearFocus() {

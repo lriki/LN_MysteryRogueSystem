@@ -48,7 +48,7 @@ export class REEntityVisualSet {
     }
 
     findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined {
-        return this._visualEntities.find(x => x.entity().id() == entity.id());
+        return this._visualEntities.find(x => x.entity().entityId() == entity.entityId());
     }
 
     findEntityVisualByRMMZEventId(rmmzEventId: number): REVisual_Entity | undefined {
