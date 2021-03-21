@@ -1,4 +1,8 @@
 import { assert } from "ts/Common"
+import { LRoom } from "ts/objects/LRoom";
+import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
+import { REGame_Map } from "ts/objects/REGame_Map";
+import { LStructure } from "ts/objects/structures/LStructure";
 /**
  * セーブデータをロードするとき、JsonEx._decode の window[value["@"]] では
  * クラス名を指定して prototype をとることができなかった。
@@ -14,6 +18,16 @@ function createInstance(name: string): any {
     switch (name) {
         case "Game_REPrefabEvent":
             return Object.create(Game_REPrefabEvent.prototype);
+        case "REGame_Map":
+            return Object.create(REGame_Map.prototype);
+        case "REGame_Block":
+            return Object.create(REGame_Block.prototype);
+        case "REBlockLayer":
+            return Object.create(REBlockLayer.prototype);
+        case "LRoom":
+            return Object.create(LRoom.prototype);
+        case "LStructure":
+            return Object.create(LStructure.prototype);
     }
 
     console.log(`Type not found. "${name}"`);

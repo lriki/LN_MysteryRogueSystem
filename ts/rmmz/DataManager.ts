@@ -151,14 +151,15 @@ DataManager.createGameObjects = function() {
 
 const _DataManager_makeSaveContents = DataManager.makeSaveContents;
 DataManager.makeSaveContents = function() {
-    const data = _DataManager_makeSaveContents.call(DataManager);
-    data.re = REGameManager.makeSaveContents();
-    return data;
+    const contents = _DataManager_makeSaveContents.call(DataManager);
+    contents.re = REGameManager.makeSaveContents();
+    return contents;
 };
 
 const _DataManager_extractSaveContents = DataManager.extractSaveContents;
 DataManager.extractSaveContents = function(contents) {
     _DataManager_extractSaveContents.call(DataManager, contents);
+    REGameManager.extractSaveContents(contents.re);
 }
 
 // メモ欄に同じタグが複数あった場合、配列としてmetaプロパティに登録する。

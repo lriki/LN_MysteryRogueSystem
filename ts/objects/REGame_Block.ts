@@ -25,7 +25,7 @@ export enum BlockLayerKind {
     System = 4,
 }
 
-class REBlockLayer {
+export class REBlockLayer {
     // 同一レイヤーに、同時に複数の Entity は存在可能。
     // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
     private _entities: LEntityId[] = [];
