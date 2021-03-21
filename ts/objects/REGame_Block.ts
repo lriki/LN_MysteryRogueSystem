@@ -3,6 +3,8 @@ import { MapDataProvidor } from "./MapDataProvidor";
 import { LEntity } from "./LEntity";
 import { REGame_Map } from "./REGame_Map";
 import { FBlockComponent } from "ts/floorgen/FMapData";
+import { eqaulsEntityId, LEntityId } from "./LObject";
+import { REGame } from "./REGame";
 
 export type LRoomId = number;
 
@@ -26,15 +28,15 @@ export enum BlockLayerKind {
 class REBlockLayer {
     // 同一レイヤーに、同時に複数の Entity は存在可能。
     // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
-    private _entities: LEntity[] = [];
+    private _entities: LEntityId[] = [];
 
     entities(): readonly LEntity[] {
-        return this._entities;
+        return this._entities.map(x => REGame.world.entity(x));
     }
 
     firstEntity(): LEntity | undefined {
         if (this._entities.length > 0)
-            return this._entities[0];
+            return REGame.world.entity(this._entities[0]);
         else
             return undefined;
     }
@@ -44,19 +46,19 @@ class REBlockLayer {
     }
 
     isContains(entity: LEntity): boolean {
-        return this._entities.includes(entity);
+        return this._entities.findIndex(x => eqaulsEntityId(x, entity.id())) >= 0;
     }
 
     isOccupied(): boolean {
-        return this._entities.some(x => x.blockOccupied);
+        return this._entities.some(x => REGame.world.entity(x).blockOccupied);
     }
 
     addEntity(entity: LEntity) {
-        this._entities.push(entity);
+        this._entities.push(entity.id());
     }
 
     removeEntity(entity: LEntity): boolean {
-        const index = this._entities.indexOf(entity);
+        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.id()));
         if (index >= 0) {
             this._entities.splice(index, 1);
             return true;
