@@ -1,4 +1,5 @@
 import { assert } from "ts/Common"
+import { LAbility } from "ts/objects/abilities/LAbility";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LEffectResult, LParamEffectResult } from "ts/objects/LEffectResult";
 import { LEntity } from "ts/objects/LEntity";
@@ -6,7 +7,9 @@ import { LRoom } from "ts/objects/LRoom";
 import { LWorld } from "ts/objects/LWorld";
 import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
 import { REGame_Map } from "ts/objects/REGame_Map";
+import { LState } from "ts/objects/states/LState";
 import { LStructure } from "ts/objects/structures/LStructure";
+import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 /**
  * セーブデータをロードするとき、JsonEx._decode の window[value["@"]] では
  * クラス名を指定して prototype をとることができなかった。
@@ -42,7 +45,15 @@ function createInstance(name: string): any {
             return Object.create(LEffectResult.prototype);
         case "LParamEffectResult":
             return Object.create(LParamEffectResult.prototype);
-            
+        case "LState":
+            return Object.create(LState.prototype);
+        case "LAbility":
+            return Object.create(LAbility.prototype);
+    }
+
+    if (name.endsWith("Behavior")) {
+        const i = SBehaviorFactory.createBehaviorInstance(name);
+        if (i) return i;
     }
 
     console.log(`Type not found. "${name}"`);

@@ -1,10 +1,11 @@
 import { DAbilityId } from "ts/data/DAbility";
 import { LBehavior } from "../behaviors/LBehavior";
-import { LEntityId, LObject, LObjectType } from "../LObject";
+import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LKnockbackBehavior } from "./LKnockbackBehavior";
 
+export type LAbilityId = LObjectId;
 
 /**
  * Ability は Entity の各種行動や与・被Effect 時に追加の様々な効果を与えるもの。
@@ -29,6 +30,10 @@ export class LAbility extends LObject {
 
     public constructor() {
         super(LObjectType.Ability);
+    }
+
+    public id(): LAbilityId {
+        return this.__objectId();
     }
 
     public setup(abilityId: DAbilityId, owner: LEntity): void {

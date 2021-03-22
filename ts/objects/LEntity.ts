@@ -17,7 +17,7 @@ import { LWorld } from "./LWorld";
 import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
 import { DParameterId, REData } from "ts/data/REData";
-import { LAbility } from "./abilities/LAbility";
+import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { FlowFlags } from "typescript";
 import { LRoom } from "./LRoom";
@@ -167,7 +167,7 @@ export class LEntity extends LObject
     // とりあえず Entity に持たせて様子見。
     _states: LStateId[] = [];
     
-    _abilities: LAbility[] = [];
+    _abilities: LAbilityId[] = [];
 
     // EffectResult はコアスクリプトの ActionResult 同様、System ではなく Entity 側に持たせてみる。
     // EffectContext に持たせて持ちまわってもよいのだが、ステート変更やパラメータ増減など様々なタイミングで参照されるため
@@ -315,34 +315,36 @@ export class LEntity extends LObject
     // LAbility
 
     addAbility(abilityId: DAbilityId) {
-        const index = this._abilities.findIndex(s => s.abilityId() == abilityId);
+        const index = this._abilities.findIndex(id => (REGame.world.ability(id)).abilityId() == abilityId);
         if (index >= 0) {
         }
         else {
-            const state = new LAbility();
-            state.setup(abilityId, this);
-            this._abilities.push(state);
-            state.onAttached();
+            const ability = new LAbility();
+            ability.setup(abilityId, this);
+            
+            assert(ability.hasId());
+            this._abilities.push(ability.id());
+            ability.onAttached();
         }
     }
 
     removeAbility(abilityId: DAbilityId) {
-        const index = this._abilities.findIndex(s => s.abilityId() == abilityId);
+        const index = this._abilities.findIndex(id => (REGame.world.ability(id)).abilityId() == abilityId);
         if (index >= 0) {
-            this._abilities[index].onDetached();
+            REGame.world.ability(this._abilities[index]).onDetached();
             this._abilities.splice(index, 1);
         }
     }
 
     removeAllAbilities() {
-        this._abilities.forEach(s => {
+        this.abilities().forEach(s => {
             s.onDetached();
         });
         this._abilities = [];
     }
 
     public abilities(): readonly LAbility[] {
-        return this._abilities;
+        return this._abilities.map(id => REGame.world.object(id) as LAbility);
     }
 
 
@@ -526,9 +528,10 @@ export class LEntity extends LObject
     }
 
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
+        const abilities = this.abilities();
         let response = REResponse.Pass;
-        for (let i = this._abilities.length - 1; i >= 0; i--) {
-            for (const b of this._abilities[i].behabiors()) {
+        for (let i = abilities.length - 1; i >= 0; i--) {
+            for (const b of abilities[i].behabiors()) {
                 let r = func(b);
                 if (r != REResponse.Pass) {
                     response = r;

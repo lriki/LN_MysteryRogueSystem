@@ -5,6 +5,7 @@ import { Random } from "ts/math/Random";
 import { LEntityId, eqaulsEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { TilingSprite } from "pixi.js";
+import { LAbility, LAbilityId } from "./abilities/LAbility";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -56,6 +57,14 @@ export class LWorld
                 throw new Error(`Destroyed behavior. (id: [${id.index}, ${id.key}])`);
             }
         }
+    }
+
+    ability(id: LAbilityId): LAbility {
+        const e = this.object(id);
+        if (e.objectType() == LObjectType.Ability)
+            return e as LAbility;
+        else
+            throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
     }
 
     random(): Random {
