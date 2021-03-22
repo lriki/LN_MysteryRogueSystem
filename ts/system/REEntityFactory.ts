@@ -28,7 +28,7 @@ export class REEntityFactory {
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
-        e.addBehavior(LActorBehavior, actorId);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
+        e.addBehavior(LActorBehavior).setup(actorId);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
         return e;
     }
 

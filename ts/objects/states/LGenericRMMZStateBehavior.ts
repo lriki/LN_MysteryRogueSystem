@@ -11,7 +11,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
-export class LStateTrait_GenericRMMZState extends LStateTraitBehavior {
+export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
     
     onAttached(): void {
         //console.log("LStateTrait_GenericRMMZState");

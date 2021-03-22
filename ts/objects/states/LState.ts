@@ -7,7 +7,7 @@ import { LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
-import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
+import { LGenericRMMZStateBehavior } from "./LGenericRMMZStateBehavior";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { REGame_Map } from "../REGame_Map";
 import { LBehaviorId } from "../behaviors/LBehavior";
@@ -36,7 +36,7 @@ export class LState extends LObject {
         REGame.world._registerObject(this);
         this._stateId = stateId;
         
-        const behavior = new LStateTrait_GenericRMMZState();
+        const behavior = new LGenericRMMZStateBehavior();
         REGame.world._registerBehavior(behavior);
 
        //this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {

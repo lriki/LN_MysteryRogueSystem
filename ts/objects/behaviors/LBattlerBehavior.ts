@@ -322,9 +322,12 @@ export class LActorBehavior extends LBattlerBehavior {
     _level: number = 0;
     _exp: number[] = [];
 
-    // Game_Actor.prototype.setup
-    public constructor(actorId: number) {
+    public constructor() {
         super();
+    }
+
+    // Game_Actor.prototype.setup
+    public setup(actorId: number): void {
         this._actorId = actorId;
     }
 
