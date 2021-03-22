@@ -58,12 +58,6 @@ export class RESystem {
         i.dataId = dataId;
         return i;
     }
-
-    static createBehavior(dataId: number) {
-        const i = REData._behaviorFactories[dataId]();
-        i.dataId = dataId;
-        return i;
-    }
 }
 
 

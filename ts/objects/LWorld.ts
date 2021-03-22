@@ -76,7 +76,6 @@ export class LWorld
 
     public _registerObject(obj: LObject): void {
         assert(!obj.hasId());
-
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._objects.findIndex((x, i) => i > 0 && x == undefined);
@@ -91,6 +90,7 @@ export class LWorld
     }
 
     _registerBehavior(behavior: LBehavior) {
+        assert(!behavior.hasId());
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);

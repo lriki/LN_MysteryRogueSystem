@@ -8,7 +8,7 @@ import { LStateTrait_Nap } from "ts/objects/states/LStateTrait_Nap";
 export class SBehaviorFactory {
     public static attachBehaviors(entity: LEntity, names: string[]): void {
         names.forEach(name => {
-            entity.addBasicBehavior(this.createBehavior(name));
+            entity._addBehavior(this.createBehavior(name));
         });
     }
     

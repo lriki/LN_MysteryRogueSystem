@@ -22,13 +22,13 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.ActorDefaultFactionId));
-        e.addBasicBehavior(new LCommonBehavior());
-        e.addBasicBehavior(new REGame_DecisionBehavior());
-        e.addBasicBehavior(new REUnitBehavior());
-        e.addBasicBehavior(new LInventoryBehavior());
-        e.addBasicBehavior(new LItemUserBehavior());
-        e.addBasicBehavior(new LEquipmentUserBehavior());
-        e.addBasicBehavior(new LActorBehavior(actorId));    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
+        e.addBehavior(LCommonBehavior);
+        e.addBehavior(REGame_DecisionBehavior);
+        e.addBehavior(REUnitBehavior);
+        e.addBehavior(LInventoryBehavior);
+        e.addBehavior(LItemUserBehavior);
+        e.addBehavior(LEquipmentUserBehavior);
+        e.addBehavior(LActorBehavior, actorId);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
         return e;
     }
 
@@ -36,52 +36,49 @@ export class REEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
             .setFactionId(REData.EnemeyDefaultFactionId));
-        e.addBasicBehavior(new LCommonBehavior());
-        e.addBasicBehavior(new REGame_DecisionBehavior());
-        e.addBasicBehavior(new REUnitBehavior());
-        //e.addBasicBehavior(new LBattlerBehavior());
-        e.addBasicBehavior((new LEnemyBehavior()).init(monsterId));
+        e.addBehavior(LCommonBehavior);
+        e.addBehavior(REGame_DecisionBehavior);
+        e.addBehavior(REUnitBehavior);
+        e.addBehavior(LEnemyBehavior).init(monsterId);
         return e;
     }
 
     static newItem(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addBasicBehavior(new LCommonBehavior());
-        e.addBasicBehavior(new LItemBehavior(itemId));
+        e.addBehavior(LCommonBehavior);
+        e.addBehavior(LItemBehavior, itemId);
         e.addAbility(REData.abilities[1].id);  // TODO: Test
         return e;
     }
 
     static newEquipment(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addBasicBehavior(new LCommonBehavior());
-        e.addBasicBehavior(new LItemBehavior(itemId));
-        e.addBasicBehavior(new LEquipmentBehavior());
+        e.addBehavior(LCommonBehavior);
+        e.addBehavior(LItemBehavior, itemId);
+        e.addBehavior(LEquipmentBehavior);
         return e;
     }
 
     static newTrap(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addBasicBehavior(new LCommonBehavior());
-        e.addBasicBehavior(new LItemBehavior(itemId));
-        e.addBasicBehavior(new LTrapBehavior());
+        e.addBehavior(LCommonBehavior);
+        e.addBehavior(LItemBehavior, itemId);
+        e.addBehavior(LTrapBehavior);
         return e;
     }
 
     static newExitPoint(): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addBasicBehavior(new REExitPointBehavior());
+        e.addBehavior(REExitPointBehavior);
         return e;
     }
 
     static newMagicBullet(ownerItem: LEntity): LEntity {
         const e = REGame.world.spawnEntity();
         e.prefabKey = "pMagicBullet";
-        //e.addBasicBehavior(new LCommonBehavior());
+        //e.addBehavior(LCommonBehavior);
 
-        const b = new LMagicBulletBehavior();
-        b.setup(ownerItem);
-        e.addBasicBehavior(b);
+        e.addBehavior(LMagicBulletBehavior).setup(ownerItem);
         return e;
     }
 }

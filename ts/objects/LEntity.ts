@@ -1,5 +1,5 @@
 import { LAttribute } from "./attributes/LAttribute";
-import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { RECommandContext } from "../system/RECommandContext";
@@ -61,7 +61,10 @@ enum BlockLayer
 export class LEntity extends LObject
 {
     
-    //private _id: LEntityId = { index: 0, key: 0 };
+
+    attrbutes: LAttribute[] = [];
+
+    private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
     
     private _parentIsMap = false;
 
@@ -104,10 +107,6 @@ export class LEntity extends LObject
 
 
     
-
-    attrbutes: LAttribute[] = [];
-    private _basicBehaviors: LBehavior[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
-    //private _adhocBehaviors: REGame_Behavior[] = [];    // 実行中にセットされる Behavior. 状態異常などで、基本とは異なる振る舞いをするときにセットされる。
 
 
     _name: string = ""; // 主にデバッグ用
@@ -186,7 +185,7 @@ export class LEntity extends LObject
 
 
 
-        this._basicBehaviors.forEach(b => {
+        this.basicBehaviors().forEach(b => {
             b.onDetached();
             REGame.world._unregisterBehavior(b);
         });
@@ -212,19 +211,40 @@ export class LEntity extends LObject
         return this;
     }
 
+    //----------------------------------------
+    // Behavior
+
     basicBehaviors(): LBehavior[] {
-        return this._basicBehaviors;
+        return this._basicBehaviors.map(x => REGame.world.behavior(x));
     }
 
-    addBasicBehavior(behavior: LBehavior) {
-        assert(this.entityId().index > 0);
-        //assert(behavior.id().index == 0);
-        //REGame.world._registerBehavior(behavior);
+    
+    public addBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, ...args: any[]): T {
+        const behavior = new ctor(args);
+        REGame.world._registerBehavior(behavior);
+        this._addBehavior(behavior);
+        return behavior;
+    }
 
-        this._basicBehaviors.push(behavior);
+    _addBehavior(behavior: LBehavior) {
+        assert(behavior.hasId());
+        assert(this.entityId().index > 0);
+        this._basicBehaviors.push(behavior.id());
+        behavior.setOwner(this);
+        behavior.onAttached();
+        return behavior;
+    }
+
+    /*
+    addBasicBehavior(behavior: LBehavior) {
+        assert(behavior.hasId());
+        assert(this.entityId().index > 0);
+
+        this._basicBehaviors.push(behavior.id());
         behavior.setOwner(this);
         behavior.onAttached();
     }
+    */
     
 
     //addAdhocBehavior(value: REGame_Behavior) {
@@ -236,7 +256,7 @@ export class LEntity extends LObject
     //}
 
     removeBehavior(behavior: LBehavior) {
-        const index = this._basicBehaviors.findIndex(x => x == behavior);
+        const index = this._basicBehaviors.findIndex(x => eqaulsEntityId(x, behavior.id()));
         if (index >= 0) {
             this._basicBehaviors.splice(index, 1);
             behavior.onDetached();
@@ -403,9 +423,9 @@ export class LEntity extends LObject
         return undefined;
     }
     
-    findBehavior<T>(ctor: { new(...args: any[]): T }): T | undefined {
+    findBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T | undefined {
         for (let i = 0; i < this._basicBehaviors.length; i++) {
-            const a = this._basicBehaviors[i];
+            const a = REGame.world.behavior(this._basicBehaviors[i]);
             if (a instanceof ctor) {
                 return a as T;
             }
@@ -413,13 +433,13 @@ export class LEntity extends LObject
         return undefined;
     }
 
-    getBehavior<T>(ctor: { new(...args: any[]): T }): T {
+    getBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T {
         const b = this.findBehavior<T>(ctor);
         if (!b) throw new Error();
         return b;
     }
 
-    hasBehavior<T>(ctor: { new(...args: any[]): T }): boolean {
+    hasBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): boolean {
         return this.findBehavior<T>(ctor) != undefined;
     }
 
@@ -434,7 +454,7 @@ export class LEntity extends LObject
         }
 
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
-            if (!func(this._basicBehaviors[i])) {
+            if (!func(REGame.world.behavior(this._basicBehaviors[i]))) {
                 return;
             }
         }
@@ -453,7 +473,7 @@ export class LEntity extends LObject
         let result: DActionId[] = [];
         
         for (let i = 0; i < this._basicBehaviors.length; i++) { // 前方から
-            result = this._basicBehaviors[i].onQueryActions(result);
+            result = REGame.world.behavior(this._basicBehaviors[i]).onQueryActions(result);
         }
         return result;
     }
@@ -478,7 +498,7 @@ export class LEntity extends LObject
 
 
         for (let i = 0; i < this._basicBehaviors.length; i++) {
-            result = this._basicBehaviors[i].onQueryReactions(result);
+            result = REGame.world.behavior(this._basicBehaviors[i]).onQueryReactions(result);
         }
         return result;
     }
@@ -486,18 +506,18 @@ export class LEntity extends LObject
     
     public collectTraits(): IDataTrait[] {
         const result: IDataTrait[] = [];
-        for (const b of this._basicBehaviors) {
+        for (const b of this.basicBehaviors()) {
             b.onCollectTraits(result);
         }
         return result;
     }
 
     public queryIdealParameterPlus(parameterId: DParameterId): number {
-        return this._basicBehaviors.reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
+        return this.basicBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
     }
 
     public refreshStatus(): void {
-        this._basicBehaviors.forEach(b => b.onRefreshStatus());
+        this.basicBehaviors().forEach(b => b.onRefreshStatus());
     }
 
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
@@ -511,7 +531,7 @@ export class LEntity extends LObject
             }
         }
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
-            let r = func(this._basicBehaviors[i]);
+            let r = func(REGame.world.behavior((this._basicBehaviors[i])));
             if (r != REResponse.Pass) {
                 response = r;
             }
@@ -558,7 +578,7 @@ export class LEntity extends LObject
         contents.x = this.x;
         contents.y = this.y;
         contents.attrbutes = this.attrbutes;
-        contents.behaviors = this._basicBehaviors.map(x => x.dataId);
+        contents.behaviors = this._basicBehaviors;
         return contents;
     }
 
@@ -572,9 +592,7 @@ export class LEntity extends LObject
             Object.assign(i, x);
             return i;
         });
-        this._basicBehaviors = contents.behaviors.map((x: number) => {
-            return RESystem.createBehavior(x);
-        });
+        this._basicBehaviors = contents.behaviors;
     }
 
     

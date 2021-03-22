@@ -281,8 +281,7 @@ test('EntitySaveLoad', () => {
         actor1.addAttribute(a1);
 
         // Behaviors
-        const b1 = RESystem.createBehavior(RESystem.behaviors.unit) as REUnitBehavior;
-        actor1.addBasicBehavior(b1);
+        actor1.addBehavior(REUnitBehavior);
 
         const contents1 = actor1.makeSaveContents();
         contentsString = JSON.stringify(contents1);
