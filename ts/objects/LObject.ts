@@ -58,7 +58,7 @@ export class LObject {
     private readonly _objectType: LObjectType;
     private _objectId: LObjectId = { index: 0, key: 0 };
     private _destroyed: boolean = false;
-    private _ownerEntityId: LObjectId = { index: 0, key: 0 };
+    private _ownerObjectId: LObjectId = { index: 0, key: 0 };
     
     protected constructor(objectType: LObjectType) {
         this._objectType = objectType;
@@ -72,6 +72,10 @@ export class LObject {
         return this._objectId;
     }
 
+    public hasId(): boolean {
+        return this._objectId.index > 0 && this._objectId.key != 0;
+    }
+
     public _setObjectId(id: LObjectId): void  {
         assert(id.index > 0);
         this._objectId = id;
@@ -82,7 +86,7 @@ export class LObject {
     }
 
     public hasOwner(): boolean {
-        return this._ownerEntityId.index > 0;
+        return this._ownerObjectId.index > 0;
     }
 
     /**
@@ -92,11 +96,11 @@ export class LObject {
      * GC のタイミングで、owner がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
      */
     public ownerObjectId(): LObjectId {
-        return this._ownerEntityId;
+        return this._ownerObjectId;
     }
     
     public ownerObject(): LObject {
-        return REGame.world.object(this._ownerEntityId);
+        return REGame.world.object(this._ownerObjectId);
     }
 
     public ownerAs<T>(ctor: { new(...args: any[]): T }): T | undefined {
@@ -114,11 +118,11 @@ export class LObject {
         assert(!this.hasOwner());
         const ownerId = owner.objectId();
         assert(ownerId.index > 0);     // ID を持たない親は設定できない
-        this._ownerEntityId = ownerId;
+        this._ownerObjectId = ownerId;
     }
 
     public clearOwner(): void {
-        this._ownerEntityId = { index: 0, key: 0 };
+        this._ownerObjectId = { index: 0, key: 0 };
     }
     
     /** destroy が要求されているか */

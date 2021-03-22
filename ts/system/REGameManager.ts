@@ -112,7 +112,7 @@ export class REGameManager
     
     public static makeSaveContents(): any {
         let contents: any = {};
-        //contents.world = REGame.world;
+        contents.world = REGame.world;
         contents.map = REGame.map;
         console.log("contents", contents);
         return contents;
@@ -120,6 +120,7 @@ export class REGameManager
 
     public static extractSaveContents(contents: any) {
         console.log("extractSaveContents contents", contents);
+        REGame.world = contents.world;
         REGame.map = contents.map;
     }
 }

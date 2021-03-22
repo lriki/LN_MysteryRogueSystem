@@ -40,7 +40,7 @@ export class LEventServer {
     private _entries: EventSubscriber[] = [];
     
     public subscribe(eventId: DEventId, behavior: LBehavior) {
-        assert(behavior.isValid());
+        assert(behavior.hasId());
         this._entries.push({
             eventId: eventId,
             behaviorId: behavior.id(),

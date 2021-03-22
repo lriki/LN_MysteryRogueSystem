@@ -1,5 +1,6 @@
 import { assert } from "ts/Common"
 import { LRoom } from "ts/objects/LRoom";
+import { LWorld } from "ts/objects/LWorld";
 import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { LStructure } from "ts/objects/structures/LStructure";
@@ -28,6 +29,8 @@ function createInstance(name: string): any {
             return Object.create(LRoom.prototype);
         case "LStructure":
             return Object.create(LStructure.prototype);
+        case "LWorld":
+            return Object.create(LWorld.prototype);
     }
 
     console.log(`Type not found. "${name}"`);

@@ -37,21 +37,7 @@ import { REGame } from "..//REGame";
 import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 
-export interface LBehaviorId {
-    readonly index: number;  // 0 is Invalid (dummy entity)
-    readonly key: number;
-}
-
-export function eqaulsEntityId(a: LBehaviorId, b: LBehaviorId): boolean {
-    return a.index == b.index && a.key == b.key;
-}
-
-export function cloneEntityId(a: LBehaviorId): LBehaviorId {
-    return {
-        index: a.index,
-        key: a.key,
-    };
-}
+export type LBehaviorId = LEntityId;
 
 export enum DecisionPhase {
     Prepare,
@@ -145,7 +131,7 @@ export class LBehavior {
         this._id = id;
     }
 
-    public isValid(): boolean {
+    public hasId(): boolean {
         return this._id.index > 0 && this._id.key != 0;
     }
 
