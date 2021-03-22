@@ -222,7 +222,8 @@ export class LEntity extends LObject
 
     
     public addBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, ...args: any[]): T {
-        const behavior = new ctor(args);
+        const behavior = new ctor();
+        (behavior as T).setup(...args);
         REGame.world._registerBehavior(behavior);
         this._addBehavior(behavior);
         return behavior;

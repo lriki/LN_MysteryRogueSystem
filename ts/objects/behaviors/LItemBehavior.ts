@@ -12,10 +12,13 @@ import { LBehavior } from "./LBehavior";
  */
 export class LItemBehavior extends LBehavior {
 
-    private _itemId: DItemDataId;
+    private _itemId: DItemDataId = 0;
 
-    public constructor(itemId: DItemDataId) {
+    public constructor() {
         super();
+    }
+
+    public setup(itemId: DItemDataId): void {
         this._itemId = itemId;
     }
 

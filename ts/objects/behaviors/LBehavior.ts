@@ -127,6 +127,10 @@ export class LBehavior extends LObject {
         super(LObjectType.Behavior);
     }
 
+    public setup(...args: any[]): void {
+
+    }
+
     public id(): LBehaviorId {
         return this.__objectId();
     }
