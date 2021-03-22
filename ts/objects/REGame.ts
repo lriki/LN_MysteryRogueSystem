@@ -6,7 +6,7 @@ import { LWorld } from "./LWorld";
 import { REGame_Core } from "./REGame_Core";
 import { REScheduler } from "../system/REScheduler";
 import { REIntegration } from "../system/REIntegration";
-import { REGame_Camera } from "../objects/REGame_Camera";
+import { LCamera } from "./LCamera";
 import { REGame_System } from "../objects/REGame_System";
 import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";
@@ -35,7 +35,7 @@ export class REGame
     static system: REGame_System;
     static world: LWorld;
     static map: REGame_Map;
-    static camera: REGame_Camera;
+    static camera: LCamera;
     static uniqueActorUnits: LEntity[] = [];
     static recorder: RECommandRecorder;
     static messageHistory: LMessageHistory;

@@ -1,7 +1,7 @@
 import { LEntity } from "./LEntity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
-import { Random } from "ts/math/Random";
+import { LRandom } from "ts/objects/LRandom";
 import { LEntityId, eqaulsEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { TilingSprite } from "pixi.js";
@@ -15,7 +15,7 @@ export class LWorld
     //private _entities: (LEntity | undefined)[] = [];
     private _objects: (LObject | undefined)[] = [];
     private _behaviors: (LBehavior | undefined)[] = [];
-    private _random: Random = new Random(Math.floor(Math.random() * 65535) + 1);
+    private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);
 
     constructor() {
         this._objects = [undefined];   // [0] is dummy
@@ -32,7 +32,7 @@ export class LWorld
                 throw new Error(`Unregisterd entity. (id: [${id.index}, ${id.key}])`);
             }
             else {
-                throw new Error(`Destroyed entity. (id: [${id.index}, ${id.key}])`);
+                throw new Error(`Destroyed entity. (id: [${id.index}, ${id.key}], actualy:[${e.__objectId().index}, ${e.__objectId().key}])`);
             }
         }
     }
@@ -67,7 +67,7 @@ export class LWorld
             throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
     }
 
-    random(): Random {
+    random(): LRandom {
         return this._random;
     }
 

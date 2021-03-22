@@ -45,7 +45,9 @@ export class LAbility extends LObject {
 
         // TODO: test
         //this._behabiorIds = [new LKnockbackBehavior()];
-        this.addBehavior(SBehaviorFactory.createBehavior("LKnockbackBehavior"));
+        const b = SBehaviorFactory.createBehavior("LKnockbackBehavior");
+        assert(b);
+        this.addBehavior(b);
     }
     
     public abilityId(): DAbilityId {

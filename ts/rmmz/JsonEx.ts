@@ -1,8 +1,10 @@
 import { assert } from "ts/Common"
 import { LAbility } from "ts/objects/abilities/LAbility";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
+import { LCamera } from "ts/objects/LCamera";
 import { LEffectResult, LParamEffectResult } from "ts/objects/LEffectResult";
 import { LEntity } from "ts/objects/LEntity";
+import { LRandom } from "ts/objects/LRandom";
 import { LRoom } from "ts/objects/LRoom";
 import { LWorld } from "ts/objects/LWorld";
 import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
@@ -49,6 +51,11 @@ function createInstance(name: string): any {
             return Object.create(LState.prototype);
         case "LAbility":
             return Object.create(LAbility.prototype);
+        case "LRandom":
+            return Object.create(LRandom.prototype);
+        case "LCamera":
+            return Object.create(LCamera.prototype);
+            
     }
 
     if (name.endsWith("Behavior")) {

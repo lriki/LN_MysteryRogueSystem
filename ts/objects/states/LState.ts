@@ -34,6 +34,7 @@ export class LState extends LObject {
     public constructor(stateId: DStateId) {
         super(LObjectType.State);
         REGame.world._registerObject(this);
+        assert(stateId > 0);
         this._stateId = stateId;
         
         const behavior = new LGenericRMMZStateBehavior();
@@ -47,6 +48,7 @@ export class LState extends LObject {
 
         const behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
             const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
+            if (!b) throw new Error(`Behavior "${behaviorName}" specified in state "${stateId}:${this.stateData().displayName}" is invalid.`);
             return b;
         }));
 

@@ -6,7 +6,7 @@ import { REGame_Core } from "../objects/REGame_Core";
 import { DFactionId, REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
-import { REGame_Camera } from "../objects/REGame_Camera";
+import { LCamera } from "../objects/LCamera";
 import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
 import { RECommandRecorder } from "./RECommandRecorder";
@@ -53,7 +53,7 @@ export class REGameManager
         REGame.system = new REGame_System();
         REGame.world = new LWorld();
         REGame.map = new REGame_Map();
-        REGame.camera = new REGame_Camera();
+        REGame.camera = new LCamera();
         REGame.uniqueActorUnits = [];
         REGame.recorder = new RECommandRecorder();
         REGame.messageHistory = new LMessageHistory();
@@ -114,6 +114,7 @@ export class REGameManager
         let contents: any = {};
         contents.world = REGame.world;
         contents.map = REGame.map;
+        contents.camera = REGame.camera;
         console.log("contents", contents);
         return contents;
     }
@@ -122,6 +123,7 @@ export class REGameManager
         console.log("extractSaveContents contents", contents);
         REGame.world = contents.world;
         REGame.map = contents.map;
+        REGame.camera = contents.camera;
     }
 }
 

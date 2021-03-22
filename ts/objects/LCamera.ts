@@ -13,7 +13,7 @@ import { LEntityId } from "./LObject";
  * 
  * ツクールのマップ移動=Game_Player の移動であるように、RE でもマップ移動=Camera の移動、となる。
  */
-export class REGame_Camera
+export class LCamera
 {
     private _focusedEntityId: LEntityId = {index: 0, key: 0};
     private _transferingNewFloorId: number = 0;

@@ -12,7 +12,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
-export class LStateTrait_Nap extends LStateTraitBehavior {
+export class LNapStateBehavior extends LStateTraitBehavior {
     private _hostileEnterd: boolean = false;
     
     onAttached(): void {

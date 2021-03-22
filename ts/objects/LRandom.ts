@@ -1,5 +1,5 @@
 
-export class Random {
+export class LRandom {
     private _x: number;
     private _y: number;
     private _z: number;

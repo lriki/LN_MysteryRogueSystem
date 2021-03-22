@@ -3,7 +3,7 @@ import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LStaffItemBehavior } from "ts/objects/behaviors/LStaffItemBehavior";
 import { REGame } from "ts/objects/REGame";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
-import { LStateTrait_Nap } from "ts/objects/states/LStateTrait_Nap";
+import { LNapStateBehavior } from "ts/objects/states/LNapStateBehavior";
 import { LKnockbackBehavior } from "ts/objects/abilities/LKnockbackBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
@@ -15,6 +15,7 @@ import { LActorBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
+import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -34,20 +35,28 @@ export class SBehaviorFactory {
         { fullName: "REExitPointBehavior", friendlyName: "_ExitPoint", create: () => new REExitPointBehavior() },
         { fullName: "LEnemyBehavior", friendlyName: "_Enemy", create: () => new LEnemyBehavior() },
         { fullName: "LGenericRMMZStateBehavior", friendlyName: "_GenericRMMZState", create: () => new LGenericRMMZStateBehavior() },
+        { fullName: "LItemBehavior", friendlyName: "_Item", create: () => new LItemBehavior() },
+        { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
+        { fullName: "LStaffItemBehavior", friendlyName: "StaffItem", create: () => new LStaffItemBehavior() },
         
         
+
         { fullName: "LKnockbackBehavior", friendlyName: "Knockback", create: () => new LKnockbackBehavior() },
     ];
     
     public static attachBehaviors(entity: LEntity, names: string[]): void {
         names.forEach(name => {
-            entity._addBehavior(this.createBehavior(name));
+            const b = this.createBehavior(name);
+            if (b)
+                entity._addBehavior(b);
+            else
+                throw new Error(`Behavior "${name}" that you tried to add to the entity "${entity._name}" is invalid.`);
         });
     }
     
-    public static createBehavior(name: string): LBehavior {
+    public static createBehavior(name: string): LBehavior | undefined {
         const b = this.createBehaviorInstance(name);
-        if (!b) throw new Error();
+        if (!b) return undefined;
         REGame.world._registerBehavior(b);
         return b;
     }
@@ -59,12 +68,12 @@ export class SBehaviorFactory {
         }
         else {
             switch (name) {
-                case "Staff":
-                    return new LStaffItemBehavior();
+                //case "Staff":
+                //    return new LStaffItemBehavior();
                 case "DebugMoveRight":
                     return new LDebugMoveRightState();
-                case "Nap":
-                    return new LStateTrait_Nap();
+                //case "Nap":
+                //    return new LNapStateBehavior();
                 default:
                     return undefined;
             }

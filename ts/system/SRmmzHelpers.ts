@@ -151,7 +151,7 @@ export class SRmmzHelpers {
     }
     public static createEntityFromRmmzEvent(metadata: RMMZEventEntityMetadata, eventId: number, x: number, y: number): void {
         const entity = this.newEntity(metadata);
-        entity.prefabKey =metadata.prefab;
+        entity.prefabKey = metadata.prefab;
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
@@ -160,7 +160,11 @@ export class SRmmzHelpers {
         // 初期 state 付与
         // TODO: 絶対に眠らないモンスターとかもいるので、Command にしたほうがいいかも。
         metadata.states.forEach(stateKey => {
-            entity.addState(REData.states.findIndex(state => state.key == stateKey));
+            const stateDataId = REData.states.findIndex(state => state.key == stateKey);
+            if (stateDataId > 0)
+                entity.addState(stateDataId);
+            else
+                throw new Error(`The state "${stateKey}" specified in event "Id:${eventId}" was not found.`);
         });
     }
 
