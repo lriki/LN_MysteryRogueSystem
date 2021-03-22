@@ -1,4 +1,7 @@
 import { assert } from "ts/Common"
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
+import { LEffectResult, LParamEffectResult } from "ts/objects/LEffectResult";
+import { LEntity } from "ts/objects/LEntity";
 import { LRoom } from "ts/objects/LRoom";
 import { LWorld } from "ts/objects/LWorld";
 import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
@@ -31,6 +34,15 @@ function createInstance(name: string): any {
             return Object.create(LStructure.prototype);
         case "LWorld":
             return Object.create(LWorld.prototype);
+        case "LEntity":
+            return Object.create(LEntity.prototype);
+        case "LUnitAttribute":
+            return Object.create(LUnitAttribute.prototype);
+        case "LEffectResult":
+            return Object.create(LEffectResult.prototype);
+        case "LParamEffectResult":
+            return Object.create(LParamEffectResult.prototype);
+            
     }
 
     console.log(`Type not found. "${name}"`);

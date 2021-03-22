@@ -14,7 +14,7 @@ import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
 import { LState } from "./states/LState";
 import { LWorld } from "./LWorld";
-import { SEffectResult } from "ts/system/SEffectResult";
+import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
 import { DParameterId, REData } from "ts/data/REData";
 import { LAbility } from "./abilities/LAbility";
@@ -169,8 +169,10 @@ export class LEntity extends LObject
     
     _abilities: LAbility[] = [];
 
-    // _states を Entity に持たせているので、それに合わせてここに持たせる
-    _effectResult: SEffectResult = new SEffectResult();
+    // EffectResult はコアスクリプトの ActionResult 同様、System ではなく Entity 側に持たせてみる。
+    // EffectContext に持たせて持ちまわってもよいのだが、ステート変更やパラメータ増減など様々なタイミングで参照されるため
+    // それらすべての関数で EffectContext を持ちまわるのはかなり煩雑なコードになってしまう。
+    _effectResult: LEffectResult = new LEffectResult();
 
     _actionConsumed: boolean = false;
 
@@ -317,7 +319,6 @@ export class LEntity extends LObject
             state.setup(abilityId, this);
             this._abilities.push(state);
             state.onAttached();
-            this._effectResult.pushAddedState(abilityId);
         }
     }
 
@@ -326,7 +327,6 @@ export class LEntity extends LObject
         if (index >= 0) {
             this._abilities[index].onDetached();
             this._abilities.splice(index, 1);
-            this._effectResult.pushRemovedState(abilityId);
         }
     }
 

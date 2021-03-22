@@ -3,12 +3,12 @@ import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
 import { LEntity } from "ts/objects/LEntity";
-import { RECommandContext } from "./RECommandContext";
-import { RESystem } from "./RESystem";
-import { SMessageBuilder } from "./SMessageBuilder";
+import { RECommandContext } from "../system/RECommandContext";
+import { RESystem } from "../system/RESystem";
+import { SMessageBuilder } from "../system/SMessageBuilder";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
-export class SParamEffectResult {
+export class LParamEffectResult {
     damag: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
     drain: boolean = false;
 }
@@ -23,7 +23,7 @@ export class SParamEffectResult {
  * - 地雷を踏む→ダメージ
  * - 隣のタイルにあった地雷が誘爆する→ダメージ
  */
-export class SEffectResult {
+export class LEffectResult {
 
     // 意味のある効果適用ができたかどうか。
     // 確率計算の前に、現状知りえる情報内で明らかに適用できるかどうかを判定する。
@@ -53,11 +53,11 @@ export class SEffectResult {
     // HP に関係する効果であったか。文字の色を変えたりする
     hpAffected = false;  // TODO: NotImplemented
 
-    paramEffects: SParamEffectResult[] = [];
+    paramEffects: LParamEffectResult[] = [];
     //parameterDamags: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
 
-   addedStates: DStateId[] = [];
-   removedStates: DStateId[] = [];
+    addedStates: DStateId[] = [];
+    removedStates: DStateId[] = [];
     /*
     this.addedBuffs = [];
     this.addedDebuffs = [];

@@ -109,7 +109,7 @@ export class LObject {
         return REGame.world.object(this._ownerObjectId);
     }
 
-    public ownerAs<T>(ctor: { new(...args: any[]): T }): T | undefined {
+    public ownerAs<T extends LObject>(ctor: { new(...args: any[]): T }): T | undefined {
         if (!this.hasOwner()) return undefined;
         const obj = this.ownerObject();
         if (obj instanceof ctor) {

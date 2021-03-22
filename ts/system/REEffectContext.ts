@@ -9,7 +9,7 @@ import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
-import { SEffectResult, SParamEffectResult } from "./SEffectResult";
+import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 
 
 enum SParameterEffectApplyType {
@@ -303,7 +303,7 @@ export class REEffectContext {
     }
     
     // Game_Action.prototype.apply
-    apply(target: LEntity): SEffectResult {
+    apply(target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -480,7 +480,7 @@ export class REEffectContext {
 
     // Game_Action.prototype.executeDamage
     // Game_Action.prototype.executeHpDamage
-    private executeDamage(paramEffect: SParameterEffect, target: LBattlerBehavior, value: number, result: SEffectResult): void {
+    private executeDamage(paramEffect: SParameterEffect, target: LBattlerBehavior, value: number, result: LEffectResult): void {
         //const b = target.findBehavior(LBattlerBehavior);
         //assert(b);
 
@@ -497,7 +497,7 @@ export class REEffectContext {
         }
         result.makeSuccess();
 
-        const paramResult = new SParamEffectResult();
+        const paramResult = new LParamEffectResult();
         paramResult.damag = value;
         paramResult.drain = paramEffect.isDrain;
         result.paramEffects[paramEffect.paramId] = paramResult;
@@ -530,7 +530,7 @@ export class REEffectContext {
     }
 
     // Game_Action.prototype.applyItemEffect
-    public applyItemEffect(target: LBattlerBehavior, effect: IDataEffect, result: SEffectResult): void {
+    public applyItemEffect(target: LBattlerBehavior, effect: IDataEffect, result: LEffectResult): void {
         switch (effect.code) {
             case DItemEffect.EFFECT_RECOVER_HP:
                 throw new Error("Not implemented.");
@@ -594,7 +594,7 @@ export class REEffectContext {
     }
 
     // Game_Action.prototype.itemEffectAddState
-    private itemEffectAddState(target: LBattlerBehavior, effect: IDataEffect, result: SEffectResult): void {
+    private itemEffectAddState(target: LBattlerBehavior, effect: IDataEffect, result: LEffectResult): void {
         if (effect.dataId === 0) {
             // ID=0 は "通常攻撃" という特殊な状態付加となる。
             // RESystem としては処理不要。
@@ -604,7 +604,7 @@ export class REEffectContext {
     }
 
     // Game_Action.prototype.itemEffectAddNormalState
-    private itemEffectAddNormalState(target: LBattlerBehavior, effect: IDataEffect, result: SEffectResult): void {
+    private itemEffectAddNormalState(target: LBattlerBehavior, effect: IDataEffect, result: LEffectResult): void {
         let chance = effect.value1;
         if (!this._effectorFact.isCertainHit()) {
             chance *= target.stateRate(effect.dataId);

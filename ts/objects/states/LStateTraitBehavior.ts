@@ -12,16 +12,16 @@ import { LState } from "./LState";
  * 
  */
 export class LStateTraitBehavior extends LBehavior {
-    _ownerState: LState | undefined;    // シリアライズしない
+    //_ownerState: LState | undefined;    // シリアライズしない
 
     
     
-    public ownerState(): LState {
-        assert(this._ownerState);
-        return this._ownerState;
-    }
+    //public ownerState(): LState {
+    //    assert(this._ownerState);
+    //    return this._ownerState;
+    //}
     
     public removeThisState(): void {
-        this.ownerState().removeThisState();
+        this.ownerAs(LState)?.removeThisState();
     }
 }

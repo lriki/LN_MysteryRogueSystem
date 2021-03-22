@@ -34,7 +34,6 @@ export class LState extends LObject {
         this._stateId = stateId;
         
         const behavior = new LStateTrait_GenericRMMZState();
-        behavior._ownerState = this;
         REGame.world._registerBehavior(behavior);
 
        //this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {
@@ -45,7 +44,6 @@ export class LState extends LObject {
 
         this._behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
             const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
-            b._ownerState = this;
             return b;
         }));
 
