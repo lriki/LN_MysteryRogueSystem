@@ -44,6 +44,7 @@ export enum LObjectType {
     Entity,
     State,
     Ability,
+    Behavior,
 }
 
 /**
@@ -77,8 +78,13 @@ export class LObject {
     }
 
     public _setObjectId(id: LObjectId): void  {
-        assert(id.index > 0);
+        assert(id.index > 0);   // 無効IDの設定は禁止。リセットしたいときは _clearObjectId() を使うこと。
+        assert(!this.hasId());  // 再設定禁止。
         this._objectId = id;
+    }
+
+    public _clearObjectId(): void {
+        this._objectId = { index: 0, key: 0 };
     }
 
     public isUnique(): boolean {

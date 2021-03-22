@@ -34,6 +34,7 @@ export class LAbility extends LObject {
     public setup(abilityId: DAbilityId, owner: LEntity): void {
         this._abilityId = abilityId;
         this.setOwner(owner);
+        REGame.world._registerObject(this);
 
         // TODO: test
         this._behabiors = [new LKnockbackBehavior()];
@@ -49,7 +50,7 @@ export class LAbility extends LObject {
 
     public onAttached(): void {
         this._behabiors.forEach(b => {
-            b._setOwnerObjectId(this.objectId());
+            b.setOwner(this);
             b.onAttached();
         });
     }

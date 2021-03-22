@@ -75,6 +75,8 @@ export class LWorld
     }
 
     public _registerObject(obj: LObject): void {
+        assert(!obj.hasId());
+
         // TODO: 空き場所を愚直に線形探索。
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._objects.findIndex((x, i) => i > 0 && x == undefined);
@@ -93,18 +95,18 @@ export class LWorld
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
-            behavior._setId({ index: this._behaviors.length, key : this._random.nextInt() });
+            behavior._setObjectId({ index: this._behaviors.length, key : this._random.nextInt() });
             this._behaviors.push(behavior);
         }
         else {
-            behavior._setId({ index: index, key : this._random.nextInt() });
+            behavior._setObjectId({ index: index, key : this._random.nextInt() });
             this._behaviors[index] = behavior;
         }
     }
 
     _unregisterBehavior(behavior: LBehavior) {
         this._behaviors[behavior.id().index] = undefined;
-        behavior._setId({ index: 0, key : 0 });
+        behavior._clearObjectId();
     }
 
     /*

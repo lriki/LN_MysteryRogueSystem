@@ -119,34 +119,30 @@ export interface CollideActionArgs {
  * 従来は派生クラスで State 用の StateBehavior や Ability 用の AbilityBehavior を作っていたが、これを禁止する。
  * たとえば "ハラヘリ" という Behavior は "ハラヘリ状態異常" や "ハラヘリの腕輪" で共有できるようにしておくことで、カスタマイズ性を確保しておきたい。
  */
-export class LBehavior {
-    private _id: LBehaviorId = { index: 0, key: 0 };
-    private _ownerObjectId: LObjectId = { index: 0, key: 0 };
+export class LBehavior extends LObject {
+    //private _id: LBehaviorId = { index: 0, key: 0 };
+    //private _ownerObjectId: LObjectId = { index: 0, key: 0 };
     
+    public constructor() {
+        super(LObjectType.Behavior);
+    }
+
     public id(): LBehaviorId {
-        return this._id;
+        return this.objectId();
     }
 
-    public _setId(id: LBehaviorId): void  {
-        this._id = id;
-    }
+    //public _setOwnerObjectId(id: LObjectId): void {
+    //    assert(this._ownerObjectId.index == 0); // 初回設定のみ許可
+    //    this._ownerObjectId = id;
+    //}
 
-    public hasId(): boolean {
-        return this._id.index > 0 && this._id.key != 0;
-    }
+    //public ownerObjectId(): LObjectId {
+    //    return this._ownerObjectId;
+    //}
 
-    public _setOwnerObjectId(id: LObjectId): void {
-        assert(this._ownerObjectId.index == 0); // 初回設定のみ許可
-        this._ownerObjectId = id;
-    }
-
-    public ownerObjectId(): LObjectId {
-        return this._ownerObjectId;
-    }
-
-    public ownerObject(): LObject {
-        return REGame.world.object(this._ownerObjectId);
-    }
+    //public ownerObject(): LObject {
+    //    return REGame.world.object(this._ownerObjectId);
+    //}
 
     public ownerEntity(): LEntity {
         const owner = this.ownerObject();

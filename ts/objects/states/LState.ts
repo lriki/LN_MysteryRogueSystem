@@ -50,7 +50,7 @@ export class LState extends LObject {
         }));
 
         for (const b of this._behabiors) {
-            b._setOwnerObjectId(this.objectId());
+            b.setOwner(this);
         }
         
     }

@@ -222,7 +222,7 @@ export class LEntity extends LObject
         //REGame.world._registerBehavior(behavior);
 
         this._basicBehaviors.push(behavior);
-        behavior._setOwnerObjectId(this.entityId());
+        behavior.setOwner(this);
         behavior.onAttached();
     }
     
