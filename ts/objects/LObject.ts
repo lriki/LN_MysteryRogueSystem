@@ -69,7 +69,7 @@ export class LObject {
         return this._objectType;
     }
 
-    public objectId(): LObjectId {
+    __objectId(): LObjectId {
         return this._objectId;
     }
 
@@ -122,7 +122,7 @@ export class LObject {
 
     public setOwner(owner: LObject): void {
         assert(!this.hasOwner());
-        const ownerId = owner.objectId();
+        const ownerId = owner.__objectId();
         assert(ownerId.index > 0);     // ID を持たない親は設定できない
         this._ownerObjectId = ownerId;
     }

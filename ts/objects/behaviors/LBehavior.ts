@@ -128,7 +128,7 @@ export class LBehavior extends LObject {
     }
 
     public id(): LBehaviorId {
-        return this.objectId();
+        return this.__objectId();
     }
 
     //public _setOwnerObjectId(id: LObjectId): void {

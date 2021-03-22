@@ -3,13 +3,16 @@ import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
-import { LObject, LObjectType } from "../LObject";
+import { LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LStateTrait_GenericRMMZState } from "./LStateTrait_GenericRMMZState";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { REGame_Map } from "../REGame_Map";
+import { LBehaviorId } from "../behaviors/LBehavior";
+
+export type LStateId = LObjectId;
 
 /**
  * Entity に着脱するステートの単位。
@@ -26,7 +29,7 @@ import { REGame_Map } from "../REGame_Map";
 export class LState extends LObject {
     //private _ownerEntity: LEntity | undefined;    // シリアライズしない
     private _stateId: DStateId;
-    private _behabiors: LStateTraitBehavior[];
+    private _stateBehabiors: LBehaviorId[]; // LStateTraitBehavior
 
     public constructor(stateId: DStateId) {
         super(LObjectType.State);
@@ -42,15 +45,20 @@ export class LState extends LObject {
         //    return b;
         //}));
 
-        this._behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
+        const behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
             const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
             return b;
         }));
 
-        for (const b of this._behabiors) {
+        for (const b of behabiors) {
             b.setOwner(this);
         }
         
+        this._stateBehabiors = behabiors.map(x => x.id());
+    }
+
+    public id(): LStateId {
+        return this.__objectId();
     }
 
     public stateId(): number {
@@ -61,8 +69,8 @@ export class LState extends LObject {
         return REData.states[this._stateId];
     }
     
-    public behabiors(): readonly LStateTraitBehavior[] {
-        return this._behabiors;
+    public stateBehabiors(): readonly LStateTraitBehavior[] {
+        return this._stateBehabiors.map(x => REGame.world.behavior(x) as LStateTraitBehavior);
     }
 
     //public ownerEntity(): LEntity {
@@ -79,17 +87,18 @@ export class LState extends LObject {
 
     }
     onAttached(): void {
-        this._behabiors.forEach(b => {
+        this._stateBehabiors.forEach(b => {
             //b._ownerEntityId = this.ownerEntity().id();
             //b._setOwnerObjectId(this.objectId());
-            b.onAttached();
+            (REGame.world.behavior(b) as LStateTraitBehavior).onAttached();
         });
     }
 
     onDetached(): void {
-        this._behabiors.forEach(b => {
-            b.onDetached();
-            REGame.world._unregisterBehavior(b);
+        this._stateBehabiors.forEach(b => {
+            const behavior = (REGame.world.behavior(b) as LStateTraitBehavior);
+            behavior.onDetached();
+            REGame.world._unregisterBehavior(behavior);
         });
     }
 
@@ -104,8 +113,9 @@ export class LState extends LObject {
     
     _callStateIterationHelper(func: (x: LStateTraitBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
-        for (let i = this._behabiors.length - 1; i >= 0; i--) {
-            const r = func(this._behabiors[i]);
+        for (let i = this._stateBehabiors.length - 1; i >= 0; i--) {
+            const behavior = (REGame.world.behavior(this._stateBehabiors[i]) as LStateTraitBehavior);
+            const r = func(behavior);
             if (r != REResponse.Pass) {
                 response = r;
             }

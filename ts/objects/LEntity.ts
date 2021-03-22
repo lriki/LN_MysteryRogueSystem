@@ -12,7 +12,7 @@ import { DEntityKindId } from "ts/data/DEntityKind";
 import { eqaulsEntityId, LEntityId, LObject, LObjectType } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
-import { LState } from "./states/LState";
+import { LState, LStateId } from "./states/LState";
 import { LWorld } from "./LWorld";
 import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
@@ -77,7 +77,7 @@ export class LEntity extends LObject
     
     public entityId(): LEntityId {
         //return this._id;
-        return this.objectId();
+        return this.__objectId();
     }
 
     public hasOwner(): boolean {
@@ -165,7 +165,7 @@ export class LEntity extends LObject
     
     // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
     // とりあえず Entity に持たせて様子見。
-    _states: LState[] = [];
+    _states: LStateId[] = [];
     
     _abilities: LAbility[] = [];
 
@@ -270,41 +270,45 @@ export class LEntity extends LObject
     // State
 
     addState(stateId: DStateId) {
-        const index = this._states.findIndex(s => s.stateId() == stateId);
+        const states = this.states();
+        const index = states.findIndex(s => s.stateId() == stateId);
         if (index >= 0) {
-            this._states[index].recast();
+            states[index].recast();
         }
         else {
             const state = new LState(stateId);
             state.setOwner(this);
-            this._states.push(state);
+            
+            assert(state.hasId());
+            this._states.push(state.id());
             state.onAttached();
             this._effectResult.pushAddedState(stateId);
         }
     }
 
     removeState(stateId: DStateId) {
-        const index = this._states.findIndex(s => s.stateId() == stateId);
+        const states = this.states();
+        const index = states.findIndex(s => s.stateId() == stateId);
         if (index >= 0) {
-            this._states[index].onDetached();
+            states[index].onDetached();
             this._states.splice(index, 1);
             this._effectResult.pushRemovedState(stateId);
         }
     }
 
     removeAllStates() {
-        this._states.forEach(s => {
+        this.states().forEach(s => {
             s.onDetached();
         });
         this._states = [];
     }
 
     public states(): readonly LState[] {
-        return this._states;
+        return this._states.map(id => REGame.world.object(id) as LState);
     }
     
     public isStateAffected(stateId: DStateId): boolean {
-        return this._states.findIndex(s => s.stateId() == stateId) >= 0;
+        return this.states().findIndex(s => s.stateId() == stateId) >= 0;
     }
 
     //--------------------------------------------------------------------------------
@@ -444,8 +448,9 @@ export class LEntity extends LObject
     }
 
     private _iterateBehaviors(func: (x: LBehavior) => boolean) {
-        for (let i = this._states.length - 1; i >= 0; i--) {
-            const behabiors = this._states[i].behabiors();
+        const states = this.states();
+        for (let i = states.length - 1; i >= 0; i--) {
+            const behabiors = states[i].stateBehabiors();
             for (let i2 = behabiors.length - 1; i2 >= 0; i2--) {
                 if (!func(behabiors[i2])) {
                     return;
@@ -542,9 +547,10 @@ export class LEntity extends LObject
     // TODO: State と通常の Behavior を分けるのやめる。
     // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
     _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
+        const states = this.states();
         let response = REResponse.Pass;
-        for (let i = this._states.length - 1; i >= 0; i--) {
-            response = this._states[i]._callStateIterationHelper(func);
+        for (let i = states.length - 1; i >= 0; i--) {
+            response = states[i]._callStateIterationHelper(func);
         }
         return response;
     }

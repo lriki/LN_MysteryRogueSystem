@@ -200,7 +200,7 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.states
     public states(): DState[] {
-        return this.ownerEntity()._states.map(s => REData.states[s.stateId()]);
+        return this.ownerEntity().states().map(s => REData.states[s.stateId()]);
     }
 
     // Game_BattlerBase.prototype.refresh

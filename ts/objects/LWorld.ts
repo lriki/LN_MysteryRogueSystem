@@ -23,7 +23,7 @@ export class LWorld
     
     object(id: LObjectId): LObject {
         const e = this._objects[id.index];
-        if (e && e.objectId().key == id.key) {
+        if (e && e.__objectId().key == id.key) {
             return e as LEntity;
         }
         else {
@@ -177,7 +177,7 @@ export class LWorld
                     obj.onFinalize();
                     this._objects[i] = undefined;
     
-                    if (eqaulsEntityId(REGame.camera.focusedEntityId(), obj.objectId())) {
+                    if (eqaulsEntityId(REGame.camera.focusedEntityId(), obj.__objectId())) {
                         REGame.camera.clearFocus();
                     }
                 }
