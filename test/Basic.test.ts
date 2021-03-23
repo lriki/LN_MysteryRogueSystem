@@ -36,7 +36,7 @@ test('Basic1', () => {
     REGameManager.createGameObjects();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.core.mainPlayerEntiyId);
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
@@ -104,7 +104,7 @@ test('TurnOrderTable', () => {
     REGameManager.createGameObjects();
 
     // actor1 - x1 速
-    const actor1 = REGame.world.entity(REGame.core.mainPlayerEntiyId);
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1._name = "actor1";
     actor1.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 1, 5);

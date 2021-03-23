@@ -3,7 +3,7 @@ import { REEntityFactory } from "../system/REEntityFactory";
 import { REDataManager } from "../data/REDataManager";
 import { LEntity } from "./LEntity";
 import { LWorld } from "./LWorld";
-import { REGame_Core } from "./REGame_Core";
+import { LSystem } from "./LSystem";
 import { REScheduler } from "../system/REScheduler";
 import { REIntegration } from "../system/REIntegration";
 import { LCamera } from "./LCamera";
@@ -29,11 +29,10 @@ export class REGame
 
     static scheduler: REScheduler;
     static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
-    static core: REGame_Core;
+    static system: LSystem;
     static world: LWorld;
     static map: REGame_Map;
     static camera: LCamera;
-    static uniqueActorUnits: LEntity[] = [];
     static recorder: RECommandRecorder;
     static messageHistory: LMessageHistory;
     static message: LMessage;

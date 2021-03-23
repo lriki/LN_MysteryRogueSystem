@@ -31,7 +31,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
     if (REDataManager.isRESystemMap(mapId)) {
-        const playerEntity = REGame.world.entity(REGame.core.mainPlayerEntiyId);
+        const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
         if (playerEntity) {
             REGame.world._transferEntity(playerEntity, mapId, $gamePlayer._newX, $gamePlayer._newY);
             assert(REGame.camera.isFloorTransfering());

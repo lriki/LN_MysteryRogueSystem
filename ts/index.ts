@@ -12,7 +12,7 @@ import './data/REDataManager';
 import './data/DTextManager';
 import './objects/LEntity';
 import './objects/REGame_Map';
-import './objects/REGame_Core';
+import './objects/LSystem';
 import './system/REEntityFactory';
 import './rmmz/Scene_Boot';
 import './rmmz/Scene_Map';

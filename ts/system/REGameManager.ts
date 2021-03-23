@@ -2,7 +2,7 @@ import { REGame } from "../objects/REGame";
 import { REEntityFactory } from "./REEntityFactory";
 import { REGame_Map } from "../objects/REGame_Map";
 import { LWorld } from "../objects/LWorld";
-import { REGame_Core } from "../objects/REGame_Core";
+import { LSystem } from "../objects/LSystem";
 import { DFactionId, REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
@@ -48,11 +48,10 @@ export class REGameManager
         RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
         REGame.scheduler = new REScheduler();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
-        REGame.core = new REGame_Core();
+        REGame.system = new LSystem();
         REGame.world = new LWorld();
         REGame.map = new REGame_Map();
         REGame.camera = new LCamera();
-        REGame.uniqueActorUnits = [];
         REGame.recorder = new RECommandRecorder();
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
@@ -69,7 +68,7 @@ export class REGameManager
                 unit.floorId = x.initialFloorId;
                 unit.x = x.initialX;
                 unit.y = x.initialY;
-                REGame.uniqueActorUnits.push(unit);
+                REGame.system.uniqueActorUnits.push(unit.entityId());
             }
         });
 
@@ -77,8 +76,8 @@ export class REGameManager
         RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
 
         // 1 番 Actor をデフォルトで操作可能とする
-        const firstActor = REGame.uniqueActorUnits[0];
-        REGame.core.mainPlayerEntiyId = firstActor.entityId();
+        const firstActor = REGame.world.entity( REGame.system.uniqueActorUnits[0]);
+        REGame.system.mainPlayerEntityId = firstActor.entityId();
         const unit = firstActor.findAttribute(LUnitAttribute);
         if (unit) {
             unit.setManualMovement(true);
@@ -109,6 +108,7 @@ export class REGameManager
     
     public static makeSaveContents(): any {
         let contents: any = {};
+        contents.system = REGame.system;
         contents.world = REGame.world;
         contents.map = REGame.map;
         contents.camera = REGame.camera;
@@ -118,6 +118,7 @@ export class REGameManager
 
     public static extractSaveContents(contents: any) {
         console.log("extractSaveContents contents", contents);
+        REGame.system = contents.system;
         REGame.world = contents.world;
         REGame.map = contents.map;
         REGame.camera = contents.camera;

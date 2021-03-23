@@ -21,7 +21,7 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
     }
     
     if (REVisual.manager) {
-        const warehouseEntity = REGame.uniqueActorUnits[actorId - 1];
+        const warehouseEntity = REGame.world.entity(REGame.system.uniqueActorUnits[actorId - 1]);
         const actorEntity = REGame.camera.focusedEntity();
         assert(actorEntity);
         RESystem.commandContext.openDialog(actorEntity, new LWarehouseDialog(actorEntity.entityId(), warehouseEntity.entityId()));

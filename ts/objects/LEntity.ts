@@ -393,7 +393,7 @@ export class LEntity extends LObject
      * UniqueEntity のインベントリに入れられたアイテム等は UniqueEntity ではないので注意。
      */
     isUnique(): boolean {
-        return REGame.uniqueActorUnits.includes(this);
+        return REGame.system.uniqueActorUnits.findIndex(id => eqaulsEntityId(id, this.entityId())) >= 0;
     }
 
     /**
