@@ -95,7 +95,7 @@ export class REGame_Map
 
     private build(): void {
         const data = new FMap(this._floorId);
-        REGame.integration.onLoadFixedMapData(data);
+        RESystem.integration.onLoadFixedMapData(data);
         const builder = new FMapBuilder();
         builder.build(data, this);
 
@@ -142,7 +142,7 @@ export class REGame_Map
             });
         }
 
-        REGame.integration.onLoadFixedMapEvents();
+        RESystem.integration.onLoadFixedMapEvents();
     }
 
     releaseMap() {
@@ -255,7 +255,7 @@ export class REGame_Map
         this._entityIds.push(entity.entityId());
         entity.setOwnerMap(this);
 
-        REGame.integration.onEntityEnteredMap(entity);
+        RESystem.integration.onEntityEnteredMap(entity);
     }
 
     /**
@@ -312,7 +312,7 @@ export class REGame_Map
         const result = block.removeEntity(entity);
         assert(result);
         
-        REGame.integration.onEntityLeavedMap(entity);
+        RESystem.integration.onEntityLeavedMap(entity);
     }
 
 

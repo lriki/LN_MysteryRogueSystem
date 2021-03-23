@@ -38,6 +38,7 @@ export class RESystem {
     static sequelContext: SSequelContext;
     static commandContext: RECommandContext;
     static dialogContext: REDialogContext;
+    static integration: REIntegration;
 
     // Database
     static parameters: BasicParameters;

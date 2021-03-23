@@ -100,7 +100,7 @@ Scene_Boot.prototype.onDatabaseLoaded = function() {
     REDataManager.loadData();
     
     REVisual.initialize();
-    REGame.integration = new RMMZIntegration();
+    RESystem.integration = new RMMZIntegration();
 
     REDataManager.loadPrefabDatabaseMap();
 

@@ -1,6 +1,7 @@
 import { Log } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { SSequelUnit, RESequelSet } from "ts/objects/REGame_Sequel";
+import { RESystem } from "./RESystem";
 
 export class SSequelContext {
     private _sequelSet: RESequelSet = new RESequelSet();
@@ -32,7 +33,7 @@ export class SSequelContext {
             if (REGame.signalFlushSequelSet) {
                 REGame.signalFlushSequelSet(this._sequelSet);
             }
-            REGame.integration.onFlushSequelSet(this._sequelSet);
+            RESystem.integration.onFlushSequelSet(this._sequelSet);
 
             this._sequelSet = new RESequelSet();
         }

@@ -116,7 +116,7 @@ export class REScheduler
 
         while (true) {
             // Sequel 終了待ち
-            if (REGame.integration.onCheckVisualSequelRunning()) {
+            if (RESystem.integration.onCheckVisualSequelRunning()) {
                 // Sequel 実行中
                 break;
             }
@@ -147,7 +147,7 @@ export class REScheduler
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!commandContext.isRunning() && REGame.integration.onCheckVisualSequelRunning()) {
+            if (!commandContext.isRunning() && RESystem.integration.onCheckVisualSequelRunning()) {
                 break;
             }
 

@@ -55,7 +55,7 @@ export class LCamera
         this._transferingNewFloorId = floorId;
         this._transferingNewX = x;
         this._transferingNewY = y;
-        REGame.integration.onReserveTransferFloor(floorId, x, y, d);
+        RESystem.integration.onReserveTransferFloor(floorId, x, y, d);
         Log.d("ReserveFloorTransfer");
     }
 

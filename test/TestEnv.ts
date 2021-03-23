@@ -11,6 +11,7 @@ import { REIntegration } from "ts/system/REIntegration";
 import { REGameManager } from "ts/system/REGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import "./Extension";
+import { RESystem } from 'ts/system/RESystem';
 
 declare global {
     interface Number {
@@ -50,7 +51,7 @@ export class TestEnv {
         this.loadRmmzDatabase();
         REData.reset();
         REDataManager.loadData();
-        REGame.integration = new TestEnvIntegration();
+        RESystem.integration = new TestEnvIntegration();
         //REDataManager.loadPrefabDatabaseMap();
         {
             // Database マップ読み込み開始

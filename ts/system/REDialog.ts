@@ -73,7 +73,7 @@ export class REDialogContext
         
         }
         this._setDialogModel(null);
-        REGame.integration.onDialogClosed(this);
+        RESystem.integration.onDialogClosed(this);
         this._commandContext._next();
     }
 
@@ -94,7 +94,7 @@ export class REDialogContext
 
         //REGame.recorder._recording = true;
         this._dialogModel.onUpdate(this);
-        REGame.integration.onUpdateDialog(this);
+        RESystem.integration.onUpdateDialog(this);
         //REGame.recorder._recording = false;
 
         //if (this._visual) {

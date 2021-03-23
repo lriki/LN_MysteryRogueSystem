@@ -225,7 +225,7 @@ export class RECommandContext
             
             RESystem.dialogContext.setCauseEntity(causeEntity);
             RESystem.dialogContext._setDialogModel(dialogModel);
-            REGame.integration.onDialogOpend(RESystem.dialogContext);
+            RESystem.integration.onDialogOpend(RESystem.dialogContext);
 
             return REResponse.Succeeded;
         };
