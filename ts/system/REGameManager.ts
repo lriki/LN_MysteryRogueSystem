@@ -7,7 +7,6 @@ import { DFactionId, REData } from "../data/REData";
 import { REScheduler } from "./REScheduler";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { LCamera } from "../objects/LCamera";
-import { REGame_System } from "../objects/REGame_System";
 import { RESystem } from "./RESystem";
 import { RECommandRecorder } from "./RECommandRecorder";
 import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
@@ -50,7 +49,6 @@ export class REGameManager
         REGame.scheduler = new REScheduler();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.core = new REGame_Core();
-        REGame.system = new REGame_System();
         REGame.world = new LWorld();
         REGame.map = new REGame_Map();
         REGame.camera = new LCamera();
@@ -81,7 +79,6 @@ export class REGameManager
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.uniqueActorUnits[0];
         REGame.core.mainPlayerEntiyId = firstActor.entityId();
-        REGame.system._mainPlayerEntityId = firstActor.entityId();
         const unit = firstActor.findAttribute(LUnitAttribute);
         if (unit) {
             unit.setManualMovement(true);

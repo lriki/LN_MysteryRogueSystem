@@ -21,7 +21,7 @@ test('PickAndPut', () => {
     REGameManager.createGameObjects();
 
     // actor1 配置
-    const actor1 = REGame.world.entity(REGame.system._mainPlayerEntityId);
+    const actor1 = REGame.world.entity(REGame.core.mainPlayerEntiyId);
     actor1._name = "actor1";
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 

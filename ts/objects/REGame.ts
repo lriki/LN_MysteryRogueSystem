@@ -7,7 +7,6 @@ import { REGame_Core } from "./REGame_Core";
 import { REScheduler } from "../system/REScheduler";
 import { REIntegration } from "../system/REIntegration";
 import { LCamera } from "./LCamera";
-import { REGame_System } from "../objects/REGame_System";
 import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
@@ -31,7 +30,6 @@ export class REGame
     static scheduler: REScheduler;
     static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
     static core: REGame_Core;
-    static system: REGame_System;
     static world: LWorld;
     static map: REGame_Map;
     static camera: LCamera;
