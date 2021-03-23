@@ -58,6 +58,12 @@ export class REVisual_Entity
         return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._rmmzSpriteIndex] : undefined;
     }
 
+    getRmmzSprite(): Sprite_Character {
+        const s = this.rmmzSprite();
+        assert(s);
+        return s;
+    }
+
     public isVisible(): boolean {
         const focusedEntity = REGame.camera.focusedEntity()
         return focusedEntity ? Helpers.testVisibility(focusedEntity, this._entity) : false;

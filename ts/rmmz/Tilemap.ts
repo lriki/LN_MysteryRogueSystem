@@ -1,5 +1,6 @@
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
+import { REVisual } from "ts/visual/REVisual";
 
 const show = false;
 const showAutotileShapeId = false;
@@ -109,6 +110,14 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
     if (showAutotileShapeId) {
         const shape = Tilemap.getAutotileShape(tileId0);
         this._addTile(this._upperLayer, startTileId + shape, dx, dy);
+    }
+
+    // ガイドグリッドの描画
+    if (this._lowerLayer._rendererId != 2) {
+        if (REVisual.guideGrid && REVisual.guideGrid.isVisible()) {
+            const tile = REVisual.guideGrid.readMapData(mx, my);
+            this._addTile(this._lowerLayer, tile, dx, dy);
+        }
     }
 
         /*

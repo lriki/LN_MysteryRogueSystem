@@ -5,6 +5,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
+import { assert } from "ts/Common";
 
 
 /**
@@ -47,8 +48,14 @@ export class REEntityVisualSet {
 
     }
 
-    findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined {
+    public findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined {
         return this._visualEntities.find(x => x.entity().entityId() == entity.entityId());
+    }
+
+    public getEntityVisualByEntity(entity: LEntity): REVisual_Entity {
+        const v = this.findEntityVisualByEntity(entity);
+        assert(v);
+        return v;
     }
 
     findEntityVisualByRMMZEventId(rmmzEventId: number): REVisual_Entity | undefined {

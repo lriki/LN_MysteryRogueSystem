@@ -52,7 +52,8 @@ export class Bitmap {
     public readonly canvas: HTMLCanvasElement;
     public readonly context: CanvasRenderingContext2D;
 
-    public readonly width: number;
+    //public readonly width: number;
+	public get width(): number;
     public readonly height: number;
     public readonly rect: Rectangle
 
@@ -306,7 +307,7 @@ export class Sprite extends PIXI.Sprite {
     opacity: number;
 	_counter : number;
 
-    constructor(bitmap: Bitmap);
+    constructor(bitmap: Bitmap | undefined);
 
     getBlendColor(): RGBA
     getColorTone(): RGBA

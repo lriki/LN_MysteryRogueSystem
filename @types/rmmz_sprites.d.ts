@@ -12,6 +12,8 @@ export class Spriteset_Base extends Sprite {
         
     constructor();
 
+    initialize(): void;
+
     loadSystemImages(): void;
 
     createLowerLayer(): void;

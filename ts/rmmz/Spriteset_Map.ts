@@ -1,5 +1,6 @@
 
 
+import { VSpriteSet } from 'ts/visual/VSpriteSet';
 import { assert } from '../Common';
 import { REGame } from '../objects/REGame';
 import { REVisual } from '../visual/REVisual';
@@ -15,6 +16,21 @@ declare global {
     }
 }
 
+const _Spriteset_Map_initialize = Spriteset_Map.prototype.initialize;
+Spriteset_Map.prototype.initialize = function(): void {
+    _Spriteset_Map_initialize.call(this);
+    assert(!REVisual.spriteSet2);
+    REVisual.spriteSet2 = new VSpriteSet(this);
+}
+
+const _Spriteset_Map_destroy = Spriteset_Map.prototype.destroy;
+Spriteset_Map.prototype.destroy = function(options) {
+    _Spriteset_Map_destroy.call(this, options);
+    if (REVisual.spriteSet2) {
+        REVisual.spriteSet2.destroy();
+        REVisual.spriteSet2 = undefined;
+    }
+}
 
 var _Spriteset_Map_prototype_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;
 Spriteset_Map.prototype.createLowerLayer = function() {

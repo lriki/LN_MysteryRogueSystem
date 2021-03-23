@@ -49,6 +49,7 @@ export class REGame_Map
     private _entityIds: LEntityId[] = [];      // マップ内に登場している Entity
     private _rooms: LRoom[] = [];
     private _structures: LStructure[] = [];
+    private _mapdataRevision: number = 1;
 
 
     constructor() {
@@ -58,6 +59,14 @@ export class REGame_Map
         assert(this._entityIds.length == 0);
         this._floorId = floorId;
         this.build();
+    }
+
+    public mapdataRevision(): number {
+        return this._mapdataRevision;
+    }
+
+    public increaseRevision(): void {
+        this._mapdataRevision++;
     }
 
     setupEmptyMap(width: number, height: number) {

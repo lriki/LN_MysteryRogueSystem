@@ -5,7 +5,7 @@ import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 
 export class Helpers {
-    private static _dirToTileOffsetTable: Vector2[] =  [
+    public static _dirToTileOffsetTable: Vector2[] =  [
         { x: 0, y: 0 },
         { x: -1, y: 1 }, { x: 0, y: 1 }, { x: 1, y: 1 },
         { x: -1, y: 0 }, { x: 0, y: 0 }, { x: 1, y: 0 },

@@ -10,10 +10,21 @@ import { VMenuDialog } from "./VMenuDialog";
 import { DBasics } from "ts/data/DBasics";
 import { VMainDialog } from "./VMainDialog";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
+import { REVisual } from "../REVisual";
+import { LEntity } from "ts/objects/LEntity";
+
+enum UpdateMode {
+    Normal,
+    DirSelecting,
+    DiagonalMoving,
+}
 
 export class VManualActionDialogVisual extends VMainDialog {
 
     private _model: REManualActionDialog;
+    private _updateMode: UpdateMode = UpdateMode.Normal;
+    private _waitCount: number = 0; // キーボード操作では 1 フレームでピッタリ斜め入力するのが難しいので、最後の入力から少し待てるようにする
+    //private _dirSelecting: boolean = false;
 
     public constructor(model: REManualActionDialog) {
         super();
@@ -47,22 +58,32 @@ export class VManualActionDialogVisual extends VMainDialog {
             }
         }
 
-        //if (Input.dir8 != 0 && Input.dir8 != entity.dir) {
-        //    context.postAction(REData.actions[REData.DirectionChangeActionId], entity, undefined, new REDirectionChangeCommand(Input.dir8));
-        //    context.closeDialog(false); // 行動消費無しで close
-        //}
-        let dir = Input.dir8;
+        switch (this._updateMode) {
+            case UpdateMode.Normal:
+                this.updateNormal(context, entity);
+                break;
+            case UpdateMode.DirSelecting:
+                this.updateDirSelecting(entity);
+                break;
+            case UpdateMode.DiagonalMoving:
+                this.updateDiagonalMoving(context, entity);
+                break;
+            default:
+                break;
+        }
         
+    }
+
+    private updateNormal(context: REDialogContext, entity: LEntity): void {
+        let dir = Input.dir8;
+
+        if (Input.isPressed("pagedown")) {
+            this._updateMode = UpdateMode.DiagonalMoving;
+            REVisual.spriteSet2?.directionArrow().setCrossDiagonal(true);
+        }
         // 移動
-        if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-            if (dir != 0) {
-                const args: REDirectionChangeArgs = { direction: dir };
-                context.postAction(DBasics.actions.DirectionChangeActionId, entity, undefined, args);
-            }
-            const args: REMoveToAdjacentArgs = { direction: dir };
-            context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);
-            this._model.close(true);
-            SceneManager._scene.executeAutosave();
+        else if (dir != 0) {
+            this.attemptMoveEntity(context, entity, dir);
             return;
         }
         // オートアクション
@@ -73,10 +94,89 @@ export class VManualActionDialogVisual extends VMainDialog {
             this._model.close(true);
             return;
         }
-
-        if (Input.isTriggered("menu")) {
+        else if (Input.isTriggered("shift")) {
+            this._updateMode = UpdateMode.DirSelecting;
+            REGame.map.increaseRevision();
+            REVisual.guideGrid?.setVisible(true);
+        }
+        else if (Input.isTriggered("menu")) {
             this.openSubDialog(new VMenuDialog(entity));
             return;
+        }
+    }
+
+    private updateDirSelecting(entity: LEntity): void {
+        assert(REVisual.entityVisualSet);
+        assert(REVisual.spriteSet2);
+        const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
+        const sprite = visual.getRmmzSprite();
+        const arrow =  REVisual.spriteSet2.directionArrow();
+        //arrow.setPosition(sprite.x, sprite.y);
+        arrow.setDirection(entity.dir);
+
+        if (Input.isTriggered("shift")) {
+            this._updateMode = UpdateMode.Normal;
+            arrow.setDirection(0);
+            REVisual.guideGrid?.setVisible(false);
+        }
+        else if (Input.isTriggered("menu")) {
+            this._updateMode = UpdateMode.Normal;
+            arrow.setDirection(0);
+            REVisual.guideGrid?.setVisible(false);
+            this.openSubDialog(new VMenuDialog(entity));
+            return;
+        }
+        else {
+            if (this._waitCount > 0) this._waitCount--;
+            
+            if (this._waitCount <= 0 && Input.dir8 != 0 && Input.dir8 != entity.dir) {
+                //const args: REDirectionChangeArgs = { direction: dir };
+                //context.postAction(DBasics.actions.DirectionChangeActionId, entity, undefined, args);
+                //context.closeDialog(false); // 行動消費無しで close
+                entity.dir = Input.dir8;
+                REGame.map.increaseRevision();
+                this._waitCount = 10;
+            }
+        }
+    }
+
+    private updateDiagonalMoving(context: REDialogContext,entity: LEntity): void {
+        assert(REVisual.entityVisualSet);
+        assert(REVisual.spriteSet2);
+        const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
+        const sprite = visual.getRmmzSprite();
+        const arrow =  REVisual.spriteSet2.directionArrow();
+        //arrow.setPosition(sprite.x, sprite.y);
+
+        if (Input.isPressed("pagedown")) {
+            const dir = Input.dir8;
+            if (dir == 1 || dir == 3 || dir == 7 || dir == 9) {
+                this.attemptMoveEntity(context, entity, dir);
+            }
+        }
+        else {
+            arrow.setCrossDiagonal(false);
+            this._updateMode = UpdateMode.Normal;
+        }
+    }
+
+    private attemptMoveEntity(context: REDialogContext, entity: LEntity, dir: number): boolean {
+        if (REGame.map.checkPassage(entity, dir)) {
+            if (dir != 0) {
+                const args: REDirectionChangeArgs = { direction: dir };
+                context.postAction(DBasics.actions.DirectionChangeActionId, entity, undefined, args);
+            }
+            const args: REMoveToAdjacentArgs = { direction: dir };
+            context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);
+            this._model.close(true);
+
+            // TODO: test
+            SceneManager._scene.executeAutosave();
+
+            return true;
+        }
+        else {
+            return false;
         }
     }
 }

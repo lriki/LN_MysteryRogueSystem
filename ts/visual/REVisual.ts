@@ -2,7 +2,10 @@ import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisual_Manager } from "./REVisual_Manager";
+import { VDirectionArrow } from "./VDirectionArrow";
+import { VMapGuideGrid } from "./VMapGuideGrid";
 import { VMessageWindowSet } from "./VMessageWindowSet";
+import { VSpriteSet } from "./VSpriteSet";
 import { VChallengeResultWindow } from "./windows/VChallengeResultWindow";
 import { VMessageWindow } from "./windows/VMessageWindow";
 
@@ -26,6 +29,9 @@ export class REVisual
     static _challengeResultWindow: VChallengeResultWindow;
     static _messageWindowSet: VMessageWindowSet;
 
+    static spriteSet2: VSpriteSet | undefined;
+    static guideGrid: VMapGuideGrid | undefined;
+
     static initialize() {
         this.finalize();
         this.manager = new REVisual_Manager();
@@ -39,6 +45,7 @@ export class REVisual
         this.scene.addWindow(this._challengeResultWindow);
 
         this._messageWindowSet = new VMessageWindowSet(scene);
+        this.guideGrid = new VMapGuideGrid();
     }
 
     static finalize() {
@@ -46,6 +53,11 @@ export class REVisual
             this.manager._finalize();
             this.manager = undefined;
         }
+    }
+
+    static update() {
+        this.entityVisualSet?.update();
+        this.guideGrid?.update();
     }
 }
 

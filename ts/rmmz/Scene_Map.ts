@@ -6,6 +6,7 @@ import { RESystem } from "../system/RESystem";
 import { REEntityVisualSet } from "../visual/REEntityVisualSet";
 import { REVisual } from "../visual/REVisual";
 import { Game_REPrefabEvent } from "./PrefabEvent";
+import { VDirectionArrow } from "ts/visual/VDirectionArrow";
 
 declare global {
     interface Scene_Map {
@@ -97,8 +98,7 @@ Scene_Map.prototype.terminate = function() {
 var _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
     _Scene_Map_update.call(this);
-
-    REVisual.entityVisualSet?.update();
+    REVisual.update();
 }
 
 // RE Map 内では RMMZ 通常のメニューを禁止する
