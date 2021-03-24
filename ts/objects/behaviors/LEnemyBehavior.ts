@@ -1,4 +1,5 @@
 
+import { assert } from "ts/Common";
 import { DEnemyId, RE_Data_Monster } from "ts/data/DEnemy";
 import { DParameterId, REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
@@ -17,9 +18,8 @@ export class LEnemyBehavior extends LBattlerBehavior {
         super();
     }
 
-    public init(enemyId: DEnemyId): LEnemyBehavior {
+    public setup(enemyId: DEnemyId): void {
         this._enemyId = enemyId;
-        return this;
     }
 
     onAttached(): void {
@@ -31,6 +31,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     }
 
     public enemyData(): RE_Data_Monster {
+        assert(this._enemyId > 0);
         return REData.monsters[this._enemyId];
     }
     

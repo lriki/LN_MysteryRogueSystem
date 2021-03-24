@@ -39,7 +39,7 @@ export class REEntityFactory {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(REGame_DecisionBehavior);
         e.addBehavior(REUnitBehavior);
-        e.addBehavior(LEnemyBehavior).init(monsterId);
+        e.addBehavior(LEnemyBehavior, monsterId);
         return e;
     }
 

@@ -232,7 +232,7 @@ export class LBattlerBehavior extends LBehavior {
         if (this.actualParam(RESystem.parameters.hp) === 0) {
             console.log("!!!DEAD!!!", this);
             entity.addState(DBasics.states.dead);
-            throw new Error();
+            //throw new Error();
         } else {
             entity.removeState(DBasics.states.dead);
         }
