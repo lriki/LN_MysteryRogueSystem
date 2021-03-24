@@ -15,6 +15,7 @@ import { EntityProperties, EntityProperty } from "ts/data/predefineds/DBasicProp
 import { SSequelContext } from "./SSequelContext";
 import { RECommandContext } from "./RECommandContext";
 import { REDialogContext } from "./REDialog";
+import { SScheduler } from "./SScheduler";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -39,6 +40,7 @@ export class RESystem {
     static commandContext: RECommandContext;
     static dialogContext: REDialogContext;
     static integration: REIntegration;
+    static scheduler: SScheduler;
 
     // Database
     static parameters: BasicParameters;

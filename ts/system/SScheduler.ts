@@ -65,7 +65,7 @@ enum SchedulerPhase
 /**
  * see Scheduler.md
  */
-export class REScheduler
+export class SScheduler
 {
     private _phase: SchedulerPhase = SchedulerPhase.PartStarting;
     private _actorEntities: LEntity[] = [];   // Part 中に行動する全 Entity
@@ -75,7 +75,6 @@ export class REScheduler
     private _currentStep: number = 0;
 
     private _phases: RESchedulerPhase[];
-    private _currentPhaseIndex: number = 0;
     private _brace: boolean = false;
     private _occupy: boolean = false;
 
@@ -94,6 +93,10 @@ export class REScheduler
 
     actionScheduleTable(): RunInfo[] {
         return this._runs;
+    }
+
+    private currentPhaseIndex(): number {
+        return REGame.scheduler.currentPhaseIndex();
     }
 
     // マップ切り替え時など。
@@ -271,8 +274,8 @@ export class REScheduler
 
         this._currentStep = -1;
         this._phase = SchedulerPhase.Processing;
-        this._currentPhaseIndex = 0;
-        this._phases[this._currentPhaseIndex].onStart(this);
+        REGame.scheduler.resetPhaseIndex();
+        this._phases[this.currentPhaseIndex()].onStart(this);
 
         this._runs.forEach(run => {
             run.steps.forEach(step => {
@@ -320,17 +323,17 @@ export class REScheduler
         // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
         this.prepareActionPhase();
 
-        const phase = this._phases[this._currentPhaseIndex];
+        const phase = this._phases[this.currentPhaseIndex()];
         const run = this._runs[this._currentRun];
         while (true) {
             if (this._currentStep >= run.steps.length) {
                 this._currentStep = -1;
-                this._currentPhaseIndex++;
-                if (this._currentPhaseIndex >= this._phases.length) {
+                REGame.scheduler.advancePhaseIndex();
+                if (this.currentPhaseIndex() >= this._phases.length) {
                     this._phase = SchedulerPhase.RunEnding;
                 }
                 else {
-                    this._phases[this._currentPhaseIndex].onStart(this);
+                    this._phases[this.currentPhaseIndex()].onStart(this);
                 }
                 return;
             }

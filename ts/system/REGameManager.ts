@@ -4,7 +4,7 @@ import { REGame_Map } from "../objects/REGame_Map";
 import { LWorld } from "../objects/LWorld";
 import { LSystem } from "../objects/LSystem";
 import { DFactionId, REData } from "../data/REData";
-import { REScheduler } from "./REScheduler";
+import { SScheduler } from "./SScheduler";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { LCamera } from "../objects/LCamera";
 import { RESystem } from "./RESystem";
@@ -24,6 +24,7 @@ import { LEventServer } from "ts/objects/LEventServer";
 import { LEntity } from "ts/objects/LEntity";
 import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/objects/LFloorDirector";
+import { LScheduler } from "ts/objects/LScheduler";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -46,12 +47,13 @@ export class REGameManager
         RESystem.sequelContext = new SSequelContext();
         RESystem.commandContext = new RECommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
-        REGame.scheduler = new REScheduler();
+        RESystem.scheduler = new SScheduler();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();
         REGame.map = new REGame_Map();
         REGame.camera = new LCamera();
+        REGame.scheduler = new LScheduler();
         REGame.recorder = new RECommandRecorder();
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
@@ -99,7 +101,7 @@ export class REGameManager
             REGame.map.setup(REGame.camera.transferingNewFloorId());
             
             REGame.world.enterEntitiesToCurrentMap();
-            REGame.scheduler.clear();
+            RESystem.scheduler.clear();
 
             REGame.camera.clearFloorTransfering();
             Log.d("PerformFloorTransfer");

@@ -5,7 +5,7 @@ import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { Helpers } from "./Helpers";
 import { REResponse } from "./RECommand";
-import { REScheduler, UnitInfo } from "./REScheduler";
+import { SScheduler, UnitInfo } from "./SScheduler";
 import { RESystem } from "./RESystem";
 
 
@@ -13,15 +13,15 @@ import { RESystem } from "./RESystem";
 export abstract class RESchedulerPhase {
     //abstract nextPhase(): SchedulerPhase;
     
-    onStart(scheduler: REScheduler): void {}
+    onStart(scheduler: SScheduler): void {}
 
     // このフェーズで何も処理を行わず、即座に次の Unit へ処理を渡す場合は false を返す。
     // true を返した場合、行動トークンを消費しなければならない。(そうしないとゲームがハングする)
-    abstract onProcess(scheduler: REScheduler, unit: UnitInfo): boolean;
+    abstract onProcess(scheduler: SScheduler, unit: UnitInfo): boolean;
 }
 
 export class RESchedulerPhase_Prepare extends RESchedulerPhase {
-    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         if (unit.entity) {
             unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Prepare);
         }
@@ -31,7 +31,7 @@ export class RESchedulerPhase_Prepare extends RESchedulerPhase {
 }
 
 export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
-    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
             unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
             return true;
@@ -46,7 +46,7 @@ export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
 // モンスターの移動・攻撃対象決定
 export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 
-    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
             unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
@@ -66,11 +66,11 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 
 // 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
 export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends RESchedulerPhase {
-    onStart(scheduler: REScheduler): void {
+    onStart(scheduler: SScheduler): void {
         REGame.map.updateLocatedResults(RESystem.commandContext);
     }
 
-    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         if (unit.entity) {
             unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
         }
@@ -83,13 +83,13 @@ export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends REScheduler
 // 罠発動
 export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
     
-    onStart(scheduler: REScheduler): void {
+    onStart(scheduler: SScheduler): void {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         RESystem.sequelContext.flushSequelSet();
     }
     
-    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         if (unit.entity && unit.behavior.requiredFeetProcess()) {
             const actor = unit.entity;
             const block = REGame.map.block(actor.x, actor.y);
@@ -107,7 +107,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
 }
 
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
-    onProcess(scheduler: REScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
             const response = unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
             if (response == REResponse.Succeeded) 

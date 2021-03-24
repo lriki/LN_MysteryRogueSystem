@@ -1,3 +1,4 @@
+import { RESystem } from "ts/system/RESystem";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
@@ -91,7 +92,7 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
                 return;
             }
             else {
-                REGame.scheduler.stepSimulation();
+                RESystem.scheduler.stepSimulation();
             }
         }
         

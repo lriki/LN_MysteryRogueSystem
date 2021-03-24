@@ -1,7 +1,7 @@
 import { RECommand, REResponse } from "./RECommand";
 import { REDialog } from "./REDialog";
 import { LEntity } from "../objects/LEntity";
-import { REScheduler } from "./REScheduler";
+import { SScheduler } from "./SScheduler";
 import { assert, Log } from "ts/Common";
 import { SAnumationSequel, SMotionSequel, SSequelUnit } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";

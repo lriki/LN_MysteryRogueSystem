@@ -5,7 +5,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LEntity } from "../objects/LEntity";
 import { RECommandContext } from "./RECommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
-import { REScheduler } from "./REScheduler";
+import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 
 export class REDialogContext

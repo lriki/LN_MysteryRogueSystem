@@ -47,7 +47,7 @@ test('Basic1', () => {
     TestEnv.performFloorTransfer();
 
     // シミュレーション 1 回実行
-    REGame.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();
     
     const dialogContext = RESystem.dialogContext;
     
@@ -66,7 +66,7 @@ test('Basic1', () => {
         expect(actor1.dir != 9).toBe(true);
         
         // シミュレーション実行
-        REGame.scheduler.stepSimulation();
+        RESystem.scheduler.stepSimulation();
         
         // 行動の消費が無いので、再び ManualActionDialog が開かれる。
         // しかし一度閉じているので、違うインスタンスで開かれている。
@@ -85,7 +85,7 @@ test('Basic1', () => {
         dialogContext.closeDialog(true);
     
         // シミュレーション実行。実際に移動が行われる
-        REGame.scheduler.stepSimulation();
+        RESystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.x).toBe(5);
@@ -166,12 +166,12 @@ test('TurnOrderTable', () => {
     REGame.world._transferEntity(enemy8, TestEnv.FloorId_FlatMap50x50, 1, 13);
 
     TestEnv.performFloorTransfer();
-    REGame.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();
 
     //--------------------
     // 最初の行動予定順をチェック
     {
-        const runs = REGame.scheduler.actionScheduleTable();
+        const runs = RESystem.scheduler.actionScheduleTable();
         expect(runs.length).toBe(3);    // map 上の Entity のうち最大速度はx3なので、Run は3つ。
 
         const run0 = runs[0].steps;
@@ -225,7 +225,7 @@ test('TurnOrderTable', () => {
         dialogContext.closeDialog(true);
     
         // AI行動決定
-        REGame.scheduler.stepSimulation();
+        RESystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.x).toBe(2);
@@ -247,7 +247,7 @@ test('TurnOrderTable', () => {
         dialogContext.closeDialog(true);
     
         // AI行動決定
-        REGame.scheduler.stepSimulation();
+        RESystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.x).toBe(3);

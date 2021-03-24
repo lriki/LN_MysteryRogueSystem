@@ -38,7 +38,7 @@ test('DamageAndGameover', () => {
     TestEnv.performFloorTransfer();
 
     // Player 入力待ちまで進める
-    REGame.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();
     
     // Player を左へ移動
     const dialogContext = RESystem.dialogContext;
@@ -48,7 +48,7 @@ test('DamageAndGameover', () => {
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される
     // onTurnEnd 時までに戦闘不能が回復されなければゲームオーバーとなり、
     // Land.exitRMMZMapId に設定されているマップへの遷移が発生する。
-    REGame.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();
 
     // 遷移中。ツクール側で遷移処理が必要
     expect(REGame.camera.isFloorTransfering()).toBe(true);
