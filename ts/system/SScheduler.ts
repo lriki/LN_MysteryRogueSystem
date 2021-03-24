@@ -11,26 +11,9 @@ import { RESystem } from "./RESystem";
 import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget } from "./RESchedulerPhase";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SSequelContext } from "./SSequelContext";
+import { RunStepInfo } from "ts/objects/LScheduler";
 
 
-export interface UnitInfo
-{
-    entity: LEntity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
-    attr: LUnitAttribute;     // cache for avoiding repeated find.
-    behavior: REUnitBehavior;
-    actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
-}
-
-export interface RunStepInfo
-{
-    unit: UnitInfo;         // 行動させたい unit
-    iterationCount: number;    // 何回連続行動できるか。Run のマージなどで 0 になることもある。
-};
-
-export interface RunInfo
-{
-    steps: RunStepInfo[];
-};
 
 enum SchedulerPhase
 {
@@ -68,11 +51,6 @@ enum SchedulerPhase
 export class SScheduler
 {
     private _phase: SchedulerPhase = SchedulerPhase.PartStarting;
-    private _actorEntities: LEntity[] = [];   // Part 中に行動する全 Entity
-    private _units: UnitInfo[] = [];
-    private _runs: RunInfo[] = [];
-    private _currentRun: number = 0;
-    private _currentStep: number = 0;
 
     private _phases: RESchedulerPhase[];
     private _brace: boolean = false;
@@ -91,10 +69,6 @@ export class SScheduler
         ];
     }
 
-    actionScheduleTable(): RunInfo[] {
-        return this._runs;
-    }
-
     private currentPhaseIndex(): number {
         return REGame.scheduler.currentPhaseIndex();
     }
@@ -105,11 +79,7 @@ export class SScheduler
         RESystem.sequelContext.clear();
         RESystem.commandContext.clear();
         this._phase = SchedulerPhase.PartStarting;
-        this._actorEntities = [];
-        this._units = [];
-        this._runs = [];
-        this._currentRun = 0;
-        this._currentStep = 0;
+        REGame.scheduler.clear();
         Log.d("ResetScheduler");
     }
 
@@ -235,10 +205,10 @@ export class SScheduler
     private update_PartStarting(): void {
         Log.d("========== [PartStarting] ==========");
 
-        this.buildOrderTable();
+        REGame.scheduler.buildOrderTable();
         
         // ターン開始時の各 unit の設定更新
-        this._units.forEach(unit => {
+        REGame.scheduler.units().forEach(unit => {
             const attr = unit.attr;
 
             // 鈍足状態の対応。待ちターン数を更新
@@ -262,7 +232,7 @@ export class SScheduler
             }
         });
         
-        this._currentRun = 0;
+        REGame.scheduler.resetRunIndex();
         this._phase = SchedulerPhase.RunStarting;
         this._occupy = true;
 
@@ -272,12 +242,12 @@ export class SScheduler
     private update_RunStarting(): void {
         Log.d("s update_RunStarting");
 
-        this._currentStep = -1;
+        REGame.scheduler._currentStep = -1;
         this._phase = SchedulerPhase.Processing;
         REGame.scheduler.resetPhaseIndex();
         this._phases[this.currentPhaseIndex()].onStart(this);
 
-        this._runs.forEach(run => {
+        REGame.scheduler.runs().forEach(run => {
             run.steps.forEach(step => {
                 step.unit.attr._targetingEntityId = 0;
             });
@@ -287,14 +257,14 @@ export class SScheduler
     }
 
     private prepareActionPhase(): void {
-        const run = this._runs[this._currentRun];
+        const run = REGame.scheduler.currentRun();
 
-        if (this._currentStep < 0) {
+        if (REGame.scheduler._currentStep < 0) {
             // 初回
-            this._currentStep++;
+            REGame.scheduler._currentStep++;
         }
         else {
-            const step = run.steps[this._currentStep];
+            const step = run.steps[REGame.scheduler._currentStep];
             const next = !step.unit.entity || step.unit.entity._actionConsumed;
 
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
@@ -303,7 +273,7 @@ export class SScheduler
                 step.iterationCount--;
                 this.onTurnEnd(step);
                 if (step.iterationCount <= 0) {
-                    this._currentStep++;
+                    REGame.scheduler._currentStep++;
                 }
                 else {
                     // まだ iterationCount が残っているので、同じ Step を再び実行する
@@ -324,10 +294,10 @@ export class SScheduler
         this.prepareActionPhase();
 
         const phase = this._phases[this.currentPhaseIndex()];
-        const run = this._runs[this._currentRun];
+        const run = REGame.scheduler.currentRun();
         while (true) {
-            if (this._currentStep >= run.steps.length) {
-                this._currentStep = -1;
+            if (REGame.scheduler._currentStep >= run.steps.length) {
+                REGame.scheduler._currentStep = -1;
                 REGame.scheduler.advancePhaseIndex();
                 if (this.currentPhaseIndex() >= this._phases.length) {
                     this._phase = SchedulerPhase.RunEnding;
@@ -338,14 +308,14 @@ export class SScheduler
                 return;
             }
             
-            const step = run.steps[this._currentStep];
+            const step = run.steps[REGame.scheduler._currentStep];
             const unit = step.unit;
             if (phase.onProcess(this, unit)) {
                 return;
             }
             else {
                 // このフェーズでは実行できない step だった。次の step へ。
-                this._currentStep++;
+                REGame.scheduler._currentStep++;
             }
         }
     }
@@ -353,12 +323,12 @@ export class SScheduler
     
     
     private update_RunEnding(): void {
-        this._currentRun++;
-        if (this._currentRun >= this._runs.length) {
-            this._phase = SchedulerPhase.PartEnding;
+        const runContinue = REGame.scheduler.advanceRunIndex();
+        if (runContinue) {
+            this._phase = SchedulerPhase.RunStarting;
         }
         else {
-            this._phase = SchedulerPhase.RunStarting;
+            this._phase = SchedulerPhase.PartEnding;
         }
     }
     
@@ -383,134 +353,17 @@ export class SScheduler
     // 手番が終了し、次の人へ手番が移る直前。
     // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
     private onTurnEnd(step: RunStepInfo): void {
-        this._actorEntities.forEach(entity => {
+        REGame.scheduler.actorEntities().forEach(entity => {
             entity._callBehaviorIterationHelper(behavior => behavior.onTurnEnd(RESystem.commandContext));
         });
     }
 
-    private buildOrderTable(): void {
-        this._actorEntities = [];
-        this._units = [];
-
-        let runCount = 0;
-
-        // 行動できるすべての entity を集める
-        {
-            REGame.map.entities().forEach(entity => {
-                const attr = entity.findAttribute(LUnitAttribute);
-                const behavior = entity.findBehavior(REUnitBehavior);
-                if (attr && behavior) {
-                    assert(attr.factionId() > 0);
-                    assert(attr.speedLevel() != 0);
-
-                    let actionCount = attr.speedLevel();
-                    
-                    // 鈍足状態の対応
-                    if (actionCount < 0) {
-                        actionCount = 1;
-                    }
-
-                    this._units.push({
-                        entity: entity,
-                        attr: attr, 
-                        behavior: behavior,
-                        actionCount: actionCount
-                    });
-
-                    // このターン内の最大行動回数 (phase 数) を調べる
-                    runCount = Math.max(runCount, actionCount);
-
-                    this._actorEntities.push(entity);
-                }
-            });
-        }
-
-        // 勢力順にソート
-        this._units = this._units.sort((a, b) => { return REData.factions[a.attr.factionId()].schedulingOrder - REData.factions[b.attr.factionId()].schedulingOrder; });
-
-        this._runs = new Array(runCount);
-        for (let i = 0; i < this._runs.length; i++) {
-            this._runs[i] = { steps: []};
-        }
-
-        // Faction にかかわらず、マニュアル操作 Unit は最優先で追加する
-        this._units.forEach(unit => {
-            if (unit.attr.manualMovement()) {
-                for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].steps.push({
-                        unit: unit,
-                        iterationCount: 1,
-                    });
-                }
-            }
-        });
-
-        // 次は倍速以上の NPC. これは前から詰めていく。
-        this._units.forEach(unit => {
-            if (!unit.attr.manualMovement() && unit.actionCount >= 2) {
-                for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].steps.push({
-                        unit: unit,
-                        iterationCount: 1,
-                    });
-                }
-            }
-        });
-
-        // 最後に等速以下の NPC を後ろから詰めていく
-        this._units.forEach(unit => {
-            if (!unit.attr.manualMovement() && unit.actionCount < 2) {
-                for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[this._runs.length - 1 - i].steps.push({  	// 後ろから詰めていく
-                        unit: unit,
-                        iterationCount: 1,
-                    });
-                }
-            }
-        });
-
-
-        // Merge
-        {
-            const flatSteps = this._runs.flatMap(x => x.steps);
-    
-            for (let i1 = flatSteps.length - 1; i1 >= 0; i1--) {
-                const step1 = flatSteps[i1];
-    
-                // step1 の前方を検索
-                for (let i2 = i1 - 1; i2 >= 0; i2--) {
-                    const step2 = flatSteps[i2];
-    
-                    if (step2.unit.attr.factionId() != step1.unit.attr.factionId()) {
-                        // 別勢力の行動予定が見つかったら終了
-                        break;
-                    }
-    
-                    if (step2.unit.entity == step1.unit.entity) {
-                        // 勢力をまたがずに同一 entity の行動予定が見つかったら、
-                        // そちらへ iterationCount をマージする。
-                        step2.iterationCount += step1.iterationCount;
-                        step1.iterationCount = 0;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    invalidateEntity(entity: LEntity) {
-        const index = this._units.findIndex(x => x.entity == entity);
-        if (index >= 0) {
-            this._units[index].entity = undefined;
-            
-            this._actorEntities = this._actorEntities.filter(x => x != entity);
-        }
-    }
 
     _foreachRunSteps(start: RunStepInfo, func: (step: RunStepInfo) => boolean) {
+        const runs = REGame.scheduler.runs();
         let each = false;
-        for (let i = 0; i < this._runs.length; i++) {
-            const run = this._runs[i];
+        for (let i = 0; i < runs.length; i++) {
+            const run = runs[i];
             for (let j = 0; j < run.steps.length; j++) {
                 if (!each && run.steps[i] == start) {
                     each = true;

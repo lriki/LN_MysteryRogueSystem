@@ -183,7 +183,7 @@ export class LEntity extends LObject
         if (this.floorId == REGame.map.floorId()) {
             REGame.map._removeEntity(this);
         }
-        RESystem.scheduler.invalidateEntity(this);
+        REGame.scheduler.invalidateEntity(this);
 
 
 

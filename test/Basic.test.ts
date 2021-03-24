@@ -171,7 +171,7 @@ test('TurnOrderTable', () => {
     //--------------------
     // 最初の行動予定順をチェック
     {
-        const runs = RESystem.scheduler.actionScheduleTable();
+        const runs = REGame.scheduler.actionScheduleTable();
         expect(runs.length).toBe(3);    // map 上の Entity のうち最大速度はx3なので、Run は3つ。
 
         const run0 = runs[0].steps;

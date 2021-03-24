@@ -5,8 +5,9 @@ import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { Helpers } from "./Helpers";
 import { REResponse } from "./RECommand";
-import { SScheduler, UnitInfo } from "./SScheduler";
+import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
+import { UnitInfo } from "ts/objects/LScheduler";
 
 
 
