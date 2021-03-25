@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { CommandArgs, LBehavior, onPrePickUpReaction, onPreThrowReaction, onThrowReaction, onWalkedOnTopAction } from "./LBehavior";
+import { CommandArgs, LBehavior, onPrePickUpReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
 import { REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -81,7 +81,12 @@ export class REUnitBehavior extends LBehavior {
             
         }
         else if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
-            console.log("★");
+
+            const reactor = cmd.reactor();
+            if (reactor) {
+                context.post(reactor, actor, undefined, onProceedFloorReaction);
+            }
+
         }
         else if (cmd.action().id == DBasics.actions.AttackActionId) {
             console.log("AttackAction");
@@ -193,7 +198,9 @@ export class REUnitBehavior extends LBehavior {
 
             const reactor = cmd.reactor();
             if (reactor) {
-                context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
+                //context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
+                
+                context.post(reactor, actor, undefined, onWaveReaction);
             }
             
             return REResponse.Succeeded;

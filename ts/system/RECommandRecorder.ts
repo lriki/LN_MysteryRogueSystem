@@ -33,8 +33,8 @@ export class RECommandRecorder {
     private _playbackCommandIndex: number = 0;
     
     constructor() {
-        //this.startRecording();
-        this.startPlayback();
+        this.startRecording();
+        //this.startPlayback();
     }
 
     public isRecording(): boolean {

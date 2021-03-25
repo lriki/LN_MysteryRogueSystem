@@ -101,18 +101,14 @@ export class LCommonBehavior extends LBehavior {
     
 
     onQueryActions(actions: DActionId[]): DActionId[] {
-        return actions.concat([
-            DBasics.actions.PickActionId,
-        ]);
+        return actions;
+        //.concat([
+        //    DBasics.actions.PickActionId,
+        //]);
     }
 
     onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         return super.onAction(entity, context, cmd);
-    }
-
-    
-    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        return super.onReaction(entity, actor, context, cmd);
     }
 }
 

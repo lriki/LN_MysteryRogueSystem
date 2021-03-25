@@ -86,6 +86,18 @@ export const onCollidePreReaction = Symbol("onCollidePreReaction");
  */
 export const onCollideAction = Symbol("onCollideAction");
 
+
+/**
+ * (杖など) 振られた
+ */
+export const onWaveReaction = Symbol("onWaveReaction");
+
+/**
+ * (階段など) 進まれた
+ */
+ export const onProceedFloorReaction = Symbol("onProceedFloorReaction");
+
+
 export interface CollideActionArgs {
     dir: number;    // 飛翔中の Entity の移動方向。必ずしも Entity の向きと一致するわけではないため、Args として渡す必要がある。
 }
@@ -189,10 +201,27 @@ export class LBehavior extends LObject {
     // results: index is DParameterId
     onQueryIdealParameterPlus(parameterId: DParameterId): number { return 0; }
 
-    // この Behavior が Attach されている Entity に対して送信できる Action を取得する。
-    // 主に UI 表示で使用するもので、Action を実行したときに "成功" するかどうかは気にしない。
-    onQueryActions(actions: DActionId[]): DActionId[] { return actions; }
-    onQueryReactions(actions: DActionId[]): DActionId[] { return actions; }
+    /**
+     * この Behavior が Attach されている Entity が送信できる Action を取得する。
+     * 例えばキャラクターはアイテムを "拾う" ことができる。
+     * 
+     * 基本的に状態異常等は関係なく、その Entity が元々とれる行動を返すこと。
+     * 例えば "封印" 状態であれば "食べる" ことはできないが、メニューから行動として
+     * "食べる" を選択することはできるので、このメソッドは EatAction を返すべき。
+     */
+    public onQueryActions(actions: DActionId[]): DActionId[] { return actions; }
+
+    /**
+     * この Behavior が Attach されている Entity に対して送信できる Action を取得する。
+     * 例えばアイテムはキャラクターに "拾われる" ことができる。
+     * 
+     * こちらも onQueryActions() 同様、状態に関係なくEntity が反応できる行動を返すこと。
+     * 例えば "床に張り付いた聖域の巻物" は "拾う" ことはできないが、メニューから行動として
+     * "拾う" を選択することはできるので、このメソッドは PickAction を返すべき。
+     * 
+     * なお "階段" Entity がこのメソッドで PickAction を返すと、階段を拾うことができてしまう。
+     */
+    public onQueryReactions(actions: DActionId[]): DActionId[] { return actions; }
 
     
     public onRefreshStatus(): void { }

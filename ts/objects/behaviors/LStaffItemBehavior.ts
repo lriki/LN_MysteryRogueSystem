@@ -5,7 +5,7 @@ import { RECommandContext } from "ts/system/RECommandContext";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
-import { LBehavior, onMoveAsMagicBullet } from "./LBehavior";
+import { CommandArgs, LBehavior, onCollideAction, onMoveAsMagicBullet, onWaveReaction } from "./LBehavior";
 
 
 /**
@@ -30,18 +30,17 @@ export class LStaffItemBehavior extends LBehavior {
     //}
 
     
-    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        //const actor = cmd.actor()
-        if (cmd.action().id == DBasics.actions.WaveActionId) {
-            const magicBullet = REEntityFactory.newMagicBullet(this.ownerEntity());
-            REGame.map.appearEntity(magicBullet, actor.x, actor.y);
-            magicBullet.dir = actor.dir;
+    [onWaveReaction](args: CommandArgs, context: RECommandContext): REResponse {
+        const actor = args.sender;
 
-            context.post(magicBullet, magicBullet, undefined, onMoveAsMagicBullet);
-            
-            return REResponse.Succeeded;
-        }
-        return REResponse.Pass;
+        const magicBullet = REEntityFactory.newMagicBullet(this.ownerEntity());
+        REGame.map.appearEntity(magicBullet, actor.x, actor.y);
+        magicBullet.dir = actor.dir;
+
+        context.post(magicBullet, magicBullet, undefined, onMoveAsMagicBullet);
+
+        return REResponse.Succeeded;
     }
+    
 }
 

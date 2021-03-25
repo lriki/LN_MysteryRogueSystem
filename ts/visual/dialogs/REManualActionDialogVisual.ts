@@ -42,7 +42,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             const targetEntities = layer.entities();
             assert(targetEntities.length <= 1);    // TODO: 多種類は未対応
             const targetEntity = targetEntities[0]; // 足元
-            const actions = targetEntities.flatMap(x => x.queryActions());
+            const actions = targetEntities.flatMap(x => x.queryReactions());
             if (actions.length > 0) {
                 if (actions.includes(DBasics.actions.PickActionId)) {
                     // 歩行移動時に足元に拾えるものがあれば取得試行

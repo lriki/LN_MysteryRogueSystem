@@ -2,7 +2,7 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { RE } from "ts/dialogs/EventExecutionDialog";
-import { LBehavior } from "ts/objects/behaviors/LBehavior";
+import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { LEntity } from "ts/objects/LEntity";
 import { RECommand, REResponse } from "ts/system/RECommand";
@@ -38,20 +38,29 @@ export class REExitPointBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
 
-    onQueryActions(actions: DActionId[]): DActionId[] {
-        return actions.concat([
-            DBasics.actions.ProceedFloorActionId,
-        ]);
+    onQueryReactions(actions: DActionId[]): DActionId[] {
+        return [DBasics.actions.ProceedFloorActionId];
     }
     
     onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
 
         if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
             //const event = $gameMap.event(entity.rmmzEventId);
-        
-            context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));
+            throw new Error("Unreachable.");
         }
 
         return REResponse.Pass;
     }
+    
+
+    
+    [onProceedFloorReaction](args: CommandArgs, context: RECommandContext): REResponse {
+        const entity = args.self;
+
+        throw new Error("OK.");
+        context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));
+
+        return REResponse.Succeeded;
+    }
+    
 }
