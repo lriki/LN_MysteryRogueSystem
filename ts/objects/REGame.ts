@@ -39,7 +39,6 @@ export class REGame
     static messageHistory: LMessageHistory;
     static message: LMessage;
     static eventServer: LEventServer;
-    static minimapData: SMinimapData;
     static floorDirector: LFloorDirector;
 
     // 冒険結果の表示中かどうか

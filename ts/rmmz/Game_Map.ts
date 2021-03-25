@@ -96,7 +96,7 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
             }
         }
         
-        REGame.minimapData.update();
+        RESystem.minimapData.update();
     }
     else {
         // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく

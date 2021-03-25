@@ -48,6 +48,7 @@ export class REGameManager
         RESystem.commandContext = new RECommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
         RESystem.scheduler = new SScheduler();
+        RESystem.minimapData = new SMinimapData();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();
@@ -59,7 +60,6 @@ export class REGameManager
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
         REGame.eventServer = new LEventServer();
-        REGame.minimapData = new SMinimapData();
         REGame.floorDirector = new LFloorDirector();
 
         // Create unique units

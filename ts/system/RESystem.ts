@@ -16,6 +16,7 @@ import { SSequelContext } from "./SSequelContext";
 import { RECommandContext } from "./RECommandContext";
 import { REDialogContext } from "./REDialog";
 import { SScheduler } from "./SScheduler";
+import { SMinimapData } from "./SMinimapData";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -41,6 +42,7 @@ export class RESystem {
     static dialogContext: REDialogContext;
     static integration: REIntegration;
     static scheduler: SScheduler;
+    static minimapData: SMinimapData;
 
     // Database
     static parameters: BasicParameters;

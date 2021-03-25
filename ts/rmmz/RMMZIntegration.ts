@@ -15,6 +15,7 @@ import { REIntegration } from "../system/REIntegration";
 import { REVisual } from "../visual/REVisual";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
+import { RESystem } from "ts/system/RESystem";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void {
@@ -34,7 +35,7 @@ export class RMMZIntegration extends REIntegration {
                 SRmmzHelpers.createEntityFromRmmzEvent(e._entityMetadata, e.eventId(), e.x, e.y);
             }
         });
-        REGame.minimapData.refresh();
+        RESystem.minimapData.refresh();
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {

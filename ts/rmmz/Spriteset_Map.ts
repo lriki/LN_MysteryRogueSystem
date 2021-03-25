@@ -1,5 +1,6 @@
 
 
+import { RESystem } from 'ts/system/RESystem';
 import { VSpriteSet } from 'ts/visual/VSpriteSet';
 import { assert } from '../Common';
 import { REGame } from '../objects/REGame';
@@ -77,7 +78,7 @@ var _Spriteset_Map_prototype_updateTilemap = Spriteset_Map.prototype.updateTilem
 Spriteset_Map.prototype.updateTilemap = function() {
     _Spriteset_Map_prototype_updateTilemap.call(this);
     
-    const minimap = REGame.minimapData;
+    const minimap = RESystem.minimapData;
     if (minimap.isTilemapResetNeeded()) {
         this._minimapTilemap.setData(minimap.width(), minimap.height(), minimap.data());
         minimap.clearTilemapResetNeeded();

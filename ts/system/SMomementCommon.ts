@@ -11,6 +11,7 @@ import { REGame_Map } from "ts/objects/REGame_Map";
 import { Helpers } from "./Helpers";
 import { RECommandContext } from "./RECommandContext";
 import { RESystem } from "./RESystem";
+import { System } from "pixi.js";
 
 
 export class SMomementCommon {
@@ -79,6 +80,6 @@ export class SMomementCommon {
                 }
             });
         }
-        REGame.minimapData.setRefreshNeeded();
+        RESystem.minimapData.setRefreshNeeded();
     }
 }

@@ -117,6 +117,10 @@ export class SMinimapData {
         const subject = REGame.camera.focusedEntity();
         assert(subject);
 
+        if (width != this._width || height != this._height) {
+            this.reset(width, height);
+        }
+
         if (this._refreshNeeded) {
             this.refresh();
         }

@@ -9,6 +9,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
 import { REEntityFactory } from "./REEntityFactory";
 import { SBehaviorFactory } from "./SBehaviorFactory";
+import { RESystem } from "./RESystem";
 
 interface RMMZEventRawMetadata {
     prefab: string;
@@ -256,7 +257,6 @@ export class SRmmzHelpers {
         const width = $dataMap.width ?? 10;
         const height = $dataMap.height ?? 10;
         map.reset(width, height);
-        REGame.minimapData.reset(width, height);
 
         for (let y = 0; y < map.height(); y++) {
             for (let x = 0; x < map.width(); x++) {
