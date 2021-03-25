@@ -54,10 +54,10 @@ export class REGameManager
         REGame.map = new REGame_Map();
         REGame.camera = new LCamera();
         REGame.scheduler = new LScheduler();
+        REGame.identifyer = new LIdentifyer();
         REGame.recorder = new RECommandRecorder();
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
-        REGame.identifyer = new LIdentifyer();
         REGame.eventServer = new LEventServer();
         REGame.minimapData = new SMinimapData();
         REGame.floorDirector = new LFloorDirector();
@@ -114,6 +114,7 @@ export class REGameManager
         contents.world = REGame.world;
         contents.map = REGame.map;
         contents.camera = REGame.camera;
+        contents.scheduler = REGame.scheduler;
         console.log("contents", contents);
         return contents;
     }
@@ -124,6 +125,7 @@ export class REGameManager
         REGame.world = contents.world;
         REGame.map = contents.map;
         REGame.camera = contents.camera;
+        REGame.scheduler = contents.scheduler;
     }
 }
 

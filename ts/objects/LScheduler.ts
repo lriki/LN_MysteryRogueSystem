@@ -3,11 +3,12 @@ import { REData } from "ts/data/REData";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
 import { REUnitBehavior } from "./behaviors/REUnitBehavior";
 import { LEntity } from "./LEntity";
+import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
 
 export interface UnitInfo
 {
-    entity: LEntity | undefined;	        // 一連の実行中に Collapse などで map から消えたりしたら null になる
+    entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
     attr: LUnitAttribute;     // cache for avoiding repeated find.
     behavior: REUnitBehavior;
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
@@ -25,7 +26,7 @@ export interface RunInfo
 };
 
 export class LScheduler {
-    private _actorEntities: LEntity[] = [];   // Part 中に行動する全 Entity
+    private _actorEntities: LEntityId[] = [];   // Part 中に行動する全 Entity
     private _units: UnitInfo[] = [];
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
@@ -86,7 +87,7 @@ export class LScheduler {
     }
 
     public actorEntities(): LEntity[] {
-        return this._actorEntities;
+        return this._actorEntities.map(id => REGame.world.entity(id));
     }
     
     public buildOrderTable(): void {
@@ -112,7 +113,7 @@ export class LScheduler {
                     }
 
                     this._units.push({
-                        entity: entity,
+                        entityId: entity.entityId(),
                         attr: attr, 
                         behavior: behavior,
                         actionCount: actionCount
@@ -121,7 +122,7 @@ export class LScheduler {
                     // このターン内の最大行動回数 (phase 数) を調べる
                     runCount = Math.max(runCount, actionCount);
 
-                    this._actorEntities.push(entity);
+                    this._actorEntities.push(entity.entityId());
                 }
             });
         }
@@ -187,7 +188,7 @@ export class LScheduler {
                         break;
                     }
     
-                    if (step2.unit.entity == step1.unit.entity) {
+                    if (step2.unit.entityId.equals(step1.unit.entityId)) {
                         // 勢力をまたがずに同一 entity の行動予定が見つかったら、
                         // そちらへ iterationCount をマージする。
                         step2.iterationCount += step1.iterationCount;
@@ -200,11 +201,11 @@ export class LScheduler {
     }
 
     public invalidateEntity(entity: LEntity) {
-        const index = this._units.findIndex(x => x.entity == entity);
+        const index = this._units.findIndex(x => x.entityId.equals(entity.entityId()));
         if (index >= 0) {
-            this._units[index].entity = undefined;
+            this._units[index].entityId = LEntityId.makeEmpty();
             
-            this._actorEntities = this._actorEntities.filter(x => x != entity);
+            this._actorEntities = this._actorEntities.filter(x => !x.equals(entity.entityId()));
         }
     }
 }

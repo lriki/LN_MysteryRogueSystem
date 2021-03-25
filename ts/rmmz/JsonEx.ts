@@ -4,8 +4,11 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LCamera } from "ts/objects/LCamera";
 import { LEffectResult, LParamEffectResult } from "ts/objects/LEffectResult";
 import { LEntity } from "ts/objects/LEntity";
+import { LEntityId } from "ts/objects/LObject";
 import { LRandom } from "ts/objects/LRandom";
 import { LRoom } from "ts/objects/LRoom";
+import { LScheduler } from "ts/objects/LScheduler";
+import { LSystem } from "ts/objects/LSystem";
 import { LWorld } from "ts/objects/LWorld";
 import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
 import { REGame_Map } from "ts/objects/REGame_Map";
@@ -55,6 +58,12 @@ function createInstance(name: string): any {
             return Object.create(LRandom.prototype);
         case "LCamera":
             return Object.create(LCamera.prototype);
+        case "LSystem":
+            return Object.create(LSystem.prototype);
+        case "LEntityId":
+            return Object.create(LEntityId.prototype);
+        case "LScheduler":
+            return Object.create(LScheduler.prototype);
             
     }
 

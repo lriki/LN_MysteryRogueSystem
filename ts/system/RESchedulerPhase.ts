@@ -23,8 +23,9 @@ export abstract class RESchedulerPhase {
 
 export class RESchedulerPhase_Prepare extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
-        if (unit.entity) {
-            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Prepare);
+        const entity = REGame.world.findEntity(unit.entityId);
+        if (entity) {
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Prepare);
         }
         // このフェーズは通知のみ行うため、_actionConsumed は不要。通過するだけ。
         return false;
@@ -33,8 +34,9 @@ export class RESchedulerPhase_Prepare extends RESchedulerPhase {
 
 export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
-        if (unit.entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
+        const entity = REGame.world.findEntity(unit.entityId);
+        if (entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
             return true;
         }
         else {
@@ -48,10 +50,11 @@ export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
 export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+        const entity = REGame.world.findEntity(unit.entityId);
         
-        if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
+        if (entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
             unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
-            const response = unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
+            const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
             if (response == REResponse.Succeeded) 
                 return true;
             else
@@ -72,8 +75,9 @@ export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends REScheduler
     }
 
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
-        if (unit.entity) {
-            unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
+        const entity = REGame.world.findEntity(unit.entityId);
+        if (entity) {
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
         }
         // このフェーズでは通知のみを行う。
         // トークンを消費するような行動をとってもらうことは無いので、そのまま次へ進む。
@@ -91,8 +95,9 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
     }
     
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
-        if (unit.entity && unit.behavior.requiredFeetProcess()) {
-            const actor = unit.entity;
+        const entity = REGame.world.findEntity(unit.entityId);
+        if (entity && unit.behavior.requiredFeetProcess()) {
+            const actor = entity;
             const block = REGame.map.block(actor.x, actor.y);
             const layer = block.layer(BlockLayerKind.Ground);
             const reactor = layer.firstEntity();
@@ -109,8 +114,9 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
 
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
-        if (unit.entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
-            const response = unit.entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
+        const entity = REGame.world.findEntity(unit.entityId);
+        if (entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+            const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
             if (response == REResponse.Succeeded) 
                 return true;
             else

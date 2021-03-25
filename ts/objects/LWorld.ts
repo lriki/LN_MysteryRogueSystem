@@ -37,12 +37,18 @@ export class LWorld
         }
     }
 
-    entity(id: LEntityId): LEntity {
+    public entity(id: LEntityId): LEntity {
+        const e = this.findEntity(id);
+        if (!e) throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
+        return e;
+    }
+
+    public findEntity(id: LEntityId): LEntity | undefined {
         const e = this.object(id);
         if (e.objectType() == LObjectType.Entity)
             return e as LEntity;
         else
-            throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
+            return undefined;
     }
 
     behavior(id: LBehaviorId): LBehavior {

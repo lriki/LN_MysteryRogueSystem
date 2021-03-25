@@ -265,7 +265,7 @@ export class SScheduler
         }
         else {
             const step = run.steps[REGame.scheduler._currentStep];
-            const next = !step.unit.entity || step.unit.entity._actionConsumed;
+            const next = step.unit.entityId.isEmpty() || REGame.world.entity(step.unit.entityId)._actionConsumed;
 
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
             if (next) {
@@ -279,8 +279,8 @@ export class SScheduler
                     // まだ iterationCount が残っているので、同じ Step を再び実行する
                 }
 
-                if (step.unit.entity) {
-                    step.unit.entity._actionConsumed = false;
+                if (step.unit.entityId.hasAny()) {
+                    REGame.world.entity(step.unit.entityId)._actionConsumed = false;
                 }
             }
             else {

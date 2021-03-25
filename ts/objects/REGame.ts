@@ -34,10 +34,10 @@ export class REGame
     static map: REGame_Map;
     static camera: LCamera;
     static scheduler: LScheduler;
+    static identifyer: LIdentifyer;
     static recorder: RECommandRecorder;
     static messageHistory: LMessageHistory;
     static message: LMessage;
-    static identifyer: LIdentifyer;
     static eventServer: LEventServer;
     static minimapData: SMinimapData;
     static floorDirector: LFloorDirector;
