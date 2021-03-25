@@ -35,7 +35,7 @@ export class RMMZIntegration extends REIntegration {
                 SRmmzHelpers.createEntityFromRmmzEvent(e._entityMetadata, e.eventId(), e.x, e.y);
             }
         });
-        RESystem.minimapData.refresh();
+        //RESystem.minimapData.refresh();
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {

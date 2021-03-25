@@ -7,6 +7,7 @@ import { RECommandContext } from "./RECommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
+import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 
 export class REDialogContext
 {
@@ -94,7 +95,10 @@ export class REDialogContext
 
         //REGame.recorder._recording = true;
         this._dialogModel.onUpdate(this);
-        RESystem.integration.onUpdateDialog(this);
+
+        if (this._dialogModel && this._dialogModel.isVisualIntegration()) {
+            RESystem.integration.onUpdateDialog(this);
+        }
         //REGame.recorder._recording = false;
 
         //if (this._visual) {
@@ -113,6 +117,10 @@ export class REDialogContext
 export class REDialog
 {
     onUpdate(context: REDialogContext): void { }
+
+    public isVisualIntegration(): boolean {
+        return true;
+    }
 
     public close(consumeAction: boolean): void {
         return RESystem.dialogContext.closeDialog(consumeAction);

@@ -171,7 +171,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             this._model.close(true);
 
             // TODO: test
-            SceneManager._scene.executeAutosave();
+            //SceneManager._scene.executeAutosave();
 
             return true;
         }

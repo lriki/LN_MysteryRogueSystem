@@ -12,6 +12,8 @@ import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { SSequelContext } from "./SSequelContext";
+import { REGame_Map } from "ts/objects/REGame_Map";
+import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -224,8 +226,14 @@ export class RECommandContext
             Log.doCommand("OpenDialog");
             
             RESystem.dialogContext.setCauseEntity(causeEntity);
-            RESystem.dialogContext._setDialogModel(dialogModel);
-            RESystem.integration.onDialogOpend(RESystem.dialogContext);
+
+            if (REGame.recorder.isPlayback()) {
+                RESystem.dialogContext._setDialogModel(new LCommandPlaybackDialog());
+            }
+            else {
+                RESystem.dialogContext._setDialogModel(dialogModel);
+                RESystem.integration.onDialogOpend(RESystem.dialogContext);
+            }
 
             return REResponse.Succeeded;
         };

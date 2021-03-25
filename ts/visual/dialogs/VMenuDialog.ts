@@ -17,11 +17,12 @@ export class VMenuDialog extends VSubDialog {
     onCreate() {
         const y = 100;
         const cw = 200;
-        this._commandWindow = new VMenuCommandWindow(new Rectangle(0, y, cw, 200));
+        this._commandWindow = new VMenuCommandWindow(new Rectangle(0, y, cw, 240));
         this.addWindow(this._commandWindow);
 
-        this._commandWindow.setHandler("item", this.commandItem.bind(this));
+        this._commandWindow.setHandler("item", this.handleItem.bind(this));
         this._commandWindow.setHandler("cancel", () => this.cancel());
+        this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
     }
     
     onStart() {
@@ -29,11 +30,15 @@ export class VMenuDialog extends VSubDialog {
     }
 
 
-    commandItem() {
+    private handleItem() {
         const inventory = this._entity.findBehavior(LInventoryBehavior);
         if (inventory) {
             this.push(new VItemListDialog(this._entity, inventory));
         }
+    }
+
+    private handleSuspend() {
+
     }
 }
 
