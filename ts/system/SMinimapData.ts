@@ -5,7 +5,6 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
-import { eqaulsEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { TileKind } from "ts/objects/REGame_Block";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
@@ -136,7 +135,7 @@ export class SMinimapData {
 
         for (const entity of map.entities()) {
             //if (entity == subject) {
-            if (eqaulsEntityId(entity.entityId(), subject.entityId())) {
+            if (entity.entityId().equals(subject.entityId())) {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
             }
             else {

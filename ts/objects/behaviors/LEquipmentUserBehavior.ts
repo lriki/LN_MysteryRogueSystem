@@ -7,7 +7,7 @@ import { DParameterId, REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { eqaulsEntityId, LEntityId } from "../LObject";
+import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior";
@@ -41,7 +41,7 @@ NOTE:
 
     public isEquipped(item: LEntity): boolean {
         const entityId = item.entityId();
-        return this._parts.findIndex(part => part && part.itemEntityIds.findIndex(id => eqaulsEntityId(id, entityId)) >= 0) >= 0;
+        return this._parts.findIndex(part => part && part.itemEntityIds.findIndex(id => id.equals(entityId)) >= 0) >= 0;
     }
 
     public equippedItemEntities(): LEntity[] {
@@ -49,7 +49,7 @@ NOTE:
         for (const part of this._parts) {
             if (part) {
                 for (const itemId of part.itemEntityIds) {
-                    if (itemId.index > 0) {
+                    if (itemId.hasAny()) {
                         result.push(REGame.world.entity(itemId));
                     }
                 }
@@ -125,7 +125,7 @@ NOTE:
             const slotList = this._parts[partId].itemEntityIds;
 
             // 空き Slot を探して格納する
-            const freeIndex = slotList.findIndex(x => x.index == 0);
+            const freeIndex = slotList.findIndex(x => x.isEmpty());
             if (freeIndex >= 0) {
                 slotList[freeIndex] = itemEntity.entityId();
             }
@@ -152,10 +152,10 @@ NOTE:
 
         equipmentSlots.forEach(partId => {
             if (newParts[partId]) {
-                newParts[partId].itemEntityIds.push({index: 0, key: 0});
+                newParts[partId].itemEntityIds.push(LEntityId.makeEmpty());
             }
             else {
-                newParts[partId] = { itemEntityIds: [{index: 0, key: 0}] };
+                newParts[partId] = { itemEntityIds: [LEntityId.makeEmpty()] };
             } 
         });
 

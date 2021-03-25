@@ -10,7 +10,7 @@ import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DLand } from "ts/data/DLand";
-import { eqaulsEntityId, LEntityId } from "./LObject";
+import { LEntityId } from "./LObject";
 import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { DBasics } from "ts/data/DBasics";
@@ -249,7 +249,7 @@ export class REGame_Map
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
-        assert(entity.entityId().index > 0);
+        assert(entity.entityId().hasAny());
         assert(!entity.hasOwner());
 
         this._entityIds.push(entity.entityId());
@@ -285,7 +285,7 @@ export class REGame_Map
     }
 
     _removeEntity(entity: LEntity): void {
-        this._entityIds = this._entityIds.filter(x => !eqaulsEntityId(x, entity.entityId()));
+        this._entityIds = this._entityIds.filter(x => !x.equals(entity.entityId()));
         this._removeEntityHelper(entity);
     }
 

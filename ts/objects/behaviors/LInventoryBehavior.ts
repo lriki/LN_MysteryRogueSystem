@@ -61,7 +61,7 @@
 import { assert } from "ts/Common";
 import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { LEntityId, eqaulsEntityId } from "../LObject";
+import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior"
@@ -77,7 +77,7 @@ export class LInventoryBehavior extends LBehavior {
         assert(!entity.parentEntity());
 
         const id = entity.entityId();
-        assert(this._entities.find(x => eqaulsEntityId(x, id)) === undefined);
+        assert(this._entities.find(x => x.equals(id)) === undefined);
         this._entities.push(id);
         
         entity.setOwner(this.ownerEntity());
@@ -87,7 +87,7 @@ export class LInventoryBehavior extends LBehavior {
         assert(entity.parentEntity() == this.ownerEntity());
 
         const id = entity.entityId();
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, id));
+        const index = this._entities.findIndex(x => x.equals(id));
         assert(index >= 0);
         this._entities.splice(index, 1);
         
@@ -95,7 +95,7 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse {
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.entityId()));
+        const index = this._entities.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());
             entity.clearOwner();

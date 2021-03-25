@@ -1,33 +1,45 @@
 import { assert } from "ts/Common";
+import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
 
 
-export interface LEntityId {
-    readonly index: number;  // 0 is Invalid (dummy entity)
-    readonly key: number;
+export class LEntityId {
+    private readonly _index: number;  // 0 is Invalid (dummy entity)
+    private readonly _key: number;
+
+    constructor(index: number, key: number) {
+        this._index = index;
+        this._key = key;
+    }
+
+    public index2(): number {
+        return this._index;
+    }
+
+    public key2(): number {
+        return this._key;
+    }
+
+    public isEmpty(): boolean {
+        return this._index == 0 && this._key == 0;
+    }
+
+    public hasAny(): boolean {
+        return this._index > 0 && this._key != 0;
+    }
+
+    public equals(other: LEntityId): boolean {
+        return this._index == other._index && this._key == other._key;
+    }
+
+    public clone(): LEntityId {
+        return new LEntityId(this._index, this._key);
+    }
+
+    public static makeEmpty(): LEntityId {
+        return new LEntityId(0, 0);
+    }
 }
-
-export const LEntityId_Empty: LEntityId = {
-    index: 0,
-    key: 0,
-};
-
-export function isEmptyEntityId(a: LEntityId): boolean {
-    return a.index == 0 && a.key == 0;
-}
-
-export function eqaulsEntityId(a: LEntityId, b: LEntityId): boolean {
-    return a.index == b.index && a.key == b.key;
-}
-
-export function cloneEntityId(a: LEntityId): LEntityId {
-    return {
-        index: a.index,
-        key: a.key,
-    };
-}
-
-
 
 
 
@@ -57,9 +69,9 @@ export enum LObjectType {
  */
 export class LObject {
     private readonly _objectType: LObjectType;
-    private _objectId: LObjectId = { index: 0, key: 0 };
+    private _objectId: LObjectId = LEntityId.makeEmpty();
     private _destroyed: boolean = false;
-    private _ownerObjectId: LObjectId = { index: 0, key: 0 };
+    private _ownerObjectId: LObjectId = LEntityId.makeEmpty();
     
     protected constructor(objectType: LObjectType) {
         this._objectType = objectType;
@@ -74,17 +86,17 @@ export class LObject {
     }
 
     public hasId(): boolean {
-        return this._objectId.index > 0 && this._objectId.key != 0;
+        return this._objectId.hasAny();
     }
 
     public _setObjectId(id: LObjectId): void  {
-        assert(id.index > 0);   // 無効IDの設定は禁止。リセットしたいときは _clearObjectId() を使うこと。
+        assert(id.hasAny());   // 無効IDの設定は禁止。リセットしたいときは _clearObjectId() を使うこと。
         assert(!this.hasId());  // 再設定禁止。
         this._objectId = id;
     }
 
     public _clearObjectId(): void {
-        this._objectId = { index: 0, key: 0 };
+        this._objectId = LEntityId.makeEmpty();
     }
 
     public isUnique(): boolean {
@@ -92,7 +104,7 @@ export class LObject {
     }
 
     public hasOwner(): boolean {
-        return this._ownerObjectId.index > 0;
+        return this._ownerObjectId.hasAny();
     }
 
     /**
@@ -123,12 +135,12 @@ export class LObject {
     public setOwner(owner: LObject): void {
         assert(!this.hasOwner());
         const ownerId = owner.__objectId();
-        assert(ownerId.index > 0);     // ID を持たない親は設定できない
+        assert(ownerId.hasAny());     // ID を持たない親は設定できない
         this._ownerObjectId = ownerId;
     }
 
     public clearOwner(): void {
-        this._ownerObjectId = { index: 0, key: 0 };
+        this._ownerObjectId = LEntityId.makeEmpty();
     }
     
     /** destroy が要求されているか */

@@ -11,7 +11,7 @@ export class LSystem
 {
     // experimental: "場所移動" 等の基準となる、メインプレイヤーの Entity.
     // もし仲間がいるような場合、MainPlayerEntity がマップ移動したらついてきたりする。
-    mainPlayerEntityId: LEntityId = {index:0, key: 0};
+    mainPlayerEntityId: LEntityId = LEntityId.makeEmpty();
 
     uniqueActorUnits: LEntityId[] = [];
 

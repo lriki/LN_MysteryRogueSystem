@@ -11,7 +11,7 @@ import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
 import { REGameManager } from "ts/system/REGameManager";
 import { SAIHelper } from "ts/system/SAIHelper";
-import { isEmptyEntityId, LEntityId, LEntityId_Empty } from "../LObject";
+import { LEntityId } from "../LObject";
 import { TilingSprite } from "pixi.js";
 
 /**
@@ -23,7 +23,7 @@ import { TilingSprite } from "pixi.js";
 export class REGame_DecisionBehavior extends LBehavior {
     private _targetPositionX: number = -1;
     private _targetPositionY: number = -1;
-    private _attackTargetEntityId: LEntityId = LEntityId_Empty;
+    private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
 
     onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
 
@@ -60,7 +60,7 @@ export class REGame_DecisionBehavior extends LBehavior {
             }
 
             // 攻撃対象が設定されていれば、このフェーズでは何もしない
-            if (!isEmptyEntityId(this._attackTargetEntityId)) {
+            if (this._attackTargetEntityId.hasAny()) {
                 return REResponse.Pass;
             }
             // 目的地が設定されている場合は移動可能
@@ -123,7 +123,7 @@ export class REGame_DecisionBehavior extends LBehavior {
         }
         else if (phase == DecisionPhase.AIMajor) {
             
-            if (!isEmptyEntityId(this._attackTargetEntityId)) {
+            if (this._attackTargetEntityId.hasAny()) {
 
                 // 通常攻撃
                 {

@@ -2,7 +2,7 @@ import { LEntity } from "./LEntity";
 import { assert } from "../Common";
 import { REGame } from "./REGame";
 import { LRandom } from "ts/objects/LRandom";
-import { LEntityId, eqaulsEntityId, LObject, LObjectType, LObjectId } from "./LObject";
+import { LEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { TilingSprite } from "pixi.js";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
@@ -23,16 +23,16 @@ export class LWorld
     }
     
     object(id: LObjectId): LObject {
-        const e = this._objects[id.index];
-        if (e && e.__objectId().key == id.key) {
+        const e = this._objects[id.index2()];
+        if (e && e.__objectId().key2() == id.key2()) {
             return e as LEntity;
         }
         else {
             if (!e) {
-                throw new Error(`Unregisterd entity. (id: [${id.index}, ${id.key}])`);
+                throw new Error(`Unregisterd entity. (id: [${id.index2()}, ${id.key2()}])`);
             }
             else {
-                throw new Error(`Destroyed entity. (id: [${id.index}, ${id.key}], actualy:[${e.__objectId().index}, ${e.__objectId().key}])`);
+                throw new Error(`Destroyed entity. (id: [${id.index2()}, ${id.key2()}], actualy:[${e.__objectId().index2()}, ${e.__objectId().key2()}])`);
             }
         }
     }
@@ -42,19 +42,19 @@ export class LWorld
         if (e.objectType() == LObjectType.Entity)
             return e as LEntity;
         else
-            throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
+            throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
     }
 
     behavior(id: LBehaviorId): LBehavior {
-        const e = this._behaviors[id.index];
-        if (e && e.id().key == id.key)
+        const e = this._behaviors[id.index2()];
+        if (e && e.id().key2() == id.key2())
             return e;
         else {
             if (!e) {
-                throw new Error(`Unregisterd behavior. (id: [${id.index}, ${id.key}])`);
+                throw new Error(`Unregisterd behavior. (id: [${id.index2()}, ${id.key2()}])`);
             }
             else {
-                throw new Error(`Destroyed behavior. (id: [${id.index}, ${id.key}])`);
+                throw new Error(`Destroyed behavior. (id: [${id.index2()}, ${id.key2()}])`);
             }
         }
     }
@@ -64,7 +64,7 @@ export class LWorld
         if (e.objectType() == LObjectType.Ability)
             return e as LAbility;
         else
-            throw new Error(`Invalid entity type. (id: [${id.index}, ${id.key}])`);
+            throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
     }
 
     random(): LRandom {
@@ -89,11 +89,11 @@ export class LWorld
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._objects.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
-            obj._setObjectId({ index: this._objects.length, key : this._random.nextInt() });
+            obj._setObjectId(new LEntityId(this._objects.length, this._random.nextInt()));
             this._objects.push(obj);
         }
         else {
-            obj._setObjectId({ index: index, key : this._random.nextInt() });
+            obj._setObjectId(new LEntityId(index, this._random.nextInt()));
             this._objects[index] = obj;
         }
     }
@@ -104,17 +104,17 @@ export class LWorld
         // 大量の Entity を扱うようになったら最適化する。
         const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);
         if (index < 0) {
-            behavior._setObjectId({ index: this._behaviors.length, key : this._random.nextInt() });
+            behavior._setObjectId(new LEntityId(this._behaviors.length, this._random.nextInt()));
             this._behaviors.push(behavior);
         }
         else {
-            behavior._setObjectId({ index: index, key : this._random.nextInt() });
+            behavior._setObjectId(new LEntityId(index, this._random.nextInt()));
             this._behaviors[index] = behavior;
         }
     }
 
     _unregisterBehavior(behavior: LBehavior) {
-        this._behaviors[behavior.id().index] = undefined;
+        this._behaviors[behavior.id().index2()] = undefined;
         behavior._clearObjectId();
     }
 
@@ -164,7 +164,7 @@ export class LWorld
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.entityId()) &&
+        if (REGame.camera.focusedEntityId().equals(entity.entityId()) &&
             REGame.map.floorId() != entity.floorId) {
             REGame.camera.reserveFloorTransferToFocusedEntity();
         }
@@ -186,7 +186,7 @@ export class LWorld
                     obj.onFinalize();
                     this._objects[i] = undefined;
     
-                    if (eqaulsEntityId(REGame.camera.focusedEntityId(), obj.__objectId())) {
+                    if (REGame.camera.focusedEntityId().equals(obj.__objectId())) {
                         REGame.camera.clearFocus();
                     }
                 }

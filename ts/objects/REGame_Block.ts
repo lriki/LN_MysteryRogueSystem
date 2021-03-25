@@ -3,7 +3,7 @@ import { MapDataProvidor } from "./MapDataProvidor";
 import { LEntity } from "./LEntity";
 import { REGame_Map } from "./REGame_Map";
 import { FBlockComponent } from "ts/floorgen/FMapData";
-import { eqaulsEntityId, LEntityId } from "./LObject";
+import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
 
 export type LRoomId = number;
@@ -46,7 +46,7 @@ export class REBlockLayer {
     }
 
     isContains(entity: LEntity): boolean {
-        return this._entities.findIndex(x => eqaulsEntityId(x, entity.entityId())) >= 0;
+        return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
     }
 
     isOccupied(): boolean {
@@ -58,7 +58,7 @@ export class REBlockLayer {
     }
 
     removeEntity(entity: LEntity): boolean {
-        const index = this._entities.findIndex(x => eqaulsEntityId(x, entity.entityId()));
+        const index = this._entities.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {
             this._entities.splice(index, 1);
             return true;

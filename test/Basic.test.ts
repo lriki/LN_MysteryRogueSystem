@@ -13,6 +13,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 import { DBasics } from "ts/data/DBasics";
+import { LEntityId } from "ts/objects/LObject";
 
 
 beforeAll(() => {
@@ -272,7 +273,7 @@ test('EntitySaveLoad', () => {
         const actor1 = new LEntity();
 
         // Entity Property
-        actor1._setObjectId({ index: 1, key: 111 });
+        actor1._setObjectId(new LEntityId(1, 111));
         actor1.x = 55;
 
         // Attributes
@@ -294,8 +295,8 @@ test('EntitySaveLoad', () => {
         actor2.extractSaveContents(contents2);
         
         // Entity Property
-        expect(actor2.entityId().index).toBe(1);
-        expect(actor2.entityId().key).toBe(111);
+        expect(actor2.entityId().index2()).toBe(1);
+        expect(actor2.entityId().key2()).toBe(111);
         expect(actor2.x).toBe(55);
 
         // Attributes

@@ -9,7 +9,7 @@ import { DState, DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
-import { eqaulsEntityId, LEntityId, LObject, LObjectType } from "./LObject";
+import { LEntityId, LObject, LObjectType } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
 import { TilingSprite } from "pixi.js";
 import { LState, LStateId } from "./states/LState";
@@ -94,7 +94,7 @@ export class LEntity extends LObject
     }
 
     public setOwnerMap(owner: REGame_Map): void {
-        assert(this.ownerObjectId().index == 0);
+        assert(this.ownerObjectId().isEmpty());
         assert(!this.hasOwner());
         this._parentIsMap = true;
     }
@@ -198,7 +198,7 @@ export class LEntity extends LObject
     }
 
     parentEntity(): LEntity | undefined {
-        if (this.ownerObjectId().index > 0) {
+        if (this.ownerObjectId().hasAny()) {
             return REGame.world.entity(this.ownerObjectId());
         }
         else {
@@ -207,7 +207,7 @@ export class LEntity extends LObject
     }
 
     addAttribute(value: LAttribute) {
-        assert(value._ownerEntityId.index == 0);
+        assert(value._ownerEntityId.isEmpty());
         this.attrbutes.push(value);
         value._ownerEntityId = this.entityId();
         return this;
@@ -231,7 +231,7 @@ export class LEntity extends LObject
 
     _addBehavior(behavior: LBehavior) {
         assert(behavior.hasId());
-        assert(this.entityId().index > 0);
+        assert(this.entityId().hasAny());
         this._basicBehaviors.push(behavior.id());
         behavior.setOwner(this);
         behavior.onAttached();
@@ -259,7 +259,7 @@ export class LEntity extends LObject
     //}
 
     removeBehavior(behavior: LBehavior) {
-        const index = this._basicBehaviors.findIndex(x => eqaulsEntityId(x, behavior.id()));
+        const index = this._basicBehaviors.findIndex(x => x.equals(behavior.id()));
         if (index >= 0) {
             this._basicBehaviors.splice(index, 1);
             behavior.onDetached();
@@ -363,7 +363,7 @@ export class LEntity extends LObject
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
                 return behavior.onRemoveEntityFromWhereabouts(context, this);
             });
-            assert(this.ownerObjectId().index == 0);    // 何らか削除されているはず
+            assert(this.ownerObjectId().index2() == 0);    // 何らか削除されているはず
             return response;
         }
         else if (this.floorId > 0) {
@@ -393,7 +393,7 @@ export class LEntity extends LObject
      * UniqueEntity のインベントリに入れられたアイテム等は UniqueEntity ではないので注意。
      */
     isUnique(): boolean {
-        return REGame.system.uniqueActorUnits.findIndex(id => eqaulsEntityId(id, this.entityId())) >= 0;
+        return REGame.system.uniqueActorUnits.findIndex(id => id.equals(this.entityId())) >= 0;
     }
 
     /**
@@ -403,7 +403,7 @@ export class LEntity extends LObject
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return eqaulsEntityId(REGame.camera.focusedEntityId(), this.entityId());
+        return REGame.camera.focusedEntityId().equals(this.entityId());
     }
 
     /**

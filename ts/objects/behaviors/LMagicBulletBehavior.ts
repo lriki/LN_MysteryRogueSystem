@@ -5,7 +5,7 @@ import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SMomementCommon } from "ts/system/SMomementCommon";
-import { LEntityId, LEntityId_Empty } from "../LObject";
+import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../REGame_Block";
 import { LEntity } from "../LEntity";
@@ -15,7 +15,7 @@ import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePr
 /**
  */
 export class LMagicBulletBehavior extends LBehavior {
-    private _ownerItemEntityId: LEntityId = LEntityId_Empty;
+    private _ownerItemEntityId: LEntityId = LEntityId.makeEmpty();
 
     public setup(ownerItem: LEntity): void {
         this._ownerItemEntityId = ownerItem.entityId();

@@ -3,7 +3,6 @@ import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { testPutInItem } from "ts/objects/behaviors/LBehavior";
-import { eqaulsEntityId } from "ts/objects/LObject";
 import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind, REGame_Block } from "ts/objects/REGame_Block";
@@ -40,7 +39,7 @@ export class SMomementCommon {
     }
     
     private static _postLocate(context: RECommandContext, entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block, map: REGame_Map) {
-        if (eqaulsEntityId(REGame.camera.focusedEntityId(), entity.entityId())) {
+        if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
 

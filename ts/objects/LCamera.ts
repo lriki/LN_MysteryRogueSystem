@@ -15,7 +15,7 @@ import { LEntityId } from "./LObject";
  */
 export class LCamera
 {
-    private _focusedEntityId: LEntityId = {index: 0, key: 0};
+    private _focusedEntityId: LEntityId = LEntityId.makeEmpty();
     private _transferingNewFloorId: number = 0;
     private _transferingNewX: number = 0;
     private _transferingNewY: number = 0;
@@ -33,7 +33,7 @@ export class LCamera
     }
 
     clearFocus() {
-        this._focusedEntityId = {index: 0, key: 0};
+        this._focusedEntityId = LEntityId.makeEmpty();
     }
 
     isFloorTransfering(): boolean {

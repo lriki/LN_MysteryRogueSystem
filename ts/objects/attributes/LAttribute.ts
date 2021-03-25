@@ -12,14 +12,14 @@ import { LEntity } from "../LEntity";
 export class LAttribute
 {
     dataId: number = 0;
-    _ownerEntityId: LEntityId = { index: 0, key: 0 };
+    _ownerEntityId: LEntityId = LEntityId.makeEmpty();
 
     data(): LAttributeData {
         return {};
     }
 
     entity(): LEntity {
-        assert(this._ownerEntityId.index > 0);
+        assert(this._ownerEntityId.hasAny());
         return REGame.world.entity(this._ownerEntityId);
     }
 }
