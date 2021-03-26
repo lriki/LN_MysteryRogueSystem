@@ -19,6 +19,7 @@ import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivi
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LWaveActivity } from "ts/objects/activities/LWaveActivity";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
+import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 
 
 declare global {  
@@ -160,7 +161,7 @@ export class REDataManager
             PickActionId: REData.addAction("Pick", "LPickActivity", () => new LPickActivity()),
             PutActionId: REData.addAction("置く", "LPutActivity", () => new LPutActivity()),
             ExchangeActionId: REData.addAction("交換", "", undefined),//"Exchange"),
-            ThrowActionId: REData.addAction("投げる", "", undefined),//"Throw"),
+            ThrowActionId: REData.addAction("投げる", "LThrowActivity", () => new LThrowActivity()),
             FlungActionId: REData.addAction("Flung", "", undefined),
             ShootingActionId: REData.addAction("Shooting", "", undefined),
             CollideActionId: REData.addAction("Collide", "", undefined),

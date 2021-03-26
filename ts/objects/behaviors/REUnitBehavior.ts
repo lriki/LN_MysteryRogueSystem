@@ -23,6 +23,7 @@ import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 import { LPickActivity } from "../activities/LPickActivity";
 import { LWaveActivity } from "../activities/LWaveActivity";
 import { LPutActivity } from "../activities/LPutActivity";
+import { LThrowActivity } from "../activities/LThrowActivity";
 
 /**
  * 
@@ -132,6 +133,51 @@ export class REUnitBehavior extends LBehavior {
             }
             return REResponse.Succeeded;
         }
+        else if (activity instanceof LThrowActivity) {
+            // [投げる] は便利コマンドのようなもの。
+            // 具体的にどのように振舞うのか (直線に飛ぶのか、放物線状に動くのか、転がるのか) を決めるのは相手側
+
+            const itemEntity = activity.object();
+            //const inventory = actor.findBehavior(LInventoryBehavior);
+            assert(itemEntity);
+            //assert(inventory);
+
+            context.post(
+                itemEntity, self, undefined, onPreThrowReaction,
+                (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
+                    if (responce == REResponse.Pass) {
+                        itemEntity.callRemoveFromWhereabouts(context);
+
+                        itemEntity.x = self.x;
+                        itemEntity.y = self.y;
+
+
+                        context.post(
+                            itemEntity, self, undefined, onThrowReaction,
+                            (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
+                                if (responce == REResponse.Pass) {
+                                    context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                                }
+                            });
+
+                    }
+                });
+
+                /*
+            // まずは itemEntity を、Inventory や Map から外してみる
+            context.postRemoveFromWhereabouts(
+                itemEntity,
+                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
+                    if (responce == REResponse.Pass) {
+                        
+                    }
+                });
+                */
+            
+            /*
+                */
+            return REResponse.Succeeded;
+        }
         else if (activity instanceof LWaveActivity) {
             context.postSequel(self, RESystem.sequels.attack);
 
@@ -161,6 +207,7 @@ export class REUnitBehavior extends LBehavior {
             console.log("AttackAction");
 
 
+            throw new Error("Unreachable");
             /*
 
 
@@ -169,51 +216,7 @@ export class REUnitBehavior extends LBehavior {
             
             return REResponse.Succeeded;
         }
-        else if (cmd.action().id == DBasics.actions.ThrowActionId) {
-            // [投げる] は便利コマンドのようなもの。
-            // 具体的にどのように振舞うのか (直線に飛ぶのか、放物線状に動くのか、転がるのか) を決めるのは相手側
-
-            const itemEntity = cmd.reactor();
-            //const inventory = actor.findBehavior(LInventoryBehavior);
-            assert(itemEntity);
-            //assert(inventory);
-
-            context.post(
-                itemEntity, actor, undefined, onPreThrowReaction,
-                (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
-                    if (responce == REResponse.Pass) {
-                        itemEntity.callRemoveFromWhereabouts(context);
-
-                        itemEntity.x = actor.x;
-                        itemEntity.y = actor.y;
-
-
-                        context.post(
-                            itemEntity, actor, undefined, onThrowReaction,
-                            (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
-                                if (responce == REResponse.Pass) {
-                                    context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
-                                }
-                            });
-
-                    }
-                });
-
-                /*
-            // まずは itemEntity を、Inventory や Map から外してみる
-            context.postRemoveFromWhereabouts(
-                itemEntity,
-                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
-                    if (responce == REResponse.Pass) {
-                        
-                    }
-                });
-                */
-            
-            /*
-                */
-            return REResponse.Succeeded;
-        }
+        
 
         return REResponse.Pass;
     }
