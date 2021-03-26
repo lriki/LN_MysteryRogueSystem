@@ -42,18 +42,6 @@ export class REExitPointBehavior extends LBehavior {
         return [DBasics.actions.ProceedFloorActionId];
     }
     
-    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-
-        if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
-            //const event = $gameMap.event(entity.rmmzEventId);
-            throw new Error("Unreachable.");
-        }
-
-        return REResponse.Pass;
-    }
-    
-
-    
     [onProceedFloorReaction](args: CommandArgs, context: RECommandContext): REResponse {
         const entity = args.self;
 

@@ -254,16 +254,6 @@ export class REUnitBehavior extends LBehavior {
     }
 
 
-            /*
-    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        if (cmd.action().id == DBasics.actions.AttackActionId) {
-
-        }
-
-        return REResponse.Pass;
-    }]
-    */
-    
     [onWalkedOnTopAction](args: CommandArgs, context: RECommandContext): REResponse {
         return REResponse.Pass;
     }

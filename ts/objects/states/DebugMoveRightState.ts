@@ -21,8 +21,8 @@ export class LDebugMoveRightState extends LStateTraitBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
-                context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
+                context.postActionOneWay(DBasics.actions.DirectionChangeActionId, entity, undefined, undefined, { direction: dir });
+                context.postActionOneWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, undefined, { direction: dir });
             }
             context.postConsumeActionToken(entity);
             return REResponse.Succeeded;

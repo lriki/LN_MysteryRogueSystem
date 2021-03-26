@@ -240,7 +240,6 @@ export class LBehavior extends LObject {
     onPreAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
 
 
 

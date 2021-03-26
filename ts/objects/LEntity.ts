@@ -577,10 +577,6 @@ export class LEntity extends LObject
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
-    _sendReaction(context: RECommandContext, actor: LEntity, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(x => x.onReaction(this, actor, context, cmd));
-    }
-
     makeSaveContents(): any {
         let contents: any = {};
         contents.id = this.entityId();

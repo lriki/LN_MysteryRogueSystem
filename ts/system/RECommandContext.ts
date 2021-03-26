@@ -92,15 +92,6 @@ export class RECommandContext
         };
         this._recodingCommandList.push({ name: "sendAction", func: m3 });
 
-        if (reactor) {
-            const m4 = () => {
-                // onReaction はひとつ前の実行が Pass ではなくても実行する
-                Log.doCommand("Reaction");
-                return reactor._sendReaction(this, actor, actualCommand);
-            };
-            this._recodingCommandList.push({ name: "sendReaction", func: m4 });
-        }
-
         Log.postCommand("postAction");
     }
     
@@ -130,39 +121,6 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "sendAction", func: m3 });
 
         Log.postCommand("ActionOneWay");
-    }
-    
-    /**
-     * 
-     * @param actionId 
-     * @param entity onReaction() を呼び出す entity
-     * @param actor 
-     * @param effectContext 
-     * @param args 
-     */
-    postReaction(actionId: number, entity: LEntity, actor: LEntity, effectContext: REEffectContext | undefined, args?: any) {
-        assert(actionId > 0);
-        
-        const actualCommand = new RECommand(actionId, entity, undefined, effectContext, args);
-
-        const m1 = () => {
-            Log.doCommand("PreReaction");
-            return entity._sendPreRection(this, actualCommand);
-        };
-        this._recodingCommandList.push({ name: "sendPreAction", func: m1 });
-
-        const m3 = () => {
-            if (this._lastActorResponce == REResponse.Pass) {
-                Log.doCommand("Reaction");
-                return entity._sendReaction(this, actor, actualCommand);
-            }
-            else {
-                return this._lastActorResponce;
-            }
-        };
-        this._recodingCommandList.push({ name: "sendReaction", func: m3 });
-
-        Log.postCommand("Reaction");
     }
 
     // TODO: sender っていうのがすごくわかりづらい。
