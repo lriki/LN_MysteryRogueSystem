@@ -148,7 +148,6 @@ export class REDataManager
         // Actions
         DBasics.actions = {
             EquipActionId: REData.addAction("装備"),
-            DirectionChangeActionId: REData.addAction("DirectionChange"),
             MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
             //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
             PickActionId: REData.addAction("Pick"),

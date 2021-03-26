@@ -6,6 +6,7 @@ import { REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { DBasics } from "ts/data/DBasics";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
+import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 
 export class LDebugMoveRightState extends LStateTraitBehavior {
 
@@ -21,7 +22,7 @@ export class LDebugMoveRightState extends LStateTraitBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                context.postActionOneWay(DBasics.actions.DirectionChangeActionId, entity, undefined, undefined, { direction: dir });
+                context.postActivity(entity, new LDirectionChangeActivity(dir));
                 context.postActionOneWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, undefined, { direction: dir });
             }
             context.postConsumeActionToken(entity);

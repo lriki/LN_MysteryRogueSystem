@@ -5,7 +5,6 @@ export interface DBasicActions
     //----------------------------------------
     // Standard Actions.
 
-    DirectionChangeActionId: number;
 
     /** 隣接タイルへの移動 */
     MoveToAdjacentActionId: number;

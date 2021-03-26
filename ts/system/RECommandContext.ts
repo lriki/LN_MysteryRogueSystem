@@ -14,6 +14,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { SSequelContext } from "./SSequelContext";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -79,6 +80,16 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "sendAction", func: m3 });
 
         Log.postCommand("ActionOneWay");
+    }
+
+    public postActivity(target: LEntity, activity: LActivity) {
+        const m1 = () => {
+            Log.doCommand("Activity");
+            return target._sendActivity(this, activity);
+        };
+        this._recodingCommandList.push({ name: "Activity", func: m1 });
+
+        Log.postCommand("Activity");
     }
 
     // TODO: sender っていうのがすごくわかりづらい。

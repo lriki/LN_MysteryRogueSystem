@@ -8,6 +8,7 @@ import { RERecordingCommandType } from "./RECommandRecorder";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 export class REDialogContext
 {
@@ -36,7 +37,10 @@ export class REDialogContext
         return this._commandContext;
     }
 
-    
+    public postActivity(target: LEntity, activity: LActivity): void {
+        this._commandContext.postActivity(target, activity);
+    }
+
     postAction(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
         //this._commandContext.postActionTwoWay(actionId, actor, reactor, args);
         this._commandContext.postActionOneWay(actionId, actor, reactor, undefined, args);

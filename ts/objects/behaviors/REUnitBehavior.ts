@@ -17,6 +17,8 @@ import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { DActionId } from "ts/data/DAction";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REEffectContext } from "ts/system/REEffectContext";
+import { LActivity } from "../activities/LActivity";
+import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 
 /**
  * 
@@ -57,13 +59,17 @@ export class REUnitBehavior extends LBehavior {
         ]);
     }
 
-    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        
-        if (cmd.action().id == DBasics.actions.DirectionChangeActionId) {
-            cmd.actor().dir = (cmd.args() as REDirectionChangeArgs).direction;
+    onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse {
+        if (activity instanceof LDirectionChangeActivity) {
+            console.log("onActivity LDirectionChangeActivity");
+            self.dir = activity.direction();
             return REResponse.Succeeded;
         }
-        else if (cmd.action().id == DBasics.actions.MoveToAdjacentActionId) {
+        return REResponse.Pass;
+    }
+    
+    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
+        if (cmd.action().id == DBasics.actions.MoveToAdjacentActionId) {
             
 
             const args = (cmd.args() as REMoveToAdjacentArgs);

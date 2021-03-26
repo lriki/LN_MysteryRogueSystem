@@ -12,6 +12,7 @@ import { VMainDialog } from "./VMainDialog";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
+import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 
 enum UpdateMode {
     Normal,
@@ -130,8 +131,6 @@ export class VManualActionDialogVisual extends VMainDialog {
             if (this._waitCount > 0) this._waitCount--;
             
             if (this._waitCount <= 0 && Input.dir8 != 0 && Input.dir8 != entity.dir) {
-                //const args: REDirectionChangeArgs = { direction: dir };
-                //context.postAction(DBasics.actions.DirectionChangeActionId, entity, undefined, args);
                 //context.closeDialog(false); // 行動消費無しで close
                 entity.dir = Input.dir8;
                 REGame.map.increaseRevision();
@@ -163,8 +162,7 @@ export class VManualActionDialogVisual extends VMainDialog {
     private attemptMoveEntity(context: REDialogContext, entity: LEntity, dir: number): boolean {
         if (REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
-                const args: REDirectionChangeArgs = { direction: dir };
-                context.postAction(DBasics.actions.DirectionChangeActionId, entity, undefined, args);
+                context.postActivity(entity, new LDirectionChangeActivity(dir));
             }
             const args: REMoveToAdjacentArgs = { direction: dir };
             context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);

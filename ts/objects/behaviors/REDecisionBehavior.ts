@@ -13,6 +13,7 @@ import { REGameManager } from "ts/system/REGameManager";
 import { SAIHelper } from "ts/system/SAIHelper";
 import { LEntityId } from "../LObject";
 import { TilingSprite } from "pixi.js";
+import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -73,7 +74,7 @@ export class REGame_DecisionBehavior extends LBehavior {
                 //else
                 {
                     if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                        context.postActionOneWay(DBasics.actions.DirectionChangeActionId, entity, undefined, undefined, { direction: dir });
+                        context.postActivity(entity, new LDirectionChangeActivity(dir));
                         context.postActionOneWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, undefined, { direction: dir });
                     }
                     context.postConsumeActionToken(entity);
@@ -137,7 +138,7 @@ export class REGame_DecisionBehavior extends LBehavior {
                     if (valid) {
                         const dir = SAIHelper.entityDistanceToDir(entity, target);
                         
-                        context.postActionOneWay(DBasics.actions.DirectionChangeActionId, entity, undefined, undefined, { direction: dir });
+                        context.postActivity(entity, new LDirectionChangeActivity(dir));
         
                         context.postPerformSkill(entity, RESystem.skills.normalAttack);
                         context.postConsumeActionToken(entity);

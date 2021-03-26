@@ -36,6 +36,7 @@ import { RECommandContext } from "../../system/RECommandContext";
 import { REGame } from "..//REGame";
 import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
+import { LActivity } from "../activities/LActivity";
 
 export type LBehaviorId = LEntityId;
 
@@ -240,6 +241,7 @@ export class LBehavior extends LObject {
     onPreAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onPreReaction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
 
 
 

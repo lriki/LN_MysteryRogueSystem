@@ -14,6 +14,7 @@ import { TestEnv } from "./TestEnv";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 import { DBasics } from "ts/data/DBasics";
 import { LEntityId } from "ts/objects/LObject";
+import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 
 
 beforeAll(() => {
@@ -60,7 +61,7 @@ test('Basic1', () => {
     
         // 向き変更。行動を消費せず Dialog を閉じる
         const args1: REDirectionChangeArgs = { direction: 9 };
-        dialogContext.postAction(DBasics.actions.DirectionChangeActionId, actor1, undefined, args1);
+        dialogContext.postActivity(actor1, new LDirectionChangeActivity(9));
         dialogContext.closeDialog(false);
     
         // この時点では向きは変更されていない

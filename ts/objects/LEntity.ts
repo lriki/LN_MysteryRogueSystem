@@ -21,6 +21,7 @@ import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { FlowFlags } from "typescript";
 import { LRoom } from "./LRoom";
+import { LActivity } from "./activities/LActivity";
 
 enum BlockLayer
 {
@@ -576,6 +577,12 @@ export class LEntity extends LObject
     _sendAction(context: RECommandContext, cmd: RECommand): REResponse {
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
+
+    _sendActivity(context: RECommandContext, activity: LActivity): REResponse {
+        return this._callBehaviorIterationHelper(x => x.onActivity(this, context, activity));
+    }
+
+    
 
     makeSaveContents(): any {
         let contents: any = {};
