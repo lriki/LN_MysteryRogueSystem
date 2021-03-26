@@ -20,6 +20,7 @@ import { REEffectContext } from "ts/system/REEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
+import { LPickActivity } from "../activities/LPickActivity";
 
 /**
  * 
@@ -81,6 +82,30 @@ export class REUnitBehavior extends LBehavior {
                 return REResponse.Succeeded;
             }
         }
+        else if (activity instanceof LPickActivity) {
+
+            const inventory = self.findBehavior(LInventoryBehavior);
+            if (inventory) {
+            
+                const block = REGame.map.block(self.x, self.y);
+                const layer = block.layer(BlockLayerKind.Ground);
+                const targetEntities = layer.entities();
+
+                if (targetEntities.length >= 1) {
+                    const itemEntity = targetEntities[0];
+    
+                    context.post(
+                        itemEntity, self, undefined, onPrePickUpReaction,
+                        (responce: REResponse, itemEntity: LEntity, context: RECommandContext) => {
+                            REGame.map._removeEntity(itemEntity);
+                            inventory.addEntity(itemEntity);
+                            context.postMessage(tr("{0} は {1} をひろった", "LRIKI", REGame.identifyer.makeDisplayText(itemEntity)));
+                        });
+    
+                }
+
+            }
+        }
 
         
         return REResponse.Pass;
@@ -106,30 +131,6 @@ export class REUnitBehavior extends LBehavior {
             */
             
             return REResponse.Succeeded;
-        }
-        else if (cmd.action().id == DBasics.actions.PickActionId) {
-
-            const inventory = actor.findBehavior(LInventoryBehavior);
-            if (inventory) {
-            
-                const block = REGame.map.block(actor.x, actor.y);
-                const layer = block.layer(BlockLayerKind.Ground);
-                const targetEntities = layer.entities();
-
-                if (targetEntities.length >= 1) {
-                    const itemEntity = targetEntities[0];
-    
-                    context.post(
-                        itemEntity, actor, undefined, onPrePickUpReaction,
-                        (responce: REResponse, itemEntity: LEntity, context: RECommandContext) => {
-                            REGame.map._removeEntity(itemEntity);
-                            inventory.addEntity(itemEntity);
-                            context.postMessage(tr("{0} は {1} をひろった", "LRIKI", REGame.identifyer.makeDisplayText(itemEntity)));
-                        });
-    
-                }
-
-            }
         }
         else if (cmd.action().id == DBasics.actions.PutActionId) {
             const itemEntity = cmd.reactor();

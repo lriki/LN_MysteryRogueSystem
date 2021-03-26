@@ -14,6 +14,7 @@ import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
+import { LPickActivity } from "ts/objects/activities/LPickActivity";
 
 enum UpdateMode {
     Normal,
@@ -48,7 +49,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             if (actions.length > 0) {
                 if (actions.includes(DBasics.actions.PickActionId)) {
                     // 歩行移動時に足元に拾えるものがあれば取得試行
-                    context.postAction(DBasics.actions.PickActionId, entity, undefined);
+                    context.postActivity(entity, new LPickActivity());
                     // 行動を消費せずに、一度 Dialog を終了する。
                     // 終了しないと、post したコマンドチェーンがうごかない。
                     this._model.close(false);
