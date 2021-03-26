@@ -22,6 +22,7 @@ import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 import { LPickActivity } from "../activities/LPickActivity";
 import { LWaveActivity } from "../activities/LWaveActivity";
+import { LPutActivity } from "../activities/LPutActivity";
 
 /**
  * 
@@ -107,6 +108,30 @@ export class REUnitBehavior extends LBehavior {
 
             }
         }
+        else if (activity instanceof LPutActivity) {
+            const itemEntity = activity.object();//cmd.reactor();
+            const inventory = self.findBehavior(LInventoryBehavior);
+            assert(itemEntity);
+            assert(inventory);
+            
+            const block = REGame.map.block(self.x, self.y);
+            const layer = block.layer(BlockLayerKind.Ground);
+            if (!layer.isContainsAnyEntity()) {
+                // 足元に置けそうなら試行
+                context.post(
+                    itemEntity, self, undefined, onPrePickUpReaction,
+                    (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
+                        inventory.removeEntity(reactor);
+                        REGame.map.appearEntity(reactor, self.x, self.y);
+
+                        context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                    });
+            }
+            else {
+                context.postMessage(tr("置けなかった。"));
+            }
+            return REResponse.Succeeded;
+        }
         else if (activity instanceof LWaveActivity) {
             context.postSequel(self, RESystem.sequels.attack);
 
@@ -142,30 +167,6 @@ export class REUnitBehavior extends LBehavior {
             context.postActionToBlock();
             */
             
-            return REResponse.Succeeded;
-        }
-        else if (cmd.action().id == DBasics.actions.PutActionId) {
-            const itemEntity = cmd.reactor();
-            const inventory = actor.findBehavior(LInventoryBehavior);
-            assert(itemEntity);
-            assert(inventory);
-            
-            const block = REGame.map.block(actor.x, actor.y);
-            const layer = block.layer(BlockLayerKind.Ground);
-            if (!layer.isContainsAnyEntity()) {
-                // 足元に置けそうなら試行
-                context.post(
-                    itemEntity, actor, undefined, onPrePickUpReaction,
-                    (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
-                        inventory.removeEntity(reactor);
-                        REGame.map.appearEntity(reactor, actor.x, actor.y);
-
-                        context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
-                    });
-            }
-            else {
-                context.postMessage(tr("置けなかった。"));
-            }
             return REResponse.Succeeded;
         }
         else if (cmd.action().id == DBasics.actions.ThrowActionId) {

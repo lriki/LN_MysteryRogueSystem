@@ -3,6 +3,7 @@ import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
+import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
@@ -62,7 +63,7 @@ test('PickAndPut', () => {
     expect(inventory.entities()[0]).toBe(item1);
 
     // item1 を置く
-    dialogContext.postAction(DBasics.actions.PutActionId, actor1, item1);
+    dialogContext.postActivity(actor1, LPutActivity.make(actor1, item1));
     dialogContext.closeDialog(true);    // 行動確定
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
