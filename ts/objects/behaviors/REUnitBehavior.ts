@@ -24,6 +24,7 @@ import { LPickActivity } from "../activities/LPickActivity";
 import { LWaveActivity } from "../activities/LWaveActivity";
 import { LPutActivity } from "../activities/LPutActivity";
 import { LThrowActivity } from "../activities/LThrowActivity";
+import { LProceedFloorActivity } from "../activities/LProceedFloorActivity";
 
 /**
  * 
@@ -84,6 +85,14 @@ export class REUnitBehavior extends LBehavior {
                 
                 return REResponse.Succeeded;
             }
+        }
+        else if (activity instanceof LProceedFloorActivity) {
+
+            const reactor = activity.object();
+            if (reactor) {
+                context.post(reactor, self, undefined, onProceedFloorReaction);
+            }
+
         }
         else if (activity instanceof LPickActivity) {
 
@@ -195,15 +204,7 @@ export class REUnitBehavior extends LBehavior {
     }
     
     onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
-
-            const reactor = cmd.reactor();
-            if (reactor) {
-                context.post(reactor, actor, undefined, onProceedFloorReaction);
-            }
-
-        }
-        else if (cmd.action().id == DBasics.actions.AttackActionId) {
+        if (cmd.action().id == DBasics.actions.AttackActionId) {
             console.log("AttackAction");
 
 

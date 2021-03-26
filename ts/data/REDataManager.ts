@@ -20,6 +20,7 @@ import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LWaveActivity } from "ts/objects/activities/LWaveActivity";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
+import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
 
 
 declare global {  
@@ -171,7 +172,7 @@ export class REDataManager
             DropActionId: REData.addAction("Drop", "", undefined),
             StepOnActionId: REData.addAction("StepOn", "", undefined),
             TrashActionId: REData.addAction("Trash", "", undefined),
-            ProceedFloorActionId: REData.addAction("すすむ", "", undefined),
+            ProceedFloorActionId: REData.addAction("すすむ", "LProceedFloorActivity", () => new LProceedFloorActivity()),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
             EquipOffActionId: REData.addAction("EquipOff", "", undefined),
