@@ -62,20 +62,9 @@ export class RECommandContext
         
         const actualCommand = new RECommand(actionId, actor, reactor, effectContext, args);
 
-        const m1 = () => {
-            Log.doCommand("PreAction");
-            return actor._sendPreAction(this, actualCommand);
-        };
-        this._recodingCommandList.push({ name: "sendPreAction", func: m1 });
-
         const m3 = () => {
-            if (this._lastActorResponce == REResponse.Pass) {
-                Log.doCommand("Action");
-                return actor._sendAction(this, actualCommand);
-            }
-            else {
-                return this._lastActorResponce;
-            }
+            Log.doCommand("Action");
+            return actor._sendAction(this, actualCommand);
         };
         this._recodingCommandList.push({ name: "sendAction", func: m3 });
 

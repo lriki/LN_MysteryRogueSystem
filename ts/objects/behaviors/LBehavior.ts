@@ -238,8 +238,6 @@ export class LBehavior extends LObject {
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
     onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
-    onPreAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onPreReaction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
 

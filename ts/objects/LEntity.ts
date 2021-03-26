@@ -566,14 +566,6 @@ export class LEntity extends LObject
         return this._callBehaviorIterationHelper(x => x.onDecisionPhase(this, context, phase));
     }
 
-    _sendPreAction(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(x => x.onPreAction(this, context, cmd));
-    }
-
-    _sendPreRection(context: RECommandContext, cmd: RECommand): REResponse {
-        return this._callBehaviorIterationHelper(x => x.onPreReaction(this, context, cmd));
-    }
-
     _sendAction(context: RECommandContext, cmd: RECommand): REResponse {
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
