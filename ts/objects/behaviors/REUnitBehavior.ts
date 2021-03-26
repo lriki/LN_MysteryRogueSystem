@@ -1,6 +1,6 @@
 import { RECommand, REResponse } from "../../system/RECommand";
 import { RECommandContext } from "../../system/RECommandContext";
-import { CommandArgs, LBehavior, onPrePickUpReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onAttackReaction, onPrePickUpReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
 import { REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -16,6 +16,7 @@ import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { DActionId } from "ts/data/DAction";
 import { SMomementCommon } from "ts/system/SMomementCommon";
+import { REEffectContext } from "ts/system/REEffectContext";
 
 /**
  * 
@@ -210,49 +211,58 @@ export class REUnitBehavior extends LBehavior {
     }
 
     
+    [onAttackReaction](args: CommandArgs, context: RECommandContext): REResponse {
+        const self = args.self;
+        //const effectContext = cmd.effectContext();
+        const effectContext: REEffectContext = args.args.effectContext;
+        if (effectContext) {
+            const result = effectContext.apply(self);
+            
+            console.log("result", result);
+
+            result.showResultMessages(context, self);
+            /*
+
+            const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+            const hpDamage = result.paramEffects[RESystem.parameters.hp].damag;
+
+            {
+                const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
+                context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
+            }
+
+            {
+                
+                const states = result.addedStateObjects();
+                for (const state of states) {
+                    const stateText = state.message1;
+                    //const stateText = target.isActor() ? state.message1 : state.message2;
+                    context.postMessage(stateText.format(name));
+                }
+            }
+
+            */
+
+
+            //const fmt = tr2("%1 は倒れた。");
+            //const fmt = tr2("%1 は %2 の経験値を得た。");
+
+            return REResponse.Succeeded;
+        }
+        
+        return REResponse.Pass;
+    }
+
+
+            /*
     onReaction(entity: LEntity, actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
         if (cmd.action().id == DBasics.actions.AttackActionId) {
 
-            const effectContext = cmd.effectContext();
-            if (effectContext) {
-                const result = effectContext.apply(entity);
-                
-                console.log("result", result);
-
-                result.showResultMessages(context, entity);
-                /*
-    
-                const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
-                const hpDamage = result.paramEffects[RESystem.parameters.hp].damag;
-    
-                {
-                    const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
-                    context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
-                }
-
-                {
-                    
-                    const states = result.addedStateObjects();
-                    for (const state of states) {
-                        const stateText = state.message1;
-                        //const stateText = target.isActor() ? state.message1 : state.message2;
-                        context.postMessage(stateText.format(name));
-                    }
-                }
-    
-                */
-    
-    
-                //const fmt = tr2("%1 は倒れた。");
-                //const fmt = tr2("%1 は %2 の経験値を得た。");
-
-                return REResponse.Succeeded;
-            }
-            
         }
 
         return REResponse.Pass;
-    }
+    }]
+    */
     
     [onWalkedOnTopAction](args: CommandArgs, context: RECommandContext): REResponse {
         return REResponse.Pass;

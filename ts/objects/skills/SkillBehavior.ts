@@ -6,6 +6,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
+import { onAttackReaction } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 
 export abstract class LSkillBehavior {
@@ -35,7 +36,10 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                     const effectContext = new REEffectContext(entity, skill.scope, skill.effect);
                     //effectContext.addEffector(effector);
 
-                    context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
+                    
+                    context.post(reacor, entity, {effectContext: effectContext}, onAttackReaction);
+
+                    //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                 }
             }
 

@@ -97,6 +97,11 @@ export const onWaveReaction = Symbol("onWaveReaction");
  */
  export const onProceedFloorReaction = Symbol("onProceedFloorReaction");
 
+/**
+ * 攻撃された
+ */
+ export const onAttackReaction = Symbol("onAttackReaction");
+
 
 export interface CollideActionArgs {
     dir: number;    // 飛翔中の Entity の移動方向。必ずしも Entity の向きと一致するわけではないため、Args として渡す必要がある。
