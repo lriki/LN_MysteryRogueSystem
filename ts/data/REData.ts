@@ -12,13 +12,14 @@ import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DStateTrait } from "./DStateTrait";
 import { DSequel } from "./DSequel";
 import { RE_Data_Monster } from "./DEnemy";
-import { DAction } from "./DAction";
+import { DAction, DActionId } from "./DAction";
 import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
 import { DActor_Default, RE_Data_Actor } from "./DActor";
 import { DAbility, DAbilityId } from "./DAbility";
 import { DMonsterHouse } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { assert } from "ts/Common";
 
 export type DParameterId = number;
 
@@ -285,7 +286,7 @@ export class REData
         return newId;
     }
     
-    static addAction(displayName: string, typeName: string, factory: () => LActivity): number {
+    static addAction(displayName: string, typeName: string, factory: (() => LActivity) | undefined): number {
         const newId = this.actions.length;
         this.actions.push({
             id: newId,
@@ -378,5 +379,11 @@ export class REData
         const d = this.findItem(re_key);
         if (d) return d;
         throw new Error(`Item "${re_key}" not found.`);
+    }
+
+    static createActivity(actionId: DActionId): LActivity {
+        const f = this.actions[actionId].factory;
+        assert(f);
+        return f();
     }
 }

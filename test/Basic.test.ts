@@ -61,8 +61,7 @@ test('Basic1', () => {
         expect((dialog1 instanceof REManualActionDialog)).toBe(true);
     
         // 向き変更。行動を消費せず Dialog を閉じる
-        const args1: REDirectionChangeArgs = { direction: 9 };
-        dialogContext.postActivity(actor1, new LDirectionChangeActivity(9));
+        dialogContext.postActivity(actor1, LDirectionChangeActivity.make(actor1, 9));
         dialogContext.closeDialog(false);
     
         // この時点では向きは変更されていない
@@ -83,7 +82,7 @@ test('Basic1', () => {
 
     // 一歩下に移動してみる (ターン消費あり)
     {
-        dialogContext.postActivity(actor1, new LMoveAdjacentActivity(2));
+        dialogContext.postActivity(actor1, LMoveAdjacentActivity.make(actor1, 2));
         dialogContext.closeDialog(true);
     
         // シミュレーション実行。実際に移動が行われる
@@ -223,7 +222,7 @@ test('TurnOrderTable', () => {
     // 移動量から実際に行動した数を判断する
     {
         // player を右へ移動
-        dialogContext.postActivity(actor1, new LMoveAdjacentActivity(6));
+        dialogContext.postActivity(actor1, LMoveAdjacentActivity.make(actor1, 6));
         dialogContext.closeDialog(true);
     
         // AI行動決定
@@ -245,7 +244,7 @@ test('TurnOrderTable', () => {
     // 2ターン目
     {
         // player を右へ移動
-        dialogContext.postActivity(actor1, new LMoveAdjacentActivity(6));
+        dialogContext.postActivity(actor1, LMoveAdjacentActivity.make(actor1, 6));
         dialogContext.closeDialog(true);
     
         // AI行動決定

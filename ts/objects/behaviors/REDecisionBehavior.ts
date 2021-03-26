@@ -75,8 +75,8 @@ export class REGame_DecisionBehavior extends LBehavior {
                 //else
                 {
                     if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                        context.postActivity(entity, (new LDirectionChangeActivity()).setup(dir));
-                        context.postActivity(entity, (new LMoveAdjacentActivity()).setup(dir));
+                        context.postActivity(entity, LDirectionChangeActivity.make(entity, dir));
+                        context.postActivity(entity, LMoveAdjacentActivity.make(entity, dir));
                     }
                     context.postConsumeActionToken(entity);
                     return REResponse.Succeeded;
@@ -139,7 +139,7 @@ export class REGame_DecisionBehavior extends LBehavior {
                     if (valid) {
                         const dir = SAIHelper.entityDistanceToDir(entity, target);
                         
-                        context.postActivity(entity, (new LDirectionChangeActivity()).setup(dir));
+                        context.postActivity(entity, LDirectionChangeActivity.make(entity, dir));
         
                         context.postPerformSkill(entity, RESystem.skills.normalAttack);
                         context.postConsumeActionToken(entity);

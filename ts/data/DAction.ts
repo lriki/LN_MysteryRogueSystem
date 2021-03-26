@@ -19,5 +19,5 @@ export interface DAction
     displayName: string;
 
     typeName: string;
-    factory: () => LActivity;
+    factory: (() => LActivity) | undefined;
 }

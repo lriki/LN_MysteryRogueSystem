@@ -21,6 +21,7 @@ import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 import { LPickActivity } from "../activities/LPickActivity";
+import { LWaveActivity } from "../activities/LWaveActivity";
 
 /**
  * 
@@ -106,7 +107,18 @@ export class REUnitBehavior extends LBehavior {
 
             }
         }
+        else if (activity instanceof LWaveActivity) {
+            context.postSequel(self, RESystem.sequels.attack);
 
+            const reactor = activity.object();
+            if (reactor) {
+                //context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
+                
+                context.post(reactor, self, undefined, onWaveReaction);
+            }
+            
+            return REResponse.Succeeded;
+        }
         
         return REResponse.Pass;
     }
@@ -199,18 +211,6 @@ export class REUnitBehavior extends LBehavior {
             
             /*
                 */
-            return REResponse.Succeeded;
-        }
-        else if (cmd.action().id == DBasics.actions.WaveActionId) {
-            context.postSequel(actor, RESystem.sequels.attack);
-
-            const reactor = cmd.reactor();
-            if (reactor) {
-                //context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
-                
-                context.post(reactor, actor, undefined, onWaveReaction);
-            }
-            
             return REResponse.Succeeded;
         }
 

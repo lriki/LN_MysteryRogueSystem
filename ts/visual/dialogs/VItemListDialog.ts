@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
+import { REData } from "ts/data/REData";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -100,7 +101,12 @@ export class VItemListDialog extends VSubDialog {
     onAction(actionId: DActionId): void {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
-            RESystem.dialogContext.postAction(actionId, this._actorEntity, itemEntity);
+            
+            const activity = REData.createActivity(actionId);
+            // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
+            activity._setup(this._actorEntity, itemEntity);
+            
+            RESystem.dialogContext.postActivity(this._actorEntity, activity);
             this.doneDialog(true);
         }
     }
