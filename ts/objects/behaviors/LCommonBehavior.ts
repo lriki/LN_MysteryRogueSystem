@@ -106,9 +106,5 @@ export class LCommonBehavior extends LBehavior {
         //    DBasics.actions.PickActionId,
         //]);
     }
-
-    onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        return super.onAction(entity, context, cmd);
-    }
 }
 

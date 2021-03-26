@@ -203,26 +203,6 @@ export class REUnitBehavior extends LBehavior {
         return REResponse.Pass;
     }
     
-    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        if (cmd.action().id == DBasics.actions.AttackActionId) {
-            console.log("AttackAction");
-
-
-            throw new Error("Unreachable");
-            /*
-
-
-            context.postActionToBlock();
-            */
-            
-            return REResponse.Succeeded;
-        }
-        
-
-        return REResponse.Pass;
-    }
-
-    
     [onAttackReaction](args: CommandArgs, context: RECommandContext): REResponse {
         const self = args.self;
         //const effectContext = cmd.effectContext();
