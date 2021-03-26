@@ -15,6 +15,7 @@ import { REEntityFactory } from "ts/system/REEntityFactory";
 import { DBasics } from "ts/data/DBasics";
 import { LEntityId } from "ts/objects/LObject";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 
 
 beforeAll(() => {
@@ -82,8 +83,7 @@ test('Basic1', () => {
 
     // 一歩下に移動してみる (ターン消費あり)
     {
-        const args2: REMoveToAdjacentArgs = { direction: 2 };
-        dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, args2);
+        dialogContext.postActivity(actor1, new LMoveAdjacentActivity(2));
         dialogContext.closeDialog(true);
     
         // シミュレーション実行。実際に移動が行われる
@@ -223,7 +223,7 @@ test('TurnOrderTable', () => {
     // 移動量から実際に行動した数を判断する
     {
         // player を右へ移動
-        dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.postActivity(actor1, new LMoveAdjacentActivity(6));
         dialogContext.closeDialog(true);
     
         // AI行動決定
@@ -245,7 +245,7 @@ test('TurnOrderTable', () => {
     // 2ターン目
     {
         // player を右へ移動
-        dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+        dialogContext.postActivity(actor1, new LMoveAdjacentActivity(6));
         dialogContext.closeDialog(true);
     
         // AI行動決定

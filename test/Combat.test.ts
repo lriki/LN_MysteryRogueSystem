@@ -9,6 +9,7 @@ import { TestEnv } from "./TestEnv";
 
 import "./Extension";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -42,7 +43,7 @@ test('DamageAndGameover', () => {
     
     // Player を左へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 4 });
+    dialogContext.postActivity(actor1, new LMoveAdjacentActivity(4));
     dialogContext.closeDialog(true);
     
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される

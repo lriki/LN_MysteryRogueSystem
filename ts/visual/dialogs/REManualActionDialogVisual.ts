@@ -13,6 +13,7 @@ import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 
 enum UpdateMode {
     Normal,
@@ -164,8 +165,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             if (dir != 0) {
                 context.postActivity(entity, new LDirectionChangeActivity(dir));
             }
-            const args: REMoveToAdjacentArgs = { direction: dir };
-            context.postAction(DBasics.actions.MoveToAdjacentActionId, entity, undefined, args);
+            context.postActivity(entity, new LMoveAdjacentActivity(dir));
             this._model.close(true);
 
             // TODO: test

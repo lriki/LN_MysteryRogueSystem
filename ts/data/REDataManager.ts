@@ -148,8 +148,6 @@ export class REDataManager
         // Actions
         DBasics.actions = {
             EquipActionId: REData.addAction("装備"),
-            MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
-            //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
             PickActionId: REData.addAction("Pick"),
             PutActionId: REData.addAction("置く"),//"Put"),
             ExchangeActionId: REData.addAction("交換"),//"Exchange"),

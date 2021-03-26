@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
@@ -37,7 +38,7 @@ test('PickAndPut', () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postAction(DBasics.actions.MoveToAdjacentActionId, actor1, undefined, { direction: 6 });
+    dialogContext.postActivity(actor1, new LMoveAdjacentActivity(6));
     dialogContext.closeDialog(true);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

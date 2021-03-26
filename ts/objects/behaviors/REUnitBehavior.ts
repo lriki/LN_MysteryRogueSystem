@@ -19,6 +19,7 @@ import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REEffectContext } from "ts/system/REEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
+import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
 /**
  * 
@@ -65,29 +66,28 @@ export class REUnitBehavior extends LBehavior {
             self.dir = activity.direction();
             return REResponse.Succeeded;
         }
-        return REResponse.Pass;
-    }
-    
-    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        if (cmd.action().id == DBasics.actions.MoveToAdjacentActionId) {
-            
+        else if (activity instanceof LMoveAdjacentActivity) {
 
-            const args = (cmd.args() as REMoveToAdjacentArgs);
-            const offset = Helpers.dirToTileOffset(args.direction);
+            const offset = Helpers.dirToTileOffset(activity.direction());
 
-            const layer = actor.queryProperty(RESystem.properties.homeLayer);
-            if (SMomementCommon.moveEntity(context, actor, actor.x + offset.x, actor.y + offset.y, layer)) {
-                context.postSequel(actor, RESystem.sequels.MoveSequel);
+            const layer = self.queryProperty(RESystem.properties.homeLayer);
+            if (SMomementCommon.moveEntity(context, self, self.x + offset.x, self.y + offset.y, layer)) {
+                context.postSequel(self, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
-                actor.immediatelyAfterAdjacentMoving = true;
+                self.immediatelyAfterAdjacentMoving = true;
                 this._requiredFeetProcess = true;
                 
                 return REResponse.Succeeded;
             }
-            
         }
-        else if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
+
+        
+        return REResponse.Pass;
+    }
+    
+    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
+        if (cmd.action().id == DBasics.actions.ProceedFloorActionId) {
 
             const reactor = cmd.reactor();
             if (reactor) {

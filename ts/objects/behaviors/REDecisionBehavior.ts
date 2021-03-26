@@ -14,6 +14,7 @@ import { SAIHelper } from "ts/system/SAIHelper";
 import { LEntityId } from "../LObject";
 import { TilingSprite } from "pixi.js";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
+import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -75,7 +76,7 @@ export class REGame_DecisionBehavior extends LBehavior {
                 {
                     if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
                         context.postActivity(entity, new LDirectionChangeActivity(dir));
-                        context.postActionOneWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, undefined, { direction: dir });
+                        context.postActivity(entity, new LMoveAdjacentActivity(dir));
                     }
                     context.postConsumeActionToken(entity);
                     return REResponse.Succeeded;
