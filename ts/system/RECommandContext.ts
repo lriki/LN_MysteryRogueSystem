@@ -52,48 +52,6 @@ export class RECommandContext
         this._lastReactorResponce = REResponse.Pass;
         this._commandChainRunning = false;
     }
-
-    /**
-     * postActionTwoWay
-     * 
-     *  [拾う] など、reactor 側の状態等によって actor 側が目的を達成できない可能性がある Action で使用する。
-     * （例えば、床に張り付いた巻物を拾おうとするときは、reactor 側が onPreReaction で Action をはじく）
-     */
-    postActionTwoWay(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
-        assert(actionId > 0);
-
-        const actualCommand = new RECommand(actionId, actor, reactor, undefined, args);
-
-        const m1 = () => {
-            Log.doCommand("PreAction");
-            return actor._sendPreAction(this, actualCommand);
-        };
-        this._recodingCommandList.push({ name: "sendPreAction", func: m1 });
-
-        if (reactor) {
-            const m2 = () => {
-                if (this._lastActorResponce == REResponse.Pass) {  // m1 で未処理なら send
-                    Log.doCommand("PreRection");
-                    return reactor._sendPreRection(this, actualCommand);
-                }
-                else
-                    return this._lastActorResponce;
-            };
-            this._recodingCommandList.push({ name: "sendPreRection", func: m2 });
-        }
-
-        const m3 = () => {
-            if (this._lastActorResponce == REResponse.Pass) {  // m2 で未処理なら send
-                Log.doCommand("Action");
-                return actor._sendAction(this, actualCommand);
-            }
-            else
-                return this._lastActorResponce;
-        };
-        this._recodingCommandList.push({ name: "sendAction", func: m3 });
-
-        Log.postCommand("postAction");
-    }
     
     /**
      * カスタムの RE-Command のように、プラグインとして事前定義できないコマンド実行 Action の呼び出し
