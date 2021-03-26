@@ -13,6 +13,10 @@ import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
 import { DLand_Default } from "./DLand";
+import { LActivity } from "ts/objects/activities/LActivity";
+import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
+import { LPickActivity } from "ts/objects/activities/LPickActivity";
 
 
 declare global {  
@@ -147,35 +151,38 @@ export class REDataManager
 
         // Actions
         DBasics.actions = {
-            EquipActionId: REData.addAction("装備"),
-            PickActionId: REData.addAction("Pick"),
-            PutActionId: REData.addAction("置く"),//"Put"),
-            ExchangeActionId: REData.addAction("交換"),//"Exchange"),
-            ThrowActionId: REData.addAction("投げる"),//"Throw"),
-            FlungActionId: REData.addAction("Flung"),
-            ShootingActionId: REData.addAction("Shooting"),
-            CollideActionId: REData.addAction("Collide"),
-            AffectActionId: REData.addAction("Affect"),
-            RollActionId: REData.addAction("Roll"),
-            FallActionId: REData.addAction("Fall"),
-            DropActionId: REData.addAction("Drop"),
-            StepOnActionId: REData.addAction("StepOn"),
-            TrashActionId: REData.addAction("Trash"),
-            ProceedFloorActionId: REData.addAction("すすむ"),
+            EquipActionId: REData.addAction("装備", "", () => new LActivity()),
+            DirectionChangeActionId: REData.addAction("DirectionChange", "LDirectionChangeActivity", () => new LDirectionChangeActivity()),
+            MoveToAdjacentActionId: REData.addAction("MoveToAdjacent", "LMoveAdjacentActivity", () => new LMoveAdjacentActivity()),
+            //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
+            PickActionId: REData.addAction("Pick", "LPickActivity", () => new LPickActivity()),
+            PutActionId: REData.addAction("置く", "", () => new LActivity()),//"Put"),
+            ExchangeActionId: REData.addAction("交換", "", () => new LActivity()),//"Exchange"),
+            ThrowActionId: REData.addAction("投げる", "", () => new LActivity()),//"Throw"),
+            FlungActionId: REData.addAction("Flung", "", () => new LActivity()),
+            ShootingActionId: REData.addAction("Shooting", "", () => new LActivity()),
+            CollideActionId: REData.addAction("Collide", "", () => new LActivity()),
+            AffectActionId: REData.addAction("Affect", "", () => new LActivity()),
+            RollActionId: REData.addAction("Roll", "", () => new LActivity()),
+            FallActionId: REData.addAction("Fall", "", () => new LActivity()),
+            DropActionId: REData.addAction("Drop", "", () => new LActivity()),
+            StepOnActionId: REData.addAction("StepOn", "", () => new LActivity()),
+            TrashActionId: REData.addAction("Trash", "", () => new LActivity()),
+            ProceedFloorActionId: REData.addAction("すすむ", "", () => new LActivity()),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
-            EquipOffActionId: REData.addAction("EquipOff"),
-            EatActionId: REData.addAction("Eat"),
-            TakeActionId: REData.addAction("Take"),
-            BiteActionId: REData.addAction("Bite"),
-            ReadActionId: REData.addAction("Read"),
-            WaveActionId: REData.addAction("Wave"),
-            PushActionId: REData.addAction("Push"),
-            PutInActionId: REData.addAction("PickIn"),
-            PickOutActionId: REData.addAction("PickOut"),
-            IdentifyActionId: REData.addAction("Identify"),
+            EquipOffActionId: REData.addAction("EquipOff", "", () => new LActivity()),
+            EatActionId: REData.addAction("Eat", "", () => new LActivity()),
+            TakeActionId: REData.addAction("Take", "", () => new LActivity()),
+            BiteActionId: REData.addAction("Bite", "", () => new LActivity()),
+            ReadActionId: REData.addAction("Read", "", () => new LActivity()),
+            WaveActionId: REData.addAction("Wave", "", () => new LActivity()),
+            PushActionId: REData.addAction("Push", "", () => new LActivity()),
+            PutInActionId: REData.addAction("PickIn","",  () => new LActivity()),
+            PickOutActionId: REData.addAction("PickOut", "", () => new LActivity()),
+            IdentifyActionId: REData.addAction("Identify", "", () => new LActivity()),
             //passItem: REData.addAction("PassItem"),
-            AttackActionId: REData.addAction("Attack"),
+            AttackActionId: REData.addAction("Attack", "", () => new LActivity()),
         };
         
         // Attributes

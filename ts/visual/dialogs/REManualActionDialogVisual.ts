@@ -164,9 +164,9 @@ export class VManualActionDialogVisual extends VMainDialog {
     private attemptMoveEntity(context: REDialogContext, entity: LEntity, dir: number): boolean {
         if (REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
-                context.postActivity(entity, new LDirectionChangeActivity(dir));
+                context.postActivity(entity, (new LDirectionChangeActivity()).setup(dir));
             }
-            context.postActivity(entity, new LMoveAdjacentActivity(dir));
+            context.postActivity(entity, (new LMoveAdjacentActivity()).setup(dir));
             this._model.close(true);
 
             // TODO: test

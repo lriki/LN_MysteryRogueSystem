@@ -18,6 +18,7 @@ import { DEquipmentPart } from "./DEquipmentPart";
 import { DActor_Default, RE_Data_Actor } from "./DActor";
 import { DAbility, DAbilityId } from "./DAbility";
 import { DMonsterHouse } from "./DMonsterHouse";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 export type DParameterId = number;
 
@@ -158,7 +159,7 @@ export class REData
     static lands: DLand[] = [DLand_Default()];
     static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
-    static actions: DAction[] = [{id: 0, displayName: 'null'}];
+    static actions: DAction[] = [];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
     static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
@@ -192,7 +193,7 @@ export class REData
         this.lands = [];
         this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [];
-        this.actions = [{id: 0, displayName: 'null'}];
+        this.actions = [{id: 0, displayName: 'null', typeName: "", factory: () => new LActivity()}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];
         this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
@@ -284,11 +285,13 @@ export class REData
         return newId;
     }
     
-    static addAction(displayName: string): number {
+    static addAction(displayName: string, typeName: string, factory: () => LActivity): number {
         const newId = this.actions.length;
         this.actions.push({
             id: newId,
-            displayName: displayName
+            displayName: displayName,
+            typeName: typeName,
+            factory: factory,
         });
         return newId;
     }

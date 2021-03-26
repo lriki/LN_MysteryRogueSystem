@@ -1,3 +1,4 @@
+import { LActivity } from "ts/objects/activities/LActivity";
 
 export type DActionId = number;
 
@@ -16,4 +17,7 @@ export interface DAction
 
     /** Name */
     displayName: string;
+
+    typeName: string;
+    factory: () => LActivity;
 }

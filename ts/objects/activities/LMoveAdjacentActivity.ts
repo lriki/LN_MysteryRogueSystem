@@ -1,11 +1,11 @@
 import { LActivity } from "./LActivity";
 
 export class LMoveAdjacentActivity extends LActivity {
-    private _direction: number;
+    private _direction: number = 0;
 
-    public constructor(d: number) {
-        super();
+    public setup(d: number): LMoveAdjacentActivity {
         this._direction = d;
+        return this;
     }
 
     public direction(): number {
