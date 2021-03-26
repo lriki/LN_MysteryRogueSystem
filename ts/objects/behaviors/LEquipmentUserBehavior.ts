@@ -14,6 +14,8 @@ import { LBehavior } from "./LBehavior";
 import { LEquipmentBehavior } from "./LEquipmentBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
+import { LEquipActivity } from "../activities/LEquipActivity";
+import { LActivity } from "../activities/LActivity";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -97,19 +99,19 @@ NOTE:
             }
         }
     }
+
     
-    onAction(actor: LEntity, context: RECommandContext, cmd: RECommand): REResponse {
-        
-        if (cmd.action().id == DBasics.actions.EquipActionId) {
+    onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse {
+        if (activity instanceof LEquipActivity) {
             this.refreshSlots();
 
-            const itemEntity = cmd.reactor();
+            const itemEntity = activity.object();
             assert(itemEntity);
             const itemBehavior = itemEntity.getBehavior(LItemBehavior);
             const equipmentBehavior = itemEntity.getBehavior(LEquipmentBehavior);
             const itemParts = itemBehavior.itemData().equipmentParts;
 
-            const inventory = actor.getBehavior(LInventoryBehavior);
+            const inventory = self.getBehavior(LInventoryBehavior);
             //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);
 
             console.log("itemParts", itemParts);

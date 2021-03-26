@@ -21,6 +21,7 @@ import { LWaveActivity } from "ts/objects/activities/LWaveActivity";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
+import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 
 
 declare global {  
@@ -155,7 +156,6 @@ export class REDataManager
 
         // Actions
         DBasics.actions = {
-            EquipActionId: REData.addAction("装備", "", undefined),
             DirectionChangeActionId: REData.addAction("DirectionChange", "LDirectionChangeActivity", () => new LDirectionChangeActivity()),
             MoveToAdjacentActionId: REData.addAction("MoveToAdjacent", "LMoveAdjacentActivity", () => new LMoveAdjacentActivity()),
             //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
@@ -175,6 +175,7 @@ export class REDataManager
             ProceedFloorActionId: REData.addAction("すすむ", "LProceedFloorActivity", () => new LProceedFloorActivity()),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
+            EquipActionId: REData.addAction("装備", "LEquipActivity", () => new LEquipActivity()),
             EquipOffActionId: REData.addAction("EquipOff", "", undefined),
             EatActionId: REData.addAction("Eat", "", undefined),
             TakeActionId: REData.addAction("Take", "", undefined),
