@@ -7,7 +7,7 @@ export class Game_REPrefabEvent extends Game_Event {
     private _spritePrepared: boolean;
 
     constructor(mapId: number, dataMapId: number, eventId: number) {
-        // "REDatabase" のマップのイベントとして扱う。
+        // "RE-Database" のマップのイベントとして扱う。
         // セルフスイッチをコントロールするときに参照される。
         super(dataMapId, eventId);
         this._databaseMapEventId = 1;

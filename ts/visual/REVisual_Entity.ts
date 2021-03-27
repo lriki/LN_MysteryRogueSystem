@@ -74,8 +74,6 @@ export class REVisual_Entity
     }
 
     setPosition(value: Vector2): void {
-        
-    console.log("setPosition");
         this._position = value;
     }
 

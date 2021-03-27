@@ -180,7 +180,7 @@ export class SRmmzHelpers {
             return databaseMap.events[index];
         }
         else {
-            throw new Error(`${prefabName} not found in REDatabase map.`);
+            throw new Error(`${prefabName} not found in RE-Database map.`);
         }
     }
     

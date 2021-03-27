@@ -671,7 +671,7 @@ export class REDataManager
 
     static isDatabaseMap(mapId: number) : boolean {
         const info = $dataMapInfos[mapId];
-        if (info && info.name && info.name.startsWith("REDatabase"))
+        if (info && info.name && info.name.startsWith("RE-Database"))
             return true;
         else
             return false;
