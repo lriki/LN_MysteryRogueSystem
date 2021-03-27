@@ -106,7 +106,7 @@ export class VItemListDialog extends VSubDialog {
             // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
             activity._setup(this._actorEntity, itemEntity);
             
-            RESystem.dialogContext.postActivity(this._actorEntity, activity);
+            RESystem.dialogContext.postActivity(activity);
             this.doneDialog(true);
         }
     }

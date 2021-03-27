@@ -71,10 +71,10 @@ export class RECommandContext
         Log.postCommand("ActionOneWay");
     }
 
-    public postActivity(target: LEntity, activity: LActivity) {
+    public postActivity(activity: LActivity) {
         const m1 = () => {
             Log.doCommand("Activity");
-            return target._sendActivity(this, activity);
+            return activity.subject()._sendActivity(this, activity);
         };
         this._recodingCommandList.push({ name: "Activity", func: m1 });
 

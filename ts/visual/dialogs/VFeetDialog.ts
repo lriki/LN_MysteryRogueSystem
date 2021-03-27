@@ -51,7 +51,7 @@ export class VFeetDialog extends VSubDialog {
         // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
         activity._setup(entity, this._targetEntity);
 
-        RESystem.dialogContext.postActivity(entity, activity);
+        RESystem.dialogContext.postActivity(activity);
         this.doneDialog(true);
     }
 }

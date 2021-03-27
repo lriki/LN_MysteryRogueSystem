@@ -18,9 +18,11 @@ export class LActivity {
         this._object = LEntityId.makeEmpty();
     }
 
-    public _setup(subject: LEntity, object: LEntity): void {
+    public _setup(subject: LEntity, object: LEntity | undefined): void {
         this._subject = subject.entityId();
-        this._object = object.entityId();
+        if (object) {
+            this._object = object.entityId();
+        }
     }
 
     public subject(): LEntity {

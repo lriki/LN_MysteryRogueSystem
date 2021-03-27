@@ -43,7 +43,7 @@ test('DamageAndGameover', () => {
     
     // Player を左へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(actor1, LMoveAdjacentActivity.make(actor1, 4));
+    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 4));
     dialogContext.closeDialog(true);
     
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される

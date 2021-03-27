@@ -23,8 +23,8 @@ export class LDebugMoveRightState extends LStateTraitBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-                context.postActivity(entity, LDirectionChangeActivity.make(entity, dir));
-                context.postActivity(entity, LMoveAdjacentActivity.make(entity, dir));
+                context.postActivity(LDirectionChangeActivity.make(entity, dir));
+                context.postActivity(LMoveAdjacentActivity.make(entity, dir));
             }
             context.postConsumeActionToken(entity);
             return REResponse.Succeeded;

@@ -37,10 +37,11 @@ export class REDialogContext
         return this._commandContext;
     }
 
-    public postActivity(target: LEntity, activity: LActivity): void {
-        this._commandContext.postActivity(target, activity);
+    public postActivity(activity: LActivity): void {
+        this._commandContext.postActivity(activity);
     }
 
+    // deprecated: レコーディングもあわせて postActivity へ
     postAction(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
         //this._commandContext.postActionTwoWay(actionId, actor, reactor, args);
         this._commandContext.postActionOneWay(actionId, actor, reactor, undefined, args);

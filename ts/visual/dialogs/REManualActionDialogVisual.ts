@@ -49,7 +49,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             if (actions.length > 0) {
                 if (actions.includes(DBasics.actions.PickActionId)) {
                     // 歩行移動時に足元に拾えるものがあれば取得試行
-                    context.postActivity(entity, new LPickActivity());
+                    context.postActivity(LPickActivity.make(entity));
                     // 行動を消費せずに、一度 Dialog を終了する。
                     // 終了しないと、post したコマンドチェーンがうごかない。
                     this._model.close(false);
@@ -164,9 +164,9 @@ export class VManualActionDialogVisual extends VMainDialog {
     private attemptMoveEntity(context: REDialogContext, entity: LEntity, dir: number): boolean {
         if (REGame.map.checkPassage(entity, dir)) {
             if (dir != 0) {
-                context.postActivity(entity, LDirectionChangeActivity.make(entity, dir));
+                context.postActivity(LDirectionChangeActivity.make(entity, dir));
             }
-            context.postActivity(entity, LMoveAdjacentActivity.make(entity, dir));
+            context.postActivity(LMoveAdjacentActivity.make(entity, dir));
             this._model.close(true);
 
             // TODO: test

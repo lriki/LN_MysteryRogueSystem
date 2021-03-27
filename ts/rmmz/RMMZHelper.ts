@@ -1,3 +1,5 @@
+import { REGame } from "ts/objects/REGame";
+import { REVisual } from "ts/visual/REVisual";
 
 
 export class RMMZHelper {
@@ -70,6 +72,27 @@ export class RMMZHelper {
             return index;
         else 
             return 0;
+    }
+
+    public static syncCameraPositionToGamePlayer(): void {
+        const entity = REGame.camera.focusedEntity();
+        if (entity && REVisual.entityVisualSet) {
+            const visual = REVisual.entityVisualSet.findEntityVisualByEntity(entity);
+            if (visual) {
+                const pos = visual.position();
+                //console.log("this._realX", this._realX - pos.x);
+                
+                const lastScrolledX = $gamePlayer.scrolledX();
+                const lastScrolledY = $gamePlayer.scrolledY();
+
+                $gamePlayer._realX = pos.x;
+                $gamePlayer._realY = pos.y;
+                $gamePlayer._x = entity.x;
+                $gamePlayer._y = entity.y;
+
+                $gamePlayer.updateScroll(lastScrolledX, lastScrolledY);
+            }
+        }
     }
 }
 

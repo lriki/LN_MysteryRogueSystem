@@ -7,6 +7,8 @@ import { REEntityVisualSet } from "../visual/REEntityVisualSet";
 import { REVisual } from "../visual/REVisual";
 import { Game_REPrefabEvent } from "./PrefabEvent";
 import { VDirectionArrow } from "ts/visual/VDirectionArrow";
+import { REGame } from "ts/objects/REGame";
+import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Scene_Map {
@@ -97,8 +99,42 @@ Scene_Map.prototype.terminate = function() {
 
 var _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
-    _Scene_Map_update.call(this);
+
+    
+    if ($gameMap.isRESystemMap()) {
+        if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
+
+            if (REGame.camera.isFloorTransfering()) {
+                // マップ遷移中はコアシステムとしては何もしない。
+                // performFloorTransfer() すること。
+                return;
+            }
+            else {
+                RESystem.scheduler.stepSimulation();
+            }
+        }
+        
+        RESystem.minimapData.update();
+    }
+    else {
+        // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく
+        REGame.immediatelyCommandExecuteScheduler.stepSimulation();
+    }
+
     REVisual.update();
+
+
+    // Entity と Game_Player の位置を合わせるときは、↑で先に REVisual の座標を更新した後、
+    // Scene_Map.update の前に同期をかける必要がある。
+    // 位置合わせは Game_Player だけではなく Game_Map や Game_Screen など様々なオブジェクトに対しても影響するため、
+    // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
+    // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
+    if ($gameMap.isRESystemMap()) {
+        RMMZHelper.syncCameraPositionToGamePlayer();
+    }
+    
+    
+    _Scene_Map_update.call(this);
 }
 
 // RE Map 内では RMMZ 通常のメニューを禁止する

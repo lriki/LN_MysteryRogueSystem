@@ -40,13 +40,13 @@ test('PickAndPut', () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(actor1, LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
     dialogContext.closeDialog(true);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 足元のアイテムを拾う
-    dialogContext.postActivity(actor1, new LPickActivity());
+    dialogContext.postActivity(LPickActivity.make(actor1));
     dialogContext.closeDialog(true);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -63,7 +63,7 @@ test('PickAndPut', () => {
     expect(inventory.entities()[0]).toBe(item1);
 
     // item1 を置く
-    dialogContext.postActivity(actor1, LPutActivity.make(actor1, item1));
+    dialogContext.postActivity(LPutActivity.make(actor1, item1));
     dialogContext.closeDialog(true);    // 行動確定
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

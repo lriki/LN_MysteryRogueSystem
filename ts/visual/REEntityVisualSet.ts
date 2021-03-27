@@ -37,13 +37,13 @@ export class REEntityVisualSet {
     
     update(): void {
         this._sequelManager.update();
-        this._sequelManager.postUpdate();
+        //this._sequelManager.postUpdate();
 
         this._visualEntities.forEach(x => {
             x._update();
         });
 
-        this._sequelManager.update();
+        //this._sequelManager.update();
         this._sequelManager.postUpdate();
 
     }

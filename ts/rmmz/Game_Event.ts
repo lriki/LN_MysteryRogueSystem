@@ -45,3 +45,13 @@ Game_Event.prototype.setupPageSettings = function() {
 Game_Event.prototype.isREEntity = function(): boolean {
     return !!this._entityMetadata;
 }
+
+const _Game_Event_update = Game_Event.prototype.update;
+Game_Event.prototype.update = function() {
+    if ($gameMap.isRESystemMap()) {
+        
+    }
+    else {
+        _Game_Event_update.call(this);
+    }
+}

@@ -83,25 +83,6 @@ var _Game_Map_update = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
 
-    if (this.isRESystemMap()) {
-        if (!this.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
-
-            if (REGame.camera.isFloorTransfering()) {
-                // マップ遷移中はコアシステムとしては何もしない。
-                // performFloorTransfer() すること。
-                return;
-            }
-            else {
-                RESystem.scheduler.stepSimulation();
-            }
-        }
-        
-        RESystem.minimapData.update();
-    }
-    else {
-        // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく
-        REGame.immediatelyCommandExecuteScheduler.stepSimulation();
-    }
 }
 
 Game_Map.prototype.isRESystemMap = function(): boolean {
