@@ -32,6 +32,7 @@ export interface RMMZEventEntityMetadata {
 export interface RMMZEventPrefabMetadata {
     item?: string;
     enemy?: string;
+    system?: string;
 
     // deprecated
     weaponId?: number;
@@ -105,9 +106,9 @@ export class SRmmzHelpers {
         return !!data.itemId;
     }
 
-    public static isExitPointPrefab(data: RMMZEventEntityMetadata): boolean {
-        return data.prefab.includes("ExitPoint");
-    }
+    //public static isExitPointPrefab(data: RMMZEventEntityMetadata): boolean {
+    //    return data.prefab.includes("ExitPoint");
+    //}
 
     static readPrefabMetadata(event: IDataMapEvent): RMMZEventPrefabMetadata | undefined {
         if (event.pages && event.pages.length > 0) {
@@ -189,8 +190,10 @@ export class SRmmzHelpers {
         const prefabData = this.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
         assert(prefabData);
 
-        if (this.isExitPointPrefab(data)) {
-            return REEntityFactory.newExitPoint();
+        if (prefabData.system) {
+            if (prefabData.system.includes("RE-ExitPoint")) {
+                return REEntityFactory.newExitPoint();
+            }
         }
 
         if (prefabData.item) {
