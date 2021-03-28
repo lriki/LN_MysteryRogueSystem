@@ -329,7 +329,7 @@ export class REData
     static addSkill(name: string): number {
         const newId = this.skills.length;
         this.skills.push({
-            ...DSkill_Default,
+            ...DSkill_Default(),
             id: newId,
             name: name,
             effect: {

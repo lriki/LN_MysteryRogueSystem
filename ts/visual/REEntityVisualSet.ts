@@ -48,6 +48,10 @@ export class REEntityVisualSet {
 
     }
 
+    public sequelManager(): REVisualSequelManager {
+        return this._sequelManager;
+    }
+
     public findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined {
         return this._visualEntities.find(x => x.entity().entityId() == entity.entityId());
     }

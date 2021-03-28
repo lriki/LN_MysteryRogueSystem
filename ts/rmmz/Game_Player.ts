@@ -42,6 +42,7 @@ Game_Player.prototype.performTransfer = function() {
 const _Game_Player_update = Game_Player.prototype.update;
 Game_Player.prototype.update = function(sceneActive: boolean) {
     
+    /*
     if ($gameMap.isRESystemMap()) {
         const entity = REGame.camera.focusedEntity();
         if (entity && REVisual.entityVisualSet) {
@@ -63,6 +64,7 @@ Game_Player.prototype.update = function(sceneActive: boolean) {
         }
     }
     else {
+        */
         _Game_Player_update.call(this, sceneActive);
-    }
+    //}
 }

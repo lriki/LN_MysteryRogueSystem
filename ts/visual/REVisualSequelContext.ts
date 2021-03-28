@@ -56,7 +56,15 @@ export class REVisualSequelContext {
         return (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
     }
 
-    unlockCancellation() {
+    public lockCamera() {
+        REVisual._syncCamera = false;
+    }
+
+    public unlockCamera() {
+        REVisual._syncCamera = true;
+    }
+
+    public unlockCancellation() {
         this._cancellationLocked = false;
     }
 

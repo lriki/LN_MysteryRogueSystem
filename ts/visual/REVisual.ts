@@ -32,6 +32,8 @@ export class REVisual
     static spriteSet2: VSpriteSet | undefined;
     static guideGrid: VMapGuideGrid | undefined;
 
+    static _syncCamera: boolean =true;
+
     static initialize() {
         this.finalize();
         this.manager = new REVisual_Manager();

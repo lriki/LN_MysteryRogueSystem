@@ -278,6 +278,16 @@ export class LBattlerBehavior extends LBehavior {
         return this.restriction() > 0;
     }
 
+    // Game_Actor.prototype.attackAnimationId1
+    public attackAnimationId(): number {
+        return this.bareHandsAnimationId();
+    }
+    
+    // Game_Actor.prototype.bareHandsAnimationId
+    public bareHandsAnimationId(): number {
+        return 1;
+    }
+
     //------------------------------------------------------------
     
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {

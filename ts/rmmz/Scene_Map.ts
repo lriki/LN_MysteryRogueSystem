@@ -99,8 +99,6 @@ Scene_Map.prototype.terminate = function() {
 
 var _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
-
-    
     if ($gameMap.isRESystemMap()) {
         if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
 
@@ -130,7 +128,9 @@ Scene_Map.prototype.update = function() {
     // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
     // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
     if ($gameMap.isRESystemMap()) {
-        RMMZHelper.syncCameraPositionToGamePlayer();
+        if (REVisual._syncCamera) {
+            RMMZHelper.syncCameraPositionToGamePlayer();
+        }
     }
     
     

@@ -1,6 +1,7 @@
 import { REVisual_Entity } from "../visual/REVisual_Entity";
 import { RESequelSet } from "../objects/REGame_Sequel";
 import { REEntityVisualSet } from "./REEntityVisualSet";
+import { REVisual } from "./REVisual";
 
 export class REVisualSequelManager {
     private _entityVisualSet: REEntityVisualSet;
@@ -24,8 +25,7 @@ export class REVisualSequelManager {
             const runs = this._activeSequelSet.runs();
             if (this._currentSequelRun >= runs.length && this.isLogicalCompleted()) {
                 // すべてのアニメーションが終了した
-                this._runningVisuals.splice(0);
-                this._activeSequelSet = undefined;
+                this.onFinishedAllSequels();
             }
             else {
                 let next = -1;
@@ -48,6 +48,7 @@ export class REVisualSequelManager {
                         run.clips().forEach(x => {
                             const visual = this._entityVisualSet.findEntityVisualByEntity(x.entity());
                             if (visual) {
+                                REVisual._syncCamera = false; 
                                 visual.sequelContext()._start(x);
                                 this._runningVisuals.push(visual);
                             }
@@ -63,10 +64,15 @@ export class REVisualSequelManager {
             const runs = this._activeSequelSet.runs();
             if (this._currentSequelRun >= runs.length && this.isLogicalCompleted()) {
                 // すべてのアニメーションが終了した
-                this._runningVisuals.splice(0);
-                this._activeSequelSet = undefined;
+                this.onFinishedAllSequels();
             }
         }
+    }
+
+    onFinishedAllSequels(): void {
+        this._runningVisuals.splice(0);
+        this._activeSequelSet = undefined;
+        REVisual._syncCamera = true;
     }
 
     isRunning(): boolean {

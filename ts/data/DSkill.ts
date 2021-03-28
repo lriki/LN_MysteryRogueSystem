@@ -136,6 +136,8 @@ export interface DSkill {
     /** Name */
     name: string;
 
+    rmmzAnimationId: number;
+
     /** Cost */
     paramCosts: DParameterId[];
 
@@ -144,10 +146,13 @@ export interface DSkill {
     effect: DEffect;
 }
 
-export const DSkill_Default: DSkill = {
-    id: 0,
-    name: "null",
-    paramCosts: [],
-    scope: DEffectScope.None,
-    effect: DEffect_Default,
-};
+export function DSkill_Default(): DSkill {
+    return {
+        id: 0,
+        name: "null",
+        rmmzAnimationId: 0,
+        paramCosts: [],
+        scope: DEffectScope.None,
+        effect: DEffect_Default,
+    };
+}

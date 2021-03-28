@@ -69,30 +69,30 @@ declare interface IDataDamage
 
 declare interface IDataSkill
 {
-    id?: number;
-    animationId?: number;
+    id: number;
+    animationId: number;
     damage: IDataDamage;
-    description?: string;
-    effects?: IDataEffect[];
-    hitType?: number;
-    iconIndex?: number;
-    message1?: string;
-    message2?: string;
-    mpCost?: number;
-    name?: string;
-    note?: string;
-    occasion?: number;
-    repeats?: number;
-    requiredWtypeId1?: number;
-    requiredWtypeId2?: number;
-    scope?: number;
-    speed?: number;
-    stypeId?: number;
-    successRate?: number;
-    tpCost?: number;
-    tpGain?: number;
-    messageType?: number;
-    meta?: any;
+    description: string;
+    effects: IDataEffect[];
+    hitType: number;
+    iconIndex: number;
+    message1: string;
+    message2: string;
+    mpCost: number;
+    name: string;
+    note: string;
+    occasion: number;
+    repeats: number;
+    requiredWtypeId1: number;
+    requiredWtypeId2: number;
+    scope: number;
+    speed: number;
+    stypeId: number;
+    successRate: number;
+    tpCost: number;
+    tpGain: number;
+    messageType: number;
+    meta: any;
 }
 
 declare interface IDataAllItem

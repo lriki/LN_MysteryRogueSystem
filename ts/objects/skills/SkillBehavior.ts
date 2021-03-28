@@ -6,6 +6,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
+import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { onAttackReaction } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 
@@ -17,6 +18,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
     onPerforme(skillId: DSkillDataId, entity: LEntity, context: RECommandContext): void {
 
         const skill = REData.skills[skillId];
+        const subject = entity.getBehavior(LBattlerBehavior);
         ///const effector = new SEffectorFact(entity, skill.effect);
         
 
@@ -31,13 +33,18 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                 // 攻撃対象決定
                 const front = Helpers.makeEntityFrontPosition(entity, 1);
                 const block = REGame.map.block(front.x, front.y);
-                const reacor = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
-                if (reacor) {
+                const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
+                if (target) {
                     const effectContext = new REEffectContext(entity, skill.scope, skill.effect);
                     //effectContext.addEffector(effector);
 
+                    const rmmzAnimationId = (skill.rmmzAnimationId < 0) ? subject.attackAnimationId() : skill.rmmzAnimationId;
+                    if (rmmzAnimationId > 0) {
+                        context.postAnimation(target, rmmzAnimationId, true);
+                    }
+
                     
-                    context.post(reacor, entity, {effectContext: effectContext}, onAttackReaction);
+                    context.post(target, entity, {effectContext: effectContext}, onAttackReaction);
 
                     //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                 }

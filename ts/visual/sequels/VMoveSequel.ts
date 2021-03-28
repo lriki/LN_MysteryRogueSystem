@@ -10,6 +10,7 @@ import { VSequelHelper } from "./VSequelHelper";
  */
 export class REVisualSequel_Move extends REVisualSequel {
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+        context.unlockCamera();
         VSequelHelper.updateStepAnimPattern(visual);
 
         // 移動は直線距離ではなく X Y 個別に計算する。

@@ -369,8 +369,9 @@ export class REDataManager
             if (x) {
                 const id = REData.addSkill(x.name ?? "null");
                 const skill = REData.skills[id];
-                skill.paramCosts[RESystem.parameters.mp] = x.mpCost ?? 0;
-                skill.paramCosts[RESystem.parameters.tp] = x.tpCost ?? 0;
+                skill.rmmzAnimationId = x.animationId;
+                skill.paramCosts[RESystem.parameters.mp] = x.mpCost;
+                skill.paramCosts[RESystem.parameters.tp] = x.tpCost;
                 if ((x.damage.type ?? 0) > 0) {
                     skill.effect = this.makeEffect(x.damage);
                 }
