@@ -1,13 +1,13 @@
 
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { RE } from "ts/dialogs/EventExecutionDialog";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { LEntity } from "ts/objects/LEntity";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
+import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
 
 /**
  * [2020/11/1] NOTE: Player が乗ったときの UI 表示タイミング
@@ -45,7 +45,7 @@ export class REExitPointBehavior extends LBehavior {
     [onProceedFloorReaction](args: CommandArgs, context: RECommandContext): REResponse {
         const entity = args.self;
 
-        context.openDialog(entity, new RE.EventExecutionDialog(entity.rmmzEventId));
+        context.openDialog(entity, new REEventExecutionDialog(entity.rmmzEventId));
 
         return REResponse.Succeeded;
     }

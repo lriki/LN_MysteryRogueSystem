@@ -10,24 +10,9 @@ import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId,
 import { REEntityFactory } from "./REEntityFactory";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
+import { DHelpers, RMMZEventEntityMetadata } from "ts/data/DHelper";
 
-interface RMMZEventRawMetadata {
-    prefab: string;
-    states?: string[];
-}
 
-export interface RMMZEventEntityMetadata {
-    /**
-     * Entity Prefab の種別。EntityFactory から生成するためのキー。
-     * 
-     * 固定マップなどで明示的にイベントから生成される Entity は、必ず Prefab が必要。
-     * これが無いと、拾われる → 置かれた の時に、Map 上に出現したときにどの Prefab を元に
-     * RMMZ イベントを作ればよいのかわからなくなるため。
-     */
-    prefab: string;
-
-    states: string[];
-}
 
 export interface RMMZEventPrefabMetadata {
     item?: string;
@@ -53,54 +38,13 @@ export class SRmmzHelpers {
 
     static readEntityMetadata(event: Game_Event): RMMZEventEntityMetadata | undefined {
         if (event._pageIndex >= 0) {
-            return this.readEntityMetadataFromPage(event.page(), event.eventId());
+            return DHelpers.readEntityMetadataFromPage(event.page(), event.eventId());
         }
         else {
             return undefined;
         }
     }
 
-    static readEntityMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZEventEntityMetadata | undefined {
-
-        let list = page.list;
-        if (list) {
-            // collect comments
-            let comments = "";
-            for (let i = 0; i < list.length; i++) {
-                if (list[i].code == 108 || list[i].code == 408) {
-                    if (list[i].parameters) {
-                        comments += list[i].parameters;
-                    }
-                }
-            }
-    
-            let index = comments.indexOf("@REEntity");
-            if (index >= 0) {
-                let block = comments.substring(index + 6);
-                block = block.substring(
-                    block.indexOf("{"),
-                    block.indexOf("}") + 1);
-
-                let rawData: RMMZEventRawMetadata | undefined;
-                eval(`rawData = ${block}`);
-
-                if (rawData) {
-                    if (!rawData.prefab) {
-                        throw new Error(`Event#${eventId} - @REEntity.prefab not specified.`);
-                    }
-                    return {
-                        prefab: rawData.prefab,
-                        states: rawData.states ?? [],
-                    };
-                }
-                else {
-                    return undefined;
-                }
-            }
-        }
-        return undefined;
-    }
-    
 
     public static isItemPrefab(data: RMMZEventPrefabMetadata): boolean {
         return !!data.itemId;
@@ -142,9 +86,9 @@ export class SRmmzHelpers {
     }
     // こちらは UnitTest 用。Game_Event は使えないので $dataMap から、最初のイベントページ固定で作る
     public static createEntitiesFromRmmzFixedMapEventData(): void {
-        $dataMap.events.forEach((e: IDataMapEvent) => {
+        $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
             if (e && e.pages.length > 0) {
-                const metadata = SRmmzHelpers.readEntityMetadataFromPage(e.pages[0], e.id);
+                const metadata = DHelpers.readEntityMetadataFromPage(e.pages[0], e.id);
                 if (metadata) {
                     this.createEntityFromRmmzEvent(metadata, e.id, e.x, e.y);
                 }
@@ -178,7 +122,9 @@ export class SRmmzHelpers {
 
         const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabName : false);
         if (index >= 0) {
-            return databaseMap.events[index];
+            const event = databaseMap.events[index];
+            if (event) return event;
+            throw new Error(`${prefabName} not found in RE-Database map.`);
         }
         else {
             throw new Error(`${prefabName} not found in RE-Database map.`);

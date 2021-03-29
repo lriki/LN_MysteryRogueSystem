@@ -5,8 +5,6 @@ import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
 import { VManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
 import { REVisualSequel } from "ts/visual/REVisualSequel";
 import { REDialogContext } from "../system/REDialog";
-import { SSequelUnit } from "../objects/REGame_Sequel";
-import { RE } from "ts/dialogs/EventExecutionDialog";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { RESystem } from "ts/system/RESystem";
 import { VCollapseSequel } from "./sequels/CollapseSequel";
@@ -20,6 +18,7 @@ import { VIdleSequel } from "./sequels/VIdleSequel";
 import { REData } from "ts/data/REData";
 import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
+import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
 
 /**
  */
@@ -64,7 +63,7 @@ export class REVisual_Manager
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
             this._dialogNavigator._openMainDialog(new VManualActionDialogVisual(d));
-        else if (d instanceof RE.EventExecutionDialog)
+        else if (d instanceof REEventExecutionDialog)
             this._dialogNavigator.push(new REEventExecutionDialogVisual());
         else if (d instanceof LWarehouseDialog)
             this._dialogNavigator._openMainDialog(new VWarehouseDialog(d));

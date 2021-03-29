@@ -515,7 +515,7 @@ declare interface IDataMap
     tilesetId: number;
     width: number;
     data: number[];
-    events: IDataMapEvent[];
+    events: (IDataMapEvent | null)[];
     meta: any;
 }
 

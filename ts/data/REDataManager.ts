@@ -12,7 +12,7 @@ import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraits
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DLand_Default } from "./DLand";
+import { buildAppearanceTable, DLand, DLand_Default } from "./DLand";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
@@ -487,28 +487,21 @@ export class REDataManager
                     }
                 }
                 
-                if (parent && parent.name == "[Database]") {
-                    const land = (parent) ? REData.lands.find(x => parent.parentId && x.rmmzMapId == parent.parentId) : undefined;
-                    
-                    if (parent && land) {
-                        if (parent.name == "[Database]") {
-                            if (info.name?.startsWith("EventTable")) {
-                                land.eventTableMapId = i;
-                            }
-                            else if (info.name?.startsWith("ItemTable")) {
-                                land.itemTableMapId = i;
-                            }
-                            else if (info.name?.startsWith("EnemyTable")) {
-                                land.enemyTableMapId = i;
-                            }
-                            else if (info.name?.startsWith("TrapTable")) {
-                                land.trapTableMapId = i;
-                            }
-                            else {
-                                // 固定マップ or シャッフルマップ用のテンプレートマップ
-                            }
-                        }
-                    }
+                if (info.name?.includes("RE-EventTable")) {
+                    const land = this.findLand(i)
+                    if (land) land.eventTableMapId = i;
+                }
+                if (info.name?.includes("RE-ItemTable")) {
+                    const land = this.findLand(i)
+                    if (land) land.itemTableMapId = i;
+                }
+                if (info.name?.includes("RE-EnemyTable")) {
+                    const land = this.findLand(i)
+                    if (land) land.enemyTableMapId = i;
+                }
+                if (info.name?.includes("RE-TrapTable")) {
+                    const land = this.findLand(i)
+                    if (land) land.trapTableMapId = i;
                 }
             }
 
@@ -610,6 +603,49 @@ export class REDataManager
                 }
             }
         }
+
+        // Load Land database
+        for (const land of REData.lands) {
+            this.beginLoadLandDatabase(land);
+        }
+    }
+
+    private static beginLoadLandDatabase(land: DLand): void {
+        if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.enemyTable = buildAppearanceTable(obj); });
+    }
+    
+    private static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
+        const filename = `Map${this.padZero(rmmzMapId, 3)}.json`;
+        this.loadDataFile(filename, onLoad);
+    }
+    
+    private static loadDataFile(src: string, onLoad: (obj: any) => void) {
+        const xhr = new XMLHttpRequest();
+        const url = "data/" + src;
+        xhr.open("GET", url);
+        xhr.overrideMimeType("application/json");
+        xhr.onload = () => this.onXhrLoad(xhr, src, url, onLoad);
+        xhr.onerror = () => DataManager.onXhrError(src, src, url);
+        xhr.send();
+    }
+
+    private static onXhrLoad(xhr: XMLHttpRequest, src: string, url: string, onLoad: (obj: any) => void) {
+        if (xhr.status < 400) {
+            onLoad(JSON.parse(xhr.responseText));
+        } else {
+            DataManager.onXhrError(src, src, url);
+        }
+    }
+
+
+    private static findLand(rmmzMapId: number): DLand | undefined {
+        let mapId = rmmzMapId;
+        while (mapId > 0) {
+            const land = REData.lands.find(x => x.rmmzMapId == mapId);
+            if (land) return land;
+            mapId = $dataMapInfos[mapId].parentId;
+        }
+        return undefined;
     }
 
     public static loadPrefabDatabaseMap(): void {

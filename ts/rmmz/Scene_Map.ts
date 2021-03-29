@@ -18,6 +18,8 @@ declare global {
 
 var _Scene_Map_isReady = Scene_Map.prototype.isReady;
 Scene_Map.prototype.isReady = function() {
+    return _Scene_Map_isReady.call(this);
+    /*
     if (REDataManager.landMapDataLoading) {
         if (DataManager.isMapLoaded()) {
             // Land 定義マップの読み込みがすべて終わった
@@ -49,6 +51,7 @@ Scene_Map.prototype.isReady = function() {
     else {
         return _Scene_Map_isReady.call(this);
     }
+    */
 }
 
 var _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
@@ -62,15 +65,6 @@ Scene_Map.prototype.onMapLoaded = function() {
 var _Scene_Map_create = Scene_Map.prototype.create;
 Scene_Map.prototype.create = function() {
     _Scene_Map_create.call(this);
-
-    const aa =  Game_REPrefabEvent.prototype;
-    console.log("prototype", aa);
-/*
-    console.log("window", window);
-    //new Game_REPrefabEvent();
-    const aa = (window as any)["PrefabEvent"];
-    console.log("PrefabEvent", aa);
-*/
 }
 
 var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;

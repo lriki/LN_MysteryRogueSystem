@@ -1,4 +1,5 @@
-import { RMMZEventEntityMetadata, SRmmzHelpers } from "ts/system/SRmmzHelpers";
+import { RMMZEventEntityMetadata } from "ts/data/DHelper";
+import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { RMMZHelper } from "./RMMZHelper";
 
 declare global {

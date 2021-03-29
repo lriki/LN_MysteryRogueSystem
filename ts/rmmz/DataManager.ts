@@ -110,6 +110,8 @@ DataManager.loadMapData = function(mapId) {
 const _DataManager_isMapLoaded = DataManager.isMapLoaded;
 DataManager.isMapLoaded = function() {
     const result = _DataManager_isMapLoaded.call(DataManager);
+    return result;
+    /*
     if (result) {
         if (REDataManager.landMapDataLoading) {
             const land = REData.lands[REDataManager.loadedLandId];
@@ -139,6 +141,7 @@ DataManager.isMapLoaded = function() {
     else {
         return false;
     }
+    */
 };
 
 const _DataManager_createGameObjects = DataManager.createGameObjects;
