@@ -12,6 +12,7 @@ import { REGameManager } from "ts/system/REGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import "./Extension";
 import { RESystem } from 'ts/system/RESystem';
+import { LFloorId } from 'ts/objects/LLand';
 
 declare global {
     interface Number {
@@ -26,7 +27,7 @@ Number.prototype.clamp = function(min: number, max: number): number{
 
 export class TestEnv {
 
-    public static FloorId_FlatMap50x50: number = -1;
+    public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
 
     private static _databaseFiles = [
         { name: "$dataActors", src: "Actors.json" },
@@ -59,7 +60,7 @@ export class TestEnv {
             this.loadDataFile("RE_databaseMap", filename);
         }
 
-        this.FloorId_FlatMap50x50 = $dataMapInfos.findIndex(x => x && x.name == "FlatMap50x50");
+        this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
 
         /*
         // Unique Entitise
@@ -75,7 +76,7 @@ export class TestEnv {
 
     public static performFloorTransfer(): void {
         // TODO: ランダムマップはまだ
-        this.loadMapData(REGame.camera.transferingNewFloorId());
+        this.loadMapData(REGame.camera.transferingNewFloorId().rmmzFixedMapId());
         REGameManager.performFloorTransfer();
     }
 

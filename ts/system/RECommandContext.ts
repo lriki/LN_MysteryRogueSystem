@@ -15,6 +15,7 @@ import { SSequelContext } from "./SSequelContext";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { LFloorId } from "ts/objects/LLand";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -220,7 +221,7 @@ export class RECommandContext
      * @param y 
      * @param d 
      */
-    postTransferFloor(entity: LEntity, floorId: number, x: number = 0, y:number = 0, d: number = 0) {
+    postTransferFloor(entity: LEntity, floorId: LFloorId, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
             REGame.world._transferEntity(entity, floorId, x, y);
@@ -230,6 +231,15 @@ export class RECommandContext
         Log.postCommand("TransferFloor");
     }
     
+    public postTransferRMMZMap(entity: LEntity, mapId: number, x: number = 0, y:number = 0, d: number = 0) {
+        const m1 = () => {
+            Log.doCommand("TransferFloor");
+            $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "TransferFloor", func: m1 });
+        Log.postCommand("TransferFloor");
+    }
 
     postConsumeActionToken(entity: LEntity): void {
         const attr = entity.findAttribute(LUnitAttribute);

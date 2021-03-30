@@ -17,7 +17,7 @@ export interface RE_Data_Actor
     name: string;
 
     /** 初期配置フロア */
-    initialFloorId: number;
+    //initialFloorId: number;
     
     /** 初期配置 X */
     initialX: number;
@@ -35,7 +35,7 @@ export interface RE_Data_Actor
 export const DActor_Default: RE_Data_Actor = {
     id: 0,
     name: "null",
-    initialFloorId: 0,
+    //initialFloorId: 0,
     initialX: 0,
     initialY: 0,
     classId: 0,

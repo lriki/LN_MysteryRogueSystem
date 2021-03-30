@@ -303,7 +303,7 @@ export class LBattlerBehavior extends LBehavior {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
-                context.postTransferFloor(entity, REGame.map.land().exitEMMZMapId);
+                context.postTransferRMMZMap(entity, REGame.map.land().exitEMMZMapId);
             }
             else {
     

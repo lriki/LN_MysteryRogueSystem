@@ -22,6 +22,7 @@ import { DAbilityId } from "ts/data/DAbility";
 import { FlowFlags } from "typescript";
 import { LRoom } from "./LRoom";
 import { LActivity } from "./activities/LActivity";
+import { LFloorId } from "./LLand";
 
 enum BlockLayer
 {
@@ -147,7 +148,7 @@ export class LEntity extends LObject
      * 
      * 直接変更禁止。transfarMap を使うこと
      */
-    floorId: number = 0;
+    floorId: LFloorId = LFloorId.makeEmpty();
     x: number = 0;          /**< 論理 X 座標 */
     y: number = 0;          /**< 論理 Y 座標 */
 
@@ -367,7 +368,7 @@ export class LEntity extends LObject
             assert(this.ownerObjectId().index2() == 0);    // 何らか削除されているはず
             return response;
         }
-        else if (this.floorId > 0) {
+        else if (this.floorId.hasAny()) {
             REGame.map._removeEntity(this);
             return REResponse.Succeeded;
         }
@@ -610,7 +611,7 @@ export class LEntity extends LObject
      * Map 上に出現していても、Ground 以外のレイヤーに存在している場合は false を返す。
      */
     isOnGround(): boolean {
-        if (this.floorId > 0) {
+        if (this.floorId.hasAny()) {
             const block = REGame.map.block(this.x, this.y);
             return block.findEntityLayerKind(this) == BlockLayerKind.Ground;
         }

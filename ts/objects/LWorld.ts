@@ -6,6 +6,7 @@ import { LEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { TilingSprite } from "pixi.js";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
+import { LFloorId } from "./LLand";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -151,7 +152,7 @@ export class LWorld
      * 直ちに座標を変更するため、コマンドチェーン実行内からの呼び出しは禁止。
      * CommandContext.postTransferFloor() を使うこと。
      */
-    _transferEntity(entity: LEntity, floorId: number, x: number, y: number): boolean {
+    _transferEntity(entity: LEntity, floorId: LFloorId, x: number, y: number): boolean {
         if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);

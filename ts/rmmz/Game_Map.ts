@@ -1,4 +1,6 @@
+import { REData } from "ts/data/REData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
+import { LFloorId } from "ts/objects/LLand";
 import { RESystem } from "ts/system/RESystem";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
@@ -25,10 +27,6 @@ Game_Map.prototype.setup = function(mapId: number) {
 
     console.log("Game_Map.prototype.setup");
 
-    if (REDataManager.isLandMap(mapId)) {
-        FMapBuilder
-        throw new Error("isLandMap");
-    }
     // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済み。
     // transfarEntity で Player 操作中の Entity も別マップへ移動する。
     // この中で、Camera が Player を注視していれば Camera も Floor を移動することで、
@@ -37,10 +35,24 @@ Game_Map.prototype.setup = function(mapId: number) {
     // Game_Map 呼び出し元の Game_Player.performTransfer() で行うのも手だが、
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
-    else if (REDataManager.isRESystemMap(mapId)) {
+    if (REDataManager.isRESystemMap(mapId) || REDataManager.isLandMap(mapId)) {
+
+        let floorId: LFloorId;
+        if (REDataManager.isLandMap(mapId)) {
+            floorId = new LFloorId(REData.lands.findIndex(x => x.rmmzMapId == mapId), $gamePlayer._newX);
+        }
+        else {
+            // 固定マップへの直接遷移
+            //const landId = REData.maps[mapId].landId;
+            //const floorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == $dataMapInfos[mapId].name);
+            //assert(landId > 0);
+            //assert(floorNumber > 0);
+            floorId = LFloorId.makeByRmmzFixedMapId(mapId);//new LFloorId(landId, floorNumber);
+        }
+
         const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
         if (playerEntity) {
-            REGame.world._transferEntity(playerEntity, mapId, $gamePlayer._newX, $gamePlayer._newY);
+            REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
             assert(REGame.camera.isFloorTransfering());
             REGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
         }

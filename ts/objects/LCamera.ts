@@ -7,6 +7,7 @@ import { REGame } from "./REGame";
 import { RESystem } from "ts/system/RESystem";
 import { Log } from "ts/Common";
 import { LEntityId } from "./LObject";
+import { LFloorId } from "./LLand";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -16,7 +17,7 @@ import { LEntityId } from "./LObject";
 export class LCamera
 {
     private _focusedEntityId: LEntityId = LEntityId.makeEmpty();
-    private _transferingNewFloorId: number = 0;
+    private _transferingNewFloorId: LFloorId = LFloorId.makeEmpty();
     private _transferingNewX: number = 0;
     private _transferingNewY: number = 0;
 
@@ -37,10 +38,10 @@ export class LCamera
     }
 
     isFloorTransfering(): boolean {
-        return this._transferingNewFloorId > 0;
+        return this._transferingNewFloorId.hasAny();
     }
 
-    transferingNewFloorId(): number {
+    transferingNewFloorId(): LFloorId {
         return this._transferingNewFloorId;
     }
     
@@ -51,16 +52,16 @@ export class LCamera
         }
     }
 
-    reserveFloorTransfer(floorId: number, x: number, y: number, d: number) {
+    reserveFloorTransfer(floorId: LFloorId, x: number, y: number, d: number) {
         this._transferingNewFloorId = floorId;
         this._transferingNewX = x;
         this._transferingNewY = y;
-        RESystem.integration.onReserveTransferFloor(floorId, x, y, d);
+        //RESystem.integration.onReserveTransferFloor(floorId, x, y, d);
         Log.d("ReserveFloorTransfer");
     }
 
     clearFloorTransfering() {
-        this._transferingNewFloorId = 0;
+        this._transferingNewFloorId = LFloorId.makeEmpty();
         this._transferingNewX = 0;
         this._transferingNewY = 0;
     }

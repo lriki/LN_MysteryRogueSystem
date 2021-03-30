@@ -68,7 +68,7 @@ export class REGameManager
             if (x.id > 0) {
                 const unit = REEntityFactory.newActor(x.id);
                 unit.prefabKey = `Actor:${x.id}`;
-                unit.floorId = x.initialFloorId;
+                //unit.floorId = LFlo;//x.initialFloorId;
                 unit.x = x.initialX;
                 unit.y = x.initialY;
                 REGame.system.uniqueActorUnits.push(unit.entityId());

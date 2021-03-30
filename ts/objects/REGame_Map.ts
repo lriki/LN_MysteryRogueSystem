@@ -22,9 +22,22 @@ import { LStructure } from "./structures/LStructure";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { RECommandContext } from "ts/system/RECommandContext";
+import { LFloorId } from "./LLand";
 
 
+/*
+    ### ランダムフロアへ移動したときのフロー
+    - マップ移動イベントにより、RE-Land マップの (x,0) へ移動
+    - FloorInfo を確認。ランダムマップであれば、FMap をランダム構築
+    - FMap を使って LMap を setup
+    - 
 
+    ### 固定フロアへ移動したときのフロー
+    - マップ移動イベントにより、固定マップの任意の座標へ移動
+    - FloorInfo を確認。固定マップであれば、$dataMap から FMap を構築
+    - FMap を使って LMap を setup
+
+*/
 
 // serializable
 export interface RE_Game_Data
@@ -42,7 +55,7 @@ export interface RE_Game_Data
  */
 export class REGame_Map
 {
-    private _floorId: number = 0;
+    private _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;
     private _height: number = 0;
     private _blocks: REGame_Block[] = [];
@@ -55,7 +68,7 @@ export class REGame_Map
     constructor() {
     }
 
-    setup(floorId: number, mapData: FMap) {
+    setup(floorId: LFloorId, mapData: FMap) {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
         this._floorId = floorId;
         this.build(mapData);
@@ -142,11 +155,10 @@ export class REGame_Map
     }
 
     isValid(): boolean {
-        //console.log("isValid?", this._floorId, this._width);
-        return this._floorId > 0 && this._width > 0;
+        return this._floorId.hasAny() && this._width > 0;
     }
 
-    floorId(): number {
+    floorId(): LFloorId {
         return this._floorId;
     }
 
@@ -159,7 +171,7 @@ export class REGame_Map
     }
 
     land(): DLand {
-        return REData.lands[REData.maps[this._floorId].landId];
+        return REData.lands[this._floorId.index2()];
     }
 
     width(): number {
@@ -170,6 +182,7 @@ export class REGame_Map
         return this._height;
     }
 
+    /*
     isFixedMap(): boolean {
         return REData.maps[this._floorId]?.mapKind == REFloorMapKind.FixedMap;
     }
@@ -177,6 +190,7 @@ export class REGame_Map
     isRandomMap(): boolean {
         return REData.maps[this._floorId]?.mapKind == REFloorMapKind.RandomMap;
     }
+    */
 
     block(x: number, y: number) : REGame_Block;
     block(pos: Vector2, _?: any) : REGame_Block;
@@ -255,7 +269,7 @@ export class REGame_Map
      * 既に現在の Floor 上に登場済みの Entity に対してこのメソッドを呼び出すと失敗する。
      */
     appearEntity(entity: LEntity, x: number, y: number, layer?: BlockLayerKind): void {
-        assert(entity.floorId == 0);
+        assert(entity.floorId.isEmpty());
         entity.floorId= this.floorId();
         this.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
@@ -295,7 +309,7 @@ export class REGame_Map
         entity.clearOwner();
 
         assert(entity.floorId == this.floorId());
-        entity.floorId = 0;
+        entity.floorId = LFloorId.makeEmpty();
 
         const block = this.block(entity.x, entity.y);
         const result = block.removeEntity(entity);
