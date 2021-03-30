@@ -27,10 +27,6 @@ Spriteset_Map.prototype.initialize = function(): void {
 const _Spriteset_Map_destroy = Spriteset_Map.prototype.destroy;
 Spriteset_Map.prototype.destroy = function(options) {
     _Spriteset_Map_destroy.call(this, options);
-    if (REVisual.spriteSet2) {
-        REVisual.spriteSet2.destroy();
-        REVisual.spriteSet2 = undefined;
-    }
 }
 
 var _Spriteset_Map_prototype_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;

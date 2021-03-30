@@ -55,10 +55,10 @@ export class REGame_Map
     constructor() {
     }
 
-    setup(floorId: number) {
-        assert(this._entityIds.length == 0);
+    setup(floorId: number, mapData: FMap) {
+        assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
         this._floorId = floorId;
-        this.build();
+        this.build(mapData);
     }
 
     public mapdataRevision(): number {
@@ -69,8 +69,7 @@ export class REGame_Map
         this._mapdataRevision++;
     }
 
-    setupEmptyMap(width: number, height: number) {
-        assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
+    private setupEmptyMap(width: number, height: number) {
 
         this._width = width;
         this._height = height
@@ -81,21 +80,11 @@ export class REGame_Map
             const x = Math.trunc(i % this._width);
             const y = Math.trunc(i / this._width);
             this._blocks[i] = new REGame_Block(x, y);
-
-            // TileEntity 追加
-            //const tile = REEntityFactory.newTile(TileKind.Floor);
-            //tile.floorId = this._floorId;
-            //tile.x = x;
-            //tile.y = y;
-            //this._addEntityInternal(tile);
-            //this._blocks[i].addEntity(BlockLayerKind.Terrain, tile);
             this._blocks[i]._tileKind = TileKind.Floor;
         }
     }
 
-    private build(): void {
-        const data = new FMap(this._floorId);
-        RESystem.integration.onLoadFixedMapData(data);
+    private build(data: FMap): void {
         const builder = new FMapBuilder();
         builder.build(data, this);
 
@@ -170,7 +159,7 @@ export class REGame_Map
     }
 
     land(): DLand {
-        return REData.lands[REData.floors[this._floorId].landId];
+        return REData.lands[REData.maps[this._floorId].landId];
     }
 
     width(): number {
@@ -182,11 +171,11 @@ export class REGame_Map
     }
 
     isFixedMap(): boolean {
-        return REData.floors[this._floorId]?.mapKind == REFloorMapKind.FixedMap;
+        return REData.maps[this._floorId]?.mapKind == REFloorMapKind.FixedMap;
     }
 
     isRandomMap(): boolean {
-        return REData.floors[this._floorId]?.mapKind == REFloorMapKind.RandomMap;
+        return REData.maps[this._floorId]?.mapKind == REFloorMapKind.RandomMap;
     }
 
     block(x: number, y: number) : REGame_Block;

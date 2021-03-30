@@ -136,15 +136,13 @@ export class FRoom {
 
 
 export class FMap {
-    private _floorId: DFloorId;
     private _width: number;
     private _height: number;
     private _blocks: FMapBlock[];
     private _rooms: FRoom[];
     private _structures: FStructure[];
 
-    public constructor(floorId: DFloorId) {
-        this._floorId = floorId;
+    public constructor() {
         this._width = 0;
         this._height = 0;
         this._blocks = [];
@@ -162,10 +160,6 @@ export class FMap {
             this._blocks[i] = new FMapBlock(x, y);
         }
         this._rooms = [new FRoom(this, 0)];    // dummy
-    }
-
-    public floorId(): DFloorId {
-        return this._floorId;
     }
 
     public width(): number {

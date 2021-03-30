@@ -25,6 +25,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/objects/LFloorDirector";
 import { LScheduler } from "ts/objects/LScheduler";
+import { FMap } from "ts/floorgen/FMapData";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -96,9 +97,12 @@ export class REGameManager
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
 
+            const mapData = new FMap();
+            RESystem.integration.onLoadFixedMapData(mapData);
+
             // マップ構築
             REGame.map._removeAllEntities();
-            REGame.map.setup(REGame.camera.transferingNewFloorId());
+            REGame.map.setup(REGame.camera.transferingNewFloorId(), mapData);
             
             REGame.world.enterEntitiesToCurrentMap();
             RESystem.scheduler.clear();

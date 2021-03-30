@@ -82,17 +82,9 @@ export interface RE_Data_EntityFeature
 
 
 /**
- * フロアひとつ分。
- * 
- * インスタンスは REData.floors に格納され、$dataMapInfos.length 以下の ID はそれの ID、つまり RMMZ のマップ ID と等しい。
- * それ以降には、ランダムダンジョンとしてのフロア情報が、最大階層の分だけ生成される。
- * 例えば RMMZ で作成したマップの数が 100 個、Land の数が 3 個とすると、次のようになる。
- * - 0~100: RMMZ マップと対応する Floor
- * - 101~200: Land[1] の F1 ~ F100 (TODO: この数は、今は MAX_DUNGEON_FLOORS で固定)
- * - 201~300: Land[2] の F1 ~ F100
- * - 301~400: Land[3] の F1 ~ F100
+ * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
  */
-export interface RE_Data_Floor
+export interface DMap
 {
     /** ID (0 is Invalid). */
     id: number;
@@ -158,7 +150,7 @@ export class REData
     static actors: RE_Data_Actor[] = [];
     static monsters: RE_Data_Monster[] = [];
     static lands: DLand[] = [DLand_Default()];
-    static floors: RE_Data_Floor[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
+    static maps: DMap[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static factions: REData_Faction[] = [];
     static actions: DAction[] = [];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
@@ -192,7 +184,7 @@ export class REData
 
         this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
         this.lands = [];
-        this.floors = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
+        this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', typeName: "", factory: () => new LActivity()}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];
@@ -275,9 +267,9 @@ export class REData
      * Add floor.
      * @param mapId : RMMZ mapID
      */
-    static addFloor(mapId: number, landId: number, kind: REFloorMapKind): number {
-        const newId = this.floors.length;
-        this.floors.push({
+    static addMap(mapId: number, landId: number, kind: REFloorMapKind): number {
+        const newId = this.maps.length;
+        this.maps.push({
             id: newId,
             mapId: mapId,
             landId: landId,

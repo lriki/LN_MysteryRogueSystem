@@ -27,7 +27,6 @@ export class RMMZIntegration extends REIntegration {
     }
 
     onLoadFixedMapEvents(): void {
-        console.log("onLoadFixedMapEvents");
         
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {

@@ -120,8 +120,8 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
         }
     }
 
-    console.log("table", table);
-    throw new Error("stop");
+    //console.log("table", table);
+    //throw new Error("stop");
     
 
     return { entities: [] };

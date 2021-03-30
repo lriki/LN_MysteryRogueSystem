@@ -41,6 +41,15 @@ export class VDirectionArrow extends Sprite {
 
     // override
     update(): void {
+        
+        if ($gameMap.isRESystemMap()) {
+            this.visible = true;
+        }
+        else {
+            this.visible = false;
+            return;
+        }
+
         const entity = REGame.camera.focusedEntity();
         if (entity && REVisual.entityVisualSet) {
             const sprite = REVisual.entityVisualSet.getEntityVisualByEntity(entity).getRmmzSprite();

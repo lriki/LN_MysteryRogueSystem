@@ -6,7 +6,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DEffect, DEffectHitType, DEffectScope, DEffect_Default, DParameterEffectApplyType } from "./DSkill";
-import { RE_Data_Floor, REData, REFloorMapKind } from "./REData";
+import { DMap, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
@@ -522,7 +522,7 @@ export class REDataManager
         //   ひとまず欠番は多くなるが、最大フロア数でデータを作ってみる。
         {
             // 固定マップ
-            REData.floors = new Array($dataMapInfos.length + (REData.lands.length * REData.MAX_DUNGEON_FLOORS));
+            REData.maps = new Array($dataMapInfos.length);// + (REData.lands.length * REData.MAX_DUNGEON_FLOORS));
             for (let i = 0; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
                 if (this.isDatabaseMap(i)) {
@@ -531,7 +531,7 @@ export class REDataManager
                 else if (info && info.name?.startsWith("RE-Land:")) {
                     const land = REData.lands.find(x => x.rmmzMapId == i);
                     assert(land);
-                    REData.floors[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
+                    REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
                 }
                 else if (info && info.parentId) {
                     const parentInfo = $dataMapInfos[info.parentId];
@@ -549,21 +549,21 @@ export class REDataManager
                         }
 
                         if (kind !== undefined) {
-                            REData.floors[i] = { id: i, landId: land.id, mapId: i, mapKind: kind };
+                            REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: kind };
                         }
                         else {
                             // RE には関係のないマップ
-                            REData.floors[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
+                            REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                         }
                     }
                     else {
                         // RE には関係のないマップ
-                        REData.floors[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
+                        REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                     }
                 }
                 else {
                     // RE には関係のないマップ
-                    REData.floors[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
+                    REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                 }
 
                 /*
@@ -588,13 +588,14 @@ export class REDataManager
 
 
             // ランダムマップ
+            /*
             for (let i = 1; i < REData.lands.length; i++) { // LandId=0 はダミーなので生成しない
                 const beginFloorId = $dataMapInfos.length + (i * REData.MAX_DUNGEON_FLOORS);
                 REData.lands[i].floorIds = new Array(REData.MAX_DUNGEON_FLOORS);
                 for (let iFloor = 0; iFloor < REData.MAX_DUNGEON_FLOORS; iFloor++){
                     const floorId = beginFloorId + iFloor;
                     REData.lands[i].floorIds[iFloor] = floorId;
-                    REData.floors[floorId] = {
+                    REData.maps[floorId] = {
                         id: floorId,
                         landId: REData.lands[i].id,
                         mapId: 0,
@@ -602,6 +603,7 @@ export class REDataManager
                     };
                 }
             }
+            */
         }
 
         // Load Land database
@@ -702,8 +704,8 @@ export class REDataManager
         };
     }
 
-    static floor(mapId: number): RE_Data_Floor {
-        return REData.floors[mapId];
+    static floor(mapId: number): DMap {
+        return REData.maps[mapId];
     }
 
     static isDatabaseMap(mapId: number) : boolean {
@@ -723,12 +725,12 @@ export class REDataManager
     }
 
     static isRESystemMap(mapId: number) : boolean {
-        const flooor = REData.floors[mapId];
+        const flooor = REData.maps[mapId];
         return flooor.landId > 0;
     }
 
     static isFloorMap(mapId: number) : boolean {
-        return REData.floors[mapId].landId > 0;
+        return REData.maps[mapId].landId > 0;
         /*
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("REFloor:"))

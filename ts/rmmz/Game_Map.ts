@@ -1,3 +1,4 @@
+import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { RESystem } from "ts/system/RESystem";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
@@ -22,7 +23,12 @@ Game_Map.prototype.setup = function(mapId: number) {
     
     _Game_Map_setup.call(this, mapId);
 
+    console.log("Game_Map.prototype.setup");
 
+    if (REDataManager.isLandMap(mapId)) {
+        FMapBuilder
+        throw new Error("isLandMap");
+    }
     // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済み。
     // transfarEntity で Player 操作中の Entity も別マップへ移動する。
     // この中で、Camera が Player を注視していれば Camera も Floor を移動することで、
@@ -31,7 +37,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     // Game_Map 呼び出し元の Game_Player.performTransfer() で行うのも手だが、
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
-    if (REDataManager.isRESystemMap(mapId)) {
+    else if (REDataManager.isRESystemMap(mapId)) {
         const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
         if (playerEntity) {
             REGame.world._transferEntity(playerEntity, mapId, $gamePlayer._newX, $gamePlayer._newY);

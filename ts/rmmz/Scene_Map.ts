@@ -89,6 +89,10 @@ Scene_Map.prototype.terminate = function() {
         REVisual.entityVisualSet.ternimate();
         REVisual.entityVisualSet = undefined;
     }
+    if (REVisual.spriteSet2) {
+        //REVisual.spriteSet2.destroy();
+        REVisual.spriteSet2 = undefined;
+    }
 }
 
 var _Scene_Map_update = Scene_Map.prototype.update;
