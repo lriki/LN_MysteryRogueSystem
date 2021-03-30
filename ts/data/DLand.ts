@@ -3,7 +3,7 @@ import { DHelpers } from "./DHelper";
 
 
 export type DLandId = number;
-export type DFloorId = number;
+export type DMapId = number;
 
 export interface DAppearanceTableEntity {
     prefabName: string;
@@ -16,11 +16,14 @@ export interface DAppearanceTable {
     entities: DAppearanceTableEntity[];
 }
 
+export interface DFloorInfo {
+    fixedMapName: string;
+}
+
 /**
  * ダンジョンや町ひとつ分。
  */
-export interface DLand
-{
+export interface DLand {
     /** ID (0 is Invalid). */
     id: number;
 
@@ -48,8 +51,10 @@ export interface DLand
 
     exitEMMZMapId: number;
 
+    floorInfos: DFloorInfo[];
+
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
-    floorIds: DFloorId[];
+    floorIds: DMapId[];
 }
 
 export function DLand_Default(): DLand {
@@ -66,8 +71,24 @@ export function DLand_Default(): DLand {
         enemyTable: { entities: [] },
         trapTable: { entities: [] },
         exitEMMZMapId:0,
+        floorInfos: [],
         floorIds: []
     };
+}
+
+export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
+    const floors: DFloorInfo[] = [];
+    for (const event of mapData.events) {
+        if (!event) continue;
+        const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
+        if (floorData) {
+            floors[event.x] = {
+                fixedMapName: floorData.fixedMap ?? "",
+            };
+        }
+    }
+    console.log("floors", floors);
+    return floors;
 }
 
 export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {

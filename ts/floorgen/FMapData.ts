@@ -1,4 +1,4 @@
-import { DFloorId } from "ts/data/DLand";
+import { DMapId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { TileKind } from "ts/objects/REGame_Block";
 import { FStructure } from "./FStructure";

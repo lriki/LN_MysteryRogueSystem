@@ -12,7 +12,7 @@ import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraits
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { buildAppearanceTable, DLand, DLand_Default } from "./DLand";
+import { buildAppearanceTable, buildFloorTable, DLand, DLand_Default } from "./DLand";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
@@ -613,6 +613,7 @@ export class REDataManager
     }
 
     private static beginLoadLandDatabase(land: DLand): void {
+        if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => { land.floorInfos = buildFloorTable(obj); });
         if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.enemyTable = buildAppearanceTable(obj); });
     }
     
