@@ -22,7 +22,7 @@ import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
-import { DTemplateMap_Default } from "./DMap";
+import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 
 
 declare global {  
@@ -534,8 +534,10 @@ export class REDataManager
                 else if (info.parentId > 0 && $dataMapInfos[info.parentId].name.includes("RE-TemplateMaps")) {
                     REData.maps[i] = { id: i, landId: 0, mapId: i, mapKind: REFloorMapKind.TemplateMap };
                     REData.templateMaps.push({
+                        ...DTemplateMap_Default(),
                         id: REData.templateMaps.length,
                         name: info.name,
+                        mapId: i,
                     });
                 }
                 else if (info.name?.startsWith("RE-Land:")) {
@@ -616,10 +618,19 @@ export class REDataManager
             */
         }
 
+        // Load Template Map
+        for (const templateMap of REData.templateMaps) {
+            this.beginLoadTemplateMap(templateMap);
+        }
+
         // Load Land database
         for (const land of REData.lands) {
             this.beginLoadLandDatabase(land);
         }
+    }
+
+    private static beginLoadTemplateMap(templateMap: DTemplateMap): void {
+        if (templateMap.mapId > 0) this.beginLoadMapData(templateMap.mapId, (obj: any) => { buildTemplateMapData(obj, templateMap); });
     }
 
     private static beginLoadLandDatabase(land: DLand): void {

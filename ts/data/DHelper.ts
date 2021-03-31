@@ -24,6 +24,25 @@ export interface RMMZEventEntityMetadata {
 }
 
 export class DHelpers {
+    public static TILE_ID_A1 = 2048;
+
+    public static getMapTopTile(mapData: IDataMap, x: number, y: number): number {
+        for (let z = 3; z >= 0; z--) {
+            const tile = mapData.data[(z * mapData.height + y) * mapData.width + x] || 0;
+            if (tile > 0) return tile;
+        }
+        return 0;
+    }
+
+    public static isAutotile(tileId: number) {
+        return tileId >= this.TILE_ID_A1;
+    };
+
+    public static getAutotileKind(tileId: number): number {
+        //if (!this.isAutotile(tileId)) return 0;
+        return Math.floor((tileId - this.TILE_ID_A1) / 48);
+    };
+    
     static readFloorMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZFloorMetadata | undefined {
 
         let list = page.list;

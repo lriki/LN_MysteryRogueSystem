@@ -1,3 +1,4 @@
+import { REData } from "ts/data/REData";
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame_Map } from "ts/objects/REGame_Map";
 import { SMinimapData } from "ts/system/SMinimapData";
@@ -22,10 +23,13 @@ export class GameMapBuilder {
 
 
     public build(coreMap: REGame_Map): void {
+        const templateMap = REData.templateMaps[1];
+
+        $dataMap.tilesetId = templateMap.tilesetId;
         $dataMap.width = coreMap.width();
         $dataMap.height = coreMap.height();
         $dataMap.data = new Array<number>($dataMap.width * $dataMap.height * 5);
-
+        $gameMap.changeTileset($dataMap.tilesetId);
         
         for (let y = 0; y < $dataMap.height; y++) {
             for (let x = 0; x < $dataMap.width; x++) {
@@ -33,13 +37,18 @@ export class GameMapBuilder {
                 
                 switch (block._blockComponent) {
                     case FBlockComponent.None:
-                        this.putAutoTile(x, y, 0, 1);
+                        if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
+                            //this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
+                        }
+                        else {
+                            this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
+                        }
                         break;
                     case FBlockComponent.Room:
-                        this.setTileId(x, y, 0, 33);
+                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
                         break;
                     case FBlockComponent.Passageway:
-                        this.setTileId(x, y, 0, 34);
+                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
                         break;
                 }
             }

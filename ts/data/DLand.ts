@@ -93,13 +93,6 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
 
 export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
     
-    const topTile = function(x: number, y: number): number {
-        for (let z = 3; z >= 0; z--) {
-            const tile = mapData.data[(z * mapData.height + y) * mapData.width + x] || 0;
-            if (tile > 0) return tile;
-        }
-        return 0;
-    };
 
     const findEvent = function(x: number, y: number): IDataMapEvent | undefined {
         for (const event of mapData.events) {
@@ -119,13 +112,13 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
             const x = event.x;
             const y = event.y;
 
-            const baseTile = topTile(x, y);
+            const baseTile = DHelpers.getMapTopTile(mapData, x, y);
             let x2 = x + 1;
 
             // 右へ伸びるタイルをカウントするときは E タイルのみを対象とする
             if (Tilemap.TILE_ID_E <= baseTile && baseTile < Tilemap.TILE_ID_A5) {
                 for (; x2 < mapData.width; x2++) {
-                    if (baseTile != topTile(x2, y) || findEvent(x2, y)) {
+                    if (baseTile != DHelpers.getMapTopTile(mapData, x2, y) || findEvent(x2, y)) {
                         
                         break;
                     }
