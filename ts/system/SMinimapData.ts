@@ -88,7 +88,7 @@ export class SMinimapData {
 
                 switch (block._blockComponent) {
                     default:
-                        const tileId = this.getAutoTileId(x, y, FBlockComponent.None);
+                        const tileId = this.getAutotileShape(x, y, FBlockComponent.None);
 
                         if (block._passed)
                             this.setData(x, y, 0, Tilemap.TILE_ID_A2 + tileId);
@@ -173,7 +173,7 @@ export class SMinimapData {
     // 5: 縦と横が異種タイル (対角は不問)
     // これらを↓に沿って配置したもの
     // https://www.f-sp.com/category/RPG%E3%83%84%E3%82%AF%E3%83%BC%E3%83%AB?page=1480575168
-    private _subtileToAutoTileTable: number[][] = [
+    public static _subtileToAutoTileTable: number[][] = [
         [1,1,1,1],[2,1,1,1],[1,2,1,1],[2,2,1,1], [1,1,1,2],[2,1,1,2],[1,2,1,2],[2,2,1,2],
         [1,1,2,1],[2,1,2,1],[1,2,2,1],[2,2,2,1], [1,1,2,2],[2,1,2,2],[1,2,2,2],[2,2,2,2],
         [4,1,4,1],[4,2,4,1],[4,1,4,2],[4,2,4,2], [3,3,1,1],[3,3,1,2],[3,3,2,1],[3,3,2,2],
@@ -183,7 +183,7 @@ export class SMinimapData {
         [4,1,5,3],[4,2,5,3],[5,5,4,4],[5,3,5,3], [4,4,5,5],[3,5,3,5],[5,5,5,5],[5,5,5,5],
     ];
 
-    private getAutoTileId(x: number, y: number, component: FBlockComponent): number {
+    private getAutotileShape(x: number, y: number, component: FBlockComponent): number {
         let subtiles: number[] = [0, 0, 0, 0];
         {
             const checkOffsets: Point[] = [ { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: 1, y: 1 } ];
@@ -204,7 +204,7 @@ export class SMinimapData {
         }
 
 		// subtiles が一致するものを線形で検索
-        const id = this._subtileToAutoTileTable.findIndex(x => {
+        const id = SMinimapData._subtileToAutoTileTable.findIndex(x => {
             return x[SubTile.UL] == subtiles[SubTile.UL] &&
                 x[SubTile.UR] == subtiles[SubTile.UR] &&
                 x[SubTile.LL] == subtiles[SubTile.LL] &&
@@ -218,6 +218,7 @@ export class SMinimapData {
     }
 
 
+    /*
     private getAutoTileDirBits(x: number, y: number, component: FBlockComponent): number {
         const map = REGame.map;
         let result = 0;
@@ -232,6 +233,7 @@ export class SMinimapData {
         result |= (this.getSameKindTile(x + 1, y - 1, component)) ? 0b000000000 : 0b100000000;
         return result;
     }
+    */
 
     // 同種タイルかどうか
     private getSameKindTile(x: number, y: number, component: FBlockComponent): boolean {
@@ -240,5 +242,6 @@ export class SMinimapData {
         if (block._blockComponent == component) return true;
         return false;
     }
+    
 
 }

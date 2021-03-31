@@ -1,5 +1,19 @@
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame_Map } from "ts/objects/REGame_Map";
+import { SMinimapData } from "ts/system/SMinimapData";
+
+
+interface Point {
+    x: number;
+    y: number;
+}
+
+enum SubTile {
+    UL,
+    UR,
+    LL,
+    LR,
+}
 
 /**
  * RE Core 側で生成されたマップ (ランダムマップ) を、RMMZ 側のマップデータに反映する。
@@ -19,7 +33,7 @@ export class GameMapBuilder {
                 
                 switch (block._blockComponent) {
                     case FBlockComponent.None:
-                        this.setTileId(x, y, 0, 32);
+                        this.putAutoTile(x, y, 0, 1);
                         break;
                     case FBlockComponent.Room:
                         this.setTileId(x, y, 0, 33);
@@ -40,16 +54,86 @@ export class GameMapBuilder {
         return $dataMap.width;
     }
 
+    private isValidPos(x: number, y: number): boolean {
+        return (0 <= x && x < this.width() && 0 <= y && y < this.height());
+    }
+
     private tileId(x: number, y: number, z: number): number {
         const width = $dataMap.width;
         const height = $dataMap.height;
         return $dataMap.data[(z * height + y) * width + x] || 0;
     }
 
-    private setTileId(x: number, y: number, z: number, value: number): void {
+    private setTileId(x: number, y: number, z: number, tileId: number): void {
         const width = $dataMap.width;
         const height = $dataMap.height;
-        $dataMap.data[(z * height + y) * width + x] = value;
+        $dataMap.data[(z * height + y) * width + x] = tileId;
+    }
+
+    private putAutoTile(x: number, y: number, z: number, autoTileKind: number): void {
+        const tileId = Tilemap.makeAutotileId(autoTileKind, this.getAutotileShape(x, y, z, autoTileKind));
+        this.setTileId(x, y, z, tileId);
+
+        if (this.isValidPos(x - 1, y - 1)) this.refreshAutoTile(x - 1, y - 1, z, autoTileKind);
+        if (this.isValidPos(x, y - 1)) this.refreshAutoTile(x, y - 1, z, autoTileKind);
+        if (this.isValidPos(x + 1, y - 1)) this.refreshAutoTile(x + 1, y - 1, z, autoTileKind);
+        if (this.isValidPos(x - 1, y)) this.refreshAutoTile(x - 1, y, z, autoTileKind);
+        if (this.isValidPos(x + 1, y)) this.refreshAutoTile(x + 1, y, z, autoTileKind);
+        if (this.isValidPos(x - 1, y + 1)) this.refreshAutoTile(x - 1, y + 1, z, autoTileKind);
+        if (this.isValidPos(x, y + 1)) this.refreshAutoTile(x, y + 1, z, autoTileKind);
+        if (this.isValidPos(x + 1, y + 1)) this.refreshAutoTile(x + 1, y + 1, z, autoTileKind);
+    }
+
+    private refreshAutoTile(x: number, y: number, z: number, autoTileKind: number): void {
+        if (Tilemap.getAutotileKind(this.tileId(x, y, z)) == autoTileKind) {
+            const tileId = Tilemap.makeAutotileId(autoTileKind, this.getAutotileShape(x, y, z, autoTileKind));
+            this.setTileId(x, y, z, tileId);
+        }
+    }
+    
+    private getAutotileShape(x: number, y: number, z: number, autoTileKind: number): number {
+        let subtiles: number[] = [0, 0, 0, 0];
+        {
+            const checkOffsets: Point[] = [ { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: 1, y: 1 } ];
+
+            // 左上、右上、左下、右下、の順で SubtileID (1~5) を決定する
+            for (let i = 0; i < 4; i++) {
+                const ox = checkOffsets[i].x;
+                const oy = checkOffsets[i].y;
+                const diag = this.getSameKindTile(x + ox, y + oy, z, autoTileKind);   // 対角
+                const hori = this.getSameKindTile(x + ox, y, z, autoTileKind);        // 横
+                const vert = this.getSameKindTile(x, y + oy, z, autoTileKind);        // 縦
+                if (diag && vert && hori) subtiles[i] = 1;             // 1: すべて同種タイル
+                else if (!diag && vert && hori) subtiles[i] = 2;       // 2: 縦と横が同種タイル (対角のみ異種タイル)
+                else if (!vert && hori) subtiles[i] = 3;               // 3: 縦のみ異種タイル (横のみ同種タイル・対角は不問)
+                else if (vert && !hori) subtiles[i] = 4;               // 4: 横のみ異種タイル (縦のみ同種タイル・対角は不問)
+                else subtiles[i] = 5;                                  // 5: 縦と横が異種タイル (対角は不問)
+            }
+        }
+
+		// subtiles が一致するものを線形で検索
+        const id = SMinimapData._subtileToAutoTileTable.findIndex(x => {
+            return x[SubTile.UL] == subtiles[SubTile.UL] &&
+                x[SubTile.UR] == subtiles[SubTile.UR] &&
+                x[SubTile.LL] == subtiles[SubTile.LL] &&
+                x[SubTile.LR] == subtiles[SubTile.LR];
+        });
+        if (id >= 0)
+            return id;
+        else
+            return 0;
+            //throw new Error();
+    }
+    
+    // 同種タイルかどうか
+    private getSameKindTile(x: number, y: number, z: number,autoTileKind: number): boolean {
+        const tileId = this.tileId(x, y, z);
+        if (Tilemap.isAutotile(tileId) && Tilemap.getAutotileKind(tileId) == autoTileKind) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 

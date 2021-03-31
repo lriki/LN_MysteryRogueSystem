@@ -3,6 +3,7 @@ import { REVisual } from "ts/visual/REVisual";
 
 
 export class RMMZHelper {
+    public static TILE_ID_A1 = 2048;
 
     public static setRegionId(x: number, y: number, regionId: number): void {
         //if ($dataMap.data) {
@@ -20,6 +21,10 @@ export class RMMZHelper {
             $dataMap.data[(z * height + y) * width + x] = value;
         }
     }
+
+    static getAutotileKind(tileId: number): number {
+        return Math.floor((tileId - this.TILE_ID_A1) / 48);
+    };
 
     // https://www.f-sp.com/category/RPG%E3%83%84%E3%82%AF%E3%83%BC%E3%83%AB?page=1480575168
     // 異種タイルが 1
