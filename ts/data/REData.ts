@@ -20,6 +20,7 @@ import { DAbility, DAbilityId } from "./DAbility";
 import { DMonsterHouse } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
+import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 
 export type DParameterId = number;
 
@@ -28,6 +29,8 @@ export enum REFloorMapKind
 {
     // データ定義用のマップ。ここへの遷移は禁止
     Land,
+
+    TemplateMap,
 
     FixedMap,
     ShuffleMap,
@@ -151,6 +154,7 @@ export class REData
     static monsters: RE_Data_Monster[] = [];
     static lands: DLand[] = [DLand_Default()];
     static maps: DMap[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
+    static templateMaps: DTemplateMap[] = [];
     static factions: REData_Faction[] = [];
     static actions: DAction[] = [];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
@@ -185,6 +189,7 @@ export class REData
         this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
         this.lands = [];
         this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
+        this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', typeName: "", factory: () => new LActivity()}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];

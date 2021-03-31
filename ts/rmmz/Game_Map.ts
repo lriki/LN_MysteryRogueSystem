@@ -43,11 +43,7 @@ Game_Map.prototype.setup = function(mapId: number) {
         }
         else {
             // 固定マップへの直接遷移
-            //const landId = REData.maps[mapId].landId;
-            //const floorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == $dataMapInfos[mapId].name);
-            //assert(landId > 0);
-            //assert(floorNumber > 0);
-            floorId = LFloorId.makeByRmmzFixedMapId(mapId);//new LFloorId(landId, floorNumber);
+            floorId = LFloorId.makeByRmmzFixedMapId(mapId);
         }
 
         const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);

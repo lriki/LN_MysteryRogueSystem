@@ -16,6 +16,8 @@ import { REVisual } from "../visual/REVisual";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { RESystem } from "ts/system/RESystem";
+import { REGame_Map } from "ts/objects/REGame_Map";
+import { GameMapBuilder } from "./GameMapBuilder";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void {
@@ -35,6 +37,11 @@ export class RMMZIntegration extends REIntegration {
             }
         });
         //RESystem.minimapData.refresh();
+    }
+    
+    onRefreshGameMap(map: REGame_Map): void {
+        const builder = new GameMapBuilder();
+        builder.build(map);
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {

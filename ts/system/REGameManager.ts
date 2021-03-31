@@ -26,6 +26,9 @@ import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/objects/LFloorDirector";
 import { LScheduler } from "ts/objects/LScheduler";
 import { FMap } from "ts/floorgen/FMapData";
+import { FMapBuilder } from "ts/floorgen/FMapBuilder";
+import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/PluginParameters";
+import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -96,13 +99,29 @@ export class REGameManager
     // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済みでなければならない。
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
+            const newFloorId = REGame.camera.transferingNewFloorId();
 
             const mapData = new FMap();
-            RESystem.integration.onLoadFixedMapData(mapData);
+            if (newFloorId.rmmzFixedMapId() > 0) {
+                // 固定マップ
+                RESystem.integration.onLoadFixedMapData(mapData);
+                const builder = new FMapBuilder();
+                builder.buildForFixedMap(mapData);
+            }
+            else {
+                mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
+                (new FMiddleSingleRoomGenerator()).generate(mapData);
+                const builder = new FMapBuilder();
+                builder.buildForFixedMap(mapData);
+            }
 
             // マップ構築
             REGame.map._removeAllEntities();
-            REGame.map.setup(REGame.camera.transferingNewFloorId(), mapData);
+            REGame.map.setup(newFloorId, mapData);
+
+            if (newFloorId.isRandomMap()) {
+                RESystem.integration.onRefreshGameMap(REGame.map);
+            }
             
             REGame.world.enterEntitiesToCurrentMap();
             RESystem.scheduler.clear();

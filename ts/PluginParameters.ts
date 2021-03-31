@@ -10,6 +10,12 @@ export var paramFixedMapMonsterHouseRoomRegionId = 2;
 // 固定マップで通路をマークするためのリージョンID
 export var paramFixedMapPassagewayRegionId = 8;
 
+// ランダムマップの最大幅 (12の倍数)
+export var paramRandomMapDefaultWidth = 60;
+
+// ランダムマップの最大高さ (12の倍数)
+export var paramRandomMapDefaultHeight = 48;
+
 /*
 // 
 export var paramMapSkillEffectsMapId = Number(PluginManager.parameters(pluginName)['MapSkillEffectsMapId']);

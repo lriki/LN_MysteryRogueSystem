@@ -77,7 +77,11 @@ export class LFloorId {
 
     public rmmzFixedMapId(): number {
         const info = this.floorInfo();
-        return $dataMapInfos.findIndex(x => x.name == info.fixedMapName);
+        return $dataMapInfos.findIndex(x => x && x.name == info.fixedMapName);
+    }
+
+    public isRandomMap(): boolean {
+        return this.rmmzFixedMapId() <= 0;
     }
 }
 

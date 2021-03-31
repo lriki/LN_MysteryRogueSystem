@@ -6,21 +6,18 @@ import { FMonsterHouseStructure } from "./FStructure";
 
 
 export class FMapBuilder {
-    private _passes: FMapBuildPass[];
 
-    public constructor() {
-        this._passes = [
+    public buildForFixedMap(data: FMap): void {
+        const passes = [
             new FMapBuildPass_MakeRoomId(),
             new FMapBuildPass_ResolveRoomShapes(),
             new FMapBuildPass_MarkMonsterHouse(),
         ];
-    }
-
-    public build(data: FMap, map: REGame_Map): void {
         // Apply passes
-        this._passes.forEach(pass => pass.execute(data));
-
+        passes.forEach(pass => pass.execute(data));
     }
+
+    
 }
 
 export abstract class FMapBuildPass {

@@ -98,8 +98,6 @@ export class REGame_Map
     }
 
     private build(data: FMap): void {
-        const builder = new FMapBuilder();
-        builder.build(data, this);
 
         {
             const width = data.width();

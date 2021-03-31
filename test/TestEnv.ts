@@ -13,6 +13,7 @@ import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import "./Extension";
 import { RESystem } from 'ts/system/RESystem';
 import { LFloorId } from 'ts/objects/LLand';
+import { REGame_Map } from 'ts/objects/REGame_Map';
 
 declare global {
     interface Number {
@@ -173,6 +174,10 @@ export class TestEnvIntegration extends REIntegration {
 
     onLoadFixedMapEvents(): void {
         SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData();
+    }
+
+    onRefreshGameMap(map: REGame_Map): void {
+        // Visual 表示は伴わない
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {

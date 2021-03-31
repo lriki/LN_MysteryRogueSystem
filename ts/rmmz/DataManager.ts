@@ -51,6 +51,7 @@ import { assert } from "../Common";
 const _DataManager_loadMapData = DataManager.loadMapData;
 DataManager.loadMapData = function(mapId) {
 
+    /*
     const floor = REDataManager.floor(mapId);
 
     if (floor.landId > 0) {
@@ -104,6 +105,9 @@ DataManager.loadMapData = function(mapId) {
         REDataManager.landMapDataLoading = false;
         _DataManager_loadMapData.call(DataManager, mapId);
     }
+    */
+    REGame.map.releaseMap();
+    _DataManager_loadMapData.call(DataManager, mapId);
 }
 
 // Scene_Map.isReady() から呼ばれる

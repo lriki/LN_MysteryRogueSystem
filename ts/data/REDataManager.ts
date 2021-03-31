@@ -22,6 +22,7 @@ import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
+import { DTemplateMap_Default } from "./DMap";
 
 
 declare global {  
@@ -38,7 +39,7 @@ declare global {
 export class REDataManager
 {
     static databaseMapId: number = 0;
-    static landMapDataLoading: boolean = false;
+    //static landMapDataLoading: boolean = false;
     //static _dataLandDefinitionMap: IDataMap | undefined = undefined;
     
     static loadedLandId: number = 0;
@@ -525,15 +526,24 @@ export class REDataManager
             REData.maps = new Array($dataMapInfos.length);// + (REData.lands.length * REData.MAX_DUNGEON_FLOORS));
             for (let i = 0; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
+                if (!info) continue;
+
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
                 }
-                else if (info && info.name?.startsWith("RE-Land:")) {
+                else if (info.parentId > 0 && $dataMapInfos[info.parentId].name.includes("RE-TemplateMaps")) {
+                    REData.maps[i] = { id: i, landId: 0, mapId: i, mapKind: REFloorMapKind.TemplateMap };
+                    REData.templateMaps.push({
+                        id: REData.templateMaps.length,
+                        name: info.name,
+                    });
+                }
+                else if (info.name?.startsWith("RE-Land:")) {
                     const land = REData.lands.find(x => x.rmmzMapId == i);
                     assert(land);
                     REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
                 }
-                else if (info && info.parentId) {
+                else if (info.parentId) {
                     const parentInfo = $dataMapInfos[info.parentId];
                     const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
                     if (land) {

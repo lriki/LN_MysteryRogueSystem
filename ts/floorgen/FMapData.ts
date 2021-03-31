@@ -6,7 +6,7 @@ import { FStructure } from "./FStructure";
 export type FRoomId = number;   // 0 is invalid
 
 export enum FBlockComponent {
-    None,
+    None,   // Wall
     Room,
     Passageway,
 }
@@ -209,5 +209,20 @@ export class FMap {
         return 0 <= x && x < this._width && 0 <= y && y < this._height;
     }
     
+    // For Debug
+    public print(): void {
+        let s = "";
+        for (let y = 0; y < this._height; y++) {
+            for (let x = 0; x < this._width; x++) {
+                switch (this.block(x, y).component()) {
+                    case FBlockComponent.None: s += "."; break;
+                    case FBlockComponent.Room: s += "*"; break;
+                    case FBlockComponent.Passageway: s += "+"; break;
+                }
+            }
+            s += "\n";
+        }
+        console.log(s);
+    }
 }
 
