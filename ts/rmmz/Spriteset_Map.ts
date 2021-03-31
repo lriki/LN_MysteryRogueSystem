@@ -255,7 +255,7 @@ Spriteset_Map.prototype.updateShadow = function() {
                 this._visibilityShadowOuterSprites[6].position.set(osx2, osy1 + osh / 2.0);
                 this._visibilityShadowOuterSprites[8].position.set(osx1 + osw / 2.0, osy1);
 
-                const scale = 15.0;
+                const scale = 30.0;
                 this._visibilityShadowOuterSprites[2].scale.set(scale * 2, scale);
                 this._visibilityShadowOuterSprites[4].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整
                 this._visibilityShadowOuterSprites[6].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整

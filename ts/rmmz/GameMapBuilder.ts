@@ -1,3 +1,4 @@
+import { DHelpers } from "ts/data/DHelper";
 import { REData } from "ts/data/REData";
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame_Map } from "ts/objects/REGame_Map";
@@ -38,7 +39,7 @@ export class GameMapBuilder {
                 switch (block._blockComponent) {
                     case FBlockComponent.None:
                         if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
-                            //this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
+                            this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
                         }
                         else {
                             this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
@@ -121,7 +122,8 @@ export class GameMapBuilder {
         }
 
 		// subtiles が一致するものを線形で検索
-        const id = SMinimapData._subtileToAutoTileTable.findIndex(x => {
+        const table = (DHelpers.isWallSideAutoTile(autoTileKind)) ? SMinimapData._subtileToAutoTileTable_Wall : SMinimapData._subtileToAutoTileTable;
+        const id = table.findIndex(x => {
             return x[SubTile.UL] == subtiles[SubTile.UL] &&
                 x[SubTile.UR] == subtiles[SubTile.UR] &&
                 x[SubTile.LL] == subtiles[SubTile.LL] &&
@@ -131,7 +133,6 @@ export class GameMapBuilder {
             return id;
         else
             return 0;
-            //throw new Error();
     }
     
     // 同種タイルかどうか

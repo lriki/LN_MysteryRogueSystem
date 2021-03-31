@@ -24,7 +24,12 @@ export interface RMMZEventEntityMetadata {
 }
 
 export class DHelpers {
+    public static TILE_ID_A5 = 1536;
     public static TILE_ID_A1 = 2048;
+    public static TILE_ID_A2 = 2816;
+    public static TILE_ID_A3 = 4352;
+    public static TILE_ID_A4 = 5888;
+    public static TILE_ID_MAX = 8192;
 
     public static getMapTopTile(mapData: IDataMap, x: number, y: number): number {
         for (let z = 3; z >= 0; z--) {
@@ -34,14 +39,34 @@ export class DHelpers {
         return 0;
     }
 
-    public static isAutotile(tileId: number) {
-        return tileId >= this.TILE_ID_A1;
+    public static isTileA3(tileId: number): boolean {
+        return tileId >= this.TILE_ID_A3 && tileId < this.TILE_ID_A4;
     };
+    
+    public static isTileA4(tileId: number): boolean {
+        return tileId >= this.TILE_ID_A4 && tileId < this.TILE_ID_MAX;
+    };
+
+    public static isAutotile(tileId: number): boolean {
+        return tileId >= this.TILE_ID_A1;
+    }
 
     public static getAutotileKind(tileId: number): number {
         //if (!this.isAutotile(tileId)) return 0;
         return Math.floor((tileId - this.TILE_ID_A1) / 48);
-    };
+    }
+
+    public static autotileKindToTileId(autotileKind: number): number {
+        return autotileKind * 48 + this.TILE_ID_A1;
+    }
+
+    public static isWallSideAutoTile(autotileKind: number): boolean {
+        const tileId = this.autotileKindToTileId(autotileKind);
+        return (
+            (this.isTileA3(tileId) || this.isTileA4(tileId)) &&
+            this.getAutotileKind(tileId) % 16 >= 8
+        );
+    }
     
     static readFloorMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZFloorMetadata | undefined {
 
