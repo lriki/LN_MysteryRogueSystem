@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { LRandom } from "ts/objects/LRandom";
-import { FAxis, FBlockComponent, FDirection, FMap, FSector } from "./FMapData";
+import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSector } from "./FMapData";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
@@ -44,6 +44,7 @@ export class FGenericRandomMapGenerator {
         this._map = map;
         this._rand = new LRandom(seed);
         this._wayConnectionMode = FGenericRandomMapWayConnectionMode.AreaEdge;
+        console.log("seed", seed);
     }
 
     public generate(): void {
@@ -57,12 +58,12 @@ export class FGenericRandomMapGenerator {
         this.makeRooms();
         this.makeEdgePins();
         this.makePinConnections();
-        this.makeBlocks();
         this.makePassageWay();
+        this.makeBlocks();
 
         console.log("sectors", this._map.sectors());
         this._map.print();
-        throw new Error();
+        //throw new Error();
     
         /*
         if (!this.makeRoomGuides()) {
@@ -259,14 +260,17 @@ export class FGenericRandomMapGenerator {
                 }
             }
             else if (this._wayConnectionMode == FGenericRandomMapWayConnectionMode.AreaEdge) {
-                for (let x = 0; x < sector.width(); x++) {
-                    if (x != outerL && x != outerR) {   // 部屋の外周に一致する場所には生成しない
+                const sx = sector.x1();
+                const sy = sector.y1();
+
+                for (let x = 0; x < sector.width() - 1; x++) {      // 区画の右端に通路は作れないため、pin は作らない。そのための -1
+                    if ((sx + x) != outerL && (sx + x) != outerR) { // 部屋の外周に一致する場所には生成しない
                         sector.edge(FDirection.T).addPin(x);
                         sector.edge(FDirection.B).addPin(x);
                     }
                 }
-                for (let y = 0; y < sector.height(); y++) {
-                    if (y != outerT && y != outerB) {   // 部屋の外周に一致する場所には生成しない
+                for (let y = 0; y < sector.height() - 1; y++) {      // 区画の下端に通路は作れないため、pin は作らない。そのための -1
+                    if ((sy + y) != outerT && (sy + y) != outerB) {  // 部屋の外周に一致する場所には生成しない
                         sector.edge(FDirection.L).addPin(y);
                         sector.edge(FDirection.R).addPin(y);
                     }
@@ -282,9 +286,40 @@ export class FGenericRandomMapGenerator {
         for (const connection of this._map.connections()) {
             const pins1 = connection.edge1().pins();
             const pins2 = connection.edge2().pins();
+            const sector1 = connection.edge1().sector();
+            const sector2 = connection.edge2().sector();
+
+            // 相手側
+            const candidates1: FEdgePin[] = [];
+            const candidates2: FEdgePin[] = [];
+            if (connection.alignedAxis() == FAxis.H) {
+                for (const pin of pins1) {
+                    if (!sector2.isRoomBesideY(pin.my())) {
+                        candidates1.push(pin);
+                    }
+                }
+                for (const pin of pins2) {
+                    if (!sector1.isRoomBesideY(pin.my())) {
+                        candidates2.push(pin);
+                    }
+                }
+            }
+            else {
+                for (const pin of pins1) {
+                    if (!sector2.isRoomBesideX(pin.mx())) {
+                        candidates1.push(pin);
+                    }
+                }
+                for (const pin of pins2) {
+                    if (!sector1.isRoomBesideX(pin.mx())) {
+                        candidates2.push(pin);
+                    }
+                }
+            }
+
             connection.setConnectedPins(
-                pins1[this._rand.nextIntWithMax(pins1.length)],
-                pins2[this._rand.nextIntWithMax(pins2.length)]);
+                candidates1[this._rand.nextIntWithMax(candidates1.length)],
+                candidates2[this._rand.nextIntWithMax(candidates2.length)]);
         }
     }
 
@@ -331,6 +366,7 @@ export class FGenericRandomMapGenerator {
 
             switch (connection.alignedAxis()) {
                 case FAxis.H: { // sector は横並び
+                    // Sector と Room の位置関係を確認
                     let secorL: FSector;
                     let secorR: FSector;
                     if (secor1.x1() < secor2.x2()) {
@@ -341,6 +377,8 @@ export class FGenericRandomMapGenerator {
                         secorL = secor2;
                         secorR = secor1;
                     }
+                    const edgeL = secorL.edge(FDirection.R);    // 左側領域の、右端Edge
+                    const edgeR = secorR.edge(FDirection.L);    // 右側領域の、左端Edge
                     const roomL = secorL.room();
                     const roomR = secorR.room();
 
@@ -348,7 +386,7 @@ export class FGenericRandomMapGenerator {
                     const roomLOuterX = roomL ? roomL.x2() + 1 : -100;
                     const roomROuterX = roomR ? roomR.x1() - 1 : -100;
 
-                    // PrimaryWay を配置する選択肢を作る
+                    // PrimaryWay を配置する選択肢を作る (Pivot の間)
                     const primaryWayXCandidates: number[] = [];
                     const left = secorL.x1() + secorL.px() + OriginToPrimaryWayMargin;
                     const right = secorR.x1() + secorR.px() - OriginToPrimaryWayMargin;
@@ -357,38 +395,70 @@ export class FGenericRandomMapGenerator {
                             primaryWayXCandidates.push(x);
                         }
                     }
-
-                    // console.log("secorL", secorL);
-                    // console.log("secorR", secorR);
-                    // console.log(roomLOuterX, roomROuterX);
-                    // console.log(left, right);
-                    // console.log("primaryWayXCandidates", primaryWayXCandidates);
                     
                     // PrimaryWay の X 座標を決める
                     const primaryWayX = primaryWayXCandidates[this._rand.nextIntWithMax(primaryWayXCandidates.length)];
 
                     // PrimaryWay の Top, Bottom 座標を決める
-                    const primaryWayT = Math.min(pin1.y(), pin2.y());
-                    const primaryWayB = Math.max(pin1.y(), pin2.y());
-
-                    console.log("primaryWayT", primaryWayT);
-                    console.log("primaryWayB", primaryWayB);
-                    console.log("pin1", pin1);
-                    console.log("pin2", pin2);
+                    const primaryWayT = Math.min(pin1.my(), pin2.my());
+                    const primaryWayB = Math.max(pin1.my(), pin2.my());
 
                     // Plot
                     for (let y = primaryWayT; y <= primaryWayB; y++) {
-                        console.log(primaryWayX, y);
                         this._map.block(primaryWayX, y).setComponent(FBlockComponent.Passageway);
                     }
-                    
-                    this.plotSecondaryWay(primaryWayX, pin1.y(), secor1, FAxis.H);
-                    this.plotSecondaryWay(primaryWayX, pin2.y(), secor2, FAxis.H);
-
+                    this.plotSecondaryWay(primaryWayX, pin1.my(), secor1, FAxis.H);
+                    this.plotSecondaryWay(primaryWayX, pin2.my(), secor2, FAxis.H);
                     break;
                 }
                 case FAxis.V: { // sector は縦並び
+                    // Sector と Room の位置関係を確認
+                    let secorT: FSector;
+                    let secorB: FSector;
+                    if (secor1.x1() < secor2.x2()) {
+                        secorT = secor1;
+                        secorB = secor2;
+                    }
+                    else {
+                        secorT = secor2;
+                        secorB = secor1;
+                    }
+                    const roomT = secorT.room();
+                    const roomB = secorB.room();
 
+                    // 部屋に隣接している位置。この Y 座標に PrimaryWay を置くことはできない。
+                    const roomTOuterY = roomT ? roomT.y2() + 1 : -100;
+                    const roomBOuterY = roomB ? roomB.y1() - 1 : -100;
+
+                    // PrimaryWay を配置する選択肢を作る
+                    const primaryWayYCandidates: number[] = [];
+                    const top = secorT.y1() + secorT.py() + OriginToPrimaryWayMargin;
+                    const bottom = secorB.y1() + secorB.py() - OriginToPrimaryWayMargin;
+                    for (let y = top; y <= bottom; y++) {
+                        if (y != roomTOuterY && y != roomBOuterY) {
+                            primaryWayYCandidates.push(y);
+                        }
+                    }
+                    
+                    // PrimaryWay の Y 座標を決める
+                    const primaryWayY = primaryWayYCandidates[this._rand.nextIntWithMax(primaryWayYCandidates.length)];
+
+                    // PrimaryWay の Top, Bottom 座標を決める
+                    const primaryWayL = Math.min(pin1.mx(), pin2.mx());
+                    const primaryWayR = Math.max(pin1.mx(), pin2.mx());
+
+                    
+                    //console.log("secorT", secorT);
+                    //console.log("secorB", secorB);
+                    //console.log(primaryWayL, primaryWayR);
+
+
+                    // Plot
+                    for (let x = primaryWayL; x <= primaryWayR; x++) {
+                        this._map.block(x, primaryWayY).setComponent(FBlockComponent.Passageway);
+                    }
+                    this.plotSecondaryWay(pin1.mx(), primaryWayY, secor1, FAxis.V);
+                    this.plotSecondaryWay(pin2.mx(), primaryWayY, secor2, FAxis.V);
                     break;
                 }
                 default:
@@ -425,8 +495,19 @@ export class FGenericRandomMapGenerator {
                 break;
             }
             case FAxis.V: { // sector は縦並び
+                // まずは Pin から基準点へ向かうように垂直線を引いて、
+                const t = Math.min(startY, py);
+                const b = Math.max(startY, py);
+                for (let y = t; y <= b; y++) {
+                    this._map.block(startX, y).setComponent(FBlockComponent.Passageway);
+                }
 
-
+                // その点から基準点へ水平に線を引く
+                const l = Math.min(startX, px);
+                const r = Math.max(startX, px);
+                for (let x = l; x <= r; x++) {
+                    this._map.block(x, py).setComponent(FBlockComponent.Passageway);
+                }
                 break;
             }
             default:

@@ -112,7 +112,8 @@ export class REGameManager
             else {
                 mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
                 //(new FMiddleSingleRoomGenerator()).generate(mapData);
-                (new FGenericRandomMapGenerator(mapData, 100)).generate();
+                (new FGenericRandomMapGenerator(mapData, Math.floor(Math.random() * 100))).generate();
+                //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                 const builder = new FMapBuilder();
                 builder.buildForFixedMap(mapData);
             }

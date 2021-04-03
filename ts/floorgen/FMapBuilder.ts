@@ -10,7 +10,7 @@ export class FMapBuilder {
     public buildForFixedMap(data: FMap): void {
         const passes = [
             new FMapBuildPass_MakeRoomId(),
-            new FMapBuildPass_ResolveRoomShapes(),
+            //new FMapBuildPass_ResolveRoomShapes(),
             new FMapBuildPass_MarkMonsterHouse(),
         ];
         // Apply passes
@@ -85,11 +85,12 @@ export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
 }
 
 
+// [固定マップ用]
 // roomId が割り当てられている block を元に、Room の矩形を確定する。
 export class FMapBuildPass_ResolveRoomShapes extends FMapBuildPass {
     public execute(map: FMap): void {
         for (const block of map.blocks()) {
-            const room = map.rooms()[block.roomId()];
+            const room = map.room(block.roomId());
             room.tryInfrateRect(block.x(), block.y());
         }
     }

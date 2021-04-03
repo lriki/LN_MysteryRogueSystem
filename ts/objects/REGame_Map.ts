@@ -123,7 +123,7 @@ export class REGame_Map
             }
 
             // Create Rooms
-            this._rooms = data.rooms().map(x => {
+            this._rooms = data.rooms_raw().map(x => {
                 const r = new LRoom();
                 r.setup(x);
                 return r;

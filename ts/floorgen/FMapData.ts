@@ -28,7 +28,7 @@ export enum FBlockComponent {
 
 export class FEdgePin {
     private _edge: FSectorEdge;
-    private _pos: number;   //  (Map 座標系)
+    private _pos: number;   //  (Sector 座標系)
 
     public constructor(edge: FSectorEdge, pos: number) {
         this._edge = edge;
@@ -43,7 +43,7 @@ export class FEdgePin {
         return this._pos;
     }
 
-    public x(): number {
+    public mx(): number {
         const s = this._edge.sector();
         const d = this._edge.direction();
         if (d == FDirection.L) {
@@ -57,7 +57,7 @@ export class FEdgePin {
         }
     }
 
-    public y(): number {
+    public my(): number {
         const s = this._edge.sector();
         const d = this._edge.direction();
         if (d == FDirection.T) {
@@ -133,6 +133,10 @@ export class FSectorEdge {
 
     public pins():  readonly FEdgePin[] {
         return this._pins;
+    }
+
+    public isValidPinPos(pos: number): boolean {
+        return this._pins.find(pin => pin.pos() == pos) != undefined;
     }
 }
 
@@ -241,10 +245,36 @@ export class FSector {
         this._room = room;
     }
 
+    public isRoomBesideX(mx: number): boolean {
+        if (this._room) {
+            return (this._room.x1() - 1 == mx) || (this._room.x2() + 1 == mx);
+        }
+        else {
+            return false;
+        }
+    }
+
+    public isRoomBesideY(my: number): boolean {
+        if (this._room) {
+            return (this._room.y1() - 1 == my) || (this._room.y2() + 1 == my);
+        }
+        else {
+            return false;
+        }
+    }
+
     //public setWeyPoints(x: number[], y: number[]) {
     //    this._wayPointsX = x;
     //    this._wayPointsY = y;
     //}
+
+    public GlobalToLocalX(gx: number): number {
+        return gx - this.x1();
+    }
+
+    public GlobalToLocalY(gy: number): number {
+        return gy - this.y1();
+    }
 }
 
 // Sector の隣接性情報
@@ -558,6 +588,14 @@ export class FMap {
 
     public connections(): readonly FSectorConnection[] {
         return this._sectorConnections;
+    }
+
+    public room(roomId: FRoomId): FRoom {
+        return this._rooms[roomId];
+    }
+
+    public rooms_raw(): readonly FRoom[] {
+        return this._rooms;
     }
 
     public rooms(): readonly FRoom[] {
