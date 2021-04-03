@@ -29,6 +29,7 @@ import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/PluginParameters";
 import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
+import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -110,7 +111,8 @@ export class REGameManager
             }
             else {
                 mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
-                (new FMiddleSingleRoomGenerator()).generate(mapData);
+                //(new FMiddleSingleRoomGenerator()).generate(mapData);
+                (new FGenericRandomMapGenerator(mapData, 100)).generate();
                 const builder = new FMapBuilder();
                 builder.buildForFixedMap(mapData);
             }

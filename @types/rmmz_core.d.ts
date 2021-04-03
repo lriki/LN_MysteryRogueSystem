@@ -366,8 +366,10 @@ export class Tilemap extends PIXI.Container {
 	_addTile(layer: Tilemap.Layer, tileId: number, dx: number, dy: number): void;
 	_addAutotile(layer: Tilemap.Layer, tileId: number, dx: number, dy: number): void;
 
+	static isAutotile(tileId: number): boolean;
 	static getAutotileKind(tileId: number): number;
 	static getAutotileShape(tileId: number): number;
+	static makeAutotileId(kind: number, shape: number): number;
 	static isTileA4(tileId: number): boolean;
 }
 

@@ -28,6 +28,7 @@ export abstract class FMapBuildPass {
 // 主に固定マップ用。
 export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
     public execute(map: FMap): void {
+        
         while (true) {
             // RoomId が割り当てられていないが、Room としてマークされている Block を集める
             const roomBlocks = map.blocks().filter(block => block.isRoom() && block.roomId() == 0);
@@ -37,7 +38,8 @@ export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
             }
             
             // 新しく部屋情報を作る
-            const room = map.newRoom();
+            const sector = map.newSector();
+            const room = map.newRoom(sector);
 
             // まずは新しい部屋割り当ててみるようにする
             let current: FMapBlock[] = [roomBlocks[0]];

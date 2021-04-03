@@ -21,6 +21,7 @@ export class LRandom {
         return this._w;
     }
     
+    // 0~(maxValue-1)
     nextIntWithMax(maxValue: number): number  {
         if (maxValue == 0) {
             return 0;
@@ -30,6 +31,7 @@ export class LRandom {
         return r;
     }
 
+    // minValue~(maxValue-1)
     nextIntWithMinMax(minValue: number, maxValue: number): number  {
         if (maxValue - minValue == 0) {
             return 0;

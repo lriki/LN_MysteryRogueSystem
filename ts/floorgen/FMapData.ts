@@ -1,15 +1,20 @@
+import { assert } from "ts/Common";
 import { DMapId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { TileKind } from "ts/objects/REGame_Block";
 import { FStructure } from "./FStructure";
 
 
-export enum FDirection
-{
-    N = 0,  // North
-    S = 1,  // South
-    W = 2,   // West
-    E = 3,   // East
+export enum FDirection {
+    T = 0,  // Top
+    B = 1,  // Bottom
+    L = 2,  // Left
+    R = 3,  // Right
+}
+
+export enum FAxis {
+    H,
+    V,
 }
 
 export type FSectorId = number;   // 0 is invalid
@@ -23,36 +28,111 @@ export enum FBlockComponent {
 
 export class FEdgePin {
     private _edge: FSectorEdge;
-    private _index: number;
+    private _pos: number;   //  (Map 座標系)
 
-    public constructor(edge: FSectorEdge, index: number) {
+    public constructor(edge: FSectorEdge, pos: number) {
         this._edge = edge;
-        this._index = index;
+        this._pos = pos;
+    }
+
+    public edge(): FSectorEdge {
+        return this._edge;
+    }
+
+    public pos(): number {
+        return this._pos;
+    }
+
+    public x(): number {
+        const s = this._edge.sector();
+        const d = this._edge.direction();
+        if (d == FDirection.L) {
+            return s.x1();
+        }
+        else if (d == FDirection.R) {
+            return s.x2();
+        }
+        else {
+            return s.x1() + this._pos;
+        }
+    }
+
+    public y(): number {
+        const s = this._edge.sector();
+        const d = this._edge.direction();
+        if (d == FDirection.T) {
+            return s.y1();
+        }
+        else if (d == FDirection.B) {
+            return s.y2();
+        }
+        else {
+            return s.y1() + this._pos;
+        }
     }
 }
 
 export class FSectorEdge {
     private _sector: FSector;
     private _direction: FDirection;
+    private _adjacencies: FSectorAdjacency[];
     private _connections: FSectorConnection[];
     private _pins: FEdgePin[];
 
     public constructor(sector: FSector, dir: FDirection) {
         this._sector = sector;
         this._direction = dir;
+        this._adjacencies = [];
         this._connections = [];
         this._pins = [];
     }
 
+    public sector(): FSector {
+        return this._sector;
+    }
+
+    public direction(): FDirection {
+        return this._direction;
+    }
+
     public resetLength(length: number): void {
         this._pins = []
-        for (let i = 0; i < length; i++) {
-            this._pins.push(new FEdgePin(this, i));
-        }
+        //for (let i = 0; i < length; i++) {
+        //    this._pins.push(new FEdgePin(this, i));
+        //}
+    }
+
+    public addAdjacency(adjacency: FSectorAdjacency): void {
+        this._adjacencies.push(adjacency);
+    }
+
+    public hasAdjacency(): boolean {
+        return this._adjacencies.length > 0;
     }
     
+    public adjacencies(): FSectorAdjacency[] {
+        return this._adjacencies;
+    }
+
     public addConnection(connection: FSectorConnection): void {
         this._connections.push(connection);
+    }
+
+    public hasConnection(): boolean {
+        return this._connections.length > 0;
+    }
+
+    public hasConnectionFully(): boolean {
+        return this._connections.length == this._adjacencies.length;
+    }
+
+    public addPin(pos: number): void {
+        const pin = new FEdgePin(this, pos);
+        this._pins.push(pin);
+    }
+
+    public pins():  readonly FEdgePin[] {
+        return this._pins;
     }
 }
 
@@ -60,21 +140,28 @@ export class FSectorEdge {
 export class FSector {
     private _map: FMap;
     private _id: FSectorId;
-    private _x1: number = -1;   // 有効範囲内左上座標
-    private _y1: number = -1;   // 有効範囲内左上座標
-    private _x2: number = -1;   // 有効範囲内右下座標
-    private _y2: number = -1;   // 有効範囲内右下座標
+    private _x1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _y1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _x2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _y2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _px: number = 0;    // Pivot. x1 からの相対座標 (Room 座標系)
+    private _py: number = 0;    // Pivot. y1 からの相対座標 (Room 座標系)
     private _edges: FSectorEdge[];
+    private _room: FRoom | undefined;
+    //private _wayPointsX: number[];  // x1~x2 間で、通路を作ってもよい X 座標
+    //private _wayPointsY: number[];  // y1~y2 間で、通路を作ってもよい Y 座標
 
     public constructor(map: FMap, id: FSectorId) {
         this._map = map;
         this._id = id;
         this._edges = [
-            new FSectorEdge(this, FDirection.N),
-            new FSectorEdge(this, FDirection.S),
-            new FSectorEdge(this, FDirection.W),
-            new FSectorEdge(this, FDirection.E),
+            new FSectorEdge(this, FDirection.T),
+            new FSectorEdge(this, FDirection.B),
+            new FSectorEdge(this, FDirection.L),
+            new FSectorEdge(this, FDirection.R),
         ];
+        //this._wayPointsX = [];
+        //this._wayPointsY = [];
     }
 
     public setRect(x: number, y: number, w: number, h: number): void {
@@ -91,10 +178,38 @@ export class FSector {
         }
 
         // Update Edge length
-        this._edges[FDirection.N].resetLength(this.width());
-        this._edges[FDirection.S].resetLength(this.width());
-        this._edges[FDirection.W].resetLength(this.height());
-        this._edges[FDirection.E].resetLength(this.height());
+        this._edges[FDirection.T].resetLength(this.width());
+        this._edges[FDirection.B].resetLength(this.width());
+        this._edges[FDirection.L].resetLength(this.height());
+        this._edges[FDirection.R].resetLength(this.height());
+    }
+
+    public id(): FSectorId {
+        return this._id;
+    }
+
+    public x1(): number {
+        return this._x1;
+    }
+
+    public y1(): number {
+        return this._y1;
+    }
+
+    public x2(): number {
+        return this._x2;
+    }
+
+    public y2(): number {
+        return this._y2;
+    }
+
+    public px(): number {
+        return this._px;
+    }
+
+    public py(): number {
+        return this._py;
     }
 
     public width(): number {
@@ -105,9 +220,31 @@ export class FSector {
         return this._y2 - this._y1 + 1;
     }
 
+    public setPivot(px: number, py: number): void {
+        this._px = px;
+        this._py = py;
+    }
+
     public edge(d: FDirection): FSectorEdge {
         return this._edges[d];
     }
+
+    public edges(): readonly FSectorEdge[] {
+        return this._edges;
+    }
+
+    public room(): FRoom | undefined {
+        return this._room;
+    }
+
+    public setRoom(room: FRoom | undefined): void {
+        this._room = room;
+    }
+
+    //public setWeyPoints(x: number[], y: number[]) {
+    //    this._wayPointsX = x;
+    //    this._wayPointsY = y;
+    //}
 }
 
 // Sector の隣接性情報
@@ -119,16 +256,58 @@ export class FSectorAdjacency {
         this._edge1 = edge1;
         this._edge2 = edge2;
     }
+
+    public edge1(): FSectorEdge {
+        return this._edge1;
+    }
+
+    public edge2(): FSectorEdge {
+        return this._edge2;
+    }
+
+    public hasPair(e1: FSectorEdge, e2: FSectorEdge): boolean {
+        return (e1 == this._edge1 && e2 == this._edge2) || (e2 == this._edge1 && e1 == this._edge2);
+    }
 }
 
 export class FSectorConnection {
     private _edge1: FSectorEdge;
     private _edge2: FSectorEdge;
+    private _pin1: FEdgePin | undefined;
+    private _pin2: FEdgePin | undefined;
 
     public constructor(edge1: FSectorEdge, edge2: FSectorEdge) {
         this._edge1 = edge1;
         this._edge2 = edge2;
     }
+
+    public edge1(): FSectorEdge {
+        return this._edge1;
+    }
+
+    public edge2(): FSectorEdge {
+        return this._edge2;
+    }
+
+    public pin1(): FEdgePin | undefined {
+        return this._pin1;
+    }
+
+    public pin2(): FEdgePin | undefined {
+        return this._pin2;
+    }
+
+    public alignedAxis(): FAxis {
+        return (this._edge1.direction() == FDirection.L || this._edge1.direction() == FDirection.R) ? FAxis.H : FAxis.V;
+    }
+
+    public setConnectedPins(pin1: FEdgePin, pin2: FEdgePin): void {
+        assert(this._edge1.pins().find(pin => pin == pin1));    // edge に含まれている pin であること
+        assert(this._edge2.pins().find(pin => pin == pin2));    // edge に含まれている pin であること
+        this._pin1 = pin1;
+        this._pin2 = pin2;
+    }
+
 }
 
 export class FMapBlock {
@@ -206,18 +385,24 @@ export class FMapBlock {
 export class FRoom {
     private _map: FMap;
     private _id: FRoomId;
-    private _x1: number = -1;   // 有効範囲内左上座標
-    private _y1: number = -1;   // 有効範囲内左上座標
-    private _x2: number = -1;   // 有効範囲内右下座標
-    private _y2: number = -1;   // 有効範囲内右下座標
+    private _sector: FSector;
+    private _x1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _y1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _x2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _y2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
 
-    public constructor(map: FMap, id: FRoomId) {
+    public constructor(map: FMap, id: FRoomId, sector: FSector) {
         this._map = map;
         this._id = id;
+        this._sector = sector;
     }
 
     public id(): FRoomId {
         return this._id;
+    }
+
+    public sector(): FSector {
+        return this._sector;
     }
 
     public x1(): number {
@@ -234,6 +419,14 @@ export class FRoom {
 
     public y2(): number {
         return this._y2;
+    }
+
+    public width(): number {
+        return this._x2 - this._x1 + 1;
+    }
+
+    public height(): number {
+        return this._y2 - this._y1 + 1;
     }
 
     public tryInfrateRect(x: number, y: number): void {
@@ -262,6 +455,13 @@ export class FRoom {
             }
         }
     }
+
+    public setRect(x: number, y: number, w: number, h: number): void {
+        this._x1 = x;
+        this._y1 = y;
+        this._x2 = x + w - 1;
+        this._y2 = y + h - 1;
+    }
 }
 
 
@@ -270,6 +470,7 @@ export class FMap {
     private _height: number;
     private _blocks: FMapBlock[];
     private _sectors: FSector[];
+    private _sectorAdjacencies: FSectorAdjacency[];
     private _sectorConnections: FSectorConnection[];
     private _rooms: FRoom[];
     private _structures: FStructure[];
@@ -278,6 +479,7 @@ export class FMap {
         this._width = 0;
         this._height = 0;
         this._blocks = [];
+        this._sectorAdjacencies = [];
         this._sectorConnections = [];
         this._sectors = [];
         this._rooms = [];
@@ -294,7 +496,7 @@ export class FMap {
             this._blocks[i] = new FMapBlock(x, y);
         }
         this._sectors = [new FSector(this, 0)];    // dummy
-        this._rooms = [new FRoom(this, 0)];    // dummy
+        this._rooms = [new FRoom(this, 0, this._sectors[0])];    // dummy
     }
 
     public width(): number {
@@ -323,7 +525,7 @@ export class FMap {
     }
 
     public sectors(): readonly FSector[] {
-        return this._sectors;
+        return this._sectors.filter(s => s.id() > 0);
     }
 
     public newSector(): FSector {
@@ -332,22 +534,40 @@ export class FMap {
         return sector;
     }
 
-    public connectSectors(s1: FSector, s1Dir: FDirection, s2: FSector, s2Dir: FDirection): void {
+    public attemptNewAdjacency(s1: FSector, s1Dir: FDirection, s2: FSector, s2Dir: FDirection): FSectorAdjacency {
         const edge1 = s1.edge(s1Dir);
         const edge2 = s2.edge(s2Dir);
+        const exists = this._sectorAdjacencies.find(a => a.hasPair(edge1, edge2));
+        if (exists) return exists;
+
+        const adjacency = new FSectorAdjacency(edge1, edge2);
+        this._sectorAdjacencies.push(adjacency);
+        edge1.addAdjacency(adjacency);
+        edge2.addAdjacency(adjacency);
+        return adjacency;
+    }
+
+    public connectSectors(edge1: FSectorEdge, edge2: FSectorEdge): FSectorConnection {
+        assert(edge1 != edge2);
         const connection = new FSectorConnection(edge1, edge2);
         this._sectorConnections.push(connection);
         edge1.addConnection(connection);
         edge2.addConnection(connection);
+        return connection;
+    }
+
+    public connections(): readonly FSectorConnection[] {
+        return this._sectorConnections;
     }
 
     public rooms(): readonly FRoom[] {
-        return this._rooms;
+        return this._rooms.filter(s => s.id() > 0);
     }
 
-    public newRoom(): FRoom {
-        const room = new FRoom(this, this._rooms.length);
+    public newRoom(sector: FSector): FRoom {
+        const room = new FRoom(this, this._rooms.length, sector);
         this._rooms.push(room);
+        sector.setRoom(room);
         return room;
     }
 
@@ -368,10 +588,15 @@ export class FMap {
         let s = "";
         for (let y = 0; y < this._height; y++) {
             for (let x = 0; x < this._width; x++) {
-                switch (this.block(x, y).component()) {
-                    case FBlockComponent.None: s += "."; break;
-                    case FBlockComponent.Room: s += "*"; break;
-                    case FBlockComponent.Passageway: s += "+"; break;
+                if (this._sectors.find(s => (s.x1() + s.px()) == x && (s.y1() + s.py()) == y)) {
+                    s += "@";
+                }
+                else {
+                    switch (this.block(x, y).component()) {
+                        case FBlockComponent.None: s += "."; break;
+                        case FBlockComponent.Room: s += "*"; break;
+                        case FBlockComponent.Passageway: s += "#"; break;
+                    }
                 }
             }
             s += "\n";
