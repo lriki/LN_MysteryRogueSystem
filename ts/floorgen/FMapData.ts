@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DMapId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
+import { LRandom } from "ts/objects/LRandom";
 import { TileKind } from "ts/objects/REGame_Block";
 import { FStructure } from "./FStructure";
 
@@ -275,6 +276,10 @@ export class FSector {
     public GlobalToLocalY(gy: number): number {
         return gy - this.y1();
     }
+
+    public contains(mx: number, my: number): boolean {
+        return this._x1 <= mx && mx < this._x2 && this._y1 <= my && my < this._y2;
+    }
 }
 
 // Sector の隣接性情報
@@ -347,6 +352,7 @@ export class FMapBlock {
     private _blockComponent: FBlockComponent;
     private _sectorId: FSectorId;
     private _roomId: FRoomId;
+    private _doorway: boolean;  // 部屋の入口
     private _monsterHouseTypeId: DMonsterHouseId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
 
     public constructor(x: number, y: number) {
@@ -356,6 +362,7 @@ export class FMapBlock {
         this._blockComponent = FBlockComponent.None;
         this._sectorId = 0;
         this._roomId = 0;
+        this._doorway = false;
         this._monsterHouseTypeId = 0;
     }
 
@@ -409,6 +416,14 @@ export class FMapBlock {
 
     public roomId(): FRoomId {
         return this._roomId;
+    }
+
+    public setDoorway(value: boolean) {
+        this._doorway = value;
+    }
+
+    public isDoorway(): boolean {
+        return this._doorway;
     }
 }
 
@@ -494,8 +509,26 @@ export class FRoom {
     }
 }
 
+export class FExitPont {
+    private _mx: number;
+    private _my: number;
+
+    public constructor(mx: number, my: number) {
+        this._mx = mx;
+        this._my = my;
+    }
+
+    public mx(): number {
+        return this._mx;
+    }
+
+    public my(): number {
+        return this._my;
+    }
+}
 
 export class FMap {
+    private _rand: LRandom;
     private _width: number;
     private _height: number;
     private _blocks: FMapBlock[];
@@ -504,8 +537,10 @@ export class FMap {
     private _sectorConnections: FSectorConnection[];
     private _rooms: FRoom[];
     private _structures: FStructure[];
+    private _exitPont: FExitPont | undefined;
 
-    public constructor() {
+    public constructor(rand: LRandom) {
+        this._rand = rand;
         this._width = 0;
         this._height = 0;
         this._blocks = [];
@@ -527,6 +562,10 @@ export class FMap {
         }
         this._sectors = [new FSector(this, 0)];    // dummy
         this._rooms = [new FRoom(this, 0, this._sectors[0])];    // dummy
+    }
+
+    public random(): LRandom {
+        return this._rand;
     }
 
     public width(): number {
@@ -620,7 +659,15 @@ export class FMap {
     public isValid(x: number, y: number): boolean {
         return 0 <= x && x < this._width && 0 <= y && y < this._height;
     }
+
+    public setExitPont(value: FExitPont) {
+        this._exitPont = value;
+    }
     
+    public exitPont(): FExitPont | undefined {
+        return this._exitPont;
+    }
+
     // For Debug
     public print(): void {
         let s = "";
@@ -628,6 +675,9 @@ export class FMap {
             for (let x = 0; x < this._width; x++) {
                 if (this._sectors.find(s => (s.x1() + s.px()) == x && (s.y1() + s.py()) == y)) {
                     s += "@";
+                }
+                else if (this.block(x, y).isDoorway()) {
+                    s += "&";
                 }
                 else {
                     switch (this.block(x, y).component()) {

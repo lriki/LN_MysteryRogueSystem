@@ -102,7 +102,7 @@ export class REGameManager
         if (REGame.camera.isFloorTransfering()) {
             const newFloorId = REGame.camera.transferingNewFloorId();
 
-            const mapData = new FMap();
+            const mapData = new FMap(REGame.world.random());
             if (newFloorId.rmmzFixedMapId() > 0) {
                 // 固定マップ
                 RESystem.integration.onLoadFixedMapData(mapData);
@@ -112,10 +112,15 @@ export class REGameManager
             else {
                 mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
                 //(new FMiddleSingleRoomGenerator()).generate(mapData);
-                (new FGenericRandomMapGenerator(mapData, Math.floor(Math.random() * 100))).generate();
+                (new FGenericRandomMapGenerator(mapData)).generate();
                 //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                 const builder = new FMapBuilder();
                 builder.buildForFixedMap(mapData);
+
+                
+
+                console.log("sectors", mapData.sectors());
+                mapData.print();
             }
 
             // マップ構築

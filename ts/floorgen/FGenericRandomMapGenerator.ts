@@ -1,5 +1,4 @@
 import { assert } from "ts/Common";
-import { LRandom } from "ts/objects/LRandom";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSector } from "./FMapData";
 
 const RoomMinSize = 4;
@@ -37,14 +36,11 @@ export enum FGenericRandomMapWayConnectionMode
  */
 export class FGenericRandomMapGenerator {
     private _map: FMap;
-    private _rand: LRandom;
     private _wayConnectionMode: FGenericRandomMapWayConnectionMode;
 
-    public constructor(map: FMap, seed: number) {
+    public constructor(map: FMap) {
         this._map = map;
-        this._rand = new LRandom(seed);
         this._wayConnectionMode = FGenericRandomMapWayConnectionMode.AreaEdge;
-        console.log("seed", seed);
     }
 
     public generate(): void {
@@ -60,20 +56,6 @@ export class FGenericRandomMapGenerator {
         this.makePinConnections();
         this.makePassageWay();
         this.makeBlocks();
-
-        console.log("sectors", this._map.sectors());
-        this._map.print();
-        //throw new Error();
-    
-        /*
-        if (!this.makeRoomGuides()) {
-            return;
-        }
-    
-        if (!this.makeCorridors()) {
-            return;
-        }
-        */
     }
 
     private reportError(message: string): void {
@@ -182,7 +164,7 @@ export class FGenericRandomMapGenerator {
 
             if (adjacencies.length > 0) {
                 // 接続する隣接情報を決定して接続
-                const adjacency = adjacencies[this._rand.nextIntWithMax(adjacencies.length)];
+                const adjacency = adjacencies[this._map.random().nextIntWithMax(adjacencies.length)];
                 this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
             }
         }
@@ -204,10 +186,10 @@ export class FGenericRandomMapGenerator {
 
             const maxRoomWidth = (r - l);
             const maxRoomHeight = (b - t);
-            const w = this._rand.nextIntWithMinMax(RoomMinSize, (r - l) + 1);
-            const h = this._rand.nextIntWithMinMax(RoomMinSize, (b - t) + 1);
-            const x = ((w != maxRoomWidth) ? this._rand.nextIntWithMax(maxRoomWidth - w + 1) : 0);
-            const y = ((h != maxRoomHeight) ? this._rand.nextIntWithMax(maxRoomHeight - h + 1) : 0);
+            const w = this._map.random().nextIntWithMinMax(RoomMinSize, (r - l) + 1);
+            const h = this._map.random().nextIntWithMinMax(RoomMinSize, (b - t) + 1);
+            const x = ((w != maxRoomWidth) ? this._map.random().nextIntWithMax(maxRoomWidth - w + 1) : 0);
+            const y = ((h != maxRoomHeight) ? this._map.random().nextIntWithMax(maxRoomHeight - h + 1) : 0);
 
             const room = this._map.newRoom(sector);
             room.setRect(sector.x1() + x, sector.y1() + y, w, h);
@@ -217,7 +199,7 @@ export class FGenericRandomMapGenerator {
             const oy = room.y1() - sector.y1();
             assert(ox >= 0);
             assert(oy >= 0);
-            sector.setPivot(ox + this._rand.nextIntWithMax(w), oy + this._rand.nextIntWithMax(h));
+            sector.setPivot(ox + this._map.random().nextIntWithMax(w), oy + this._map.random().nextIntWithMax(h));
         }
     }
 
@@ -318,8 +300,8 @@ export class FGenericRandomMapGenerator {
             }
 
             connection.setConnectedPins(
-                candidates1[this._rand.nextIntWithMax(candidates1.length)],
-                candidates2[this._rand.nextIntWithMax(candidates2.length)]);
+                candidates1[this._map.random().nextIntWithMax(candidates1.length)],
+                candidates2[this._map.random().nextIntWithMax(candidates2.length)]);
         }
     }
 
@@ -397,7 +379,7 @@ export class FGenericRandomMapGenerator {
                     }
                     
                     // PrimaryWay の X 座標を決める
-                    const primaryWayX = primaryWayXCandidates[this._rand.nextIntWithMax(primaryWayXCandidates.length)];
+                    const primaryWayX = primaryWayXCandidates[this._map.random().nextIntWithMax(primaryWayXCandidates.length)];
 
                     // PrimaryWay の Top, Bottom 座標を決める
                     const primaryWayT = Math.min(pin1.my(), pin2.my());
@@ -441,7 +423,7 @@ export class FGenericRandomMapGenerator {
                     }
                     
                     // PrimaryWay の Y 座標を決める
-                    const primaryWayY = primaryWayYCandidates[this._rand.nextIntWithMax(primaryWayYCandidates.length)];
+                    const primaryWayY = primaryWayYCandidates[this._map.random().nextIntWithMax(primaryWayYCandidates.length)];
 
                     // PrimaryWay の Top, Bottom 座標を決める
                     const primaryWayL = Math.min(pin1.mx(), pin2.mx());

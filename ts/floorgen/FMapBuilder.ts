@@ -1,7 +1,6 @@
-import { assert } from "ts/Common";
-import { TileKind } from "ts/objects/REGame_Block";
-import { REGame_Map } from "ts/objects/REGame_Map";
-import { FBlockComponent, FMap, FMapBlock } from "./FMapData";
+import { FMapBuildPass } from "./FMapBuildPass";
+import { FMap, FMapBlock } from "./FMapData";
+import { FMarkExitPointAndContinuationPass } from "./FMarkContinuationPass";
 import { FMonsterHouseStructure } from "./FStructure";
 
 
@@ -11,6 +10,7 @@ export class FMapBuilder {
         const passes = [
             new FMapBuildPass_MakeRoomId(),
             //new FMapBuildPass_ResolveRoomShapes(),
+            new FMarkExitPointAndContinuationPass(),
             new FMapBuildPass_MarkMonsterHouse(),
         ];
         // Apply passes
@@ -20,9 +20,6 @@ export class FMapBuilder {
     
 }
 
-export abstract class FMapBuildPass {
-    public abstract execute(map: FMap): void;
-}
 
 // Room としてマークされているが、RoomId 未割り当ての Block を解決する。
 // 主に固定マップ用。
