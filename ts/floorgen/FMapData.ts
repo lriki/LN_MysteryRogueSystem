@@ -353,6 +353,7 @@ export class FMapBlock {
     private _sectorId: FSectorId;
     private _roomId: FRoomId;
     private _doorway: boolean;  // 部屋の入口
+    private _continuation: boolean; // ゴールとなる階段から地続きであるか
     private _monsterHouseTypeId: DMonsterHouseId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
 
     public constructor(x: number, y: number) {
@@ -363,6 +364,7 @@ export class FMapBlock {
         this._sectorId = 0;
         this._roomId = 0;
         this._doorway = false;
+        this._continuation = false;
         this._monsterHouseTypeId = 0;
     }
 
@@ -410,8 +412,14 @@ export class FMapBlock {
         this._roomId = value;
     }
 
+    // TODO: 水路かつ部屋、水路かつ通路、みたいなこともあるので分ける必要がある
     public isRoom(): boolean {
         return this._blockComponent == FBlockComponent.Room;
+    }
+    
+    // TODO: 水路かつ部屋、水路かつ通路、みたいなこともあるので分ける必要がある
+    public isFloor(): boolean {
+        return this._blockComponent == FBlockComponent.Room || this._blockComponent == FBlockComponent.Passageway;
     }
 
     public roomId(): FRoomId {
@@ -425,6 +433,16 @@ export class FMapBlock {
     public isDoorway(): boolean {
         return this._doorway;
     }
+
+    public setContinuation(value: boolean) {
+        this._continuation = value;
+    }
+
+    public isContinuation(): boolean {
+        return this._continuation;
+    }
+
+    
 }
 
 export class FRoom {
@@ -506,6 +524,16 @@ export class FRoom {
         this._y1 = y;
         this._x2 = x + w - 1;
         this._y2 = y + h - 1;
+    }
+    
+    public blocks(): FMapBlock[] {
+        const result = [];
+        for (let my = this._y1; my <= this._y2; my++) {
+            for (let mx = this._x1; mx <= this._x2; mx++) {
+                result.push(this._map.block(mx, my));
+            }
+        }
+        return result;
     }
 }
 
@@ -675,6 +703,9 @@ export class FMap {
             for (let x = 0; x < this._width; x++) {
                 if (this._sectors.find(s => (s.x1() + s.px()) == x && (s.y1() + s.py()) == y)) {
                     s += "@";
+                }
+                else if (this.block(x, y).isContinuation()) {
+                    s += "o";
                 }
                 else if (this.block(x, y).isDoorway()) {
                     s += "&";

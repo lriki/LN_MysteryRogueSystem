@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
-import { FBlockComponent, FMap, FSector } from "./FMapData";
+import { FBlockComponent, FMap, FMapBlock, FSector } from "./FMapData";
 
 
 
@@ -17,9 +17,8 @@ export class FMarkExitPointAndContinuationPass extends FMapBuildPass {
     public execute(map: FMap): void {
         const hasExitPoint = (map.exitPont() != undefined);
 
-        const sector = this.selectExitPoint(map);
 
-        // 部屋の入口 Block をマークする
+        // すべての部屋の入口 Block をマークする
         for (const sector of map.sectors()) {
             const room = sector.room();
             if (room) {
@@ -44,6 +43,57 @@ export class FMarkExitPointAndContinuationPass extends FMapBuildPass {
                     }
                 }
             }
+        }
+
+        {
+            const sector = this.selectExitPoint(map);
+            const room = sector.room();
+            assert(room);
+
+            // 最初に見つかった床 Block を開始点とする
+            const baseBlock = room.blocks().find(b => b.component() == FBlockComponent.Room);
+            assert(baseBlock);
+
+
+
+            
+            let current: FMapBlock[] = [baseBlock];
+            let next: FMapBlock[] = [];
+            while (current.length > 0) {
+                current.forEach(b => {
+                    if (!b.isContinuation()) {   // 上下左右の集計で、current に同じ Block が入ることがある。無駄な処理を省く。
+                        // ID を振る
+                        b.setContinuation(true);
+    
+                        // 左
+                        const b1 = map.blockTry(b.x() - 1, b.y());
+                        if (b1 && b1.isFloor() && !b1.isContinuation()) {
+                            next.push(b1);
+                        }
+                        // 上
+                        const b2 = map.blockTry(b.x(), b.y() - 1);
+                        if (b2 && b2.isFloor() && !b2.isContinuation()) {
+                            next.push(b2);
+                        }
+                        // 右
+                        const b3 = map.blockTry(b.x() + 1, b.y());
+                        if (b3 && b3.isFloor() && !b3.isContinuation()) {
+                            next.push(b3);
+                        }
+                        // 下
+                        const b4 = map.blockTry(b.x(), b.y() + 1);
+                        if (b4 && b4.isFloor() && !b4.isContinuation()) {
+                            next.push(b4);
+                        }
+                    }
+                });
+
+                // swap
+                [current, next] = [next, current];
+                next = [];
+            }
+
+            // roomBlocks[0] から辿れるすべての Block に ID を振り終えた
         }
 
         
