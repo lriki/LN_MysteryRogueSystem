@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
-import { FBlockComponent, FMap, FMapBlock, FSector } from "./FMapData";
+import { FBlockComponent, FExitPont, FMap, FMapBlock, FSector } from "./FMapData";
 
 
 
@@ -53,9 +53,6 @@ export class FMarkExitPointAndContinuationPass extends FMapBuildPass {
             // 最初に見つかった床 Block を開始点とする
             const baseBlock = room.blocks().find(b => b.component() == FBlockComponent.Room);
             assert(baseBlock);
-
-
-
             
             let current: FMapBlock[] = [baseBlock];
             let next: FMapBlock[] = [];
@@ -98,7 +95,11 @@ export class FMarkExitPointAndContinuationPass extends FMapBuildPass {
 
         
         if (!hasExitPoint) {
+            const candidates = map.blocks().filter(b => b.isRoom() && b.isContinuation());
+            assert(candidates.length > 0);
 
+            const block = candidates[map.random().nextIntWithMax(candidates.length)];
+            map.setExitPont(new FExitPont(block.x(), block.y()));
         }
     }
 

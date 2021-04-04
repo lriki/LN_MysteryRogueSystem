@@ -701,7 +701,10 @@ export class FMap {
         let s = "";
         for (let y = 0; y < this._height; y++) {
             for (let x = 0; x < this._width; x++) {
-                if (this._sectors.find(s => (s.x1() + s.px()) == x && (s.y1() + s.py()) == y)) {
+                if (this._exitPont && this._exitPont.mx() == x && this._exitPont.my() == y) {
+                    s += "!";
+                }
+                else if (this._sectors.find(s => (s.x1() + s.px()) == x && (s.y1() + s.py()) == y)) {
                     s += "@";
                 }
                 else if (this.block(x, y).isContinuation()) {
