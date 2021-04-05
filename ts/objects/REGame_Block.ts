@@ -215,6 +215,7 @@ export class REGame_Block// extends LObject
     
     _tileKind: TileKind = TileKind.Floor;
 
+
     constructor(x: number, y: number) {
         this._x = x;
         this._y = y;

@@ -134,19 +134,16 @@ declare global {
     }
 }
 
+// Scene 開始時の Sprite 生成
 var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
-    console.log("$gameMap.events()", $gameMap.events());
 
     this._prefabSpriteIdRE = this._counter + 1;
     _Spriteset_Map_createCharacters.call(this);
-
-    console.log("this._characterSprites", this._characterSprites);
     
     // Visual と Sprite を関連付ける
     if (REVisual.entityVisualSet) {
         this._characterSprites.forEach((sprite, index) => {
-            console.log("index", index);
             if (REVisual.entityVisualSet && sprite._character.isREEvent()) {
                 const event = (sprite._character as Game_Event);
                 const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());

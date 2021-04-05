@@ -1,7 +1,9 @@
 import { DHelpers } from "ts/data/DHelper";
 import { REData } from "ts/data/REData";
-import { FBlockComponent } from "ts/floorgen/FMapData";
+import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
+import { REGame } from "ts/objects/REGame";
 import { REGame_Map } from "ts/objects/REGame_Map";
+import { REEntityFactory } from "ts/system/REEntityFactory";
 import { SMinimapData } from "ts/system/SMinimapData";
 
 
@@ -23,7 +25,7 @@ enum SubTile {
 export class GameMapBuilder {
 
 
-    public build(coreMap: REGame_Map): void {
+    public build(coreMap: REGame_Map, initialMap: FMap): void {
         const templateMap = REData.templateMaps[1];
 
         $dataMap.tilesetId = templateMap.tilesetId;
@@ -53,6 +55,16 @@ export class GameMapBuilder {
                         break;
                 }
             }
+        }
+
+        const exitPoint = initialMap.exitPont();
+        if (exitPoint) {
+            const entity = REEntityFactory.newExitPoint();
+            
+            console.log("exitPoint floorId", coreMap.floorId());
+            REGame.world._transferEntity(entity, coreMap.floorId(), exitPoint.mx(), exitPoint.my());
+            
+            console.log("_transferEntity e");
         }
     }
 

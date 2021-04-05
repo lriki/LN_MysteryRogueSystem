@@ -176,7 +176,7 @@ export class TestEnvIntegration extends REIntegration {
         SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData();
     }
 
-    onRefreshGameMap(map: REGame_Map): void {
+    onRefreshGameMap(map: REGame_Map, initialMap: FMap): void {
         // Visual 表示は伴わない
     }
 

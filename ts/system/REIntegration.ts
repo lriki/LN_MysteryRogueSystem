@@ -15,7 +15,7 @@ export abstract class REIntegration {
     
     abstract onLoadFixedMapEvents(): void;
 
-    abstract onRefreshGameMap(map: REGame_Map): void;
+    abstract onRefreshGameMap(map: REGame_Map, initialMap: FMap): void;
 
     abstract onFlushSequelSet(sequelSet: RESequelSet): void;
 

@@ -39,9 +39,9 @@ export class RMMZIntegration extends REIntegration {
         //RESystem.minimapData.refresh();
     }
     
-    onRefreshGameMap(map: REGame_Map): void {
+    onRefreshGameMap(map: REGame_Map, initialMap: FMap): void {
         const builder = new GameMapBuilder();
-        builder.build(map);
+        builder.build(map, initialMap);
     }
 
     onFlushSequelSet(sequelSet: RESequelSet): void {

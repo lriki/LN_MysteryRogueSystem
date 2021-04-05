@@ -128,7 +128,7 @@ export class REGameManager
             REGame.map.setup(newFloorId, mapData);
 
             if (newFloorId.isRandomMap()) {
-                RESystem.integration.onRefreshGameMap(REGame.map);
+                RESystem.integration.onRefreshGameMap(REGame.map, mapData);
             }
             
             REGame.world.enterEntitiesToCurrentMap();
