@@ -4,6 +4,21 @@ export interface RMMZFloorMetadata {
     fixedMap?: string;
 }
 
+export interface RMMZEventPrefabMetadata {
+    item?: string;
+    enemy?: string;
+    system?: string;
+
+    // deprecated
+    weaponId?: number;
+    // deprecated
+    armorId?: number;
+    // deprecated
+    itemId?: number;    // RMMZ データベース上の ItemId
+    // deprecated
+    enemyId?: number;   // RMMZ データベース上の EnemyId
+}
+
 interface RMMZEventRawMetadata {
     prefab: string;
     states?: string[];
@@ -98,6 +113,37 @@ export class DHelpers {
         return undefined;
     }
     
+    static readPrefabMetadata(event: IDataMapEvent): RMMZEventPrefabMetadata | undefined {
+        if (event.pages && event.pages.length > 0) {
+            const page = event.pages[0];
+            const list = page.list;
+            if (list) {
+                // collect comments
+                let comments = "";
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].code == 108 || list[i].code == 408) {
+                        if (list[i].parameters) {
+                            comments += list[i].parameters;
+                        }
+                    }
+                }
+        
+                let index = comments.indexOf("@REPrefab");
+                if (index >= 0) {
+                    let block = comments.substring(index + 6);
+                    block = block.substring(
+                        block.indexOf("{"),
+                        block.indexOf("}") + 1);
+
+                    let metadata: RMMZEventPrefabMetadata | undefined;
+                    eval(`metadata = ${block}`);
+                    return metadata;
+                }
+            }
+        }
+        return undefined;
+    }
+
     static readEntityMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZEventEntityMetadata | undefined {
 
         let list = page.list;
@@ -112,7 +158,7 @@ export class DHelpers {
                 }
             }
     
-            let index = comments.indexOf("@REEntity");
+            let index = comments.indexOf("@RE-Entity");
             if (index >= 0) {
                 let block = comments.substring(index + 6);
                 block = block.substring(
@@ -124,7 +170,7 @@ export class DHelpers {
 
                 if (rawData) {
                     if (!rawData.prefab) {
-                        throw new Error(`Event#${eventId} - @REEntity.prefab not specified.`);
+                        throw new Error(`Event#${eventId} - @RE-Entity.prefab not specified.`);
                     }
                     return {
                         prefab: rawData.prefab,

@@ -628,5 +628,13 @@ export class LEntity extends LObject
     public roomId(): LRoomId {
         return REGame.map.block(this.x, this.y)._roomId;
     }
+
+    
+    //--------------------------------------------------------------------------------
+    // Debug Utils
+
+    public debugDisplayName(): string {
+        return `Entity:${this._name}(${this.entityId().index2()}:${this.entityId().key2()})`;
+    }
 }
 

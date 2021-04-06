@@ -142,7 +142,6 @@ export class REGame_Map
             });
         }
 
-        RESystem.integration.onLoadFixedMapEvents();
     }
 
     releaseMap() {

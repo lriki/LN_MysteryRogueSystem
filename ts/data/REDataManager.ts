@@ -23,6 +23,8 @@ import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
+import { DHelpers } from "./DHelper";
+import { DPrefab, DPrefabKind, DPrefab_Default } from "./DPrefab";
 
 
 declare global {  
@@ -585,15 +587,52 @@ export class REDataManager
             }
         }
 
+        // Load Prefabs
+        this.beginLoadPrefabs();
+
         // Load Template Map
         for (const templateMap of REData.templateMaps) {
             this.beginLoadTemplateMap(templateMap);
         }
+    }
 
-        // Load Land database
-        for (const land of REData.lands) {
-            this.beginLoadLandDatabase(land);
-        }
+    private static beginLoadPrefabs(): void {
+        assert(this.databaseMapId > 0);
+        this.beginLoadMapData(this.databaseMapId, (obj: any) => { 
+            const mapData: IDataMap = obj;
+            for (const event of mapData.events) {
+                if (!event) continue;
+                const data = DHelpers.readPrefabMetadata(event);
+                if (!data) continue;
+
+                const prefab: DPrefab = {
+                    ...DPrefab_Default(),
+                    id: REData.prefabs.length,
+                    key: event.name,
+                }
+                REData.prefabs.push(prefab);
+                if (data.enemy) {
+                    prefab.kind = DPrefabKind.Enemy;
+                    prefab.rmmzDataKey = data.enemy;
+                }
+                else if (data.item) {
+                    prefab.kind = DPrefabKind.Item;
+                    prefab.rmmzDataKey = data.item;
+                }
+                else if (data.system) {
+                    prefab.kind = DPrefabKind.System;
+                    prefab.rmmzDataKey = data.system;
+                }
+                else {
+                    throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
+                }
+            }
+            
+            // Load Land database
+            for (const land of REData.lands) {
+                this.beginLoadLandDatabase(land);
+            }
+        });
     }
 
     private static beginLoadTemplateMap(templateMap: DTemplateMap): void {
@@ -602,7 +641,7 @@ export class REDataManager
 
     private static beginLoadLandDatabase(land: DLand): void {
         if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => { land.floorInfos = buildFloorTable(obj); });
-        if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.enemyTable = buildAppearanceTable(obj); });
+        if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.appearanceTable = buildAppearanceTable(obj); });
     }
     
     private static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {

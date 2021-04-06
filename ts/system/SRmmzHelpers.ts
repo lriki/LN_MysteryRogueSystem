@@ -10,24 +10,9 @@ import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId,
 import { REEntityFactory } from "./REEntityFactory";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
-import { DHelpers, RMMZEventEntityMetadata } from "ts/data/DHelper";
+import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
 
 
-
-export interface RMMZEventPrefabMetadata {
-    item?: string;
-    enemy?: string;
-    system?: string;
-
-    // deprecated
-    weaponId?: number;
-    // deprecated
-    armorId?: number;
-    // deprecated
-    itemId?: number;    // RMMZ データベース上の ItemId
-    // deprecated
-    enemyId?: number;   // RMMZ データベース上の EnemyId
-}
 
 /**
  * RMMZ データ ($dataXXXX) に依存する処理。
@@ -54,36 +39,6 @@ export class SRmmzHelpers {
     //    return data.prefab.includes("ExitPoint");
     //}
 
-    static readPrefabMetadata(event: IDataMapEvent): RMMZEventPrefabMetadata | undefined {
-        if (event.pages && event.pages.length > 0) {
-            const page = event.pages[0];
-            const list = page.list;
-            if (list) {
-                // collect comments
-                let comments = "";
-                for (let i = 0; i < list.length; i++) {
-                    if (list[i].code == 108 || list[i].code == 408) {
-                        if (list[i].parameters) {
-                            comments += list[i].parameters;
-                        }
-                    }
-                }
-        
-                let index = comments.indexOf("@REPrefab");
-                if (index >= 0) {
-                    let block = comments.substring(index + 6);
-                    block = block.substring(
-                        block.indexOf("{"),
-                        block.indexOf("}") + 1);
-
-                    let metadata: RMMZEventPrefabMetadata | undefined;
-                    eval(`metadata = ${block}`);
-                    return metadata;
-                }
-            }
-        }
-        return undefined;
-    }
     // こちらは UnitTest 用。Game_Event は使えないので $dataMap から、最初のイベントページ固定で作る
     public static createEntitiesFromRmmzFixedMapEventData(): void {
         $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
@@ -133,7 +88,7 @@ export class SRmmzHelpers {
     
     public static newEntity(data: RMMZEventEntityMetadata): LEntity {
         const prefabEventData = this.getPrefabEventData(data.prefab);
-        const prefabData = this.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
+        const prefabData = DHelpers.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
         assert(prefabData);
 
         if (prefabData.system) {

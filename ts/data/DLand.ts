@@ -1,5 +1,7 @@
 
 import { DHelpers } from "./DHelper";
+import { DPrefabId } from "./DPrefab";
+import { REData } from "./REData";
 
 
 export type DLandId = number;
@@ -9,11 +11,19 @@ export interface DAppearanceTableEntity {
     prefabName: string;
     startFloorNumber: number;
     lastFloorNumber: number;
+    prefabId: DPrefabId;
 }
 
 
 export interface DAppearanceTable {
+    /** すべての Entity と出現範囲 */
     entities: DAppearanceTableEntity[];
+
+    maxFloors: number;
+    others: DAppearanceTableEntity[][];
+    enemies: DAppearanceTableEntity[][];
+    traps: DAppearanceTableEntity[][];
+    items: DAppearanceTableEntity[][];
 }
 
 export interface DFloorInfo {
@@ -44,10 +54,11 @@ export interface DLand {
     /** TrapTable MapId. */
     trapTableMapId: number;
 
-    eventTable: DAppearanceTable;
-    itemTable: DAppearanceTable;
-    enemyTable: DAppearanceTable;
-    trapTable: DAppearanceTable;
+    appearanceTable: DAppearanceTable;
+    //eventTable: DAppearanceTable;
+    //itemTable: DAppearanceTable;
+    //enemyTable: DAppearanceTable;
+    //trapTable: DAppearanceTable;
 
     exitEMMZMapId: number;
 
@@ -67,10 +78,18 @@ export function DLand_Default(): DLand {
         itemTableMapId: 0,
         enemyTableMapId: 0,
         trapTableMapId: 0,
-        eventTable: { entities: [] },
-        itemTable: { entities: [] },
-        enemyTable: { entities: [] },
-        trapTable: { entities: [] },
+        appearanceTable: {
+            entities: [],
+            maxFloors: 0,
+            others: [],
+            enemies: [],
+            traps: [],
+            items: [],
+        },
+        //eventTable: { entities: [] },
+        //itemTable: { entities: [] },
+        //enemyTable: { entities: [] },
+        //trapTable: { entities: [] },
         exitEMMZMapId:0,
         floorInfos: [],
         floorIds: []
@@ -103,7 +122,14 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
         return undefined;
     }
 
-    const table: DAppearanceTable = { entities: [] };
+    const table: DAppearanceTable = { 
+        entities: [],
+        maxFloors: 0,
+        others: [],
+        enemies: [],
+        traps: [],
+        items: [],
+    };
 
     for (const event of mapData.events) {
         if (!event) continue;
@@ -129,8 +155,29 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
                 prefabName: entityMetadata.prefab,
                 startFloorNumber: x,
                 lastFloorNumber: x2 - 1,
+                prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),
             };
             table.entities.push(entity);
+
+            if (entity.prefabId <= 0) {
+                console.log(REData.prefabs);
+                throw new Error(`Prefab "${entity.prefabName}" not found. (Map:${mapData.displayName}, Event:${event.id}.${event.name})`);
+            }
+
+            table.maxFloors = Math.max(table.maxFloors, entity.lastFloorNumber + 1);
+        }
+    }
+
+    table.others = new Array(table.maxFloors);
+    for (let i = 0; i < table.maxFloors; i++) {
+        table.others[i] = [];
+    }
+    for (const entity of table.entities) {
+        for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
+            console.log(table);
+            console.log("i", i);
+            console.log("table.others[i]", table.others[i]);
+            table.others[i].push(entity);
         }
     }
 
@@ -138,5 +185,5 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
     //throw new Error("stop");
     
 
-    return { entities: [] };
+    return table;
 }

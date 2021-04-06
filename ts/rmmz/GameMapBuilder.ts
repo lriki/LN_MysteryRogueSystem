@@ -1,4 +1,7 @@
+import { GetContentRegionMax } from "imgui-js/imgui";
+import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
+import { DPrefabKind } from "ts/data/DPrefab";
 import { REData } from "ts/data/REData";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
@@ -59,8 +62,18 @@ export class GameMapBuilder {
 
         const exitPoint = initialMap.exitPont();
         if (exitPoint) {
+            const appearanceTable = REData.lands[coreMap.floorId().index2()].appearanceTable;
+            const prefab = appearanceTable.others[coreMap.floorId().key2()].find(e => {
+                const p = REData.prefabs[e.prefabId];
+                return p.kind == DPrefabKind.System && p.rmmzDataKey == "RE-SystemPrefab:ExitPoint";
+            });
+            assert(prefab);
+
+
             const entity = REEntityFactory.newExitPoint();
+            entity.prefabKey = prefab.prefabName;
             
+            console.log("exitPoint prefab", prefab);
             console.log("exitPoint floorId", coreMap.floorId());
             REGame.world._transferEntity(entity, coreMap.floorId(), exitPoint.mx(), exitPoint.my());
             

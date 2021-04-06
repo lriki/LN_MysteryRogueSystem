@@ -130,6 +130,9 @@ export class REGameManager
             if (newFloorId.isRandomMap()) {
                 RESystem.integration.onRefreshGameMap(REGame.map, mapData);
             }
+            else {
+                RESystem.integration.onLoadFixedMapEvents();
+            }
             
             REGame.world.enterEntitiesToCurrentMap();
             RESystem.scheduler.clear();

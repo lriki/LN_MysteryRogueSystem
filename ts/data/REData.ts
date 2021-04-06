@@ -21,6 +21,7 @@ import { DMonsterHouse } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
+import { DPrefab, DPrefabKind, DPrefab_Default } from "./DPrefab";
 
 export type DParameterId = number;
 
@@ -167,6 +168,7 @@ export class REData
     static states: DState[] = [];
     static abilities: DAbility[] = [];
     static monsterHouses: DMonsterHouse[] = [];
+    static prefabs: DPrefab[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -206,6 +208,7 @@ export class REData
         this.states = [DState_makeDefault()];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
+        this.prefabs = [DPrefab_Default()];
     }
 
     static addEntityKind(name: string, prefabKind: string): number {
@@ -370,6 +373,10 @@ export class REData
     
     static findItem(re_key: string): DItem | undefined {
         return this.items.find(x => x.entity.key == re_key);
+    }
+
+    static findPrefab(kind: DPrefabKind, dataKey: string): DPrefab | undefined {
+        return this.prefabs.find(p => p.kind == kind && p.rmmzDataKey == dataKey);
     }
 
     static getItem(re_key: string): DItem {

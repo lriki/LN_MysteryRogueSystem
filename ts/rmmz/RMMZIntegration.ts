@@ -98,6 +98,7 @@ export class RMMZIntegration extends REIntegration {
             }
         }
         else {
+            throw new Error(`${entity.debugDisplayName()} は Prefab が指定されていません。`);
             // Tile などは RMMZ のイベント化する必要はない
             return;
         }
