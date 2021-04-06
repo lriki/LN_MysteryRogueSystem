@@ -532,5 +532,5 @@ declare var $dataStates      : IDataState[];
 declare var $dataTilesets    : IDataTileset[];
 declare var $dataCommonEvents: IDataCommonEvent[];
 declare var $dataSystem      : IDataSystem;
-declare var $dataMapInfos    : IDataMapInfo[];
+declare var $dataMapInfos    : (IDataMapInfo | undefined)[];
 declare var $dataMap         : IDataMap;	// Runtime load

@@ -531,37 +531,46 @@ export class REDataManager
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
                 }
-                else if (info.parentId > 0 && $dataMapInfos[info.parentId].name.includes("RE-TemplateMaps")) {
-                    REData.maps[i] = { id: i, landId: 0, mapId: i, mapKind: REFloorMapKind.TemplateMap };
-                    REData.templateMaps.push({
-                        ...DTemplateMap_Default(),
-                        id: REData.templateMaps.length,
-                        name: info.name,
-                        mapId: i,
-                    });
-                }
-                else if (info.name?.startsWith("RE-Land:")) {
-                    const land = REData.lands.find(x => x.rmmzMapId == i);
-                    assert(land);
-                    REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
-                }
-                else if (info.parentId) {
+                else {
+                    // 以下、必ず親Mapが必要なもの
                     const parentInfo = $dataMapInfos[info.parentId];
-                    const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
-                    if (land) {
-                        let kind = undefined;
-                        if (parentInfo.name.includes("[RandomMaps]")) {
-                            kind = REFloorMapKind.RandomMap;
-                        }
-                        else if (parentInfo.name.includes("[ShuffleMaps]")) {
-                            kind = REFloorMapKind.ShuffleMap;
-                        }
-                        else if (parentInfo.name.includes("RE-FixedMaps")) {
-                            kind = REFloorMapKind.FixedMap;
-                        }
+                    if (!parentInfo) continue;
 
-                        if (kind !== undefined) {
-                            REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: kind };
+                    if (info.parentId > 0 && parentInfo.name.includes("RE-TemplateMaps")) {
+                        REData.maps[i] = { id: i, landId: 0, mapId: i, mapKind: REFloorMapKind.TemplateMap };
+                        REData.templateMaps.push({
+                            ...DTemplateMap_Default(),
+                            id: REData.templateMaps.length,
+                            name: info.name,
+                            mapId: i,
+                        });
+                    }
+                    else if (info.name?.startsWith("RE-Land:")) {
+                        const land = REData.lands.find(x => x.rmmzMapId == i);
+                        assert(land);
+                        REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
+                    }
+                    else if (info.parentId) {
+                        const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
+                        if (land) {
+                            let kind = undefined;
+                            if (parentInfo.name.includes("[RandomMaps]")) {
+                                kind = REFloorMapKind.RandomMap;
+                            }
+                            else if (parentInfo.name.includes("[ShuffleMaps]")) {
+                                kind = REFloorMapKind.ShuffleMap;
+                            }
+                            else if (parentInfo.name.includes("RE-FixedMaps")) {
+                                kind = REFloorMapKind.FixedMap;
+                            }
+    
+                            if (kind !== undefined) {
+                                REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: kind };
+                            }
+                            else {
+                                // RE には関係のないマップ
+                                REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
+                            }
                         }
                         else {
                             // RE には関係のないマップ
@@ -573,49 +582,7 @@ export class REDataManager
                         REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                     }
                 }
-                else {
-                    // RE には関係のないマップ
-                    REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
-                }
-
-                /*
-                const parentInfo = $dataMapInfos[i];
-
-                const land = REData.lands.find(x => info && info.parentId && x.mapId == info.parentId);
-
-                if (this.isDatabaseMap(i)) {
-                    this.databaseMapId = i;
-                }
-                else if (land) {
-                    // Land の子マップを Floor として採用
-                    REData.floors[i] = {
-                        id: i,
-                        landId: land.id,
-                        mapId: i,
-                        mapKind: REFloorMapKind.FixedMap,
-                    };
-                }
-                */
             }
-
-
-            // ランダムマップ
-            /*
-            for (let i = 1; i < REData.lands.length; i++) { // LandId=0 はダミーなので生成しない
-                const beginFloorId = $dataMapInfos.length + (i * REData.MAX_DUNGEON_FLOORS);
-                REData.lands[i].floorIds = new Array(REData.MAX_DUNGEON_FLOORS);
-                for (let iFloor = 0; iFloor < REData.MAX_DUNGEON_FLOORS; iFloor++){
-                    const floorId = beginFloorId + iFloor;
-                    REData.lands[i].floorIds[iFloor] = floorId;
-                    REData.maps[floorId] = {
-                        id: floorId,
-                        landId: REData.lands[i].id,
-                        mapId: 0,
-                        mapKind: REFloorMapKind.RandomMap,
-                    };
-                }
-            }
-            */
         }
 
         // Load Template Map
@@ -667,7 +634,9 @@ export class REDataManager
         while (mapId > 0) {
             const land = REData.lands.find(x => x.rmmzMapId == mapId);
             if (land) return land;
-            mapId = $dataMapInfos[mapId].parentId;
+            const parentInfo = $dataMapInfos[mapId];
+            if (!parentInfo) break;
+            mapId = parentInfo.parentId;
         }
         return undefined;
     }

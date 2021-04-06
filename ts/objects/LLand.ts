@@ -56,16 +56,20 @@ export class LFloorId {
     }
 
     public static makeByRmmzFixedMapName(fixedMapName: string): LFloorId {
-        const mapId = $dataMapInfos.findIndex(x => x.name == fixedMapName);
+        const mapId = $dataMapInfos.findIndex(x => x && x.name == fixedMapName);
         const landId = REData.maps[mapId].landId;
         const floorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+        assert(floorNumber > 0);
         return new LFloorId(landId, floorNumber);
     }
 
     public static makeByRmmzFixedMapId(mapId: number): LFloorId {
-        const fixedMapName = $dataMapInfos[mapId].name;
+        const mapInfo = $dataMapInfos[mapId];
+        assert(mapInfo);
+        const fixedMapName = mapInfo.name;
         const landId = REData.maps[mapId].landId;
         const floorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+        assert(floorNumber > 0);
         return new LFloorId(landId, floorNumber);
     }
 

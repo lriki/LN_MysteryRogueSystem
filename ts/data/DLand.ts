@@ -51,6 +51,7 @@ export interface DLand {
 
     exitEMMZMapId: number;
 
+    /** @RE-Floor から読み取った Floor 情報 */
     floorInfos: DFloorInfo[];
 
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
@@ -87,7 +88,6 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
             };
         }
     }
-    console.log("floors", floors);
     return floors;
 }
 
