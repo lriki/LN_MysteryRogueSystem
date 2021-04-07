@@ -1,7 +1,7 @@
 
 import { DEntity, DEntity_Default } from "./DEntity";
 import { DHelpers } from "./DHelper";
-import { DPrefabId } from "./DPrefab";
+import { DPrefabId, DPrefabKind } from "./DPrefab";
 import { REData } from "./REData";
 
 
@@ -112,7 +112,7 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
     return floors;
 }
 
-export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
+export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppearanceTable {
     
 
     const findEvent = function(x: number, y: number): IDataMapEvent | undefined {
@@ -165,8 +165,7 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
             table.entities.push(tableItem);
 
             if (tableItem.entity.prefabId <= 0) {
-                console.log(REData.prefabs);
-                throw new Error(`Prefab "${tableItem.prefabName}" not found. (Map:${mapData.displayName}, Event:${event.id}.${event.name})`);
+                throw new Error(`Prefab "${tableItem.prefabName}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
             }
 
             table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
@@ -174,21 +173,35 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
     }
 
     table.others = new Array(table.maxFloors);
+    table.enemies = new Array(table.maxFloors);
+    table.traps = new Array(table.maxFloors);
+    table.items = new Array(table.maxFloors);
     for (let i = 0; i < table.maxFloors; i++) {
         table.others[i] = [];
-    }
-    for (const entity of table.entities) {
-        for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
-            console.log(table);
-            console.log("i", i);
-            console.log("table.others[i]", table.others[i]);
-            table.others[i].push(entity);
-        }
+        table.enemies[i] = [];
+        table.traps[i] = [];
+        table.items[i] = [];
     }
 
-    //console.log("table", table);
-    //throw new Error("stop");
-    
+    for (const entity of table.entities) {
+        const prefab = REData.prefabs[entity.entity.prefabId];
+        for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
+            switch (prefab.kind) {
+                case DPrefabKind.Enemy:
+                    table.enemies[i].push(entity);
+                    break;
+                case DPrefabKind.Trap:
+                    table.traps[i].push(entity);
+                    break;
+                case DPrefabKind.Item:
+                    table.items[i].push(entity);
+                    break;
+                default:
+                    table.others[i].push(entity);
+                    break;
+            }
+        }
+    }
 
     return table;
 }

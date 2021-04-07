@@ -71,6 +71,7 @@ export class LMap
     setup(floorId: LFloorId, mapData: FMap) {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
         this._floorId = floorId;
+        console.log("000000000000 ", this._floorId);
         this.build(mapData);
     }
 
@@ -231,7 +232,7 @@ export class LMap
 
     /** NPC や Enemy が出現可能な Block を取得する。既に Unit が存在している Block は対象外。 */
     public unitSpawnableBlocks(): REGame_Block[] {
-        return this.roomFloorBlocks().filter(b => b.layer(BlockLayerKind.Unit).isContainsAnyEntity());
+        return this.roomFloorBlocks().filter(b => !b.layer(BlockLayerKind.Unit).isContainsAnyEntity());
     }
 
     public isValidPosition(x: number, y: number): boolean {

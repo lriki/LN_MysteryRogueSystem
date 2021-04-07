@@ -16,6 +16,9 @@ export var paramRandomMapDefaultWidth = 60;
 // ランダムマップの最大高さ (12の倍数)
 export var paramRandomMapDefaultHeight = 48;
 
+// エネミーのランダム出現時、自分の周囲に生成しないようにする範囲
+export var paramEnemySpawnInvalidArea  = 12;
+
 /*
 // 
 export var paramMapSkillEffectsMapId = Number(PluginManager.parameters(pluginName)['MapSkillEffectsMapId']);

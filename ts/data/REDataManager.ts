@@ -641,8 +641,11 @@ export class REDataManager
     }
 
     private static beginLoadLandDatabase(land: DLand): void {
-        if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => { land.floorInfos = buildFloorTable(obj); });
-        if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.appearanceTable = buildAppearanceTable(obj); });
+        if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => { 
+            land.floorInfos = buildFloorTable(obj);
+            land.appearanceTable = buildAppearanceTable(obj, land.rmmzMapId);
+        });
+        //if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.appearanceTable = buildAppearanceTable(obj); });
     }
     
     private static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {

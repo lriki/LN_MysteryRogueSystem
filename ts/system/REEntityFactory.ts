@@ -89,7 +89,7 @@ export class REEntityFactory {
         let entity: LEntity;
         switch (prefab.kind) {
             case DPrefabKind.Enemy: {
-                const data = REData.monsters.find(x => x.key == prefab.key);
+                const data = REData.monsters.find(x => x.key == prefab.rmmzDataKey);
                 if (data)
                     entity = REEntityFactory.newMonster(data.id);
                 else
@@ -119,6 +119,7 @@ export class REEntityFactory {
                 throw new Error("Not implemented.");
         }
 
+        entity.prefabKey = prefab.key;
         return entity;
     }
 }

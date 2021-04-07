@@ -127,9 +127,11 @@ export class REGameManager
                 //mapData.print();
             }
 
+
             // マップ構築
             REGame.map._removeAllEntities();
             REGame.map.setup(newFloorId, mapData);
+            RESystem.mapManager.setMap(REGame.map);
 
             if (newFloorId.isRandomMap()) {
                 RESystem.integration.onRefreshGameMap(REGame.map, mapData);
