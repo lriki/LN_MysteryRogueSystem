@@ -17,7 +17,7 @@ import { RunStepInfo } from "ts/objects/LScheduler";
 
 enum SchedulerPhase
 {
-    PartStarting,
+    RoundStarting,
 
     RunStarting,
 
@@ -41,7 +41,7 @@ enum SchedulerPhase
 
     RunEnding,
 
-    PartEnding,
+    RoundEnding,
 }
 
 
@@ -50,7 +50,7 @@ enum SchedulerPhase
  */
 export class SScheduler
 {
-    private _phase: SchedulerPhase = SchedulerPhase.PartStarting;
+    private _phase: SchedulerPhase = SchedulerPhase.RoundStarting;
 
     private _phases: RESchedulerPhase[];
     private _brace: boolean = false;
@@ -78,7 +78,7 @@ export class SScheduler
     clear() {
         RESystem.sequelContext.clear();
         RESystem.commandContext.clear();
-        this._phase = SchedulerPhase.PartStarting;
+        this._phase = SchedulerPhase.RoundStarting;
         REGame.scheduler.clear();
         Log.d("ResetScheduler");
     }
@@ -181,8 +181,8 @@ export class SScheduler
 
     private stepSimulationInternal(): void {
         switch (this._phase) {
-            case SchedulerPhase.PartStarting:
-                this.update_PartStarting();
+            case SchedulerPhase.RoundStarting:
+                this.update_RoundStarting();
                 break;
             case SchedulerPhase.RunStarting:
                 this.update_RunStarting();
@@ -193,8 +193,8 @@ export class SScheduler
             case SchedulerPhase.RunEnding:
                 this.update_RunEnding();
                 break;
-            case SchedulerPhase.PartEnding:
-                this.update_PartEnding();
+            case SchedulerPhase.RoundEnding:
+                this.update_RoundEnding();
                 break;
             default:
                 assert(0);
@@ -202,8 +202,11 @@ export class SScheduler
         }
     }
     
-    private update_PartStarting(): void {
-        Log.d("========== [PartStarting] ==========");
+    private update_RoundStarting(): void {
+        Log.d("========== [RoundStarting] ==========");
+
+        // 敵の生成など
+        RESystem.mapManager.updateRound();
 
         REGame.scheduler.buildOrderTable();
         
@@ -236,7 +239,7 @@ export class SScheduler
         this._phase = SchedulerPhase.RunStarting;
         this._occupy = true;
 
-        Log.d("e update_PartStarting");
+        Log.d("e update_RoundStarting");
     }
     
     private update_RunStarting(): void {
@@ -328,15 +331,15 @@ export class SScheduler
             this._phase = SchedulerPhase.RunStarting;
         }
         else {
-            this._phase = SchedulerPhase.PartEnding;
+            this._phase = SchedulerPhase.RoundEnding;
         }
     }
     
-    private update_PartEnding(): void {
+    private update_RoundEnding(): void {
 
         //if (RESystem.sequelContext.isEmptySequelSet()) {
         if (this._occupy) {
-            // PartStart からここまで、一度もシミュレーションループから抜けなかった場合は一度制御を返すようにする。
+            // RoundStart からここまで、一度もシミュレーションループから抜けなかった場合は一度制御を返すようにする。
             // こうしておかないとゲームがハングする。
             // マップにいるすべての Entity が状態異常等で行動不能な場合にこのケースが発生する。
             this._brace = true;
@@ -346,7 +349,7 @@ export class SScheduler
             RESystem.sequelContext.flushSequelSet();
         }
 
-        this._phase = SchedulerPhase.PartStarting;
+        this._phase = SchedulerPhase.RoundStarting;
     }
 
     // 1行動トークンの消費を終えたタイミング。

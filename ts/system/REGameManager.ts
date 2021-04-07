@@ -30,6 +30,7 @@ import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/PluginParameters";
 import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
+import { SMapManager } from "./SMapManager";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -54,6 +55,7 @@ export class REGameManager
         RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
         RESystem.scheduler = new SScheduler();
         RESystem.minimapData = new SMinimapData();
+        RESystem.mapManager = new SMapManager();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();
