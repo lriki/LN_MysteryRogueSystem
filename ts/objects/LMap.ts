@@ -71,7 +71,6 @@ export class LMap
     setup(floorId: LFloorId, mapData: FMap) {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
         this._floorId = floorId;
-        console.log("000000000000 ", this._floorId);
         this.build(mapData);
     }
 

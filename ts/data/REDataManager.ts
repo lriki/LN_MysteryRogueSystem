@@ -786,7 +786,6 @@ export class REDataManager
     //   また UnitTest 環境では同期的にロードしたいので、必要に応じて FS を使うようにしている。
     
     private static loadDataFile(src: string, onLoad: (obj: any) => void) {
-        console.log("isNode", DHelpers.isNode());
         if (DHelpers.isNode()) {
             const data = JSON.parse(fs.readFileSync("data/" + src).toString());
             onLoad(data);

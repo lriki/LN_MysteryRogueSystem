@@ -375,8 +375,8 @@ export class REData
         return this.items.find(x => x.entity.key == re_key);
     }
 
-    static findPrefab(kind: DPrefabKind, dataKey: string): DPrefab | undefined {
-        return this.prefabs.find(p => p.kind == kind && p.rmmzDataKey == dataKey);
+    static findPrefab(kind: DPrefabKind, key: string): DPrefab | undefined {
+        return this.prefabs.find(p => p.kind == kind && p.key == key);
     }
 
     static getItem(re_key: string): DItem {
