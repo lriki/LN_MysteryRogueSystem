@@ -1,6 +1,6 @@
 import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REDialogContext } from "./REDialog";
 
@@ -15,7 +15,7 @@ export abstract class REIntegration {
     
     abstract onLoadFixedMapEvents(): void;
 
-    abstract onRefreshGameMap(map: REGame_Map, initialMap: FMap): void;
+    abstract onRefreshGameMap(map: LMap, initialMap: FMap): void;
 
     abstract onFlushSequelSet(sequelSet: RESequelSet): void;
 

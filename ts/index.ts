@@ -11,7 +11,7 @@ import './data/REData';
 import './data/REDataManager';
 import './data/DTextManager';
 import './objects/LEntity';
-import './objects/REGame_Map';
+import './objects/LMap';
 import './objects/LSystem';
 import './system/REEntityFactory';
 import './rmmz/Scene_Boot';

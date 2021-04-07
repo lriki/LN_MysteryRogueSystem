@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { TileKind } from "ts/objects/REGame_Block";
-import { REGame_Map } from "../objects/REGame_Map";
+import { LMap } from "../objects/LMap";
 
 /**
  * 地形生成を行うモジュールに対して、マップデータへのアクセスを提供するクラス。

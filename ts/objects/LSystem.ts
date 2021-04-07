@@ -1,4 +1,4 @@
-import { REGame_Map } from "./REGame_Map";
+import { LMap } from "./LMap";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { LEntity } from "./LEntity";
 import { LWorld } from "./LWorld";

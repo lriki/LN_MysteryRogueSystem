@@ -1,4 +1,4 @@
-import { REGame_Map } from "./REGame_Map";
+import { LMap } from "./LMap";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { REDataManager } from "../data/REDataManager";
 import { LEntity } from "./LEntity";
@@ -31,7 +31,7 @@ export class REGame
     static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
     static system: LSystem;
     static world: LWorld;
-    static map: REGame_Map;
+    static map: LMap;
     static camera: LCamera;
     static scheduler: LScheduler;
     static identifyer: LIdentifyer;

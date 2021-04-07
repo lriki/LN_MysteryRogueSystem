@@ -1,4 +1,4 @@
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { REGame } from "../objects/REGame";
 import { REVisual } from "../visual/REVisual";
 

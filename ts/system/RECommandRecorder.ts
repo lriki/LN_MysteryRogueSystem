@@ -5,7 +5,7 @@ import { DActionId } from 'ts/data/DAction';
 import { LCommandPlaybackDialog } from 'ts/dialogs/LCommandPlaybackDialog';
 import { LEntityId } from 'ts/objects/LObject';
 import { REGame } from 'ts/objects/REGame';
-import { REGame_Map } from 'ts/objects/REGame_Map';
+import { LMap } from 'ts/objects/LMap';
 import { RECommand } from './RECommand';
 import { RESystem } from './RESystem';
 

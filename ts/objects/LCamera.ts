@@ -1,4 +1,4 @@
-import { REGame_Map } from "./REGame_Map";
+import { LMap } from "./LMap";
 import { REEntityFactory } from "../system/REEntityFactory";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
 import { LEntity } from "./LEntity";

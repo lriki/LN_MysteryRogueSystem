@@ -11,7 +11,7 @@ import { LScheduler } from "ts/objects/LScheduler";
 import { LSystem } from "ts/objects/LSystem";
 import { LWorld } from "ts/objects/LWorld";
 import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { LState } from "ts/objects/states/LState";
 import { LStructure } from "ts/objects/structures/LStructure";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
@@ -31,7 +31,7 @@ function createInstance(name: string): any {
         case "Game_REPrefabEvent":
             return Object.create(Game_REPrefabEvent.prototype);
         case "REGame_Map":
-            return Object.create(REGame_Map.prototype);
+            return Object.create(LMap.prototype);
         case "REGame_Block":
             return Object.create(REGame_Block.prototype);
         case "REBlockLayer":

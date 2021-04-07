@@ -1,6 +1,6 @@
 import { REGame } from "../objects/REGame";
 import { REEntityFactory } from "./REEntityFactory";
-import { REGame_Map } from "../objects/REGame_Map";
+import { LMap } from "../objects/LMap";
 import { LWorld } from "../objects/LWorld";
 import { LSystem } from "../objects/LSystem";
 import { DFactionId, REData } from "../data/REData";
@@ -59,7 +59,7 @@ export class REGameManager
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();
-        REGame.map = new REGame_Map();
+        REGame.map = new LMap();
         REGame.camera = new LCamera();
         REGame.scheduler = new LScheduler();
         REGame.identifyer = new LIdentifyer();

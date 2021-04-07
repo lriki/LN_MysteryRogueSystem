@@ -2,7 +2,7 @@ import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";

@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { MapDataProvidor } from "./MapDataProvidor";
 import { LEntity } from "./LEntity";
-import { REGame_Map } from "./REGame_Map";
+import { LMap } from "./LMap";
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
@@ -210,6 +210,7 @@ export class REGame_Block// extends LObject
 
     _roomId: LRoomId = 0;
     _blockComponent: FBlockComponent = FBlockComponent.None;
+    _continuation: boolean = false;
 
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     
@@ -247,6 +248,15 @@ export class REGame_Block// extends LObject
         //const attr = this.tile().findAttribute(RETileAttribute);
         //return attr ? attr.tileKind() : TileKind.Void;
         return this._tileKind;
+    }
+
+    /** 部屋内のブロックであるか */
+    public isRoom(): boolean {
+        return this._roomId > 0;
+    }
+
+    public isContinuation(): boolean {
+        return this._continuation;
     }
 
     layers(): readonly REBlockLayer[] {

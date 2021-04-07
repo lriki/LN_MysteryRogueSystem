@@ -1,6 +1,6 @@
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 

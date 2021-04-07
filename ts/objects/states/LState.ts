@@ -9,7 +9,7 @@ import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LGenericRMMZStateBehavior } from "./LGenericRMMZStateBehavior";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
-import { REGame_Map } from "../REGame_Map";
+import { LMap } from "../LMap";
 import { LBehaviorId } from "../behaviors/LBehavior";
 
 export type LStateId = LObjectId;

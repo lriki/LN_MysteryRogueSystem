@@ -11,7 +11,7 @@ import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DFloorInfo, DLand } from "ts/data/DLand";
 import { LEntityId } from "./LObject";
-import { FMap } from "ts/floorgen/FMapData";
+import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
@@ -53,7 +53,7 @@ export interface RE_Game_Data
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
-export class REGame_Map
+export class LMap
 {
     private _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;
@@ -119,6 +119,7 @@ export class REGame_Map
 
                     mapBlock._roomId = dataBlock.roomId();
                     mapBlock._blockComponent = dataBlock.component();
+                    mapBlock._continuation = dataBlock.isContinuation();
                 }
             }
 
@@ -221,6 +222,16 @@ export class REGame_Map
         else {
             return this._blocks[y * this._width + x];
         }
+    }
+
+    /** "部屋" 内の "床" である Block を取得する */
+    public roomFloorBlocks(): REGame_Block[] {
+        return this._blocks.filter(b => b.isRoom() && b.tileKind() == TileKind.Floor);
+    }
+
+    /** NPC や Enemy が出現可能な Block を取得する。既に Unit が存在している Block は対象外。 */
+    public unitSpawnableBlocks(): REGame_Block[] {
+        return this.roomFloorBlocks().filter(b => b.layer(BlockLayerKind.Unit).isContainsAnyEntity());
     }
 
     public isValidPosition(x: number, y: number): boolean {

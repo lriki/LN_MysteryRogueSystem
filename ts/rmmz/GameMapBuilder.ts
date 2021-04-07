@@ -5,7 +5,7 @@ import { DPrefabKind } from "ts/data/DPrefab";
 import { REData } from "ts/data/REData";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { REEntityFactory } from "ts/system/REEntityFactory";
 import { SMinimapData } from "ts/system/SMinimapData";
 
@@ -28,7 +28,7 @@ enum SubTile {
 export class GameMapBuilder {
 
 
-    public build(coreMap: REGame_Map, initialMap: FMap): void {
+    public build(coreMap: LMap, initialMap: FMap): void {
         const templateMap = REData.templateMaps[1];
 
         $dataMap.tilesetId = templateMap.tilesetId;

@@ -3,7 +3,7 @@
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "./RESystem";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { REEntityFactory } from "./REEntityFactory";
 
 
@@ -11,7 +11,7 @@ import { REEntityFactory } from "./REEntityFactory";
  * LMap へのアイテムや敵の生成・配置など、ゲーム進行に伴う Map 上の変化を管理するクラス。
  */
 export class SMapManager {
-    private _map: REGame_Map;
+    private _map: LMap;
     private _enemySpanwRate: number = 20;
     private _enemySpawnCount: number = 0;   // 
 
@@ -20,7 +20,7 @@ export class SMapManager {
         this._enemySpawnCount = this._enemySpanwRate;
     }
 
-    public setMap(map: REGame_Map): void {
+    public setMap(map: LMap): void {
         this._map = map;
     }
 
@@ -37,14 +37,17 @@ export class SMapManager {
     }
 
     private spawnRandomEnemy(): void {
-        
+        const floorId = this._map.floorId();
 
-
-        const enemies = this._map.land().appearanceTable.enemies[this._map.floorId().floorNumber()];
+        // 出現テーブルからランダムに選択して Entity を作る
+        const enemies = this._map.land().appearanceTable.enemies[floorId.floorNumber()];
         const item = enemies[REGame.world.random().nextIntWithMax(enemies.length)];
         const entity = REEntityFactory.newEntity(item.entity);
 
-
+        // 空いている Block をランダムに選択して配置する
+        const candidateBlocks = this._map.unitSpawnableBlocks();
+        const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
+        REGame.world._transferEntity(entity, floorId, block.x(), block.y());
     }
 }
 

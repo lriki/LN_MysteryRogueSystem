@@ -10,7 +10,7 @@ import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
 import { LEntityId, LObject, LObjectType } from "./LObject";
-import { REGame_Map } from "./REGame_Map";
+import { LMap } from "./LMap";
 import { LState, LStateId } from "./states/LState";
 import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
@@ -91,7 +91,7 @@ export class LEntity extends LObject
         super.setOwner(owner);
     }
 
-    public setOwnerMap(owner: REGame_Map): void {
+    public setOwnerMap(owner: LMap): void {
         assert(this.ownerObjectId().isEmpty());
         assert(!this.hasOwner());
         this._parentIsMap = true;

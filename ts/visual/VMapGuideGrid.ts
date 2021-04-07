@@ -1,6 +1,6 @@
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
-import { REGame_Map } from "ts/objects/REGame_Map";
+import { LMap } from "ts/objects/LMap";
 import { Helpers } from "ts/system/Helpers";
 import { REVisual } from "./REVisual";
 
