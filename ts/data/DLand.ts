@@ -1,4 +1,5 @@
 
+import { DEntity, DEntity_Default } from "./DEntity";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
@@ -8,10 +9,10 @@ export type DLandId = number;
 export type DMapId = number;
 
 export interface DAppearanceTableEntity {
+    entity: DEntity;
     prefabName: string;
     startFloorNumber: number;
     lastFloorNumber: number;
-    prefabId: DPrefabId;
 }
 
 
@@ -152,20 +153,23 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
                 }
             }
             
-            const entity: DAppearanceTableEntity = {
+            const tableItem: DAppearanceTableEntity = {
                 prefabName: entityMetadata.prefab,
                 startFloorNumber: x,
                 lastFloorNumber: x2 - 1,
-                prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),
+                entity: {
+                    ...DEntity_Default(),
+                    prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),
+                }
             };
-            table.entities.push(entity);
+            table.entities.push(tableItem);
 
-            if (entity.prefabId <= 0) {
+            if (tableItem.entity.prefabId <= 0) {
                 console.log(REData.prefabs);
-                throw new Error(`Prefab "${entity.prefabName}" not found. (Map:${mapData.displayName}, Event:${event.id}.${event.name})`);
+                throw new Error(`Prefab "${tableItem.prefabName}" not found. (Map:${mapData.displayName}, Event:${event.id}.${event.name})`);
             }
 
-            table.maxFloors = Math.max(table.maxFloors, entity.lastFloorNumber + 1);
+            table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
         }
     }
 

@@ -16,6 +16,8 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
+import { DEntity } from "ts/data/DEntity";
+import { DPrefabKind } from "ts/data/DPrefab";
 
 export class REEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -81,5 +83,44 @@ export class REEntityFactory {
         e.addBehavior(LMagicBulletBehavior, ownerItem);
         return e;
     }
+
+    static newEntity(data: DEntity): LEntity {
+        const prefab = REData.prefabs[data.prefabId];
+        let entity: LEntity;
+        switch (prefab.kind) {
+            case DPrefabKind.Enemy: {
+                const data = REData.monsters.find(x => x.key == prefab.key);
+                if (data)
+                    entity = REEntityFactory.newMonster(data.id);
+                else
+                    throw new Error("Invalid enemy key: " + prefab.key);
+                }
+                break;
+
+            case DPrefabKind.Trap: {
+                throw new Error("Not implemented.");
+                break;
+            }
+
+            case DPrefabKind.Item: {
+                throw new Error("Not implemented.");
+                break;
+            }
+            case DPrefabKind.System: {
+                if (prefab.rmmzDataKey == "RE-SystemEntity:ExitPoint") {
+                    entity = this.newExitPoint();
+                }
+                else {
+                    throw new Error("Not implemented.");
+                }
+                break;
+            }
+            default:
+                throw new Error("Not implemented.");
+        }
+
+        return entity;
+    }
 }
+
 

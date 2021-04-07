@@ -64,7 +64,7 @@ export class GameMapBuilder {
         if (exitPoint) {
             const appearanceTable = REData.lands[coreMap.floorId().landId()].appearanceTable;
             const prefab = appearanceTable.others[coreMap.floorId().floorNumber()].find(e => {
-                const p = REData.prefabs[e.prefabId];
+                const p = REData.prefabs[e.entity.prefabId];
                 return p.kind == DPrefabKind.System && p.rmmzDataKey == "RE-SystemPrefab:ExitPoint";
             });
             assert(prefab);

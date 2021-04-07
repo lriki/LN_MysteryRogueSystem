@@ -4,6 +4,7 @@ import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "./RESystem";
 import { REGame_Map } from "ts/objects/REGame_Map";
+import { REEntityFactory } from "./REEntityFactory";
 
 
 /**
@@ -36,6 +37,13 @@ export class SMapManager {
     }
 
     private spawnRandomEnemy(): void {
+        
+
+
+        const enemies = this._map.land().appearanceTable.enemies[this._map.floorId().floorNumber()];
+        const item = enemies[REGame.world.random().nextIntWithMax(enemies.length)];
+        const entity = REEntityFactory.newEntity(item.entity);
+
 
     }
 }

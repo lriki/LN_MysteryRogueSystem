@@ -9,7 +9,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
-import { DLand } from "ts/data/DLand";
+import { DFloorInfo, DLand } from "ts/data/DLand";
 import { LEntityId } from "./LObject";
 import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
@@ -167,8 +167,12 @@ export class REGame_Map
         return this._rooms[roomId];
     }
 
-    land(): DLand {
+    public land(): DLand {
         return REData.lands[this._floorId.landId()];
+    }
+
+    public floorData(): DFloorInfo {
+        return this.land().floorInfos[this._floorId.floorNumber()];
     }
 
     width(): number {
