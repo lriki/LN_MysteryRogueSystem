@@ -1,4 +1,4 @@
-import { GetContentRegionMax } from "imgui-js/imgui";
+
 import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
 import { DPrefabKind } from "ts/data/DPrefab";
@@ -62,8 +62,8 @@ export class GameMapBuilder {
 
         const exitPoint = initialMap.exitPont();
         if (exitPoint) {
-            const appearanceTable = REData.lands[coreMap.floorId().index2()].appearanceTable;
-            const prefab = appearanceTable.others[coreMap.floorId().key2()].find(e => {
+            const appearanceTable = REData.lands[coreMap.floorId().landId()].appearanceTable;
+            const prefab = appearanceTable.others[coreMap.floorId().floorNumber()].find(e => {
                 const p = REData.prefabs[e.prefabId];
                 return p.kind == DPrefabKind.System && p.rmmzDataKey == "RE-SystemPrefab:ExitPoint";
             });

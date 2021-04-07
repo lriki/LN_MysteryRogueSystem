@@ -39,6 +39,7 @@ export interface RMMZEventEntityMetadata {
 }
 
 export class DHelpers {
+    public static TILE_ID_E = 768;
     public static TILE_ID_A5 = 1536;
     public static TILE_ID_A1 = 2048;
     public static TILE_ID_A2 = 2816;
@@ -185,4 +186,7 @@ export class DHelpers {
         return undefined;
     }
     
+    static isNode(): boolean {
+        return (process.title !== 'browser');
+    }
 }

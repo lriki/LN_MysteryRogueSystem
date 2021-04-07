@@ -62,6 +62,7 @@ export class TestEnv {
         }
 
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
+        
 
         /*
         // Unique Entitise
@@ -76,7 +77,6 @@ export class TestEnv {
     }
 
     public static performFloorTransfer(): void {
-        // TODO: ランダムマップはまだ
         this.loadMapData(REGame.camera.transferingNewFloorId().rmmzFixedMapId());
         REGameManager.performFloorTransfer();
     }

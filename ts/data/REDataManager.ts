@@ -1,4 +1,5 @@
 //import 'types/index.d.ts'
+import fs from 'fs';
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
@@ -648,26 +649,6 @@ export class REDataManager
         const filename = `Map${this.padZero(rmmzMapId, 3)}.json`;
         this.loadDataFile(filename, onLoad);
     }
-    
-    private static loadDataFile(src: string, onLoad: (obj: any) => void) {
-        const xhr = new XMLHttpRequest();
-        const url = "data/" + src;
-        xhr.open("GET", url);
-        xhr.overrideMimeType("application/json");
-        xhr.onload = () => this.onXhrLoad(xhr, src, url, onLoad);
-        xhr.onerror = () => DataManager.onXhrError(src, src, url);
-        xhr.send();
-    }
-
-    private static onXhrLoad(xhr: XMLHttpRequest, src: string, url: string, onLoad: (obj: any) => void) {
-        if (xhr.status < 400) {
-            onLoad(JSON.parse(xhr.responseText));
-        } else {
-            DataManager.onXhrError(src, src, url);
-        }
-    }
-
-
     private static findLand(rmmzMapId: number): DLand | undefined {
         let mapId = rmmzMapId;
         while (mapId > 0) {
@@ -793,4 +774,37 @@ export class REDataManager
     static databaseMap(): IDataMap | undefined {
         return window["RE_databaseMap"];
     }
+
+    
+    //--------------------------------------------------
+    // DataManager の実装
+    //   コアスクリプトの DataManager は結果をグローバル変数へ格納するが、
+    //   代わりにコールバックで受け取るようにしたもの。
+    //   また UnitTest 環境では同期的にロードしたいので、必要に応じて FS を使うようにしている。
+    
+    private static loadDataFile(src: string, onLoad: (obj: any) => void) {
+        console.log("isNode", DHelpers.isNode());
+        if (DHelpers.isNode()) {
+            const data = JSON.parse(fs.readFileSync("data/" + src).toString());
+            onLoad(data);
+        }
+        else {
+            const xhr = new XMLHttpRequest();
+            const url = "data/" + src;
+            xhr.open("GET", url);
+            xhr.overrideMimeType("application/json");
+            xhr.onload = () => this.onXhrLoad(xhr, src, url, onLoad);
+            xhr.onerror = () => DataManager.onXhrError(src, src, url);
+            xhr.send();
+        }
+    }
+
+    private static onXhrLoad(xhr: XMLHttpRequest, src: string, url: string, onLoad: (obj: any) => void) {
+        if (xhr.status < 400) {
+            onLoad(JSON.parse(xhr.responseText));
+        } else {
+            DataManager.onXhrError(src, src, url);
+        }
+    }
+
 }

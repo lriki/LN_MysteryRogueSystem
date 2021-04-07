@@ -142,7 +142,7 @@ export function buildAppearanceTable(mapData: IDataMap): DAppearanceTable {
             let x2 = x + 1;
 
             // 右へ伸びるタイルをカウントするときは E タイルのみを対象とする
-            if (Tilemap.TILE_ID_E <= baseTile && baseTile < Tilemap.TILE_ID_A5) {
+            if (DHelpers.TILE_ID_E <= baseTile && baseTile < DHelpers.TILE_ID_A5) {
                 for (; x2 < mapData.width; x2++) {
                     if (baseTile != DHelpers.getMapTopTile(mapData, x2, y) || findEvent(x2, y)) {
                         

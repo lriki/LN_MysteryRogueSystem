@@ -168,7 +168,7 @@ export class REGame_Map
     }
 
     land(): DLand {
-        return REData.lands[this._floorId.index2()];
+        return REData.lands[this._floorId.landId()];
     }
 
     width(): number {

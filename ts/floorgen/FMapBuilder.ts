@@ -6,7 +6,7 @@ import { FMonsterHouseStructure } from "./FStructure";
 
 export class FMapBuilder {
 
-    public buildForFixedMap(data: FMap): void {
+    public buildForRandomMap(data: FMap): void {
         const passes = [
             new FMapBuildPass_MakeRoomId(),
             //new FMapBuildPass_ResolveRoomShapes(),
@@ -17,6 +17,16 @@ export class FMapBuilder {
         passes.forEach(pass => pass.execute(data));
     }
 
+    public buildForFixedMap(data: FMap): void {
+        const passes = [
+            new FMapBuildPass_MakeRoomId(),
+            //new FMapBuildPass_ResolveRoomShapes(),
+            new FMarkExitPointAndContinuationPass(),
+            new FMapBuildPass_MarkMonsterHouse(),
+        ];
+        // Apply passes
+        passes.forEach(pass => pass.execute(data));
+    }
     
 }
 

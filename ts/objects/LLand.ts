@@ -27,11 +27,11 @@ export class LFloorId {
         this._floorNumber = key;
     }
 
-    public index2(): number {
+    public landId(): number {
         return this._landId;
     }
 
-    public key2(): number {
+    public floorNumber(): number {
         return this._floorNumber;
     }
 

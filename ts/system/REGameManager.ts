@@ -97,7 +97,9 @@ export class REGameManager
     }
 
     
-    // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済みでなければならない。
+    // performTransfer() が呼ばれる時点で、RMMZ のマップ情報はロード済みでなければならない。
+    // - 固定マップの場合は、そのマップがロード済みであること。
+    // - ランダムマップの場合は、テーブル定義マップがロード済みであること。
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
             const newFloorId = REGame.camera.transferingNewFloorId();
@@ -115,12 +117,12 @@ export class REGameManager
                 (new FGenericRandomMapGenerator(mapData)).generate();
                 //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                 const builder = new FMapBuilder();
-                builder.buildForFixedMap(mapData);
+                builder.buildForRandomMap(mapData);
 
                 
 
-                console.log("sectors", mapData.sectors());
-                mapData.print();
+                //console.log("sectors", mapData.sectors());
+                //mapData.print();
             }
 
             // マップ構築
