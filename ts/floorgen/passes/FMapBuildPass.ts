@@ -1,4 +1,4 @@
-import { FMap } from "./FMapData";
+import { FMap } from "../FMapData";
 
 
 export abstract class FMapBuildPass {

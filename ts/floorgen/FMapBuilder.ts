@@ -1,7 +1,8 @@
-import { FMapBuildPass } from "./FMapBuildPass";
+import { FMapBuildPass } from "./passes/FMapBuildPass";
 import { FMap, FMapBlock } from "./FMapData";
-import { FMarkExitPointAndContinuationPass } from "./FMarkContinuationPass";
+import { FMarkContinuationPass } from "./passes/FMarkContinuationPass";
 import { FMonsterHouseStructure } from "./FStructure";
+import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPass";
 
 
 export class FMapBuilder {
@@ -9,8 +10,8 @@ export class FMapBuilder {
     public buildForRandomMap(data: FMap): void {
         const passes = [
             new FMapBuildPass_MakeRoomId(),
-            //new FMapBuildPass_ResolveRoomShapes(),
-            new FMarkExitPointAndContinuationPass(),
+            new FMarkContinuationPass(),
+            new FEntryPointAndExitPointPass(),
             new FMapBuildPass_MarkMonsterHouse(),
         ];
         // Apply passes
@@ -20,8 +21,8 @@ export class FMapBuilder {
     public buildForFixedMap(data: FMap): void {
         const passes = [
             new FMapBuildPass_MakeRoomId(),
-            //new FMapBuildPass_ResolveRoomShapes(),
-            new FMarkExitPointAndContinuationPass(),
+            new FMapBuildPass_ResolveRoomShapes(),
+            new FMarkContinuationPass(),
             new FMapBuildPass_MarkMonsterHouse(),
         ];
         // Apply passes

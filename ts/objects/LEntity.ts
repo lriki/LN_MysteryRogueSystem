@@ -11,18 +11,14 @@ import { DBasics } from "ts/data/DBasics";
 import { DEntityKindId } from "ts/data/DEntityKind";
 import { LEntityId, LObject, LObjectType } from "./LObject";
 import { REGame_Map } from "./REGame_Map";
-import { TilingSprite } from "pixi.js";
 import { LState, LStateId } from "./states/LState";
-import { LWorld } from "./LWorld";
 import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
-import { DParameterId, REData } from "ts/data/REData";
+import { DParameterId } from "ts/data/REData";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
-import { FlowFlags } from "typescript";
-import { LRoom } from "./LRoom";
 import { LActivity } from "./activities/LActivity";
-import { LFloorId } from "./LLand";
+import { LFloorId } from "./LFloorId";
 
 enum BlockLayer
 {

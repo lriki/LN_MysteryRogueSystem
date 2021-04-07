@@ -104,7 +104,7 @@ export class REGameManager
         if (REGame.camera.isFloorTransfering()) {
             const newFloorId = REGame.camera.transferingNewFloorId();
 
-            const mapData = new FMap(REGame.world.random());
+            const mapData = new FMap(newFloorId, REGame.world.random());
             if (newFloorId.rmmzFixedMapId() > 0) {
                 // 固定マップ
                 RESystem.integration.onLoadFixedMapData(mapData);

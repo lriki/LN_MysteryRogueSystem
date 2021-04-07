@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DMapId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
+import { LFloorId } from "ts/objects/LFloorId";
 import { LRandom } from "ts/objects/LRandom";
 import { TileKind } from "ts/objects/REGame_Block";
 import { FStructure } from "./FStructure";
@@ -556,6 +557,7 @@ export class FExitPont {
 }
 
 export class FMap {
+    private _floorId: LFloorId;
     private _rand: LRandom;
     private _width: number;
     private _height: number;
@@ -567,7 +569,8 @@ export class FMap {
     private _structures: FStructure[];
     private _exitPont: FExitPont | undefined;
 
-    public constructor(rand: LRandom) {
+    public constructor(floorId: LFloorId, rand: LRandom) {
+        this._floorId = floorId;
         this._rand = rand;
         this._width = 0;
         this._height = 0;
@@ -590,6 +593,10 @@ export class FMap {
         }
         this._sectors = [new FSector(this, 0)];    // dummy
         this._rooms = [new FRoom(this, 0, this._sectors[0])];    // dummy
+    }
+
+    public floorId(): LFloorId {
+        return this._floorId;
     }
 
     public random(): LRandom {
@@ -694,6 +701,11 @@ export class FMap {
     
     public exitPont(): FExitPont | undefined {
         return this._exitPont;
+    }
+
+    public rmmzFixedMapData(): IDataMap {
+        assert(this._floorId.isFixedMap());
+        return $dataMap;
     }
 
     // For Debug

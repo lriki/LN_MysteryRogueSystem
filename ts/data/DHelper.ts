@@ -185,6 +185,10 @@ export class DHelpers {
         }
         return undefined;
     }
+
+    static makeRmmzMapDebugName(mapId: number) {
+        return `${mapId}:${$dataMapInfos[mapId]?.name}`;
+    }
     
     static isNode(): boolean {
         return (process.title !== 'browser');

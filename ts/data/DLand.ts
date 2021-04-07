@@ -100,6 +100,7 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
     const floors: DFloorInfo[] = [];
     for (const event of mapData.events) {
         if (!event) continue;
+        // @RE-Floor 設定を取り出す
         const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
         if (floorData) {
             floors[event.x] = {

@@ -1,7 +1,5 @@
 import { REData } from "ts/data/REData";
-import { FMapBuilder } from "ts/floorgen/FMapBuilder";
-import { LFloorId } from "ts/objects/LLand";
-import { RESystem } from "ts/system/RESystem";
+import { LFloorId } from "ts/objects/LFloorId";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";

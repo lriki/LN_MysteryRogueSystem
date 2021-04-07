@@ -22,7 +22,7 @@ import { LStructure } from "./structures/LStructure";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { LFloorId } from "./LLand";
+import { LFloorId } from "./LFloorId";
 
 
 /*

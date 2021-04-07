@@ -12,10 +12,9 @@ import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { SSequelContext } from "./SSequelContext";
-import { REGame_Map } from "ts/objects/REGame_Map";
 import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { LFloorId } from "ts/objects/LLand";
+import { LFloorId } from "ts/objects/LFloorId";
 
 interface RECCMessage {
     name: string;   // for debug

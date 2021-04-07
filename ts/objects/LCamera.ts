@@ -7,7 +7,7 @@ import { REGame } from "./REGame";
 import { RESystem } from "ts/system/RESystem";
 import { Log } from "ts/Common";
 import { LEntityId } from "./LObject";
-import { LFloorId } from "./LLand";
+import { LFloorId } from "./LFloorId";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。

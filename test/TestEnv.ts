@@ -12,7 +12,7 @@ import { REGameManager } from "ts/system/REGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import "./Extension";
 import { RESystem } from 'ts/system/RESystem';
-import { LFloorId } from 'ts/objects/LLand';
+import { LFloorId } from 'ts/objects/LFloorId';
 import { REGame_Map } from 'ts/objects/REGame_Map';
 
 declare global {

@@ -4,9 +4,8 @@ import { REGame } from "./REGame";
 import { LRandom } from "ts/objects/LRandom";
 import { LEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
-import { TilingSprite } from "pixi.js";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
-import { LFloorId } from "./LLand";
+import { LFloorId } from "./LFloorId";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
