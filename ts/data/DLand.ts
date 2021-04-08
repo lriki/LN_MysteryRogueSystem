@@ -8,6 +8,13 @@ import { REData } from "./REData";
 export type DLandId = number;
 export type DMapId = number;
 
+/*
+export interface DFloorId {
+    landId: DLandId;
+    floorNumber: number;
+}
+*/
+
 export interface DAppearanceTableEntity {
     entity: DEntity;
     prefabName: string;
@@ -61,7 +68,13 @@ export interface DLand {
     //enemyTable: DAppearanceTable;
     //trapTable: DAppearanceTable;
 
-    exitEMMZMapId: number;
+    /**
+     * 主にシステムの都合で行先が明示されずに、Land から "出される" ときの移動先となるマップ。
+     * ゲームオーバーや "脱出の巻物" などでダンジョンから抜けるときに参照される。
+     * このマップは通過点として演出や遷移先の指定のみ利用する。REシステム管理下のマップではない。
+     */
+    exitRMMZMapId: number;
+    //exitFloorId: DFloorId;
 
     /** @RE-Floor から読み取った Floor 情報 */
     floorInfos: DFloorInfo[];
@@ -91,7 +104,8 @@ export function DLand_Default(): DLand {
         //itemTable: { entities: [] },
         //enemyTable: { entities: [] },
         //trapTable: { entities: [] },
-        exitEMMZMapId:0,
+        //exitFloorId: { landId: 0, floorNumber: 0 },
+        exitRMMZMapId: 0,
         floorInfos: [],
         floorIds: []
     };

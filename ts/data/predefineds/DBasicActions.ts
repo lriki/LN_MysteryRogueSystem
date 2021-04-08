@@ -122,12 +122,15 @@ export interface DBasicActions
     TrashActionId: number;
 
     // TODO: ↓このあたりは言葉がちがうだけでやることは同じなので、グループ化できるようにしてみたい
-    /** 進む */
-    ProceedFloorActionId: number;
+    /** 進む () */
+    ForwardFloorActionId: number;
     /** 降りる */
     //StairsDownActionId: number;
     /** 登る */
     //StairsUpActionId: number;
+
+    /** 戻る */
+    BackwardFloorActionId: number;
 
     //----------------------------------------
     // Item Actions.

@@ -152,7 +152,7 @@ export class TestEnv {
 }
 
 export class TestEnvIntegration extends REIntegration {
-    onReserveTransferFloor(floorId: number): void {
+    onReserveTransferMap(mapId: number): void {
         // Test では Camera の transfar 情報を使うため設定不要
     }
 

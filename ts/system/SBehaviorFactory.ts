@@ -16,6 +16,7 @@ import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
+import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -33,6 +34,7 @@ export class SBehaviorFactory {
         { fullName: "LEquipmentUserBehavior", friendlyName: "_EquipmentUser", create: () => new LEquipmentUserBehavior() },
         { fullName: "LActorBehavior", friendlyName: "_Actor", create: () => new LActorBehavior() },
         { fullName: "REExitPointBehavior", friendlyName: "_ExitPoint", create: () => new REExitPointBehavior() },
+        { fullName: "LEntryPointBehavior", friendlyName: "_EntryPoint", create: () => new LEntryPointBehavior() },
         { fullName: "LEnemyBehavior", friendlyName: "_Enemy", create: () => new LEnemyBehavior() },
         { fullName: "LGenericRMMZStateBehavior", friendlyName: "_GenericRMMZState", create: () => new LGenericRMMZStateBehavior() },
         { fullName: "LItemBehavior", friendlyName: "_Item", create: () => new LItemBehavior() },

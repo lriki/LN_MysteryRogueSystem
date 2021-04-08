@@ -6,10 +6,10 @@ import { REDialogContext } from "./REDialog";
 
 export abstract class REIntegration {
     /**
-     * フロアを移動するときに呼び出される。
-     * @param floorId 
+     * REシステム内から、 RMMZ マップを移動する必要があるときに呼び出される。
+     * (ゲームオーバー時に拠点フロアへ戻るときなど)
      */
-    abstract onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void;
+    abstract onReserveTransferMap(mapId: number, x: number, y:number, d: number): void;
 
     abstract onLoadFixedMapData(map: FMap): void;
     

@@ -20,8 +20,8 @@ import { LMap } from "ts/objects/LMap";
 import { GameMapBuilder } from "./GameMapBuilder";
 
 export class RMMZIntegration extends REIntegration {
-    onReserveTransferFloor(floorId: number, x: number, y:number, d: number): void {
-        $gamePlayer.reserveTransfer(floorId, x, y, d, 0);
+    onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
+        $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
     }
 
     onLoadFixedMapData(map: FMap): void {
@@ -32,8 +32,8 @@ export class RMMZIntegration extends REIntegration {
         
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
-            if (e && e._entityMetadata) {
-                SRmmzHelpers.createEntityFromRmmzEvent(e._entityMetadata, e.eventId(), e.x, e.y);
+            if (e && e._entityData) {
+                SRmmzHelpers.createEntityFromRmmzEvent(e._entityData, e.eventId(), e.x, e.y);
             }
         });
         //RESystem.minimapData.refresh();

@@ -18,6 +18,7 @@ import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehav
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
 import { DEntity } from "ts/data/DEntity";
 import { DPrefabKind } from "ts/data/DPrefab";
+import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 
 export class REEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -75,6 +76,12 @@ export class REEntityFactory {
         return e;
     }
 
+    static newEntryPoint(): LEntity {
+        const e = REGame.world.spawnEntity();
+        e.addBehavior(LEntryPointBehavior);
+        return e;
+    }
+
     static newMagicBullet(ownerItem: LEntity): LEntity {
         const e = REGame.world.spawnEntity();
         e.prefabKey = "pMagicBullet";
@@ -107,8 +114,11 @@ export class REEntityFactory {
                 break;
             }
             case DPrefabKind.System: {
-                if (prefab.rmmzDataKey == "RE-SystemEntity:ExitPoint") {
+                if (prefab.rmmzDataKey == "RE-SystemPrefab:ExitPoint") {
                     entity = this.newExitPoint();
+                }
+                else if (prefab.rmmzDataKey == "RE-SystemPrefab:EntryPoint") {
+                    entity = this.newEntryPoint();
                 }
                 else {
                     throw new Error("Not implemented.");

@@ -39,7 +39,7 @@ export class REExitPointBehavior extends LBehavior {
     }
 
     onQueryReactions(actions: DActionId[]): DActionId[] {
-        return [DBasics.actions.ProceedFloorActionId];
+        return [DBasics.actions.ForwardFloorActionId];
     }
     
     [onProceedFloorReaction](args: CommandArgs, context: RECommandContext): REResponse {

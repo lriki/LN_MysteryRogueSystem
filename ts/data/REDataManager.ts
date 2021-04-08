@@ -21,11 +21,12 @@ import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LWaveActivity } from "ts/objects/activities/LWaveActivity";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
-import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
+import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabKind, DPrefab_Default } from "./DPrefab";
+import { LBackwardFloorActivity } from 'ts/objects/activities/LBackwardFloorActivity';
 
 
 declare global {  
@@ -176,7 +177,8 @@ export class REDataManager
             DropActionId: REData.addAction("Drop", "", undefined),
             StepOnActionId: REData.addAction("StepOn", "", undefined),
             TrashActionId: REData.addAction("Trash", "", undefined),
-            ProceedFloorActionId: REData.addAction("すすむ", "LProceedFloorActivity", () => new LProceedFloorActivity()),
+            ForwardFloorActionId: REData.addAction("すすむ", "LForwardFloorActivity", () => new LForwardFloorActivity()),
+            BackwardFloorActionId: REData.addAction("戻る", "LBackwardFloorActivity", () => new LBackwardFloorActivity()),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
             EquipActionId: REData.addAction("装備", "LEquipActivity", () => new LEquipActivity()),
@@ -487,7 +489,7 @@ export class REDataManager
                 if (info.name?.includes("RE-ExitMap")) {
                     const land = (parent) ? REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId) : undefined;
                     if (land) {
-                        land.exitEMMZMapId = i;
+                        land.exitRMMZMapId = i;
                     }
                 }
                 
@@ -514,7 +516,7 @@ export class REDataManager
         // 検証
         for (const land of REData.lands) {
             if (land.id > 0) {
-                if (land.exitEMMZMapId == 0) {
+                if (land.exitRMMZMapId == 0) {
                     throw new Error(`Land[${land.name}] is RE-ExitMap not defined.`);
                 }
             }
@@ -526,7 +528,7 @@ export class REDataManager
         //   ひとまず欠番は多くなるが、最大フロア数でデータを作ってみる。
         {
             // 固定マップ
-            REData.maps = new Array($dataMapInfos.length);// + (REData.lands.length * REData.MAX_DUNGEON_FLOORS));
+            REData.maps = new Array($dataMapInfos.length);
             for (let i = 0; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
                 if (!info) continue;

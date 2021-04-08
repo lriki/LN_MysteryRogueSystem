@@ -233,7 +233,7 @@ export class RECommandContext
     public postTransferRMMZMap(entity: LEntity, mapId: number, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
-            $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
+            RESystem.integration.onReserveTransferMap(mapId, x, y, d);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "TransferFloor", func: m1 });

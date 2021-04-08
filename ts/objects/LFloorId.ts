@@ -12,7 +12,9 @@ import { REData } from "ts/data/REData";
  * - FloorId を静的なものにしてしまうと、動的な Land 生成に対応しづらくなる。
  */
 export class LFloorId {
+    /** LandId=0 は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
     private readonly _landId: number;
+
     private readonly _floorNumber: number;
 
     constructor(index: number, key: number) {

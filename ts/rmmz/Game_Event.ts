@@ -1,10 +1,11 @@
+import { DEntity } from "ts/data/DEntity";
 import { RMMZEventEntityMetadata } from "ts/data/DHelper";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Event {
-        _entityMetadata: RMMZEventEntityMetadata | undefined;
+        _entityData: DEntity | undefined;
 
         isREEntity(): boolean;
     }
@@ -40,11 +41,11 @@ var _Game_Event_setupPageSettings = Game_Event.prototype.setupPageSettings;
 Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
-    this._entityMetadata = SRmmzHelpers.readEntityMetadata(this);
+    this._entityData = SRmmzHelpers.readEntityMetadata(this);
 }
 
 Game_Event.prototype.isREEntity = function(): boolean {
-    return !!this._entityMetadata;
+    return !!this._entityData;
 }
 
 const _Game_Event_update = Game_Event.prototype.update;

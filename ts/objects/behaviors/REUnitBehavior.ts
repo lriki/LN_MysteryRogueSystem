@@ -24,7 +24,7 @@ import { LPickActivity } from "../activities/LPickActivity";
 import { LWaveActivity } from "../activities/LWaveActivity";
 import { LPutActivity } from "../activities/LPutActivity";
 import { LThrowActivity } from "../activities/LThrowActivity";
-import { LProceedFloorActivity } from "../activities/LProceedFloorActivity";
+import { LForwardFloorActivity } from "../activities/LForwardFloorActivity";
 
 /**
  * 
@@ -67,7 +67,6 @@ export class REUnitBehavior extends LBehavior {
 
     onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse {
         if (activity instanceof LDirectionChangeActivity) {
-            console.log("onActivity LDirectionChangeActivity");
             self.dir = activity.direction();
             return REResponse.Succeeded;
         }
@@ -86,7 +85,7 @@ export class REUnitBehavior extends LBehavior {
                 return REResponse.Succeeded;
             }
         }
-        else if (activity instanceof LProceedFloorActivity) {
+        else if (activity instanceof LForwardFloorActivity) {
 
             const reactor = activity.object();
             if (reactor) {

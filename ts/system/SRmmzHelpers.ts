@@ -11,6 +11,8 @@ import { REEntityFactory } from "./REEntityFactory";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
+import { DEntityKindId } from "ts/data/DEntityKind";
+import { DEntity, DEntity_Default, DEntity_makeFromEventData, DEntity_makeFromEventPageData } from "ts/data/DEntity";
 
 
 
@@ -21,9 +23,9 @@ import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/d
  */
 export class SRmmzHelpers {
 
-    static readEntityMetadata(event: Game_Event): RMMZEventEntityMetadata | undefined {
+    static readEntityMetadata(event: Game_Event): DEntity | undefined {
         if (event._pageIndex >= 0) {
-            return DHelpers.readEntityMetadataFromPage(event.page(), event.eventId());
+            return DEntity_makeFromEventPageData(event.eventId(), event.page());
         }
         else {
             return undefined;
@@ -42,33 +44,20 @@ export class SRmmzHelpers {
     // こちらは UnitTest 用。Game_Event は使えないので $dataMap から、最初のイベントページ固定で作る
     public static createEntitiesFromRmmzFixedMapEventData(): void {
         $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
-            if (e && e.pages.length > 0) {
-                const metadata = DHelpers.readEntityMetadataFromPage(e.pages[0], e.id);
-                if (metadata) {
-                    this.createEntityFromRmmzEvent(metadata, e.id, e.x, e.y);
-                }
+            if (e) {
+                const data = DEntity_makeFromEventData(e);
+                this.createEntityFromRmmzEvent(data, e.id, e.x, e.y);
             }
         });
     }
-    public static createEntityFromRmmzEvent(metadata: RMMZEventEntityMetadata, eventId: number, x: number, y: number): void {
-        const entity = this.newEntity(metadata);
-        entity.prefabKey = metadata.prefab;
+
+    public static createEntityFromRmmzEvent(data: DEntity, eventId: number, x: number, y: number): void {
+        const entity = REEntityFactory.newEntity(data)
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
         assert(entity.ownerIsMap());
-
-        // 初期 state 付与
-        // TODO: 絶対に眠らないモンスターとかもいるので、Command にしたほうがいいかも。
-        metadata.states.forEach(stateKey => {
-            const stateDataId = REData.states.findIndex(state => state.key == stateKey);
-            if (stateDataId > 0)
-                entity.addState(stateDataId);
-            else
-                throw new Error(`The state "${stateKey}" specified in event "Id:${eventId}" was not found.`);
-        });
     }
-
 
     public static getPrefabEventData(prefabName: string): IDataMapEvent {
         const databaseMap = REDataManager.databaseMap();
@@ -84,62 +73,6 @@ export class SRmmzHelpers {
         else {
             throw new Error(`${prefabName} not found in RE-Database map.`);
         }
-    }
-    
-    public static newEntity(data: RMMZEventEntityMetadata): LEntity {
-        const prefabEventData = this.getPrefabEventData(data.prefab);
-        const prefabData = DHelpers.readPrefabMetadata(prefabEventData);    // TODO: 毎回パースするとパフォーマンスに影響でそうなのでキャッシュしたいところ
-        assert(prefabData);
-
-        if (prefabData.system) {
-            if (prefabData.system.includes("RE-ExitPoint")) {
-                return REEntityFactory.newExitPoint();
-            }
-        }
-
-        if (prefabData.item) {
-            const data = REData.items.find(x => x.entity.key == prefabData.item);
-            if (data) {
-                let entity;
-                if (data.entity.kind == "Weapon")
-                    entity = REEntityFactory.newEquipment(data.id);
-                else if (data.entity.kind == "Shield")
-                    entity = REEntityFactory.newEquipment(data.id);
-                else if (data.entity.kind == "Trap")
-                    entity = REEntityFactory.newTrap(data.id);
-                else
-                    entity = REEntityFactory.newItem(data.id);
-                
-                SBehaviorFactory.attachBehaviors(entity, data.entity.behaviors);
-                return entity;
-            }
-            else
-                throw new Error("Invalid item key: " + prefabData.item);
-        }
-
-        if (prefabData.enemy) {
-            const data = REData.monsters.find(x => x.key == prefabData.enemy);
-            if (data)
-                return REEntityFactory.newMonster(data.id);
-            else
-                throw new Error("Invalid enemy key: " + prefabData.enemy);
-        }
-
-        throw new Error("Invalid prefab data key: " + prefabEventData.name);
-
-        /*
-        switch (data.prefabKind) {
-            case "":
-                return REEntityFactory.newEquipment((prefabData.weaponId ?? 0) + REData.weaponDataIdOffset);
-            case "":
-            case "Ring":
-                return REEntityFactory.newEquipment((prefabData.armorId ?? 0) + REData.armorDataIdOffset);
-            case 
-                
-            default:
-                throw new Error("Invalid entity name: " + data.prefabKind);
-        }
-        */
     }
 
     public static getRegionId(x: number, y: number): number {
