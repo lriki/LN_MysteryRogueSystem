@@ -118,9 +118,15 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
         // @RE-Floor 設定を取り出す
         const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
         if (floorData) {
-            floors[event.x] = {
+            const info: DFloorInfo = {
                 fixedMapName: floorData.fixedMap ?? "",
-            };
+            }
+
+            const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);
+            for (let x = event.x; x <= x2; x++) {
+                floors[x] = info;
+            }
+
         }
     }
     return floors;
@@ -129,14 +135,6 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
 export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppearanceTable {
     
 
-    const findEvent = function(x: number, y: number): IDataMapEvent | undefined {
-        for (const event of mapData.events) {
-            if (event && event.x == x && event.y == y) {
-                return event;
-            }
-        }
-        return undefined;
-    }
 
     const table: DAppearanceTable = { 
         entities: [],
@@ -154,23 +152,11 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
             const x = event.x;
             const y = event.y;
 
-            const baseTile = DHelpers.getMapTopTile(mapData, x, y);
-            let x2 = x + 1;
-
-            // 右へ伸びるタイルをカウントするときは E タイルのみを対象とする
-            if (DHelpers.TILE_ID_E <= baseTile && baseTile < DHelpers.TILE_ID_A5) {
-                for (; x2 < mapData.width; x2++) {
-                    if (baseTile != DHelpers.getMapTopTile(mapData, x2, y) || findEvent(x2, y)) {
-                        
-                        break;
-                    }
-                }
-            }
             
             const tableItem: DAppearanceTableEntity = {
                 prefabName: entityMetadata.prefab,
                 startFloorNumber: x,
-                lastFloorNumber: x2 - 1,
+                lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
                 entity: {
                     ...DEntity_Default(),
                     prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),

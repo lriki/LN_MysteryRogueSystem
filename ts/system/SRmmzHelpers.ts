@@ -46,7 +46,9 @@ export class SRmmzHelpers {
         $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
             if (e) {
                 const data = DEntity_makeFromEventData(e);
-                this.createEntityFromRmmzEvent(data, e.id, e.x, e.y);
+                if (data) {
+                    this.createEntityFromRmmzEvent(data, e.id, e.x, e.y);
+                }
             }
         });
     }

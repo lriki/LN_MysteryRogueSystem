@@ -188,6 +188,33 @@ export class DHelpers {
         return undefined;
     }
 
+    static countSomeTilesRight_E(mapData: IDataMap, x: number, y: number): number {
+
+        const findEvent = function(x: number, y: number): IDataMapEvent | undefined {
+            for (const event of mapData.events) {
+                if (event && event.x == x && event.y == y) {
+                    return event;
+                }
+            }
+            return undefined;
+        }
+
+        const baseTile = DHelpers.getMapTopTile(mapData, x, y);
+        let x2 = x + 1;
+
+        // 右へ伸びるタイルをカウントするときは E タイルのみを対象とする
+        if (DHelpers.TILE_ID_E <= baseTile && baseTile < DHelpers.TILE_ID_A5) {
+            for (; x2 < mapData.width; x2++) {
+                if (baseTile != DHelpers.getMapTopTile(mapData, x2, y) || findEvent(x2, y)) {
+                    
+                    break;
+                }
+            }
+        }
+
+        return (x2 - 1) - x;
+    }
+
     static makeRmmzMapDebugName(mapId: number) {
         return `${mapId}:${$dataMapInfos[mapId]?.name}`;
     }

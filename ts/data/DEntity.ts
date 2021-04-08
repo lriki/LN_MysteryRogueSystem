@@ -17,13 +17,14 @@ export function DEntity_Default(): DEntity {
     };
 }
 
-export function DEntity_makeFromEventData(event: IDataMapEvent): DEntity {
+export function DEntity_makeFromEventData(event: IDataMapEvent): DEntity | undefined {
     return DEntity_makeFromEventPageData(event.id, event.pages[0]);
 }
 
-export function DEntity_makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntity {
+export function DEntity_makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntity | undefined {
     const entityMetadata = DHelpers.readEntityMetadataFromPage(page, eventId);
-    assert(entityMetadata);
+    if (!entityMetadata) return undefined;
+    
     const entity: DEntity = {
         prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),
         stateIds: [],
