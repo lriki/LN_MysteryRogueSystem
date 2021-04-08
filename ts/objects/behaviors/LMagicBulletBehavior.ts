@@ -1,8 +1,6 @@
-import { DActionId } from "ts/data/DAction";
-import { DBasics } from "ts/data/DBasics";
 import { Helpers } from "ts/system/Helpers";
 import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { LEntityId } from "../LObject";
@@ -29,7 +27,7 @@ export class LMagicBulletBehavior extends LBehavior {
     }
     
     // 射程無限・壁反射を伴うため、通常の MoveAsProjectile とは異なる処理が必要となる。
-    [onMoveAsMagicBullet](args: CommandArgs, context: RECommandContext): REResponse {
+    [onMoveAsMagicBullet](args: CommandArgs, context: SCommandContext): REResponse {
         this.ownerEntity().blockOccupied = false;   // TODO: これは onQueryProperty にしたい
 
         const self = args.self;
@@ -47,7 +45,7 @@ export class LMagicBulletBehavior extends LBehavior {
 
                 context.post(
                     entity1, self, undefined, onCollidePreReaction,
-                    (response: REResponse, _: LEntity, context: RECommandContext) => {
+                    (response: REResponse, _: LEntity, context: SCommandContext) => {
                         if (response == REResponse.Pass) {
 
                             // reactor 側ではじかれていなかったので CollideAction を呼び出す
@@ -90,7 +88,7 @@ export class LMagicBulletBehavior extends LBehavior {
         return REResponse.Pass;
     }
     
-    [onCollideAction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
         const ownerItem = REGame.world.entity(this._ownerItemEntityId);
         const target = args.sender;
 

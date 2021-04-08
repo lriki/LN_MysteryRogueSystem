@@ -21,7 +21,7 @@ import { EmitFlags } from "typescript";
 import { LStructure } from "./structures/LStructure";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
 
@@ -428,7 +428,7 @@ export class LMap
         }
     }
 
-    public updateLocatedResults(context: RECommandContext): void {
+    public updateLocatedResults(context: SCommandContext): void {
         for (const entity of this.entities()) {
             if (entity._located) {
 

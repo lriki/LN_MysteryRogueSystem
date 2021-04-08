@@ -1,11 +1,7 @@
-import { DSkill, DSkillDataId } from "ts/data/DSkill";
-import { DStateId } from "ts/data/DState";
 import { DParameterId, REData } from "ts/data/REData";
 import { LSkillBehavior } from "../objects/skills/SkillBehavior";
 import { BlockLayerKind } from "../objects/REGame_Block";
 import { REIntegration } from "./REIntegration";
-import { DItemDataId } from "ts/data/DItem";
-import { BasicEntityKinds } from "ts/data/predefineds/DBasicEntityKinds";
 import { BasicParameters } from "ts/data/predefineds/DBasicParameters";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
 import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
@@ -13,7 +9,7 @@ import { BasicItems } from "ts/data/predefineds/DBasicItems";
 import { BasicAttributes, BasicBehaviors } from "ts/data/predefineds/DBasicBehaviors";
 import { EntityProperties, EntityProperty } from "ts/data/predefineds/DBasicProperties";
 import { SSequelContext } from "./SSequelContext";
-import { RECommandContext } from "./RECommandContext";
+import { SCommandContext } from "./SCommandContext";
 import { REDialogContext } from "./REDialog";
 import { SScheduler } from "./SScheduler";
 import { SMinimapData } from "./SMinimapData";
@@ -39,7 +35,7 @@ export class RESystem {
 
     // System
     static sequelContext: SSequelContext;
-    static commandContext: RECommandContext;
+    static commandContext: SCommandContext;
     static dialogContext: REDialogContext;
     static integration: REIntegration;
     static scheduler: SScheduler;

@@ -1,5 +1,5 @@
 import { assert, Log } from "../Common";
-import { RECommandContext } from "./RECommandContext";
+import { SCommandContext } from "./SCommandContext";
 import { REData } from "../data/REData";
 import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "../objects/REGame";

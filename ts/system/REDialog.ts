@@ -3,21 +3,19 @@ import { assert } from "ts/Common";
 import { REGame } from "../objects/REGame";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LEntity } from "../objects/LEntity";
-import { RECommandContext } from "./RECommandContext";
+import { SCommandContext } from "./SCommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
-import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
-import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 
 export class REDialogContext
 {
-    private _commandContext: RECommandContext;
+    private _commandContext: SCommandContext;
     private _causeEntity: LEntity | undefined;
     private _dialogModel: REDialog | null;
     //_visual: REDialogVisual | undefined;
 
-    constructor(commandContext: RECommandContext) {
+    constructor(commandContext: SCommandContext) {
         this._commandContext = commandContext;
         this._dialogModel = null;
     }
@@ -33,7 +31,7 @@ export class REDialogContext
             throw new Error("_dialogModel");
     }
 
-    commandContext(): RECommandContext {
+    commandContext(): SCommandContext {
         return this._commandContext;
     }
 

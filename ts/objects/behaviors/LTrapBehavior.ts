@@ -1,15 +1,11 @@
 import { assert, tr } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { REEffectContext } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
-import { REGame } from "../REGame";
-import { REGame_Block } from "../REGame_Block";
-import { LEntity } from "../LEntity";
 import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
@@ -37,7 +33,7 @@ export class LTrapBehavior extends LBehavior {
         assert(this.ownerEntity().findBehavior(LItemBehavior));
     }
     
-    [onWalkedOnTopReaction](e: CommandArgs, context: RECommandContext): REResponse {
+    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): REResponse {
 
 
         context.postMessage(tr("{0} を踏んだ！", this.trapName()));

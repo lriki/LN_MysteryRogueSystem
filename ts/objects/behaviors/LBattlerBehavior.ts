@@ -7,7 +7,7 @@ import { REGame } from "../REGame";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
@@ -298,7 +298,7 @@ export class LBattlerBehavior extends LBehavior {
         this.refresh();
     }
     
-    onTurnEnd(context: RECommandContext): REResponse {
+    onTurnEnd(context: SCommandContext): REResponse {
         const entity = this.ownerEntity();
         if (this.isDeathStateAffected()) {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);

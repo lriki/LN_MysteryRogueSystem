@@ -2,13 +2,12 @@ import { LAttribute } from "./attributes/LAttribute";
 import { DecisionPhase, LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
-import { RECommandContext } from "../system/RECommandContext";
+import { SCommandContext } from "../system/SCommandContext";
 import { BlockLayerKind, LRoomId, REGame_Block } from "./REGame_Block";
 import { RESystem } from "ts/system/RESystem";
-import { DState, DStateId } from "ts/data/DState";
+import { DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { DEntityKindId } from "ts/data/DEntityKind";
 import { LEntityId, LObject, LObjectType } from "./LObject";
 import { LMap } from "./LMap";
 import { LState, LStateId } from "./states/LState";
@@ -355,7 +354,7 @@ export class LEntity extends LObject
      * 何らかの Inventory に入っているならそこから、Map 上に出現しているならその Block から除外する。
      * 除外された UniqueEntity 以外の Entity は、そのターンの間にいずれかから参照を得ない場合 GC によって削除される。
      */
-    callRemoveFromWhereabouts(context: RECommandContext): REResponse {
+    callRemoveFromWhereabouts(context: SCommandContext): REResponse {
         const parent = this.parentEntity();
         if (parent) {
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
@@ -557,17 +556,17 @@ export class LEntity extends LObject
         return response;
     }
 
-    _callDecisionPhase(context: RECommandContext, phase: DecisionPhase): REResponse {
+    _callDecisionPhase(context: SCommandContext, phase: DecisionPhase): REResponse {
         let r = this._callStateIterationHelper(x => x.onDecisionPhase(this, context, phase));
         if (r != REResponse.Pass) return r;
         return this._callBehaviorIterationHelper(x => x.onDecisionPhase(this, context, phase));
     }
 
-    _sendAction(context: RECommandContext, cmd: RECommand): REResponse {
+    _sendAction(context: SCommandContext, cmd: RECommand): REResponse {
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
-    _sendActivity(context: RECommandContext, activity: LActivity): REResponse {
+    _sendActivity(context: SCommandContext, activity: LActivity): REResponse {
         return this._callBehaviorIterationHelper(x => x.onActivity(this, context, activity));
     }
 

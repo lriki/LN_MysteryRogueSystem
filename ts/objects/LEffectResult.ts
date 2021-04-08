@@ -3,7 +3,7 @@ import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
 import { LEntity } from "ts/objects/LEntity";
-import { RECommandContext } from "../system/RECommandContext";
+import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "../system/RESystem";
 import { SMessageBuilder } from "../system/SMessageBuilder";
 
@@ -120,7 +120,7 @@ export class LEffectResult {
     }
 
     // Window_BattleLog.prototype.displayActionResults
-    public showResultMessages(context: RECommandContext, entity: LEntity): void {
+    public showResultMessages(context: SCommandContext, entity: LEntity): void {
 
         const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
         

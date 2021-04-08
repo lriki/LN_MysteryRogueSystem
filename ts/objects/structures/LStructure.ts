@@ -1,8 +1,8 @@
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { LEntity } from "../LEntity";
 
 export class LStructure {
-    onEntityLocated(context: RECommandContext, entity: LEntity): void {
+    onEntityLocated(context: SCommandContext, entity: LEntity): void {
 
     }
 }

@@ -32,8 +32,7 @@ import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { DParameterId } from "ts/data/REData";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
-import { RECommandContext } from "../../system/RECommandContext";
-import { REGame } from "..//REGame";
+import { SCommandContext } from "../../system/SCommandContext";
 import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
@@ -193,9 +192,9 @@ export class LBehavior extends LObject {
     //_ownerEntityId: LEntityId = { index: 0, key: 0 };
     
 
-    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
+    onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
-    [onPrePickUpReaction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onPrePickUpReaction](args: CommandArgs, context: SCommandContext): REResponse {
         return REResponse.Pass;
     }
 
@@ -236,10 +235,10 @@ export class LBehavior extends LObject {
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
 
-    onAction(entity: LEntity, context: RECommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
-    onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
 
 
 
@@ -249,7 +248,7 @@ export class LBehavior extends LObject {
     onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
 
     /** 1行動消費単位の終了時点 */
-    onTurnEnd(context: RECommandContext): REResponse { return REResponse.Pass; }
+    onTurnEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
 }
 
 /*

@@ -1,19 +1,14 @@
 import { RECommand, REResponse } from "../../system/RECommand";
-import { RECommandContext } from "../../system/RECommandContext";
+import { SCommandContext } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onPrePickUpReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
-import { REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { RESystem } from "ts/system/RESystem";
-import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../REGame_Block";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { LCommonBehavior } from "./LCommonBehavior";
-import { SMessageBuilder } from "ts/system/SMessageBuilder";
-import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { DActionId } from "ts/data/DAction";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REEffectContext } from "ts/system/REEffectContext";
@@ -65,7 +60,7 @@ export class REUnitBehavior extends LBehavior {
         ]);
     }
 
-    onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         if (activity instanceof LDirectionChangeActivity) {
             self.dir = activity.direction();
             return REResponse.Succeeded;
@@ -107,7 +102,7 @@ export class REUnitBehavior extends LBehavior {
     
                     context.post(
                         itemEntity, self, undefined, onPrePickUpReaction,
-                        (responce: REResponse, itemEntity: LEntity, context: RECommandContext) => {
+                        (responce: REResponse, itemEntity: LEntity, context: SCommandContext) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
                             context.postMessage(tr("{0} は {1} をひろった", "LRIKI", REGame.identifyer.makeDisplayText(itemEntity)));
@@ -129,7 +124,7 @@ export class REUnitBehavior extends LBehavior {
                 // 足元に置けそうなら試行
                 context.post(
                     itemEntity, self, undefined, onPrePickUpReaction,
-                    (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
+                    (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                         inventory.removeEntity(reactor);
                         REGame.map.appearEntity(reactor, self.x, self.y);
 
@@ -152,7 +147,7 @@ export class REUnitBehavior extends LBehavior {
 
             context.post(
                 itemEntity, self, undefined, onPreThrowReaction,
-                (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
+                (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                     if (responce == REResponse.Pass) {
                         itemEntity.callRemoveFromWhereabouts(context);
 
@@ -162,7 +157,7 @@ export class REUnitBehavior extends LBehavior {
 
                         context.post(
                             itemEntity, self, undefined, onThrowReaction,
-                            (responce: REResponse, reactor: LEntity, context: RECommandContext) => {
+                            (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                                 if (responce == REResponse.Pass) {
                                     context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                                 }
@@ -202,7 +197,7 @@ export class REUnitBehavior extends LBehavior {
         return REResponse.Pass;
     }
     
-    [onAttackReaction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onAttackReaction](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         //const effectContext = cmd.effectContext();
         const effectContext: REEffectContext = args.args.effectContext;
@@ -245,7 +240,7 @@ export class REUnitBehavior extends LBehavior {
     }
 
 
-    [onWalkedOnTopAction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onWalkedOnTopAction](args: CommandArgs, context: SCommandContext): REResponse {
         return REResponse.Pass;
     }
 }

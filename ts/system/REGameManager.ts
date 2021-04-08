@@ -17,7 +17,7 @@ import { LMessageHistory } from "ts/objects/LMessageHistory";
 import { DBasics } from "ts/data/DBasics";
 import { LIdentifyer } from "ts/objects/LIdentifyer";
 import { SSequelContext } from "./SSequelContext";
-import { RECommandContext } from "./RECommandContext";
+import { SCommandContext } from "./SCommandContext";
 import { REDialogContext } from "./REDialog";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "ts/objects/LEventServer";
@@ -51,7 +51,7 @@ export class REGameManager
     // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。
     static createGameObjects(): void {
         RESystem.sequelContext = new SSequelContext();
-        RESystem.commandContext = new RECommandContext(RESystem.sequelContext);
+        RESystem.commandContext = new SCommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
         RESystem.scheduler = new SScheduler();
         RESystem.minimapData = new SMinimapData();

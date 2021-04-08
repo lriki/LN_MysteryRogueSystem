@@ -4,7 +4,7 @@ import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame } from "../REGame";
@@ -26,7 +26,7 @@ export class LCommonBehavior extends LBehavior {
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
 
-    public static startMoveAsProjectile(context: RECommandContext, entity: LEntity, dir: number, distance: number): void {
+    public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, dir: number, distance: number): void {
         const common = entity.findBehavior(LCommonBehavior);
         assert(common);
 
@@ -44,18 +44,18 @@ export class LCommonBehavior extends LBehavior {
     }
 
     // 拾われようとしている
-    [onPrePickUpReaction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onPrePickUpReaction](args: CommandArgs, context: SCommandContext): REResponse {
         return REResponse.Succeeded; // 無条件でOK
     }
 
     // 置かれようとしている
     // この時点で座標は確定していないため、ここで GroundLayer に置くことができるか確認することはできない。
-    [onPrePutReaction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onPrePutReaction](args: CommandArgs, context: SCommandContext): REResponse {
         return REResponse.Succeeded; // 無条件でOK
     }
     
     // 投げられた
-    [onThrowReaction](args: CommandArgs, context: RECommandContext): REResponse {
+    [onThrowReaction](args: CommandArgs, context: SCommandContext): REResponse {
 
         const self = args.self;
 
@@ -69,7 +69,7 @@ export class LCommonBehavior extends LBehavior {
     }
     
     // Projectile として移動
-    [onMoveAsProjectile](args: CommandArgs, context: RECommandContext): REResponse {
+    [onMoveAsProjectile](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         
         const common = self.findBehavior(LCommonBehavior);

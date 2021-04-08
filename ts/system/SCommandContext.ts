@@ -1,7 +1,6 @@
 import { RECommand, REResponse } from "./RECommand";
 import { REDialog } from "./REDialog";
 import { LEntity } from "../objects/LEntity";
-import { SScheduler } from "./SScheduler";
 import { assert, Log } from "ts/Common";
 import { SAnumationSequel, SMotionSequel, SSequelUnit } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
@@ -21,13 +20,13 @@ interface RECCMessage {
     func: () => REResponse;
 }
 
-export type CommandResultCallback = (response: REResponse, reactor: LEntity, context: RECommandContext) => void;
+export type CommandResultCallback = (response: REResponse, reactor: LEntity, context: SCommandContext) => void;
 
 /**
  * 
  * 
  */
-export class RECommandContext
+export class SCommandContext
 {
     private _sequelContext: SSequelContext;
     private _visualAnimationWaiting: boolean = false;   // 不要かも

@@ -60,7 +60,7 @@
 
 import { assert } from "ts/Common";
 import { REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -94,7 +94,7 @@ export class LInventoryBehavior extends LBehavior {
         entity.clearOwner();
     }
 
-    onRemoveEntityFromWhereabouts(context: RECommandContext, entity: LEntity): REResponse {
+    onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());

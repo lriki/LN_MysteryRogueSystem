@@ -1,6 +1,5 @@
 import { assert } from "ts/Common";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
-import { RECommandContext } from "ts/system/RECommandContext";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 

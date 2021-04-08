@@ -5,7 +5,7 @@ import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { REDialog, REDialogContext } from "../system/REDialog";
 
@@ -39,14 +39,14 @@ export class LWarehouseDialog extends REDialog {
             console.log("0");
             // Item を取り出せるか確認
             RESystem.commandContext.post(user, user, item, testPickOutItem,
-                (response: REResponse, reactor: LEntity, context: RECommandContext) => {
+                (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                     console.log("1");
                     if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
                         RESystem.commandContext.post(warehouse, warehouse, item, testPutInItem,
-                            (response: REResponse, reactor: LEntity, context: RECommandContext) => {
+                            (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                                 console.log("3");
                                 if (response != REResponse.Canceled) {
                                     console.log("4");
@@ -75,14 +75,14 @@ export class LWarehouseDialog extends REDialog {
             console.log("0");
             // Item を取り出せるか確認
             RESystem.commandContext.post(warehouse, warehouse, item, testPickOutItem,
-                (response: REResponse, reactor: LEntity, context: RECommandContext) => {
+                (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                     console.log("1");
                     if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
                         RESystem.commandContext.post(user, user, item, testPutInItem,
-                            (response: REResponse, reactor: LEntity, context: RECommandContext) => {
+                            (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                                 console.log("3");
                                 if (response != REResponse.Canceled) {
                                     console.log("4");

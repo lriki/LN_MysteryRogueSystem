@@ -4,7 +4,7 @@ import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { DFactionId } from "ts/data/REData";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { Helpers } from "ts/system/Helpers";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { MonsterHouseState } from "../LRoom";
 import { REGame } from "../REGame";
@@ -37,7 +37,7 @@ export class LMonsterHouseStructure extends LStructure {
         return this._monsterHouseState;
     }
 
-    public startMonsterHouse(context: RECommandContext): void {
+    public startMonsterHouse(context: SCommandContext): void {
         assert(this._monsterHouseTypeId > 0);
         assert(this._monsterHouseState == MonsterHouseState.Sleeping);
 
@@ -47,7 +47,7 @@ export class LMonsterHouseStructure extends LStructure {
         this._monsterHouseState = MonsterHouseState.Activated;
     }
     
-    onEntityLocated(context: RECommandContext, entity: LEntity): void {
+    onEntityLocated(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
 

@@ -5,7 +5,7 @@ import { DEquipmentPartId } from "ts/data/DEquipmentPart";
 import { DItem } from "ts/data/DItem";
 import { DParameterId, REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -101,7 +101,7 @@ NOTE:
     }
 
     
-    onActivity(self: LEntity, context: RECommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         if (activity instanceof LEquipActivity) {
             this.refreshSlots();
 

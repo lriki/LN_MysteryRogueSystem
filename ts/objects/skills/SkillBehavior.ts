@@ -3,7 +3,7 @@ import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "ts/system/Helpers";
-import { RECommandContext } from "ts/system/RECommandContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
@@ -11,11 +11,11 @@ import { onAttackReaction } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 
 export abstract class LSkillBehavior {
-    abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: RECommandContext): void;
+    abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void;
 }
 
 export class LNormalAttackSkillBehavior extends LSkillBehavior {
-    onPerforme(skillId: DSkillDataId, entity: LEntity, context: RECommandContext): void {
+    onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void {
 
         const skill = REData.skills[skillId];
         const subject = entity.getBehavior(LBattlerBehavior);

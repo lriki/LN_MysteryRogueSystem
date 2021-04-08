@@ -1,18 +1,13 @@
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REResponse } from "../../system/RECommand";
-import { RECommandContext } from "../../system/RECommandContext";
+import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
-import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
-import { BlockLayerKind } from "ts/objects/REGame_Block";
 import { RESystem } from "ts/system/RESystem";
-import { DBasics } from "ts/data/DBasics";
-import { REGameManager } from "ts/system/REGameManager";
 import { SAIHelper } from "ts/system/SAIHelper";
 import { LEntityId } from "../LObject";
-import { TilingSprite } from "pixi.js";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
@@ -27,7 +22,7 @@ export class REGame_DecisionBehavior extends LBehavior {
     private _targetPositionY: number = -1;
     private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
 
-    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
             context.openDialog(entity, new REManualActionDialog());

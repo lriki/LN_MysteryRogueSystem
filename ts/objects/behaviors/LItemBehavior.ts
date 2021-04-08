@@ -1,9 +1,6 @@
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
-import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior";
 
 

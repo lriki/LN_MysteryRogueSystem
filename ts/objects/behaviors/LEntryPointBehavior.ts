@@ -1,13 +1,9 @@
 
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/objects/behaviors/LBehavior";
+import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
-import { LEntity } from "ts/objects/LEntity";
-import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
 
 /**
  */

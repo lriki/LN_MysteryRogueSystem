@@ -1,17 +1,15 @@
-import { REData } from "ts/data/REData";
 import { REGame } from "ts/objects/REGame";
 import { DecisionPhase } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
-import { DBasics } from "ts/data/DBasics";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
 export class LDebugMoveRightState extends LStateTraitBehavior {
 
-    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ

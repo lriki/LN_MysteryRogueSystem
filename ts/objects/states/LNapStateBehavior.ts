@@ -1,12 +1,9 @@
-import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEventId, RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { Helpers } from "ts/system/Helpers";
 import { REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
-import { REGameManager } from "ts/system/REGameManager";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { DecisionPhase } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -44,7 +41,7 @@ export class LNapStateBehavior extends LStateTraitBehavior {
             return super.onQueryProperty(propertyId);
     }
     
-    onDecisionPhase(entity: LEntity, context: RECommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
                 this.removeThisState();

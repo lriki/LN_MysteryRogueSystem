@@ -1,9 +1,4 @@
-
-import { assert } from "ts/Common";
-import { LEntity } from "ts/objects/LEntity";
-import { RECommand, REResponse } from "ts/system/RECommand";
-import { RECommandContext } from "ts/system/RECommandContext";
-import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
+import { LBehavior } from "../behaviors/LBehavior";
 import { LState } from "./LState";
 
 /**

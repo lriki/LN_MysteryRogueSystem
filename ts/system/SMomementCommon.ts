@@ -9,13 +9,13 @@ import { BlockLayerKind, REGame_Block } from "ts/objects/REGame_Block";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
-import { RECommandContext } from "./RECommandContext";
+import { SCommandContext } from "./SCommandContext";
 import { RESystem } from "./RESystem";
 import { System } from "pixi.js";
 
 
 export class SMomementCommon {
-    public static moveEntity(context: RECommandContext, entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+    public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
         assert(entity.floorId == map.floorId());
 
@@ -39,7 +39,7 @@ export class SMomementCommon {
         }
     }
     
-    private static _postLocate(context: RECommandContext, entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block, map: LMap) {
+    private static _postLocate(context: SCommandContext, entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block, map: LMap) {
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
