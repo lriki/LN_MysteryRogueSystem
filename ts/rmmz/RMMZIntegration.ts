@@ -10,7 +10,7 @@ import { RESequelSet } from "../objects/REGame_Sequel";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "../PluginParameters";
 import { RMMZHelper } from "./RMMZHelper";
 import { REDialogContext } from "../system/REDialog";
-import { REEntityFactory } from "../system/REEntityFactory";
+import { SEntityFactory } from "../system/SEntityFactory";
 import { REIntegration } from "../system/REIntegration";
 import { REVisual } from "../visual/REVisual";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";

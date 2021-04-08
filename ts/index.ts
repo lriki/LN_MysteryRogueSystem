@@ -13,7 +13,7 @@ import './data/DTextManager';
 import './objects/LEntity';
 import './objects/LMap';
 import './objects/LSystem';
-import './system/REEntityFactory';
+import './system/SEntityFactory';
 import './rmmz/Scene_Boot';
 import './rmmz/Scene_Map';
 import './rmmz/Game_CharacterBase'

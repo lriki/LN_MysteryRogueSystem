@@ -4,7 +4,7 @@ import { BlockLayerKind, LRoomId, REGame_Block, TileKind } from "./REGame_Block"
 import { LEntity } from "./LEntity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
-import { REEntityFactory } from "../system/REEntityFactory";
+import { SEntityFactory } from "../system/SEntityFactory";
 import { Helpers } from "ts/system/Helpers";
 import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";

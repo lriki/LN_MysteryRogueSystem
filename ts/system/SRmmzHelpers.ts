@@ -7,7 +7,7 @@ import { REGame } from "ts/objects/REGame";
 import { TileKind } from "ts/objects/REGame_Block";
 import { LEntity } from "ts/objects/LEntity";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
-import { REEntityFactory } from "./REEntityFactory";
+import { SEntityFactory } from "./SEntityFactory";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
@@ -52,7 +52,7 @@ export class SRmmzHelpers {
     }
 
     public static createEntityFromRmmzEvent(data: DEntity, eventId: number, x: number, y: number): void {
-        const entity = REEntityFactory.newEntity(data)
+        const entity = SEntityFactory.newEntity(data)
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);

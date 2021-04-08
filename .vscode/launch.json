@@ -27,10 +27,10 @@
 
                 // 個別テスト実行
                 "-t", "Basic1"
-              ],
-              "cwd": "${workspaceRoot}",
-              "console": "integratedTerminal",
-              "sourceMaps": true,
+            ],
+            "cwd": "${workspaceRoot}",
+            "console": "integratedTerminal",
+            "sourceMaps": true,
         }
     ]
 }

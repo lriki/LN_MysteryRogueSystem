@@ -2,7 +2,7 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { RECommandContext } from "ts/system/RECommandContext";
-import { REEntityFactory } from "ts/system/REEntityFactory";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { CommandArgs, LBehavior, onCollideAction, onMoveAsMagicBullet, onWaveReaction } from "./LBehavior";
@@ -33,7 +33,7 @@ export class LStaffItemBehavior extends LBehavior {
     [onWaveReaction](args: CommandArgs, context: RECommandContext): REResponse {
         const actor = args.sender;
 
-        const magicBullet = REEntityFactory.newMagicBullet(this.ownerEntity());
+        const magicBullet = SEntityFactory.newMagicBullet(this.ownerEntity());
         REGame.map.appearEntity(magicBullet, actor.x, actor.y);
         magicBullet.dir = actor.dir;
 

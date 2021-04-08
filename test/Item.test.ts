@@ -7,7 +7,7 @@ import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/REGame_Block";
-import { REEntityFactory } from "ts/system/REEntityFactory";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 import { REGameManager } from "ts/system/REGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
@@ -29,7 +29,7 @@ test('PickAndPut', () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
-    const item1 = REEntityFactory.newItem(REData.getItem("kItem_Herb").id);
+    const item1 = SEntityFactory.newItem(REData.getItem("kItem_Herb").id);
     item1._name = "item1";
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 

@@ -1,5 +1,5 @@
 import { REGame } from "../objects/REGame";
-import { REEntityFactory } from "./REEntityFactory";
+import { SEntityFactory } from "./SEntityFactory";
 import { LMap } from "../objects/LMap";
 import { LWorld } from "../objects/LWorld";
 import { LSystem } from "../objects/LSystem";
@@ -72,7 +72,7 @@ export class REGameManager
         // Create unique units
         REData.actors.forEach(x => {
             if (x.id > 0) {
-                const unit = REEntityFactory.newActor(x.id);
+                const unit = SEntityFactory.newActor(x.id);
                 unit.prefabKey = `Actor:${x.id}`;
                 //unit.floorId = LFlo;//x.initialFloorId;
                 unit.x = x.initialX;

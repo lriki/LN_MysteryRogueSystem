@@ -2,7 +2,7 @@ import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
-import { REEntityFactory } from "ts/system/REEntityFactory";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 import { REGameManager } from "ts/system/REGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
@@ -31,7 +31,7 @@ test('DamageAndGameover', () => {
     SDebugHelpers.setHP(actor1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
     // enemy1
-    const enemy1 = REEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(1);
     enemy1._name = "enemy1";
     //enemy1.addState(RESystem.states.debug_MoveRight);
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置

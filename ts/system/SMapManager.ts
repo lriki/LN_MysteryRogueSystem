@@ -4,7 +4,7 @@ import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "./RESystem";
 import { LMap } from "ts/objects/LMap";
-import { REEntityFactory } from "./REEntityFactory";
+import { SEntityFactory } from "./SEntityFactory";
 import { assert } from "ts/Common";
 import { paramEnemySpawnInvalidArea } from "ts/PluginParameters";
 
@@ -46,7 +46,7 @@ export class SMapManager {
         // 出現テーブルからランダムに選択して Entity を作る
         const enemies = this._map.land().appearanceTable.enemies[floorId.floorNumber()];
         const data = enemies[REGame.world.random().nextIntWithMax(enemies.length)];
-        const entity = REEntityFactory.newEntity(data.entity);
+        const entity = SEntityFactory.newEntity(data.entity);
 
         // 空いている Block をランダムに選択して配置する
         const spawnableBlocks = this._map.unitSpawnableBlocks();

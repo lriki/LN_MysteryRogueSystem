@@ -20,7 +20,7 @@ import { DEntity } from "ts/data/DEntity";
 import { DPrefabKind } from "ts/data/DPrefab";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 
-export class REEntityFactory {
+export class SEntityFactory {
     static newActor(actorId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute()
@@ -98,7 +98,7 @@ export class REEntityFactory {
             case DPrefabKind.Enemy: {
                 const data = REData.monsters.find(x => x.key == prefab.rmmzDataKey);
                 if (data)
-                    entity = REEntityFactory.newMonster(data.id);
+                    entity = SEntityFactory.newMonster(data.id);
                 else
                     throw new Error("Invalid enemy key: " + prefab.key);
                 }

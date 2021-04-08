@@ -6,7 +6,7 @@ import { REData } from "ts/data/REData";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LMap } from "ts/objects/LMap";
-import { REEntityFactory } from "ts/system/REEntityFactory";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SMinimapData } from "ts/system/SMinimapData";
 
 
@@ -70,7 +70,7 @@ export class GameMapBuilder {
             assert(prefab);
 
 
-            const entity = REEntityFactory.newExitPoint();
+            const entity = SEntityFactory.newExitPoint();
             entity.prefabKey = prefab.prefabName;
             
             console.log("exitPoint prefab", prefab);
