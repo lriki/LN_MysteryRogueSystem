@@ -14,6 +14,7 @@ import { DBasics } from "ts/data/DBasics";
 import { DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
 import { RE_Data_Actor } from "ts/data/DActor";
 import { DActionId } from "ts/data/DAction";
+import { LFloorId } from "../LFloorId";
 
 export class LBattlerBehavior extends LBehavior {
     
@@ -303,7 +304,7 @@ export class LBattlerBehavior extends LBehavior {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
-                context.postTransferRMMZMap(entity, REGame.map.land().exitRMMZMapId);
+                context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land().exitRMMZMapId));
             }
             else {
     

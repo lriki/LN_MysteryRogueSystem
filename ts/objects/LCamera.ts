@@ -81,18 +81,18 @@ export class LCamera
         return this._transferingNewFloorId;
     }
     
-    reserveFloorTransferToFocusedEntity() {
+    _reserveFloorTransferToFocusedEntity(): void {
         const entity = this.focusedEntity();
         if (entity) {
             this.reserveFloorTransfer(entity.floorId, entity.x, entity.y, 2);
         }
     }
 
-    reserveFloorTransfer(floorId: LFloorId, x: number, y: number, d: number) {
+    private reserveFloorTransfer(floorId: LFloorId, x: number, y: number, d: number): void {
         this._transferingNewFloorId = floorId;
         this._transferingNewX = x;
         this._transferingNewY = y;
-        //RESystem.integration.onReserveTransferFloor(floorId, x, y, d);
+        RESystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
         Log.d("ReserveFloorTransfer");
     }
 

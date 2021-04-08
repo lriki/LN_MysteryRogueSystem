@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DHelpers } from "ts/data/DHelper";
 import { DFloorInfo } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 
@@ -68,10 +69,32 @@ export class LFloorId {
         return new LFloorId(landId, floorNumber);
     }
 
+    public static makeByRmmzNormalMapId(mapId: number): LFloorId {
+        return new LFloorId(DHelpers.RmmzNormalMapLandId, mapId);
+    }
+
     public floorInfo(): DFloorInfo {
         const info = REData.lands[this._landId].floorInfos[this._floorNumber];
         assert(info);
         return info;
+    }
+
+    /** this が示すフロアへ遷移するとなったときに、ロードするべき RMMZ MapId */
+    public rmmzMapId(): number {
+        assert(this._landId > 0);
+        if (this._landId == DHelpers.RmmzNormalMapLandId) {
+            // REシステム管理外
+            return this._floorNumber;
+        }
+        else {
+            const fixedMapId = this.rmmzFixedMapId();
+            if (fixedMapId > 0) {
+                return fixedMapId;
+            }
+            else {
+                return REData.lands[this._landId].rmmzMapId;
+            }
+        }
     }
 
     public rmmzFixedMapId(): number {

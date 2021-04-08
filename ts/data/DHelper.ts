@@ -47,6 +47,8 @@ export class DHelpers {
     public static TILE_ID_A4 = 5888;
     public static TILE_ID_MAX = 8192;
 
+    public static RmmzNormalMapLandId = 1;
+
     public static getMapTopTile(mapData: IDataMap, x: number, y: number): number {
         for (let z = 3; z >= 0; z--) {
             const tile = mapData.data[(z * mapData.height + y) * mapData.width + x] || 0;

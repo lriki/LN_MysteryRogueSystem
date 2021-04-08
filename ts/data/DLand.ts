@@ -47,7 +47,7 @@ export interface DLand {
 
     name: string;
 
-    /** Land に対応するツクール MapId. */
+    /** Land の生成元になった、対応するツクール MapId (RE-Land:). */
     rmmzMapId: number;
 
     /** EventTable MapId. */

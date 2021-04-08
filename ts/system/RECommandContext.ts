@@ -230,6 +230,7 @@ export class RECommandContext
         Log.postCommand("TransferFloor");
     }
     
+    /*
     public postTransferRMMZMap(entity: LEntity, mapId: number, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
@@ -239,6 +240,7 @@ export class RECommandContext
         this._recodingCommandList.push({ name: "TransferFloor", func: m1 });
         Log.postCommand("TransferFloor");
     }
+    */
 
     postConsumeActionToken(entity: LEntity): void {
         const attr = entity.findAttribute(LUnitAttribute);

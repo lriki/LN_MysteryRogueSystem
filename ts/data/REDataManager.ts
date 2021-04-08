@@ -464,7 +464,9 @@ export class REDataManager
 
         // Import Lands
         // 最初に Land を作る
-        REData.lands.push(DLand_Default());
+        REData.lands = [];
+        REData.lands.push(DLand_Default()); // [0] dummy
+        REData.lands.push({ ...DLand_Default(), id: 1 }); // [1] REシステム管理外の RMMZ マップを表す Land
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info && info.name?.startsWith("RE-Land:")) {
@@ -515,7 +517,7 @@ export class REDataManager
 
         // 検証
         for (const land of REData.lands) {
-            if (land.id > 0) {
+            if (land.id > 0 && land.id != DHelpers.RmmzNormalMapLandId) {
                 if (land.exitRMMZMapId == 0) {
                     throw new Error(`Land[${land.name}] is RE-ExitMap not defined.`);
                 }
