@@ -60,6 +60,7 @@ export class REVisual
     static update() {
         this.entityVisualSet?.update();
         this.guideGrid?.update();
+        this.spriteSet2?.update();
     }
 }
 

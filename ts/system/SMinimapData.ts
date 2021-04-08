@@ -30,6 +30,12 @@ export class SMinimapData {
     private _tilemapResetNeeded: boolean = true;
     private _refreshNeeded: boolean = false;
 
+    public clear(): void {
+        this._width = 0;
+        this._height = 0;
+        this._tilemapResetNeeded = true;
+    }
+
     public reset(width: number, height: number) {
         this._width = width;
         this._height = height;

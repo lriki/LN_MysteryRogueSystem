@@ -141,6 +141,7 @@ export class REGameManager
             }
             
             REGame.world.enterEntitiesToCurrentMap();
+            RESystem.minimapData.clear();
             RESystem.scheduler.clear();
 
             REGame.camera.clearFloorTransfering();

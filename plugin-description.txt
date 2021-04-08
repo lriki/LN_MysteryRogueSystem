@@ -27,6 +27,14 @@
  * @desc 引数 actorId に指定した ID のアクターが持つ Inventory を倉庫として、倉庫画面を表示します。
  * @arg actorId
  * @type number
+ *
+ * @command RE-ProceedFloorForward
+ * @text ProceedFloorForward
+ * @desc 次のフロアへ
+ *
+ * @command RE-ProceedFloorBackword
+ * @text ProceedFloorBackword
+ * @desc 前のフロアへ
  */
  
 
