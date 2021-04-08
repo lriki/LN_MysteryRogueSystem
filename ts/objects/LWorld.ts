@@ -6,6 +6,9 @@ import { LEntityId, LObject, LObjectType, LObjectId } from "./LObject";
 import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { LFloorId } from "./LFloorId";
+import { REData } from "ts/data/REData";
+import { LLand } from "./LLand";
+import { DLandId } from "ts/data/DLand";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -16,10 +19,16 @@ export class LWorld
     private _objects: (LObject | undefined)[] = [];
     private _behaviors: (LBehavior | undefined)[] = [];
     private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);
+    private _lands: LLand[];
 
     constructor() {
         this._objects = [undefined];   // [0] is dummy
         this._behaviors = [undefined];   // [0] is dummy
+        this._lands = REData.lands.map(x => {
+            const land = new LLand();
+            land.setup_(x.id);
+            return land;
+        });
     }
     
     object(id: LObjectId): LObject {
@@ -75,6 +84,10 @@ export class LWorld
 
     random(): LRandom {
         return this._random;
+    }
+
+    public land(landId: DLandId): LLand {
+        return this._lands[landId];
     }
 
     /**

@@ -124,7 +124,7 @@ export class REGameManager
                 
 
                 //console.log("sectors", mapData.sectors());
-                //mapData.print();
+                mapData.print();
             }
 
 

@@ -44,7 +44,7 @@ export class SMapManager {
 
 
         // 出現テーブルからランダムに選択して Entity を作る
-        const enemies = this._map.land().appearanceTable.enemies[floorId.floorNumber()];
+        const enemies = this._map.land2().landData().appearanceTable.enemies[floorId.floorNumber()];
         const data = enemies[REGame.world.random().nextIntWithMax(enemies.length)];
         const entity = SEntityFactory.newEntity(data.entity);
 

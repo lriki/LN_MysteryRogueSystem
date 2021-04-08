@@ -23,6 +23,7 @@ import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { RECommandContext } from "ts/system/RECommandContext";
 import { LFloorId } from "./LFloorId";
+import { LLand } from "./LLand";
 
 
 /*
@@ -168,12 +169,12 @@ export class LMap
         return this._rooms[roomId];
     }
 
-    public land(): DLand {
-        return REData.lands[this._floorId.landId()];
+    public land2(): LLand {
+        return REGame.world.land(this._floorId.landId());
     }
 
     public floorData(): DFloorInfo {
-        return this.land().floorInfos[this._floorId.floorNumber()];
+        return this.land2().landData().floorInfos[this._floorId.floorNumber()];
     }
 
     width(): number {

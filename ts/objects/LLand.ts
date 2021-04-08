@@ -15,6 +15,14 @@ export class LLand {
     public setup_(landDataId: DLandId): void {
         this._landDataId = landDataId;
     }
+
+    public landData(): DLand {
+        return REData.lands[this._landDataId];
+    }
+
+    public maxFloorNumber(): number {
+        return this.landData().floorInfos.length - 1;
+    }
 }
 
 

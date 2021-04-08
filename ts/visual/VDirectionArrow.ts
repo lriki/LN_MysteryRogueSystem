@@ -52,7 +52,14 @@ export class VDirectionArrow extends Sprite {
 
         const entity = REGame.camera.focusedEntity();
         if (entity && REVisual.entityVisualSet) {
-            const sprite = REVisual.entityVisualSet.getEntityVisualByEntity(entity).getRmmzSprite();
+            const visual = REVisual.entityVisualSet.findEntityVisualByEntity(entity);
+            if (!visual) {
+                // マップ遷移直後など、まだターゲットが生成されていないことがある
+                this.visible = false;
+                return;
+            }
+            
+            const sprite = visual.getRmmzSprite();
             this.setPosition(sprite.x, sprite.y);
         }
 

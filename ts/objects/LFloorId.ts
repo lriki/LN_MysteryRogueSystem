@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
-import { DFloorInfo } from "ts/data/DLand";
+import { DFloorInfo, DLandId } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 
 /**
@@ -14,16 +14,16 @@ import { REData } from "ts/data/REData";
  */
 export class LFloorId {
     /** LandId=0 は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
-    private readonly _landId: number;
+    private readonly _landId: DLandId;
 
     private readonly _floorNumber: number;
 
-    constructor(index: number, key: number) {
-        this._landId = index;
-        this._floorNumber = key;
+    constructor(landId: DLandId, floorNumber: number) {
+        this._landId = landId;
+        this._floorNumber = floorNumber;
     }
 
-    public landId(): number {
+    public landId(): DLandId {
         return this._landId;
     }
 
@@ -49,6 +49,10 @@ export class LFloorId {
 
     public static makeEmpty(): LFloorId {
         return new LFloorId(0, 0);
+    }
+
+    public static make(landId: DLandId, floorNumber: number): LFloorId {
+        return new LFloorId(landId, floorNumber);
     }
 
     public static makeByRmmzFixedMapName(fixedMapName: string): LFloorId {

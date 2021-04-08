@@ -22,6 +22,9 @@ import { GameMapBuilder } from "./GameMapBuilder";
 export class RMMZIntegration extends REIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
+
+        // この後のコアスクリプト側の流れ
+        // - Scene_Map.prototype.updateTransferPlayer() にて、新しい Scene_Map が作成され Scene 遷移する
     }
 
     onLoadFixedMapData(map: FMap): void {

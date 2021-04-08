@@ -535,6 +535,8 @@ export class REDataManager
                 const info = $dataMapInfos[i];
                 if (!info) continue;
 
+                REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
+
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
                 }
@@ -576,17 +578,14 @@ export class REDataManager
                             }
                             else {
                                 // RE には関係のないマップ
-                                REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                             }
                         }
                         else {
                             // RE には関係のないマップ
-                            REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                         }
                     }
                     else {
                         // RE には関係のないマップ
-                        REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
                     }
                 }
             }
