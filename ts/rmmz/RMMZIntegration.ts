@@ -23,8 +23,12 @@ export class RMMZIntegration extends REIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
 
+        // マップ遷移後、同一マップへの遷移でも Game_Map.setup が実行されるようにする。Scene_Load の処理と同じ。
+        $gamePlayer.requestMapReload();
+
         // この後のコアスクリプト側の流れ
-        // - Scene_Map.prototype.updateTransferPlayer() にて、新しい Scene_Map が作成され Scene 遷移する
+        // - Scene_Map.prototype.updateTransferPlayer() にて、新しい Scene_Map が作成され Scene 遷移する。
+        // 
     }
 
     onLoadFixedMapData(map: FMap): void {

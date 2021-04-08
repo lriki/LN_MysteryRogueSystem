@@ -163,12 +163,7 @@ export class SScheduler
                 if (!commandContext.isRecordingListEmpty()) {
                     commandContext._submit(); // swap
                 }
-            }
 
-            if (commandContext.isRunning()) {
-                // コマンド実行中。まだフェーズを進ませない
-            }
-            else {
                 REGame.world._removeDestroyedObjects();
     
                 //m_commandContext->beginCommandChain();

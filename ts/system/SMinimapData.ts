@@ -69,6 +69,10 @@ export class SMinimapData {
         this._tilemapResetNeeded = false;
     }
 
+    public setTilemapResetNeeded(): void {
+        this._tilemapResetNeeded = true;
+    }
+
     public setRefreshNeeded(): void {
         this._refreshNeeded = true;
     }

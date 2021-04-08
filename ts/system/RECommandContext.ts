@@ -322,7 +322,7 @@ export class RECommandContext
     }
     
     isRunning(): boolean {
-        return this._messageIndex < this._runningCommandList.length;
+        return this._messageIndex < this._runningCommandList.length || this._recodingCommandList.length != 0;
     }
 
     isRecordingListEmpty(): boolean {
@@ -357,17 +357,24 @@ export class RECommandContext
     */
 
     _processCommand() {
+        if (this._messageIndex >= this._runningCommandList.length) {
+            if (this._recodingCommandList.length > 0) {
+                this._submit();
+            }
+        }
+
+
         if (this.isRunning()) {
             const message = this._runningCommandList[this._messageIndex];
             const response = message.func();
     
-            if (RESystem.dialogContext._hasDialogModel()) {
+            //if (RESystem.dialogContext._hasDialogModel()) {
                 // もし command の実行で Dialog が表示されたときは index を進めない。
                 // Dialog が閉じたときに進める。
-            }
-            else {
+            //}
+            //else {
                 this._next();
-            }
+            //}
         }
     }
 

@@ -43,6 +43,8 @@ export class REDialogContext
 
     // deprecated: レコーディングもあわせて postActivity へ
     postAction(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
+        
+
         //this._commandContext.postActionTwoWay(actionId, actor, reactor, args);
         this._commandContext.postActionOneWay(actionId, actor, reactor, undefined, args);
         
@@ -80,7 +82,9 @@ export class REDialogContext
         }
         this._setDialogModel(null);
         RESystem.integration.onDialogClosed(this);
-        this._commandContext._next();
+        //this._commandContext._next();
+        //console.log("closeDialog");
+        //console.trace();
     }
 
     setCauseEntity(value: LEntity) {
