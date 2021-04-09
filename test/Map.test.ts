@@ -31,7 +31,15 @@ test('MapTransfar', () => {
 
     TestEnv.performFloorTransfer();
 
+    // 移動できていること
+    expect(REGame.map.floorId().equals(TestEnv.FloorId_DefaultNormalMap)).toBe(true);
+
+
+    //--------------------
+    // 
+
+
     // Player 入力待ちまで進める
-    RESystem.scheduler.stepSimulation();
+    //RESystem.scheduler.stepSimulation();
     
 });
