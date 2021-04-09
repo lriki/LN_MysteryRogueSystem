@@ -533,9 +533,19 @@ export class REDataManager
             REData.maps = new Array($dataMapInfos.length);
             for (let i = 0; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
-                if (!info) continue;
+                
+                const mapData: DMap = {
+                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap,
+                };
+                REData.maps[i] = mapData;
 
-                REData.maps[i] = { id: 0, landId: 0, mapId: 0, mapKind: REFloorMapKind.FixedMap };
+                if (!info) {
+                    // Map 無し。mapId は 0 のまま。
+                    continue;
+                }
+                else {
+                    mapData.mapId = i;
+                }
 
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
@@ -543,50 +553,43 @@ export class REDataManager
                 else {
                     // 以下、必ず親Mapが必要なもの
                     const parentInfo = $dataMapInfos[info.parentId];
-                    if (!parentInfo) continue;
+                    if (parentInfo) {
+                        if (info.parentId > 0 && parentInfo.name.includes("RE-TemplateMaps")) {
+                            mapData.mapKind = REFloorMapKind.TemplateMap;
+                            REData.templateMaps.push({
+                                ...DTemplateMap_Default(),
+                                id: REData.templateMaps.length,
+                                name: info.name,
+                                mapId: mapData.id,
+                            });
+                        }
+                        else if (info.name?.startsWith("RE-Land:")) {
+                            const land = REData.lands.find(x => x.rmmzMapId == i);
+                            assert(land);
+                            mapData.landId = land.id;
+                            mapData.mapKind = REFloorMapKind.Land;
+                        }
+                        else if (info.parentId) {
+                            const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
+                            if (land) {
+                                mapData.landId = land.id;
+                                if (parentInfo.name.includes("[RandomMaps]")) {
+                                    mapData.mapKind = REFloorMapKind.RandomMap;
+                                }
+                                else if (parentInfo.name.includes("[ShuffleMaps]")) {
+                                    mapData.mapKind = REFloorMapKind.ShuffleMap;
+                                }
+                                else if (parentInfo.name.includes("RE-FixedMaps")) {
+                                    mapData.mapKind = REFloorMapKind.FixedMap;
+                                }
+                            }
+                        }
+                    }
+                }
 
-                    if (info.parentId > 0 && parentInfo.name.includes("RE-TemplateMaps")) {
-                        REData.maps[i] = { id: i, landId: 0, mapId: i, mapKind: REFloorMapKind.TemplateMap };
-                        REData.templateMaps.push({
-                            ...DTemplateMap_Default(),
-                            id: REData.templateMaps.length,
-                            name: info.name,
-                            mapId: i,
-                        });
-                    }
-                    else if (info.name?.startsWith("RE-Land:")) {
-                        const land = REData.lands.find(x => x.rmmzMapId == i);
-                        assert(land);
-                        REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: REFloorMapKind.Land };
-                    }
-                    else if (info.parentId) {
-                        const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
-                        if (land) {
-                            let kind = undefined;
-                            if (parentInfo.name.includes("[RandomMaps]")) {
-                                kind = REFloorMapKind.RandomMap;
-                            }
-                            else if (parentInfo.name.includes("[ShuffleMaps]")) {
-                                kind = REFloorMapKind.ShuffleMap;
-                            }
-                            else if (parentInfo.name.includes("RE-FixedMaps")) {
-                                kind = REFloorMapKind.FixedMap;
-                            }
-    
-                            if (kind !== undefined) {
-                                REData.maps[i] = { id: i, landId: land.id, mapId: i, mapKind: kind };
-                            }
-                            else {
-                                // RE には関係のないマップ
-                            }
-                        }
-                        else {
-                            // RE には関係のないマップ
-                        }
-                    }
-                    else {
-                        // RE には関係のないマップ
-                    }
+                // null 回避のため、REシステム管理外のマップの FloorInfo を作っておく
+                if (mapData.landId == DHelpers.RmmzNormalMapLandId) {
+                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.id] = { fixedMapName: "" };
                 }
             }
         }

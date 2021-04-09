@@ -14,6 +14,8 @@ import "./Extension";
 import { RESystem } from 'ts/system/RESystem';
 import { LFloorId } from 'ts/objects/LFloorId';
 import { LMap } from 'ts/objects/LMap';
+import { DHelpers } from 'ts/data/DHelper';
+import { assert } from 'ts/Common';
 
 declare global {
     interface Number {
@@ -28,6 +30,7 @@ Number.prototype.clamp = function(min: number, max: number): number{
 
 export class TestEnv {
 
+    public static FloorId_DefaultNormalMap: LFloorId = LFloorId.makeEmpty();
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
 
     private static _databaseFiles = [
@@ -61,6 +64,7 @@ export class TestEnv {
             this.loadDataFile("RE_databaseMap", filename);
         }
 
+        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.maps.findIndex(m => DHelpers.getMapName(m.mapId) == "拠点マップ"));
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         
 
@@ -77,7 +81,8 @@ export class TestEnv {
     }
 
     public static performFloorTransfer(): void {
-        this.loadMapData(REGame.camera.transferingNewFloorId().rmmzFixedMapId());
+        assert(REGame.camera.isFloorTransfering());
+        this.loadMapData(REGame.camera.transferingNewFloorId().rmmzMapId());
         REGameManager.performFloorTransfer();
     }
 
@@ -153,7 +158,8 @@ export class TestEnv {
 
 export class TestEnvIntegration extends REIntegration {
     onReserveTransferMap(mapId: number): void {
-        // Test では Camera の transfar 情報を使うため設定不要
+        // Game では $gamePlayer.reserveTransfer() でマップ遷移を予約し、Scene 側でマップデータをロードしてもらう。
+        // Test では Camera の transfar 情報を使うため設定不要。マップデータも、TestEnv.performFloorTransfer() でロードする。
     }
 
     onLoadFixedMapData(map: FMap): void {

@@ -1,3 +1,4 @@
+import { DMapId } from "./DLand";
 
 
 export interface RMMZFloorMetadata {
@@ -48,6 +49,11 @@ export class DHelpers {
     public static TILE_ID_MAX = 8192;
 
     public static RmmzNormalMapLandId = 1;
+
+    public static getMapName(mapId: DMapId): string {
+        const info = $dataMapInfos[mapId];
+        return info ? info.name : "";
+    }
 
     public static getMapTopTile(mapData: IDataMap, x: number, y: number): number {
         for (let z = 3; z >= 0; z--) {
