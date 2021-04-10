@@ -89,8 +89,11 @@ export class RMMZHelper {
                 $gamePlayer._realY = pos.y;
                 $gamePlayer._x = entity.x;
                 $gamePlayer._y = entity.y;
-
+                //console.log("lastScrolledX", pos.x, pos.y, lastScrolledX, lastScrolledY);
+                //console.log("$gameMap", $gameMap);
                 $gamePlayer.updateScroll(lastScrolledX, lastScrolledY);
+
+                //$gamePlayer.center($gamePlayer._x, $gamePlayer._y);
             }
         }
     }

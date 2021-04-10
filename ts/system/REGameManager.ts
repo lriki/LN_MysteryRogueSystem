@@ -106,7 +106,7 @@ export class REGameManager
         if (REGame.camera.isFloorTransfering()) {
             const newFloorId = REGame.camera.transferingNewFloorId();
 
-            const mapData = new FMap(newFloorId, REGame.world.random());
+            const mapData = new FMap(newFloorId, REGame.world.random().nextInt());
             if (newFloorId.rmmzFixedMapId() > 0) {
                 // 固定マップ
                 RESystem.integration.onLoadFixedMapData(mapData);
@@ -131,16 +131,8 @@ export class REGameManager
             // マップ構築
             REGame.map._removeAllEntities();
             REGame.map.setup(newFloorId, mapData);
-            RESystem.mapManager.setMap(REGame.map);
+            RESystem.mapManager.setMap(REGame.map, mapData);
 
-            if (newFloorId.isRandomMap()) {
-                RESystem.integration.onRefreshGameMap(REGame.map, mapData);
-            }
-            else {
-                RESystem.integration.onLoadFixedMapEvents();
-            }
-            
-            REGame.world.enterEntitiesToCurrentMap();
             RESystem.minimapData.clear();
             RESystem.scheduler.clear();
 

@@ -45,6 +45,10 @@ export class LWorld
             }
         }
     }
+    
+    public objects(): (LObject | undefined)[] {
+        return this._objects;
+    }
 
     public entity(id: LEntityId): LEntity {
         const e = this.findEntity(id);
@@ -214,25 +218,5 @@ export class LWorld
         }
     }
 
-    // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
-    enterEntitiesToCurrentMap() {
-        const player = REGame.camera.focusedEntity();
-        assert(player)
-
-        for (let i = 1; i < this._objects.length; i++) {
-            const obj = this._objects[i];
-            if (obj && obj.objectType() == LObjectType.Entity) {
-                const entity = obj as LEntity;
-                // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
-                // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
-                // それはここでは追加しない。
-                const isNoEnterd = !entity.hasOwner();
-
-                if (REGame.map.floorId() == entity.floorId && isNoEnterd) {
-                    REGame.map._reappearEntity(entity);
-                }
-            }
-        }
-    }
 }
 

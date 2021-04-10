@@ -60,25 +60,6 @@ export class GameMapBuilder {
             }
         }
 
-        const exitPoint = initialMap.exitPont();
-        if (exitPoint) {
-            const appearanceTable = REData.lands[coreMap.floorId().landId()].appearanceTable;
-            const prefab = appearanceTable.others[coreMap.floorId().floorNumber()].find(e => {
-                const p = REData.prefabs[e.entity.prefabId];
-                return p.kind == DPrefabKind.System && p.rmmzDataKey == "RE-SystemPrefab:ExitPoint";
-            });
-            assert(prefab);
-
-
-            const entity = SEntityFactory.newExitPoint();
-            entity.prefabKey = prefab.prefabName;
-            
-            console.log("exitPoint prefab", prefab);
-            console.log("exitPoint floorId", coreMap.floorId());
-            REGame.world._transferEntity(entity, coreMap.floorId(), exitPoint.mx(), exitPoint.my());
-            
-            console.log("_transferEntity e");
-        }
     }
 
     private width(): number {

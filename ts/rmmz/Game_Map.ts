@@ -4,6 +4,7 @@ import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { REGameManager } from "../system/REGameManager";
+import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Map {
@@ -67,7 +68,10 @@ Game_Map.prototype.setup = function(mapId: number) {
             
         }
         */
-       $gamePlayer.hideFollowers();
+
+
+
+        $gamePlayer.hideFollowers();
     }
 
 

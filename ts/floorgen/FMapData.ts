@@ -558,6 +558,7 @@ export class FExitPont {
 
 export class FMap {
     private _floorId: LFloorId;
+    private _randSeed: number; // for debug
     private _rand: LRandom;
     private _width: number;
     private _height: number;
@@ -569,9 +570,10 @@ export class FMap {
     private _structures: FStructure[];
     private _exitPont: FExitPont | undefined;
 
-    public constructor(floorId: LFloorId, rand: LRandom) {
+    public constructor(floorId: LFloorId, randSeed: number) {
         this._floorId = floorId;
-        this._rand = rand;
+        this._randSeed = randSeed;
+        this._rand = new LRandom(this._randSeed);
         this._width = 0;
         this._height = 0;
         this._blocks = [];
@@ -710,6 +712,7 @@ export class FMap {
 
     // For Debug
     public print(): void {
+
         let s = "";
         for (let y = 0; y < this._height; y++) {
             for (let x = 0; x < this._width; x++) {
@@ -736,6 +739,7 @@ export class FMap {
             s += "\n";
         }
         console.log(s);
+        console.log("Seed:", this._randSeed);
     }
 }
 
