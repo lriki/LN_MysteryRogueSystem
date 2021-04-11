@@ -11387,6 +11387,9 @@ declare class Game_Interpreter {
      */
     command206(): boolean;
 
+    // Transfer Player
+    command201(params: any): boolean;
+
     /**
      * Change Transparency
      * @param params 
