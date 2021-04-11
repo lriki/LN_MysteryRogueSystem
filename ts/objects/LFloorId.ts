@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
-import { DFloorInfo, DLandId } from "ts/data/DLand";
+import { DFloorInfo, DLand, DLandId } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 
 /**
@@ -75,6 +75,10 @@ export class LFloorId {
 
     public static makeByRmmzNormalMapId(mapId: number): LFloorId {
         return new LFloorId(DHelpers.RmmzNormalMapLandId, mapId);
+    }
+
+    public landData(): DLand {
+        return REData.lands[this._landId];
     }
 
     public floorInfo(): DFloorInfo {

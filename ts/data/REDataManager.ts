@@ -746,7 +746,7 @@ export class REDataManager
 
     static isRESystemMap(mapId: number) : boolean {
         const flooor = REData.maps[mapId];
-        return flooor.landId > 0;
+        return flooor.landId > DHelpers.RmmzNormalMapLandId;
     }
 
     static isFloorMap(mapId: number) : boolean {

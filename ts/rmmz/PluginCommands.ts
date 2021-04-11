@@ -3,9 +3,11 @@ import { REData } from "ts/data/REData";
 import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
+import { paramLandExitResultVariableId } from "ts/PluginParameters";
 import { RESystem } from "ts/system/RESystem";
 import { VWarehouseDialog } from "ts/visual/dialogs/VWarehouseDialog";
 import { REVisual } from "ts/visual/REVisual";
+import { LandExitResult } from "./RMMZHelper";
 import { Scene_Warehouse } from "./Scene_Warehouse";
 
 const pluginName: string = "LN_RoguelikeEngine";
@@ -39,8 +41,13 @@ PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(thi
         const newFloorNumber = floorId.floorNumber() + 1;
 
         if (newFloorNumber > REGame.map.land2().maxFloorNumber()) {
+            $gameVariables.setValue(paramLandExitResultVariableId, LandExitResult.Goal);
+
+            const exitRMMZMapId = floorId.landData().exitRMMZMapId;
+            assert(exitRMMZMapId > 0);
             // 最後のフロアを踏破した
-            throw new Error("Not implemented.");
+            const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
+            assert(result);
         }
         else {
             REGame.world._transferEntity(entity, LFloorId.make(floorId.landId(), newFloorNumber), newFloorNumber, 0);

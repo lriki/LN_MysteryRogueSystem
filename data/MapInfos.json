@@ -2,7 +2,7 @@
 null,
 {"id":1,"expanded":false,"name":"緑燐の丘 1F","order":25,"parentId":11,"scrollX":411.55555555555554,"scrollY":320.8888888888889},
 {"id":2,"expanded":true,"name":"最奥部屋","order":28,"parentId":14,"scrollX":811,"scrollY":453},
-{"id":3,"expanded":true,"name":"RE-Land:ダンジョン1","order":21,"parentId":14,"scrollX":407,"scrollY":309},
+{"id":3,"expanded":true,"name":"RE-Land:ダンジョン1","order":21,"parentId":14,"scrollX":811,"scrollY":461},
 null,
 null,
 null,
@@ -32,5 +32,5 @@ null,
 {"id":30,"expanded":false,"name":"RE-ExitMap:","order":18,"parentId":26,"scrollX":811,"scrollY":453},
 {"id":31,"expanded":true,"name":"ダンジョン","order":19,"parentId":0,"scrollX":0,"scrollY":0},
 {"id":32,"expanded":false,"name":"洞窟A","order":3,"parentId":33,"scrollX":811,"scrollY":461},
-{"id":33,"expanded":false,"name":"RE-TemplateMaps","order":2,"parentId":8,"scrollX":409,"scrollY":323}
+{"id":33,"expanded":true,"name":"RE-TemplateMaps","order":2,"parentId":8,"scrollX":811,"scrollY":461}
 ]

@@ -1,6 +1,7 @@
 import { LMap } from "ts/objects/LMap";
 import { REGame } from "../objects/REGame";
 import { REVisual } from "../visual/REVisual";
+import { RMMZHelper } from "./RMMZHelper";
 
 const _Game_Player_initMembers = Game_Player.prototype.initMembers;
 Game_Player.prototype.initMembers = function() {
@@ -43,18 +44,20 @@ const _Game_Player_refresh = Game_Player.prototype.refresh;
 Game_Player.prototype.refresh = function() {
     _Game_Player_refresh.call(this);
 
-    // ランダムマップで配置された結果を、Player 位置に再設定する。
-    // Game_Player.prototype.performTransfer() の処理は次の順で行われる。
-    // - $gameMap.setup()
-    // - locate(newPos);
-    // - refresh();
-    // ランダム配置は $gameMap.setup() の中で行われるが、その後 $gamePlayer.locate があるので、
-    // 座標の再設定は refresh() のタイミングで行う必要がある。
-    // なお、locate() を呼んでいるのは、合わせて $gameMap.setDisplayPos() が必要だから。
-    // これが無いと、プレイヤー初期位置が画面中央になるようにスクロールしてくれない。
-    const entity = REGame.camera.focusedEntity();
-    if (entity) {
-        $gamePlayer.locate(entity.x, entity.y);
+    if (RMMZHelper.isRESystemMap()) {
+        // ランダムマップで配置された結果を、Player 位置に再設定する。
+        // Game_Player.prototype.performTransfer() の処理は次の順で行われる。
+        // - $gameMap.setup()
+        // - locate(newPos);
+        // - refresh();
+        // ランダム配置は $gameMap.setup() の中で行われるが、その後 $gamePlayer.locate があるので、
+        // 座標の再設定は refresh() のタイミングで行う必要がある。
+        // なお、locate() を呼んでいるのは、合わせて $gameMap.setDisplayPos() が必要だから。
+        // これが無いと、プレイヤー初期位置が画面中央になるようにスクロールしてくれない。
+        const entity = REGame.camera.focusedEntity();
+        if (entity) {
+            $gamePlayer.locate(entity.x, entity.y);
+        }
     }
 }
 

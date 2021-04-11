@@ -38,6 +38,7 @@ export class SMapManager {
             RESystem.integration.onLoadFixedMapEvents();
         }
 
+        // 階段を配置する
         {
             
             const exitPoint = initialMap.exitPont();
@@ -61,17 +62,18 @@ export class SMapManager {
             }
         }
         
-        this.enterEntitiesToCurrentMap();
+        const enterdEntities = this.enterEntitiesToCurrentMap();
 
         
         if (this._map.floorId().isRandomMap()) {
             
             console.log("isRandomMap w");
-            const objects = REGame.world.objects();
-            for (let i = 1; i < objects.length; i++) {
-                const obj = objects[i];
-                if (obj && obj.objectType() == LObjectType.Entity) {
-                    const entity = obj as LEntity;
+            //const objects = REGame.world.objects();
+            for (const entity of enterdEntities) {
+            //for (let i = 1; i < objects.length; i++) {
+            //    const obj = objects[i];
+            //    if (obj && obj.objectType() == LObjectType.Entity) {
+                    //const entity = obj as LEntity;
                     if (entity.floorId.equals(this._map.floorId())) {
 
                         console.log("locateEntity w");
@@ -87,7 +89,7 @@ export class SMapManager {
                         //block.addEntity(layer, entity);
                         //this._map._addEntityInternal(entity);
                     }
-                }
+                //}
             }
         }
     }
@@ -106,10 +108,11 @@ export class SMapManager {
     }
 
     // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
-    private enterEntitiesToCurrentMap() {
+    private enterEntitiesToCurrentMap(): LEntity[] {
         const player = REGame.camera.focusedEntity();
         assert(player)
 
+        const result: LEntity[] = [];
         const isFixedMap = this._map.floorId().isFixedMap();
 
         const objects = REGame.world.objects();
@@ -125,6 +128,7 @@ export class SMapManager {
                 if (this._map.floorId().equals(entity.floorId) && isNoEnterd) {
                     //if (isFixedMap) {
                         this._map._reappearEntity(entity);
+                        result.push(entity);
                     //}
                     /*
                     else {
@@ -142,6 +146,8 @@ export class SMapManager {
                 }
             }
         }
+
+        return result;
     }
 
     private findSpawnableBlockRandom(entity: LEntity, layer: BlockLayerKind): REGame_Block | undefined {
