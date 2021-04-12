@@ -33,6 +33,13 @@ Game_Map.prototype.setup = function(mapId: number) {
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
     if (REDataManager.isRESystemMap(mapId) || REDataManager.isLandMap(mapId)) {
+        
+        // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
+        // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
+        this.events().forEach(e => e.setTransparent(true));
+        $gamePlayer.hideFollowers();
+
+
 
         let floorId: LFloorId;
         if (REDataManager.isLandMap(mapId)) {
@@ -71,7 +78,6 @@ Game_Map.prototype.setup = function(mapId: number) {
 
 
 
-        $gamePlayer.hideFollowers();
     }
 
 

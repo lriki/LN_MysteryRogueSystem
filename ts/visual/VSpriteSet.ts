@@ -1,14 +1,17 @@
 import { RESystem } from "ts/system/RESystem";
 import { VDirectionArrow } from "./VDirectionArrow";
+import { VVisibilityShadow } from "./VVisibilityShadow";
 
 export class VSpriteSet {
     private _spritesetMap: Spriteset_Map;
+    private _visibilityShadow: VVisibilityShadow;
     private _minimapTilemap: Tilemap;
     private _directionArrow: VDirectionArrow;
     private _initialUpdate: boolean;
 
     constructor(spritesetMap: Spriteset_Map) {
         this._spritesetMap = spritesetMap;
+        this._visibilityShadow = new VVisibilityShadow(spritesetMap);
         this._directionArrow = new VDirectionArrow();
         this._spritesetMap.addChild(this._directionArrow);
         this._initialUpdate = true;
@@ -61,7 +64,10 @@ export class VSpriteSet {
         this._minimapTilemap.refresh();
 
         
+        this._visibilityShadow._update();
+        
         this._initialUpdate  = false;
+
     }
 }
 

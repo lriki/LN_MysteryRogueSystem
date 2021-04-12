@@ -8,6 +8,7 @@ import { REGame } from "ts/objects/REGame";
 import { LMap } from "ts/objects/LMap";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SMinimapData } from "ts/system/SMinimapData";
+import { TileKind } from "ts/objects/REGame_Block";
 
 
 interface Point {
@@ -40,7 +41,24 @@ export class GameMapBuilder {
         for (let y = 0; y < $dataMap.height; y++) {
             for (let x = 0; x < $dataMap.width; x++) {
                 const block = coreMap.block(x, y);
+
+                switch (block.tileKind()) {
+                    case TileKind.Floor:
+                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
+                        break;
+                    case TileKind.Wall:
+                        if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
+                            this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
+                        }
+                        else {
+                            this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
+                        }
+                        break;
+                    default:
+                        throw new Error("Not implemented.");
+                }
                 
+                /*
                 switch (block._blockComponent) {
                     case FBlockComponent.None:
                         if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
@@ -57,6 +75,7 @@ export class GameMapBuilder {
                         this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
                         break;
                 }
+                */
             }
         }
 

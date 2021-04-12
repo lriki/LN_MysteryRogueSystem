@@ -3,6 +3,7 @@ import { FMap, FMapBlock } from "./FMapData";
 import { FMarkContinuationPass } from "./passes/FMarkContinuationPass";
 import { FMonsterHouseStructure } from "./FStructure";
 import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPass";
+import { FMakeTileKindPass } from "./passes/FMakeTileKindPass";
 
 
 export class FMapBuilder {
@@ -11,6 +12,7 @@ export class FMapBuilder {
         const passes = [
             new FMapBuildPass_MakeRoomId(),
             new FMarkContinuationPass(),
+            new FMakeTileKindPass(),
             new FEntryPointAndExitPointPass(),
             new FMapBuildPass_MarkMonsterHouse(),
         ];

@@ -349,7 +349,7 @@ export class FSectorConnection {
 export class FMapBlock {
     private _x;
     private _y;
-    private _kind: TileKind;
+    private _tileKind: TileKind;
     private _blockComponent: FBlockComponent;
     private _sectorId: FSectorId;
     private _roomId: FRoomId;
@@ -360,7 +360,7 @@ export class FMapBlock {
     public constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
-        this._kind = TileKind.Floor;
+        this._tileKind = TileKind.Floor;
         this._blockComponent = FBlockComponent.None;
         this._sectorId = 0;
         this._roomId = 0;
@@ -378,11 +378,11 @@ export class FMapBlock {
     }
 
     public setTileKind(value: TileKind): void {
-        this._kind = value;
+        this._tileKind = value;
     }
 
     public tileKind(): TileKind {
-        return this._kind;
+        return this._tileKind;
     }
 
     public setComponent(value: FBlockComponent): void {
@@ -418,8 +418,11 @@ export class FMapBlock {
         return this._blockComponent == FBlockComponent.Room;
     }
     
-    // TODO: 水路かつ部屋、水路かつ通路、みたいなこともあるので分ける必要がある
-    public isFloor(): boolean {
+    /**
+     * 本質的なものとして通行可能であるか。
+     * 例えば隠し通路 (通常攻撃で通路が姿を現す) の場合、tileKind は Wall であるが、Component は Passageway となる。
+     */
+    public isPassagableComponent(): boolean {
         return this._blockComponent == FBlockComponent.Room || this._blockComponent == FBlockComponent.Passageway;
     }
 

@@ -7292,7 +7292,7 @@ declare class Game_Map {
      * 
      * @return  
      */
-    events(): Game_Map.prototype.EventsRet;
+    events(): Game_Event[];
 
     /**
      * 

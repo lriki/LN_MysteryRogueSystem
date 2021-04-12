@@ -63,22 +63,22 @@ export class FMarkContinuationPass extends FMapBuildPass {
     
                         // 左
                         const b1 = map.blockTry(b.x() - 1, b.y());
-                        if (b1 && b1.isFloor() && !b1.isContinuation()) {
+                        if (b1 && b1.isPassagableComponent() && !b1.isContinuation()) {
                             next.push(b1);
                         }
                         // 上
                         const b2 = map.blockTry(b.x(), b.y() - 1);
-                        if (b2 && b2.isFloor() && !b2.isContinuation()) {
+                        if (b2 && b2.isPassagableComponent() && !b2.isContinuation()) {
                             next.push(b2);
                         }
                         // 右
                         const b3 = map.blockTry(b.x() + 1, b.y());
-                        if (b3 && b3.isFloor() && !b3.isContinuation()) {
+                        if (b3 && b3.isPassagableComponent() && !b3.isContinuation()) {
                             next.push(b3);
                         }
                         // 下
                         const b4 = map.blockTry(b.x(), b.y() + 1);
-                        if (b4 && b4.isFloor() && !b4.isContinuation()) {
+                        if (b4 && b4.isPassagableComponent() && !b4.isContinuation()) {
                             next.push(b4);
                         }
                     }
