@@ -625,7 +625,12 @@ export class LEntity extends LObject
     }
 
     
-    //--------------------------------------------------------------------------------
+    //----------------------------------------
+    // Object Reference Management
+
+
+    
+    //----------------------------------------
     // Debug Utils
 
     public debugDisplayName(): string {

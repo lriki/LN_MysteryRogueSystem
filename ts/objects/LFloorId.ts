@@ -110,6 +110,10 @@ export class LFloorId {
         return $dataMapInfos.findIndex(x => x && x.name == info.fixedMapName);
     }
 
+    public isNormalMap(): boolean {
+        return this._landId == DHelpers.RmmzNormalMapLandId;
+    }
+
     public isRandomMap(): boolean {
         return this.rmmzFixedMapId() <= 0;
     }

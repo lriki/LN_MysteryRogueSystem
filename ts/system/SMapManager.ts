@@ -31,20 +31,33 @@ export class SMapManager {
         this._map = map;
         const newFloorId = map.floorId();
 
-        if (newFloorId.isRandomMap()) {
-            RESystem.integration.onRefreshGameMap(REGame.map, initialMap);
+        if (newFloorId.isNormalMap()) {
+            
+        }
+        else if (newFloorId.isRandomMap()) {
+            this.setupRandomMap(initialMap);
         }
         else {
             RESystem.integration.onLoadFixedMapEvents();
         }
+
+
+        
+    }
+
+    private setupRandomMap(initialMap: FMap): void {
+        const floorId = this._map.floorId();
+
+        
+        RESystem.integration.onRefreshGameMap(REGame.map, initialMap);
 
         // 階段を配置する
         {
             
             const exitPoint = initialMap.exitPont();
             if (exitPoint) {
-                const appearanceTable = REData.lands[map.floorId().landId()].appearanceTable;
-                const prefab = appearanceTable.others[map.floorId().floorNumber()].find(e => {
+                const appearanceTable = REData.lands[floorId.landId()].appearanceTable;
+                const prefab = appearanceTable.others[floorId.floorNumber()].find(e => {
                     const p = REData.prefabs[e.entity.prefabId];
                     return p.kind == DPrefabKind.System && p.rmmzDataKey == "RE-SystemPrefab:ExitPoint";
                 });
@@ -55,8 +68,8 @@ export class SMapManager {
                 entity.prefabKey = prefab.prefabName;
                 
                 console.log("exitPoint prefab", prefab);
-                console.log("exitPoint floorId", map.floorId());
-                REGame.world._transferEntity(entity, map.floorId(), exitPoint.mx(), exitPoint.my());
+                console.log("exitPoint floorId", floorId);
+                REGame.world._transferEntity(entity, floorId, exitPoint.mx(), exitPoint.my());
                 
                 console.log("_transferEntity e");
             }
@@ -64,8 +77,8 @@ export class SMapManager {
         
         const enterdEntities = this.enterEntitiesToCurrentMap();
 
-        
-        if (this._map.floorId().isRandomMap()) {
+        // この Floor にいるべき Entity を配置する
+        {
             
             console.log("isRandomMap w");
             //const objects = REGame.world.objects();

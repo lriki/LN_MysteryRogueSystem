@@ -34,7 +34,6 @@ test('MapTransfar', () => {
     // 移動できていること
     expect(REGame.map.floorId().equals(TestEnv.FloorId_DefaultNormalMap)).toBe(true);
 
-
     //--------------------
     // 
 
