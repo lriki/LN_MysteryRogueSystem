@@ -552,5 +552,8 @@ export class Window_Base extends Window {
 	playBuzzerSound(): void;
 }
 
+class Window_MapName extends Window_Base {
+	
+}
 
 }

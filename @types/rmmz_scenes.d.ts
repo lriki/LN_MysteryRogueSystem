@@ -12,6 +12,8 @@
 declare class Scene_Base {
 
 	_windowLayer: WindowLayer;
+    _fadeWhite: number;
+    _fadeOpacity: number;
 
 	/**
 	 * 
@@ -597,7 +599,7 @@ declare class Scene_Map extends Scene_Base {
 	/**
 	 * 
 	 */
-    _spriteset: /*no type*/{};
+    _spriteset: Spriteset_Map;
 
 	/**
 	 * 

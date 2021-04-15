@@ -1,4 +1,5 @@
 import { REGame } from "ts/objects/REGame";
+import { VFloorNameWindow } from "./windows/VFloorNameWindow";
 import { VMessageLogWindow } from "./windows/VMessageLogWindow";
 import { VMessageWindow } from "./windows/VMessageWindow";
 
@@ -12,12 +13,40 @@ export class VMessageWindowSet {
     private _logWindow: VMessageLogWindow;
     private _messageWindow: VMessageWindow;
 
+    private _shadowBitmap: Bitmap;
+    private _shadowSprite: Sprite;
+    private _fadeDuration: number;
+    private _fadeOpacity: number;
+    private _fadeSign: number;
+
+    _floorNameWindow: VFloorNameWindow;
+
     constructor(scene: Scene_Map) {
         this._scene = scene;
+
+
+        this._shadowBitmap = new Bitmap(32, 32);
+        this._shadowBitmap.fillAll("black");
+        this._shadowSprite = new Sprite(this._shadowBitmap);
+        this._shadowSprite.setFrame(0, 0, 32, 32);
+        this._shadowSprite.scale.x = (Graphics.boxWidth / 32) + 1;
+        this._shadowSprite.scale.y = (Graphics.boxHeight / 32) + 1;
+        scene._spriteset.addChild(this._shadowSprite);
+
         this._logWindow = new VMessageLogWindow(REGame.messageHistory, this.messageWindowRect());
-        this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());
         this._scene.addWindow(this._logWindow);
+
+        this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());
         this._scene.addWindow(this._messageWindow);
+
+        this._floorNameWindow = new VFloorNameWindow(new Rectangle(0, 0, Graphics.boxWidth, Graphics.boxHeight));
+        this._scene.addWindow(this._floorNameWindow);
+
+        
+        this._fadeDuration = 0;
+        this._fadeOpacity = 0;
+        this._fadeSign = 0;
+        this.setFade();
     }
 
     private calcWindowHeight(numLines: number, selectable: boolean) {
@@ -36,6 +65,31 @@ export class VMessageWindowSet {
         const wy = Graphics.boxHeight - wh;
         return new Rectangle(wx + padding, wy - padding, ww - padding * 2, wh);
     }
+
+    public setFade(): void {
+        this._fadeDuration = 0;
+        this._fadeOpacity = 255;
+    }
     
+    public startFadeIn(): void {
+        this._fadeSign = 1;
+        this._fadeDuration = 30;
+        this._fadeOpacity = 255;
+    }
+
+    public update(): void {
+        
+        if (this._fadeDuration > 0) {
+            const d = this._fadeDuration;
+            if (this._fadeSign > 0) {
+                this._fadeOpacity -= this._fadeOpacity / d;
+            } else {
+                this._fadeOpacity += (255 - this._fadeOpacity) / d;
+            }
+            this._fadeDuration--;
+        }
+
+        this._shadowSprite.opacity = this._fadeOpacity;
+    }
 }
 

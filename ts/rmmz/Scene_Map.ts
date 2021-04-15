@@ -59,6 +59,15 @@ Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
 }
 
+const _Scene_Map_onTransferEnd = Scene_Map.prototype.onTransferEnd;
+Scene_Map.prototype.onTransferEnd = function() {
+    _Scene_Map_onTransferEnd.call(this);
+    if (REVisual._messageWindowSet) {
+        REVisual._messageWindowSet._floorNameWindow.open();
+    }
+}
+
+
 // マップ切り替えのたびに呼び出される。
 // Scene_Map.updateTransferPlayer() でマップ遷移を検出すると、
 // goto(Scene_Map) で別インスタンスの Scene_Map へ遷移する。
@@ -81,6 +90,20 @@ Scene_Map.prototype.createDisplayObjects = function() {
     REVisual.onSceneChanged(this);
 };
 
+var _Scene_Map_start = Scene_Map.prototype.start;
+Scene_Map.prototype.start = function() {
+    /*
+    if (RMMZHelper.isRESystemMap()) {
+        this._fadeWhite = 0;
+        this._fadeOpacity = 255;
+
+    }
+    */
+
+    _Scene_Map_start.call(this);
+    
+}
+
 var _Scene_Map_terminate = Scene_Map.prototype.terminate;
 Scene_Map.prototype.terminate = function() {
     _Scene_Map_terminate.call(this);
@@ -95,27 +118,72 @@ Scene_Map.prototype.terminate = function() {
     }
 }
 
-var _Scene_Map_update = Scene_Map.prototype.update;
-Scene_Map.prototype.update = function() {
-    if ($gameMap.isRESystemMap()) {
-        if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
-
-            if (REGame.camera.isFloorTransfering()) {
-                // マップ遷移中はコアシステムとしては何もしない。
-                // performFloorTransfer() すること。
-                return;
-            }
-            else {
-                RESystem.scheduler.stepSimulation();
-            }
-        }
-        
-        RESystem.minimapData.update();
+function isTransterEffectRunning(): boolean {
+    if (REVisual._messageWindowSet) {
+        return REVisual._messageWindowSet._floorNameWindow.isEffectRunning();
     }
     else {
-        // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく
-        REGame.immediatelyCommandExecuteScheduler.stepSimulation();
+        return false;
     }
+}
+
+/*
+var _Scene_Map_fadeInForTransfer = Scene_Map.prototype.fadeInForTransfer;
+Scene_Map.prototype.fadeInForTransfer = function() {
+    console.log("fadeInForTransfer", RMMZHelper.isRESystemMap());
+    if (RMMZHelper.isRESystemMap()) {
+    }
+    else {
+        _Scene_Map_fadeInForTransfer.call(this);
+    }
+}
+
+var _Scene_Map_needsFadeIn = Scene_Map.prototype.needsFadeIn;
+Scene_Map.prototype.needsFadeIn = function(): boolean {
+    console.log("needsFadeIn", RMMZHelper.isRESystemMap());
+    if (RMMZHelper.isRESystemMap()) {
+        return false;
+    }
+    else {
+        return _Scene_Map_needsFadeIn.call(this);
+    }
+}
+*/
+
+
+var _Scene_Map_update = Scene_Map.prototype.update;
+Scene_Map.prototype.update = function() {
+    if (!isTransterEffectRunning()) {
+        if ($gameMap.isRESystemMap()) {
+            if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
+    
+                if (REGame.camera.isFloorTransfering()) {
+                    // マップ遷移中はコアシステムとしては何もしない。
+                    // performFloorTransfer() すること。
+                    return;
+                }
+                else {
+                    RESystem.scheduler.stepSimulation();
+                }
+            }
+            
+            RESystem.minimapData.update();
+        }
+        else {
+            // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく
+            REGame.immediatelyCommandExecuteScheduler.stepSimulation();
+        }
+    
+    }
+    
+    else {
+        if (REVisual._messageWindowSet._floorNameWindow.showCount() == 60) {
+            //this.startFadeIn(30, false);
+            REVisual._messageWindowSet.startFadeIn();
+        }
+    }
+    
+
 
     REVisual.update();
 

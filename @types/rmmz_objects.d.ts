@@ -7365,7 +7365,7 @@ declare class Game_Map {
     /**
      * 
      */
-    displayName(): void;
+    displayName(): string;
 
     /**
      * 

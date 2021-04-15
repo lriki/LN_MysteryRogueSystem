@@ -145,7 +145,7 @@ export class VVisibilityShadow {
 
     private createVisibilityShadowPart(frame: number, anchorX: number, anchorY: number): Sprite {
         const sprite = new Sprite(this._visibilityShadowBitmap);
-        sprite.setFrame((frame % 5) * VisibilityShadowTileSize, Math.floor(frame / 5) * VisibilityShadowTileSize, VisibilityShadowTileSize, VisibilityShadowTileSize);;
+        sprite.setFrame((frame % 5) * VisibilityShadowTileSize, Math.floor(frame / 5) * VisibilityShadowTileSize, VisibilityShadowTileSize, VisibilityShadowTileSize);
         sprite.anchor.set(anchorX, anchorY);    // 9sprite で拡大を伴うものがあるため中央にしておいた方が計算しやすい
         this._spritesetMap.addChild(sprite);
         return sprite;
