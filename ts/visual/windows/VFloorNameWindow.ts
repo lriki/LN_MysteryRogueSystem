@@ -7,22 +7,25 @@ export class VFloorNameWindow extends Window_Base {
 
     constructor(rect: Rectangle) {
         super(rect);
+        this.openness = 0;
         this.opacity = 0;
         this.contentsOpacity = 0;
         this._showCount = 0;
 
         
 
-        this.refresh();
+        this.open();
     }
     
     public open() {
         this.refresh();
+        this.openness = 255;
         this._showCount = 150;
     }
     
     public close() {
         this._showCount = 0;
+        this.openness = 0;
     }
 
     public isEffectRunning(): boolean {
@@ -49,6 +52,9 @@ export class VFloorNameWindow extends Window_Base {
     
     private updateFadeOut() {
         this.contentsOpacity -= 16;
+        if (this.contentsOpacity <= 0) {
+            this.close();
+        }
     }
     
     private refresh() {
