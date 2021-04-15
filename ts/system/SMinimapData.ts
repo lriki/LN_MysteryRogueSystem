@@ -6,7 +6,7 @@ import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { REGame } from "ts/objects/REGame";
-import { TileKind } from "ts/objects/REGame_Block";
+import { TileKind } from "ts/objects/LBlock";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
 import { Helpers } from "./Helpers";
 import { REGameManager } from "./REGameManager";

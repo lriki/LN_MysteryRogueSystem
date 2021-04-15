@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { REGame } from "./REGame";
-import { REGame_Block } from "./REGame_Block";
+import { LBlock } from "./LBlock";
 
 /**
  * Data_Map をラップして、RE モジュールへ Data_Map への書き込み手段を提供する。
@@ -53,7 +53,7 @@ export class MapDataProvidor
         }
     }
 
-    static onUpdateBlock(block: REGame_Block): void {
+    static onUpdateBlock(block: LBlock): void {
         const tileIds = block.tileIds();
         if (tileIds) {
             this.setTileIds(block.x(), block.y(), tileIds);

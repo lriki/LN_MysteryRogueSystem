@@ -5,7 +5,7 @@ import { DFactionId, REData } from "ts/data/REData";
 import { FRoom } from "ts/floorgen/FMapData";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { REGame } from "./REGame";
-import { REGame_Block, TileKind } from "./REGame_Block";
+import { LBlock, TileKind } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { DFloorInfo, DLand, DLandId } from "ts/data/DLand";
 

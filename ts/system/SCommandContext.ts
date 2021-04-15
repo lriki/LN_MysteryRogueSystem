@@ -5,7 +5,7 @@ import { assert, Log } from "ts/Common";
 import { SAnumationSequel, SMotionSequel, SSequelUnit } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
 import { REEffectContext } from "./REEffectContext";
-import { REGame_Block } from "../objects/REGame_Block";
+import { LBlock } from "../objects/LBlock";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
@@ -127,7 +127,7 @@ export class SCommandContext
         Log.postCommand("Call");
     }
 
-    findReactorEntityInBlock(block: REGame_Block, actionId: number): LEntity | undefined {
+    findReactorEntityInBlock(block: LBlock, actionId: number): LEntity | undefined {
         const layers = block.layers();
         for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
             const reactor = layers[iLayer].entities().find(entity => entity.queryReactions().find(x => x == actionId) != undefined);

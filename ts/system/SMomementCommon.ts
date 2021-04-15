@@ -5,7 +5,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { testPutInItem } from "ts/objects/behaviors/LBehavior";
 import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind, REGame_Block } from "ts/objects/REGame_Block";
+import { BlockLayerKind, LBlock } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
@@ -39,7 +39,7 @@ export class SMomementCommon {
         }
     }
     
-    private static _postLocate(context: SCommandContext, entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block, map: LMap) {
+    private static _postLocate(context: SCommandContext, entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap) {
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
@@ -64,7 +64,7 @@ export class SMomementCommon {
         [-1, 1], [0, 1], [1, 1],
     ];
 
-    private static markPassed(map: LMap, block: REGame_Block): void {
+    private static markPassed(map: LMap, block: LBlock): void {
         block._passed = true;
         if (block._roomId > 0) {
             const room = map.room(block._roomId);

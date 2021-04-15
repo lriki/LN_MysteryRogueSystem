@@ -10,7 +10,7 @@ import { LRoom } from "ts/objects/LRoom";
 import { LScheduler } from "ts/objects/LScheduler";
 import { LSystem } from "ts/objects/LSystem";
 import { LWorld } from "ts/objects/LWorld";
-import { REBlockLayer, REGame_Block } from "ts/objects/REGame_Block";
+import { REBlockLayer, LBlock } from "ts/objects/LBlock";
 import { LMap } from "ts/objects/LMap";
 import { LState } from "ts/objects/states/LState";
 import { LStructure } from "ts/objects/structures/LStructure";
@@ -33,7 +33,7 @@ function createInstance(name: string): any {
         case "REGame_Map":
             return Object.create(LMap.prototype);
         case "REGame_Block":
-            return Object.create(REGame_Block.prototype);
+            return Object.create(LBlock.prototype);
         case "REBlockLayer":
             return Object.create(REBlockLayer.prototype);
         case "LRoom":

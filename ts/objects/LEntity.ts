@@ -3,7 +3,7 @@ import { DecisionPhase, LBehavior, LBehaviorId } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
-import { BlockLayerKind, LRoomId, REGame_Block } from "./REGame_Block";
+import { BlockLayerKind, LRoomId, LBlock } from "./LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";

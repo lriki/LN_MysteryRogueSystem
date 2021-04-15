@@ -5,7 +5,7 @@ import { RESystem } from "ts/system/RESystem";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { BlockLayerKind } from "../REGame_Block";
+import { BlockLayerKind } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsMagicBullet } from "./LBehavior";
 

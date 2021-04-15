@@ -2,7 +2,7 @@ import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/REComma
 import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind } from "ts/objects/REGame_Block";
+import { BlockLayerKind } from "ts/objects/LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { REDialogContext } from "../../system/REDialog";
 import { VFeetDialog } from "./VFeetDialog";

@@ -1,6 +1,6 @@
 import { DParameterId, REData } from "ts/data/REData";
 import { LSkillBehavior } from "../objects/skills/SkillBehavior";
-import { BlockLayerKind } from "../objects/REGame_Block";
+import { BlockLayerKind } from "../objects/LBlock";
 import { REIntegration } from "./REIntegration";
 import { BasicParameters } from "ts/data/predefineds/DBasicParameters";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";

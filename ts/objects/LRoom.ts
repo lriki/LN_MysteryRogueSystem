@@ -1,6 +1,6 @@
 import { FRoom } from "ts/floorgen/FMapData";
 import { REGame } from "./REGame";
-import { REGame_Block, TileKind } from "./REGame_Block";
+import { LBlock, TileKind } from "./LBlock";
 import { LEntity } from "./LEntity";
 
 export enum MonsterHouseState {
@@ -62,7 +62,7 @@ export class LRoom {
         return undefined;
     }
 
-    public forEachBlocks(func: (block: REGame_Block) => void): void {
+    public forEachBlocks(func: (block: LBlock) => void): void {
         const map = REGame.map;
         for (let y = this._y1; y <= this._y2; y++) {
             for (let x = this._x1; x <= this._x2; x++) {
@@ -72,7 +72,7 @@ export class LRoom {
         }
     }
     
-    public forEachEdgeBlocks(func: (block: REGame_Block) => void): void {
+    public forEachEdgeBlocks(func: (block: LBlock) => void): void {
         const map = REGame.map;
         const left = Math.max(0, this._x1 - 1);
         const right = Math.min(this._x2 + 1, map.width() - 1);

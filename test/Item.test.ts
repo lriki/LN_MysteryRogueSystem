@@ -6,7 +6,7 @@ import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind } from "ts/objects/REGame_Block";
+import { BlockLayerKind } from "ts/objects/LBlock";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { REGameManager } from "ts/system/REGameManager";
 import { RESystem } from "ts/system/RESystem";

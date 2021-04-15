@@ -195,7 +195,7 @@ export enum TileKind {
  * elona みたいに固定マップの壊した壁が一定時間すると復活するようなものを実装するには必要になる。
  * 
  */
-export class REGame_Block// extends LObject
+export class LBlock// extends LObject
 {
     // 固定マップ等で、決まった ID のタイルを表示した場合はここに値を持たせておく。
     // 常に持たせておくとデータ量もそれなりになるので、今はオプションにしておく。

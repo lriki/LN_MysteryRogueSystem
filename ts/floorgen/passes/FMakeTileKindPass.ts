@@ -1,4 +1,4 @@
-import { TileKind } from "ts/objects/REGame_Block";
+import { TileKind } from "ts/objects/LBlock";
 import { FBlockComponent, FMap } from "../FMapData";
 import { FMapBuildPass } from "./FMapBuildPass";
 

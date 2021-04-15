@@ -8,7 +8,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { MonsterHouseState } from "../LRoom";
 import { REGame } from "../REGame";
-import { LRoomId } from "../REGame_Block";
+import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 

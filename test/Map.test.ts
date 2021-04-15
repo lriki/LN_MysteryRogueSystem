@@ -1,15 +1,7 @@
-import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
-import { SEntityFactory } from "ts/system/SEntityFactory";
 import { REGameManager } from "ts/system/REGameManager";
-import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-
 import "./Extension";
-import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

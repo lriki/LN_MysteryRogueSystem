@@ -3,7 +3,7 @@ import { DMapId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LRandom } from "ts/objects/LRandom";
-import { TileKind } from "ts/objects/REGame_Block";
+import { TileKind } from "ts/objects/LBlock";
 import { FStructure } from "./FStructure";
 
 

@@ -8,7 +8,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame } from "../REGame";
-import { BlockLayerKind } from "../REGame_Block";
+import { BlockLayerKind } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { CommandArgs, LBehavior, onMoveAsProjectile, onPrePickUpReaction, onPrePutReaction, onThrowReaction } from "./LBehavior";
 

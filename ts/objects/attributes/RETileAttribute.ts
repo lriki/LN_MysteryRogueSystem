@@ -1,4 +1,4 @@
-import { TileKind } from "../REGame_Block";
+import { TileKind } from "../LBlock";
 import { LAttributeData, LAttribute } from "./LAttribute";
 
 /*

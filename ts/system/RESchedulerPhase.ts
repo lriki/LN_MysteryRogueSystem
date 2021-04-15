@@ -2,7 +2,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { DecisionPhase, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/behaviors/LBehavior";
 import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind } from "ts/objects/REGame_Block";
+import { BlockLayerKind } from "ts/objects/LBlock";
 import { Helpers } from "./Helpers";
 import { REResponse } from "./RECommand";
 import { SScheduler } from "./SScheduler";

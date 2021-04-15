@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
 import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock, FSector } from "../FMapData";
-import { REGame_Block } from "ts/objects/REGame_Block";
+import { LBlock } from "ts/objects/LBlock";
 import { DHelpers } from "ts/data/DHelper";
 import { REData } from "ts/data/REData";
 import { DPrefabKind } from "ts/data/DPrefab";

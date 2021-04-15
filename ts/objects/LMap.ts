@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
-import { BlockLayerKind, LRoomId, REGame_Block, TileKind } from "./REGame_Block";
+import { BlockLayerKind, LRoomId, LBlock, TileKind } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
@@ -59,7 +59,7 @@ export class LMap
     private _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;
     private _height: number = 0;
-    private _blocks: REGame_Block[] = [];
+    private _blocks: LBlock[] = [];
     private _entityIds: LEntityId[] = [];      // マップ内に登場している Entity
     private _rooms: LRoom[] = [];
     private _structures: LStructure[] = [];
@@ -89,11 +89,11 @@ export class LMap
         this._height = height
 
         const count = this._width * this._height;
-        this._blocks = new Array<REGame_Block>(count);
+        this._blocks = new Array<LBlock>(count);
         for (let i = 0; i < count; i++) {
             const x = Math.trunc(i % this._width);
             const y = Math.trunc(i / this._width);
-            this._blocks[i] = new REGame_Block(x, y);
+            this._blocks[i] = new LBlock(x, y);
             this._blocks[i]._tileKind = TileKind.Floor;
         }
     }
@@ -195,9 +195,9 @@ export class LMap
     }
     */
 
-    block(x: number, y: number) : REGame_Block;
-    block(pos: Vector2, _?: any) : REGame_Block;
-    block(a1: any, a2: any) : REGame_Block {
+    block(x: number, y: number) : LBlock;
+    block(pos: Vector2, _?: any) : LBlock;
+    block(a1: any, a2: any) : LBlock {
         let x, y;
         if (a1 instanceof Vector2) {
             x = a1.x;
@@ -216,7 +216,7 @@ export class LMap
         }
     }
 
-    public tryGetBlock(x: number, y: number): REGame_Block | undefined {
+    public tryGetBlock(x: number, y: number): LBlock | undefined {
         if (x < 0 || this._width <= x || y < 0 || this._height <= y) {
             return undefined;
         }
@@ -226,12 +226,12 @@ export class LMap
     }
 
     /** "部屋" 内の "床" である Block を取得する */
-    public roomFloorBlocks(): REGame_Block[] {
+    public roomFloorBlocks(): LBlock[] {
         return this._blocks.filter(b => b.isRoom() && b.tileKind() == TileKind.Floor);
     }
 
     /** NPC や Enemy が出現可能な Block を取得する。既に Unit が存在している Block は対象外。 */
-    public unitSpawnableBlocks(): REGame_Block[] {
+    public unitSpawnableBlocks(): LBlock[] {
         return this.roomFloorBlocks().filter(b => !b.layer(BlockLayerKind.Unit).isContainsAnyEntity());
     }
 
@@ -340,12 +340,12 @@ export class LMap
 
 
 
-    canEntering(block: REGame_Block, layer: BlockLayerKind): boolean {
+    canEntering(block: LBlock, layer: BlockLayerKind): boolean {
         // TODO: 壁抜けや浮遊状態で変わる
         return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
     }
     
-    canLeaving(block: REGame_Block, entity: LEntity): boolean {
+    canLeaving(block: LBlock, entity: LEntity): boolean {
 
         // TODO: 壁抜けや浮遊状態で変わる
         return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
@@ -420,7 +420,7 @@ export class LMap
         this._postLocate(entity, oldBlock, newBlock);
     }
 
-    private _postLocate(entity: LEntity, oldBlock: REGame_Block, newBlock: REGame_Block) {
+    private _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock) {
         if (oldBlock._roomId != newBlock._roomId) {
             const args: RoomEventArgs = {
                 entity: entity,

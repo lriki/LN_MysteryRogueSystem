@@ -8,7 +8,7 @@ import { REGame } from "ts/objects/REGame";
 import { LMap } from "ts/objects/LMap";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SMinimapData } from "ts/system/SMinimapData";
-import { TileKind } from "ts/objects/REGame_Block";
+import { TileKind } from "ts/objects/LBlock";
 
 
 interface Point {
