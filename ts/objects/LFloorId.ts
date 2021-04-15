@@ -114,6 +114,10 @@ export class LFloorId {
         return this._landId == DHelpers.RmmzNormalMapLandId;
     }
 
+    public isRESystem(): boolean {
+        return this._landId != DHelpers.RmmzNormalMapLandId;
+    }
+
     public isRandomMap(): boolean {
         return this.rmmzFixedMapId() <= 0;
     }

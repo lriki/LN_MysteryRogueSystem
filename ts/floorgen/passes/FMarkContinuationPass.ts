@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
-import { FBlockComponent, FExitPont, FMap, FMapBlock, FSector } from "../FMapData";
+import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock, FSector } from "../FMapData";
 import { REGame_Block } from "ts/objects/REGame_Block";
 import { DHelpers } from "ts/data/DHelper";
 import { REData } from "ts/data/REData";
@@ -130,6 +130,9 @@ export class FMarkContinuationPass extends FMapBuildPass {
             });
             
             if (entryPointEvent) {
+                // FIXME: ここでついでにやっちゃうのはあまりよくない気がするが…
+                map.setEntryPont(new FEntryPont(entryPointEvent.x, entryPointEvent.y));
+
                 return map.block(entryPointEvent.x, entryPointEvent.y);
             }
             else {

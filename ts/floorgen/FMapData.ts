@@ -541,6 +541,24 @@ export class FRoom {
     }
 }
 
+export class FEntryPont {
+    private _mx: number;
+    private _my: number;
+
+    public constructor(mx: number, my: number) {
+        this._mx = mx;
+        this._my = my;
+    }
+
+    public mx(): number {
+        return this._mx;
+    }
+
+    public my(): number {
+        return this._my;
+    }
+}
+
 export class FExitPont {
     private _mx: number;
     private _my: number;
@@ -571,6 +589,7 @@ export class FMap {
     private _sectorConnections: FSectorConnection[];
     private _rooms: FRoom[];
     private _structures: FStructure[];
+    private _entryPoint: FEntryPont | undefined;
     private _exitPont: FExitPont | undefined;
 
     public constructor(floorId: LFloorId, randSeed: number) {
@@ -698,6 +717,14 @@ export class FMap {
 
     public isValid(x: number, y: number): boolean {
         return 0 <= x && x < this._width && 0 <= y && y < this._height;
+    }
+
+    public setEntryPont(value: FEntryPont) {
+        this._entryPoint = value;
+    }
+    
+    public entryPoint(): FEntryPont | undefined {
+        return this._entryPoint;
     }
 
     public setExitPont(value: FExitPont) {

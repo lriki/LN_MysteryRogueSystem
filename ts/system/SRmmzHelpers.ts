@@ -58,7 +58,6 @@ export class SRmmzHelpers {
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
-        assert(entity.ownerIsMap());
     }
 
     public static getPrefabEventData(prefabName: string): IDataMapEvent {

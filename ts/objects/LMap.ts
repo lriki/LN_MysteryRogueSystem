@@ -269,7 +269,7 @@ export class LMap
         assert(!entity.hasOwner());
 
         this._entityIds.push(entity.entityId());
-        entity.setOwnerMap(this);
+        //entity.setOwnerMap(this);
 
         RESystem.integration.onEntityEnteredMap(entity);
     }
@@ -318,16 +318,21 @@ export class LMap
     }
 
     private _removeEntityHelper(entity: LEntity) {
-        assert(entity.ownerIsMap());
-        entity.clearOwner();
+        //assert(entity.ownerIsMap());
+        //entity.clearOwner();
 
         assert(entity.floorId == this.floorId());
-        entity.floorId = LFloorId.makeEmpty();
-
-        const block = this.block(entity.x, entity.y);
-        const result = block.removeEntity(entity);
-        assert(result);
         
+        if (entity.floorId.isRESystem()) {
+            const block = this.block(entity.x, entity.y);
+            const result = block.removeEntity(entity);
+            assert(result);
+        }
+        else {
+            // RESystem 外のマップでは block を作っていないこともある
+        }
+        
+        entity.floorId = LFloorId.makeEmpty();
         RESystem.integration.onEntityLeavedMap(entity);
     }
 

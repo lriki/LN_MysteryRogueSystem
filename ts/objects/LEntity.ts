@@ -18,6 +18,7 @@ import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
+import { textChangeRangeIsUnchanged } from "typescript";
 
 enum BlockLayer
 {
@@ -63,7 +64,7 @@ export class LEntity extends LObject
 
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
     
-    private _parentIsMap = false;
+    //private _parentIsMap = false;
 
     public constructor() {
         super(LObjectType.Entity);
@@ -77,6 +78,7 @@ export class LEntity extends LObject
         return this.__objectId();
     }
 
+    /*
     public hasOwner(): boolean {
         return super.hasOwner() || this._parentIsMap;
     }
@@ -99,6 +101,14 @@ export class LEntity extends LObject
     public clearOwner(): void {
         super.clearOwner();
         this._parentIsMap = false;
+    }
+    */
+
+    public isGCReady(): boolean {
+        // 何らかのフロア上にいる場合は削除されない (明示的に除外されなければならない)
+        if (this.floorId.hasAny()) return false;
+
+        return super.isGCReady();
     }
 
 
@@ -624,9 +634,23 @@ export class LEntity extends LObject
         return REGame.map.block(this.x, this.y)._roomId;
     }
 
+    /** 特定の座標を持っておらず、Floor へ進入中であるかどうか。Map がロードされた後、EntryPoint へ配置される状態。 */
+    public isEnteringToFloor(): boolean {
+        return this.x < 0;
+    }
+
+    /** 現在のマップ上に出現しているか (いずれかの Block 上に存在しているか) */
+    public isAppearedOnMap(): boolean {
+        if (!REGame.map.isValidPosition(this.x, this.y)) return false;
+        const block = REGame.map.block(this.x, this.y);
+        return block.containsEntity(this);
+    }
+
     
     //----------------------------------------
-    // Object Reference Management
+    // 
+
+    
 
 
     

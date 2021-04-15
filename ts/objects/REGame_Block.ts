@@ -308,4 +308,9 @@ export class REGame_Block// extends LObject
         else
             return undefined;
     }
+
+    /** 指定した Entity がこの Block に含まれているか */
+    public containsEntity(entity: LEntity): boolean {
+        return this.findEntityLayerKind(entity) != undefined;
+    }
 }

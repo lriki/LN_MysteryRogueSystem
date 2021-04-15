@@ -107,6 +107,15 @@ export class LObject {
         return this._ownerObjectId.hasAny();
     }
 
+    public isGCReady(): boolean {
+        // Unique Entity は削除されない
+        if (this.isUnique()) return false;
+        // 親から参照されているものは削除されない (明示的に除外されなければならない)
+        if (this.hasOwner()) return false;
+        
+        return true;
+    }
+
     /**
      * 親 Entity。
      * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。

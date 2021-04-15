@@ -38,7 +38,7 @@ export class SMapManager {
             this.setupRandomMap(initialMap);
         }
         else {
-            RESystem.integration.onLoadFixedMapEvents();
+            this.setupFixedMap(initialMap);
         }
 
 
@@ -107,6 +107,26 @@ export class SMapManager {
         }
     }
 
+    private setupFixedMap(initialMap: FMap): void {
+        RESystem.integration.onLoadFixedMapEvents();
+
+
+        const enterdEntities = this.enterEntitiesToCurrentMap();
+
+
+
+        const entryPoint = initialMap.entryPoint();
+        assert(entryPoint);
+        for (const entity of enterdEntities) {
+            if (entity.isEnteringToFloor()) {
+
+                // TODO: 複数 Entity が重なるときの対策
+
+                this._map.locateEntity(entity, entryPoint.mx(), entryPoint.my());
+            }
+        }
+    }
+
     public setupInitial(): void {
 
     }
@@ -121,6 +141,7 @@ export class SMapManager {
     }
 
     // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
+    // ※追加だけ。配置方法はマップの種類によって変わるので、この関数では行わない。
     private enterEntitiesToCurrentMap(): LEntity[] {
         const player = REGame.camera.focusedEntity();
         assert(player)
@@ -137,6 +158,9 @@ export class SMapManager {
                 // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
                 // それはここでは追加しない。
                 const isNoEnterd = !entity.hasOwner();
+
+                // onLoadFixedMapEvents() によって既に追加されているものは対象外
+                if (entity.isAppearedOnMap()) continue;
 
                 if (this._map.floorId().equals(entity.floorId) && isNoEnterd) {
                     //if (isFixedMap) {

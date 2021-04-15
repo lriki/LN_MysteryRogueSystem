@@ -199,7 +199,7 @@ export class LWorld
         for (let i = 1; i < this._objects.length; i++) {
             const obj = this._objects[i];
             if (obj) {
-                if (!obj.isUnique() && !obj.hasOwner()) {
+                if (obj.isGCReady()) {
                     // Unique Entity 以外で、いずれからの参照もない Entity は削除する
                     obj.destroy();
                 }
