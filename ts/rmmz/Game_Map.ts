@@ -59,28 +59,7 @@ Game_Map.prototype.setup = function(mapId: number) {
         else {
             throw new Error();
         }
-
-            
-        // この時点ではまだ Player は locate() されていないので、
-        // 位置をとりたければ _newX, _newY を見る必要がある。
-        //console.log("Game_Map initialized.", $gamePlayer._newX);
-        //console.log($gamePlayer);
-
-        /*
-        if (1)  // TODO: 固定マップの場合
-        {
-            REGame.map.setup(mapId);
-
-
-            
-        }
-        */
-
-
-
     }
-
-
 
     Log.d("RMMZ map setup finished.");
 }

@@ -230,9 +230,14 @@ export class LMap
         return this._blocks.filter(b => b.isRoom() && b.tileKind() == TileKind.Floor);
     }
 
-    /** NPC や Enemy が出現可能な Block を取得する。既に Unit が存在している Block は対象外。 */
-    public unitSpawnableBlocks(): LBlock[] {
-        return this.roomFloorBlocks().filter(b => !b.layer(BlockLayerKind.Unit).isContainsAnyEntity());
+    /**
+     * NPC や Enemy が出現可能な Block を取得する。
+     * 
+     * - 既に Unit が存在している Block は対象外。
+     * - 地続きではない Block も取得する。(堀内部や埋蔵金部屋)
+     */
+    public getSpawnableBlocks(layer: BlockLayerKind): LBlock[] {
+        return this.roomFloorBlocks().filter(b => !b.layer(layer).isContainsAnyEntity());
     }
 
     public isValidPosition(x: number, y: number): boolean {

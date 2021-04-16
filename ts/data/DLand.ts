@@ -28,9 +28,17 @@ export interface DAppearanceTable {
     entities: DAppearanceTableEntity[];
 
     maxFloors: number;
-    others: DAppearanceTableEntity[][];
+
+    /** 階段など、RESystem によって特別扱いされるもの。 */
+    system: DAppearanceTableEntity[][];
+
+    /** Enemy のテーブル。初期配置の他、ターン経過によって出現する。 */
     enemies: DAppearanceTableEntity[][];
+
+    /** Trap のテーブル。Item とは出現率が別管理なので、分けておく。 */
     traps: DAppearanceTableEntity[][];
+
+    /** Item のテーブル。Trap とは出現率が別管理なので、分けておく。 */
     items: DAppearanceTableEntity[][];
 }
 
@@ -95,7 +103,7 @@ export function DLand_Default(): DLand {
         appearanceTable: {
             entities: [],
             maxFloors: 0,
-            others: [],
+            system: [],
             enemies: [],
             traps: [],
             items: [],
@@ -139,7 +147,7 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
     const table: DAppearanceTable = { 
         entities: [],
         maxFloors: 0,
-        others: [],
+        system: [],
         enemies: [],
         traps: [],
         items: [],
@@ -172,12 +180,12 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
         }
     }
 
-    table.others = new Array(table.maxFloors);
+    table.system = new Array(table.maxFloors);
     table.enemies = new Array(table.maxFloors);
     table.traps = new Array(table.maxFloors);
     table.items = new Array(table.maxFloors);
     for (let i = 0; i < table.maxFloors; i++) {
-        table.others[i] = [];
+        table.system[i] = [];
         table.enemies[i] = [];
         table.traps[i] = [];
         table.items[i] = [];
@@ -197,7 +205,7 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
                     table.items[i].push(entity);
                     break;
                 default:
-                    table.others[i].push(entity);
+                    table.system[i].push(entity);
                     break;
             }
         }

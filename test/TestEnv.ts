@@ -16,6 +16,7 @@ import { LFloorId } from 'ts/objects/LFloorId';
 import { LMap } from 'ts/objects/LMap';
 import { DHelpers } from 'ts/data/DHelper';
 import { assert } from 'ts/Common';
+import { DLandId } from 'ts/data/DLand';
 
 declare global {
     interface Number {
@@ -30,6 +31,7 @@ Number.prototype.clamp = function(min: number, max: number): number{
 
 export class TestEnv {
 
+    public static UnitTestLandId: DLandId;
     public static FloorId_DefaultNormalMap: LFloorId = LFloorId.makeEmpty();
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
 
@@ -64,6 +66,7 @@ export class TestEnv {
             this.loadDataFile("RE_databaseMap", filename);
         }
 
+        this.UnitTestLandId = REData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
         this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.maps.findIndex(m => DHelpers.getMapName(m.mapId) == "拠点マップ"));
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         

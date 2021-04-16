@@ -55,6 +55,16 @@ enum BlockLayer
  * @note
  * 以前オブジェクトの参照と寿命管理のために LObject をベースクラスとし、Entity だけではなく Map 等もその派生としていたことがあったが、
  * セーブデータ作成や、World から Entity を検索するとき等の書き方が非常に煩雑になってしまったため廃止した。
+ * 
+ * 
+ * 
+ * 座標と Map 上への配置状況について
+ * ----------
+ * 
+ * 座標 x,y のマイナス値は正当な値。これは、Floor 内には存在しているが Map 上には配置されていない状態を示す。
+ * イメージとしては、概念として存在しているが、現実世界に登場していない状態。
+ * お店のセキュリティシステムなど、Map 上に存在する必要はないが Floor 内に存在し、影響を与える Entity でこの状態になることがある。
+ * また、フロア移動 ～ Map 上へ配置までの間では、通常の Entity も一時的にこの状態になることがある。
  */
 export class LEntity extends LObject
 {
@@ -154,8 +164,8 @@ export class LEntity extends LObject
      * 直接変更禁止。transfarMap を使うこと
      */
     floorId: LFloorId = LFloorId.makeEmpty();
-    x: number = 0;          /**< 論理 X 座標 */
-    y: number = 0;          /**< 論理 Y 座標 */
+    x: number = 0;          /**< 論理 X 座標。マイナス値は正当（クラスコメント参照） */
+    y: number = 0;          /**< 論理 Y 座標。マイナス値は正当（クラスコメント参照） */
 
     //--------------------
     // 以下、一時的に Entity に直接持たせてる Attr. 利用率とかで、別途 Attr クラスに分けたりする。
