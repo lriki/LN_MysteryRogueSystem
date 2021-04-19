@@ -21,7 +21,7 @@ import { DMonsterHouse } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
-import { DPrefab, DPrefabKind, DPrefab_Default } from "./DPrefab";
+import { DPrefab, DPrefabKind } from "./DPrefab";
 
 export type DParameterId = number;
 
@@ -208,7 +208,7 @@ export class REData
         this.states = [DState_makeDefault()];
         this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
-        this.prefabs = [DPrefab_Default()];
+        this.prefabs = [new DPrefab()];
     }
 
     static addEntityKind(name: string, prefabKind: string): number {
@@ -375,14 +375,29 @@ export class REData
         return this.items.find(x => x.entity.key == re_key);
     }
 
-    static findPrefab(kind: DPrefabKind, key: string): DPrefab | undefined {
-        return this.prefabs.find(p => p.kind == kind && p.key == key);
+    static findItemFuzzy(pattern: string): DItem | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.items[id];
+        else
+            return this.items.find(x => x.name == pattern || x.entity.key == pattern);
     }
 
     static getItem(re_key: string): DItem {
         const d = this.findItem(re_key);
         if (d) return d;
         throw new Error(`Item "${re_key}" not found.`);
+    }
+
+    static getItemFuzzy(pattern: string): DItem {
+        const d = this.findItemFuzzy(pattern);
+        if (d) return d;
+        throw new Error(`Item "${pattern}" not found.`);
+    }
+
+    static findPrefabFuzzy(pattern: string): DPrefab | undefined {
+        // TODO: id
+        return this.prefabs.find(p => p.key == pattern);
     }
 
     static createActivity(actionId: DActionId): LActivity {

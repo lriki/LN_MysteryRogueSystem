@@ -25,7 +25,7 @@ import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivi
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
-import { DPrefab, DPrefabKind, DPrefab_Default } from "./DPrefab";
+import { DPrefab, DPrefabDataSource, DPrefabKind, DSystemPrefabKind } from "./DPrefab";
 import { LBackwardFloorActivity } from 'ts/objects/activities/LBackwardFloorActivity';
 
 
@@ -612,23 +612,33 @@ export class REDataManager
                 const data = DHelpers.readPrefabMetadata(event);
                 if (!data) continue;
 
-                const prefab: DPrefab = {
-                    ...DPrefab_Default(),
-                    id: REData.prefabs.length,
-                    key: event.name,
-                }
+                const prefab = new DPrefab();
+                prefab.id = REData.prefabs.length;
+                prefab.key = event.name;
+                
                 REData.prefabs.push(prefab);
                 if (data.enemy) {
-                    prefab.kind = DPrefabKind.Enemy;
-                    prefab.rmmzDataKey = data.enemy;
+                    prefab.dataSource = DPrefabDataSource.Enemy;
+                    prefab.dataId = REData.monsters.findIndex(x => x.key == data.enemy);
+                    if (prefab.dataId <= 0) {
+                        throw new Error(`EnemyData not found. (${data.enemy})`);
+                    }
                 }
                 else if (data.item) {
-                    prefab.kind = DPrefabKind.Item;
-                    prefab.rmmzDataKey = data.item;
+                    prefab.dataSource = DPrefabDataSource.Item;
+                    prefab.dataId = REData.getItemFuzzy(data.item).id;
                 }
                 else if (data.system) {
-                    prefab.kind = DPrefabKind.System;
-                    prefab.rmmzDataKey = data.system;
+                    prefab.dataSource = DPrefabDataSource.System;
+                    if (data.system == "RE-SystemPrefab:EntryPoint") {
+                        prefab.dataId = DSystemPrefabKind.EntryPoint;
+                    }
+                    else if (data.system == "RE-SystemPrefab:ExitPoint") {
+                        prefab.dataId = DSystemPrefabKind.ExitPoint;
+                    }
+                    else {
+                        throw new Error(`Invalid system prefab name. (${data.system})`);
+                    }
                 }
                 else {
                     throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);

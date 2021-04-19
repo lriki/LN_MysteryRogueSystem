@@ -94,39 +94,29 @@ export class SEntityFactory {
     static newEntity(data: DEntity): LEntity {
         const prefab = REData.prefabs[data.prefabId];
         let entity: LEntity;
-        switch (prefab.kind) {
-            case DPrefabKind.Enemy: {
-                const data = REData.monsters.find(x => x.key == prefab.rmmzDataKey);
-                if (data)
-                    entity = SEntityFactory.newMonster(data.id);
-                else
-                    throw new Error("Invalid enemy key: " + prefab.key);
-                }
-                break;
 
-            case DPrefabKind.Trap: {
-                throw new Error("Not implemented.");
-                break;
-            }
-
-            case DPrefabKind.Item: {
-                throw new Error("Not implemented.");
-                break;
-            }
-            case DPrefabKind.System: {
-                if (prefab.rmmzDataKey == "RE-SystemPrefab:ExitPoint") {
-                    entity = this.newExitPoint();
-                }
-                else if (prefab.rmmzDataKey == "RE-SystemPrefab:EntryPoint") {
-                    entity = this.newEntryPoint();
-                }
-                else {
-                    throw new Error("Not implemented.");
-                }
-                break;
-            }
-            default:
-                throw new Error("Not implemented.");
+        if (prefab.isEnemyKind()) {
+            const data = REData.monsters[prefab.dataId];
+            if (data)
+                entity = SEntityFactory.newMonster(data.id);
+            else
+                throw new Error("Invalid enemy key: " + prefab.key);
+        }
+        else if (prefab.isTrapKind()) {
+            throw new Error("Not implemented.");
+        }
+        else if (prefab.isItemKind()) {
+            const data = REData.items[prefab.dataId];
+            throw new Error("Not implemented.");
+        }
+        else if (prefab.isEntryPoint()) {
+            entity = this.newExitPoint();
+        }
+        else if (prefab.isExitPoint()) {
+            entity = this.newEntryPoint();
+        }
+        else {
+            throw new Error("Not implemented.");
         }
 
         entity.prefabKey = prefab.key;

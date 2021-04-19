@@ -194,19 +194,18 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
     for (const entity of table.entities) {
         const prefab = REData.prefabs[entity.entity.prefabId];
         for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
-            switch (prefab.kind) {
-                case DPrefabKind.Enemy:
-                    table.enemies[i].push(entity);
-                    break;
-                case DPrefabKind.Trap:
-                    table.traps[i].push(entity);
-                    break;
-                case DPrefabKind.Item:
-                    table.items[i].push(entity);
-                    break;
-                default:
-                    table.system[i].push(entity);
-                    break;
+
+            if (prefab.isEnemyKind()) {
+                table.enemies[i].push(entity);
+            }
+            else if (prefab.isTrapKind()) {
+                table.traps[i].push(entity);
+            }
+            else if (prefab.isItemKind()) {
+                table.items[i].push(entity);
+            }
+            else {
+                table.system[i].push(entity);
             }
         }
     }

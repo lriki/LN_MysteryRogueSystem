@@ -55,7 +55,7 @@ export class SMapManager {
                 const appearanceTable = REData.lands[floorId.landId()].appearanceTable;
                 const prefab = appearanceTable.system[floorId.floorNumber()].find(e => {
                     const p = REData.prefabs[e.entity.prefabId];
-                    return p.kind == DPrefabKind.System && p.rmmzDataKey == "RE-SystemPrefab:ExitPoint";
+                    return p.isExitPoint();
                 });
                 assert(prefab);
 
