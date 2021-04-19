@@ -231,18 +231,20 @@ export class LBlock// extends LObject
         return this._y;
     }
 
-    tileIds(): number[] | undefined {
+    /** 表示用 TileId. 通行判定や部屋内判定に使用するものではない点に注意。 */
+    public tileIds(): number[] | undefined {
         return this._tileIds;
     }
 
-    setTileIds(tileIds: number[]): void {
+    /** 表示用 TileId. 通行判定や部屋内判定に使用するものではない点に注意。 */
+    public setTileIds(tileIds: number[]): void {
         this._tileIds = tileIds;
         MapDataProvidor.onUpdateBlock(this);
     }
 
-    tile(): LEntity {
-        return this._layers[BlockLayerKind.Terrain].entities()[0];
-    }
+    //tile(): LEntity {
+    //    return this._layers[BlockLayerKind.Terrain].entities()[0];
+    //}
 
     tileKind(): TileKind {
         //const attr = this.tile().findAttribute(RETileAttribute);

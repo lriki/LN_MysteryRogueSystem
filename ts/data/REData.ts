@@ -21,7 +21,7 @@ import { DMonsterHouse } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
-import { DPrefab, DPrefabKind } from "./DPrefab";
+import { DPrefab } from "./DPrefab";
 
 export type DParameterId = number;
 

@@ -25,7 +25,7 @@ import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivi
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
-import { DPrefab, DPrefabDataSource, DPrefabKind, DSystemPrefabKind } from "./DPrefab";
+import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { LBackwardFloorActivity } from 'ts/objects/activities/LBackwardFloorActivity';
 
 
@@ -615,7 +615,7 @@ export class REDataManager
                 const prefab = new DPrefab();
                 prefab.id = REData.prefabs.length;
                 prefab.key = event.name;
-                
+
                 REData.prefabs.push(prefab);
                 if (data.enemy) {
                     prefab.dataSource = DPrefabDataSource.Enemy;

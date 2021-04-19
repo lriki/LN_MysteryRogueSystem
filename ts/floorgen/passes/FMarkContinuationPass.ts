@@ -4,7 +4,6 @@ import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock, FSector } from
 import { LBlock } from "ts/objects/LBlock";
 import { DHelpers } from "ts/data/DHelper";
 import { REData } from "ts/data/REData";
-import { DPrefabKind } from "ts/data/DPrefab";
 
 
 

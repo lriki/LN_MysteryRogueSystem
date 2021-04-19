@@ -1,7 +1,6 @@
 
 import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
-import { DPrefabKind } from "ts/data/DPrefab";
 import { REData } from "ts/data/REData";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";

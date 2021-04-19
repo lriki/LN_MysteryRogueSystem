@@ -1,7 +1,7 @@
 
 import { DEntity, DEntity_Default } from "./DEntity";
 import { DHelpers } from "./DHelper";
-import { DPrefabId, DPrefabKind } from "./DPrefab";
+import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
 
 

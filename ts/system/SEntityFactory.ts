@@ -17,7 +17,6 @@ import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
 import { DEntity } from "ts/data/DEntity";
-import { DPrefabKind } from "ts/data/DPrefab";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 
 export class SEntityFactory {

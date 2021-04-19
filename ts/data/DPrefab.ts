@@ -3,6 +3,7 @@ import { REData } from "./REData";
 export type DPrefabId = number;
 
 /** Prefab の大分類 */
+/*
 export enum DPrefabKind {
     Unknown,
     Enemy,
@@ -10,6 +11,7 @@ export enum DPrefabKind {
     Item,
     System,
 }
+*/
 
 /** どのデータテーブルの要素と関連づいているか */
 export enum DPrefabDataSource {

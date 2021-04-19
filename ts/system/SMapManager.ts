@@ -9,7 +9,6 @@ import { assert, Log } from "ts/Common";
 import { paramEnemySpawnInvalidArea } from "ts/PluginParameters";
 import { FMap } from "ts/floorgen/FMapData";
 import { REData } from "ts/data/REData";
-import { DPrefabKind } from "ts/data/DPrefab";
 import { LObjectType } from "ts/objects/LObject";
 import { BlockLayerKind, LBlock } from "ts/objects/LBlock";
 
