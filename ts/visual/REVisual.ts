@@ -3,7 +3,7 @@ import { REGame } from "ts/objects/REGame";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisual_Manager } from "./REVisual_Manager";
 import { VDirectionArrow } from "./VDirectionArrow";
-import { VHudSpriteSet } from "./VHudSpriteSet";
+import { VHudWindow } from "./VHudWindow";
 import { VMapGuideGrid } from "./VMapGuideGrid";
 import { VMessageWindowSet } from "./VMessageWindowSet";
 import { VSpriteSet } from "./VSpriteSet";
@@ -31,7 +31,6 @@ export class REVisual
     static _messageWindowSet: VMessageWindowSet;
 
     static spriteSet2: VSpriteSet | undefined;
-    static hudSpriteSet: VHudSpriteSet | undefined;
     static guideGrid: VMapGuideGrid | undefined;
 
     static _syncCamera: boolean =true;

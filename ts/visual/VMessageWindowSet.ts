@@ -1,4 +1,5 @@
 import { REGame } from "ts/objects/REGame";
+import { VHudWindow } from "./VHudWindow";
 import { VFloorNameWindow } from "./windows/VFloorNameWindow";
 import { VMessageLogWindow } from "./windows/VMessageLogWindow";
 import { VMessageWindow } from "./windows/VMessageWindow";
@@ -10,6 +11,9 @@ import { VMessageWindow } from "./windows/VMessageWindow";
 export class VMessageWindowSet {
 
     private _scene: Scene_Map;
+    
+    private _hudSpriteSet: VHudWindow;
+
     private _logWindow: VMessageLogWindow;
     private _messageWindow: VMessageWindow;
 
@@ -23,6 +27,9 @@ export class VMessageWindowSet {
 
     constructor(scene: Scene_Map) {
         this._scene = scene;
+
+        this._hudSpriteSet = new VHudWindow();
+        this._scene.addWindow(this._hudSpriteSet);
 
 
         this._shadowBitmap = new Bitmap(32, 32);

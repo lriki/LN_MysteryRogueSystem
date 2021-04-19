@@ -1,5 +1,6 @@
 import { RESystem } from "ts/system/RESystem";
 import { VDirectionArrow } from "./VDirectionArrow";
+import { VHudWindow } from "./VHudWindow";
 import { VVisibilityShadow } from "./VVisibilityShadow";
 
 export class VSpriteSet {
@@ -34,6 +35,8 @@ export class VSpriteSet {
         this._minimapTilemap.setData(width, height, minimapData);
         this._minimapTilemap.horizontalWrap = $gameMap.isLoopHorizontal();
         this._minimapTilemap.verticalWrap = $gameMap.isLoopVertical();
+        this._minimapTilemap.y = VHudWindow.HeaderHeight;
+        this._minimapTilemap.scale.set(0.75, 0.75);
         this._spritesetMap._baseSprite.addChild(this._minimapTilemap);
 
         this._minimapTilemap.setRendererId(2);

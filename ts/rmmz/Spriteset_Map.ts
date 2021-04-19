@@ -1,7 +1,7 @@
 
 
 import { RESystem } from 'ts/system/RESystem';
-import { VHudSpriteSet } from 'ts/visual/VHudSpriteSet';
+import { VHudWindow } from 'ts/visual/VHudWindow';
 import { VSpriteSet } from 'ts/visual/VSpriteSet';
 import { assert } from '../Common';
 import { REGame } from '../objects/REGame';
@@ -22,14 +22,14 @@ Spriteset_Map.prototype.initialize = function(): void {
 
     if (RMMZHelper.isRESystemMap()) {
         REVisual.spriteSet2 = new VSpriteSet(this);
-        REVisual.hudSpriteSet = new VHudSpriteSet();
-        this.addChild(REVisual.hudSpriteSet);
+        //REVisual.hudSpriteSet = new VHudWindow();
+        //this.addChild(REVisual.hudSpriteSet);
     }
     else {
-        if (REVisual.hudSpriteSet) {
-            this.removeChild(REVisual.hudSpriteSet);
-            REVisual.hudSpriteSet = undefined;
-        }
+        //if (REVisual.hudSpriteSet) {
+        //    this.removeChild(REVisual.hudSpriteSet);
+        //   REVisual.hudSpriteSet = undefined;
+        //}
         REVisual.spriteSet2 = undefined;
     }
 }
