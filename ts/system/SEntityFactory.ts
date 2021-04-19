@@ -103,11 +103,10 @@ export class SEntityFactory {
                 throw new Error("Invalid enemy key: " + prefab.key);
         }
         else if (prefab.isTrapKind()) {
-            throw new Error("Not implemented.");
+            entity = this.newTrap(prefab.dataId);
         }
         else if (prefab.isItemKind()) {
-            const data = REData.items[prefab.dataId];
-            throw new Error("Not implemented.");
+            entity = this.newItem(prefab.dataId);
         }
         else if (prefab.isEntryPoint()) {
             entity = this.newExitPoint();
