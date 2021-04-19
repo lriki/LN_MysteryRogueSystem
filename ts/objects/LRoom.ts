@@ -1,6 +1,6 @@
 import { FRoom } from "ts/floorgen/FMapData";
 import { REGame } from "./REGame";
-import { LBlock, TileKind } from "./LBlock";
+import { LBlock, TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 
 export enum MonsterHouseState {

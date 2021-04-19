@@ -4,7 +4,7 @@ import { REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
 import { FBlockComponent, FMap } from "../floorgen/FMapData";
 import { REGame } from "../objects/REGame";
-import { TileKind } from "../objects/LBlock";
+import { TileShape } from "../objects/LBlock";
 import { LEntity } from "../objects/LEntity";
 import { RESequelSet } from "../objects/REGame_Sequel";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "../PluginParameters";

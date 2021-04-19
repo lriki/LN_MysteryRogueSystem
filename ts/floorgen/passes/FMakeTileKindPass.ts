@@ -1,4 +1,4 @@
-import { TileKind } from "ts/objects/LBlock";
+import { TileShape } from "ts/objects/LBlock";
 import { FBlockComponent, FMap } from "../FMapData";
 import { FMapBuildPass } from "./FMapBuildPass";
 
@@ -10,10 +10,10 @@ import { FMapBuildPass } from "./FMapBuildPass";
         // TODO: 適当状態
         for (const block of map.blocks()) {
             if (block.isPassagableComponent()) {
-                block.setTileKind(TileKind.Floor);
+                block.setTileShape(TileShape.Floor);
             }
             else {
-                block.setTileKind(TileKind.Wall);
+                block.setTileShape(TileShape.Wall);
             }
         }
     }

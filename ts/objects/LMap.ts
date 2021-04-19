@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { MapDataProvidor } from "./MapDataProvidor";
-import { BlockLayerKind, LRoomId, LBlock, TileKind } from "./LBlock";
+import { BlockLayerKind, LRoomId, LBlock, TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
@@ -94,7 +94,7 @@ export class LMap
             const x = Math.trunc(i % this._width);
             const y = Math.trunc(i / this._width);
             this._blocks[i] = new LBlock(x, y);
-            this._blocks[i]._tileKind = TileKind.Floor;
+            this._blocks[i]._tileShape = TileShape.Floor;
         }
     }
 
@@ -110,13 +110,13 @@ export class LMap
                     const dataBlock = data.block(x, y);
                     const mapBlock = this.block(x, y);
 
-                    const kind = dataBlock.tileKind();
+                    const kind = dataBlock.tileShape();
                     
                     //const tile = mapBlock.tile();
                     //const attr = tile.findAttribute(RETileAttribute);
                     //assert(attr);
                     //attr.setTileKind(kind);
-                    mapBlock._tileKind = kind;
+                    mapBlock._tileShape = kind;
 
                     mapBlock._roomId = dataBlock.roomId();
                     mapBlock._blockComponent = dataBlock.component();
@@ -227,7 +227,7 @@ export class LMap
 
     /** "部屋" 内の "床" である Block を取得する */
     public roomFloorBlocks(): LBlock[] {
-        return this._blocks.filter(b => b.isRoom() && b.tileKind() == TileKind.Floor);
+        return this._blocks.filter(b => b.isRoom() && b.tileShape() == TileShape.Floor);
     }
 
     /**
@@ -347,13 +347,13 @@ export class LMap
 
     canEntering(block: LBlock, layer: BlockLayerKind): boolean {
         // TODO: 壁抜けや浮遊状態で変わる
-        return !block.layers()[layer].isOccupied() && block.tileKind() == TileKind.Floor;
+        return !block.layers()[layer].isOccupied() && block.tileShape() == TileShape.Floor;
     }
     
     canLeaving(block: LBlock, entity: LEntity): boolean {
 
         // TODO: 壁抜けや浮遊状態で変わる
-        return /*!block->isOccupied() &&*/ block.tileKind() == TileKind.Floor;
+        return /*!block->isOccupied() &&*/ block.tileShape() == TileShape.Floor;
     }
     
     // NOTE: 斜め移動の禁止は、隣接タイルや Entity が、自分の角を斜め移動可能とするか、で検知したほうがいいかも。

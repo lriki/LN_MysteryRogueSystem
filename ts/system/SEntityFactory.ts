@@ -4,7 +4,7 @@ import { REData } from "../data/REData";
 import { REGame } from "../objects/REGame";
 import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
-import { TileKind } from "../objects/LBlock";
+import { TileShape } from "../objects/LBlock";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";

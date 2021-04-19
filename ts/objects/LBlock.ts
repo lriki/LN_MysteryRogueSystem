@@ -73,8 +73,8 @@ export class REBlockLayer {
     }
 }
 
-/** Tile Entity の性質 */
-export enum TileKind {
+/** Tile の本質的な形状 */
+export enum TileShape {
     /** 中空 */
     Void,
 
@@ -214,7 +214,7 @@ export class LBlock// extends LObject
 
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     
-    _tileKind: TileKind = TileKind.Floor;
+    _tileShape: TileShape = TileShape.Floor;
 
 
     constructor(x: number, y: number) {
@@ -246,10 +246,10 @@ export class LBlock// extends LObject
     //    return this._layers[BlockLayerKind.Terrain].entities()[0];
     //}
 
-    tileKind(): TileKind {
+    tileShape(): TileShape {
         //const attr = this.tile().findAttribute(RETileAttribute);
         //return attr ? attr.tileKind() : TileKind.Void;
-        return this._tileKind;
+        return this._tileShape;
     }
 
     /** 部屋内のブロックであるか */

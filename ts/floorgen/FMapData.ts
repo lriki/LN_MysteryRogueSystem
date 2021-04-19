@@ -3,7 +3,7 @@ import { DMapId } from "ts/data/DLand";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LRandom } from "ts/objects/LRandom";
-import { TileKind } from "ts/objects/LBlock";
+import { TileShape } from "ts/objects/LBlock";
 import { FStructure } from "./FStructure";
 
 
@@ -349,7 +349,7 @@ export class FSectorConnection {
 export class FMapBlock {
     private _x;
     private _y;
-    private _tileKind: TileKind;
+    private _tileShape: TileShape;
     private _blockComponent: FBlockComponent;
     private _sectorId: FSectorId;
     private _roomId: FRoomId;
@@ -360,7 +360,7 @@ export class FMapBlock {
     public constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
-        this._tileKind = TileKind.Floor;
+        this._tileShape = TileShape.Floor;
         this._blockComponent = FBlockComponent.None;
         this._sectorId = 0;
         this._roomId = 0;
@@ -377,12 +377,12 @@ export class FMapBlock {
         return this._y;
     }
 
-    public setTileKind(value: TileKind): void {
-        this._tileKind = value;
+    public setTileShape(value: TileShape): void {
+        this._tileShape = value;
     }
 
-    public tileKind(): TileKind {
-        return this._tileKind;
+    public tileShape(): TileShape {
+        return this._tileShape;
     }
 
     public setComponent(value: FBlockComponent): void {

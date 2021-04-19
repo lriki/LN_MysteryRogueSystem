@@ -4,7 +4,7 @@ import { REData } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
-import { TileKind } from "ts/objects/LBlock";
+import { TileShape } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
 import { SEntityFactory } from "./SEntityFactory";
@@ -101,10 +101,10 @@ export class SRmmzHelpers {
                 const block = map.block(x, y);
 
                 if (Game_Map_Impl.checkPassage(x, y, 0xF)) {
-                    block.setTileKind(TileKind.Floor);
+                    block.setTileShape(TileShape.Floor);
                 }
                 else {
-                    block.setTileKind(TileKind.HardWall);
+                    block.setTileShape(TileShape.HardWall);
                 }
 
                 const regionId = this.getRegionId(x, y);
