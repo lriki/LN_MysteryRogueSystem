@@ -43,13 +43,19 @@ export class VVisibilityShadow {
                 if (sprite) {
                     // Tile の中央点
                     const htw = $gameMap.tileWidth() / 2;
+
+                    
     
                     // 部屋ではなくCharacterSpriteにフォーカスしている場合
-                    let tx1 = (event.screenX() - htw);// - VisibilityShadowTileSize;  // タイル左辺
-                    let tx2 = (event.screenX() - htw) + VisibilityShadowTileSize;  // タイル右辺
-                    let ty1 = event.screenY() - VisibilityShadowTileSize;         // タイル上辺
-                    let ty2 = event.screenY();         // タイル下辺
+                    //let tx1 = (event.screenX() - htw);// - VisibilityShadowTileSize;  // タイル左辺
+                    //let tx2 = (event.screenX() - htw) + VisibilityShadowTileSize;  // タイル右辺
+                    //let ty1 = event.screenY() - VisibilityShadowTileSize;         // タイル上辺
+                    //let ty2 = event.screenY();         // タイル下辺
     
+                    let tx1 = (sprite.x - htw);// - VisibilityShadowTileSize;  // タイル左辺
+                    let tx2 = (sprite.x - htw) + VisibilityShadowTileSize;  // タイル右辺
+                    let ty1 = sprite.y - VisibilityShadowTileSize;         // タイル上辺
+                    let ty2 = sprite.y;         // タイル下辺
     
                     // test
                     tx1 -= VisibilityShadowTileSize / 2.0;

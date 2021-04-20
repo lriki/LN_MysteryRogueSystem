@@ -62,6 +62,9 @@ export class REVisual
         this.entityVisualSet?.update();
         this.guideGrid?.update();
         this._messageWindowSet?.update();
+    }
+    
+    static postUpdate() {
         this.spriteSet2?.update();
     }
 }

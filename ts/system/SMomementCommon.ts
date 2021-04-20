@@ -35,6 +35,13 @@ export class SMomementCommon {
         6, 0, 2,
         7, 0, 1,
     ];
+
+    /**
+     * 向き反転
+     */
+    public static reverseDir(d: number): number {
+        return 10 - d;
+    };
     
     /**
      * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
@@ -187,6 +194,34 @@ export class SMomementCommon {
     public static rotatePositionByDir(localDir: number, dir: number): SPoint {
         const localPos = Helpers.dirToTileOffset(localDir);
         return this.transformRotationBlock(localPos.x, localPos.y, dir);
+    }
+
+    public static checkDashStopBlock(entity: LEntity): boolean {
+        const x = entity.x;
+        const y = entity.y;
+        const map = REGame.map;
+        const front = Helpers.dirToTileOffset(entity.dir);
+        const block = map.block(x, y);
+        const frontBlock = map.block(x + front.x, y + front.y);
+        if (!this.checkPassageBlockToBlock(entity, block, frontBlock)) return false;    // そもそも Block 間の移動ができない
+        if (block.layer(BlockLayerKind.Ground).isContainsAnyEntity()) return false;     // 足元に何かしらある場合はダッシュ停止
+        if (block._roomId != frontBlock._roomId) return false;                          // 部屋と部屋や、部屋と通路の境界
+
+
+        if (map.adjacentBlocks8(x, y).find(b => b.layer(BlockLayerKind.Unit).isContainsAnyEntity() || b.layer(BlockLayerKind.Ground).isContainsAnyEntity())) return false;
+
+        
+        if (block.isPassageway()) {
+            const back = Helpers.dirToTileOffset(this.reverseDir(entity.dir));
+            const count1 = map.adjacentBlocks4(x + back.x, y + back.y).filter(b => b.isFloorLikeShape()).length;
+            const count2 = map.adjacentBlocks4(x, y).filter(b => b.isFloorLikeShape()).length;
+            if (count1 < count2) return false;
+        }
+        else {
+            if (block.isDoorway()) return false;
+        }
+
+        return true;
     }
 
     public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {

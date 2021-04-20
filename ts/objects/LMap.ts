@@ -121,6 +121,7 @@ export class LMap
                     mapBlock._roomId = dataBlock.roomId();
                     mapBlock._blockComponent = dataBlock.component();
                     mapBlock._continuation = dataBlock.isContinuation();
+                    mapBlock._doorway = dataBlock.isDoorway();
                 }
             }
 
@@ -223,6 +224,30 @@ export class LMap
         else {
             return this._blocks[y * this._width + x];
         }
+    }
+
+    /** 指定座標の周囲 4 Block を取得する */
+    public adjacentBlocks4(x: number, y: number): LBlock[] {
+        return [
+            this.block(x, y - 1),
+            this.block(x - 1, y),
+            this.block(x + 1, y),
+            this.block(x, y + 1),
+        ];
+    }
+
+    /** 指定座標の周囲 8 Block を取得する */
+    public adjacentBlocks8(x: number, y: number): LBlock[] {
+        return [
+            this.block(x - 1, y - 1),
+            this.block(x, y - 1),
+            this.block(x + 1, y - 1),
+            this.block(x - 1, y),
+            this.block(x + 1, y),
+            this.block(x - 1, y + 1),
+            this.block(x, y + 1),
+            this.block(x + 1, y + 1),
+        ];
     }
 
     /** "部屋" 内の "床" である Block を取得する */

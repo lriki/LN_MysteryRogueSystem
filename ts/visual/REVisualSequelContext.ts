@@ -1,6 +1,8 @@
 import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { REGame } from "ts/objects/REGame";
 import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel } from "ts/objects/REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
@@ -31,6 +33,14 @@ export class REVisualSequelContext {
     
     timeScale(): number {
         return this._timeScale;
+    }
+    
+    public isDashing(): boolean {
+        const entty = REGame.camera.focusedEntity();
+        if (!entty) return false;
+        const behavior = entty.findBehavior(REUnitBehavior);
+        if (!behavior) return false;
+        return behavior._straightDashing;
     }
 
     /** Sequel 開始時の Visual の position */

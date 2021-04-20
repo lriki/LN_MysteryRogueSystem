@@ -10,6 +10,8 @@ import { SAIHelper } from "ts/system/SAIHelper";
 import { LEntityId } from "../LObject";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
+import { REUnitBehavior } from "./REUnitBehavior";
+import { SMomementCommon } from "ts/system/SMomementCommon";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -25,7 +27,19 @@ export class REGame_DecisionBehavior extends LBehavior {
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
-            context.openDialog(entity, new REManualActionDialog());
+
+            const behavior = entity.getBehavior(REUnitBehavior);
+            if (behavior._straightDashing && SMomementCommon.checkDashStopBlock(entity)) {
+                context.postActivity(LMoveAdjacentActivity.make(entity, entity.dir));
+                context.postConsumeActionToken(entity);
+            }
+            else {
+                behavior._straightDashing = false;
+                context.openDialog(entity, new REManualActionDialog());
+            }
+
+            
+
             return REResponse.Succeeded;
         }
         else if (phase == DecisionPhase.AIMinor) {

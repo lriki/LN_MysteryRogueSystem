@@ -15,6 +15,8 @@ import { LEntity } from "ts/objects/LEntity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { Dir } from "imgui-js/imgui";
 
 enum UpdateMode {
     Normal,
@@ -23,18 +25,100 @@ enum UpdateMode {
 }
 
 export class VManualActionDialogVisual extends VMainDialog {
+    private readonly MovingInputInterval = 5;
 
     private _model: REManualActionDialog;
     private _updateMode: UpdateMode = UpdateMode.Normal;
     private _waitCount: number = 0; // キーボード操作では 1 フレームでピッタリ斜め入力するのが難しいので、最後の入力から少し待てるようにする
     //private _dirSelecting: boolean = false;
+    private _directionButtonPresseCount: number = 0;
+    private _moveButtonPresseCount: number = 0;
+    private _movingInputWaitCount = -1;
 
     public constructor(model: REManualActionDialog) {
         super();
         this._model = model;
     }
 
+    private dashButton(): string {
+        return "shift";
+    }
+
+    private directionButton(): string {
+        return "shift";
+    }
+
+    private isOffDirectionButton(): boolean {
+        return this._directionButtonPresseCount < 0;
+    }
+
+    private isDashButtonPressed(): boolean {
+        return Input.isPressed(this.dashButton());
+    }
+    
+    private isMoveButtonPressed(): boolean {
+        return this._moveButtonPresseCount > 0;
+    }
+
     onUpdate() {
+        // Update input
+        {
+            if (this._directionButtonPresseCount == 0) {
+                if (Input.isTriggered(this.directionButton())) {
+                    // 向き関係は Dialog が開いた後、初めて押されたら、入力処理を受け付ける。
+                    // こうしておかないと、ダッシュでキー押しっぱなし → 離すで向き変更モードに入ってしまう。
+                    this._directionButtonPresseCount = 1;
+                }
+            }
+            else {
+                if (Input.isPressed(this.directionButton())) {
+                    this._directionButtonPresseCount++;
+                }
+                else if (this._directionButtonPresseCount < 0) {
+                    this._directionButtonPresseCount = 1;
+                }
+                else if (this._directionButtonPresseCount > 1) {
+                    this._directionButtonPresseCount = -1;
+                }
+            }
+
+            if (this._moveButtonPresseCount == 0) {
+                if (Input.isTriggered("left") ||
+                    Input.isTriggered("right") ||
+                    Input.isTriggered("up") ||
+                    Input.isTriggered("down")) {
+                    this._moveButtonPresseCount = 1;
+                }
+                if (!Input.isPressed(this.dashButton())) {
+                    this._moveButtonPresseCount = 1;
+                }
+            }
+            else {
+                if (Input.isTriggered("left") ||
+                    Input.isTriggered("right") ||
+                    Input.isTriggered("up") ||
+                    Input.isTriggered("down")) {
+                    this._moveButtonPresseCount++;
+                }
+            }
+
+            if (this._movingInputWaitCount < 0) {
+                if (Input.dir8 != 0) {
+                    this._movingInputWaitCount = this.MovingInputInterval;
+                }
+            }
+            else if (Input.dir8 != 0) {
+                this._movingInputWaitCount++;
+            }
+            else {
+                this._movingInputWaitCount = 0;
+            }
+        }
+
+
+
+
+
         const context = RESystem.dialogContext;
         const entity = context.causeEntity();
         if (!entity) return;
@@ -85,7 +169,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             REVisual.spriteSet2?.directionArrow().setCrossDiagonal(true);
         }
         // 移動
-        else if (dir != 0) {
+        else if (dir != 0 && this._movingInputWaitCount >= this.MovingInputInterval) {
             this.attemptMoveEntity(context, entity, dir);
             return;
         }
@@ -97,7 +181,7 @@ export class VManualActionDialogVisual extends VMainDialog {
             this._model.close(true);
             return;
         }
-        else if (Input.isTriggered("shift")) {
+        else if (this.isOffDirectionButton()) {
             this._updateMode = UpdateMode.DirSelecting;
             REGame.map.increaseRevision();
             REVisual.guideGrid?.setVisible(true);
@@ -117,7 +201,7 @@ export class VManualActionDialogVisual extends VMainDialog {
         //arrow.setPosition(sprite.x, sprite.y);
         arrow.setDirection(entity.dir);
 
-        if (Input.isTriggered("shift")) {
+        if (this.isOffDirectionButton()) {
             this._updateMode = UpdateMode.Normal;
             arrow.setDirection(0);
             REVisual.guideGrid?.setVisible(false);
@@ -162,7 +246,15 @@ export class VManualActionDialogVisual extends VMainDialog {
     }
 
     private attemptMoveEntity(context: REDialogContext, entity: LEntity, dir: number): boolean {
-        if (REGame.map.checkPassage(entity, dir)) {
+        if (this.isMoveButtonPressed() &&
+            REGame.map.checkPassage(entity, dir)) {
+
+            if (this.isDashButtonPressed()) {
+                const behavior = entity.findBehavior(REUnitBehavior);
+                assert(behavior);
+                behavior._straightDashing = true;
+            }
+
             if (dir != 0) {
                 context.postActivity(LDirectionChangeActivity.make(entity, dir));
             }

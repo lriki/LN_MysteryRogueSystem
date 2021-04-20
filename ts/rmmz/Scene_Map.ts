@@ -187,6 +187,7 @@ Scene_Map.prototype.update = function() {
 
     REVisual.update();
 
+    REVisual.postUpdate();
 
     // Entity と Game_Player の位置を合わせるときは、↑で先に REVisual の座標を更新した後、
     // Scene_Map.update の前に同期をかける必要がある。
@@ -201,6 +202,7 @@ Scene_Map.prototype.update = function() {
     
     
     _Scene_Map_update.call(this);
+
 }
 
 // RE Map 内では RMMZ 通常のメニューを禁止する

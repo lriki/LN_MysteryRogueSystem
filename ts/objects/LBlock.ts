@@ -211,6 +211,7 @@ export class LBlock// extends LObject
     _roomId: LRoomId = 0;
     _blockComponent: FBlockComponent = FBlockComponent.None;
     _continuation: boolean = false;
+    _doorway: boolean = false;
 
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     
@@ -252,6 +253,10 @@ export class LBlock// extends LObject
         return this._tileShape;
     }
 
+    public isFloorLikeShape(): boolean {
+        return this._tileShape == TileShape.Floor;
+    }
+
     public isWallLikeShape(): boolean {
         return this._tileShape == TileShape.Wall || this._tileShape == TileShape.HardWall;
     }
@@ -261,8 +266,18 @@ export class LBlock// extends LObject
         return this._roomId > 0;
     }
 
+    /** 通路あるか */
+    public isPassageway(): boolean {
+        return !this.isRoom();
+    }
+
     public isContinuation(): boolean {
         return this._continuation;
+    }
+
+    /** 部屋の入口であるか */
+    public isDoorway(): boolean {
+        return this._doorway;
     }
 
     layers(): readonly REBlockLayer[] {

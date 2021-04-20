@@ -263,8 +263,8 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.enemies.length == 0) return undefined;    // 出現テーブルが空
-
         const list = table.enemies[floorId.floorNumber()];
+        if (list.length == 0) return undefined;    // 出現テーブルが空
         const data = list[REGame.world.random().nextIntWithMax(list.length)];
         return SEntityFactory.newEntity(data.entity);
     }
@@ -274,8 +274,8 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.items.length == 0) return undefined;    // 出現テーブルが空
-
         const list = table.items[floorId.floorNumber()];
+        if (list.length == 0) return undefined;    // 出現テーブルが空
         const data = list[REGame.world.random().nextIntWithMax(list.length)];
         return SEntityFactory.newEntity(data.entity);
     }
@@ -285,8 +285,8 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.traps.length == 0) return undefined;    // 出現テーブルが空
-
         const list = table.traps[floorId.floorNumber()];
+        if (list.length == 0) return undefined;    // 出現テーブルが空
         const data = list[REGame.world.random().nextIntWithMax(list.length)];
         return SEntityFactory.newEntity(data.entity);
     }
