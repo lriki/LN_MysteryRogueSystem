@@ -107,62 +107,62 @@ test('TurnOrderTable', () => {
     // actor1 - x1 速
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1._name = "actor1";
-    actor1.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
+    actor1.findBehavior(REUnitBehavior)?.setSpeedLevel(1);
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 1, 5);
 
     // enemy1 - x1 速
     const enemy1 = SEntityFactory.newMonster(1);
     enemy1._name = "enemy1";
-    enemy1.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
+    enemy1.findBehavior(REUnitBehavior)?.setSpeedLevel(1);
     enemy1.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 1, 6);
 
     // enemy2 - x1 速
     const enemy2 = SEntityFactory.newMonster(1);
     enemy2._name = "enemy2";
-    enemy2.findAttribute(LUnitAttribute)?.setSpeedLevel(1);
+    enemy2.findBehavior(REUnitBehavior)?.setSpeedLevel(1);
     enemy2.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 1, 7);
 
     // enemy3 - x2 速
     const enemy3 = SEntityFactory.newMonster(1);
     enemy3._name = "enemy3";
-    enemy3.findAttribute(LUnitAttribute)?.setSpeedLevel(2);
+    enemy3.findBehavior(REUnitBehavior)?.setSpeedLevel(2);
     enemy3.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy3, TestEnv.FloorId_FlatMap50x50, 1, 8);
 
     // enemy4 - x2 速
     const enemy4 = SEntityFactory.newMonster(1);
     enemy4._name = "enemy4";
-    enemy4.findAttribute(LUnitAttribute)?.setSpeedLevel(2);
+    enemy4.findBehavior(REUnitBehavior)?.setSpeedLevel(2);
     enemy4.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy4, TestEnv.FloorId_FlatMap50x50, 1, 9);
 
     // enemy5 - x3 速
     const enemy5 = SEntityFactory.newMonster(1);
     enemy5._name = "enemy5";
-    enemy5.findAttribute(LUnitAttribute)?.setSpeedLevel(3);
+    enemy5.findBehavior(REUnitBehavior)?.setSpeedLevel(3);
     enemy5.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy5, TestEnv.FloorId_FlatMap50x50, 1, 10);
 
     // enemy6 - x3 速
     const enemy6 = SEntityFactory.newMonster(1);
     enemy6._name = "enemy6";
-    enemy6.findAttribute(LUnitAttribute)?.setSpeedLevel(3);
+    enemy6.findBehavior(REUnitBehavior)?.setSpeedLevel(3);
     enemy6.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy6, TestEnv.FloorId_FlatMap50x50, 1, 11);
 
     // enemy7 - x0.5 速
     const enemy7 = SEntityFactory.newMonster(1);
     enemy7._name = "enemy7";
-    enemy7.findAttribute(LUnitAttribute)?.setSpeedLevel(-1);
+    enemy7.findBehavior(REUnitBehavior)?.setSpeedLevel(-1);
     enemy7.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy7, TestEnv.FloorId_FlatMap50x50, 1, 12);
 
     // enemy8 - x0.5 速
     const enemy8 = SEntityFactory.newMonster(1);
     enemy8._name = "enemy8";
-    enemy8.findAttribute(LUnitAttribute)?.setSpeedLevel(-1);
+    enemy8.findBehavior(REUnitBehavior)?.setSpeedLevel(-1);
     enemy8.addState(DBasics.states.debug_MoveRight);
     REGame.world._transferEntity(enemy8, TestEnv.FloorId_FlatMap50x50, 1, 13);
 
@@ -300,7 +300,7 @@ test('EntitySaveLoad', () => {
         expect(actor2.x).toBe(55);
 
         // Attributes
-        const a1 = actor2.findAttribute(LUnitAttribute);
+        const a1 = actor2.findBehavior(REUnitBehavior);
         expect(actor2.attrbutes.length).toBe(1);
         expect(a1).toBeDefined();
         expect(a1?.speedLevel()).toBe(2);

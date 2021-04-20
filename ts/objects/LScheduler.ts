@@ -9,7 +9,7 @@ import { REGame } from "./REGame";
 export interface UnitInfo
 {
     entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
-    attr: LUnitAttribute;     // cache for avoiding repeated find.
+    //attr: LUnitAttribute;     // cache for avoiding repeated find.
     behavior: REUnitBehavior;
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
@@ -99,13 +99,12 @@ export class LScheduler {
         // 行動できるすべての entity を集める
         {
             REGame.map.entities().forEach(entity => {
-                const attr = entity.findAttribute(LUnitAttribute);
                 const behavior = entity.findBehavior(REUnitBehavior);
-                if (attr && behavior) {
-                    assert(attr.factionId() > 0);
-                    assert(attr.speedLevel() != 0);
+                if (behavior) {
+                    assert(behavior.factionId() > 0);
+                    assert(behavior.speedLevel() != 0);
 
-                    let actionCount = attr.speedLevel();
+                    let actionCount = behavior.speedLevel();
                     
                     // 鈍足状態の対応
                     if (actionCount < 0) {
@@ -114,7 +113,6 @@ export class LScheduler {
 
                     this._units.push({
                         entityId: entity.entityId(),
-                        attr: attr, 
                         behavior: behavior,
                         actionCount: actionCount
                     });
@@ -128,7 +126,7 @@ export class LScheduler {
         }
 
         // 勢力順にソート
-        this._units = this._units.sort((a, b) => { return REData.factions[a.attr.factionId()].schedulingOrder - REData.factions[b.attr.factionId()].schedulingOrder; });
+        this._units = this._units.sort((a, b) => { return REData.factions[a.behavior.factionId()].schedulingOrder - REData.factions[b.behavior.factionId()].schedulingOrder; });
 
         this._runs = new Array(runCount);
         for (let i = 0; i < this._runs.length; i++) {
@@ -137,7 +135,7 @@ export class LScheduler {
 
         // Faction にかかわらず、マニュアル操作 Unit は最優先で追加する
         this._units.forEach(unit => {
-            if (unit.attr.manualMovement()) {
+            if (unit.behavior.manualMovement()) {
                 for (let i = 0; i < unit.actionCount; i++) {
                     this._runs[i].steps.push({
                         unit: unit,
@@ -149,7 +147,7 @@ export class LScheduler {
 
         // 次は倍速以上の NPC. これは前から詰めていく。
         this._units.forEach(unit => {
-            if (!unit.attr.manualMovement() && unit.actionCount >= 2) {
+            if (!unit.behavior.manualMovement() && unit.actionCount >= 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
                     this._runs[i].steps.push({
                         unit: unit,
@@ -161,7 +159,7 @@ export class LScheduler {
 
         // 最後に等速以下の NPC を後ろから詰めていく
         this._units.forEach(unit => {
-            if (!unit.attr.manualMovement() && unit.actionCount < 2) {
+            if (!unit.behavior.manualMovement() && unit.actionCount < 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
                     this._runs[this._runs.length - 1 - i].steps.push({  	// 後ろから詰めていく
                         unit: unit,
@@ -183,7 +181,7 @@ export class LScheduler {
                 for (let i2 = i1 - 1; i2 >= 0; i2--) {
                     const step2 = flatSteps[i2];
     
-                    if (step2.unit.attr.factionId() != step1.unit.attr.factionId()) {
+                    if (step2.unit.behavior.factionId() != step1.unit.behavior.factionId()) {
                         // 別勢力の行動予定が見つかったら終了
                         break;
                     }

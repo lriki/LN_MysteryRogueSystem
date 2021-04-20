@@ -9,6 +9,7 @@ import { LAttribute, LAttributeData } from "./LAttribute";
 export interface LUnitAttributeData extends LAttributeData {
 }
 export class LUnitAttribute extends LAttribute {
+    /*
     _factionId: number = 0;
     _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
@@ -34,6 +35,7 @@ export class LUnitAttribute extends LAttribute {
     actionTokenCount(): number { return this._actionTokenCount; }
     setActionTokenCount(value: number): LUnitAttribute { this._actionTokenCount = value; return this; }
     clearActionTokenCount(): void { this._actionTokenCount = 0; }
+    */
 }
 
 

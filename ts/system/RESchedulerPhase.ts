@@ -35,7 +35,7 @@ export class RESchedulerPhase_Prepare extends RESchedulerPhase {
 export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         const entity = REGame.world.findEntity(unit.entityId);
-        if (entity && unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+        if (entity && unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
             return true;
         }
@@ -52,8 +52,8 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         const entity = REGame.world.findEntity(unit.entityId);
         
-        if (entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0 &&
-            unit.attr._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
+        if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0 &&
+            unit.behavior._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
             const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
             if (response == REResponse.Succeeded) 
                 return true;
@@ -115,7 +115,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
         const entity = REGame.world.findEntity(unit.entityId);
-        if (entity && !unit.attr.manualMovement() && unit.attr.actionTokenCount() > 0) {
+        if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
             const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
             if (response == REResponse.Succeeded) 
                 return true;

@@ -22,11 +22,10 @@ import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addAttribute(new LUnitAttribute()
-            .setFactionId(REData.ActorDefaultFactionId));
+        e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
         e.addBehavior(REGame_DecisionBehavior);
-        e.addBehavior(REUnitBehavior);
+        e.addBehavior(REUnitBehavior).setFactionId(REData.ActorDefaultFactionId);
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
@@ -36,11 +35,10 @@ export class SEntityFactory {
 
     static newMonster(monsterId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addAttribute(new LUnitAttribute()
-            .setFactionId(REData.EnemeyDefaultFactionId));
+        e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
         e.addBehavior(REGame_DecisionBehavior);
-        e.addBehavior(REUnitBehavior);
+        e.addBehavior(REUnitBehavior).setFactionId(REData.EnemeyDefaultFactionId);
         e.addBehavior(LEnemyBehavior, monsterId);
         return e;
     }

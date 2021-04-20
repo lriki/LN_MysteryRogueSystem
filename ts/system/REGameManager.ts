@@ -31,6 +31,7 @@ import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/Plug
 import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -87,7 +88,7 @@ export class REGameManager
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.world.entity( REGame.system.uniqueActorUnits[0]);
         REGame.system.mainPlayerEntityId = firstActor.entityId();
-        const unit = firstActor.findAttribute(LUnitAttribute);
+        const unit = firstActor.findBehavior(REUnitBehavior);
         if (unit) {
             unit.setManualMovement(true);
         }

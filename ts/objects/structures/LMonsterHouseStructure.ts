@@ -11,6 +11,7 @@ import { REGame } from "../REGame";
 import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
+import { REUnitBehavior } from "../behaviors/REUnitBehavior";
 
 export class LMonsterHouseStructure extends LStructure {
     private _roomId: LRoomId = 0
@@ -51,10 +52,10 @@ export class LMonsterHouseStructure extends LStructure {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
 
-            const attr = entity.findAttribute(LUnitAttribute);
+            const behavior = entity.findBehavior(REUnitBehavior);
             // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
-            if (attr &&
-                Helpers.isHostileFactionId(this.monsterHouseFactionId(), attr.factionId()) &&
+            if (behavior &&
+                Helpers.isHostileFactionId(this.monsterHouseFactionId(), behavior.factionId()) &&
                 this.monsterHouseState() == MonsterHouseState.Sleeping) {
                 this.startMonsterHouse(context);
             }

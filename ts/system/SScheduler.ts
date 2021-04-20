@@ -207,23 +207,23 @@ export class SScheduler
         
         // ターン開始時の各 unit の設定更新
         REGame.scheduler.units().forEach(unit => {
-            const attr = unit.attr;
+            const behavior = unit.behavior;
 
             // 鈍足状態の対応。待ちターン数を更新
-            if (attr.speedLevel() < 0) {
-                if (attr.waitTurnCount() == 0) {
-                    attr.setWaitTurnCount(1);
+            if (behavior.speedLevel() < 0) {
+                if (behavior.waitTurnCount() == 0) {
+                    behavior.setWaitTurnCount(1);
                 }
                 else {
-                    attr.setWaitTurnCount(attr.waitTurnCount() - 1);
+                    behavior.setWaitTurnCount(behavior.waitTurnCount() - 1);
                 }
             }
 
             // 行動トークンを更新
-            if (attr.waitTurnCount() == 0) {
+            if (behavior.waitTurnCount() == 0) {
                 // 行動トークンを、速度の分だけ配る。鈍足状態でも 1 つ配る。
                 // リセットではなく追加である点に注意。借金している場合に備える。
-                attr.setActionTokenCount(attr.actionTokenCount() + Math.max(1, attr.speedLevel()));
+                behavior.setActionTokenCount(behavior.actionTokenCount() + Math.max(1, behavior.speedLevel()));
             }
             else {
                 // 鈍足状態。このターンは行動トークンをもらえない。
@@ -247,7 +247,7 @@ export class SScheduler
 
         REGame.scheduler.runs().forEach(run => {
             run.steps.forEach(step => {
-                step.unit.attr._targetingEntityId = 0;
+                step.unit.behavior._targetingEntityId = 0;
             });
         });
 

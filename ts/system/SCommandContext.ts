@@ -14,6 +14,7 @@ import { SSequelContext } from "./SSequelContext";
 import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -242,13 +243,13 @@ export class SCommandContext
     */
 
     postConsumeActionToken(entity: LEntity): void {
-        const attr = entity.findAttribute(LUnitAttribute);
-        assert(attr);
+        const behavior = entity.findBehavior(REUnitBehavior);
+        assert(behavior);
 
         const m1 = () => {
             Log.doCommand("ConsumeActionToken");
             
-            attr.setActionTokenCount(attr.actionTokenCount() - 1);  // ここで借金することもあり得る
+            behavior.setActionTokenCount(behavior.actionTokenCount() - 1);  // ここで借金することもあり得る
             entity._actionConsumed = true;
 
             return REResponse.Succeeded;
@@ -258,13 +259,13 @@ export class SCommandContext
     }
 
     postSkipPart(entity: LEntity): void {
-        const attr = entity.findAttribute(LUnitAttribute);
-        assert(attr);
+        const behavior = entity.findBehavior(REUnitBehavior);
+        assert(behavior);
 
         const m1 = () => {
             Log.doCommand("SkipPart");
             
-            attr.clearActionTokenCount();
+            behavior.clearActionTokenCount();
             entity._actionConsumed = true;
 
             return REResponse.Succeeded;

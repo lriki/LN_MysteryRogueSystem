@@ -3,6 +3,7 @@ import { Vector2 } from "ts/math/Vector2";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 
 export class Helpers {
     public static _dirToTileOffsetTable: Vector2[] =  [
@@ -79,8 +80,8 @@ export class Helpers {
 
     // 敵対勢力であるかを確認
     public static isHostile(subject: LEntity, target: LEntity): boolean {
-        const attr1 = subject.findAttribute(LUnitAttribute);
-        const attr2 = target.findAttribute(LUnitAttribute);
+        const attr1 = subject.findBehavior(REUnitBehavior);
+        const attr2 = target.findBehavior(REUnitBehavior);
         if (attr1 && attr2) {
             return this.isHostileFactionId(attr1.factionId(), attr2.factionId());
         }
@@ -93,10 +94,10 @@ export class Helpers {
     // 味方であるかを確認
     // (target が subject に対して中立である場合は false を返すので注意)
     public static isFriend(subject: LEntity, target: LEntity): boolean {
-        const attr1 = subject.findAttribute(LUnitAttribute);
-        const attr2 = target.findAttribute(LUnitAttribute);
-        if (attr1 && attr2) {
-            return this.isFriendFactionId(attr1.factionId(), attr2.factionId());
+        const behavior1 = subject.findBehavior(REUnitBehavior);
+        const behavior2 = target.findBehavior(REUnitBehavior);
+        if (behavior1 && behavior2) {
+            return this.isFriendFactionId(behavior1.factionId(), behavior2.factionId());
         }
         else {
             // 判定不可能。中立扱い。
