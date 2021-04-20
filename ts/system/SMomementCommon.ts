@@ -13,8 +13,182 @@ import { SCommandContext } from "./SCommandContext";
 import { RESystem } from "./RESystem";
 import { System } from "pixi.js";
 
+export interface SPoint {
+    x: number;
+    y: number;
+}
+
+interface Edge {
+    x: number;      // 始点X
+    y: number;      // 始点Y
+    forwardX: number;   // 進行方向X
+    forwardY: number;   // 進行方向Y
+    beginOffset: number;
+    endOffset: number;
+}
 
 export class SMomementCommon {
+    // 8 を基準に時計回り
+    private static readonly _edgeOffsetTable: number[] = [
+        0,
+        5, 4, 3,
+        6, 0, 2,
+        7, 0, 1,
+    ];
+    
+    /**
+     * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
+     * 
+     * 地形のみを判断する点に注意。状態異常などによる移動制限は Behavior など他で行う。
+     */
+    private static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, layer?: BlockLayerKind): boolean {
+        const map = REGame.map;
+        const actualLayer = layer || entity.queryProperty(RESystem.properties.homeLayer);
+
+        const dx = newBlock.x() - oldBlock.x();
+        const dy = newBlock.y() - oldBlock.y();
+
+        if (Math.abs(dx) > 1) return false; // 隣接 Block への移動ではない
+        if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
+
+        if (!map.canLeaving(oldBlock, entity)) return false;
+        if (!map.canEntering(newBlock, actualLayer)) return false;
+
+        const d = Helpers.offsetToDir(dx, dy);
+        if (this.isDiagonalMoving(d)) {
+            // 斜め移動の場合
+            const fl = this.rotatePositionByDir(7, d);  // 左前
+            const fr = this.rotatePositionByDir(9, d);  // 右前
+            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
+            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+            if (flBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+            if (frBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+        }
+        else {
+            // 平行移動の場合
+        }
+
+        return true;
+    }
+
+    public static isDiagonalMoving(d: number): boolean {
+        return (d % 2) != 0;
+    }
+
+    // 2点間の距離 (到達に必要な移動ブロック数) を求める。
+    // 斜め移動を許可しているので、マンハッタン距離やユークリッド距離とは違う点に注意。
+    public static blockDistance(x1: number, y1: number, x2: number, y2: number): number {
+        const dx = Math.abs(x2 - x1);
+        const dy = Math.abs(y2 - y1);
+        return Math.max(dx, dy);
+    }
+
+    /**
+     * 8(↑) 方向を基準としたローカル座標を、dir 方向に回転させたときのローカル座標を求める
+     * @param localX 
+     * @param localY 
+     * @param dir 
+     * 
+     * 隣接ブロックや短い距離の扇形を変換するときなどで使用する。
+     * 射程無限など広大な範囲をこれで変換するとパフォーマンスに影響が出るので、
+     * そういったものは別途メソッドを用意すること。(TODO:)
+     */
+    public static transformRotationBlock(localX: number, localY: number, dir: number): SPoint {
+        /*
+
+        距離3を例にする。
+
+        まず↓のように辺を分けて考える。
+
+        00001
+        3...1
+        3.@.1
+        3...1
+        32222
+
+        時計回りを正の移動方向と考えて、四辺は各 Edge の始点とする。(例：左上は Edge[0] の始点)
+
+        
+
+
+        */
+
+
+        const distance = this.blockDistance(0, 0, localX, localY);
+        const edgeLength = distance * 2;
+        const edges: Edge[] = [
+            {
+                x: Helpers.dirToTileOffset(7).x * distance,
+                y: Helpers.dirToTileOffset(7).y * distance,
+                forwardX: 1,
+                forwardY: 0,
+                beginOffset: 0 * edgeLength,
+                endOffset: 1 * edgeLength,
+            },
+            {
+                x: Helpers.dirToTileOffset(9).x * distance,
+                y: Helpers.dirToTileOffset(9).y * distance,
+                forwardX: 0,
+                forwardY: 1,
+                beginOffset: 1 * edgeLength,
+                endOffset: 2 * edgeLength,
+            },
+            {
+                x: Helpers.dirToTileOffset(3).x * distance,
+                y: Helpers.dirToTileOffset(3).y * distance,
+                forwardX: -1,
+                forwardY: 0,
+                beginOffset: 2 * edgeLength,
+                endOffset: 3 * edgeLength,
+            },
+            {
+                x: Helpers.dirToTileOffset(1).x * distance,
+                y: Helpers.dirToTileOffset(1).y * distance,
+                forwardX: 0,
+                forwardY: -1,
+                beginOffset: 3 * edgeLength,
+                endOffset: 4 * edgeLength,
+            }
+        ];
+
+        let pos = -1;
+        for (const edge of edges) {
+            const sx = Math.min(edge.x, edge.x + edge.forwardX * edgeLength);
+            const sy = Math.min(edge.y, edge.y + edge.forwardY * edgeLength);
+            const ex = Math.max(edge.x, edge.x + edge.forwardX * edgeLength);
+            const ey = Math.max(edge.y, edge.y + edge.forwardY * edgeLength);
+            if (sx <= localX && localX <= ex && sy <= localY && localY <= ey) {
+                pos = this.blockDistance(edge.x, edge.y, localX, localY) + edge.beginOffset;
+                break;
+            }
+        }
+        assert(pos >= 0);
+
+        // dir に向けるには、外周上を何 Block 分移動すればよいか？
+        const offset = this._edgeOffsetTable[dir] * distance;
+        const newPos = (pos + offset) % edges[3].endOffset;   // 特に dir=7で変換すると、右方向が1週分回ることもある
+
+        const edge = edges.find(e => e.beginOffset <= newPos && newPos < e.endOffset);
+        assert(edge);
+
+        const edgeLocalPos = newPos - edge.beginOffset;
+
+        return {
+            x: edge.x + (edge.forwardX * edgeLocalPos),
+            y: edge.y + (edge.forwardY * edgeLocalPos),
+        }
+    }
+
+
+    /**
+     * 8(↑) 方向を基準としたローカル座標を、dir 方向に回転させたときのローカル座標を求める。
+     * （ローカル座標は、座標の代わりに向きを指定）
+     */
+    public static rotatePositionByDir(localDir: number, dir: number): SPoint {
+        const localPos = Helpers.dirToTileOffset(localDir);
+        return this.transformRotationBlock(localPos.x, localPos.y, dir);
+    }
+
     public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
         assert(entity.floorId == map.floorId());
@@ -26,7 +200,7 @@ export class SMomementCommon {
         const oldBlock = map.block(entity.x, entity.y);
         const newBlock = map.block(x, y);
 
-        if (map.canLeaving(oldBlock, entity) && map.canEntering(newBlock, toLayer)) {
+        if (this.checkPassageBlockToBlock(entity, oldBlock, newBlock, toLayer)) {
             oldBlock.removeEntity(entity);
             entity.x = x;
             entity.y = y;

@@ -42,7 +42,7 @@ export interface DBasicParameters {
     exr: number;    // EXperience Rate
     */
 
-    satiety: number;    // 満腹度
+    fp: number;    // 満腹度
 
 }
 

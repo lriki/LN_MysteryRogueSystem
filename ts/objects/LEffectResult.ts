@@ -6,6 +6,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "../system/RESystem";
 import { SMessageBuilder } from "../system/SMessageBuilder";
+import { DBasics } from "ts/data/DBasics";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class LParamEffectResult {
@@ -130,7 +131,7 @@ export class LEffectResult {
         else if (this.hpAffected) {
             
             const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
-            const hpDamage = this.paramEffects[RESystem.parameters.hp].damag;
+            const hpDamage = this.paramEffects[DBasics.params.hp].damag;
 
             {
                 const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);

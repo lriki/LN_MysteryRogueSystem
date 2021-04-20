@@ -230,7 +230,7 @@ export class LBattlerBehavior extends LBehavior {
         //this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
     
         const entity = this.ownerEntity();
-        if (this.actualParam(RESystem.parameters.hp) === 0) {
+        if (this.actualParam(DBasics.params.hp) === 0) {
             console.log("!!!DEAD!!!", this);
             entity.addState(DBasics.states.dead);
             //throw new Error();
@@ -318,10 +318,10 @@ export class LBattlerBehavior extends LBehavior {
 
 
     public get atk(): number {
-        return this.actualParam(RESystem.parameters.atk);
+        return this.actualParam(DBasics.params.atk);
     }
     public get def(): number {
-        return this.actualParam(RESystem.parameters.def);
+        return this.actualParam(DBasics.params.def);
     }
 }
 

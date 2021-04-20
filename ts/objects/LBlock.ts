@@ -252,6 +252,10 @@ export class LBlock// extends LObject
         return this._tileShape;
     }
 
+    public isWallLikeShape(): boolean {
+        return this._tileShape == TileShape.Wall || this._tileShape == TileShape.HardWall;
+    }
+
     /** 部屋内のブロックであるか */
     public isRoom(): boolean {
         return this._roomId > 0;

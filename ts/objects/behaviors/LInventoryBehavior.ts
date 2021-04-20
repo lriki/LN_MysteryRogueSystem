@@ -68,6 +68,7 @@ import { LBehavior } from "./LBehavior"
 
 export class LInventoryBehavior extends LBehavior {
     private _entities: LEntityId[] = [];
+    private _gold: number = 0;
 
     public entities(): LEntity[] {
         return this._entities.map(x => REGame.world.entity(x));
@@ -105,6 +106,25 @@ export class LInventoryBehavior extends LBehavior {
 
         return REResponse.Pass;
     }
+    
+    // Game_Party.prototype.gold
+    public gold(): number {
+        return this._gold;
+    }
+
+    // Game_Party.prototype.gainGold
+    public gainGold(amount: number): void {
+        this._gold = (this._gold + amount).clamp(0, this.maxGold());
+    }
+
+    // Game_Party.prototype.loseGold
+    public loseGold(amount: number): void {
+        this.gainGold(-amount);
+    }
+
+    // Game_Party.prototype.maxGold
+    public maxGold(): number {
+        return 99999999;
+    }
 }
 
- 

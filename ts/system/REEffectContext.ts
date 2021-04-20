@@ -205,8 +205,8 @@ export class SEffectorFact {
     // Game_Action.prototype.lukEffectRate
     public lukEffectRate(target: LBattlerBehavior): number {
         const subjectBehavior = this.subjectBehavior();
-        const subject_luk = subjectBehavior ? subjectBehavior.actualParam(RESystem.parameters.luk) : 0.0;
-        const target_luk = target.actualParam(RESystem.parameters.luk);
+        const subject_luk = subjectBehavior ? subjectBehavior.actualParam(DBasics.params.luk) : 0.0;
+        const target_luk = target.actualParam(DBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     };
 
@@ -485,7 +485,7 @@ export class REEffectContext {
         //const b = target.findBehavior(LBattlerBehavior);
         //assert(b);
 
-        //b.gainActualParam(RESystem.parameters.hp, -value);
+        //b.gainActualParam(DBasics.params.hp, -value);
 
 
 
@@ -511,7 +511,7 @@ export class REEffectContext {
         this.gainDrainedParam(paramEffect, value);
 
         //console.log("damage", paramEffect.paramId, value);
-        if (paramEffect.paramId == RESystem.parameters.hp) {
+        if (paramEffect.paramId == DBasics.params.hp) {
             result.hpAffected = true;
         }
     }

@@ -33,5 +33,6 @@ export class LItemBehavior extends LBehavior {
         else
             super.onQueryProperty(propertyId);
     }
+
 }
 

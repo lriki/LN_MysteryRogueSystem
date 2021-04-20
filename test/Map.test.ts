@@ -3,6 +3,11 @@ import { REGameManager } from "ts/system/REGameManager";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { LFloorId } from "ts/objects/LFloorId";
+import { SMomementCommon } from "ts/system/SMomementCommon";
+import { Helpers } from "ts/system/Helpers";
+import { RESystem } from "ts/system/RESystem";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
+import { TileShape } from "ts/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -70,3 +75,102 @@ test('MapTransfarDirectly', () => {
     expect(actor1.y).toBe(5);   // EntryPoint の位置へ移動できていること
 });
 
+test('TransformRotationBlock', () => {
+    // "左前" を1周変換してみる
+    {
+        // 回転無し
+        let pos = SMomementCommon.transformRotationBlock(-1, -1, 8);
+        expect(pos.x).toBe(-1);
+        expect(pos.y).toBe(-1);
+    
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 9);
+        expect(pos.x).toBe(0);
+        expect(pos.y).toBe(-1);
+
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 6);
+        expect(pos.x).toBe(1);
+        expect(pos.y).toBe(-1);
+
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 3);
+        expect(pos.x).toBe(1);
+        expect(pos.y).toBe(0);
+
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 2);
+        expect(pos.x).toBe(1);
+        expect(pos.y).toBe(1);
+
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 1);
+        expect(pos.x).toBe(0);
+        expect(pos.y).toBe(1);
+
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 4);
+        expect(pos.x).toBe(-1);
+        expect(pos.y).toBe(1);
+
+        pos = SMomementCommon.transformRotationBlock(-1, -1, 7);
+        expect(pos.x).toBe(-1);
+        expect(pos.y).toBe(0);
+    }
+
+    // 桂馬の "右前" を1周変換してみる
+    {
+        // 回転無し
+        let pos = SMomementCommon.transformRotationBlock(1, -2, 8);
+        expect(pos.x).toBe(1);
+        expect(pos.y).toBe(-2);
+    
+        pos = SMomementCommon.transformRotationBlock(1, -2, 9);
+        expect(pos.x).toBe(2);
+        expect(pos.y).toBe(-1);
+
+        pos = SMomementCommon.transformRotationBlock(1, -2, 6);
+        expect(pos.x).toBe(2);
+        expect(pos.y).toBe(1);
+
+        pos = SMomementCommon.transformRotationBlock(1, -2, 3);
+        expect(pos.x).toBe(1);
+        expect(pos.y).toBe(2);
+
+        pos = SMomementCommon.transformRotationBlock(1, -2, 2);
+        expect(pos.x).toBe(-1);
+        expect(pos.y).toBe(2);
+
+        pos = SMomementCommon.transformRotationBlock(1, -2, 1);
+        expect(pos.x).toBe(-2);
+        expect(pos.y).toBe(1);
+
+        pos = SMomementCommon.transformRotationBlock(1, -2, 4);
+        expect(pos.x).toBe(-2);
+        expect(pos.y).toBe(-1);
+
+        pos = SMomementCommon.transformRotationBlock(1, -2, 7);
+        expect(pos.x).toBe(-1);
+        expect(pos.y).toBe(-2);
+    }
+});
+
+test('MoveDiagonal_CollideWalls', () => {
+    REGameManager.createGameObjects();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.performFloorTransfer();
+
+    // 右下に移動できないような壁を作る
+    REGame.map.block(6, 5)._tileShape = TileShape.Wall;
+    REGame.map.block(5, 6)._tileShape = TileShape.Wall;
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // player を右下へ移動
+    const dialogContext = RESystem.dialogContext;
+    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 3));
+    dialogContext.closeDialog(true);
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // 壁があるので移動できていない
+    expect(actor1.x).toBe(5);
+    expect(actor1.y).toBe(5);
+});

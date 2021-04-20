@@ -4,7 +4,7 @@ import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
 import { DBasicFactions } from "./predefineds/DBasicFactions";
 import { DBasicMonsterHouses } from "./predefineds/DBasicMonsterHouses";
-import { DBasicSParams, DBasicXParams } from "./predefineds/DBasicParameters";
+import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DBasicParameters";
 import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicStateTraits } from "./predefineds/DBasicStateTraits";
 
@@ -19,6 +19,7 @@ export class DBasics
     static entityKinds: BasicEntityKinds;
     static stateTraits: DBasicStateTraits;
     static states: DBasicStates;
+    static params: DBasicParameters;
     static xparams: DBasicXParams;
     static sparams: DBasicSParams;
     static factions: DBasicFactions;

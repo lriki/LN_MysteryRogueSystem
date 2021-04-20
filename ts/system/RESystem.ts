@@ -43,7 +43,6 @@ export class RESystem {
     static mapManager: SMapManager;
 
     // Database
-    static parameters: DBasicParameters;
     static attributes: BasicAttributes;
     static behaviors: BasicBehaviors;
     static sequels: BasicSequels;

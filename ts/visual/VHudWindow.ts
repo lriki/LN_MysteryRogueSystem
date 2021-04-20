@@ -1,6 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
 import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
 import { readBuilderProgram } from "typescript";
@@ -30,13 +31,18 @@ export class VHudWindow extends Window_Base {
         if (!entity) return;
         const battler = entity.findBehavior(LActorBehavior);
         if (!battler) return;
+        const inventory = entity.findBehavior(LInventoryBehavior);
+        if (!inventory) return;
 
-        //battler.actualParam(DBasics.sparams)
+        const hp = battler.actualParam(DBasics.params.hp);
+        const mhp = battler.paramMax(DBasics.params.hp);
+        const fp = battler.actualParam(DBasics.params.fp);
+        const mfp = battler.paramMax(DBasics.params.fp);
 
         this.drawFloorNumber(0, 0, entity.floorId);
         this.drawLevel(150, 0, battler.level, battler.currentExp() / battler.nextLevelExp());
-        this.drawHpFp(300, 0, 80, 100, 30, 100);
-        this.drawGold(567);
+        this.drawHpFp(300, 0, hp, mhp, fp, mfp);
+        this.drawGold(inventory.gold());
     }
 
     private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {

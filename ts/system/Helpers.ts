@@ -12,8 +12,44 @@ export class Helpers {
         { x: -1, y: -1 }, { x: 0, y: -1 }, { x: 1, y: -1 },
     ]
 
-    static dirToTileOffset(dir: number): Vector2 {
+    public static dirToTileOffset(dir: number): Vector2 {
         return this._dirToTileOffsetTable[dir];
+    }
+
+    public static offsetToDir(offsetX: number, offsetY: number): number {
+        if (offsetX == 0) {
+            if (offsetY == 0) {
+                return 2;   // FailSafe.
+            }
+            else if (offsetY > 0) {
+                return 2;
+            }
+            else {  // if (offsetY < 0)
+                return 8;
+            }
+        }
+        else if (offsetX > 0) {
+            if (offsetY == 0) {
+                return 6;
+            }
+            else if (offsetY > 0) {
+                return 3;
+            }
+            else {  // if (offsetY < 0)
+                return 9;
+            }
+        }
+        else {  // if (offsetX < 0)
+            if (offsetY == 0) {
+                return 4;
+            }
+            else if (offsetY > 0) {
+                return 1;
+            }
+            else {  // if (offsetY < 0)
+                return 7;
+            }
+        }
     }
 
     static makeFrontPosition(x: number, y: number, dir: number, length: number): Vector2 {

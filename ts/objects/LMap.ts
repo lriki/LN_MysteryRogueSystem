@@ -359,6 +359,7 @@ export class LMap
     // NOTE: 斜め移動の禁止は、隣接タイルや Entity が、自分の角を斜め移動可能とするか、で検知したほうがいいかも。
     // シレン5石像の洞窟の石像は、Entity扱いだが斜め移動禁止。
     // ちなみに、丸太の罠等では斜めすり抜けできる。
+    // deprecated: use SMomementCommon
     checkPassage(entity: LEntity, dir: number, toLayer?: BlockLayerKind): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
@@ -380,7 +381,7 @@ export class LMap
      * 
      * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
      */
-    // deprecated
+    // deprecated: use SMomementCommon
     moveEntity(entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         assert(entity.floorId == this.floorId());
 

@@ -62,7 +62,7 @@ export class REDataManager
         }
 
         // Parameters
-        RESystem.parameters = {
+        DBasics.params = {
             hp: REData.addParameter("HP"),
             mp: REData.addParameter("MP"),
             atk: REData.addParameter("ATK"),
@@ -74,17 +74,17 @@ export class REDataManager
 
             tp: REData.addParameter("TP"),
 
-            satiety: REData.addParameter("満腹度"),
+            fp: REData.addParameter("FP"),  // 満腹度
         };
         // RMMZ のパラメータID との一致を検証
-        assert(RESystem.parameters.hp === 0);
-        assert(RESystem.parameters.mp === 1);
-        assert(RESystem.parameters.atk === 2);
-        assert(RESystem.parameters.def === 3);
-        assert(RESystem.parameters.mat === 4);
-        assert(RESystem.parameters.mdf === 5);
-        assert(RESystem.parameters.agi === 6);
-        assert(RESystem.parameters.luk === 7);
+        assert(DBasics.params.hp === 0);
+        assert(DBasics.params.mp === 1);
+        assert(DBasics.params.atk === 2);
+        assert(DBasics.params.def === 3);
+        assert(DBasics.params.mat === 4);
+        assert(DBasics.params.mdf === 5);
+        assert(DBasics.params.agi === 6);
+        assert(DBasics.params.luk === 7);
         
         DBasics.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
@@ -376,8 +376,8 @@ export class REDataManager
                 const id = REData.addSkill(x.name ?? "null");
                 const skill = REData.skills[id];
                 skill.rmmzAnimationId = x.animationId;
-                skill.paramCosts[RESystem.parameters.mp] = x.mpCost;
-                skill.paramCosts[RESystem.parameters.tp] = x.tpCost;
+                skill.paramCosts[DBasics.params.mp] = x.mpCost;
+                skill.paramCosts[DBasics.params.tp] = x.tpCost;
                 if ((x.damage.type ?? 0) > 0) {
                     skill.effect = this.makeEffect(x.damage);
                 }
@@ -448,14 +448,14 @@ export class REDataManager
                 monster.exp = x.exp ?? 0;
                 if (x.params) {
                     // see: Object.defineProperties
-                    monster.idealParams[RESystem.parameters.hp] = x.params[0];
-                    monster.idealParams[RESystem.parameters.mp] = x.params[1];
-                    monster.idealParams[RESystem.parameters.atk] = x.params[2];
-                    monster.idealParams[RESystem.parameters.def] = x.params[3];
-                    monster.idealParams[RESystem.parameters.mat] = x.params[4];
-                    monster.idealParams[RESystem.parameters.mdf] = x.params[5];
-                    monster.idealParams[RESystem.parameters.agi] = x.params[6];
-                    monster.idealParams[RESystem.parameters.luk] = x.params[7];
+                    monster.idealParams[DBasics.params.hp] = x.params[0];
+                    monster.idealParams[DBasics.params.mp] = x.params[1];
+                    monster.idealParams[DBasics.params.atk] = x.params[2];
+                    monster.idealParams[DBasics.params.def] = x.params[3];
+                    monster.idealParams[DBasics.params.mat] = x.params[4];
+                    monster.idealParams[DBasics.params.mdf] = x.params[5];
+                    monster.idealParams[DBasics.params.agi] = x.params[6];
+                    monster.idealParams[DBasics.params.luk] = x.params[7];
                 }
                 monster.traits = x.traits ?? [];
                 monster.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
@@ -695,27 +695,27 @@ export class REDataManager
         let applyType = DParameterEffectApplyType.None;
         switch (damage.type) {
             case 1: // HPダメージ
-                parameterId = RESystem.parameters.hp;
+                parameterId = DBasics.params.hp;
                 applyType = DParameterEffectApplyType.Damage;
                 break;
             case 2: // MPダメージ
-                parameterId = RESystem.parameters.mp;
+                parameterId = DBasics.params.mp;
                 applyType = DParameterEffectApplyType.Damage;
                 break;
             case 3: // HP回復
-                parameterId = RESystem.parameters.hp;
+                parameterId = DBasics.params.hp;
                 applyType = DParameterEffectApplyType.Recover;
                 break;
             case 4: // MP回復
-                parameterId = RESystem.parameters.mp;
+                parameterId = DBasics.params.mp;
                 applyType = DParameterEffectApplyType.Recover;
                 break;
             case 5: // HP吸収
-                parameterId = RESystem.parameters.hp;
+                parameterId = DBasics.params.hp;
                 applyType = DParameterEffectApplyType.Drain;
                 break;
             case 6: // MP吸収
-                parameterId = RESystem.parameters.mp;
+                parameterId = DBasics.params.mp;
                 applyType = DParameterEffectApplyType.Drain;
                 break;
             default:
