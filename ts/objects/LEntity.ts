@@ -13,12 +13,12 @@ import { LMap } from "./LMap";
 import { LState, LStateId } from "./states/LState";
 import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
-import { DParameterId } from "ts/data/REData";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
 import { textChangeRangeIsUnchanged } from "typescript";
+import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 
 enum BlockLayer
 {

@@ -4,12 +4,13 @@ import { DBasics } from "ts/data/DBasics";
 import { DItemEffect } from "ts/data/DItemEffect";
 import { DEffect, DEffectHitType, DEffectScope, DParameterEffect, DParameterEffectApplyType } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
-import { DParameterId, REData } from "ts/data/REData";
+import { REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
+import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 
 
 enum SParameterEffectApplyType {

@@ -3,7 +3,7 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DEquipmentPartId } from "ts/data/DEquipmentPart";
 import { DItem } from "ts/data/DItem";
-import { DParameterId, REData } from "ts/data/REData";
+import { REData } from "ts/data/REData";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
@@ -16,6 +16,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 import { LEquipActivity } from "../activities/LEquipActivity";
 import { LActivity } from "../activities/LActivity";
+import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];

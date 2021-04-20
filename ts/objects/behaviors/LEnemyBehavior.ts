@@ -1,7 +1,8 @@
 
 import { assert } from "ts/Common";
 import { DEnemyId, RE_Data_Monster } from "ts/data/DEnemy";
-import { DParameterId, REData } from "ts/data/REData";
+import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { isThisTypeNode } from "typescript";
 import { LBattlerBehavior } from "./LBattlerBehavior";

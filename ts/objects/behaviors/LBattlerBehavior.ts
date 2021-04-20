@@ -2,7 +2,7 @@ import { assert } from "ts/Common";
 import { DClass } from "ts/data/DClass";
 import { DState, DStateId, DStateRestriction } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
-import { DParameterId, REData } from "ts/data/REData";
+import { REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
@@ -11,7 +11,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectorFact } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
-import { DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId, DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
 import { RE_Data_Actor } from "ts/data/DActor";
 import { DActionId } from "ts/data/DAction";
 import { LFloorId } from "../LFloorId";
@@ -317,10 +317,10 @@ export class LBattlerBehavior extends LBehavior {
 
 
 
-    get atk(): number {
+    public get atk(): number {
         return this.actualParam(RESystem.parameters.atk);
     }
-    get def(): number {
+    public get def(): number {
         return this.actualParam(RESystem.parameters.def);
     }
 }
@@ -342,6 +342,14 @@ export class LActorBehavior extends LBattlerBehavior {
     public setup(actorId: number): void {
         this._actorId = actorId;
     }
+
+
+    
+    public get level(): number {
+        return this._level;
+    }
+
+
 
     onAttached(): void {
         const actor = REData.actors[this._actorId];
@@ -387,6 +395,11 @@ export class LActorBehavior extends LBattlerBehavior {
                 (level - 1) * extra
         );
     }
+
+    // Game_Actor.prototype.nextLevelExp
+    public nextLevelExp(): number {
+        return this.expForLevel(this._level + 1);
+    };
 
     // Game_Actor.prototype.actor
     actor(): RE_Data_Actor {

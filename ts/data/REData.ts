@@ -23,8 +23,6 @@ import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 
-export type DParameterId = number;
-
 
 export enum REFloorMapKind
 {

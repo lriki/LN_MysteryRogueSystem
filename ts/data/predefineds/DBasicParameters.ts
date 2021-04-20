@@ -1,11 +1,11 @@
-import { DParameterId } from "../REData";
 
+export type DParameterId = number;
 export type DXParamId = number;
 export type DSParamId = number;
 
-// Battler 自身が持つパラメータ。
+// 基本能力値。
 // Property との違いは、戦闘ダメージなどに関係するものを集めたものである、という点。すべて number で表される。
-export interface BasicParameters {
+export interface DBasicParameters {
     // RMMZ 基礎パラメータ。(Game_Battler.params(x)) 並び順が一致するようにしておく。
     hp: DParameterId; // = 0    // HP / Maximum Hit Points
     mp: DParameterId; // = 1    // Magic Points / Maximum Magic Points

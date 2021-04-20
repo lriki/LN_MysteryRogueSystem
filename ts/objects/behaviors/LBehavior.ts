@@ -29,13 +29,13 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
-import { DParameterId } from "ts/data/REData";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
 import { RECommand, REResponse } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
+import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 
 export type LBehaviorId = LEntityId;
 

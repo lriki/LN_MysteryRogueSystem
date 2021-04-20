@@ -1,4 +1,4 @@
-import { DParameterId } from "./REData";
+import { DParameterId } from "./predefineds/DBasicParameters";
 
 export type DEnemyId = number;
 

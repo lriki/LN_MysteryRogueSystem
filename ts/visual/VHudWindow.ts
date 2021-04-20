@@ -1,3 +1,9 @@
+import { DBasics } from "ts/data/DBasics";
+import { REData } from "ts/data/REData";
+import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { LFloorId } from "ts/objects/LFloorId";
+import { REGame } from "ts/objects/REGame";
+import { readBuilderProgram } from "typescript";
 
 
 const gaugeHeight = 6;
@@ -20,19 +26,29 @@ export class VHudWindow extends Window_Base {
     }
 
     private refresh() {
-        this.drawText("1", 0, 0, 32, "right");
-        this.changeTextColor(this.paramTitleColor());
-        this.drawText("F", 32, 0, 32, "left");
-        this.resetTextColor();
+        const entity = REGame.camera.focusedEntity();
+        if (!entity) return;
+        const battler = entity.findBehavior(LActorBehavior);
+        if (!battler) return;
 
-        this.drawLevel(150, 0, "5", 0.5);
+        //battler.actualParam(DBasics.sparams)
+
+        this.drawFloorNumber(0, 0, entity.floorId);
+        this.drawLevel(150, 0, battler.level, battler.currentExp() / battler.nextLevelExp());
         this.drawHpFp(300, 0, 80, 100, 30, 100);
         this.drawGold(567);
     }
 
-    private drawLevel(x: number, y: number, level: string, expRatio: number): void {
+    private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {
+        this.drawText("1", x, y, 32, "right");
+        this.changeTextColor(this.paramTitleColor());
+        this.drawText("F", x + 32, y, 32, "left");
+        this.resetTextColor();
+    }
+
+    private drawLevel(x: number, y: number, level: number, expRatio: number): void {
         const t1 = "Lv ";
-        const t2 = level;
+        const t2 = level.toString();
         const width = this.textWidth(t1 + "000");
         const w1 = this.textWidth(t1);
         //const w2 = this.textWidth(t2);

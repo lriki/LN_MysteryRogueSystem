@@ -1,8 +1,8 @@
-import { DParameterId, REData } from "ts/data/REData";
+import { REData } from "ts/data/REData";
 import { LSkillBehavior } from "../objects/skills/SkillBehavior";
 import { BlockLayerKind } from "../objects/LBlock";
 import { REIntegration } from "./REIntegration";
-import { BasicParameters } from "ts/data/predefineds/DBasicParameters";
+import { DBasicParameters } from "ts/data/predefineds/DBasicParameters";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
 import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
 import { BasicItems } from "ts/data/predefineds/DBasicItems";
@@ -43,7 +43,7 @@ export class RESystem {
     static mapManager: SMapManager;
 
     // Database
-    static parameters: BasicParameters;
+    static parameters: DBasicParameters;
     static attributes: BasicAttributes;
     static behaviors: BasicBehaviors;
     static sequels: BasicSequels;
