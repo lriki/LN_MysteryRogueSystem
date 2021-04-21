@@ -75,7 +75,6 @@ export class SMapManager {
         // この Floor にいるべき Entity を配置する
         {
             
-            console.log("isRandomMap w");
             //const objects = REGame.world.objects();
             for (const entity of enterdEntities) {
             //for (let i = 1; i < objects.length; i++) {
@@ -83,8 +82,6 @@ export class SMapManager {
             //    if (obj && obj.objectType() == LObjectType.Entity) {
                     //const entity = obj as LEntity;
                     if (entity.floorId.equals(this._map.floorId())) {
-
-                        console.log("locateEntity w");
 
                         const layer = entity.queryProperty(RESystem.properties.homeLayer);
                         const block = this.findSpawnableBlockRandom(layer);

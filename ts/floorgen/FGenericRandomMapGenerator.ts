@@ -430,14 +430,16 @@ export class FGenericRandomMapGenerator {
                     const primaryWayR = Math.max(pin1.mx(), pin2.mx());
 
                     
-                    //console.log("secorT", secorT);
-                    //console.log("secorB", secorB);
-                    //console.log(primaryWayL, primaryWayR);
-
 
                     // Plot
                     for (let x = primaryWayL; x <= primaryWayR; x++) {
-                        this._map.block(x, primaryWayY).setComponent(FBlockComponent.Passageway);
+                        const block = this._map.block(x, primaryWayY);
+                        if (!block) {
+                            // TODO: UnitTest で稀にここに来ることがあるので、log を張って経過観察
+                            console.log("this._map",  this._map);
+                            console.log("block", x, primaryWayY);
+                        }
+                        block.setComponent(FBlockComponent.Passageway);
                     }
                     this.plotSecondaryWay(pin1.mx(), primaryWayY, secor1, FAxis.V);
                     this.plotSecondaryWay(pin2.mx(), primaryWayY, secor2, FAxis.V);

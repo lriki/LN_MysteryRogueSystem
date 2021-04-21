@@ -256,6 +256,7 @@ export class SScheduler
     }
 
     private prepareActionPhase(): void {
+        assert(!RESystem.commandContext.isRunning());
         const run = REGame.scheduler.currentRun();
 
         if (REGame.scheduler._currentStep < 0) {
@@ -264,7 +265,7 @@ export class SScheduler
         }
         else {
             const step = run.steps[REGame.scheduler._currentStep];
-            const next = step.unit.entityId.isEmpty() || REGame.world.entity(step.unit.entityId)._actionConsumed;
+            const next = true;//step.unit.entityId.isEmpty() || REGame.world.entity(step.unit.entityId)._actionConsumed;
 
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
             if (next) {
@@ -309,7 +310,10 @@ export class SScheduler
             
             const step = run.steps[REGame.scheduler._currentStep];
             const unit = step.unit;
-            if (phase.onProcess(this, unit)) {
+            phase.onProcess(this, unit);
+
+            if (RESystem.commandContext.isRunning()) {
+                // onProcess で何かコマンドが積まれていたらそれを実行しに行く
                 return;
             }
             else {
