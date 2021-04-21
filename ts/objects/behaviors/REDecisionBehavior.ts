@@ -1,5 +1,5 @@
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
-import { REResponse } from "../../system/RECommand";
+import { REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -24,7 +24,7 @@ export class REGame_DecisionBehavior extends LBehavior {
     private _targetPositionY: number = -1;
     private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
 
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
 
@@ -32,15 +32,14 @@ export class REGame_DecisionBehavior extends LBehavior {
             if (behavior._straightDashing && SMomementCommon.checkDashStopBlock(entity)) {
                 context.postActivity(LMoveAdjacentActivity.make(entity, entity.dir));
                 context.postConsumeActionToken(entity);
+                return SPhaseResult.Handled;
             }
             else {
                 behavior._straightDashing = false;
                 context.openDialog(entity, new REManualActionDialog());
+                return SPhaseResult.ExternalConsumingRequired;
             }
 
-            
-
-            return REResponse.Succeeded;
         }
         else if (phase == DecisionPhase.AIMinor) {
 
@@ -72,7 +71,7 @@ export class REGame_DecisionBehavior extends LBehavior {
 
             // 攻撃対象が設定されていれば、このフェーズでは何もしない
             if (this._attackTargetEntityId.hasAny()) {
-                return REResponse.Pass;
+                return SPhaseResult.Pass;
             }
             // 目的地が設定されている場合は移動可能
             else if (this._targetPositionX >= 0 && this._targetPositionY >= 0) {
@@ -88,13 +87,13 @@ export class REGame_DecisionBehavior extends LBehavior {
                         context.postActivity(LMoveAdjacentActivity.make(entity, dir));
                     }
                     context.postConsumeActionToken(entity);
-                    return REResponse.Succeeded;
+                    return SPhaseResult.Handled;
                 }
             }
             else {
                 // TODO: ここで消費は良くないのだが、現状これが無いと無限ループする
                 context.postConsumeActionToken(entity);
-                return REResponse.Succeeded;
+                return SPhaseResult.Handled;
             }
         
             /*
@@ -125,12 +124,11 @@ export class REGame_DecisionBehavior extends LBehavior {
             }
             context.postConsumeActionToken(entity);
             */
-            return REResponse.Succeeded;
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
 
             // 後続をブロックする理由はない
-            return REResponse.Pass;
+            return SPhaseResult.Pass;
         }
         else if (phase == DecisionPhase.AIMajor) {
             
@@ -152,7 +150,7 @@ export class REGame_DecisionBehavior extends LBehavior {
         
                         context.postPerformSkill(entity, RESystem.skills.normalAttack);
                         context.postConsumeActionToken(entity);
-                        return REResponse.Succeeded;
+                        return SPhaseResult.Handled;
                     }
                     
                 }
@@ -162,10 +160,10 @@ export class REGame_DecisionBehavior extends LBehavior {
             else {
 
             }
-            return REResponse.Pass;
+            return SPhaseResult.Pass;
         }
 
-        return REResponse.Pass;
+        return SPhaseResult.Pass;
     }
 
 }

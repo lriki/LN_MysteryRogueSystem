@@ -8,7 +8,7 @@ import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
 import { LEntity } from "../objects/LEntity";
 import { SSequelUnit, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
-import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget } from "./RESchedulerPhase";
+import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget, RESchedulerPhase_ResolveState } from "./RESchedulerPhase";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SSequelContext } from "./SSequelContext";
 import { RunStepInfo } from "ts/objects/LScheduler";
@@ -63,6 +63,7 @@ export class SScheduler
             new RESchedulerPhase_Prepare(),
             new RESchedulerPhase_ManualAction(),
             new RESchedulerPhase_AIMinorAction(),
+            new RESchedulerPhase_ResolveState(),
             new RESchedulerPhase_ResolveAdjacentAndMovingTarget(),
             new RESchedulerPhase_CheckFeetMoved(),
             new RESchedulerPhase_AIMajorAction(),

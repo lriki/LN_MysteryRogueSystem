@@ -1,7 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
 import { DEventId, RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { Helpers } from "ts/system/Helpers";
-import { REResponse } from "ts/system/RECommand";
+import { REResponse, SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { DecisionPhase } from "../behaviors/LBehavior";
@@ -41,19 +41,19 @@ export class LNapStateBehavior extends LStateTraitBehavior {
             return super.onQueryProperty(propertyId);
     }
     
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
                 this.removeThisState();
             }
             this._hostileEnterd = false;
 
-            return REResponse.Pass;
+            return SPhaseResult.Pass;
         }
         else {
             // Skip action
             context.postConsumeActionToken(entity);
-            return REResponse.Succeeded;
+            return SPhaseResult.Handled;
         }
     }
 }

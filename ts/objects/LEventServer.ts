@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
-import { LBehavior, LBehaviorId } from "./behaviors/LBehavior";
+import { LBehavior } from "./behaviors/LBehavior";
+import { LBehaviorId } from "./LObject";
 import { REGame } from "./REGame";
 
 export type EventHandler = (args: any) => void;

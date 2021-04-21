@@ -1,14 +1,14 @@
 import { LAttribute } from "./attributes/LAttribute";
-import { DecisionPhase, LBehavior, LBehaviorId } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
-import { RECommand, REResponse } from "../system/RECommand";
+import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { BlockLayerKind, LRoomId, LBlock } from "./LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { LEntityId, LObject, LObjectType } from "./LObject";
+import { LBehaviorId, LEntityId, LObject, LObjectType } from "./LObject";
 import { LMap } from "./LMap";
 import { LState, LStateId } from "./states/LState";
 import { LEffectResult } from "ts/objects/LEffectResult";
@@ -17,7 +17,7 @@ import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
-import { textChangeRangeIsUnchanged } from "typescript";
+import { ResolvedModule, textChangeRangeIsUnchanged } from "typescript";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 
 enum BlockLayer
@@ -576,10 +576,34 @@ export class LEntity extends LObject
         return response;
     }
 
-    _callDecisionPhase(context: SCommandContext, phase: DecisionPhase): REResponse {
-        let r = this._callStateIterationHelper(x => x.onDecisionPhase(this, context, phase));
-        if (r != REResponse.Pass) return r;
-        return this._callBehaviorIterationHelper(x => x.onDecisionPhase(this, context, phase));
+    
+    public static _iterateBehavior<TResult>(behaviorIds: readonly LBehaviorId[], func: (x: LBehavior) => TResult, isContinue: (x: TResult) => boolean): TResult | undefined {
+        let result:(TResult | undefined) = undefined;
+        for (let iBehavior = behaviorIds.length - 1; iBehavior >= 0; iBehavior--) {
+            const behavior = REGame.world.behavior(behaviorIds[iBehavior]);
+            result = func(behavior);
+            if (!isContinue(result)) {
+                return result;
+            }
+        }
+        return result;
+    }
+
+
+    public static _iterationHelper_ProcessPhase<TObject extends LObject>(objects: readonly TObject[], func: (x: LBehavior) => SPhaseResult): SPhaseResult | undefined {
+        for (let iObject = objects.length - 1; iObject >= 0; iObject--) {
+            const r = LEntity._iterateBehavior<SPhaseResult>(objects[iObject].behaviorIds(), func, r => r == SPhaseResult.Pass);
+            if (r) return r;
+        }
+        return SPhaseResult.Pass;
+    }
+
+    _callDecisionPhase(context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        let r = LEntity._iterationHelper_ProcessPhase<LState>(this.states(), b => b.onDecisionPhase(this, context, phase));
+        if (r) return r;
+        r = LEntity._iterateBehavior<SPhaseResult>(this._basicBehaviors, b => b.onDecisionPhase(this, context, phase), r => r == SPhaseResult.Pass);
+        if (r) return r;
+        return SPhaseResult.Pass;
     }
 
     _sendAction(context: SCommandContext, cmd: RECommand): REResponse {

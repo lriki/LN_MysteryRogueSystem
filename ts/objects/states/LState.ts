@@ -3,14 +3,13 @@ import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
-import { LObject, LObjectId, LObjectType } from "../LObject";
+import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LGenericRMMZStateBehavior } from "./LGenericRMMZStateBehavior";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { LMap } from "../LMap";
-import { LBehaviorId } from "../behaviors/LBehavior";
 
 export type LStateId = LObjectId;
 
@@ -74,6 +73,11 @@ export class LState extends LObject {
     public stateBehabiors(): readonly LStateTraitBehavior[] {
         return this._stateBehabiors.map(x => REGame.world.behavior(x) as LStateTraitBehavior);
     }
+
+    public behaviorIds(): LBehaviorId[] {
+        return this._stateBehabiors;
+    }
+
 
     //public ownerEntity(): LEntity {
     //    assert(this._ownerEntity);

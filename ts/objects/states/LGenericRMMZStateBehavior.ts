@@ -1,4 +1,4 @@
-import { REResponse } from "ts/system/RECommand";
+import { REResponse, SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { DecisionPhase } from "../behaviors/LBehavior";
@@ -26,15 +26,15 @@ export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
             return super.onQueryProperty(propertyId);
     }
     
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.Prepare) {
             //console.log("DecisionPhase.Prepare");
             // TEST: 行動スキップ
             //context.postSkipPart(entity);
-            return REResponse.Succeeded;
+            return SPhaseResult.Handled;
         }
         else {
-            return REResponse.Succeeded;
+            return SPhaseResult.Handled;
         }
     }
 }

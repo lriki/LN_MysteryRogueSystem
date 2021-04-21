@@ -1,6 +1,6 @@
 import { DAbilityId } from "ts/data/DAbility";
-import { LBehavior, LBehaviorId } from "../behaviors/LBehavior";
-import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
+import { LBehavior } from "../behaviors/LBehavior";
+import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LKnockbackBehavior } from "./LKnockbackBehavior";

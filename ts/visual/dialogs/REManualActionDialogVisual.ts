@@ -16,7 +16,6 @@ import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChange
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
-import { Dir } from "imgui-js/imgui";
 
 enum UpdateMode {
     Normal,

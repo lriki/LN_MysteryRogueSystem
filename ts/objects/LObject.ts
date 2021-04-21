@@ -51,6 +51,7 @@ export interface LObjectId {
 }
 */
 export type LObjectId = LEntityId;
+export type LBehaviorId = LEntityId;
 
 export enum LObjectType {
     Entity,
@@ -168,4 +169,10 @@ export class LObject {
     public onFinalize(): void {
 
     }
+    
+
+    public behaviorIds(): LBehaviorId[] {
+        return [];
+    }
+
 }

@@ -4,7 +4,7 @@ import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { Helpers } from "./Helpers";
-import { REResponse } from "./RECommand";
+import { REResponse, SPhaseResult } from "./RECommand";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 import { UnitInfo } from "ts/objects/LScheduler";
@@ -55,7 +55,7 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
         if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0 &&
             unit.behavior._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
             const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
-            if (response == REResponse.Succeeded) 
+            if (response != SPhaseResult.Pass) 
                 return true;
             else
                 return false;
@@ -67,6 +67,18 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
     }
 }
 
+// 状態異常の発動・解除、HPの自然回復・減少
+export class RESchedulerPhase_ResolveState extends RESchedulerPhase {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+        const entity = REGame.world.findEntity(unit.entityId);
+        if (entity) {
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveState);
+        }
+        // このフェーズでは通知のみを行う。
+        // トークンを消費するような行動をとってもらうことは無いので、そのまま次へ進む。
+        return false;
+    }
+}
 
 // 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
 export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends RESchedulerPhase {
@@ -117,7 +129,7 @@ export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
             const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
-            if (response == REResponse.Succeeded) 
+            if (response != SPhaseResult.Pass) 
                 return true;
             else
                 return false;

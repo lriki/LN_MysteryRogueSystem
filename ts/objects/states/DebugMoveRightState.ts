@@ -1,7 +1,7 @@
 import { REGame } from "ts/objects/REGame";
 import { DecisionPhase } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "ts/objects/LEntity";
-import { REResponse } from "ts/system/RECommand";
+import { REResponse, SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
@@ -9,7 +9,7 @@ import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
 export class LDebugMoveRightState extends LStateTraitBehavior {
 
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse {
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
@@ -25,7 +25,7 @@ export class LDebugMoveRightState extends LStateTraitBehavior {
                 context.postActivity(LMoveAdjacentActivity.make(entity, dir));
             }
             context.postConsumeActionToken(entity);
-            return REResponse.Succeeded;
+            return SPhaseResult.Handled;
         }
 
         return super.onDecisionPhase(entity, context, phase);

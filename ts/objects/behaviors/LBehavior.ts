@@ -30,19 +30,18 @@ import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
-import { RECommand, REResponse } from "../../system/RECommand";
+import { RECommand, REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
-import { LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
+import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
-
-export type LBehaviorId = LEntityId;
 
 export enum DecisionPhase {
     Prepare,
     Manual,
     AIMinor,
+    ResolveState,
     ResolveAdjacentAndMovingTarget,
     AIMajor,
 }
@@ -235,7 +234,7 @@ export class LBehavior extends LObject {
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): REResponse { return REResponse.Pass; }
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
