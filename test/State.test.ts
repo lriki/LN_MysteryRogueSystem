@@ -40,3 +40,30 @@ test('State_Brace', () => {
     // 1回 Simulation しただけでは解除されていないこと。
     expect(actor1.states()[0].stateId()).toBe(TestEnv.StateId_Sleep);
 });
+
+test('State.AutoRemove', () => {
+    REGameManager.createGameObjects();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.performFloorTransfer();
+
+    // "睡眠" 強制付加
+    actor1.addState(TestEnv.StateId_Sleep);
+
+    const stateObjectId = actor1.states()[0].id();
+
+    // 10 ターン分 シミュレーション実行
+    for (let i = 0; i < 10; i++) {
+        RESystem.scheduler.stepSimulation();
+    }
+
+    // 自然解除されている
+    expect(actor1.states().length).toBe(0);
+
+    // State Object も GC で削除されている
+    const state = REGame.world.findEntity(stateObjectId);
+    expect(state).toBe(undefined);
+
+});

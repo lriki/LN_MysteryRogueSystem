@@ -46,11 +46,12 @@ export class LState extends LObject {
         //    return b;
         //}));
 
-        const behabiors = [behavior].concat(this.stateData().behaviors.map(behaviorName => {
+        const behabiors: LStateTraitBehavior[] = [behavior];
+        for (const behaviorName of this.stateData().behaviors) {
             const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
             if (!b) throw new Error(`Behavior "${behaviorName}" specified in state "${stateId}:${this.stateData().displayName}" is invalid.`);
-            return b;
-        }));
+            behabiors.push(b);
+        }
 
         for (const b of behabiors) {
             b.setOwner(this);

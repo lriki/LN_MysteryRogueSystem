@@ -6,6 +6,38 @@ import { LEntity } from "../LEntity";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 
 export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
+    private _stateTurn: number = 0;
+    
+    constructor() {
+        super();
+        this.resetStateCounts();
+    }
+    
+    // Game_BattlerBase.prototype.isStateExpired 
+    private isStateExpired(): boolean {
+        return this._stateTurn <= 0;
+    }
+
+    // Game_BattlerBase.prototype.resetStateCounts
+    private resetStateCounts(): void {
+        //const state = $dataStates[stateId];
+        //const variance = 1 + Math.max(state.maxTurns - state.minTurns, 0);
+        //this._stateTurns[stateId] = state.minTurns + Math.randomInt(variance);
+        this._stateTurn = 10;
+    }
+
+    private updateStateTurns(): void {
+        if (this._stateTurn > 0) {
+            this._stateTurn--;
+        }
+    }
+
+    // Game_Battler.prototype.removeStatesAuto
+    private removeStatesAuto(): void {
+        if (this.isStateExpired()) {
+            this.removeThisState();
+        }
+    }
     
     onAttached(): void {
         //console.log("LStateTrait_GenericRMMZState");
@@ -30,6 +62,8 @@ export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.UpdateState) {
+            this.updateStateTurns();
+            this.removeStatesAuto();
             //this.count++;
             //if (this.count > 2) {
             //    this.removeThisState();
