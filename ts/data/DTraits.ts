@@ -13,5 +13,11 @@ export class DTraits {
     static TRAIT_SPARAM = 23;
 
     static TRAIT_ATTACK_ELEMENT = 31;
+
+
+    // ↑ ここまでは RMMZ の Game_BattlerBase.TRAIT_xxxx と同一
+    //----------
+    
+
 }
 
