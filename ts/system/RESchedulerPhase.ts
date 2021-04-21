@@ -16,32 +16,26 @@ export abstract class RESchedulerPhase {
     
     onStart(scheduler: SScheduler): void {}
 
-    // このフェーズで何も処理を行わず、即座に次の Unit へ処理を渡す場合は false を返す。
-    // true を返した場合、行動トークンを消費しなければならない。(そうしないとゲームがハングする)
-    abstract onProcess(scheduler: SScheduler, unit: UnitInfo): boolean;
+    // この処理の中で CommandContext にコマンドが積まれた場合、
+    // Scheduler はその処理を始め、全てコマンドを実行し終えたら次の unit の処理に移る。
+    // コマンドが積まれなかった場合、即座に次の unit の処理に移る。
+    abstract onProcess(scheduler: SScheduler, unit: UnitInfo): void;
 }
 
 export class RESchedulerPhase_Prepare extends RESchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Prepare);
         }
-        // このフェーズは通知のみ行うため、_actionConsumed は不要。通過するだけ。
-        return false;
     }
 }
 
 export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
-            return true;
-        }
-        else {
-            // このフェーズでは実行できない step だった。次の step へ。
-            return false;
         }
     }
 }
@@ -49,34 +43,23 @@ export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
 // モンスターの移動・攻撃対象決定
 export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         
         if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0 &&
             unit.behavior._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
-            const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
-            if (response != SPhaseResult.Pass) 
-                return true;
-            else
-                return false;
-        }
-        else {
-            // このフェーズでは実行できない step だった。次の step へ。
-            return false;
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
         }
     }
 }
 
 // 状態異常の発動・解除、HPの自然回復・減少
 export class RESchedulerPhase_ResolveState extends RESchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveState);
         }
-        // このフェーズでは通知のみを行う。
-        // トークンを消費するような行動をとってもらうことは無いので、そのまま次へ進む。
-        return false;
     }
 }
 
@@ -86,14 +69,11 @@ export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends REScheduler
         REGame.map.updateLocatedResults(RESystem.commandContext);
     }
 
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
         }
-        // このフェーズでは通知のみを行う。
-        // トークンを消費するような行動をとってもらうことは無いので、そのまま次へ進む。
-        return false;
     }
 }
 
@@ -106,7 +86,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
         RESystem.sequelContext.flushSequelSet();
     }
     
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && unit.behavior.requiredFeetProcess()) {
             const actor = entity;
@@ -120,23 +100,14 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
             }
             unit.behavior.clearFeetProcess();
         }
-        return false;
     }
 }
 
 export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: UnitInfo): boolean {
+    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
-            const response = entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
-            if (response != SPhaseResult.Pass) 
-                return true;
-            else
-                return false;
-        }
-        else {
-            // このフェーズでは実行できない step だった。次の step へ。
-            return false;
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
         }
     }
 }
