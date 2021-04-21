@@ -52,15 +52,6 @@ export enum SPhaseResult {
 
     /** Behavior Chain の実行を終了する。 */
     Handled,
-
-    /** 
-     * 具体的な行動を、シミュレーションループ外に任せる。
-     * Dialog を開いて、その Dialog の処理内で行動トークンを消費するべきときはこれに該当する。
-     * 
-     * 
-     * Behavior Chain の実行を終了する。
-     */
-    ExternalConsumingRequired,
 }
 
 export function checkContinuousResponse(r: REResponse): boolean {

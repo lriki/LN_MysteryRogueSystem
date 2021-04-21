@@ -598,12 +598,32 @@ export class LEntity extends LObject
         return SPhaseResult.Pass;
     }
 
+    
+    public iterateBehaviors(func: (b: LBehavior) => void): void {
+        for (const id of this._basicBehaviors) {
+            func(REGame.world.behavior(id));
+        }
+    }
+
+    public collectBehaviors(): LBehavior[] {
+        const result: LBehavior[] = [];
+        this.iterateBehaviors(b => result.push(b));
+        for (const state of this.states()) state.iterateBehaviors(b => result.push(b));
+        return result;
+    }
+
     _callDecisionPhase(context: SCommandContext, phase: DecisionPhase): SPhaseResult {
-        let r = LEntity._iterationHelper_ProcessPhase<LState>(this.states(), b => b.onDecisionPhase(this, context, phase));
-        if (r) return r;
-        r = LEntity._iterateBehavior<SPhaseResult>(this._basicBehaviors, b => b.onDecisionPhase(this, context, phase), r => r == SPhaseResult.Pass);
-        if (r) return r;
+        for (const b of this.collectBehaviors().reverse()) {
+            const result = b.onDecisionPhase(this, context, phase);
+            if (result != SPhaseResult.Pass) return result;
+        }
         return SPhaseResult.Pass;
+
+        //let r = LEntity._iterationHelper_ProcessPhase<LState>(this.states(), b => b.onDecisionPhase(this, context, phase));
+       // if (r) return r;
+        //r = LEntity._iterateBehavior<SPhaseResult>(this._basicBehaviors, b => b.onDecisionPhase(this, context, phase), r => r == SPhaseResult.Pass);
+        ///if (r) return r;
+        //return SPhaseResult.Pass;
     }
 
     _sendAction(context: SCommandContext, cmd: RECommand): REResponse {

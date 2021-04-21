@@ -377,6 +377,7 @@ export class FGenericRandomMapGenerator {
                             primaryWayXCandidates.push(x);
                         }
                     }
+                    assert(primaryWayXCandidates.length > 0);
                     
                     // PrimaryWay の X 座標を決める
                     const primaryWayX = primaryWayXCandidates[this._map.random().nextIntWithMax(primaryWayXCandidates.length)];
@@ -387,7 +388,8 @@ export class FGenericRandomMapGenerator {
 
                     // Plot
                     for (let y = primaryWayT; y <= primaryWayB; y++) {
-                        this._map.block(primaryWayX, y).setComponent(FBlockComponent.Passageway);
+                        const block = this._map.block(primaryWayX, y);
+                        block.setComponent(FBlockComponent.Passageway);
                     }
                     this.plotSecondaryWay(primaryWayX, pin1.my(), secor1, FAxis.H);
                     this.plotSecondaryWay(primaryWayX, pin2.my(), secor2, FAxis.H);
@@ -421,6 +423,7 @@ export class FGenericRandomMapGenerator {
                             primaryWayYCandidates.push(y);
                         }
                     }
+                    assert(primaryWayYCandidates.length > 0);
                     
                     // PrimaryWay の Y 座標を決める
                     const primaryWayY = primaryWayYCandidates[this._map.random().nextIntWithMax(primaryWayYCandidates.length)];
@@ -434,11 +437,6 @@ export class FGenericRandomMapGenerator {
                     // Plot
                     for (let x = primaryWayL; x <= primaryWayR; x++) {
                         const block = this._map.block(x, primaryWayY);
-                        if (!block) {
-                            // TODO: UnitTest で稀にここに来ることがあるので、log を張って経過観察
-                            console.log("this._map",  this._map);
-                            console.log("block", x, primaryWayY);
-                        }
                         block.setComponent(FBlockComponent.Passageway);
                     }
                     this.plotSecondaryWay(pin1.mx(), primaryWayY, secor1, FAxis.V);

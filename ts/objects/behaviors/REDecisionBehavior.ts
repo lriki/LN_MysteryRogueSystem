@@ -37,7 +37,7 @@ export class REGame_DecisionBehavior extends LBehavior {
             else {
                 behavior._straightDashing = false;
                 context.openDialog(entity, new REManualActionDialog());
-                return SPhaseResult.ExternalConsumingRequired;
+                return SPhaseResult.Handled;
             }
 
         }

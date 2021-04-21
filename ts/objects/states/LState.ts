@@ -10,6 +10,7 @@ import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LGenericRMMZStateBehavior } from "./LGenericRMMZStateBehavior";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { LMap } from "../LMap";
+import { LBehavior } from "../behaviors/LBehavior";
 
 export type LStateId = LObjectId;
 
@@ -115,8 +116,14 @@ export class LState extends LObject {
         }
     }
 
+    public iterateBehaviors(func: (b: LBehavior) => void): void {
+        for (const id of this._stateBehabiors) {
+            func(REGame.world.behavior(id));
+        }
+    }
 
-    
+
+    // deprecated:
     _callStateIterationHelper(func: (x: LStateTraitBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
         for (let i = this._stateBehabiors.length - 1; i >= 0; i--) {
