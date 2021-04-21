@@ -25,8 +25,17 @@ export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
         else
             return super.onQueryProperty(propertyId);
     }
+
+    //count = 0;
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        if (phase == DecisionPhase.UpdateState) {
+            //this.count++;
+            //if (this.count > 2) {
+            //    this.removeThisState();
+            //}
+        }
+        
         if (phase == DecisionPhase.Prepare) {
             //console.log("DecisionPhase.Prepare");
             // TEST: 行動スキップ

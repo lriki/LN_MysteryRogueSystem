@@ -41,7 +41,7 @@ export enum DecisionPhase {
     Prepare,
     Manual,
     AIMinor,
-    ResolveState,
+    UpdateState,
     ResolveAdjacentAndMovingTarget,
     AIMajor,
 }

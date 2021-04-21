@@ -54,11 +54,11 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 }
 
 // 状態異常の発動・解除、HPの自然回復・減少
-export class RESchedulerPhase_ResolveState extends RESchedulerPhase {
+export class RESchedulerPhase_UpdateState extends RESchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity) {
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveState);
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
         }
     }
 }
