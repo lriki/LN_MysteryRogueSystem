@@ -13,10 +13,23 @@ import { LItemBehavior } from "./LItemBehavior";
 /**
  */
 export class LTrapBehavior extends LBehavior {
+    private _exposed: boolean = false;
 
     constructor() {
         super();
     }
+
+    /**
+     * 露出しているかどうか。
+     * 罠が踏まれたり、空振りや魔法弾の通過で発見された状態で、勢力に関わらず可視である。
+     */
+    public exposed(): boolean {
+        return this._exposed;
+    }
+
+    //public setExposed(value: boolean): void {
+    //    this._exposed = value;
+    //}
 
     public trapName(): string {
         const itemId = this.ownerEntity().queryProperty(RESystem.properties.itemId) as number;
@@ -34,6 +47,9 @@ export class LTrapBehavior extends LBehavior {
     }
     
     [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): REResponse {
+
+
+        this._exposed = true;
 
 
         context.postMessage(tr("{0} を踏んだ！", this.trapName()));

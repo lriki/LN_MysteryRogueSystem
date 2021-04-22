@@ -118,8 +118,6 @@ export class SMinimapData {
         this._refreshNeeded = false;
     }
 
-    //_count = 0;
-
     public update() {
         const map = REGame.map;
         const width = map.width();
@@ -135,9 +133,6 @@ export class SMinimapData {
             this.refresh();
         }
 
-        //console.log("_count", this._count, (this._count % 2));
-        //this._count++;
-        //this._tilemapResetNeeded = true;
         // Clear
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
@@ -251,10 +246,11 @@ export class SMinimapData {
     }
     */
 
-    // 同種タイルかどうか
+    // (x, y) のタイルが、component と同種かどうか
     private getSameKindTile(x: number, y: number, component: FBlockComponent): boolean {
         const block = REGame.map.tryGetBlock(x, y);
-        if (!block) return true;    // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
+        if (!block) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
+        if (block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
         if (block._blockComponent == component) return true;
         return false;
     }
