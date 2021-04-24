@@ -35,14 +35,18 @@ export class VHudWindow extends Window_Base {
         if (!inventory) return;
 
         const hp = battler.actualParam(DBasics.params.hp);
-        const mhp = battler.paramMax(DBasics.params.hp);
+        const mhp = battler.idealParam(DBasics.params.hp);
         const fp = battler.actualParam(DBasics.params.fp);
-        const mfp = battler.paramMax(DBasics.params.fp);
+        const mfp = battler.idealParam(DBasics.params.fp);
 
         this.drawFloorNumber(0, 0, entity.floorId);
         this.drawLevel(150, 0, battler.level, battler.currentExp() / battler.nextLevelExp());
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
         this.drawGold(inventory.gold());
+    }
+
+    update() {
+        this.refresh();
     }
 
     private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {
