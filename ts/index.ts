@@ -23,14 +23,4 @@ import './rmmz/Spriteset_Map'
 import './rmmz/Window_MapName'
 import './rmmz/PluginCommands'
 import './rmmz/JsonEx'
-
-function aaaafunc() {
-    console.log("invoked foobar!");
-}
-
-
-
-(window as any).re = {
-    aaaa: aaaafunc,
-};
-
+import './ConsoleCommands'

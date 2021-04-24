@@ -27,6 +27,8 @@ export class VHudWindow extends Window_Base {
     }
 
     private refresh() {
+        this.contents.clear();
+
         const entity = REGame.camera.focusedEntity();
         if (!entity) return;
         const battler = entity.findBehavior(LActorBehavior);

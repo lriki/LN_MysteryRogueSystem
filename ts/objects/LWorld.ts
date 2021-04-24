@@ -64,6 +64,12 @@ export class LWorld
             return undefined;
     }
 
+    public entityByIndex(index: number): LEntity {
+        const e = this._objects[index];
+        assert(e instanceof LEntity);
+        return e;
+    }
+
     behavior(id: LBehaviorId): LBehavior {
         const e = this._behaviors[id.index2()];
         if (e && e.id().key2() == id.key2())
