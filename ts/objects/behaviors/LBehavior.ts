@@ -36,6 +36,7 @@ import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "../LObj
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+//import { LState } from "../states/LState";
 
 export enum DecisionPhase {
     Prepare,
@@ -249,6 +250,12 @@ export class LBehavior extends LObject {
 
     /** 1行動消費単位の終了時点 */
     onTurnEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
+
+
+    
+    //public removeThisState(): void {
+    //    this.ownerAs(LState)?.removeThisState();
+    //}
 }
 
 /*

@@ -2,15 +2,10 @@ import { assert } from "ts/Common";
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
-import { RESystem } from "ts/system/RESystem";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "../behaviors/LBehavior";
-import { LStateTraitBehavior } from "./LStateTraitBehavior";
-import { LGenericRMMZStateBehavior } from "./LGenericRMMZStateBehavior";
-import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
-import { LMap } from "../LMap";
 
 export type LStateId = LObjectId;
 
@@ -28,36 +23,17 @@ export type LStateId = LObjectId;
  */
 export class LState extends LObject {
     //private _ownerEntity: LEntity | undefined;    // シリアライズしない
-    private _stateId: DStateId;
-    private _stateBehabiors: LBehaviorId[]; // LStateTraitBehavior
+    _stateId: DStateId = 0;
+    _stateBehabiors: LBehaviorId[] = []; // LStateTraitBehavior
 
-    public constructor(stateId: DStateId) {
+    public constructor() {
         super(LObjectType.State);
         REGame.world._registerObject(this);
+    }
+
+    public setup(stateId: DStateId): void {
         assert(stateId > 0);
         this._stateId = stateId;
-        
-        const behavior = new LGenericRMMZStateBehavior();
-        REGame.world._registerBehavior(behavior);
-
-       //this._behabiors = [behavior].concat(this.stateData().traits.map(traitId => {
-        //    const b = DBehaviorFactory.createStateTraitBehavior(traitId);
-        //    b._ownerState = this;
-        //    return b;
-        //}));
-
-        const behabiors: LStateTraitBehavior[] = [behavior];
-        for (const behaviorName of this.stateData().behaviors) {
-            const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
-            if (!b) throw new Error(`Behavior "${behaviorName}" specified in state "${stateId}:${this.stateData().displayName}" is invalid.`);
-            behabiors.push(b);
-        }
-
-        for (const b of behabiors) {
-            b.setOwner(this);
-        }
-        
-        this._stateBehabiors = behabiors.map(x => x.id());
     }
 
     public id(): LStateId {
@@ -72,8 +48,8 @@ export class LState extends LObject {
         return REData.states[this._stateId];
     }
     
-    public stateBehabiors(): readonly LStateTraitBehavior[] {
-        return this._stateBehabiors.map(x => REGame.world.behavior(x) as LStateTraitBehavior);
+    public stateBehabiors(): readonly LBehavior[] {
+        return this._stateBehabiors.map(x => REGame.world.behavior(x) as LBehavior);
     }
 
     public behaviorIds(): LBehaviorId[] {
@@ -98,13 +74,13 @@ export class LState extends LObject {
         this._stateBehabiors.forEach(b => {
             //b._ownerEntityId = this.ownerEntity().id();
             //b._setOwnerObjectId(this.objectId());
-            (REGame.world.behavior(b) as LStateTraitBehavior).onAttached();
+            (REGame.world.behavior(b) as LBehavior).onAttached();
         });
     }
 
     onDetached(): void {
         this._stateBehabiors.forEach(b => {
-            const behavior = (REGame.world.behavior(b) as LStateTraitBehavior);
+            const behavior = (REGame.world.behavior(b) as LBehavior);
             behavior.onDetached();
             REGame.world._unregisterBehavior(behavior);
         });
@@ -125,10 +101,10 @@ export class LState extends LObject {
 
 
     // deprecated:
-    _callStateIterationHelper(func: (x: LStateTraitBehavior) => REResponse): REResponse {
+    _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
         let response = REResponse.Pass;
         for (let i = this._stateBehabiors.length - 1; i >= 0; i--) {
-            const behavior = (REGame.world.behavior(this._stateBehabiors[i]) as LStateTraitBehavior);
+            const behavior = (REGame.world.behavior(this._stateBehabiors[i]) as LBehavior);
             const r = func(behavior);
             if (r != REResponse.Pass) {
                 response = r;

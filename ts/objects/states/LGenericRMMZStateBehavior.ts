@@ -1,11 +1,11 @@
 import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { DecisionPhase } from "../behaviors/LBehavior";
+import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
-import { LStateTraitBehavior } from "./LStateTraitBehavior";
+import { LState } from "./LState";
 
-export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
+export class LGenericRMMZStateBehavior extends LBehavior {
     private _stateTurn: number = 0;
     
     constructor() {
@@ -35,7 +35,8 @@ export class LGenericRMMZStateBehavior extends LStateTraitBehavior {
     // Game_Battler.prototype.removeStatesAuto
     private removeStatesAuto(): void {
         if (this.isStateExpired()) {
-            this.removeThisState();
+            //this.removeThisState();
+            this.ownerAs(LState)?.removeThisState();
         }
     }
     

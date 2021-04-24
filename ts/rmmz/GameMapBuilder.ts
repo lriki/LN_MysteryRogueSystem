@@ -5,7 +5,6 @@ import { REData } from "ts/data/REData";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LMap } from "ts/objects/LMap";
-import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SMinimapData } from "ts/system/SMinimapData";
 import { TileShape } from "ts/objects/LBlock";
 

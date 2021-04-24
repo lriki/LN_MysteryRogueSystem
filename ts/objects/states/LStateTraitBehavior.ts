@@ -6,6 +6,7 @@ import { LState } from "./LState";
  * 
  * 
  */
+/*
 export class LStateTraitBehavior extends LBehavior {
     //_ownerState: LState | undefined;    // シリアライズしない
 
@@ -20,7 +21,5 @@ export class LStateTraitBehavior extends LBehavior {
         super();
     }
     
-    public removeThisState(): void {
-        this.ownerAs(LState)?.removeThisState();
-    }
 }
+*/

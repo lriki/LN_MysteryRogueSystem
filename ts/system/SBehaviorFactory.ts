@@ -60,6 +60,29 @@ export class SBehaviorFactory {
         });
     }
     
+    /*
+    public static attachBehaviorsToState(state: LState, names: string[]): void {
+        const behavior = new LGenericRMMZStateBehavior();
+        REGame.world._registerBehavior(behavior);
+
+        
+        const behabiors: LStateTraitBehavior[] = [behavior];
+        for (const behaviorName of state.stateData().behaviors) {
+            const b = SBehaviorFactory.createBehavior(behaviorName) as LStateTraitBehavior;
+            if (!b) throw new Error(`Behavior "${behaviorName}" specified in state "${stateId}:${this.stateData().displayName}" is invalid.`);
+            behabiors.push(b);
+        }
+
+
+        names.forEach(name => {
+            const b = this.createBehavior(name);
+            if (b)
+                entity._addBehavior(b);
+            else
+                throw new Error(`Behavior "${name}" that you tried to add to the entity "${entity._name}" is invalid.`);
+        });
+    }
+    */
     
     public static createBehavior(name: string): LBehavior | undefined {
         const b = this.createBehaviorInstance(name);

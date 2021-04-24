@@ -1,5 +1,4 @@
 import { LMap } from "./LMap";
-import { SEntityFactory } from "../system/SEntityFactory";
 import { LEntity } from "./LEntity";
 import { LWorld } from "./LWorld";
 import { LEntityId } from "./LObject";

@@ -4,9 +4,7 @@ import { REData } from "../data/REData";
 import { REGame } from "../objects/REGame";
 import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
 import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
-import { TileShape } from "../objects/LBlock";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
-import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
@@ -20,6 +18,7 @@ import { DEntity } from "ts/data/DEntity";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
+//import { SBehaviorFactory } from "./internal";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -122,6 +121,7 @@ export class SEntityFactory {
         entity.prefabKey = prefab.key;
         return entity;
     }
+
 }
 
 

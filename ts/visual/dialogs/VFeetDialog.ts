@@ -3,6 +3,7 @@ import { DActionId } from "ts/data/DAction";
 import { REData } from "ts/data/REData";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
+import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
 import { VSubDialog } from "./VSubDialog";
 
@@ -47,7 +48,7 @@ export class VFeetDialog extends VSubDialog {
         const entity = RESystem.dialogContext.causeEntity();
         assert(entity);
 
-        const activity = REData.createActivity(actionId);
+        const activity = SActivityFactory.newActivity(actionId);
         // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
         activity._setup(entity, this._targetEntity);
 

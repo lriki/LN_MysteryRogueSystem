@@ -190,7 +190,7 @@ export class REData
         this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap }];
         this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
-        this.actions = [{id: 0, displayName: 'null', typeName: "", factory: () => new LActivity()}];
+        this.actions = [{id: 0, displayName: 'null', typeName: ""}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];
         this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
@@ -270,13 +270,12 @@ export class REData
         return newId;
     }
     
-    static addAction(displayName: string, typeName: string, factory: (() => LActivity) | undefined): number {
+    static addAction(displayName: string, typeName: string): number {
         const newId = this.actions.length;
         this.actions.push({
             id: newId,
             displayName: displayName,
             typeName: typeName,
-            factory: factory,
         });
         return newId;
     }
@@ -382,11 +381,5 @@ export class REData
     static findPrefabFuzzy(pattern: string): DPrefab | undefined {
         // TODO: id
         return this.prefabs.find(p => p.key == pattern);
-    }
-
-    static createActivity(actionId: DActionId): LActivity {
-        const f = this.actions[actionId].factory;
-        assert(f);
-        return f();
     }
 }

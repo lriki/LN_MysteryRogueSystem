@@ -6,6 +6,7 @@ import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehav
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
+import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VSubDialog } from "./VSubDialog";
@@ -105,7 +106,7 @@ export class VItemListDialog extends VSubDialog {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
             
-            const activity = REData.createActivity(actionId);
+            const activity = SActivityFactory.newActivity(actionId);
             // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
             activity._setup(this._actorEntity, itemEntity);
             

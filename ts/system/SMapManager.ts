@@ -4,7 +4,7 @@ import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "./RESystem";
 import { LMap } from "ts/objects/LMap";
-import { SEntityFactory } from "./SEntityFactory";
+import { SEntityFactory } from "./internal";
 import { assert, Log } from "ts/Common";
 import { paramEnemySpawnInvalidArea } from "ts/PluginParameters";
 import { FMap } from "ts/floorgen/FMapData";

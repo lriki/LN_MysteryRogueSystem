@@ -7,7 +7,7 @@ import { REGame } from "ts/objects/REGame";
 import { TileShape } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
-import { SEntityFactory } from "./SEntityFactory";
+import { SEntityFactory } from "./internal";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";

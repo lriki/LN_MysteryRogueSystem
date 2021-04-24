@@ -1,15 +1,15 @@
 import { DBasics } from "ts/data/DBasics";
 import { DEventId, RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { Helpers } from "ts/system/Helpers";
-import { REResponse, SPhaseResult } from "ts/system/RECommand";
+import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { DecisionPhase } from "../behaviors/LBehavior";
+import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
-import { LStateTraitBehavior } from "./LStateTraitBehavior";
+import { LState } from "./LState";
 
-export class LNapStateBehavior extends LStateTraitBehavior {
+export class LNapStateBehavior extends LBehavior {
     private _hostileEnterd: boolean = false;
     
     onAttached(): void {
@@ -44,7 +44,8 @@ export class LNapStateBehavior extends LStateTraitBehavior {
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
-                this.removeThisState();
+                //this.removeThisState();
+                this.ownerAs(LState)?.removeThisState();
             }
             this._hostileEnterd = false;
 

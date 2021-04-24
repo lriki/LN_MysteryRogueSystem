@@ -1,5 +1,5 @@
 import { REGame } from "../objects/REGame";
-import { SEntityFactory } from "./SEntityFactory";
+import { SEntityFactory } from "./internal";
 import { LMap } from "../objects/LMap";
 import { LWorld } from "../objects/LWorld";
 import { LSystem } from "../objects/LSystem";

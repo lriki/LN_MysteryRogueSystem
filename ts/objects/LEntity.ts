@@ -3,13 +3,12 @@ import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
-import { BlockLayerKind, LRoomId, LBlock } from "./LBlock";
+import { BlockLayerKind, LRoomId } from "./LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "./LObject";
-import { LMap } from "./LMap";
 import { LState, LStateId } from "./states/LState";
 import { LEffectResult } from "ts/objects/LEffectResult";
 import { DActionId } from "ts/data/DAction";
@@ -17,8 +16,8 @@ import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
-import { ResolvedModule, textChangeRangeIsUnchanged } from "typescript";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { SStateFactory } from "ts/system/SStateFactory";
 
 enum BlockLayer
 {
@@ -294,7 +293,8 @@ export class LEntity extends LObject
             states[index].recast();
         }
         else {
-            const state = new LState(stateId);
+            //const state = new LState(stateId);
+            const state = SStateFactory.newState(stateId);
             state.setOwner(this);
             
             assert(state.hasId());

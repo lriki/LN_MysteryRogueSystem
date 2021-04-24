@@ -17,22 +17,22 @@ declare interface IDataTrait
 
 declare interface IDataActor
 {
-    id?: number;
-    battlerName?: string;
-    characterIndex?: number;
-    characterName?: string;
-    classId?: number;
-    equips?: number[];
-    faceIndex?: number;
-    faceName?: string;
-    traits?: IDataTrait[];
-    initialLevel?: number;
-    maxLevel?: number;
-    name?: string;
-    nickname?: string;
-    note?: string;
-    profile?: string;
-    meta?: any;
+    id: number;
+    battlerName: string;
+    characterIndex: number;
+    characterName: string;
+    classId: number;
+    equips: number[];
+    faceIndex: number;
+    faceName: string;
+    traits: IDataTrait[];
+    initialLevel: number;
+    maxLevel: number;
+    name: string;
+    nickname: string;
+    note: string;
+    profile: string;
+    meta: any;
 }
 
 declare interface IDataClass

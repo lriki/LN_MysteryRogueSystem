@@ -14,19 +14,9 @@ import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
 import { buildAppearanceTable, buildFloorTable, DLand, DLand_Default } from "./DLand";
-import { LActivity } from "ts/objects/activities/LActivity";
-import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
-import { LPickActivity } from "ts/objects/activities/LPickActivity";
-import { LWaveActivity } from "ts/objects/activities/LWaveActivity";
-import { LPutActivity } from "ts/objects/activities/LPutActivity";
-import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
-import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivity";
-import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
-import { LBackwardFloorActivity } from 'ts/objects/activities/LBackwardFloorActivity';
 import { RE_Data_Actor } from './DActor';
 
 
@@ -162,39 +152,39 @@ export class REDataManager
 
         // Actions
         DBasics.actions = {
-            DirectionChangeActionId: REData.addAction("DirectionChange", "LDirectionChangeActivity", () => new LDirectionChangeActivity()),
-            MoveToAdjacentActionId: REData.addAction("MoveToAdjacent", "LMoveAdjacentActivity", () => new LMoveAdjacentActivity()),
+            DirectionChangeActionId: REData.addAction("DirectionChange", "LDirectionChangeActivity"),
+            MoveToAdjacentActionId: REData.addAction("MoveToAdjacent", "LMoveAdjacentActivity"),
             //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
-            PickActionId: REData.addAction("Pick", "LPickActivity", () => new LPickActivity()),
-            PutActionId: REData.addAction("置く", "LPutActivity", () => new LPutActivity()),
-            ExchangeActionId: REData.addAction("交換", "", undefined),//"Exchange"),
-            ThrowActionId: REData.addAction("投げる", "LThrowActivity", () => new LThrowActivity()),
-            FlungActionId: REData.addAction("Flung", "", undefined),
-            ShootingActionId: REData.addAction("Shooting", "", undefined),
-            CollideActionId: REData.addAction("Collide", "", undefined),
-            AffectActionId: REData.addAction("Affect", "", undefined),
-            RollActionId: REData.addAction("Roll", "", undefined),
-            FallActionId: REData.addAction("Fall", "", undefined),
-            DropActionId: REData.addAction("Drop", "", undefined),
-            StepOnActionId: REData.addAction("StepOn", "", undefined),
-            TrashActionId: REData.addAction("Trash", "", undefined),
-            ForwardFloorActionId: REData.addAction("すすむ", "LForwardFloorActivity", () => new LForwardFloorActivity()),
-            BackwardFloorActionId: REData.addAction("戻る", "LBackwardFloorActivity", () => new LBackwardFloorActivity()),
+            PickActionId: REData.addAction("Pick", "LPickActivity"),
+            PutActionId: REData.addAction("置く", "LPutActivity"),
+            ExchangeActionId: REData.addAction("交換", ""),//"Exchange"),
+            ThrowActionId: REData.addAction("投げる", "LThrowActivity"),
+            FlungActionId: REData.addAction("Flung", ""),
+            ShootingActionId: REData.addAction("Shooting", ""),
+            CollideActionId: REData.addAction("Collide", ""),
+            AffectActionId: REData.addAction("Affect", ""),
+            RollActionId: REData.addAction("Roll", "",),
+            FallActionId: REData.addAction("Fall", ""),
+            DropActionId: REData.addAction("Drop", ""),
+            StepOnActionId: REData.addAction("StepOn", ""),
+            TrashActionId: REData.addAction("Trash", ""),
+            ForwardFloorActionId: REData.addAction("すすむ", "LForwardFloorActivity"),
+            BackwardFloorActionId: REData.addAction("戻る", "LBackwardFloorActivity"),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
-            EquipActionId: REData.addAction("装備", "LEquipActivity", () => new LEquipActivity()),
-            EquipOffActionId: REData.addAction("EquipOff", "", undefined),
-            EatActionId: REData.addAction("Eat", "", undefined),
-            TakeActionId: REData.addAction("Take", "", undefined),
-            BiteActionId: REData.addAction("Bite", "", undefined),
-            ReadActionId: REData.addAction("Read", "", undefined),
-            WaveActionId: REData.addAction("Wave", "LWaveActivity", () => new LWaveActivity()),
-            PushActionId: REData.addAction("Push", "", undefined),
-            PutInActionId: REData.addAction("PickIn","",  undefined),
-            PickOutActionId: REData.addAction("PickOut", "", undefined),
-            IdentifyActionId: REData.addAction("Identify", "", undefined),
+            EquipActionId: REData.addAction("装備", "LEquipActivity"),
+            EquipOffActionId: REData.addAction("EquipOff", ""),
+            EatActionId: REData.addAction("Eat", ""),
+            TakeActionId: REData.addAction("Take", ""),
+            BiteActionId: REData.addAction("Bite", ""),
+            ReadActionId: REData.addAction("Read", "",),
+            WaveActionId: REData.addAction("Wave", "LWaveActivity"),
+            PushActionId: REData.addAction("Push", ""),
+            PutInActionId: REData.addAction("PickIn",""),
+            PickOutActionId: REData.addAction("PickOut", ""),
+            IdentifyActionId: REData.addAction("Identify", ""),
             //passItem: REData.addAction("PassItem"),
-            AttackActionId: REData.addAction("Attack", "", undefined),
+            AttackActionId: REData.addAction("Attack", ""),
         };
         
         // Attributes

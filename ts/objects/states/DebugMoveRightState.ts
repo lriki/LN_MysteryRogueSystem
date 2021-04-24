@@ -1,13 +1,12 @@
 import { REGame } from "ts/objects/REGame";
-import { DecisionPhase } from "ts/objects/behaviors/LBehavior";
+import { DecisionPhase, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "ts/objects/LEntity";
-import { REResponse, SPhaseResult } from "ts/system/RECommand";
+import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
-export class LDebugMoveRightState extends LStateTraitBehavior {
+export class LDebugMoveRightState extends LBehavior {
 
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
