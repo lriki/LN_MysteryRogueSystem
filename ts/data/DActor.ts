@@ -8,8 +8,7 @@ type DActorId = number;
  * ツクールの Actor とほぼ同義で、そこからインポートして使う。
  * ただし、必ずしも味方であるとは限らない。
  */
-export interface RE_Data_Actor
-{
+export class RE_Data_Actor {
     /** ID (0 is Invalid). */
     id: DActorId;
 
@@ -30,15 +29,24 @@ export interface RE_Data_Actor
     initialLevel: number;
 
     traits: IDataTrait[];
-}
 
-export const DActor_Default: RE_Data_Actor = {
-    id: 0,
-    name: "null",
-    //initialFloorId: 0,
-    initialX: 0,
-    initialY: 0,
-    classId: 0,
-    initialLevel: 0,
-    traits: [],
+
+    actionCommands: DActorId[];
+
+    constructor(id: DActorId) {
+        this.id = id;
+        this.name = "null";
+        this.initialX = 0;
+        this.initialY = 0;
+        this.classId = 0;
+        this.initialLevel = 0;
+        this.traits = [];
+        this.actionCommands = [];
+    }
+
+    public setup(rmmzActor: IDataActor) {
+        this.classId = rmmzActor.classId;
+        this.initialLevel = rmmzActor.initialLevel;
+        this.traits = rmmzActor.traits;
+    }
 }

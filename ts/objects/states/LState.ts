@@ -6,11 +6,11 @@ import { RESystem } from "ts/system/RESystem";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
+import { LBehavior } from "../behaviors/LBehavior";
 import { LStateTraitBehavior } from "./LStateTraitBehavior";
 import { LGenericRMMZStateBehavior } from "./LGenericRMMZStateBehavior";
 import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { LMap } from "../LMap";
-import { LBehavior } from "../behaviors/LBehavior";
 
 export type LStateId = LObjectId;
 

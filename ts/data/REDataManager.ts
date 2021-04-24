@@ -27,6 +27,7 @@ import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { LBackwardFloorActivity } from 'ts/objects/activities/LBackwardFloorActivity';
+import { RE_Data_Actor } from './DActor';
 
 
 declare global {  
@@ -360,14 +361,11 @@ export class REDataManager
         });
 
         // Import Actors
+        REData.actors = [];
         $dataActors.forEach(x => {
-            if (x) {
-                const id = REData.addActor(x.name ?? "null");
-                const actor = REData.actors[id];
-                actor.classId = x.classId ?? 0;
-                actor.initialLevel = x.initialLevel ?? 1;
-                actor.traits = x.traits ?? [];
-            }
+            const actor = new RE_Data_Actor(REData.actors.length);
+            REData.actors.push(actor);
+            if (x) actor.setup(x);
         });
 
         // Import Skills

@@ -67,9 +67,12 @@ export class VItemListDialog extends VSubDialog {
 
             // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
             // 実際に実行できる Action のリストができる。
-            const actorActions = this._actorEntity.queryActions();
-            const actualActions = itemEntity.queryReactions()
-                .filter(actionId => actorActions.includes(actionId))
+            const actions = this._actorEntity.queryActions();
+            const reactions = itemEntity.queryReactions();
+            console.log("actions", actions);
+            console.log("reactions", reactions);
+            const actualActions = reactions
+                .filter(actionId => actions.includes(actionId))
                 .sort();    // ID順にソート
             
             const self = this;

@@ -11,13 +11,13 @@ import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
-import { LActorBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
-import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
+import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
-import { LEatableBehavior } from "ts/objects/behaviors/items/LGrassItemBehavior";
+import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
+import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -26,7 +26,7 @@ interface SBehaviorFactoryEntry {
 };
 
 export class SBehaviorFactory {
-    public static _behaviorEntries: SBehaviorFactoryEntry[] = [
+    private static _behaviorEntries: SBehaviorFactoryEntry[] = [
         { fullName: "LCommonBehavior", friendlyName: "_Common", create: () => new LCommonBehavior() },
         { fullName: "REGame_DecisionBehavior", friendlyName: "_Decision", create: () => new REGame_DecisionBehavior() },
         { fullName: "REUnitBehavior", friendlyName: "_Unit", create: () => new REUnitBehavior() },
@@ -49,6 +49,7 @@ export class SBehaviorFactory {
         { fullName: "LKnockbackBehavior", friendlyName: "Knockback", create: () => new LKnockbackBehavior() },
     ];
     
+    
     public static attachBehaviors(entity: LEntity, names: string[]): void {
         names.forEach(name => {
             const b = this.createBehavior(name);
@@ -58,6 +59,7 @@ export class SBehaviorFactory {
                 throw new Error(`Behavior "${name}" that you tried to add to the entity "${entity._name}" is invalid.`);
         });
     }
+    
     
     public static createBehavior(name: string): LBehavior | undefined {
         const b = this.createBehaviorInstance(name);

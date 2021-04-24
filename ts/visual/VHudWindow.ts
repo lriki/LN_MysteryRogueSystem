@@ -1,6 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
-import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
+import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";

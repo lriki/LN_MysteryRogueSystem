@@ -6,7 +6,7 @@ import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior
 import { REUnitBehavior } from "../objects/behaviors/REUnitBehavior";
 import { TileShape } from "../objects/LBlock";
 import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
-import { LActorBehavior, LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
@@ -18,6 +18,8 @@ import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehav
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
 import { DEntity } from "ts/data/DEntity";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
+import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
+import { SBehaviorFactory } from "./SBehaviorFactory";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -47,7 +49,9 @@ export class SEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LItemBehavior, itemId);
-        e.addAbility(REData.abilities[1].id);  // TODO: Test
+        const item = REData.items[itemId];
+        SBehaviorFactory.attachBehaviors(e, item.entity.behaviors);
+        //e.addAbility(REData.abilities[1].id);  // TODO: Test
         return e;
     }
 

@@ -15,6 +15,10 @@ export class LStateTraitBehavior extends LBehavior {
     //    assert(this._ownerState);
     //    return this._ownerState;
     //}
+
+    constructor() {
+        super();
+    }
     
     public removeThisState(): void {
         this.ownerAs(LState)?.removeThisState();

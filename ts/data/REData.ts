@@ -15,7 +15,7 @@ import { RE_Data_Monster } from "./DEnemy";
 import { DAction, DActionId } from "./DAction";
 import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
-import { DActor_Default, RE_Data_Actor } from "./DActor";
+import { RE_Data_Actor } from "./DActor";
 import { DAbility, DAbilityId } from "./DAbility";
 import { DMonsterHouse } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
@@ -184,7 +184,6 @@ export class REData
         this.addClass("null");
 
         this.actors = [];
-        this.addActor("null");
 
         this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
         this.lands = [];
@@ -234,19 +233,6 @@ export class REData
         const newId = this.classes.length;
         this.classes.push({
             ...DClass_Default,
-            id: newId,
-            name: name,
-        });
-        return newId;
-    }
-
-    /**
-     * Add actor.
-     */
-    static addActor(name: string): number {
-        const newId = this.actors.length;
-        this.actors.push({
-            ...DActor_Default,
             id: newId,
             name: name,
         });
