@@ -238,6 +238,7 @@ export class LBehavior extends LObject {
 
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    //onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
 
 
 
