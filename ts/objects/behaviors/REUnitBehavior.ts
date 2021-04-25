@@ -20,6 +20,8 @@ import { LWaveActivity } from "../activities/LWaveActivity";
 import { LPutActivity } from "../activities/LPutActivity";
 import { LThrowActivity } from "../activities/LThrowActivity";
 import { LForwardFloorActivity } from "../activities/LForwardFloorActivity";
+import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
+import { SMessageBuilder } from "ts/system/SMessageBuilder";
 
 /**
  * 
@@ -147,7 +149,9 @@ export class REUnitBehavior extends LBehavior {
                         (responce: REResponse, itemEntity: LEntity, context: SCommandContext) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
-                            context.postMessage(tr("{0} は {1} をひろった", "LRIKI", REGame.identifyer.makeDisplayText(itemEntity)));
+                            
+                            const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(self), DescriptionHighlightLevel.UnitName);
+                            context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));
                         });
     
                 }
