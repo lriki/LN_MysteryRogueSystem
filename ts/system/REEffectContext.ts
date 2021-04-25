@@ -499,7 +499,7 @@ export class REEffectContext {
         result.makeSuccess();
 
         const paramResult = new LParamEffectResult();
-        paramResult.damag = value;
+        paramResult.damage = value;
         paramResult.drain = paramEffect.isDrain;
         result.paramEffects[paramEffect.paramId] = paramResult;
 

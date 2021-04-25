@@ -7,10 +7,11 @@ import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "../system/RESystem";
 import { SMessageBuilder } from "../system/SMessageBuilder";
 import { DBasics } from "ts/data/DBasics";
+import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class LParamEffectResult {
-    damag: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
+    damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
     drain: boolean = false;
 }
 
@@ -123,21 +124,29 @@ export class LEffectResult {
     // Window_BattleLog.prototype.displayActionResults
     public showResultMessages(context: SCommandContext, entity: LEntity): void {
 
-        const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+        const targetName = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
         
         if (this.missed) {
-            context.postMessage(tr2("外れた。"));
+            context.postMessage(tr2("TEST: 外れた。"));
         }
-        else if (this.hpAffected) {
+        else {
+            for (let i = 0; i < this.paramEffects.length; i++) {
+                context.postMessage(this.makeParamDamageText(targetName, i));
+            }
+        }
+        /*
+        else if (this.hpAffected && hpDamage >= 0) {
             
-            const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
-            const hpDamage = this.paramEffects[DBasics.params.hp].damag;
 
             {
                 const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
                 context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
             }
         }
+        else {
+
+        }
+        */
 
         // Game_Actor.prototype.showAddedStates
         {
@@ -162,6 +171,28 @@ export class LEffectResult {
         if (!this.success) {
             const m = "%1には効かなかった！";
             context.postMessage(m.format(name));
+        }
+    }
+
+    // Window_BattleLog.prototype.makeHpDamageText
+    private makeParamDamageText(targetName: string, paramId: DParameterId): string {
+        const paramResult = this.paramEffects[paramId];
+        const paramData = REData.parameters[paramId];
+        const damage = paramResult.damage;
+        const isActor = true;
+        let fmt;
+        if (damage > 0 && paramResult.drain) {
+            fmt = isActor ? TextManager.actorDrain : TextManager.enemyDrain;
+            return fmt.format(targetName, paramData.name, damage);
+        } else if (damage > 0) {
+            fmt = isActor ? TextManager.actorDamage : TextManager.enemyDamage;
+            return fmt.format(targetName, damage);
+        } else if (damage < 0) {
+            fmt = isActor ? TextManager.actorRecovery : TextManager.enemyRecovery;
+            return fmt.format(targetName, paramData.name, -damage);
+        } else {
+            fmt = isActor ? TextManager.actorNoDamage : TextManager.enemyNoDamage;
+            return fmt.format(targetName);
         }
     }
 }

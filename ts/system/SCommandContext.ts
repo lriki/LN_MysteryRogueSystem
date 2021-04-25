@@ -171,6 +171,8 @@ export class SCommandContext
     
     // 動きを伴わず、Animation だけ表示するのに使う。 Sequel 作るまでもないものとか。
     postAnimation(entity: LEntity, animationId: number, wait: boolean) {
+        if (animationId <= 0) return;
+
         const m1 = () => {
             Log.doCommand("Animation");
             this._sequelContext.addSequel(new SAnumationSequel(entity, animationId, wait));

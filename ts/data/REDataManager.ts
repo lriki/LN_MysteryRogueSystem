@@ -391,6 +391,7 @@ export class REDataManager
                 item.effect.specialEffects = x.effects ?? [];
                 item.scope = x.scope ?? DEffectScope.None;
                 item.entity = parseMetaToEntityProperties(x.meta);
+                item.animationId = x.animationId;
             }
         });
         REData.weaponDataIdOffset = REData.items.length;

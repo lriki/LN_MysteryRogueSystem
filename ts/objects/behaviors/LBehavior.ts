@@ -88,6 +88,11 @@ export const onCollideAction = Symbol("onCollideAction");
 
 
 /**
+ * 食べられた
+ */
+ export const onEatReaction = Symbol("onEatReaction");
+
+/**
  * (杖など) 振られた
  */
 export const onWaveReaction = Symbol("onWaveReaction");

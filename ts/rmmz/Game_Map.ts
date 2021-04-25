@@ -36,7 +36,10 @@ Game_Map.prototype.setup = function(mapId: number) {
         
         // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
         // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
-        this.events().forEach(e => e.setTransparent(true));
+        if (REDataManager.isLandMap(mapId)) {
+            this.events().forEach(e => e.setTransparent(true));
+        }
+
         $gamePlayer.hideFollowers();
 
 

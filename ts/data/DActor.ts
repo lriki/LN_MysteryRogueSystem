@@ -45,6 +45,7 @@ export class RE_Data_Actor {
     }
 
     public setup(rmmzActor: IDataActor) {
+        this.name = rmmzActor.name;
         this.classId = rmmzActor.classId;
         this.initialLevel = rmmzActor.initialLevel;
         this.traits = rmmzActor.traits;

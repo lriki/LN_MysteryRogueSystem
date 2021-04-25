@@ -18,6 +18,10 @@ import { DEntity } from "ts/data/DEntity";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
+import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
+import { DItem } from "ts/data/DItem";
+import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
+import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 //import { SBehaviorFactory } from "./internal";
 
 export class SEntityFactory {
@@ -31,6 +35,7 @@ export class SEntityFactory {
         e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
         e.addBehavior(LActorBehavior, actorId);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
+        e.addBehavior(LEaterBehavior);
         return e;
     }
 
@@ -51,6 +56,7 @@ export class SEntityFactory {
         const item = REData.items[itemId];
         SBehaviorFactory.attachBehaviors(e, item.entity.behaviors);
         //e.addAbility(REData.abilities[1].id);  // TODO: Test
+        this.setupDirectly_Item(e, item);
         return e;
     }
 
@@ -122,6 +128,16 @@ export class SEntityFactory {
         return entity;
     }
 
+    // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
+    // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
+    // そのためここで直定義して一通り作ってみた後、再検討する。
+    static setupDirectly_Item(entity: LEntity, data: DItem) {
+        switch (data.entity.key) {
+            case "kキュアリーフ":
+                entity.addBehavior(LItemBehavior_Grass1);
+                break;
+        }
+    }
 }
 
 

@@ -24,6 +24,8 @@ export interface DItem {
     iconIndex: number;
 
     scope: DEffectScope;
+
+    animationId: number;
     
     effect: DEffect;
 
@@ -44,6 +46,7 @@ export function DItem_Default(): DItem {
         name: "null",
         iconIndex: 0,
         scope: 0,
+        animationId: 0,
         effect: {
             ...DEffect_Default,
             parameterEffects: [],
