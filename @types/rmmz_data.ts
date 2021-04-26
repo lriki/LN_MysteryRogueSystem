@@ -334,8 +334,8 @@ declare interface IDataSystem
     startX?: number;
     startY?: number;
     switches?: string[];
-    terms?: {
-        basic?: string[];
+    terms: {
+        basic: string[];
         commands: string[];
         params: string[];
         messages: {

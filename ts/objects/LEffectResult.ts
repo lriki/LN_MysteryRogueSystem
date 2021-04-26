@@ -8,6 +8,7 @@ import { RESystem } from "../system/RESystem";
 import { SMessageBuilder } from "../system/SMessageBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { STextManager } from "ts/system/STextManager";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class LParamEffectResult {
@@ -182,16 +183,16 @@ export class LEffectResult {
         const isActor = true;
         let fmt;
         if (damage > 0 && paramResult.drain) {
-            fmt = isActor ? TextManager.actorDrain : TextManager.enemyDrain;
+            fmt = isActor ? STextManager.actorDrain : STextManager.enemyDrain;
             return fmt.format(targetName, paramData.name, damage);
         } else if (damage > 0) {
-            fmt = isActor ? TextManager.actorDamage : TextManager.enemyDamage;
+            fmt = isActor ? STextManager.actorDamage : STextManager.enemyDamage;
             return fmt.format(targetName, damage);
         } else if (damage < 0) {
-            fmt = isActor ? TextManager.actorRecovery : TextManager.enemyRecovery;
+            fmt = isActor ? STextManager.actorRecovery : STextManager.enemyRecovery;
             return fmt.format(targetName, paramData.name, -damage);
         } else {
-            fmt = isActor ? TextManager.actorNoDamage : TextManager.enemyNoDamage;
+            fmt = isActor ? STextManager.actorNoDamage : STextManager.enemyNoDamage;
             return fmt.format(targetName);
         }
     }

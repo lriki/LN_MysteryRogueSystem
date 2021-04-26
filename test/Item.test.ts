@@ -11,6 +11,8 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { REGameManager } from "ts/system/REGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
+import { DEntity } from "ts/data/DEntity";
+import { SActivityFactory } from "ts/system/SActivityFactory";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -73,4 +75,37 @@ test('PickAndPut', () => {
 
     // item1 はインベントリから外れている
     expect(inventory.entities.length).toBe(0);
+});
+
+test('Item.Eat', () => {
+    REGameManager.createGameObjects();
+
+    // actor1
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    actor1._name = "actor1";
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+
+    // アイテム作成
+    const entityData: DEntity = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const item1 = SEntityFactory.newEntity(entityData);
+
+    // インベントリに入れる
+    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+
+    TestEnv.performFloorTransfer();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // [食べる] Post
+    const activity = SActivityFactory.newActivity(DBasics.actions.EatActionId);
+    activity._setup(actor1, item1);
+    RESystem.dialogContext.postActivity(activity);
+    RESystem.dialogContext.closeDialog(true);
+    
+    // [食べる] 実行
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // 
+    expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(0);
+
 });
