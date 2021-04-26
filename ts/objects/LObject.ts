@@ -72,7 +72,7 @@ export class LObject {
     private readonly _objectType: LObjectType;
     private _objectId: LObjectId = LEntityId.makeEmpty();
     private _destroyed: boolean = false;
-    private _ownerObjectId: LObjectId = LEntityId.makeEmpty();
+    private _parentObjectId: LObjectId = LEntityId.makeEmpty();
     
     protected constructor(objectType: LObjectType) {
         this._objectType = objectType;
@@ -104,15 +104,15 @@ export class LObject {
         return false;
     }
 
-    public hasOwner(): boolean {
-        return this._ownerObjectId.hasAny();
+    public hasParent(): boolean {
+        return this._parentObjectId.hasAny();
     }
 
     public isGCReady(): boolean {
         // Unique Entity は削除されない
         if (this.isUnique()) return false;
         // 親から参照されているものは削除されない (明示的に除外されなければならない)
-        if (this.hasOwner()) return false;
+        if (this.hasParent()) return false;
         
         return true;
     }
@@ -123,17 +123,17 @@ export class LObject {
      * 
      * GC のタイミングで、owner がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
      */
-    public ownerObjectId(): LObjectId {
-        return this._ownerObjectId;
+    public parentObjectId(): LObjectId {
+        return this._parentObjectId;
     }
     
-    public ownerObject(): LObject {
-        return REGame.world.object(this._ownerObjectId);
+    public parentObject(): LObject {
+        return REGame.world.object(this._parentObjectId);
     }
 
-    public ownerAs<T extends LObject>(ctor: { new(...args: any[]): T }): T | undefined {
-        if (!this.hasOwner()) return undefined;
-        const obj = this.ownerObject();
+    public parentAs<T extends LObject>(ctor: { new(...args: any[]): T }): T | undefined {
+        if (!this.hasParent()) return undefined;
+        const obj = this.parentObject();
         if (obj instanceof ctor) {
             return obj as T;
         }
@@ -142,15 +142,15 @@ export class LObject {
         }
     }
 
-    public setOwner(owner: LObject): void {
-        assert(!this.hasOwner());
-        const ownerId = owner.__objectId();
+    public setParent(parent: LObject): void {
+        assert(!this.hasParent());
+        const ownerId = parent.__objectId();
         assert(ownerId.hasAny());     // ID を持たない親は設定できない
-        this._ownerObjectId = ownerId;
+        this._parentObjectId = ownerId;
     }
 
-    public clearOwner(): void {
-        this._ownerObjectId = LEntityId.makeEmpty();
+    public clearParent(): void {
+        this._parentObjectId = LEntityId.makeEmpty();
     }
     
     /** destroy が要求されているか */

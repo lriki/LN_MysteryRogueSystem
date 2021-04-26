@@ -23,7 +23,7 @@ export class SStateFactory {
         }
 
         for (const b of behabiors) {
-            b.setOwner(state);
+            b.setParent(state);
         }
         
         state._stateBehabiors = behabiors.map(x => x.id());

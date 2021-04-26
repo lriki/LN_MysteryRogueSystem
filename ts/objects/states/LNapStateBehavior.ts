@@ -45,7 +45,7 @@ export class LNapStateBehavior extends LBehavior {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
                 //this.removeThisState();
-                this.ownerAs(LState)?.removeThisState();
+                this.parentAs(LState)?.removeThisState();
             }
             this._hostileEnterd = false;
 

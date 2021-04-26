@@ -87,7 +87,7 @@ export class LState extends LObject {
     }
 
     public removeThisState(): void {
-        const entity = this.ownerAs(LEntity);
+        const entity = this.parentAs(LEntity);
         if (entity) {
             entity.removeState(this._stateId);
         }

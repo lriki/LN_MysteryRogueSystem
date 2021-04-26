@@ -295,7 +295,7 @@ export class LMap
         // floorId は外部で設定済みであることを前提とする。
         assert(entity.floorId == this.floorId());
         assert(entity.entityId().hasAny());
-        assert(!entity.hasOwner());
+        assert(!entity.hasParent());
 
         this._entityIds.push(entity.entityId());
         //entity.setOwnerMap(this);

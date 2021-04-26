@@ -40,7 +40,7 @@ export class LAbility extends LObject {
 
     public setup(abilityId: DAbilityId, owner: LEntity): void {
         this._abilityId = abilityId;
-        this.setOwner(owner);
+        this.setParent(owner);
         REGame.world._registerObject(this);
 
         // TODO: test
@@ -65,7 +65,7 @@ export class LAbility extends LObject {
 
     public onAttached(): void {
         this.behabiors().forEach(b => {
-            b.setOwner(this);
+            b.setParent(this);
             b.onAttached();
         });
     }

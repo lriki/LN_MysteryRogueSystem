@@ -214,8 +214,8 @@ export class LEntity extends LObject
     }
 
     parentEntity(): LEntity | undefined {
-        if (this.ownerObjectId().hasAny()) {
-            return REGame.world.entity(this.ownerObjectId());
+        if (this.parentObjectId().hasAny()) {
+            return REGame.world.entity(this.parentObjectId());
         }
         else {
             return undefined;
@@ -249,7 +249,7 @@ export class LEntity extends LObject
         assert(behavior.hasId());
         assert(this.entityId().hasAny());
         this._basicBehaviors.push(behavior.id());
-        behavior.setOwner(this);
+        behavior.setParent(this);
         behavior.onAttached();
         return behavior;
     }
@@ -295,7 +295,7 @@ export class LEntity extends LObject
         else {
             //const state = new LState(stateId);
             const state = SStateFactory.newState(stateId);
-            state.setOwner(this);
+            state.setParent(this);
             
             assert(state.hasId());
             this._states.push(state.id());
@@ -380,7 +380,7 @@ export class LEntity extends LObject
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
                 return behavior.onRemoveEntityFromWhereabouts(context, this);
             });
-            assert(this.ownerObjectId().index2() == 0);    // 何らか削除されているはず
+            assert(this.parentObjectId().index2() == 0);    // 何らか削除されているはず
             return response;
         }
         else if (this.floorId.hasAny()) {

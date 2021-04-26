@@ -188,7 +188,7 @@ export class SMapManager {
                 // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
                 // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
                 // それはここでは追加しない。
-                const isNoEnterd = !entity.hasOwner();
+                const isNoEnterd = !entity.hasParent();
 
                 // onLoadFixedMapEvents() によって既に追加されているものは対象外
                 if (entity.isAppearedOnMap()) continue;

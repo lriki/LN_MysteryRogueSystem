@@ -36,7 +36,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     private removeStatesAuto(): void {
         if (this.isStateExpired()) {
             //this.removeThisState();
-            this.ownerAs(LState)?.removeThisState();
+            this.parentAs(LState)?.removeThisState();
         }
     }
     
