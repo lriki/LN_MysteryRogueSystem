@@ -105,7 +105,6 @@ test('Item.Eat', () => {
     // [食べる] 実行
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    // 
+    // インベントリから消えていること。
     expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(0);
-
 });

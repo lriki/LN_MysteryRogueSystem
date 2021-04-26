@@ -95,6 +95,12 @@ export class LInventoryBehavior extends LBehavior {
         entity.clearParent();
     }
 
+    onRemoveChild(entity: LEntity): void {
+        if (this._entities.mutableRemove(x => x.equals(entity.entityId()))) {
+            entity.clearParent();
+        }
+    }
+
     onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {

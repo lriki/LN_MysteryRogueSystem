@@ -152,6 +152,13 @@ export class LObject {
     public clearParent(): void {
         this._parentObjectId = LEntityId.makeEmpty();
     }
+
+    public removeFromParent(): void {
+        if (this.hasParent()) {
+            this.parentObject().onRemoveChild(this);
+            assert(this._parentObjectId.isEmpty());
+        }
+    }
     
     /** destroy が要求されているか */
     public isDestroyed(): boolean {
@@ -163,6 +170,7 @@ export class LObject {
      */
     public destroy(): void {
         assert(!this.isUnique());
+        this.removeFromParent();
         this._destroyed = true;
     }
 
@@ -175,4 +183,7 @@ export class LObject {
         return [];
     }
 
+    protected onRemoveChild(obj: LObject): void {
+        throw new Error("Unreachable.");
+    }
 }

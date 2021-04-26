@@ -213,6 +213,14 @@ export class LEntity extends LObject
 
     }
 
+    protected onRemoveChild(obj: LObject): void {
+        if (obj instanceof LEntity) {
+            for (const b of this.basicBehaviors()) {
+                b.onRemoveChild(obj);
+            }
+        }
+    }
+    
     parentEntity(): LEntity | undefined {
         if (this.parentObjectId().hasAny()) {
             return REGame.world.entity(this.parentObjectId());

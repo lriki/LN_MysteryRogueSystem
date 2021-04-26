@@ -1,4 +1,5 @@
 
+import './objects/Extensions'
 import './rmmz/PrefabEvent';
 
 import './rmmz/DataManager';

@@ -1,3 +1,6 @@
+
+import "ts/objects/Extensions";
+
 export {};
 
 declare global {
