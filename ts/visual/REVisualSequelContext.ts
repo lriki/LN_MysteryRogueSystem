@@ -3,7 +3,7 @@ import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel, RESequelRun } from "ts/objects/REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
@@ -18,6 +18,7 @@ export class REVisualSequelContext {
     private _timeScale: number = 0;
     private _cuurentFinished: boolean = false;
     private _cancellationLocked : boolean = false;
+    private _currentSequel: SSequelUnit | undefined;
     private _currentVisualSequel: REVisualSequel | undefined;
     private _startPosition: Vector2 = new Vector2(0, 0);
     private _currentIdleSequelId: DSequelId = 0;
@@ -26,12 +27,17 @@ export class REVisualSequelContext {
     constructor(entityVisual: REVisual_Entity) {
         this._entityVisual = entityVisual;
     }
+
+    public sequel(): SSequelUnit {
+        assert(this._currentSequel);
+        return this._currentSequel;
+    }
     
-    frameCount(): number {
+    public frameCount(): number {
         return this._frameCount;
     }
     
-    timeScale(): number {
+    public timeScale(): number {
         return this._timeScale;
     }
     
@@ -100,7 +106,7 @@ export class REVisualSequelContext {
             if (this._currentClip < this._clip.sequels().length) {
                 const unit = this._clip.sequels()[this._currentClip];
                 if (unit instanceof SMotionSequel) {
-                    this._startSequel(unit.sequelId());
+                    this._startSequel(unit);
                     this._cancellationLocked = true;    // end() 必須にする
                     break;
                 }
@@ -121,10 +127,11 @@ export class REVisualSequelContext {
         }
     }
 
-    _startSequel(sequelId: DSequelId) {
+    _startSequel(sequel: SMotionSequel) {
         if (!REVisual.manager) throw new Error();
 
-        this._currentVisualSequel = REVisual.manager.createVisualSequel(sequelId);
+        this._currentSequel = sequel;
+        this._currentVisualSequel = REVisual.manager.createVisualSequel(sequel.sequelId());
         this._frameCount = 0;
         this._cancellationLocked = false;
         this._cuurentFinished = false;
@@ -173,7 +180,7 @@ export class REVisualSequelContext {
             if (this._currentIdleSequelId != id) {
                 this._currentIdleSequelId = id;
                 if (this._currentIdleSequelId != 0) {
-                    this._startSequel(id);
+                    this._startSequel(new SMotionSequel(this._entityVisual.entity(), id, undefined));
                 }
             }
         }

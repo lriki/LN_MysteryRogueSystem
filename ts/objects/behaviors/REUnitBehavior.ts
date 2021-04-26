@@ -114,7 +114,7 @@ export class REUnitBehavior extends LBehavior {
             const offset = Helpers.dirToTileOffset(activity.direction());
 
             const layer = self.queryProperty(RESystem.properties.homeLayer);
-            if (SMomementCommon.moveEntity(context, self, self.x + offset.x, self.y + offset.y, layer)) {
+            if (SMomementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする

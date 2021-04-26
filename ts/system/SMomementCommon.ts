@@ -224,7 +224,7 @@ export class SMomementCommon {
         return true;
     }
 
-    public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+    public static moveEntity(entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
         assert(entity.floorId == map.floorId());
 
@@ -240,7 +240,7 @@ export class SMomementCommon {
             entity.x = x;
             entity.y = y;
             newBlock.addEntity(toLayer, entity);
-            this._postLocate(context, entity, oldBlock, newBlock, map);
+            this._postLocate(entity, oldBlock, newBlock, map);
             return true;
         }
         else {
@@ -248,7 +248,30 @@ export class SMomementCommon {
         }
     }
     
-    private static _postLocate(context: SCommandContext, entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap) {
+    /**
+     * Entity の位置設定
+     * 
+     * - moveEntity() と異なり、移動可能判定を行わずに強制移動する。
+     * - マップ生成時の Entity 配置や、ワープ移動などで使用する。
+     * - 侵入判定を伴う。
+     */
+    public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
+        const map = REGame.map;
+        assert(entity.floorId == map.floorId());
+
+        const oldBlock = map.block(entity.x, entity.y);
+        const newBlock = map.block(x, y);
+        
+        const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
+
+        oldBlock.removeEntity(entity);
+        entity.x = x;
+        entity.y = y;
+        newBlock.addEntity(layer, entity);
+        this._postLocate(entity, oldBlock, newBlock, map);
+    }
+    
+    private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap) {
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }

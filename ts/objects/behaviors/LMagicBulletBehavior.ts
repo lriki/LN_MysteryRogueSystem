@@ -72,7 +72,7 @@ export class LMagicBulletBehavior extends LBehavior {
             }
         }
 
-        if (SMomementCommon.moveEntity(context, self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
+        if (SMomementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             // recall

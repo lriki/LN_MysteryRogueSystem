@@ -205,6 +205,7 @@ export class REDataManager
             idle: REData.addSequel("idle"),
             MoveSequel: REData.addSequel("Move"),
             blowMoveSequel: REData.addSequel("BlowMove"),
+            dropSequel: REData.addSequel("BlowMove"),
             attack: REData.addSequel("attack"),
             CollapseSequel: REData.addSequel("Collapse"),
             commonStopped: REData.addSequel("commonStopped"),

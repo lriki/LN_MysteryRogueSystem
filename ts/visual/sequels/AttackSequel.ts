@@ -8,7 +8,6 @@ import { REVisual_Entity } from "../REVisual_Entity";
 
 export class VAttackSequel extends REVisualSequel {
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
-        console.log("REVisual._syncCamera", REVisual._syncCamera);
         const entity = visual.entity();
         const offset = Helpers.dirToTileOffset(entity.dir);
 

@@ -435,6 +435,7 @@ export class LMap
      * moveEntity() と異なり、移動可能判定を行わずに強制移動する。
      * マップ生成時の Entity 配置や、ワープ移動などで使用する。
      */
+    // deprecated
     locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
         assert(entity.floorId == this.floorId());
 

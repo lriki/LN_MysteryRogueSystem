@@ -27,7 +27,6 @@ export class LItemBehavior_Grass1 extends LBehavior {
 
         context.postCall(() => {
             const result = effectContext.apply(target);
-            console.log("result", result);
             result.showResultMessages(context, target);
         });
 

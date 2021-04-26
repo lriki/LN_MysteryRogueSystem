@@ -11,10 +11,12 @@ import { LEntity } from "./LEntity";
 export class SSequelUnit {
     private _entity: LEntity;
     private _parallel: boolean;
+    private _args: any | undefined;
 
-    constructor(entity: LEntity, parallel: boolean) {
+    constructor(entity: LEntity, parallel: boolean, args: any | undefined) {
         this._entity = entity;
         this._parallel = parallel;
+        this._args = args;
     }
 
     entity(): LEntity {
@@ -24,13 +26,17 @@ export class SSequelUnit {
     isParallel(): boolean {
         return this._parallel;
     }
+
+    args(): any | undefined {
+        return this._args;
+    }
 }
 
 export class SMotionSequel extends SSequelUnit {
     private _sequelId: DSequelId;
 
-    constructor(entity: LEntity, sequelId: DSequelId) {
-        super(entity, REData.sequels[sequelId].parallel);
+    constructor(entity: LEntity, sequelId: DSequelId, args: any | undefined) {
+        super(entity, REData.sequels[sequelId].parallel, args);
         this._sequelId = sequelId;
     }
 
@@ -48,7 +54,7 @@ export class SAnumationSequel extends SSequelUnit {
     private _isWait: boolean;
 
     public constructor(entity: LEntity, anumationlId: number, wait: boolean) {
-        super(entity, !wait);   // wait するときは parallel にしない。してしまうと、直後に post したメッセージなどが先に進んでしまう。
+        super(entity, !wait, undefined);   // wait するときは parallel にしない。してしまうと、直後に post したメッセージなどが先に進んでしまう。
         this._anumationlId = anumationlId;
         this._isWait = wait;
     }

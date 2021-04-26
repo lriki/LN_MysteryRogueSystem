@@ -19,6 +19,7 @@ import { REData } from "ts/data/REData";
 import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
 import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
+import { VDropSequel } from "./sequels/VDropSequel";
 
 /**
  */
@@ -36,6 +37,7 @@ export class REVisual_Manager
         this._visualSequelFactory[RESystem.sequels.idle] = () => new VIdleSequel();
         this._visualSequelFactory[RESystem.sequels.MoveSequel] = () => new REVisualSequel_Move();
         this._visualSequelFactory[RESystem.sequels.blowMoveSequel] = () => new VBlowMoveSequel();
+        this._visualSequelFactory[RESystem.sequels.dropSequel] = () => new VDropSequel();
         this._visualSequelFactory[RESystem.sequels.attack] = () => new VAttackSequel();
         this._visualSequelFactory[RESystem.sequels.CollapseSequel] = () => new VCollapseSequel();
         this._visualSequelFactory[RESystem.sequels.commonStopped] = () => new VCommonStoppedSequel();

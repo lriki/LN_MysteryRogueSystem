@@ -79,7 +79,7 @@ export class LCommonBehavior extends LBehavior {
         //const args = (cmd.args() as REMoveToAdjacentArgs);
         const offset = Helpers.dirToTileOffset(this.blowDirection);
 
-        if (SMomementCommon.moveEntity(context, self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
+        if (SMomementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
@@ -94,7 +94,12 @@ export class LCommonBehavior extends LBehavior {
                 
             return REResponse.Succeeded;
         }
-        console.log("false");
+        else {
+            context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
+
+            // HomeLayer へ移動
+            SMomementCommon.locateEntity(self, self.x, self.y);
+        }
 
         return REResponse.Pass;
     }

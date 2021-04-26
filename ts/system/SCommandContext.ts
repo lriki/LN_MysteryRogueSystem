@@ -157,11 +157,11 @@ export class SCommandContext
         Log.postCommand("openDialog");
     }
 
-    postSequel(entity: LEntity, sequelId: number) {
+    postSequel(entity: LEntity, sequelId: number, args?: any) {
         assert(sequelId > 0);
         const m1 = () => {
             Log.doCommand("Sequel");
-            this._sequelContext.addSequel(new SMotionSequel(entity, sequelId));
+            this._sequelContext.addSequel(new SMotionSequel(entity, sequelId, args));
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
