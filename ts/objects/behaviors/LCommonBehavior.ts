@@ -85,8 +85,11 @@ export class LCommonBehavior extends LBehavior {
             common.blowMoveCount--;
         
             if (common.blowMoveCount <= 0) {
-                // TODO: 落下
+                // HomeLayer へ移動
+                SMomementCommon.locateEntity(self, self.x, self.y);
+                context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
                 this.clearKnockback();
+                // TODO: 落下
             }
             else {
                 context.post(self, self, undefined, onMoveAsProjectile);
@@ -95,10 +98,11 @@ export class LCommonBehavior extends LBehavior {
             return REResponse.Succeeded;
         }
         else {
-            context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
-
             // HomeLayer へ移動
             SMomementCommon.locateEntity(self, self.x, self.y);
+            context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
+            this.clearKnockback();
+            // TODO: 落下
         }
 
         return REResponse.Pass;

@@ -696,6 +696,12 @@ export class LEntity extends LObject
         return REGame.map.block(this.x, this.y)._roomId;
     }
 
+    public layer(): BlockLayerKind {
+        const r = REGame.map.block(this.x, this.y).findEntityLayerKind(this);
+        assert(r);
+        return r;
+    }
+
     /** 特定の座標を持っておらず、Floor へ進入中であるかどうか。Map がロードされた後、EntryPoint へ配置される状態。 */
     public isEnteringToFloor(): boolean {
         return this.x < 0;

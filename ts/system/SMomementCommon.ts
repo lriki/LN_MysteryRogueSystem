@@ -41,7 +41,15 @@ export class SMomementCommon {
      */
     public static reverseDir(d: number): number {
         return 10 - d;
-    };
+    }
+
+    /**
+     * 斜め方向であるかを判断する
+     */
+    public static isDiagonalMoving(d: number): boolean {
+        return (d % 2) != 0;
+    }
+
     
     /**
      * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
@@ -78,9 +86,7 @@ export class SMomementCommon {
         return true;
     }
 
-    public static isDiagonalMoving(d: number): boolean {
-        return (d % 2) != 0;
-    }
+
 
     // 2点間の距離 (到達に必要な移動ブロック数) を求める。
     // 斜め移動を許可している Block 単位の距離なので、マンハッタン距離やユークリッド距離とは違う点に注意。
