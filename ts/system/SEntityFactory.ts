@@ -22,6 +22,7 @@ import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
 import { DItem } from "ts/data/DItem";
 import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
+import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 //import { SBehaviorFactory } from "./internal";
 
 export class SEntityFactory {
@@ -29,6 +30,7 @@ export class SEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
+        e.addBehavior(LProjectableBehavior);
         e.addBehavior(REGame_DecisionBehavior);
         e.addBehavior(REUnitBehavior).setFactionId(REData.ActorDefaultFactionId);
         e.addBehavior(LInventoryBehavior);
@@ -43,6 +45,7 @@ export class SEntityFactory {
         const e = REGame.world.spawnEntity();
         e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
+        e.addBehavior(LProjectableBehavior);
         e.addBehavior(REGame_DecisionBehavior);
         e.addBehavior(REUnitBehavior).setFactionId(REData.EnemeyDefaultFactionId);
         e.addBehavior(LEnemyBehavior, monsterId);
@@ -52,6 +55,7 @@ export class SEntityFactory {
     static newItem(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
+        e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior, itemId);
         const item = REData.items[itemId];
         SBehaviorFactory.attachBehaviors(e, item.entity.behaviors);
@@ -63,6 +67,7 @@ export class SEntityFactory {
     static newEquipment(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
+        e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior, itemId);
         e.addBehavior(LEquipmentBehavior);
         return e;
@@ -71,6 +76,7 @@ export class SEntityFactory {
     static newTrap(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
+        e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior, itemId);
         e.addBehavior(LTrapBehavior);
         return e;
@@ -79,12 +85,14 @@ export class SEntityFactory {
     static newExitPoint(): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(REExitPointBehavior);
+        e.addBehavior(LProjectableBehavior);
         return e;
     }
 
     static newEntryPoint(): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LEntryPointBehavior);
+        e.addBehavior(LProjectableBehavior);
         return e;
     }
 

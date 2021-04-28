@@ -31,7 +31,8 @@ test('PickAndPut', () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newItem(REData.getItem("kItem_Herb").id);
+    const entityData: DEntity = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const item1 = SEntityFactory.newEntity(entityData);
     item1._name = "item1";
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
