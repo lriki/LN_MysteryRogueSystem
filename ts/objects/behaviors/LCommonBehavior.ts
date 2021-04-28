@@ -10,7 +10,7 @@ import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../LBlock";
 import { LEntity } from "../LEntity";
-import { CommandArgs, LBehavior, onMoveAsProjectile, onPrePickUpReaction, onPrePutReaction, onThrowReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onPrePickUpReaction, onPrePutReaction, onThrowReaction } from "./LBehavior";
 
 
 
@@ -76,10 +76,31 @@ export class LCommonBehavior extends LBehavior {
         assert(common);
         assert(this.blowDirection != 0);
         
+        /*
+        const hitTarget = REGame.map.block(self.x, self.y).aliveEntity(BlockLayerKind.Unit);
+        if (hitTarget) {
+
+            context.post(
+                hitTarget, self, undefined, onCollidePreReaction,
+                (response: REResponse, _: LEntity, context: SCommandContext) => {
+                    if (response == REResponse.Pass) {
+                        context.post(self, hitTarget, args, onCollideAction, () => {
+                        });
+                    }
+                });
+
+
+            return REResponse.Succeeded;
+        }
+        */
+
         //const args = (cmd.args() as REMoveToAdjacentArgs);
         const offset = Helpers.dirToTileOffset(this.blowDirection);
+        const tx = self.x + offset.x;
+        const ty = self.y + offset.y;
 
-        if (SMomementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
+
+        if (SMomementCommon.moveEntity(self, tx, ty, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;

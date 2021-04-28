@@ -112,3 +112,44 @@ test('Activity.Throw', () => {
     expect(item2.y).toBe(actor1.y + 1);
     expect(item2.layer()).toBe(BlockLayerKind.Ground);
 });
+
+/*
+test('Activity.ThrowAndCollide', () => {
+    REGameManager.createGameObjects();
+
+    // actor1
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    actor1._name = "actor1";
+    actor1.dir = 6; // 右を向く
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.performFloorTransfer();
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newMonster(1);
+    enemy1._name = "enemy1";
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+
+    // アイテムを作ってインベントリに入れる
+    const entityData: DEntity = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const item1 = SEntityFactory.newEntity(entityData);
+    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // [投げる] Post
+    const activity = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
+    activity._setup(actor1, item1);
+    RESystem.dialogContext.postActivity(activity);
+    RESystem.dialogContext.closeDialog(true);
+    
+    // [投げる] 実行
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // インベントリから消えていること。
+    expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(1);
+
+    // とりあえず、Actor 位置より右に落ちること。
+    expect(item1.x > 10).toBe(true);
+    expect(item1.layer()).toBe(BlockLayerKind.Ground);
+});
+*/

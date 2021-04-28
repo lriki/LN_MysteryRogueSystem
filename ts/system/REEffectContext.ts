@@ -304,7 +304,7 @@ export class REEffectContext {
     }
     
     // Game_Action.prototype.apply
-    apply(target: LEntity): LEffectResult {
+    public apply(target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
