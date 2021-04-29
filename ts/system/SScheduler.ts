@@ -164,12 +164,13 @@ export class SScheduler
                 if (!commandContext.isRecordingListEmpty()) {
                     commandContext._submit(); // swap
                 }
-
-                REGame.world._removeDestroyedObjects();
     
                 //m_commandContext->beginCommandChain();
                 this.stepSimulationInternal();
             }
+
+            REGame.world._removeDestroyedObjects();
+            
         }
 
         this._occupy = false;

@@ -1,9 +1,10 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
+import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { REEffectContext } from "ts/system/REEffectContext";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { CommandArgs, LBehavior, onEatReaction } from "../LBehavior";
+import { CommandArgs, LBehavior, onCollideAction, onEatReaction } from "../LBehavior";
 import { LItemBehavior } from "../LItemBehavior";
 
 /**
@@ -18,17 +19,7 @@ export class LItemBehavior_Grass1 extends LBehavior {
     
     [onEatReaction](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
-        const item = this.ownerEntity().getBehavior(LItemBehavior);
-        const itemData = item.itemData();
-        const target = args.sender;
-        const effectContext = new REEffectContext(self, itemData.scope, itemData.effect);
-
-        context.postAnimation(args.sender, itemData.animationId, true);
-
-        context.postCall(() => {
-            const result = effectContext.apply(target);
-            result.showResultMessages(context, target);
-        });
+        this.applyEffect(context, self, args.sender);
 
         // 食べられたので削除。
         // [かじる] も [食べる] の一部として考えるような場合は Entity が削除されることは無いので、
@@ -37,5 +28,38 @@ export class LItemBehavior_Grass1 extends LBehavior {
 
         return REResponse.Succeeded;
     }
+
+    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
+        const self = args.self;
+        
+        context.postDestroy(self);
+
+        this.applyEffect(context, self, args.sender);
+        
+        //const a = args.args as CollideActionArgs;
+
+        console.log("LItemBehavior_Grass1.onCollideAction", args);
+
+        //LProjectableBehavior.startMoveAsProjectile(context, args.sender, a.dir, 5);
+        
+
+        return REResponse.Succeeded;
+    }
+    
+    private applyEffect(context: SCommandContext, self: LEntity, target: LEntity): void {
+
+        const item = this.ownerEntity().getBehavior(LItemBehavior);
+        const itemData = item.itemData();
+        const effectContext = new REEffectContext(self, itemData.scope, itemData.effect);
+
+        context.postAnimation(target, itemData.animationId, true);
+
+        context.postCall(() => {
+            const result = effectContext.apply(target);
+            result.showResultMessages(context, target);
+        });
+    }
+
+
 }
 

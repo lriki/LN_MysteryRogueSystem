@@ -1,4 +1,4 @@
-import { RECommand, REResponse } from "./RECommand";
+import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
 import { REDialog } from "./REDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
@@ -192,6 +192,20 @@ export class SCommandContext
         };
         this._recodingCommandList.push({ name: "WaitSequel", func: m1 });
         Log.postCommand("WaitSequel");
+    }
+
+    public postApplyEffect(target: LEntity, context: SCommandContext, effect: REEffectContext): void {
+        const m1 = () => {
+            for (const b of target.collectBehaviors()) {
+                const r = b.onApplyEffect(target, this, effect);
+                if (!checkContinuousResponse(r)) {
+                    return r;
+                }
+            }
+            return REResponse.Pass;
+        };
+        this._recodingCommandList.push({ name: "ApplyEffect", func: m1 });
+        Log.postCommand("ApplyEffect");
     }
 
     postDestroy(entity: LEntity) {

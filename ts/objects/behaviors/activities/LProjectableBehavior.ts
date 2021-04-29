@@ -11,7 +11,7 @@ import { REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMomementCommon } from "ts/system/SMomementCommon";
-import { CommandArgs, LBehavior, onMoveAsProjectile, onPreThrowReaction, onThrowReaction } from "../LBehavior";
+import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onPreThrowReaction, onThrowReaction } from "../LBehavior";
 import { LCommonBehavior } from "../LCommonBehavior";
 
 /**
@@ -28,6 +28,7 @@ export class LProjectableBehavior extends LBehavior {
     
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
+    //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
 
     public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, dir: number, distance: number): void {
         const common = entity.findBehavior(LProjectableBehavior);
@@ -36,6 +37,8 @@ export class LProjectableBehavior extends LBehavior {
         // 普通のアイテムは吹き飛ばし扱いで移動開始
         common.blowDirection = dir;
         common.blowMoveCount = distance;
+        //common.blowMoveCountMax = distance;
+        
         //entity.dir = args.sender.dir;
         
         context.post(entity, entity, undefined, onMoveAsProjectile);
@@ -82,23 +85,6 @@ export class LProjectableBehavior extends LBehavior {
         assert(common);
         assert(this.blowDirection != 0);
         
-        /*
-        const hitTarget = REGame.map.block(self.x, self.y).aliveEntity(BlockLayerKind.Unit);
-        if (hitTarget) {
-
-            context.post(
-                hitTarget, self, undefined, onCollidePreReaction,
-                (response: REResponse, _: LEntity, context: SCommandContext) => {
-                    if (response == REResponse.Pass) {
-                        context.post(self, hitTarget, args, onCollideAction, () => {
-                        });
-                    }
-                });
-
-
-            return REResponse.Succeeded;
-        }
-        */
 
         //const args = (cmd.args() as REMoveToAdjacentArgs);
         const offset = Helpers.dirToTileOffset(this.blowDirection);
@@ -110,6 +96,26 @@ export class LProjectableBehavior extends LBehavior {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
+
+
+
+            // 他 Unit との衝突判定
+            const hitTarget = REGame.map.block(tx, ty).aliveEntity(BlockLayerKind.Unit);
+            if (hitTarget) {
+                context.post(
+                    hitTarget, self, undefined, onCollidePreReaction,
+                    (response: REResponse, _: LEntity, context: SCommandContext) => {
+                        if (response == REResponse.Pass) {
+                            context.post(self, hitTarget, args, onCollideAction, () => {
+                            });
+                        }
+                    });
+
+                return REResponse.Succeeded;
+            }
+        
+
+
         
             if (common.blowMoveCount <= 0) {
                 // HomeLayer へ移動

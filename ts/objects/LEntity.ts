@@ -598,6 +598,7 @@ export class LEntity extends LObject
     }
 
 
+    /*
     public static _iterationHelper_ProcessPhase<TObject extends LObject>(objects: readonly TObject[], func: (x: LBehavior) => SPhaseResult): SPhaseResult | undefined {
         for (let iObject = objects.length - 1; iObject >= 0; iObject--) {
             const r = LEntity._iterateBehavior<SPhaseResult>(objects[iObject].behaviorIds(), func, r => r == SPhaseResult.Pass);
@@ -605,6 +606,7 @@ export class LEntity extends LObject
         }
         return SPhaseResult.Pass;
     }
+    */
 
     
     public iterateBehaviors(func: (b: LBehavior) => void): void {

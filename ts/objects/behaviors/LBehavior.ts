@@ -90,7 +90,7 @@ export const onCollideAction = Symbol("onCollideAction");
 /**
  * 食べられた
  */
- export const onEatReaction = Symbol("onEatReaction");
+export const onEatReaction = Symbol("onEatReaction");
 
 /**
  * (杖など) 振られた
@@ -100,12 +100,12 @@ export const onWaveReaction = Symbol("onWaveReaction");
 /**
  * (階段など) 進まれた
  */
- export const onProceedFloorReaction = Symbol("onProceedFloorReaction");
+export const onProceedFloorReaction = Symbol("onProceedFloorReaction");
 
 /**
  * 攻撃された
  */
- export const onAttackReaction = Symbol("onAttackReaction");
+export const onAttackReaction = Symbol("onAttackReaction");
 
 
 export interface CollideActionArgs {
@@ -251,13 +251,13 @@ export class LBehavior extends LObject {
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
     //onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    onApplyEffect(self: LEntity, context: SCommandContext, effect: REEffectContext): REResponse { return REResponse.Pass; }
 
 
 
 
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {}
     onCollectTraits(result: IDataTrait[]): void { }
-    onApplyEffect(context: REEffectContext): REResponse { return REResponse.Pass; }
 
     /** 1行動消費単位の終了時点 */
     onTurnEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
