@@ -70,12 +70,12 @@ export class VItemListDialog extends VSubDialog {
             // 実際に実行できる Action のリストができる。
             const actions = this._actorEntity.queryActions();
             const reactions = itemEntity.queryReactions();
-            console.log("actions", actions);
-            console.log("reactions", reactions);
             const actualActions = reactions
                 .filter(actionId => actions.includes(actionId))
+                .distinct()
                 .sort();    // ID順にソート
             
+            console.log("actualActions", actualActions);
             const self = this;
             this._commandWindow.setActionList2(actualActions.map(actionId => {
                 return {

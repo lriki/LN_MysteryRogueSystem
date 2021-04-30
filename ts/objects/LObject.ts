@@ -58,6 +58,7 @@ export enum LObjectType {
     State,
     Ability,
     Behavior,
+    Map,
 }
 
 /**
@@ -143,7 +144,13 @@ export class LObject {
     }
 
     public setParent(parent: LObject): void {
-        assert(!this.hasParent());
+        if (this.hasParent()) {
+            console.error("this", this);
+            console.error("current parent", this.parentObject());
+            console.error("new parent", parent);
+            assert(!this.hasParent());
+        }
+
         const ownerId = parent.__objectId();
         assert(ownerId.hasAny());     // ID を持たない親は設定できない
         this._parentObjectId = ownerId;

@@ -242,7 +242,7 @@ export class SMomementCommon {
         const newBlock = map.block(x, y);
 
         if (this.checkPassageBlockToBlock(entity, oldBlock, newBlock, toLayer)) {
-            oldBlock.removeEntity(entity);
+            assert(oldBlock.removeEntity(entity));
             entity.x = x;
             entity.y = y;
             newBlock.addEntity(toLayer, entity);

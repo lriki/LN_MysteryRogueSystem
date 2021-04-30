@@ -130,11 +130,6 @@ export class SScheduler
             if (dialogContext._hasDialogModel()) {
                 dialogContext._update();
 
-                const entity = dialogContext.causeEntity();
-                if (entity) {
-                    entity.immediatelyAfterAdjacentMoving = false;
-                }
-
                 if (dialogContext._hasDialogModel()) {
                     // Dialog 表示中は後続コマンドを実行しない
                     break;
@@ -143,6 +138,11 @@ export class SScheduler
                     // update() で Dialog が Close された。
                     // すぐに post されたコマンドの実行を始める。
                     // こうしておかないと、移動 Sequel 開始までに 1Frame 空いてしまうため、一瞬遅延してみえてしまう。
+
+                    const entity = dialogContext.causeEntity();
+                    if (entity) {
+                        entity.immediatelyAfterAdjacentMoving = false;
+                    }
                 }
             }
 
@@ -164,13 +164,11 @@ export class SScheduler
                 if (!commandContext.isRecordingListEmpty()) {
                     commandContext._submit(); // swap
                 }
+                
+                REGame.world._removeDestroyedObjects();
     
-                //m_commandContext->beginCommandChain();
                 this.stepSimulationInternal();
             }
-
-            REGame.world._removeDestroyedObjects();
-            
         }
 
         this._occupy = false;

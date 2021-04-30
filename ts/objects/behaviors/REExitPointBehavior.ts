@@ -44,7 +44,7 @@ export class REExitPointBehavior extends LBehavior {
     [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): REResponse {
         const entity = args.self;
 
-        context.openDialog(entity, new REEventExecutionDialog(entity.rmmzEventId));
+        context.openDialog(entity, new REEventExecutionDialog(entity.rmmzEventId), false);
 
         return REResponse.Succeeded;
     }

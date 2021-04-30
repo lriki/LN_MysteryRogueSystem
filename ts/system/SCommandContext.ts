@@ -33,6 +33,7 @@ export class SCommandContext
     private _visualAnimationWaiting: boolean = false;   // 不要かも
     private _recodingCommandList: RECCMessage[] = [];
     private _runningCommandList: RECCMessage[] = [];
+    private _afterChainCommandList: RECCMessage[] = [];
     private _messageIndex: number = 0;
     private _lastActorResponce: REResponse = REResponse.Pass;
     private _lastReactorResponce: REResponse = REResponse.Pass;
@@ -137,7 +138,7 @@ export class SCommandContext
         return undefined;
     }
 
-    openDialog(causeEntity: LEntity, dialogModel: REDialog): void {
+    openDialog(causeEntity: LEntity, dialogModel: REDialog, afterChain: boolean): void {
         const m1 = () => {
             Log.doCommand("OpenDialog");
             
@@ -153,7 +154,11 @@ export class SCommandContext
 
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "openDialog", func: m1 });
+
+        if (afterChain)
+            this._afterChainCommandList.push({ name: "openDialog", func: m1 });
+        else
+            this._recodingCommandList.push({ name: "openDialog", func: m1 });
         Log.postCommand("openDialog");
     }
 
@@ -338,7 +343,7 @@ export class SCommandContext
     }
     
     isRunning(): boolean {
-        return this._messageIndex < this._runningCommandList.length || this._recodingCommandList.length != 0;
+        return this._messageIndex < this._runningCommandList.length || this._recodingCommandList.length != 0 || this._afterChainCommandList.length != 0;
     }
 
     isRecordingListEmpty(): boolean {
@@ -374,7 +379,7 @@ export class SCommandContext
 
     _processCommand() {
         if (this._messageIndex >= this._runningCommandList.length) {
-            if (this._recodingCommandList.length > 0) {
+            if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
                 this._submit();
             }
         }
@@ -403,7 +408,7 @@ export class SCommandContext
             Log.d("<<<<[End CommandChain]");
 
             // CommandChain 中に post されたものがあれば、続けて swap して実行開始してみる
-            if (this._recodingCommandList.length > 0) {
+            if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
                 this._submit();
             }
         }
@@ -424,6 +429,11 @@ export class SCommandContext
             Log.d(">>>>[Start CommandChain]");
             this._commandChainRunning = true;
             //this.dumpCommands();
+        }
+        else if (this._afterChainCommandList.length > 0) {
+            [this._runningCommandList, this._afterChainCommandList] = [this._afterChainCommandList, this._runningCommandList];
+            this._afterChainCommandList.splice(0);
+            this._commandChainRunning = true;
         }
     }
 

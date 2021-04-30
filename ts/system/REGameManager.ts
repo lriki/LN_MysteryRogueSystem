@@ -70,6 +70,9 @@ export class REGameManager
         REGame.eventServer = new LEventServer();
         REGame.floorDirector = new LFloorDirector();
 
+        
+        REGame.world._registerObject(REGame.map);
+
         // Create unique units
         REData.actors.forEach(x => {
             if (x.id > 0) {

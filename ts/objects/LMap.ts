@@ -9,7 +9,7 @@ import { RESequelSet } from "./REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DFloorInfo, DLand } from "ts/data/DLand";
-import { LEntityId } from "./LObject";
+import { LEntityId, LObject, LObjectType } from "./LObject";
 import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { DBasics } from "ts/data/DBasics";
@@ -53,7 +53,7 @@ export interface RE_Game_Data
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
-export class LMap
+export class LMap extends LObject
 {
     private _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;
@@ -66,6 +66,11 @@ export class LMap
 
 
     constructor() {
+        super(LObjectType.Map);
+    }
+    
+    public isGCReady(): boolean {
+        return false;   // 自動削除しない
     }
 
     setup(floorId: LFloorId, mapData: FMap) {
@@ -298,7 +303,7 @@ export class LMap
         assert(!entity.hasParent());
 
         this._entityIds.push(entity.entityId());
-        //entity.setOwnerMap(this);
+        entity.setParent(this);
 
         RESystem.integration.onEntityEnteredMap(entity);
     }
@@ -312,7 +317,7 @@ export class LMap
      */
     appearEntity(entity: LEntity, x: number, y: number, layer?: BlockLayerKind): void {
         assert(entity.floorId.isEmpty());
-        entity.floorId= this.floorId();
+        entity.floorId = this.floorId();
         this.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
     }
@@ -362,10 +367,15 @@ export class LMap
         }
         
         entity.floorId = LFloorId.makeEmpty();
+        entity.clearParent();
         RESystem.integration.onEntityLeavedMap(entity);
     }
 
-
+    onRemoveChild(obj: LObject): void {
+        if (obj instanceof LEntity) {
+            this._removeEntity(obj);
+        }
+    }
 
 
 

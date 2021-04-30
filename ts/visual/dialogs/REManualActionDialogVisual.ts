@@ -133,9 +133,9 @@ export class VManualActionDialogVisual extends VMainDialog {
                 if (actions.includes(DBasics.actions.PickActionId)) {
                     // 歩行移動時に足元に拾えるものがあれば取得試行
                     context.postActivity(LPickActivity.make(entity));
-                    // 行動を消費せずに、一度 Dialog を終了する。
-                    // 終了しないと、post したコマンドチェーンがうごかない。
-                    this._model.close(false);
+
+                    // コマンドチェーンを動かす
+                    context.postReopen();
                 }
                 else {
                     this.openSubDialog(new VFeetDialog(targetEntity, actions));

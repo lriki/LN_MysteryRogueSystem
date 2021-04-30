@@ -4,6 +4,7 @@
 declare global {
     interface Array<T> {
         mutableRemove(predicate: (x: T) => boolean): boolean;
+        distinct(): Array<T>;
     }
 }
 
@@ -16,6 +17,10 @@ Array.prototype.mutableRemove = function<T>(predicate: (x: T) => boolean): boole
     else {
         return false;
     }
+}
+
+Array.prototype.distinct = function<T>(): Array<T> {
+    return Array.from(new Set(this));
 }
 
 export {}
