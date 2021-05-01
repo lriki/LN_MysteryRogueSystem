@@ -56,8 +56,7 @@ export class LItemBehavior_Grass1 extends LBehavior {
 
         // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
         context.postCall(() => {
-            const result = effectContext.apply(target);
-            result.showResultMessages(context, target);
+            effectContext.applyWithWorth(context, [target]);
         });
     }
 

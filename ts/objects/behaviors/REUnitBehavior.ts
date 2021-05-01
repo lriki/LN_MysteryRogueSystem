@@ -250,11 +250,9 @@ export class REUnitBehavior extends LBehavior {
         //const effectContext = cmd.effectContext();
         const effectContext: REEffectContext = args.args.effectContext;
         if (effectContext) {
-            const result = effectContext.apply(self);
+            effectContext.applyWithWorth(context, [self]);
             
-            console.log("result", result);
 
-            result.showResultMessages(context, self);
             /*
 
             const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);

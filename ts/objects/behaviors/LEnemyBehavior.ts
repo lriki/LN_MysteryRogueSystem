@@ -42,6 +42,11 @@ export class LEnemyBehavior extends LBattlerBehavior {
         return this.enemyData().idealParams[paramId];
     }
 
+    // Game_Enemy.prototype.exp
+    public exp(): number {
+        return this.enemyData().exp;
+    };
+
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.name)
             return this.enemyData().name;

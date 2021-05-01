@@ -72,8 +72,7 @@ export class LTrapBehavior extends LBehavior {
         // TODO: ここでラムダ式も post して apply したい。
 
         context.postCall(() => {
-            const result = effectContext.apply(target);
-            result.showResultMessages(context, target);
+            effectContext.applyWithWorth(context, [target]);
         });
 
 

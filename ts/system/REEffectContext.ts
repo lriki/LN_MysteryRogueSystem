@@ -11,6 +11,11 @@ import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
+import { SCommandContext } from "./SCommandContext";
+import { REGameManager } from "./REGameManager";
+import { SAIHelper } from "./SAIHelper";
+import { REGame } from "ts/objects/REGame";
 
 
 enum SParameterEffectApplyType {
@@ -295,11 +300,11 @@ export class REEffectContext {
 
     // 経験値など、報酬に関わるフィードバックを得る人。
     // 基本は effectors と同じだが、反射や投げ返しを行ったときは経験値を得る人が変わるため、その対応のために必要となる。
-    private _awarder: LEntity[] = [];
+    //private _awarder: LEntity[] = [];
 
     // 被適用側 (防御側) の関係者。AttackCommand を受け取ったときなど、ダメージ計算したい直前に構築する。
     // effectors と同じく、装備品なども含まれる。（サビなど修正値ダウンしたり、ひびが入ったり、燃えたりといった処理のため）
-    private _effectees: LEntity[] = [];
+    //private _effectees: LEntity[] = [];
 
     
     //private _targetEntity: REGame_Entity;
@@ -314,9 +319,44 @@ export class REEffectContext {
         //this._targetEntity = target;
         //this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
     }
+
+    public applyWithWorth(commandContext: SCommandContext, targets: LEntity[]): void {
+        let deadCount = 0;
+        let totalExp = 0;
+        for (const target of targets) {
+            const result = this.apply(target);
+            
+            result.showResultMessages(commandContext, target);
+
+            const battler = target.getBehavior(LBattlerBehavior);
+            if (battler.isDead()) {
+                deadCount++;
+                if (battler instanceof LEnemyBehavior) {
+                    totalExp += battler.exp();
+                }
+            }
+        }
+        
+
+        if (deadCount > 0) {
+            const awarder = this._effectorFact.subjectBehavior();
+            if (awarder) {
+                awarder.gainExp(totalExp)
+            }
+        }
+
+        if (totalExp > 0) {
+            const text = TextManager.obtainExp.format(totalExp, TextManager.exp);
+            commandContext.postMessage(text);
+        }
+
+        // "レベルが上がった！" など、subject 側の結果メッセージも表示しておく
+        const subject = this._effectorFact.subject();
+        subject._effectResult.showResultMessages(commandContext, subject);
+    }
     
     // Game_Action.prototype.apply
-    public apply(target: LEntity): LEffectResult {
+    private apply(target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -354,6 +394,16 @@ export class REEffectContext {
         }
         else {
             assert(0);
+        }
+
+
+        const focusedEntity = REGame.camera.focusedEntity();
+        const friendlySubject = focusedEntity ? Helpers.isFriend(this._effectorFact.subject(), focusedEntity) : false;
+        if (friendlySubject) {  // subject は味方
+            result.focusedFriendly = Helpers.isFriend(this._effectorFact.subject(), target);
+        }
+        else { // subject は味方以外 (敵・NPC)
+            result.focusedFriendly = true;  // 敵 vs 敵のときは、味方用のメッセージを表示したい ("ダメージを受けた！")
         }
 
         return result;

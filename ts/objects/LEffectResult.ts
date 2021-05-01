@@ -9,6 +9,8 @@ import { SMessageBuilder } from "../system/SMessageBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 import { STextManager } from "ts/system/STextManager";
+import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
+import { LActorBehavior } from "./behaviors/LActorBehavior";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class LParamEffectResult {
@@ -67,6 +69,11 @@ export class LEffectResult {
     this.removedBuffs = [];
     */
 
+    // 効果を受けたのは、Camera がフォーカスしている勢力に属する者であるか
+    focusedFriendly: boolean = true;
+
+    levelup: boolean = false;
+
     // Game_ActionResult.prototype.isHit
     isHit(): boolean {
         return this.used && !this.missed && !this.evaded;
@@ -86,6 +93,8 @@ export class LEffectResult {
         //this.addedBuffs = [];
         //this.addedDebuffs = [];
         //this.removedBuffs = [];
+        this.focusedFriendly = true;
+        this.levelup = false;
     }
 
     // Game_ActionResult.prototype.isStateAdded
@@ -149,29 +158,42 @@ export class LEffectResult {
         }
         */
 
+        const isActor = this.focusedFriendly;
+
         // Game_Actor.prototype.showAddedStates
         {
             for (const stateId of this.addedStates) {
                 const state = REData.states[stateId];
-                if (state.message1) {
-                    context.postMessage(state.message1.format(name));
-                }
+                const stateText = isActor ? state.message1 : state.message2;
+                context.postMessage(stateText.format(targetName));
             }
         }
         // Game_Actor.prototype.showRemovedStates
         {
             for (const stateId of this.removedStates) {
                 const state = REData.states[stateId];
-                if (state.message1) {
-                    context.postMessage(state.message1.format(name));
-                }
+                context.postMessage(state.message4.format(targetName));
             }
         }
 
         
         if (!this.success) {
             const m = "%1には効かなかった！";
-            context.postMessage(m.format(name));
+            context.postMessage(m.format(targetName));
+        }
+
+        console.log("this.levelup", this.levelup);
+
+        // Game_Actor.prototype.displayLevelUp
+        if (this.levelup) {
+            const battler = entity.getBehavior(LBattlerBehavior);
+            if (battler instanceof LActorBehavior) {
+                const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level);
+                context.postMessage(text);
+            }
+            else {
+                throw new Error("NotImplemented.");
+            }
         }
     }
 
@@ -180,7 +202,7 @@ export class LEffectResult {
         const paramResult = this.paramEffects[paramId];
         const paramData = REData.parameters[paramId];
         const damage = paramResult.damage;
-        const isActor = true;
+        const isActor = this.focusedFriendly;
         let fmt;
         if (damage > 0 && paramResult.drain) {
             fmt = isActor ? STextManager.actorDrain : STextManager.enemyDrain;
