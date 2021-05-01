@@ -14,6 +14,8 @@ import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SDebugHelpers } from "ts/system/SDebugHelpers";
+import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -113,8 +115,8 @@ test('Activity.Throw', () => {
     expect(item2.layer()).toBe(BlockLayerKind.Ground);
 });
 
-/*
-test('Activity.ThrowAndCollide', () => {
+
+test('Activity.ThrowAndHit', () => {
     REGameManager.createGameObjects();
 
     // actor1
@@ -128,6 +130,7 @@ test('Activity.ThrowAndCollide', () => {
     const enemy1 = SEntityFactory.newMonster(1);
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    SDebugHelpers.setHP(enemy1, 1); // HP1
 
     // アイテムを作ってインベントリに入れる
     const entityData: DEntity = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
@@ -145,11 +148,7 @@ test('Activity.ThrowAndCollide', () => {
     // [投げる] 実行
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    // インベントリから消えていること。
-    expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(1);
-
-    // とりあえず、Actor 位置より右に落ちること。
-    expect(item1.x > 10).toBe(true);
-    expect(item1.layer()).toBe(BlockLayerKind.Ground);
+    expect(enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });
-*/
+
+
