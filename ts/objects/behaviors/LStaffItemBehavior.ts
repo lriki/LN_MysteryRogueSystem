@@ -37,7 +37,7 @@ export class LStaffItemBehavior extends LBehavior {
         REGame.map.appearEntity(magicBullet, actor.x, actor.y);
         magicBullet.dir = actor.dir;
 
-        context.post(magicBullet, magicBullet, undefined, onMoveAsMagicBullet);
+        context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
 
         return REResponse.Succeeded;
     }

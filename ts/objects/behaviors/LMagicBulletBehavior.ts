@@ -44,15 +44,15 @@ export class LMagicBulletBehavior extends LBehavior {
                 self.destroy();
 
                 context.post(
-                    entity1, self, undefined, onCollidePreReaction,
+                    entity1, self, args.subject, undefined, onCollidePreReaction,
                     (response: REResponse, _: LEntity, context: SCommandContext) => {
                         if (response == REResponse.Pass) {
 
                             // reactor 側ではじかれていなかったので CollideAction を呼び出す
-                            const args: CollideActionArgs = {
+                            const args2: CollideActionArgs = {
                                 dir: dir,
                             };
-                            context.post(self, entity1, args, onCollideAction, () => {
+                            context.post(self, entity1, args.subject, args2, onCollideAction, () => {
                             });
                         }
                     });
@@ -76,7 +76,7 @@ export class LMagicBulletBehavior extends LBehavior {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             // recall
-            context.post(self, self, undefined, onMoveAsMagicBullet);
+            context.post(self, self, args.subject, undefined, onMoveAsMagicBullet);
 
             return REResponse.Succeeded;
         }
@@ -93,7 +93,7 @@ export class LMagicBulletBehavior extends LBehavior {
         const target = args.sender;
 
         // ownerItem の onCollideAction へ中継する
-        context.post(ownerItem, target, args.args, onCollideAction);
+        context.post(ownerItem, target, args.subject, args.args, onCollideAction);
 
         return REResponse.Succeeded;
     }

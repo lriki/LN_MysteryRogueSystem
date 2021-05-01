@@ -29,7 +29,7 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
-import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
+import { REEffectContext, SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
 import { RECommand, REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
@@ -48,8 +48,22 @@ export enum DecisionPhase {
 }
 
 export interface CommandArgs {
+    /** Behavior がアタッチされている Entity. */
     self: LEntity,
+
+    /** Command を Post した人 */
     sender: LEntity,
+    
+    /**
+     * 効果発動時に参照する subject. 経験値の取得者などを示す。
+     * 
+     * 1度のコマンドチェーンの中で複数回の攻撃とカウンターが互い違いに発生するケースでは
+     * 個々のコールツリーごとに subject を持ちまわる必要があるため、CommandContext 側で管理するのは難しい。
+     * そのため頑張って持ちまわる。
+     */
+    subject: SEffectSubject,
+    
+
     args: any,
 };
 

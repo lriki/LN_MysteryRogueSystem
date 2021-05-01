@@ -4,7 +4,7 @@ import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
 import { SAnumationSequel, SMotionSequel, SSequelUnit } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
-import { REEffectContext } from "./REEffectContext";
+import { REEffectContext, SEffectorFact, SEffectSubject } from "./REEffectContext";
 import { LBlock } from "../objects/LBlock";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
@@ -85,12 +85,12 @@ export class SCommandContext
     // TODO: sender っていうのがすごくわかりづらい。
     // target と sender は基本的に self で同一なのでそうして、
     // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
-    post<TSym extends symbol>(target: LEntity, sender: LEntity, args: any, symbol: TSym, result?: CommandResultCallback): void {
+    post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): void {
         const m1 = () => {
             const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
                 const func = (behavior as any)[symbol];
                 if (func) {
-                    const args2: CommandArgs = { self: target, sender: sender, args: args };
+                    const args2: CommandArgs = { self: target, sender: sender, subject: subject, args: args };
                     const r1 = func.call(behavior, args2, this);
                     //if (r1 != REResponse.Pass) {
                         // 何らかの形でコマンドが処理された

@@ -8,6 +8,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { Helpers } from "ts/system/Helpers";
 import { REResponse } from "ts/system/RECommand";
+import { SEffectSubject } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMomementCommon } from "ts/system/SMomementCommon";
@@ -30,7 +31,7 @@ export class LProjectableBehavior extends LBehavior {
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
     //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
 
-    public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, dir: number, distance: number): void {
+    public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
         const common = entity.findBehavior(LProjectableBehavior);
         assert(common);
 
@@ -41,7 +42,7 @@ export class LProjectableBehavior extends LBehavior {
         
         //entity.dir = args.sender.dir;
         
-        context.post(entity, entity, undefined, onMoveAsProjectile);
+        context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
 
     private clearKnockback(): void {
@@ -71,7 +72,7 @@ export class LProjectableBehavior extends LBehavior {
         REGame.map.appearEntity(self, self.x, self.y, BlockLayerKind.Projectile);
 
 
-        LProjectableBehavior.startMoveAsProjectile(context, self, args.sender.dir, 5);
+        LProjectableBehavior.startMoveAsProjectile(context, self, args.subject, args.sender.dir, 5);
 
         
         return REResponse.Pass;
@@ -103,10 +104,10 @@ export class LProjectableBehavior extends LBehavior {
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(BlockLayerKind.Unit);
             if (hitTarget) {
                 context.post(
-                    hitTarget, self, undefined, onCollidePreReaction,
+                    hitTarget, self, args.subject, undefined, onCollidePreReaction,
                     (response: REResponse, _: LEntity, context: SCommandContext) => {
                         if (response == REResponse.Pass) {
-                            context.post(self, hitTarget, args, onCollideAction, () => {
+                            context.post(self, hitTarget, args.subject, args, onCollideAction, () => {
                             });
                         }
                     });
@@ -125,7 +126,7 @@ export class LProjectableBehavior extends LBehavior {
                 // TODO: 落下
             }
             else {
-                context.post(self, self, undefined, onMoveAsProjectile);
+                context.post(self, self, args.subject, undefined, onMoveAsProjectile);
             }
                 
             return REResponse.Succeeded;

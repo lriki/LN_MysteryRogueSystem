@@ -11,7 +11,7 @@ import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DActionId } from "ts/data/DAction";
 import { SMomementCommon } from "ts/system/SMomementCommon";
-import { REEffectContext } from "ts/system/REEffectContext";
+import { REEffectContext, SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
@@ -105,6 +105,8 @@ export class REUnitBehavior extends LBehavior {
     }
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+        const subject = new SEffectSubject(self);
+
         if (activity instanceof LDirectionChangeActivity) {
             self.dir = activity.direction();
             return REResponse.Succeeded;
@@ -128,7 +130,7 @@ export class REUnitBehavior extends LBehavior {
 
             const reactor = activity.object();
             if (reactor) {
-                context.post(reactor, self, undefined, onProceedFloorReaction);
+                context.post(reactor, self, subject, undefined, onProceedFloorReaction);
             }
 
         }
@@ -145,7 +147,7 @@ export class REUnitBehavior extends LBehavior {
                     const itemEntity = targetEntities[0];
     
                     context.post(
-                        itemEntity, self, undefined, onPrePickUpReaction,
+                        itemEntity, self, subject, undefined, onPrePickUpReaction,
                         (responce: REResponse, itemEntity: LEntity, context: SCommandContext) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
@@ -169,7 +171,7 @@ export class REUnitBehavior extends LBehavior {
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
                 context.post(
-                    itemEntity, self, undefined, onPrePickUpReaction,
+                    itemEntity, self, subject, undefined, onPrePickUpReaction,
                     (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                         inventory.removeEntity(reactor);
                         REGame.map.appearEntity(reactor, self.x, self.y);
@@ -192,7 +194,7 @@ export class REUnitBehavior extends LBehavior {
             //assert(inventory);
 
             context.post(
-                itemEntity, self, undefined, onPreThrowReaction,
+                itemEntity, self, subject, undefined, onPreThrowReaction,
                 (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                     if (responce == REResponse.Pass) {
                         itemEntity.callRemoveFromWhereabouts(context);
@@ -202,7 +204,7 @@ export class REUnitBehavior extends LBehavior {
 
 
                         context.post(
-                            itemEntity, self, undefined, onThrowReaction,
+                            itemEntity, self, subject, undefined, onThrowReaction,
                             (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                                 if (responce == REResponse.Pass) {
                                     context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
@@ -234,7 +236,7 @@ export class REUnitBehavior extends LBehavior {
             if (reactor) {
                 //context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
                 
-                context.post(reactor, self, undefined, onWaveReaction);
+                context.post(reactor, self, subject, undefined, onWaveReaction);
             }
             
             return REResponse.Succeeded;

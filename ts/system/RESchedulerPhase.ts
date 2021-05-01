@@ -8,6 +8,7 @@ import { REResponse, SPhaseResult } from "./RECommand";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 import { UnitInfo } from "ts/objects/LScheduler";
+import { SEffectorFact, SEffectSubject } from "./REEffectContext";
 
 
 
@@ -95,8 +96,8 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
             const reactor = layer.firstEntity();
             if (reactor) {
                 const c = RESystem.commandContext;
-                c.post(actor, reactor, undefined, onWalkedOnTopAction);
-                c.post(reactor, actor, undefined, onWalkedOnTopReaction);
+                c.post(actor, reactor, new SEffectSubject(actor), undefined, onWalkedOnTopAction);
+                c.post(reactor, actor, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
             }
             unit.behavior.clearFeetProcess();
         }

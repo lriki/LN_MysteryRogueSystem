@@ -8,6 +8,7 @@ import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { REDialog, REDialogContext } from "../system/REDialog";
+import { SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
 
 export class LWarehouseDialog extends REDialog {
     private _userEntityId: LEntityId;
@@ -32,20 +33,21 @@ export class LWarehouseDialog extends REDialog {
         const warehouse = this.warehouseEntity();
         const userInventory = user.getBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getBehavior(LInventoryBehavior);
+        const subject = new SEffectSubject(user);
 
         console.log("!!!!!  storeItems", items);
 
         items.forEach(item => {
             console.log("0");
             // Item を取り出せるか確認
-            RESystem.commandContext.post(user, user, item, testPickOutItem,
+            RESystem.commandContext.post(user, user, subject, item, testPickOutItem,
                 (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                     console.log("1");
                     if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
-                        RESystem.commandContext.post(warehouse, warehouse, item, testPutInItem,
+                        RESystem.commandContext.post(warehouse, warehouse, subject, item, testPutInItem,
                             (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                                 console.log("3");
                                 if (response != REResponse.Canceled) {
@@ -70,18 +72,19 @@ export class LWarehouseDialog extends REDialog {
         const warehouse = this.warehouseEntity();
         const userInventory = user.getBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getBehavior(LInventoryBehavior);
+        const subject = new SEffectSubject(user);
 
         items.forEach(item => {
             console.log("0");
             // Item を取り出せるか確認
-            RESystem.commandContext.post(warehouse, warehouse, item, testPickOutItem,
+            RESystem.commandContext.post(warehouse, warehouse, subject, item, testPickOutItem,
                 (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                     console.log("1");
                     if (response != REResponse.Canceled) {
                         console.log("2");
 
                         // Item を格納できるか確認
-                        RESystem.commandContext.post(user, user, item, testPutInItem,
+                        RESystem.commandContext.post(user, user, subject, item, testPutInItem,
                             (response: REResponse, reactor: LEntity, context: SCommandContext) => {
                                 console.log("3");
                                 if (response != REResponse.Canceled) {

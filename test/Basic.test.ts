@@ -31,10 +31,10 @@ const fs = require('fs');
     //this.initialize(...arguments);
 //}
 
-eval("function Game_Temp() { }");
+//eval("function Game_Temp() { }");
 
 
-var ss = Game_Temp;
+//var ss = Game_Temp;
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -54,7 +54,7 @@ class ActorAttr extends BattlerAttr {
 
 test('Basic1', () => {
     //const taa = aaa;
-    const t = Game_Temp;
+    //const t = Game_Temp;
     //const ac = new Game_Temp();
     //ac._destinationX = 1000;
 

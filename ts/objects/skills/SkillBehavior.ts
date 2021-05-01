@@ -4,7 +4,7 @@ import { REData } from "ts/data/REData";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "ts/system/Helpers";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { REEffectContext, SEffectorFact } from "ts/system/REEffectContext";
+import { REEffectContext, SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { onAttackReaction } from "../behaviors/LBehavior";
@@ -44,7 +44,8 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                     }
 
                     
-                    context.post(target, entity, {effectContext: effectContext}, onAttackReaction);
+                    // TODO: SEffectSubject はダミー
+                    context.post(target, entity, new SEffectSubject(entity), {effectContext: effectContext}, onAttackReaction);
 
                     //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                 }

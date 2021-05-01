@@ -5,7 +5,7 @@ export {};
 
 declare global {
     interface String {
-         format(...args: any[]): string;
+        format(...args: any[]): string;
     }
 }
 

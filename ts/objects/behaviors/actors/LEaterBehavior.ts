@@ -4,6 +4,7 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { LEatActivity } from "ts/objects/activities/LEatActivity";
 import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
+import { SEffectSubject } from "ts/system/REEffectContext";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LBehavior, onEatReaction } from "../LBehavior";
 
@@ -23,7 +24,7 @@ export class LEaterBehavior extends LBehavior {
 
             const reactor = activity.object();
             if (reactor) {
-                context.post(reactor, self, undefined, onEatReaction);
+                context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);
             }
             
             return REResponse.Succeeded;

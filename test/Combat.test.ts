@@ -8,6 +8,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 
 import "./Extension";
+import "./../ts/objects/Extensions";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 

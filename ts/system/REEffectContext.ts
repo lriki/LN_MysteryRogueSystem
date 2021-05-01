@@ -67,6 +67,18 @@ export class SParameterEffect {
     }
 }
 
+export class SEffectSubject {
+    private _entity: LEntity;
+
+    constructor(entity: LEntity) {
+        this._entity = entity;
+    }
+
+    public entity(): LEntity {
+        return this._entity;
+    }
+}
+
 // 攻撃側
 export class SEffectorFact {
     private _context: REEffectContext;
