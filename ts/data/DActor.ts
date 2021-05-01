@@ -28,6 +28,8 @@ export class RE_Data_Actor {
     
     initialLevel: number;
 
+    maxLevel: number;
+
     traits: IDataTrait[];
 
 
@@ -39,15 +41,17 @@ export class RE_Data_Actor {
         this.initialX = 0;
         this.initialY = 0;
         this.classId = 0;
+        this.maxLevel = 0;
         this.initialLevel = 0;
         this.traits = [];
         this.actionCommands = [];
     }
 
-    public setup(rmmzActor: IDataActor) {
-        this.name = rmmzActor.name;
-        this.classId = rmmzActor.classId;
-        this.initialLevel = rmmzActor.initialLevel;
-        this.traits = rmmzActor.traits;
+    public setup(data: IDataActor) {
+        this.name = data.name;
+        this.classId = data.classId;
+        this.initialLevel = data.initialLevel;
+        this.maxLevel = data.maxLevel;
+        this.traits = data.traits;
     }
 }

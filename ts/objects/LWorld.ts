@@ -9,6 +9,7 @@ import { LFloorId } from "./LFloorId";
 import { REData } from "ts/data/REData";
 import { LLand } from "./LLand";
 import { DLandId } from "ts/data/DLand";
+import { LParty, LPartyId } from "./LParty";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -20,6 +21,7 @@ export class LWorld
     private _behaviors: (LBehavior | undefined)[] = [];
     private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);
     private _lands: LLand[];
+    private _parties: (LParty | undefined)[];
 
     constructor() {
         this._objects = [undefined];   // [0] is dummy
@@ -29,6 +31,7 @@ export class LWorld
             land.setup_(x.id);
             return land;
         });
+        this._parties = [undefined];  // [0] is dummy
     }
     
     object(id: LObjectId): LObject {
@@ -100,6 +103,12 @@ export class LWorld
         return this._lands[landId];
     }
 
+    public party(partyId: LPartyId): LParty {
+        const p = this._parties[partyId];
+        assert(p);
+        return p;
+    }
+
     /**
      * 新しい Entity を World 内に生成する。
      * 
@@ -110,6 +119,20 @@ export class LWorld
         const entity = new LEntity();
         this._registerObject(entity);
         return entity;
+    }
+
+    public newParty(): LParty {
+        const party = new LParty();
+        const index = this._parties.findIndex((x, i) => i > 0 && x == undefined);
+        if (index < 0) {
+            party.setup(this._parties.length);
+            this._parties.push(party);
+        }
+        else {
+            party.setup(index);
+            this._parties[index] = party;
+        }
+        return party;
     }
 
     public _registerObject(obj: LObject): void {
@@ -224,6 +247,15 @@ export class LWorld
             }
 
         }
+
+        // Party
+        for (let i = 1; i < this._parties.length; i++) {
+            const party = this._parties[i];
+            if (party && party.isEmpty()) {
+                this._parties[i] = undefined;
+            }
+        }
+
     }
 
 }

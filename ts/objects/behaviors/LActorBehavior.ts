@@ -9,7 +9,7 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 
 /**
  */
- export class LActorBehavior extends LBattlerBehavior {
+export class LActorBehavior extends LBattlerBehavior {
     _actorId: number = 0;
     _classId: number = 0;
     _level: number = 0;
@@ -91,7 +91,17 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
     currentClass(): DClass {
         return REData.classes[this._classId];
     }
-    
+
+    // Game_Actor.prototype.maxLevel
+    private maxLevel() {
+        return this.actor().maxLevel;
+    };
+
+    // Game_Actor.prototype.isMaxLevel
+    private isMaxLevel() {
+        return this._level >= this.maxLevel();
+    };
+        
     // Game_Actor.prototype.initSkills
     initSkills(): void {
         throw new Error("Not implemented.");
@@ -123,6 +133,49 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
         this.releaseUnequippableItems(true);
         this.refresh();
         */
+    }
+
+    // Game_Actor.prototype.changeExp
+    private changeExp(exp: number): void {
+        this._exp[this._classId] = Math.max(exp, 0);
+        const lastLevel = this._level;
+        //const lastSkills = this.skills();
+        while (!this.isMaxLevel() && this.currentExp() >= this.nextLevelExp()) {
+            this.levelUp();
+        }
+        while (this.currentExp() < this.currentLevelExp()) {
+            this.levelDown();
+        }
+        //if (show && this._level > lastLevel) {
+        //    this.displayLevelUp(this.findNewSkills(lastSkills));
+        //}
+        this.refresh();
+    }
+
+    // Game_Actor.prototype.levelUp
+    private levelUp(): void {
+        this._level++;
+        //for (const learning of this.currentClass().learnings) {
+        //    if (learning.level === this._level) {
+        //        this.learnSkill(learning.skillId);
+        //    }
+        //}
+    }
+
+    // Game_Actor.prototype.levelDown
+    private levelDown(): void {
+        this._level--;
+    }
+    
+    // Game_Actor.prototype.gainExp
+    gainExp(exp: number): void {
+        const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
+        this.changeExp(newExp);
+    }
+
+    // Game_Actor.prototype.finalExpRate
+    private finalExpRate(): number {
+        return 1;
     }
 
     // Game_Actor.prototype.learnSkill

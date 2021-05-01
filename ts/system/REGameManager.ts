@@ -97,6 +97,10 @@ export class REGameManager
         }
         REGame.camera.focus(firstActor);
 
+        // 1 番 Actor を Party に入れる
+        const party = REGame.world.newParty();
+        party.addMember(firstActor);
+
         // この時点で移動しようとしてはならない。
         // RMMZ 側の Game_Player.performTransfer をフックする。
         assert(!REGame.camera.isFloorTransfering());

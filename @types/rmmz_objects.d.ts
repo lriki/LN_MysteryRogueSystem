@@ -4914,13 +4914,7 @@ declare class Game_Actor extends Game_Battler {
     /**
      * 
      */
-    new();
-
-    /**
-     * 
-     * @param actorId 
-     */
-    initialize(actorId: any): void;
+    constructor(actorId: any);
 
     /**
      * 

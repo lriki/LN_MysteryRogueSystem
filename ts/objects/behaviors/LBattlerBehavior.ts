@@ -290,6 +290,11 @@ export class LBattlerBehavior extends LBehavior {
     }
 
     //------------------------------------------------------------
+
+    
+    gainExp(exp: number): void {
+        throw new Error("Unreachable.");
+    }
     
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }

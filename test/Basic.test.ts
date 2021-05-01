@@ -17,6 +17,24 @@ import { LEntityId } from "ts/objects/LObject";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 
+//import "js/rmmz_objects.js"
+
+//var aaa = require("./../js/rmmz_objects.js");
+//(global as any).Game_Temp = aaa.Game_Temp;
+
+const fs = require('fs');
+//var ttttt = fs.readFileSync("./js/rmmz_objects.js").toString();
+//eval(ttttt);
+
+
+//function Game_Temp() {
+    //this.initialize(...arguments);
+//}
+
+eval("function Game_Temp() { }");
+
+
+var ss = Game_Temp;
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -35,6 +53,11 @@ class ActorAttr extends BattlerAttr {
 */
 
 test('Basic1', () => {
+    //const taa = aaa;
+    const t = Game_Temp;
+    //const ac = new Game_Temp();
+    //ac._destinationX = 1000;
+
     // NewGame.
     REGameManager.createGameObjects();
 

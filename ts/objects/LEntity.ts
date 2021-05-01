@@ -18,6 +18,8 @@ import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 import { SStateFactory } from "ts/system/SStateFactory";
+import { LParty, LPartyId } from "./LParty";
+import { LanguageServiceMode } from "typescript";
 
 enum BlockLayer
 {
@@ -72,6 +74,8 @@ export class LEntity extends LObject
     attrbutes: LAttribute[] = [];
 
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
+
+    _partyId: LPartyId = 0;
     
     //private _parentIsMap = false;
 
@@ -228,6 +232,17 @@ export class LEntity extends LObject
         else {
             return undefined;
         }
+    }
+
+    public partyId(): LPartyId {
+        return this._partyId;
+    }
+
+    public party(): LParty | undefined {
+        if (this._partyId == 0)
+            return undefined;
+        else
+            return REGame.world.party(this._partyId);
     }
 
     addAttribute(value: LAttribute) {
