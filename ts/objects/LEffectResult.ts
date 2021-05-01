@@ -177,10 +177,10 @@ export class LEffectResult {
         }
 
         
-        if (!this.success) {
-            const m = "%1には効かなかった！";
-            context.postMessage(m.format(targetName));
-        }
+        //if (!this.success) {
+        //    const m = "%1には効かなかった！";
+        //    context.postMessage(m.format(targetName));
+        //}
 
         console.log("this.levelup", this.levelup);
 

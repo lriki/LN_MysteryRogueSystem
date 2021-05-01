@@ -142,6 +142,7 @@ export class SEntityFactory {
     static setupDirectly_Item(entity: LEntity, data: DItem) {
         switch (data.entity.key) {
             case "kキュアリーフ":
+            case "kフレイムリーフ":
                 entity.addBehavior(LItemBehavior_Grass1);
                 break;
         }

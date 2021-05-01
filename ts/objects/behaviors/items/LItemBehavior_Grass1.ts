@@ -50,7 +50,7 @@ export class LItemBehavior_Grass1 extends LBehavior {
 
         const item = this.ownerEntity().getBehavior(LItemBehavior);
         const itemData = item.itemData();
-        const effectContext = new REEffectContext(self, itemData.scope, itemData.effect);
+        const effectContext = new REEffectContext(subject.entity(), itemData.scope, itemData.effect);
 
         context.postAnimation(target, itemData.animationId, true);
 
