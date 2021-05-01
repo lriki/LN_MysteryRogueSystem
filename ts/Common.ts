@@ -9,9 +9,9 @@ export function tr(text: string, ...keys: any[]): string {
     
     var result = text;
     for (var i = 0; i < keys.length; i++) { 
-      var pattern = "\\{" + i + "\\}"; 
-      var re = new RegExp(pattern, "g"); 
-      result = result.replace(re, keys[i]);
+        var pattern = "\\{" + i + "\\}"; 
+        var re = new RegExp(pattern, "g"); 
+        result = result.replace(re, keys[i]);
     }
     return result; 
 

@@ -55,3 +55,35 @@ test('DamageAndGameover', () => {
     // 遷移中。ツクール側で遷移処理が必要
     expect(REGame.camera.isFloorTransfering()).toBe(true);
 });
+
+test('Combat.DamageAndCollapse', () => {
+
+    //--------------------
+    // 準備
+    REGameManager.createGameObjects();
+
+    // actor1
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    actor1._name = "actor1";
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
+
+    // enemy1
+    const enemy1 = SEntityFactory.newMonster(1);
+    enemy1._name = "enemy1";
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
+    SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
+
+    TestEnv.performFloorTransfer();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // 右を向いて攻撃
+    const dialogContext = RESystem.dialogContext;
+    actor1.dir = 6;
+    dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack);
+    dialogContext.closeDialog(true);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(enemy1.isDestroyed()).toBe(true);    // 攻撃がヒットし、倒されていること。
+});

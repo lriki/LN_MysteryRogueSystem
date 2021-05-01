@@ -34,10 +34,10 @@ export class LWorld
         this._parties = [undefined];  // [0] is dummy
     }
     
-    object(id: LObjectId): LObject {
+    public object(id: LObjectId): LObject {
         const e = this._objects[id.index2()];
         if (e && e.__objectId().key2() == id.key2()) {
-            return e as LEntity;
+            return e;
         }
         else {
             if (!e) {
@@ -46,6 +46,16 @@ export class LWorld
             else {
                 throw new Error(`Destroyed entity. (id: [${id.index2()}, ${id.key2()}], actualy:[${e.__objectId().index2()}, ${e.__objectId().key2()}])`);
             }
+        }
+    }
+
+    public findObject(id: LObjectId): LObject | undefined {
+        const e = this._objects[id.index2()];
+        if (e && e.__objectId().key2() == id.key2()) {
+            return e;
+        }
+        else {
+            return undefined;
         }
     }
     
@@ -60,9 +70,9 @@ export class LWorld
     }
 
     public findEntity(id: LEntityId): LEntity | undefined {
-        const e = this.object(id);
-        if (e.objectType() == LObjectType.Entity)
-            return e as LEntity;
+        const obj = this.findObject(id);
+        if (obj && obj.objectType() == LObjectType.Entity)
+            return obj as LEntity;
         else
             return undefined;
     }
