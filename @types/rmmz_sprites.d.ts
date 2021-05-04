@@ -231,6 +231,11 @@ export class Sprite_Character extends Sprite {
 
     widthHeight(): number;
     patternHeight(): number;
+    patternWidth(): number;
+    patternHeight(): number;
+    characterBlockX(): number;
+    characterBlockY(): number;
+
 }
 
 

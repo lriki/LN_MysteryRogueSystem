@@ -305,7 +305,8 @@ export class Sprite extends PIXI.Sprite {
 
     bitmap: Bitmap;
     opacity: number;
-	_counter : number;
+    _counter : number;
+    z: number;
 
     constructor(bitmap: Bitmap | undefined);
 

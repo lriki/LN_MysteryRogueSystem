@@ -1,7 +1,12 @@
+import { REVisual } from 'ts/visual/REVisual';
+import { REVisual_Entity } from 'ts/visual/REVisual_Entity';
+import { VCharacterSpriteSet } from 'ts/visual/VCharacterSpriteSet';
 import { assert } from '../Common';
 
 declare global {
     interface Sprite_Character {
+        _spriteSet: VCharacterSpriteSet | undefined;
+
         // StateIcon 関係
         _stateIconSprite: Sprite;
         _stateIcons: number[];
@@ -12,6 +17,7 @@ declare global {
         isRECharacterExtinct(): boolean;
         endAllEffect(): void;
         removeREPrefabEventSprite(index: number): void;
+        findVisual(): REVisual_Entity | undefined;
     }
 }
 
@@ -60,6 +66,17 @@ const _Sprite_Character_update = Sprite_Character.prototype.update;
 Sprite_Character.prototype.update = function() {
     _Sprite_Character_update.call(this);
 
+    const visual = this.findVisual();
+    if (visual) {
+        if (!this._spriteSet) {
+            this._spriteSet = new VCharacterSpriteSet(this.parent as Spriteset_Map, this);
+        }
+    
+        if (this._spriteSet) {
+            this._spriteSet.update();
+        }
+    }
+
     // Update state icon
     {
         if (this._stateIcons.length > 0) {
@@ -87,4 +104,17 @@ Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
 
 Sprite_Character.prototype.endAllEffect = function() {
     // TODO: https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/EventReSpawn.js
+}
+
+Sprite_Character.prototype.findVisual = function(): REVisual_Entity | undefined {
+    if (!REVisual.entityVisualSet) return undefined;
+
+    const event = this._character;
+    if (event instanceof Game_Event) {
+        const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
+        return visual;
+    }
+    else {
+        return undefined;
+    }
 }
