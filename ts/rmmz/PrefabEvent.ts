@@ -148,6 +148,9 @@ Spriteset_Map.prototype.createCharacters = function() {
                 const event = (sprite._character as Game_Event);
                 const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
                 visual?._setSpriteIndex(index);
+                if (event instanceof Game_REPrefabEvent) {
+                    event.setSpritePrepared(true);
+                }
             }
         });
     }
@@ -191,7 +194,11 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
     // Visual と Sprite を関連付ける
     if (REVisual.entityVisualSet) {
         const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
-        visual?._setSpriteIndex(spriteIndex);
+        if (visual) {
+            assert(visual.rmmzSpriteIndex() == -1);
+            visual?._setSpriteIndex(spriteIndex);
+        }
+
     }
 };
 

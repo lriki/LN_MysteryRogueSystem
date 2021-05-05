@@ -13,7 +13,7 @@ declare global {
         setStateIcons(icons: number[]): void;
         
         // 動的イベント関係
-        _prefabSpriteIdRE: number;
+        //_prefabSpriteIdRE: number;
         isRECharacterExtinct(): boolean;
         endAllEffect(): void;
         removeREPrefabEventSprite(index: number): void;
