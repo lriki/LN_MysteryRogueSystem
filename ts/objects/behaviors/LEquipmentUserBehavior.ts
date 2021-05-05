@@ -17,6 +17,7 @@ import { LItemBehavior } from "./LItemBehavior";
 import { LEquipActivity } from "../activities/LEquipActivity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { LEquipOffActivity } from "../activities/LEquipOffActivity";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -92,6 +93,7 @@ NOTE:
     
     onQueryActions(actions: DActionId[]): DActionId[] {
         actions.push(DBasics.actions.EquipActionId);
+        actions.push(DBasics.actions.EquipOffActionId);
         return actions;
     }
 
@@ -143,6 +145,28 @@ NOTE:
             this.ownerEntity().refreshStatus();
 
             context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+            return REResponse.Succeeded;
+        }
+        else if (activity instanceof LEquipOffActivity) {
+            const itemEntity = activity.object();
+            let removed = false;
+            for (const part of this._parts) {
+                if (part) {
+                    for (let i = 0; i < part.itemEntityIds.length; i++) {
+                        if (part.itemEntityIds[i].equals(itemEntity.entityId())) {
+                            part.itemEntityIds[i] = LEntityId.makeEmpty();
+                            removed = true;
+                        }
+                    }
+                }
+            }
+            this._revisitonNumber++;
+            
+            if (removed)
+                context.postMessage(tr2("%1 をはずした。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+            else
+                context.postMessage(tr2("何も起こらなかった。"));
+
             return REResponse.Succeeded;
         }
         return REResponse.Pass;

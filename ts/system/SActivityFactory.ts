@@ -6,6 +6,7 @@ import { LBackwardFloorActivity } from "ts/objects/activities/LBackwardFloorActi
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LEatActivity } from "ts/objects/activities/LEatActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
+import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
 import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
@@ -36,6 +37,8 @@ export class SActivityFactory {
                 return new LBackwardFloorActivity();
             case DBasics.actions.EquipActionId:
                 return new LEquipActivity();
+            case DBasics.actions.EquipOffActionId:
+                return new LEquipOffActivity();
             case DBasics.actions.EatActionId:
                 return new LEatActivity();
             case DBasics.actions.WaveActionId:

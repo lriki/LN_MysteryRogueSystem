@@ -75,7 +75,16 @@ export class VItemListDialog extends VSubDialog {
                 .distinct()
                 .sort();    // ID順にソート
             
-            console.log("actualActions", actualActions);
+
+            // [装備] [はずす] チェック
+            {
+                const equipments = this._actorEntity.getBehavior(LEquipmentUserBehavior);
+                if (equipments.isEquipped(itemEntity))
+                    actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
+                else
+                    actualActions.mutableRemove(x => x == DBasics.actions.EquipOffActionId);  // [はずす] を除く
+            }
+
             const self = this;
             this._commandWindow.setActionList2(actualActions.map(actionId => {
                 return {

@@ -174,7 +174,7 @@ export class REDataManager
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
             EquipActionId: REData.addAction("装備", "LEquipActivity"),
-            EquipOffActionId: REData.addAction("EquipOff", ""),
+            EquipOffActionId: REData.addAction("はずす", "LEquipOffActivity"),
             EatActionId: REData.addAction("Eat", ""),
             TakeActionId: REData.addAction("Take", ""),
             BiteActionId: REData.addAction("Bite", ""),

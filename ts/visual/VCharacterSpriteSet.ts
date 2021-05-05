@@ -67,6 +67,18 @@ export class VCharacterSpriteSet {
                 const items = equipments.equippedItems();
 
                 // 装備中のアイテムリストとスプライト情報の配列サイズを揃えておく
+                while(this._sprites.length > items.length) {
+                    this._sprites[this._sprites.length - 1].sprite?.destroy();
+                    this._sprites.pop();
+                }
+                while(this._sprites.length < items.length) { 
+                    this._sprites.push({
+                        imageName: "",
+                        sprite: undefined,
+                        itemId: 0,
+                    });
+                 }
+                /*
                 for (let i = 0; i < items.length; i++) {
                     if (!this._sprites[i]) {
                         this._sprites[i] = {
@@ -76,13 +88,18 @@ export class VCharacterSpriteSet {
                         };
                     }
                 }
+                */
 
 
                 for (let i = 0; i < items.length; i++) {
+
+                    
                     const newImage = items[i].entity.equipmentImage.name;
                     const current = (i < this._sprites.length) ? this._sprites[i].imageName : "";
 
                     const spriteData = this._sprites[i];
+                    spriteData.itemId = items[i].id;
+
                     if (current != newImage) {
                         this._sprites[i].imageName = newImage;
                         if (!spriteData.sprite) {
@@ -109,9 +126,6 @@ export class VCharacterSpriteSet {
                 }
 
                 this._revisionNumber = equipments.revisitonNumber();
-
-                
-                console.log("refresh", this);
             }
 
             const pw = this._owner.patternWidth();

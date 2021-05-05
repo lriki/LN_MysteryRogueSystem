@@ -14,6 +14,7 @@ export class LEquipmentBehavior extends LBehavior {
     
     onQueryReactions(actions: DActionId[]): DActionId[] {
         actions.push(DBasics.actions.EquipActionId);
+        actions.push(DBasics.actions.EquipOffActionId);
         return actions;
     }
 }
