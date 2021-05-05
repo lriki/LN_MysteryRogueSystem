@@ -303,7 +303,7 @@ export type RGBA = [number, number, number, number];
  */
 export class Sprite extends PIXI.Sprite {
 
-    bitmap: Bitmap;
+    bitmap: Bitmap | undefined;
     opacity: number;
     _counter : number;
     z: number;

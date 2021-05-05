@@ -58,12 +58,19 @@ export class SEntityFactory {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior, itemId);
         const item = REData.items[itemId];
+
+        if (item.entity.kind == "Weapon" ||
+            item.entity.kind == "Shield") {
+            e.addBehavior(LEquipmentBehavior);
+        }
+
         SBehaviorFactory.attachBehaviors(e, item.entity.behaviors);
         //e.addAbility(REData.abilities[1].id);  // TODO: Test
         this.setupDirectly_Item(e, item);
         return e;
     }
 
+    /*
     static newEquipment(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
@@ -72,6 +79,7 @@ export class SEntityFactory {
         e.addBehavior(LEquipmentBehavior);
         return e;
     }
+    */
 
     static newTrap(itemId: number): LEntity {
         const e = REGame.world.spawnEntity();

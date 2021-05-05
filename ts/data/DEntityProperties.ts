@@ -1,4 +1,16 @@
 
+
+
+export enum DItemEquipmentSide {
+    Right,
+    Left,
+}
+
+export interface DItemEquipmentImage {
+    name: string;
+    side: DItemEquipmentSide;
+}
+
 export interface DEntityProperties {
     /** RE-Key */
     key: string;
@@ -9,6 +21,8 @@ export interface DEntityProperties {
     reactions: string[];
     abilities: string[];
     capacity?: string;
+    
+    equipmentImage: DItemEquipmentImage;
 }
 
 export function DEntityProperties_Default(): DEntityProperties {
@@ -20,6 +34,10 @@ export function DEntityProperties_Default(): DEntityProperties {
         reactions: [],
         abilities: [],
         capacity: undefined,
+        equipmentImage: {
+            name: "",
+            side: DItemEquipmentSide.Right,
+        }
     }
 }
 
@@ -33,6 +51,10 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
             reactions: [],
             abilities: [],
             capacity: meta["RE-Capacity"],
+            equipmentImage: {
+                name: "",
+                side: DItemEquipmentSide.Right,
+            }
         };
 
         const behaviors = meta["RE-Behavior"];
@@ -53,6 +75,22 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         const abilities = meta["RE-Ability"];
         if (abilities) {
             data.abilities = (abilities as string).split(";");
+        }
+
+        const equipmentImage = meta["RE-EquipmentImage"];
+        if (equipmentImage) {
+            const tokens = (equipmentImage as string).split(",");
+            data.equipmentImage.name = tokens[0];
+            switch (tokens[1].toLocaleLowerCase()) {
+                case "right":
+                    data.equipmentImage.side = DItemEquipmentSide.Right;
+                    break;
+                case "left":
+                    data.equipmentImage.side = DItemEquipmentSide.Left;
+                    break;
+                default:
+                    throw new Error(`Invalid token. (${tokens[1]})`);
+            }
         }
 
         return data;

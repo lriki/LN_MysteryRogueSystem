@@ -97,13 +97,13 @@ declare interface IDataSkill
 
 declare interface IDataAllItem
 {
-    id?: number;
+    id: number;
     description?: string;
-    name?: string;
-    note?: string;
-    iconIndex?: number;
-    price?: number;
-    meta?: any;
+    name: string;
+    note: string;
+    iconIndex: number;
+    price: number;
+    meta: any;
 }
 
 declare interface IDataItem extends IDataAllItem

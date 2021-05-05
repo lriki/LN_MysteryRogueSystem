@@ -161,7 +161,7 @@ export class VMessageLogWindow extends Window_Base {
         textState.height = this.lineHeight();//this.calcTextHeight(textState);
 
         const lineSprite = this.acquireLineSprite();
-        lineSprite.bitmap.clear();
+        lineSprite.bitmap?.clear();
         //lineSprite.bitmap.drawText(text, 0, 0, 100, 30, "left");
         lineSprite.x = 0;
         lineSprite.height = textState.height;
@@ -250,7 +250,10 @@ export class VMessageLogWindow extends Window_Base {
     processEscapeCharacter(code: string, textState: TextLineState) {
         switch (code) {
             case "C":   // override, textColor の対象を行 Sprite にする
-                textState.sprite.bitmap.textColor = ColorManager.textColor((this.obtainEscapeParam(textState)));
+                const bitmap = textState.sprite.bitmap;
+                if (bitmap) {
+                    bitmap.textColor = ColorManager.textColor((this.obtainEscapeParam(textState)));
+                }
                 break;
             case "$":
                 throw new Error("GoldWindow not supported.");
@@ -292,8 +295,9 @@ export class VMessageLogWindow extends Window_Base {
         const height = textState.height;
         const x = rtl ? textState.x - width : textState.x;
         const y = textState.y;
-        if (textState.drawing) {
-            textState.sprite.bitmap.drawText(text, x, y, width, height, "left");
+        const bitmap = textState.sprite.bitmap;
+        if (textState.drawing && bitmap) {
+            bitmap.drawText(text, x, y, width, height, "left");
         }
         textState.x += rtl ? -width : width;
         textState.buffer = this.createTextBuffer(rtl);
@@ -316,7 +320,7 @@ export class VMessageLogWindow extends Window_Base {
             const ph = ImageManager.iconHeight;
             const sx = (iconIndex % 16) * pw;
             const sy = Math.floor(iconIndex / 16) * ph;
-            textState.sprite.bitmap.blt(bitmap, sx, sy, pw, ph, x, y, pw, ph);
+            textState.sprite.bitmap?.blt(bitmap, sx, sy, pw, ph, x, y, pw, ph);
         }
         textState.x += ImageManager.iconWidth + 4;
     }
@@ -338,7 +342,7 @@ export class VMessageLogWindow extends Window_Base {
         if (this._lineSpriteCache.length > 0) {
             const sprite = this._lineSpriteCache.pop();
             assert(sprite);
-            sprite.bitmap.clear();
+            sprite.bitmap?.clear();
             return sprite;
         }
         else {

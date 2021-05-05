@@ -40,7 +40,7 @@ NOTE:
 */
     // index is DEquipmentPartId
     private _parts: SlotPart[] = [];
-    
+    private _revisitonNumber: number = 0;
 
     public isEquipped(item: LEntity): boolean {
         const entityId = item.entityId();
@@ -63,6 +63,10 @@ NOTE:
     
     public equippedItems(): DItem[] {
         return this.equippedItemEntities().map(x => x.getBehavior(LItemBehavior).itemData());
+    }
+
+    public revisitonNumber(): number {
+        return this._revisitonNumber;
     }
     
     onQueryProperty(propertyId: number): any {
@@ -115,8 +119,6 @@ NOTE:
             const inventory = self.getBehavior(LInventoryBehavior);
             //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);
 
-            console.log("itemParts", itemParts);
-            console.log("this._parts", this._parts);
 
             // 候補Part抽出
             // 腕輪2個装備できるときは 腕輪Part が2つとれる。
@@ -138,7 +140,6 @@ NOTE:
             }
 
 
-            console.log("refresssss");
             this.ownerEntity().refreshStatus();
 
             context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
@@ -175,6 +176,6 @@ NOTE:
         });
 
         this._parts = newParts;
-
+        this._revisitonNumber++;
     }
 }

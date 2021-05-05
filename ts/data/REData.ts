@@ -6,7 +6,7 @@ import { DState, DState_makeDefault } from "./DState";
 import { DSystem } from "./DSystem";
 import { DEffectHitType, DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
-import { DItem, DItem_Default } from "./DItem";
+import { DItem } from "./DItem";
 import { DLand, DLand_Default } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DStateTrait } from "./DStateTrait";
@@ -200,7 +200,6 @@ export class REData
         this.addSkill("null");
 
         this.items = [];
-        this.addItem("null");
 
         this.states = [DState_makeDefault()];
         this._attributeFactories = [() => new LAttribute()];
@@ -325,23 +324,6 @@ export class REData
         });
         return newId;
     }
-    
-    static addItem(name: string): number {
-        const newId = this.items.length;
-        this.items.push({
-            ...DItem_Default(),
-            id: newId,
-            name: name,
-            effect: {
-                critical: false,
-                successRate: 100,
-                hitType: DEffectHitType.Certain,
-                parameterEffects: [],
-                specialEffects: [],
-            },
-        });
-        return newId;
-    }
 
     static addSequel(name: string): number {
         const newId = this.sequels.length;
@@ -352,7 +334,6 @@ export class REData
         });
         return newId;
     }
-    
     
     static findItem(re_key: string): DItem | undefined {
         return this.items.find(x => x.entity.key == re_key);

@@ -18,6 +18,7 @@ import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
+import { DItem } from './DItem';
 
 
 declare global {  
@@ -378,11 +379,13 @@ export class REDataManager
         });
 
         // Import Item
+        REData.items = [];
         REData.itemDataIdOffset = REData.items.length;
         $dataItems.forEach(x => {
+            const item = new DItem(REData.items.length);
+            REData.items.push(item);
             if (x) {
-                const id = REData.addItem(x.name ?? "null");
-                const item = REData.items[id];
+                item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
                 if ((x.damage.type ?? 0) > 0) {
                     item.effect = this.makeEffect(x.damage);
@@ -397,32 +400,28 @@ export class REDataManager
         });
         REData.weaponDataIdOffset = REData.items.length;
         $dataWeapons.forEach(x => {
+            const item = new DItem(REData.items.length);
+            REData.items.push(item);
             if (x) {
-                const id = REData.addItem(x.name ?? "null");
-                const item = REData.items[id];
+                item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 item.entity = parseMetaToEntityProperties(x.meta);
-            }
-            else {
-                REData.addItem("null");
             }
         });
         REData.armorDataIdOffset = REData.items.length;
         $dataArmors.forEach(x => {
+            const item = new DItem(REData.items.length);
+            REData.items.push(item);
             if (x) {
-                const id = REData.addItem(x.name ?? "null");
-                const item = REData.items[id];
+                item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 item.entity = parseMetaToEntityProperties(x.meta);
-            }
-            else {
-                REData.addItem("null");
             }
         });
         RESystem.items = {
