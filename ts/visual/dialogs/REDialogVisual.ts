@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { REDialogContext } from "ts/system/SDialogContext";
+import { SDialogContext } from "ts/system/SDialogContext";
 import { VDialog } from "./VDialog";
 import { VMainDialog } from "./VMainDialog";
 import { VSubDialog } from "./VSubDialog";
@@ -85,7 +85,7 @@ export class REDialogVisualNavigator {
         this._nextScene = undefined;
     }
 
-    update(context: REDialogContext): void {
+    update(context: SDialogContext): void {
         this.changeScene();
         this.updateScene(context);
     }
@@ -107,7 +107,7 @@ export class REDialogVisualNavigator {
         }
     }
 
-    private updateScene(context: REDialogContext): void {
+    private updateScene(context: SDialogContext): void {
         if (this._scene) {
             this._scene.onUpdate();
             /*

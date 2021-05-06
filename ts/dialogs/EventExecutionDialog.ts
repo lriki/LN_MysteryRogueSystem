@@ -1,5 +1,5 @@
 import { REDialog } from "ts/system/REDialog";
-import { REDialogContext } from "ts/system/SDialogContext";
+import { SDialogContext } from "ts/system/SDialogContext";
 
 
 export class REEventExecutionDialog extends REDialog {
@@ -14,7 +14,7 @@ export class REEventExecutionDialog extends REDialog {
         return this._rmmzEventId;
     }
 
-    onUpdate(context: REDialogContext): void {
+    onUpdate(context: SDialogContext): void {
     }
 }
 

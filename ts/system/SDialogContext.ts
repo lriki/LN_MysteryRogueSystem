@@ -9,7 +9,7 @@ import { RESystem } from "./RESystem";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { REDialog } from "./REDialog";
 
-export class REDialogContext
+export class SDialogContext
 {
     private _commandContext: SCommandContext;
     private _causeEntity: LEntity | undefined;

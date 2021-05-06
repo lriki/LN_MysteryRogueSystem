@@ -21,7 +21,7 @@ import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
 import { VDropSequel } from "./sequels/VDropSequel";
 import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
 import { VMenuDialog } from "./dialogs/VMenuDialog";
-import { REDialogContext } from "ts/system/SDialogContext";
+import { SDialogContext } from "ts/system/SDialogContext";
 
 /**
  */
@@ -63,7 +63,7 @@ export class REVisual_Manager
         }
     }
 
-    openDialog(context: REDialogContext): void {
+    openDialog(context: SDialogContext): void {
         const d = context.dialog();
         if (d instanceof REManualActionDialog)
             this._dialogNavigator._openMainDialog(new VManualActionDialogVisual(d));
@@ -79,7 +79,7 @@ export class REVisual_Manager
         //return undefined;
     }
 
-    closeDialog(context: REDialogContext) {
+    closeDialog(context: SDialogContext) {
         this._dialogNavigator.clear();
         //if (this._dialogVisual) {
         //    this._dialogVisual.onClose();

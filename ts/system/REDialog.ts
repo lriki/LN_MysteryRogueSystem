@@ -1,5 +1,5 @@
 import { RESystem } from "./RESystem";
-import { REDialogContext } from "./SDialogContext";
+import { SDialogContext } from "./SDialogContext";
 
 
 /**
@@ -12,7 +12,7 @@ import { REDialogContext } from "./SDialogContext";
  */
 export class REDialog
 {
-    onUpdate(context: REDialogContext): void { }
+    onUpdate(context: SDialogContext): void { }
 
     public isVisualIntegration(): boolean {
         return true;

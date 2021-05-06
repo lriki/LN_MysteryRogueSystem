@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { REDialog } from "ts/system/REDialog";
-import { REDialogContext } from "ts/system/SDialogContext";
+import { SDialogContext } from "ts/system/SDialogContext";
 
 
 export class LCommandPlaybackDialog extends REDialog {
@@ -10,7 +10,7 @@ export class LCommandPlaybackDialog extends REDialog {
         return false;
     }
 
-    onUpdate(context: REDialogContext): void {
+    onUpdate(context: SDialogContext): void {
         console.log("LCommandPlaybackDialog update");
         assert(REGame.recorder.isPlayback());
         REGame.recorder.runPlaybackCommand(this);

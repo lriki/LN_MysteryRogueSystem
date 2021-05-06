@@ -144,9 +144,16 @@ Scene_Map.prototype.update = function() {
 const _Scene_Map_callMenu = Scene_Map.prototype.isMenuCalled;
 Scene_Map.prototype.callMenu = function() {
     if ($gameMap.isRMMZDefaultSystemMap()) {
+        // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
+    else if ($gameMap.isRESystemMap()) {
+        // REシステムマップ
+        this.menuCalling = false;
+    }
     else {
+        // REセーフティマップ
+        this.menuCalling = false;
         const actorEntity = REGame.camera.focusedEntity();
         assert(actorEntity);
         RESystem.commandContext.openDialog(actorEntity, new LMainMenuDialog(actorEntity), false);

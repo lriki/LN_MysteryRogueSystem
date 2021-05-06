@@ -13,7 +13,7 @@ import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChange
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
-import { REDialogContext } from "ts/system/SDialogContext";
+import { SDialogContext } from "ts/system/SDialogContext";
 
 enum UpdateMode {
     Normal,
@@ -158,7 +158,7 @@ export class VManualActionDialogVisual extends VMainDialog {
         
     }
 
-    private updateNormal(context: REDialogContext, entity: LEntity): void {
+    private updateNormal(context: SDialogContext, entity: LEntity): void {
         let dir = Input.dir8;
 
         if (Input.isPressed("pagedown")) {
@@ -222,7 +222,7 @@ export class VManualActionDialogVisual extends VMainDialog {
         }
     }
 
-    private updateDiagonalMoving(context: REDialogContext,entity: LEntity): void {
+    private updateDiagonalMoving(context: SDialogContext,entity: LEntity): void {
         assert(REVisual.entityVisualSet);
         assert(REVisual.spriteSet2);
         const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
@@ -242,7 +242,7 @@ export class VManualActionDialogVisual extends VMainDialog {
         }
     }
 
-    private attemptMoveEntity(context: REDialogContext, entity: LEntity, dir: number): boolean {
+    private attemptMoveEntity(context: SDialogContext, entity: LEntity, dir: number): boolean {
         if (this.isMoveButtonPressed() &&
             REGame.map.checkPassage(entity, dir)) {
 

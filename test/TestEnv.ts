@@ -18,7 +18,7 @@ import { assert } from 'ts/Common';
 import { DLandId } from 'ts/data/DLand';
 import { DStateId } from 'ts/data/DState';
 import { DPrefab, DPrefabId } from 'ts/data/DPrefab';
-import { REDialogContext } from 'ts/system/SDialogContext';
+import { SDialogContext } from 'ts/system/SDialogContext';
 
 declare global {
     interface Number {
@@ -208,15 +208,15 @@ export class TestEnvIntegration extends REIntegration {
         return false;
     }
 
-    onDialogOpend(context: REDialogContext): void {
+    onDialogOpend(context: SDialogContext): void {
         // Dialog の処理はテストコード内で行う
     }
 
-    onDialogClosed(context: REDialogContext): void {
+    onDialogClosed(context: SDialogContext): void {
         // Dialog の処理はテストコード内で行う
     }
 
-    onUpdateDialog(context: REDialogContext): void {
+    onUpdateDialog(context: SDialogContext): void {
         // Dialog の処理はテストコード内で行う
     }
 

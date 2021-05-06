@@ -2,7 +2,7 @@ import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
-import { REDialogContext } from "./SDialogContext";
+import { SDialogContext } from "./SDialogContext";
 
 export abstract class REIntegration {
     /**
@@ -22,12 +22,12 @@ export abstract class REIntegration {
     abstract onCheckVisualSequelRunning(): boolean;
     
     /** Dialog が開かれたとき。 */
-    abstract onDialogOpend(context: REDialogContext): void;
+    abstract onDialogOpend(context: SDialogContext): void;
 
-    abstract onUpdateDialog(context: REDialogContext): void;
+    abstract onUpdateDialog(context: SDialogContext): void;
 
     /** Dialog が閉じられたとき。 */
-    abstract onDialogClosed(context: REDialogContext): void;
+    abstract onDialogClosed(context: SDialogContext): void;
 
     /** Entity が Map 上に出現したとき。 */
     abstract onEntityEnteredMap(entity: LEntity): void;

@@ -31,7 +31,7 @@ import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
-import { REDialogContext } from "./SDialogContext";
+import { SDialogContext } from "./SDialogContext";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -53,7 +53,7 @@ export class REGameManager
     static createGameObjects(): void {
         RESystem.sequelContext = new SSequelContext();
         RESystem.commandContext = new SCommandContext(RESystem.sequelContext);
-        RESystem.dialogContext = new REDialogContext(RESystem.commandContext);
+        RESystem.dialogContext = new SDialogContext(RESystem.commandContext);
         RESystem.scheduler = new SScheduler();
         RESystem.minimapData = new SMinimapData();
         RESystem.mapManager = new SMapManager();

@@ -9,7 +9,7 @@ import { REVisual } from "../visual/REVisual";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { LMap } from "ts/objects/LMap";
 import { GameMapBuilder } from "./GameMapBuilder";
-import { REDialogContext } from "ts/system/SDialogContext";
+import { SDialogContext } from "ts/system/SDialogContext";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
@@ -58,11 +58,11 @@ export class RMMZIntegration extends REIntegration {
             return false;
     }
     
-    onDialogOpend(context: REDialogContext): void {
+    onDialogOpend(context: SDialogContext): void {
         REVisual.manager?.openDialog(context);
     }
     
-    onUpdateDialog(context: REDialogContext): void {
+    onUpdateDialog(context: SDialogContext): void {
         const manager = REVisual.manager;
         if (manager) {
             assert(!manager._dialogNavigator.isEmpty());
@@ -70,7 +70,7 @@ export class RMMZIntegration extends REIntegration {
         }
     }
 
-    onDialogClosed(context: REDialogContext): void {
+    onDialogClosed(context: SDialogContext): void {
         const manager = REVisual.manager;
         if (manager) {
             manager.closeDialog(context);
