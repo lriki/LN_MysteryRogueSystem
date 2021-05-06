@@ -44,17 +44,17 @@ NOTE:
 なので必要な任意のタイミングで refresh かけて、slot の変動に合わせて自動的につけ外しする仕組みが無いとダメそう。
 
 */
-    private _parts: SlotPart2[] = [];
+    private _slots: SlotPart2[] = [];
     private _revisitonNumber: number = 0;
 
     public isEquipped(item: LEntity): boolean {
         const entityId = item.entityId();
-        return this._parts.findIndex(part => part.itemEntityId.equals(entityId)) >= 0;
+        return this._slots.findIndex(part => part.itemEntityId.equals(entityId)) >= 0;
     }
 
     public equippedItemEntities(): LEntity[] {
         const result: LEntity[] = [];
-        for (const part of this._parts) {
+        for (const part of this._slots) {
             if (part.itemEntityId.hasAny()) {
                 result.push(REGame.world.entity(part.itemEntityId));
             }
@@ -123,11 +123,11 @@ NOTE:
 
 
             // まず空きが無いか調べてみる
-            let slot = this._parts.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
+            let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
 
             // 空きが無ければ交換対象を探す
             if (!slot) {
-                slot = this._parts.find(x => x.partId == itemPart);
+                slot = this._slots.find(x => x.partId == itemPart);
             }
 
             if (!slot) {
@@ -147,7 +147,7 @@ NOTE:
         else if (activity instanceof LEquipOffActivity) {
             const itemEntity = activity.object();
             let removed = false;
-            for (const slot of this._parts) {
+            for (const slot of this._slots) {
                 if (slot.itemEntityId.hasAny() && slot.itemEntityId.equals(itemEntity.entityId())) {
                     slot.itemEntityId = LEntityId.makeEmpty();
                     removed = true;
@@ -174,13 +174,13 @@ NOTE:
 
         // 古い Slot リストから新しい Slot リストへ、同一種類の Slot の Entity を上から順に詰め直す
         for (const newSlot of newSlots) {
-            const oldSlot = this._parts.find(x => x.partId == newSlot.partId && x.itemEntityId.hasAny());
+            const oldSlot = this._slots.find(x => x.partId == newSlot.partId && x.itemEntityId.hasAny());
             if (oldSlot) {
                 [newSlot.itemEntityId, oldSlot.itemEntityId] = [oldSlot.itemEntityId, newSlot.itemEntityId];
             }
         }
 
-        this._parts = newSlots;
+        this._slots = newSlots;
         this._revisitonNumber++;
     }
 }
