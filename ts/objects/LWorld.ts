@@ -247,8 +247,6 @@ export class LWorld
 
                     obj.onFinalize();
                     this._objects[i] = undefined;
-
-                    console.log("destroy", obj);
     
                     if (REGame.camera.focusedEntityId().equals(obj.__objectId())) {
                         REGame.camera.clearFocus();

@@ -18,6 +18,8 @@ export class STextManager {
         return ($dataSystem.terms.messages as any)[messageId] || "";
     }
 
+    public static get exp(): string { return this.basic(8); }
+    public static get obtainExp(): string { return this.message("obtainExp"); }
     public static get actorDamage(): string { return this.message("actorDamage"); }
     public static get actorRecovery(): string { return this.message("actorRecovery"); }
     public static get actorDrain(): string { return this.message("actorDrain"); }

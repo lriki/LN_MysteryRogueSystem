@@ -16,6 +16,7 @@ import { SCommandContext } from "./SCommandContext";
 import { REGameManager } from "./REGameManager";
 import { SAIHelper } from "./SAIHelper";
 import { REGame } from "ts/objects/REGame";
+import { STextManager } from "./STextManager";
 
 
 enum SParameterEffectApplyType {
@@ -346,7 +347,7 @@ export class REEffectContext {
         }
 
         if (totalExp > 0) {
-            const text = TextManager.obtainExp.format(totalExp, TextManager.exp);
+            const text = STextManager.obtainExp.format(totalExp, STextManager.exp);
             commandContext.postMessage(text);
         }
 
