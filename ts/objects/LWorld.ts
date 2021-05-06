@@ -78,7 +78,9 @@ export class LWorld
 
     public entity(id: LObjectId): LEntity {
         const e = this.findEntity(id);
-        if (!e) throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
+        if (!e) {
+            throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
+        }
         return e;
     }
 

@@ -197,7 +197,8 @@ export class REUnitBehavior extends LBehavior {
                 itemEntity, self, subject, undefined, onPreThrowReaction,
                 (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
                     if (responce == REResponse.Pass) {
-                        itemEntity.callRemoveFromWhereabouts(context);
+                        //itemEntity.callRemoveFromWhereabouts(context);
+                        itemEntity.removeFromParent();
 
                         itemEntity.x = self.x;
                         itemEntity.y = self.y;

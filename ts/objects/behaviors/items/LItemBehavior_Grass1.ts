@@ -38,8 +38,6 @@ export class LItemBehavior_Grass1 extends LBehavior {
         
         //const a = args.args as CollideActionArgs;
 
-        console.log("LItemBehavior_Grass1.onCollideAction", args);
-
         //LProjectableBehavior.startMoveAsProjectile(context, args.sender, a.dir, 5);
         
 

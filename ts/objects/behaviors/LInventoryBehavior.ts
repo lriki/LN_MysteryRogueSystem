@@ -89,7 +89,7 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     public removeEntity(entity: LEntity) {
-        assert(entity.parentEntity() == this.ownerEntity());
+        assert(entity.parentObject() == this);
 
         const id = entity.entityId();
         const index = this._entities.findIndex(x => x.equals(id));
@@ -105,6 +105,7 @@ export class LInventoryBehavior extends LBehavior {
         }
     }
 
+    /*
     onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {
@@ -116,6 +117,7 @@ export class LInventoryBehavior extends LBehavior {
 
         return REResponse.Pass;
     }
+    */
     
     // Game_Party.prototype.gold
     public gold(): number {

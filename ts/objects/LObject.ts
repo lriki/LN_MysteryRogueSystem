@@ -159,6 +159,12 @@ export class LObject {
         this._parentObjectId = LEntityId.makeEmpty();
     }
 
+    /**
+     * Entity が存在している場所から除外する。
+     * 
+     * 何らかの Inventory に入っているならそこから、Map 上に出現しているならその Map から除外する。
+     * 除外された UniqueEntity 以外の Entity は、そのターンの間にいずれかから参照を得ない場合 GC によって削除される。
+     */
     public removeFromParent(): void {
         if (this.hasParent()) {
             this.parentObject().onRemoveChild(this);

@@ -56,6 +56,15 @@ export class LState extends LObject {
         return this._stateBehabiors;
     }
 
+    /** 全ての Behavior を除外します。 */
+    public removeAllBehaviors(): void {
+        this.stateBehabiors().forEach(b => {
+            b.clearParent();
+            b.onDetached();
+            b.destroy();
+        });
+        this._stateBehabiors = [];
+    }
 
     //public ownerEntity(): LEntity {
     //    assert(this._ownerEntity);
@@ -79,11 +88,7 @@ export class LState extends LObject {
     }
 
     onDetached(): void {
-        this._stateBehabiors.forEach(b => {
-            const behavior = (REGame.world.behavior(b) as LBehavior);
-            behavior.onDetached();
-            behavior.destroy();
-        });
+        this.stateBehabiors();
     }
 
     public removeThisState(): void {

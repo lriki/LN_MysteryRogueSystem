@@ -206,12 +206,7 @@ export class LEntity extends LObject
         REGame.scheduler.invalidateEntity(this);
 
 
-
-        this.basicBehaviors().forEach(b => {
-            b.onDetached();
-            b.destroy();
-        });
-        this._basicBehaviors = [];
+        this.removeAllBehaviors();
         this.removeAllStates();
 
 
@@ -222,6 +217,15 @@ export class LEntity extends LObject
             for (const b of this.basicBehaviors()) {
                 b.onRemoveChild(obj);
             }
+        }
+        //else if (obj instanceof LBehavior) {
+        //    for (const b of this.basicBehaviors()) {
+        //        b.onRemoveChild(obj);
+        //    }
+        //}
+        else {
+            // TODO: State とか Ability とか
+            throw new Error("Not implemented.");
         }
     }
     
@@ -301,10 +305,23 @@ export class LEntity extends LObject
         const index = this._basicBehaviors.findIndex(x => x.equals(behavior.id()));
         if (index >= 0) {
             this._basicBehaviors.splice(index, 1);
+            behavior.clearParent();
             behavior.onDetached();
             behavior.destroy();
         }
     }
+
+    /** 全ての Behavior を除外します。 */
+    public removeAllBehaviors(): void {
+        this.basicBehaviors().forEach(b => {
+            b.clearParent();
+            b.onDetached();
+            b.destroy();
+        });
+        this._basicBehaviors = [];
+    }
+
+
 
     //--------------------------------------------------------------------------------
     // State
@@ -327,29 +344,32 @@ export class LEntity extends LObject
         }
     }
 
-    removeState(stateId: DStateId) {
-        const states = this.states();
-        const index = states.findIndex(s => s.stateId() == stateId);
-        if (index >= 0) {
-            states[index].onDetached();
-            this._states.splice(index, 1);
-            this._effectResult.pushRemovedState(stateId);
-        }
-    }
-
-    removeAllStates() {
-        this.states().forEach(s => {
-            s.onDetached();
-        });
-        this._states = [];
-    }
-
     public states(): readonly LState[] {
         return this._states.map(id => REGame.world.object(id) as LState);
     }
     
     public isStateAffected(stateId: DStateId): boolean {
         return this.states().findIndex(s => s.stateId() == stateId) >= 0;
+    }
+
+    removeState(stateId: DStateId) {
+        const states = this.states();
+        const index = states.findIndex(s => s.stateId() == stateId);
+        if (index >= 0) {
+            states[index].clearParent();
+            states[index].onDetached();
+            this._states.splice(index, 1);
+            this._effectResult.pushRemovedState(stateId);
+        }
+    }
+
+    /** 全ての State を除外します。 */
+    public removeAllStates(): void {
+        this.states().forEach(s => {
+            s.clearParent();
+            s.onDetached();
+        });
+        this._states = [];
     }
 
     //--------------------------------------------------------------------------------
@@ -397,6 +417,7 @@ export class LEntity extends LObject
      * 何らかの Inventory に入っているならそこから、Map 上に出現しているならその Block から除外する。
      * 除外された UniqueEntity 以外の Entity は、そのターンの間にいずれかから参照を得ない場合 GC によって削除される。
      */
+    /*
     callRemoveFromWhereabouts(context: SCommandContext): REResponse {
         const parent = this.parentEntity();
         if (parent) {
@@ -414,6 +435,7 @@ export class LEntity extends LObject
             throw new Error();
         }
     }
+    */
 
     
     /** 

@@ -217,7 +217,7 @@ export class LBehavior extends LObject {
     //_ownerEntityId: LEntityId = { index: 0, key: 0 };
     
 
-    onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
+    //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
     [onPrePickUpReaction](args: CommandArgs, context: SCommandContext): REResponse {
         return REResponse.Pass;

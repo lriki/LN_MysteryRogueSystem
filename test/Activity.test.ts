@@ -148,6 +148,7 @@ test('Activity.ThrowAndHit', () => {
     // [投げる] 実行
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
+    expect(item1.isDestroyed()).toBe(true);     // item は削除されている
     expect(enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });
 
