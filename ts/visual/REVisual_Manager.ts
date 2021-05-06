@@ -4,7 +4,6 @@ import { Vector2 } from "ts/math/Vector2";
 import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
 import { VManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
 import { REVisualSequel } from "ts/visual/REVisualSequel";
-import { REDialogContext } from "../system/REDialog";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { RESystem } from "ts/system/RESystem";
 import { VCollapseSequel } from "./sequels/CollapseSequel";
@@ -20,6 +19,9 @@ import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
 import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
 import { VDropSequel } from "./sequels/VDropSequel";
+import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
+import { VMenuDialog } from "./dialogs/VMenuDialog";
+import { REDialogContext } from "ts/system/SDialogContext";
 
 /**
  */
@@ -69,6 +71,8 @@ export class REVisual_Manager
             this._dialogNavigator.push(new REEventExecutionDialogVisual());
         else if (d instanceof LWarehouseDialog)
             this._dialogNavigator._openMainDialog(new VWarehouseDialog(d));
+        //else if (d instanceof LMainMenuDialog)
+        //    this._dialogNavigator._openMainDialog(new VMenuDialog(d));
 
             
         // AI 用の Dialog を開いた時など、UI を伴わないものもある

@@ -1,6 +1,5 @@
 
 import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
-import { REDialogContext } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
 import { VSubDialog } from "./VSubDialog";
 

@@ -6,7 +6,6 @@ import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
-import { REDialogContext } from "ts/system/REDialog";
 import { REIntegration } from "ts/system/REIntegration";
 import { REGameManager } from "ts/system/REGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
@@ -19,6 +18,7 @@ import { assert } from 'ts/Common';
 import { DLandId } from 'ts/data/DLand';
 import { DStateId } from 'ts/data/DState';
 import { DPrefab, DPrefabId } from 'ts/data/DPrefab';
+import { REDialogContext } from 'ts/system/SDialogContext';
 
 declare global {
     interface Number {

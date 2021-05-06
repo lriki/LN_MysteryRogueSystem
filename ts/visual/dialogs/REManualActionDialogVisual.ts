@@ -1,10 +1,7 @@
-import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { assert } from "ts/Common";
-import { REData } from "ts/data/REData";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { RESystem } from "ts/system/RESystem";
-import { REDialogContext } from "../../system/REDialog";
 import { VFeetDialog } from "./VFeetDialog";
 import { VMenuDialog } from "./VMenuDialog";
 import { DBasics } from "ts/data/DBasics";
@@ -16,6 +13,7 @@ import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChange
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { REDialogContext } from "ts/system/SDialogContext";
 
 enum UpdateMode {
     Normal,

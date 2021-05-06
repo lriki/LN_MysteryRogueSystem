@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
-import { REDialog, REDialogContext } from "ts/system/REDialog";
-import { RESystem } from "ts/system/RESystem";
+import { REDialog } from "ts/system/REDialog";
+import { REDialogContext } from "ts/system/SDialogContext";
 
 
 export class LCommandPlaybackDialog extends REDialog {

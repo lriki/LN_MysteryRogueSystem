@@ -1,8 +1,7 @@
 import { assert } from "ts/Common";
-import { REDialogContext } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
 import { REVisual } from "../REVisual";
-import { DialogResultCallback, REDialogVisualNavigator } from "./REDialogVisual";
+import { DialogResultCallback } from "./REDialogVisual";
 import { VDialog } from "./VDialog";
 
 

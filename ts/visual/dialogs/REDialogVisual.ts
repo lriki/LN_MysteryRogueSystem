@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { REDialogContext } from "../../system/REDialog";
+import { REDialogContext } from "ts/system/SDialogContext";
 import { VDialog } from "./VDialog";
 import { VMainDialog } from "./VMainDialog";
 import { VSubDialog } from "./VSubDialog";

@@ -8,6 +8,7 @@ import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Map {
+        isRMMZDefaultSystemMap(): boolean;
         isRESystemMap(): boolean;
     }
 }
@@ -85,6 +86,10 @@ var _Game_Map_update = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
 
+}
+
+Game_Map.prototype.isRMMZDefaultSystemMap = function(): boolean {
+    return REData.maps[this.mapId()].defaultSystem;
 }
 
 Game_Map.prototype.isRESystemMap = function(): boolean {

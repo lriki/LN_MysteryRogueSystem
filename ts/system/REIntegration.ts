@@ -2,7 +2,7 @@ import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
-import { REDialogContext } from "./REDialog";
+import { REDialogContext } from "./SDialogContext";
 
 export abstract class REIntegration {
     /**

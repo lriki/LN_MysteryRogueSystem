@@ -1,10 +1,6 @@
-import { assert, tr } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
+import { tr } from "ts/Common";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
-import { REDialogContext } from "ts/system/REDialog";
-import { RESystem } from "ts/system/RESystem";
-import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VSubDialog } from "./VSubDialog";

@@ -18,7 +18,6 @@ import { DBasics } from "ts/data/DBasics";
 import { LIdentifyer } from "ts/objects/LIdentifyer";
 import { SSequelContext } from "./SSequelContext";
 import { SCommandContext } from "./SCommandContext";
-import { REDialogContext } from "./REDialog";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "ts/objects/LEventServer";
 import { LEntity } from "ts/objects/LEntity";
@@ -32,6 +31,7 @@ import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { REDialogContext } from "./SDialogContext";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 

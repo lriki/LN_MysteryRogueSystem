@@ -44,6 +44,7 @@ export interface DAppearanceTable {
 
 export interface DFloorInfo {
     fixedMapName: string;
+    safety: boolean;
 }
 
 /**
@@ -128,6 +129,7 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
         if (floorData) {
             const info: DFloorInfo = {
                 fixedMapName: floorData.fixedMap ?? "",
+                safety: floorData.safety ?? false,
             }
 
             const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

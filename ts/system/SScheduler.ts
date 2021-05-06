@@ -1,16 +1,7 @@
 import { assert, Log } from "../Common";
-import { SCommandContext } from "./SCommandContext";
-import { REData } from "../data/REData";
-import { REDialog, REDialogContext } from "./REDialog";
 import { REGame } from "../objects/REGame";
-import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
-import { DecisionPhase, LBehavior } from "../objects/behaviors/LBehavior";
-import { LEntity } from "../objects/LEntity";
-import { SSequelUnit, RESequelSet } from "../objects/REGame_Sequel";
 import { RESystem } from "./RESystem";
 import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget, RESchedulerPhase_UpdateState } from "./RESchedulerPhase";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
-import { SSequelContext } from "./SSequelContext";
 import { RunStepInfo } from "ts/objects/LScheduler";
 
 

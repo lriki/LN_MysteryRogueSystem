@@ -9,6 +9,7 @@ import { Game_REPrefabEvent } from "./PrefabEvent";
 import { VDirectionArrow } from "ts/visual/VDirectionArrow";
 import { REGame } from "ts/objects/REGame";
 import { RMMZHelper } from "./RMMZHelper";
+import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
 
 declare global {
     interface Scene_Map {
@@ -16,45 +17,12 @@ declare global {
     }
 }
 
-var _Scene_Map_isReady = Scene_Map.prototype.isReady;
+const _Scene_Map_isReady = Scene_Map.prototype.isReady;
 Scene_Map.prototype.isReady = function() {
     return _Scene_Map_isReady.call(this);
-    /*
-    if (REDataManager.landMapDataLoading) {
-        if (DataManager.isMapLoaded()) {
-            // Land 定義マップの読み込みがすべて終わった
-            
-            if (REData.floors[REDataManager.loadingMapId].mapKind == REFloorMapKind.FixedMap) {
-                // イベントなどから固定マップへ直接遷移した場合はここに来る。
-                // この場合はベースの DataManger.loadMapData によってマップデータロード済みなので、特に何かする必要はない。
-                REDataManager.loadedFloorMapId = REDataManager.loadingMapId;
-                REDataManager.landMapDataLoading = false;
-
-                // これを呼んでおかないと、コアスクリプト内で必要なオブジェクトが作成されない。
-                return _Scene_Map_isReady.call(this);
-            }
-            else {
-                throw new Error("Not implemented.");
-                // Reload. まだ読み込み完了していない扱いにする
-                return false;
-            }
-
-            // 固定マップを読み込む
-            //DataManager.loadMapData(1); // TODO: id
-
-        }
-        else {
-            // Land 定義マップの読み込み中
-            return false;
-        }
-    }
-    else {
-        return _Scene_Map_isReady.call(this);
-    }
-    */
 }
 
-var _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
+const _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
 Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
 }
@@ -71,12 +39,12 @@ Scene_Map.prototype.onTransferEnd = function() {
 // マップ切り替えのたびに呼び出される。
 // Scene_Map.updateTransferPlayer() でマップ遷移を検出すると、
 // goto(Scene_Map) で別インスタンスの Scene_Map へ遷移する。
-var _Scene_Map_create = Scene_Map.prototype.create;
+const _Scene_Map_create = Scene_Map.prototype.create;
 Scene_Map.prototype.create = function() {
     _Scene_Map_create.call(this);
 }
 
-var _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
+const _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
 
     // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく
@@ -90,21 +58,12 @@ Scene_Map.prototype.createDisplayObjects = function() {
     REVisual.onSceneChanged(this);
 };
 
-var _Scene_Map_start = Scene_Map.prototype.start;
+const _Scene_Map_start = Scene_Map.prototype.start;
 Scene_Map.prototype.start = function() {
-    /*
-    if (RMMZHelper.isRESystemMap()) {
-        this._fadeWhite = 0;
-        this._fadeOpacity = 255;
-
-    }
-    */
-
     _Scene_Map_start.call(this);
-    
 }
 
-var _Scene_Map_terminate = Scene_Map.prototype.terminate;
+const _Scene_Map_terminate = Scene_Map.prototype.terminate;
 Scene_Map.prototype.terminate = function() {
     _Scene_Map_terminate.call(this);
 
@@ -127,31 +86,8 @@ function isTransterEffectRunning(): boolean {
     }
 }
 
-/*
-var _Scene_Map_fadeInForTransfer = Scene_Map.prototype.fadeInForTransfer;
-Scene_Map.prototype.fadeInForTransfer = function() {
-    console.log("fadeInForTransfer", RMMZHelper.isRESystemMap());
-    if (RMMZHelper.isRESystemMap()) {
-    }
-    else {
-        _Scene_Map_fadeInForTransfer.call(this);
-    }
-}
 
-var _Scene_Map_needsFadeIn = Scene_Map.prototype.needsFadeIn;
-Scene_Map.prototype.needsFadeIn = function(): boolean {
-    console.log("needsFadeIn", RMMZHelper.isRESystemMap());
-    if (RMMZHelper.isRESystemMap()) {
-        return false;
-    }
-    else {
-        return _Scene_Map_needsFadeIn.call(this);
-    }
-}
-*/
-
-
-var _Scene_Map_update = Scene_Map.prototype.update;
+const _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
     if (!isTransterEffectRunning()) {
         if ($gameMap.isRESystemMap()) {
@@ -205,11 +141,26 @@ Scene_Map.prototype.update = function() {
 
 }
 
-// RE Map 内では RMMZ 通常のメニューを禁止する
-var _Scene_Map_isMenuCalled = Scene_Map.prototype.isMenuCalled;
-Scene_Map.prototype.isMenuCalled = function() {
-    if ($gameMap.isRESystemMap())
-        return false;
-    else
-        return _Scene_Map_isMenuCalled.call(this);
+const _Scene_Map_callMenu = Scene_Map.prototype.isMenuCalled;
+Scene_Map.prototype.callMenu = function() {
+    if ($gameMap.isRMMZDefaultSystemMap()) {
+        _Scene_Map_callMenu.call(this);
+    }
+    else {
+        const actorEntity = REGame.camera.focusedEntity();
+        assert(actorEntity);
+        RESystem.commandContext.openDialog(actorEntity, new LMainMenuDialog(actorEntity), false);
+    }
 };
+
+/*
+// RE Map 内では RMMZ 通常のメニューを禁止する
+const _Scene_Map_isMenuCalled = Scene_Map.prototype.isMenuCalled;
+Scene_Map.prototype.isMenuCalled = function() {
+    if ($gameMap.isRMMZDefaultSystemMap())
+        return _Scene_Map_isMenuCalled.call(this);
+    else
+        return false;
+};
+*/
+

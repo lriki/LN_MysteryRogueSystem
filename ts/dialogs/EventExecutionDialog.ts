@@ -1,4 +1,5 @@
-import { REDialog, REDialogContext } from "ts/system/REDialog";
+import { REDialog } from "ts/system/REDialog";
+import { REDialogContext } from "ts/system/SDialogContext";
 
 
 export class REEventExecutionDialog extends REDialog {

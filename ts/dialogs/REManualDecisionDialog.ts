@@ -1,4 +1,5 @@
-import { REDialog, REDialogContext } from "../system/REDialog";
+import { REDialogContext } from "ts/system/SDialogContext";
+import { REDialog } from "../system/REDialog";
 
 export class REManualActionDialog extends REDialog
 {

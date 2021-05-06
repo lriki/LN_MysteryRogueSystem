@@ -10,10 +10,10 @@ import { BasicAttributes, BasicBehaviors } from "ts/data/predefineds/DBasicBehav
 import { EntityProperties, EntityProperty } from "ts/data/predefineds/DBasicProperties";
 import { SSequelContext } from "./SSequelContext";
 import { SCommandContext } from "./SCommandContext";
-import { REDialogContext } from "./REDialog";
 import { SScheduler } from "./SScheduler";
 import { SMinimapData } from "./SMinimapData";
 import { SMapManager } from "./SMapManager";
+import { REDialogContext } from "./SDialogContext";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [

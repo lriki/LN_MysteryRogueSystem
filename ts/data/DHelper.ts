@@ -3,6 +3,7 @@ import { DMapId } from "./DLand";
 
 export interface RMMZFloorMetadata {
     fixedMap?: string;
+    safety?: boolean;
 }
 
 export interface RMMZEventPrefabMetadata {

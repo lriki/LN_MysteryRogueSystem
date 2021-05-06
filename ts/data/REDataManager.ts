@@ -524,7 +524,7 @@ export class REDataManager
                 const info = $dataMapInfos[i];
                 
                 const mapData: DMap = {
-                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap,
+                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap, defaultSystem: false,
                 };
                 REData.maps[i] = mapData;
 
@@ -578,7 +578,7 @@ export class REDataManager
 
                 // null 回避のため、REシステム管理外のマップの FloorInfo を作っておく
                 if (mapData.landId == DHelpers.RmmzNormalMapLandId) {
-                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.id] = { fixedMapName: "" };
+                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.id] = { fixedMapName: "", safety: true };
                 }
             }
         }

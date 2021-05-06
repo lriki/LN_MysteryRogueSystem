@@ -1,22 +1,15 @@
 import { assert } from "../Common";
-import { DBasics } from "../data/DBasics";
 import { REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
-import { FBlockComponent, FMap } from "../floorgen/FMapData";
-import { REGame } from "../objects/REGame";
-import { TileShape } from "../objects/LBlock";
+import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
 import { RESequelSet } from "../objects/REGame_Sequel";
-import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "../PluginParameters";
-import { RMMZHelper } from "./RMMZHelper";
-import { REDialogContext } from "../system/REDialog";
 import { REIntegration } from "../system/REIntegration";
 import { REVisual } from "../visual/REVisual";
-import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
-import { RESystem } from "ts/system/RESystem";
 import { LMap } from "ts/objects/LMap";
 import { GameMapBuilder } from "./GameMapBuilder";
+import { REDialogContext } from "ts/system/SDialogContext";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
