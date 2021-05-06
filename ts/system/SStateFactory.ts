@@ -12,7 +12,7 @@ export class SStateFactory {
         state.setup(stateId);
 
         const behavior = new LGenericRMMZStateBehavior();
-        REGame.world._registerBehavior(behavior);
+        REGame.world._registerObject(behavior);
         
         //const behabiors: LStateTraitBehavior[] = [behavior];
         const behabiors: LBehavior[] = [behavior];

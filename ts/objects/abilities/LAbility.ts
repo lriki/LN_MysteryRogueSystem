@@ -73,7 +73,7 @@ export class LAbility extends LObject {
     public onDetached(): void {
         this.behabiors().forEach(b => {
             b.onDetached();
-            REGame.world._unregisterBehavior(b);
+            b.destroy();
         });
     }
 }

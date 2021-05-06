@@ -16,16 +16,13 @@ import { LParty, LPartyId } from "./LParty";
  */
 export class LWorld
 {
-    //private _entities: (LEntity | undefined)[] = [];
     private _objects: (LObject | undefined)[] = [];
-    private _behaviors: (LBehavior | undefined)[] = [];
     private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);
     private _lands: LLand[];
     private _parties: (LParty | undefined)[];
 
     constructor() {
         this._objects = [undefined];   // [0] is dummy
-        this._behaviors = [undefined];   // [0] is dummy
         this._lands = REData.lands.map(x => {
             const land = new LLand();
             land.setup_(x.id);
@@ -58,16 +55,6 @@ export class LWorld
             return undefined;
         }
     }
-    
-    public objects(): (LObject | undefined)[] {
-        return this._objects;
-    }
-
-    public entity(id: LEntityId): LEntity {
-        const e = this.findEntity(id);
-        if (!e) throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
-        return e;
-    }
 
     public findEntity(id: LEntityId): LEntity | undefined {
         const obj = this.findObject(id);
@@ -77,24 +64,35 @@ export class LWorld
             return undefined;
     }
 
+    public findBehavior(id: LBehaviorId): LBehavior | undefined {
+        const obj = this.findObject(id);
+        if (obj && obj.objectType() == LObjectType.Behavior)
+            return obj as LBehavior;
+        else
+            return undefined;
+    }
+    
+    public objects(): (LObject | undefined)[] {
+        return this._objects;
+    }
+
+    public entity(id: LObjectId): LEntity {
+        const e = this.findEntity(id);
+        if (!e) throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
+        return e;
+    }
+
+    public behavior(id: LBehaviorId): LBehavior {
+        const e = this.findBehavior(id);
+        if (!e) throw new Error(`Invalid behavior type. (id: [${id.index2()}, ${id.key2()}])`);
+        return e;
+    }
+
+
     public entityByIndex(index: number): LEntity {
         const e = this._objects[index];
         assert(e instanceof LEntity);
         return e;
-    }
-
-    behavior(id: LBehaviorId): LBehavior {
-        const e = this._behaviors[id.index2()];
-        if (e && e.id().key2() == id.key2())
-            return e;
-        else {
-            if (!e) {
-                throw new Error(`Unregisterd behavior. (id: [${id.index2()}, ${id.key2()}])`);
-            }
-            else {
-                throw new Error(`Destroyed behavior. (id: [${id.index2()}, ${id.key2()}])`);
-            }
-        }
     }
 
     ability(id: LAbilityId): LAbility {
@@ -160,6 +158,7 @@ export class LWorld
         }
     }
 
+    /*
     _registerBehavior(behavior: LBehavior) {
         assert(!behavior.hasId());
         // TODO: 空き場所を愚直に線形探索。
@@ -179,6 +178,7 @@ export class LWorld
         this._behaviors[behavior.id().index2()] = undefined;
         behavior._clearObjectId();
     }
+    */
 
     /*
     newBehavior<T>(ctor: { new(...args: any[]): T }): T {

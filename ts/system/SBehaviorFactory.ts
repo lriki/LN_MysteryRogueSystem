@@ -87,7 +87,7 @@ export class SBehaviorFactory {
     public static createBehavior(name: string): LBehavior | undefined {
         const b = this.createBehaviorInstance(name);
         if (!b) return undefined;
-        REGame.world._registerBehavior(b);
+        REGame.world._registerObject(b);
         return b;
     }
 

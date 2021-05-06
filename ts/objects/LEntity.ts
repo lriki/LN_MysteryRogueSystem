@@ -209,7 +209,7 @@ export class LEntity extends LObject
 
         this.basicBehaviors().forEach(b => {
             b.onDetached();
-            REGame.world._unregisterBehavior(b);
+            b.destroy();
         });
         this._basicBehaviors = [];
         this.removeAllStates();
@@ -263,7 +263,7 @@ export class LEntity extends LObject
     public addBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, ...args: any[]): T {
         const behavior = new ctor();
         (behavior as T).setup(...args);
-        REGame.world._registerBehavior(behavior);
+        REGame.world._registerObject(behavior);
         this._addBehavior(behavior);
         return behavior;
     }
@@ -302,7 +302,7 @@ export class LEntity extends LObject
         if (index >= 0) {
             this._basicBehaviors.splice(index, 1);
             behavior.onDetached();
-            REGame.world._unregisterBehavior(behavior);
+            behavior.destroy();
         }
     }
 

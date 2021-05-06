@@ -82,7 +82,7 @@ export class LState extends LObject {
         this._stateBehabiors.forEach(b => {
             const behavior = (REGame.world.behavior(b) as LBehavior);
             behavior.onDetached();
-            REGame.world._unregisterBehavior(behavior);
+            behavior.destroy();
         });
     }
 
