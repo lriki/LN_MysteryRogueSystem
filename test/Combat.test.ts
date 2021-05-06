@@ -19,7 +19,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('DamageAndGameover', () => {
+test('Combat.DamageAndGameover', () => {
 
     //--------------------
     // 準備
