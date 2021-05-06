@@ -23,6 +23,11 @@ interface SlotPart {
     itemEntityIds: LEntityId[];
 }
 
+interface SlotPart2 {
+    partId: DEquipmentPartId;
+    itemEntityId: LEntityId;
+}
+
 /**
  * 装備アイテムを装備できる人。
  * 
@@ -39,24 +44,19 @@ NOTE:
 なので必要な任意のタイミングで refresh かけて、slot の変動に合わせて自動的につけ外しする仕組みが無いとダメそう。
 
 */
-    // index is DEquipmentPartId
-    private _parts: SlotPart[] = [];
+    private _parts: SlotPart2[] = [];
     private _revisitonNumber: number = 0;
 
     public isEquipped(item: LEntity): boolean {
         const entityId = item.entityId();
-        return this._parts.findIndex(part => part && part.itemEntityIds.findIndex(id => id.equals(entityId)) >= 0) >= 0;
+        return this._parts.findIndex(part => part.itemEntityId.equals(entityId)) >= 0;
     }
 
     public equippedItemEntities(): LEntity[] {
         const result: LEntity[] = [];
         for (const part of this._parts) {
-            if (part) {
-                for (const itemId of part.itemEntityIds) {
-                    if (itemId.hasAny()) {
-                        result.push(REGame.world.entity(itemId));
-                    }
-                }
+            if (part.itemEntityId.hasAny()) {
+                result.push(REGame.world.entity(part.itemEntityId));
             }
         }
         return result;
@@ -116,48 +116,41 @@ NOTE:
             assert(itemEntity);
             const itemBehavior = itemEntity.getBehavior(LItemBehavior);
             const equipmentBehavior = itemEntity.getBehavior(LEquipmentBehavior);
-            const itemParts = itemBehavior.itemData().equipmentParts;
+            const itemPart = itemBehavior.itemData().equipmentParts[0];
 
             const inventory = self.getBehavior(LInventoryBehavior);
             //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);
 
 
-            // 候補Part抽出
-            // 腕輪2個装備できるときは 腕輪Part が2つとれる。
-            const candidateParts = itemParts.filter(partId => this._parts[partId] != undefined);
-            assert(candidateParts.length > 0);
+            // まず空きが無いか調べてみる
+            let slot = this._parts.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
 
+            // 空きが無ければ交換対象を探す
+            if (!slot) {
+                slot = this._parts.find(x => x.partId == itemPart);
+            }
 
-            const partId = candidateParts[0];
-            const slotList = this._parts[partId].itemEntityIds;
-
-            // 空き Slot を探して格納する
-            const freeIndex = slotList.findIndex(x => x.isEmpty());
-            if (freeIndex >= 0) {
-                slotList[freeIndex] = itemEntity.entityId();
+            if (!slot) {
+                // ここまでで slot が見つからなければ装備不可能
+                context.postMessage(tr2("%1 は装備できない。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             }
             else {
-                // 空きが無ければ 0 番と交換
-                slotList[0] = itemEntity.entityId();
+                slot.itemEntityId = itemEntity.entityId();
+
+                this.ownerEntity().refreshStatus();
+    
+                context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             }
 
-
-            this.ownerEntity().refreshStatus();
-
-            context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             return REResponse.Succeeded;
         }
         else if (activity instanceof LEquipOffActivity) {
             const itemEntity = activity.object();
             let removed = false;
-            for (const part of this._parts) {
-                if (part) {
-                    for (let i = 0; i < part.itemEntityIds.length; i++) {
-                        if (part.itemEntityIds[i].equals(itemEntity.entityId())) {
-                            part.itemEntityIds[i] = LEntityId.makeEmpty();
-                            removed = true;
-                        }
-                    }
+            for (const slot of this._parts) {
+                if (slot.itemEntityId.hasAny() && slot.itemEntityId.equals(itemEntity.entityId())) {
+                    slot.itemEntityId = LEntityId.makeEmpty();
+                    removed = true;
                 }
             }
             this._revisitonNumber++;
@@ -176,30 +169,18 @@ NOTE:
         const entity = this.ownerEntity();
         const equipmentSlots = entity.queryProperty(RESystem.properties.equipmentSlots) as DEquipmentPartId[];
 
-        let newParts: SlotPart[] = [];
+        // 現在の状態で、Slot のリストを作る
+        const newSlots: SlotPart2[] = equipmentSlots.map(x => { return {partId: x, itemEntityId: LEntityId.makeEmpty()}; });
 
-        equipmentSlots.forEach(partId => {
-            if (newParts[partId]) {
-                newParts[partId].itemEntityIds.push(LEntityId.makeEmpty());
+        // 古い Slot リストから新しい Slot リストへ、同一種類の Slot の Entity を上から順に詰め直す
+        for (const newSlot of newSlots) {
+            const oldSlot = this._parts.find(x => x.partId == newSlot.partId && x.itemEntityId.hasAny());
+            if (oldSlot) {
+                [newSlot.itemEntityId, oldSlot.itemEntityId] = [oldSlot.itemEntityId, newSlot.itemEntityId];
             }
-            else {
-                newParts[partId] = { itemEntityIds: [LEntityId.makeEmpty()] };
-            } 
-        });
+        }
 
-        // 移し替える
-        this._parts.forEach((x, i) => {
-            const partId = i;
-
-            x.itemEntityIds.forEach((entityId, j) => {
-                const part = newParts[partId];
-                if (part.itemEntityIds[j]) {
-                    part.itemEntityIds[j] = entityId;
-                }
-            });
-        });
-
-        this._parts = newParts;
+        this._parts = newSlots;
         this._revisitonNumber++;
     }
 }

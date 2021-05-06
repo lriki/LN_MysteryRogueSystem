@@ -7,6 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
+import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -15,7 +16,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('Equipment.Equip', () => {
+test('Equipment.EquipOnOff', () => {
     // New Game
     REGameManager.createGameObjects();
 
@@ -44,7 +45,7 @@ test('Equipment.Equip', () => {
     const shield1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Shield1, stateIds: [] });
     inventory.addEntity(shield1);
 
-    // 装備
+    // [装備]
     dialogContext.postActivity(LEquipActivity.make(actor1, weapon1));
     dialogContext.postActivity(LEquipActivity.make(actor1, shield1));
     dialogContext.closeDialog(true);
@@ -61,4 +62,16 @@ test('Equipment.Equip', () => {
     expect(inventory.contains(shield1)).toBe(true);
     expect(weapon1.parentObject()).toBe(inventory);
     expect(shield1.parentObject()).toBe(inventory);
+    
+    // [はずす]
+    dialogContext.postActivity(LEquipOffActivity.make(actor1, weapon1));
+    dialogContext.postActivity(LEquipOffActivity.make(actor1, shield1));
+    dialogContext.closeDialog(true);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // 外れていること。
+    expect(equipmens.isEquipped(weapon1)).toBe(false);
+    expect(equipmens.isEquipped(shield1)).toBe(false);
+    expect(equipmens.equippedItemEntities().length).toBe(0);
 });
