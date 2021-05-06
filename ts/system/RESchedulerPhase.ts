@@ -1,14 +1,10 @@
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { DecisionPhase, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/behaviors/LBehavior";
-import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
-import { Helpers } from "./Helpers";
-import { REResponse, SPhaseResult } from "./RECommand";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 import { UnitInfo } from "ts/objects/LScheduler";
-import { SEffectorFact, SEffectSubject } from "./REEffectContext";
+import { SEffectSubject } from "./SEffectContext";
 
 
 

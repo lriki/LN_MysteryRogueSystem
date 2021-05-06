@@ -1,4 +1,4 @@
-import { RECommand, REResponse } from "../../system/RECommand";
+import { REResponse } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onPrePickUpReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
 import { REGame } from "../REGame";
@@ -7,11 +7,11 @@ import { RESystem } from "ts/system/RESystem";
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../LBlock";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { assert, tr, tr2 } from "ts/Common";
+import { assert, tr } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DActionId } from "ts/data/DAction";
 import { SMomementCommon } from "ts/system/SMomementCommon";
-import { REEffectContext, SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
+import { SEffectContext, SEffectSubject } from "ts/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
@@ -248,7 +248,7 @@ export class REUnitBehavior extends LBehavior {
     [onAttackReaction](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         //const effectContext = cmd.effectContext();
-        const effectContext: REEffectContext = args.args.effectContext;
+        const effectContext: SEffectContext = args.args.effectContext;
         if (effectContext) {
             effectContext.applyWithWorth(context, [self]);
             

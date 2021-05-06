@@ -1,7 +1,7 @@
 import { DAction } from "ts/data/DAction";
 import { REData } from "../data/REData";
 import { LEntity } from "../objects/LEntity";
-import { REEffectContext } from "./REEffectContext";
+import { SEffectContext } from "./SEffectContext";
 
 /**
  * RECommand の処理結果
@@ -64,10 +64,10 @@ export class RECommand  // sealed
     private _actionId: number;
     private _actor: LEntity;
     private _reactor: LEntity | undefined;
-    private _effectContext: REEffectContext | undefined;
+    private _effectContext: SEffectContext | undefined;
     private _args: any;
 
-    constructor(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: REEffectContext | undefined, args: any) {
+    constructor(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: SEffectContext | undefined, args: any) {
         this._actionId = actionId;
         this._actor = actor;
         this._reactor = reactor;
@@ -91,7 +91,7 @@ export class RECommand  // sealed
     /** Reaction 側 Entity */
     reactor(): LEntity | undefined { return this._reactor; }
 
-    effectContext(): REEffectContext | undefined { return this._effectContext; }
+    effectContext(): SEffectContext | undefined { return this._effectContext; }
 
     save(): string {
         return JSON.stringify({ act: this._actionId, args: this.args });

@@ -74,6 +74,10 @@ export class LInventoryBehavior extends LBehavior {
         return this._entities.map(x => REGame.world.entity(x));
     }
 
+    public contains(entity: LEntity): boolean {
+        return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
+    }
+
     public addEntity(entity: LEntity) {
         assert(!entity.parentEntity());
 
@@ -81,7 +85,7 @@ export class LInventoryBehavior extends LBehavior {
         assert(this._entities.find(x => x.equals(id)) === undefined);
         this._entities.push(id);
         
-        entity.setParent(this.ownerEntity());
+        entity.setParent(this);
     }
 
     public removeEntity(entity: LEntity) {

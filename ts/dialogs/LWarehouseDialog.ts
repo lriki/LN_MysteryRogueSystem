@@ -7,8 +7,8 @@ import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { REDialog, REDialogContext } from "../system/REDialog";
-import { SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
+import { REDialog } from "../system/REDialog";
+import { SEffectSubject } from "ts/system/SEffectContext";
 
 export class LWarehouseDialog extends REDialog {
     private _userEntityId: LEntityId;

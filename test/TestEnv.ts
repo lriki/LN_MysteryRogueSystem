@@ -38,6 +38,8 @@ export class TestEnv {
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
     public static StateId_Sleep: DStateId;
     public static PrefabId_Herb: DPrefabId;
+    public static PrefabId_Weapon1: DPrefabId;
+    public static PrefabId_Shield1: DPrefabId;
 
     private static _databaseFiles = [
         { name: "$dataActors", src: "Actors.json" },
@@ -75,6 +77,8 @@ export class TestEnv {
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.StateId_Sleep = REData.states.findIndex(x => x.displayName == "睡眠");
         this.PrefabId_Herb = REData.prefabs.findIndex(x => x.key == "pキュアリーフ");
+        this.PrefabId_Weapon1 = REData.prefabs.findIndex(x => x.key == "pゴブリンのこん棒");
+        this.PrefabId_Shield1 = REData.prefabs.findIndex(x => x.key == "pレザーシールド");
         
 
         /*

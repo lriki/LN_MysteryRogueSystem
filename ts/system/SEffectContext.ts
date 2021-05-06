@@ -1,4 +1,3 @@
-import { BatchDrawCall } from "pixi.js";
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItemEffect } from "ts/data/DItemEffect";
@@ -8,13 +7,10 @@ import { REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "./Helpers";
-import { RESystem } from "./RESystem";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
-import { REGameManager } from "./REGameManager";
-import { SAIHelper } from "./SAIHelper";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 
@@ -87,7 +83,7 @@ export class SEffectSubject {
 
 // 攻撃側
 export class SEffectorFact {
-    private _context: REEffectContext;
+    private _context: SEffectContext;
     private _subject: LEntity;
     private _subjectEffect: DEffect;
     private _subjectBattlerBehavior: LBattlerBehavior | undefined;
@@ -105,7 +101,7 @@ export class SEffectorFact {
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
 
-    public constructor(context: REEffectContext, subject: LEntity, effect: DEffect) {
+    public constructor(context: SEffectContext, subject: LEntity, effect: DEffect) {
         this._context = context;
         this._subject = subject;
         this._subjectEffect = effect;
@@ -295,7 +291,7 @@ export class SEffectorFact {
  * EffectContext 自体が複数対象へのダメージ適用をサポートしたとしても、
  * もしそのような中断がやりたければひとつずつインスタンス作って addTarget すればいいだけなので、まとめる方向で作ってよさそう。
  */
-export class REEffectContext {
+export class SEffectContext {
 
     private _effectorFact: SEffectorFact;
 

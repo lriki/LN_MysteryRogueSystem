@@ -2,14 +2,13 @@ import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
 import { REDialog } from "./REDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
-import { SAnumationSequel, SMotionSequel, SSequelUnit } from "../objects/REGame_Sequel";
+import { SAnumationSequel, SMotionSequel } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
-import { REEffectContext, SEffectorFact, SEffectSubject } from "./REEffectContext";
+import { SEffectContext, SEffectSubject } from "./SEffectContext";
 import { LBlock } from "../objects/LBlock";
 import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { SSequelContext } from "./SSequelContext";
 import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
@@ -58,7 +57,7 @@ export class SCommandContext
     /**
      * カスタムの RE-Command のように、プラグインとして事前定義できないコマンド実行 Action の呼び出し
      */
-    postActionOneWay(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: REEffectContext | undefined, args?: any) {
+    postActionOneWay(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: SEffectContext | undefined, args?: any) {
         assert(actionId > 0);
         
         const actualCommand = new RECommand(actionId, actor, reactor, effectContext, args);
@@ -199,7 +198,7 @@ export class SCommandContext
         Log.postCommand("WaitSequel");
     }
 
-    public postApplyEffect(target: LEntity, context: SCommandContext, effect: REEffectContext): void {
+    public postApplyEffect(target: LEntity, context: SCommandContext, effect: SEffectContext): void {
         const m1 = () => {
             for (const b of target.collectBehaviors()) {
                 const r = b.onApplyEffect(target, this, effect);

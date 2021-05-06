@@ -1,19 +1,17 @@
-import { assert, tr } from "ts/Common";
+import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { Helpers } from "ts/system/Helpers";
 import { REResponse } from "ts/system/RECommand";
-import { SEffectSubject } from "ts/system/REEffectContext";
+import { SEffectSubject } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMomementCommon } from "ts/system/SMomementCommon";
-import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onPreThrowReaction, onThrowReaction } from "../LBehavior";
-import { LCommonBehavior } from "../LCommonBehavior";
+import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。

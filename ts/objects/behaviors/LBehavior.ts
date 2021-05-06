@@ -29,10 +29,10 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
-import { REEffectContext, SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
+import { SEffectContext, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
 import { RECommand, REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
-import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "../LObject";
+import { LBehaviorId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
@@ -265,7 +265,7 @@ export class LBehavior extends LObject {
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
     //onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
-    onApplyEffect(self: LEntity, context: SCommandContext, effect: REEffectContext): REResponse { return REResponse.Pass; }
+    onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): REResponse { return REResponse.Pass; }
 
 
 

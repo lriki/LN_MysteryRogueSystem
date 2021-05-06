@@ -1,5 +1,3 @@
-import { assert } from "ts/Common";
-import { DClass } from "ts/data/DClass";
 import { DState, DStateId, DStateRestriction } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
 import { REData } from "ts/data/REData";
@@ -8,12 +6,10 @@ import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { SEffectorFact } from "ts/system/REEffectContext";
+import { SEffectorFact } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
 import { DParameterId, DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
-import { RE_Data_Actor } from "ts/data/DActor";
-import { DActionId } from "ts/data/DAction";
 import { LFloorId } from "../LFloorId";
 
 export class LBattlerBehavior extends LBehavior {

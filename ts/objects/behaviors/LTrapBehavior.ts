@@ -2,9 +2,9 @@ import { assert, tr } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { REData } from "ts/data/REData";
-import { RECommand, REResponse } from "ts/system/RECommand";
+import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { REEffectContext } from "ts/system/REEffectContext";
+import { SEffectContext } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
@@ -59,7 +59,7 @@ export class LTrapBehavior extends LBehavior {
         const itemData = trapItem.itemData();
 
         const target = e.sender;
-        const effectContext = new REEffectContext(e.self, itemData.scope, itemData.effect);
+        const effectContext = new SEffectContext(e.self, itemData.scope, itemData.effect);
 
 
 

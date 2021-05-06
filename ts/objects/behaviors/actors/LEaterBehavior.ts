@@ -4,7 +4,7 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { LEatActivity } from "ts/objects/activities/LEatActivity";
 import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
-import { SEffectSubject } from "ts/system/REEffectContext";
+import { SEffectSubject } from "ts/system/SEffectContext";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LBehavior, onEatReaction } from "../LBehavior";
 

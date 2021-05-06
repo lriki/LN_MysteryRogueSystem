@@ -119,8 +119,7 @@ export class LObject {
     }
 
     /**
-     * 親 Entity。
-     * 例えば Inventory に入っている Entity は、その Inventory を持つ Entity を親として参照する。
+     * 親 Object
      * 
      * GC のタイミングで、owner がおらず、UniqueEntity や Map に出現している Entity のリストに存在しない Entity は削除される。
      */

@@ -4,7 +4,7 @@ import { REData } from "ts/data/REData";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "ts/system/Helpers";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { REEffectContext, SEffectorFact, SEffectSubject } from "ts/system/REEffectContext";
+import { SEffectContext, SEffectSubject } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { onAttackReaction } from "../behaviors/LBehavior";
@@ -35,7 +35,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                 const block = REGame.map.block(front.x, front.y);
                 const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
                 if (target) {
-                    const effectContext = new REEffectContext(entity, skill.scope, skill.effect);
+                    const effectContext = new SEffectContext(entity, skill.scope, skill.effect);
                     //effectContext.addEffector(effector);
 
                     const rmmzAnimationId = (skill.rmmzAnimationId < 0) ? subject.attackAnimationId() : skill.rmmzAnimationId;
