@@ -1,7 +1,5 @@
-import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -9,9 +7,9 @@ import { RESystem } from "ts/system/RESystem";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
-import { VSubDialog } from "./VSubDialog";
+import { VDialog } from "./VDialog";
 
-export class VItemListDialog extends VSubDialog {
+export class VItemListDialog extends VDialog {
     _actorEntity: LEntity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;// | undefined;

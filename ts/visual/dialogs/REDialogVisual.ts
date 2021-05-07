@@ -2,7 +2,6 @@ import { assert } from "ts/Common";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { VDialog } from "./VDialog";
 import { VMainDialog } from "./VMainDialog";
-import { VSubDialog } from "./VSubDialog";
 
 export type DialogResultCallback = (result: any) => void;
 
@@ -32,7 +31,7 @@ export class REDialogVisualNavigator {
         this.push(dialog);
     }
 
-    _openSubDialog(dialog: VSubDialog): void {
+    _openSubDialog(dialog: VDialog): void {
         assert(!this.isEmpty());
         this.push(dialog);
     }

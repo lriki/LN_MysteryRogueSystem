@@ -3,9 +3,9 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
-import { VSubDialog } from "./VSubDialog";
+import { VDialog } from "./VDialog";
 
-export class VWarehouseStoreDialog extends VSubDialog {
+export class VWarehouseStoreDialog extends VDialog {
     _actorEntity: LEntity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;

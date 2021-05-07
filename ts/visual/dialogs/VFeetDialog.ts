@@ -1,16 +1,15 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
-import { REData } from "ts/data/REData";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
-import { VSubDialog } from "./VSubDialog";
+import { VDialog } from "./VDialog";
 
 /**
  * [足元]
  */
-export class VFeetDialog extends VSubDialog {
+export class VFeetDialog extends VDialog {
     _targetEntity: LEntity;
     _actions: DActionId[];
     _entityNameWindow: Window_Help | undefined;

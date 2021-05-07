@@ -2,10 +2,10 @@
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
+import { VDialog } from "./VDialog";
 import { VItemListDialog } from "./VItemListDialog";
-import { VSubDialog } from "./VSubDialog";
 
-export class VMenuDialog extends VSubDialog {
+export class VMenuDialog extends VDialog {
     _entity: LEntity;
     _commandWindow: VMenuCommandWindow | undefined;
 

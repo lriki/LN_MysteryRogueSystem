@@ -2,7 +2,6 @@ import { assert } from "ts/Common";
 import { RESystem } from "ts/system/RESystem";
 import { REVisual } from "../REVisual";
 import { DialogResultCallback, REDialogVisualNavigator } from "./REDialogVisual";
-import { VSubDialog } from "./VSubDialog";
 
 export class VDialog {
     _created: boolean = false;
@@ -11,6 +10,27 @@ export class VDialog {
     _navigator: REDialogVisualNavigator | undefined;
     _windows: Window_Base[] = [];
     _resultCallback: DialogResultCallback | undefined;
+
+
+    
+    protected push(dialog: VDialog, result?: DialogResultCallback) {
+        dialog._resultCallback = result;
+        REVisual.manager?._dialogNavigator.push(dialog);
+    }
+
+    protected submit(result?: any) {
+        REVisual.manager?._dialogNavigator.pop(true, result);
+    }
+
+    protected cancel() {
+        REVisual.manager?._dialogNavigator.pop(false);
+    }
+    
+    protected doneDialog(consumeAction: boolean) {
+        assert(this._navigator);
+        this._navigator.clear();
+        return RESystem.dialogContext.closeDialog(consumeAction);
+    }
 
     // push されたあと、最初の onUpdate の前
     onCreate() {

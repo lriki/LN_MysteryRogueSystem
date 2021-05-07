@@ -1,9 +1,9 @@
 
 import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
 import { RESystem } from "ts/system/RESystem";
-import { VSubDialog } from "./VSubDialog";
+import { VDialog } from "./VDialog";
 
-export class REEventExecutionDialogVisual extends VSubDialog {
+export class REEventExecutionDialogVisual extends VDialog {
     onCreate() {
         const model = (RESystem.dialogContext.dialog() as REEventExecutionDialog);
         const event = $gameMap.event(model.rmmzEventId());
