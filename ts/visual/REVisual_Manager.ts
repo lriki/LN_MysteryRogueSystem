@@ -29,6 +29,8 @@ import { LWarehouseStoreDialog } from "ts/dialogs/LWarehouseStoreDialog";
 import { VWarehouseStoreDialog } from "./dialogs/VWarehouseStoreDialog";
 import { LWarehouseWithdrawDialog } from "ts/dialogs/LWarehouseWithdrawDialog";
 import { VWarehouseWithdrawDialog } from "./dialogs/VWarehouseWithdrawDialog";
+import { LItemListDialog } from "ts/dialogs/LItemListDialog";
+import { VItemListDialog } from "./dialogs/VItemListDialog";
 
 /**
  */
@@ -85,6 +87,9 @@ export class REVisual_Manager
             this._dialogNavigator._openDialog(new VMenuDialog(model));
         else if (model instanceof LFeetDialog)
             this._dialogNavigator._openDialog(new VFeetDialog(model));
+        else if (model instanceof LItemListDialog)
+            this._dialogNavigator._openDialog(new VItemListDialog(model));
+            
 
             
         //else if (d instanceof LMainMenuDialog)

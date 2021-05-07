@@ -14,6 +14,7 @@ import { SDialogContext } from "ts/system/SDialogContext";
 import { LFeetDialog } from "ts/dialogs/LFeetDialog";
 import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
 import { VDialog } from "./VDialog";
+import { DialogSubmitMode } from "ts/system/REDialog";
 
 enum UpdateMode {
     Normal,
@@ -187,10 +188,9 @@ export class VManualActionDialogVisual extends VDialog {
             REVisual.guideGrid?.setVisible(true);
         }
         else if (Input.isTriggered("menu")) {
-            console.log("menu");
             this.openSubDialog(new LMainMenuDialog(entity), d => {
-                console.log("end?", d);
-                if (d.isSubmitted()) this._model.submit();
+                console.log("close LMainMenuDialog", d);
+                if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
             });
             return;
         }
@@ -215,7 +215,7 @@ export class VManualActionDialogVisual extends VDialog {
             arrow.setDirection(0);
             REVisual.guideGrid?.setVisible(false);
             this.openSubDialog(new LMainMenuDialog(entity), d => {
-                if (d.isSubmitted()) this._model.submit();
+                if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
             });
             return;
         }

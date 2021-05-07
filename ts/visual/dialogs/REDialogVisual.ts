@@ -51,7 +51,13 @@ export class REDialogVisualNavigator {
 
         if (this._scene) {
             this._scene.onStop();
+
+            // 深い Dialog がまとめて閉じられるときは update を挟まずに複数の Dialog が同時に閉じられる。
+            // そのため削除漏れしないようにここで destroy.
+            //this._scene._destroy();
             this._scene._destroying = true;
+
+            this.changeScene();
         }
 
     }
