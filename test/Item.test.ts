@@ -13,6 +13,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
 import { SActivityFactory } from "ts/system/SActivityFactory";
+import { DialogSubmitMode } from "ts/system/REDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -43,13 +44,13 @@ test('PickAndPut', () => {
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
     dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
-    dialogContext.closeDialog(true);    // 行動確定
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 足元のアイテムを拾う
     dialogContext.postActivity(LPickActivity.make(actor1));
-    dialogContext.closeDialog(true);    // 行動確定
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -66,7 +67,7 @@ test('PickAndPut', () => {
 
     // item1 を置く
     dialogContext.postActivity(LPutActivity.make(actor1, item1));
-    dialogContext.closeDialog(true);    // 行動確定
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -104,7 +105,7 @@ test('PickAtMoved', () => {
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
     dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
-    dialogContext.closeDialog(true);    // 行動確定
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

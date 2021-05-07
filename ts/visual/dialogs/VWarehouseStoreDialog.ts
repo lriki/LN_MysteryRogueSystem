@@ -1,4 +1,5 @@
 import { tr } from "ts/Common";
+import { LWarehouseStoreDialog } from "ts/dialogs/LWarehouseStoreDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
@@ -6,19 +7,17 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
 export class VWarehouseStoreDialog extends VDialog {
-    _actorEntity: LEntity;
-    _inventory: LInventoryBehavior;
+    _model: LWarehouseStoreDialog;
     _itemListWindow: VItemListWindow;
     _commandWindow: VFlexCommandWindow;
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
+    public constructor(model: LWarehouseStoreDialog) {
         super();
-        this._actorEntity = actorEntity;
-        this._inventory = inventory;
+        this._model = model;
         
         const y = 100;
         const cw = 200;
-        this._itemListWindow = new VItemListWindow(this._inventory, new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow = new VItemListWindow(this._model.inventory(), new Rectangle(0, y, Graphics.boxWidth - cw, 400));
         this._itemListWindow.setHandler("ok", () => this.handleItemSubmit());
         this._itemListWindow.setHandler("cancel", () => this.handleItemCancel());
         this._itemListWindow.forceSelect(0);
@@ -63,8 +62,9 @@ export class VWarehouseStoreDialog extends VDialog {
         }
     }
 
-    private handleStore(items: [LEntity]): void {
-        this.submit(items);
+    private handleStore(items: LEntity[]): void {
+        this._model.setResultItems(items);
+        this._model.submit();
     }
 
     private activateItemWindow() {

@@ -1,9 +1,8 @@
 import { assert } from "ts/Common";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { VDialog } from "./VDialog";
-import { VMainDialog } from "./VMainDialog";
 
-export type DialogResultCallback = (result: any) => void;
+export type DialogResultCallback = (dialog: any) => void;
 
 /**
  * SceneManager と同じく、スタックで Sub Dialog を管理するクラス。
@@ -26,14 +25,12 @@ export class REDialogVisualNavigator {
         return !this._scene && !this._nextScene && this._subDialogs.length == 0;
     }
 
-    _openMainDialog(dialog: VMainDialog): void {
-        assert(this.isEmpty());
+    _openDialog(dialog: VDialog): void {
         this.push(dialog);
     }
 
-    _openSubDialog(dialog: VDialog): void {
-        assert(!this.isEmpty());
-        this.push(dialog);
+    closeDialog(): void {
+        this.pop();
     }
 
     push(dialog: VDialog): void {
@@ -49,21 +46,17 @@ export class REDialogVisualNavigator {
         }
     }
     
-    pop(submit: boolean, result?: any): void {
+    pop(): void {
         this._nextScene = this._subDialogs.pop();
 
         if (this._scene) {
             this._scene.onStop();
             this._scene._destroying = true;
-
-            if (submit && this._scene._resultCallback) {
-                this._scene._resultCallback(result);
-            }
         }
 
     }
 
-    clear(): void {
+    clear2(): void {
         if (this._scene) {
             this._scene.onStop();
             this._scene.onClose();

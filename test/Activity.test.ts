@@ -16,6 +16,7 @@ import { SActivityFactory } from "ts/system/SActivityFactory";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
+import { DialogSubmitMode } from "ts/system/REDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -47,7 +48,7 @@ test('Activity.Eat', () => {
     const activity = SActivityFactory.newActivity(DBasics.actions.EatActionId);
     activity._setup(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.closeDialog(true);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     // [食べる] 実行
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -82,7 +83,7 @@ test('Activity.Throw', () => {
     const activity = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
     activity._setup(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.closeDialog(true);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     // [投げる] 実行 (自然落下)
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -101,7 +102,7 @@ test('Activity.Throw', () => {
     const activity2 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
     activity2._setup(actor1, item2);
     RESystem.dialogContext.postActivity(activity2);
-    RESystem.dialogContext.closeDialog(true);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     // [投げる] 実行 (壁に当たって落下)
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -143,7 +144,7 @@ test('Activity.ThrowAndHit', () => {
     const activity = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
     activity._setup(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.closeDialog(true);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     // [投げる] 実行
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

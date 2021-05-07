@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
+import { LFeetDialog } from "ts/dialogs/LFeetDialog";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { SActivityFactory } from "ts/system/SActivityFactory";
@@ -10,15 +11,15 @@ import { VDialog } from "./VDialog";
  * [足元]
  */
 export class VFeetDialog extends VDialog {
-    _targetEntity: LEntity;
-    _actions: DActionId[];
+    //_targetEntity: LEntity;
+   // _actions: DActionId[];
+   _model: LFeetDialog;
     _entityNameWindow: Window_Help | undefined;
     _commandWindow: VActionCommandWindow | undefined;
 
-    constructor(targetEntity: LEntity, actions: DActionId[]) {
+    constructor(model: LFeetDialog) {
         super();
-        this._targetEntity = targetEntity;
-        this._actions = actions;
+        this._model = model;
     }
     
     onCreate() {
@@ -32,7 +33,7 @@ export class VFeetDialog extends VDialog {
         this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
         
         const self = this;
-        this._commandWindow.setActionList2(this._actions.map(actionId => {
+        this._commandWindow.setActionList2(this._model.actions().map(actionId => {
             return {
                 actionId: actionId,
                 handler: (x) => self.onAction(x),
@@ -49,9 +50,9 @@ export class VFeetDialog extends VDialog {
 
         const activity = SActivityFactory.newActivity(actionId);
         // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-        activity._setup(entity, this._targetEntity);
+        activity._setup(entity, this._model.targetEntity());
 
         RESystem.dialogContext.postActivity(activity);
-        this.doneDialog(true);
+        this._model.submit();
     }
 }

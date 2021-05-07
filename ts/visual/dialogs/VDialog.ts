@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { LDialogResultCallback, REDialog } from "ts/system/REDialog";
 import { RESystem } from "ts/system/RESystem";
 import { REVisual } from "../REVisual";
 import { DialogResultCallback, REDialogVisualNavigator } from "./REDialogVisual";
@@ -9,28 +10,50 @@ export class VDialog {
     _destroying: boolean = false;
     _navigator: REDialogVisualNavigator | undefined;
     _windows: Window_Base[] = [];
-    _resultCallback: DialogResultCallback | undefined;
+    _resultCallback: DialogResultCallback | undefined;  // deprecated
+    _dialogResult: boolean = false;
 
-
+    // NOTE: maindialog
+    //protected openSubDialog(dialog: REDialog, result: LDialogResultCallback) {
+    protected openSubDialog<T extends REDialog>(dialog: T, result: (model: T) => void) {
+        dialog._resultCallback = result;
+        RESystem.dialogContext.open(dialog);
+    }
     
-    protected push(dialog: VDialog, result?: DialogResultCallback) {
+    protected push<T extends VDialog>(dialog: T, result: (model: T) => void) {
         dialog._resultCallback = result;
         REVisual.manager?._dialogNavigator.push(dialog);
     }
 
-    protected submit(result?: any) {
-        REVisual.manager?._dialogNavigator.pop(true, result);
+    protected submit() {
+        this._dialogResult = true;
+        REVisual.manager?._dialogNavigator.pop();
+
+        if (this._resultCallback) {
+            this._resultCallback(this);
+        }
     }
 
     protected cancel() {
-        REVisual.manager?._dialogNavigator.pop(false);
+        this._dialogResult = false;
+        REVisual.manager?._dialogNavigator.pop();
+    }
+
+    public isSubmitted(): boolean {
+        return this._dialogResult;
+    }
+
+    public isCanceled(): boolean {
+        return !this._dialogResult;
     }
     
+    /*
     protected doneDialog(consumeAction: boolean) {
         assert(this._navigator);
         this._navigator.clear();
         return RESystem.dialogContext.closeDialog(consumeAction);
     }
+    */
 
     // push されたあと、最初の onUpdate の前
     onCreate() {

@@ -22,6 +22,13 @@ import { VDropSequel } from "./sequels/VDropSequel";
 import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
 import { VMenuDialog } from "./dialogs/VMenuDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
+import { LFeetDialog } from "ts/dialogs/LFeetDialog";
+import { VFeetDialog } from "./dialogs/VFeetDialog";
+import { REDialog } from "ts/system/REDialog";
+import { LWarehouseStoreDialog } from "ts/dialogs/LWarehouseStoreDialog";
+import { VWarehouseStoreDialog } from "./dialogs/VWarehouseStoreDialog";
+import { LWarehouseWithdrawDialog } from "ts/dialogs/LWarehouseWithdrawDialog";
+import { VWarehouseWithdrawDialog } from "./dialogs/VWarehouseWithdrawDialog";
 
 /**
  */
@@ -63,16 +70,25 @@ export class REVisual_Manager
         }
     }
 
-    openDialog(context: SDialogContext): void {
-        const d = context.dialog();
-        if (d instanceof REManualActionDialog)
-            this._dialogNavigator._openMainDialog(new VManualActionDialogVisual(d));
-        else if (d instanceof REEventExecutionDialog)
-            this._dialogNavigator.push(new REEventExecutionDialogVisual());
-        else if (d instanceof LWarehouseDialog)
-            this._dialogNavigator._openMainDialog(new VWarehouseDialog(d));
+    openDialog(model: REDialog): void {
+        if (model instanceof REManualActionDialog)
+            this._dialogNavigator._openDialog(new VManualActionDialogVisual(model));
+        else if (model instanceof REEventExecutionDialog)
+            this._dialogNavigator._openDialog(new REEventExecutionDialogVisual(model));
+        else if (model instanceof LWarehouseDialog)
+            this._dialogNavigator._openDialog(new VWarehouseDialog(model));
+        else if (model instanceof LWarehouseStoreDialog)
+            this._dialogNavigator._openDialog(new VWarehouseStoreDialog(model));
+        else if (model instanceof LWarehouseWithdrawDialog)
+            this._dialogNavigator._openDialog(new VWarehouseWithdrawDialog(model));
+        else if (model instanceof LMainMenuDialog)
+            this._dialogNavigator._openDialog(new VMenuDialog(model));
+        else if (model instanceof LFeetDialog)
+            this._dialogNavigator._openDialog(new VFeetDialog(model));
+
+            
         //else if (d instanceof LMainMenuDialog)
-        //    this._dialogNavigator._openMainDialog(new VMenuDialog(d));
+        //    this._dialogNavigator._openDialog(new VMenuDialog(d));
 
             
         // AI 用の Dialog を開いた時など、UI を伴わないものもある
@@ -80,7 +96,8 @@ export class REVisual_Manager
     }
 
     closeDialog(context: SDialogContext) {
-        this._dialogNavigator.clear();
+        this._dialogNavigator.closeDialog();
+        //this._dialogNavigator.clear();
         //if (this._dialogVisual) {
         //    this._dialogVisual.onClose();
         //    this._dialogVisual = null;

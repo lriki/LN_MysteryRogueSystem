@@ -2,10 +2,7 @@ import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { RESystem } from "ts/system/RESystem";
-import { VFeetDialog } from "./VFeetDialog";
-import { VMenuDialog } from "./VMenuDialog";
 import { DBasics } from "ts/data/DBasics";
-import { VMainDialog } from "./VMainDialog";
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
@@ -14,6 +11,9 @@ import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivi
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SDialogContext } from "ts/system/SDialogContext";
+import { LFeetDialog } from "ts/dialogs/LFeetDialog";
+import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
+import { VDialog } from "./VDialog";
 
 enum UpdateMode {
     Normal,
@@ -21,7 +21,7 @@ enum UpdateMode {
     DiagonalMoving,
 }
 
-export class VManualActionDialogVisual extends VMainDialog {
+export class VManualActionDialogVisual extends VDialog {
     private readonly MovingInputInterval = 5;
 
     private _model: REManualActionDialog;
@@ -136,7 +136,9 @@ export class VManualActionDialogVisual extends VMainDialog {
                     context.postReopen();
                 }
                 else {
-                    this.openSubDialog(new VFeetDialog(targetEntity, actions));
+                    this.openSubDialog(new LFeetDialog(targetEntity, actions), d => {
+                        if (d.isSubmitted()) this._model.submit();
+                    });
                 }
                 return;
             }
@@ -175,7 +177,8 @@ export class VManualActionDialogVisual extends VMainDialog {
             
             // [通常攻撃] スキル発動
             context.commandContext().postPerformSkill(entity, RESystem.skills.normalAttack);
-            this._model.close(true);
+            this._model.consumeAction();
+            this._model.submit();
             return;
         }
         else if (this.isOffDirectionButton()) {
@@ -184,7 +187,11 @@ export class VManualActionDialogVisual extends VMainDialog {
             REVisual.guideGrid?.setVisible(true);
         }
         else if (Input.isTriggered("menu")) {
-            this.openSubDialog(new VMenuDialog(entity));
+            console.log("menu");
+            this.openSubDialog(new LMainMenuDialog(entity), d => {
+                console.log("end?", d);
+                if (d.isSubmitted()) this._model.submit();
+            });
             return;
         }
     }
@@ -207,7 +214,9 @@ export class VManualActionDialogVisual extends VMainDialog {
             this._updateMode = UpdateMode.Normal;
             arrow.setDirection(0);
             REVisual.guideGrid?.setVisible(false);
-            this.openSubDialog(new VMenuDialog(entity));
+            this.openSubDialog(new LMainMenuDialog(entity), d => {
+                if (d.isSubmitted()) this._model.submit();
+            });
             return;
         }
         else {
@@ -256,7 +265,8 @@ export class VManualActionDialogVisual extends VMainDialog {
                 context.postActivity(LDirectionChangeActivity.make(entity, dir));
             }
             context.postActivity(LMoveAdjacentActivity.make(entity, dir));
-            this._model.close(true);
+            this._model.consumeAction();
+            this._model.submit();
 
             // TODO: test
             //SceneManager._scene.executeAutosave();

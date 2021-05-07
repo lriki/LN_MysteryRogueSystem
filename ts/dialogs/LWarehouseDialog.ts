@@ -7,7 +7,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { REDialog } from "../system/REDialog";
+import { DialogSubmitMode, REDialog } from "../system/REDialog";
 import { SEffectSubject } from "ts/system/SEffectContext";
 
 export class LWarehouseDialog extends REDialog {
@@ -64,7 +64,7 @@ export class LWarehouseDialog extends REDialog {
                 });
         })
 
-        this.close(true);
+        this.submit(DialogSubmitMode.ConsumeAction);
     }
     
     public withdrawItems(items: LEntity[]): void {
@@ -101,6 +101,7 @@ export class LWarehouseDialog extends REDialog {
                 });
         })
 
-        this.close(true);
+        this.consumeAction();
+        this.submit();
     }
 }

@@ -144,11 +144,10 @@ export class SCommandContext
             RESystem.dialogContext.setCauseEntity(causeEntity);
 
             if (REGame.recorder.isPlayback()) {
-                RESystem.dialogContext._setDialogModel(new LCommandPlaybackDialog());
+                RESystem.dialogContext.open(new LCommandPlaybackDialog());
             }
             else {
-                RESystem.dialogContext._setDialogModel(dialogModel);
-                RESystem.integration.onDialogOpend(RESystem.dialogContext);
+                RESystem.dialogContext.open(dialogModel);
             }
 
             return REResponse.Succeeded;

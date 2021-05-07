@@ -13,24 +13,41 @@ export class SDialogContext
 {
     private _commandContext: SCommandContext;
     private _causeEntity: LEntity | undefined;
-    private _dialogModel: REDialog | null;
+    //private _dialogModel: REDialog | null;
     //_visual: REDialogVisual | undefined;
+    private _dialogs: REDialog[];
 
     constructor(commandContext: SCommandContext) {
         this._commandContext = commandContext;
-        this._dialogModel = null;
+        this._dialogs = [];
+    }
+
+    public open(dialog: REDialog): void {
+        this._dialogs.push(dialog);
+        RESystem.integration.onOpenDialog(dialog);
+    }
+
+    private pop(): void {
+        this._dialogs.pop();
+    }
+
+    public activeDialog(): REDialog {
+        assert(this._hasDialogModel());
+        return this._dialogs[this._dialogs.length - 1]; 
     }
 
     causeEntity(): LEntity | undefined {
         return this._causeEntity;
     }
 
+    /*
     dialog(): REDialog {
         if (this._dialogModel)
             return this._dialogModel;
         else
             throw new Error("_dialogModel");
     }
+    */
 
     commandContext(): SCommandContext {
         return this._commandContext;
@@ -61,8 +78,8 @@ export class SDialogContext
         
     }
 
-    closeDialog(consumeAction: boolean) {
-        if (consumeAction && this._causeEntity) {
+    consumeAction(): void {
+        if (this._causeEntity) {
             // RMMZイベント起動Dialog では、causeEntity が「階段Entity」等になることがある。
             // 行動順が回らない Entity の ActionToken を消費することはできないのでガードする。
             if (this._causeEntity.findAttribute(LUnitAttribute)) {
@@ -79,11 +96,11 @@ export class SDialogContext
             }
         
         }
-        this._setDialogModel(null);
+    }
+
+    closeDialog() {
+        this.pop();
         RESystem.integration.onDialogClosed(this);
-        //this._commandContext._next();
-        //console.log("closeDialog");
-        //console.trace();
     }
 
     /**
@@ -91,9 +108,9 @@ export class SDialogContext
      */
     public postReopen(): void {
         const entity = this.causeEntity();
-        const model = this.dialog();
+        const model = this.activeDialog();
 
-        this.closeDialog(false);
+        this.closeDialog();
 
         assert(entity);
         this._commandContext.openDialog(entity, model, true);
@@ -103,21 +120,22 @@ export class SDialogContext
         this._causeEntity = value;
     }
 
-    _setDialogModel(value: REDialog | null) {
-        this._dialogModel = value;
-    }
+    //_setDialogModel(value: REDialog | null) {
+    //    this._dialogModel = value;
+    //}
 
     _hasDialogModel(): boolean {
-        return this._dialogModel !== null;
+        return this._dialogs.length > 0;
     }
 
     _update() {
-        assert(this._dialogModel !== null);
+        assert(this._hasDialogModel());
 
         //REGame.recorder._recording = true;
-        this._dialogModel.onUpdate(this);
+        const dialog = this.activeDialog();
+        dialog.onUpdate(this);
 
-        if (this._dialogModel && this._dialogModel.isVisualIntegration()) {
+        if (dialog.isVisualIntegration()) {
             RESystem.integration.onUpdateDialog(this);
         }
         //REGame.recorder._recording = false;

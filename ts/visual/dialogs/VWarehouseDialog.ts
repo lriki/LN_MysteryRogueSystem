@@ -1,18 +1,12 @@
-
-import { tr } from "ts/Common";
 import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
-import { RESystem } from "ts/system/RESystem";
-import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWindow";
-import { VItemListDialog } from "./VItemListDialog";
-import { VWarehouseStoreDialog } from "./VWarehouseStoreDialog";
-import { VMainDialog } from "./VMainDialog";
-import { VWarehouseWithdrawDialog } from "./VWarehouseWithdrawDialog";
+import { LWarehouseStoreDialog } from "ts/dialogs/LWarehouseStoreDialog";
+import { LWarehouseWithdrawDialog } from "ts/dialogs/LWarehouseWithdrawDialog";
+import { VDialog } from "./VDialog";
 
-export class VWarehouseDialog extends VMainDialog {
+export class VWarehouseDialog extends VDialog {
     private _model: LWarehouseDialog;
     private _inventory: LInventoryBehavior;
     private _commandWindow: VWarehouseMenuCommandWindow;
@@ -41,7 +35,7 @@ export class VWarehouseDialog extends VMainDialog {
     private handleStoreCommand() {
         const user = this._model.userEntity();
         const inventory = user.getBehavior(LInventoryBehavior);
-        this.openSubDialog(new VWarehouseStoreDialog(user, inventory), (result: any) => {
+        this.openSubDialog(new LWarehouseStoreDialog(user, inventory), (result: any) => {
             this._model.storeItems(result as LEntity[]);
         });
 
@@ -51,13 +45,13 @@ export class VWarehouseDialog extends VMainDialog {
 
         const user = this._model.userEntity();
         const inventory = this._model.warehouseEntity().getBehavior(LInventoryBehavior);
-        this.openSubDialog(new VWarehouseWithdrawDialog(user, inventory), (result: any) => {
+        this.openSubDialog(new LWarehouseWithdrawDialog(user, inventory), (result: any) => {
             this._model.withdrawItems(result as LEntity[]);
         });
     }
     
     private handleCancelCommand() {
-        this._model.close(true);
+        this._model.cancel();
     }
 }
 

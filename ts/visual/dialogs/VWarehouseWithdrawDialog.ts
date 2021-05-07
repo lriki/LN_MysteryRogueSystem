@@ -1,13 +1,15 @@
 import { tr } from "ts/Common";
-import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
+import { LWarehouseWithdrawDialog } from "ts/dialogs/LWarehouseWithdrawDialog";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase } from "./VItemListDialogBase";
 
 export class VWarehouseWithdrawDialog extends VItemListDialogBase {
+    private _model: LWarehouseWithdrawDialog;
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
-        super(actorEntity, inventory);
+    public constructor(model: LWarehouseWithdrawDialog) {
+        super(model.entity(), model.inventory());
+        this._model = model;
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
@@ -17,7 +19,8 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
         this._commandWindow.refresh();
     }
     
-    private handleWithdraw(items: [LEntity]): void {
-        this.submit(items);
+    private handleWithdraw(items: LEntity[]): void {
+        this._model.setResultItems(items);
+        this._model.submit();
     }
 }

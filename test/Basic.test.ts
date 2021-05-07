@@ -16,6 +16,7 @@ import { DBasics } from "ts/data/DBasics";
 import { LEntityId } from "ts/objects/LObject";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
+import { DialogSubmitMode } from "ts/system/REDialog";
 
 //import "js/rmmz_objects.js"
 
@@ -80,12 +81,12 @@ test('Basic1', () => {
     // 方向転換してみる (ターン消費無し)
     {
         // マニュアル操作の Dialog が開かれている
-        const dialog1 = dialogContext.dialog();
+        const dialog1 = dialogContext.activeDialog();
         expect((dialog1 instanceof REManualActionDialog)).toBe(true);
     
         // 向き変更。行動を消費せず Dialog を閉じる
         dialogContext.postActivity(LDirectionChangeActivity.make(actor1, 9));
-        dialogContext.closeDialog(false);
+        dialogContext.activeDialog().submit();
     
         // この時点では向きは変更されていない
         expect(actor1.dir != 9).toBe(true);
@@ -95,8 +96,8 @@ test('Basic1', () => {
         
         // 行動の消費が無いので、再び ManualActionDialog が開かれる。
         // しかし一度閉じているので、違うインスタンスで開かれている。
-        expect((dialogContext.dialog() instanceof REManualActionDialog)).toBe(true);
-        expect((dialog1 != dialogContext.dialog())).toBe(true);
+        expect((dialogContext.activeDialog() instanceof REManualActionDialog)).toBe(true);
+        expect((dialog1 != dialogContext.activeDialog())).toBe(true);
     
         // この時点では向きは変更されている
         expect(actor1.dir).toBe(9);
@@ -106,7 +107,7 @@ test('Basic1', () => {
     // 一歩下に移動してみる (ターン消費あり)
     {
         dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 2));
-        dialogContext.closeDialog(true);
+        dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
         // シミュレーション実行。実際に移動が行われる
         RESystem.scheduler.stepSimulation();
@@ -246,7 +247,7 @@ test('TurnOrderTable', () => {
     {
         // player を右へ移動
         dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
-        dialogContext.closeDialog(true);
+        dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
         // AI行動決定
         RESystem.scheduler.stepSimulation();
@@ -268,7 +269,7 @@ test('TurnOrderTable', () => {
     {
         // player を右へ移動
         dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
-        dialogContext.closeDialog(true);
+        dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
         // AI行動決定
         RESystem.scheduler.stepSimulation();

@@ -101,7 +101,8 @@ export class RECommandRecorder {
                 assert(id.equals(causeEntity.entityId()));
 
                 RESystem.commandContext.postConsumeActionToken(REGame.world.entity(id));
-                dialog.close(true); // TODO:
+                dialog.consumeAction(); // TODO:
+                dialog.submit(); // TODO:
                 return false;
             }
             default:

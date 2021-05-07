@@ -118,7 +118,7 @@ export class VItemListDialog extends VDialog {
             activity._setup(this._actorEntity, itemEntity);
             
             RESystem.dialogContext.postActivity(activity);
-            this.doneDialog(true);
+            this.submit();
         }
     }
 

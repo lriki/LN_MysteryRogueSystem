@@ -8,6 +8,7 @@ import { TestEnv } from "./TestEnv";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
+import { DialogSubmitMode } from "ts/system/REDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -31,7 +32,7 @@ test('Equipment.EquipOnOff', () => {
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
     dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
-    dialogContext.closeDialog(true);    // 行動確定
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -48,7 +49,7 @@ test('Equipment.EquipOnOff', () => {
     // [装備]
     dialogContext.postActivity(LEquipActivity.make(actor1, weapon1));
     dialogContext.postActivity(LEquipActivity.make(actor1, shield1));
-    dialogContext.closeDialog(true);
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -66,7 +67,7 @@ test('Equipment.EquipOnOff', () => {
     // [はずす]
     dialogContext.postActivity(LEquipOffActivity.make(actor1, weapon1));
     dialogContext.postActivity(LEquipOffActivity.make(actor1, shield1));
-    dialogContext.closeDialog(true);
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

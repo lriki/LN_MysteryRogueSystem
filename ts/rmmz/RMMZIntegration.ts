@@ -10,6 +10,7 @@ import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { LMap } from "ts/objects/LMap";
 import { GameMapBuilder } from "./GameMapBuilder";
 import { SDialogContext } from "ts/system/SDialogContext";
+import { REDialog } from "ts/system/REDialog";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
@@ -58,8 +59,8 @@ export class RMMZIntegration extends REIntegration {
             return false;
     }
     
-    onDialogOpend(context: SDialogContext): void {
-        REVisual.manager?.openDialog(context);
+    onOpenDialog(model: REDialog): void {
+        REVisual.manager?.openDialog(model);
     }
     
     onUpdateDialog(context: SDialogContext): void {
