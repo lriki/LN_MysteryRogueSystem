@@ -1,4 +1,5 @@
 
+import { LItemListDialog } from "ts/dialogs/LItemListDialog";
 import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -11,7 +12,7 @@ export class VMenuDialog extends VDialog {
     _commandWindow: VMenuCommandWindow | undefined;
 
     constructor(model: LMainMenuDialog) {
-        super();
+        super(model);
         this._model = model;
     }
     
@@ -35,7 +36,7 @@ export class VMenuDialog extends VDialog {
         const entity = this._model.entity();
         const inventory = entity.findBehavior(LInventoryBehavior);
         if (inventory) {
-            this.push(new VItemListDialog(entity, inventory), d => {
+            this.openSubDialog(new LItemListDialog(entity, inventory), d => {
                 if (d.isSubmitted()) this.submit();
             });
         }

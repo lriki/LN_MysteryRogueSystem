@@ -12,7 +12,7 @@ export class VWarehouseStoreDialog extends VDialog {
     _commandWindow: VFlexCommandWindow;
 
     public constructor(model: LWarehouseStoreDialog) {
-        super();
+        super(model);
         this._model = model;
         
         const y = 100;

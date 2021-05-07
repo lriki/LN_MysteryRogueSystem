@@ -6,7 +6,7 @@ export class REEventExecutionDialogVisual extends VDialog {
     private _model: REEventExecutionDialog;
 
     constructor(model: REEventExecutionDialog) {
-        super();
+        super(model);
         this._model = model;
     }
 

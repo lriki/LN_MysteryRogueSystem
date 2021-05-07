@@ -1,5 +1,6 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
+import { LItemListDialog } from "ts/dialogs/LItemListDialog";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -10,8 +11,7 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
 export class VItemListDialog extends VDialog {
-    _actorEntity: LEntity;
-    _inventory: LInventoryBehavior;
+    private _model: LItemListDialog;
     _itemListWindow: VItemListWindow;// | undefined;
     _commandWindow: VActionCommandWindow | undefined;
 
@@ -24,20 +24,19 @@ export class VItemListDialog extends VDialog {
      * 必ずしも Inventory を持っている Entity ではない点に注意。
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
-    constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
-        super();
-        this._actorEntity = actorEntity;
-        this._inventory = inventory;
+    constructor(model: LItemListDialog) {
+        super(model);
+        this._model = model;
         
         const y = 100;
         const cw = 200;
-        this._itemListWindow = new VItemListWindow(this._inventory, new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow = new VItemListWindow(this._model.inventory(), new Rectangle(0, y, Graphics.boxWidth - cw, 400));
         this._itemListWindow.setHandler("ok", this.onItemOk.bind(this));
         this._itemListWindow.setHandler("cancel", this.onItemCancel.bind(this));
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
 
-        const equipmentUser = this._actorEntity.findBehavior(LEquipmentUserBehavior);
+        const equipmentUser = this._model.entity().findBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
             this._itemListWindow.setEquipmentUser(equipmentUser);
         }
@@ -63,10 +62,11 @@ export class VItemListDialog extends VDialog {
         if (this._itemListWindow && this._commandWindow) {
 
             const itemEntity = this._itemListWindow.selectedItem();
+            const actorEntity = this._model.entity();
 
             // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
             // 実際に実行できる Action のリストができる。
-            const actions = this._actorEntity.queryActions();
+            const actions = actorEntity.queryActions();
             const reactions = itemEntity.queryReactions();
             const actualActions = reactions
                 .filter(actionId => actions.includes(actionId))
@@ -76,7 +76,7 @@ export class VItemListDialog extends VDialog {
 
             // [装備] [はずす] チェック
             {
-                const equipments = this._actorEntity.getBehavior(LEquipmentUserBehavior);
+                const equipments = actorEntity.getBehavior(LEquipmentUserBehavior);
                 if (equipments.isEquipped(itemEntity))
                     actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
                 else
@@ -115,7 +115,7 @@ export class VItemListDialog extends VDialog {
             
             const activity = SActivityFactory.newActivity(actionId);
             // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-            activity._setup(this._actorEntity, itemEntity);
+            activity._setup(this._model.entity(), itemEntity);
             
             RESystem.dialogContext.postActivity(activity);
             this.submit();

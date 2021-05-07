@@ -2,7 +2,7 @@
 import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
 import { Vector2 } from "ts/math/Vector2";
 import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
-import { VManualActionDialogVisual } from "ts/visual/dialogs/REManualActionDialogVisual";
+import { VManualActionDialogVisual } from "ts/visual/dialogs/VManualActionDialogVisual";
 import { REVisualSequel } from "ts/visual/REVisualSequel";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { RESystem } from "ts/system/RESystem";

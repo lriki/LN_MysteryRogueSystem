@@ -18,7 +18,7 @@ export class VFeetDialog extends VDialog {
     _commandWindow: VActionCommandWindow | undefined;
 
     constructor(model: LFeetDialog) {
-        super();
+        super(model);
         this._model = model;
     }
     

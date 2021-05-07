@@ -8,7 +8,7 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     private _model: LWarehouseWithdrawDialog;
 
     public constructor(model: LWarehouseWithdrawDialog) {
-        super(model.entity(), model.inventory());
+        super(model.entity(), model.inventory(), model);
         this._model = model;
     }
 

@@ -33,7 +33,7 @@ export class VManualActionDialogVisual extends VDialog {
     private _movingInputWaitCount = -1;
 
     public constructor(model: REManualActionDialog) {
-        super();
+        super(model);
         this._model = model;
     }
 

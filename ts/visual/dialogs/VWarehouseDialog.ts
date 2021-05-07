@@ -8,13 +8,13 @@ import { VDialog } from "./VDialog";
 
 export class VWarehouseDialog extends VDialog {
     private _model: LWarehouseDialog;
-    private _inventory: LInventoryBehavior;
+    //private _inventory: LInventoryBehavior;
     private _commandWindow: VWarehouseMenuCommandWindow;
 
     constructor(model: LWarehouseDialog) {
-        super();
+        super(model);
         this._model = model;
-        this._inventory = this._model.userEntity().getBehavior(LInventoryBehavior);
+        //this._inventory = this._model.userEntity().getBehavior(LInventoryBehavior);
         
         const y = 100;
         const cw = 200;
