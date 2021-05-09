@@ -27,12 +27,11 @@ Scene_Map.prototype.onMapLoaded = function() {
     return _Scene_Map_onMapLoaded.call(this);
 }
 
+// 遷移後、フェードイン開始前
 const _Scene_Map_onTransferEnd = Scene_Map.prototype.onTransferEnd;
 Scene_Map.prototype.onTransferEnd = function() {
     _Scene_Map_onTransferEnd.call(this);
-    if (REVisual._messageWindowSet) {
-        REVisual._messageWindowSet._floorNameWindow.open();
-    }
+    REVisual._messageWindowSet?.attemptStartDisplayFloorName();
 }
 
 
@@ -113,10 +112,6 @@ Scene_Map.prototype.update = function() {
     }
     
     else {
-        if (REVisual._messageWindowSet._floorNameWindow.showCount() == 60) {
-            //this.startFadeIn(30, false);
-            REVisual._messageWindowSet.startFadeIn();
-        }
     }
     
 

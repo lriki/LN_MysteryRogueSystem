@@ -14,13 +14,13 @@ export class VFloorNameWindow extends Window_Base {
 
         
 
-        this.open();
     }
     
     public open() {
         this.refresh();
         this.openness = 255;
         this._showCount = 150;
+        throw new Error();
     }
     
     public close() {

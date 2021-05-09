@@ -6,7 +6,9 @@ import { VMessageWindow } from "./windows/VMessageWindow";
 
 
 /**
- * Scene_Message 相当の機能
+ * Scene_Message 相当の機能。
+ * 
+ * Scene_Map をオーバーライドして実装すると他プラグインと衝突するための名前調整など小細工が要ることが多いので、こちらにまとめている。
  */
 export class VMessageWindowSet {
 
@@ -17,6 +19,8 @@ export class VMessageWindowSet {
     private _logWindow: VMessageLogWindow;
     private _messageWindow: VMessageWindow;
 
+    // コアスクリプトのフェード機能は Window 全体にも影響する。つまり、黒画面の上に文字だけ出すような演出ができない。
+    // そのため黒Spriteで画面を覆うようにすることで独自のフェード処理を実装する。
     private _shadowBitmap: Bitmap;
     private _shadowSprite: Sprite;
     private _fadeDuration: number;
@@ -53,7 +57,7 @@ export class VMessageWindowSet {
         this._fadeDuration = 0;
         this._fadeOpacity = 0;
         this._fadeSign = 0;
-        this.setFade();
+
     }
 
     private calcWindowHeight(numLines: number, selectable: boolean) {
@@ -73,18 +77,29 @@ export class VMessageWindowSet {
         return new Rectangle(wx + padding, wy - padding, ww - padding * 2, wh);
     }
 
-    public setFade(): void {
-        this._fadeDuration = 0;
-        this._fadeOpacity = 255;
+    public attemptStartDisplayFloorName(): void {
+        if ($gameMap.displayName()) {
+            this._fadeDuration = 0;
+            this._fadeOpacity = 255;
+            this._floorNameWindow.open();
+        }
     }
     
-    public startFadeIn(): void {
+    private startFadeIn(): void {
         this._fadeSign = 1;
         this._fadeDuration = 30;
         this._fadeOpacity = 255;
     }
 
     public update(): void {
+        if (this._floorNameWindow.isEffectRunning()) {
+            if (this._floorNameWindow.showCount() == 60) {
+                console.log("startFadeIn");
+                this.startFadeIn();
+            }
+        }
+
+
         
         if (this._fadeDuration > 0) {
             const d = this._fadeDuration;
