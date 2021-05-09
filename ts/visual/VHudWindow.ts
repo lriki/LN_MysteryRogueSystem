@@ -19,6 +19,7 @@ export class VHudWindow extends Window_Base {
         super(new Rectangle(0, 0, Graphics.boxWidth, 100)); // 画面全体を覆うとツクールデフォルトの MessageWindow などが見えなくなってしまう
         this.frameVisible = false;
         this.backOpacity = 0;
+        this.visible = false;
 
         //this._floorNumberBitmap = new Bitmap(64, 64);
         //this._floorNumberBitmap.drawText("1F", 0, 0, 64, lineHeight, "left");
@@ -50,6 +51,13 @@ export class VHudWindow extends Window_Base {
 
     update() {
         this.refresh();
+
+        if (REGame.map.floorId().isEntitySystemMap()) {
+            this.visible = true;
+        }
+        else {
+            this.visible = false;
+        }
     }
 
     private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {

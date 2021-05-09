@@ -99,6 +99,8 @@ export interface DMap
 
     /** マップ生成 */
     mapKind: REFloorMapKind;
+
+    exitMap: boolean;
     
     /** 非REシステムマップにおいて、RMMZオリジナルのメニューを使うか。(つまり、一切 RE システムと関係ないマップであるか) */
     defaultSystem: boolean;
@@ -188,7 +190,7 @@ export class REData
 
         this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
         this.lands = [];
-        this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, defaultSystem: false }];
+        this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false }];
         this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', typeName: ""}];

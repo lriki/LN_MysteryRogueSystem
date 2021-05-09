@@ -19,6 +19,13 @@ export class RMMZIntegration extends REIntegration {
         // マップ遷移後、同一マップへの遷移でも Game_Map.setup が実行されるようにする。Scene_Load の処理と同じ。
         $gamePlayer.requestMapReload();
 
+        // 主に演出のため ExitMap への遷移時にプレイヤーの表示をOFFにする
+        console.log("onReserveTransferMap");
+        if (REData.maps[mapId].exitMap) {
+            console.log("exitmap");
+            $gamePlayer.setTransparent(true);
+        }
+
         // この後のコアスクリプト側の流れ
         // - Scene_Map.prototype.updateTransferPlayer() にて、新しい Scene_Map が作成され Scene 遷移する。
         // 

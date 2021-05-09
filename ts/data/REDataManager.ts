@@ -524,7 +524,7 @@ export class REDataManager
                 const info = $dataMapInfos[i];
                 
                 const mapData: DMap = {
-                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap, defaultSystem: false,
+                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false,
                 };
                 REData.maps[i] = mapData;
 
@@ -572,6 +572,10 @@ export class REDataManager
                                     mapData.mapKind = REFloorMapKind.FixedMap;
                                 }
                             }
+                        }
+                                
+                        if (info.name?.includes("RE-ExitMap")) {
+                            mapData.exitMap = true;
                         }
                     }
                 }
