@@ -45,11 +45,12 @@ export class GameMapBuilder {
                         this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
                         break;
                     case TileShape.Wall:
+                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
                         if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
-                            this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
+                            this.putAutoTile(x, y, 1, templateMap.wallEdgeAutoTileKind);
                         }
                         else {
-                            this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
+                            this.putAutoTile(x, y, 1, templateMap.wallHeadAutoTileKind);
                         }
                         break;
                     default:

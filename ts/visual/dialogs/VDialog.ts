@@ -100,7 +100,6 @@ export class VDialog {
     }
 
     _destroy() {
-        console.log("destroy", this);
         this.onDestroy();
 
         this._windows.forEach(x => {
