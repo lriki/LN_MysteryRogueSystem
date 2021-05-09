@@ -250,7 +250,7 @@ export class SMinimapData {
     private getSameKindTile(x: number, y: number, component: FBlockComponent): boolean {
         const block = REGame.map.tryGetBlock(x, y);
         if (!block) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
-        if (block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
+        if (!block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
         if (block._blockComponent == component) return true;
         return false;
     }

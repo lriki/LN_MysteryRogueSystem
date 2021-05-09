@@ -23,6 +23,7 @@ import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
+import { SMomementCommon } from "ts/system/SMomementCommon";
 
 
 /*
@@ -324,7 +325,7 @@ export class LMap extends LObject
     appearEntity(entity: LEntity, x: number, y: number, layer?: BlockLayerKind): void {
         assert(entity.floorId.isEmpty());
         entity.floorId = this.floorId();
-        this.locateEntity(entity, x, y, layer);
+        SMomementCommon.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
     }
 
@@ -422,6 +423,7 @@ export class LMap extends LObject
      * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
      */
     // deprecated: use SMomementCommon
+    /*
     moveEntity(entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
         assert(entity.floorId == this.floorId());
 
@@ -444,6 +446,7 @@ export class LMap extends LObject
             return false;
         }
     }
+    */
 
     /**
      * Entity の位置設定
@@ -452,6 +455,7 @@ export class LMap extends LObject
      * マップ生成時の Entity 配置や、ワープ移動などで使用する。
      */
     // deprecated
+    /*
     locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
         assert(entity.floorId == this.floorId());
 
@@ -479,6 +483,7 @@ export class LMap extends LObject
             REGame.eventServer.send(DBasics.events.roomLeaved, args);
         }
     }
+    */
 
     public updateLocatedResults(context: SCommandContext): void {
         for (const entity of this.entities()) {

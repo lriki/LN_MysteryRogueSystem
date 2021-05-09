@@ -81,6 +81,8 @@ function createInstance(name: string): any {
             return Object.create(LLand.prototype);
         case "LParty":
             return Object.create(LParty.prototype);
+        case "LBlock":
+            return Object.create(LBlock.prototype);
 
             
             

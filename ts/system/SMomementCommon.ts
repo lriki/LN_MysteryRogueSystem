@@ -310,6 +310,7 @@ export class SMomementCommon {
             room.forEachEdgeBlocks(b => b._passed = true);
         }
         else {
+            // 通路なら外周1タイルを通過済みにする
             this.adjacentOffsets.forEach(offset => {
                 const x = block.x() + offset[0];
                 const y = block.y() + offset[1];

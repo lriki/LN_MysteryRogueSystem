@@ -62,6 +62,7 @@ export class LRoom {
         return undefined;
     }
 
+    /** 部屋内の Block を列挙する。 */
     public forEachBlocks(func: (block: LBlock) => void): void {
         const map = REGame.map;
         for (let y = this._y1; y <= this._y2; y++) {
@@ -72,6 +73,7 @@ export class LRoom {
         }
     }
     
+    /** 部屋の外側、外周1タイル分の Block を列挙する */
     public forEachEdgeBlocks(func: (block: LBlock) => void): void {
         const map = REGame.map;
         const left = Math.max(0, this._x1 - 1);
