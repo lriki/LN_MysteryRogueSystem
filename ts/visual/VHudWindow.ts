@@ -16,7 +16,7 @@ export class VHudWindow extends Window_Base {
     //private _floorNumberSprite: Sprite;
 
     constructor() {
-        super(new Rectangle(0, 0, Graphics.boxWidth, Graphics.boxHeight));
+        super(new Rectangle(0, 0, Graphics.boxWidth, 100)); // 画面全体を覆うとツクールデフォルトの MessageWindow などが見えなくなってしまう
         this.frameVisible = false;
         this.backOpacity = 0;
 

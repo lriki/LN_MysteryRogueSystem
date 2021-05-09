@@ -42,6 +42,7 @@ export class VMessageWindowSet {
         this._shadowSprite.setFrame(0, 0, 32, 32);
         this._shadowSprite.scale.x = (Graphics.boxWidth / 32) + 1;
         this._shadowSprite.scale.y = (Graphics.boxHeight / 32) + 1;
+        //this._shadowSprite.visible = false;
         scene._spriteset.addChild(this._shadowSprite);
 
         this._logWindow = new VMessageLogWindow(REGame.messageHistory, this.messageWindowRect());
@@ -89,12 +90,12 @@ export class VMessageWindowSet {
         this._fadeSign = 1;
         this._fadeDuration = 30;
         this._fadeOpacity = 255;
+        //this._shadowSprite.visible = true;
     }
 
     public update(): void {
         if (this._floorNameWindow.isEffectRunning()) {
             if (this._floorNameWindow.showCount() == 60) {
-                console.log("startFadeIn");
                 this.startFadeIn();
             }
         }

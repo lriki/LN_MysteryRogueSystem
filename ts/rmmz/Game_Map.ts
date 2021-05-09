@@ -48,6 +48,18 @@ Game_Map.prototype.setup = function(mapId: number) {
         floorId = LFloorId.makeByRmmzNormalMapId(mapId);
     }
 
+    
+
+    if (floorId.isEntitySystemMap()) {
+        // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
+        // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
+        if (REDataManager.isLandMap(mapId)) {
+            this.events().forEach(e => e.setTransparent(true));
+        }
+
+        $gamePlayer.hideFollowers();
+    }
+
     const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
     if (playerEntity) {
         REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
@@ -59,17 +71,6 @@ Game_Map.prototype.setup = function(mapId: number) {
     }
 
     
-
-    //if (REDataManager.isRESystemMap(mapId) || REDataManager.isLandMap(mapId)) {
-    if (REGame.map.floorId().isEntitySystemMap()) {
-        // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
-        // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
-        if (REDataManager.isLandMap(mapId)) {
-            this.events().forEach(e => e.setTransparent(true));
-        }
-
-        $gamePlayer.hideFollowers();
-    }
 
     Log.d("RMMZ map setup finished.");
 }
