@@ -128,6 +128,7 @@ export class LFloorId {
     }
 
     public isSafety(): boolean {
+        if (this._landId == DHelpers.RmmzNormalMapLandId) return true; // RE 管理外のマップは常に Safety
         return this.floorInfo().safetyActions;
     }
 

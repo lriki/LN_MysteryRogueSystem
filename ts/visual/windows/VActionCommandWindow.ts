@@ -75,10 +75,12 @@ export class VActionCommandWindow extends Window_Command {
         this.refresh();
     }
 
+    /*
     addActionCommand(action: DActionId, handler: ActionCommandHandler): void {
         this.setHandler(`action:${action}`, () => handler(action));
         this.refresh();
     }
+    */
     
     makeCommandList(): void {
         if (this._actions) {

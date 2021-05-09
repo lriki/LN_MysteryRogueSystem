@@ -24,12 +24,8 @@ export class VMenuDialog extends VDialog {
 
         this._commandWindow.setHandler("item", this.handleItem.bind(this));
         this._commandWindow.setHandler("cancel", () => this.cancel());
-        if (REGame.map.floorId().isSafety()) {
-            this._commandWindow.setHandler(STextManager.save, this.handleSave.bind(this));
-        }
-        else {
-            this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
-        }
+        this._commandWindow.setHandler("save", this.handleSave.bind(this));
+        this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
     }
     
     onStart() {
