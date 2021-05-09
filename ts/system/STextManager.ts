@@ -19,6 +19,7 @@ export class STextManager {
     }
 
     public static get exp(): string { return this.basic(8); }
+    public static get save(): string { return this.command(9); }
     public static get obtainExp(): string { return this.message("obtainExp"); }
     public static get actorDamage(): string { return this.message("actorDamage"); }
     public static get actorRecovery(): string { return this.message("actorRecovery"); }

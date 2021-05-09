@@ -79,6 +79,12 @@ export class LMap extends LObject
         this.build(mapData);
     }
 
+    public setupForRMMZDefaultMap(floorId: LFloorId):void {
+        assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
+        this._floorId = floorId;
+        this.setupEmptyMap(1, 1);
+    }
+
     public mapdataRevision(): number {
         return this._mapdataRevision;
     }

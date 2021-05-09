@@ -44,7 +44,15 @@ export interface DAppearanceTable {
 
 export interface DFloorInfo {
     fixedMapName: string;
-    safety: boolean;
+
+    /** false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
+    //entitySystem: boolean;
+
+    /** true の場合、アイテムを置いたり投げたりできない。[捨てる] ができるようになる。一般的な拠点マップを示す。 */
+    safetyActions: boolean;
+
+    /** true の場合、ターン経過で満腹度が減ったりする。 */
+    //survival: boolean;
 }
 
 /**
@@ -129,7 +137,7 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
         if (floorData) {
             const info: DFloorInfo = {
                 fixedMapName: floorData.fixedMap ?? "",
-                safety: floorData.safety ?? false,
+                safetyActions: floorData.safety ?? false,
             }
 
             const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

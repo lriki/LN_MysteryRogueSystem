@@ -1,5 +1,6 @@
 import { DEntity } from "ts/data/DEntity";
 import { RMMZEventEntityMetadata } from "ts/data/DHelper";
+import { REGame } from "ts/objects/REGame";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { RMMZHelper } from "./RMMZHelper";
 
@@ -50,7 +51,7 @@ Game_Event.prototype.isREEntity = function(): boolean {
 
 const _Game_Event_update = Game_Event.prototype.update;
 Game_Event.prototype.update = function() {
-    if ($gameMap.isRESystemMap()) {
+    if (REGame.map.floorId().isEntitySystemMap()) {
         
     }
     else {

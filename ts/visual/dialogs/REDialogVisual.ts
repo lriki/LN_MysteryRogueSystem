@@ -89,10 +89,12 @@ export class REDialogVisualNavigator {
     }
 
     private changeScene(): void {
+        if (this._scene && this._scene._destroying) {
+            this._scene._destroy();
+            this._scene = undefined;
+        }
+
         if (this._nextScene) {
-            if (this._scene && this._scene._destroying) {
-                this._scene._destroy();
-            }
             this._scene = this._nextScene;
             this._nextScene = undefined;
             if (this._scene) {

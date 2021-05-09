@@ -24,6 +24,11 @@ import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
  */
 
 import { Game_REPrefabEvent } from "./PrefabEvent";
+import { LFloorId } from "ts/objects/LFloorId";
+import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
+import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
+import { LLand } from "ts/objects/LLand";
+import { LParty } from "ts/objects/LParty";
 
 
 function createInstance(name: string): any {
@@ -64,6 +69,20 @@ function createInstance(name: string): any {
             return Object.create(LEntityId.prototype);
         case "LScheduler":
             return Object.create(LScheduler.prototype);
+        case "LMap":
+            return Object.create(LMap.prototype);
+        case "LFloorId":
+            return Object.create(LFloorId.prototype);
+        case "LProjectableBehavior":
+            return Object.create(LProjectableBehavior.prototype);
+        case "LEaterBehavior":
+            return Object.create(LEaterBehavior.prototype);
+        case "LLand":
+            return Object.create(LLand.prototype);
+        case "LParty":
+            return Object.create(LParty.prototype);
+
+            
             
     }
 

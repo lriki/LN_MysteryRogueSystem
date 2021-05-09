@@ -42,7 +42,7 @@ export class VDirectionArrow extends Sprite {
     // override
     update(): void {
         
-        if ($gameMap.isRESystemMap()) {
+        if (REGame.map.floorId().isEntitySystemMap()) {
             this.visible = true;
         }
         else {

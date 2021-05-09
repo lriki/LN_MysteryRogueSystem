@@ -1,8 +1,9 @@
+import { REGame } from "ts/objects/REGame";
 
 
 const _Game_CharacterBase_updatePattern = Game_CharacterBase.prototype.updatePattern;
 Game_CharacterBase.prototype.updatePattern = function() {
-    if ($gameMap.isRESystemMap()) {
+    if (REGame.map.floorId().isEntitySystemMap()) {
         // RE System の下では、見た目の制御は Sequel に任せる
     }
     else {
@@ -12,7 +13,7 @@ Game_CharacterBase.prototype.updatePattern = function() {
 
 const _Game_CharacterBase_updateAnimation = Game_CharacterBase.prototype.updateAnimation;
 Game_CharacterBase.prototype.updateAnimation = function() {
-    if ($gameMap.isRESystemMap()) {
+    if (REGame.map.floorId().isEntitySystemMap()) {
         // RE System の下では、見た目の制御は Sequel に任せる
     }
     else {

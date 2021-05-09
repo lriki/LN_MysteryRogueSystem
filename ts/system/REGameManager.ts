@@ -114,36 +114,41 @@ export class REGameManager
         if (REGame.camera.isFloorTransfering()) {
             const newFloorId = REGame.camera.transferingNewFloorId();
 
-            const mapData = new FMap(newFloorId, REGame.world.random().nextInt());
-            if (newFloorId.rmmzFixedMapId() > 0) {
-                // 固定マップ
-                RESystem.integration.onLoadFixedMapData(mapData);
-                const builder = new FMapBuilder();
-                builder.buildForFixedMap(mapData);
+            if (newFloorId.isEntitySystemMap()) {
+
+                const mapData = new FMap(newFloorId, REGame.world.random().nextInt());
+                if (newFloorId.rmmzFixedMapId() > 0) {
+                    // 固定マップ
+                    RESystem.integration.onLoadFixedMapData(mapData);
+                    const builder = new FMapBuilder();
+                    builder.buildForFixedMap(mapData);
+                }
+                else {
+                    mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
+                    //(new FMiddleSingleRoomGenerator()).generate(mapData);
+                    (new FGenericRandomMapGenerator(mapData)).generate();
+                    //(new FGenericRandomMapGenerator(mapData, 69)).generate();
+                    const builder = new FMapBuilder();
+                    builder.buildForRandomMap(mapData);
+    
+                    
+                    mapData.print();
+                }
+    
+    
+                // マップ構築
+                REGame.map._removeAllEntities();
+                REGame.map.setup(newFloorId, mapData);
+                RESystem.mapManager.setMap(REGame.map, mapData);
+    
             }
             else {
-                mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
-                //(new FMiddleSingleRoomGenerator()).generate(mapData);
-                (new FGenericRandomMapGenerator(mapData)).generate();
-                //(new FGenericRandomMapGenerator(mapData, 69)).generate();
-                const builder = new FMapBuilder();
-                builder.buildForRandomMap(mapData);
-
-                
-
-                //console.log("sectors", mapData.sectors());
-                mapData.print();
+                // Entity を登場させない、通常の RMMZ マップ
+                REGame.map.setupForRMMZDefaultMap(newFloorId);
             }
-
-
-            // マップ構築
-            REGame.map._removeAllEntities();
-            REGame.map.setup(newFloorId, mapData);
-            RESystem.mapManager.setMap(REGame.map, mapData);
-
+    
             RESystem.minimapData.clear();
             RESystem.scheduler.clear();
-
             REGame.camera.clearFloorTransfering();
             Log.d("PerformFloorTransfer");
         }

@@ -82,6 +82,7 @@ export class LFloorId {
     }
 
     public floorInfo(): DFloorInfo {
+        assert(this.hasAny());
         const info = REData.lands[this._landId].floorInfos[this._floorNumber];
         assert(info);
         return info;
@@ -127,7 +128,17 @@ export class LFloorId {
     }
 
     public isSafety(): boolean {
-        return this.floorInfo().safety;
+        return this.floorInfo().safetyActions;
+    }
+
+    /** Entity を登場させるマップであるか。false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
+    public isEntitySystemMap(): boolean {
+        return this._landId != DHelpers.RmmzNormalMapLandId;
+    }
+
+    public isRMMZDefaultSystemMap(): boolean {
+        if (this._landId != DHelpers.RmmzNormalMapLandId) return false;
+        return REData.maps[this._floorNumber].defaultSystem;
     }
 }
 

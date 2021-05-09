@@ -2,6 +2,8 @@
 import { LItemListDialog } from "ts/dialogs/LItemListDialog";
 import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
+import { REGame } from "ts/objects/REGame";
+import { STextManager } from "ts/system/STextManager";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";
 
@@ -22,7 +24,12 @@ export class VMenuDialog extends VDialog {
 
         this._commandWindow.setHandler("item", this.handleItem.bind(this));
         this._commandWindow.setHandler("cancel", () => this.cancel());
-        this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
+        if (REGame.map.floorId().isSafety()) {
+            this._commandWindow.setHandler(STextManager.save, this.handleSave.bind(this));
+        }
+        else {
+            this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
+        }
     }
     
     onStart() {
@@ -34,16 +41,19 @@ export class VMenuDialog extends VDialog {
         const entity = this._model.entity();
         const inventory = entity.findBehavior(LInventoryBehavior);
         if (inventory) {
-            console.log("LItemListDialog");
             this.openSubDialog(new LItemListDialog(entity, inventory), d => {
-                console.log("LItemListDialog end?", d);
                 if (d.isSubmitted()) this.submit();
             });
         }
     }
 
-    private handleSuspend() {
+    private handleSave() {
+        SceneManager.push(Scene_Save);
+        this.cancel();
+    }
 
+    private handleSuspend() {
+        throw new Error("Not implemented.");
     }
 }
 

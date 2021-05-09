@@ -90,7 +90,7 @@ function isTransterEffectRunning(): boolean {
 const _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
     if (!isTransterEffectRunning()) {
-        if ($gameMap.isRESystemMap()) {
+        if (REGame.map.floorId().isEntitySystemMap()) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
     
                 if (REGame.camera.isFloorTransfering()) {
@@ -130,7 +130,7 @@ Scene_Map.prototype.update = function() {
     // 位置合わせは Game_Player だけではなく Game_Map や Game_Screen など様々なオブジェクトに対しても影響するため、
     // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
     // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
-    if ($gameMap.isRESystemMap()) {
+    if (REGame.map.floorId().isEntitySystemMap()) {
         if (REVisual._syncCamera) {
             RMMZHelper.syncCameraPositionToGamePlayer();
         }
@@ -143,15 +143,17 @@ Scene_Map.prototype.update = function() {
 
 const _Scene_Map_callMenu = Scene_Map.prototype.isMenuCalled;
 Scene_Map.prototype.callMenu = function() {
-    if ($gameMap.isRMMZDefaultSystemMap()) {
+    if (REGame.map.floorId().isRMMZDefaultSystemMap()) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
-    else if ($gameMap.isRESystemMap()) {
+    else if (REGame.map.floorId().isEntitySystemMap()) {
         // REシステムマップ
         this.menuCalling = false;
     }
     else {
+        assert(RESystem.dialogContext.dialogs().length == 0);
+
         // REセーフティマップ
         this.menuCalling = false;
         const actorEntity = REGame.camera.focusedEntity();

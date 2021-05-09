@@ -31,6 +31,10 @@ export class SDialogContext
         this._dialogs.pop();
     }
 
+    public dialogs(): readonly REDialog[] {
+        return this._dialogs;
+    }
+
     public activeDialog(): REDialog {
         assert(this._hasDialogModel());
         return this._dialogs[this._dialogs.length - 1]; 

@@ -8,8 +8,8 @@ import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Map {
-        isRMMZDefaultSystemMap(): boolean;
-        isRESystemMap(): boolean;
+        //isRMMZDefaultSystemMap(): boolean;
+        //isRESystemMap(): boolean;
     }
 }
 
@@ -25,6 +25,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     
     _Game_Map_setup.call(this, mapId);
 
+    
     // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済み。
     // transfarEntity で Player 操作中の Entity も別マップへ移動する。
     // この中で、Camera が Player を注視していれば Camera も Floor を移動することで、
@@ -33,8 +34,34 @@ Game_Map.prototype.setup = function(mapId: number) {
     // Game_Map 呼び出し元の Game_Player.performTransfer() で行うのも手だが、
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
-    if (REDataManager.isRESystemMap(mapId) || REDataManager.isLandMap(mapId)) {
-        
+
+    let floorId: LFloorId;
+    if (REDataManager.isLandMap(mapId)) {
+        floorId = new LFloorId(REData.lands.findIndex(x => x.rmmzMapId == mapId), $gamePlayer._newX);
+    }
+    else if (REDataManager.isRESystemMap(mapId)) {
+        // 固定マップへの直接遷移
+        floorId = LFloorId.makeByRmmzFixedMapId(mapId);
+    }
+    else {
+        // 管理外マップへの遷移
+        floorId = LFloorId.makeByRmmzNormalMapId(mapId);
+    }
+
+    const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    if (playerEntity) {
+        REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
+        assert(REGame.camera.isFloorTransfering());
+        REGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
+    }
+    else {
+        throw new Error();
+    }
+
+    
+
+    //if (REDataManager.isRESystemMap(mapId) || REDataManager.isLandMap(mapId)) {
+    if (REGame.map.floorId().isEntitySystemMap()) {
         // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
         // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
         if (REDataManager.isLandMap(mapId)) {
@@ -42,27 +69,6 @@ Game_Map.prototype.setup = function(mapId: number) {
         }
 
         $gamePlayer.hideFollowers();
-
-
-
-        let floorId: LFloorId;
-        if (REDataManager.isLandMap(mapId)) {
-            floorId = new LFloorId(REData.lands.findIndex(x => x.rmmzMapId == mapId), $gamePlayer._newX);
-        }
-        else {
-            // 固定マップへの直接遷移
-            floorId = LFloorId.makeByRmmzFixedMapId(mapId);
-        }
-
-        const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
-        if (playerEntity) {
-            REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
-            assert(REGame.camera.isFloorTransfering());
-            REGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
-        }
-        else {
-            throw new Error();
-        }
     }
 
     Log.d("RMMZ map setup finished.");
@@ -88,6 +94,7 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
 
 }
 
+/*
 Game_Map.prototype.isRMMZDefaultSystemMap = function(): boolean {
     return REData.maps[this.mapId()].defaultSystem;
 }
@@ -95,3 +102,4 @@ Game_Map.prototype.isRMMZDefaultSystemMap = function(): boolean {
 Game_Map.prototype.isRESystemMap = function(): boolean {
     return REGame.map.isValid();
 }
+*/

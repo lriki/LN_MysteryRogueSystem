@@ -10,7 +10,7 @@ Game_Player.prototype.initMembers = function() {
 
 const _Game_Player_isTransparent = Game_Player.prototype.isTransparent;
 Game_Player.prototype.isTransparent = function() {
-    if ($gameMap.isRESystemMap())
+    if (REGame.map.floorId().isEntitySystemMap())
         return true;    // RE マップ中は常に非表示
     else
         return _Game_Player_isTransparent.call(this);
@@ -19,7 +19,7 @@ Game_Player.prototype.isTransparent = function() {
 const _Game_Player_canMove = Game_Player.prototype.canMove;
 Game_Player.prototype.canMove = function(): boolean {
     // REma マップではマニュアル移動を禁止
-    if ($gameMap.isRESystemMap()) {
+    if (REGame.map.floorId().isEntitySystemMap()) {
         return false;
     }
 
