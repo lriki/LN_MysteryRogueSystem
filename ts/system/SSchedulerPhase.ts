@@ -8,7 +8,7 @@ import { SEffectSubject } from "./SEffectContext";
 
 
 
-export abstract class RESchedulerPhase {
+export abstract class SSchedulerPhase {
     //abstract nextPhase(): SchedulerPhase;
     
     onStart(scheduler: SScheduler): void {}
@@ -19,7 +19,7 @@ export abstract class RESchedulerPhase {
     abstract onProcess(scheduler: SScheduler, unit: UnitInfo): void;
 }
 
-export class RESchedulerPhase_Prepare extends RESchedulerPhase {
+export class SSchedulerPhase_Prepare extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity) {
@@ -28,7 +28,7 @@ export class RESchedulerPhase_Prepare extends RESchedulerPhase {
     }
 }
 
-export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
+export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
@@ -38,7 +38,7 @@ export class RESchedulerPhase_ManualAction extends RESchedulerPhase {
 }
 
 // モンスターの移動・攻撃対象決定
-export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
+export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
 
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
@@ -51,7 +51,7 @@ export class RESchedulerPhase_AIMinorAction extends RESchedulerPhase {
 }
 
 // 状態異常の発動・解除、HPの自然回復・減少
-export class RESchedulerPhase_UpdateState extends RESchedulerPhase {
+export class SSchedulerPhase_UpdateState extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity) {
@@ -61,7 +61,7 @@ export class RESchedulerPhase_UpdateState extends RESchedulerPhase {
 }
 
 // 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
-export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends RESchedulerPhase {
+export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPhase {
     onStart(scheduler: SScheduler): void {
         REGame.map.updateLocatedResults(RESystem.commandContext);
     }
@@ -75,7 +75,7 @@ export class RESchedulerPhase_ResolveAdjacentAndMovingTarget extends REScheduler
 }
 
 // 罠発動
-export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
+export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
     
     onStart(scheduler: SScheduler): void {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
@@ -100,7 +100,7 @@ export class RESchedulerPhase_CheckFeetMoved extends RESchedulerPhase {
     }
 }
 
-export class RESchedulerPhase_AIMajorAction extends RESchedulerPhase {
+export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {

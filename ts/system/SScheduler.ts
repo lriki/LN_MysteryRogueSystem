@@ -1,7 +1,7 @@
 import { assert, Log } from "../Common";
 import { REGame } from "../objects/REGame";
 import { RESystem } from "./RESystem";
-import { RESchedulerPhase, RESchedulerPhase_AIMajorAction, RESchedulerPhase_AIMinorAction, RESchedulerPhase_CheckFeetMoved, RESchedulerPhase_ManualAction, RESchedulerPhase_Prepare, RESchedulerPhase_ResolveAdjacentAndMovingTarget, RESchedulerPhase_UpdateState } from "./RESchedulerPhase";
+import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_Prepare, SSchedulerPhase_ResolveAdjacentAndMovingTarget, SSchedulerPhase_UpdateState } from "./SSchedulerPhase";
 import { RunStepInfo } from "ts/objects/LScheduler";
 
 
@@ -43,7 +43,7 @@ export class SScheduler
 {
     private _phase: SchedulerPhase = SchedulerPhase.RoundStarting;
 
-    private _phases: RESchedulerPhase[];
+    private _phases: SSchedulerPhase[];
     private _brace: boolean = false;
     private _occupy: boolean = false;
 
@@ -51,13 +51,13 @@ export class SScheduler
 
     constructor() {
         this._phases = [
-            new RESchedulerPhase_Prepare(),
-            new RESchedulerPhase_ManualAction(),
-            new RESchedulerPhase_AIMinorAction(),
-            new RESchedulerPhase_UpdateState(),
-            new RESchedulerPhase_ResolveAdjacentAndMovingTarget(),
-            new RESchedulerPhase_CheckFeetMoved(),
-            new RESchedulerPhase_AIMajorAction(),
+            new SSchedulerPhase_Prepare(),
+            new SSchedulerPhase_ManualAction(),
+            new SSchedulerPhase_AIMinorAction(),
+            new SSchedulerPhase_UpdateState(),
+            new SSchedulerPhase_ResolveAdjacentAndMovingTarget(),
+            new SSchedulerPhase_CheckFeetMoved(),
+            new SSchedulerPhase_AIMajorAction(),
         ];
     }
 
