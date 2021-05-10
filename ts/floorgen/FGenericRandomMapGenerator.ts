@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSector } from "./FMapData";
+import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSector, FSectorAdjacency, FSectorId } from "./FMapData";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
@@ -155,19 +155,84 @@ export class FGenericRandomMapGenerator {
         }
     }
 
+    // 実際に Connection を作成する。
+    // Sector ごとに、ランダムでいずれかの Adjacency を選択する。
+    // 四辺のどれかひとつに向かって腕を伸ばすイメージ。
     private makeSectorConnections(): void {
-        for (const sector of this._map.sectors()) {
-            // 接続可能な隣接情報を集める
-            const adjacencies = sector.edges()
-                .filter(edge => !edge.hasConnectionFully())  // 他の区画がまだ接続してきていない隣接は？
-                .flatMap(edge => edge.adjacencies());
+        const connectionRaisedSectorIds: FSectorId[] = [];  // Connection を作った Sector (相手側は含まない)
+        const tracedSectorIds: FSectorId[] = [];               // 一筆書きで通ったところ
+        const sectorCount = this._map.sectors().length;
 
-            if (adjacencies.length > 0) {
+        // 最初に、開始点 Sector を決めてそこから一筆書きの要領で適当に接続していく
+        {
+
+            // 開始 Sector
+            let sector = this._map.sectors()[this._map.random().nextIntWithMax(sectorCount)];
+
+            for (let i = 0; i < sectorCount; i++) { // 最大でも Sector 総数までしかループしないので、念のための無限ループ回避
+
+                // 接続候補を集める
+                const candidateAdjacencies: FSectorAdjacency[] = [];
+                for (const e of sector.edges()) {
+                    for (const a of e.adjacencies()) {
+                        const e2 = a.otherSide(e);
+                        if (!tracedSectorIds.includes(e2.sector().id())) {  // 既に通った Sector は除外
+                            candidateAdjacencies.push(a);
+                        }
+                    }
+                }
+                
                 // 接続する隣接情報を決定して接続
-                const adjacency = adjacencies[this._map.random().nextIntWithMax(adjacencies.length)];
-                this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
+                if (candidateAdjacencies.length > 0) {
+                    const adjacency = candidateAdjacencies[this._map.random().nextIntWithMax(candidateAdjacencies.length)];
+                    this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
+                    connectionRaisedSectorIds.push(sector.id());
+                    tracedSectorIds.push(sector.id());
+
+                    sector = adjacency.otherSideBySector(sector).sector();
+                }
+                else {
+                    // 候補が無ければ行き止まり
+                    break;
+                }
+            }
+
+        }
+
+        // 次に、一筆書きで通らなかった Sector から通った Sector へ接続していく
+        {
+            for (let i = 0; i < sectorCount; i++) { // 最大でも Sector 総数までしかループしないので、念のための無限ループ回避
+                
+                for (const sector of this._map.sectors()) {
+                    if (!connectionRaisedSectorIds.includes(sector.id())) {
+                        
+                        // 接続候補を集める
+                        const candidateAdjacencies: FSectorAdjacency[] = [];
+                        for (const e of sector.edges()) {
+                            for (const a of e.adjacencies()) {
+                                const e2 = a.otherSide(e);
+                                if (connectionRaisedSectorIds.includes(e2.sector().id())) { // Connection 作成済みのところへ向かって接続したい
+                                    candidateAdjacencies.push(a);
+                                }
+                            }
+                        }
+                        
+                        // 接続する隣接情報を決定して接続
+                        if (candidateAdjacencies.length > 0) {
+                            const adjacency = candidateAdjacencies[this._map.random().nextIntWithMax(candidateAdjacencies.length)];
+                            this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
+                            connectionRaisedSectorIds.push(sector.id());
+                        }
+                    }
+                }
+
+                if (connectionRaisedSectorIds.length == sectorCount) {
+                    break;
+                }
+
             }
         }
+
     }
 
     private makeRooms(): void {

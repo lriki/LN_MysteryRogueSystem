@@ -37,6 +37,7 @@ export class TestEnv {
     public static UnitTestLandId: DLandId;
     public static FloorId_DefaultNormalMap: LFloorId = LFloorId.makeEmpty();
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
+    public static FloorId_RandomMapFloor: LFloorId = LFloorId.makeEmpty();
     public static StateId_Sleep: DStateId;
     public static PrefabId_Herb: DPrefabId;
     public static PrefabId_Weapon1: DPrefabId;
@@ -76,6 +77,7 @@ export class TestEnv {
         this.UnitTestLandId = REData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
         this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.maps.findIndex(m => DHelpers.getMapName(m.mapId) == "拠点マップ"));
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
+        this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
         this.StateId_Sleep = REData.states.findIndex(x => x.displayName == "睡眠");
         this.PrefabId_Herb = REData.prefabs.findIndex(x => x.key == "pキュアリーフ");
         this.PrefabId_Weapon1 = REData.prefabs.findIndex(x => x.key == "pゴブリンのこん棒");

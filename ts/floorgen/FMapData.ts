@@ -21,6 +21,7 @@ export enum FAxis {
 
 export type FSectorId = number;   // 0 is invalid
 export type FRoomId = number;   // 0 is invalid
+export type FConnectionId = number;
 
 export enum FBlockComponent {
     None,   // Wall
@@ -281,6 +282,10 @@ export class FSector {
     public contains(mx: number, my: number): boolean {
         return this._x1 <= mx && mx < this._x2 && this._y1 <= my && my < this._y2;
     }
+
+    public hasAnyConnection(): boolean {
+        return this._edges.some(e => e.hasConnection());
+    }
 }
 
 // Sector の隣接性情報
@@ -304,17 +309,39 @@ export class FSectorAdjacency {
     public hasPair(e1: FSectorEdge, e2: FSectorEdge): boolean {
         return (e1 == this._edge1 && e2 == this._edge2) || (e2 == this._edge1 && e1 == this._edge2);
     }
+
+    public otherSide(edge: FSectorEdge): FSectorEdge {
+        if (edge == this._edge1)
+            return this._edge2;
+        if (edge == this._edge2)
+            return this._edge1;
+        throw new Error();
+    }
+
+    public otherSideBySector(sector: FSector): FSectorEdge {
+        if (sector == this._edge1.sector())
+            return this._edge2;
+        if (sector == this._edge2.sector())
+            return this._edge1;
+        throw new Error();
+    }
 }
 
 export class FSectorConnection {
+    private _id: FConnectionId;
     private _edge1: FSectorEdge;
     private _edge2: FSectorEdge;
     private _pin1: FEdgePin | undefined;
     private _pin2: FEdgePin | undefined;
 
-    public constructor(edge1: FSectorEdge, edge2: FSectorEdge) {
+    public constructor(id: FConnectionId, edge1: FSectorEdge, edge2: FSectorEdge) {
+        this._id = id;
         this._edge1 = edge1;
         this._edge2 = edge2;
+    }
+
+    public id(): FConnectionId {
+        return this._id;
     }
 
     public edge1(): FSectorEdge {
@@ -677,11 +704,15 @@ export class FMap {
 
     public connectSectors(edge1: FSectorEdge, edge2: FSectorEdge): FSectorConnection {
         assert(edge1 != edge2);
-        const connection = new FSectorConnection(edge1, edge2);
+        const connection = new FSectorConnection(this._sectorConnections.length, edge1, edge2);
         this._sectorConnections.push(connection);
         edge1.addConnection(connection);
         edge2.addConnection(connection);
         return connection;
+    }
+
+    public adjacencies(): readonly FSectorAdjacency[] {
+        return this._sectorAdjacencies;
     }
 
     public connections(): readonly FSectorConnection[] {
