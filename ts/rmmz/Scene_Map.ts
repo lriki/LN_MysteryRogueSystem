@@ -88,6 +88,7 @@ function isTransterEffectRunning(): boolean {
 
 const _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
+
     if (!isTransterEffectRunning()) {
         if (REGame.map.floorId().isEntitySystemMap()) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
@@ -95,7 +96,7 @@ Scene_Map.prototype.update = function() {
                 if (REGame.camera.isFloorTransfering()) {
                     // マップ遷移中はコアシステムとしては何もしない。
                     // performFloorTransfer() すること。
-                    return;
+                    //return;
                 }
                 else {
                     RESystem.scheduler.stepSimulation();

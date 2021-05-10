@@ -115,8 +115,10 @@ export class REGameManager
             const newFloorId = REGame.camera.transferingNewFloorId();
 
             if (newFloorId.isEntitySystemMap()) {
+                const mapSeed = REGame.world.random().nextInt();
+                console.log("seed:", mapSeed);
 
-                const mapData = new FMap(newFloorId, REGame.world.random().nextInt());
+                const mapData = new FMap(newFloorId, mapSeed);
                 if (newFloorId.rmmzFixedMapId() > 0) {
                     // 固定マップ
                     RESystem.integration.onLoadFixedMapData(mapData);

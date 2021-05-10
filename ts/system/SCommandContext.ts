@@ -197,6 +197,16 @@ export class SCommandContext
         Log.postCommand("WaitSequel");
     }
 
+    public postWait(frameCount: number) {
+        const m1 = () => {
+            Log.doCommand("Wait");
+            REGame.scheduler.setWaitCount(frameCount);
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "Wait", func: m1 });
+        Log.postCommand("Wait");
+    }
+
     public postApplyEffect(target: LEntity, context: SCommandContext, effect: SEffectContext): void {
         const m1 = () => {
             for (const b of target.collectBehaviors()) {

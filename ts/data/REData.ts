@@ -136,6 +136,27 @@ export interface REData_Parameter
     name: string;
 }
 
+
+// 2xx: 踏破
+// 3xx: 中断。持ち物などは無くならない。
+// 4xx: ゲームオーバー。
+export enum LandExitResult {
+    /** ゴールに到達した。最後のフロアを抜けたか、戻り状態で最初のフロアを抜けたとき。 */
+    Goal = 200,
+
+    /** 脱出の巻物などによって冒険を中断した。 */
+    Escape = 300,
+
+    /** ゲームオーバーによって Land から出された。 */
+    Gameover = 400,
+
+    /** 冒険をあきらめた（メニューから） */
+    Abandoned = 401,
+
+    /** 制約付きのハードコアモードなど、ダンジョン内でセーブせずにゲームを終えたらゲームオーバー扱いする。 */
+    InvalidSuspend = 402,
+}
+
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;

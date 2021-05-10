@@ -1,6 +1,6 @@
 import { DState, DStateId, DStateRestriction } from "ts/data/DState";
 import { DTraits } from "ts/data/DTraits";
-import { REData } from "ts/data/REData";
+import { LandExitResult, REData } from "ts/data/REData";
 import { REGame } from "../REGame";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
@@ -11,6 +11,9 @@ import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
 import { DParameterId, DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
 import { LFloorId } from "../LFloorId";
+import { paramLandExitResultVariableId } from "ts/PluginParameters";
+//import { paramLandExitResultVariableId } from "ts/PluginParameters";
+//import { LandExitResult } from "ts/rmmz/RMMZHelper";
 
 export class LBattlerBehavior extends LBehavior {
     
@@ -304,7 +307,15 @@ export class LBattlerBehavior extends LBehavior {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
-                context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
+                if (entity == REGame.camera.focusedEntity()) {
+                    $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Gameover / 100));
+                    context.postWait(100);
+                    context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
+                }
+                else {
+                    // 仲間等
+                    throw new Error("Not implemented.");
+                }
             }
             else {
     

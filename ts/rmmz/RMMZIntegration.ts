@@ -20,9 +20,7 @@ export class RMMZIntegration extends REIntegration {
         $gamePlayer.requestMapReload();
 
         // 主に演出のため ExitMap への遷移時にプレイヤーの表示をOFFにする
-        console.log("onReserveTransferMap");
         if (REData.maps[mapId].exitMap) {
-            console.log("exitmap");
             $gamePlayer.setTransparent(true);
         }
 
