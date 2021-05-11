@@ -27,6 +27,7 @@ export class REVisualSequel_Move extends REVisualSequel {
         
             const entity = visual.entity();
             const moveSpeed = 4;    // RMMZ の基本移動速度
+            //const moveSpeed = 6;    // 
             const speed = Math.pow(2, moveSpeed) / 256;
             //const frameCount = 1.0 / speed; // 水平1Tile移動に何Frame必要？
     
