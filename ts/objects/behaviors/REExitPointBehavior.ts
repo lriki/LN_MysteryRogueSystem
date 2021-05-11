@@ -6,7 +6,7 @@ import { BlockLayerKind } from "ts/objects/LBlock";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { REEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
 
 /**
  * [2020/11/1] NOTE: Player が乗ったときの UI 表示タイミング
@@ -44,7 +44,7 @@ export class REExitPointBehavior extends LBehavior {
     [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): REResponse {
         const entity = args.self;
 
-        context.openDialog(entity, new REEventExecutionDialog(entity.rmmzEventId), false);
+        context.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId), false);
 
         return REResponse.Succeeded;
     }

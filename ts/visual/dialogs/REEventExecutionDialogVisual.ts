@@ -1,11 +1,11 @@
 
-import { REEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
 import { VDialog } from "./VDialog";
 
 export class REEventExecutionDialogVisual extends VDialog {
-    private _model: REEventExecutionDialog;
+    private _model: SEventExecutionDialog;
 
-    constructor(model: REEventExecutionDialog) {
+    constructor(model: SEventExecutionDialog) {
         super(model);
         this._model = model;
     }

@@ -2,7 +2,7 @@ import { SDialog } from "ts/system/SDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
 
 
-export class REEventExecutionDialog extends SDialog {
+export class SEventExecutionDialog extends SDialog {
     private _rmmzEventId: number;
 
     constructor(rmmzEventId: number) {

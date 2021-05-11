@@ -17,7 +17,7 @@ import { VIdleSequel } from "./sequels/VIdleSequel";
 import { REData } from "ts/data/REData";
 import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
-import { REEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
 import { VDropSequel } from "./sequels/VDropSequel";
 import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { VMenuDialog } from "./dialogs/VMenuDialog";
@@ -75,7 +75,7 @@ export class REVisual_Manager
     openDialog(model: SDialog): void {
         if (model instanceof REManualActionDialog)
             this._dialogNavigator._openDialog(new VManualActionDialogVisual(model));
-        else if (model instanceof REEventExecutionDialog)
+        else if (model instanceof SEventExecutionDialog)
             this._dialogNavigator._openDialog(new REEventExecutionDialogVisual(model));
         else if (model instanceof LWarehouseDialog)
             this._dialogNavigator._openDialog(new VWarehouseDialog(model));
