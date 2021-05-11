@@ -181,7 +181,7 @@ test('MoveDiagonal_CollideWalls', () => {
 
 test('RandomMap.1001562234', () => {
     for (let i = 0; i < 20; i++) {
-        const seed = Math.floor( Math.random()*65535 ); //100156223
+        const seed = 52509;//Math.floor( Math.random()*65535 ); //100156223
         console.log("seed", seed);
 
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);

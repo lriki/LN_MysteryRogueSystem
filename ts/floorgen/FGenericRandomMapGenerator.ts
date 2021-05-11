@@ -253,8 +253,8 @@ export class FGenericRandomMapGenerator {
             const maxRoomHeight = (b - t);
             const w = this._map.random().nextIntWithMinMax(RoomMinSize, (r - l) + 1);
             const h = this._map.random().nextIntWithMinMax(RoomMinSize, (b - t) + 1);
-            const x = ((w != maxRoomWidth) ? this._map.random().nextIntWithMax(maxRoomWidth - w + 1) : 0);
-            const y = ((h != maxRoomHeight) ? this._map.random().nextIntWithMax(maxRoomHeight - h + 1) : 0);
+            const x = l + ((w != maxRoomWidth) ? this._map.random().nextIntWithMax(maxRoomWidth - w + 1) : 0);
+            const y = t + ((h != maxRoomHeight) ? this._map.random().nextIntWithMax(maxRoomHeight - h + 1) : 0);
 
             const room = this._map.newRoom(sector);
             room.setRect(sector.x1() + x, sector.y1() + y, w, h);
