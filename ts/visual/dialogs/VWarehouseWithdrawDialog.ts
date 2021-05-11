@@ -1,5 +1,5 @@
 import { tr } from "ts/Common";
-import { LWarehouseWithdrawDialog } from "ts/dialogs/LWarehouseWithdrawDialog";
+import { LWarehouseWithdrawDialog } from "ts/system/dialogs/LWarehouseWithdrawDialog";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase } from "./VItemListDialogBase";

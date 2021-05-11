@@ -3,7 +3,7 @@ import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
-import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
+import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
@@ -11,10 +11,10 @@ import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivi
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SDialogContext } from "ts/system/SDialogContext";
-import { LFeetDialog } from "ts/dialogs/LFeetDialog";
-import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
+import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
+import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { VDialog } from "./VDialog";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 enum UpdateMode {
     Normal,

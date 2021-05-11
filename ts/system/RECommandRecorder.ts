@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import { assert } from 'ts/Common';
 import { DActionId } from 'ts/data/DAction';
-import { LCommandPlaybackDialog } from 'ts/dialogs/LCommandPlaybackDialog';
+import { LCommandPlaybackDialog } from 'ts/system/dialogs/LCommandPlaybackDialog';
 import { LEntityId } from 'ts/objects/LObject';
 import { REGame } from 'ts/objects/REGame';
 import { LMap } from 'ts/objects/LMap';

@@ -11,7 +11,7 @@ import "./Extension";
 import "./../ts/objects/Extensions";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

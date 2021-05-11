@@ -22,8 +22,17 @@ export enum DialogSubmitMode {
  * また基本的にすべての LDialog の派生と VDialog の派生はペアとなっている。
  * これはいずれの Dialog も Main/Sub 両方で使用できるようにするため。
  * これによって再利用がしやすくなる。例えば壺や倉庫にアイテムを入れるときのアイテム選択や、イベントリストからのアイテム選択。
+ * 
+ * [2021/5/11] Dialog は System モジュールに持っていくべき？
+ * ----------
+ * セーブデータに保存しない、ということになる。
+ * Dialog の状態を保存できなくなるので、Dialog を開いている時のセーブは基本的に禁止になる。
+ * 例えば Dialog からのイベント実行でセーブ画面を呼び出すようなことは禁止。
+ * 
+ * Object に持っていく場合はこれと併せて CommandContext の保存も必要になってくる。
+ * ただそうすると想定外の領域にもどんどん保存の必要性が出てくるので、ここは制限付きにしておくのがベターかも。
  */
-export class REDialog {
+export class SDialog {
     _resultCallback: LDialogResultCallback | undefined;
     _dialogResult: boolean = false;
     

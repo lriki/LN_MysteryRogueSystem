@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
-import { LFeetDialog } from "ts/dialogs/LFeetDialog";
+import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { SActivityFactory } from "ts/system/SActivityFactory";

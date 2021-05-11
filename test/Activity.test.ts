@@ -16,7 +16,7 @@ import { SActivityFactory } from "ts/system/SActivityFactory";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

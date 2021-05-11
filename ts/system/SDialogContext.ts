@@ -7,7 +7,7 @@ import { SCommandContext } from "./SCommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { RESystem } from "./RESystem";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { REDialog } from "./REDialog";
+import { SDialog } from "./SDialog";
 
 export class SDialogContext
 {
@@ -15,14 +15,14 @@ export class SDialogContext
     private _causeEntity: LEntity | undefined;
     //private _dialogModel: REDialog | null;
     //_visual: REDialogVisual | undefined;
-    private _dialogs: REDialog[];
+    private _dialogs: SDialog[];
 
     constructor(commandContext: SCommandContext) {
         this._commandContext = commandContext;
         this._dialogs = [];
     }
 
-    public open(dialog: REDialog): void {
+    public open(dialog: SDialog): void {
         this._dialogs.push(dialog);
         RESystem.integration.onOpenDialog(dialog);
     }
@@ -31,11 +31,11 @@ export class SDialogContext
         this._dialogs.pop();
     }
 
-    public dialogs(): readonly REDialog[] {
+    public dialogs(): readonly SDialog[] {
         return this._dialogs;
     }
 
-    public activeDialog(): REDialog {
+    public activeDialog(): SDialog {
         assert(this._hasDialogModel());
         return this._dialogs[this._dialogs.length - 1]; 
     }

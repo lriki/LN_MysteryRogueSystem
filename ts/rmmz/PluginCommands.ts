@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { LandExitResult, REData } from "ts/data/REData";
-import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
+import { LWarehouseDialog } from "ts/system/dialogs/LWarehouseDialog";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";

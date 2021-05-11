@@ -1,8 +1,8 @@
-import { REDialog } from "ts/system/REDialog";
+import { SDialog } from "ts/system/SDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
 
 
-export class REEventExecutionDialog extends REDialog {
+export class REEventExecutionDialog extends SDialog {
     private _rmmzEventId: number;
 
     constructor(rmmzEventId: number) {

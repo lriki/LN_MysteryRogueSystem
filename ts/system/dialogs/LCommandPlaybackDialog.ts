@@ -1,10 +1,10 @@
 import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
-import { REDialog } from "ts/system/REDialog";
+import { SDialog } from "ts/system/SDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
 
 
-export class LCommandPlaybackDialog extends REDialog {
+export class LCommandPlaybackDialog extends SDialog {
     
     isVisualIntegration(): boolean {
         return false;

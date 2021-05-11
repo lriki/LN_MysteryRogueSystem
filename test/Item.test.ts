@@ -13,7 +13,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
 import { SActivityFactory } from "ts/system/SActivityFactory";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

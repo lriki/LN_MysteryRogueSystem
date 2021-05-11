@@ -1,5 +1,5 @@
 import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
-import { REDialog } from "./REDialog";
+import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
 import { SAnumationSequel, SMotionSequel } from "../objects/REGame_Sequel";
@@ -10,7 +10,7 @@ import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { SSequelContext } from "./SSequelContext";
-import { LCommandPlaybackDialog } from "ts/dialogs/LCommandPlaybackDialog";
+import { LCommandPlaybackDialog } from "ts/system/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
@@ -137,7 +137,7 @@ export class SCommandContext
         return undefined;
     }
 
-    openDialog(causeEntity: LEntity, dialogModel: REDialog, afterChain: boolean): void {
+    openDialog(causeEntity: LEntity, dialogModel: SDialog, afterChain: boolean): void {
         const m1 = () => {
             Log.doCommand("OpenDialog");
             

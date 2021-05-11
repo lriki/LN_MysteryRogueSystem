@@ -1,6 +1,6 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { LItemListDialog } from "ts/dialogs/LItemListDialog";
+import { LItemListDialog } from "ts/system/dialogs/LItemListDialog";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";

@@ -1,9 +1,9 @@
-import { LWarehouseDialog } from "ts/dialogs/LWarehouseDialog";
+import { LWarehouseDialog } from "ts/system/dialogs/LWarehouseDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWindow";
-import { LWarehouseStoreDialog } from "ts/dialogs/LWarehouseStoreDialog";
-import { LWarehouseWithdrawDialog } from "ts/dialogs/LWarehouseWithdrawDialog";
+import { LWarehouseStoreDialog } from "ts/system/dialogs/LWarehouseStoreDialog";
+import { LWarehouseWithdrawDialog } from "ts/system/dialogs/LWarehouseWithdrawDialog";
 import { VDialog } from "./VDialog";
 
 export class VWarehouseDialog extends VDialog {

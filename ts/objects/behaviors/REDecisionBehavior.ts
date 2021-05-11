@@ -1,4 +1,4 @@
-import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
+import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";

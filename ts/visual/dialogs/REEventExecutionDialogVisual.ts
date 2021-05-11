@@ -1,5 +1,5 @@
 
-import { REEventExecutionDialog } from "ts/dialogs/EventExecutionDialog";
+import { REEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
 import { VDialog } from "./VDialog";
 
 export class REEventExecutionDialogVisual extends VDialog {

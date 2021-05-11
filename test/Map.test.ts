@@ -8,7 +8,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { TileShape } from "ts/objects/LBlock";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 import { FMap, FSector } from "ts/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";

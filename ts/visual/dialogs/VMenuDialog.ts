@@ -1,6 +1,6 @@
 
-import { LItemListDialog } from "ts/dialogs/LItemListDialog";
-import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
+import { LItemListDialog } from "ts/system/dialogs/LItemListDialog";
+import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "ts/system/STextManager";

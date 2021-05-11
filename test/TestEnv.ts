@@ -19,7 +19,7 @@ import { DLandId } from 'ts/data/DLand';
 import { DStateId } from 'ts/data/DState';
 import { DPrefab, DPrefabId } from 'ts/data/DPrefab';
 import { SDialogContext } from 'ts/system/SDialogContext';
-import { REDialog } from 'ts/system/REDialog';
+import { SDialog } from 'ts/system/SDialog';
 
 declare global {
     interface Number {
@@ -211,7 +211,7 @@ export class TestEnvIntegration extends REIntegration {
         return false;
     }
 
-    onOpenDialog(model: REDialog): void {
+    onOpenDialog(model: SDialog): void {
         // Dialog の処理はテストコード内で行う
     }
 

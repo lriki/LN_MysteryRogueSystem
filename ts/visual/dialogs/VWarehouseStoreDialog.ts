@@ -1,5 +1,5 @@
 import { tr } from "ts/Common";
-import { LWarehouseStoreDialog } from "ts/dialogs/LWarehouseStoreDialog";
+import { LWarehouseStoreDialog } from "ts/system/dialogs/LWarehouseStoreDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";

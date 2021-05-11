@@ -2,9 +2,9 @@ import { DActionId } from "ts/data/DAction";
 import { LEntity } from "ts/objects/LEntity";
 import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
-import { REDialog } from "../system/REDialog";
+import { SDialog } from "../SDialog";
 
-export class LFeetDialog extends REDialog {
+export class LFeetDialog extends SDialog {
     private _targetEntityId: LEntityId;
     private _actions: DActionId[];
 

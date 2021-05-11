@@ -1,6 +1,6 @@
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
-import { REDialog } from "ts/system/REDialog";
+import { SDialog } from "ts/system/SDialog";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
@@ -11,7 +11,7 @@ export class VItemListDialogBase extends VDialog {
     _itemListWindow: VItemListWindow;
     _commandWindow: VFlexCommandWindow;
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, model: REDialog) {
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, model: SDialog) {
         super(model);
         this._actorEntity = actorEntity;
         this._inventory = inventory;

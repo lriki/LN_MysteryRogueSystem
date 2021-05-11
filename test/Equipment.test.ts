@@ -8,7 +8,7 @@ import { TestEnv } from "./TestEnv";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

@@ -4,7 +4,7 @@
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
 import { REData } from "ts/data/REData";
-import { REManualActionDialog } from "ts/dialogs/REManualDecisionDialog";
+import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/objects/REGame";
 import { REGameManager } from "ts/system/REGameManager";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
@@ -16,7 +16,7 @@ import { DBasics } from "ts/data/DBasics";
 import { LEntityId } from "ts/objects/LObject";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
-import { DialogSubmitMode } from "ts/system/REDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 //import "js/rmmz_objects.js"
 

@@ -9,7 +9,7 @@ import { Game_REPrefabEvent } from "./PrefabEvent";
 import { VDirectionArrow } from "ts/visual/VDirectionArrow";
 import { REGame } from "ts/objects/REGame";
 import { RMMZHelper } from "./RMMZHelper";
-import { LMainMenuDialog } from "ts/dialogs/LMainMenuDialog";
+import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 
 declare global {
     interface Scene_Map {

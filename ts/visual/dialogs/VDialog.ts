@@ -1,11 +1,11 @@
 import { assert } from "ts/Common";
-import { LDialogResultCallback, REDialog } from "ts/system/REDialog";
+import { LDialogResultCallback, SDialog } from "ts/system/SDialog";
 import { RESystem } from "ts/system/RESystem";
 import { REVisual } from "../REVisual";
 import { DialogResultCallback, REDialogVisualNavigator } from "./REDialogVisual";
 
 export class VDialog {
-    private _baseModel: REDialog;
+    private _baseModel: SDialog;
     _created: boolean = false;
     _started: boolean = false;
     _destroying: boolean = false;
@@ -14,13 +14,13 @@ export class VDialog {
     //_resultCallback: DialogResultCallback | undefined;  // deprecated
     //_dialogResult: boolean = false;
 
-    protected constructor(model: REDialog) {
+    protected constructor(model: SDialog) {
         this._baseModel = model;
     }
 
     // NOTE: maindialog
     //protected openSubDialog(dialog: REDialog, result: LDialogResultCallback) {
-    protected openSubDialog<T extends REDialog>(dialog: T, result: (model: T) => void) {
+    protected openSubDialog<T extends SDialog>(dialog: T, result: (model: T) => void) {
         dialog._resultCallback = result;
         RESystem.dialogContext.open(dialog);
     }

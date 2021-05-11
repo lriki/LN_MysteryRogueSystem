@@ -7,10 +7,10 @@ import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { DialogSubmitMode, REDialog } from "../system/REDialog";
+import { DialogSubmitMode, SDialog } from "../SDialog";
 import { SEffectSubject } from "ts/system/SEffectContext";
 
-export class LWarehouseDialog extends REDialog {
+export class LWarehouseDialog extends SDialog {
     private _userEntityId: LEntityId;
     private _warehouseEntityId: LEntityId;
 
