@@ -53,6 +53,10 @@ export interface DFloorInfo {
 
     /** true の場合、ターン経過で満腹度が減ったりする。 */
     //survival: boolean;
+
+    bgmName: string;
+    bgmVolume: 90;
+    bgmPitch: number;
 }
 
 /**
@@ -138,6 +142,9 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
             const info: DFloorInfo = {
                 fixedMapName: floorData.fixedMap ?? "",
                 safetyActions: floorData.safety ?? false,
+                bgmName: floorData.bgm ? floorData.bgm[0] : "",
+                bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
+                bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
             }
 
             const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

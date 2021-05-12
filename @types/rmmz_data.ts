@@ -2,10 +2,10 @@
 
 declare interface IDataSound
 {
-    name?: string;
-    pan?: number;
-    pitch?: number;
-    volume?: number;
+    name: string;
+    pan: number;
+    pitch: number;
+    volume: number;
 }
 
 declare interface IDataTrait

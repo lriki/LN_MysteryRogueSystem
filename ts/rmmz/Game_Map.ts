@@ -104,3 +104,16 @@ Game_Map.prototype.isRESystemMap = function(): boolean {
     return REGame.map.isValid();
 }
 */
+
+const _Game_Map_autoplay = Game_Map.prototype.autoplay;
+Game_Map.prototype.autoplay = function() {
+    const data = REGame.map.floorId().floorInfo();
+    console.log("autoplay", data);
+    if (data.bgmName != "") {
+        AudioManager.playBgm({ name: data.bgmName, pan: 0, pitch: data.bgmPitch, volume: data.bgmVolume }, 0);
+    }
+    else {
+        _Game_Map_autoplay.call(this);
+    }
+}
+

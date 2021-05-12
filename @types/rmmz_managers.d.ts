@@ -210,20 +210,7 @@ declare namespace ConfigManager{
 		seVolume : number;
 	}
 }
-declare namespace AudioManager{
-	// AudioManager.playBgm.!0
-	
-	/**
-	 * 
-	 */
-	interface PlayBgm0 {
-				
-		/**
-		 * 
-		 */
-		pos : number;
-	}
-}
+
 declare namespace AudioManager{
 	// AudioManager.playBgs.!0
 	
@@ -1391,7 +1378,7 @@ declare namespace AudioManager{
 	 * @param bgm 
 	 * @param pos 
 	 */
-	function playBgm(bgm : AudioManager.PlayBgm0, pos : number): void;
+	function playBgm(bgm: IDataSound, pos : number): void;
 		
 	/**
 	 * 
