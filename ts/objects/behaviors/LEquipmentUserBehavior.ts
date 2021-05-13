@@ -139,6 +139,7 @@ NOTE:
 
                 this.ownerEntity().refreshStatus();
     
+                SoundManager.playEquip();
                 context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             }
 
@@ -155,10 +156,13 @@ NOTE:
             }
             this._revisitonNumber++;
             
-            if (removed)
+            if (removed) {
+                SoundManager.playEquip();
                 context.postMessage(tr2("%1 をはずした。").format(REGame.identifyer.makeDisplayText(itemEntity)));
-            else
+            }
+            else {
                 context.postMessage(tr2("何も起こらなかった。"));
+            }
 
             return REResponse.Succeeded;
         }

@@ -197,6 +197,7 @@ export class VManualActionDialogVisual extends VDialog {
             entity.dir = SMomementCommon.getNextAdjacentEntityDirCW(entity);
         }
         else if (Input.isTriggered("menu")) {
+            SoundManager.playOk();
             this.openSubDialog(new LMainMenuDialog(entity), d => {
                 console.log("close LMainMenuDialog", d);
                 if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
