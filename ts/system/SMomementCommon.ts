@@ -75,6 +75,25 @@ export class SMomementCommon {
             default: return 2;
         }
     }
+
+    /**
+     * 
+     */
+    public static getNextAdjacentEntityDirCW(entity: LEntity): number {
+        const map = REGame.map;
+        let d = entity.dir;
+        for (let i = 0; i < 9; i++) {
+            const offset = Helpers.dirToTileOffset(d);
+            const mx = entity.x + offset.x;
+            const my = entity.y + offset.y;
+            const e = map.block(mx, my).aliveEntity(BlockLayerKind.Unit);
+            if (e) {
+                return d;
+            }
+            d = this.getNextDirCW(d);
+        }
+        return entity.dir;
+    }
     
     /**
      * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
