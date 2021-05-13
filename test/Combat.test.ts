@@ -3,7 +3,7 @@ import { REData } from "ts/data/REData";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 
@@ -24,7 +24,7 @@ test('Combat.DamageAndGameover', () => {
 
     //--------------------
     // 準備
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -61,7 +61,7 @@ test('Combat.DamageAndCollapse', () => {
 
     //--------------------
     // 準備
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

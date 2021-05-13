@@ -1,5 +1,5 @@
 import { REGame } from "ts/objects/REGame";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { LFloorId } from "ts/objects/LFloorId";
@@ -25,7 +25,7 @@ test('MapTransfarDirectly', () => {
 
     //--------------------
     // 準備
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // 最初に Player を REシステム管理外の 通常マップに配置しておく
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -154,7 +154,7 @@ test('TransformRotationBlock', () => {
 });
 
 test('MoveDiagonal_CollideWalls', () => {
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

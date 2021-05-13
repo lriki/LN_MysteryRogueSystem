@@ -9,7 +9,7 @@ import { REGame } from "ts/objects/REGame";
 import { TileShape } from "ts/objects/LBlock";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
 import { Helpers } from "./Helpers";
-import { REGameManager } from "./REGameManager";
+import { SGameManager } from "./SGameManager";
 
 enum SubTile {
     UL,

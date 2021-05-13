@@ -2,7 +2,7 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { LBehaviorId, LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { SDialog } from "../SDialog";
 
 export class LWarehouseWithdrawDialog extends SDialog {

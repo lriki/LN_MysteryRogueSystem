@@ -50,6 +50,31 @@ export class SMomementCommon {
         return (d % 2) != 0;
     }
 
+    /**
+     * base が target を向く時の方向を計算する
+     */
+    public static getLookAtDir(base: LEntity, target: LEntity): number {
+        const dx = target.x - base.x;
+        const dy = target.y - base.y;
+        return Helpers.offsetToDir(dx, dy);
+    }
+
+    /**
+     * 方向 d から時計回りに、次の方向を求める
+     */
+    public static getNextDirCW(d: number): number {
+        switch (d) {
+            case 1: return 4;
+            case 2: return 1;
+            case 3: return 2;
+            case 4: return 7;
+            case 6: return 3;
+            case 7: return 8;
+            case 8: return 9;
+            case 9: return 6;
+            default: return 2;
+        }
+    }
     
     /**
      * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。

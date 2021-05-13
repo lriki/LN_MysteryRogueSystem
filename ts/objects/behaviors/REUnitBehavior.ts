@@ -252,33 +252,10 @@ export class REUnitBehavior extends LBehavior {
         const effectContext: SEffectContext = args.args.effectContext;
         if (effectContext) {
             effectContext.applyWithWorth(context, [self]);
-            
-
-            /*
-
-            const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
-            const hpDamage = result.paramEffects[RESystem.parameters.hp].damag;
-
-            {
-                const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
-                context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
-            }
-
-            {
-                
-                const states = result.addedStateObjects();
-                for (const state of states) {
-                    const stateText = state.message1;
-                    //const stateText = target.isActor() ? state.message1 : state.message2;
-                    context.postMessage(stateText.format(name));
-                }
-            }
-
-            */
 
 
-            //const fmt = tr2("%1 は倒れた。");
-            //const fmt = tr2("%1 は %2 の経験値を得た。");
+            // 相手の方向を向く
+            self.dir = SMomementCommon.getLookAtDir(self, effectContext.effectorFact().subject());
 
             return REResponse.Succeeded;
         }

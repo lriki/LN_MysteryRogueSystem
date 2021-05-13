@@ -14,39 +14,25 @@ import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { assert, Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
-import { DBasics } from "ts/data/DBasics";
 import { LIdentifyer } from "ts/objects/LIdentifyer";
 import { SSequelContext } from "./SSequelContext";
 import { SCommandContext } from "./SCommandContext";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "ts/objects/LEventServer";
-import { LEntity } from "ts/objects/LEntity";
 import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/objects/LFloorDirector";
 import { LScheduler } from "ts/objects/LScheduler";
 import { FMap } from "ts/floorgen/FMapData";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/PluginParameters";
-import { FMiddleSingleRoomGenerator } from "ts/floorgen/FGenerator";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SDialogContext } from "./SDialogContext";
 
-type Constructor<T = {}> = new (...args: any[]) => T;
-
-
-function Unit<TBase extends Constructor>(Base: TBase) {
-    return class extends Base {
-      timestamp = Date.now();
-    };
-  }
-
-
-
 /**
  */
-export class REGameManager
+export class SGameManager
 {
     // DataManager.createGameObjects に従って呼び出される。
     // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。

@@ -2,7 +2,7 @@ import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivi
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
@@ -19,7 +19,7 @@ afterAll(() => {
 
 test('Equipment.EquipOnOff', () => {
     // New Game
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

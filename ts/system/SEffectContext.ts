@@ -317,6 +317,10 @@ export class SEffectContext {
         //this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
     }
 
+    public effectorFact(): SEffectorFact {
+        return this._effectorFact;
+    }
+
     public applyWithWorth(commandContext: SCommandContext, targets: LEntity[]): void {
         let deadCount = 0;
         let totalExp = 0;

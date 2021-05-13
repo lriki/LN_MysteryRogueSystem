@@ -1,5 +1,5 @@
 import { REGame } from "ts/objects/REGame";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { LFloorId } from "ts/objects/LFloorId";
@@ -19,7 +19,7 @@ afterAll(() => {
 });
 
 test('State_Brace', () => {
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -42,7 +42,7 @@ test('State_Brace', () => {
 });
 
 test('State.AutoRemove', () => {
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

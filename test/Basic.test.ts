@@ -6,7 +6,7 @@ import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/REComma
 import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/objects/REGame";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
@@ -60,7 +60,7 @@ test('Basic1', () => {
     //ac._destinationX = 1000;
 
     // NewGame.
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -126,7 +126,7 @@ test('Basic1', () => {
 test('TurnOrderTable', () => {
     //--------------------
     // 準備
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1 - x1 速
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

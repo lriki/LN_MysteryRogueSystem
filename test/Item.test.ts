@@ -8,7 +8,7 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { SEntityFactory } from "ts/system/SEntityFactory";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
@@ -24,7 +24,7 @@ afterAll(() => {
 
 test('PickAndPut', () => {
     // New Game
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -80,7 +80,7 @@ test('PickAndPut', () => {
 
 test('PickAtMoved', () => {
     // New Game
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

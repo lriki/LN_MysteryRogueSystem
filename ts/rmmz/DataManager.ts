@@ -1,6 +1,6 @@
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
-import { REGameManager } from "../system/REGameManager";
+import { SGameManager } from "../system/SGameManager";
 import { REData, REFloorMapKind } from "../data/REData";
 import { assert } from "../Common";
 
@@ -152,21 +152,21 @@ const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
     _DataManager_createGameObjects.call(DataManager);
 
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 }
 
 
 const _DataManager_makeSaveContents = DataManager.makeSaveContents;
 DataManager.makeSaveContents = function() {
     const contents = _DataManager_makeSaveContents.call(DataManager);
-    contents.re = REGameManager.makeSaveContents();
+    contents.re = SGameManager.makeSaveContents();
     return contents;
 };
 
 const _DataManager_extractSaveContents = DataManager.extractSaveContents;
 DataManager.extractSaveContents = function(contents) {
     _DataManager_extractSaveContents.call(DataManager, contents);
-    REGameManager.extractSaveContents(contents.re);
+    SGameManager.extractSaveContents(contents.re);
 }
 
 // メモ欄に同じタグが複数あった場合、配列としてmetaプロパティに登録する。

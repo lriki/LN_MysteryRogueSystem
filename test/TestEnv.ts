@@ -7,7 +7,7 @@ import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { RESequelSet } from "ts/objects/REGame_Sequel";
 import { REIntegration } from "ts/system/REIntegration";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import "./Extension";
 import { RESystem } from 'ts/system/RESystem';
@@ -99,7 +99,7 @@ export class TestEnv {
     public static performFloorTransfer(): void {
         assert(REGame.camera.isFloorTransfering());
         this.loadMapData(REGame.camera.transferingNewFloorId().rmmzMapId());
-        REGameManager.performFloorTransfer();
+        SGameManager.performFloorTransfer();
     }
 
     private static loadRmmzDatabase(): void {

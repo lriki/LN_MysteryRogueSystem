@@ -8,7 +8,7 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind, TileShape } from "ts/objects/LBlock";
 import { SEntityFactory } from "ts/system/SEntityFactory";
-import { REGameManager } from "ts/system/REGameManager";
+import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
@@ -26,7 +26,7 @@ afterAll(() => {
 });
 
 test('Activity.Eat', () => {
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -58,7 +58,7 @@ test('Activity.Eat', () => {
 });
 
 test('Activity.Throw', () => {
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -118,7 +118,7 @@ test('Activity.Throw', () => {
 
 
 test('Activity.ThrowAndHit', () => {
-    REGameManager.createGameObjects();
+    SGameManager.createGameObjects();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

@@ -3,7 +3,7 @@ import { LFloorId } from "ts/objects/LFloorId";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
-import { REGameManager } from "../system/REGameManager";
+import { SGameManager } from "../system/SGameManager";
 import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
@@ -64,7 +64,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     if (playerEntity) {
         REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
         assert(REGame.camera.isFloorTransfering());
-        REGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
+        SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
     }
     else {
         throw new Error();
