@@ -93,6 +93,7 @@ export class VManualActionDialogVisual extends VDialog {
                 else {
                     this.openSubDialog(new LFeetDialog(targetEntity, actions), d => {
                         if (d.isSubmitted()) this._model.submit();
+                        entity.immediatelyAfterAdjacentMoving = false;
                     });
                 }
                 return;
