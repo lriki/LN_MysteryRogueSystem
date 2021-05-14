@@ -81,9 +81,9 @@ export class SScheduler
 
         while (true) {
             // フレーム待ち
-            if (REGame.scheduler.updateWaiting()) {
-                break;
-            }
+            //if (REGame.scheduler.updateWaiting()) {
+             //   break;
+            //}
 
             // Sequel 終了待ち
             if (RESystem.integration.onCheckVisualSequelRunning()) {

@@ -32,7 +32,7 @@ export class LScheduler {
     private _currentRun: number = 0;
     public _currentStep: number = 0;
     private _currentPhaseIndex: number = 0;
-    private _waitCount: number = 0;
+    //private _waitCount: number = 0;
 
     public clear() {
         this._actorEntities = [];
@@ -71,10 +71,11 @@ export class LScheduler {
         return (this._currentRun < this._runs.length);
     }
     
-    public setWaitCount(value: number): void {
-        this._waitCount = value;
-    }
+    //public setWaitCount(value: number): void {
+    //    this._waitCount = value;
+    //}
 
+    /*
     public updateWaiting(): boolean {
         if (this._waitCount > 0) {
             this._waitCount--;
@@ -84,8 +85,7 @@ export class LScheduler {
             return false;
         }
     }
-
-
+*/
 
 
 

@@ -2,7 +2,7 @@ import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
-import { SAnumationSequel, SMotionSequel } from "../objects/REGame_Sequel";
+import { SAnumationSequel, SMotionSequel, SWaitSequel } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
 import { SEffectContext, SEffectSubject } from "./SEffectContext";
 import { LBlock } from "../objects/LBlock";
@@ -197,10 +197,12 @@ export class SCommandContext
         Log.postCommand("WaitSequel");
     }
 
-    public postWait(frameCount: number) {
+    public postWait(entity: LEntity, waitCount: number) {
         const m1 = () => {
             Log.doCommand("Wait");
-            REGame.scheduler.setWaitCount(frameCount);
+            this._sequelContext.addSequel(new SWaitSequel(entity, waitCount));
+            this._visualAnimationWaiting = true;
+            //REGame.scheduler.setWaitCount(frameCount);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "Wait", func: m1 });

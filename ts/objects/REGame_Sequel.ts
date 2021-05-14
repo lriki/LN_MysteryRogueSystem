@@ -68,6 +68,18 @@ export class SAnumationSequel extends SSequelUnit {
     }
 }
 
+export class SWaitSequel extends SSequelUnit {
+    private _waitCount: number;
+    public constructor(entity: LEntity, waitCount: number) {
+        super(entity, true, undefined);
+        this._waitCount = waitCount;
+    }
+
+    public waitCount(): number {
+        return this._waitCount;
+    }
+}
+
 /**
  * ある Entity に連続適用する Sequel のリスト。
  * 

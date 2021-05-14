@@ -92,7 +92,7 @@ export class REVisualSequelManager {
     private isLogicalCompleted(): boolean {
         for (let i = 0; i < this._runningVisuals.length; i++) {
             const c = this._runningVisuals[i].sequelContext();
-            if (c.isCancellationLocked() || c.isAnimationWaintng()) {
+            if (c.isCancellationLocked() || c.isAnimationWaintng() || c.isFrameWaiting()) {
                 return false;
             }
         }

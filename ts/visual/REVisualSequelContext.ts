@@ -3,7 +3,7 @@ import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel, RESequelRun } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel, RESequelRun, SWaitSequel } from "ts/objects/REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
@@ -23,6 +23,7 @@ export class REVisualSequelContext {
     private _startPosition: Vector2 = new Vector2(0, 0);
     private _currentIdleSequelId: DSequelId = 0;
     private _animationWaiting = false;
+    private _waitFrameCount: number = 0;
 
     constructor(entityVisual: REVisual_Entity) {
         this._entityVisual = entityVisual;
@@ -72,6 +73,10 @@ export class REVisualSequelContext {
         return (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
     }
 
+    isFrameWaiting(): boolean {
+        return this._waitFrameCount > 0;
+    }
+
     public lockCamera() {
         REVisual._syncCamera = false;
     }
@@ -116,6 +121,10 @@ export class REVisualSequelContext {
                         break;
                     }
                 }
+                else if (unit instanceof SWaitSequel) {
+                    this._startWaitSequel(unit);
+                    break;
+                }
                 else {
                     assert(0);
                 }
@@ -127,7 +136,7 @@ export class REVisualSequelContext {
         }
     }
 
-    _startSequel(sequel: SMotionSequel) {
+    private _startSequel(sequel: SMotionSequel) {
         if (!REVisual.manager) throw new Error();
 
         this._currentSequel = sequel;
@@ -145,6 +154,10 @@ export class REVisualSequelContext {
         }
     }
 
+    private _startWaitSequel(sequel: SWaitSequel): void {
+        this._waitFrameCount = sequel.waitCount();
+    }
+
     _update() {
         if (this._currentVisualSequel) {
             this._currentVisualSequel.onUpdate(this._entityVisual, this);
@@ -154,6 +167,10 @@ export class REVisualSequelContext {
                 // onUpdate() 実行によりアニメーションが終了した
                 this._currentVisualSequel = undefined;
             }
+        }
+
+        if (this._waitFrameCount > 0) {
+            this._waitFrameCount--;
         }
         
         let idleRequested = false;
