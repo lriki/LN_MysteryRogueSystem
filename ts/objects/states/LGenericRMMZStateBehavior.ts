@@ -78,7 +78,8 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             return SPhaseResult.Handled;
         }
         else {
-            return SPhaseResult.Handled;
+            return SPhaseResult.Pass;
+            //return SPhaseResult.Handled;
         }
     }
 }

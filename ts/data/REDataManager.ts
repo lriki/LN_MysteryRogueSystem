@@ -19,6 +19,7 @@ import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
+import { DTraits } from './DTraits';
 
 
 declare global {  
@@ -127,7 +128,7 @@ export class REDataManager
 
         // StateTraits
         {
-            REData.stateTraits = [
+            REData.traits = [
                 { id: 0, name: "null" },
                 { id: 1, name: "RE.StateTrait.Nap" },
             ];
@@ -135,6 +136,9 @@ export class REDataManager
             DBasics.stateTraits = {
                 nap: 1,
             };
+
+
+            REData.traits[DTraits.CertainDirectAttack] = { id: DTraits.CertainDirectAttack, name: "CertainDirectAttack" };
         }
 
         // Factions
@@ -299,6 +303,7 @@ export class REDataManager
                         traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
                         behaviors: x.meta ? makeStateBehaviorsFromMeta(x.meta) : [],
                     };
+                    this.setupDirectly_State(state);
                     return state;
                 }
                 else {
@@ -818,4 +823,15 @@ export class REDataManager
         }
     }
 
+    
+    // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
+    // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
+    // そのためここで直定義して一通り作ってみた後、再検討する。
+    static setupDirectly_State(data: DState) {
+        switch (data.key) {
+            case "kState_UnitTest_攻撃必中":
+                data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
+                break;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { DStateTraitId } from "./DStateTrait";
+import { DTraitId } from "./DTraits";
 import { REData } from "./REData";
 
 export type DStateId = number;
@@ -38,8 +38,9 @@ export interface DState {
     message3: string;
     message4: string;
 
+    traits: IDataTrait[];
+
     // TODO: deprecated
-    traits: DStateTraitId[];
     behaviors: string[];
 }
 
@@ -59,10 +60,22 @@ export function DState_makeDefault(): DState {
     }
 }
 
-export function makeStateTraitsFromMeta(meta: any): DStateTraitId[] {
-    return REData.stateTraits
-        .filter(trait => !!meta[trait.name])
-        .map(trait => trait.id);
+export function makeStateTraitsFromMeta(meta: any): IDataTrait[] {
+    const raws = meta["RE-Trait"];
+    if (!raws) return [];
+    const list = (raws instanceof Array) ? raws : [raws];
+
+    const traits: IDataTrait[] = [];
+    for (const data of list) {
+        const index = REData.traits.findIndex(x => x.name == data);
+        if (index) {
+            traits.push({ code: index, dataId: 0, value: 0 });
+        }
+        else {
+            throw new Error(`Trait "${data}" is invalid.`);
+        }
+    }
+    return traits;
 }
 
 export function makeStateBehaviorsFromMeta(meta: any): string[] {

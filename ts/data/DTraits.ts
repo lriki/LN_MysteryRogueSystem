@@ -1,5 +1,10 @@
 
+export type DTraitId = number;
+
 /**
+ * コアスクリプトの Trait は number だけで識別されるものであるが、
+ * RE としてはメモ欄を使った指定を行う際の名前検索などで Trait というデータ自体に若干属性が必要になる。
+ * 
  * NOTE: Behavior と Trait は違うもの？
  * ----------
  * ひとまず、違うものにしてみる。
@@ -13,6 +18,18 @@
  * ただ、よく見え状態やワナ師状態などは必ずしも個々のEntityの Behavior だけで解決できるものではない。
  * そういったものモノある点に注意。
  * それでもまぁ、例えば "勢力の資質" とか "パーティの資質" とかで考えるといいかも。
+ */
+export interface DTrait {
+    /** ID (0 is Invalid). */
+    id: DTraitId;
+
+    /** Name */
+    name: string;
+}
+
+
+
+/**
  */
 export class DTraits {
     static TRAIT_ELEMENT_RATE = 11;
@@ -33,6 +50,10 @@ export class DTraits {
     // ↑ ここまでは RMMZ の Game_BattlerBase.TRAIT_xxxx と同一
     //----------
     
+    /**
+     * 直接攻撃を必中にする。
+     */
+    static CertainDirectAttack = 127;
 
 
     // 壁抜けゴースト系モンスターの "フロア全体視界"

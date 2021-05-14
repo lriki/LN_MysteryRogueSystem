@@ -98,6 +98,11 @@ export class LState extends LObject {
         }
     }
 
+    public collectTraits(result: IDataTrait[]): void {
+        this.stateData().traits.forEach(x => result.push(x));
+        this.iterateBehaviors(x => x.onCollectTraits(result));
+    }
+
     public iterateBehaviors(func: (b: LBehavior) => void): void {
         for (const id of this._stateBehabiors) {
             func(REGame.world.behavior(id));

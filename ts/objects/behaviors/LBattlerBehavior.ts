@@ -123,12 +123,12 @@ export class LBattlerBehavior extends LBehavior {
     };
 
     // Game_BattlerBase.prototype.traits
-    private traits(code: number): IDataTrait[] {
+    public traits(code: number): IDataTrait[] {
         return this.allTraits().filter(trait => trait.code === code);
     };
 
     // Game_BattlerBase.prototype.traitsWithId
-    private traitsWithId(code: number, id: number): IDataTrait[] {
+    public traitsWithId(code: number, id: number): IDataTrait[] {
         return this.allTraits().filter(
             trait => trait.code === code && trait.dataId === id
         );

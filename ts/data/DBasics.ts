@@ -6,7 +6,7 @@ import { DBasicFactions } from "./predefineds/DBasicFactions";
 import { DBasicMonsterHouses } from "./predefineds/DBasicMonsterHouses";
 import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DBasicParameters";
 import { DBasicStates } from "./predefineds/DBasicStates";
-import { DBasicStateTraits } from "./predefineds/DBasicStateTraits";
+import { DBasicStateTraits } from "./predefineds/DBasicTraits";
 
 
 /**

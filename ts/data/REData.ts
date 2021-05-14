@@ -9,7 +9,6 @@ import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem } from "./DItem";
 import { DLand, DLand_Default } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
-import { DStateTrait } from "./DStateTrait";
 import { DSequel } from "./DSequel";
 import { RE_Data_Monster } from "./DEnemy";
 import { DAction, DActionId } from "./DAction";
@@ -22,6 +21,7 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
+import { DTrait } from "./DTraits";
 
 
 export enum REFloorMapKind
@@ -186,7 +186,7 @@ export class REData
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static skills: DSkill[] = [];
     static items: DItem[] = [];
-    static stateTraits: DStateTrait[] = [];
+    static traits: DTrait[] = [];
     static states: DState[] = [];
     static abilities: DAbility[] = [];
     static monsterHouses: DMonsterHouse[] = [];

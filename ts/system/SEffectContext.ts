@@ -13,6 +13,7 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
+import { DTraits } from "ts/data/DTraits";
 
 
 enum SParameterEffectApplyType {
@@ -21,6 +22,13 @@ enum SParameterEffectApplyType {
     Recover,
 }
 
+export enum SEffectIncidentType {
+    /** 直接攻撃 (ヤリなど、隣接していない場合もあり得る) */
+    DirectAttack,
+
+    /** 間接攻撃 (矢など) */
+    IndirectAttack,
+}
 
 
 // DParameterEffect とよく似ているが、こちらは動的なデータとして扱うものの集合。
@@ -83,7 +91,6 @@ export class SEffectSubject {
 
 // 攻撃側
 export class SEffectorFact {
-    private _context: SEffectContext;
     private _subject: LEntity;
     private _subjectEffect: DEffect;
     private _subjectBattlerBehavior: LBattlerBehavior | undefined;
@@ -101,11 +108,17 @@ export class SEffectorFact {
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
 
-    public constructor(context: SEffectContext, subject: LEntity, effect: DEffect) {
-        this._context = context;
+    // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
+    private _scope: DEffectScope = 0;
+
+    private _incidentType: SEffectIncidentType;
+
+    public constructor(subject: LEntity, effect: DEffect, scope: DEffectScope, incidentType: SEffectIncidentType) {
         this._subject = subject;
         this._subjectEffect = effect;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
+        this._scope = scope;
+        this._incidentType = incidentType;
 
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
@@ -141,6 +154,13 @@ export class SEffectorFact {
         return this._subjectEffect;
     }
 
+    public scope(): DEffectScope {
+        return this._scope;
+    }
+
+    public incidentType(): SEffectIncidentType {
+        return this._incidentType;
+    }
 
     //--------------------
     // onCollectEffector から使うもの
@@ -307,14 +327,9 @@ export class SEffectContext {
     //private _targetEntity: REGame_Entity;
     //private _targetBattlerBehavior: LBattlerBehavior;
 
-    // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
-    private _scope: DEffectScope = 0;
 
-    constructor(subject: LEntity, scope: DEffectScope, effect: DEffect) {
-        this._effectorFact = new SEffectorFact(this, subject, effect);
-        this._scope = scope;
-        //this._targetEntity = target;
-        //this._targetBattlerBehavior = target.getBehavior(LBattlerBehavior);
+    constructor(subject: SEffectorFact) {
+        this._effectorFact = subject;
     }
 
     public effectorFact(): SEffectorFact {
@@ -363,12 +378,13 @@ export class SEffectContext {
         result.clear();
 
         if (targetBattlerBehavior) {
-            const hitRate = this._effectorFact.hitRate();
-            const evaRate = this._effectorFact.evaRate(targetBattlerBehavior);
 
             result.used = this.testApply(targetBattlerBehavior);
-            result.missed = result.used && Math.random() >= hitRate;
-            result.evaded = !result.missed && Math.random() < evaRate;
+
+
+            // 命中判定
+            this.judgeHits(result);
+            
             result.physical = this._effectorFact.isPhysical();
 
             if (result.isHit()) {
@@ -410,6 +426,26 @@ export class SEffectContext {
         return result;
     }
 
+    private judgeHits(result: LEffectResult): void {
+        const subject = this._effectorFact.subjectBehavior();
+        assert(subject);
+
+        if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
+            if (subject.traits(DTraits.CertainDirectAttack).length > 0) {
+                // 直接攻撃必中
+                result.missed = false;
+                result.evaded = false;
+                return;
+            }
+        }
+
+        const hitRate = this._effectorFact.hitRate();
+        const evaRate = this._effectorFact.evaRate(subject);
+
+        result.missed = result.used && Math.random() >= hitRate;
+        result.evaded = !result.missed && Math.random() < evaRate;
+    }
+
     
     // Game_Action.prototype.testApply
     private testApply(target: LBattlerBehavior): boolean {
@@ -431,7 +467,7 @@ export class SEffectContext {
     
     // Game_Action.prototype.checkItemScope
     private checkItemScope(list: DEffectScope[]) {
-        return list.includes(this._scope);
+        return list.includes(this._effectorFact.scope());
     };
 
     // Game_Action.prototype.isForOpponent

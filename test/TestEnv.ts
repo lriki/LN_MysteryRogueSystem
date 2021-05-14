@@ -39,6 +39,7 @@ export class TestEnv {
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
     public static FloorId_RandomMapFloor: LFloorId = LFloorId.makeEmpty();
     public static StateId_Sleep: DStateId;
+    public static StateId_CertainDirectAttack: DStateId;
     public static PrefabId_Herb: DPrefabId;
     public static PrefabId_Weapon1: DPrefabId;
     public static PrefabId_Shield1: DPrefabId;
@@ -79,6 +80,7 @@ export class TestEnv {
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
         this.StateId_Sleep = REData.states.findIndex(x => x.displayName == "睡眠");
+        this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
         this.PrefabId_Herb = REData.prefabs.findIndex(x => x.key == "pキュアリーフ");
         this.PrefabId_Weapon1 = REData.prefabs.findIndex(x => x.key == "pゴブリンのこん棒");
         this.PrefabId_Shield1 = REData.prefabs.findIndex(x => x.key == "pレザーシールド");

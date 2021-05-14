@@ -576,8 +576,11 @@ export class LEntity extends LObject
     
     public collectTraits(): IDataTrait[] {
         const result: IDataTrait[] = [];
-        for (const b of this.basicBehaviors()) {
-            b.onCollectTraits(result);
+        for (const i of this.basicBehaviors()) {
+            i.onCollectTraits(result);
+        }
+        for (const i of this.states()) {
+            i.collectTraits(result);
         }
         return result;
     }
