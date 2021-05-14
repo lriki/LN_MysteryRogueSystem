@@ -4,6 +4,8 @@ import { RESystem } from "ts/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
+import { DState, DStateId, DStateRestriction } from "ts/data/DState";
+import { assert } from "ts/Common";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
     private _stateTurn: number = 0;
@@ -40,6 +42,12 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         }
     }
     
+    private stateData(): DState {
+        const parent = this.parentAs(LState);
+        assert(parent);
+        return parent.stateData();
+    }
+
     onAttached(): void {
         //console.log("LStateTrait_GenericRMMZState");
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
@@ -62,6 +70,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     //count = 0;
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        // 解除判定
         if (phase == DecisionPhase.UpdateState) {
             this.updateStateTurns();
             this.removeStatesAuto();
@@ -69,17 +78,21 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             //if (this.count > 2) {
             //    this.removeThisState();
             //}
-        }
-        
-        if (phase == DecisionPhase.Prepare) {
-            //console.log("DecisionPhase.Prepare");
-            // TEST: 行動スキップ
-            //context.postSkipPart(entity);
-            return SPhaseResult.Handled;
+            return SPhaseResult.Pass;
         }
         else {
-            return SPhaseResult.Pass;
-            //return SPhaseResult.Handled;
+            const state = this.stateData();
+            if (state.restriction == DStateRestriction.None) {
+                return SPhaseResult.Pass;
+            }
+            else if (state.restriction == DStateRestriction.NotAction) {
+                // 行動スキップ
+                return SPhaseResult.Handled;
+            }
+            else {
+                throw new Error("Not implemented.");
+                return SPhaseResult.Handled;
+            }
         }
     }
 }

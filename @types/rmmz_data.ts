@@ -223,7 +223,7 @@ declare interface IDataState
     message4?: string;
     minTurns?: number;
     motion?: number;
-    name?: string;
+    name: string;
     note?: string;
     overlay?: number;
     priority?: number;
@@ -232,7 +232,7 @@ declare interface IDataState
     removeByDamage?: boolean;
     removeByRestriction?: boolean;
     removeByWalking?: boolean;
-    restriction?: number;
+    restriction: number;
     stepsToRemove?: number;
     traits?: IDataTrait[];
     meta?: any;

@@ -268,6 +268,7 @@ export class LBattlerBehavior extends LBehavior {
 
 
     // Game_BattlerBase.prototype.restriction
+    // 各種 restriction を集計し、制約が最も強いものを返す。
     public restriction(): DStateRestriction {
         const restrictions = this.states().map(state => state.restriction);
         return Math.max(0, ...restrictions);

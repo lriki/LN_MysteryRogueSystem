@@ -29,7 +29,7 @@ export interface DState {
     displayName: string;
 
     /** Restriction */
-    restriction: number;
+    restriction: DStateRestriction;
 
     iconIndex: number;
 

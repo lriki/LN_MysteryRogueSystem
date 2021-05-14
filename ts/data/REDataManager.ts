@@ -293,8 +293,8 @@ export class REDataManager
                     let state: DState = {
                         id: i,
                         key: x.meta ? x.meta["RE-Key"] : "",
-                        displayName: x.name ?? "",
-                        restriction: 0,
+                        displayName: x.name,
+                        restriction: x.restriction,
                         iconIndex: x.iconIndex ?? 0,
                         message1: x.message1 ?? "",
                         message2: x.message2 ?? "",
