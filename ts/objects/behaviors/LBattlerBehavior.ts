@@ -308,7 +308,7 @@ export class LBattlerBehavior extends LBehavior {
             
             if (entity.isUnique()) {
                 if (entity == REGame.camera.focusedEntity()) {
-                    $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Gameover / 100));
+                    RESystem.integration.onSetLandExitResult(LandExitResult.Gameover);
                     context.postWait(100);
                     context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
                 }

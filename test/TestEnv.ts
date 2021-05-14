@@ -1,6 +1,6 @@
 
 import fs from 'fs';
-import { REData, REFloorMapKind } from "ts/data/REData";
+import { LandExitResult, REData, REFloorMapKind } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
@@ -231,5 +231,8 @@ export class TestEnvIntegration extends REIntegration {
 
     onEntityLeavedMap(entity: LEntity): void {
         // Visual 表示は伴わない
+    }
+    
+    onSetLandExitResult(result: LandExitResult): void {
     }
 }

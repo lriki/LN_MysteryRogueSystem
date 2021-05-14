@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { REData } from "../data/REData";
+import { LandExitResult, REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
 import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
@@ -11,6 +11,7 @@ import { LMap } from "ts/objects/LMap";
 import { GameMapBuilder } from "./GameMapBuilder";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { SDialog } from "ts/system/SDialog";
+import { paramLandExitResultVariableId } from "ts/PluginParameters";
 
 export class RMMZIntegration extends REIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
@@ -123,5 +124,8 @@ export class RMMZIntegration extends REIntegration {
         return `${REData.entityKinds[kindId].prefabKind}:${index}`;
     }
 
+    onSetLandExitResult(result: LandExitResult): void {
+        $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(result / 100));
+    }
 
 }

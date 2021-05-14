@@ -18,6 +18,7 @@ import { LEquipActivity } from "../activities/LEquipActivity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 import { LEquipOffActivity } from "../activities/LEquipOffActivity";
+import { SSoundManager } from "ts/system/SSoundManager";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -139,7 +140,7 @@ NOTE:
 
                 this.ownerEntity().refreshStatus();
     
-                SoundManager.playEquip();
+                SSoundManager.playEquip();
                 context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             }
 
@@ -157,7 +158,7 @@ NOTE:
             this._revisitonNumber++;
             
             if (removed) {
-                SoundManager.playEquip();
+                SSoundManager.playEquip();
                 context.postMessage(tr2("%1 をはずした。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             }
             else {

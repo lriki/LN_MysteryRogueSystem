@@ -1,3 +1,4 @@
+import { LandExitResult } from "ts/data/REData";
 import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
@@ -35,4 +36,6 @@ export abstract class REIntegration {
 
     /** Entity が Map から離れたとき。 */
     abstract onEntityLeavedMap(entity: LEntity): void;
+
+    abstract onSetLandExitResult(result: LandExitResult): void;
 }
