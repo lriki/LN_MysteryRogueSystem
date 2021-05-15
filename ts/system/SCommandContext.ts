@@ -202,7 +202,6 @@ export class SCommandContext
             Log.doCommand("Wait");
             this._sequelContext.addSequel(new SWaitSequel(entity, waitCount));
             this._visualAnimationWaiting = true;
-            //REGame.scheduler.setWaitCount(frameCount);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push({ name: "Wait", func: m1 });

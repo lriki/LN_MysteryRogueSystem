@@ -311,6 +311,7 @@ export class LBattlerBehavior extends LBehavior {
                 if (entity == REGame.camera.focusedEntity()) {
                     RESystem.integration.onSetLandExitResult(LandExitResult.Gameover);
                     context.postWait(entity, 100);
+                    context.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
                     context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
                 }
                 else {
