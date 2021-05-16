@@ -22,6 +22,7 @@ import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
+import { REData_Parameter } from "./DParameter";
 
 
 export enum REFloorMapKind
@@ -127,15 +128,6 @@ export interface REData_Faction
 }
 
 
-export interface REData_Parameter
-{
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name */
-    name: string;
-}
-
 
 // 2xx: 踏破
 // 3xx: 中断。持ち物などは無くならない。
@@ -181,7 +173,7 @@ export class REData
     static factions: REData_Faction[] = [];
     static actions: DAction[] = [];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
-    static parameters: REData_Parameter[] = [{id: 0, name: 'null'}];
+    static parameters: REData_Parameter[] = [];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static skills: DSkill[] = [];
@@ -288,6 +280,7 @@ export class REData
         return newId;
     }
 
+    /*
     static addParameter(name: string): number {
         const newId = this.parameters.length;
         this.parameters.push({
@@ -296,6 +289,7 @@ export class REData
         });
         return newId;
     }
+    */
 
     static addAttribute(name: string, factory: (() => LAttribute)): number {
         const newId = this.attributes.length;

@@ -35,8 +35,7 @@ import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
-//import { LState } from "../states/LState";
+import { DParameterId } from "ts/data/DParameter";
 
 export enum DecisionPhase {
     Prepare,

@@ -2,7 +2,7 @@ import { DActionId } from "ts/data/DAction";
 import { RE_Data_Actor } from "ts/data/DActor";
 import { DBasics } from "ts/data/DBasics";
 import { DClass } from "ts/data/DClass";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId } from "ts/data/DParameter";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { LBattlerBehavior } from "./LBattlerBehavior";
@@ -175,6 +175,8 @@ export class LActorBehavior extends LBattlerBehavior {
     gainExp(exp: number): void {
         const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
         this.changeExp(newExp);
+        
+        this.ownerEntity()._effectResult.gainedExp += exp;
     }
 
     // Game_Actor.prototype.finalExpRate
@@ -203,7 +205,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.paramBase 
     idealParamBase(paramId: DParameterId): number {
-        const p = this.currentClass().params[paramId];
+        const p = this.currentClass().params[REData.parameters[paramId].battlerParamId];
         return p ? p[this._level] : 0;
     }
 

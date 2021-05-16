@@ -1,4 +1,4 @@
-import { DParameterId } from "./predefineds/DBasicParameters";
+import { DParameterId } from "./DParameter";
 
 export type DSkillDataId = number;
 

@@ -1,10 +1,9 @@
 
-export type DParameterId = number;
-export type DXParamId = number;
-export type DSParamId = number;
 
 // 基本能力値。
-// Property との違いは、戦闘ダメージなどに関係するものを集めたものである、という点。すべて number で表される。
+
+import { DParameterId, DSParamId, DXParamId } from "../DParameter";
+
 export interface DBasicParameters {
     // RMMZ 基礎パラメータ。(Game_Battler.params(x)) 並び順が一致するようにしておく。
     hp: DParameterId; // = 0    // HP / Maximum Hit Points
@@ -47,7 +46,7 @@ export interface DBasicParameters {
 }
 
 
-// 追加能力値。加算で計算する。
+// 追加能力値。加算で計算する。攻撃側が必要とするパラメータがメイン。
 export interface DBasicXParams {
     // HIT rate
     hit: DXParamId,// = 0,
@@ -80,7 +79,7 @@ export interface DBasicXParams {
     trg: DXParamId,// = 9,
 }
 
-// 特殊能力値。乗算で計算する。
+// 特殊能力値。乗算で計算する。防御側が必要とするパラメータがメイン。
 export interface DBasicSParams {
     // TarGet Rate
     tgr: DSParamId,// = 0,

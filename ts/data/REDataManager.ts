@@ -55,29 +55,41 @@ export class REDataManager
         }
 
         // Parameters
+        REData.parameters = [
+            { id: 0, name: "null", battlerParamId: -1, initialIdealValue: 0 },
+            { id: 1, name: "HP", battlerParamId: 0, initialIdealValue: 0 },
+            { id: 2, name: "MP", battlerParamId: 1, initialIdealValue: 0 },
+            { id: 3, name: "ATK", battlerParamId: 2, initialIdealValue: 0 },
+            { id: 4, name: "DEF", battlerParamId: 3, initialIdealValue: 0 },
+            { id: 5, name: "MAT", battlerParamId: 4, initialIdealValue: 0 },
+            { id: 6, name: "MDF", battlerParamId: 5, initialIdealValue: 0 },
+            { id: 7, name: "AGI", battlerParamId: 6, initialIdealValue: 0 },
+            { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0 },
+            { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0 },
+            //----------
+            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 100 },  // 満腹度
+        ]
         DBasics.params = {
-            hp: REData.addParameter("HP"),
-            mp: REData.addParameter("MP"),
-            atk: REData.addParameter("ATK"),
-            def: REData.addParameter("DEF"),
-            mat: REData.addParameter("MAT"),
-            mdf: REData.addParameter("MDF"),
-            agi: REData.addParameter("AGI"),
-            luk: REData.addParameter("LUK"),
-
-            tp: REData.addParameter("TP"),
-
-            fp: REData.addParameter("FP"),  // 満腹度
+            hp: REData.parameters.findIndex(x => x.name == "HP"),
+            mp: REData.parameters.findIndex(x => x.name == "MP"),
+            atk: REData.parameters.findIndex(x => x.name == "ATK"),
+            def: REData.parameters.findIndex(x => x.name == "DEF"),
+            mat: REData.parameters.findIndex(x => x.name == "MAT"),
+            mdf: REData.parameters.findIndex(x => x.name == "MDF"),
+            agi: REData.parameters.findIndex(x => x.name == "AGI"),
+            luk: REData.parameters.findIndex(x => x.name == "LUK"),
+            tp: REData.parameters.findIndex(x => x.name == "TP"),
+            fp: REData.parameters.findIndex(x => x.name == "FP"),
         };
         // RMMZ のパラメータID との一致を検証
-        assert(DBasics.params.hp === 0);
-        assert(DBasics.params.mp === 1);
-        assert(DBasics.params.atk === 2);
-        assert(DBasics.params.def === 3);
-        assert(DBasics.params.mat === 4);
-        assert(DBasics.params.mdf === 5);
-        assert(DBasics.params.agi === 6);
-        assert(DBasics.params.luk === 7);
+        assert(REData.parameters[DBasics.params.hp].battlerParamId === 0);
+        assert(REData.parameters[DBasics.params.mp].battlerParamId === 1);
+        assert(REData.parameters[DBasics.params.atk].battlerParamId === 2);
+        assert(REData.parameters[DBasics.params.def].battlerParamId === 3);
+        assert(REData.parameters[DBasics.params.mat].battlerParamId === 4);
+        assert(REData.parameters[DBasics.params.mdf].battlerParamId === 5);
+        assert(REData.parameters[DBasics.params.agi].battlerParamId === 6);
+        assert(REData.parameters[DBasics.params.luk].battlerParamId === 7);
         
         DBasics.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
@@ -441,6 +453,8 @@ export class REDataManager
                 const monster = REData.monsters[id];
                 monster.exp = x.exp ?? 0;
                 if (x.params) {
+                    monster.idealParams = x.params;
+                    /*
                     // see: Object.defineProperties
                     monster.idealParams[DBasics.params.hp] = x.params[0];
                     monster.idealParams[DBasics.params.mp] = x.params[1];
@@ -450,6 +464,7 @@ export class REDataManager
                     monster.idealParams[DBasics.params.mdf] = x.params[5];
                     monster.idealParams[DBasics.params.agi] = x.params[6];
                     monster.idealParams[DBasics.params.luk] = x.params[7];
+                    */
                 }
                 monster.traits = x.traits ?? [];
                 monster.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";

@@ -16,10 +16,10 @@ import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { DAbilityId } from "ts/data/DAbility";
 import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
 import { SStateFactory } from "ts/system/SStateFactory";
 import { LParty, LPartyId } from "./LParty";
 import { LanguageServiceMode } from "typescript";
+import { DParameterId } from "ts/data/DParameter";
 
 enum BlockLayer
 {

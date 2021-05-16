@@ -9,11 +9,58 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectorFact } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
-import { DParameterId, DSParamId, DXParamId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId, DSParamId, DXParamId } from "ts/data/DParameter";
 import { LFloorId } from "../LFloorId";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
+import { assert } from "ts/Common";
 //import { paramLandExitResultVariableId } from "ts/PluginParameters";
 //import { LandExitResult } from "ts/rmmz/RMMZHelper";
+
+export class LParamInstance {
+    private _dataId: DParameterId;
+    private _actualParamDamge: number;       // ダメージ値
+    private _idealParamPlus: number;      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
+    private _buff: number;              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
+
+    constructor(id: DParameterId) {
+        this._dataId = id;
+        this._actualParamDamge = 0;
+        this._idealParamPlus = 0;
+        this._buff = 0;
+    }
+
+    public parameterId(): DParameterId {
+        return this._dataId;
+    }
+
+    public actualParamDamge(): number {
+        return this._actualParamDamge;
+    }
+
+    public setActualDamgeParam(value: number): void {
+        this._actualParamDamge = value;
+    }
+
+    public gainActualParam(value: number): void {
+        this._actualParamDamge -= value;
+    }
+
+    public idealParamPlus(): number {
+        return this._idealParamPlus;
+    }
+
+    public buff(): number {
+        return this._buff;
+    }
+
+    public clearDamage(): void {
+        this._actualParamDamge = 0;
+    }
+
+    public clearParamPlus(): void {
+        this._idealParamPlus = 0;
+    }
+}
 
 export class LBattlerBehavior extends LBehavior {
     
@@ -23,44 +70,49 @@ export class LBattlerBehavior extends LBehavior {
     // 現在値は、最大値からダメージ値を減算することで求める。
     // 本システムは atk,def などのすべての基本パラメータは HP と同じように0~最大値の間で変化が起こるようになっているが、
     // 増分計算だと装備品の有無やモンスターの特技などで変わるときにその前後の変化量から現在値を調整する処理が必要になり複雑になる。
-    _actualParamDamges: number[] = [];       // ダメージ値
-    _idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
-    _buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
+    //_actualParamDamges: number[] = [];       // ダメージ値
+    //_idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
+    //_buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
+    private _params: (LParamInstance | undefined)[];
 
     constructor() {
         super();
 
+        this._params = [];
         for (const param of REData.parameters) {
-            this._actualParamDamges[param.id] = 0;
-            this._idealParamPlus[param.id] = 0;
-            this._buffs[param.id] = 0;
+            if (param.id > 0 && param.battlerParamId >= 0) {
+                this._params[param.id] = new LParamInstance(param.id);
+            }
         }
     }
 
     // Game_BattlerBase.prototype.clearParamPlus
     clearParamPlus(): void {
-        for (let i = 0; i < this._idealParamPlus.length; i++) {
-            this._idealParamPlus[i] = 0;
-        }
+        this._params.forEach(x => x?.clearParamPlus());
     };
 
     // Game_BattlerBase.prototype.clearStates
     private clearStates(): void {
         this.ownerEntity().removeAllStates();
-    };
+    }
 
+    private param(paramId: DParameterId): LParamInstance {
+        const param = this._params[paramId];
+        assert(param);
+        return param;
+    }
 
     actualParam(paramId: DParameterId): number {
-        return this.idealParam(paramId) - this._actualParamDamges[paramId];
+        return this.idealParam(paramId) - this.param(paramId).actualParamDamge();
     }
 
     setActualDamgeParam(paramId: DParameterId, value: number): void {
-        this._actualParamDamges[paramId] = value;
+        this.param(paramId).setActualDamgeParam(value);
         this.refresh();
     }
     
     gainActualParam(paramId: DParameterId, value: number): void {
-        this._actualParamDamges[paramId] -= value;
+        this.param(paramId).gainActualParam(value);
         this.refresh();
     }
 
@@ -84,8 +136,8 @@ export class LBattlerBehavior extends LBehavior {
     }
 
     // Game_BattlerBase.prototype.paramPlus
-    idealParamPlus(parameterId: DParameterId): number {
-        return this._idealParamPlus[parameterId] + this.ownerEntity().queryIdealParameterPlus(parameterId);
+    idealParamPlus(paramId: DParameterId): number {
+        return this.param(paramId).idealParamPlus()+ this.ownerEntity().queryIdealParameterPlus(paramId);
     }
 
     // Game_BattlerBase.prototype.paramBasePlus
@@ -100,7 +152,7 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.paramBuffRate
     paramBuffRate(paramId: DParameterId): number {
-        return this._buffs[paramId] * 0.25 + 1.0;
+        return this.param(paramId).buff() * 0.25 + 1.0;
     };
     
     // バフや成長によるパラメータ上限値の最小値。
@@ -214,11 +266,20 @@ export class LBattlerBehavior extends LBehavior {
 
         //console.log("refresh--------");
         // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
+        for (const param of this._params) {
+            if (param) {
+                const max = this.idealParam(param.parameterId());
+                param.setActualDamgeParam(param.actualParamDamge().clamp(0, max));
+            }
+        }
+        /*
         for (const param of REData.parameters) {
             const max = this.idealParam(param.id);
             //console.log("max", max);
+
             this._actualParamDamges[param.id] = this._actualParamDamges[param.id].clamp(0, max);//this.actualParam(param.id).clamp(0, max);
         }
+        */
 
         // TODO: 全パラメータ
         //const mhp = this.idealParam(RESystem.parameters.hp);
@@ -247,10 +308,11 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
         this.clearStates();
+        this._params.forEach(x => x?.clearDamage());
+        //for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
 
-        for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
-            this._actualParamDamges[paramId] = 0;
-        }
+        //    this._actualParamDamges[paramId] = 0;
+        //}
         
         this.refresh();
     };

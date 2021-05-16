@@ -351,9 +351,18 @@ export class SScheduler
     // 手番が終了し、次の人へ手番が移る直前。
     // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
     private onTurnEnd(step: RunStepInfo): void {
+
         REGame.scheduler.actorEntities().forEach(entity => {
             entity._callBehaviorIterationHelper(behavior => behavior.onTurnEnd(RESystem.commandContext));
         });
+
+        
+        const unit = step.unit;
+        if (unit.entityId.hasAny()) {
+            const entity = REGame.world.entity(unit.entityId);
+            entity._effectResult.showResultMessagesDeferred(RESystem.commandContext, entity);
+            entity._effectResult.clear();
+        }
     }
 
 

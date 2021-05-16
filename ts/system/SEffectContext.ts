@@ -8,7 +8,7 @@ import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "./Helpers";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId } from "ts/data/DParameter";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/objects/REGame";
@@ -342,6 +342,7 @@ export class SEffectContext {
         for (const target of targets) {
             const result = this.apply(target);
             
+            console.log("result.showResultMessages");
             result.showResultMessages(commandContext, target);
 
             const battler = target.getBehavior(LBattlerBehavior);
@@ -360,15 +361,6 @@ export class SEffectContext {
                 awarder.gainExp(totalExp)
             }
         }
-
-        if (totalExp > 0) {
-            const text = STextManager.obtainExp.format(totalExp, STextManager.exp);
-            commandContext.postMessage(text);
-        }
-
-        // "レベルが上がった！" など、subject 側の結果メッセージも表示しておく
-        const subject = this._effectorFact.subject();
-        subject._effectResult.showResultMessages(commandContext, subject);
     }
     
     // Game_Action.prototype.apply

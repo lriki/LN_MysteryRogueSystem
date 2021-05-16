@@ -7,7 +7,7 @@ import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "../system/RESystem";
 import { SMessageBuilder } from "../system/SMessageBuilder";
 import { DBasics } from "ts/data/DBasics";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId } from "ts/data/DParameter";
 import { STextManager } from "ts/system/STextManager";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LActorBehavior } from "./behaviors/LActorBehavior";
@@ -74,6 +74,8 @@ export class LEffectResult {
 
     levelup: boolean = false;
 
+    gainedExp: number = 0;
+
     // Game_ActionResult.prototype.isHit
     isHit(): boolean {
         return this.used && !this.missed && !this.evaded;
@@ -95,6 +97,7 @@ export class LEffectResult {
         //this.removedBuffs = [];
         this.focusedFriendly = true;
         this.levelup = false;
+        this.gainedExp = 0;
     }
 
     // Game_ActionResult.prototype.isStateAdded
@@ -182,7 +185,18 @@ export class LEffectResult {
         //    context.postMessage(m.format(targetName));
         //}
 
-        console.log("this.levelup", this.levelup);
+    }
+
+    // ターン終了時に表示するべき結果メッセージ。
+    // 特に複数の敵を倒したときの取得経験値は合計したものを1度で出したい。
+    public showResultMessagesDeferred(context: SCommandContext, entity: LEntity): void {
+        const targetName = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+
+        if (this.gainedExp > 0) {
+            const text = STextManager.obtainExp.format(this.gainedExp, STextManager.exp);
+            context.postMessage(text);
+        }
+        
 
         // Game_Actor.prototype.displayLevelUp
         if (this.levelup) {

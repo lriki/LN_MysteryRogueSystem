@@ -1,4 +1,4 @@
-import { DParameterId } from "./predefineds/DBasicParameters";
+import { DParameterId } from "./DParameter";
 
 export type DEnemyId = number;
 
@@ -24,8 +24,8 @@ export interface RE_Data_Monster
     /** 取得経験値 */
     exp: number;
 
-    /** 各基本パラメータ (index は BasicParameters) */
-    idealParams: DParameterId[];
+    /** 各基本パラメータ (index は DParamId とは関係ない点に注意。RMMZ のもの) */
+    idealParams: number[];
 
     traits: IDataTrait[];
 }

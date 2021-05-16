@@ -16,7 +16,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 import { LEquipActivity } from "../activities/LEquipActivity";
 import { LActivity } from "../activities/LActivity";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId } from "ts/data/DParameter";
 import { LEquipOffActivity } from "../activities/LEquipOffActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
 

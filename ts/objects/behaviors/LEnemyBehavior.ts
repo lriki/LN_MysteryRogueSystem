@@ -1,7 +1,7 @@
 
 import { assert } from "ts/Common";
 import { DEnemyId, RE_Data_Monster } from "ts/data/DEnemy";
-import { DParameterId } from "ts/data/predefineds/DBasicParameters";
+import { DParameterId } from "ts/data/DParameter";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { isThisTypeNode } from "typescript";
@@ -39,7 +39,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
     // Game_Enemy.prototype.paramBase
     idealParamBase(paramId: DParameterId): number {
-        return this.enemyData().idealParams[paramId];
+        return this.enemyData().idealParams[REData.parameters[paramId].battlerParamId];
     }
 
     // Game_Enemy.prototype.exp

@@ -72,7 +72,6 @@ export class VHudWindow extends Window_Base {
         const t2 = level.toString();
         const width = this.textWidth(t1 + "000");
         const w1 = this.textWidth(t1);
-        //const w2 = this.textWidth(t2);
 
         // Text
         this.changeTextColor(this.paramTitleColor());
@@ -97,7 +96,6 @@ export class VHudWindow extends Window_Base {
         this.drawText(t1, x, y, w1, "left");
         this.resetTextColor();
         this.drawText(t2, x + w1, y, w2, "left");
-
         
         // Gauge
         this.contents.fillRect(x, y + this.lineHeight(), width, gaugeHeight, ColorManager.gaugeBackColor());
