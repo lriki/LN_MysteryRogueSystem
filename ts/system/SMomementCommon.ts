@@ -1,17 +1,12 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { testPutInItem } from "ts/objects/behaviors/LBehavior";
-import { MonsterHouseState } from "ts/objects/LRoom";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind, LBlock } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
-import { SCommandContext } from "./SCommandContext";
 import { RESystem } from "./RESystem";
-import { System } from "pixi.js";
 
 export interface SPoint {
     x: number;
