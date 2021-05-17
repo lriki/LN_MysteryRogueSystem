@@ -1,8 +1,9 @@
 import { assert, Log } from "../Common";
 import { REGame } from "../objects/REGame";
 import { RESystem } from "./RESystem";
-import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_Prepare, SSchedulerPhase_ResolveAdjacentAndMovingTarget, SSchedulerPhase_UpdateState } from "./SSchedulerPhase";
+import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_Prepare, SSchedulerPhase_ResolveAdjacentAndMovingTarget } from "./SSchedulerPhase";
 import { RunStepInfo } from "ts/objects/LScheduler";
+import { DecisionPhase } from "ts/objects/internal";
 
 
 
@@ -54,7 +55,7 @@ export class SScheduler
             new SSchedulerPhase_Prepare(),
             new SSchedulerPhase_ManualAction(),
             new SSchedulerPhase_AIMinorAction(),
-            new SSchedulerPhase_UpdateState(),
+            //new SSchedulerPhase_UpdateState(),
             new SSchedulerPhase_ResolveAdjacentAndMovingTarget(),
             new SSchedulerPhase_CheckFeetMoved(),
             new SSchedulerPhase_AIMajorAction(),
@@ -312,6 +313,7 @@ export class SScheduler
                 return;
             }
             else {
+                //this.onTurnEnd(step);
                 // このフェーズでは実行できない step だった。次の step へ。
                 REGame.scheduler._currentStep++;
             }
@@ -360,6 +362,9 @@ export class SScheduler
         const unit = step.unit;
         if (unit.entityId.hasAny()) {
             const entity = REGame.world.entity(unit.entityId);
+
+
+
             entity._effectResult.showResultMessagesDeferred(RESystem.commandContext, entity);
             entity._effectResult.clear();
         }

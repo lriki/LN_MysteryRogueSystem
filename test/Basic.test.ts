@@ -23,9 +23,23 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 //var aaa = require("./../js/rmmz_objects.js");
 //(global as any).Game_Temp = aaa.Game_Temp;
 
+
+/*
 const fs = require('fs');
-//var ttttt = fs.readFileSync("./js/rmmz_objects.js").toString();
+var ttttt = fs.readFileSync("./js/rmmz_objects.js").toString();
 //eval(ttttt);
+
+(window as any)["Game_Temp"] = function() {
+    // New class name constructor code
+};
+
+const gt = Game_Temp;
+const proto = Game_Temp.prototype;
+(window as any)["Game_Temp"].prototype = Game_Temp.prototype;
+
+(window as any)["Game_Temp"] = gt;
+*/
+
 
 
 //function Game_Temp() {
@@ -57,7 +71,8 @@ test('Basic1', () => {
     //const taa = aaa;
     //const t = Game_Temp;
     //const ac = new Game_Temp();
-    //ac._destinationX = 1000;
+   // const tc = ac._destinationY;
+   // ac._destinationX = 1000;
 
     // NewGame.
     SGameManager.createGameObjects();
@@ -123,7 +138,7 @@ test('Basic1', () => {
 });
 
 
-test('TurnOrderTable', () => {
+test('Basic.TurnOrderTable', () => {
     //--------------------
     // 準備
     SGameManager.createGameObjects();

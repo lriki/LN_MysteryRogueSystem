@@ -1,4 +1,4 @@
-import { tr2 } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
 import { DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
@@ -58,7 +58,7 @@ export class LEffectResult {
     // HP に関係する効果であったか。文字の色を変えたりする
     hpAffected = false;  // TODO: NotImplemented
 
-    paramEffects: LParamEffectResult[] = [];
+    paramEffects: (LParamEffectResult | undefined)[] = [];
     //parameterDamags: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
 
     addedStates: DStateId[] = [];
@@ -144,7 +144,9 @@ export class LEffectResult {
         }
         else {
             for (let i = 0; i < this.paramEffects.length; i++) {
-                context.postMessage(this.makeParamDamageText(targetName, i));
+                if (this.paramEffects[i]) {
+                    context.postMessage(this.makeParamDamageText(targetName, i));
+                }
             }
         }
         /*
@@ -214,6 +216,8 @@ export class LEffectResult {
     // Window_BattleLog.prototype.makeHpDamageText
     private makeParamDamageText(targetName: string, paramId: DParameterId): string {
         const paramResult = this.paramEffects[paramId];
+        assert(paramResult);
+
         const paramData = REData.parameters[paramId];
         const damage = paramResult.damage;
         const isActor = this.focusedFriendly;
