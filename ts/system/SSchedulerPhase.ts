@@ -35,7 +35,7 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
-            REGame.scheduler.setCurrentTurnEntity(entity);
+            //REGame.scheduler.setCurrentTurnEntity(entity);
         }
     }
 }
@@ -49,7 +49,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0 &&
             unit.behavior._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
-            REGame.scheduler.setCurrentTurnEntity(entity);
+            //REGame.scheduler.setCurrentTurnEntity(entity);
         }
     }
 }

@@ -163,34 +163,6 @@ export class SScheduler
                 //}
                 assert(commandContext.isRecordingListEmpty());
 
-                // ターンエンド
-                {
-                    const entity = REGame.scheduler.currentTurnEntity();
-                    if (entity) {
-                        // 風来のシレン Wiki の行動順ではそれぞれ Phase が分かれているように見えるが、
-                        // 実際のステート更新は、各 step の終了時で行われるべき。
-                        //
-                        // 例えば倍速 Enemy の場合、次のような順で処理が動いてほしい。
-                        // - 敵行動
-                        // - 混乱解除判定
-                        // - 敵行動
-                        // - 混乱解除判定
-                        // 
-                        // これを阻害する可能性として、Scheduler.md にまとめている「Run のマージ」という仕組みがある。
-                        // ステート更新を SSchedulerPhase にしてしまうと、
-                        // - 敵行動
-                        // - 敵行動
-                        // - 混乱解除判定
-                        // - 混乱解除判定
-                        // という順で実行されてしまう。
-                        //
-                        // そのため onTurnEnd のタイミングでステート更新をかける。
-                        //
-                        entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
-
-                        REGame.scheduler.clearCurrentTurnEntity();
-                    }
-                }
                 
                 REGame.world._removeDestroyedObjects();
     

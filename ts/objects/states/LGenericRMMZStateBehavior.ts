@@ -80,12 +80,17 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             //}
             return SPhaseResult.Pass;
         }
-        else {
+        else if (phase == DecisionPhase.Manual ||
+            phase == DecisionPhase.AIMinor ||
+            phase == DecisionPhase.AIMajor) {
             const state = this.stateData();
             if (state.restriction == DStateRestriction.None) {
                 return SPhaseResult.Pass;
             }
             else if (state.restriction == DStateRestriction.NotAction) {
+
+                context.postConsumeActionToken(entity);
+
                 // 行動スキップ
                 return SPhaseResult.Handled;
             }
@@ -93,6 +98,9 @@ export class LGenericRMMZStateBehavior extends LBehavior {
                 throw new Error("Not implemented.");
                 return SPhaseResult.Handled;
             }
+        }
+        else {
+            return SPhaseResult.Pass;
         }
     }
 }
