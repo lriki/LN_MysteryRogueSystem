@@ -36,7 +36,7 @@ export class VMessageLogWindow extends Window_Base {
     private _maxLines: number = 2;
 
     private _autoCloseCount: number = 0;
-    private _autoCloseCountMax: number = 120;
+    private _autoCloseCountMax: number = 200;
     private _lineSpriteCache: Sprite[] = [];
     private _textLines: TextLineState[] = [];
 

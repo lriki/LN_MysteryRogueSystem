@@ -431,7 +431,7 @@ declare class Game_Temp {
      * @param target 
      * @param balloonId 
      */
-    requestBalloon(target: Game_Player, balloonId: any): void;
+    requestBalloon(target: Game_CharacterBase, balloonId: any): void;
 
     /**
      * 

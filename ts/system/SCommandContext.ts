@@ -2,7 +2,7 @@ import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
-import { SAnumationSequel, SMotionSequel, SWaitSequel } from "../objects/REGame_Sequel";
+import { SAnumationSequel, SBalloonSequel, SMotionSequel, SWaitSequel } from "../objects/REGame_Sequel";
 import { REGame } from "../objects/REGame";
 import { SEffectContext, SEffectSubject } from "./SEffectContext";
 import { LBlock } from "../objects/LBlock";
@@ -185,6 +185,22 @@ export class SCommandContext
         this._recodingCommandList.push({ name: "Animation", func: m1 });
         Log.postCommand("Animation");
     }
+
+    postBalloon(entity: LEntity, balloonId: number, wait: boolean) {
+        if (balloonId <= 0) return;
+
+        const m1 = () => {
+            Log.doCommand("Balloon");
+            this._sequelContext.addSequel(new SBalloonSequel(entity, balloonId, wait));
+            this._visualAnimationWaiting = true;
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push({ name: "Balloon", func: m1 });
+        Log.postCommand("Balloon");
+    }
+
+
+    
 
     postWaitSequel() {
         const m1 = () => {

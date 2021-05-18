@@ -3,7 +3,7 @@ import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel, RESequelRun, SWaitSequel } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel, RESequelRun, SWaitSequel, SBalloonSequel } from "ts/objects/REGame_Sequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
@@ -23,6 +23,7 @@ export class REVisualSequelContext {
     private _startPosition: Vector2 = new Vector2(0, 0);
     private _currentIdleSequelId: DSequelId = 0;
     private _animationWaiting = false;
+    private _balloonWaiting = false;
     private _waitFrameCount: number = 0;
 
     constructor(entityVisual: REVisual_Entity) {
@@ -58,7 +59,8 @@ export class REVisualSequelContext {
     finished(): boolean {
         if (this._clip) {
             const rmmzAnimationWainting = (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
-            return !rmmzAnimationWainting && this._cuurentFinished && this._currentClip >= this._clip.sequels().length;
+            const rmmzBalloonWainting = (this._balloonWaiting) ? this._entityVisual.rmmzEvent().isBalloonPlaying() : false;
+            return !rmmzAnimationWainting && !rmmzBalloonWainting && this._cuurentFinished && this._currentClip >= this._clip.sequels().length;
         }
         else {
             return true;
@@ -70,7 +72,13 @@ export class REVisualSequelContext {
     }
 
     isAnimationWaintng(): boolean {
-        return (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
+        if (this._animationWaiting && this._entityVisual.rmmzEvent().isAnimationPlaying()) {
+            return true;
+        }
+        if (this._balloonWaiting && this._entityVisual.rmmzEvent().isBalloonPlaying()) {
+            return true;
+        }
+        return false;
     }
 
     isFrameWaiting(): boolean {
@@ -107,6 +115,7 @@ export class REVisualSequelContext {
         while (this._clip) {
             this._currentClip++;
             this._animationWaiting = false;
+            this._balloonWaiting = false;
 
             if (this._currentClip < this._clip.sequels().length) {
                 const unit = this._clip.sequels()[this._currentClip];
@@ -118,6 +127,12 @@ export class REVisualSequelContext {
                 else if (unit instanceof SAnumationSequel) {
                     this._startAnimation(unit);
                     if (this._animationWaiting) {
+                        break;
+                    }
+                }
+                else if (unit instanceof SBalloonSequel) {
+                    this._startBalloon(unit);
+                    if (this._balloonWaiting) {
                         break;
                     }
                 }
@@ -154,6 +169,13 @@ export class REVisualSequelContext {
         }
     }
 
+    private _startBalloon(unit: SBalloonSequel) {
+        $gameTemp.requestBalloon(this._entityVisual.rmmzEvent(), unit.balloonId());
+        if (unit.isWait()) {
+            this._balloonWaiting = true;
+        }
+    }
+
     private _startWaitSequel(sequel: SWaitSequel): void {
         this._waitFrameCount = sequel.waitCount();
     }
@@ -176,12 +198,13 @@ export class REVisualSequelContext {
         let idleRequested = false;
         if (this._clip) {
             const rmmzAnimationWainting = (this._animationWaiting) ? this._entityVisual.rmmzEvent().isAnimationPlaying() : false;
+            const rmmzBalloonWainting = (this._balloonWaiting) ? this._entityVisual.rmmzEvent().isBalloonPlaying() : false;
 
             // MotionSequel を持っていなければ Idle モーションを再生したい。 (AnimationSequel のみのとき)
             idleRequested = !this._clip.hasMotionSeque();
 
             // current の Sequel は完了しているが、全体としては未完了の場合は次の Sequel に進む
-            if (!rmmzAnimationWainting && this._cuurentFinished && this._currentClip < this._clip.sequels().length) {
+            if (!rmmzAnimationWainting && !rmmzBalloonWainting && this._cuurentFinished && this._currentClip < this._clip.sequels().length) {
                 this._next();
             }
         }

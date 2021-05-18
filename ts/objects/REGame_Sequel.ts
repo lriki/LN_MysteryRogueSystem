@@ -68,6 +68,25 @@ export class SAnumationSequel extends SSequelUnit {
     }
 }
 
+export class SBalloonSequel extends SSequelUnit {
+    private _balloonId: number;
+    private _isWait: boolean;
+
+    public constructor(entity: LEntity, balloonId: number, wait: boolean) {
+        super(entity, !wait, undefined);   // wait するときは parallel にしない。してしまうと、直後に post したメッセージなどが先に進んでしまう。
+        this._balloonId = balloonId;
+        this._isWait = wait;
+    }
+
+    public balloonId(): DSequelId {
+        return this._balloonId;
+    }
+
+    public isWait(): boolean {
+        return this._isWait;
+    }
+}
+
 export class SWaitSequel extends SSequelUnit {
     private _waitCount: number;
     public constructor(entity: LEntity, waitCount: number) {

@@ -9,6 +9,11 @@ function setHP(entityId: number, value: number) {
     SDebugHelpers.setHP(e, value);
 }
 
+function setFP(entityId: number, value: number) {
+    const e = REGame.world.entityByIndex(entityId);
+    SDebugHelpers.setFP(e, value);
+}
+
 function entities(domain?: string): LEntity[] {
     if (domain == "world") {
         //return REGame.world.entities();
@@ -20,15 +25,12 @@ function entities(domain?: string): LEntity[] {
 }
 
 
-function aaaafunc() {
-    console.log("invoked foobar!");
-}
 
 
 
 (window as any).re = {
-    aaaa: aaaafunc,
     setHP: setHP,
+    setFP: setFP,
     entities: entities,
 
 };
