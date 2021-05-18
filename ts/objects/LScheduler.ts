@@ -34,12 +34,15 @@ export class LScheduler {
     private _currentPhaseIndex: number = 0;
     //private _waitCount: number = 0;
 
+    _currentTurnEntityId: LEntityId = LEntityId.makeEmpty();
+
     public clear() {
         this._actorEntities = [];
         this._units = [];
         this._runs = [];
         this._currentRun = 0;
         this._currentStep = 0;
+        this._currentTurnEntityId = LEntityId.makeEmpty();
     }
 
     public currentPhaseIndex(): number {
@@ -58,8 +61,8 @@ export class LScheduler {
         return this._currentRun;
     }
 
-    public currentRun(): RunInfo {
-        return this._runs[this._currentRun];
+    public currentTurnEntity(): LEntity | undefined {
+        return this._currentTurnEntityId.hasAny() ? REGame.world.entity(this._currentTurnEntityId) : undefined;
     }
 
     public resetRunIndex(): void {
@@ -86,6 +89,19 @@ export class LScheduler {
         }
     }
 */
+
+    public currentRun(): RunInfo {
+        return this._runs[this._currentRun];
+    }
+
+    public clearCurrentTurnEntity(): void {
+        this._currentTurnEntityId = LEntityId.makeEmpty();
+    }
+
+    public setCurrentTurnEntity(entity: LEntity): void {
+        assert(this._currentTurnEntityId.isEmpty());
+        this._currentTurnEntityId = entity.entityId().clone();
+    }
 
 
 

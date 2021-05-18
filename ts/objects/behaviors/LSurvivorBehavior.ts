@@ -22,8 +22,10 @@ export class LSurvivorBehavior extends LBehavior {
             const battler = this.ownerEntity().getBehavior(LBattlerBehavior);
             battler.gainActualParam(DBasics.params.fp, -1);
 
-
-
+            // 満腹度 0 による HP 減少
+            if (battler.actualParam(DBasics.params.fp) <= 0) {
+                battler.gainActualParam(DBasics.params.hp, -1);
+            }
 
 
             return SPhaseResult.Pass;

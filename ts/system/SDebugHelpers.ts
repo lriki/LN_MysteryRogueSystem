@@ -13,4 +13,12 @@ export class SDebugHelpers {
             //console.log(hp);
         }
     }
+    
+    public static setFP(entity: LEntity, value: number): void {
+        const battler = entity.findBehavior(LBattlerBehavior);
+        if (battler) {
+            const max = battler.idealParam(DBasics.params.fp);
+            battler.setActualDamgeParam(DBasics.params.fp, max - value);
+        }
+    }
 }
