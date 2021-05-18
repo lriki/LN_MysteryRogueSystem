@@ -23,6 +23,7 @@ import { DItem } from "ts/data/DItem";
 import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
+import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 //import { SBehaviorFactory } from "./internal";
 
 export class SEntityFactory {
@@ -38,6 +39,7 @@ export class SEntityFactory {
         e.addBehavior(LEquipmentUserBehavior);
         e.addBehavior(LActorBehavior, actorId);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
         e.addBehavior(LEaterBehavior);
+        e.addBehavior(LSurvivorBehavior);
         return e;
     }
 

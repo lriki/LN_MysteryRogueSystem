@@ -67,7 +67,7 @@ export class REDataManager
             { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0 },
             { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0 },
             //----------
-            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 100 },  // 満腹度
+            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 1000 },  // 満腹度
         ]
         DBasics.params = {
             hp: REData.parameters.findIndex(x => x.name == "HP"),

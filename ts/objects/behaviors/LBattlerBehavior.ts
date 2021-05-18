@@ -73,16 +73,14 @@ export class LBattlerBehavior extends LBehavior {
     //_actualParamDamges: number[] = [];       // ダメージ値
     //_idealParamPlus: number[] = [];      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     //_buffs: number[] = [];              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
-    private _params: (LParamInstance | undefined)[];
+    private _params: LParamInstance[];
 
     constructor() {
         super();
 
         this._params = [];
         for (const param of REData.parameters) {
-            if (param.id > 0 && param.battlerParamId >= 0) {
-                this._params[param.id] = new LParamInstance(param.id);
-            }
+            this._params[param.id] = new LParamInstance(param.id);
         }
     }
 
@@ -130,8 +128,21 @@ export class LBattlerBehavior extends LBehavior {
         return Math.round(value.clamp(minValue, maxValue));
     };
 
+    // 現在のレベルやクラスに応じた基礎値。
+    // 例えば FP だと常に 100. バフやアイテムによる最大 FP 上昇量は含まない。
     // Game_BattlerBase.prototype.paramBase
-    idealParamBase(paramId: DParameterId): number {
+    private idealParamBase(paramId: DParameterId): number {
+        const data = REData.parameters[paramId];
+        const battlerParam = data.battlerParamId;
+        if (battlerParam >= 0) {
+            return this.onGetIdealParamBase(paramId);
+        }
+        else {
+            return data.initialIdealValue;
+        }
+    }
+
+    protected onGetIdealParamBase(paramId: DParameterId): number {
         return 0;
     }
 
@@ -267,10 +278,8 @@ export class LBattlerBehavior extends LBehavior {
         //console.log("refresh--------");
         // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
         for (const param of this._params) {
-            if (param) {
-                const max = this.idealParam(param.parameterId());
-                param.setActualDamgeParam(param.actualParamDamge().clamp(0, max));
-            }
+            const max = this.idealParam(param.parameterId());
+            param.setActualDamgeParam(param.actualParamDamge().clamp(0, max));
         }
         /*
         for (const param of REData.parameters) {

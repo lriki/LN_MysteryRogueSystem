@@ -204,7 +204,7 @@ export class LActorBehavior extends LBattlerBehavior {
     };
 
     // Game_Actor.prototype.paramBase 
-    idealParamBase(paramId: DParameterId): number {
+    onGetIdealParamBase(paramId: DParameterId): number {
         const p = this.currentClass().params[REData.parameters[paramId].battlerParamId];
         return p ? p[this._level] : 0;
     }

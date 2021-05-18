@@ -75,7 +75,7 @@ export class SGameManager
         RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
 
         // 1 番 Actor をデフォルトで操作可能とする
-        const firstActor = REGame.world.entity( REGame.system.uniqueActorUnits[0]);
+        const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         REGame.system.mainPlayerEntityId = firstActor.entityId();
         const unit = firstActor.findBehavior(REUnitBehavior);
         if (unit) {
