@@ -1,4 +1,4 @@
-import { DAction, DActionId } from "ts/data/DAction";
+import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DStateId } from "ts/data/DState";
 import { LActivity } from "ts/objects/activities/LActivity";
