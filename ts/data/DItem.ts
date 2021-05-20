@@ -1,6 +1,6 @@
+import { DEffect, DEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DEquipmentPartId } from "./DEquipmentPart";
-import { DEffect, DEffectHitType, DEffectScope, DEffect_Default } from "./DSkill";
 
 export type DItemDataId = number;
 
@@ -44,7 +44,8 @@ export class DItem {
 
     animationId: number;
     
-    effect: DEffect;
+    //effect: DEffect;
+    effectSet: DEffectSet;
 
     /** このアイテム(装備品) を装備できる部位 */
     equipmentParts: DEquipmentPartId[];
@@ -63,11 +64,12 @@ export class DItem {
         this.iconIndex = 0;
         this.scope = 0;
         this.animationId = 0;
-        this.effect = {
-            ...DEffect_Default,
-            parameterEffects: [],
-            specialEffects: [],
-        },
+        this.effectSet = new DEffectSet();
+        //this.effect = {
+        //    ...DEffect_Default,
+        //    parameterQualifyings: [],
+        //    specialEffects: [],
+        //},
         this.equipmentParts = [];
         this.parameters = [];
         this.traits = [];

@@ -4,7 +4,7 @@ import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState, DState_makeDefault } from "./DState";
 import { DSystem } from "./DSystem";
-import { DEffectHitType, DEffect_Default, DSkill, DSkill_Default } from "./DSkill";
+import { DSkill, DSkill_Default } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem } from "./DItem";
 import { DLand, DLand_Default } from "./DLand";
@@ -23,6 +23,7 @@ import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
 import { REData_Parameter } from "./DParameter";
+import { DEffectHitType } from "./DEffect";
 
 
 export enum REFloorMapKind
@@ -321,7 +322,9 @@ export class REData
                 critical: false,
                 successRate: 100,
                 hitType: DEffectHitType.Certain,
-                parameterEffects: [],
+                parameterQualifyings: [],
+                performeSkillQualifyings: [],
+                otherEffectQualifyings: [],
                 specialEffects: [],
             },
         });

@@ -1,7 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItemEffect } from "ts/data/DItemEffect";
-import { DEffect, DEffectHitType, DEffectScope, DParameterEffect, DParameterEffectApplyType } from "ts/data/DSkill";
 import { ParameterEffectType } from "ts/data/DSystem";
 import { REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -14,6 +13,7 @@ import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
+import { DEffect, DEffectHitType, DEffectScope, DParameterEffectApplyType, DParameterQualifying } from "ts/data/DEffect";
 
 
 enum SParameterEffectApplyType {
@@ -49,7 +49,7 @@ export class SParameterEffect {
     /** 分散度 */
     variance: number;
 
-    public constructor(data: DParameterEffect) {
+    public constructor(data: DParameterQualifying) {
         switch (data.applyType) {
             case DParameterEffectApplyType.Damage:
                 this.applyType = SParameterEffectApplyType.Damage;
@@ -133,7 +133,7 @@ export class SEffectorFact {
         this._successRate = effect.successRate;
 
         // Effect 展開
-        this._subjectEffect.parameterEffects.forEach(x => {
+        this._subjectEffect.parameterQualifyings.forEach(x => {
             this._parameterEffects[x.parameterId] = new SParameterEffect(x);
         });
         

@@ -6,7 +6,6 @@ import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
-import { DEffect, DEffectHitType, DEffectScope, DEffect_Default, DParameterEffectApplyType } from "./DSkill";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
@@ -20,6 +19,7 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
+import { DEffect, DEffectCause, DEffectHitType, DEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType } from './DEffect';
 
 
 declare global {  
@@ -404,12 +404,17 @@ export class REDataManager
             if (x) {
                 item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
-                if ((x.damage.type ?? 0) > 0) {
-                    item.effect = this.makeEffect(x.damage);
+
+                if (x.damage.type > 0) {
+                    const effect = this.makeEffect(x.damage);
+                    effect.successRate = x.successRate;
+                    effect.hitType = x.hitType;
+                    effect.specialEffects = x.effects;
+                    item.effectSet.setEffect(DEffectCause.Affect, effect);
+                    item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
+                    item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
                 }
-                item.effect.successRate = x.successRate ?? 100;
-                item.effect.hitType = x.hitType ?? DEffectHitType.Certain;
-                item.effect.specialEffects = x.effects ?? [];
+
                 item.scope = x.scope ?? DEffectScope.None;
                 item.entity = parseMetaToEntityProperties(x.meta);
                 item.animationId = x.animationId;
@@ -738,9 +743,9 @@ export class REDataManager
                 throw new Error();
         }
         return {
-            ...DEffect_Default,
+            ...DEffect_Default(),
             critical: damage.critical ?? false,
-            parameterEffects: [{
+            parameterQualifyings: [{
                 parameterId: parameterId,
                 elementId: damage.elementId ?? 0,
                 formula: damage.formula ?? "0",
@@ -848,7 +853,7 @@ export class REDataManager
     static setupDirectly_DItem(data: DItem) {
         switch (data.entity.key) {
             case "kキュアリーフ":
-                data.effect.parameterEffects.push({
+                data.effectSet.aquireEffect(DEffectCause.Eat).parameterQualifyings.push({
                     parameterId: DBasics.params.fp,
                     elementId: 0,
                     formula: "5",

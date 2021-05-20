@@ -8,6 +8,7 @@ import { SEffectContext, SEffectIncidentType, SEffectorFact } from "ts/system/SE
 import { RESystem } from "ts/system/RESystem";
 import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
+import { DEffectCause } from "ts/data/DEffect";
 
 
 /**
@@ -57,28 +58,31 @@ export class LTrapBehavior extends LBehavior {
 
         const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
         const itemData = trapItem.itemData();
+        const effect = itemData.effectSet.effect(DEffectCause.Affect);
 
-        const target = e.sender;
-        const subject = new SEffectorFact(e.self, itemData.effect, itemData.scope, SEffectIncidentType.IndirectAttack);
-        const effectContext = new SEffectContext(subject);
+        if (effect) {
+            const target = e.sender;
+            const subject = new SEffectorFact(e.self, effect, itemData.scope, SEffectIncidentType.IndirectAttack);
+            const effectContext = new SEffectContext(subject);
 
-
-
-
-        //console.log(result);
-
-
-        context.postAnimation(e.sender, 35, true);
-
-        // TODO: ここでラムダ式も post して apply したい。
-
-        context.postCall(() => {
-            effectContext.applyWithWorth(context, [target]);
-        });
+            //console.log(result);
 
 
+            context.postAnimation(e.sender, 35, true);
 
-        //context.postMessage(tr("しかし ワナには かからなかった。"));
+            // TODO: ここでラムダ式も post して apply したい。
+
+            context.postCall(() => {
+                effectContext.applyWithWorth(context, [target]);
+            });
+
+
+
+            //context.postMessage(tr("しかし ワナには かからなかった。"));
+        }
+
+
+
         
         return REResponse.Pass;
     }
