@@ -413,6 +413,7 @@ export class REDataManager
                 item.scope = x.scope ?? DEffectScope.None;
                 item.entity = parseMetaToEntityProperties(x.meta);
                 item.animationId = x.animationId;
+                this.setupDirectly_DItem(item);
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
@@ -426,6 +427,7 @@ export class REDataManager
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 item.entity = parseMetaToEntityProperties(x.meta);
+                this.setupDirectly_DItem(item);
             }
         });
         REData.armorDataIdOffset = REData.items.length;
@@ -439,6 +441,7 @@ export class REDataManager
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 item.entity = parseMetaToEntityProperties(x.meta);
+                this.setupDirectly_DItem(item);
             }
         });
         RESystem.items = {
@@ -842,6 +845,20 @@ export class REDataManager
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
     // そのためここで直定義して一通り作ってみた後、再検討する。
+    static setupDirectly_DItem(data: DItem) {
+        switch (data.entity.key) {
+            case "kキュアリーフ":
+                data.effect.parameterEffects.push({
+                    parameterId: DBasics.params.fp,
+                    elementId: 0,
+                    formula: "5",
+                    applyType: DParameterEffectApplyType.Recover,
+                    variance: 0,
+                });
+                //data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
+                break;
+        }
+    }
     static setupDirectly_State(data: DState) {
         switch (data.key) {
             case "kState_UnitTest_攻撃必中":
