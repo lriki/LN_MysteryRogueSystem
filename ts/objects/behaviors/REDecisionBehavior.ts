@@ -35,8 +35,10 @@ export class REGame_DecisionBehavior extends LBehavior {
                 return SPhaseResult.Handled;
             }
             else {
+                const dialog = new REManualActionDialog();
+                dialog.dashingEntry = behavior._straightDashing;
+                context.openDialog(entity, dialog, false);
                 behavior._straightDashing = false;
-                context.openDialog(entity, new REManualActionDialog(), false);
                 return SPhaseResult.Handled;
             }
 

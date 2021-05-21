@@ -1,4 +1,4 @@
-import { assert } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlock";
 import { RESystem } from "ts/system/RESystem";
@@ -16,6 +16,7 @@ import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMomementCommon } from "ts/system/SMomementCommon";
+import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
 
 enum UpdateMode {
     Normal,
@@ -75,29 +76,36 @@ export class VManualActionDialogVisual extends VDialog {
         const context = RESystem.dialogContext;
         const entity = context.causeEntity();
         if (!entity) return;
+
+        const model = context.activeDialog() as REManualActionDialog;
         
         if (entity.immediatelyAfterAdjacentMoving) {
-            const block = REGame.map.block(entity.x, entity.y);
-            const layer = block.layer(BlockLayerKind.Ground);
-            const targetEntities = layer.entities();
-            assert(targetEntities.length <= 1);    // TODO: 多種類は未対応
-            const targetEntity = targetEntities[0]; // 足元
-            const actions = targetEntities.flatMap(x => x.queryReactions());
-            if (actions.length > 0) {
-                if (actions.includes(DBasics.actions.PickActionId)) {
-                    // 歩行移動時に足元に拾えるものがあれば取得試行
-                    context.postActivity(LPickActivity.make(entity));
-
-                    // コマンドチェーンを動かす
-                    context.postReopen();
+            const targetEntity = REGame.map.firstFeetEntity(entity);
+            if (targetEntity) {
+                const actions = targetEntity.queryReactions();
+                if (actions.length > 0) {
+                    if (actions.includes(DBasics.actions.PickActionId)) {
+    
+                        if (model.dashingEntry) {
+                            context.commandContext().postMessage(tr2("%1 に乗った。").format(REGame.identifyer.makeDisplayText(targetEntity)));
+                        }
+                        else {
+                            // 歩行移動時に足元に拾えるものがあれば取得試行
+                            context.postActivity(LPickActivity.make(entity));
+                        }
+    
+    
+                        // コマンドチェーンを動かす
+                        context.postReopen();
+                    }
+                    else {
+                        this.openSubDialog(new LFeetDialog(targetEntity, actions), d => {
+                            if (d.isSubmitted()) this._model.submit();
+                            entity.immediatelyAfterAdjacentMoving = false;
+                        });
+                    }
+                    return;
                 }
-                else {
-                    this.openSubDialog(new LFeetDialog(targetEntity, actions), d => {
-                        if (d.isSubmitted()) this._model.submit();
-                        entity.immediatelyAfterAdjacentMoving = false;
-                    });
-                }
-                return;
             }
         }
 

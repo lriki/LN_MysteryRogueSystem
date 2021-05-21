@@ -9,6 +9,7 @@ import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
+import { REGame } from "ts/objects/REGame";
 
 export class VItemListDialog extends VDialog {
     private _model: LItemListDialog;
@@ -81,6 +82,16 @@ export class VItemListDialog extends VDialog {
                     actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
                 else
                     actualActions.mutableRemove(x => x == DBasics.actions.EquipOffActionId);  // [はずす] を除く
+            }
+
+            // 足元に何かあれば [置く] を [交換] にする
+            {
+                const feetEntity = REGame.map.firstFeetEntity(actorEntity);
+                if (feetEntity) {
+                    if (actualActions.mutableRemove(x => x == DBasics.actions.PutActionId)) {
+                        actualActions.push(DBasics.actions.ExchangeActionId);
+                    }
+                }
             }
 
             const self = this;

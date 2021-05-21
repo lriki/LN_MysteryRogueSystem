@@ -415,75 +415,6 @@ export class LMap extends LObject
         }
     }
 
-    /**
-     * 移動可能判定を伴うタイル間移動
-     * 
-     * 指定位置の Block と Entity のみをもとに、移動可否判定を行いつつ移動する。
-     * 
-     * 他の Entity から移動の割り込みを受けるようなケースでは、moveEntity() の呼び出し元の Command ハンドリング側で対応すること。
-     */
-    // deprecated: use SMomementCommon
-    /*
-    moveEntity(entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
-        assert(entity.floorId == this.floorId());
-
-        if (!this.isValidPosition(x, y)) {
-            return false;   // マップ外への移動
-        }
-        
-        const oldBlock = this.block(entity.x, entity.y);
-        const newBlock = this.block(x, y);
-
-        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, toLayer)) {
-            oldBlock.removeEntity(entity);
-            entity.x = x;
-            entity.y = y;
-            newBlock.addEntity(toLayer, entity);
-            this._postLocate(entity, oldBlock, newBlock);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    */
-
-    /**
-     * Entity の位置設定
-     * 
-     * moveEntity() と異なり、移動可能判定を行わずに強制移動する。
-     * マップ生成時の Entity 配置や、ワープ移動などで使用する。
-     */
-    // deprecated
-    /*
-    locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
-        assert(entity.floorId == this.floorId());
-
-        const oldBlock = this.block(entity.x, entity.y);
-        const newBlock = this.block(x, y);
-        
-        const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
-
-        oldBlock.removeEntity(entity);
-        entity.x = x;
-        entity.y = y;
-        newBlock.addEntity(layer, entity);
-        this._postLocate(entity, oldBlock, newBlock);
-    }
-
-    private _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock) {
-        if (oldBlock._roomId != newBlock._roomId) {
-            const args: RoomEventArgs = {
-                entity: entity,
-                newRoomId: newBlock._roomId,
-                oldRoomId: oldBlock._roomId,
-            };
-
-            REGame.eventServer.send(DBasics.events.roomEnterd, args);
-            REGame.eventServer.send(DBasics.events.roomLeaved, args);
-        }
-    }
-    */
 
     public updateLocatedResults(context: SCommandContext): void {
         for (const entity of this.entities()) {
@@ -496,6 +427,16 @@ export class LMap extends LObject
                 entity._located = false;
             }
         }
+    }
+
+    //----------
+    // Helpers
+
+    /** 足元の Entity を取得する */
+    public firstFeetEntity(entity: LEntity): LEntity | undefined {
+        const block = REGame.map.block(entity.x, entity.y);
+        const layer = block.layer(BlockLayerKind.Ground);
+        return layer.firstEntity();
     }
 }
 
