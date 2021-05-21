@@ -43,6 +43,7 @@ export class TestEnv {
     public static PrefabId_Herb: DPrefabId;
     public static PrefabId_Weapon1: DPrefabId;
     public static PrefabId_Shield1: DPrefabId;
+    public static PrefabId_SleepTrap: DPrefabId;
 
     private static _databaseFiles = [
         { name: "$dataActors", src: "Actors.json" },
@@ -84,8 +85,8 @@ export class TestEnv {
         this.PrefabId_Herb = REData.prefabs.findIndex(x => x.key == "pキュアリーフ");
         this.PrefabId_Weapon1 = REData.prefabs.findIndex(x => x.key == "pゴブリンのこん棒");
         this.PrefabId_Shield1 = REData.prefabs.findIndex(x => x.key == "pレザーシールド");
+        this.PrefabId_SleepTrap = REData.prefabs.findIndex(x => x.key == "p眠りガス");
         
-
         /*
         // Unique Entitise
         REData.addActor("Unique1");

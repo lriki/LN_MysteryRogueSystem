@@ -19,7 +19,7 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
-import { DEffect, DEffectCause, DEffectHitType, DEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType } from './DEffect';
+import { DEffect, DEffectCause, DEffectHitType, DEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying } from './DEffect';
 
 
 declare global {  
@@ -385,12 +385,25 @@ export class REDataManager
                 skill.rmmzAnimationId = x.animationId;
                 skill.paramCosts[DBasics.params.mp] = x.mpCost;
                 skill.paramCosts[DBasics.params.tp] = x.tpCost;
-                if ((x.damage.type ?? 0) > 0) {
-                    skill.effect = this.makeEffect(x.damage);
+                
+                const effect: DEffect = {
+                    ...DEffect_Default(),
+                    critical: false,
+                    successRate: x.successRate,
+                    hitType: x.hitType,
+                    specialEffectQualifyings: x.effects,
                 }
-                skill.effect.successRate = x.successRate ?? 100;
-                skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
-                skill.effect.specialEffects = x.effects ?? [];
+
+                if (x.damage.type > 0) {
+                    effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                }
+                skill.effectSet.setEffect(DEffectCause.Affect, effect);
+                // TODO:
+                skill.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
+                skill.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
+                //skill.effect.successRate = x.successRate ?? 100;
+                //skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
+                //skill.effect.specialEffects = x.effects ?? [];
                 skill.scope = x.scope ?? DEffectScope.None;
             }
         });
@@ -405,15 +418,33 @@ export class REDataManager
                 item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
 
+                const effect: DEffect = {
+                    ...DEffect_Default(),
+                    critical: false,
+                    successRate: x.successRate,
+                    hitType: x.hitType,
+                    specialEffectQualifyings: x.effects,
+                }
+
+                if (x.damage.type > 0) {
+                    effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                }
+                //effect.rmmzItemEffectQualifying = x.effects.
+
+                item.effectSet.setEffect(DEffectCause.Affect, effect);
+                // TODO:
+                item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
+                item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
+                /*
                 if (x.damage.type > 0) {
                     const effect = this.makeEffect(x.damage);
                     effect.successRate = x.successRate;
                     effect.hitType = x.hitType;
                     effect.specialEffects = x.effects;
-                    item.effectSet.setEffect(DEffectCause.Affect, effect);
                     item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
                     item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
                 }
+                */
 
                 item.scope = x.scope ?? DEffectScope.None;
                 item.entity = parseMetaToEntityProperties(x.meta);
@@ -711,7 +742,7 @@ export class REDataManager
         return String(v).padStart(length, "0");
     }
 
-    static makeEffect(damage: IDataDamage): DEffect {
+    static makeParameterQualifying(damage: IDataDamage): DParameterQualifying {
         let parameterId = 0;
         let applyType = DParameterEffectApplyType.None;
         switch (damage.type) {
@@ -743,15 +774,11 @@ export class REDataManager
                 throw new Error();
         }
         return {
-            ...DEffect_Default(),
-            critical: damage.critical ?? false,
-            parameterQualifyings: [{
                 parameterId: parameterId,
                 elementId: damage.elementId ?? 0,
                 formula: damage.formula ?? "0",
                 applyType: applyType,
                 variance: damage.variance ?? 0,
-            }]
         };
     }
 
@@ -860,7 +887,8 @@ export class REDataManager
                     applyType: DParameterEffectApplyType.Recover,
                     variance: 0,
                 });
-                //data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
+                break;
+            case "k眠りガス":
                 break;
         }
     }

@@ -318,15 +318,6 @@ export class REData
             ...DSkill_Default(),
             id: newId,
             name: name,
-            effect: {
-                critical: false,
-                successRate: 100,
-                hitType: DEffectHitType.Certain,
-                parameterQualifyings: [],
-                performeSkillQualifyings: [],
-                otherEffectQualifyings: [],
-                specialEffects: [],
-            },
         });
         return newId;
     }

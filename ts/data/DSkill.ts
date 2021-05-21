@@ -1,4 +1,4 @@
-import { DEffect, DEffectScope, DEffect_Default } from "./DEffect";
+import { DEffect, DEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
 import { DParameterId } from "./DParameter";
 
 export type DSkillDataId = number;
@@ -18,7 +18,8 @@ export interface DSkill {
 
     scope: DEffectScope;
 
-    effect: DEffect;
+    effectSet: DEffectSet;
+    //effect: DEffect;
 }
 
 export function DSkill_Default(): DSkill {
@@ -28,6 +29,7 @@ export function DSkill_Default(): DSkill {
         rmmzAnimationId: 0,
         paramCosts: [],
         scope: DEffectScope.None,
-        effect: DEffect_Default(),
+        effectSet: new DEffectSet(),
+        //effect: DEffect_Default(),
     };
 }

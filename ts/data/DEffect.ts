@@ -30,6 +30,10 @@ export interface DParameterQualifying {
     variance: number;
 }
 
+//export interface DRmmzItemEffectQualifying {
+//    effect: IDataEffect,
+//}
+
 export interface DPerformeSkillQualifying {
 }
 
@@ -118,6 +122,7 @@ export interface DEffect {
      * IDataItem.damage
      */
     parameterQualifyings: DParameterQualifying[];
+    //rmmzItemEffectQualifying: DRmmzItemEffectQualifying[];
     performeSkillQualifyings: DPerformeSkillQualifying[];
     otherEffectQualifyings: DOtherEffectQualifying[];
 
@@ -125,7 +130,7 @@ export interface DEffect {
      * IDataSkill.effects
      * IDataItem.effects
      */
-    specialEffects: IDataEffect[];
+    specialEffectQualifyings: IDataEffect[];
 }
 
 export function DEffect_Default(): DEffect {
@@ -134,9 +139,10 @@ export function DEffect_Default(): DEffect {
         successRate: 100,
         hitType: DEffectHitType.Certain,
         parameterQualifyings: [],
+        //rmmzItemEffectQualifying: [],
         performeSkillQualifyings: [],
         otherEffectQualifyings: [],
-        specialEffects: [],
+        specialEffectQualifyings: [],
     };
 };
 
@@ -146,9 +152,10 @@ export function DEffect_Clone(s: DEffect): DEffect {
         successRate: s.successRate,
         hitType: s.hitType,
         parameterQualifyings: s.parameterQualifyings.slice(),
+        //rmmzItemEffectQualifying: s.rmmzItemEffectQualifying.slice(),
         performeSkillQualifyings: s.performeSkillQualifyings.slice(),
         otherEffectQualifyings: s.otherEffectQualifyings.slice(),
-        specialEffects: s.specialEffects.slice(),
+        specialEffectQualifyings: s.specialEffectQualifyings.slice(),
     };
 }
 

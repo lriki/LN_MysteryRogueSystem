@@ -375,7 +375,7 @@ export class SEffectContext {
 
 
             // 命中判定
-            this.judgeHits(result);
+            this.judgeHits(targetBattlerBehavior, result);
             
             result.physical = this._effectorFact.isPhysical();
 
@@ -394,7 +394,7 @@ export class SEffectContext {
                 }
     
                 // Effect
-                for (const effect of this._effectorFact.subjectEffect().specialEffects) {
+                for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
                     this.applyItemEffect(targetBattlerBehavior, effect, result);
                 }
                 this.applyItemUserEffect(targetBattlerBehavior);
@@ -418,21 +418,25 @@ export class SEffectContext {
         return result;
     }
 
-    private judgeHits(result: LEffectResult): void {
+    private judgeHits(target: LBattlerBehavior, result: LEffectResult): void {
         const subject = this._effectorFact.subjectBehavior();
-        assert(subject);
 
-        if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
-            if (subject.traits(DTraits.CertainDirectAttack).length > 0) {
-                // 直接攻撃必中
-                result.missed = false;
-                result.evaded = false;
-                return;
+        if (subject) {
+            if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
+                if (subject.traits(DTraits.CertainDirectAttack).length > 0) {
+                    // 直接攻撃必中
+                    result.missed = false;
+                    result.evaded = false;
+                    return;
+                }
             }
         }
+        else {
+            // 罠Entityなど。
+        }
 
-        const hitRate = this._effectorFact.hitRate();
-        const evaRate = this._effectorFact.evaRate(subject);
+        const hitRate = this._effectorFact.hitRate();       // 攻撃側命中率
+        const evaRate = this._effectorFact.evaRate(target); // 受け側回避率
 
         result.missed = result.used && Math.random() >= hitRate;
         result.evaded = !result.missed && Math.random() < evaRate;
