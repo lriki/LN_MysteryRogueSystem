@@ -11,6 +11,7 @@ import { LExchangeActivity } from "ts/objects/activities/LExchangeActivity";
 import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
+import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { LWaveActivity } from "ts/objects/activities/LWaveActivity";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
@@ -30,6 +31,8 @@ export class SActivityFactory {
                 return new LMoveAdjacentActivity();
             case DBasics.actions.PickActionId:
                 return new LPickActivity();
+            case DBasics.actions.PutActionId:
+                return new LPutActivity();
             case DBasics.actions.ThrowActionId:
                 return new LThrowActivity();
             case DBasics.actions.ExchangeActionId:

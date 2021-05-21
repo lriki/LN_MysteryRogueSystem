@@ -13,7 +13,7 @@ export class VMenuCommandWindow extends Window_Command {
     
     makeCommandList(): void {
         this.addCommand(TextManager.item, "item", true, undefined);
-        this.addCommand("足元", "footing", true, undefined);
+        this.addCommand("足元", "feet", true, undefined);
         this.addCommand("その他", "other", true, undefined);
 
         if (REGame.map.floorId().isSafety()) {

@@ -20,7 +20,7 @@ import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
 import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
 import { VDropSequel } from "./sequels/VDropSequel";
 import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
-import { VMenuDialog } from "./dialogs/VMenuDialog";
+import { VMainMenuDialog } from "./dialogs/VMenuDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
 import { VFeetDialog } from "./dialogs/VFeetDialog";
@@ -84,7 +84,7 @@ export class REVisual_Manager
         else if (model instanceof LWarehouseWithdrawDialog)
             this._dialogNavigator._openDialog(new VWarehouseWithdrawDialog(model));
         else if (model instanceof LMainMenuDialog)
-            this._dialogNavigator._openDialog(new VMenuDialog(model));
+            this._dialogNavigator._openDialog(new VMainMenuDialog(model));
         else if (model instanceof LFeetDialog)
             this._dialogNavigator._openDialog(new VFeetDialog(model));
         else if (model instanceof LItemListDialog)

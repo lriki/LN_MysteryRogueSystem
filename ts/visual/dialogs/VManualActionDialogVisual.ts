@@ -80,6 +80,8 @@ export class VManualActionDialogVisual extends VDialog {
         const model = context.activeDialog() as REManualActionDialog;
         
         if (entity.immediatelyAfterAdjacentMoving) {
+            entity.immediatelyAfterAdjacentMoving = false;
+
             const targetEntity = REGame.map.firstFeetEntity(entity);
             if (targetEntity) {
                 const actions = targetEntity.queryReactions();
@@ -99,9 +101,8 @@ export class VManualActionDialogVisual extends VDialog {
                         context.postReopen();
                     }
                     else {
-                        this.openSubDialog(new LFeetDialog(targetEntity, actions), d => {
+                        this.openSubDialog(new LFeetDialog(targetEntity), d => {
                             if (d.isSubmitted()) this._model.submit();
-                            entity.immediatelyAfterAdjacentMoving = false;
                         });
                     }
                     return;
@@ -207,7 +208,6 @@ export class VManualActionDialogVisual extends VDialog {
         else if (Input.isTriggered("menu")) {
             SoundManager.playOk();
             this.openSubDialog(new LMainMenuDialog(entity), d => {
-                console.log("close LMainMenuDialog", d);
                 if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
             });
             return;

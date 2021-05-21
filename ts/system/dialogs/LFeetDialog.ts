@@ -8,10 +8,10 @@ export class LFeetDialog extends SDialog {
     private _targetEntityId: LEntityId;
     private _actions: DActionId[];
 
-    constructor(targetEntity: LEntity, actions: DActionId[]) {
+    constructor(targetEntity: LEntity) {
         super();
         this._targetEntityId = targetEntity.entityId();
-        this._actions = actions;
+        this._actions = targetEntity.queryReactions();
     }
 
     public targetEntity(): LEntity {

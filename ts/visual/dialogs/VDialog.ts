@@ -3,6 +3,8 @@ import { LDialogResultCallback, SDialog } from "ts/system/SDialog";
 import { RESystem } from "ts/system/RESystem";
 import { REVisual } from "../REVisual";
 import { DialogResultCallback, REDialogVisualNavigator } from "./REDialogVisual";
+import { SDialogContext } from "ts/system/SDialogContext";
+import { SCommandContext } from "ts/system/SCommandContext";
 
 export class VDialog {
     private _baseModel: SDialog;
@@ -16,6 +18,14 @@ export class VDialog {
 
     protected constructor(model: SDialog) {
         this._baseModel = model;
+    }
+
+    protected dialogContext(): SDialogContext {
+        return RESystem.dialogContext;
+    }
+
+    protected commandContext(): SCommandContext {
+        return this.dialogContext().commandContext();
     }
 
     // NOTE: maindialog

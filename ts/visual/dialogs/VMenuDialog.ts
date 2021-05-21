@@ -6,8 +6,11 @@ import { REGame } from "ts/objects/REGame";
 import { STextManager } from "ts/system/STextManager";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";
+import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
+import { tr2 } from "ts/Common";
+import { TileShape } from "ts/objects/LBlock";
 
-export class VMenuDialog extends VDialog {
+export class VMainMenuDialog extends VDialog {
     _model: LMainMenuDialog;
     _commandWindow: VMenuCommandWindow | undefined;
 
@@ -23,6 +26,7 @@ export class VMenuDialog extends VDialog {
         this.addWindow(this._commandWindow);
 
         this._commandWindow.setHandler("item", this.handleItem.bind(this));
+        this._commandWindow.setHandler("feet", this.handleFeet.bind(this));
         this._commandWindow.setHandler("cancel", () => this.cancel());
         this._commandWindow.setHandler("save", this.handleSave.bind(this));
         this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
@@ -40,6 +44,20 @@ export class VMenuDialog extends VDialog {
             this.openSubDialog(new LItemListDialog(entity, inventory), d => {
                 if (d.isSubmitted()) this.submit();
             });
+        }
+    }
+
+    private handleFeet() {
+        const feetEntity = REGame.map.firstFeetEntity(this._model.entity());
+        if (feetEntity) {
+            this.openSubDialog(new LFeetDialog(feetEntity), d => {
+                if (d.isSubmitted()) this.submit();
+            });
+        }
+        else {
+            this.commandContext().postMessage(tr2("足元には何もない。"));
+            this.cancel();
+            this.dialogContext().postReopen();
         }
     }
 
