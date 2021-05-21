@@ -1500,7 +1500,7 @@ declare namespace AudioManager{
 	 * 
 	 * @param se 
 	 */
-	function playSe(se : any): void;
+	function playSe(se : IDataSound): void;
 		
 	/**
 	 * 

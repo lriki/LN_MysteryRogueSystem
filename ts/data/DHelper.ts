@@ -2,6 +2,8 @@ import { DMapId } from "./DLand";
 
 
 export interface RMMZFloorMetadata {
+    template?: string;
+    displayName?: string;
     fixedMap?: string;
     safety?: boolean;
     bgm?: any[];

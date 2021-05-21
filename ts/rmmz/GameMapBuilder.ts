@@ -28,7 +28,9 @@ export class GameMapBuilder {
 
 
     public build(coreMap: LMap, initialMap: FMap): void {
-        const templateMap = REData.templateMaps[1];
+        const floorData = coreMap.floorData();
+        const templateMap = floorData.template ? REData.templateMaps.find(x => x.name == floorData.template) : REData.templateMaps[1];
+        assert(templateMap);
 
         $dataMap.tilesetId = templateMap.tilesetId;
         $dataMap.width = coreMap.width();

@@ -9,5 +9,13 @@ export class SSoundManager {
 
     public static playEquip(): void {
         this.playSystemSound(4);
-    };
+    }
+
+    public static playPickItem(): void {
+        AudioManager.playSe({ name: "Item1", volume: 80, pitch: 100, pan: 0 });
+    }
+
+    public static playLevelUp(): void {
+        AudioManager.playSe({ name: "Item3", volume: 80, pitch: 100, pan: 0 });
+    }
 }

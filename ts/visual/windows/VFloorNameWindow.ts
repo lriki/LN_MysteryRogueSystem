@@ -60,7 +60,12 @@ export class VFloorNameWindow extends Window_Base {
         this.contents.clear();
         if ($gameMap.displayName()) {
 
-            const lines = $gameMap.displayName().format(REGame.map.floorId().floorNumber()).split("\\n");
+            const floorId = REGame.map.floorId();
+            const floorInfo = floorId.floorInfo();
+
+            const displayName = floorInfo.displayName ? floorInfo.displayName : $gameMap.displayName();
+
+            const lines = displayName.format(floorId.floorNumber()).split("\\n");
 
             const height = this.lineHeight() * lines.length;
 

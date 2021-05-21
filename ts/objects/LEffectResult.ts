@@ -11,6 +11,7 @@ import { DParameterId } from "ts/data/DParameter";
 import { STextManager } from "ts/system/STextManager";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LActorBehavior } from "./behaviors/LActorBehavior";
+import { SSoundManager } from "ts/system/SSoundManager";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class LParamEffectResult {
@@ -206,6 +207,7 @@ export class LEffectResult {
             if (battler instanceof LActorBehavior) {
                 const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level);
                 context.postMessage(text);
+                SSoundManager.playLevelUp();
             }
             else {
                 throw new Error("NotImplemented.");

@@ -23,6 +23,7 @@ import { LForwardFloorActivity } from "../activities/LForwardFloorActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { LExchangeActivity } from "../activities/LExchangeActivity";
+import { SSoundManager } from "ts/system/SSoundManager";
 
 /**
  * 
@@ -155,6 +156,7 @@ export class REUnitBehavior extends LBehavior {
                             
                             const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(self), DescriptionHighlightLevel.UnitName);
                             context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));
+                            SSoundManager.playPickItem();
                         });
     
                 }
@@ -248,6 +250,7 @@ export class REUnitBehavior extends LBehavior {
                 inventory.addEntity(item2);
 
                 context.postMessage(tr("{0} と {1} を交換した。", REGame.identifyer.makeDisplayText(item1), REGame.identifyer.makeDisplayText(item2)));
+                SSoundManager.playPickItem();
             }
             else {
                 context.postMessage(tr2("足元には何もない。"));

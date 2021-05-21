@@ -20,6 +20,7 @@ export class LSurvivorBehavior extends LBehavior {
         
         if (phase == DecisionPhase.UpdateState) {
 
+            // FP 減少
             const battler = this.ownerEntity().getBehavior(LBattlerBehavior);
             battler.gainActualParam(DBasics.params.fp, -1);
 
@@ -42,9 +43,13 @@ export class LSurvivorBehavior extends LBehavior {
 
 
 
-            // 満腹度 0 による HP 減少
             if (battler.actualParam(DBasics.params.fp) <= 0) {
+                // 満腹度 0 による HP 減少
                 battler.gainActualParam(DBasics.params.hp, -1);
+            }
+            else {
+                // HP自動回復
+                battler.gainActualParam(DBasics.params.hp, 1);
             }
 
 

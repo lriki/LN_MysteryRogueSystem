@@ -43,6 +43,8 @@ export interface DAppearanceTable {
 }
 
 export interface DFloorInfo {
+    template: string | undefined;
+    displayName: string | undefined;
     fixedMapName: string;
 
     /** false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
@@ -140,6 +142,8 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
         const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
         if (floorData) {
             const info: DFloorInfo = {
+                template: floorData.template ?? undefined,
+                displayName: floorData.displayName ?? undefined,
                 fixedMapName: floorData.fixedMap ?? "",
                 safetyActions: floorData.safety ?? false,
                 bgmName: floorData.bgm ? floorData.bgm[0] : "",
