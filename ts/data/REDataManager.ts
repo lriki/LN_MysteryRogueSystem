@@ -174,7 +174,7 @@ export class REDataManager
             //moveToAdjacentAsProjectile: REData.addAction("MoveToAdjacent"),
             PickActionId: REData.addAction("Pick", "LPickActivity"),
             PutActionId: REData.addAction("置く", "LPutActivity"),
-            ExchangeActionId: REData.addAction("交換", ""),//"Exchange"),
+            ExchangeActionId: REData.addAction("交換", "LExchangeActivity"),//"Exchange"),
             ThrowActionId: REData.addAction("投げる", "LThrowActivity"),
             FlungActionId: REData.addAction("Flung", ""),
             ShootingActionId: REData.addAction("Shooting", ""),

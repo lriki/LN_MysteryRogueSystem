@@ -7,7 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { Helpers } from "ts/system/Helpers";
 import { BlockLayerKind } from "../LBlock";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { assert, tr } from "ts/Common";
+import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DActionId } from "ts/data/DAction";
 import { SMomementCommon } from "ts/system/SMomementCommon";
@@ -22,6 +22,7 @@ import { LThrowActivity } from "../activities/LThrowActivity";
 import { LForwardFloorActivity } from "../activities/LForwardFloorActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
+import { LExchangeActivity } from "../activities/LExchangeActivity";
 
 /**
  * 
@@ -229,6 +230,29 @@ export class REUnitBehavior extends LBehavior {
             /*
                 */
             return REResponse.Succeeded;
+        }
+        else if (activity instanceof LExchangeActivity) {
+            
+            const inventory = self.getBehavior(LInventoryBehavior);
+            const item1 = activity.object();
+            const block = REGame.map.block(self.x, self.y);
+            const layer = block.layer(BlockLayerKind.Ground);
+            const item2 = layer.firstEntity();
+            if (item2) {
+                // TODO: 呪いの処理など、アイテムを今いる場所から取り外せるかチェック入れる
+
+                REGame.map._removeEntity(item2);
+                inventory.removeEntity(item1);
+
+                REGame.map.appearEntity(item1, self.x, self.y);
+                inventory.addEntity(item2);
+
+                context.postMessage(tr("{0} と {1} を交換した。", REGame.identifyer.makeDisplayText(item1), REGame.identifyer.makeDisplayText(item2)));
+            }
+            else {
+                context.postMessage(tr2("足元には何もない。"));
+            }
+
         }
         else if (activity instanceof LWaveActivity) {
             context.postSequel(self, RESystem.sequels.attack);

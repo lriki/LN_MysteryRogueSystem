@@ -1,6 +1,3 @@
-import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";

@@ -7,6 +7,7 @@ import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChange
 import { LEatActivity } from "ts/objects/activities/LEatActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
+import { LExchangeActivity } from "ts/objects/activities/LExchangeActivity";
 import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
@@ -31,6 +32,8 @@ export class SActivityFactory {
                 return new LPickActivity();
             case DBasics.actions.ThrowActionId:
                 return new LThrowActivity();
+            case DBasics.actions.ExchangeActionId:
+                return new LExchangeActivity();
             case DBasics.actions.ForwardFloorActionId:
                 return new LForwardFloorActivity();
             case DBasics.actions.BackwardFloorActionId:
