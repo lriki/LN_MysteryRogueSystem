@@ -31,6 +31,12 @@ export class SMomementCommon {
         7, 0, 1,
     ];
 
+    // 左折の法則のオフセット
+    // http://twist.jpn.org/sfcsiren/index.php?%E3%83%A2%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%AE%E8%A1%8C%E5%8B%95%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0#zd804a50
+    private static readonly LHRuleOffsets: SPoint[] = [
+        { x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 0 }, { x: 1, y: 0 }
+    ];
+
     /**
      * 向き反転
      */
@@ -88,6 +94,38 @@ export class SMomementCommon {
             d = this.getNextDirCW(d);
         }
         return entity.dir;
+    }
+
+    /**
+     * 左折の法則に従い、移動候補にできる Block を優先度順に取得する
+     */
+    public static getMovingCandidateBlockAsLHRule(entity: LEntity): LBlock | undefined {
+        /*
+        const result: LBlock[] = [];
+        for (const offset of this.LHRuleOffsets) {
+            const pos = this.transformRotationBlock(offset.x, offset.y, entity.dir);
+            const block = REGame.map.tryGetBlock(pos.x, pos.y);
+            if (block) result.push(block);
+        }
+        */
+        const map = REGame.map;
+        const oldBlock = map.block(entity.x, entity.y);
+        for (const offset of this.LHRuleOffsets) {
+            const pos = this.transformRotationBlock(offset.x, offset.y, entity.dir);
+            const block = map.tryGetBlock(entity.x + pos.x, entity.y + pos.y);
+            if (block && this.checkPassageBlockToBlock(entity, oldBlock, block)) {
+                return block;
+            }
+        }
+        return undefined;
+    }
+
+    public static checkPassageToDir(entity: LEntity, dir: number): boolean {
+        const offset = Helpers.dirToTileOffset(dir);
+        const map = REGame.map;
+        const oldBlock = map.block(entity.x, entity.y);
+        const newBlock = map.block(entity.x + offset.x, entity.y + offset.y);
+        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock);
     }
     
     /**

@@ -298,8 +298,27 @@ export class LMap extends LObject
             .filter((e): e is LEntity => { return e != undefined; });
     }
 
-    public entitiesInRoom(roomId: LRoomId): LEntity[] {
-        return this.entities().filter(entity => this.roomId(entity) == roomId);
+    /** entity の視界内の Entity を取得する */
+    public getVisibilityEntities(subject: LEntity): LEntity[] {
+        if (subject.isOnRoom()) {
+            return this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
+        }
+        else {
+            return this.entities().filter(entity => Helpers.isAdjacent(entity, subject) && entity != subject);
+        }
+    }
+
+    // withOuter: 部屋の外周1マスも含むかどうか
+    public entitiesInRoom(roomId: LRoomId, withOuter: boolean): LEntity[] {
+        if (withOuter) {
+            const room = this.room(roomId);
+            const outers: LBlock[] = [];
+            room.forEachEdgeBlocks(b => outers.push(b));
+            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.x() == entity.x || b.y() == entity.y) != undefined));
+        }
+        else {
+            return this.entities().filter(entity => this.roomId(entity) == roomId);
+        }
     }
 
     _addEntityInternal(entity: LEntity): void {

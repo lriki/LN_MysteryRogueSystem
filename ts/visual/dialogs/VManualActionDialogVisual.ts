@@ -17,6 +17,7 @@ import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
+import { IsKeyPressed } from "imgui-js/imgui";
 
 enum UpdateMode {
     Normal,
@@ -40,6 +41,10 @@ export class VManualActionDialogVisual extends VDialog {
     public constructor(model: REManualActionDialog) {
         super(model);
         this._model = model;
+    }
+
+    private actionButton(): string {
+        return "ok";
     }
 
     private dashButton(): string {
@@ -70,14 +75,19 @@ export class VManualActionDialogVisual extends VDialog {
         this.updateInput();
 
 
-
-
-
         const context = RESystem.dialogContext;
         const entity = context.causeEntity();
         if (!entity) return;
 
-        const model = context.activeDialog() as REManualActionDialog;
+        // 足踏み
+        if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
+            entity.getBehavior(REUnitBehavior)._fastforwarding = true;
+            this._model.consumeAction();
+            this._model.submit();
+            return;
+        }
+
+
         
         if (entity.immediatelyAfterAdjacentMoving) {
             entity.immediatelyAfterAdjacentMoving = false;
@@ -88,7 +98,7 @@ export class VManualActionDialogVisual extends VDialog {
                 if (actions.length > 0) {
                     if (actions.includes(DBasics.actions.PickActionId)) {
     
-                        if (model.dashingEntry) {
+                        if (this._model.dashingEntry) {
                             context.commandContext().postMessage(tr2("%1 に乗った。").format(REGame.identifyer.makeDisplayText(targetEntity)));
                         }
                         else {
@@ -195,7 +205,7 @@ export class VManualActionDialogVisual extends VDialog {
             return;
         }
         // アクション
-        else if (Input.isTriggered("ok")) {
+        else if (Input.isTriggered(this.actionButton())) {
             this.attemptFrontAction(context, entity);
             return;
         }
@@ -297,7 +307,7 @@ export class VManualActionDialogVisual extends VDialog {
         }
 
         if (this.isMoveButtonPressed() &&
-            REGame.map.checkPassage(entity, dir)) {
+            SMomementCommon.checkPassageToDir(entity, dir)) {
 
             if (this.isDashButtonPressed()) {
                 const behavior = entity.findBehavior(REUnitBehavior);

@@ -14,6 +14,7 @@ import { LCommandPlaybackDialog } from "ts/system/dialogs/LCommandPlaybackDialog
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LRandom } from "ts/objects/LRandom";
 
 interface RECCMessage {
     name: string;   // for debug
@@ -53,6 +54,12 @@ export class SCommandContext
         this._lastReactorResponce = REResponse.Pass;
         this._commandChainRunning = false;
     }
+
+    public random(): LRandom {
+        return REGame.world.random();
+    }
+
+
     
     /**
      * カスタムの RE-Command のように、プラグインとして事前定義できないコマンド実行 Action の呼び出し

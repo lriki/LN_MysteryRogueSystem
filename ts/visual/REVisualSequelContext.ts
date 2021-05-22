@@ -48,7 +48,7 @@ export class REVisualSequelContext {
         if (!entty) return false;
         const behavior = entty.findBehavior(REUnitBehavior);
         if (!behavior) return false;
-        return behavior._straightDashing;
+        return behavior._straightDashing || behavior._fastforwarding;
     }
 
     /** Sequel 開始時の Visual の position */

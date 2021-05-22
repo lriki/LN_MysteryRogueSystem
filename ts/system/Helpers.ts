@@ -114,6 +114,11 @@ export class Helpers {
         return (REData.factions[subject].friendBits & (1 << target)) != 0;
     }
 
+    public static isAdjacent(entity1: LEntity, entity2: LEntity): boolean {
+        return (Math.abs(entity1.x - entity2.x) <= 1 && Math.abs(entity1.y - entity2.y) <= 1);
+    }
+
+    // ミニマップ表示に使う。AIでは想定していない
     public static testVisibility(subject: LEntity, target: LEntity): boolean {
         const targetBlock = REGame.map.block(target.x, target.y);
 
@@ -123,7 +128,7 @@ export class Helpers {
         }
 
         // 隣接していれば Faction を問わず見える
-        if (Math.abs(subject.x - target.x) <= 1 && Math.abs(subject.y - target.y) <= 1) {
+        if (this.isAdjacent(subject, target)) {
             return true;
         }
 

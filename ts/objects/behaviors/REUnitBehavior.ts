@@ -38,6 +38,7 @@ export class REUnitBehavior extends LBehavior {
     _targetingEntityId: number = 0;   // AIMinor Phase で、攻撃対象を確定したかどうか。以降、Run 内では iterationCount が残っていても MinorAction を行わない
 
     _straightDashing: boolean = false;
+    _fastforwarding: boolean = false;
 
     // Battler params
     

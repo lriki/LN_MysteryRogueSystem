@@ -67,6 +67,7 @@ export class SAIHelper {
         return this.axisToDir(dx, dy);
     }
 
+    /*
     public static findDirectionTo(entity: LEntity, startX: number, startY: number, goalX: number, goalY: number): number {
         const dx = goalX - startX;
         const dy = goalY - startY;
@@ -88,5 +89,6 @@ export class SAIHelper {
 
         return dstDir;
     }
+    */
 }
 

@@ -738,6 +738,14 @@ export class LEntity extends LObject
         return REGame.map.block(this.x, this.y)._roomId;
     }
 
+    public isOnRoom(): boolean {
+        return this.roomId() > 0;
+    }
+
+    public isOnPassageWay(): boolean {
+        return this.roomId() <= 0;
+    }
+
     public layer(): BlockLayerKind {
         const r = REGame.map.block(this.x, this.y).findEntityLayerKind(this);
         assert(r);
