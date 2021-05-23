@@ -4,32 +4,48 @@ import { RESystem } from "ts/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
-import { DState, DStateId, DStateRestriction } from "ts/data/DState";
+import { DAutoRemovalTiming, DState, DStateId, DStateRestriction } from "ts/data/DState";
 import { assert } from "ts/Common";
+import { REGame_DecisionBehavior } from "../behaviors/REDecisionBehavior";
+import { REGame } from "../REGame";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
-    private _stateTurn: number = 0;
+    private _stateTurn: number | undefined = 0;
+    //private _persistent: boolean = false;   // 永続ステータス？
     
     constructor() {
         super();
-        this.resetStateCounts();
     }
     
     // Game_BattlerBase.prototype.isStateExpired 
     private isStateExpired(): boolean {
-        return this._stateTurn <= 0;
+        return this._stateTurn != undefined && this._stateTurn <= 0;
     }
 
     // Game_BattlerBase.prototype.resetStateCounts
     private resetStateCounts(): void {
-        //const state = $dataStates[stateId];
-        //const variance = 1 + Math.max(state.maxTurns - state.minTurns, 0);
-        //this._stateTurns[stateId] = state.minTurns + Math.randomInt(variance);
-        this._stateTurn = 10;
+        const state = this.stateData();
+        if (state.autoRemovalTiming == DAutoRemovalTiming.None) {
+            this._stateTurn = undefined;
+        }
+        else if (state.autoRemovalTiming == DAutoRemovalTiming.TurnEnd) {
+            if (state.minTurns ==  state.maxTurns) {
+                this._stateTurn = state.maxTurns;
+            }
+            else {
+                const variance = 1 + Math.max(state.maxTurns - state.minTurns, 0);
+                this._stateTurn = state.minTurns + REGame.world.random().nextIntWithMax(variance);
+            }
+        }
+        else {
+            throw new Error("Not implemented");
+        }
     }
 
+    
+
     private updateStateTurns(): void {
-        if (this._stateTurn > 0) {
+        if (this._stateTurn && this._stateTurn > 0) {
             this._stateTurn--;
         }
     }
@@ -49,6 +65,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
 
     onAttached(): void {
+        this.resetStateCounts();
         //console.log("LStateTrait_GenericRMMZState");
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
     }

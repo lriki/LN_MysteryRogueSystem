@@ -8,7 +8,7 @@ import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
-import { DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
+import { DAutoRemovalTiming, DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
@@ -308,6 +308,9 @@ export class REDataManager
                         displayName: x.name,
                         restriction: x.restriction,
                         iconIndex: x.iconIndex ?? 0,
+                        autoRemovalTiming: x.autoRemovalTiming,
+                        minTurns: x.minTurns,
+                        maxTurns: x.maxTurns,
                         message1: x.message1 ?? "",
                         message2: x.message2 ?? "",
                         message3: x.message3 ?? "",
@@ -315,6 +318,12 @@ export class REDataManager
                         traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
                         behaviors: x.meta ? makeStateBehaviorsFromMeta(x.meta) : [],
                     };
+
+                    if (state.autoRemovalTiming == DAutoRemovalTiming.AfterAction) {
+                        // TODO:
+                        //console.error("[行動終了時の自動解除] は未実装です。");
+                    }
+
                     this.setupDirectly_State(state);
                     return state;
                 }

@@ -3,19 +3,30 @@ import { REData } from "./REData";
 
 export type DStateId = number;
 
+export enum DAutoRemovalTiming {
+    /** [RMMZ] なし */
+    None = 0,
+
+    /** [RMMZ] 行動終了時 */
+    AfterAction = 1,
+
+    /** [RMMZ] ターン終了時 */
+    TurnEnd = 2,
+}
+
 export enum DStateRestriction {
     None = 0,
 
-    /** 敵を攻撃 */
+    /** [RMMZ] 敵を攻撃 */
     AttcakToOpponent = 1,
 
-    /** 誰かを攻撃 */
+    /** [RMMZ] 誰かを攻撃 */
     AttackToOther = 2,
 
-    /** 味方を攻撃 */
+    /** [RMMZ] 味方を攻撃 */
     AttcakToFriend = 3,
 
-    /** 行動できない */
+    /** [RMMZ] 行動できない */
     NotAction = 4,
 }
 
@@ -32,6 +43,15 @@ export interface DState {
     restriction: DStateRestriction;
 
     iconIndex: number;
+
+    /** 自動解除のタイミング */
+    autoRemovalTiming: DAutoRemovalTiming;
+
+    /** 継続ターン数 Min */
+    minTurns: number;
+
+    /** 継続ターン数 Max */
+    maxTurns: number;
 
     message1: string;
     message2: string;
@@ -51,6 +71,9 @@ export function DState_makeDefault(): DState {
         key: "",
         restriction: 0,
         iconIndex: 0,
+        autoRemovalTiming: DAutoRemovalTiming.None,
+        minTurns: 0,
+        maxTurns: 0,
         message1: "",
         message2: "",
         message3: "",

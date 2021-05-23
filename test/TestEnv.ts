@@ -80,7 +80,7 @@ export class TestEnv {
         this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.maps.findIndex(m => DHelpers.getMapName(m.mapId) == "拠点メイン"));
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
-        this.StateId_Sleep = REData.states.findIndex(x => x.displayName == "睡眠");
+        this.StateId_Sleep = REData.getStateFuzzy("UT睡眠").id;
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
         this.PrefabId_Herb = REData.prefabs.findIndex(x => x.key == "pキュアリーフ");
         this.PrefabId_Weapon1 = REData.prefabs.findIndex(x => x.key == "pゴブリンのこん棒");
