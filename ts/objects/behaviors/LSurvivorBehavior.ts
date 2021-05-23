@@ -46,6 +46,10 @@ export class LSurvivorBehavior extends LBehavior {
             if (battler.actualParam(DBasics.params.fp) <= 0) {
                 // 満腹度 0 による HP 減少
                 battler.gainActualParam(DBasics.params.hp, -1);
+
+                if (battler.isDeathStateAffected()) {
+                    context.postMessage(tr2("おなかがすいて倒れた・・・"));
+                }
             }
             else {
                 // HP自動回復

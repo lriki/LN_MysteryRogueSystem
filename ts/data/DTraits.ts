@@ -31,30 +31,34 @@ export interface DTrait {
 
 /**
  */
-export class DTraits {
-    static TRAIT_ELEMENT_RATE = 11;
-    static TRAIT_STATE_RATE = 13;
+export enum DTraits {
+    TRAIT_ELEMENT_RATE = 11,
+    TRAIT_STATE_RATE = 13,
 
     /**
      * Game_BattlerBase.TRAIT_PARAM
      * dataId: RMMZ ParameterId
      * value:  
      */
-    static TRAIT_PARAM = 21;
-    static TRAIT_XPARAM = 22;
-    static TRAIT_SPARAM = 23;
+    TRAIT_PARAM = 21,
+    TRAIT_XPARAM = 22,
+    TRAIT_SPARAM = 23,
 
-    static TRAIT_ATTACK_ELEMENT = 31;
+    TRAIT_ATTACK_ELEMENT = 31,
 
 
     // ↑ ここまでは RMMZ の Game_BattlerBase.TRAIT_xxxx と同一
     //----------
     
+    _separator = 127,
+
     /**
      * 直接攻撃を必中にする。
      */
-    static CertainDirectAttack = 127;
+    CertainDirectAttack,
 
+    /** 地獄耳 */
+    UnitVisitor,
 
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 

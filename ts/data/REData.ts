@@ -360,4 +360,18 @@ export class REData
         // TODO: id
         return this.prefabs.find(p => p.key == pattern);
     }
+
+    static findStateFuzzy(pattern: string): DState | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.states[id];
+        else
+            return this.states.find(x => x.displayName == pattern || x.key == pattern);
+    }
+
+    static getStateFuzzy(pattern: string): DState {
+        const d = this.findStateFuzzy(pattern);
+        if (d) return d;
+        throw new Error(`Item "${pattern}" not found.`);
+    }
 }

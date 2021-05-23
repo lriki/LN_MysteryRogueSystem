@@ -21,6 +21,7 @@ export class LCharacterAI {
     private _targetPositionX: number = -1;
     private _targetPositionY: number = -1;
     private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
+    private _noActionTurnCount: number = 0;
 
     public thinkMoving(self: LEntity, context: SCommandContext): SPhaseResult {
 
@@ -69,6 +70,7 @@ export class LCharacterAI {
 
         // 移動メイン
         if (this.thinkMoving_Search(self, context)) {
+            this._noActionTurnCount = 0;
             return SPhaseResult.Handled;
         }
 
@@ -248,7 +250,18 @@ export class LCharacterAI {
             }
         }
 
-        // TODO: 6連続で移動できなかったときはランダム移動
+        this._noActionTurnCount++;
+        if (this._noActionTurnCount >= 6) {
+            // 6連続で移動できなかったときはランダム移動
+            const candidates = SMomementCommon.getMovableAdjacentTiles(self);
+            if (candidates.length > 0) {
+                const block = candidates[context.random().nextIntWithMax(candidates.length)];
+                this.moveToAdjacent(self, block, context);
+                this._noActionTurnCount = 0;
+                return true;
+            }
+        }
+
         return false;
     }
 

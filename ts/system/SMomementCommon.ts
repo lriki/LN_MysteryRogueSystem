@@ -120,6 +120,24 @@ export class SMomementCommon {
         return undefined;
     }
 
+    /**
+     * "移動" できる隣接 Block を取得する
+     */
+    public static getMovableAdjacentTiles(entity: LEntity): LBlock[] {
+        const result: LBlock[] = [];
+        const map = REGame.map;
+        const oldBlock = map.block(entity.x, entity.y);
+        for (const d of this.AdjacentDirs) {
+            const offset = Helpers.dirToTileOffset(d);
+            const block = map.tryGetBlock(entity.x + offset.x, entity.y + offset.y);
+            if (block && this.checkPassageBlockToBlock(entity, oldBlock, block)) {
+                result.push(block);
+            }
+        }
+        return result;
+    }
+    private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
+
     public static checkPassageToDir(entity: LEntity, dir: number): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const map = REGame.map;

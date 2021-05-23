@@ -897,6 +897,9 @@ export class REDataManager
     }
     static setupDirectly_State(data: DState) {
         switch (data.key) {
+            case "kState_UT気配察知":
+                data.traits.push({ code: DTraits.UnitVisitor, dataId: 0, value: 0 });
+                break;
             case "kState_UnitTest_攻撃必中":
                 data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
                 break;

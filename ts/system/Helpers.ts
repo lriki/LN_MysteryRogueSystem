@@ -4,6 +4,7 @@ import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { DTraits } from "ts/data/DTraits";
 
 export class Helpers {
     public static _dirToTileOffsetTable: Vector2[] =  [
@@ -133,11 +134,16 @@ export class Helpers {
         }
 
         // 同じ部屋にいれば Faction を問わず見える
-        if (subject.roomId() == target.roomId()) {
+        if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
             return true;
         }
 
         if (Helpers.isHostile(subject, target)) {
+
+            if (subject.collectTraits().find(t => t.code == DTraits.UnitVisitor)) {
+                return true;
+            }
+
         }
         else {
             // 中立 target は、踏破済みの Block 上なら見える
