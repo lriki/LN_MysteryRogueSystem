@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Trap.Basic"
+                "-t", "CharacterAI.AttackOnDiagonalEdge"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

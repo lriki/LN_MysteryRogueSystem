@@ -17,7 +17,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('Equipment.EquipOnOff', () => {
+test("Equipment.EquipOnOff", () => {
     // New Game
     SGameManager.createGameObjects();
 

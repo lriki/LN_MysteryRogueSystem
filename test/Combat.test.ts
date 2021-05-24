@@ -17,7 +17,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('Combat.DamageAndCollapse', () => {
+test("Combat.DamageAndCollapse", () => {
 
     //--------------------
     // 準備
@@ -51,7 +51,7 @@ test('Combat.DamageAndCollapse', () => {
 });
 
 
-test('Combat.DamageAndGameover', () => {
+test("Combat.DamageAndGameover", () => {
 
     //--------------------
     // 準備

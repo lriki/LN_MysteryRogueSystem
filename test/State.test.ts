@@ -18,7 +18,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('State_Brace', () => {
+test("State_Brace", () => {
     SGameManager.createGameObjects();
 
     // Player
@@ -41,7 +41,7 @@ test('State_Brace', () => {
     expect(actor1.states()[0].stateId()).toBe(TestEnv.StateId_Sleep);
 });
 
-test('State.AutoRemove', () => {
+test("State.AutoRemove", () => {
     SGameManager.createGameObjects();
 
     // Player

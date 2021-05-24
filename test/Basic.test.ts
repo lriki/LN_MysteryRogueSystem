@@ -25,7 +25,7 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 
 
 /*
-const fs = require('fs');
+const fs = require("fs");
 var ttttt = fs.readFileSync("./js/rmmz_objects.js").toString();
 //eval(ttttt);
 
@@ -67,7 +67,7 @@ class ActorAttr extends BattlerAttr {
 }
 */
 
-test('Basic1', () => {
+test("Basic1", () => {
     //const taa = aaa;
     //const t = Game_Temp;
     //const ac = new Game_Temp();
@@ -138,7 +138,7 @@ test('Basic1', () => {
 });
 
 
-test('Basic.TurnOrderTable', () => {
+test("Basic.TurnOrderTable", () => {
     //--------------------
     // 準備
     SGameManager.createGameObjects();
@@ -304,7 +304,7 @@ test('Basic.TurnOrderTable', () => {
 });
 
 /*
-test('EntitySaveLoad', () => {
+test("EntitySaveLoad", () => {
     let contentsString = "";
 
     // Save

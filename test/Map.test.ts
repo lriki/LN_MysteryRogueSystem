@@ -21,7 +21,7 @@ afterAll(() => {
 });
 
 // フロア番号やマップの直接指定による移動
-test('MapTransfarDirectly', () => {
+test("MapTransfarDirectly", () => {
 
     //--------------------
     // 準備
@@ -79,7 +79,7 @@ test('MapTransfarDirectly', () => {
     expect(actor1.y).toBe(5);   // EntryPoint の位置へ移動できていること
 });
 
-test('TransformRotationBlock', () => {
+test("TransformRotationBlock", () => {
     // "左前" を1周変換してみる
     {
         // 回転無し
@@ -153,7 +153,7 @@ test('TransformRotationBlock', () => {
     }
 });
 
-test('MoveDiagonal_CollideWalls', () => {
+test("MoveDiagonal_CollideWalls", () => {
     SGameManager.createGameObjects();
 
     // Player
@@ -179,7 +179,7 @@ test('MoveDiagonal_CollideWalls', () => {
     expect(actor1.y).toBe(5);
 });
 
-test('RandomMap.1001562234', () => {
+test("RandomMap.1001562234", () => {
     for (let i = 0; i < 20; i++) {
         const seed = 52509;//Math.floor( Math.random()*65535 ); //100156223
         console.log("seed", seed);

@@ -21,7 +21,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('Survival.FP', () => {
+test("Survival.FP", () => {
     SGameManager.createGameObjects();
 
     // Player

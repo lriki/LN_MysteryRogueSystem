@@ -49,7 +49,8 @@ export class LCharacterAI {
 
             // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
             // TODO: このあたり、遠距離攻撃モンスターとかは変わる
-            if (target && Helpers.checkAdjacent(self, target)) {
+            if (target &&
+                this.checkAdjacentDirectlyAttack(self, target)) {
                 this._attackTargetEntityId = target.entityId();
             }
             else {
@@ -291,6 +292,33 @@ export class LCharacterAI {
         context.postActivity(LDirectionChangeActivity.make(self, dir));
         context.postActivity(LMoveAdjacentActivity.make(self, dir));
         context.postConsumeActionToken(self);
+    }
+
+    private checkAdjacentDirectlyAttack(self: LEntity, target: LEntity): boolean {
+        const map = REGame.map;
+        const selfBlock = map.block(self.x, self.y);
+        const targetBlock = map.block(target.x, target.y);
+        const dx = targetBlock.x() - selfBlock.x();
+        const dy = targetBlock.y() - selfBlock.y();
+
+        if (Math.abs(dx) > 1) return false; // 隣接 Block への攻撃ではない
+        if (Math.abs(dy) > 1) return false; // 隣接 Block への攻撃ではない
+
+        const d = Helpers.offsetToDir(dx, dy);
+        if (SMomementCommon.isDiagonalMoving(d)) {
+            // 斜め場合
+            const fl = SMomementCommon.rotatePositionByDir(7, d);  // 左前
+            const fr = SMomementCommon.rotatePositionByDir(9, d);  // 右前
+            const flBlock = map.block(self.x + fl.x, self.y + fl.y);
+            const frBlock = map.block(self.x + fr.x, self.y + fr.y);
+            if (flBlock.isWallLikeShape()) return false;    // 壁があるので攻撃できない
+            if (frBlock.isWallLikeShape()) return false;    // 壁があるので攻撃できない
+        }
+        else {
+            // 平行の場合
+        }
+
+        return true;
     }
     
     public thinkAction(self: LEntity, context: SCommandContext): SPhaseResult {

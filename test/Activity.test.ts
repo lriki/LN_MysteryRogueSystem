@@ -188,10 +188,5 @@ test("Activity.Exchange", () => {
     expect(inventory.entities().length).toBe(1);
     expect(inventory.contains(item2)).toBe(true);                          // item2 が持ち物に入っている
     expect(REGame.map.block(10, 10).containsEntity(item1)).toBe(true);  // item1 が足元にある
-
-
-
-    //expect(item1.isDestroyed()).toBe(true);     // item は削除されている
-    //expect(enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });
 

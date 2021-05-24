@@ -22,7 +22,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test('PickAndPut', () => {
+test("PickAndPut", () => {
     // New Game
     SGameManager.createGameObjects();
 
@@ -78,7 +78,7 @@ test('PickAndPut', () => {
     expect(inventory.entities.length).toBe(0);
 });
 
-test('PickAtMoved', () => {
+test("PickAtMoved", () => {
     // New Game
     SGameManager.createGameObjects();
 

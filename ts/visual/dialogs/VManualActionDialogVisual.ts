@@ -17,7 +17,6 @@ import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
-import { IsKeyPressed } from "imgui-js/imgui";
 
 enum UpdateMode {
     Normal,
