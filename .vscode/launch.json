@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "CharacterAI.AttackOnDiagonalEdge"
+                "-t", "CharacterAI.Moving1"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

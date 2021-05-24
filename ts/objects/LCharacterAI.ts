@@ -173,19 +173,20 @@ export class LCharacterAI {
 
     // 
     private thinkMoving_Search(self: LEntity, context: SCommandContext): boolean {
-        let moveAdLHRule = false;
+        let moveToLHRule = false;
+        let moveToPassageWay: LBlock | undefined;
         const block = REGame.map.block(self.x, self.y);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
                 // 目的地なし, 現在位置が通路・迷路
                 // => 左折の法則による移動
-                moveAdLHRule = true;
+                moveToLHRule = true;
             }
             else {
                 const room = REGame.map.room(block._roomId);
                 if (!block.isDoorway()) {
-                    // 現在位置が部屋
+                    // 目的地なし, 現在位置が部屋
                     // => ランダムな入口を目的地に設定し、目的地に向かう移動。
                     // => 入口が無ければ左折の法則による移動
 
@@ -197,14 +198,14 @@ export class LCharacterAI {
                     }
                     else {
                         // 入り口のない部屋。左折の法則による移動を継続する。
-                        moveAdLHRule = true;
+                        moveToLHRule = true;
                     }
                 }
                 else {
-                    // 現在位置が部屋の入口
+                    // 目的地なし, 現在位置が部屋の入口
                     // => 現在位置以外のランダムな入口を目的地に設定し、左折の法則による移動
                     // => 他に入口がなければ逆方向を向き、左折の法則による移動
-                    moveAdLHRule = true;
+                    moveToLHRule = true;
                     
     
                     const candidates = room.doorwayBlocks().filter(b => b.x() != self.x && b.y() != self.y);    // 足元フィルタ
@@ -224,7 +225,17 @@ export class LCharacterAI {
             // => 目的地を解除し、左折の法則による移動
             this._targetPositionX = -1;
             this._targetPositionY = -1;
-            moveAdLHRule = true;
+
+            // これは SFC シレン Wiki には乗っていない細工。
+            // 部屋内から目的地にたどり着いたとき、現在の向きと通路の方向が直角だと、左折の法則で通路に侵入できなくなる。
+            // 対策として、このときは隣接している通路ブロックへの移動を優先する。
+            const blocks = SMomementCommon.getMovableAdjacentTiles(self).filter(b => b.isPassageway());
+            if (blocks.length > 0) {
+                moveToPassageWay = blocks[context.random().nextIntWithMax(blocks.length)];
+            }
+            else {
+                moveToLHRule = true;
+            }
         }
         else {
             // 目的地あり 目的地が現在位置でない
@@ -238,12 +249,17 @@ export class LCharacterAI {
             }
             else {
                 // 壁際を斜め移動しようとした等、移動できなかった
-                moveAdLHRule = true;
+                moveToLHRule = true;
             }
         }
 
-        // 目的地設定されていないが、移動要求されている場合は移動する
-        if (moveAdLHRule) {
+        if (moveToPassageWay) {
+            this.moveToAdjacent(self, moveToPassageWay, context);
+            return true;
+        }
+
+        // 左折の法則による移動
+        if (moveToLHRule) {
             const block = SMomementCommon.getMovingCandidateBlockAsLHRule(self);
             if (block) {
                 this.moveToAdjacent(self, block, context);

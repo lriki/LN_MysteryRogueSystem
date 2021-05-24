@@ -207,6 +207,10 @@ export class LMap extends LObject
     }
     */
 
+    public blocks(): readonly LBlock[] {
+        return this._blocks;
+    }
+
     block(x: number, y: number) : LBlock;
     block(pos: Vector2, _?: any) : LBlock;
     block(a1: any, a2: any) : LBlock {
@@ -314,7 +318,7 @@ export class LMap extends LObject
             const room = this.room(roomId);
             const outers: LBlock[] = [];
             room.forEachEdgeBlocks(b => outers.push(b));
-            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.x() == entity.x || b.y() == entity.y) != undefined));
+            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.x() == entity.x && b.y() == entity.y) != undefined));
         }
         else {
             return this.entities().filter(entity => this.roomId(entity) == roomId);

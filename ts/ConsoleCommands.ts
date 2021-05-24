@@ -1,7 +1,9 @@
 import { REData } from "./data/REData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
+import { TileShape } from "./objects/LBlock";
 import { LEntity } from "./objects/LEntity";
 import { REGame } from "./objects/REGame";
+import { RESystem } from "./system/RESystem";
 import { SDebugHelpers } from "./system/SDebugHelpers";
 
 
@@ -36,6 +38,13 @@ function addState(entityId: number, pattern: string) {
     e.addState(REData.getStateFuzzy(pattern).id);
 }
 
+function visitAll() {
+    addState(REGame.system.mainPlayerEntityId.index2(), "UT気配察知");
+    addState(REGame.system.mainPlayerEntityId.index2(), "UT道具感知");
+    REGame.map.blocks().forEach(b => b._passed = true);
+    RESystem.minimapData.setRefreshNeeded();
+}
+
 
 
 
@@ -44,6 +53,7 @@ function addState(entityId: number, pattern: string) {
     setHP: setHP,
     setFP: setFP,
     addState: addState,
+    visitAll: visitAll,
 
 };
 

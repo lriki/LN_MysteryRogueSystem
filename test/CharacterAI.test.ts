@@ -22,14 +22,39 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test("CharacterAI.test", () => {
+test("CharacterAI.Moving1", () => {
     SGameManager.createGameObjects();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_CharacterAI, 19, 4);
     TestEnv.performFloorTransfer();
 
+    // enemy1
+    const enemy1 = SEntityFactory.newMonster(1);
+    enemy1._name = "enemy1";
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 13, 5);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // 足踏み
+    const dialogContext = RESystem.dialogContext;
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // enemy1 は入り口に向かって↑に移動している
+    expect(enemy1.x).toBe(13);
+    expect(enemy1.y).toBe(4);
+
+    // 足踏み
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // enemy1 は通路に向かって→に移動している
+    expect(enemy1.x).toBe(14);
+    expect(enemy1.y).toBe(4);
 });
 
 // 壁角斜め方向への攻撃はしない
