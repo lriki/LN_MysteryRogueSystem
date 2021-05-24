@@ -1,6 +1,6 @@
 import { Log } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, SSequelSet } from "ts/objects/SSequel";
+import { SSequelUnit, SSequelSet } from "ts/system/SSequel";
 import { RESystem } from "./RESystem";
 
 export class SSequelContext {

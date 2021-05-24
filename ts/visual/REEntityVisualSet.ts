@@ -2,7 +2,7 @@ import { REData } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
-import { SSequelSet } from "ts/objects/SSequel";
+import { SSequelSet } from "ts/system/SSequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { assert } from "ts/Common";

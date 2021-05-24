@@ -2,7 +2,7 @@ import { LandExitResult } from "ts/data/REData";
 import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
-import { SSequelSet } from "ts/objects/SSequel";
+import { SSequelSet } from "ts/system/SSequel";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 

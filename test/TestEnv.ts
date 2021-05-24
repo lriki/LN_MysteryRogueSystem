@@ -5,7 +5,7 @@ import { REDataManager } from "ts/data/REDataManager";
 import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
-import { SSequelSet } from "ts/objects/SSequel";
+import { SSequelSet } from "ts/system/SSequel";
 import { REIntegration } from "ts/system/REIntegration";
 import { SGameManager } from "ts/system/SGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";

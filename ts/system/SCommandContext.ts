@@ -2,7 +2,7 @@ import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
-import { SAnumationSequel, SBalloonSequel, SMotionSequel, SWaitSequel } from "../objects/SSequel";
+import { SAnumationSequel, SBalloonSequel, SMotionSequel, SWaitSequel } from "./SSequel";
 import { REGame } from "../objects/REGame";
 import { SEffectContext, SEffectSubject } from "./SEffectContext";
 import { LBlock } from "../objects/LBlock";

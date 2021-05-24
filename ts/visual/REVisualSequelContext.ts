@@ -3,7 +3,7 @@ import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, SSequelClip, SMotionSequel, SAnumationSequel, SSequelRun, SWaitSequel, SBalloonSequel } from "ts/objects/SSequel";
+import { SSequelUnit, SSequelClip, SMotionSequel, SAnumationSequel, SSequelRun, SWaitSequel, SBalloonSequel } from "ts/system/SSequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";

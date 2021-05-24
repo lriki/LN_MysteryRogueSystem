@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { REData } from "../data/REData";
-import { LEntity } from "./LEntity";
+import { LEntity } from "../objects/LEntity";
 
 /**
  * Sequel

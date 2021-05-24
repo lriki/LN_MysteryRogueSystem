@@ -10,7 +10,7 @@ import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
-import { SSequelSet } from "./SSequel";
+import { SSequelSet } from "../system/SSequel";
 import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "./LEventServer";
 import { SMinimapData } from "ts/system/SMinimapData";

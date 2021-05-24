@@ -3,7 +3,7 @@ import { LandExitResult, REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
 import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
-import { SSequelSet } from "../objects/SSequel";
+import { SSequelSet } from "../system/SSequel";
 import { REIntegration } from "../system/REIntegration";
 import { REVisual } from "../visual/REVisual";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";

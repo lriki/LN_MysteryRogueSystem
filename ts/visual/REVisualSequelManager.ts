@@ -1,5 +1,5 @@
 import { REVisual_Entity } from "../visual/REVisual_Entity";
-import { SSequelSet } from "../objects/SSequel";
+import { SSequelSet } from "../system/SSequel";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisual } from "./REVisual";
 
