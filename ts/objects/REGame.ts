@@ -10,7 +10,7 @@ import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
-import { RESequelSet } from "./REGame_Sequel";
+import { SSequelSet } from "./SSequel";
 import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "./LEventServer";
 import { SMinimapData } from "ts/system/SMinimapData";
@@ -47,6 +47,6 @@ export class REGame
     static borderWall: LBlock = new LBlock(-1, -1);
 
     /**  */
-    static signalFlushSequelSet: ((sequelSet: RESequelSet) => void) | undefined;
+    static signalFlushSequelSet: ((sequelSet: SSequelSet) => void) | undefined;
 }
 

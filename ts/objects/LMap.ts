@@ -5,7 +5,7 @@ import { LEntity } from "./LEntity";
 import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { Helpers } from "ts/system/Helpers";
-import { RESequelSet } from "./REGame_Sequel";
+import { SSequelSet } from "./SSequel";
 import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DFloorInfo, DLand } from "ts/data/DLand";

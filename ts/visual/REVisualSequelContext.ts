@@ -3,7 +3,7 @@ import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, RESequelClip, SMotionSequel, SAnumationSequel, RESequelRun, SWaitSequel, SBalloonSequel } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, SSequelClip, SMotionSequel, SAnumationSequel, SSequelRun, SWaitSequel, SBalloonSequel } from "ts/objects/SSequel";
 import { RESystem } from "ts/system/RESystem";
 import { updateDecorator } from "typescript";
 import { REVisual } from "../visual/REVisual";
@@ -12,7 +12,7 @@ import { REVisual_Entity } from "./REVisual_Entity";
 
 export class REVisualSequelContext {
     private _entityVisual: REVisual_Entity;
-    private _clip: RESequelClip | undefined;
+    private _clip: SSequelClip | undefined;
     private _currentClip: number = 0;
     private _frameCount: number = 0;
     private _timeScale: number = 0;
@@ -102,7 +102,7 @@ export class REVisualSequelContext {
         this._cuurentFinished = true;
     }
 
-    _start(clip: RESequelClip) {
+    _start(clip: SSequelClip) {
         this._clip = clip;
         this._currentClip = -1;
         this._timeScale = clip.sequels().length;

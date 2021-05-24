@@ -1,11 +1,11 @@
 import { REVisual_Entity } from "../visual/REVisual_Entity";
-import { RESequelSet } from "../objects/REGame_Sequel";
+import { SSequelSet } from "../objects/SSequel";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisual } from "./REVisual";
 
 export class REVisualSequelManager {
     private _entityVisualSet: REEntityVisualSet;
-    private _activeSequelSet: RESequelSet | undefined;
+    private _activeSequelSet: SSequelSet | undefined;
     private _currentSequelRun: number = -1;
     private _runningVisuals: REVisual_Entity[] = [];
 
@@ -13,7 +13,7 @@ export class REVisualSequelManager {
         this._entityVisualSet = entityVisualSet;
     }
 
-    setup(sequelSet: RESequelSet) {
+    setup(sequelSet: SSequelSet) {
         this._activeSequelSet = sequelSet;
         this._currentSequelRun = -1;
         this._runningVisuals.splice(0);

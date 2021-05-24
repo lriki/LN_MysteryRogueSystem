@@ -5,7 +5,7 @@ import { REDataManager } from "ts/data/REDataManager";
 import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
-import { RESequelSet } from "ts/objects/REGame_Sequel";
+import { SSequelSet } from "ts/objects/SSequel";
 import { REIntegration } from "ts/system/REIntegration";
 import { SGameManager } from "ts/system/SGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
@@ -62,7 +62,7 @@ export class TestEnv {
         { name: "$dataMapInfos", src: "MapInfos.json" }
     ];
 
-    static activeSequelSet: RESequelSet;
+    static activeSequelSet: SSequelSet;
 
     static setupDatabase() {
         this.loadRmmzDatabase();
@@ -205,7 +205,7 @@ export class TestEnvIntegration extends REIntegration {
         // Visual 表示は伴わない
     }
 
-    onFlushSequelSet(sequelSet: RESequelSet): void {
+    onFlushSequelSet(sequelSet: SSequelSet): void {
         // 実行結果確認用に保持するだけ
         TestEnv.activeSequelSet = sequelSet;
     }

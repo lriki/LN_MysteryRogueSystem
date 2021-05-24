@@ -2,7 +2,7 @@ import { LandExitResult } from "ts/data/REData";
 import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
-import { RESequelSet } from "ts/objects/REGame_Sequel";
+import { SSequelSet } from "ts/objects/SSequel";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 
@@ -19,7 +19,7 @@ export abstract class REIntegration {
 
     abstract onRefreshGameMap(map: LMap, initialMap: FMap): void;
 
-    abstract onFlushSequelSet(sequelSet: RESequelSet): void;
+    abstract onFlushSequelSet(sequelSet: SSequelSet): void;
 
     abstract onCheckVisualSequelRunning(): boolean;
     

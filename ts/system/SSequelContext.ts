@@ -1,13 +1,13 @@
 import { Log } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
-import { SSequelUnit, RESequelSet } from "ts/objects/REGame_Sequel";
+import { SSequelUnit, SSequelSet } from "ts/objects/SSequel";
 import { RESystem } from "./RESystem";
 
 export class SSequelContext {
-    private _sequelSet: RESequelSet = new RESequelSet();
+    private _sequelSet: SSequelSet = new SSequelSet();
 
     public clear(): void {
-        this._sequelSet = new RESequelSet();
+        this._sequelSet = new SSequelSet();
     }
 
     public isEmptySequelSet(): boolean {
@@ -35,7 +35,7 @@ export class SSequelContext {
             }
             RESystem.integration.onFlushSequelSet(this._sequelSet);
 
-            this._sequelSet = new RESequelSet();
+            this._sequelSet = new SSequelSet();
         }
     }
 

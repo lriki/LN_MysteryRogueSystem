@@ -3,7 +3,7 @@ import { LandExitResult, REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
 import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
-import { RESequelSet } from "../objects/REGame_Sequel";
+import { SSequelSet } from "../objects/SSequel";
 import { REIntegration } from "../system/REIntegration";
 import { REVisual } from "../visual/REVisual";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
@@ -50,7 +50,7 @@ export class RMMZIntegration extends REIntegration {
         builder.build(map, initialMap);
     }
 
-    onFlushSequelSet(sequelSet: RESequelSet): void {
+    onFlushSequelSet(sequelSet: SSequelSet): void {
     }
     
     onCheckVisualSequelRunning(): boolean {

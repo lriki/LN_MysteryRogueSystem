@@ -104,7 +104,7 @@ export class SWaitSequel extends SSequelUnit {
  * 
  * 倍速移動などで、複数の Sequel が追加されることがある。
  */
-export class RESequelClip {
+export class SSequelClip {
     private _sequels: SSequelUnit[];
 
     constructor(firstItem: SSequelUnit) {
@@ -135,14 +135,14 @@ export class RESequelClip {
 /**
  * 並列実行の単位。同時実行できる RESequelClip はまとめてひとつの SequelRun に属する。
  */
-export class RESequelRun {
-    private _clips: RESequelClip[];
+export class SSequelRun {
+    private _clips: SSequelClip[];
 
     constructor(firstItem: SSequelUnit) {
-        this._clips = [new RESequelClip(firstItem)];
+        this._clips = [new SSequelClip(firstItem)];
     }
 
-    clips(): readonly RESequelClip[] {
+    clips(): readonly SSequelClip[] {
         return this._clips;
     }
 
@@ -158,7 +158,7 @@ export class RESequelRun {
         assert(sequel.isParallel() == this.isParallel());
         const index = this._clips.findIndex(x => x.entity() == sequel.entity());
         if (index < 0) {
-            this._clips.push(new RESequelClip(sequel));
+            this._clips.push(new SSequelClip(sequel));
         }
         else {
             this._clips[index].add(sequel);
@@ -170,8 +170,8 @@ export class RESequelRun {
  * 一連のコマンドチェーン内で発生した Sequel を、並列実行などを考慮して整理して保持する。
  * その後 Visual レイヤーに渡り、アニメーションが実行される。
  */
-export class RESequelSet {
-    private _runs: RESequelRun[];
+export class SSequelSet {
+    private _runs: SSequelRun[];
     private _allParallel: boolean;
     private _isEmpty: boolean;
 
@@ -181,7 +181,7 @@ export class RESequelSet {
         this._isEmpty = true;
     }
 
-    runs(): readonly RESequelRun[] {
+    runs(): readonly SSequelRun[] {
         return this._runs;
     }
 
@@ -222,7 +222,7 @@ export class RESequelSet {
         }
 
         if (newRun) {
-            this._runs.push(new RESequelRun(sequel));
+            this._runs.push(new SSequelRun(sequel));
         }
         else {
             this._runs[this._runs.length - 1].add(sequel);
