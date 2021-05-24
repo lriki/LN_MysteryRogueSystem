@@ -10,6 +10,7 @@ import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { onAttackReaction } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { DEffectCause } from "ts/data/DEffect";
+import { SMomementCommon } from "ts/system/SMomementCommon";
 
 export abstract class LSkillBehavior {
     abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void;
@@ -42,16 +43,22 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                     const effectContext = new SEffectContext(effectSubject);
                     //effectContext.addEffector(effector);
 
-                    const rmmzAnimationId = (skill.rmmzAnimationId < 0) ? subject.attackAnimationId() : skill.rmmzAnimationId;
-                    if (rmmzAnimationId > 0) {
-                        context.postAnimation(target, rmmzAnimationId, true);
+
+                    if (SMomementCommon.checkDiagonalWallCornerCrossing(entity, entity.dir)) {
+                        // 斜め向きで壁の角と交差しているので通常攻撃は通らない
                     }
-
+                    else {
+                        const rmmzAnimationId = (skill.rmmzAnimationId < 0) ? subject.attackAnimationId() : skill.rmmzAnimationId;
+                        if (rmmzAnimationId > 0) {
+                            context.postAnimation(target, rmmzAnimationId, true);
+                        }
+                        
+                        // TODO: SEffectSubject はダミー
+                        context.post(target, entity, new SEffectSubject(entity), {effectContext: effectContext}, onAttackReaction);
+    
+                        //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
+                    }
                     
-                    // TODO: SEffectSubject はダミー
-                    context.post(target, entity, new SEffectSubject(entity), {effectContext: effectContext}, onAttackReaction);
-
-                    //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                 }
             }
 

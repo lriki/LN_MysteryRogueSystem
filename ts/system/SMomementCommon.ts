@@ -138,6 +138,30 @@ export class SMomementCommon {
     }
     private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
 
+    /**
+     * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
+     */
+    public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
+        const map = REGame.map;
+        if (SMomementCommon.isDiagonalMoving(d)) {
+            // 斜め場合
+            const fl = SMomementCommon.rotatePositionByDir(7, d);  // 左前
+            const fr = SMomementCommon.rotatePositionByDir(9, d);  // 右前
+            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
+            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+            if (flBlock.isWallLikeShape()) return true;
+            if (frBlock.isWallLikeShape()) return true;
+            return false;
+        }
+        else {
+            // 平行の場合
+            return false;
+        }
+    }
+
+    /**
+     * entity が指定した方向に歩行移動できるかを確認する。
+     */
     public static checkPassageToDir(entity: LEntity, dir: number): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const map = REGame.map;
