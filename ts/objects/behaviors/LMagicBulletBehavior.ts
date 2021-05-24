@@ -45,7 +45,7 @@ export class LMagicBulletBehavior extends LBehavior {
 
                 context.post(
                     entity1, self, args.subject, undefined, onCollidePreReaction,
-                    (response: REResponse, _: LEntity, context: SCommandContext) => {
+                    (response: REResponse) => {
                         if (response == REResponse.Pass) {
 
                             // reactor 側ではじかれていなかったので CollideAction を呼び出す

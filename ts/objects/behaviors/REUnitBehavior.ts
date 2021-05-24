@@ -151,7 +151,7 @@ export class REUnitBehavior extends LBehavior {
     
                     context.post(
                         itemEntity, self, subject, undefined, onPrePickUpReaction,
-                        (responce: REResponse, itemEntity: LEntity, context: SCommandContext) => {
+                        (responce: REResponse) => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
                             
@@ -176,9 +176,9 @@ export class REUnitBehavior extends LBehavior {
                 // 足元に置けそうなら試行
                 context.post(
                     itemEntity, self, subject, undefined, onPrePickUpReaction,
-                    (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
-                        inventory.removeEntity(reactor);
-                        REGame.map.appearEntity(reactor, self.x, self.y);
+                    (responce: REResponse) => {
+                        inventory.removeEntity(itemEntity);
+                        REGame.map.appearEntity(itemEntity, self.x, self.y);
 
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
                     });
@@ -199,7 +199,7 @@ export class REUnitBehavior extends LBehavior {
 
             context.post(
                 itemEntity, self, subject, undefined, onPreThrowReaction,
-                (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
+                (responce: REResponse) => {
                     if (responce == REResponse.Pass) {
                         //itemEntity.callRemoveFromWhereabouts(context);
                         itemEntity.removeFromParent();
@@ -210,7 +210,7 @@ export class REUnitBehavior extends LBehavior {
 
                         context.post(
                             itemEntity, self, subject, undefined, onThrowReaction,
-                            (responce: REResponse, reactor: LEntity, context: SCommandContext) => {
+                            (responce: REResponse) => {
                                 if (responce == REResponse.Pass) {
                                     context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                                 }

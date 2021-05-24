@@ -21,7 +21,7 @@ interface RECCMessage {
     func: () => REResponse;
 }
 
-export type CommandResultCallback = (response: REResponse, reactor: LEntity, context: SCommandContext) => void;
+export type CommandResultCallback = (response: REResponse) => void;
 
 /**
  * 
@@ -114,7 +114,7 @@ export class SCommandContext
             //if (response == REResponse.Pass) {
                 //// コマンドが処理されなかった
                 if (result) {
-                    result(response, target, this);
+                    result(response);
                 }
             //}
 
