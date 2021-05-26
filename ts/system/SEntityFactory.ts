@@ -24,6 +24,7 @@ import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
+import { DSystem } from "ts/data/DSystem";
 //import { SBehaviorFactory } from "./internal";
 
 export class SEntityFactory {
@@ -33,7 +34,7 @@ export class SEntityFactory {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(REGame_DecisionBehavior);
-        e.addBehavior(REUnitBehavior).setFactionId(REData.ActorDefaultFactionId);
+        e.addBehavior(REUnitBehavior).setFactionId(DSystem.factions.player);
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
@@ -49,7 +50,7 @@ export class SEntityFactory {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(REGame_DecisionBehavior);
-        e.addBehavior(REUnitBehavior).setFactionId(REData.EnemeyDefaultFactionId);
+        e.addBehavior(REUnitBehavior).setFactionId(DSystem.factions.enemy);
         e.addBehavior(LEnemyBehavior, monsterId);
         return e;
     }

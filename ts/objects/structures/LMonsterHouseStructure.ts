@@ -12,6 +12,7 @@ import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { REUnitBehavior } from "../behaviors/REUnitBehavior";
+import { DSystem } from "ts/data/DSystem";
 
 export class LMonsterHouseStructure extends LStructure {
     private _roomId: LRoomId = 0
@@ -22,7 +23,7 @@ export class LMonsterHouseStructure extends LStructure {
     public setup(structure: FMonsterHouseStructure): void {
         this._roomId = structure.roomId();
         this._monsterHouseTypeId = structure.monsterHouseTypeId();
-        this._monsterHouseFactionId = DBasics.factions.enemy;
+        this._monsterHouseFactionId = DSystem.factions.enemy;
         this._monsterHouseState = MonsterHouseState.Sleeping;
     }
 

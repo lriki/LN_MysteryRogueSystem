@@ -24,13 +24,14 @@ import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { LExchangeActivity } from "../activities/LExchangeActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
+import { DSystem } from "ts/data/DSystem";
 
 /**
  * 
  */
 export class REUnitBehavior extends LBehavior {
     
-    _factionId: number = DBasics.factions.neutral;
+    _factionId: number = DSystem.factions.neutral;
     _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。

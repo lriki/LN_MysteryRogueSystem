@@ -2,7 +2,6 @@ import { DEntityKindId } from "./DEntityKind";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
-import { DBasicFactions } from "./predefineds/DBasicFactions";
 import { DBasicMonsterHouses } from "./predefineds/DBasicMonsterHouses";
 import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DBasicParameters";
 import { DBasicStates } from "./predefineds/DBasicStates";
@@ -23,7 +22,6 @@ export class DBasics
     static params: DBasicParameters;
     static xparams: DBasicXParams;
     static sparams: DBasicSParams;
-    static factions: DBasicFactions;
     static monsterHouses: DBasicMonsterHouses;
 
     static trapTargetFactionId: DFactionId;

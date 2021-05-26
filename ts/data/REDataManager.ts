@@ -20,6 +20,7 @@ import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
 import { DEffect, DEffectCause, DEffectHitType, DEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying } from './DEffect';
+import { DSystem } from './DSystem';
 
 
 declare global {  
@@ -161,12 +162,12 @@ export class REDataManager
                 { id: 2, name: 'Enemy', schedulingOrder: 2, hostileBits: 0b0010, friendBits: 0 },
                 { id: 3, name: 'Neutral', schedulingOrder: 3, hostileBits: 0, friendBits: 0 },
             ];
-            DBasics.factions = {
+            DSystem.factions = {
                 player: 1,
                 enemy: 2,
                 neutral: 3,
             };
-            DBasics.trapTargetFactionId = DBasics.factions.player;
+            DBasics.trapTargetFactionId = DSystem.factions.player;
         }
 
         // Actions
@@ -251,9 +252,7 @@ export class REDataManager
     {
         this.setupCommonData();
         
-        REData.system = {
-            elements: $dataSystem.elements ?? [],
-        };
+        DSystem.elements = $dataSystem.elements ?? [];
 
         if ($dataSystem.equipTypes) {
             REData.equipmentParts = $dataSystem.equipTypes.map((x, i) => {

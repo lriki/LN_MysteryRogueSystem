@@ -156,13 +156,9 @@ export class REData
 
     
     // Common defineds.
-    // deprecated:
-    static ActorDefaultFactionId: number = 1;
-    static EnemeyDefaultFactionId: number = 2;
-
     static NormalAttackSkillId: number = 1;
 
-    static system: DSystem;
+    //static system: DSystem;
     //static equipTypes: DEquipmentType[] = [];
     static equipmentParts: DEquipmentPart[] = [];
     static entityKinds: DEntityKind[] = [];
