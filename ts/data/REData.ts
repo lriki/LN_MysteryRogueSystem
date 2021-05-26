@@ -156,6 +156,7 @@ export class REData
 
     
     // Common defineds.
+    // deprecated:
     static ActorDefaultFactionId: number = 1;
     static EnemeyDefaultFactionId: number = 2;
 

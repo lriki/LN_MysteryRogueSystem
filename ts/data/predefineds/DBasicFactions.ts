@@ -7,5 +7,7 @@ export interface DBasicFactions {
 
     /** Enemy の属する勢力 */
     enemy: DFactionId;
+
+    neutral: DFactionId;
 }
 

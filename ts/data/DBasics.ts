@@ -7,6 +7,7 @@ import { DBasicMonsterHouses } from "./predefineds/DBasicMonsterHouses";
 import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DBasicParameters";
 import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicStateTraits } from "./predefineds/DBasicTraits";
+import { DFactionId } from "./REData";
 
 
 /**
@@ -24,5 +25,7 @@ export class DBasics
     static sparams: DBasicSParams;
     static factions: DBasicFactions;
     static monsterHouses: DBasicMonsterHouses;
+
+    static trapTargetFactionId: DFactionId;
 }
 

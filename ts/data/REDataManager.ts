@@ -164,7 +164,9 @@ export class REDataManager
             DBasics.factions = {
                 player: 1,
                 enemy: 2,
+                neutral: 3,
             };
+            DBasics.trapTargetFactionId = DBasics.factions.player;
         }
 
         // Actions
