@@ -4,7 +4,7 @@ import { LEntity } from "./LEntity";
 import { LWorld } from "./LWorld";
 import { LSystem } from "./LSystem";
 import { SScheduler } from "../system/SScheduler";
-import { REIntegration } from "../system/REIntegration";
+import { SIntegration } from "../system/SIntegration";
 import { LCamera } from "./LCamera";
 import { RECommandRecorder } from "ts/system/RECommandRecorder";
 import { LMessage } from "./LMessage";

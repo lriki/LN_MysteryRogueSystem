@@ -6,7 +6,7 @@ import { FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { SSequelSet } from "ts/system/SSequel";
-import { REIntegration } from "ts/system/REIntegration";
+import { SIntegration } from "ts/system/SIntegration";
 import { SGameManager } from "ts/system/SGameManager";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import "./Extension";
@@ -177,7 +177,7 @@ export class TestEnv {
     }
 }
 
-export class TestEnvIntegration extends REIntegration {
+export class TestEnvIntegration extends SIntegration {
     onReserveTransferMap(mapId: number): void {
         // Game では $gamePlayer.reserveTransfer() でマップ遷移を予約し、Scene 側でマップデータをロードしてもらう。
         // Test では Camera の transfar 情報を使うため設定不要。マップデータも、TestEnv.performFloorTransfer() でロードする。

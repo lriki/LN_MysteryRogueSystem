@@ -6,7 +6,7 @@ import { SSequelSet } from "ts/system/SSequel";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 
-export abstract class REIntegration {
+export abstract class SIntegration {
     /**
      * REシステム内から、 RMMZ マップを移動する必要があるときに呼び出される。
      * (ゲームオーバー時に拠点フロアへ戻るときなど)

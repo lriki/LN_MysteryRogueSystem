@@ -4,7 +4,7 @@ import { REDataManager } from "../data/REDataManager";
 import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
 import { SSequelSet } from "../system/SSequel";
-import { REIntegration } from "../system/REIntegration";
+import { SIntegration } from "../system/SIntegration";
 import { REVisual } from "../visual/REVisual";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { LMap } from "ts/objects/LMap";
@@ -13,7 +13,7 @@ import { SDialogContext } from "ts/system/SDialogContext";
 import { SDialog } from "ts/system/SDialog";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
 
-export class RMMZIntegration extends REIntegration {
+export class RMMZIntegration extends SIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
 

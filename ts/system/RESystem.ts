@@ -1,7 +1,7 @@
 import { REData } from "ts/data/REData";
 import { LSkillBehavior } from "../objects/skills/SkillBehavior";
 import { BlockLayerKind } from "../objects/LBlock";
-import { REIntegration } from "./REIntegration";
+import { SIntegration } from "./SIntegration";
 import { DBasicParameters } from "ts/data/predefineds/DBasicParameters";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
 import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
@@ -37,7 +37,7 @@ export class RESystem {
     static sequelContext: SSequelContext;
     static commandContext: SCommandContext;
     static dialogContext: SDialogContext;
-    static integration: REIntegration;
+    static integration: SIntegration;
     static scheduler: SScheduler;
     static minimapData: SMinimapData;
     static mapManager: SMapManager;
