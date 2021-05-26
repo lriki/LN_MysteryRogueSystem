@@ -10,6 +10,7 @@ import { TileShape } from "ts/objects/LBlock";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
 import { Helpers } from "./Helpers";
 import { SGameManager } from "./SGameManager";
+import { SNavigationHelper } from "./SNavigationHelper";
 
 enum SubTile {
     UL,
@@ -87,6 +88,7 @@ export class SMinimapData {
     //    return this._tilemapResetNeeded;
     //}
 
+    // 地形表示の更新
     public refresh(): void {
         const map = REGame.map;
         const width = map.width();
@@ -145,7 +147,7 @@ export class SMinimapData {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
             }
             else {
-                if (Helpers.testVisibility(subject, entity)) {
+                if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
                     if (entity.hasBehavior(LTrapBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
                     }

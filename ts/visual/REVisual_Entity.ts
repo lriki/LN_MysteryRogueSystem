@@ -8,6 +8,7 @@ import { RESystem } from "ts/system/RESystem";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
 import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
+import { SNavigationHelper } from "ts/system/SNavigationHelper";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -70,7 +71,7 @@ export class REVisual_Entity
 
     public isVisible(): boolean {
         const focusedEntity = REGame.camera.focusedEntity()
-        return focusedEntity ? Helpers.testVisibility(focusedEntity, this._entity) : false;
+        return focusedEntity ? SNavigationHelper.testVisibilityForMinimap(focusedEntity, this._entity) : false;
     }
 
     position(): Vector2 {

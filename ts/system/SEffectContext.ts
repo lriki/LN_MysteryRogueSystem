@@ -1,7 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItemEffect } from "ts/data/DItemEffect";
-import { ParameterEffectType } from "ts/data/DSystem";
 import { REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -256,23 +255,6 @@ export class SEffectorFact {
 
     }
     */
-
-    /**
-     * 
-     * @param paramId 
-     * @param elementId Index of DSystem.elements
-     * @param critical 
-     * 
-     * 複数のパラメータへのダメージを同時に指定することはできるが、
-     * ひとつのパラメータへ複数の element や type を使ってダメージを指定することはできない。
-     * 
-     * critical は、ターゲットへヒットしたときにクリティカル判定を行うかどうか。
-     * 前方3方向など複数攻撃対象がいるばあいは個別にクリティカルが発生することになる。
-     * 攻撃の発生元での会心判定は Action として行うこと。
-     */
-    addParameterEffect(paramId: DParameterId, elementId: number, type: ParameterEffectType, variance: number, critical: boolean) {
-        
-    }
 
 }
 

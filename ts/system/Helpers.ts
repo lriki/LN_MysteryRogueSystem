@@ -119,41 +119,6 @@ export class Helpers {
         return (Math.abs(entity1.x - entity2.x) <= 1 && Math.abs(entity1.y - entity2.y) <= 1);
     }
 
-    // ミニマップ表示に使う。AIでは想定していない
-    public static testVisibility(subject: LEntity, target: LEntity): boolean {
-        const targetBlock = REGame.map.block(target.x, target.y);
-
-        // 見方は常に視認可能
-        if (Helpers.isFriend(subject, target)) {
-            return true;
-        }
-
-        // 隣接していれば Faction を問わず見える
-        if (this.isAdjacent(subject, target)) {
-            return true;
-        }
-
-        // 同じ部屋にいれば Faction を問わず見える
-        if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
-            return true;
-        }
-
-        if (Helpers.isHostile(subject, target)) {
-
-            if (subject.collectTraits().find(t => t.code == DTraits.UnitVisitor)) {
-                return true;
-            }
-
-        }
-        else {
-            // 中立 target は、踏破済みの Block 上なら見える
-            if (targetBlock._passed) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     public static lerp(v1: number, v2: number, t: number): number {
         return v1 + ((v2 - v1) * t);
