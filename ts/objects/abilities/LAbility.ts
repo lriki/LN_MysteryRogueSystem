@@ -38,9 +38,9 @@ export class LAbility extends LObject {
         return this.__objectId();
     }
 
-    public setup(abilityId: DAbilityId, owner: LEntity): void {
+    public setup(abilityId: DAbilityId/*, owner: LEntity*/): void {
         this._abilityId = abilityId;
-        this.setParent(owner);
+        //this.setParent(owner);
         REGame.world._registerObject(this);
 
         // TODO: test

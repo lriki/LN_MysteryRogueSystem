@@ -66,7 +66,14 @@ export class SEntityFactory {
             e.addBehavior(LEquipmentBehavior);
         }
 
-        SBehaviorFactory.attachBehaviors(e, item.entity.behaviors);
+        SBehaviorFactory.attachBehaviors(e, item.entity.behaviorNames);
+
+        for (const name of item.entity.abilityNames) {
+            const data = REData.abilities.find(x => x.key == name);
+            if (!data) throw new Error(`Ability "${name}" not found.`);
+            e.addAbility(data.id);
+        }
+
         //e.addAbility(REData.abilities[1].id);  // TODO: Test
         this.setupDirectly_Item(e, item);
         return e;

@@ -20,6 +20,7 @@ import { SStateFactory } from "ts/system/SStateFactory";
 import { LParty, LPartyId } from "./LParty";
 import { LanguageServiceMode } from "typescript";
 import { DParameterId } from "ts/data/DParameter";
+import { SAbilityFactory } from "ts/system/SAbilityFactory";
 
 enum BlockLayer
 {
@@ -333,7 +334,6 @@ export class LEntity extends LObject
             states[index].recast();
         }
         else {
-            //const state = new LState(stateId);
             const state = SStateFactory.newState(stateId);
             state.setParent(this);
             
@@ -380,9 +380,9 @@ export class LEntity extends LObject
         if (index >= 0) {
         }
         else {
-            const ability = new LAbility();
-            ability.setup(abilityId, this);
-            
+            const ability = SAbilityFactory.newAbility(abilityId);
+            ability.setParent(this);
+
             assert(ability.hasId());
             this._abilities.push(ability.id());
             ability.onAttached();

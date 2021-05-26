@@ -41,7 +41,7 @@ export class LMagicBulletBehavior extends LBehavior {
             if (entity1) {
                 context.postAnimation(self, 1, false);
                 context.postDestroy(self);
-                self.destroy();
+                //self.destroy();
 
                 context.post(
                     entity1, self, args.subject, undefined, onCollidePreReaction,
@@ -91,6 +91,12 @@ export class LMagicBulletBehavior extends LBehavior {
     [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
         const ownerItem = REGame.world.entity(this._ownerItemEntityId);
         const target = args.sender;
+
+        
+
+        console.log("LMagicBulletBehavior.onCollideAction");
+        console.log("ownerItem", ownerItem.basicBehaviors());
+        console.log("abilities", ownerItem.abilities());
 
         // ownerItem の onCollideAction へ中継する
         context.post(ownerItem, target, args.subject, args.args, onCollideAction);

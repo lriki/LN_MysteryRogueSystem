@@ -13,6 +13,7 @@ export class LKnockbackBehavior extends LBehavior {
 
         console.log("startMoveAsProjectile", args);
 
+
         LProjectableBehavior.startMoveAsProjectile(context, args.sender, args.subject, a.dir, 5);
         
         return REResponse.Pass;

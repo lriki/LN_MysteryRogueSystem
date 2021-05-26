@@ -16,10 +16,10 @@ export interface DEntityProperties {
     key: string;
 
     kind: string;
-    behaviors: string[];
-    commands: string[];
-    reactions: string[];
-    abilities: string[];
+    behaviorNames: string[];
+    commandNames: string[];
+    reactionNames: string[];
+    abilityNames: string[];
     capacity?: string;
     
     equipmentImage: DItemEquipmentImage;
@@ -29,10 +29,10 @@ export function DEntityProperties_Default(): DEntityProperties {
     return {
         key: "",
         kind: "",
-        behaviors: [],
-        commands: [],
-        reactions: [],
-        abilities: [],
+        behaviorNames: [],
+        commandNames: [],
+        reactionNames: [],
+        abilityNames: [],
         capacity: undefined,
         equipmentImage: {
             name: "",
@@ -46,10 +46,10 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         const data: DEntityProperties = {
             key: meta["RE-Key"],
             kind: meta["RE-Kind"],
-            behaviors: [],
-            commands: [],
-            reactions: [],
-            abilities: [],
+            behaviorNames: [],
+            commandNames: [],
+            reactionNames: [],
+            abilityNames: [],
             capacity: meta["RE-Capacity"],
             equipmentImage: {
                 name: "",
@@ -59,22 +59,22 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
 
         const behaviors = meta["RE-Behavior"];
         if (behaviors) {
-            data.behaviors = (behaviors as string).split(";");
+            data.behaviorNames = (behaviors as string).split(";");
         }
 
         const commands = meta["RE-Command"];
         if (commands) {
-            data.commands = (commands as string).split(";");
+            data.commandNames = (commands as string).split(";");
         }
 
         const reactions = meta["RE-Reaction"];
         if (reactions) {
-            data.reactions = (reactions as string).split(";");
+            data.reactionNames = (reactions as string).split(";");
         }
 
         const abilities = meta["RE-Ability"];
         if (abilities) {
-            data.abilities = (abilities as string).split(";");
+            data.abilityNames = (abilities as string).split(";");
         }
 
         const equipmentImage = meta["RE-EquipmentImage"];
