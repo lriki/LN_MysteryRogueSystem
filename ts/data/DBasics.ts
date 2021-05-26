@@ -23,7 +23,5 @@ export class DBasics
     static xparams: DBasicXParams;
     static sparams: DBasicSParams;
     static monsterHouses: DBasicMonsterHouses;
-
-    static trapTargetFactionId: DFactionId;
 }
 

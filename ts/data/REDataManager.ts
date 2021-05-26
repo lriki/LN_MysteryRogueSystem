@@ -162,12 +162,6 @@ export class REDataManager
                 { id: 2, name: 'Enemy', schedulingOrder: 2, hostileBits: 0b0010, friendBits: 0 },
                 { id: 3, name: 'Neutral', schedulingOrder: 3, hostileBits: 0, friendBits: 0 },
             ];
-            DSystem.factions = {
-                player: 1,
-                enemy: 2,
-                neutral: 3,
-            };
-            DBasics.trapTargetFactionId = DSystem.factions.player;
         }
 
         // Actions
@@ -251,9 +245,9 @@ export class REDataManager
     static loadData(): void
     {
         this.setupCommonData();
-        
-        DSystem.elements = $dataSystem.elements ?? [];
 
+        REData.system = new DSystem();
+        
         if ($dataSystem.equipTypes) {
             REData.equipmentParts = $dataSystem.equipTypes.map((x, i) => {
                 if (x) {

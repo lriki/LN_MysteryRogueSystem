@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
-import { DFactionId } from "ts/data/REData";
+import { DFactionId, REData } from "ts/data/REData";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { Helpers } from "ts/system/Helpers";
 import { SCommandContext } from "ts/system/SCommandContext";
@@ -12,7 +12,6 @@ import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { REUnitBehavior } from "../behaviors/REUnitBehavior";
-import { DSystem } from "ts/data/DSystem";
 
 export class LMonsterHouseStructure extends LStructure {
     private _roomId: LRoomId = 0
@@ -23,7 +22,7 @@ export class LMonsterHouseStructure extends LStructure {
     public setup(structure: FMonsterHouseStructure): void {
         this._roomId = structure.roomId();
         this._monsterHouseTypeId = structure.monsterHouseTypeId();
-        this._monsterHouseFactionId = DSystem.factions.enemy;
+        this._monsterHouseFactionId = REData.system.factions.enemy;
         this._monsterHouseState = MonsterHouseState.Sleeping;
     }
 

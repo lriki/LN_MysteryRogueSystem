@@ -15,7 +15,19 @@ export interface DSystemFactions {
 }
 
 export class DSystem {
-    public static elements: string[];    // IDataSystem.elements (0 is Invalid)
+    public elements: string[];    // IDataSystem.elements (0 is Invalid)
 
-    public static factions: DSystemFactions;
+    public factions: DSystemFactions;
+
+    public trapTargetFactionId: DFactionId;
+
+    constructor() {
+        this.elements = $dataSystem.elements ?? [];
+        this.factions = {
+            player: 1,
+            enemy: 2,
+            neutral: 3,
+        };
+        this.trapTargetFactionId = this.factions.player;
+    }
 }
