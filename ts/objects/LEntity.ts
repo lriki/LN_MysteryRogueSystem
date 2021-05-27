@@ -21,6 +21,7 @@ import { LParty, LPartyId } from "./LParty";
 import { LanguageServiceMode } from "typescript";
 import { DParameterId } from "ts/data/DParameter";
 import { SAbilityFactory } from "ts/system/SAbilityFactory";
+import { REData } from "ts/data/REData";
 
 enum BlockLayer
 {
@@ -36,6 +37,24 @@ enum BlockLayer
     /** 発射物。矢、魔法弾、吹き飛ばされたUnitなど。 */
     Projectile,
 }
+
+/**
+ * [2021/5/27] 祝福・呪い・封印
+ * ----------
+ * ### 印にするべきか？
+ * シレンタイトルでは 2 だけこのパターン。
+ * 印であることを利用した予防やモンスター対策など小技があるが、印を埋めると無害化できるので
+ * このパターンはかなりプレイヤーに有利なルールと言える。
+ * また性質上、装備品以外は呪い状態にできないのであんまりよくないかも。
+ * 
+ * ### State にするべきか？独立したパラメータにするべきか？
+ * これら3ステートは排他なので state にした場合はその上書きや解除の処理が必要になる。
+ * 
+ * また例えば祝福は草など他のアイテム効果を高めるだけでなく、祝福状態自体に「一定確率で呪いを防ぐ」みたいな効果もある。
+ * 祝福によるダメージ増加、効果2倍などはそれぞれ 武器、草アイテム Entity 側で、祝福されているかどうかをチェックして対応するべき。
+ * でも呪い防止は祝福自体の効果なので、Behavior にするべきだろう。
+ * RMMZ の仕組みの上に乗っているのでステート有効度で制御できるようにもなる。
+ */
 
 /**
  * システムを構成する最も原始的な要素。
@@ -370,6 +389,19 @@ export class LEntity extends LObject
             s.onDetached();
         });
         this._states = [];
+    }
+
+    
+    public isBlessed(): boolean {
+        return this.isStateAffected(REData.system.states.bless);
+    }
+
+    public isCursed(): boolean {
+        return this.isStateAffected(REData.system.states.curse);
+    }
+
+    public isSealed(): boolean {
+        return this.isStateAffected(REData.system.states.seal);
     }
 
     //--------------------------------------------------------------------------------

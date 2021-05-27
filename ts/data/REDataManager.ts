@@ -242,7 +242,7 @@ export class REDataManager
         };
     }
 
-    static loadData(): void
+    static loadData(testMode: boolean): void
     {
         this.setupCommonData();
 
@@ -652,6 +652,8 @@ export class REDataManager
                 }
             }
         }
+
+        REData.system.link(testMode);
 
         // Load Prefabs
         this.beginLoadPrefabs();

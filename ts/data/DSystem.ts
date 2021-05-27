@@ -1,4 +1,5 @@
-import { DFactionId } from "./REData";
+import { DStateId } from "./DState";
+import { DFactionId, REData } from "./REData";
 
 export interface DSystemFactions {
     
@@ -14,12 +15,20 @@ export interface DSystemFactions {
     neutral: DFactionId;
 }
 
+export interface DSystemStates {
+    bless: DStateId,
+    curse: DStateId,
+    seal: DStateId,
+}
+
 export class DSystem {
     public elements: string[];    // IDataSystem.elements (0 is Invalid)
 
     public factions: DSystemFactions;
 
     public trapTargetFactionId: DFactionId;
+
+    public states: DSystemStates;
 
     constructor() {
         this.elements = $dataSystem.elements ?? [];
@@ -29,5 +38,21 @@ export class DSystem {
             neutral: 3,
         };
         this.trapTargetFactionId = this.factions.player;
+        this.states = {
+            bless: 0,
+            curse: 0,
+            seal: 0,
+        }
+    }
+
+    public link(testMode: boolean): void {
+        if (!testMode) {
+            throw new Error("Not implemented.");
+        }
+        else {
+            this.states.bless = REData.getStateFuzzy("kState_UT祝福").id;
+            this.states.curse = REData.getStateFuzzy("kState_UT呪い").id;
+            this.states.seal = REData.getStateFuzzy("kState_UT封印").id;
+        }
     }
 }

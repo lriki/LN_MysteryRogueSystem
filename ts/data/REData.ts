@@ -369,6 +369,6 @@ export class REData
     static getStateFuzzy(pattern: string): DState {
         const d = this.findStateFuzzy(pattern);
         if (d) return d;
-        throw new Error(`Item "${pattern}" not found.`);
+        throw new Error(`State "${pattern}" not found.`);
     }
 }

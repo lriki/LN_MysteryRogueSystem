@@ -68,7 +68,7 @@ export class TestEnv {
     static setupDatabase() {
         this.loadRmmzDatabase();
         REData.reset();
-        REDataManager.loadData();
+        REDataManager.loadData(true);
         RESystem.integration = new TestEnvIntegration();
         //REDataManager.loadPrefabDatabaseMap();
         {
