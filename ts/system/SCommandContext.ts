@@ -318,6 +318,11 @@ export class SCommandContext
     postDestroy(entity: LEntity) {
         const m1 = () => {
             Log.doCommand("Destroy");
+            
+            // 消滅時に何かアニメーションを再生したいとき、postAnimation() と postDestroy() を連続で実行することがある。
+            // その場合 flush しておかないと、先に GC で Entity の消滅と Sprite の消滅が先に行われ、アニメーションが表示されない。
+            this._sequelContext.flushSequelSet();
+            
             entity.destroy();
             return REResponse.Succeeded;
         };

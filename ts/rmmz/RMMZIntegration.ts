@@ -120,10 +120,6 @@ export class RMMZIntegration extends SIntegration {
         entity.rmmzEventId = 0;
     }
 
-    private makePrefavNameFromKindId(kindId: number, index: number): string {
-        return `${REData.entityKinds[kindId].prefabKind}:${index}`;
-    }
-
     onSetLandExitResult(result: LandExitResult): void {
         $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(result / 100));
     }
