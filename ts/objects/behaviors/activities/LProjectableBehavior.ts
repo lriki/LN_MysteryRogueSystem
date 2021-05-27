@@ -103,13 +103,11 @@ export class LProjectableBehavior extends LBehavior {
             if (hitTarget) {
                 context.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,
-                    (response: REResponse) => {
-                        if (response == REResponse.Pass) {
-                            context.post(self, hitTarget, args.subject, args, onCollideAction, () => {
-                                return REResponse.Succeeded;
-                            });
-                        }
-                        return REResponse.Succeeded;
+                    () => {
+                        context.post(self, hitTarget, args.subject, args, onCollideAction, () => {
+                            return true;
+                        });
+                        return true;
                     });
 
                 return REResponse.Succeeded;

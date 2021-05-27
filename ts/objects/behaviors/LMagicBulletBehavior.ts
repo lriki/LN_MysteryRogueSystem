@@ -45,18 +45,16 @@ export class LMagicBulletBehavior extends LBehavior {
 
                 context.post(
                     entity1, self, args.subject, undefined, onCollidePreReaction,
-                    (response: REResponse) => {
-                        if (response == REResponse.Pass) {
+                    () => {
+                        // reactor 側ではじかれていなかったので CollideAction を呼び出す
+                        const args2: CollideActionArgs = {
+                            dir: dir,
+                        };
+                        context.post(self, entity1, args.subject, args2, onCollideAction, () => {
+                            return true;
+                        });
 
-                            // reactor 側ではじかれていなかったので CollideAction を呼び出す
-                            const args2: CollideActionArgs = {
-                                dir: dir,
-                            };
-                            context.post(self, entity1, args.subject, args2, onCollideAction, () => {
-                                return REResponse.Succeeded;
-                            });
-                        }
-                        return REResponse.Succeeded;
+                        return true;
                     });
 
                 

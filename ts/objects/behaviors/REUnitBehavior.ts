@@ -152,7 +152,7 @@ export class REUnitBehavior extends LBehavior {
     
                     context.post(
                         itemEntity, self, subject, undefined, onPrePickUpReaction,
-                        (responce: REResponse) => {
+                        () => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
                             
@@ -160,7 +160,7 @@ export class REUnitBehavior extends LBehavior {
                             context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));
                             SSoundManager.playPickItem();
 
-                            return REResponse.Succeeded;
+                            return true;
                         });
     
                 }
@@ -179,12 +179,12 @@ export class REUnitBehavior extends LBehavior {
                 // 足元に置けそうなら試行
                 context.post(
                     itemEntity, self, subject, undefined, onPrePickUpReaction,
-                    (responce: REResponse) => {
+                    () => {
                         inventory.removeEntity(itemEntity);
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
-                        return REResponse.Succeeded;
+                        return true;
                     });
             }
             else {
@@ -203,26 +203,22 @@ export class REUnitBehavior extends LBehavior {
 
             context.post(
                 itemEntity, self, subject, undefined, onPreThrowReaction,
-                (responce: REResponse) => {
-                    if (responce == REResponse.Pass) {
-                        //itemEntity.callRemoveFromWhereabouts(context);
-                        itemEntity.removeFromParent();
+                () => {
+                    //itemEntity.callRemoveFromWhereabouts(context);
+                    itemEntity.removeFromParent();
 
-                        itemEntity.x = self.x;
-                        itemEntity.y = self.y;
+                    itemEntity.x = self.x;
+                    itemEntity.y = self.y;
 
 
-                        context.post(
-                            itemEntity, self, subject, undefined, onThrowReaction,
-                            (responce: REResponse) => {
-                                if (responce == REResponse.Pass) {
-                                    context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
-                                }
-                                return REResponse.Succeeded;
-                            });
+                    context.post(
+                        itemEntity, self, subject, undefined, onThrowReaction,
+                        () => {
+                            context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                            return true;
+                        });
 
-                    }
-                    return REResponse.Succeeded;
+                    return true;
                 });
 
                 /*

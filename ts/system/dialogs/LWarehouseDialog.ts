@@ -42,28 +42,22 @@ export class LWarehouseDialog extends SDialog {
             console.log("0");
             // Item を取り出せるか確認
             context.post(user, user, subject, item, testPickOutItem,
-                (response: REResponse) => {
-                    console.log("1");
-                    if (response != REResponse.Canceled) {
-                        console.log("2");
+                () => {
+                    console.log("2");
 
-                        // Item を格納できるか確認
-                        context.post(warehouse, warehouse, subject, item, testPutInItem,
-                            (response: REResponse) => {
-                                console.log("3");
-                                if (response != REResponse.Canceled) {
-                                    console.log("4");
-            
-                                    // Item を移す
-                                    userInventory.removeEntity(item);
-                                    warehouseInventory.addEntity(item);
+                    // Item を格納できるか確認
+                    context.post(warehouse, warehouse, subject, item, testPutInItem,
+                        () => {
+                            console.log("4");
+    
+                            // Item を移す
+                            userInventory.removeEntity(item);
+                            warehouseInventory.addEntity(item);
 
-                                    context.postMessage(tr("{0} を預けた。", REGame.identifyer.makeDisplayText(item)));
-                                }
-                                return REResponse.Succeeded;
-                            });
-                    }
-                    return REResponse.Succeeded;
+                            context.postMessage(tr("{0} を預けた。", REGame.identifyer.makeDisplayText(item)));
+                            return true;
+                        });
+                    return true;
                 });
         })
 
@@ -82,28 +76,22 @@ export class LWarehouseDialog extends SDialog {
             console.log("0");
             // Item を取り出せるか確認
             context.post(warehouse, warehouse, subject, item, testPickOutItem,
-                (response: REResponse) => {
-                    console.log("1");
-                    if (response != REResponse.Canceled) {
-                        console.log("2");
+                () => {
+                    console.log("2");
 
-                        // Item を格納できるか確認
-                        context.post(user, user, subject, item, testPutInItem,
-                            (response: REResponse) => {
-                                console.log("3");
-                                if (response != REResponse.Canceled) {
-                                    console.log("4");
-            
-                                    // Item を移す
-                                    warehouseInventory.removeEntity(item);
-                                    userInventory.addEntity(item);
+                    // Item を格納できるか確認
+                    context.post(user, user, subject, item, testPutInItem,
+                        () => {
+                            console.log("4");
+    
+                            // Item を移す
+                            warehouseInventory.removeEntity(item);
+                            userInventory.addEntity(item);
 
-                                    context.postMessage(tr("{0} を取り出した。", REGame.identifyer.makeDisplayText(item)));
-                                }
-                                return REResponse.Succeeded;
-                            });
-                    }
-                    return REResponse.Succeeded;
+                            context.postMessage(tr("{0} を取り出した。", REGame.identifyer.makeDisplayText(item)));
+                            return true;
+                        });
+                    return true;
                 });
         })
 

@@ -17,7 +17,7 @@ import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LRandom } from "ts/objects/LRandom";
 
 export type MCEntryProc = () => REResponse;
-export type CommandResultCallback = (response: REResponse) => REResponse;
+export type CommandResultCallback = () => boolean;
 
 /*
 export class SMCResult {
@@ -37,15 +37,18 @@ export class RECCMessageCommand {
     _then: RECCMessageCommand | undefined;
     _rejected: RECCMessageCommand | undefined;
     
-    _result: REResponse;
-    constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined) {
+    _result: boolean;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
+    _prev: RECCMessageCommand | undefined;
+
+    constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: RECCMessageCommand | undefined) {
+        assert(!(entryFunc && chainFunc));
         this._name = name;
         this._entryFunc = entryFunc;
         this._chainFunc = chainFunc;
-        this._result = REResponse.Pass;
+        this._result = true;
+        this._prev = prev;
     }
 
-    /*
     public then(func: CommandResultCallback): RECCMessageCommand {
         assert(!this._then);
         this._then = new RECCMessageCommand("then", undefined, func);
@@ -58,27 +61,24 @@ export class RECCMessageCommand {
         this._rejected = new RECCMessageCommand("rejected", undefined, func);
         //return this._rejected;
     }
-    */
 
     public call(context: SCommandContext): void {
-        if (this._entryFunc) {
-            this._result = this._entryFunc();
-        }
         
-        /*
         if (this._entryFunc) {
-            this._result = this._entryFunc();
+            this._result = this._entryFunc() != REResponse.Canceled;
             if (this._then) {
                 context._recodingCommandList.push(this._then);
             }
         }
         else if (this._chainFunc) {
-            this._result = this._chainFunc();
-            if (this._then) {
-                context._recodingCommandList.push(this._then);
+            assert(this._prev);
+            if (this._prev._result) {
+                this._result = this._chainFunc();
+                if (this._then) {
+                    context._recodingCommandList.push(this._then);
+                }
             }
         }
-        */
     }
 }
 
@@ -91,7 +91,7 @@ export class SCommandContext
 {
     private _sequelContext: SSequelContext;
     private _visualAnimationWaiting: boolean = false;   // 不要かも
-    private _recodingCommandList: RECCMessageCommand[] = [];
+    _recodingCommandList: RECCMessageCommand[] = [];
     private _runningCommandList: RECCMessageCommand[] = [];
     private _afterChainCommandList: RECCMessageCommand[] = [];
     private _messageIndex: number = 0;
@@ -171,12 +171,12 @@ export class SCommandContext
                 }
             });
 
-            //if (response == REResponse.Pass) {
-                //// コマンドが処理されなかった
+            if (response != REResponse.Canceled) {
+                // コマンドが処理されなかった
                 if (result) {
-                    result(response);
+                    result();
                 }
-            //}
+            }
 
             return REResponse.Succeeded;
 
