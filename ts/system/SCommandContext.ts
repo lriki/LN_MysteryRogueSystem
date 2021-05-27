@@ -16,18 +16,29 @@ import { LFloorId } from "ts/objects/LFloorId";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LRandom } from "ts/objects/LRandom";
 
-export type MCProc = () => REResponse;
+export type MCEntryProc = () => REResponse;
+export type CommandResultCallback = (response: REResponse) => REResponse;
+
+/*
+export class SMCResult {
+    _result: REResponse = REResponse.Succeeded;
+
+    public reject(): void {
+        this._result = 
+    }
+}
+*/
 
 export class RECCMessageCommand {
 
     _name: string;   // for debug
-    _entryFunc: MCProc | undefined;
+    _entryFunc: MCEntryProc | undefined;
     _chainFunc: CommandResultCallback | undefined;
     _then: RECCMessageCommand | undefined;
     _rejected: RECCMessageCommand | undefined;
     
     _result: REResponse;
-    constructor(name: string, entryFunc: MCProc | undefined, chainFunc?: CommandResultCallback | undefined) {
+    constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined) {
         this._name = name;
         this._entryFunc = entryFunc;
         this._chainFunc = chainFunc;
@@ -71,7 +82,6 @@ export class RECCMessageCommand {
     }
 }
 
-export type CommandResultCallback = (response: REResponse) => void;
 
 /**
  * 

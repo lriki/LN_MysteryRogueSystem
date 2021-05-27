@@ -60,8 +60,10 @@ export class LWarehouseDialog extends SDialog {
 
                                     context.postMessage(tr("{0} を預けた。", REGame.identifyer.makeDisplayText(item)));
                                 }
+                                return REResponse.Succeeded;
                             });
                     }
+                    return REResponse.Succeeded;
                 });
         })
 
@@ -98,8 +100,10 @@ export class LWarehouseDialog extends SDialog {
 
                                     context.postMessage(tr("{0} を取り出した。", REGame.identifyer.makeDisplayText(item)));
                                 }
+                                return REResponse.Succeeded;
                             });
                     }
+                    return REResponse.Succeeded;
                 });
         })
 

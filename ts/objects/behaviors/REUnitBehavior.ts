@@ -159,6 +159,8 @@ export class REUnitBehavior extends LBehavior {
                             const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(self), DescriptionHighlightLevel.UnitName);
                             context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));
                             SSoundManager.playPickItem();
+
+                            return REResponse.Succeeded;
                         });
     
                 }
@@ -182,6 +184,7 @@ export class REUnitBehavior extends LBehavior {
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                        return REResponse.Succeeded;
                     });
             }
             else {
@@ -215,9 +218,11 @@ export class REUnitBehavior extends LBehavior {
                                 if (responce == REResponse.Pass) {
                                     context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                                 }
+                                return REResponse.Succeeded;
                             });
 
                     }
+                    return REResponse.Succeeded;
                 });
 
                 /*

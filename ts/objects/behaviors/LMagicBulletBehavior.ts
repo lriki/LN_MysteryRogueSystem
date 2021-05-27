@@ -53,8 +53,10 @@ export class LMagicBulletBehavior extends LBehavior {
                                 dir: dir,
                             };
                             context.post(self, entity1, args.subject, args2, onCollideAction, () => {
+                                return REResponse.Succeeded;
                             });
                         }
+                        return REResponse.Succeeded;
                     });
 
                 
