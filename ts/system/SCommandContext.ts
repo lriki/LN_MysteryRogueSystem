@@ -16,9 +16,59 @@ import { LFloorId } from "ts/objects/LFloorId";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { LRandom } from "ts/objects/LRandom";
 
-interface RECCMessage {
-    name: string;   // for debug
-    func: () => REResponse;
+export type MCProc = () => REResponse;
+
+export class RECCMessageCommand {
+
+    _name: string;   // for debug
+    _entryFunc: MCProc | undefined;
+    _chainFunc: CommandResultCallback | undefined;
+    _then: RECCMessageCommand | undefined;
+    _rejected: RECCMessageCommand | undefined;
+    
+    _result: REResponse;
+    constructor(name: string, entryFunc: MCProc | undefined, chainFunc?: CommandResultCallback | undefined) {
+        this._name = name;
+        this._entryFunc = entryFunc;
+        this._chainFunc = chainFunc;
+        this._result = REResponse.Pass;
+    }
+
+    /*
+    public then(func: CommandResultCallback): RECCMessageCommand {
+        assert(!this._then);
+        this._then = new RECCMessageCommand("then", undefined, func);
+        return this._then;
+    }
+
+    public rejected(func: CommandResultCallback): void {
+        throw new Error("Not implemented.");
+        assert(!this._rejected);
+        this._rejected = new RECCMessageCommand("rejected", undefined, func);
+        //return this._rejected;
+    }
+    */
+
+    public call(context: SCommandContext): void {
+        if (this._entryFunc) {
+            this._result = this._entryFunc();
+        }
+        
+        /*
+        if (this._entryFunc) {
+            this._result = this._entryFunc();
+            if (this._then) {
+                context._recodingCommandList.push(this._then);
+            }
+        }
+        else if (this._chainFunc) {
+            this._result = this._chainFunc();
+            if (this._then) {
+                context._recodingCommandList.push(this._then);
+            }
+        }
+        */
+    }
 }
 
 export type CommandResultCallback = (response: REResponse) => void;
@@ -31,9 +81,9 @@ export class SCommandContext
 {
     private _sequelContext: SSequelContext;
     private _visualAnimationWaiting: boolean = false;   // 不要かも
-    private _recodingCommandList: RECCMessage[] = [];
-    private _runningCommandList: RECCMessage[] = [];
-    private _afterChainCommandList: RECCMessage[] = [];
+    private _recodingCommandList: RECCMessageCommand[] = [];
+    private _runningCommandList: RECCMessageCommand[] = [];
+    private _afterChainCommandList: RECCMessageCommand[] = [];
     private _messageIndex: number = 0;
     private _lastActorResponce: REResponse = REResponse.Pass;
     private _lastReactorResponce: REResponse = REResponse.Pass;
@@ -73,7 +123,7 @@ export class SCommandContext
             Log.doCommand("Action");
             return actor._sendAction(this, actualCommand);
         };
-        this._recodingCommandList.push({ name: "sendAction", func: m3 });
+        this._recodingCommandList.push(new RECCMessageCommand("sendAction", m3));
 
         Log.postCommand("ActionOneWay");
     }
@@ -83,7 +133,7 @@ export class SCommandContext
             Log.doCommand("Activity");
             return activity.subject()._sendActivity(this, activity);
         };
-        this._recodingCommandList.push({ name: "Activity", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Activity", m1));
 
         Log.postCommand("Activity");
     }
@@ -121,7 +171,7 @@ export class SCommandContext
             return REResponse.Succeeded;
 
         };
-        this._recodingCommandList.push({ name: "Post", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Post", m1));
         Log.postCommand("Post");
     }
 
@@ -131,7 +181,7 @@ export class SCommandContext
             func();
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Call", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Call", m1));
         Log.postCommand("Call");
     }
 
@@ -161,9 +211,9 @@ export class SCommandContext
         };
 
         if (afterChain)
-            this._afterChainCommandList.push({ name: "openDialog", func: m1 });
+            this._afterChainCommandList.push(new RECCMessageCommand("openDialog", m1));
         else
-            this._recodingCommandList.push({ name: "openDialog", func: m1 });
+            this._recodingCommandList.push(new RECCMessageCommand("openDialog", m1));
         Log.postCommand("openDialog");
     }
 
@@ -175,7 +225,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Sequel", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Sequel", m1));
         Log.postCommand("Sequel");
     }
     
@@ -189,7 +239,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Animation", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Animation", m1));
         Log.postCommand("Animation");
     }
 
@@ -202,7 +252,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Balloon", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Balloon", m1));
         Log.postCommand("Balloon");
     }
 
@@ -216,7 +266,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "WaitSequel", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("WaitSequel", m1));
         Log.postCommand("WaitSequel");
     }
 
@@ -227,7 +277,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Wait", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Wait", m1));
         Log.postCommand("Wait");
     }
 
@@ -241,7 +291,7 @@ export class SCommandContext
             }
             return REResponse.Pass;
         };
-        this._recodingCommandList.push({ name: "ApplyEffect", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("ApplyEffect", m1));
         Log.postCommand("ApplyEffect");
     }
 
@@ -251,7 +301,7 @@ export class SCommandContext
             entity.destroy();
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Destroy", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Destroy", m1));
         Log.postCommand("Destroy");
     }
 
@@ -261,7 +311,7 @@ export class SCommandContext
             REGame.messageHistory.add(text);
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "Message", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("Message", m1));
         Log.postCommand("Message");
     }
 
@@ -279,7 +329,7 @@ export class SCommandContext
             REGame.world._transferEntity(entity, floorId, x, y);
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "TransferFloor", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("TransferFloor", m1));
         Log.postCommand("TransferFloor");
     }
     
@@ -290,7 +340,7 @@ export class SCommandContext
             RESystem.integration.onReserveTransferMap(mapId, x, y, d);
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "TransferFloor", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("TransferFloor", m1));
         Log.postCommand("TransferFloor");
     }
     */
@@ -342,7 +392,7 @@ export class SCommandContext
 
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "ConsumeActionToken", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("ConsumeActionToken", m1));
         Log.postCommand("ConsumeActionToken");
     }
 
@@ -358,7 +408,7 @@ export class SCommandContext
 
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "SkipPart", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("SkipPart", m1));
         Log.postCommand("SkipPart");
     }
 
@@ -368,7 +418,7 @@ export class SCommandContext
             RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "PerformSkill", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));
         Log.postCommand("PerformSkill");
     }
 
@@ -381,7 +431,7 @@ export class SCommandContext
             // TODO:
             return REResponse.Succeeded;
         };
-        this._recodingCommandList.push({ name: "ApplyEffect", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("ApplyEffect", m1));
         Log.postCommand("ApplyEffect");
     }
     */
@@ -394,7 +444,7 @@ export class SCommandContext
             result(response, entity, this);
             return response;
         };
-        this._recodingCommandList.push({ name: "RemoveFromWhereabouts", func: m1 });
+        this._recodingCommandList.push(new RECCMessageCommand("RemoveFromWhereabouts", m1));
         Log.postCommand("RemoveFromWhereabouts");
     }
     */
@@ -454,7 +504,8 @@ export class SCommandContext
 
         if (this.isRunning()) {
             const message = this._runningCommandList[this._messageIndex];
-            const response = message.func();
+            message.call(this);
+            //const response = message._func();
     
             //if (RESystem.dialogContext._hasDialogModel()) {
                 // もし command の実行で Dialog が表示されたときは index を進めない。
@@ -507,7 +558,7 @@ export class SCommandContext
     dumpCommands() {
         console.log("Commands:");
         this._runningCommandList.forEach(x => {
-            console.log("  " + x.name);
+            console.log("  " + x._name);
         });
     }
 
