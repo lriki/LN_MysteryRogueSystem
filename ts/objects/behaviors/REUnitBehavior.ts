@@ -177,26 +177,14 @@ export class REUnitBehavior extends LBehavior {
             const layer = block.layer(BlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
-                
                 context.post(itemEntity, self, subject, undefined, onPrePickUpReaction)
-                .then(() => {
-                    inventory.removeEntity(itemEntity);
-                    REGame.map.appearEntity(itemEntity, self.x, self.y);
-
-                    context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
-                    return true;
-                });
-                /*
-                context.post(
-                    itemEntity, self, subject, undefined, onPrePickUpReaction,
-                    () => {
+                    .then(() => {
                         inventory.removeEntity(itemEntity);
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
                         return true;
                     });
-                */
             }
             else {
                 context.postMessage(tr("置けなかった。"));
@@ -212,39 +200,22 @@ export class REUnitBehavior extends LBehavior {
             assert(itemEntity);
             //assert(inventory);
 
-            context.post(
-                itemEntity, self, subject, undefined, onPreThrowReaction,
-                () => {
+            context.post(itemEntity, self, subject, undefined, onPreThrowReaction)
+                .then(() => {
                     //itemEntity.callRemoveFromWhereabouts(context);
                     itemEntity.removeFromParent();
 
                     itemEntity.x = self.x;
                     itemEntity.y = self.y;
 
-
-                    context.post(
-                        itemEntity, self, subject, undefined, onThrowReaction,
-                        () => {
+                    context.post(itemEntity, self, subject, undefined, onThrowReaction)
+                        .then(() => {
                             context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                             return true;
                         });
 
                     return true;
                 });
-
-                /*
-            // まずは itemEntity を、Inventory や Map から外してみる
-            context.postRemoveFromWhereabouts(
-                itemEntity,
-                (responce: REResponse, reactor: REGame_Entity, context: RECommandContext) => {
-                    if (responce == REResponse.Pass) {
-                        
-                    }
-                });
-                */
-            
-            /*
-                */
             return REResponse.Succeeded;
         }
         else if (activity instanceof LExchangeActivity) {
