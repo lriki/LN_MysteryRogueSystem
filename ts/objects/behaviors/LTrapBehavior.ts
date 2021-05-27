@@ -53,7 +53,7 @@ export class LTrapBehavior extends LBehavior {
         return item.name;
     }
     
-    onQueryActions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(actions: DActionId[]): DActionId[] {
         const result = actions.filter(x => x != DBasics.actions.PickActionId);
         return result;
     }

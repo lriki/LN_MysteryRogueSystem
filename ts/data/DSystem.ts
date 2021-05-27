@@ -47,7 +47,9 @@ export class DSystem {
 
     public link(testMode: boolean): void {
         if (!testMode) {
-            throw new Error("Not implemented.");
+            this.states.bless = REData.getStateFuzzy("kState_UT祝福").id;
+            this.states.curse = REData.getStateFuzzy("kState_UT呪い").id;
+            this.states.seal = REData.getStateFuzzy("kState_UT封印").id;
         }
         else {
             this.states.bless = REData.getStateFuzzy("kState_UT祝福").id;

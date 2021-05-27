@@ -17,6 +17,7 @@ import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
+import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 
 enum UpdateMode {
     Normal,
@@ -92,7 +93,7 @@ export class VManualActionDialogVisual extends VDialog {
             entity.immediatelyAfterAdjacentMoving = false;
 
             const targetEntity = REGame.map.firstFeetEntity(entity);
-            if (targetEntity) {
+            if (targetEntity && !targetEntity.findBehavior(LTrapBehavior)) {
                 const actions = targetEntity.queryReactions();
                 if (actions.length > 0) {
                     if (actions.includes(DBasics.actions.PickActionId)) {
