@@ -38,7 +38,7 @@ export class RECCMessageCommand {
     _rejected: RECCMessageCommand | undefined;
     
     _result: boolean;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
-    _prev: RECCMessageCommand | undefined;
+    //_prev: RECCMessageCommand | undefined;
 
     constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: RECCMessageCommand | undefined) {
         assert(!(entryFunc && chainFunc));
@@ -46,7 +46,7 @@ export class RECCMessageCommand {
         this._entryFunc = entryFunc;
         this._chainFunc = chainFunc;
         this._result = true;
-        this._prev = prev;
+        //this._prev = prev;
     }
 
     public then(func: CommandResultCallback): RECCMessageCommand {
@@ -66,16 +66,25 @@ export class RECCMessageCommand {
         
         if (this._entryFunc) {
             this._result = this._entryFunc() != REResponse.Canceled;
-            if (this._then) {
-                context._recodingCommandList.push(this._then);
-            }
         }
         else if (this._chainFunc) {
-            assert(this._prev);
-            if (this._prev._result) {
+            //assert(this._prev);
+            //if (this._prev._result) {
                 this._result = this._chainFunc();
+           // }
+        }
+
+        if (this._entryFunc || this._chainFunc) {
+            if (this._result) {
                 if (this._then) {
-                    context._recodingCommandList.push(this._then);
+                    this._then.call(context);
+                    //context._recodingCommandList.push(this._then);
+                }
+            }
+            else {
+                if (this._rejected) {
+                    this._rejected.call(context);
+                    //context._recodingCommandList.push(this._then);
                 }
             }
         }
@@ -151,7 +160,7 @@ export class SCommandContext
     // TODO: sender っていうのがすごくわかりづらい。
     // target と sender は基本的に self で同一なのでそうして、
     // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
-    post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): void {
+    post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): RECCMessageCommand {
         const m1 = () => {
             const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
                 const func = (behavior as any)[symbol];
@@ -183,6 +192,7 @@ export class SCommandContext
         };
         this._recodingCommandList.push(new RECCMessageCommand("Post", m1));
         Log.postCommand("Post");
+        return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
 
     postCall(func: () => void): void {

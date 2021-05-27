@@ -177,6 +177,16 @@ export class REUnitBehavior extends LBehavior {
             const layer = block.layer(BlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
+                
+                context.post(itemEntity, self, subject, undefined, onPrePickUpReaction)
+                .then(() => {
+                    inventory.removeEntity(itemEntity);
+                    REGame.map.appearEntity(itemEntity, self.x, self.y);
+
+                    context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                    return true;
+                });
+                /*
                 context.post(
                     itemEntity, self, subject, undefined, onPrePickUpReaction,
                     () => {
@@ -186,6 +196,7 @@ export class REUnitBehavior extends LBehavior {
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
                         return true;
                     });
+                */
             }
             else {
                 context.postMessage(tr("置けなかった。"));
