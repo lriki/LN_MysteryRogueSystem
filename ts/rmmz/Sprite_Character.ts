@@ -7,6 +7,8 @@ declare global {
     interface Sprite_Character {
         _spriteSet: VCharacterSpriteSet | undefined;
 
+        _spriteIndex: number;
+
         // StateIcon 関係
         _stateIconSprite: Sprite;
         _stateIcons: number[];
@@ -75,26 +77,33 @@ Sprite_Character.prototype.update = function() {
         if (this._spriteSet) {
             this._spriteSet.update();
         }
+
+        // Update state icon
+        {
+            if (this._stateIcons.length > 0) {
+                const iconIndex = this._stateIcons[0];  // TODO: 複数
+                const pw = ImageManager.iconWidth;
+                const ph = ImageManager.iconHeight;
+                const sx = (iconIndex % 16) * pw;
+                const sy = Math.floor(iconIndex / 16) * ph;
+                this._stateIconSprite.setFrame(sx, sy, pw, ph);
+                this._stateIconSprite.anchor.x = 0.5;
+                this._stateIconSprite.anchor.y = 1;
+                this._stateIconSprite.y = this.bitmap ? -this.patternHeight() : 0;  // bitmap が無いと Character の高さが取れないので
+                this._stateIconSprite.visible = true;
+            }
+            else {
+                this._stateIconSprite.visible = false;
+            }
+        }
+
+        // 寿命管理が複雑なので、間違ったものを参照していないか検証しておく
+        assert(visual.rmmzSpriteIndex() == this._spriteIndex);
+    }
+    else {
+        this._stateIconSprite.visible = false;
     }
 
-    // Update state icon
-    {
-        if (this._stateIcons.length > 0) {
-            const iconIndex = this._stateIcons[0];  // TODO: 複数
-            const pw = ImageManager.iconWidth;
-            const ph = ImageManager.iconHeight;
-            const sx = (iconIndex % 16) * pw;
-            const sy = Math.floor(iconIndex / 16) * ph;
-            this._stateIconSprite.setFrame(sx, sy, pw, ph);
-            this._stateIconSprite.anchor.x = 0.5;
-            this._stateIconSprite.anchor.y = 1;
-            this._stateIconSprite.y = this.bitmap ? -this.patternHeight() : 0;  // bitmap が無いと Character の高さが取れないので
-            this._stateIconSprite.visible = true;
-        }
-        else {
-            this._stateIconSprite.visible = false;
-        }
-    }
 }
 
 Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {

@@ -13,6 +13,7 @@ export class Game_REPrefabEvent extends Game_Event {
         this._databaseMapEventId = 1;
         this._spritePrepared = false;
     }
+
     
 
     databaseMapEventId(): number {

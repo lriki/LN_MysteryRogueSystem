@@ -93,29 +93,27 @@ declare global {
 // Scene 開始時の Sprite 生成
 var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
+    console.log("createCharacters", $gameMap.events());
 
     this._prefabSpriteIdRE = this._counter + 1;
     _Spriteset_Map_createCharacters.call(this);
-    
-    // Visual と Sprite を関連付ける
-    if (REVisual.entityVisualSet) {
-        this._characterSprites.forEach((sprite, index) => {
-            if (REVisual.entityVisualSet && sprite._character.isREEvent()) {
-                const event = (sprite._character as Game_Event);
-                const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
-                visual?._setSpriteIndex(index);
-                if (event instanceof Game_REPrefabEvent) {
-                    event.setSpritePrepared(true);
-                }
-            }
-        });
+
+    for (let i = 0; i < this._characterSprites.length; i++) {
+        const sprite =  this._characterSprites[i];
+        if (sprite._character instanceof Game_REPrefabEvent) {
+            sprite._character.setSpritePrepared(true);
+            sprite._spriteIndex = i;
+        }
     }
+
+    
+    console.log("createCharacters e", );
 };
 
 var _Spriteset_Map_update = Spriteset_Map.prototype.update;
 Spriteset_Map.prototype.update = function() {
-    _Spriteset_Map_update.call(this);
     this.updateREPrefabEvent();
+    _Spriteset_Map_update.call(this);
 };
 
 Spriteset_Map.prototype.updateREPrefabEvent = function() {
@@ -135,20 +133,49 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
         }
     }
     */
+
+    
+    // Visual と Sprite を関連付ける
+    if (REVisual.entityVisualSet) {
+        for (const visual of REVisual.entityVisualSet.entityVisuals()) {
+            if (visual.rmmzSpriteIndex() < 0) {
+                const spriteIndex = this._characterSprites.findIndex(s => (s._character instanceof Game_REPrefabEvent) && s._character.eventId() == visual.rmmzEventId());
+                assert(spriteIndex >= 0);
+                visual._setSpriteIndex(spriteIndex);
+            }
+        }
+
+        /*
+        this._characterSprites.forEach((sprite, index) => {
+            if (REVisual.entityVisualSet && sprite._character.isREEvent()) {
+                const event = (sprite._character as Game_Event);
+                const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
+                visual?._setSpriteIndex(index);
+                if (event instanceof Game_REPrefabEvent) {
+                    event.setSpritePrepared(true);
+                }
+            }
+        });
+        */
+    }
 };
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabEvent) {
     assert(REVisual.manager);
     
+    console.log("makeREPrefabEventSprite", event);
+
     event.setSpritePrepared(true);
     var sprite = new Sprite_Character(event as unknown as Game_Character);
 
     const spriteIndex = this._characterSprites.length;
     this._characterSprites.push(sprite);
+    sprite._spriteIndex = spriteIndex;
 
     const t: any = this._tilemap;
     t.addChild(sprite);
 
+    /*
     // Visual と Sprite を関連付ける
     if (REVisual.entityVisualSet) {
         const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
@@ -158,6 +185,7 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
         }
 
     }
+    */
 };
 
 /*

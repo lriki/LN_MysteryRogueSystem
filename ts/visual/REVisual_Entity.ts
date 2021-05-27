@@ -157,6 +157,12 @@ export class REVisual_Entity
                     }
                 }
             }
+            else {
+                console.log("undef??");
+            }
+        }
+        else {
+            console.log("vent??");
         }
     }
 }

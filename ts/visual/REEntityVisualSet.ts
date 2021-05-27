@@ -31,6 +31,10 @@ export class REEntityVisualSet {
         });
     }
 
+    public entityVisuals(): REVisual_Entity[] {
+        return this._visualEntities;
+    }
+
     ternimate() {
         this._visualEntities = [];
     }
