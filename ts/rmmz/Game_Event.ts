@@ -9,6 +9,7 @@ declare global {
         _entityData: DEntity | undefined;
 
         isREEntity(): boolean;
+        isREEvent(): boolean;
     }
 }
 
@@ -47,6 +48,10 @@ Game_Event.prototype.setupPageSettings = function() {
 
 Game_Event.prototype.isREEntity = function(): boolean {
     return !!this._entityData;
+}
+
+Game_Event.prototype.isREEvent = function() {
+    return true;
 }
 
 const _Game_Event_update = Game_Event.prototype.update;

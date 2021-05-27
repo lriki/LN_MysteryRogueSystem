@@ -7871,7 +7871,7 @@ declare class Game_Map {
     /**
      * 
      */
-    _events: Array</* Game_Map._eventsI */ any>;
+    _events: Array<Game_Event>;
 
     /**
      * 

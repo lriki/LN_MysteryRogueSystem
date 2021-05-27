@@ -1,82 +1,24 @@
+/**
+ * RE用動的スプライトのライフサイクル
+ * ----------
+ * Entity が削除されても、動的に作成された REEvent 及び対応する CharacterSprite は
+ * 非表示になるだけで、削除されることは無い。
+ * 新たな Entity が作成されると、これが再利用される。
+ * 
+ * REEvent は通常の Event と同じ更新処理を適用したいため、$gameMap.events で管理される。
+ * REEvent のインスタンス削除が発生すれば当然このリストからも取り除く必要があるが、
+ * そうすると取り除いた箇所の index が undefined になってしまう。
+ * コアスクリプトはそのような状態を想定していないためクラッシュする。
+ */
+
 import { assert } from '../Common';
 import { REDataManager } from '../data/REDataManager';
 import { REVisual } from '../visual/REVisual';
-
-export class Game_REPrefabEvent extends Game_Event {
-    private _databaseMapEventId: number;
-    private _spritePrepared: boolean;
-
-    constructor(mapId: number, dataMapId: number, eventId: number) {
-        // "RE-Database" のマップのイベントとして扱う。
-        // セルフスイッチをコントロールするときに参照される。
-        super(dataMapId, eventId);
-        this._databaseMapEventId = 1;
-        this._spritePrepared = false;
-    }
-    
-
-    databaseMapEventId(): number {
-        return this._databaseMapEventId;
-    }
-    
-    isREPrefab(): boolean {
-        return true;
-    }
-
-    isREExtinct(): boolean {
-        return this._erased;
-    }
-    
-    isRESpritePrepared(): boolean {
-        return this._spritePrepared;
-    }
-
-    setSpritePrepared(value: boolean) {
-        this._spritePrepared = true;
-    }
-}
+import { Game_REPrefabEvent } from './Game_REPrefabEvent';
 
 
-//==============================================================================
-// Game_CharacterBase
 
-declare global {
-    interface Game_CharacterBase {
-        isREEvent(): boolean;   // Event であるか。他のプラグインとの競合回避のため、RE プレフィックスをつけている。
-        isREPrefab(): boolean;
-        isRESpritePrepared(): boolean;
-        isREExtinct(): boolean;
-    }
-}
 
-Game_CharacterBase.prototype.isREEvent = function() {
-    return false;
-};
-
-Game_CharacterBase.prototype.isREPrefab = function() {
-    return false;
-};
-
-Game_CharacterBase.prototype.isRESpritePrepared = function() {
-    return false;
-};
-
-Game_CharacterBase.prototype.isREExtinct = function() {
-    return false;
-};
-
-//==============================================================================
-// Game_Event
-
-declare global {
-    interface Game_Event {
-        isREEvent(): boolean;
-    }
-}
-
-Game_Event.prototype.isREEvent = function() {
-    return true;
-};
 
 //==============================================================================
 // Game_Map
@@ -94,16 +36,30 @@ Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent): Game_REPre
         throw new Error();
     }
 
-    // 新しい Game_Event ID を発行
-    const eventId = this._events.length;
+    // フリー状態の REEvent を探してみる
+    let eventId = this._events.findIndex(e => (e instanceof Game_REPrefabEvent) && e.isREExtinct());
+    if (eventId < 0) {
+        // 見つからなければ新しく作る
+        eventId = this._events.length;
+        
+        // 新しい Game_Event に対応する IDataMapEvent を登録する。
+        // こうしておかないと、Game_Event のコンストラクタの locate で例外する。
+        $dataMap.events[eventId] = eventData;
+        
+        const event = new Game_REPrefabEvent(REDataManager.databaseMapId, eventId);
+        this._events[eventId] = event;
+        return event;
+    }
+    else {
+        const event = this._events[eventId];
+        assert(event instanceof Game_REPrefabEvent);
 
-    // 新しい Game_Event に対応する IDataMapEvent を登録する。
-    // こうしておかないと、Game_Event のコンストラクタの locate で例外する。
-    $dataMap.events[eventId] = eventData;
-
-    var event = new Game_REPrefabEvent(this._mapId, REDataManager.databaseMapId, eventId);
-    this._events[eventId] = event;
-    return event;
+        // 再構築
+        $dataMap.events[eventId] = eventData;
+        event.initMembers();
+        event.refresh();
+        return event;
+    }
 }
 
 /*
@@ -130,7 +86,7 @@ declare global {
 
         updateREPrefabEvent(): void;
         makeREPrefabEventSprite(event: Game_REPrefabEvent): void;
-        removeREPrefabEventSprite(index: number): void;
+        //removeREPrefabEventSprite(index: number): void;
     }
 }
 
@@ -169,6 +125,7 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
         }
     });
     
+    /*
     for (var i = 0, n = this._characterSprites.length; i < n; i++) {
         const sprite = this._characterSprites[i];
         
@@ -177,6 +134,7 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
             n--;
         }
     }
+    */
 };
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabEvent) {
@@ -202,6 +160,7 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
     }
 };
 
+/*
 Spriteset_Map.prototype.removeREPrefabEventSprite = function(index: number) {
     var sprite = this._characterSprites[index];
     this._characterSprites.splice(index, 1);
@@ -211,4 +170,4 @@ Spriteset_Map.prototype.removeREPrefabEventSprite = function(index: number) {
     t.removeChild(sprite);
 };
 
-
+*/

@@ -23,7 +23,6 @@ import { SBehaviorFactory } from "ts/system/SBehaviorFactory";
  * JsonEx._decode をオーバーライドしてインスタンスを作成できるようにしている。
  */
 
-import { Game_REPrefabEvent } from "./PrefabEvent";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
@@ -34,6 +33,7 @@ import { LParamInstance } from "ts/objects/behaviors/LBattlerBehavior";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
+import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 
 
 function createInstance(name: string): any {

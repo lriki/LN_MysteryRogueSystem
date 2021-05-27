@@ -5,7 +5,6 @@ import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "../system/RESystem";
 import { REEntityVisualSet } from "../visual/REEntityVisualSet";
 import { REVisual } from "../visual/REVisual";
-import { Game_REPrefabEvent } from "./PrefabEvent";
 import { VDirectionArrow } from "ts/visual/VDirectionArrow";
 import { REGame } from "ts/objects/REGame";
 import { RMMZHelper } from "./RMMZHelper";
