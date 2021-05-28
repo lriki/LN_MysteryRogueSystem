@@ -12,6 +12,7 @@ import { LEntity } from "ts/objects/LEntity";
 export class SGroundRules {
 
     public onEntityLandLeaved(entity: LEntity): void {
+        /*
         const actor = entity.findBehavior(LActorBehavior);
         if (actor) {
             actor.resetLevel();
@@ -21,6 +22,7 @@ export class SGroundRules {
         if (battler) {
             battler.resetAllConditions();
         }
+        */
     }
 
 }

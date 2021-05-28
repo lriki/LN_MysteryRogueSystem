@@ -93,8 +93,6 @@ declare global {
 // Scene 開始時の Sprite 生成
 var _Spriteset_Map_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
-    console.log("createCharacters", $gameMap.events());
-
     this._prefabSpriteIdRE = this._counter + 1;
     _Spriteset_Map_createCharacters.call(this);
 
@@ -105,9 +103,6 @@ Spriteset_Map.prototype.createCharacters = function() {
             sprite._spriteIndex = i;
         }
     }
-
-    
-    console.log("createCharacters e", );
 };
 
 var _Spriteset_Map_update = Spriteset_Map.prototype.update;

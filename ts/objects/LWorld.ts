@@ -217,7 +217,7 @@ export class LWorld
             REGame.map._removeEntity(entity);
         }
 
-        const oldFloorId = entity.floorId;
+        const oldLandId = entity.floorId.landId();
 
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
@@ -238,7 +238,8 @@ export class LWorld
         }
 
         // Land 間移動が行われた
-        if (oldFloorId.landId() != floorId.landId()) {
+        if (oldLandId != floorId.landId()) {
+            console.log("onEntityLandLeaved", oldLandId, floorId.landId(), entity);
             RESystem.groundRules.onEntityLandLeaved(entity);
         }
 
