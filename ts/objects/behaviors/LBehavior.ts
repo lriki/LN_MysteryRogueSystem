@@ -273,7 +273,7 @@ export class LBehavior extends LObject {
     onCollectTraits(result: IDataTrait[]): void { }
 
     /** 1行動消費単位の終了時点 */
-    onTurnEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
+    onStepEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
 
 
     

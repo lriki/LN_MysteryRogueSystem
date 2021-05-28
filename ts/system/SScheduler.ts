@@ -269,7 +269,7 @@ export class SScheduler
             if (next) {
                 // 行動トークンを消費する行動がとられた。または、無効化されている
                 step.iterationCount--;
-                this.onTurnEnd(step);
+                this.onStepEnd(step);
                 if (step.iterationCount <= 0) {
                     REGame.scheduler._currentStep++;
                 }
@@ -354,10 +354,10 @@ export class SScheduler
     // 1行動トークンの消費を終えたタイミング。
     // 手番が終了し、次の人へ手番が移る直前。
     // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
-    private onTurnEnd(step: RunStepInfo): void {
+    private onStepEnd(step: RunStepInfo): void {
 
         REGame.scheduler.actorEntities().forEach(entity => {
-            entity._callBehaviorIterationHelper(behavior => behavior.onTurnEnd(RESystem.commandContext));
+            entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
         });
 
         

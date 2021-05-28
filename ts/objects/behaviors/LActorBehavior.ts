@@ -24,6 +24,10 @@ export class LActorBehavior extends LBattlerBehavior {
         this._actorId = actorId;
     }
 
+    public resetLevel(): void {
+        const actor = REData.actors[this._actorId];
+        this._level = actor.initialLevel;
+    }
 
     
     public get level(): number {
@@ -39,7 +43,7 @@ export class LActorBehavior extends LBattlerBehavior {
         //this._name = actor.name;
         //this._nickname = actor.nickname;
         //this._profile = actor.profile;
-        this._level = actor.initialLevel;
+        this.resetLevel();
         this.initExp();
         //this.initSkills();
         //this.initEquips(actor.equips);

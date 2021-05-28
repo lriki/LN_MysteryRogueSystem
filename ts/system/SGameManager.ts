@@ -29,6 +29,7 @@ import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerat
 import { SMapManager } from "./SMapManager";
 import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 import { SDialogContext } from "./SDialogContext";
+import { SGroundRules } from "./SGroundRules";
 
 /**
  */
@@ -43,6 +44,7 @@ export class SGameManager
         RESystem.scheduler = new SScheduler();
         RESystem.minimapData = new SMinimapData();
         RESystem.mapManager = new SMapManager();
+        RESystem.groundRules = new SGroundRules();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();

@@ -61,7 +61,7 @@ export class VHudWindow extends Window_Base {
     }
 
     private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {
-        this.drawText("1", x, y, 32, "right");
+        this.drawText(floorId.floorNumber().toString(), x, y, 32, "right");
         this.changeTextColor(this.paramTitleColor());
         this.drawText("F", x + 32, y, 32, "left");
         this.resetTextColor();

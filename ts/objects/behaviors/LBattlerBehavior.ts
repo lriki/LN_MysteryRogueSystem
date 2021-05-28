@@ -29,6 +29,12 @@ export class LParamInstance {
         this._buff = 0;
     }
 
+    public reset(): void {
+        this._actualParamDamge = 0;
+        this._idealParamPlus = 0;
+        this._buff = 0;
+    }
+
     public parameterId(): DParameterId {
         return this._dataId;
     }
@@ -82,6 +88,17 @@ export class LBattlerBehavior extends LBehavior {
         for (const param of REData.parameters) {
             this._params[param.id] = new LParamInstance(param.id);
         }
+    }
+
+    /**
+     * すべての状態をリセットする。
+     * 
+     * recoverAll() は buffs 等一部リセットされないものがあるが、このメソッドは全てリセットする。
+     * 拠点へ戻ったときなどで完全リセットしたいときに使う。
+     */
+    public resetAllConditions(): void {
+        this._params.forEach(x => x?.reset());
+        this.clearStates();
     }
 
     // Game_BattlerBase.prototype.clearParamPlus
@@ -373,7 +390,7 @@ export class LBattlerBehavior extends LBehavior {
         this.refresh();
     }
     
-    onTurnEnd(context: SCommandContext): REResponse {
+    onStepEnd(context: SCommandContext): REResponse {
         const entity = this.ownerEntity();
         if (this.isDeathStateAffected()) {
             context.postSequel(entity, RESystem.sequels.CollapseSequel);

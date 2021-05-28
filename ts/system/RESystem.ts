@@ -14,6 +14,7 @@ import { SScheduler } from "./SScheduler";
 import { SMinimapData } from "./SMinimapData";
 import { SMapManager } from "./SMapManager";
 import { SDialogContext } from "./SDialogContext";
+import { SGroundRules } from "./SGroundRules";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -41,6 +42,7 @@ export class RESystem {
     static scheduler: SScheduler;
     static minimapData: SMinimapData;
     static mapManager: SMapManager;
+    static groundRules: SGroundRules;
 
     // Database
     static attributes: BasicAttributes;

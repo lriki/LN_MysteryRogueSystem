@@ -11,6 +11,7 @@ import { LLand } from "./LLand";
 import { DLandId } from "ts/data/DLand";
 import { LParty, LPartyId } from "./LParty";
 import { SMomementCommon } from "ts/system/SMomementCommon";
+import { RESystem } from "ts/system/RESystem";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -216,6 +217,8 @@ export class LWorld
             REGame.map._removeEntity(entity);
         }
 
+        const oldFloorId = entity.floorId;
+
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
             entity.floorId = floorId;
@@ -232,6 +235,11 @@ export class LWorld
         if (REGame.camera.focusedEntityId().equals(entity.entityId()) &&
             REGame.map.floorId() != entity.floorId) {
             REGame.camera._reserveFloorTransferToFocusedEntity();
+        }
+
+        // Land 間移動が行われた
+        if (oldFloorId.landId() != floorId.landId()) {
+            RESystem.groundRules.onEntityLandLeaved(entity);
         }
 
         return true;
