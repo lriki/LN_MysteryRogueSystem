@@ -105,9 +105,6 @@ Spriteset_Map.prototype.createCharacters = function() {
             if (sprite._character instanceof Game_REPrefabEvent) {
                 sprite._character.setSpritePrepared(true);
             }
-            //else {
-                //throw new Error("aaa");
-            //}
         }
     }
 };

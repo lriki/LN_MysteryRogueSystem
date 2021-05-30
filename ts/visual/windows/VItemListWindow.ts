@@ -94,16 +94,34 @@ export class VItemListWindow extends Window_Selectable {
     private drawEntityItemName(item: LEntity, x: number, y: number, width: number): void {
         if (item) {
             const iconY = y + (this.lineHeight() - ImageManager.iconHeight) / 2;
-            const textMargin = ImageManager.iconWidth + 4;
-            const itemWidth = Math.max(0, width - textMargin);
-            this.resetTextColor();
+            const nameX = x + ImageManager.iconWidth;
 
-            this.drawTextEx(REGame.identifyer.makeDisplayText(item), x, y, itemWidth);
-
-            // 装備していればアイコンを表示する
-            if (this._equipmentUser && this._equipmentUser.isEquipped(item)) {
-                this.drawIcon(12, x, iconY);
+            // State Icon
+            {
+                const states = item.states();
+                if (states.length > 0) {
+                    const state = states[0];
+                    this.drawIcon(state.stateData().iconIndex, x, iconY);
+                }
             }
+
+            // Item Icon
+            // Name
+            {
+                const textMargin = ImageManager.iconWidth * 2 + 4;
+
+                const itemWidth = Math.max(0, width - textMargin);
+                this.resetTextColor();
+
+                this.drawTextEx(REGame.identifyer.makeDisplayText(item), nameX, y, itemWidth);
+
+                // 装備していればアイコンを表示する
+                if (this._equipmentUser && this._equipmentUser.isEquipped(item)) {
+                    this.drawIcon(12, nameX, iconY);
+                }
+            }
+
+
         }
     }
 

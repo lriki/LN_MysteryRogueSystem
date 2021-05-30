@@ -9,6 +9,8 @@ import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
 import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
 import { SNavigationHelper } from "ts/system/SNavigationHelper";
+import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
+import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -119,7 +121,10 @@ export class REVisual_Entity
             const sprite = this.rmmzSprite();
             if (sprite) {
                 const entity = this.entity();
-                sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
+
+                if (entity.findBehavior(REUnitBehavior)) {
+                    sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
+                }
 
                 if (this._initialUpdate) {
                     this._initialUpdate = false;
@@ -157,12 +162,6 @@ export class REVisual_Entity
                     }
                 }
             }
-            else {
-                console.log("undef??");
-            }
-        }
-        else {
-            console.log("vent??");
         }
     }
 }

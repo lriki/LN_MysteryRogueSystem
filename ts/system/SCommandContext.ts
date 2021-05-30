@@ -157,29 +157,27 @@ export class SCommandContext
         Log.postCommand("Activity");
     }
 
+    callSymbol<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym): REResponse {
+        const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
+            const func = (behavior as any)[symbol];
+            if (func) {
+                const args2: CommandArgs = { self: target, sender: sender, subject: subject, args: args };
+                const r1 = func.call(behavior, args2, this);
+                return r1;
+            }
+            else {
+                return REResponse.Pass;
+            }
+        });
+        return response;
+    }
+
     // TODO: sender っていうのがすごくわかりづらい。
     // target と sender は基本的に self で同一なのでそうして、
     // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
     post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): RECCMessageCommand {
         const m1 = () => {
-            const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
-                const func = (behavior as any)[symbol];
-                if (func) {
-                    const args2: CommandArgs = { self: target, sender: sender, subject: subject, args: args };
-                    const r1 = func.call(behavior, args2, this);
-                    //if (r1 != REResponse.Pass) {
-                        // 何らかの形でコマンドが処理された
-                    //    if (result) {
-                    //        result(r1, target, this);
-                    //    }
-                    //}
-                    return r1;
-                }
-                else {
-                    return REResponse.Pass;
-                }
-            });
-
+            const response = this.callSymbol(target, sender, subject, args, symbol);
             if (response != REResponse.Canceled) {
                 // コマンドが処理されなかった
                 if (result) {
@@ -187,7 +185,7 @@ export class SCommandContext
                 }
             }
 
-            return REResponse.Succeeded;
+            return response;
 
         };
         this._recodingCommandList.push(new RECCMessageCommand("Post", m1));

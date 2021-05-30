@@ -1,7 +1,9 @@
-import { assert } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { LBehavior } from "./LBehavior";
+import { REResponse } from "ts/system/RECommand";
+import { SCommandContext } from "ts/system/SCommandContext";
+import { CommandArgs, LBehavior, testPickOutItem } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
@@ -17,4 +19,16 @@ export class LEquipmentBehavior extends LBehavior {
         actions.push(DBasics.actions.EquipOffActionId);
         return actions;
     }
+    
+    [testPickOutItem](args: CommandArgs, context: SCommandContext): REResponse {
+        const self = args.self;
+        if (self.isCursed()) {
+            context.postMessage(tr2("呪われている！"));
+            return REResponse.Canceled;
+        }
+        else {
+            return REResponse.Succeeded;
+        }
+    }
+    
 }

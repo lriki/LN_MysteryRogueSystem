@@ -218,6 +218,7 @@ export class LEntity extends LObject
 
     _located: boolean = false;
 
+
     onFinalize(): void {
         // 現在マップ上の Entity 削除
         if (this.floorId == REGame.map.floorId()) {

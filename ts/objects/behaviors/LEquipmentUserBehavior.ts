@@ -19,6 +19,8 @@ import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/DParameter";
 import { LEquipOffActivity } from "../activities/LEquipOffActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
+import { SEffectSubject } from "ts/system/SEffectContext";
+import { testPickOutItem } from "../internal";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -153,22 +155,27 @@ NOTE:
         }
         else if (activity instanceof LEquipOffActivity) {
             const itemEntity = activity.object();
-            let removed = false;
-            for (const slot of this._slots) {
-                if (slot.itemEntityId.hasAny() && slot.itemEntityId.equals(itemEntity.entityId())) {
-                    slot.itemEntityId = LEntityId.makeEmpty();
-                    removed = true;
-                }
-            }
-            this._revisitonNumber++;
             
-            if (removed) {
-                SSoundManager.playEquip();
-                context.postMessage(tr2("%1 をはずした。").format(REGame.identifyer.makeDisplayText(itemEntity)));
-            }
-            else {
-                context.postMessage(tr2("何も起こらなかった。"));
-            }
+            context.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
+            .then(() => {
+                let removed = false;
+                for (const slot of this._slots) {
+                    if (slot.itemEntityId.hasAny() && slot.itemEntityId.equals(itemEntity.entityId())) {
+                        slot.itemEntityId = LEntityId.makeEmpty();
+                        removed = true;
+                    }
+                }
+                this._revisitonNumber++;
+                
+                if (removed) {
+                    SSoundManager.playEquip();
+                    context.postMessage(tr2("%1 をはずした。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+                }
+                else {
+                    context.postMessage(tr2("何も起こらなかった。"));
+                }
+                return true;
+            });
 
             return REResponse.Succeeded;
         }
