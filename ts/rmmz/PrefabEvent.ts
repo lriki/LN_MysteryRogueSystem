@@ -98,9 +98,16 @@ Spriteset_Map.prototype.createCharacters = function() {
 
     for (let i = 0; i < this._characterSprites.length; i++) {
         const sprite =  this._characterSprites[i];
-        if (sprite._character instanceof Game_REPrefabEvent) {
-            sprite._character.setSpritePrepared(true);
+        if (sprite._character instanceof Game_Event) {
+            // 固定マップで初期配置されているイベント用
             sprite._spriteIndex = i;
+
+            if (sprite._character instanceof Game_REPrefabEvent) {
+                sprite._character.setSpritePrepared(true);
+            }
+            //else {
+                //throw new Error("aaa");
+            //}
         }
     }
 };
@@ -134,7 +141,7 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
     if (REVisual.entityVisualSet) {
         for (const visual of REVisual.entityVisualSet.entityVisuals()) {
             if (visual.rmmzSpriteIndex() < 0) {
-                const spriteIndex = this._characterSprites.findIndex(s => (s._character instanceof Game_REPrefabEvent) && s._character.eventId() == visual.rmmzEventId());
+                const spriteIndex = this._characterSprites.findIndex(s => (s._character instanceof Game_Event) && s._character.eventId() == visual.rmmzEventId());
                 assert(spriteIndex >= 0);
                 visual._setSpriteIndex(spriteIndex);
             }

@@ -31,6 +31,17 @@
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
             "sourceMaps": true,
+        },
+        {
+            "name": "Launch",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/index.html",
+            "runtimeArgs": [
+                "--allow-file-access-from-files",
+                "--remote-debugging-port=9222",
+                "--autoplay-policy=no-user-gesture-required"
+            ]
         }
     ]
 }

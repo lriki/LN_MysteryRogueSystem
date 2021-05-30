@@ -98,6 +98,9 @@ Sprite_Character.prototype.update = function() {
         }
 
         // 寿命管理が複雑なので、間違ったものを参照していないか検証しておく
+        if (visual.rmmzSpriteIndex() != this._spriteIndex) {
+            console.log("err", this);
+        }
         assert(visual.rmmzSpriteIndex() == this._spriteIndex);
     }
     else {

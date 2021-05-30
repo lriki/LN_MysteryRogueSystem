@@ -147,6 +147,11 @@ export class SEntityFactory {
             throw new Error("Not implemented.");
         }
 
+        // ステート追加
+        for (const stateId of data.stateIds) {
+            entity.addState(stateId);
+        }
+
         entity.prefabKey = prefab.key;
         return entity;
     }
