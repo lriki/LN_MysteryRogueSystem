@@ -66,8 +66,6 @@ export interface CommandArgs {
     args: any,
 };
 
-export const onPrePickUpReaction = Symbol("onPicking");
-export const onPrePutReaction = Symbol("onPrePutReaction");
 export const onPreThrowReaction = Symbol("onPreThrowReaction");
 export const onThrowReaction = Symbol("onThrowReaction");
 export const onMoveAsProjectile = Symbol("onMoveAsProjectile");
@@ -218,9 +216,6 @@ export class LBehavior extends LObject {
 
     //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
-    [onPrePickUpReaction](args: CommandArgs, context: SCommandContext): REResponse {
-        return REResponse.Pass;
-    }
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
     // propertyId: see EntityProperties

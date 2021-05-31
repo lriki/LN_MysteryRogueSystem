@@ -10,7 +10,7 @@ import { SMomementCommon } from "ts/system/SMomementCommon";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../LBlock";
 import { LEntity } from "../LEntity";
-import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onPrePickUpReaction, onPrePutReaction, onThrowReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "./LBehavior";
 
 
 
@@ -22,18 +22,6 @@ import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAs
  * というか現状何が本当に必要なのか不透明な状態なので、あるていど機能のまとまりが見えてきたら派生クラス作って分離していく。
  */
 export class LCommonBehavior extends LBehavior {
-
-    // 拾われようとしている
-    [onPrePickUpReaction](args: CommandArgs, context: SCommandContext): REResponse {
-        return REResponse.Succeeded; // 無条件でOK
-    }
-
-    // 置かれようとしている
-    // この時点で座標は確定していないため、ここで GroundLayer に置くことができるか確認することはできない。
-    [onPrePutReaction](args: CommandArgs, context: SCommandContext): REResponse {
-        return REResponse.Succeeded; // 無条件でOK
-    }
-    
 
     onQueryActions(actions: DActionId[]): DActionId[] {
         return actions;

@@ -1,6 +1,6 @@
 import { REResponse } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
-import { CommandArgs, LBehavior, onAttackReaction, onPrePickUpReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onAttackReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { RESystem } from "ts/system/RESystem";
@@ -151,7 +151,7 @@ export class LUnitBehavior extends LBehavior {
                     const itemEntity = targetEntities[0];
     
                     context.post(
-                        itemEntity, self, subject, undefined, onPrePickUpReaction,
+                        itemEntity, self, subject, undefined, testPickOutItem,
                         () => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntity(itemEntity);
@@ -177,9 +177,11 @@ export class LUnitBehavior extends LBehavior {
             const layer = block.layer(BlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
-                context.post(itemEntity, self, subject, undefined, onPrePickUpReaction)
+                context.post(itemEntity, self, subject, undefined, testPickOutItem)
                     .then(() => {
-                        inventory.removeEntity(itemEntity);
+                        itemEntity.removeFromParent();
+                        //context.remo
+                        //inventory.removeEntity(itemEntity);
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));

@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Equipment.Curse"
+                "-t", "Equipment.Put_Throw"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

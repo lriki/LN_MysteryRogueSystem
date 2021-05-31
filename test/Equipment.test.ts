@@ -11,6 +11,7 @@ import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
+import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -76,6 +77,52 @@ test("Equipment.EquipOnOff", () => {
     expect(equipmens.isEquipped(weapon1)).toBe(false);
     expect(equipmens.isEquipped(shield1)).toBe(false);
     expect(equipmens.equippedItemEntities().length).toBe(0);
+});
+
+test("Equipment.Put_Throw", () => {
+    SGameManager.createGameObjects();
+
+    // actor1
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.performFloorTransfer();
+    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const equipmens = actor1.getBehavior(LEquipmentUserBehavior);
+
+    // 武器 入手
+    const weapon1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Weapon1, stateIds: [] });
+    inventory.addEntity(weapon1);
+
+    // 盾 入手
+    const shield1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Shield1, stateIds: [] });
+    inventory.addEntity(shield1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // [装備]
+    RESystem.dialogContext.postActivity(LEquipActivity.make(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LEquipActivity.make(actor1, shield1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // [置く]
+    RESystem.dialogContext.postActivity(LPutActivity.make(actor1, weapon1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(equipmens.isEquipped(weapon1)).toBe(false);  // 装備からは外れていること。
+    expect(weapon1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
+    
+    // [投げる]
+    RESystem.dialogContext.postActivity(LThrowActivity.make(actor1, shield1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(equipmens.isEquipped(shield1)).toBe(false);  // 装備からは外れていること。
+    expect(shield1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
 });
 
 test("Equipment.Curse", () => {

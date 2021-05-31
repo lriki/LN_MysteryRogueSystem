@@ -90,8 +90,8 @@ export class TestEnv {
         this.PrefabId_SleepTrap = REData.prefabs.findIndex(x => x.key == "p眠りガス");
         
         // デバッグしやすいように共通の名前を付けておく
-        const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-        actor1._name = "actor1";
+        //const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+        //actor1._name = "actor1";
     }
 
     public static performFloorTransfer(): void {
