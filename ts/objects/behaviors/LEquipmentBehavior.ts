@@ -3,7 +3,11 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
+import { LEntity } from "../LEntity";
+import { LObject } from "../LObject";
 import { CommandArgs, LBehavior, testPickOutItem } from "./LBehavior";
+import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
+import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
@@ -20,6 +24,22 @@ export class LEquipmentBehavior extends LBehavior {
         return actions;
     }
     
+    onOwnerRemoveFromParent(owner: LObject): void {
+        const inventory = owner.parentObject();
+        if (inventory instanceof LInventoryBehavior) {
+            const unit = inventory.ownerEntity();
+
+            const behavior = unit.getBehavior(LEquipmentUserBehavior);
+            const removed = behavior.removeEquitment(this.ownerEntity());
+            assert(removed);
+
+            // TODO: ↑ちょっとあまりにも場当たり的なので再設計したいところ…
+        }
+        else {
+            throw new Error("Not Implemented.");
+        }
+    }
+
     [testPickOutItem](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         if (self.isCursed()) {

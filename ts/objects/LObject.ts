@@ -167,6 +167,14 @@ export class LObject {
      */
     public removeFromParent(): void {
         if (this.hasParent()) {
+            // onRemoveFromParent() では、parent を間接的に参照しているオブジェクトの後始末を行う。
+            // 様々な理由で parent にアクセスするため、parent が null になる前に、this に通知する。
+            this.onRemoveFromParent();
+
+            // this への通知が終わった後、親から直接参照を外してもらう。
+            // ここで parent が null になる。
+            // ※ parent-child の関係を解除するのは、parent から行ってもらう方が自然。
+            //    child 側から外すには parent の具体的な型を知らなければならないが、それは不自然。
             this.parentObject().onRemoveChild(this);
             assert(this._parentObjectId.isEmpty());
         }
@@ -197,5 +205,8 @@ export class LObject {
 
     protected onRemoveChild(obj: LObject): void {
         throw new Error("Unreachable.");
+    }
+
+    protected onRemoveFromParent(): void {
     }
 }

@@ -204,6 +204,12 @@ export class LBehavior extends LObject {
      */
     onRemoveChild(entity: LEntity): void {}
 
+    /**
+     * 親オブジェクトから直ちに取り除くべき時に呼び出される。
+     * この動作はキャンセルできないため、例えば呪い状態による装備の着脱判定などは行わず、確実に除外しなければならない。
+     */
+     onOwnerRemoveFromParent(owner: LObject): void {}
+
     onAttached(): void {}
     onDetached(): void {}
     onEvent(eventId: DEventId, args: any): void {}

@@ -158,13 +158,7 @@ NOTE:
             
             context.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
             .then(() => {
-                let removed = false;
-                for (const slot of this._slots) {
-                    if (slot.itemEntityId.hasAny() && slot.itemEntityId.equals(itemEntity.entityId())) {
-                        slot.itemEntityId = LEntityId.makeEmpty();
-                        removed = true;
-                    }
-                }
+                const removed = this.removeEquitment(itemEntity);
                 this._revisitonNumber++;
                 
                 if (removed) {
@@ -180,6 +174,16 @@ NOTE:
             return REResponse.Succeeded;
         }
         return REResponse.Pass;
+    }
+    
+    public removeEquitment(itemEntity: LEntity): boolean {
+        for (const slot of this._slots) {
+            if (slot.itemEntityId.hasAny() && slot.itemEntityId.equals(itemEntity.entityId())) {
+                slot.itemEntityId = LEntityId.makeEmpty();
+                return true;
+            }
+        }
+        return false;
     }
 
     private refreshSlots(): void {
