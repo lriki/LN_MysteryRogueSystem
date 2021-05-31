@@ -29,7 +29,6 @@ test("MapTransfarDirectly", () => {
 
     // 最初に Player を REシステム管理外の 通常マップに配置しておく
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     REGame.world._transferEntity(actor1, TestEnv.FloorId_DefaultNormalMap, 5, 5);
 
     TestEnv.performFloorTransfer();

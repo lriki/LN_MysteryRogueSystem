@@ -22,7 +22,6 @@ test("Items.Staff.Knockback", () => {
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.dir = 6;
     TestEnv.performFloorTransfer();

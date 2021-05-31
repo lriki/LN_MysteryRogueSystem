@@ -30,7 +30,6 @@ test("Activity.Eat", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // アイテム作成
@@ -62,7 +61,6 @@ test("Activity.Throw", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     actor1.dir = 6; // 右を向く
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
@@ -122,7 +120,6 @@ test("Activity.ThrowAndHit", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     actor1.dir = 6; // 右を向く
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
@@ -159,7 +156,6 @@ test("Activity.Exchange", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     actor1.dir = 6; // 右を向く
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory = actor1.getBehavior(LInventoryBehavior);

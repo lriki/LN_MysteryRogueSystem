@@ -145,7 +145,6 @@ test("Basic.TurnOrderTable", () => {
 
     // actor1 - x1 速
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1._name = "actor1";
     actor1.findBehavior(LUnitBehavior)?.setSpeedLevel(1);
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 1, 5);
 
