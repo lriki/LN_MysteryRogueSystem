@@ -10,7 +10,7 @@ import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
 import { SNavigationHelper } from "ts/system/SNavigationHelper";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -122,7 +122,7 @@ export class REVisual_Entity
             if (sprite) {
                 const entity = this.entity();
 
-                if (entity.findBehavior(REUnitBehavior)) {
+                if (entity.findBehavior(LUnitBehavior)) {
                     sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
                 }
 

@@ -13,7 +13,7 @@ import { SSequelContext } from "./SSequelContext";
 import { LCommandPlaybackDialog } from "ts/system/dialogs/LCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LRandom } from "ts/objects/LRandom";
 
 export type MCEntryProc = () => REResponse;
@@ -369,7 +369,7 @@ export class SCommandContext
     */
 
     postConsumeActionToken(entity: LEntity): void {
-        const behavior = entity.findBehavior(REUnitBehavior);
+        const behavior = entity.findBehavior(LUnitBehavior);
         assert(behavior);
 
         // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
@@ -420,7 +420,7 @@ export class SCommandContext
     }
 
     postSkipPart(entity: LEntity): void {
-        const behavior = entity.findBehavior(REUnitBehavior);
+        const behavior = entity.findBehavior(LUnitBehavior);
         assert(behavior);
 
         const m1 = () => {

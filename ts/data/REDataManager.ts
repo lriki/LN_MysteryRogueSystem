@@ -1,7 +1,7 @@
 //import 'types/index.d.ts'
 import fs from 'fs';
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
@@ -210,7 +210,7 @@ export class REDataManager
         // Behaviors
         RESystem.behaviors = {
             decision: REData.addBehavior("Decision", () => new REGame_DecisionBehavior()),
-            unit: REData.addBehavior("Unit", () => new REUnitBehavior()),
+            unit: REData.addBehavior("Unit", () => new LUnitBehavior()),
             //genericState: REData.addBehavior("GenericState", () => new LGenericState()),
         };
 

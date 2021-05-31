@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
 import { LUnitAttribute } from "./attributes/LUnitAttribute";
-import { REUnitBehavior } from "./behaviors/REUnitBehavior";
+import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
@@ -10,7 +10,7 @@ export interface UnitInfo
 {
     entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
     //attr: LUnitAttribute;     // cache for avoiding repeated find.
-    behavior: REUnitBehavior;
+    behavior: LUnitBehavior;
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
 }
 
@@ -130,7 +130,7 @@ export class LScheduler {
         // 行動できるすべての entity を集める
         {
             REGame.map.entities().forEach(entity => {
-                const behavior = entity.findBehavior(REUnitBehavior);
+                const behavior = entity.findBehavior(LUnitBehavior);
                 if (behavior) {
                     assert(behavior.factionId() > 0);
                     assert(behavior.speedLevel() != 0);

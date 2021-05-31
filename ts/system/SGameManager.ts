@@ -27,7 +27,7 @@ import { FMapBuilder } from "ts/floorgen/FMapBuilder";
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/PluginParameters";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 
@@ -79,7 +79,7 @@ export class SGameManager
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         REGame.system.mainPlayerEntityId = firstActor.entityId();
-        const unit = firstActor.findBehavior(REUnitBehavior);
+        const unit = firstActor.findBehavior(LUnitBehavior);
         if (unit) {
             unit.setManualMovement(true);
         }

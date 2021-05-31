@@ -5,9 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug Jest",
             "type": "node",
             "request": "launch",
-            "name": "Debug Jest",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -33,7 +33,7 @@
             "sourceMaps": true,
         },
         {
-            "name": "Launch",
+            "name": "Debug Chrome",
             "type": "chrome",
             "request": "launch",
             "file": "${workspaceRoot}/index.html",

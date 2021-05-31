@@ -29,7 +29,7 @@ import { REData } from "ts/data/REData";
 /**
  * 
  */
-export class REUnitBehavior extends LBehavior {
+export class LUnitBehavior extends LBehavior {
     
     _factionId: number = REData.system.factions.neutral;
     _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
@@ -45,19 +45,19 @@ export class REUnitBehavior extends LBehavior {
     
 
     factionId(): number { return this._factionId; }
-    setFactionId(value: number): REUnitBehavior { this._factionId = value; return this; }
+    setFactionId(value: number): LUnitBehavior { this._factionId = value; return this; }
 
     speedLevel(): number { return this._speedLevel; }
-    setSpeedLevel(value: number): REUnitBehavior { this._speedLevel = value; return this; }
+    setSpeedLevel(value: number): LUnitBehavior { this._speedLevel = value; return this; }
 
     waitTurnCount(): number { return this._waitTurnCount; }
-    setWaitTurnCount(value: number): REUnitBehavior { this._waitTurnCount = value; return this; }
+    setWaitTurnCount(value: number): LUnitBehavior { this._waitTurnCount = value; return this; }
 
     manualMovement(): boolean { return this._manualMovement; }
-    setManualMovement(value: boolean): REUnitBehavior { this._manualMovement = value; return this; }
+    setManualMovement(value: boolean): LUnitBehavior { this._manualMovement = value; return this; }
 
     actionTokenCount(): number { return this._actionTokenCount; }
-    setActionTokenCount(value: number): REUnitBehavior { this._actionTokenCount = value; return this; }
+    setActionTokenCount(value: number): LUnitBehavior { this._actionTokenCount = value; return this; }
     clearActionTokenCount(): void { this._actionTokenCount = 0; }
 
 

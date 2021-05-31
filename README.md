@@ -21,6 +21,9 @@ npm run test
 npm run test -- -t Basic1
 ```
 
+```
+code --install-extension msjsdiag.debugger-for-chrome
+```
 
 
 

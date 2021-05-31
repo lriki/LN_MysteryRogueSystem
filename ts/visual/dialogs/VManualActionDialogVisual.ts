@@ -9,7 +9,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
 import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
@@ -81,7 +81,7 @@ export class VManualActionDialogVisual extends VDialog {
 
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
-            entity.getBehavior(REUnitBehavior)._fastforwarding = true;
+            entity.getBehavior(LUnitBehavior)._fastforwarding = true;
             this._model.consumeAction();
             this._model.submit();
             return;
@@ -310,7 +310,7 @@ export class VManualActionDialogVisual extends VDialog {
             SMomementCommon.checkPassageToDir(entity, dir)) {
 
             if (this.isDashButtonPressed()) {
-                const behavior = entity.findBehavior(REUnitBehavior);
+                const behavior = entity.findBehavior(LUnitBehavior);
                 assert(behavior);
                 behavior._straightDashing = true;
             }

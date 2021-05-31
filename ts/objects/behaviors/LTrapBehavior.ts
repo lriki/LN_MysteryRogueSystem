@@ -11,7 +11,7 @@ import { LItemBehavior } from "./LItemBehavior";
 import { DEffectCause } from "ts/data/DEffect";
 import { LEntity } from "../LEntity";
 import { LUnitAttribute } from "../attributes/LUnitAttribute";
-import { REUnitBehavior } from "./REUnitBehavior";
+import { LUnitBehavior } from "./LUnitBehavior";
 
 
 /**
@@ -63,7 +63,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     private checkValidTarget(entity: LEntity): boolean {
-        const unit = entity.findBehavior(REUnitBehavior);
+        const unit = entity.findBehavior(LUnitBehavior);
         if (!unit) return false;
         return unit.factionId() === REData.system.trapTargetFactionId;
     }

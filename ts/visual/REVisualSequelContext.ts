@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { REGame } from "ts/objects/REGame";
 import { SSequelUnit, SSequelClip, SMotionSequel, SAnumationSequel, SSequelRun, SWaitSequel, SBalloonSequel } from "ts/system/SSequel";
 import { RESystem } from "ts/system/RESystem";
@@ -46,7 +46,7 @@ export class REVisualSequelContext {
     public isDashing(): boolean {
         const entty = REGame.camera.focusedEntity();
         if (!entty) return false;
-        const behavior = entty.findBehavior(REUnitBehavior);
+        const behavior = entty.findBehavior(LUnitBehavior);
         if (!behavior) return false;
         return behavior._straightDashing || behavior._fastforwarding;
     }

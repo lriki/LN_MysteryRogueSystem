@@ -7,7 +7,7 @@ import { LNapStateBehavior } from "ts/objects/states/LNapStateBehavior";
 import { LKnockbackBehavior } from "ts/objects/abilities/LKnockbackBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
-import { REUnitBehavior } from "ts/objects/behaviors/REUnitBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
@@ -29,7 +29,7 @@ export class SBehaviorFactory {
     private static _behaviorEntries: SBehaviorFactoryEntry[] = [
         { fullName: "LCommonBehavior", friendlyName: "_Common", create: () => new LCommonBehavior() },
         { fullName: "REGame_DecisionBehavior", friendlyName: "_Decision", create: () => new REGame_DecisionBehavior() },
-        { fullName: "REUnitBehavior", friendlyName: "_Unit", create: () => new REUnitBehavior() },
+        { fullName: "REUnitBehavior", friendlyName: "_Unit", create: () => new LUnitBehavior() },
         { fullName: "LInventoryBehavior", friendlyName: "_Inventory", create: () => new LInventoryBehavior() },
         { fullName: "LItemUserBehavior", friendlyName: "_ItemUser", create: () => new LItemUserBehavior() },
         { fullName: "LEquipmentUserBehavior", friendlyName: "_EquipmentUser", create: () => new LEquipmentUserBehavior() },

@@ -10,7 +10,7 @@ import { SAIHelper } from "ts/system/SAIHelper";
 import { LEntityId } from "../LObject";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
-import { REUnitBehavior } from "./REUnitBehavior";
+import { LUnitBehavior } from "./LUnitBehavior";
 import { SMomementCommon } from "ts/system/SMomementCommon";
 import { LCharacterAI } from "../LCharacterAI";
 
@@ -28,7 +28,7 @@ export class REGame_DecisionBehavior extends LBehavior {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
 
-            const behavior = entity.getBehavior(REUnitBehavior);
+            const behavior = entity.getBehavior(LUnitBehavior);
             behavior._fastforwarding = false;
 
             if (behavior._straightDashing && SMomementCommon.checkDashStopBlock(entity)) {
