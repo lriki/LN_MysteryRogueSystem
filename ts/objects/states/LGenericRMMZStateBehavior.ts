@@ -6,7 +6,7 @@ import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { DAutoRemovalTiming, DState, DStateId, DStateRestriction } from "ts/data/DState";
 import { assert } from "ts/Common";
-import { REGame_DecisionBehavior } from "../behaviors/REDecisionBehavior";
+import { LDecisionBehavior } from "../behaviors/LDecisionBehavior";
 import { REGame } from "../REGame";
 
 export class LGenericRMMZStateBehavior extends LBehavior {

@@ -29,7 +29,7 @@ import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
  * HC4 の時に実装したリアクションコマンド形式がいいかも。
  * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
-export class REExitPointBehavior extends LBehavior {
+export class LExitPointBehavior extends LBehavior {
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.homeLayer)
             return BlockLayerKind.Ground;

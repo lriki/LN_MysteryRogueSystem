@@ -2,9 +2,9 @@ import { LEntity } from "../objects/LEntity";
 import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REData } from "../data/REData";
 import { REGame } from "../objects/REGame";
-import { REGame_DecisionBehavior } from "../objects/behaviors/REDecisionBehavior";
+import { LDecisionBehavior } from "../objects/behaviors/LDecisionBehavior";
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
-import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
+import { LExitPointBehavior } from "ts/objects/behaviors/LExitPointBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
@@ -30,7 +30,7 @@ export class SEntityFactory {
         e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
-        e.addBehavior(REGame_DecisionBehavior);
+        e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.player);
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LItemUserBehavior);
@@ -46,7 +46,7 @@ export class SEntityFactory {
         e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
-        e.addBehavior(REGame_DecisionBehavior);
+        e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
         e.addBehavior(LEnemyBehavior, monsterId);
         return e;
@@ -99,7 +99,7 @@ export class SEntityFactory {
 
     static newExitPoint(): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addBehavior(REExitPointBehavior);
+        e.addBehavior(LExitPointBehavior);
         e.addBehavior(LProjectableBehavior);
         return e;
     }

@@ -4,7 +4,7 @@ import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
-import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
+import { LExitPointBehavior } from "ts/objects/behaviors/LExitPointBehavior";
 import { REGame } from "ts/objects/REGame";
 import { TileShape } from "ts/objects/LBlock";
 import { RMMZHelper } from "ts/rmmz/RMMZHelper";
@@ -164,7 +164,7 @@ export class SMinimapData {
                             this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
                         }
                     }
-                    else if (entity.hasBehavior(REExitPointBehavior)) {
+                    else if (entity.hasBehavior(LExitPointBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);
                     }
                 }

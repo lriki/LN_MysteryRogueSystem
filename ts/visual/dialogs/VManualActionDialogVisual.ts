@@ -16,7 +16,7 @@ import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMomementCommon } from "ts/system/SMomementCommon";
-import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
+import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 
 enum UpdateMode {

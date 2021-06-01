@@ -6,12 +6,12 @@ import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LNapStateBehavior } from "ts/objects/states/LNapStateBehavior";
 import { LKnockbackBehavior } from "ts/objects/abilities/LKnockbackBehavior";
 import { LCommonBehavior } from "ts/objects/behaviors/LCommonBehavior";
-import { REGame_DecisionBehavior } from "ts/objects/behaviors/REDecisionBehavior";
+import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LItemUserBehavior } from "ts/objects/behaviors/LItemUserBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
-import { REExitPointBehavior } from "ts/objects/behaviors/REExitPointBehavior";
+import { LExitPointBehavior } from "ts/objects/behaviors/LExitPointBehavior";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
@@ -28,13 +28,13 @@ interface SBehaviorFactoryEntry {
 export class SBehaviorFactory {
     private static _behaviorEntries: SBehaviorFactoryEntry[] = [
         { fullName: "LCommonBehavior", friendlyName: "_Common", create: () => new LCommonBehavior() },
-        { fullName: "REGame_DecisionBehavior", friendlyName: "_Decision", create: () => new REGame_DecisionBehavior() },
+        { fullName: "REGame_DecisionBehavior", friendlyName: "_Decision", create: () => new LDecisionBehavior() },
         { fullName: "REUnitBehavior", friendlyName: "_Unit", create: () => new LUnitBehavior() },
         { fullName: "LInventoryBehavior", friendlyName: "_Inventory", create: () => new LInventoryBehavior() },
         { fullName: "LItemUserBehavior", friendlyName: "_ItemUser", create: () => new LItemUserBehavior() },
         { fullName: "LEquipmentUserBehavior", friendlyName: "_EquipmentUser", create: () => new LEquipmentUserBehavior() },
         { fullName: "LActorBehavior", friendlyName: "_Actor", create: () => new LActorBehavior() },
-        { fullName: "REExitPointBehavior", friendlyName: "_ExitPoint", create: () => new REExitPointBehavior() },
+        { fullName: "REExitPointBehavior", friendlyName: "_ExitPoint", create: () => new LExitPointBehavior() },
         { fullName: "LEntryPointBehavior", friendlyName: "_EntryPoint", create: () => new LEntryPointBehavior() },
         { fullName: "LEnemyBehavior", friendlyName: "_Enemy", create: () => new LEnemyBehavior() },
         { fullName: "LGenericRMMZStateBehavior", friendlyName: "_GenericRMMZState", create: () => new LGenericRMMZStateBehavior() },

@@ -20,7 +20,7 @@ import { LCharacterAI } from "../LCharacterAI";
  * この Behavior は標準的な行動決定のみ行う。
  * 状態異常による行動制限(&経過ターンのデクリメント)・暴走は、状態異常の Behavior 側で onDecisionPhase() をフックして実装する。
  */
-export class REGame_DecisionBehavior extends LBehavior {
+export class LDecisionBehavior extends LBehavior {
     _characterAI: LCharacterAI = new LCharacterAI();
 
 
