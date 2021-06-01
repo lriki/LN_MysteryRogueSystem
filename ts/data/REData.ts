@@ -10,7 +10,7 @@ import { DItem } from "./DItem";
 import { DLand, DLand_Default } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DSequel } from "./DSequel";
-import { RE_Data_Monster } from "./DEnemy";
+import { DEnemy } from "./DEnemy";
 import { DAction, DActionId } from "./DAction";
 import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
@@ -164,7 +164,7 @@ export class REData
     static entityKinds: DEntityKind[] = [];
     static classes: DClass[] = [];
     static actors: RE_Data_Actor[] = [];
-    static monsters: RE_Data_Monster[] = [];
+    static monsters: DEnemy[] = [];
     static lands: DLand[] = [DLand_Default()];
     static maps: DMap[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static templateMaps: DTemplateMap[] = [];

@@ -11,7 +11,7 @@ import { FMap } from "ts/floorgen/FMapData";
 import { REData } from "ts/data/REData";
 import { LObjectType } from "ts/objects/LObject";
 import { BlockLayerKind, LBlock } from "ts/objects/LBlock";
-import { SMomementCommon } from "./SMomementCommon";
+import { SMovementCommon } from "./SMovementCommon";
 
 
 /**
@@ -88,7 +88,7 @@ export class SMapManager {
                         const block = this.findSpawnableBlockRandom(layer);
                         assert(block);
                         
-                        SMomementCommon.locateEntity(entity, block.x(), block.y());
+                        SMovementCommon.locateEntity(entity, block.x(), block.y());
                         
                         //const block = this.block(entity.x, entity.y);
                         //const layer = entity.queryProperty(RESystem.properties.homeLayer);
@@ -154,7 +154,7 @@ export class SMapManager {
 
                 // TODO: 複数 Entity が重なるときの対策
 
-                SMomementCommon.locateEntity(entity, entryPoint.mx(), entryPoint.my());
+                SMovementCommon.locateEntity(entity, entryPoint.mx(), entryPoint.my());
             }
         }
     }

@@ -22,7 +22,7 @@ interface Edge {
     endOffset: number;
 }
 
-export class SMomementCommon {
+export class SMovementCommon {
     // 8 を基準に時計回り
     private static readonly _edgeOffsetTable: number[] = [
         0,
@@ -143,10 +143,10 @@ export class SMomementCommon {
      */
     public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
         const map = REGame.map;
-        if (SMomementCommon.isDiagonalMoving(d)) {
+        if (SMovementCommon.isDiagonalMoving(d)) {
             // 斜め場合
-            const fl = SMomementCommon.rotatePositionByDir(7, d);  // 左前
-            const fr = SMomementCommon.rotatePositionByDir(9, d);  // 右前
+            const fl = SMovementCommon.rotatePositionByDir(7, d);  // 左前
+            const fr = SMovementCommon.rotatePositionByDir(9, d);  // 右前
             const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
             const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
             if (flBlock.isWallLikeShape()) return true;

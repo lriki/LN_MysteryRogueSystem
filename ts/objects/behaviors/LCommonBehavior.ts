@@ -6,7 +6,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../LBlock";
 import { LEntity } from "../LEntity";

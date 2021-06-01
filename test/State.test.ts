@@ -3,7 +3,7 @@ import { SGameManager } from "ts/system/SGameManager";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { LFloorId } from "ts/objects/LFloorId";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";

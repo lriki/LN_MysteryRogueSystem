@@ -23,7 +23,7 @@ import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 
 
 /*
@@ -348,7 +348,7 @@ export class LMap extends LObject
     appearEntity(entity: LEntity, x: number, y: number, layer?: BlockLayerKind): void {
         assert(entity.floorId.isEmpty());
         entity.floorId = this.floorId();
-        SMomementCommon.locateEntity(entity, x, y, layer);
+        SMovementCommon.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
     }
 

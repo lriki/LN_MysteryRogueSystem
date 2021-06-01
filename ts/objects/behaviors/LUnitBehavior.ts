@@ -10,7 +10,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DActionId } from "ts/data/DAction";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 import { SEffectContext, SEffectSubject } from "ts/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
@@ -120,7 +120,7 @@ export class LUnitBehavior extends LBehavior {
             const offset = Helpers.dirToTileOffset(activity.direction());
 
             const layer = self.queryProperty(RESystem.properties.homeLayer);
-            if (SMomementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, layer)) {
+            if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
@@ -269,7 +269,7 @@ export class LUnitBehavior extends LBehavior {
 
 
             // 相手の方向を向く
-            self.dir = SMomementCommon.getLookAtDir(self, effectContext.effectorFact().subject());
+            self.dir = SMovementCommon.getLookAtDir(self, effectContext.effectorFact().subject());
 
             return REResponse.Succeeded;
         }

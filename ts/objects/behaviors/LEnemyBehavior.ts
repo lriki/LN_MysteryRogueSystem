@@ -1,12 +1,10 @@
 
 import { assert } from "ts/Common";
-import { DEnemyId, RE_Data_Monster } from "ts/data/DEnemy";
+import { DEnemyId, DEnemy } from "ts/data/DEnemy";
 import { DParameterId } from "ts/data/DParameter";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
-import { isThisTypeNode } from "typescript";
 import { LBattlerBehavior } from "./LBattlerBehavior";
-import { LBehavior } from "./LBehavior";
 
 
 /**
@@ -31,7 +29,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
         return this._enemyId;
     }
 
-    public enemyData(): RE_Data_Monster {
+    public enemyData(): DEnemy {
         assert(this._enemyId > 0);
         return REData.monsters[this._enemyId];
     }

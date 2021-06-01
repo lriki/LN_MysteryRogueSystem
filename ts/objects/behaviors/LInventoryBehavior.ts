@@ -59,8 +59,6 @@
  */
 
 import { assert } from "ts/Common";
-import { REResponse } from "ts/system/RECommand";
-import { SCommandContext } from "ts/system/SCommandContext";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";

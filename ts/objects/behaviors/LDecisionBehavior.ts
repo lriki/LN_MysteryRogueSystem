@@ -11,7 +11,7 @@ import { LEntityId } from "../LObject";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 import { LUnitBehavior } from "./LUnitBehavior";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 import { LCharacterAI } from "../LCharacterAI";
 
 /**
@@ -31,7 +31,7 @@ export class LDecisionBehavior extends LBehavior {
             const behavior = entity.getBehavior(LUnitBehavior);
             behavior._fastforwarding = false;
 
-            if (behavior._straightDashing && SMomementCommon.checkDashStopBlock(entity)) {
+            if (behavior._straightDashing && SMovementCommon.checkDashStopBlock(entity)) {
                 context.postActivity(LMoveAdjacentActivity.make(entity, entity.dir));
                 context.postConsumeActionToken(entity);
                 return SPhaseResult.Handled;

@@ -13,7 +13,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
 import { SActivityFactory } from "ts/system/SActivityFactory";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { DialogSubmitMode } from "ts/system/SDialog";

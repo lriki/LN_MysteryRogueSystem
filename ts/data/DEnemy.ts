@@ -1,4 +1,3 @@
-import { DParameterId } from "./DParameter";
 
 export type DEnemyId = number;
 
@@ -11,7 +10,7 @@ export type DEnemyId = number;
  * やっぱりナシ。
  * ツクールと連携するので、Enemy という名前の方がデータの対応がわかりやすい。
  */
-export interface RE_Data_Monster
+export interface DEnemy
 {
     /** ID (0 is Invalid). */
     id: DEnemyId;

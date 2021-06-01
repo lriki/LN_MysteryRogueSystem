@@ -10,7 +10,7 @@ import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { onAttackReaction } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { DEffectCause } from "ts/data/DEffect";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 
 export abstract class LSkillBehavior {
     abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void;
@@ -44,7 +44,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                     //effectContext.addEffector(effector);
 
 
-                    if (SMomementCommon.checkDiagonalWallCornerCrossing(entity, entity.dir)) {
+                    if (SMovementCommon.checkDiagonalWallCornerCrossing(entity, entity.dir)) {
                         // 斜め向きで壁の角と交差しているので通常攻撃は通らない
                     }
                     else {

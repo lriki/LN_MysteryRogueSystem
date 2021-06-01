@@ -10,7 +10,7 @@ import { REData } from "ts/data/REData";
 import { LLand } from "./LLand";
 import { DLandId } from "ts/data/DLand";
 import { LParty, LPartyId } from "./LParty";
-import { SMomementCommon } from "ts/system/SMomementCommon";
+import { SMovementCommon } from "ts/system/SMovementCommon";
 import { RESystem } from "ts/system/RESystem";
 
 /**
@@ -222,7 +222,7 @@ export class LWorld
         if (REGame.map.floorId() == floorId) {
             // 現在表示中のマップへの移動
             entity.floorId = floorId;
-            SMomementCommon.locateEntity(entity, x, y);
+            SMovementCommon.locateEntity(entity, x, y);
             REGame.map._addEntityInternal(entity);
         }
         else {
