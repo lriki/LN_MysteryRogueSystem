@@ -1,4 +1,3 @@
-import { LAttribute } from "ts/objects/attributes/LAttribute";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
@@ -188,7 +187,6 @@ export class REData
     //static rmmzWeaponTypeIdOffset: number = 0;
     //static rmmzArmorTypeIdOffset: number = 0;
 
-    static _attributeFactories: (() => LAttribute)[] = [];
     static _behaviorFactories: (() => LBehavior)[] = [];
 
     static reset() {
@@ -216,7 +214,6 @@ export class REData
         this.items = [];
 
         this.states = [DState_makeDefault()];
-        this._attributeFactories = [() => new LAttribute()];
         this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
     }
@@ -289,16 +286,6 @@ export class REData
     }
     */
 
-    static addAttribute(name: string, factory: (() => LAttribute)): number {
-        const newId = this.attributes.length;
-        this.attributes.push({
-            id: newId,
-            name: name,
-        });
-        this._attributeFactories.push(factory);
-        return newId;
-    }
-    
     static addBehavior(name: string, factory: (() => LBehavior)): number {
         const newId = this.behaviors.length;
         this.behaviors.push({

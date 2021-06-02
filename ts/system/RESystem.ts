@@ -53,14 +53,6 @@ export class RESystem {
     
 
     static skillBehaviors: LSkillBehavior[];
-
-
-
-    static createAttribute(dataId: number) {
-        const i = REData._attributeFactories[dataId]();
-        i.dataId = dataId;
-        return i;
-    }
 }
 
 

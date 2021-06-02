@@ -1,4 +1,3 @@
-import { LAttribute } from "./attributes/LAttribute";
 import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
@@ -89,10 +88,6 @@ enum BlockLayer
  */
 export class LEntity extends LObject
 {
-    
-
-    attrbutes: LAttribute[] = [];
-
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
 
     _partyId: LPartyId = 0;
@@ -274,13 +269,6 @@ export class LEntity extends LObject
             return undefined;
         else
             return REGame.world.party(this._partyId);
-    }
-
-    addAttribute(value: LAttribute) {
-        assert(value._ownerEntityId.isEmpty());
-        this.attrbutes.push(value);
-        value._ownerEntityId = this.entityId();
-        return this;
     }
 
     /**
@@ -532,17 +520,6 @@ export class LEntity extends LObject
         return !this.isDestroyed();
     }
 
-
-    findAttribute<T>(ctor: { new(...args: any[]): T }): T | undefined {
-        for (let i = 0; i < this.attrbutes.length; i++) {
-            const a = this.attrbutes[i];
-            if (a instanceof ctor) {
-                return a as T;
-            }
-        }
-        return undefined;
-    }
-    
     findBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T | undefined {
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             const a = REGame.world.behavior(this._basicBehaviors[i]);
@@ -743,7 +720,6 @@ export class LEntity extends LObject
         contents.floorId = this.floorId;
         contents.x = this.x;
         contents.y = this.y;
-        contents.attrbutes = this.attrbutes;
         contents.behaviors = this._basicBehaviors;
         return contents;
     }
@@ -753,11 +729,7 @@ export class LEntity extends LObject
         this.floorId = contents.floorId;
         this.x = contents.x;
         this.y = contents.y;
-        this.attrbutes = contents.attrbutes.map((x: any) => {
-            const i = RESystem.createAttribute(x.dataId);
-            Object.assign(i, x);
-            return i;
-        });
+
         this._basicBehaviors = contents.behaviors;
     }
 
