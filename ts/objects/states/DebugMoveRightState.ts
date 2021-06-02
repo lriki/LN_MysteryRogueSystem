@@ -8,6 +8,11 @@ import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 
 export class LDebugMoveRightState extends LBehavior {
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LDebugMoveRightState);
+        return b
+    }
+
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.AIMinor) {

@@ -3,6 +3,7 @@ import { DBasics } from "ts/data/DBasics";
 import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LEntity } from "../LEntity";
+import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 
@@ -10,6 +11,11 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
  * 
  */
 export class LSurvivorBehavior extends LBehavior {
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LSurvivorBehavior);
+        return b
+    }
 
     onAttached(): void {
         //const battler = this.ownerEntity().getBehavior(LBattlerBehavior);

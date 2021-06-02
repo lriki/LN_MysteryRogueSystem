@@ -1,6 +1,8 @@
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
+import { LEntity } from "../LEntity";
+import { REGame } from "../REGame";
 import { LBehavior } from "./LBehavior";
 
 
@@ -10,6 +12,12 @@ import { LBehavior } from "./LBehavior";
 export class LItemBehavior extends LBehavior {
 
     private _itemId: DItemDataId = 0;
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LItemBehavior);
+        b._itemId = this._itemId;
+        return b
+    }
 
     public constructor() {
         super();

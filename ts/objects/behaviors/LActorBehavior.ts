@@ -5,6 +5,9 @@ import { DClass } from "ts/data/DClass";
 import { DParameterId } from "ts/data/DParameter";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
+import { LBehavior } from "../internal";
+import { LEntity } from "../LEntity";
+import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 
 /**
@@ -15,6 +18,16 @@ export class LActorBehavior extends LBattlerBehavior {
     _level: number = 0;
     _exp: number[] = [];
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LActorBehavior);
+        throw new Error("Not implemented.");    // TODO: base の LBattlerBehavior のコピー
+        b._actorId = this._actorId;
+        b._classId = this._classId;
+        b._level = this._level;
+        b._exp = this._exp;
+        return b
+    }
+    
     public constructor() {
         super();
     }

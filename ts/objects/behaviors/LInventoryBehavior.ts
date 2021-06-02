@@ -68,6 +68,14 @@ export class LInventoryBehavior extends LBehavior {
     private _entities: LEntityId[] = [];
     private _gold: number = 0;
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LInventoryBehavior);
+        throw new Error("Not implemented.");    // TODO: Item 自体もコピーしないとだめかも
+        b._entities = this._entities.slice();
+        b._gold = this._gold;
+        return b
+    }
+
     public entities(): LEntity[] {
         return this._entities.map(x => REGame.world.entity(x));
     }

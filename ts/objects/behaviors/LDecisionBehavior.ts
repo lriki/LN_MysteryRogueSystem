@@ -23,6 +23,12 @@ import { LCharacterAI } from "../LCharacterAI";
 export class LDecisionBehavior extends LBehavior {
     _characterAI: LCharacterAI = new LCharacterAI();
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LDecisionBehavior);
+        throw new Error("Not implemented.");    // TODO: LCharacterAI のコピー
+        //b._characterAI = this._enemyId;
+        return b
+    }
 
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
 

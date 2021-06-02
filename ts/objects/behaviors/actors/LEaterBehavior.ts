@@ -7,10 +7,15 @@ import { REResponse } from "ts/system/RECommand";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LBehavior, onEatReaction } from "../LBehavior";
+import { REGame } from "ts/objects/REGame";
 
 
 export class LEaterBehavior extends LBehavior {
     
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LEaterBehavior);
+        return b
+    }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
         actions.push(DBasics.actions.EatActionId);

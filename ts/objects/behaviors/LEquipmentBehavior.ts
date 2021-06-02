@@ -5,6 +5,7 @@ import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { LObject } from "../LObject";
+import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, testPickOutItem } from "./LBehavior";
 import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
@@ -13,6 +14,10 @@ import { LItemBehavior } from "./LItemBehavior";
 
 export class LEquipmentBehavior extends LBehavior {
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LEquipmentBehavior);
+        return b
+    }
     
     onAttached(): void {
         assert( this.ownerEntity().hasBehavior(LItemBehavior));

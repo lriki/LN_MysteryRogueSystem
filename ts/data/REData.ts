@@ -214,7 +214,7 @@ export class REData
         this.items = [];
 
         this.states = [DState_makeDefault()];
-        this._behaviorFactories = [() => new LBehavior()];
+        //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
     }
 

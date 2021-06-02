@@ -16,6 +16,12 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     constructor() {
         super();
     }
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LGenericRMMZStateBehavior);
+        b._stateTurn = this._stateTurn;
+        return b
+    }
     
     // Game_BattlerBase.prototype.isStateExpired 
     private isStateExpired(): boolean {

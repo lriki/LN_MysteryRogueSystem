@@ -11,6 +11,7 @@ import { LItemBehavior } from "./LItemBehavior";
 import { DEffectCause } from "ts/data/DEffect";
 import { LEntity } from "../LEntity";
 import { LUnitBehavior } from "./LUnitBehavior";
+import { REGame } from "../REGame";
 
 
 /**
@@ -32,6 +33,12 @@ export class LTrapBehavior extends LBehavior {
 
     constructor() {
         super();
+    }
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LTrapBehavior);
+        b._exposed = this._exposed;
+        return b
     }
 
     /**

@@ -50,6 +50,12 @@ NOTE:
     private _slots: SlotPart2[] = [];
     private _revisitonNumber: number = 0;
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LEquipmentUserBehavior);
+        throw new Error("Not implemented."); // TODO: コピーされたインベントリから参照しないとダメでは？
+        return b
+    }
+
     public isEquipped(item: LEntity): boolean {
         const entityId = item.entityId();
         return this._slots.findIndex(part => part.itemEntityId.equals(entityId)) >= 0;

@@ -29,6 +29,13 @@ export class LProjectableBehavior extends LBehavior {
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
     //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LProjectableBehavior);
+        b.blowDirection = this.blowDirection;
+        b.blowMoveCount = this.blowMoveCount;
+        return b
+    }
+
     public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
         const common = entity.findBehavior(LProjectableBehavior);
         assert(common);

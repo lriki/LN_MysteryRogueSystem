@@ -28,6 +28,7 @@ import { SMapManager } from "./SMapManager";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
+import { LBlock } from "ts/objects/LBlock";
 
 /**
  */
@@ -55,6 +56,7 @@ export class SGameManager
         REGame.message = new LMessage();
         REGame.eventServer = new LEventServer();
         REGame.floorDirector = new LFloorDirector();
+        REGame.borderWall = new LBlock(-1, -1);
 
         
         REGame.world._registerObject(REGame.map);

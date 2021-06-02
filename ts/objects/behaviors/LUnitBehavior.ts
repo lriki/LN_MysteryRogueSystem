@@ -40,6 +40,19 @@ export class LUnitBehavior extends LBehavior {
 
     _straightDashing: boolean = false;
     _fastforwarding: boolean = false;
+    
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LUnitBehavior);
+        b._factionId = this._factionId;
+        b._speedLevel = this._speedLevel;
+        b._waitTurnCount = this._waitTurnCount;
+        b._manualMovement = this._manualMovement;
+        b._actionTokenCount = this._actionTokenCount;
+        b._targetingEntityId = this._targetingEntityId;
+        b._straightDashing = this._straightDashing;
+        b._fastforwarding = this._fastforwarding;
+        return b
+    }
 
     // Battler params
     

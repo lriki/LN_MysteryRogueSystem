@@ -4,6 +4,9 @@ import { DEnemyId, DEnemy } from "ts/data/DEnemy";
 import { DParameterId } from "ts/data/DParameter";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
+import { LBehavior } from "../internal";
+import { LEntity } from "../LEntity";
+import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 
 
@@ -12,6 +15,13 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 export class LEnemyBehavior extends LBattlerBehavior {
 
     private _enemyId: DEnemyId = 0;
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LEnemyBehavior);
+        throw new Error("Not implemented.");    // TODO: base の LBattlerBehavior のコピー
+        b._enemyId = this._enemyId;
+        return b
+    }
 
     public constructor() {
         super();

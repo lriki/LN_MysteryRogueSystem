@@ -7,6 +7,8 @@ import { RECommand, REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
+import { LEntity } from "../LEntity";
+import { REGame } from "../REGame";
 
 /**
  * [2020/11/1] NOTE: Player が乗ったときの UI 表示タイミング
@@ -30,6 +32,12 @@ import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
  * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
 export class LExitPointBehavior extends LBehavior {
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LExitPointBehavior);
+        return b
+    }
+
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.homeLayer)
             return BlockLayerKind.Ground;

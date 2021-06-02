@@ -15,6 +15,13 @@ import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePr
 export class LMagicBulletBehavior extends LBehavior {
     private _ownerItemEntityId: LEntityId = LEntityId.makeEmpty();
 
+
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LMagicBulletBehavior);
+        throw new Error("Not implemented.");    // TODO: _ownerItemEntityId の取り方
+        return b
+    }
+
     public setup(ownerItem: LEntity): void {
         this._ownerItemEntityId = ownerItem.entityId();
     }
@@ -91,12 +98,6 @@ export class LMagicBulletBehavior extends LBehavior {
     [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
         const ownerItem = REGame.world.entity(this._ownerItemEntityId);
         const target = args.sender;
-
-        
-
-        console.log("LMagicBulletBehavior.onCollideAction");
-        console.log("ownerItem", ownerItem.basicBehaviors());
-        console.log("abilities", ownerItem.abilities());
 
         // ownerItem の onCollideAction へ中継する
         context.post(ownerItem, target, args.subject, args.args, onCollideAction);

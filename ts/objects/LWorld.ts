@@ -133,6 +133,16 @@ export class LWorld
         return entity;
     }
 
+    /**
+     * インスタンスを作成し、World に登録する。
+     * この後、何らかの親オブジェクトに属さない場合、GC で削除される。
+     */
+    public spawn<T extends LObject>(ctor: { new(...args: any[]): T }) {
+        const obj = new ctor();
+        this._registerObject(obj);
+        return obj;
+    }
+
     public newParty(): LParty {
         const party = new LParty();
         const index = this._parties.findIndex((x, i) => i > 0 && x == undefined);
@@ -239,7 +249,6 @@ export class LWorld
 
         // Land 間移動が行われた
         if (oldLandId != floorId.landId()) {
-            console.log("onEntityLandLeaved", oldLandId, floorId.landId(), entity);
             RESystem.groundRules.onEntityLandLeaved(entity);
         }
 

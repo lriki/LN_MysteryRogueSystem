@@ -34,6 +34,20 @@ export class LAbility extends LObject {
         super(LObjectType.Ability);
     }
 
+    public clone(newOwner: LEntity): LAbility {
+        const ability = new LAbility();
+        REGame.world._registerObject(ability);
+        ability._abilityId = this._abilityId;
+
+        for (const i of this.behabiors()) {
+            const i2 = i.clone(newOwner);
+            ability._behabiorIds.push(i2.id());
+            i2.setParent(this);
+        }
+        
+        return ability;
+    }
+
     public id(): LAbilityId {
         return this.__objectId();
     }

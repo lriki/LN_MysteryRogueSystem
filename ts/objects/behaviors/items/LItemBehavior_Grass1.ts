@@ -7,12 +7,18 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { CommandArgs, LBehavior, onCollideAction, onEatReaction } from "../LBehavior";
 import { LItemBehavior } from "../LItemBehavior";
 import { DEffectCause } from "ts/data/DEffect";
+import { REGame } from "ts/objects/REGame";
 
 /**
  * 
  */
 export class LItemBehavior_Grass1 extends LBehavior {
     
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LItemBehavior_Grass1);
+        return b
+    }
+
     onQueryReactions(actions: DActionId[]): DActionId[] {
         actions.push(DBasics.actions.EatActionId);
         return actions;

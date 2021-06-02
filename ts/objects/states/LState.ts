@@ -31,6 +31,19 @@ export class LState extends LObject {
         REGame.world._registerObject(this);
     }
 
+    public clone(newOwner: LEntity): LState {
+        const state = new LState();
+        state._stateId = this._stateId;
+
+        for (const i of this.stateBehabiors()) {
+            const i2 = i.clone(newOwner);
+            state._stateBehabiors.push(i2.id());
+            i2.setParent(this);
+        }
+        
+        return state;
+    }
+
     public setup(stateId: DStateId): void {
         assert(stateId > 0);
         this._stateId = stateId;
@@ -108,7 +121,6 @@ export class LState extends LObject {
             func(REGame.world.behavior(id));
         }
     }
-
 
     // deprecated:
     _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {

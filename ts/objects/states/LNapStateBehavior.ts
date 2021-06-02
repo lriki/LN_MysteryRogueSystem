@@ -12,6 +12,12 @@ import { LState } from "./LState";
 export class LNapStateBehavior extends LBehavior {
     private _hostileEnterd: boolean = false;
     
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LNapStateBehavior);
+        b._hostileEnterd = this._hostileEnterd;
+        return b
+    }
+
     onAttached(): void {
         REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
     }

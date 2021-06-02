@@ -90,6 +90,10 @@ export class LBattlerBehavior extends LBehavior {
         }
     }
 
+    public clone(newOwner: LEntity): LBehavior {
+        throw new Error();  // LBattlerBehavior 自体の clone は禁止
+    }
+
     /**
      * すべての状態をリセットする。
      * 

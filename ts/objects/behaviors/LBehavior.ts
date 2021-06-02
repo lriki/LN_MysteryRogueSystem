@@ -158,7 +158,7 @@ export interface CollideActionArgs {
  * 従来は派生クラスで State 用の StateBehavior や Ability 用の AbilityBehavior を作っていたが、これを禁止する。
  * たとえば "ハラヘリ" という Behavior は "ハラヘリ状態異常" や "ハラヘリの腕輪" で共有できるようにしておくことで、カスタマイズ性を確保しておきたい。
  */
-export class LBehavior extends LObject {
+export abstract class LBehavior extends LObject {
     //private _id: LBehaviorId = { index: 0, key: 0 };
     //private _ownerObjectId: LObjectId = { index: 0, key: 0 };
     
@@ -287,6 +287,8 @@ export class LBehavior extends LObject {
     //public removeThisState(): void {
     //    this.ownerAs(LState)?.removeThisState();
     //}
+
+    public abstract clone(newOwner: LEntity): LBehavior;
 }
 
 /*

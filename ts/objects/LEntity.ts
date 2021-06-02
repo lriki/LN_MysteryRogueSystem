@@ -278,9 +278,25 @@ export class LEntity extends LObject
      * そうしなければ GC により削除される。
      */
     public clone(): LEntity {
-        const e = REGame.world.spawnEntity();
+        const entity = REGame.world.spawnEntity();
 
-        return e;
+        for (const i of this.basicBehaviors()) {
+            const i2 = i.clone(entity);
+            entity._basicBehaviors.push(i2.id());
+            i2.setParent(this);
+        }
+        for (const i of this.states()) {
+            const i2 = i.clone(entity);
+            entity._states.push(i2.id());
+            i2.setParent(this);
+        }
+        for (const i of this.abilities()) {
+            const i2 = i.clone(entity);
+            entity._abilities.push(i2.id());
+            i2.setParent(this);
+        }
+
+        return entity;
     }
 
     //----------------------------------------

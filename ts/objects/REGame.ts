@@ -44,7 +44,7 @@ export class REGame
     static challengeResultShowing: boolean = false;
 
     // マップ有効範囲外に存在するダミー要素
-    static borderWall: LBlock = new LBlock(-1, -1);
+    static borderWall: LBlock;
 
     /**  */
     static signalFlushSequelSet: ((sequelSet: SSequelSet) => void) | undefined;

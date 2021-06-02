@@ -23,6 +23,11 @@ import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAs
  */
 export class LCommonBehavior extends LBehavior {
 
+    public clone(newOwner: LEntity): LBehavior {
+        const b = REGame.world.spawn(LCommonBehavior);
+        return b
+    }
+
     onQueryActions(actions: DActionId[]): DActionId[] {
         return actions;
         //.concat([
