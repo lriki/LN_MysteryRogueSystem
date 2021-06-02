@@ -1,22 +1,13 @@
 import { assert } from "../Common";
-import { MapDataProvidor } from "./MapDataProvidor";
 import { BlockLayerKind, LRoomId, LBlock, TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
-import { REFloorMapKind, REData } from "../data/REData";
 import { REGame } from "./REGame";
 import { Helpers } from "ts/system/Helpers";
-import { SSequelSet } from "../system/SSequel";
 import { RESystem } from "ts/system/RESystem";
 import { Vector2 } from "ts/math/Vector2";
 import { DFloorInfo, DLand } from "ts/data/DLand";
 import { LEntityId, LObject, LObjectType } from "./LObject";
-import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
-import { FMapBuilder } from "ts/floorgen/FMapBuilder";
-import { DBasics } from "ts/data/DBasics";
-import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
-import { LRoom, MonsterHouseState } from "./LRoom";
-import { LUnitAttribute } from "./attributes/LUnitAttribute";
-import { EmitFlags } from "typescript";
+import { LRoom } from "./LRoom";
 import { LStructure } from "./structures/LStructure";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
@@ -24,6 +15,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
 import { SMovementCommon } from "ts/system/SMovementCommon";
+import { FMap } from "ts/floorgen/FMapData";
 
 
 /*

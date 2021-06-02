@@ -1,6 +1,5 @@
 import { assert } from "ts/Common";
 import { REData } from "ts/data/REData";
-import { LUnitAttribute } from "./attributes/LUnitAttribute";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";

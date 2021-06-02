@@ -1,10 +1,7 @@
 import { DFactionId, REData } from "ts/data/REData";
 import { Vector2 } from "ts/math/Vector2";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
-import { DTraits } from "ts/data/DTraits";
 
 export class Helpers {
     public static _dirToTileOffsetTable: Vector2[] =  [

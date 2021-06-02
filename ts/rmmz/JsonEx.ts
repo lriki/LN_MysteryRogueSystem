@@ -1,6 +1,5 @@
 import { assert } from "ts/Common"
 import { LAbility } from "ts/objects/abilities/LAbility";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LCamera } from "ts/objects/LCamera";
 import { LEffectResult, LParamEffectResult } from "ts/objects/LEffectResult";
 import { LEntity } from "ts/objects/LEntity";
@@ -54,8 +53,6 @@ function createInstance(name: string): any {
             return Object.create(LWorld.prototype);
         case "LEntity":
             return Object.create(LEntity.prototype);
-        case "LUnitAttribute":
-            return Object.create(LUnitAttribute.prototype);
         case "LEffectResult":
             return Object.create(LEffectResult.prototype);
         case "LParamEffectResult":

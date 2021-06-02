@@ -2,18 +2,13 @@
 //   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
 
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
-import { REDirectionChangeArgs, REMoveToAdjacentArgs } from "ts/commands/RECommandArgs";
-import { REData } from "ts/data/REData";
 import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REGame } from "ts/objects/REGame";
 import { SGameManager } from "ts/system/SGameManager";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
-import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { DBasics } from "ts/data/DBasics";
-import { LEntityId } from "ts/objects/LObject";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { DialogSubmitMode } from "ts/system/SDialog";

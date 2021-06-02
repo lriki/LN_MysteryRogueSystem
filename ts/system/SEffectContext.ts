@@ -324,7 +324,6 @@ export class SEffectContext {
         for (const target of targets) {
             const result = this.apply(target);
             
-            console.log("result.showResultMessages");
             result.showResultMessages(commandContext, target);
 
             const battler = target.getBehavior(LBattlerBehavior);

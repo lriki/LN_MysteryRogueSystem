@@ -10,7 +10,6 @@ import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 import { DEffectCause } from "ts/data/DEffect";
 import { LEntity } from "../LEntity";
-import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { LUnitBehavior } from "./LUnitBehavior";
 
 

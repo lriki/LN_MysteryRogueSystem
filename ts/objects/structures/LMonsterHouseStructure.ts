@@ -1,11 +1,9 @@
 import { assert } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
 import { DMonsterHouseId } from "ts/data/DMonsterHouse";
 import { DFactionId, REData } from "ts/data/REData";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { Helpers } from "ts/system/Helpers";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { LUnitAttribute } from "../attributes/LUnitAttribute";
 import { MonsterHouseState } from "../LRoom";
 import { REGame } from "../REGame";
 import { LRoomId } from "../LBlock";

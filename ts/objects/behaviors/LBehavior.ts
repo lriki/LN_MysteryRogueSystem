@@ -118,6 +118,12 @@ export const onProceedFloorReaction = Symbol("onProceedFloorReaction");
  */
 export const onAttackReaction = Symbol("onAttackReaction");
 
+/**
+ * 直接攻撃がヒットし、ダメージを受けた。
+ * - 外れたときは呼ばれない。
+ * - ヤリなど、隣接していなくても呼ばれることがある。
+ */
+export const onDirectAttackDamaged = Symbol("onDirectAttackDamaged");
 
 export interface CollideActionArgs {
     dir: number;    // 飛翔中の Entity の移動方向。必ずしも Entity の向きと一致するわけではないため、Args として渡す必要がある。

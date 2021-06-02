@@ -1,15 +1,13 @@
 import { assert } from "ts/Common";
-import { DSequel, DSequelId } from "ts/data/DSequel";
+import { DSequelId } from "ts/data/DSequel";
 import { Vector2 } from "ts/math/Vector2";
 import { REGame } from "ts/objects/REGame";
-import { LMap } from "ts/objects/LMap";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { REVisualSequelContext } from "ts/visual/REVisualSequelContext";
 import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
 import { SNavigationHelper } from "ts/system/SNavigationHelper";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 
 /**

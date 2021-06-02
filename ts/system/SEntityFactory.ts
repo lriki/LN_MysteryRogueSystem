@@ -1,5 +1,4 @@
 import { LEntity } from "../objects/LEntity";
-import { LUnitAttribute } from "../objects/attributes/LUnitAttribute";
 import { REData } from "../data/REData";
 import { REGame } from "../objects/REGame";
 import { LDecisionBehavior } from "../objects/behaviors/LDecisionBehavior";
@@ -27,7 +26,6 @@ import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
@@ -43,7 +41,6 @@ export class SEntityFactory {
 
     static newMonster(monsterId: number): LEntity {
         const e = REGame.world.spawnEntity();
-        e.addAttribute(new LUnitAttribute());
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);

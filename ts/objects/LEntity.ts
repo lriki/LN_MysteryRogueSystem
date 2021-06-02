@@ -283,6 +283,18 @@ export class LEntity extends LObject
         return this;
     }
 
+    /**
+     * この Entity のクローンを作成し、World に登録する。
+     * Behavior, State など子要素もディープクローンされる。
+     * クローンは特定の親に属していない状態となるため、このあと直ちにマップ上への配置やインベントリへの追加などを行うこと。
+     * そうしなければ GC により削除される。
+     */
+    public clone(): LEntity {
+        const e = REGame.world.spawnEntity();
+
+        return e;
+    }
+
     //----------------------------------------
     // Behavior
 

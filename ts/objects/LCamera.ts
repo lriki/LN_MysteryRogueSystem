@@ -1,7 +1,4 @@
-import { LMap } from "./LMap";
-import { LUnitAttribute } from "./attributes/LUnitAttribute";
 import { LEntity } from "./LEntity";
-import { LWorld } from "./LWorld";
 import { REGame } from "./REGame";
 import { RESystem } from "ts/system/RESystem";
 import { Log } from "ts/Common";

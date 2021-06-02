@@ -1,6 +1,6 @@
 import { REResponse } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
-import { CommandArgs, LBehavior, onAttackReaction, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
+import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { RESystem } from "ts/system/RESystem";
@@ -265,11 +265,20 @@ export class LUnitBehavior extends LBehavior {
         //const effectContext = cmd.effectContext();
         const effectContext: SEffectContext = args.args.effectContext;
         if (effectContext) {
-            effectContext.applyWithWorth(context, [self]);
+            const targets = [self];
+            effectContext.applyWithWorth(context, targets);
 
 
             // 相手の方向を向く
             self.dir = SMovementCommon.getLookAtDir(self, effectContext.effectorFact().subject());
+
+            for (const target of targets) {
+                if (target._effectResult.isHit()) {
+                    context.post(target, self, new SEffectSubject(effectContext.effectorFact().subject()), undefined, onDirectAttackDamaged);
+
+                    
+                }
+            }
 
             return REResponse.Succeeded;
         }

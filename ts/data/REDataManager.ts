@@ -2,8 +2,6 @@
 import fs from 'fs';
 import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
-import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
@@ -201,11 +199,6 @@ export class REDataManager
             AttackActionId: REData.addAction("Attack", ""),
         };
         
-        // Attributes
-        RESystem.attributes = {
-            //tile: REData.addAttribute("Tile", () => new RETileAttribute()),
-            unit: REData.addAttribute("Unit", () => new LUnitAttribute()),
-        };
 
         // Behaviors
         RESystem.behaviors = {

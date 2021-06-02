@@ -1,13 +1,13 @@
 
 import { assert } from "ts/Common";
 import { REGame } from "../objects/REGame";
-import { LUnitAttribute } from "ts/objects/attributes/LUnitAttribute";
 import { LEntity } from "../objects/LEntity";
 import { SCommandContext } from "./SCommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { RESystem } from "./RESystem";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { SDialog } from "./SDialog";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 
 export class SDialogContext
 {
@@ -86,7 +86,7 @@ export class SDialogContext
         if (this._causeEntity) {
             // RMMZイベント起動Dialog では、causeEntity が「階段Entity」等になることがある。
             // 行動順が回らない Entity の ActionToken を消費することはできないのでガードする。
-            if (this._causeEntity.findAttribute(LUnitAttribute)) {
+            if (this._causeEntity.findBehavior(LUnitBehavior)) {
                 this._commandContext.postConsumeActionToken(this._causeEntity);
             }
             
