@@ -159,7 +159,14 @@ export class REVisualSequelContext {
         this._frameCount = 0;
         this._cancellationLocked = false;
         this._cuurentFinished = false;
-        this._startPosition = Vector2.clone(this._entityVisual.position());
+        if (sequel.hasStartPosition()) {
+            this._startPosition.x = sequel.startX();
+            this._startPosition.y = sequel.startY();
+            this._entityVisual.setPosition(new Vector2(this._startPosition.x, this._startPosition.y));
+        }
+        else {
+            this._startPosition = Vector2.clone(this._entityVisual.position());
+        }
     }
 
     private _startAnimation(unit: SAnumationSequel) {

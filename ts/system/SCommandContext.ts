@@ -235,16 +235,18 @@ export class SCommandContext
         Log.postCommand("openDialog");
     }
 
-    postSequel(entity: LEntity, sequelId: number, args?: any) {
+    postSequel(entity: LEntity, sequelId: number, args?: any): SMotionSequel {
         assert(sequelId > 0);
+        const s = new SMotionSequel(entity, sequelId, args);
         const m1 = () => {
             Log.doCommand("Sequel");
-            this._sequelContext.addSequel(new SMotionSequel(entity, sequelId, args));
+            this._sequelContext.addSequel(s);
             this._visualAnimationWaiting = true;
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Sequel", m1));
         Log.postCommand("Sequel");
+        return s;
     }
     
     // 動きを伴わず、Animation だけ表示するのに使う。 Sequel 作るまでもないものとか。

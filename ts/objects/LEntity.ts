@@ -213,6 +213,49 @@ export class LEntity extends LObject
 
     _located: boolean = false;
 
+    /**
+     * この Entity のクローンを作成し、World に登録する。
+     * Behavior, State など子要素もディープクローンされる。
+     * クローンは特定の親に属していない状態となるため、このあと直ちにマップ上への配置やインベントリへの追加などを行うこと。
+     * そうしなければ GC により削除される。
+     */
+     public clone(): LEntity {
+        const entity = REGame.world.spawnEntity();
+        entity._partyId = this._partyId;
+        entity._name = this._name;
+        entity._displayName = this._displayName;
+        entity._iconName = this._iconName;
+        entity.prefabKey = this.prefabKey;
+        entity.rmmzEventId = 0; // 固定マップのイベントを参照するわけではないのでリセット
+        entity.inhabitsCurrentFloor = this.inhabitsCurrentFloor;
+        entity.floorId = LFloorId.makeEmpty();
+        entity.x = 0;
+        entity.y = 0;
+        entity.dir = this.dir;
+        //entity.blockOccupied = this.blockOccupied;
+        //entity.immediatelyAfterAdjacentMoving = this.immediatelyAfterAdjacentMoving;
+        //entity._effectResult = new LEffectResult();
+        //entity._actionConsumed = this._actionConsumed;
+        //entity._located = this._located;
+
+        for (const i of this.basicBehaviors()) {
+            const i2 = i.clone(entity);
+            entity._basicBehaviors.push(i2.id());
+            i2.setParent(entity);
+        }
+        for (const i of this.states()) {
+            const i2 = i.clone(entity);
+            entity._states.push(i2.id());
+            i2.setParent(entity);
+        }
+        for (const i of this.abilities()) {
+            const i2 = i.clone(entity);
+            entity._abilities.push(i2.id());
+            i2.setParent(entity);
+        }
+
+        return entity;
+    }
 
     onFinalize(): void {
         // 現在マップ上の Entity 削除
@@ -271,33 +314,6 @@ export class LEntity extends LObject
             return REGame.world.party(this._partyId);
     }
 
-    /**
-     * この Entity のクローンを作成し、World に登録する。
-     * Behavior, State など子要素もディープクローンされる。
-     * クローンは特定の親に属していない状態となるため、このあと直ちにマップ上への配置やインベントリへの追加などを行うこと。
-     * そうしなければ GC により削除される。
-     */
-    public clone(): LEntity {
-        const entity = REGame.world.spawnEntity();
-
-        for (const i of this.basicBehaviors()) {
-            const i2 = i.clone(entity);
-            entity._basicBehaviors.push(i2.id());
-            i2.setParent(this);
-        }
-        for (const i of this.states()) {
-            const i2 = i.clone(entity);
-            entity._states.push(i2.id());
-            i2.setParent(this);
-        }
-        for (const i of this.abilities()) {
-            const i2 = i.clone(entity);
-            entity._abilities.push(i2.id());
-            i2.setParent(this);
-        }
-
-        return entity;
-    }
 
     //----------------------------------------
     // Behavior

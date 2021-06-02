@@ -34,6 +34,8 @@ export class SSequelUnit {
 
 export class SMotionSequel extends SSequelUnit {
     private _sequelId: DSequelId;
+    private _startX: number | undefined;
+    private _startY: number | undefined;
 
     constructor(entity: LEntity, sequelId: DSequelId, args: any | undefined) {
         super(entity, REData.sequels[sequelId].parallel, args);
@@ -46,6 +48,25 @@ export class SMotionSequel extends SSequelUnit {
 
     data(): DSequel {
         return REData.sequels[this._sequelId];
+    }
+
+    public setStartPosition(x: number, y: number): void {
+        this._startX = x;
+        this._startY = y;
+    }
+
+    public hasStartPosition(): boolean {
+        return !!this._startX && !!this._startY;
+    }
+
+    public startX(): number {
+        assert(this._startX);
+        return this._startX;
+    }
+
+    public startY(): number {
+        assert(this._startY);
+        return this._startY;
     }
 }
 

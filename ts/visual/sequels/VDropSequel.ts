@@ -17,7 +17,6 @@ export class VDropSequel extends REVisualSequel {
 
         const ratio = context.frameCount() / DROP_TIME;
 
-        console.log("d", context.sequel());
 
         let ox = 0;
         let oy = 0;

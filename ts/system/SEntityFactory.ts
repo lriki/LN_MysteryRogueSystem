@@ -22,6 +22,7 @@ import { DItem } from "ts/data/DItem";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
+import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -46,6 +47,7 @@ export class SEntityFactory {
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
         e.addBehavior(LEnemyBehavior, monsterId);
+        e.addBehavior(LEntityDivisionBehavior);
         return e;
     }
 

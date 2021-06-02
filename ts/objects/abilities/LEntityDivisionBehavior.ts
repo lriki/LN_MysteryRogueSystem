@@ -1,7 +1,9 @@
 import { REResponse } from "ts/system/RECommand";
+import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { LProjectableBehavior } from "../behaviors/activities/LProjectableBehavior";
+import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onDirectAttackDamaged } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -16,6 +18,8 @@ export class LEntityDivisionBehavior extends LBehavior {
 
     [onDirectAttackDamaged](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
+        const battler = self.getBehavior(LBattlerBehavior);
+        if (battler.isDeathStateAffected()) return REResponse.Pass;
 
         const selfBlock = REGame.map.block(self.x, self.y);
 
@@ -25,6 +29,9 @@ export class LEntityDivisionBehavior extends LBehavior {
             const newBlock = candidates[context.random().nextIntWithMax(candidates.length)];
             const newEntity = self.clone();
             REGame.world._transferEntity(newEntity, self.floorId, newBlock.x(), newBlock.y());
+
+            context.postSequel(newEntity, RESystem.sequels.MoveSequel).setStartPosition(self.x, self.y);
+            context.postWaitSequel();
         }
         else {
             // 周囲に空きが無いため分裂できない
