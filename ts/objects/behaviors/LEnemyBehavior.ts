@@ -18,7 +18,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEnemyBehavior);
-        throw new Error("Not implemented.");    // TODO: base の LBattlerBehavior のコピー
+        this.copyTo(b);
         b._enemyId = this._enemyId;
         return b
     }

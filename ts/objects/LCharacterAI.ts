@@ -23,6 +23,15 @@ export class LCharacterAI {
     private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
     private _noActionTurnCount: number = 0;
 
+    public clone(): LCharacterAI {
+        const i = new LCharacterAI();
+        i._targetPositionX = this._targetPositionX;
+        i._targetPositionY = this._targetPositionY;
+        i._attackTargetEntityId = this._attackTargetEntityId.clone();
+        i._noActionTurnCount = this._noActionTurnCount;
+        return i;
+    }
+
     public thinkMoving(self: LEntity, context: SCommandContext): SPhaseResult {
 
 

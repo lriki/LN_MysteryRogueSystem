@@ -29,6 +29,14 @@ export class LParamInstance {
         this._buff = 0;
     }
 
+    public clone(): LParamInstance {
+        const i = new LParamInstance(this._dataId);
+        i._actualParamDamge = this._actualParamDamge;
+        i._idealParamPlus = this._idealParamPlus;
+        i._buff = this._buff;
+        return i;
+    }
+
     public reset(): void {
         this._actualParamDamge = 0;
         this._idealParamPlus = 0;
@@ -92,6 +100,10 @@ export class LBattlerBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         throw new Error();  // LBattlerBehavior 自体の clone は禁止
+    }
+
+    public copyTo(other: LBattlerBehavior): void {
+        other._params = this._params.map(x => x.clone());
     }
 
     /**

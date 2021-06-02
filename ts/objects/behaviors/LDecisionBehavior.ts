@@ -25,9 +25,8 @@ export class LDecisionBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LDecisionBehavior);
-        throw new Error("Not implemented.");    // TODO: LCharacterAI のコピー
-        //b._characterAI = this._enemyId;
-        return b
+        b._characterAI = this._characterAI.clone();
+        return b;
     }
 
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {

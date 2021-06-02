@@ -37,6 +37,12 @@ export class SMovementCommon {
         { x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 0 }, { x: 1, y: 0 }
     ];
 
+    private static adjacentOffsets: number[][] = [
+        [-1, -1], [0, -1], [1, -1],
+        [-1, 0], [1, 0],
+        [-1, 1], [0, 1], [1, 1],
+    ];
+
     /**
      * 向き反転
      */
@@ -75,6 +81,24 @@ export class SMovementCommon {
             case 9: return 6;
             default: return 2;
         }
+    }
+
+    /**
+     * Entity の周囲 8 マスの Block を取得する。(有効座標のみ)
+     */
+    public static getAdjacentBlocks(entity: LEntity): LBlock[] {
+        const map = REGame.map;
+        assert(map.floorId().equals(entity.floorId));
+
+        const blocks: LBlock[] = [];
+        for (const offset of this.adjacentOffsets) {
+            const x = entity.x + offset[0];
+            const y = entity.y + offset[1];
+            if (map.isValidPosition(x, y)) {
+                blocks.push(map.block(x, y));
+            }
+        }
+        return blocks;
     }
 
     /**
@@ -175,7 +199,7 @@ export class SMovementCommon {
      * 
      * 地形のみを判断する点に注意。状態異常などによる移動制限は Behavior など他で行う。
      */
-    private static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, layer?: BlockLayerKind): boolean {
+    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, layer?: BlockLayerKind): boolean {
         const map = REGame.map;
         const actualLayer = layer || entity.queryProperty(RESystem.properties.homeLayer);
 
@@ -414,12 +438,6 @@ export class SMovementCommon {
 
         entity._located = true;
     }
-
-    private static adjacentOffsets: number[][] = [
-        [-1, -1], [0, -1], [1, -1],
-        [-1, 0], [1, 0],
-        [-1, 1], [0, 1], [1, 1],
-    ];
 
     private static markPassed(map: LMap, block: LBlock): void {
         block._passed = true;
