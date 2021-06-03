@@ -40,8 +40,10 @@ test("Abilities.Enemy.Division", () => {
     RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
+    const entityCount = REGame.map.entities().length;
+
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    
-
+    // 分裂でエンティティが増えていること
+    expect(REGame.map.entities().length).toBe(entityCount + 1);
 });

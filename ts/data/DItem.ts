@@ -27,6 +27,14 @@ export type DItemDataId = number;
  * - <RE-Ability: k飲むとブレススキルを発動する>
  * - <RE-Ability: k投げ当てると炎ダメージを与える>
  *
+ * [2021/6/3] Effect と Action は分類するべきかも
+ * ----------
+ * - Effect は何かしらの動作や状況変化をうけて発動する効果。
+ *   - 単にスキル効果を発動するもの
+ *   - 吹き飛ばしのようにスクリプト側で制御する動作を開始するもの
+ * 
+ * 
+ * 
  */
 
 export class DItem {

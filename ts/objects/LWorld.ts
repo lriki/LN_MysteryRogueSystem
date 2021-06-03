@@ -229,7 +229,7 @@ export class LWorld
 
         const oldLandId = entity.floorId.landId();
 
-        if (REGame.map.floorId() == floorId) {
+        if (REGame.map.floorId().equals(floorId)) {
             // 現在表示中のマップへの移動
             entity.floorId = floorId;
             SMovementCommon.locateEntity(entity, x, y);

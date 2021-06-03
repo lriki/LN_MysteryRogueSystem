@@ -47,7 +47,7 @@ export class SEntityFactory {
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
         e.addBehavior(LEnemyBehavior, monsterId);
-        e.addBehavior(LEntityDivisionBehavior);
+        //e.addBehavior(LEntityDivisionBehavior);
         return e;
     }
 
