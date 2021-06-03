@@ -23,7 +23,7 @@ export type DItemDataId = number;
  * 草を飲むことによる FP 回復は Ability ではなく、草アイテム固有の Effect.
  * なので、"火炎草" アイテムの設定は
  * - ダメージ: なし
- * - <RE-Effect:Eat=Param FP +5>
+ * - <RE-Action:Eat=Effect(Param FP +5)>
  * - <RE-Ability: k飲むとブレススキルを発動する>
  * - <RE-Ability: k投げ当てると炎ダメージを与える>
  *
@@ -33,7 +33,26 @@ export type DItemDataId = number;
  *   - 単にスキル効果を発動するもの
  *   - 吹き飛ばしのようにスクリプト側で制御する動作を開始するもの
  * 
+ * Effect は RMMZ エディタ上ではスキルとして作成するのがいいかも。
+ * - パラメータダメージはツクール標準で設定。
+ * - 拡張パラメータは Note で設定。
+ * - 吹き飛ばし効果やブレスは Note で、「ActionEffect」 みたいな名前で設定。
  * 
+ * これを考慮すると「飲むとブレススキルを発動するAbility」は、
+ * - <RE-Action:Eat=Effect(PerformSkill, kSkill_炎ブレス)>
+ * 
+ * 「kSkill_炎ブレス」は、
+ * - <RE-Motion: ブレス>
+ * だけでいいかな。射程目の前だけだし。
+ * 
+ * [2021/6/3] Projectile
+ * ----------
+ * 魔法弾、ドラゴン草、矢、大砲の弾、石、"技"による弾
+ * 
+ * これら、もしかしたら「射程」の一部と考えたほうがよいのかも？
+ * 
+ * 通常攻撃や火炎草は目の前に効果を発動する。
+ * 矢弾は Projectile を出現させる。
  * 
  */
 
