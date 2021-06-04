@@ -30,6 +30,12 @@ module.exports = {
             {
                 test: /\.ts$/,
                 loader: 'ts-loader'
+            },
+            {
+                test: /.(vert|frag)$/,
+                use: 'raw-loader',
+                //include: [path.resolve(__dirname, 'src')],
+                exclude: /node_modules/
             }
         ]
     },

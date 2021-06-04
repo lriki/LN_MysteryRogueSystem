@@ -1,5 +1,55 @@
 import { BlurFilterPass } from "./BlurFilterPass";
 
+import fragment from './glsl/test.frag';
+
+
+class CopyFilterPass extends PIXI.Filter {
+    constructor() {
+        
+        const fragmentSrc = [
+            'precision mediump float;',
+            'uniform sampler2D uSampler;',
+            'varying vec2 vTextureCoord;',
+            'void main (void) {',
+            ' vec4 color1 = texture2D(uSampler, vTextureCoord);',
+            ' gl_FragColor = color1;',
+            '}'
+        ];
+
+        super(undefined, fragmentSrc.join('\n'), {});
+    }
+
+}
+
+class BlurBlendFilterPass extends PIXI.Filter {
+    constructor() {
+        /*
+        const fragmentSrc = [
+            'precision mediump float;',
+            'uniform sampler2D inputSampler;',
+            'uniform sampler2D uSampler;',
+            'varying vec2 vTextureCoord;',
+            'void main (void) {',
+            ' vec4 color1 = texture2D(inputSampler, vTextureCoord);',
+            ' vec4 color2 = texture2D(uSampler, vTextureCoord);',
+            ' float r = abs((vTextureCoord.y * 2.0) - 1.0);',
+            //' float r = (vTextureCoord.y * 2.0) - 1.0;',
+            ' gl_FragColor = mix(color1, color2, r);',
+            ' gl_FragColor = vec4(r, 0, 0, 1);',
+            //' gl_FragColor = color1;',
+            '}'
+        ];
+        */
+
+
+        super(undefined, (fragment as string) + ('\n'), {});
+    }
+
+}
+
+
+
+
 /**
  * The BlurFilter applies a Gaussian blur to an object.
  *
@@ -15,6 +65,9 @@ import { BlurFilterPass } from "./BlurFilterPass";
     public blurYFilter: BlurFilterPass;
 
     private _repeatEdgePixels: boolean;
+
+    private _copyPass: CopyFilterPass;
+    private _blendPass: BlurBlendFilterPass;
 
      /**
       * @param {number} [strength=8] - The strength of the blur filter.
@@ -38,6 +91,8 @@ import { BlurFilterPass } from "./BlurFilterPass";
 
          // ★ .d がプロパティになっていなかったので
          this.blendMode = this.blurYFilter.blendMode;
+         this._copyPass = new CopyFilterPass();
+         this._blendPass = new BlurBlendFilterPass();
      }
  
      /**
@@ -55,12 +110,22 @@ import { BlurFilterPass } from "./BlurFilterPass";
  
          if (xStrength && yStrength)
          {
-             const renderTarget = filterManager.getFilterTexture();
+             const renderTarget1 = filterManager.getFilterTexture(input);
+             const renderTarget2 = filterManager.getFilterTexture(input);
  
-             this.blurXFilter.apply(filterManager, input, renderTarget, PIXI.CLEAR_MODES.CLEAR);
-             this.blurYFilter.apply(filterManager, renderTarget, output, clear);
+             // BlurFilterPass の実装は input を swap で再利用するので、
+             // 元の画像が書き換わらないように退避する。
+             this._copyPass.apply(filterManager, input, renderTarget2, (true as any));
+
+             this.blurXFilter.apply(filterManager, renderTarget2, renderTarget1, clear);//(true as any));
+             this.blurYFilter.apply(filterManager, renderTarget1, renderTarget2, clear);//(true as any));
  
-             filterManager.returnFilterTexture(renderTarget);
+
+             this._blendPass.uniforms.inputSampler = input;
+             this._blendPass.apply(filterManager, renderTarget2, output, clear);
+
+             filterManager.returnFilterTexture(renderTarget1);
+             filterManager.returnFilterTexture(renderTarget2);
          }
          else if (yStrength)
          {
@@ -70,6 +135,8 @@ import { BlurFilterPass } from "./BlurFilterPass";
          {
              this.blurXFilter.apply(filterManager, input, output, clear);
          }
+
+         
      }
  
      updatePadding()

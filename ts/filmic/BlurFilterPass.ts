@@ -95,7 +95,7 @@ export class BlurFilterPass extends PIXI.Filter
             let flop = renderTarget;
 
             this.state.blend = false;
-            filterManager.applyFilter(this, flip, flop, PIXI.CLEAR_MODES.CLEAR);
+            filterManager.applyFilter(this, flip, flop, (true as any));
 
             for (let i = 1; i < this.passes - 1; i++)
             {
