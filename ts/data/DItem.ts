@@ -1,8 +1,9 @@
-import { DEffect, DEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
+import { DEffect, DRmmzEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DEquipmentPartId } from "./DEquipmentPart";
 
 export type DItemDataId = number;
+
 
 /**
  * ひとまず Item, Weapon Armor をまとめて表現してみる。
@@ -53,6 +54,15 @@ export type DItemDataId = number;
  * 
  * 通常攻撃や火炎草は目の前に効果を発動する。
  * 矢弾は Projectile を出現させる。
+ * Projectile は何らかの Item である。
+ * 炎や魔法弾も Item である。
+ * 極端な話、キャッチしてインベントリに入れることもできる。
+ * 
+ * Scope { range: "straight", length: "inf", projectile: "pブレス" }  # スキル
+ * Scope { range: "straight", length: 10, projectile: "self" }     # 矢弾アイテム
+ * 
+ * 矢弾アイテムの場合は、自身を Projectile として打ち出す。
+ * スタックされているアイテムの場合、1つだけマップ上に出現させるような処理になる。
  * 
  */
 
@@ -67,7 +77,8 @@ export class DItem {
 
     iconIndex: number;
 
-    scope: DEffectScope;
+    rmmzScope: DRmmzEffectScope;
+
 
     animationId: number;
     
@@ -89,7 +100,7 @@ export class DItem {
         this.name = "null";
         this.entity = DEntityProperties_Default();
         this.iconIndex = 0;
-        this.scope = 0;
+        this.rmmzScope = 0;
         this.animationId = 0;
         this.effectSet = new DEffectSet();
         //this.effect = {

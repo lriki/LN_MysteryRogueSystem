@@ -59,7 +59,7 @@ export class LItemBehavior_Grass1 extends LBehavior {
         if (effect) {
 
 
-            const effectSubject = new SEffectorFact(subject.entity(), effect, itemData.scope, SEffectIncidentType.IndirectAttack);
+            const effectSubject = new SEffectorFact(subject.entity(), effect, itemData.rmmzScope, SEffectIncidentType.IndirectAttack);
             const effectContext = new SEffectContext(effectSubject);
     
             context.postAnimation(target, itemData.animationId, true);
@@ -68,6 +68,12 @@ export class LItemBehavior_Grass1 extends LBehavior {
             context.postCall(() => {
                 effectContext.applyWithWorth(context, [target]);
             });
+        }
+        
+        const skill = itemData.effectSet.skill(cause);
+        if (skill) {
+            console.log("postPerformSkill", skill);
+            context.postPerformSkill(subject.entity(), skill.id);
         }
     }
 

@@ -27,7 +27,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
         // もともと UntBehavior.onAction() で AttackActionId をフックして処理していたが、こちらに持ってきた。
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
-        const effect = skill.effectSet.effect(DEffectCause.Affect);
+        const effect = skill.effect;//Set.effect(DEffectCause.Affect);
         if (effect) {
             context.postSequel(entity, RESystem.sequels.attack);
 

@@ -12,7 +12,7 @@ import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
-import { DEffect, DEffectHitType, DEffectScope, DParameterEffectApplyType, DParameterQualifying } from "ts/data/DEffect";
+import { DEffect, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying } from "ts/data/DEffect";
 
 
 enum SParameterEffectApplyType {
@@ -108,11 +108,11 @@ export class SEffectorFact {
     private _successRate: number;       // 0~100
 
     // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
-    private _scope: DEffectScope = 0;
+    private _scope: DRmmzEffectScope = 0;
 
     private _incidentType: SEffectIncidentType;
 
-    public constructor(subject: LEntity, effect: DEffect, scope: DEffectScope, incidentType: SEffectIncidentType) {
+    public constructor(subject: LEntity, effect: DEffect, scope: DRmmzEffectScope, incidentType: SEffectIncidentType) {
         this._subject = subject;
         this._subjectEffect = effect;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
@@ -153,7 +153,7 @@ export class SEffectorFact {
         return this._subjectEffect;
     }
 
-    public scope(): DEffectScope {
+    public scope(): DRmmzEffectScope {
         return this._scope;
     }
 
@@ -443,36 +443,36 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.checkItemScope
-    private checkItemScope(list: DEffectScope[]) {
+    private checkItemScope(list: DRmmzEffectScope[]) {
         return list.includes(this._effectorFact.scope());
     };
 
     // Game_Action.prototype.isForOpponent
     private isForOpponent(): boolean {
         return this.checkItemScope([
-            DEffectScope.Opponent_Single,
-            DEffectScope.Opponent_All,
-            DEffectScope.Opponent_Random_1,
-            DEffectScope.Opponent_Random_2,
-            DEffectScope.Opponent_Random_3,
-            DEffectScope.Opponent_Random_4,
-            DEffectScope.Everyone]);
+            DRmmzEffectScope.Opponent_Single,
+            DRmmzEffectScope.Opponent_All,
+            DRmmzEffectScope.Opponent_Random_1,
+            DRmmzEffectScope.Opponent_Random_2,
+            DRmmzEffectScope.Opponent_Random_3,
+            DRmmzEffectScope.Opponent_Random_4,
+            DRmmzEffectScope.Everyone]);
     }
 
     // Game_Action.prototype.isForAliveFriend
     private isForAliveFriend(): boolean {
         return this.checkItemScope([
-            DEffectScope.Friend_Single_Alive,
-            DEffectScope.Friend_All_Alive,
-            DEffectScope.User,
-            DEffectScope.Everyone]);
+            DRmmzEffectScope.Friend_Single_Alive,
+            DRmmzEffectScope.Friend_All_Alive,
+            DRmmzEffectScope.User,
+            DRmmzEffectScope.Everyone]);
     }
 
     // Game_Action.prototype.isForDeadFriend
     private isForDeadFriend(): boolean {
         return this.checkItemScope([
-            DEffectScope.Friend_Single_Dead,
-            DEffectScope.Friend_All_Dead]);
+            DRmmzEffectScope.Friend_Single_Dead,
+            DRmmzEffectScope.Friend_All_Dead]);
     }
 
     // Game_Action.prototype.makeDamageValue

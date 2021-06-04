@@ -17,8 +17,9 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
-import { DEffect, DEffectCause, DEffectHitType, DEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying } from './DEffect';
+import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying } from './DEffect';
 import { DSystem } from './DSystem';
+import { DSkill } from './DSkill';
 
 
 declare global {  
@@ -375,10 +376,13 @@ export class REDataManager
         });
 
         // Import Skills
+        REData.skills = [];
         $dataSkills.forEach(x => {
+            const skill = new DSkill(REData.skills.length);
+            REData.skills.push(skill);
             if (x) {
-                const id = REData.addSkill(x.name ?? "null");
-                const skill = REData.skills[id];
+                //const id = REData.addSkill(x.name ?? "null");
+                //const skill = REData.skills[id];
                 skill.rmmzAnimationId = x.animationId;
                 skill.paramCosts[DBasics.params.mp] = x.mpCost;
                 skill.paramCosts[DBasics.params.tp] = x.tpCost;
@@ -394,14 +398,15 @@ export class REDataManager
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
+                /*
                 skill.effectSet.setEffect(DEffectCause.Affect, effect);
                 // TODO:
                 skill.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
                 skill.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
-                //skill.effect.successRate = x.successRate ?? 100;
-                //skill.effect.hitType = x.hitType ?? DEffectHitType.Certain;
-                //skill.effect.specialEffects = x.effects ?? [];
-                skill.scope = x.scope ?? DEffectScope.None;
+                */
+                skill.effect = effect;
+                skill.scope = x.scope ?? DRmmzEffectScope.None;
+                skill.parseMetadata(x.meta);
             }
         });
 
@@ -430,8 +435,8 @@ export class REDataManager
 
                 item.effectSet.setEffect(DEffectCause.Affect, effect);
                 // TODO:
-                item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
-                item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
+                //item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
+                //item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
                 /*
                 if (x.damage.type > 0) {
                     const effect = this.makeEffect(x.damage);
@@ -443,10 +448,9 @@ export class REDataManager
                 }
                 */
 
-                item.scope = x.scope ?? DEffectScope.None;
+                item.rmmzScope = x.scope ?? DRmmzEffectScope.None;
                 item.entity = parseMetaToEntityProperties(x.meta);
                 item.animationId = x.animationId;
-                this.setupDirectly_DItem(item);
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
@@ -460,7 +464,6 @@ export class REDataManager
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 item.entity = parseMetaToEntityProperties(x.meta);
-                this.setupDirectly_DItem(item);
             }
         });
         REData.armorDataIdOffset = REData.items.length;
@@ -474,12 +477,15 @@ export class REDataManager
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 item.entity = parseMetaToEntityProperties(x.meta);
-                this.setupDirectly_DItem(item);
             }
         });
         RESystem.items = {
             autoSupplyFood: 2,
         };
+
+        for (const item of REData.items) {
+            this.setupDirectly_DItem(item);
+        }
         
 
         // Import Monsters
@@ -889,7 +895,14 @@ export class REDataManager
                     applyType: DParameterEffectApplyType.Recover,
                     variance: 0,
                 });
+                data.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(data.effectSet.mainEffect()));
                 break;
+
+            case "kフレイムリーフ":
+                data.effectSet.setEffect(DEffectCause.Hit, data.effectSet.mainEffect());
+                data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス"));
+                break;
+                
             case "k眠りガス":
                 break;
         }

@@ -1,4 +1,6 @@
+import { assert } from "ts/Common";
 import { DParameterId } from "./DParameter";
+import { DSkill } from "./DSkill";
 
 
 
@@ -40,7 +42,7 @@ export interface DPerformeSkillQualifying {
 export interface DOtherEffectQualifying {
 }
 
-export enum DEffectScope {
+export enum DRmmzEffectScope {
     /** なし */
     None = 0,
 
@@ -94,10 +96,23 @@ export enum DEffectHitType {
 }
 
 
+export enum DEffectFieldScopeRange {
+    Front1,
+    StraightProjectile,
+}
+
+export interface DEffectFieldScope {
+    range: DEffectFieldScopeRange,
+    length: number,
+    projectilePrefabKey: string,
+}
+
 /**
  * RMMZ の Skill と Item の共通パラメータ
  */
 export interface DEffect {
+    
+    scope: DEffectFieldScope;
     
     /**
      * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
@@ -135,6 +150,7 @@ export interface DEffect {
 
 export function DEffect_Default(): DEffect {
     return {
+        scope: { range: DEffectFieldScopeRange.Front1, length: -1, projectilePrefabKey: "" },
         critical: false,
         successRate: 100,
         hitType: DEffectHitType.Certain,
@@ -148,6 +164,7 @@ export function DEffect_Default(): DEffect {
 
 export function DEffect_Clone(s: DEffect): DEffect {
     return {
+        scope: { ...s.scope },
         critical: s.critical,
         successRate: s.successRate,
         hitType: s.hitType,
@@ -173,13 +190,28 @@ export enum DEffectCause {
 
 export class DEffectSet {
     private _effects: (DEffect | undefined)[] = [];
+    private _skills: (DSkill | undefined)[] = [];
 
-    public setEffect(cause: DEffectCause, data: DEffect): void {
-        this._effects[cause] = data;
+    public setEffect(cause: DEffectCause, value: DEffect): void {
+        this._effects[cause] = value;
+    }
+
+    public setSkill(cause: DEffectCause, value: DSkill): void {
+        this._skills[cause] = value;
+    }
+
+    public mainEffect(): DEffect {
+        const e = this._effects[DEffectCause.Affect];
+        assert(e);
+        return e;
     }
 
     public effect(cause: DEffectCause): DEffect | undefined {
         return this._effects[cause];
+    }
+
+    public skill(cause: DEffectCause): DSkill | undefined {
+        return this._skills[cause];
     }
 
     public aquireEffect(cause: DEffectCause): DEffect {

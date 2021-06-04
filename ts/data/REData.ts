@@ -3,7 +3,7 @@ import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState, DState_makeDefault } from "./DState";
 import { DSystem } from "./DSystem";
-import { DSkill, DSkill_Default } from "./DSkill";
+import { DSkill } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem } from "./DItem";
 import { DLand, DLand_Default } from "./DLand";
@@ -209,7 +209,6 @@ export class REData
         this.behaviors = [{id: 0, name: 'null'}];
 
         this.skills = [];
-        this.addSkill("null");
 
         this.items = [];
 
@@ -296,16 +295,6 @@ export class REData
         return newId;
     }
     
-    static addSkill(name: string): number {
-        const newId = this.skills.length;
-        this.skills.push({
-            ...DSkill_Default(),
-            id: newId,
-            name: name,
-        });
-        return newId;
-    }
-
     static addSequel(name: string): number {
         const newId = this.sequels.length;
         this.sequels.push({
@@ -325,7 +314,7 @@ export class REData
         if (!isNaN(id)) 
             return this.items[id];
         else
-            return this.items.find(x => x.name == pattern || x.entity.key == pattern);
+            return this.items.find(x => x.name == pattern || (x.entity.key != "" && x.entity.key == pattern));
     }
 
     static getItem(re_key: string): DItem {
@@ -350,12 +339,27 @@ export class REData
         if (!isNaN(id)) 
             return this.states[id];
         else
-            return this.states.find(x => x.displayName == pattern || x.key == pattern);
+            return this.states.find(x => x.displayName == pattern || (x.key != "" && x.key == pattern));
     }
 
     static getStateFuzzy(pattern: string): DState {
         const d = this.findStateFuzzy(pattern);
         if (d) return d;
         throw new Error(`State "${pattern}" not found.`);
+    }
+    
+
+    static findSkill(pattern: string): DSkill | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.skills[id];
+        else
+            return this.skills.find(x => x.name == pattern || (x.key != "" && x.key == pattern));
+    }
+
+    static getSkill(pattern: string): DSkill {
+        const d = this.findSkill(pattern);
+        if (d) return d;
+        throw new Error(`Skill "${pattern}" not found.`);
     }
 }
