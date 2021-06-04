@@ -1,5 +1,7 @@
 
 
+import { BlurFilter } from 'ts/filmic/BlurFilter';
+import { TileShape } from 'ts/objects/LBlock';
 import { RESystem } from 'ts/system/RESystem';
 import { VHudWindow } from 'ts/visual/VHudWindow';
 import { VSpriteSet } from 'ts/visual/VSpriteSet';
@@ -7,6 +9,31 @@ import { assert } from '../Common';
 import { REGame } from '../objects/REGame';
 import { REVisual } from '../visual/REVisual';
 import { RMMZHelper } from './RMMZHelper';
+
+
+
+
+class MyFilter extends PIXI.Filter {
+    constructor() {
+        
+        const fragmentSrc = [
+            'precision mediump float;',
+            'uniform sampler2D uSampler;',
+            'varying vec2 vTextureCoord;',
+            'void main (void) {',
+            ' vec4 color = texture2D(uSampler, vTextureCoord);',
+            ' gl_FragColor = color;',
+            ' gl_FragColor.r = 1.0;',
+            '}'
+        ];
+
+        super(undefined, fragmentSrc.join('\n'), {});
+    }
+
+}
+
+
+
 
 declare global {
     interface Spriteset_Map {
@@ -44,6 +71,7 @@ Spriteset_Map.prototype.createLowerLayer = function() {
     _Spriteset_Map_prototype_createLowerLayer.call(this);
 
     
+    this._baseSprite.filters.push(new BlurFilter());
 }
 
 
