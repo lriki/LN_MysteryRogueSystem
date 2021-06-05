@@ -25,6 +25,11 @@ class Parameters {
     public toneColorB: number;
     public toneGray: number;
 
+    public luminosityThreshold = 0.9;
+    public luminositySmoothWidth = 0.01;
+    public bloomStrength: number;
+    public bloomRadius: number;
+
     public vignetteSize: number;
     public vignetteAmount: number;
 
@@ -43,6 +48,9 @@ class Parameters {
         this.toneColorG = 0.0;
         this.toneColorB = 0.0;
         this.toneGray = 0.0;
+
+        this.bloomStrength = 0.3;
+        this.bloomRadius = 0.5;
 
         this.vignetteSize = 0.5;
         this.vignetteAmount = 0.75;
@@ -120,7 +128,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
     private _luminosityHighPassFilter: LuminosityHighPassFilter;
     private _seperableBlurPassHList: SeperableBlurPass[];
     private _seperableBlurPassVList: SeperableBlurPass[];
-    private _bloomCompositePass: BloomCompositePass;
+    //private _bloomCompositePass: BloomCompositePass;
 
     gui: dat.GUI;
     param: Parameters;
@@ -137,6 +145,11 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
          this.gui = new dat.GUI();
         this.param = new Parameters();
+        const bloom = this.gui.addFolder("bloom");
+        bloom.add(this.param, 'luminosityThreshold', 0.0, 1.0);
+        bloom.add(this.param, 'luminositySmoothWidth', 0.0, 1.0);
+        bloom.add(this.param, 'bloomStrength', 0.0, 1.0);
+        bloom.add(this.param, 'bloomRadius', 0.0, 5.0);
         const tonemap = this.gui.addFolder("Tonemap");
         tonemap.add(this.param, 'linearWhite', 0, 10.0);
         tonemap.add(this.param, 'shoulderStrength', 0, 10.0);
@@ -179,7 +192,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
              this._seperableBlurPassVList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], false));
          }
 
-         this._bloomCompositePass = new BloomCompositePass();
+         //this._bloomCompositePass = new BloomCompositePass();
      }
  
      /**
@@ -198,15 +211,40 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
          if (xStrength && yStrength)
          {
              // Prepare Bloom
-             let resolution = 0.5;
-             for (let i = 0; i < MIPS; i++) {
-                this._seperableBlurPassHList[i].prepare(filterManager, input, resolution);
-                this._seperableBlurPassVList[i].prepare(filterManager, input, resolution);
-                resolution *= 0.5;
+             {
+                let resolution = 0.5;
+                for (let i = 0; i < MIPS; i++) {
+                   this._seperableBlurPassHList[i].prepare(filterManager, input, resolution);
+                   this._seperableBlurPassVList[i].prepare(filterManager, input, resolution);
+                   resolution *= 0.5;
+                }
+
+                // 高輝度部分を抽出したテクスチャを作る
+                const brightTexture = filterManager.getFilterTexture(input);
+                this._luminosityHighPassFilter.prepare(this.param.luminosityThreshold, this.param.luminositySmoothWidth);
+                this._luminosityHighPassFilter.apply(filterManager, input, brightTexture, clear);
+                //this._luminosityHighPassFilter.apply(filterManager, input, output, clear);
+
+                // ブラー適用
+                let inputRenderTarget = brightTexture;
+                for (let i = 0; i < MIPS; i++) {
+                    const rtH = this._seperableBlurPassHList[i].renderTexture();
+                    const rtV = this._seperableBlurPassVList[i].renderTexture();
+                    this._seperableBlurPassHList[i].apply(filterManager, inputRenderTarget, rtH, clear);
+                    this._seperableBlurPassVList[i].apply(filterManager, rtH, rtV, clear);
+                    inputRenderTarget = rtV;
+                }
+
+                this.prepareBloomCompositeParams(this.param.bloomStrength, this.param.bloomRadius, [
+                    this._seperableBlurPassVList[0].renderTexture(),
+                    this._seperableBlurPassVList[1].renderTexture(),
+                    this._seperableBlurPassVList[2].renderTexture(),
+                    this._seperableBlurPassVList[3].renderTexture(),
+                    this._seperableBlurPassVList[4].renderTexture(),
+                ]);
              }
 
 
-             /*
              const renderTarget1 = filterManager.getFilterTexture(input);
              const renderTarget2 = filterManager.getFilterTexture(input);
  
@@ -253,9 +291,9 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
              filterManager.returnFilterTexture(renderTarget1);
              filterManager.returnFilterTexture(renderTarget2);
-*/
 
-             
+
+             /*
              // 高輝度部分を抽出したテクスチャを作る
              const brightTexture = filterManager.getFilterTexture(input);
              this._luminosityHighPassFilter.apply(filterManager, input, brightTexture, clear);
@@ -281,6 +319,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
              ]);
              this._bloomCompositePass.apply(filterManager, input, output, clear);
              
+             */
              
              for (let i = 0; i < MIPS; i++) {
                 this._seperableBlurPassHList[i].retain(filterManager);
@@ -298,6 +337,22 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
          
      }
+
+     
+    private prepareBloomCompositeParams(bloomStrength: number, bloomRadius: number, texturs: PIXI.RenderTexture[]): void {
+        this._blendPass.uniforms._BloomStrength = bloomStrength;
+        this._blendPass.uniforms._BloomRadius = bloomRadius;
+        this._blendPass.uniforms._BlurTexture1 = texturs[0];
+        this._blendPass.uniforms._BlurTexture2 = texturs[1];
+        this._blendPass.uniforms._BlurTexture3 = texturs[2];
+        this._blendPass.uniforms._BlurTexture4 = texturs[3];
+        this._blendPass.uniforms._BlurTexture5 = texturs[4];
+        this._blendPass.uniforms._BloomTintColorsAndFactors1 = [1.0, 1.0, 1.0, 1.0];
+        this._blendPass.uniforms._BloomTintColorsAndFactors2 = [1.0, 1.0, 1.0, 0.8];
+        this._blendPass.uniforms._BloomTintColorsAndFactors3 = [1.0, 1.0, 1.0, 0.6];
+        this._blendPass.uniforms._BloomTintColorsAndFactors4 = [1.0, 1.0, 1.0, 0.4];
+        this._blendPass.uniforms._BloomTintColorsAndFactors5 = [1.0, 1.0, 1.0, 0.2];
+    }
  
      updatePadding()
      {

@@ -4,8 +4,8 @@ varying vec2 vTextureCoord;
 
 const vec3 _Color = vec3(0.0, 0.0, 0.0);
 const float _Opacity = 1.0;
-const float _LuminosityThreshold = 0.8;
-const float _SmoothWidth = 0.01;
+uniform float _LuminosityThreshold;
+uniform float _SmoothWidth;
 
 #define saturate(x) clamp(x, 0.0, 1.0)
 
