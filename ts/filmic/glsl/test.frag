@@ -11,16 +11,59 @@ uniform highp vec4 outputFrame;
 
 //uniform float size;
 //uniform float amount;
-const float size = 0.5;
-const float amount = 0.75;
+uniform float size;
+uniform float amount;
 const float focalPointX = 0.5;
 const float focalPointY = 0.5;
+
+#define saturate(x) clamp(x, 0.0, 1.0)
+
+// Tonemap Params
+uniform float    paramA;  // shoulderStrength
+uniform float    paramB;  // linearStrength
+uniform float    paramCB;    // param.linearStrength * param.linearAngle
+uniform float    paramDE;    // param.toeStrength * param.toeNumerator
+uniform float    paramDF;    // param.toeStrength * param.toeDenominator
+uniform float    paramEperF;  // param.toeNumerator / param.toeDenominator
+uniform float    paramF_White;//
+uniform float   Exposure;
+uniform vec4 _Tone;
+
+vec3 CalcUncharted2FilmicPreParam( vec3 rgb,
+    float paramA, float paramB, float paramCB,
+    float paramDE, float paramDF, float paramEperF, float paramF_White )
+{
+    vec3    ret = ((rgb * (paramA * rgb + paramCB) + paramDE)
+        / (rgb * (paramA * rgb + paramB) + paramDF))
+        - paramEperF;
+    return ret / paramF_White;
+}
+
+vec3 Tonemap(vec3 color)
+{
+    float expBias = exp2(Exposure);
+    vec3 rgb = color.rgb * expBias;
+
+    rgb = CalcUncharted2FilmicPreParam(rgb,
+        paramA, paramB, paramCB, paramDE, paramDF, paramEperF, paramF_White);
+    
+    return rgb;
+}
+
+
+vec3 LN_CalculateToneColor(vec3 inColor, vec4 inToneColor)
+{
+    vec3 outColor = inColor;
+    float y = (0.208012 * outColor.r + 0.586611 * inColor.g + 0.114478 * inColor.b) * inToneColor.w;
+    outColor = (inColor * (1.0 - inToneColor.w)) + y + inToneColor.rgb;
+    return saturate(outColor);
+}
+
 
 
 /*
 */
 
-#define saturate(x) clamp(x, 0.0, 1.0)
 
 // https://github.com/pixijs/pixijs/wiki/v5-Creating-filters#conversion-functions
 // PIXI.js は RenderTarget も 2累乗で作る。それを、スクリーンのサイズに正規化するもの。
@@ -28,7 +71,7 @@ vec2 filterTextureCoord() {
     return vTextureCoord * inputSize.xy / outputFrame.zw;
 }
 
-
+/*
 const float Exposure = 0.3;
 const int isGamma = 0;
 
@@ -44,6 +87,7 @@ vec3 CalcFilmic(vec3 rgb_input)
     }
     return ret;
 }
+*/
 
 vec3 vignette(vec3 color, vec2 uv) {
     float dist = distance(uv, vec2(focalPointX, focalPointY));
@@ -62,7 +106,9 @@ void main (void) {
                 //' float r = (uv.y * 2.0) - 1.0;
     gl_FragColor = mix(color1, color2, saturate(r));
 
-    gl_FragColor.rgb = CalcFilmic(gl_FragColor.rgb);
+    gl_FragColor.rgb = LN_CalculateToneColor(gl_FragColor.rgb, _Tone);
+    gl_FragColor.rgb = Tonemap(gl_FragColor.rgb);
+    
 
     gl_FragColor.rgb = vignette(gl_FragColor.rgb, uv);
 

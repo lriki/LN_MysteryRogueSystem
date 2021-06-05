@@ -13,26 +13,6 @@ import { RMMZHelper } from './RMMZHelper';
 
 
 
-class MyFilter extends PIXI.Filter {
-    constructor() {
-        
-        const fragmentSrc = [
-            'precision mediump float;',
-            'uniform sampler2D uSampler;',
-            'varying vec2 vTextureCoord;',
-            'void main (void) {',
-            ' vec4 color = texture2D(uSampler, vTextureCoord);',
-            ' gl_FragColor = color;',
-            ' gl_FragColor.r = 1.0;',
-            '}'
-        ];
-
-        super(undefined, fragmentSrc.join('\n'), {});
-    }
-
-}
-
-
 
 
 declare global {
