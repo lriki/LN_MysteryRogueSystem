@@ -3,6 +3,9 @@ import { BlurFilterPass } from "./BlurFilterPass";
 import fragment from './glsl/test.frag';
 
 import dat from 'dat.gui';
+import { LuminosityHighPassFilter } from "./BloomFilterPass";
+import { SeperableBlurPass } from "./SeperableBlurPass";
+import { BloomCompositePass } from "./BloomCompositePass";
 
 
 
@@ -92,7 +95,8 @@ class BlurBlendFilterPass extends PIXI.Filter {
 }
 
 
-
+const MIPS = 5;
+const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
 /**
  * The BlurFilter applies a Gaussian blur to an object.
@@ -112,6 +116,12 @@ class BlurBlendFilterPass extends PIXI.Filter {
 
     private _copyPass: CopyFilterPass;
     private _blendPass: BlurBlendFilterPass;
+
+    private _luminosityHighPassFilter: LuminosityHighPassFilter;
+    private _seperableBlurPassHList: SeperableBlurPass[];
+    private _seperableBlurPassVList: SeperableBlurPass[];
+    private _bloomCompositePass: BloomCompositePass;
+
     gui: dat.GUI;
     param: Parameters;
 
@@ -159,6 +169,17 @@ class BlurBlendFilterPass extends PIXI.Filter {
          this.blendMode = this.blurYFilter.blendMode;
          this._copyPass = new CopyFilterPass();
          this._blendPass = new BlurBlendFilterPass();
+
+         this._luminosityHighPassFilter = new LuminosityHighPassFilter();
+
+         this._seperableBlurPassHList = [];
+         this._seperableBlurPassVList = [];
+         for (let i = 0; i < MIPS; i++) {
+             this._seperableBlurPassHList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], true));
+             this._seperableBlurPassVList.push(new SeperableBlurPass(kernelSizeArray[i], kernelSizeArray[i], false));
+         }
+
+         this._bloomCompositePass = new BloomCompositePass();
      }
  
      /**
@@ -176,6 +197,15 @@ class BlurBlendFilterPass extends PIXI.Filter {
  
          if (xStrength && yStrength)
          {
+             // Prepare Bloom
+             let resolution = 0.5;
+             for (let i = 0; i < MIPS; i++) {
+                this._seperableBlurPassHList[i].prepare(filterManager, input, resolution);
+                this._seperableBlurPassVList[i].prepare(filterManager, input, resolution);
+                resolution *= 0.5;
+             }
+
+
              const renderTarget1 = filterManager.getFilterTexture(input);
              const renderTarget2 = filterManager.getFilterTexture(input);
  
@@ -213,10 +243,47 @@ class BlurBlendFilterPass extends PIXI.Filter {
              this._blendPass.uniforms.size = this.param.vignetteSize;
              this._blendPass.uniforms.amount = this.param.vignetteAmount;
 
+
+
+
              this._blendPass.apply(filterManager, renderTarget2, output, clear);
+
+
 
              filterManager.returnFilterTexture(renderTarget1);
              filterManager.returnFilterTexture(renderTarget2);
+
+
+             
+             // 高輝度部分を抽出したテクスチャを作る
+             const brightTexture = filterManager.getFilterTexture(input);
+             this._luminosityHighPassFilter.apply(filterManager, input, brightTexture, clear);
+
+             {
+                 let inputRenderTarget = brightTexture;
+                for (let i = 0; i < MIPS; i++) {
+                    const rtH = this._seperableBlurPassHList[i].renderTexture();
+                    const rtV = this._seperableBlurPassVList[i].renderTexture();
+                    this._seperableBlurPassHList[i].apply(filterManager, inputRenderTarget, rtH, clear);
+                    this._seperableBlurPassVList[i].apply(filterManager, rtH, rtV, clear);
+                    inputRenderTarget = rtV;
+                }
+             }
+
+             this._bloomCompositePass.prepare(1.0, 1.0, [
+                this._seperableBlurPassVList[0].renderTexture(),
+                this._seperableBlurPassVList[1].renderTexture(),
+                this._seperableBlurPassVList[2].renderTexture(),
+                this._seperableBlurPassVList[3].renderTexture(),
+                this._seperableBlurPassVList[4].renderTexture(),
+             ]);
+             this._bloomCompositePass.apply(filterManager, input, output, clear);
+             
+             
+             for (let i = 0; i < MIPS; i++) {
+                this._seperableBlurPassHList[i].retain(filterManager);
+                this._seperableBlurPassVList[i].retain(filterManager);
+             }
          }
          else if (yStrength)
          {
