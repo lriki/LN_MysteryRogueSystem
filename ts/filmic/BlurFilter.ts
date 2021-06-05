@@ -206,6 +206,7 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
              }
 
 
+             /*
              const renderTarget1 = filterManager.getFilterTexture(input);
              const renderTarget2 = filterManager.getFilterTexture(input);
  
@@ -252,12 +253,13 @@ const kernelSizeArray: number[] = [3, 5, 8, 13, 21];
 
              filterManager.returnFilterTexture(renderTarget1);
              filterManager.returnFilterTexture(renderTarget2);
-
+*/
 
              
              // 高輝度部分を抽出したテクスチャを作る
              const brightTexture = filterManager.getFilterTexture(input);
              this._luminosityHighPassFilter.apply(filterManager, input, brightTexture, clear);
+             //this._luminosityHighPassFilter.apply(filterManager, input, output, clear);
 
              {
                  let inputRenderTarget = brightTexture;

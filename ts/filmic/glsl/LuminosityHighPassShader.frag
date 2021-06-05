@@ -2,7 +2,7 @@ precision mediump float;
 uniform sampler2D uSampler;
 varying vec2 vTextureCoord;
 
-const vec3 _Color = vec3(1.0, 1.0, 1.0);
+const vec3 _Color = vec3(0.0, 0.0, 0.0);
 const float _Opacity = 1.0;
 const float _LuminosityThreshold = 0.8;
 const float _SmoothWidth = 0.01;
