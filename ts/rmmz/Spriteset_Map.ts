@@ -1,6 +1,5 @@
 
 
-import { BlurFilter } from 'ts/filmic/BlurFilter';
 import { TileShape } from 'ts/objects/LBlock';
 import { RESystem } from 'ts/system/RESystem';
 import { VHudWindow } from 'ts/visual/VHudWindow';
@@ -49,9 +48,6 @@ Spriteset_Map.prototype.destroy = function(options) {
 var _Spriteset_Map_prototype_createLowerLayer = Spriteset_Map.prototype.createLowerLayer;
 Spriteset_Map.prototype.createLowerLayer = function() {
     _Spriteset_Map_prototype_createLowerLayer.call(this);
-
-    
-    this._baseSprite.filters.push(new BlurFilter());
 }
 
 

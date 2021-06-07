@@ -5,6 +5,8 @@ import { LMap } from "./LMap";
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
+import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
+import { LSanctuaryBehavior } from "./behaviors/LSanctuaryBehavior";
 
 export type LRoomId = number;
 
@@ -28,39 +30,43 @@ export enum BlockLayerKind {
 export class REBlockLayer {
     // 同一レイヤーに、同時に複数の Entity は存在可能。
     // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
-    private _entities: LEntityId[] = [];
+    private _entityIds: LEntityId[] = [];
+
+    public entityIds(): readonly LEntityId[] {
+        return this._entityIds;
+    }
 
     entities(): readonly LEntity[] {
-        return this._entities.map(x => REGame.world.entity(x));
+        return this._entityIds.map(x => REGame.world.entity(x));
     }
 
     firstEntity(): LEntity | undefined {
-        if (this._entities.length > 0)
-            return REGame.world.entity(this._entities[0]);
+        if (this._entityIds.length > 0)
+            return REGame.world.entity(this._entityIds[0]);
         else
             return undefined;
     }
 
     isContainsAnyEntity(): boolean {
-        return this._entities.length > 0;
+        return this._entityIds.length > 0;
     }
 
     isContains(entity: LEntity): boolean {
-        return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
+        return this._entityIds.findIndex(x => x.equals(entity.entityId())) >= 0;
     }
 
     isOccupied(): boolean {
-        return this._entities.some(x => REGame.world.entity(x).blockOccupied);
+        return this._entityIds.some(x => REGame.world.entity(x).blockOccupied);
     }
 
     addEntity(entity: LEntity) {
-        this._entities.push(entity.entityId());
+        this._entityIds.push(entity.entityId());
     }
 
     removeEntity(entity: LEntity): boolean {
-        const index = this._entities.findIndex(x => x.equals(entity.entityId()));
+        const index = this._entityIds.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {
-            this._entities.splice(index, 1);
+            this._entityIds.splice(index, 1);
             return true;
         }
         else {
@@ -69,7 +75,7 @@ export class REBlockLayer {
     }
 
     removeAllEntites() {
-        this._entities.splice(0);
+        this._entityIds.splice(0);
     }
 }
 
@@ -322,16 +328,40 @@ export class LBlock// extends LObject
     }
 
     /** Entity が含まれている Layer を検索する */
-    findEntityLayerKind(entity: LEntity): BlockLayerKind | undefined {
+    public findEntityLayerKind(entity: LEntity): BlockLayerKind | undefined {
         const index = this._layers.findIndex(x => x.isContains(entity));
         if (index >= 0)
             return index;
         else
             return undefined;
     }
+    
+    /** Entity が含まれている Layer を検索する */
+    public findEntity(predicate: (entity: LEntity) => boolean): LEntity | undefined {
+        for (const layer of this._layers) {
+            for (const id of layer.entityIds()) {
+                const entity = REGame.world.entity(id);
+                if (predicate(entity)) return entity;
+            }
+        }
+        return undefined;
+    }
 
     /** 指定した Entity がこの Block に含まれているか */
     public containsEntity(entity: LEntity): boolean {
         return this.findEntityLayerKind(entity) != undefined;
+    }
+
+    /** 指定した Entity にとって、この Block が浄化属性 (聖域の巻物) となるか */
+    public checkPurifier(entity: LEntity): boolean {
+        // FIXME: とりあえず決め打ちで、Enemy に対する SanctuaryBehavior のみチェックする
+        if (entity.findBehavior(LEnemyBehavior)) {
+            const sanctuary = this.findEntity(e => !!e.findBehavior(LSanctuaryBehavior));
+            if (sanctuary) {
+                // TODO: 張り付き？
+                return true;
+            }
+        }
+        return false;
     }
 }

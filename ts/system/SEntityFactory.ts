@@ -23,6 +23,7 @@ import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_G
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
+import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -169,6 +170,9 @@ export class SEntityFactory {
             case "kキュアリーフ":
             case "kフレイムリーフ":
                 entity.addBehavior(LItemBehavior_Grass1);
+                break;
+            case "kItem_サンクチュアリスクロール":
+                entity.addBehavior(LSanctuaryBehavior);
                 break;
         }
     }

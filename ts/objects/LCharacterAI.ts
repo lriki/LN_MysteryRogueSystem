@@ -40,7 +40,6 @@ export class LCharacterAI {
         // こうしておかないと、Player の移動を追うように Enemy が移動できなくなる。
         {
             // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
-            //const roomId = REGame.map.roomId(self);
             const target = REGame.map.getVisibilityEntities(self)
                 .filter(e => Helpers.isHostile(self, e))
                 .sort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
@@ -55,18 +54,22 @@ export class LCharacterAI {
                 //this._targetPositionY = -1;
             }
         
+            if (target) {
+                const targetBlock = REGame.map.block(target);
+                // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
+                // TODO: このあたり、遠距離攻撃モンスターとかは変わる
+                if (this.checkAdjacentDirectlyAttack(self, target) &&
+                    !targetBlock.checkPurifier(self)) {     // 聖域の巻物とか無ければ隣接攻撃可能。
+                    this._attackTargetEntityId = target.entityId();
+                }
+                else {
+                    this._attackTargetEntityId = LEntityId.makeEmpty();
+    
+                    // 見失ったときも targetPosition は維持
+                }
 
-            // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
-            // TODO: このあたり、遠距離攻撃モンスターとかは変わる
-            if (target &&
-                this.checkAdjacentDirectlyAttack(self, target)) {
-                this._attackTargetEntityId = target.entityId();
             }
-            else {
-                this._attackTargetEntityId = LEntityId.makeEmpty();
 
-                // 見失ったときも targetPosition は維持
-            }
         }
 
         
