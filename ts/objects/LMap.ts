@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { BlockLayerKind, LRoomId, LBlock, TileShape } from "./LBlock";
+import { LRoomId, LBlock, TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
 import { Helpers } from "ts/system/Helpers";
@@ -16,6 +16,7 @@ import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { FMap } from "ts/floorgen/FMapData";
+import { BlockLayerKind } from "./LBlockLayer";
 
 
 /*

@@ -5,7 +5,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { RESystem } from "ts/system/RESystem";
 import { Helpers } from "ts/system/Helpers";
-import { BlockLayerKind } from "../LBlock";
+import { BlockLayerKind } from "../LBlockLayer";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";

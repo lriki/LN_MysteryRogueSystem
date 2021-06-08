@@ -1,8 +1,7 @@
 import { REData } from "ts/data/REData";
 import { LSkillBehavior } from "../objects/skills/SkillBehavior";
-import { BlockLayerKind } from "../objects/LBlock";
+import { BlockLayerKind } from "../objects/LBlockLayer";
 import { SIntegration } from "./SIntegration";
-import { DBasicParameters } from "ts/data/predefineds/DBasicParameters";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
 import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
 import { BasicItems } from "ts/data/predefineds/DBasicItems";

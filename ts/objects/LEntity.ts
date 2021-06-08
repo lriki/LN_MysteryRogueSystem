@@ -2,7 +2,7 @@ import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
-import { BlockLayerKind, LRoomId } from "./LBlock";
+import { LRoomId } from "./LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { DStateId } from "ts/data/DState";
 import { assert } from "ts/Common";
@@ -21,6 +21,7 @@ import { LanguageServiceMode } from "typescript";
 import { DParameterId } from "ts/data/DParameter";
 import { SAbilityFactory } from "ts/system/SAbilityFactory";
 import { REData } from "ts/data/REData";
+import { BlockLayerKind } from "./LBlockLayer";
 
 enum BlockLayer
 {

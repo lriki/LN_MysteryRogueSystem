@@ -9,7 +9,7 @@ import { LRoom } from "ts/objects/LRoom";
 import { LScheduler } from "ts/objects/LScheduler";
 import { LSystem } from "ts/objects/LSystem";
 import { LWorld } from "ts/objects/LWorld";
-import { REBlockLayer, LBlock } from "ts/objects/LBlock";
+import { LBlock } from "ts/objects/LBlock";
 import { LMap } from "ts/objects/LMap";
 import { LState } from "ts/objects/states/LState";
 import { LStructure } from "ts/objects/structures/LStructure";
@@ -33,6 +33,7 @@ import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
+import { REBlockLayer } from "ts/objects/LBlockLayer";
 
 
 function createInstance(name: string): any {

@@ -1,6 +1,6 @@
 import { DecisionPhase, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/behaviors/LBehavior";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind } from "ts/objects/LBlock";
+import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 import { UnitInfo } from "ts/objects/LScheduler";

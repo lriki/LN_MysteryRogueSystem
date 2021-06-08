@@ -10,8 +10,9 @@ import { paramEnemySpawnInvalidArea } from "ts/PluginParameters";
 import { FMap } from "ts/floorgen/FMapData";
 import { REData } from "ts/data/REData";
 import { LObjectType } from "ts/objects/LObject";
-import { BlockLayerKind, LBlock } from "ts/objects/LBlock";
+import { LBlock } from "ts/objects/LBlock";
 import { SMovementCommon } from "./SMovementCommon";
+import { BlockLayerKind } from "ts/objects/LBlockLayer";
 
 
 /**

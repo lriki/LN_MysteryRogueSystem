@@ -1,22 +1,18 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
-import { LPickActivity } from "ts/objects/activities/LPickActivity";
-import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind, TileShape } from "ts/objects/LBlock";
+import { TileShape } from "ts/objects/LBlock";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity } from "ts/data/DEntity";
 import { SActivityFactory } from "ts/system/SActivityFactory";
-import { SMovementCommon } from "ts/system/SMovementCommon";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { DialogSubmitMode } from "ts/system/SDialog";
+import { BlockLayerKind } from "ts/objects/LBlockLayer";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

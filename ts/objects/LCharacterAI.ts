@@ -55,11 +55,11 @@ export class LCharacterAI {
             }
         
             if (target) {
-                const targetBlock = REGame.map.block(target);
+                const targetBlock = REGame.map.block(target.x, target.y);
                 // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
                 // TODO: このあたり、遠距離攻撃モンスターとかは変わる
                 if (this.checkAdjacentDirectlyAttack(self, target) &&
-                    !targetBlock.checkPurifier(self)) {     // 聖域の巻物とか無ければ隣接攻撃可能。
+                    targetBlock &&!targetBlock.checkPurifier(self)) {     // 聖域の巻物とか無ければ隣接攻撃可能。
                     this._attackTargetEntityId = target.entityId();
                 }
                 else {

@@ -2,11 +2,12 @@ import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind, LBlock } from "ts/objects/LBlock";
+import { LBlock } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
+import { BlockLayerKind } from "ts/objects/LBlockLayer";
 
 export interface SPoint {
     x: number;
@@ -121,7 +122,7 @@ export class SMovementCommon {
     }
 
     /**
-     * 左折の法則に従い、移動候補にできる Block を優先度順に取得する
+     * 左折の法則に従い、移動候補にできる Block を優先度順に取得する。
      */
     public static getMovingCandidateBlockAsLHRule(entity: LEntity): LBlock | undefined {
         /*
@@ -197,7 +198,11 @@ export class SMovementCommon {
     /**
      * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
      * 
-     * 地形のみを判断する点に注意。状態異常などによる移動制限は Behavior など他で行う。
+     * 地形および Block 性質を判断材料とする点に注意。 (Block 種類及び Block 性質と、Entity 性質の確認)
+     * 状態異常などによる移動制限は Behavior など他で行う。
+     * 
+     * 移動可否は entity や Block の性質を考慮する。
+     * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
      */
     public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, layer?: BlockLayerKind): boolean {
         const map = REGame.map;

@@ -2,7 +2,7 @@ import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { BlockLayerKind } from "ts/objects/LBlock";
+import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { Helpers } from "ts/system/Helpers";

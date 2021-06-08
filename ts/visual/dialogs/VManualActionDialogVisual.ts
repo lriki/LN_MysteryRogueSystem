@@ -1,12 +1,10 @@
 import { assert, tr2 } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
-import { BlockLayerKind } from "ts/objects/LBlock";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
 import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
-import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
@@ -16,7 +14,6 @@ import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMovementCommon } from "ts/system/SMovementCommon";
-import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 
 enum UpdateMode {
