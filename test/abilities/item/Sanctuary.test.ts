@@ -18,7 +18,6 @@ afterAll(() => {
 });
 
 test("Items.Sanctuary", () => {
-    /*
     SGameManager.createGameObjects();
     const dc = RESystem.dialogContext;
 
@@ -27,18 +26,17 @@ test("Items.Sanctuary", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.dir = 6;
     TestEnv.performFloorTransfer();
-    const inventory = actor1.getBehavior(LInventoryBehavior);
-
-    // item1
-    const item1 = SEntityFactory.newEntityFromPrefabName("pふきとばしの杖");
-    item1._name = "item1";
-    item1.addBehavior(LSanctuaryBehavior);
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
     // enemy1
     const enemy1 = SEntityFactory.newMonster(1);
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+
+    // item1: actor1 と enemy1 の間に聖域を置いてみる
+    const item1 = SEntityFactory.newEntityFromPrefabName("pふきとばしの杖");
+    item1._name = "item1";
+    item1.addBehavior(LSanctuaryBehavior);
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -48,18 +46,7 @@ test("Items.Sanctuary", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    console.log("");
-*/
-    /*
-    // [振る]
-    const activity1 = SActivityFactory.newActivity(DBasics.actions.WaveActionId);
-    activity1._setup(actor1, item1);
-    dc.postActivity(activity1);
-    dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
-    
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
-
-    // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
-    expect(enemy1.x).toBe(20);
-    */
+    // Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
+    expect(enemy1.x).toBe(11);
+    expect(enemy1.y).toBe(11);
 });

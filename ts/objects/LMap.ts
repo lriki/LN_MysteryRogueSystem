@@ -402,7 +402,12 @@ export class LMap extends LObject
 
 
 
-    canEntering(block: LBlock, layer: BlockLayerKind): boolean {
+    /**
+     * 指定した Block へ Entity が、"歩行" で侵入できるか。
+     */
+    public canWalkEntering(block: LBlock, entity: LEntity, layer: BlockLayerKind): boolean {
+        if (block.checkPurifier(entity)) return false;  // 聖域の巻物とかがある
+
         // TODO: 壁抜けや浮遊状態で変わる
         return !block.layers()[layer].isOccupied() && block.tileShape() == TileShape.Floor;
     }
@@ -423,7 +428,7 @@ export class LMap extends LObject
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
         const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
 
-        if (this.canLeaving(oldBlock, entity) && this.canEntering(newBlock, layer)) {
+        if (this.canLeaving(oldBlock, entity) && this.canWalkEntering(newBlock, entity, layer)) {
             return true;
         }
         else {

@@ -215,7 +215,7 @@ export class SMovementCommon {
         if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
 
         if (!map.canLeaving(oldBlock, entity)) return false;
-        if (!map.canEntering(newBlock, actualLayer)) return false;
+        if (!map.canWalkEntering(newBlock, entity, actualLayer)) return false;
 
         const d = Helpers.offsetToDir(dx, dy);
         if (this.isDiagonalMoving(d)) {
