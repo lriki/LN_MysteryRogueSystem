@@ -39,7 +39,6 @@ test("Items.Sanctuary", () => {
     // item1: actor1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntityFromPrefabName("pサンクチュアリスクロール");
     item1._name = "item1";
-    item1.addBehavior(LSanctuaryBehavior);
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
