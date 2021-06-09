@@ -12,6 +12,7 @@ import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
+import { MovingMethod } from "ts/objects/LMap";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -98,7 +99,7 @@ export class LProjectableBehavior extends LBehavior {
         const ty = self.y + offset.y;
 
 
-        if (SMovementCommon.moveEntity(self, tx, ty, BlockLayerKind.Projectile)) {
+        if (SMovementCommon.moveEntity(self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;

@@ -220,6 +220,8 @@ export class LWorld
      * 
      * 直ちに座標を変更するため、コマンドチェーン実行内からの呼び出しは禁止。
      * CommandContext.postTransferFloor() を使うこと。
+     * 
+     * このメソッドで移動しても、足元に対するアクションは行わない。(罠を踏んだり、アイテムを拾ったりしない)
      */
     _transferEntity(entity: LEntity, floorId: LFloorId, x: number, y: number): boolean {
         if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
@@ -230,10 +232,17 @@ export class LWorld
         const oldLandId = entity.floorId.landId();
 
         if (REGame.map.floorId().equals(floorId)) {
-            // 現在表示中のマップへの移動
-            entity.floorId = floorId;
-            SMovementCommon.locateEntity(entity, x, y);
-            REGame.map._addEntityInternal(entity);
+            if (entity.floorId.equals(floorId)) {
+                // 現在マップ内での座標移動
+                SMovementCommon.locateEntity(entity, x, y);
+            }
+            else {
+                // 他の Floor から、現在表示中の Floor へ移動
+                entity.floorId = floorId;
+                SMovementCommon.locateEntity(entity, x, y);
+                REGame.map._addEntityInternal(entity);
+            }
+
         }
         else {
             entity.floorId = floorId;

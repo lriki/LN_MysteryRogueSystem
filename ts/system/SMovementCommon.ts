@@ -4,7 +4,7 @@ import { RoomEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { REGame } from "ts/objects/REGame";
 import { LBlock } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
-import { LMap } from "ts/objects/LMap";
+import { LMap, MovingMethod } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
@@ -138,7 +138,7 @@ export class SMovementCommon {
         for (const offset of this.LHRuleOffsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, entity.dir);
             const block = map.tryGetBlock(entity.x + pos.x, entity.y + pos.y);
-            if (block && this.checkPassageBlockToBlock(entity, oldBlock, block)) {
+            if (block && this.checkPassageBlockToBlock(entity, oldBlock, block, MovingMethod.Walk)) {
                 return block;
             }
         }
@@ -155,7 +155,7 @@ export class SMovementCommon {
         for (const d of this.AdjacentDirs) {
             const offset = Helpers.dirToTileOffset(d);
             const block = map.tryGetBlock(entity.x + offset.x, entity.y + offset.y);
-            if (block && this.checkPassageBlockToBlock(entity, oldBlock, block)) {
+            if (block && this.checkPassageBlockToBlock(entity, oldBlock, block, MovingMethod.Walk)) {
                 result.push(block);
             }
         }
@@ -192,7 +192,7 @@ export class SMovementCommon {
         const map = REGame.map;
         const oldBlock = map.block(entity.x, entity.y);
         const newBlock = map.block(entity.x + offset.x, entity.y + offset.y);
-        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock);
+        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
     }
     
     /**
@@ -204,7 +204,7 @@ export class SMovementCommon {
      * 移動可否は entity や Block の性質を考慮する。
      * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
      */
-    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, layer?: BlockLayerKind): boolean {
+    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: BlockLayerKind): boolean {
         const map = REGame.map;
         const actualLayer = layer || entity.queryProperty(RESystem.properties.homeLayer);
 
@@ -215,7 +215,7 @@ export class SMovementCommon {
         if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
 
         if (!map.canLeaving(oldBlock, entity)) return false;
-        if (!map.canWalkEntering(newBlock, entity, actualLayer)) return false;
+        if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
 
         const d = Helpers.offsetToDir(dx, dy);
         if (this.isDiagonalMoving(d)) {
@@ -357,7 +357,7 @@ export class SMovementCommon {
         const front = Helpers.dirToTileOffset(entity.dir);
         const block = map.block(x, y);
         const frontBlock = map.block(x + front.x, y + front.y);
-        if (!this.checkPassageBlockToBlock(entity, block, frontBlock)) return false;    // そもそも Block 間の移動ができない
+        if (!this.checkPassageBlockToBlock(entity, block, frontBlock, MovingMethod.Walk)) return false;    // そもそも Block 間の移動ができない
         if (block.layer(BlockLayerKind.Ground).isContainsAnyEntity()) return false;     // 足元に何かしらある場合はダッシュ停止
         if (block._roomId != frontBlock._roomId) return false;                          // 部屋と部屋や、部屋と通路の境界
 
@@ -378,7 +378,7 @@ export class SMovementCommon {
         return true;
     }
 
-    public static moveEntity(entity: LEntity, x: number, y: number, toLayer: BlockLayerKind): boolean {
+    public static moveEntity(entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
         assert(entity.floorId == map.floorId());
 
@@ -389,7 +389,7 @@ export class SMovementCommon {
         const oldBlock = map.block(entity.x, entity.y);
         const newBlock = map.block(x, y);
 
-        if (this.checkPassageBlockToBlock(entity, oldBlock, newBlock, toLayer)) {
+        if (this.checkPassageBlockToBlock(entity, oldBlock, newBlock, method, toLayer)) {
             assert(oldBlock.removeEntity(entity));
             entity.x = x;
             entity.y = y;

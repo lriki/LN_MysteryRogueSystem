@@ -8,6 +8,7 @@ import { REGame } from "../REGame";
 import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsMagicBullet } from "./LBehavior";
+import { MovingMethod } from "../LMap";
 
 
 /**
@@ -79,7 +80,7 @@ export class LMagicBulletBehavior extends LBehavior {
             }
         }
 
-        if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, BlockLayerKind.Projectile)) {
+        if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             // recall

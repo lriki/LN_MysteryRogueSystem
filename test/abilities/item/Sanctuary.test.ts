@@ -10,6 +10,9 @@ import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
+import { TileShape } from "ts/objects/LBlock";
+import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
+import { SEffectSubject } from "ts/system/SEffectContext";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -57,6 +60,19 @@ test("Items.Sanctuary", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy は攻撃をせずに、左折の法則に従って進む。
+    expect(enemy1.x).toBe(10);
+    expect(enemy1.y).toBe(10);
+
+    
+    REGame.map.block(5, 10)._tileShape = TileShape.Wall;
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
+    LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, enemy1, new SEffectSubject(actor1), 4, 10);
+
+    // 足踏み
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
     expect(enemy1.x).toBe(10);
     expect(enemy1.y).toBe(10);
 });

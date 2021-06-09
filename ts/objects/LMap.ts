@@ -18,6 +18,10 @@ import { SMovementCommon } from "ts/system/SMovementCommon";
 import { FMap } from "ts/floorgen/FMapData";
 import { BlockLayerKind } from "./LBlockLayer";
 
+export enum MovingMethod {
+    Walk,
+    Projectile,
+}
 
 /*
     ### ランダムフロアへ移動したときのフロー
@@ -405,8 +409,10 @@ export class LMap extends LObject
     /**
      * 指定した Block へ Entity が、"歩行" で侵入できるか。
      */
-    public canWalkEntering(block: LBlock, entity: LEntity, layer: BlockLayerKind): boolean {
-        if (block.checkPurifier(entity)) return false;  // 聖域の巻物とかがある
+    public canWalkEntering(block: LBlock, entity: LEntity, method: MovingMethod, layer: BlockLayerKind): boolean {
+        if (method == MovingMethod.Walk) {
+            if (block.checkPurifier(entity)) return false;  // 聖域の巻物とかがある
+        }
 
         // TODO: 壁抜けや浮遊状態で変わる
         return !block.layers()[layer].isOccupied() && block.tileShape() == TileShape.Floor;
@@ -422,13 +428,13 @@ export class LMap extends LObject
     // シレン5石像の洞窟の石像は、Entity扱いだが斜め移動禁止。
     // ちなみに、丸太の罠等では斜めすり抜けできる。
     // deprecated: use SMomementCommon
-    checkPassage(entity: LEntity, dir: number, toLayer?: BlockLayerKind): boolean {
+    checkPassage(entity: LEntity, dir: number, method: MovingMethod, toLayer?: BlockLayerKind): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
         const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
 
-        if (this.canLeaving(oldBlock, entity) && this.canWalkEntering(newBlock, entity, layer)) {
+        if (this.canLeaving(oldBlock, entity) && this.canWalkEntering(newBlock, entity, method, layer)) {
             return true;
         }
         else {

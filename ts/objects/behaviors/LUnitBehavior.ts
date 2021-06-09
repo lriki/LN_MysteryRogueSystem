@@ -25,6 +25,7 @@ import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { LExchangeActivity } from "../activities/LExchangeActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
+import { MovingMethod } from "../LMap";
 
 /**
  * 
@@ -133,7 +134,7 @@ export class LUnitBehavior extends LBehavior {
             const offset = Helpers.dirToTileOffset(activity.direction());
 
             const layer = self.queryProperty(RESystem.properties.homeLayer);
-            if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, layer)) {
+            if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする

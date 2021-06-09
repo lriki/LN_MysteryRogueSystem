@@ -5,6 +5,7 @@ import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
+import { MovingMethod } from "../LMap";
 
 export class LDebugMoveRightState extends LBehavior {
 
@@ -24,7 +25,7 @@ export class LDebugMoveRightState extends LBehavior {
             //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
 
-            if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
+            if (dir != 0 && REGame.map.checkPassage(entity, MovingMethod.Walk, dir)) {
                 context.postActivity(LDirectionChangeActivity.make(entity, dir));
                 context.postActivity(LMoveAdjacentActivity.make(entity, dir));
             }
