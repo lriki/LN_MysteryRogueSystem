@@ -9,6 +9,7 @@ import { TestEnv } from "../../TestEnv";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
+import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -33,7 +34,7 @@ test("Items.Sanctuary", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: actor1 と enemy1 の間に聖域を置いてみる
-    const item1 = SEntityFactory.newEntityFromPrefabName("pふきとばしの杖");
+    const item1 = SEntityFactory.newEntityFromPrefabName("pサンクチュアリスクロール");
     item1._name = "item1";
     item1.addBehavior(LSanctuaryBehavior);
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
@@ -41,12 +42,21 @@ test("Items.Sanctuary", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // 足踏み
-    const dialogContext = RESystem.dialogContext;
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
     expect(enemy1.x).toBe(11);
     expect(enemy1.y).toBe(11);
+    
+    // player を右へ移動。聖域の上に乗る
+    RESystem.dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // Enemy は攻撃をせずに、左折の法則に従って進む。
+    expect(enemy1.x).toBe(10);
+    expect(enemy1.y).toBe(10);
 });

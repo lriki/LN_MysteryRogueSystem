@@ -266,7 +266,7 @@ export class LCharacterAI {
         }
 
         if (moveToPassageWay) {
-            this.moveToAdjacent(self, moveToPassageWay, context);
+            this.postMoveToAdjacent(self, moveToPassageWay, context);
             return true;
         }
 
@@ -274,7 +274,12 @@ export class LCharacterAI {
         if (moveToLHRule) {
             const block = SMovementCommon.getMovingCandidateBlockAsLHRule(self);
             if (block) {
-                this.moveToAdjacent(self, block, context);
+                this.postMoveToAdjacent(self, block, context);
+
+                // 移動後、向きを target へ向けておく
+                const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+                context.postActivity(LDirectionChangeActivity.make(self, dir));
+
                 return true;
             }
         }
@@ -285,7 +290,7 @@ export class LCharacterAI {
             const candidates = SMovementCommon.getMovableAdjacentTiles(self);
             if (candidates.length > 0) {
                 const block = candidates[context.random().nextIntWithMax(candidates.length)];
-                this.moveToAdjacent(self, block, context);
+                this.postMoveToAdjacent(self, block, context);
                 this._noActionTurnCount = 0;
                 return true;
             }
@@ -315,7 +320,7 @@ export class LCharacterAI {
         }
     }
     
-    private moveToAdjacent(self: LEntity, block: LBlock, context: SCommandContext): void {
+    private postMoveToAdjacent(self: LEntity, block: LBlock, context: SCommandContext): void {
         const dir = Helpers.offsetToDir(block.x() - self.x, block.y() - self.y);
         context.postActivity(LDirectionChangeActivity.make(self, dir));
         context.postActivity(LMoveAdjacentActivity.make(self, dir));
@@ -339,7 +344,7 @@ export class LCharacterAI {
     }
     
     public thinkAction(self: LEntity, context: SCommandContext): SPhaseResult {
-        
+
         if (this._attackTargetEntityId.hasAny()) {
 
             // 通常攻撃

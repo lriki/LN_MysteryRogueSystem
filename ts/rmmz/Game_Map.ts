@@ -25,7 +25,6 @@ Game_Map.prototype.setup = function(mapId: number) {
     
     _Game_Map_setup.call(this, mapId);
 
-    
     // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済み。
     // transfarEntity で Player 操作中の Entity も別マップへ移動する。
     // この中で、Camera が Player を注視していれば Camera も Floor を移動することで、
