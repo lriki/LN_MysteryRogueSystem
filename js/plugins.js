@@ -3,5 +3,5 @@
 var $plugins =
 [
 {"name":"LN_RoguelikeEngine","status":true,"description":"LN_RoguelikeEngine v0.0.1","parameters":{}},
-{"name":"LN_FilmicFilter","status":false,"description":"LN_FilmicFilter v0.0.1 (MIT License)","parameters":{}}
+{"name":"LN_FilmicFilter","status":true,"description":"LN_FilmicFilter v0.0.1 (MIT License)","parameters":{}}
 ];
