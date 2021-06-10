@@ -6,6 +6,7 @@ import { RESystem } from "./RESystem";
 import { UnitInfo } from "ts/objects/LScheduler";
 import { SEffectSubject } from "./SEffectContext";
 import { LEntity } from "ts/objects/LEntity";
+import { SActionCommon } from "./SActionCommon";
 
 
 
@@ -92,15 +93,7 @@ export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && unit.behavior.requiredFeetProcess()) {
-            const actor = entity;
-            const block = REGame.map.block(actor.x, actor.y);
-            const layer = block.layer(BlockLayerKind.Ground);
-            const reactor = layer.firstEntity();
-            if (reactor) {
-                const c = RESystem.commandContext;
-                c.post(actor, reactor, new SEffectSubject(actor), undefined, onWalkedOnTopAction);
-                c.post(reactor, actor, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
-            }
+            SActionCommon.postStepOnGround(RESystem.commandContext, entity);
             unit.behavior.clearFeetProcess();
         }
     }

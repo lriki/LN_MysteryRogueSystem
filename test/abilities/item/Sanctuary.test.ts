@@ -62,7 +62,7 @@ test("Items.Sanctuary", () => {
     expect(enemy1.x).toBe(10);
     expect(enemy1.y).toBe(10);
 
-    
+    // 壁 聖 敵 のような並びを作り、←方向へ敵を吹き飛ばす
     REGame.map.block(5, 10)._tileShape = TileShape.Wall;
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
     LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, enemy1, new SEffectSubject(actor1), 4, 10);

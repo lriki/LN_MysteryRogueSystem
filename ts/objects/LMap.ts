@@ -442,6 +442,11 @@ export class LMap extends LObject
         }
     }
 
+    /** 指定した Entity が、このマップ上に出現しているかを確認する。 */
+    public checkAppearing(entity: LEntity): boolean {
+        return this._floorId.equals(entity.floorId) && !entity.isEnteringToFloor();
+    }
+
 
     public updateLocatedResults(context: SCommandContext): void {
         for (const entity of this.entities()) {

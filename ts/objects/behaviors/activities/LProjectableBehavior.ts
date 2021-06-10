@@ -125,11 +125,7 @@ export class LProjectableBehavior extends LBehavior {
 
         
             if (common.blowMoveCount <= 0) {
-                // HomeLayer へ移動
-                SMovementCommon.locateEntity(self, self.x, self.y);
-                context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
-                this.clearKnockback();
-                // TODO: 落下
+                this.endMoving(context ,self);
             }
             else {
                 context.post(self, self, args.subject, undefined, onMoveAsProjectile);
@@ -138,15 +134,18 @@ export class LProjectableBehavior extends LBehavior {
             return REResponse.Succeeded;
         }
         else {
-            // HomeLayer へ移動
-            SMovementCommon.locateEntity(self, self.x, self.y);
-            context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
-            this.clearKnockback();
-            // TODO: 落下
+            this.endMoving(context ,self);
         }
 
         return REResponse.Pass;
     }
     
+    private endMoving(context: SCommandContext, self: LEntity): void {
+        // HomeLayer へ移動
+        SMovementCommon.locateEntity(self, self.x, self.y);
+        context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
+        this.clearKnockback();
+        // TODO: 落下
+    }
 }
 
