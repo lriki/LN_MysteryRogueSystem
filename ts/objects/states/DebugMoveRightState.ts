@@ -25,7 +25,7 @@ export class LDebugMoveRightState extends LBehavior {
             //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
 
-            if (dir != 0 && REGame.map.checkPassage(entity, MovingMethod.Walk, dir)) {
+            if (dir != 0 && REGame.map.checkPassage(entity, dir, MovingMethod.Walk)) {
                 context.postActivity(LDirectionChangeActivity.make(entity, dir));
                 context.postActivity(LMoveAdjacentActivity.make(entity, dir));
             }

@@ -151,7 +151,6 @@ NOTE:
                 SSoundManager.playEquip();
                 context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
 
-                console.log("itemEntity", itemEntity);
                 if (itemEntity.isCursed()) {
                     context.postMessage(tr2("呪われていた！"));
                 }

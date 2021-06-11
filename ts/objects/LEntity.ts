@@ -386,7 +386,7 @@ export class LEntity extends LObject
     //--------------------------------------------------------------------------------
     // State
 
-    addState(stateId: DStateId) {
+    addState(stateId: DStateId, refresh: boolean = true) {
         const states = this.states();
         const index = states.findIndex(s => s.stateId() == stateId);
         if (index >= 0) {
@@ -400,6 +400,10 @@ export class LEntity extends LObject
             this._states.push(state.id());
             state.onAttached();
             this._effectResult.pushAddedState(stateId);
+        }
+
+        if (refresh) {
+            
         }
     }
 

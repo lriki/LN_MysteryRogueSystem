@@ -13,6 +13,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/objects/LMap";
+import { SActionCommon } from "ts/system/SActionCommon";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -146,6 +147,7 @@ export class LProjectableBehavior extends LBehavior {
         context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
         this.clearKnockback();
         // TODO: 落下
+        SActionCommon.postStepOnGround(context, self);
     }
 }
 

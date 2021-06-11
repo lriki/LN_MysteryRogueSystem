@@ -302,6 +302,10 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.refresh
     // Game_Battler.prototype.refresh
     refresh() {
+        const dead = this.isDeathStateAffected();
+
+
+
         //for (const stateId of this.stateResistSet()) {
         //    this.eraseState(stateId);
         //}
@@ -330,11 +334,17 @@ export class LBattlerBehavior extends LBehavior {
         //this._actualParams[RESystem.parameters.hp] = this.actualParam(RESystem.parameters.hp).clamp(0, mhp);
         //this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
         //this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
+
+        // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
+        if (dead && this.actualParam(DBasics.params.hp) != 0) {
+            this.param(DBasics.params.hp).setActualDamgeParam(this.idealParam(DBasics.params.hp));
+            this.ownerEntity().removeAllStates();
+        }
     
         const entity = this.ownerEntity();
         if (this.actualParam(DBasics.params.hp) === 0) {
             console.log("!!!DEAD!!!", this);
-            entity.addState(DBasics.states.dead);
+            entity.addState(DBasics.states.dead, false);
             //throw new Error();
         } else {
             entity.removeState(DBasics.states.dead);

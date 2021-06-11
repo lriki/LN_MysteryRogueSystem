@@ -72,6 +72,6 @@ test("Items.Sanctuary", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-    expect(enemy1.x).toBe(10);
-    expect(enemy1.y).toBe(10);
+    // "戦闘不能" 付加 -> HP0 -> 削除されている
+    expect(enemy1.isDestroyed()).toBe(true);
 });
