@@ -125,6 +125,15 @@ export const onAttackReaction = Symbol("onAttackReaction");
  */
 export const onDirectAttackDamaged = Symbol("onDirectAttackDamaged");
 
+/**
+ * 接地した。
+ * 
+ * 落下とはことなり、例えば既にアイテムがあるところに落ちようとした時は周囲タイルへ落ちていくが、
+ * そういった落下完了までの諸々の処理が解決され、本当に地面上に着地したときに呼ばれる。
+ */
+export const onGrounded = Symbol("onGrounded");
+
+
 export interface CollideActionArgs {
     dir: number;    // 飛翔中の Entity の移動方向。必ずしも Entity の向きと一致するわけではないため、Args として渡す必要がある。
 }

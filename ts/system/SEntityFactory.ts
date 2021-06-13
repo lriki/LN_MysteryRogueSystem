@@ -24,6 +24,7 @@ import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectab
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
+import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -173,6 +174,7 @@ export class SEntityFactory {
                 break;
             case "kItem_サンクチュアリスクロール":
                 entity.addBehavior(LSanctuaryBehavior);
+                entity.addBehavior(LClingFloorBehavior);
                 break;
         }
     }

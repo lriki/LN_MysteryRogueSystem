@@ -26,6 +26,7 @@ import { LExchangeActivity } from "../activities/LExchangeActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
+import { onGrounded } from "../internal";
 
 /**
  * 
@@ -199,6 +200,7 @@ export class LUnitBehavior extends LBehavior {
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
                         context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                        context.post(itemEntity, self, subject, undefined, onGrounded);
                         return true;
                     });
             }
