@@ -108,15 +108,15 @@ export class SEffectorFact {
     private _successRate: number;       // 0~100
 
     // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
-    private _scope: DRmmzEffectScope = 0;
+    private _rmmzEffectScope: DRmmzEffectScope = 0;
 
     private _incidentType: SEffectIncidentType;
 
-    public constructor(subject: LEntity, effect: DEffect, scope: DRmmzEffectScope, incidentType: SEffectIncidentType) {
+    public constructor(subject: LEntity, effect: DEffect, rmmzEffectScope: DRmmzEffectScope, incidentType: SEffectIncidentType) {
         this._subject = subject;
         this._subjectEffect = effect;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
-        this._scope = scope;
+        this._rmmzEffectScope = rmmzEffectScope;
         this._incidentType = incidentType;
 
         // subject の現在値を初期パラメータとする。
@@ -153,8 +153,8 @@ export class SEffectorFact {
         return this._subjectEffect;
     }
 
-    public scope(): DRmmzEffectScope {
-        return this._scope;
+    public rmmzEffectScope(): DRmmzEffectScope {
+        return this._rmmzEffectScope;
     }
 
     public incidentType(): SEffectIncidentType {
@@ -444,7 +444,7 @@ export class SEffectContext {
     
     // Game_Action.prototype.checkItemScope
     private checkItemScope(list: DRmmzEffectScope[]) {
-        return list.includes(this._effectorFact.scope());
+        return list.includes(this._effectorFact.rmmzEffectScope());
     };
 
     // Game_Action.prototype.isForOpponent

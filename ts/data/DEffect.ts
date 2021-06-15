@@ -133,6 +133,13 @@ export interface DEffect {
     hitType: DEffectHitType;
 
     /**
+     * ターゲット側アニメーション。
+     * なお、ユーザー側アニメーションは Effect ではなく Item や Skill 側に付く点に注意。
+     * Item が複数の Effect を持つときでも、ユーザー側は Item 自体に対応する見た目の動作をとる。
+     */
+    rmmzAnimationId: number;
+
+    /**
      * IDataSkill.damage
      * IDataItem.damage
      */
@@ -154,6 +161,7 @@ export function DEffect_Default(): DEffect {
         critical: false,
         successRate: 100,
         hitType: DEffectHitType.Certain,
+        rmmzAnimationId: 0,
         parameterQualifyings: [],
         //rmmzItemEffectQualifying: [],
         performeSkillQualifyings: [],
@@ -168,6 +176,7 @@ export function DEffect_Clone(s: DEffect): DEffect {
         critical: s.critical,
         successRate: s.successRate,
         hitType: s.hitType,
+        rmmzAnimationId: s.rmmzAnimationId,
         parameterQualifyings: s.parameterQualifyings.slice(),
         //rmmzItemEffectQualifying: s.rmmzItemEffectQualifying.slice(),
         performeSkillQualifyings: s.performeSkillQualifyings.slice(),

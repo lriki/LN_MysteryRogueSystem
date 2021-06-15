@@ -15,6 +15,7 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LRandom } from "ts/objects/LRandom";
+import { SEffectPerformer } from "./SEffectPerformer";
 
 export type MCEntryProc = () => REResponse;
 export type CommandResultCallback = () => boolean;
@@ -440,7 +441,9 @@ export class SCommandContext
     postPerformSkill(performer: LEntity, skillId: DSkillDataId): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
-            RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
+            //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
+            const effectPerformer = new SEffectPerformer();
+            effectPerformer.performeSkill(skillId, performer, this);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));

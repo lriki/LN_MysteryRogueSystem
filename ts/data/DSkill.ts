@@ -14,16 +14,16 @@ export class DSkill {
     /** Name */
     name: string;
 
-    rmmzAnimationId: number;
-
     /** Cost */
     paramCosts: DParameterId[];
 
-    scope: DRmmzEffectScope;
+    rmmzEffectScope: DRmmzEffectScope;
 
     //effectSet: DEffectSet;
 
     // Skill は EffectSet ではなく Effect だけを持つものとする。
+    //
+    // 簡単に言うと、Item の方が Skill よりも偉いため。
     //
     // Item は、食べた、投げ当てられたなど様々な要因により効果を発動するが、
     // この効果は "Skill を発動する" と考える方が管理しやすい。
@@ -38,9 +38,8 @@ export class DSkill {
         this.name = "null";
         this.key = "";
         this.kind = "";
-        this.rmmzAnimationId = 0;
         this.paramCosts = [];
-        this.scope = DRmmzEffectScope.None;
+        this.rmmzEffectScope = DRmmzEffectScope.None;
         //effectSet: new DEffectSet(),
         this.effect = DEffect_Default();
     }

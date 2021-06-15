@@ -1,5 +1,4 @@
 import { REData } from "ts/data/REData";
-import { LSkillBehavior } from "../objects/skills/SkillBehavior";
 import { BlockLayerKind } from "../objects/LBlockLayer";
 import { SIntegration } from "./SIntegration";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
@@ -51,7 +50,7 @@ export class RESystem {
     
     
 
-    static skillBehaviors: LSkillBehavior[];
+    //static skillBehaviors: LSkillBehavior[];
 }
 
 

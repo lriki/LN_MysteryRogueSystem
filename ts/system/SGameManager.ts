@@ -8,7 +8,6 @@ import { SScheduler } from "./SScheduler";
 import { LCamera } from "../objects/LCamera";
 import { RESystem } from "./RESystem";
 import { RECommandRecorder } from "./RECommandRecorder";
-import { LNormalAttackSkillBehavior } from "ts/objects/skills/SkillBehavior";
 import { assert, Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
@@ -74,7 +73,7 @@ export class SGameManager
         });
 
         // TODO: とりあえずまずは全部同じにしてテスト
-        RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
+        //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
 
         // 1 番 Actor をデフォルトで操作可能とする
         const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);

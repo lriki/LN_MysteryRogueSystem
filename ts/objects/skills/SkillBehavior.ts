@@ -12,6 +12,7 @@ import { REGame } from "../REGame";
 import { DEffectCause } from "ts/data/DEffect";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 
+/*
 export abstract class LSkillBehavior {
     abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void;
 }
@@ -39,7 +40,7 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
                 const block = REGame.map.block(front.x, front.y);
                 const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
                 if (target) {
-                    const effectSubject = new SEffectorFact(entity, effect ,skill.scope, SEffectIncidentType.DirectAttack);
+                    const effectSubject = new SEffectorFact(entity, effect ,skill.rmmzEffectScope, SEffectIncidentType.DirectAttack);
                     const effectContext = new SEffectContext(effectSubject);
                     //effectContext.addEffector(effector);
 
@@ -66,3 +67,4 @@ export class LNormalAttackSkillBehavior extends LSkillBehavior {
     }
 }
 
+*/

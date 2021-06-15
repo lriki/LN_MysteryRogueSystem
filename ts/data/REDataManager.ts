@@ -17,7 +17,7 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
-import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying } from './DEffect';
+import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 
@@ -383,7 +383,6 @@ export class REDataManager
             if (x) {
                 //const id = REData.addSkill(x.name ?? "null");
                 //const skill = REData.skills[id];
-                skill.rmmzAnimationId = x.animationId;
                 skill.paramCosts[DBasics.params.mp] = x.mpCost;
                 skill.paramCosts[DBasics.params.tp] = x.tpCost;
                 
@@ -392,6 +391,7 @@ export class REDataManager
                     critical: false,
                     successRate: x.successRate,
                     hitType: x.hitType,
+                    rmmzAnimationId: x.animationId,
                     specialEffectQualifyings: x.effects,
                 }
 
@@ -405,8 +405,10 @@ export class REDataManager
                 skill.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
                 */
                 skill.effect = effect;
-                skill.scope = x.scope ?? DRmmzEffectScope.None;
+                skill.rmmzEffectScope = x.scope ?? DRmmzEffectScope.None;
                 skill.parseMetadata(x.meta);
+
+                this.setupDirectly_Skill(skill);
             }
         });
 
@@ -881,6 +883,15 @@ export class REDataManager
         }
     }
 
+    static setupDirectly_Skill(data: DSkill) {
+        switch (data.key) {
+            case "kSkill_炎のブレス":
+                data.effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                data.effect.scope.length = Infinity;
+                data.effect.scope.projectilePrefabKey = "p炎のブレス";
+                break;
+        }
+    }
     
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
@@ -907,6 +918,7 @@ export class REDataManager
                 break;
         }
     }
+
     static setupDirectly_State(data: DState) {
         switch (data.key) {
             case "kState_UT気配察知":
