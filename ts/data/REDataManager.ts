@@ -702,6 +702,9 @@ export class REDataManager
                         throw new Error(`Invalid system prefab name. (${data.system})`);
                     }
                 }
+                else if (data.kind && data.kind == "ornament") {
+                    prefab.dataSource = DPrefabDataSource.Ornament;
+                }
                 else {
                     throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
                 }
@@ -885,7 +888,7 @@ export class REDataManager
 
     static setupDirectly_Skill(data: DSkill) {
         switch (data.key) {
-            case "kSkill_炎のブレス":
+            case "kSkill_炎のブレス_直線":
                 data.effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 data.effect.scope.length = Infinity;
                 data.effect.scope.projectilePrefabKey = "p炎のブレス";
@@ -911,7 +914,8 @@ export class REDataManager
 
             case "kフレイムリーフ":
                 data.effectSet.setEffect(DEffectCause.Hit, data.effectSet.mainEffect());
-                data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス"));
+                //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
+                data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 break;
                 
             case "k眠りガス":

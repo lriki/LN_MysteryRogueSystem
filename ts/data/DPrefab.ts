@@ -19,6 +19,7 @@ export enum DPrefabDataSource {
     Item,
     Enemy,
     System,
+    Ornament,
 }
 
 export enum DSystemPrefabKind {

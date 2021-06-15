@@ -10,6 +10,7 @@ export interface RMMZFloorMetadata {
 }
 
 export interface RMMZEventPrefabMetadata {
+    kind?: string;   // TODO: 必須にしてみる
     item?: string;
     enemy?: string;
     system?: string;

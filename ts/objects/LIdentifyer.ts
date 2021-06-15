@@ -80,6 +80,7 @@ export class LIdentifyer {
             return new LEntityDescription(item.iconIndex, item.name, DescriptionHighlightLevel.Identified);
         }
         else {
+            //return new LEntityDescription(0, "炎", DescriptionHighlightLevel.Identified);
             throw new Error("NotImplemented");
         }
     }

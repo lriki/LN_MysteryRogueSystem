@@ -25,6 +25,7 @@ import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
 import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
+import { DPrefab, DPrefabDataSource, DPrefabId } from "ts/data/DPrefab";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -121,6 +122,13 @@ export class SEntityFactory {
         return e;
     }
 
+    static newOrnament(prefab: DPrefab): LEntity {
+        const e = REGame.world.spawnEntity();
+        e.prefabKey = prefab.key;
+        e.addBehavior(LProjectableBehavior);
+        return e;
+    }
+
     static newEntity(data: DEntity): LEntity {
         const prefab = REData.prefabs[data.prefabId];
         let entity: LEntity;
@@ -143,6 +151,9 @@ export class SEntityFactory {
         }
         else if (prefab.isExitPoint()) {
             entity = this.newEntryPoint();
+        }
+        else if (prefab.dataSource = DPrefabDataSource.Ornament) {
+            entity = this.newOrnament(prefab);
         }
         else {
             throw new Error("Not implemented.");
