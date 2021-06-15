@@ -1,5 +1,5 @@
 import { DBasics } from "ts/data/DBasics";
-import { DEffect, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEffect, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -10,6 +10,7 @@ import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "./SEffectContext";
+import { SEntityFactory } from "./SEntityFactory";
 import { SMovementCommon } from "./SMovementCommon";
 
 
@@ -38,37 +39,57 @@ export class SEffectPerformer {
     public performeEffect(context: SCommandContext, performer: LEntity, effect: DEffect, rmmzEffectScope: DRmmzEffectScope): void {
 
         const subject = performer.getBehavior(LBattlerBehavior);
+
+        // TODO: ユーザー側モーション
         context.postSequel(performer, RESystem.sequels.attack);
 
-        // TODO: 正面3方向攻撃とかの場合はここをループする
-        //for ()
-        {
-            // 攻撃対象決定
-            const front = Helpers.makeEntityFrontPosition(performer, 1);
-            const block = REGame.map.block(front.x, front.y);
-            const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
-            if (target) {
-                const effectSubject = new SEffectorFact(performer, effect, rmmzEffectScope, SEffectIncidentType.DirectAttack);
-                const effectContext = new SEffectContext(effectSubject);
-                //effectContext.addEffector(effector);
+        if (effect.scope.range == DEffectFieldScopeRange.Front1) {
+
+            // TODO: 正面3方向攻撃とかの場合はここをループする
+            //for ()
+            {
+                // 攻撃対象決定
+                const front = Helpers.makeEntityFrontPosition(performer, 1);
+                const block = REGame.map.block(front.x, front.y);
+                const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
+                if (target) {
+                    const effectSubject = new SEffectorFact(performer, effect, rmmzEffectScope, SEffectIncidentType.DirectAttack);
+                    const effectContext = new SEffectContext(effectSubject);
+                    //effectContext.addEffector(effector);
 
 
-                if (SMovementCommon.checkDiagonalWallCornerCrossing(performer, performer.dir)) {
-                    // 斜め向きで壁の角と交差しているので通常攻撃は通らない
-                }
-                else {
-                    const rmmzAnimationId = (effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : effect.rmmzAnimationId;
-                    if (rmmzAnimationId > 0) {
-                        context.postAnimation(target, rmmzAnimationId, true);
+                    if (SMovementCommon.checkDiagonalWallCornerCrossing(performer, performer.dir)) {
+                        // 斜め向きで壁の角と交差しているので通常攻撃は通らない
+                    }
+                    else {
+                        const rmmzAnimationId = (effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : effect.rmmzAnimationId;
+                        if (rmmzAnimationId > 0) {
+                            context.postAnimation(target, rmmzAnimationId, true);
+                        }
+                        
+                        // TODO: SEffectSubject はダミー
+                        context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction);
+
+                        //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                     }
                     
-                    // TODO: SEffectSubject はダミー
-                    context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction);
-
-                    //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
                 }
-                
             }
+        }
+        else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
+            
+            const bullet = SEntityFactory.newEntity({ prefabId: REData.getPrefab(effect.scope.projectilePrefabKey).id, stateIds: [] });
+            REGame.map.appearEntity(bullet, performer.x, performer.y);
+            bullet.dir = performer.dir;
+
+            //context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
+            
+            throw new Error("Not implemented.");
+
+
+        }
+        else {
+            throw new Error("Not implemented.");
         }
     }
 }

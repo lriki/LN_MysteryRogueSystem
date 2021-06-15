@@ -334,6 +334,12 @@ export class REData
         return this.prefabs.find(p => p.key == pattern);
     }
 
+    static getPrefab(pattern: string): DPrefab {
+        const d = this.findPrefabFuzzy(pattern);
+        if (d) return d;
+        throw new Error(`Prefab "${pattern}" not found.`);
+    }
+
     static findStateFuzzy(pattern: string): DState | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
