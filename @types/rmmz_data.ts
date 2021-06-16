@@ -145,8 +145,8 @@ declare interface IDataAction
     conditionParam1?: number;
     conditionParam2?: number;
     conditionType?: number;
-    rating?: number;
-    skillId?: number;
+    rating: number;
+    skillId: number;
 }
 
 declare interface IDataDropItem
@@ -158,18 +158,18 @@ declare interface IDataDropItem
 
 declare interface IDataEnemy
 {
-    id?: number;
-    actions?: IDataAction[];
-    battlerHue?: number;
-    battlerName?: string;
-    dropItems?: IDataDropItem[];
-    exp?: number;
-    traits?: IDataTrait[];
-    gold?: number;
-    name?: string;
-    note?: string;
-    params?: number[];
-    meta?: any;
+    id: number;
+    actions: IDataAction[];
+    battlerHue: number;
+    battlerName: string;
+    dropItems: IDataDropItem[];
+    exp: number;
+    traits: IDataTrait[];
+    gold: number;
+    name: string;
+    note: string;
+    params: number[];
+    meta: any;
 }
 
 declare interface IDataPage

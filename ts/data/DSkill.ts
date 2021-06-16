@@ -49,5 +49,7 @@ export class DSkill {
         this.key = meta["RE-Key"];
         this.kind = meta["RE-Kind"];
     }
+
+    
 }
 

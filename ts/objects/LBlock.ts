@@ -260,6 +260,25 @@ export class LBlock// extends LObject
         return l.entities().find(x => x.isAlive());
     }
 
+    /** Block に含まれている Entity を取得する。 layerKind を指定した場合は、 */
+    public getEntities(layerKind?: BlockLayerKind): LEntity[] {
+        const result: LEntity[] = [];
+        if (layerKind) {
+            const layer = this._layers[layerKind];
+            for (const entity of layer.entities()) {
+                result.push(entity);
+            }
+        }
+        else {
+            for (const layer of this._layers) {
+                for (const entity of layer.entities()) {
+                    result.push(entity);
+                }
+            }
+        }
+        return result;
+    }
+
     /** Entity が含まれている Layer を検索する */
     public findEntityLayerKind(entity: LEntity): BlockLayerKind | undefined {
         const index = this._layers.findIndex(x => x.isContains(entity));

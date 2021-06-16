@@ -1,4 +1,6 @@
 import { assert } from "ts/Common";
+import { DEffectFieldScopeRange } from "ts/data/DEffect";
+import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
@@ -58,7 +60,7 @@ export class LCharacterAI {
                 const targetBlock = REGame.map.block(target.x, target.y);
                 // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
                 // TODO: このあたり、遠距離攻撃モンスターとかは変わる
-                if (this.checkAdjacentDirectlyAttack(self, target) &&
+                if (LCharacterAI.checkAdjacentDirectlyAttack(self, target) &&
                     targetBlock &&!targetBlock.checkPurifier(self)) {     // 聖域の巻物とか無ければ隣接攻撃可能。
                     this._attackTargetEntityId = target.entityId();
                 }
@@ -326,22 +328,6 @@ export class LCharacterAI {
         context.postActivity(LMoveAdjacentActivity.make(self, dir));
         context.postConsumeActionToken(self);
     }
-
-    private checkAdjacentDirectlyAttack(self: LEntity, target: LEntity): boolean {
-        const map = REGame.map;
-        const selfBlock = map.block(self.x, self.y);
-        const targetBlock = map.block(target.x, target.y);
-        const dx = targetBlock.x() - selfBlock.x();
-        const dy = targetBlock.y() - selfBlock.y();
-
-        if (Math.abs(dx) > 1) return false; // 隣接 Block への攻撃ではない
-        if (Math.abs(dy) > 1) return false; // 隣接 Block への攻撃ではない
-
-        const d = Helpers.offsetToDir(dx, dy);
-        if (SMovementCommon.checkDiagonalWallCornerCrossing(self, d)) return false;    // 壁があるので攻撃できない
-
-        return true;
-    }
     
     public thinkAction(self: LEntity, context: SCommandContext): SPhaseResult {
 
@@ -375,4 +361,5 @@ export class LCharacterAI {
         }
         return SPhaseResult.Pass;
     }
+
 }

@@ -650,6 +650,14 @@ export class LEntity extends LObject
         return result;
     }
 
+    public collectSkillActions(): IDataAction[] {
+        const result: IDataAction[] = [];
+        for (const i of this.collectBehaviors()) {
+            i.onCollectSkillActions(result);
+        }
+        return result;
+    }
+
     public queryIdealParameterPlus(parameterId: DParameterId): number {
         return this.basicBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
     }
@@ -658,6 +666,7 @@ export class LEntity extends LObject
         this.basicBehaviors().forEach(b => b.onRefreshStatus());
     }
 
+    /** @deprecated  use collectBehaviors*/
     _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
         const abilities = this.abilities();
         let response = REResponse.Pass;
@@ -680,6 +689,7 @@ export class LEntity extends LObject
 
     // TODO: State と通常の Behavior を分けるのやめる。
     // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
+    /** @deprecated  use collectBehaviors*/
     _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
         const states = this.states();
         let response = REResponse.Pass;
@@ -690,6 +700,7 @@ export class LEntity extends LObject
     }
 
     
+    /** @deprecated  use collectBehaviors*/
     public static _iterateBehavior<TResult>(behaviorIds: readonly LBehaviorId[], func: (x: LBehavior) => TResult, isContinue: (x: TResult) => boolean): TResult | undefined {
         let result:(TResult | undefined) = undefined;
         for (let iBehavior = behaviorIds.length - 1; iBehavior >= 0; iBehavior--) {
@@ -713,7 +724,7 @@ export class LEntity extends LObject
     }
     */
 
-    
+    /** @deprecated  use collectBehaviors*/
     public iterateBehaviors(func: (b: LBehavior) => void): void {
         for (const id of this._basicBehaviors) {
             func(REGame.world.behavior(id));
@@ -722,8 +733,9 @@ export class LEntity extends LObject
 
     public collectBehaviors(): LBehavior[] {
         const result: LBehavior[] = [];
-        this.iterateBehaviors(b => result.push(b));
-        for (const state of this.states()) state.iterateBehaviors(b => result.push(b));
+        for (const i of this._basicBehaviors) result.push(REGame.world.behavior(i));
+        for (const i of this.states()) i.iterateBehaviors(b => result.push(b));
+        for (const i of this.abilities()) i.iterateBehaviors(b => result.push(b));
         return result;
     }
 

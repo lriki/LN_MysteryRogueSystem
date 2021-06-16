@@ -103,6 +103,22 @@ export class SMovementCommon {
     }
 
     /**
+     * Entity の周囲 8 マスの隣接 Entity を取得する。
+     * layerKind を指定すると、そのレイヤーだけ取得する。
+     * 足元は取得しない。
+     * 単純に列挙するだけで、通行判定や攻撃可能判定は行わない。
+     */
+    public static getAdjacentEntities(entity: LEntity, layerKind?: BlockLayerKind): LEntity[] {
+        const result: LEntity[] = [];
+        for (const block of this.getAdjacentBlocks(entity)) {
+            for (const entity of block.getEntities()) {
+                result.push(entity);
+            }
+        }
+        return result;
+    }
+
+    /**
      * 
      */
     public static getNextAdjacentEntityDirCW(entity: LEntity): number {

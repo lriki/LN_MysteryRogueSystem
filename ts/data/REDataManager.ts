@@ -20,6 +20,7 @@ import { DTraits } from './DTraits';
 import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
+import { DEnemy } from './DEnemy';
 
 
 declare global {  
@@ -492,26 +493,28 @@ export class REDataManager
 
         // Import Monsters
         $dataEnemies.forEach(x => {
+            const enemy = new DEnemy(REData.monsters.length);
+            REData.monsters.push(enemy);
             if (x) {
-                const id = REData.addMonster(x.name ?? "");
-                const monster = REData.monsters[id];
-                monster.exp = x.exp ?? 0;
+                enemy.name = x.name;
+                enemy.exp = x.exp;
                 if (x.params) {
-                    monster.idealParams = x.params;
+                    enemy.idealParams = x.params;
                     /*
                     // see: Object.defineProperties
-                    monster.idealParams[DBasics.params.hp] = x.params[0];
-                    monster.idealParams[DBasics.params.mp] = x.params[1];
-                    monster.idealParams[DBasics.params.atk] = x.params[2];
-                    monster.idealParams[DBasics.params.def] = x.params[3];
-                    monster.idealParams[DBasics.params.mat] = x.params[4];
-                    monster.idealParams[DBasics.params.mdf] = x.params[5];
-                    monster.idealParams[DBasics.params.agi] = x.params[6];
-                    monster.idealParams[DBasics.params.luk] = x.params[7];
+                    enemy.idealParams[DBasics.params.hp] = x.params[0];
+                    enemy.idealParams[DBasics.params.mp] = x.params[1];
+                    enemy.idealParams[DBasics.params.atk] = x.params[2];
+                    enemy.idealParams[DBasics.params.def] = x.params[3];
+                    enemy.idealParams[DBasics.params.mat] = x.params[4];
+                    enemy.idealParams[DBasics.params.mdf] = x.params[5];
+                    enemy.idealParams[DBasics.params.agi] = x.params[6];
+                    enemy.idealParams[DBasics.params.luk] = x.params[7];
                     */
                 }
-                monster.traits = x.traits ?? [];
-                monster.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
+                enemy.traits = x.traits;
+                enemy.actions = x.actions;
+                enemy.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
             }
         });
 

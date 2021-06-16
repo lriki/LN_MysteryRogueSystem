@@ -286,7 +286,10 @@ export abstract class LBehavior extends LObject {
 
 
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {}
-    onCollectTraits(result: IDataTrait[]): void { }
+    onCollectTraits(result: IDataTrait[]): void {}
+
+    /** 主に AI 行動決定用に、スキルの一覧を取得する */
+    onCollectSkillActions(result: IDataAction[]): void {}
 
     /** 1行動消費単位の終了時点 */
     onStepEnd(context: SCommandContext): REResponse { return REResponse.Pass; }

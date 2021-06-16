@@ -77,6 +77,12 @@ export class LAbility extends LObject {
         return this._behabiorIds.map(id => REGame.world.behavior(id));
     }
 
+    public iterateBehaviors(func: (b: LBehavior) => void): void {
+        for (const id of this._behabiorIds) {
+            func(REGame.world.behavior(id));
+        }
+    }
+
     public onAttached(): void {
         this.behabiors().forEach(b => {
             b.setParent(this);

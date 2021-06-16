@@ -197,7 +197,7 @@ export class REData
 
         this.actors = [];
 
-        this.monsters = [{ id: 0, key: "", name: 'null', exp: 0, idealParams:[], traits: [] }];
+        this.monsters = [];
         this.lands = [];
         this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false }];
         this.templateMaps = [DTemplateMap_Default()];
@@ -244,22 +244,6 @@ export class REData
             ...DClass_Default,
             id: newId,
             name: name,
-        });
-        return newId;
-    }
-    
-    /**
-     * Add Monster.
-     */
-    static addMonster(name: string): number {
-        const newId = this.monsters.length;
-        this.monsters.push({
-            id: newId,
-            key: "",
-            name: name,
-            exp: 0,
-            idealParams: [],
-            traits: []
         });
         return newId;
     }

@@ -68,5 +68,12 @@ export class LEnemyBehavior extends LBattlerBehavior {
             result.push(t);
         }
     }
+
+    onCollectSkillActions(result: IDataAction[]): void {
+        super.onCollectSkillActions(result);
+        for (const t of this.enemyData().actions){
+            result.push(t);
+        }
+    }
 }
 

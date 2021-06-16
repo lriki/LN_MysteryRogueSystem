@@ -10,8 +10,7 @@ export type DEnemyId = number;
  * やっぱりナシ。
  * ツクールと連携するので、Enemy という名前の方がデータの対応がわかりやすい。
  */
-export interface DEnemy
-{
+export class DEnemy {
     /** ID (0 is Invalid). */
     id: DEnemyId;
 
@@ -27,5 +26,17 @@ export interface DEnemy
     idealParams: number[];
 
     traits: IDataTrait[];
+
+    actions: IDataAction[];
+
+    constructor(id: DEnemyId) {
+        this.id = id;
+        this.key = "";
+        this.name = "";
+        this.exp = 0;
+        this.idealParams = [];
+        this.traits = [];
+        this.actions = [];
+    }
 }
 

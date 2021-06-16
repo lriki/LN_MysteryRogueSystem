@@ -13,6 +13,7 @@ import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
 import { DEffect, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying } from "ts/data/DEffect";
+import { SActionCommon } from "./SActionCommon";
 
 
 enum SParameterEffectApplyType {
@@ -433,46 +434,14 @@ export class SEffectContext {
 
     // Game_Action.prototype.testLifeAndDeath
     private testLifeAndDeath(targetBattlerBehavior: LBattlerBehavior) {
-        if (this.isForOpponent() || this.isForAliveFriend()) {
+        const itemScope = this._effectorFact.rmmzEffectScope()
+        if (SActionCommon.isForOpponent(itemScope) || SActionCommon.isForAliveFriend(itemScope)) {
             return targetBattlerBehavior.isAlive();
-        } else if (this.isForDeadFriend()) {
+        } else if (SActionCommon.isForDeadFriend(itemScope)) {
             return targetBattlerBehavior.isDead();
         } else {
             return true;
         }
-    }
-    
-    // Game_Action.prototype.checkItemScope
-    private checkItemScope(list: DRmmzEffectScope[]) {
-        return list.includes(this._effectorFact.rmmzEffectScope());
-    };
-
-    // Game_Action.prototype.isForOpponent
-    private isForOpponent(): boolean {
-        return this.checkItemScope([
-            DRmmzEffectScope.Opponent_Single,
-            DRmmzEffectScope.Opponent_All,
-            DRmmzEffectScope.Opponent_Random_1,
-            DRmmzEffectScope.Opponent_Random_2,
-            DRmmzEffectScope.Opponent_Random_3,
-            DRmmzEffectScope.Opponent_Random_4,
-            DRmmzEffectScope.Everyone]);
-    }
-
-    // Game_Action.prototype.isForAliveFriend
-    private isForAliveFriend(): boolean {
-        return this.checkItemScope([
-            DRmmzEffectScope.Friend_Single_Alive,
-            DRmmzEffectScope.Friend_All_Alive,
-            DRmmzEffectScope.User,
-            DRmmzEffectScope.Everyone]);
-    }
-
-    // Game_Action.prototype.isForDeadFriend
-    private isForDeadFriend(): boolean {
-        return this.checkItemScope([
-            DRmmzEffectScope.Friend_Single_Dead,
-            DRmmzEffectScope.Friend_All_Dead]);
     }
 
     // Game_Action.prototype.makeDamageValue

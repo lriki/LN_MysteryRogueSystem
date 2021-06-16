@@ -1,3 +1,4 @@
+import { assert } from "ts/Common";
 
 export class LRandom {
     private _x: number;
@@ -44,6 +45,11 @@ export class LRandom {
 
     nextIntWithWidth(median: number, width: number): number {
         return this.nextIntWithMinMax(median - width, median + width);
+    }
+
+    public select<T>(ary: Array<T>): T {
+        assert(ary.length > 0);
+        return ary[this.nextIntWithMax(ary.length)];
     }
 
 }
