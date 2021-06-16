@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 import { DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
@@ -7,13 +8,14 @@ import { LEntity } from "ts/objects/LEntity";
 import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { Helpers } from "./Helpers";
+import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectSubject } from "./SEffectContext";
 import { SMovementCommon } from "./SMovementCommon";
 
 export interface CandidateSkillAction {
     action: IDataAction;
-    target: LEntity;
+    targets: LEntity[];
 }
 
 export class SActionCommon {
@@ -86,10 +88,26 @@ export class SActionCommon {
     public static makeCandidateSkillActions(performer: LEntity, prevTargetEntityId: LEntityId): CandidateSkillAction[] {
         const actions = performer.collectSkillActions();
         const result: CandidateSkillAction[] = [];
+        let hasAdjacentAction = false;
+
+        // まずは射程や地形状況を考慮して、発動可能な Skill を集める
         for (const action of actions) {
-            const r = this.meetValidAction(performer, prevTargetEntityId, action);
-            if (r) result.push(r);
+            if (action.skillId == RESystem.skills.move) {
+                // "移動" は特別扱い。まずは常に使用できるものとして追加しておく
+                result.push({ action: action,targets: []});
+            }
+            else {
+                const r = this.meetValidAction(performer, prevTargetEntityId, action);
+                if (r) {
+                    result.push(r);
+                }
+            }
         }
+
+        
+
+
+
         return result;
     }
 
@@ -137,7 +155,7 @@ export class SActionCommon {
 
             assert(target);
 
-            return { action: action, target: target };
+            return { action: action, targets: [target] };
 
 
 

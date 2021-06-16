@@ -223,7 +223,8 @@ export class REDataManager
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         
         RESystem.skills = {
-            normalAttack:1,
+            move: 3,
+            normalAttack: 1,
         };
 
         REData.monsterHouses = [
