@@ -180,6 +180,15 @@ export class SMovementCommon {
     private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
 
     /**
+     * 2つの Entity が隣接しているかどうか
+     */
+    public static checkEntityAdjacent(e1: LEntity, e2: LEntity): boolean {
+        const dx = e1.x - e2.x;
+        const dy = e1.y - e2.y;
+        return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
+    }
+
+    /**
      * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
      */
     public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {

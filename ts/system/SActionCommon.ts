@@ -104,7 +104,7 @@ export class SActionCommon {
             }
         }
 
-        
+        // 攻撃対象が隣接していれば、"移動" を外す
 
 
 

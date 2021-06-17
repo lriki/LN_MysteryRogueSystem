@@ -47,9 +47,24 @@ import { REGame } from "./REGame";
  */
 export class LCharacterAI {
     
+    // 最初のフェーズで決定する、メインの行動対象 Entity.
+    // 基本的に敵対 Entity であり、移動処理のために使用する。
+    // 通常の AI はここに向かって移動する。
+    // 逃げ AI はここから離れるように移動する。
+    private _primaryTargetEntity: LEntityId = LEntityId.makeEmpty();
+    
+    // 移動ターゲットとなる座標。
+    // _primaryTargetEntity ではなく、部屋の入り口などを示すこともある。
     private _targetPositionX: number = -1;
     private _targetPositionY: number = -1;
+
+    // スキル適用対象。
+    // 味方に回復や支援を行うモンスターは、_primaryTargetEntity で敵の方向に向かいつつ、
+    // 範囲内にいる味方はこの値でターゲットする。
+    // 最初のフェーズで決定したあと実査には Major フェーズで行動を起こすが、
+    // そのときこの値でターゲットした対象が効果範囲を外れていた場合はもう一度 Minor と同じ試行処理を回す。
     private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
+
     private _noActionTurnCount: number = 0;
 
     public clone(): LCharacterAI {
