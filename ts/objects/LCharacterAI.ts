@@ -4,6 +4,7 @@ import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
+import { CandidateSkillAction, SActionCommon } from "ts/system/SActionCommon";
 import { SAIHelper } from "ts/system/SAIHelper";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMovementCommon } from "ts/system/SMovementCommon";
@@ -51,7 +52,7 @@ export class LCharacterAI {
     // 基本的に敵対 Entity であり、移動処理のために使用する。
     // 通常の AI はここに向かって移動する。
     // 逃げ AI はここから離れるように移動する。
-    private _primaryTargetEntity: LEntityId = LEntityId.makeEmpty();
+    private _primaryTargetEntityId: LEntityId = LEntityId.makeEmpty();
     
     // 移動ターゲットとなる座標。
     // _primaryTargetEntity ではなく、部屋の入り口などを示すこともある。
@@ -63,15 +64,18 @@ export class LCharacterAI {
     // 範囲内にいる味方はこの値でターゲットする。
     // 最初のフェーズで決定したあと実査には Major フェーズで行動を起こすが、
     // そのときこの値でターゲットした対象が効果範囲を外れていた場合はもう一度 Minor と同じ試行処理を回す。
-    private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
+    //private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
+    private _requiredSkillAction: CandidateSkillAction | undefined;
 
     private _noActionTurnCount: number = 0;
 
     public clone(): LCharacterAI {
         const i = new LCharacterAI();
+        i._primaryTargetEntityId = this._primaryTargetEntityId.clone();
         i._targetPositionX = this._targetPositionX;
         i._targetPositionY = this._targetPositionY;
-        i._attackTargetEntityId = this._attackTargetEntityId.clone();
+        i._requiredSkillAction = this._requiredSkillAction ? { ...this._requiredSkillAction } : undefined;
+        //i._attackTargetEntityId = this._attackTargetEntityId.clone();
         i._noActionTurnCount = this._noActionTurnCount;
         return i;
     }
@@ -91,13 +95,41 @@ export class LCharacterAI {
             if (target) {
                 this._targetPositionX = target.x;
                 this._targetPositionY = target.y;
+                this._primaryTargetEntityId = target.entityId().clone();
+
+                
+                // TODO: 仮
+                const dir = SAIHelper.entityDistanceToDir(self, target);
+                self.dir = dir;
             }
             else {
                 //console.log("NotImplemented.");
                 //this._targetPositionX = -1;
                 //this._targetPositionY = -1;
+                this._primaryTargetEntityId = LEntityId.makeEmpty();
+            }
+
+            this._requiredSkillAction = undefined;
+            const candidates = SActionCommon.makeCandidateSkillActions(self, this._primaryTargetEntityId);
+            const skillAction = context.random().selectOrUndefined(candidates);
+            if (skillAction) {
+                if (skillAction.action.skillId == RESystem.skills.move) {
+                    // 移動
+                    //this._attackTargetEntityId = LEntityId.makeEmpty();
+                }
+                else {
+                    this._requiredSkillAction = skillAction;
+                    //this._attackTargetEntityId = target.entityId();
+
+                }
+
+            }
+            else {
+                //this._attackTargetEntityId = LEntityId.makeEmpty();
+                // 見失ったときも targetPosition は維持
             }
         
+            /*
             if (target) {
                 const targetBlock = REGame.map.block(target.x, target.y);
                 // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
@@ -111,8 +143,8 @@ export class LCharacterAI {
     
                     // 見失ったときも targetPosition は維持
                 }
-
             }
+            */
 
         }
 
@@ -120,7 +152,8 @@ export class LCharacterAI {
 
         
         // 攻撃対象が設定されていれば、このフェーズでは何もしない
-        if (this._attackTargetEntityId.hasAny()) {
+        //if (this._requiredSkillAction?.targets.hasAny() && ) {
+        if (this._requiredSkillAction) {
             return SPhaseResult.Pass;
         }
         
@@ -373,23 +406,27 @@ export class LCharacterAI {
     
     public thinkAction(self: LEntity, context: SCommandContext): SPhaseResult {
 
-        if (this._attackTargetEntityId.hasAny()) {
+        //if (this._attackTargetEntityId.hasAny()) {
+        if (this._requiredSkillAction) {
 
-            // 通常攻撃
+            //// 通常攻撃
             {
-                const target = REGame.world.entity(this._attackTargetEntityId);
+                //const target = REGame.world.entity(this._attackTargetEntityId);
                 // 発動可否チェック。本当に隣接している？
-                let valid = false;
-                if (Helpers.checkAdjacent(self, target)) {
-                    valid = true;
-                }
+                //let valid = false;
+                //if (Helpers.checkAdjacent(self, target)) {
+                //    valid = true;
+                //}
 
-                if (valid) {
-                    const dir = SAIHelper.entityDistanceToDir(self, target);
+                console.log("this._requiredSkillAction", this._requiredSkillAction);
+
+                if (SActionCommon.checkEntityWithinSkillActionRange(self, this._requiredSkillAction)) {
+                    //const dir = SAIHelper.entityDistanceToDir(self, target);
                     
-                    context.postActivity(LDirectionChangeActivity.make(self, dir));
+                    //context.postActivity(LDirectionChangeActivity.make(self, dir));
     
-                    context.postPerformSkill(self, RESystem.skills.normalAttack);
+                    //context.postPerformSkill(self, RESystem.skills.normalAttack);
+                    context.postPerformSkill(self, this._requiredSkillAction.action.skillId);
                     context.postConsumeActionToken(self);
                     return SPhaseResult.Handled;
                 }

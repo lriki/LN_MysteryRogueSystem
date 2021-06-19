@@ -52,4 +52,10 @@ export class LRandom {
         return ary[this.nextIntWithMax(ary.length)];
     }
 
+    public selectOrUndefined<T>(ary: Array<T>): T | undefined {
+        if (ary.length > 0)
+            return ary[this.nextIntWithMax(ary.length)];
+        else
+            return undefined;
+    }
 }

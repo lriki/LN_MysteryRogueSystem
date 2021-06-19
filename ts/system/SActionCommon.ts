@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEffect, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
@@ -85,7 +85,7 @@ export class SActionCommon {
         return true;
     }
 
-    public static makeCandidateSkillActions(performer: LEntity, prevTargetEntityId: LEntityId): CandidateSkillAction[] {
+    public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): CandidateSkillAction[] {
         const actions = performer.collectSkillActions();
         const result: CandidateSkillAction[] = [];
         let hasAdjacentAction = false;
@@ -97,7 +97,7 @@ export class SActionCommon {
                 result.push({ action: action,targets: []});
             }
             else {
-                const r = this.meetValidAction(performer, prevTargetEntityId, action);
+                const r = this.meetValidAction(performer, primaryTargetId, action);
                 if (r) {
                     result.push(r);
                 }
@@ -105,6 +105,9 @@ export class SActionCommon {
         }
 
         // 攻撃対象が隣接していれば、"移動" を外す
+        if (primaryTargetId.hasAny() && SMovementCommon.checkEntityAdjacent(performer, REGame.world.entity(primaryTargetId))) {
+            result.mutableRemove(x => x.action.skillId == RESystem.skills.move);
+        }
 
 
 
@@ -170,7 +173,34 @@ export class SActionCommon {
         else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
             throw new Error("Not implemented.");
         }
+        else {
+            throw new Error("Unreachable.");
+        }
 
         return undefined;
+    }
+
+    /** skillAction の射程範囲内に、有効なターゲットが１つでも含まれているか確認する */
+    public static checkEntityWithinSkillActionRange(performer: LEntity, skillAction: CandidateSkillAction): boolean {
+        const skill = REData.skills[skillAction.action.skillId];
+        const effect = skill.effect;
+        let count = 0;
+        for (const t of skillAction.targets) {
+            if (this.checkEntityWithinRange(performer, effect, t)) count++;
+        }
+        return count > 0;
+    }
+
+    /** effect の射程範囲内に target が含まれているかを確認する */
+    public static checkEntityWithinRange(performer: LEntity, effect: DEffect, target: LEntity): boolean {
+        if (effect.scope.range == DEffectFieldScopeRange.Front1) {
+            return SMovementCommon.checkEntityAdjacent(performer, target);
+        }
+        else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
+            throw new Error("Not implemented.");
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
     }
 }
