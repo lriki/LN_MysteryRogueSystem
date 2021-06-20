@@ -112,7 +112,7 @@ test("CharacterAI.ActionPattern", () => {
     const dialogContext = RESystem.dialogContext;
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
-    REGame.world.random().resetSeed(4);
+    REGame.world.random().resetSeed(4);     // 炎を吐く乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
     const hp = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);

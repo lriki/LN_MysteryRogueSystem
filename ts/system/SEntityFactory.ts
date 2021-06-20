@@ -26,6 +26,8 @@ import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBeh
 import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
 import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
 import { DPrefab, DPrefabDataSource, DPrefabId } from "ts/data/DPrefab";
+import { DEnemy, DEnemyId } from "ts/data/DEnemy";
+import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavior";
 
 export class SEntityFactory {
     static newActor(actorId: number): LEntity {
@@ -43,14 +45,15 @@ export class SEntityFactory {
         return e;
     }
 
-    static newMonster(monsterId: number): LEntity {
+    static newMonster(enemyId: DEnemyId): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
-        e.addBehavior(LEnemyBehavior, monsterId);
+        e.addBehavior(LEnemyBehavior, enemyId);
         //e.addBehavior(LEntityDivisionBehavior);
+        this.setupDirectly_Enemy(e, REData.monsters[enemyId])
         return e;
     }
 
@@ -188,6 +191,15 @@ export class SEntityFactory {
                 entity.addBehavior(LClingFloorBehavior);
                 break;
         }
+    }
+
+    static setupDirectly_Enemy(entity: LEntity, data: DEnemy) {
+        switch (data.key) {
+            case "kEnemy_ミミック":
+                entity.addBehavior(LItemImitatorBehavior);
+                break;
+        }
+
     }
 }
 
