@@ -8,6 +8,7 @@ import { REGame } from "./REGame";
 import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
 import { LSanctuaryBehavior } from "./behaviors/LSanctuaryBehavior";
 import { BlockLayerKind, REBlockLayer } from "./LBlockLayer";
+import { LRoom } from "./LRoom";
 
 export type LRoomId = number;
 
@@ -169,6 +170,13 @@ export class LBlock// extends LObject
 
     y(): number {
         return this._y;
+    }
+
+    public room(): LRoom | undefined {
+        if (this._roomId > 0)
+            return REGame.map.room(this._roomId);
+        else
+            return undefined;
     }
 
     /** 表示用 TileId. 通行判定や部屋内判定に使用するものではない点に注意。 */

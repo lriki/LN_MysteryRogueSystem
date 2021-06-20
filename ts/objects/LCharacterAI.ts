@@ -420,6 +420,7 @@ export class LCharacterAI {
 
                 console.log("this._requiredSkillAction", this._requiredSkillAction);
 
+                // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
                 if (SActionCommon.checkEntityWithinSkillActionRange(self, this._requiredSkillAction)) {
                     //const dir = SAIHelper.entityDistanceToDir(self, target);
                     
@@ -429,6 +430,10 @@ export class LCharacterAI {
                     context.postPerformSkill(self, this._requiredSkillAction.action.skillId);
                     context.postConsumeActionToken(self);
                     return SPhaseResult.Handled;
+                }
+                else {
+                    // 
+                    throw new Error("Not implemented.");
                 }
                 
             }

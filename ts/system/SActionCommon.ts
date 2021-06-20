@@ -1,12 +1,13 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { DEffect, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEffect, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { LEntity } from "ts/objects/LEntity";
 import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
+import { preProcessFile } from "typescript";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
@@ -15,7 +16,7 @@ import { SMovementCommon } from "./SMovementCommon";
 
 export interface CandidateSkillAction {
     action: IDataAction;
-    targets: LEntity[];
+    targets: LEntity[];     // ターゲット候補。
 }
 
 export class SActionCommon {
@@ -92,16 +93,28 @@ export class SActionCommon {
 
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
         for (const action of actions) {
-            if (action.skillId == RESystem.skills.move) {
-                // "移動" は特別扱い。まずは常に使用できるものとして追加しておく
-                result.push({ action: action,targets: []});
+            const skill = REData.skills[action.skillId];
+            const effect = skill.effect;
+            const targets = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
+            if (targets.length > 0) {
+                result.push({ action: action, targets: targets });
             }
-            else {
-                const r = this.meetValidAction(performer, primaryTargetId, action);
-                if (r) {
-                    result.push(r);
-                }
-            }
+            //if (action.skillId == RESystem.skills.move) {
+            //}
+        }
+
+        // "移動" は特別扱い。まずは常に使用できるものとして追加しておく
+        if (!result.find(x => x.action.skillId == RESystem.skills.move)) {
+            result.push({
+                action: { 
+                    conditionParam1: undefined,
+                    conditionParam2: undefined,
+                    conditionType: undefined,
+                    rating: 5,
+                    skillId: RESystem.skills.move,
+                },
+                targets: []
+            });
         }
 
         // 攻撃対象が隣接していれば、"移動" を外す
@@ -128,14 +141,12 @@ export class SActionCommon {
         return false;
     }
     
-    private static meetValidAction(performer: LEntity, prevTargetEntityId: LEntityId, action: IDataAction): CandidateSkillAction | undefined {
-        const skill = REData.skills[action.skillId];
-        const effect = skill.effect;
+    private static searchTargetEntities(performer: LEntity, scope: DEffectFieldScope, rmmzEffectScope: DRmmzEffectScope): LEntity[] {
         
-        if (effect.scope.range == DEffectFieldScopeRange.Front1) {
+        if (scope.range == DEffectFieldScopeRange.Front1) {
             // ターゲット候補を集める
             const candidates = SMovementCommon.getAdjacentEntities(performer).filter(target => {
-                if (!this.testFactionMatch(performer, target, skill.rmmzEffectScope)) return false;
+                if (!this.testFactionMatch(performer, target, rmmzEffectScope)) return false;
 
                 if (!this.checkAdjacentDirectlyAttack(performer, target)) return false; // 壁の角など、隣接攻撃できなければダメ
 
@@ -145,6 +156,9 @@ export class SActionCommon {
                 return true;
             });
 
+            return candidates;
+
+            /*
             // 隣接している有効な対象がいない
             if (candidates.length <= 0) return undefined;
 
@@ -159,6 +173,7 @@ export class SActionCommon {
             assert(target);
 
             return { action: action, targets: [target] };
+            */
 
 
 
@@ -170,37 +185,94 @@ export class SActionCommon {
             }
             */
         }
-        else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
-            throw new Error("Not implemented.");
+        else if (scope.range == DEffectFieldScopeRange.StraightProjectile) {
+            let candidates: LEntity[] = [];
+            for (const dir of SMovementCommon.directions) {
+                //const [ox, oy] = Helpers._dirToTileOffsetTable[dir];
+                const ox = Helpers._dirToTileOffsetTable[dir].x;
+                const oy = Helpers._dirToTileOffsetTable[dir].y;
+                for (let i = 1; i < scope.length; i++) { // 足元を含む必要はないので i=1 から開始
+                    const x = performer.x + (ox * i);
+                    const y = performer.y + (oy * i);
+                    const block = REGame.map.tryGetBlock(x, y);
+
+                    // マップ外まで見たら列挙終了
+                    if (!block) {
+                        break;
+                    }
+
+                    // 視界内チェック
+                    if (scope.area == DEffectFieldScopeArea.Room) {
+                        const room = block.room();
+                        if (room) {
+                            if (room.checkVisibilityBlock(block)) {
+                                // 視界内
+                            }
+                            else {
+                                // 視界外
+                                break;
+                            }
+                        }
+                        else {
+                            // 通路内では隣接のみ視界内としたい
+                            if (i == 2) break;
+                        }
+                    }
+                    else if (scope.area == DEffectFieldScopeArea.Floor) {
+                        throw new Error("Not implemented.");
+                    }
+                    else {
+                        throw new Error("Unreachable");
+                    }
+
+                    // Block 内の Target にできる Entity を集める
+                    const targets = block.getEntities().filter(target => {
+                        // 勢力チェック
+                        if (!this.testFactionMatch(performer, target, rmmzEffectScope)) return false;
+                        return true;
+                    })
+
+                    if (targets.length > 0) {
+                        candidates = candidates.concat(targets);
+                    }
+                }
+            }
+
+            return candidates;
+            //return { action: action, targets: targets };
         }
         else {
             throw new Error("Unreachable.");
         }
 
-        return undefined;
+        return [];
     }
 
     /** skillAction の射程範囲内に、有効なターゲットが１つでも含まれているか確認する */
     public static checkEntityWithinSkillActionRange(performer: LEntity, skillAction: CandidateSkillAction): boolean {
         const skill = REData.skills[skillAction.action.skillId];
         const effect = skill.effect;
-        let count = 0;
-        for (const t of skillAction.targets) {
-            if (this.checkEntityWithinRange(performer, effect, t)) count++;
+        //let count = 0;
+        const entities = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
+        for (const target of skillAction.targets) {
+            if (!!entities.find(x => x == target)) {
+                return true;
+            }
         }
-        return count > 0;
+        return false;
+        //for (const t of skillAction.targets) {
+        //    if (this.checkEntityWithinRange(performer, effect, skill.rmmzEffectScope, t)) {
+        //        return true;
+        //    }
+        //}
+        //return count > 0;
     }
 
     /** effect の射程範囲内に target が含まれているかを確認する */
-    public static checkEntityWithinRange(performer: LEntity, effect: DEffect, target: LEntity): boolean {
-        if (effect.scope.range == DEffectFieldScopeRange.Front1) {
-            return SMovementCommon.checkEntityAdjacent(performer, target);
-        }
-        else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
-            throw new Error("Not implemented.");
-        }
-        else {
-            throw new Error("Unreachable.");
-        }
+    /*
+    public static checkEntityWithinRange(performer: LEntity, effect: DEffect, rmmzScope: DRmmzEffectScope, target: LEntity): boolean {
+        const entities = this.searchTargetEntities(performer, effect.scope, rmmzScope);
+        return !!entities.find(x => x == target);
     }
+    */
 }

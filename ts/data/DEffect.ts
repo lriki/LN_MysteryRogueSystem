@@ -99,9 +99,16 @@ export enum DEffectHitType {
 export enum DEffectFieldScopeRange {
     Front1,
     StraightProjectile,
+    PointProjectile,        // 投石やスカイドラゴンの炎
+}
+
+export enum DEffectFieldScopeArea {
+    Room,
+    Floor,
 }
 
 export interface DEffectFieldScope {
+    area: DEffectFieldScopeArea,
     range: DEffectFieldScopeRange,
     length: number,
     projectilePrefabKey: string,
@@ -157,7 +164,11 @@ export interface DEffect {
 
 export function DEffect_Default(): DEffect {
     return {
-        scope: { range: DEffectFieldScopeRange.Front1, length: -1, projectilePrefabKey: "" },
+        scope: {
+            area: DEffectFieldScopeArea.Room,
+            range: DEffectFieldScopeRange.Front1,
+            length: -1,
+            projectilePrefabKey: "" },
         critical: false,
         successRate: 100,
         hitType: DEffectHitType.Certain,

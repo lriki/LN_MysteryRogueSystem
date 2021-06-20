@@ -110,6 +110,15 @@ export class LRoom {
         return result;
     }
 
+    /**
+     * 指定した Block が、この部屋として有効な視界内にあるかを確認する。
+     * (部屋の床タイルと、周囲１マスの壁は有効視界である)
+     */
+    public checkVisibilityBlock(block: LBlock): boolean {
+        return this._x1 - 1 <= block.x() && block.x() <= this._x2 + 1 &&
+               this._y1 - 1 <= block.y() && block.y() <= this._y2 + 1;
+    }
+
     /*
     public forEachEntranceBlocks(func: (block: REGame_Block) => void): void {
         const map = REGame.map;

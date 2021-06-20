@@ -14,6 +14,9 @@ import { SActivityFactory } from "ts/system/SActivityFactory";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { TileShape } from "ts/objects/LBlock";
+import { REData } from "ts/data/REData";
+import { LActivity } from "ts/objects/activities/LActivity";
+import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -86,3 +89,36 @@ test("CharacterAI.AttackOnDiagonalEdge", () => {
     expect(enemy1.x).toBe(10);
     expect(enemy1.y).toBe(11);
 });
+
+
+test("CharacterAI.ActionPattern", () => {
+    SGameManager.createGameObjects();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    actor1._name = "actor1";
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_CharacterAI, 2, 4);
+    TestEnv.performFloorTransfer();
+    const initialHP = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
+
+    // enemy1 
+    const enemy1 = SEntityFactory.newEntity({ prefabId: REData.getPrefab("pドラゴン").id, stateIds: [] });
+    enemy1._name = "enemy1";
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 4, 4);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // 足踏み
+    const dialogContext = RESystem.dialogContext;
+    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    REGame.world.random().resetSeed(3);
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    const hp = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
+
+    // enemy1 は左折の法則により移動しているはず
+    //expect(enemy1.x).toBe(10);
+    //expect(enemy1.y).toBe(11);
+});
+

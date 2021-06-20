@@ -38,7 +38,11 @@ export class SMovementCommon {
         { x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 0 }, { x: 1, y: 0 }
     ];
 
-    private static adjacentOffsets: number[][] = [
+    public static directions: number[] = [
+        1, 2, 3, 4, 6, 7, 8, 9,
+    ];
+
+    public static adjacentOffsets: number[][] = [
         [-1, -1], [0, -1], [1, -1],
         [-1, 0], [1, 0],
         [-1, 1], [0, 1], [1, 1],

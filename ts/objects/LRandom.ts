@@ -13,6 +13,13 @@ export class LRandom {
         this._w = seed;
     }
 
+    public resetSeed(seed: number) {
+        this._x = 123456789;
+        this._y = 362436069;
+        this._z = 521288629;
+        this._w = seed;
+    }
+
     nextInt(): number {
         const t = this._x ^ (this._x << 11);
         this._x = this._y;
