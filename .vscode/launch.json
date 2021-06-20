@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "CharacterAI.Moving1"
+                "-t", "CharacterAI.ActionPattern"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

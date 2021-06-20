@@ -7,13 +7,15 @@ import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { Helpers } from "ts/system/Helpers";
 import { REResponse } from "ts/system/RECommand";
-import { SEffectSubject } from "ts/system/SEffectContext";
+import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/objects/LMap";
 import { SActionCommon } from "ts/system/SActionCommon";
+import { DEffect, DEffectCause, DRmmzEffectScope } from "ts/data/DEffect";
+import { LEntityId } from "ts/objects/LObject";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -30,6 +32,8 @@ export class LProjectableBehavior extends LBehavior {
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
     //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
+    private _effect: DEffect | undefined;
+    //private _effectSubject: LEntityId | undefined;
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LProjectableBehavior);
@@ -51,6 +55,18 @@ export class LProjectableBehavior extends LBehavior {
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
+    
+    public static startMoveAsSkillEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, effect: DEffect): void {
+        const common = entity.findBehavior(LProjectableBehavior);
+        assert(common);
+
+        common._effect = effect;
+        common.blowDirection = dir;
+        common.blowMoveCount = effect.scope.length;
+        
+        context.post(entity, entity, subject, undefined, onMoveAsProjectile);
+    }
+
 
     private clearKnockback(): void {
         this.blowDirection = 0;
@@ -141,6 +157,36 @@ export class LProjectableBehavior extends LBehavior {
         return REResponse.Pass;
     }
     
+    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
+        if (this._effect) {
+            const self = args.self;
+            const target = args.sender;
+            const subject = args.subject;
+
+            context.postDestroy(self);
+            //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+            
+            const rmmzScope = DRmmzEffectScope.Opponent_Single; // itemData.rmmzScope,
+            const animationId = 1;  // TODO:
+
+            const effectSubject = new SEffectorFact(subject.entity(), this._effect, rmmzScope, SEffectIncidentType.IndirectAttack);
+            const effectContext = new SEffectContext(effectSubject);
+    
+            context.postAnimation(target, animationId, true);
+    
+            // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
+            context.postCall(() => {
+                effectContext.applyWithWorth(context, [target]);
+            });
+            
+            return REResponse.Succeeded;
+        }
+        else {
+
+            return REResponse.Pass;
+        }
+    }
+
     private endMoving(context: SCommandContext, self: LEntity): void {
         // HomeLayer へ移動
         SMovementCommon.locateEntity(self, self.x, self.y);

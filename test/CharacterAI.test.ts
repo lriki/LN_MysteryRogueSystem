@@ -112,13 +112,10 @@ test("CharacterAI.ActionPattern", () => {
     const dialogContext = RESystem.dialogContext;
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
-    REGame.world.random().resetSeed(3);
+    REGame.world.random().resetSeed(4);
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
     const hp = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
-
-    // enemy1 は左折の法則により移動しているはず
-    //expect(enemy1.x).toBe(10);
-    //expect(enemy1.y).toBe(11);
+    expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

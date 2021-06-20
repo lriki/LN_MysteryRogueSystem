@@ -88,7 +88,7 @@ export class SEffectPerformer {
 
             //context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
             
-            LProjectableBehavior.startMoveAsProjectile(context, bullet, new SEffectSubject(performer), performer.dir, 10);
+            LProjectableBehavior.startMoveAsSkillEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, effect);
             //throw new Error("Not implemented.");
 
 
