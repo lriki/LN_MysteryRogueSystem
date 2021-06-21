@@ -78,29 +78,13 @@ export class Helpers {
 
     // 敵対勢力であるかを確認
     public static isHostile(subject: LEntity, target: LEntity): boolean {
-        const attr1 = subject.findBehavior(LUnitBehavior);
-        const attr2 = target.findBehavior(LUnitBehavior);
-        if (attr1 && attr2) {
-            return this.isHostileFactionId(attr1.factionId(), attr2.factionId());
-        }
-        else {
-            // 判定不可能。中立扱い。
-            return false;
-        }
+        return this.isHostileFactionId(subject.getFactionId(), target.getFactionId());
     }
 
     // 味方であるかを確認
     // (target が subject に対して中立である場合は false を返すので注意)
     public static isFriend(subject: LEntity, target: LEntity): boolean {
-        const behavior1 = subject.findBehavior(LUnitBehavior);
-        const behavior2 = target.findBehavior(LUnitBehavior);
-        if (behavior1 && behavior2) {
-            return this.isFriendFactionId(behavior1.factionId(), behavior2.factionId());
-        }
-        else {
-            // 判定不可能。中立扱い。
-            return false;
-        }
+        return this.isFriendFactionId(subject.getFactionId(), target.getFactionId());
     }
 
     public static isHostileFactionId(subject: DFactionId, target: DFactionId): boolean {

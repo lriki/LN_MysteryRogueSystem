@@ -49,11 +49,8 @@ export class LMonsterHouseStructure extends LStructure {
     onEntityLocated(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
-
-            const behavior = entity.findBehavior(LUnitBehavior);
             // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
-            if (behavior &&
-                Helpers.isHostileFactionId(this.monsterHouseFactionId(), behavior.factionId()) &&
+            if (Helpers.isHostileFactionId(this.monsterHouseFactionId(), entity.getFactionId()) &&
                 this.monsterHouseState() == MonsterHouseState.Sleeping) {
                 this.startMonsterHouse(context);
             }

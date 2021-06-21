@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { REData } from "ts/data/REData";
+import { DFactionId, REData } from "ts/data/REData";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
@@ -11,6 +11,7 @@ export interface UnitInfo
     //attr: LUnitAttribute;     // cache for avoiding repeated find.
     behavior: LUnitBehavior;
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
+    factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
 }
 
 export interface RunStepInfo
@@ -131,7 +132,8 @@ export class LScheduler {
             REGame.map.entities().forEach(entity => {
                 const behavior = entity.findBehavior(LUnitBehavior);
                 if (behavior) {
-                    assert(behavior.factionId() > 0);
+                    const factionId = entity.getFactionId();
+                    assert(factionId > 0);
                     assert(behavior.speedLevel() != 0);
 
                     let actionCount = behavior.speedLevel();
@@ -144,7 +146,8 @@ export class LScheduler {
                     this._units.push({
                         entityId: entity.entityId(),
                         behavior: behavior,
-                        actionCount: actionCount
+                        actionCount: actionCount,
+                        factionId: factionId,
                     });
 
                     // このターン内の最大行動回数 (phase 数) を調べる
@@ -156,7 +159,7 @@ export class LScheduler {
         }
 
         // 勢力順にソート
-        this._units = this._units.sort((a, b) => { return REData.factions[a.behavior.factionId()].schedulingOrder - REData.factions[b.behavior.factionId()].schedulingOrder; });
+        this._units = this._units.sort((a, b) => { return REData.factions[a.factionId].schedulingOrder - REData.factions[b.factionId].schedulingOrder; });
 
         this._runs = new Array(runCount);
         for (let i = 0; i < this._runs.length; i++) {
@@ -211,7 +214,7 @@ export class LScheduler {
                 for (let i2 = i1 - 1; i2 >= 0; i2--) {
                     const step2 = flatSteps[i2];
     
-                    if (step2.unit.behavior.factionId() != step1.unit.behavior.factionId()) {
+                    if (step2.unit.factionId != step1.unit.factionId) {
                         // 別勢力の行動予定が見つかったら終了
                         break;
                     }

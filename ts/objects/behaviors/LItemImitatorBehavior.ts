@@ -83,6 +83,9 @@ export class LItemImitatorBehavior extends LBehavior {
         //return "Damage2";
     }
 
+    public queryFactionId(): number | undefined {
+        return REData.system.factions.neutral;
+    }
 
     /*
     public itemDataId(): DItemDataId {

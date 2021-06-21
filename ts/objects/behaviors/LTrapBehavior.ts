@@ -69,9 +69,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     private checkValidTarget(entity: LEntity): boolean {
-        const unit = entity.findBehavior(LUnitBehavior);
-        if (!unit) return false;
-        return unit.factionId() === REData.system.trapTargetFactionId;
+        return entity.getFactionId() === REData.system.trapTargetFactionId;
     }
     
     [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): REResponse {
