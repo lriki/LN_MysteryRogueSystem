@@ -237,6 +237,8 @@ export abstract class LBehavior extends LObject {
 
     //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
+    
+    public queryCharacterFileName(): string | undefined { return undefined; }
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
     // propertyId: see EntityProperties

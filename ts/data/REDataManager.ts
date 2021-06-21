@@ -935,6 +935,9 @@ export class REDataManager
             case "kState_UnitTest_攻撃必中":
                 data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
                 break;
+            case "kState_UTアイテム擬態":
+                data.behaviors.push("LItemImitatorBehavior");
+                break;
         }
     }
 }

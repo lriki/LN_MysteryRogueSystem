@@ -18,6 +18,7 @@ import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
 import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
+import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -42,6 +43,7 @@ export class SBehaviorFactory {
         { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
         { fullName: "LStaffItemBehavior", friendlyName: "StaffItem", create: () => new LStaffItemBehavior() },
         { fullName: "LEatableBehavior", friendlyName: "Eatable", create: () => new LEatableBehavior() },
+        { fullName: "LItemImitatorBehavior", friendlyName: "ItemImitator", create: () => new LItemImitatorBehavior() },
         
         
         

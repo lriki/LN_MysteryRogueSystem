@@ -25,6 +25,20 @@ import { LBehavior } from "./LBehavior";
  * そういった処理を常に気を付けながら実装しなければならないのはNG.
  * 
  * どちらの場合にしても、例えば草、杖といった "種別" は、表示用と処理用の2つが必要になる。
+ * 
+ * [2021/6/21] アイテム化けはスキルおよびステートとして扱う
+ * ----------
+ * 
+ * こうしないと、完全にあるモンスター専用の Behavior を作る必要がある。
+ * それはカスタマイズ性を著しく下げるため避けたいところ。
+ * その場合は既存の AI の仕組みをオーバーライドする必要もあり、AI 側はそのような使われ方を想定して実装しなければならず負担が大きい。
+ * 
+ * アイテム化けスキルは「敵対Entityが視界内にいなければ優先的に発動する」スキルとして実装する。
+ * またこのスキルは「アイテム化けステートを付加する」のみの効果とする。
+ * 
+ * 
+ * 
+ * 
  */
 export class LItemImitatorBehavior extends LBehavior {
 
@@ -38,11 +52,13 @@ export class LItemImitatorBehavior extends LBehavior {
 
     public constructor() {
         super();
+        console.log("LItemImitatorBehavior");
+    }
+    
+    public queryCharacterFileName(): string | undefined {
+        return "Damage2";
     }
 
-    public setup(itemId: DItemDataId): void {
-        this._itemId = itemId;
-    }
 
     /*
     public itemDataId(): DItemDataId {

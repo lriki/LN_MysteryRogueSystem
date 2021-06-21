@@ -15,6 +15,7 @@ import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
+import { REData } from "ts/data/REData";
 
 enum UpdateMode {
     Normal,
@@ -79,6 +80,14 @@ export class VManualActionDialogVisual extends VDialog {
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
             entity.getBehavior(LUnitBehavior)._fastforwarding = true;
+            this._model.consumeAction();
+            this._model.submit();
+            return;
+        }
+
+        if (Input.isTriggered("pageup")) {
+            console.log("pageup");
+            entity.addState(REData.getStateFuzzy("kState_UTアイテム擬態").id);
             this._model.consumeAction();
             this._model.submit();
             return;
