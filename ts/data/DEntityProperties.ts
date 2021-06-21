@@ -1,3 +1,4 @@
+import { DPrefabId } from "./DPrefab";
 
 
 
@@ -23,6 +24,14 @@ export interface DEntityProperties {
     capacity?: string;
     
     equipmentImage: DItemEquipmentImage;
+
+    /**
+     * プレハブID
+     * 
+     * 例えば固定お店の処理において、アイテムのリストはツクールのイベントからアイテムIDで指定される。（プレハブIDではない）
+     * このアイテムIDをインスタンス化するときにプレハブIDが必要になるため、アイテムデータはプレハブIDを知っている必要がある。
+     */
+    prefabId: DPrefabId;
 }
 
 export function DEntityProperties_Default(): DEntityProperties {
@@ -37,7 +46,8 @@ export function DEntityProperties_Default(): DEntityProperties {
         equipmentImage: {
             name: "",
             side: DItemEquipmentSide.Right,
-        }
+        },
+        prefabId: 0,
     }
 }
 
@@ -54,7 +64,8 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
             equipmentImage: {
                 name: "",
                 side: DItemEquipmentSide.Right,
-            }
+            },
+            prefabId: 0,
         };
 
         const behaviors = meta["RE-Behavior"];

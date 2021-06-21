@@ -1,9 +1,13 @@
+import { assert } from "ts/Common";
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LEntity } from "../LEntity";
+import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LBehavior } from "./LBehavior";
+import { LItemBehavior } from "./LItemBehavior";
 
 
 /**
@@ -42,11 +46,12 @@ import { LBehavior } from "./LBehavior";
  */
 export class LItemImitatorBehavior extends LBehavior {
 
-    private _itemId: DItemDataId = 0;
+    //private _itemId: DItemDataId = 0;
+    private _itemEntityId: LEntityId = LEntityId.makeEmpty();
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemImitatorBehavior);
-        b._itemId = this._itemId;
+        b._itemEntityId = this._itemEntityId.clone();
         return b
     }
 
@@ -54,9 +59,28 @@ export class LItemImitatorBehavior extends LBehavior {
         super();
         console.log("LItemImitatorBehavior");
     }
+
+    onAttached(): void {
+        assert(this._itemEntityId.isEmpty());
+        const item = SEntityFactory.newItem(REData.getItemFuzzy("kキュアリーフ").id);
+        item.setParent(this);
+        this._itemEntityId = item.entityId();
+    }
+    
+    onDetached(): void {
+        assert(this._itemEntityId.hasAny());
+        this.itemEntity().clearParent();
+    }
+
+    public itemEntity(): LEntity {
+        return REGame.world.entity(this._itemEntityId);
+    }
     
     public queryCharacterFileName(): string | undefined {
-        return "Damage2";
+        const b = this.itemEntity().getBehavior(LItemBehavior);
+        const p = REData.prefabs[b.itemData().entity.prefabId]
+        return p.image.characterName;
+        //return "Damage2";
     }
 
 

@@ -28,6 +28,13 @@ export enum DSystemPrefabKind {
     ExitPoint,
 }
 
+export interface DPrefabImage {
+    characterName: string;
+    direction: number;
+    pattern: number;
+    characterIndex: number;
+}
+
 /**
  * DPrefab
  * 
@@ -41,6 +48,16 @@ export class DPrefab {
     key: string = "";
     dataSource: DPrefabDataSource = DPrefabDataSource.Unknown;
     dataId: number = 0;
+    image: DPrefabImage;
+
+    public constructor() {
+        this.image = {
+            characterName: "",
+            direction: 2,
+            pattern: 0,
+            characterIndex: 0,
+        };
+    }
 
     public isEnemyKind(): boolean {
         return this.dataSource == DPrefabDataSource.Enemy;

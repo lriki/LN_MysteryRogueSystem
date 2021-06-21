@@ -116,7 +116,7 @@ export class REVisual_Entity
             event.setDirection(this._entity.dir);
 
             const charactorName = this.entity().getCharacterFileName();
-            if (charactorName && charactorName != "") {
+            if (charactorName) {
                 event.setImage(charactorName, 0);
             }
 

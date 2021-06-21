@@ -453,12 +453,12 @@ declare interface IDataMapEventPage
         variableValue?: number;
     };
     directionFix?: boolean;
-    image?: {
-        tileId?: number;
-        characterName?: string;
-        direction?: number;
-        pattern?: number;
-        characterIndex?: number;
+    image: {
+        tileId: number;
+        characterName: string;
+        direction: number;
+        pattern: number;
+        characterIndex: number;
     }
     list: IDataList[];
     moveFrequency?: number;

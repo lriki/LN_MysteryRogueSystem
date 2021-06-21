@@ -682,6 +682,11 @@ export class REDataManager
                 prefab.id = REData.prefabs.length;
                 prefab.key = event.name;
 
+                prefab.image.characterName = event.pages[0].image.characterName;
+                prefab.image.direction = event.pages[0].image.direction;
+                prefab.image.pattern = event.pages[0].image.pattern;
+                prefab.image.characterIndex = event.pages[0].image.characterIndex;
+
                 REData.prefabs.push(prefab);
                 if (data.enemy) {
                     prefab.dataSource = DPrefabDataSource.Enemy;
@@ -691,8 +696,10 @@ export class REDataManager
                     }
                 }
                 else if (data.item) {
+                    const item = REData.getItemFuzzy(data.item);
                     prefab.dataSource = DPrefabDataSource.Item;
-                    prefab.dataId = REData.getItemFuzzy(data.item).id;
+                    prefab.dataId = item.id;
+                    item.entity.prefabId = prefab.id;   // 相互リンク
                 }
                 else if (data.system) {
                     prefab.dataSource = DPrefabDataSource.System;

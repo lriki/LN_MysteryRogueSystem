@@ -315,12 +315,12 @@ export class LEntity extends LObject
             return REGame.world.party(this._partyId);
     }
 
-    public getCharacterFileName(): string {
+    public getCharacterFileName(): string | undefined {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryCharacterFileName();
             if (v) return v;
         }
-        return "";
+        return undefined;
     }
 
     //----------------------------------------
