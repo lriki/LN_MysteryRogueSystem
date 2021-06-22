@@ -27,11 +27,8 @@ export class LMagicBulletBehavior extends LBehavior {
         this._ownerItemEntityId = ownerItem.entityId();
     }
 
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.homeLayer)
-            return BlockLayerKind.Projectile;
-        else
-            super.onQueryProperty(propertyId);
+    queryHomeLayer(): BlockLayerKind | undefined {
+        return BlockLayerKind.Projectile;
     }
     
     // 射程無限・壁反射を伴うため、通常の MoveAsProjectile とは異なる処理が必要となる。

@@ -149,6 +149,7 @@ export class SScheduler
                 if (!commandContext.isRunning()) {
                     // _processCommand() の後で isRunning が落ちていたら、
                     // 実行中コマンドリストの実行が完了した。
+                    this.onCommandChainConsumed();
                 }
 
                 RESystem.sequelContext.attemptFlush();
@@ -351,6 +352,24 @@ export class SScheduler
         this._phase = SchedulerPhase.RoundStarting;
     }
 
+    // 遅延予約済みのコマンドすべて実行し終え、次のフェーズに進もうとしている状態。
+    // ここで新たにコマンドを post すると、フェーズは進まず新たなコマンドチェーンを開始できる。
+    private onCommandChainConsumed(): void {
+        // stabilEntities
+        // 本来あるべき状態と齟齬がある Entity を、定常状態へ矯正する。
+        {
+            for (const entity of REGame.map.entities()) {
+                const block = REGame.map.block(entity.x, entity.y);
+                const currentLayer = block.findEntityLayerKind(entity);
+                assert(currentLayer);
+                const homeLayer = entity.getHomeLayer();
+                if (currentLayer != homeLayer) {
+                    throw new Error("(currentLayer != homeLayer)");
+                }
+            }
+        }
+    }
+
     // 1行動トークンの消費を終えたタイミング。
     // 手番が終了し、次の人へ手番が移る直前。
     // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
@@ -371,6 +390,7 @@ export class SScheduler
             entity._effectResult.clear();
         }
     }
+
 
 
     _foreachRunSteps(start: RunStepInfo, func: (step: RunStepInfo) => boolean) {

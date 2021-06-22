@@ -38,11 +38,8 @@ export class LExitPointBehavior extends LBehavior {
         return b
     }
 
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.homeLayer)
-            return BlockLayerKind.Ground;
-        else
-            super.onQueryProperty(propertyId);
+    queryHomeLayer(): BlockLayerKind | undefined {
+        return BlockLayerKind.Ground;
     }
 
     onQueryReactions(actions: DActionId[]): DActionId[] {

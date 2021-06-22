@@ -3,6 +3,7 @@ import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { SEntityFactory } from "ts/system/SEntityFactory";
+import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -70,6 +71,10 @@ export class LItemImitatorBehavior extends LBehavior {
     onDetached(): void {
         assert(this._itemEntityId.hasAny());
         this.itemEntity().clearParent();
+    }
+
+    queryHomeLayer(): BlockLayerKind | undefined {
+        return BlockLayerKind.Ground;
     }
 
     public itemEntity(): LEntity {

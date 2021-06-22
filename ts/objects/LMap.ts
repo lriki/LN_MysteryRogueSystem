@@ -355,7 +355,7 @@ export class LMap extends LObject
         //assert(!entity.isTile());   // Tile は setup で追加済みのため、間違って追加されないようにチェック
         
         const block = this.block(entity.x, entity.y);
-        const layer = entity.queryProperty(RESystem.properties.homeLayer);
+        const layer = entity.getHomeLayer();
         block.addEntity(layer, entity);
 
         this._addEntityInternal(entity);
@@ -432,7 +432,7 @@ export class LMap extends LObject
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
-        const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
+        const layer = (toLayer) ? toLayer : entity.getHomeLayer();
 
         if (this.canLeaving(oldBlock, entity) && this.canWalkEntering(newBlock, entity, method, layer)) {
             return true;

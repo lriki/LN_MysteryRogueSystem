@@ -86,16 +86,11 @@ export class SMapManager {
                     //const entity = obj as LEntity;
                     if (entity.floorId.equals(this._map.floorId())) {
 
-                        const layer = entity.queryProperty(RESystem.properties.homeLayer);
+                        const layer = entity.getHomeLayer();
                         const block = this.findSpawnableBlockRandom(layer);
                         assert(block);
                         
                         SMovementCommon.locateEntity(entity, block.x(), block.y());
-                        
-                        //const block = this.block(entity.x, entity.y);
-                        //const layer = entity.queryProperty(RESystem.properties.homeLayer);
-                        //block.addEntity(layer, entity);
-                        //this._map._addEntityInternal(entity);
                     }
                 //}
             }

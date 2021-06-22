@@ -235,7 +235,7 @@ export class SMovementCommon {
      */
     public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: BlockLayerKind): boolean {
         const map = REGame.map;
-        const actualLayer = layer || entity.queryProperty(RESystem.properties.homeLayer);
+        const actualLayer = layer || entity.getHomeLayer();
 
         const dx = newBlock.x() - oldBlock.x();
         const dy = newBlock.y() - oldBlock.y();
@@ -445,7 +445,7 @@ export class SMovementCommon {
         const oldBlock = map.block(entity.x, entity.y);
         const newBlock = map.block(x, y);
         
-        const layer = (toLayer) ? toLayer : entity.queryProperty(RESystem.properties.homeLayer);
+        const layer = (toLayer) ? toLayer : entity.getHomeLayer();
 
         oldBlock.removeEntity(entity);
         entity.x = x;

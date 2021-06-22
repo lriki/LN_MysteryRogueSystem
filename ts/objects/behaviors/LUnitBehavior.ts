@@ -104,11 +104,8 @@ export class LUnitBehavior extends LBehavior {
         this._requiredFeetProcess = false;
     }
 
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.homeLayer)
-            return BlockLayerKind.Unit;
-        else
-            super.onQueryProperty(propertyId);
+    queryHomeLayer(): BlockLayerKind | undefined {
+        return BlockLayerKind.Unit;
     }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
@@ -137,7 +134,7 @@ export class LUnitBehavior extends LBehavior {
 
             const offset = Helpers.dirToTileOffset(activity.direction());
 
-            const layer = self.queryProperty(RESystem.properties.homeLayer);
+            const layer = self.getHomeLayer();
             if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);
 

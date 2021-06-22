@@ -17,19 +17,17 @@ import { SGroundRules } from "./SGroundRules";
 export class RESystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
-        { id: 1, defaultValue: BlockLayerKind.Ground },  // homeLayer
-        { id: 2, defaultValue: 0 },  // itemId
-        { id: 3, defaultValue: "null" },  // name
-        { id: 4, defaultValue: 1 },  // idleSequel
-        { id: 5, defaultValue: [] },  // equipmentSlots
+        { id: 1, defaultValue: 0 },  // itemId
+        { id: 2, defaultValue: "null" },  // name
+        { id: 3, defaultValue: 1 },  // idleSequel
+        { id: 4, defaultValue: [] },  // equipmentSlots
     ];
 
     static properties: EntityProperties = {
-        homeLayer: 1,
-        itemId: 2,
-        name: 3,
-        idleSequel: 4,
-        equipmentSlots: 5,
+        itemId: 1,
+        name: 2,
+        idleSequel: 3,
+        equipmentSlots: 4,
     };
 
     // System

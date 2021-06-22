@@ -334,6 +334,16 @@ export class LEntity extends LObject
         }
         return REData.system.factions.neutral;
     }
+    
+    public getHomeLayer(): number {
+        for (const b of this.collectBehaviors().reverse()) {
+            const v = b.queryHomeLayer();
+            if (v) return v;
+        }
+        return BlockLayerKind.Ground;
+    }
+
+    
 
     //----------------------------------------
     // Behavior
