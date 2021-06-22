@@ -82,7 +82,7 @@ export class SEffectPerformer {
         }
         else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
             
-            const bullet = SEntityFactory.newEntity({ prefabId: REData.getPrefab(effect.scope.projectilePrefabKey).id, stateIds: [] });
+            const bullet = SEntityFactory.newEntity({ entityId: REData.getEntity(effect.scope.projectilePrefabKey).id, stateIds: [] });
             REGame.map.appearEntity(bullet, performer.x, performer.y);
             bullet.dir = performer.dir;
 

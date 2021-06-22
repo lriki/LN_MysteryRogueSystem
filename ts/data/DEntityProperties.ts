@@ -32,6 +32,8 @@ export interface DEntityProperties {
      * このアイテムIDをインスタンス化するときにプレハブIDが必要になるため、アイテムデータはプレハブIDを知っている必要がある。
      */
     prefabId: DPrefabId;
+
+    meta_prefabName: string;
 }
 
 export function DEntityProperties_Default(): DEntityProperties {
@@ -48,13 +50,14 @@ export function DEntityProperties_Default(): DEntityProperties {
             side: DItemEquipmentSide.Right,
         },
         prefabId: 0,
+        meta_prefabName: "",
     }
 }
 
 export function parseMetaToEntityProperties(meta: any | undefined): DEntityProperties {
     if (meta) {
         const data: DEntityProperties = {
-            key: meta["RE-Key"],
+            key: meta["RE-Key"] ?? "",
             kind: meta["RE-Kind"],
             behaviorNames: [],
             commandNames: [],
@@ -66,6 +69,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
                 side: DItemEquipmentSide.Right,
             },
             prefabId: 0,
+            meta_prefabName: meta["RE-Prefab"]
         };
 
         const behaviors = meta["RE-Behavior"];

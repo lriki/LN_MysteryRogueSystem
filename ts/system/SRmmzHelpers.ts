@@ -12,7 +12,7 @@ import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
 import { DEntityKindId } from "ts/data/DEntityKind";
-import { DEntityInstance, DEntity_Default, DEntity_makeFromEventData, DEntity_makeFromEventPageData } from "ts/data/DEntity";
+import { DEntityInstance, DEntity_makeFromEventData, DEntity_makeFromEventPageData } from "ts/data/DEntity";
 
 
 
@@ -47,6 +47,10 @@ export class SRmmzHelpers {
             if (e) {
                 const data = DEntity_makeFromEventData(e);
                 if (data) {
+                    if (data.entityId < 0) {
+                        throw new Error("Invalid enity data.");
+                    }
+
                     this.createEntityFromRmmzEvent(data, e.id, e.x, e.y);
                 }
             }

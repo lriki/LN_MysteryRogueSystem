@@ -29,7 +29,7 @@ test("Items.Staff.Knockback", () => {
     const inventory = actor1.getBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntityFromPrefabName("pふきとばしの杖");
+    const item1 = SEntityFactory.newEntity({ entityId: REData.getEntity("kふきとばしの杖").id, stateIds: []});
     item1._name = "item1";
     inventory.addEntity(item1);
     

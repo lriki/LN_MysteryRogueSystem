@@ -1,5 +1,5 @@
 
-import { DEntityInstance, DEntity_Default } from "./DEntity";
+import { DEntityInstance, DEntityInstance_Default } from "./DEntity";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
@@ -17,7 +17,7 @@ export interface DFloorId {
 
 export interface DAppearanceTableEntity {
     entity: DEntityInstance;
-    prefabName: string;
+    prefabName: string; // TODO: 必要？
     startFloorNumber: number;
     lastFloorNumber: number;
 }
@@ -181,21 +181,21 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
             const x = event.x;
             const y = event.y;
 
-            
+            const entityData = REData.findEntity(entityMetadata.data);
+            if (!entityData) {
+                throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+            }
+
             const tableItem: DAppearanceTableEntity = {
-                prefabName: entityMetadata.prefab,
+                prefabName: REData.prefabs[entityData.prefabId].key,
                 startFloorNumber: x,
                 lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
                 entity: {
-                    ...DEntity_Default(),
-                    prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),
+                    ...DEntityInstance_Default(),
+                    entityId: entityData.id,
                 }
             };
             table.entities.push(tableItem);
-
-            if (tableItem.entity.prefabId <= 0) {
-                throw new Error(`Prefab "${tableItem.prefabName}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
-            }
 
             table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
         }
@@ -213,7 +213,8 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
     }
 
     for (const entity of table.entities) {
-        const prefab = REData.prefabs[entity.entity.prefabId];
+        const entityData = REData.entities[entity.entity.entityId];
+        const prefab = REData.prefabs[entityData.prefabId];
         for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
 
             if (prefab.isEnemyKind()) {

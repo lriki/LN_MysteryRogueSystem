@@ -41,11 +41,11 @@ test("Equipment.EquipOnOff", () => {
     const inventory = actor1.getBehavior(LInventoryBehavior);
 
     // 武器 入手
-    const weapon1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Weapon1, stateIds: [] });
+    const weapon1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Weapon1, stateIds: [] });
     inventory.addEntity(weapon1);
 
     // 盾 入手
-    const shield1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Shield1, stateIds: [] });
+    const shield1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Shield1, stateIds: [] });
     inventory.addEntity(shield1);
 
     // [装備]
@@ -90,11 +90,11 @@ test("Equipment.Put_Throw", () => {
     const equipmens = actor1.getBehavior(LEquipmentUserBehavior);
 
     // 武器 入手
-    const weapon1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Weapon1, stateIds: [] });
+    const weapon1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Weapon1, stateIds: [] });
     inventory.addEntity(weapon1);
 
     // 盾 入手
-    const shield1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Shield1, stateIds: [] });
+    const shield1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Shield1, stateIds: [] });
     inventory.addEntity(shield1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -136,7 +136,7 @@ test("Equipment.Curse", () => {
     const equipmens = actor1.getBehavior(LEquipmentUserBehavior);
 
     // 武器 入手 (呪い付き)
-    const weapon1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Weapon1, stateIds: [REData.getStateFuzzy("UT呪い").id] });
+    const weapon1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Weapon1, stateIds: [REData.getStateFuzzy("UT呪い").id] });
     inventory.addEntity(weapon1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

@@ -123,9 +123,9 @@ export class FMarkContinuationPass extends FMapBuildPass {
                 if (!e) return false;
                 const metadata = DHelpers.readEntityMetadataFromPage(e.pages[0], e.id);
                 if (!metadata) return false;
-                const prefab = REData.findPrefabFuzzy(metadata.prefab);
-                if (!prefab) return false;
-                return prefab.isEntryPoint();
+                const entity = REData.findEntity(metadata.data);
+                if (!entity) return false;
+                return REData.prefabs[entity.prefabId].isEntryPoint();
             });
             
             if (entryPointEvent) {

@@ -65,7 +65,7 @@ test("Survival.FP", () => {
     //--------------------
 
     // UT薬草をインベントリに入れる
-    const entityData: DEntityInstance = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const entityData: DEntityInstance = { entityId: TestEnv.EntityId_Herb, stateIds: [] };
     const item1 = SEntityFactory.newEntity(entityData);
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
 
@@ -84,7 +84,7 @@ test("Survival.FP", () => {
     // 投げ当てたときは FP は回復しない
     
     // UT薬草を Player の右に置く
-    const item2 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Herb, stateIds: [] });
+    const item2 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
     item2._name = "item2";
     REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, actor1.x + 2, actor1.y);
     

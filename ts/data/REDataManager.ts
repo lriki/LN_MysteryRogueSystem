@@ -512,7 +512,7 @@ export class REDataManager
                 }
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
-                entity.entity.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
+                entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
 
@@ -721,13 +721,18 @@ export class REDataManager
             // Link Prefab and Entity
             {
                 for (const entity of REData.entities) {
-                    if (entity.meta_prefabName) {
-                        const prefab = REData.prefabs.find(x => x.key == entity.meta_prefabName);
-                        if (prefab) {
-                            entity.prefabId = prefab.id;
+                    if (entity.entity.key != "") {
+                        if (entity.entity.meta_prefabName) {
+                            const prefab = REData.prefabs.find(x => x.key == entity.entity.meta_prefabName);
+                            if (prefab) {
+                                entity.prefabId = prefab.id;
+                            }
+                            else {
+                                throw new Error(`Unknown Prefab "${entity.entity.meta_prefabName}".`);
+                            }
                         }
                         else {
-                            throw new Error(`Unknown Prefab "${entity.meta_prefabName}".`);
+                            throw new Error(`No prefab specified. "${entity.entity.key}"`);
                         }
                     }
                 }
@@ -914,7 +919,7 @@ export class REDataManager
             case "kSkill_炎のブレス_直線":
                 data.effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 data.effect.scope.length = Infinity;
-                data.effect.scope.projectilePrefabKey = "p炎のブレス";
+                data.effect.scope.projectilePrefabKey = "kSystem_炎のブレス";
                 break;
         }
     }

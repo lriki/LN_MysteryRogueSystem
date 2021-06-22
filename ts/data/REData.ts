@@ -217,6 +217,7 @@ export class REData
         this.states = [DState_makeDefault()];
         //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
+        this.entities = [new DEntity(0)];
     }
 
     static addEntityKind(name: string, prefabKind: string): number {
@@ -296,6 +297,21 @@ export class REData
         const data = new DEntity(newId);
         this.entities.push(data);
         return data;
+    }
+
+    static findEntity(pattern: string): DEntity | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.entities[id];
+        else {
+            return this.entities.find(e => (e.entity.key != "" && e.entity.key == pattern));
+        }
+    }
+
+    static getEntity(pattern: string): DEntity {
+        const d = this.findEntity(pattern);
+        if (d) return d;
+        throw new Error(`Entity "${pattern}" not found.`);
     }
 
     //--------------------

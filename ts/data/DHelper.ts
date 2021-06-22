@@ -26,20 +26,14 @@ export interface RMMZEventPrefabMetadata {
 }
 
 interface RMMZEventRawMetadata {
-    prefab: string;
+    //prefab: string;
+    data: string;
     states?: string[];
 }
 
 
 export interface RMMZEventEntityMetadata {
-    /**
-     * Entity Prefab の種別。EntityFactory から生成するためのキー。
-     * 
-     * 固定マップなどで明示的にイベントから生成される Entity は、必ず Prefab が必要。
-     * これが無いと、拾われる → 置かれた の時に、Map 上に出現したときにどの Prefab を元に
-     * RMMZ イベントを作ればよいのかわからなくなるため。
-     */
-    prefab: string;
+    data: string;
 
     states: string[];
 }
@@ -183,11 +177,11 @@ export class DHelpers {
                 eval(`rawData = ${block}`);
 
                 if (rawData) {
-                    if (!rawData.prefab) {
+                    if (!rawData.data) {
                         throw new Error(`Event#${eventId} - @RE-Entity.prefab not specified.`);
                     }
                     return {
-                        prefab: rawData.prefab,
+                        data: rawData.data,
                         states: rawData.states ?? [],
                     };
                 }

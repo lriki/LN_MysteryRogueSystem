@@ -102,7 +102,7 @@ test("CharacterAI.ActionPattern", () => {
     const initialHP = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
 
     // enemy1 
-    const enemy1 = SEntityFactory.newEntity({ prefabId: REData.getPrefab("pドラゴン").id, stateIds: [] });
+    const enemy1 = SEntityFactory.newEntity({ entityId: REData.getEntity("kEnemy_ドラゴン").id, stateIds: [] });
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 4, 4);
 

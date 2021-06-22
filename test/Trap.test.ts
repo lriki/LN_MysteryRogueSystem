@@ -24,7 +24,7 @@ test("Trap.Basic", () => {
     TestEnv.performFloorTransfer();
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_SleepTrap, stateIds: [] });
+    const trap1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_SleepTrap, stateIds: [] });
     trap1._name = "trap1";
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動
@@ -50,7 +50,7 @@ test("Trap.Enemy", () => {
     TestEnv.performFloorTransfer();
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_SleepTrap, stateIds: [] });
+    const trap1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_SleepTrap, stateIds: [] });
     trap1._name = "trap1";
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動

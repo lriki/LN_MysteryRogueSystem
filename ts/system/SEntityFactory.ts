@@ -135,7 +135,8 @@ export class SEntityFactory {
     }
 
     static newEntity(data: DEntityInstance): LEntity {
-        const prefab = REData.prefabs[data.prefabId];
+        const entityData = REData.entities[data.entityId];
+        const prefab = REData.prefabs[entityData.prefabId];
         let entity: LEntity;
 
         if (prefab.isEnemyKind()) {
@@ -173,11 +174,13 @@ export class SEntityFactory {
         return entity;
     }
 
+    /*
     static newEntityFromPrefabName(prefabName: string): LEntity {
         const id = REData.prefabs.findIndex(x => x.key == prefabName);
         if (id < 0) throw new Error(`Prefab "${prefabName}" not found.`);
         return this.newEntity({ prefabId: id, stateIds: [] });
     }
+    */
 
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)

@@ -30,7 +30,7 @@ test("Activity.Eat", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // アイテム作成
-    const entityData: DEntityInstance = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const entityData: DEntityInstance = { entityId: TestEnv.EntityId_Herb, stateIds: [] };
     const item1 = SEntityFactory.newEntity(entityData);
 
     // インベントリに入れる
@@ -63,7 +63,7 @@ test("Activity.Throw", () => {
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
-    const entityData: DEntityInstance = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const entityData: DEntityInstance = { entityId: TestEnv.EntityId_Herb, stateIds: [] };
     const item1 = SEntityFactory.newEntity(entityData);
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
     const item2 = SEntityFactory.newEntity(entityData);
@@ -128,7 +128,7 @@ test("Activity.ThrowAndHit", () => {
     SDebugHelpers.setHP(enemy1, 1); // HP1
 
     // アイテムを作ってインベントリに入れる
-    const entityData: DEntityInstance = { prefabId: TestEnv.PrefabId_Herb, stateIds: [] };
+    const entityData: DEntityInstance = { entityId: TestEnv.EntityId_Herb, stateIds: [] };
     const item1 = SEntityFactory.newEntity(entityData);
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
 
@@ -159,12 +159,12 @@ test("Activity.Exchange", () => {
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Herb, stateIds: [] });
+    const item1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
     item1._name = "item1";
     inventory.addEntity(item1);
 
     // 足元にアイテムを作る
-    const item2 = SEntityFactory.newEntity({ prefabId: TestEnv.PrefabId_Herb, stateIds: [] });
+    const item2 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
     item2._name = "item2";
     REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);
 

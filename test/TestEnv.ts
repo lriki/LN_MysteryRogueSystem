@@ -20,6 +20,7 @@ import { DStateId } from 'ts/data/DState';
 import { DPrefab, DPrefabId } from 'ts/data/DPrefab';
 import { SDialogContext } from 'ts/system/SDialogContext';
 import { SDialog } from 'ts/system/SDialog';
+import { DEntityId } from 'ts/data/DEntity';
 
 declare global {
     interface Number {
@@ -41,10 +42,10 @@ export class TestEnv {
     public static FloorId_RandomMapFloor: LFloorId = LFloorId.makeEmpty();
     public static StateId_Sleep: DStateId;
     public static StateId_CertainDirectAttack: DStateId;
-    public static PrefabId_Herb: DPrefabId;
-    public static PrefabId_Weapon1: DPrefabId;
-    public static PrefabId_Shield1: DPrefabId;
-    public static PrefabId_SleepTrap: DPrefabId;
+    public static EntityId_Herb: DEntityId;
+    public static EntityId_Weapon1: DEntityId;
+    public static EntityId_Shield1: DEntityId;
+    public static EntityId_SleepTrap: DEntityId;
 
     private static _databaseFiles = [
         { name: "$dataActors", src: "Actors.json" },
@@ -84,10 +85,10 @@ export class TestEnv {
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
         this.StateId_Sleep = REData.getStateFuzzy("UT睡眠").id;
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
-        this.PrefabId_Herb = REData.prefabs.findIndex(x => x.key == "pキュアリーフ");
-        this.PrefabId_Weapon1 = REData.prefabs.findIndex(x => x.key == "pゴブリンのこん棒");
-        this.PrefabId_Shield1 = REData.prefabs.findIndex(x => x.key == "pレザーシールド");
-        this.PrefabId_SleepTrap = REData.prefabs.findIndex(x => x.key == "p眠りガス");
+        this.EntityId_Herb = REData.getEntity("kキュアリーフ").id;
+        this.EntityId_Weapon1 = REData.getEntity("kゴブリンのこん棒").id;
+        this.EntityId_Shield1 = REData.getEntity("kレザーシールド").id;
+        this.EntityId_SleepTrap = REData.getEntity("k眠りガス").id;
         
         // デバッグしやすいように共通の名前を付けておく
         //const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

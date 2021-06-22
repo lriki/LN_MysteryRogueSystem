@@ -39,15 +39,12 @@ export class DEntity {
 
     enemy: DEnemy | undefined;
 
-    meta_prefabName: string | undefined;
-
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;
         this.entity = DEntityProperties_Default();
         this.itemData = undefined;
         this.enemy = undefined;
-        this.meta_prefabName = "";
     }
 
     public item(): DItem {
@@ -66,13 +63,13 @@ export class DEntity {
 
 
 export interface DEntityInstance {
-    prefabId: DPrefabId;
+    entityId: DEntityId;
     stateIds: DStateId[];
 }
 
-export function DEntity_Default(): DEntityInstance {
+export function DEntityInstance_Default(): DEntityInstance {
     return {
-        prefabId: 0,
+        entityId: 0,
         stateIds: [],
     };
 }
@@ -86,7 +83,7 @@ export function DEntity_makeFromEventPageData(eventId: number, page: IDataMapEve
     if (!entityMetadata) return undefined;
     
     const entity: DEntityInstance = {
-        prefabId: REData.prefabs.findIndex(p => p.key == entityMetadata.prefab),
+        entityId: REData.entities.findIndex(x => x.entity.key == entityMetadata.data),
         stateIds: [],
     };
 

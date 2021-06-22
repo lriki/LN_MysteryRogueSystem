@@ -37,7 +37,7 @@ test("Items.Sanctuary", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: actor1 と enemy1 の間に聖域を置いてみる
-    const item1 = SEntityFactory.newEntityFromPrefabName("pサンクチュアリスクロール");
+    const item1 = SEntityFactory.newEntity({ entityId: REData.getEntity("kItem_サンクチュアリスクロール").id, stateIds: [] });
     item1._name = "item1";
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
