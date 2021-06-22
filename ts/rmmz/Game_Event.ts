@@ -1,4 +1,4 @@
-import { DEntity } from "ts/data/DEntity";
+import { DEntityInstance } from "ts/data/DEntity";
 import { RMMZEventEntityMetadata } from "ts/data/DHelper";
 import { REGame } from "ts/objects/REGame";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
@@ -6,7 +6,7 @@ import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Event {
-        _entityData: DEntity | undefined;
+        _entityData: DEntityInstance | undefined;
 
         isREEntity(): boolean;
         isREEvent(): boolean;

@@ -1,5 +1,5 @@
 
-import { DEntity, DEntity_Default } from "./DEntity";
+import { DEntityInstance, DEntity_Default } from "./DEntity";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
@@ -16,7 +16,7 @@ export interface DFloorId {
 */
 
 export interface DAppearanceTableEntity {
-    entity: DEntity;
+    entity: DEntityInstance;
     prefabName: string;
     startFloorNumber: number;
     lastFloorNumber: number;

@@ -7,7 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SGameManager } from "ts/system/SGameManager";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { DEntity } from "ts/data/DEntity";
+import { DEntityInstance } from "ts/data/DEntity";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { SActivityFactory } from "ts/system/SActivityFactory";

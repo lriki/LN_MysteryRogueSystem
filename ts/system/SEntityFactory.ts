@@ -13,7 +13,7 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
-import { DEntity } from "ts/data/DEntity";
+import { DEntityInstance } from "ts/data/DEntity";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
@@ -132,7 +132,7 @@ export class SEntityFactory {
         return e;
     }
 
-    static newEntity(data: DEntity): LEntity {
+    static newEntity(data: DEntityInstance): LEntity {
         const prefab = REData.prefabs[data.prefabId];
         let entity: LEntity;
 

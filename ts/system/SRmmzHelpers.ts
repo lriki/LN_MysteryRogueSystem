@@ -12,7 +12,7 @@ import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
 import { DEntityKindId } from "ts/data/DEntityKind";
-import { DEntity, DEntity_Default, DEntity_makeFromEventData, DEntity_makeFromEventPageData } from "ts/data/DEntity";
+import { DEntityInstance, DEntity_Default, DEntity_makeFromEventData, DEntity_makeFromEventPageData } from "ts/data/DEntity";
 
 
 
@@ -23,7 +23,7 @@ import { DEntity, DEntity_Default, DEntity_makeFromEventData, DEntity_makeFromEv
  */
 export class SRmmzHelpers {
 
-    static readEntityMetadata(event: Game_Event): DEntity | undefined {
+    static readEntityMetadata(event: Game_Event): DEntityInstance | undefined {
         if (event._pageIndex >= 0) {
             return DEntity_makeFromEventPageData(event.eventId(), event.page());
         }
@@ -53,7 +53,7 @@ export class SRmmzHelpers {
         });
     }
 
-    public static createEntityFromRmmzEvent(data: DEntity, eventId: number, x: number, y: number): void {
+    public static createEntityFromRmmzEvent(data: DEntityInstance, eventId: number, x: number, y: number): void {
         const entity = SEntityFactory.newEntity(data)
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
