@@ -34,7 +34,7 @@ test("CharacterAI.Moving1", () => {
     TestEnv.performFloorTransfer();
 
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 13, 5);
 
@@ -70,7 +70,7 @@ test("CharacterAI.AttackOnDiagonalEdge", () => {
     TestEnv.performFloorTransfer();
 
     // enemy1 (Player の右下に配置)
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 

@@ -13,6 +13,7 @@ import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivi
 import { TileShape } from "ts/objects/LBlock";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
+import { REData } from "ts/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -23,7 +24,6 @@ afterAll(() => {
 
 test("Items.Sanctuary", () => {
     SGameManager.createGameObjects();
-    const dc = RESystem.dialogContext;
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -32,7 +32,7 @@ test("Items.Sanctuary", () => {
     TestEnv.performFloorTransfer();
     
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 

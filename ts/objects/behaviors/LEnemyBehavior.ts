@@ -41,7 +41,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
     public enemyData(): DEnemy {
         assert(this._enemyId > 0);
-        return REData.monsters[this._enemyId];
+        return REData.enemyData(this._enemyId);
     }
     
 

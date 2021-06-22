@@ -9,6 +9,7 @@ import "./../ts/objects/Extensions";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { DialogSubmitMode } from "ts/system/SDialog";
+import { REData } from "ts/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -29,7 +30,7 @@ test("Combat.DamageAndCollapse", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
 
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
@@ -62,7 +63,7 @@ test("Combat.DamageAndGameover", () => {
     SDebugHelpers.setHP(actor1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置

@@ -9,6 +9,7 @@ import { TestEnv } from "../../TestEnv";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
+import { REData } from "ts/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -27,7 +28,7 @@ test("Abilities.Enemy.Division", () => {
     TestEnv.performFloorTransfer();
 
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     enemy1.addBehavior(LEntityDivisionBehavior);
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);

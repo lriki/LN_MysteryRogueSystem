@@ -8,6 +8,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
+import { REData } from "ts/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -33,7 +34,7 @@ test("Items.Staff.Knockback", () => {
     inventory.addEntity(item1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 

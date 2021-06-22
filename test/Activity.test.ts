@@ -13,6 +13,7 @@ import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
+import { REData } from "ts/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -121,7 +122,7 @@ test("Activity.ThrowAndHit", () => {
     TestEnv.performFloorTransfer();
     
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(1);
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     SDebugHelpers.setHP(enemy1, 1); // HP1

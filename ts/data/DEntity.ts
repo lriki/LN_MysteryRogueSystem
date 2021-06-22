@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
 import { DItem } from "./DItem";
@@ -36,6 +37,8 @@ export class DEntity {
 
     itemData: DItem | undefined;
 
+    enemy: DEnemy | undefined;
+
     meta_prefabName: string | undefined;
 
     constructor(id: DEntityId) {
@@ -43,12 +46,18 @@ export class DEntity {
         this.prefabId = 0;
         this.entity = DEntityProperties_Default();
         this.itemData = undefined;
+        this.enemy = undefined;
         this.meta_prefabName = "";
     }
 
     public item(): DItem {
         assert(this.itemData);
         return this.itemData;
+    }
+
+    public enemyData(): DEnemy {
+        assert(this.enemy);
+        return this.enemy;
     }
 }
 

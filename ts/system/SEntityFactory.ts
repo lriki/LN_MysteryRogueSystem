@@ -45,15 +45,15 @@ export class SEntityFactory {
         return e;
     }
 
-    static newMonster(enemyId: DEnemyId): LEntity {
+    static newMonster(enemyEntityData: DEntity): LEntity {
         const e = REGame.world.spawnEntity();
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
-        e.addBehavior(LEnemyBehavior, enemyId);
+        e.addBehavior(LEnemyBehavior, enemyEntityData.enemyData().id);
         //e.addBehavior(LEntityDivisionBehavior);
-        this.setupDirectly_Enemy(e, REData.monsters[enemyId])
+        this.setupDirectly_Enemy(e, enemyEntityData);
         return e;
     }
 
@@ -139,9 +139,9 @@ export class SEntityFactory {
         let entity: LEntity;
 
         if (prefab.isEnemyKind()) {
-            const data = REData.monsters[prefab.dataId];
-            if (data)
-                entity = SEntityFactory.newMonster(data.id);
+            const entityId = REData.monsters[prefab.dataId];
+            if (entityId)
+                entity = SEntityFactory.newMonster(REData.entities[entityId]);
             else
                 throw new Error("Invalid enemy key: " + prefab.key);
         }
@@ -195,8 +195,8 @@ export class SEntityFactory {
         }
     }
 
-    static setupDirectly_Enemy(entity: LEntity, data: DEnemy) {
-        switch (data.key) {
+    static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
+        switch (entityData.entity.key) {
             case "kEnemy_ミミック":
                 entity.addBehavior(LItemImitatorBehavior);
                 break;

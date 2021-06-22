@@ -1,3 +1,4 @@
+import { DEntityId } from "./DEntity";
 
 export type DEnemyId = number;
 
@@ -14,7 +15,9 @@ export class DEnemy {
     /** ID (0 is Invalid). */
     id: DEnemyId;
 
-    key: string;
+    entityId: DEntityId;
+
+    //key: string;
 
     /** Name. */
     name: string;
@@ -29,9 +32,10 @@ export class DEnemy {
 
     actions: IDataAction[];
 
-    constructor(id: DEnemyId) {
+    constructor(id: DEnemyId, entityId: DEntityId) {
         this.id = id;
-        this.key = "";
+        this.entityId = entityId;
+        //this.key = "";
         this.name = "";
         this.exp = 0;
         this.idealParams = [];

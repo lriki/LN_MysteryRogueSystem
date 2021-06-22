@@ -492,8 +492,7 @@ export class REDataManager
 
         // Import Monsters
         $dataEnemies.forEach(x => {
-            const enemy = new DEnemy(REData.monsters.length);
-            REData.monsters.push(enemy);
+            const [entity, enemy] = REData.newEnemy();
             if (x) {
                 enemy.name = x.name;
                 enemy.exp = x.exp;
@@ -513,7 +512,7 @@ export class REDataManager
                 }
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
-                enemy.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
+                entity.entity.key = (x.meta && x.meta["RE-Key"]) ? x.meta["RE-Key"] : "";
             }
         });
 
@@ -688,7 +687,7 @@ export class REDataManager
                 REData.prefabs.push(prefab);
                 if (data.enemy) {
                     prefab.dataSource = DPrefabDataSource.Enemy;
-                    prefab.dataId = REData.monsters.findIndex(x => x.key == data.enemy);
+                    prefab.dataId = REData.getEnemy(data.enemy).id;
                     if (prefab.dataId <= 0) {
                         throw new Error(`EnemyData not found. (${data.enemy})`);
                     }
