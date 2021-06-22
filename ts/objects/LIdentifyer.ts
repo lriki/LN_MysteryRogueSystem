@@ -75,7 +75,7 @@ export class LIdentifyer {
     resolveDescription(entity: LEntity): LEntityDescription {
         const itemId = entity.queryProperty(RESystem.properties.itemId) as number;
         if (itemId > 0) {
-            const item = REData.items[itemId];
+            const item = REData.itemData(itemId);
             //return new LEntityDescription(item.iconIndex, "白い草", DescriptionHighlightLevel.UserIdentified);
             return new LEntityDescription(item.iconIndex, item.name, DescriptionHighlightLevel.Identified);
         }

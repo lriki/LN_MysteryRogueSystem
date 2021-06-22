@@ -78,7 +78,8 @@ export class LItemImitatorBehavior extends LBehavior {
     
     public queryCharacterFileName(): string | undefined {
         const b = this.itemEntity().getBehavior(LItemBehavior);
-        const p = REData.prefabs[b.itemData().entity.prefabId]
+        const e = REData.entities[b.itemData().entityId];
+        const p = REData.prefabs[e.prefabId];
         return p.image.characterName;
         //return "Damage2";
     }

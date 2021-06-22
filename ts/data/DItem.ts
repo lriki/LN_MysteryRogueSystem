@@ -1,6 +1,8 @@
 import { DEffect, DRmmzEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
+import { DEntity, DEntityId } from "./DEntity";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DEquipmentPartId } from "./DEquipmentPart";
+import { REData } from "./REData";
 
 export type DItemDataId = number;
 
@@ -70,10 +72,11 @@ export class DItem {
     /** ID (0 is Invalid). */
     id: DItemDataId;
 
+    entityId: DEntityId;
+
     /** Name */
     name: string;
 
-    entity: DEntityProperties;
 
     iconIndex: number;
 
@@ -95,10 +98,10 @@ export class DItem {
     traits: IDataTrait[];
 
     
-    constructor(id: DItemDataId) {
+    constructor(id: DItemDataId, entityId: DEntityId) {
         this.id = id;
+        this.entityId = entityId;
         this.name = "null";
-        this.entity = DEntityProperties_Default();
         this.iconIndex = 0;
         this.rmmzScope = 0;
         this.animationId = 0;
@@ -111,6 +114,10 @@ export class DItem {
         this.equipmentParts = [];
         this.parameters = [];
         this.traits = [];
+    }
+
+    public entityData(): DEntity {
+        return REData.entities[this.entityId];
     }
 }
 

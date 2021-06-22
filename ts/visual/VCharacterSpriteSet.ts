@@ -93,9 +93,9 @@ export class VCharacterSpriteSet {
 
 
                 for (let i = 0; i < items.length; i++) {
-
+                    const itemEntityData = REData.entities[items[i].entityId];
                     
-                    const newImage = items[i].entity.equipmentImage.name;
+                    const newImage = itemEntityData.entity.equipmentImage.name;
                     const current = (i < this._sprites.length) ? this._sprites[i].imageName : "";
 
                     const spriteData = this._sprites[i];
@@ -139,7 +139,7 @@ export class VCharacterSpriteSet {
                     s.sprite.setFrame(sx, sy, pw, ph);
                     s.sprite.position = this._owner.position;
                     s.sprite.visible = true;
-                    if (REData.items[s.itemId].entity.equipmentImage.side == DItemEquipmentSide.Right) {
+                    if (REData.itemEntity(s.itemId).entity.equipmentImage.side == DItemEquipmentSide.Right) {
                         s.sprite.z = this._owner.z + ZOFFSET_TABLE_RIGHT_HAND[d];
                     }
                     else {

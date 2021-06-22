@@ -68,7 +68,7 @@ export class DPrefab {
     }
 
     public isTrapKind(): boolean {
-        return this.dataSource == DPrefabDataSource.Item && REData.items[this.dataId].entity.kind == "Trap";
+        return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kind == "Trap";
     }
 
     public isEntryPoint(): boolean {

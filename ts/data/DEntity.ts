@@ -1,13 +1,17 @@
 import { assert } from "ts/Common";
+import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
+import { DItem } from "./DItem";
 import { DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { REData } from "./REData";
 
+export type DEntityId = number;
+
 /**
  * [2021/6/22] Database 修正について
  * ----------
- * これまでは Prefab の方が偉かった (インスタンス化するときは PrefabID を使った) が、EntityData の方を偉くする。
+ * これまでは Prefab の方が偉かった (インスタンス化するときは PrefabID を使った) が、EntityData の方を偉くしてみる。
  * 
  * - 固定のお店を作るときはツクールの [お店の処理] を使いたいが、ここで指定するのは ItemData(EntityData) である。Prefab との関連付けが少し手間。
  *   - お店に限らず、イベントからアイテムIDとして情報をもらうときに、REシステムのほとんどの個所で Prefab を要求していることがツクールとマッチしていない。
@@ -19,7 +23,37 @@ import { REData } from "./REData";
  * インスタンス化時にはどちらを指定しても問題はなくなった。
  * どちらでもよいなら、エディタから指定しやすい方を使うのがよいだろう。
  * 
+ * NOTE: このような仕組みにすると、EntityData と Prefab は 1:n でも良くなる。
+ * Prefab は見た目をコントロールするものとみなせるので、例えば同種のアイテムなどは共通の Prefab を使っても構わない。
+ * 当初は Prefab の方が偉かったが、Prefab は View の機能なので、Data に対して View が優先されるのはやっぱりちょっと不自然だろう。
  */
+
+export class DEntity {
+    id: DEntityId;
+    prefabId: DPrefabId;
+    
+    entity: DEntityProperties;
+
+    itemData: DItem | undefined;
+
+    meta_prefabName: string | undefined;
+
+    constructor(id: DEntityId) {
+        this.id = id;
+        this.prefabId = 0;
+        this.entity = DEntityProperties_Default();
+        this.itemData = undefined;
+        this.meta_prefabName = "";
+    }
+
+    public item(): DItem {
+        assert(this.itemData);
+        return this.itemData;
+    }
+}
+
+
+
 
 
 export interface DEntityInstance {

@@ -55,7 +55,7 @@ export class LTrapBehavior extends LBehavior {
 
     public trapName(): string {
         const itemId = this.ownerEntity().queryProperty(RESystem.properties.itemId) as number;
-        const item = REData.items[itemId];
+        const item = REData.itemData(itemId);
         return item.name;
     }
     

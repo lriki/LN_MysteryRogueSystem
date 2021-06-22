@@ -13,7 +13,7 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LMagicBulletBehavior } from "ts/objects/behaviors/LMagicBulletBehavior";
-import { DEntityInstance } from "ts/data/DEntity";
+import { DEntity, DEntityInstance } from "ts/data/DEntity";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
@@ -62,23 +62,25 @@ export class SEntityFactory {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior, itemId);
-        const item = REData.items[itemId];
+        const item = REData.itemData(itemId);
 
-        if (item.entity.kind == "Weapon" ||
-            item.entity.kind == "Shield") {
+        const entityData = REData.entities[item.entityId]
+
+        if (entityData.entity.kind == "Weapon" ||
+            entityData.entity.kind == "Shield") {
             e.addBehavior(LEquipmentBehavior);
         }
 
-        SBehaviorFactory.attachBehaviors(e, item.entity.behaviorNames);
+        SBehaviorFactory.attachBehaviors(e, entityData.entity.behaviorNames);
 
-        for (const name of item.entity.abilityNames) {
+        for (const name of entityData.entity.abilityNames) {
             const data = REData.abilities.find(x => x.key == name);
             if (!data) throw new Error(`Ability "${name}" not found.`);
             e.addAbility(data.id);
         }
 
         //e.addAbility(REData.abilities[1].id);  // TODO: Test
-        this.setupDirectly_Item(e, item);
+        this.setupDirectly_Item(e, entityData);
         return e;
     }
 
@@ -180,8 +182,8 @@ export class SEntityFactory {
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
     // そのためここで直定義して一通り作ってみた後、再検討する。
-    static setupDirectly_Item(entity: LEntity, data: DItem) {
-        switch (data.entity.key) {
+    static setupDirectly_Item(entity: LEntity, entityData: DEntity) {
+        switch (entityData.entity.key) {
             case "kキュアリーフ":
             case "kフレイムリーフ":
                 entity.addBehavior(LItemBehavior_Grass1);

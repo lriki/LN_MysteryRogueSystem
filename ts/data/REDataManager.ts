@@ -21,6 +21,7 @@ import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DEffect_Clone,
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
+import { DEntity } from './DEntity';
 
 
 declare global {  
@@ -418,8 +419,7 @@ export class REDataManager
         REData.items = [];
         REData.itemDataIdOffset = REData.items.length;
         $dataItems.forEach(x => {
-            const item = new DItem(REData.items.length);
-            REData.items.push(item);
+            const [entity, item] = REData.newItem();
             if (x) {
                 item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
@@ -453,34 +453,32 @@ export class REDataManager
                 */
 
                 item.rmmzScope = x.scope ?? DRmmzEffectScope.None;
-                item.entity = parseMetaToEntityProperties(x.meta);
+                entity.entity = parseMetaToEntityProperties(x.meta);
                 item.animationId = x.animationId;
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
         $dataWeapons.forEach(x => {
-            const item = new DItem(REData.items.length);
-            REData.items.push(item);
+            const [entity, item] = REData.newItem();
             if (x) {
                 item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
-                item.entity = parseMetaToEntityProperties(x.meta);
+                entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
         REData.armorDataIdOffset = REData.items.length;
         $dataArmors.forEach(x => {
-            const item = new DItem(REData.items.length);
-            REData.items.push(item);
+            const [entity, item] = REData.newItem();
             if (x) {
                 item.name = x.name;
                 item.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
-                item.entity = parseMetaToEntityProperties(x.meta);
+                entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
         RESystem.items = {
@@ -488,7 +486,7 @@ export class REDataManager
         };
 
         for (const item of REData.items) {
-            this.setupDirectly_DItem(item);
+            this.setupDirectly_DItem(REData.entities[item]);
         }
         
 
@@ -698,7 +696,7 @@ export class REDataManager
                 else if (data.item) {
                     const item = REData.getItemFuzzy(data.item);
                     prefab.dataSource = DPrefabDataSource.Item;
-                    prefab.dataId = item.id;
+                    prefab.dataId = item.item().id;
                     item.entity.prefabId = prefab.id;   // 相互リンク
                 }
                 else if (data.system) {
@@ -718,6 +716,21 @@ export class REDataManager
                 }
                 else {
                     throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
+                }
+            }
+
+            // Link Prefab and Entity
+            {
+                for (const entity of REData.entities) {
+                    if (entity.meta_prefabName) {
+                        const prefab = REData.prefabs.find(x => x.key == entity.meta_prefabName);
+                        if (prefab) {
+                            entity.prefabId = prefab.id;
+                        }
+                        else {
+                            throw new Error(`Unknown Prefab "${entity.meta_prefabName}".`);
+                        }
+                    }
                 }
             }
             
@@ -910,8 +923,9 @@ export class REDataManager
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
     // そのためここで直定義して一通り作ってみた後、再検討する。
-    static setupDirectly_DItem(data: DItem) {
-        switch (data.entity.key) {
+    static setupDirectly_DItem(entity: DEntity) {
+        const data = entity.item();
+        switch (entity.entity.key) {
             case "kキュアリーフ":
                 data.effectSet.aquireEffect(DEffectCause.Eat).parameterQualifyings.push({
                     parameterId: DBasics.params.fp,

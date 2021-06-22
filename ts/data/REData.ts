@@ -5,7 +5,7 @@ import { DState, DState_makeDefault } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
-import { DItem } from "./DItem";
+import { DItem, DItemDataId } from "./DItem";
 import { DLand, DLand_Default } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DSequel } from "./DSequel";
@@ -23,6 +23,7 @@ import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
 import { REData_Parameter } from "./DParameter";
 import { DEffectHitType } from "./DEffect";
+import { DEntity, DEntityId } from "./DEntity";
 
 
 export enum REFloorMapKind
@@ -174,12 +175,13 @@ export class REData
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static skills: DSkill[] = [];
-    static items: DItem[] = [];
+    static items: DEntityId[] = [];
     static traits: DTrait[] = [];
     static states: DState[] = [];
     static abilities: DAbility[] = [];
     static monsterHouses: DMonsterHouse[] = [];
     static prefabs: DPrefab[] = [];
+    static entities: DEntity[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -288,28 +290,59 @@ export class REData
         });
         return newId;
     }
-    
-    static findItem(re_key: string): DItem | undefined {
-        return this.items.find(x => x.entity.key == re_key);
+
+    static newEntity(): DEntity {
+        const newId = this.entities.length;
+        const data = new DEntity(newId);
+        this.entities.push(data);
+        return data;
     }
 
+    static newItem(): [DEntity, DItem] {
+        const entity = REData.newEntity();
+        const data = new DItem(REData.items.length, entity.id);
+        REData.items.push(entity.id);
+        entity.itemData = data;
+        return [entity, data];
+    }
+
+    static itemEntity(id: DItemDataId): DEntity {
+        return this.entities[this.items[id]];
+    }
+
+    static itemData(id: DItemDataId): DItem {
+        return this.itemEntity(id).item();
+    }
+    
+/*     static findItem(re_key: string): DItem | undefined {
+        return this.items.find(x => x.entity.key == re_key);
+    }
+ */
     static findItemFuzzy(pattern: string): DItem | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
-            return this.items[id];
-        else
-            return this.items.find(x => x.name == pattern || (x.entity.key != "" && x.entity.key == pattern));
+            return this.entities[this.items[id]].item();
+        else {
+            const entityId = this.items.find(id => {
+                const e = this.entities[id];
+                return e.item().name == pattern || (e.entity.key != "" && e.entity.key == pattern);
+            });
+            if (!entityId)
+                return undefined;
+            else
+                return this.entities[entityId].item();
+        }
     }
 
-    static getItem(re_key: string): DItem {
+/*     static getItem(re_key: string): DItem {
         const d = this.findItem(re_key);
         if (d) return d;
         throw new Error(`Item "${re_key}" not found.`);
     }
-
-    static getItemFuzzy(pattern: string): DItem {
+ */
+    static getItemFuzzy(pattern: string): DEntity {
         const d = this.findItemFuzzy(pattern);
-        if (d) return d;
+        if (d) return this.entities[d.entityId];
         throw new Error(`Item "${pattern}" not found.`);
     }
 

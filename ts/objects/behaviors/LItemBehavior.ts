@@ -32,7 +32,7 @@ export class LItemBehavior extends LBehavior {
     }
 
     public itemData(): DItem {
-        return REData.items[this._itemId];
+        return REData.itemData(this._itemId);
     }
 
     onQueryProperty(propertyId: number): any {
