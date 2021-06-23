@@ -262,6 +262,56 @@ export class LMap extends LObject
         ];
     }
 
+    /**
+     * 
+     * distance=0 の時は足元。
+     * distance=1 の時は外周1マス。
+     */
+    public getEdgeBlocks(x: number, y: number, distance: number): LBlock[] {
+        assert(distance >= 0);
+        const result: LBlock[] = [];
+
+        if (distance == 0) {
+            const block = this.tryGetBlock(x, y);
+            if (block) result.push(block);
+        }
+        else {
+            const x1 = x - distance;
+            const y1 = y - distance;
+            const x2 = x + distance;
+            const y2 = y + distance;
+            const count = distance * 2;
+    
+            /* ↓ここを始点に、時計回りに列挙していく。
+             * uuuur
+             * l   r
+             * l   r
+             * l   r
+             * ldddd
+             */
+            for (let i = 0; i < count; i++) {
+                const block = this.tryGetBlock(x1 + i, y1);
+                if (block) result.push(block);
+            }
+            for (let i = 0; i < count; i++) {
+                const block = this.tryGetBlock(x2, y1 + i);
+                if (block) result.push(block);
+            }
+            for (let i = 0; i < count; i++) {
+                const block = this.tryGetBlock(x2 - i, y2);
+                if (block) result.push(block);
+            }
+            for (let i = 0; i < count; i++) {
+                const block = this.tryGetBlock(x1, y2 - i);
+                if (block) result.push(block);
+            }
+        }
+
+        return result;
+    }
+
+
+
     /** "部屋" 内の "床" である Block を取得する */
     public roomFloorBlocks(): LBlock[] {
         return this._blocks.filter(b => b.isRoom() && b.tileShape() == TileShape.Floor);

@@ -1,8 +1,9 @@
-import { assert } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEffect, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
+import { LBlock } from "ts/objects/LBlock";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { LEntity } from "ts/objects/LEntity";
 import { LEntityId } from "ts/objects/LObject";
@@ -29,6 +30,44 @@ export class SActionCommon {
             context.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
         }
     }
+
+    /**
+     * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
+     * 
+     */
+    public static postDropToGroundOrDestroy(context: SCommandContext, entity: LEntity, blowDirection: number): void {
+
+        const maxDistance = 3;
+        for (let distance = 0; distance <= maxDistance; distance++) {
+            // 落下できる周辺 Block を集める
+            const candidates = REGame.map.getEdgeBlocks(entity.x, entity.y, distance)
+                .filter(b => !b.layer(BlockLayerKind.Ground).isContainsAnyEntity());
+            if (candidates.length > 0) {
+                const block = context.random().select(candidates);
+                //context.postSequel(entity, RESystem.sequels.dropSequel);
+                context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
+                context.postCall(() => {
+                    SMovementCommon.locateEntity(entity, block.x(), block.y());
+                });
+                return;
+            }
+        }
+
+        // 落下できるところが無ければ Entity 削除
+        context.postMessage(tr2("使い物にならなくなった。"));
+        context.postDestroy(entity);
+    }
+
+
+
+
+
+
+
+
+
+
+
     
     
     

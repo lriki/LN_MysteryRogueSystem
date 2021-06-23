@@ -11,6 +11,8 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
+import { SActivityFactory } from "ts/system/SActivityFactory";
+import { DBasics } from "ts/data/DBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -115,4 +117,41 @@ test("PickAtMoved", () => {
 
     expect(enemy1.x).toBe(19);  // enemy は動いていない (ターンは回っていない)
     expect(actor1.getBehavior(LInventoryBehavior).entities()[0]).toBe(item1);   // アイテムを拾えていること
+});
+
+test("Item.ThrowAndDrop", () => {
+    SGameManager.createGameObjects();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    actor1.dir = 6;
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.performFloorTransfer();
+
+    // アイテムを作ってインベントリに入れる
+    const item1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
+    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    const item2 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
+    actor1.getBehavior(LInventoryBehavior).addEntity(item2);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // [投げる]
+    const activity1 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
+    activity1._setup(actor1, item1);
+    RESystem.dialogContext.postActivity(activity1);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // [投げる]
+    const activity2 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
+    activity2._setup(actor1, item2);
+    RESystem.dialogContext.postActivity(activity2);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // item1 と item2 は違うところに落ちたはず
+    expect(item1.x != item2.x || item1.y != item2.y).toBe(true);
 });
