@@ -4,6 +4,8 @@ import { RESystem } from "./RESystem";
 import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_Prepare, SSchedulerPhase_ResolveAdjacentAndMovingTarget } from "./SSchedulerPhase";
 import { RunStepInfo } from "ts/objects/LScheduler";
 import { DecisionPhase } from "ts/objects/internal";
+import { BlockLayerKind } from "ts/objects/LBlockLayer";
+import { SActionCommon } from "./SActionCommon";
 
 
 
@@ -364,7 +366,12 @@ export class SScheduler
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {
-                    throw new Error("(currentLayer != homeLayer)");
+                    if (homeLayer == BlockLayerKind.Ground) {
+                        SActionCommon.postDropToGroundOrDestroy(RESystem.commandContext, entity, 0);
+                    }
+                    else {
+                        throw new Error("Not implemented.");
+                    }
                 }
             }
         }

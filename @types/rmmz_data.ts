@@ -40,10 +40,10 @@ declare interface IDataClass
     id?: number;
     expParams?: number[];
     traits?: IDataTrait[];
-    learnings?: {
-        level?: number;
-        note?: string;
-        skillId?: number;
+    learnings: {
+        level: number;
+        note: string;
+        skillId: number;
     }[];
     name?: string;
     note?: string;

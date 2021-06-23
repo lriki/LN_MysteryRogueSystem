@@ -367,6 +367,7 @@ export class REDataManager
                 c.expParams = x.expParams ?? [];
                 c.params = x.params ?? [];
                 c.traits = x.traits ?? [];
+                c.learnings = x.learnings;
             }
         });
 

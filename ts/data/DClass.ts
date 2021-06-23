@@ -1,6 +1,12 @@
 
 export type DClassId = number;
 
+export interface DClassLearningSkill {
+    level: number;
+    note: string;
+    skillId: number;
+}
+
 export interface DClass {
     /** ID (0 is Invalid). */
     id: DClassId;
@@ -15,6 +21,8 @@ export interface DClass {
     params: number[][];
 
     traits: IDataTrait[];
+
+    learnings: DClassLearningSkill[];
 }
 
 export const DClass_Default: DClass = {
@@ -23,5 +31,6 @@ export const DClass_Default: DClass = {
     expParams: [],
     params: [],
     traits: [],
+    learnings: [],
 };
 

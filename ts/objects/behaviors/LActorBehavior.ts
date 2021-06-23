@@ -3,6 +3,7 @@ import { RE_Data_Actor } from "ts/data/DActor";
 import { DBasics } from "ts/data/DBasics";
 import { DClass } from "ts/data/DClass";
 import { DParameterId } from "ts/data/DParameter";
+import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { LBehavior } from "../internal";
@@ -17,6 +18,7 @@ export class LActorBehavior extends LBattlerBehavior {
     _classId: number = 0;
     _level: number = 0;
     _exp: number[] = [];
+    _skills: DSkillDataId[] = [];
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LActorBehavior);
@@ -58,7 +60,7 @@ export class LActorBehavior extends LBattlerBehavior {
         //this._profile = actor.profile;
         this.resetLevel();
         this.initExp();
-        //this.initSkills();
+        this.initSkills();
         //this.initEquips(actor.equips);
         this.clearParamPlus();
         this.recoverAll();
@@ -121,15 +123,12 @@ export class LActorBehavior extends LBattlerBehavior {
         
     // Game_Actor.prototype.initSkills
     initSkills(): void {
-        throw new Error("Not implemented.");
-        /*
         this._skills = [];
         for (const learning of this.currentClass().learnings) {
             if (learning.level <= this._level) {
                 this.learnSkill(learning.skillId);
             }
         }
-        */
     }
 
     // Game_Actor.prototype.initEquips
@@ -202,22 +201,16 @@ export class LActorBehavior extends LBattlerBehavior {
     }
 
     // Game_Actor.prototype.learnSkill
-    learnSkill(skillId: number): void {
-        throw new Error("Not implemented.");
-        /*
+    private learnSkill(skillId: DSkillDataId): void {
         if (!this.isLearnedSkill(skillId)) {
             this._skills.push(skillId);
             this._skills.sort((a, b) => a - b);
         }
-        */
     }
 
     // Game_Actor.prototype.isLearnedSkill
-    isLearnedSkill(skillId: number): boolean {
-        throw new Error("Not implemented.");
-        /*
+    private isLearnedSkill(skillId: DSkillDataId): boolean {
         return this._skills.includes(skillId);
-        */
     };
 
     // Game_Actor.prototype.paramBase 
