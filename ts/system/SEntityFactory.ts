@@ -32,6 +32,7 @@ import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavio
 export class SEntityFactory {
     static newActor(entityId: DEntityId): LEntity {
         const e = REGame.world.spawnEntity(entityId);
+        e.prefabKey = REData.prefabs[e.data().prefabId].key;
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);

@@ -28,6 +28,7 @@ import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
 import { onGrounded } from "../internal";
 import { WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
+import { DPrefabImage } from "ts/data/DPrefab";
 
 /**
  * 
@@ -109,10 +110,10 @@ export class LUnitBehavior extends LBehavior {
         this._requiredFeetProcess = false;
     }
 
-    queryCharacterFileName(): string | undefined {
+    queryCharacterFileName(): DPrefabImage | undefined {
         const e = this.ownerEntity().data();
         const p = REData.prefabs[e.prefabId];
-        return p.image.characterName;
+        return p.image;
     }
 
     queryHomeLayer(): BlockLayerKind | undefined {

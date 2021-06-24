@@ -74,7 +74,10 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
 
         const behaviors = meta["RE-Behavior"];
         if (behaviors) {
-            data.behaviorNames = (behaviors as string).split(";");
+            if (typeof(behaviors) == "string")
+                data.behaviorNames = (behaviors as string).split(";");
+            else
+                data.behaviorNames = behaviors;
         }
 
         const commands = meta["RE-Command"];

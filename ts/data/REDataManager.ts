@@ -377,6 +377,7 @@ export class REDataManager
         $dataActors.forEach(x => {
             const [entity, actor] = REData.newActor();
             if (x) {
+                entity.entity = parseMetaToEntityProperties(x.meta);
                 actor.setup(x);
             }
         });
@@ -717,7 +718,7 @@ export class REDataManager
                     prefab.dataSource = DPrefabDataSource.Ornament;
                 }
                 else {
-                    throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
+                    //throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
                 }
             }
 

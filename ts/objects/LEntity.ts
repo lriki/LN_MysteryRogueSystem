@@ -23,6 +23,7 @@ import { SAbilityFactory } from "ts/system/SAbilityFactory";
 import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
 import { DEntity, DEntityId } from "ts/data/DEntity";
+import { DPrefabImage } from "ts/data/DPrefab";
 
 enum BlockLayer
 {
@@ -327,7 +328,7 @@ export class LEntity extends LObject
     //----------------------------------------
     // Property
 
-    public getCharacterFileName(): string | undefined {
+    public getCharacterImage(): DPrefabImage | undefined {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryCharacterFileName();
             if (v) return v;

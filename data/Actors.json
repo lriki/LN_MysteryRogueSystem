@@ -1,8 +1,8 @@
 [
 null,
-{"id":1,"battlerName":"","characterIndex":0,"characterName":"RE-Actor1-X","classId":1,"equips":[2,0,0,3,0],"faceIndex":0,"faceName":"","traits":[{"code":11,"dataId":1,"value":1}],"initialLevel":1,"maxLevel":99,"name":"ヒカリ","nickname":"","note":"<RE-Behavior:Eater>\n<RE-Behavior:Waver>\n","profile":""},
-{"id":2,"battlerName":"Actor1_2","characterIndex":1,"characterName":"Actor1","classId":1,"equips":[1,0,0,9,0],"faceIndex":1,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"プリシア","nickname":"","note":"","profile":""},
-{"id":3,"battlerName":"Actor1_3","characterIndex":2,"characterName":"Actor1","classId":5,"equips":[31,0,65,5,0],"faceIndex":2,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"ゲイル","nickname":"","note":"","profile":""},
-{"id":4,"battlerName":"Actor1_4","characterIndex":3,"characterName":"Actor1","classId":5,"equips":[31,0,0,5,0],"faceIndex":3,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"ミシェル","nickname":"","note":"","profile":""},
-{"id":5,"battlerName":"","characterIndex":0,"characterName":"","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"倉庫","nickname":"","note":"","profile":""}
+{"id":1,"battlerName":"","characterIndex":0,"characterName":"RE-Actor1-X","classId":1,"equips":[2,0,0,3,0],"faceIndex":0,"faceName":"","traits":[{"code":11,"dataId":1,"value":1}],"initialLevel":1,"maxLevel":99,"name":"ヒカリ","nickname":"","note":"<RE-Key:kActor1>\n<RE-Prefab:pActor1>\n<RE-Behavior:Eater>\n<RE-Behavior:Waver>\n","profile":""},
+{"id":2,"battlerName":"Actor1_2","characterIndex":1,"characterName":"Actor1","classId":1,"equips":[1,0,0,9,0],"faceIndex":1,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"プリシア","nickname":"","note":"<RE-Key:kActor2>\n<RE-Prefab:pActor2>","profile":""},
+{"id":3,"battlerName":"Actor1_3","characterIndex":2,"characterName":"Actor1","classId":5,"equips":[31,0,65,5,0],"faceIndex":2,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"ゲイル","nickname":"","note":"<RE-Key:kActor3>\n<RE-Prefab:pActor3>","profile":""},
+{"id":4,"battlerName":"Actor1_4","characterIndex":3,"characterName":"Actor1","classId":5,"equips":[31,0,0,5,0],"faceIndex":3,"faceName":"Actor1","traits":[],"initialLevel":1,"maxLevel":99,"name":"ミシェル","nickname":"","note":"<RE-Key:kActor4>\n<RE-Prefab:pActor4>","profile":""},
+{"id":5,"battlerName":"","characterIndex":0,"characterName":"","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"倉庫","nickname":"","note":"<RE-Key:kActor5>\n<RE-Prefab:pActor5>","profile":""}
 ]

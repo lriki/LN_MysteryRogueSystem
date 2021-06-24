@@ -66,7 +66,7 @@ export class SGameManager
                 const actor = REData.entities[entityId].actorData();
                 if (actor.id > 0) {
                     const unit = SEntityFactory.newActor(entityId);
-                    unit.prefabKey = `Actor:${actor.id}`;
+                    //unit.prefabKey = `Actor:${actor.id}`;
                     //unit.floorId = LFlo;//x.initialFloorId;
                     unit.x = actor.initialX;
                     unit.y = actor.initialY;

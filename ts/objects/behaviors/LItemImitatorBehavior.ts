@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItem, DItemDataId } from "ts/data/DItem";
+import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
@@ -91,10 +92,10 @@ export class LItemImitatorBehavior extends LBehavior {
         return REGame.world.entity(this._itemEntityId);
     }
     
-    queryCharacterFileName(): string | undefined {
+    queryCharacterFileName(): DPrefabImage | undefined {
         const e = this.itemEntity().data();
         const p = REData.prefabs[e.prefabId];
-        return p.image.characterName;
+        return p.image;
     }
 
     queryOutwardFactionId(): number | undefined {

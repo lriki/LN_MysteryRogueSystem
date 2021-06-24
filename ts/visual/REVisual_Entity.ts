@@ -115,9 +115,9 @@ export class REVisual_Entity
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
 
-            const charactorName = this.entity().getCharacterFileName();
-            if (charactorName) {
-                event.setImage(charactorName, 0);
+            const charactorImage = this.entity().getCharacterImage();
+            if (charactorImage) {
+                event.setImage(charactorImage.characterName, charactorImage.characterIndex);
             }
 
             
