@@ -291,7 +291,7 @@ export class SScheduler
     }
 
     private update_ProcessPhase(): void {
-        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を処理
+        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上のコマンドチェーンの結果を処理
         this.prepareActionPhase();
 
         const phase = this._phases[this.currentPhaseIndex()];
@@ -366,12 +366,7 @@ export class SScheduler
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {
-                    if (homeLayer == BlockLayerKind.Ground) {
-                        SActionCommon.postDropToGroundOrDestroy(RESystem.commandContext, entity, 0);
-                    }
-                    else {
-                        throw new Error("Not implemented.");
-                    }
+                    SActionCommon.postDropOrDestroy(RESystem.commandContext, entity, homeLayer, 0);
                 }
             }
         }

@@ -35,26 +35,26 @@ export class SActionCommon {
      * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      * 
      */
-    public static postDropToGroundOrDestroy(context: SCommandContext, entity: LEntity, blowDirection: number): void {
+    public static postDropOrDestroy(context: SCommandContext, entity: LEntity, targetLayer: BlockLayerKind, blowDirection: number): void {
 
         const maxDistance = 3;
         for (let distance = 0; distance <= maxDistance; distance++) {
             // 落下できる周辺 Block を集める
             const candidates = REGame.map.getEdgeBlocks(entity.x, entity.y, distance)
-                .filter(b => !b.layer(BlockLayerKind.Ground).isContainsAnyEntity());
+                .filter(b => !b.layer(targetLayer).isContainsAnyEntity());
             if (candidates.length > 0) {
                 const block = context.random().select(candidates);
                 //context.postSequel(entity, RESystem.sequels.dropSequel);
                 context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
                 context.postCall(() => {
-                    SMovementCommon.locateEntity(entity, block.x(), block.y());
+                    SMovementCommon.locateEntity(entity, block.x(), block.y(), targetLayer);
                 });
                 return;
             }
         }
 
         // 落下できるところが無ければ Entity 削除
-        context.postMessage(tr2("使い物にならなくなった。"));
+        context.postMessage(tr2("消えてしまった…。"));
         context.postDestroy(entity);
     }
 

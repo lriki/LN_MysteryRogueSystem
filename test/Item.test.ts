@@ -155,3 +155,40 @@ test("Item.ThrowAndDrop", () => {
     // item1 と item2 は違うところに落ちたはず
     expect(item1.x != item2.x || item1.y != item2.y).toBe(true);
 });
+
+test("Item.DropAndDestroy", () => {
+    SGameManager.createGameObjects();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    actor1.dir = 6;
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.performFloorTransfer();
+
+    // アイテムを作ってインベントリに入れる
+    const item1 = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
+    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+
+    // 床にアイテムを敷き詰める
+    const ox = 7//10;
+    const oy = 2//5;
+    for (let y = 0; y < 7; y++) {
+        for (let x = 0; x < 7; x++) {
+            const item = SEntityFactory.newEntity({ entityId: TestEnv.EntityId_Herb, stateIds: [] });
+            REGame.world._transferEntity(item, TestEnv.FloorId_FlatMap50x50, ox + x, oy + y);
+        }
+    }
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // [投げる]
+    const activity1 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
+    activity1._setup(actor1, item1);
+    RESystem.dialogContext.postActivity(activity1);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // 置くところが無いので削除される
+    expect(item1.isDestroyed()).toBe(true);
+});
