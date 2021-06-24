@@ -70,7 +70,7 @@ export class LItemImitatorBehavior extends LBehavior {
 
     onAttached(): void {
         assert(this._itemEntityId.isEmpty());
-        const item = SEntityFactory.newItem(REData.getItemFuzzy("kキュアリーフ").id);
+        const item = SEntityFactory.newItem(REData.getItemFuzzy("kキュアリーフ").item().id);
         item.setParent(this);
         this._itemEntityId = item.entityId();
 
@@ -92,8 +92,7 @@ export class LItemImitatorBehavior extends LBehavior {
     }
     
     queryCharacterFileName(): string | undefined {
-        const b = this.itemEntity().getBehavior(LItemBehavior);
-        const e = REData.entities[b.itemData().entityId];
+        const e = this.itemEntity().data();
         const p = REData.prefabs[e.prefabId];
         return p.image.characterName;
     }

@@ -109,6 +109,12 @@ export class LUnitBehavior extends LBehavior {
         this._requiredFeetProcess = false;
     }
 
+    queryCharacterFileName(): string | undefined {
+        const e = this.ownerEntity().data();
+        const p = REData.prefabs[e.prefabId];
+        return p.image.characterName;
+    }
+
     queryHomeLayer(): BlockLayerKind | undefined {
         return BlockLayerKind.Unit;
     }
