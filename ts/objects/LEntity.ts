@@ -22,6 +22,7 @@ import { DParameterId } from "ts/data/DParameter";
 import { SAbilityFactory } from "ts/system/SAbilityFactory";
 import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
+import { DEntity, DEntityId } from "ts/data/DEntity";
 
 enum BlockLayer
 {
@@ -89,19 +90,26 @@ enum BlockLayer
  */
 export class LEntity extends LObject
 {
+    private _entityDataId: DEntityId;
+
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
 
     _partyId: LPartyId = 0;
     
     //private _parentIsMap = false;
 
-    public constructor() {
+    public constructor(entityDataId: DEntityId) {
         super(LObjectType.Entity);
+        this._entityDataId = entityDataId;
     }
 
     //----------------------------------------
     // Object Reference Management
     
+    public data(): DEntity {
+        return REData.entities[this._entityDataId];
+    }
+
     public entityId(): LEntityId {
         //return this._id;
         return this.__objectId();
@@ -221,7 +229,7 @@ export class LEntity extends LObject
      * そうしなければ GC により削除される。
      */
      public clone(): LEntity {
-        const entity = REGame.world.spawnEntity();
+        const entity = REGame.world.spawnEntity(this._entityDataId);
         entity._partyId = this._partyId;
         entity._name = this._name;
         entity._displayName = this._displayName;

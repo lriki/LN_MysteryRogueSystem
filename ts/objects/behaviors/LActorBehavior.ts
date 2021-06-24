@@ -1,3 +1,4 @@
+import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { RE_Data_Actor } from "ts/data/DActor";
 import { DBasics } from "ts/data/DBasics";
@@ -14,7 +15,6 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 /**
  */
 export class LActorBehavior extends LBattlerBehavior {
-    _actorId: number = 0;
     _classId: number = 0;
     _level: number = 0;
     _exp: number[] = [];
@@ -23,7 +23,6 @@ export class LActorBehavior extends LBattlerBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LActorBehavior);
         throw new Error("Not implemented.");    // TODO: base の LBattlerBehavior のコピー
-        b._actorId = this._actorId;
         b._classId = this._classId;
         b._level = this._level;
         b._exp = this._exp;
@@ -34,14 +33,8 @@ export class LActorBehavior extends LBattlerBehavior {
         super();
     }
 
-    // Game_Actor.prototype.setup
-    public setup(actorId: number): void {
-        this._actorId = actorId;
-    }
-
     public resetLevel(): void {
-        const actor = REData.actors[this._actorId];
-        this._level = actor.initialLevel;
+        this._level = this.actor().initialLevel;
     }
 
     
@@ -52,8 +45,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
 
     onAttached(): void {
-        const actor = REData.actors[this._actorId];
-        this._classId = actor.classId;
+        this._classId = this.actor().classId;
 
         //this._name = actor.name;
         //this._nickname = actor.nickname;
@@ -103,7 +95,9 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.actor
     actor(): RE_Data_Actor {
-        return REData.actors[this._actorId];
+        const entity = this.ownerEntity().data();
+        assert(entity.actor);
+        return entity.actor;
     }
 
     // Game_Actor.prototype.currentClass

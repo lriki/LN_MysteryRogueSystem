@@ -375,9 +375,10 @@ export class REDataManager
         // Import Actors
         REData.actors = [];
         $dataActors.forEach(x => {
-            const actor = new RE_Data_Actor(REData.actors.length);
-            REData.actors.push(actor);
-            if (x) actor.setup(x);
+            const [entity, actor] = REData.newActor();
+            if (x) {
+                actor.setup(x);
+            }
         });
 
         // Import Skills

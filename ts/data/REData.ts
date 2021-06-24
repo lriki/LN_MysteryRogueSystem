@@ -163,7 +163,7 @@ export class REData
     static equipmentParts: DEquipmentPart[] = [];
     static entityKinds: DEntityKind[] = [];
     static classes: DClass[] = [];
-    static actors: RE_Data_Actor[] = [];
+    static actors: DEntityId[] = [];
     static monsters: DEntityId[] = [];
     static lands: DLand[] = [DLand_Default()];
     static maps: DMap[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
@@ -312,6 +312,46 @@ export class REData
         const d = this.findEntity(pattern);
         if (d) return d;
         throw new Error(`Entity "${pattern}" not found.`);
+    }
+
+    //--------------------
+
+    static newActor(): [DEntity, RE_Data_Actor] {
+        const entity = REData.newEntity();
+        const data = new RE_Data_Actor(REData.actors.length);
+        REData.actors.push(data.id);
+        entity.actor = data;
+        return [entity, data];
+    }
+
+    static actorEntity(id: DEnemyId): DEntity {
+        return this.entities[this.monsters[id]];
+    }
+
+    static actorData(id: DEnemyId): RE_Data_Actor {
+        return this.actorEntity(id).actorData();
+    }
+
+    static findActor(pattern: string): RE_Data_Actor | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.entities[this.actors[id]].actorData();
+        else {
+            const entityId = this.monsters.find(id => {
+                const e = this.entities[id];
+                return e.enemyData().name == pattern || (e.entity.key != "" && e.entity.key == pattern);
+            });
+            if (!entityId)
+                return undefined;
+            else
+                return this.entities[entityId].actorData();
+        }
+    }
+
+    static getActor(pattern: string): RE_Data_Actor {
+        const d = this.findActor(pattern);
+        if (d) return d;
+        throw new Error(`Actor "${pattern}" not found.`);
     }
 
     //--------------------

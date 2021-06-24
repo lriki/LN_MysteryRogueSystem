@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { RE_Data_Actor } from "./DActor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
@@ -35,6 +36,8 @@ export class DEntity {
     
     entity: DEntityProperties;
 
+    actor: RE_Data_Actor | undefined;
+
     itemData: DItem | undefined;
 
     enemy: DEnemy | undefined;
@@ -45,6 +48,11 @@ export class DEntity {
         this.entity = DEntityProperties_Default();
         this.itemData = undefined;
         this.enemy = undefined;
+    }
+    
+    public actorData(): RE_Data_Actor {
+        assert(this.actor);
+        return this.actor;
     }
 
     public item(): DItem {

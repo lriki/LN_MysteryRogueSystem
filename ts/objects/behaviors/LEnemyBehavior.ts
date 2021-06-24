@@ -13,13 +13,9 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 /**
  */
 export class LEnemyBehavior extends LBattlerBehavior {
-
-    private _enemyId: DEnemyId = 0;
-
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEnemyBehavior);
         this.copyTo(b);
-        b._enemyId = this._enemyId;
         return b
     }
 
@@ -27,21 +23,20 @@ export class LEnemyBehavior extends LBattlerBehavior {
         super();
     }
 
-    public setup(enemyId: DEnemyId): void {
-        this._enemyId = enemyId;
-    }
-
     onAttached(): void {
         this.recoverAll();
     }
 
     public enemyId(): DEnemyId {
-        return this._enemyId;
+        const entity = this.ownerEntity().data();
+        assert(entity.enemy);
+        return entity.enemy.id;
     }
 
     public enemyData(): DEnemy {
-        assert(this._enemyId > 0);
-        return REData.enemyData(this._enemyId);
+        const entity = this.ownerEntity().data();
+        assert(entity.enemy);
+        return entity.enemy;
     }
     
 

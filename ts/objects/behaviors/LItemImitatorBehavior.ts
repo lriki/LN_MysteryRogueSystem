@@ -96,7 +96,6 @@ export class LItemImitatorBehavior extends LBehavior {
         const e = REData.entities[b.itemData().entityId];
         const p = REData.prefabs[e.prefabId];
         return p.image.characterName;
-        //return "Damage2";
     }
 
     queryOutwardFactionId(): number | undefined {
@@ -116,30 +115,11 @@ export class LItemImitatorBehavior extends LBehavior {
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
             if (Helpers.isHostileFactionId(e.walker.getOutwardFactionId(), self.getInnermostFactionId()) &&
                 e.targetX == self.x && e.targetY == self.y) {
-                console.log("removeThisState");
                 this.parentAs(LState)?.removeThisState();
                 return LEventResult.Handled;
             }
         }
         return LEventResult.Pass;
     }
-
-    /*
-    public itemDataId(): DItemDataId {
-        return this._itemId;
-    }
-
-    public itemData(): DItem {
-        return REData.items[this._itemId];
-    }
-
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.itemId)
-            return this._itemId;
-        else
-            super.onQueryProperty(propertyId);
-    }
-    */
-
 }
 

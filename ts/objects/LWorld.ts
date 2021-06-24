@@ -12,6 +12,7 @@ import { DLandId } from "ts/data/DLand";
 import { LParty, LPartyId } from "./LParty";
 import { SMovementCommon } from "ts/system/SMovementCommon";
 import { RESystem } from "ts/system/RESystem";
+import { DEntityId } from "ts/data/DEntity";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -127,8 +128,8 @@ export class LWorld
      * 生成された Entity はいずれの Floor にも属さない状態となっている。
      * 出現させるには transfarEntity() を呼び出す必要がある。
      */
-    spawnEntity(): LEntity {
-        const entity = new LEntity();
+    spawnEntity(entityDataId: DEntityId): LEntity {
+        const entity = new LEntity(entityDataId);
         this._registerObject(entity);
         return entity;
     }

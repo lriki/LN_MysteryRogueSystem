@@ -61,16 +61,19 @@ export class SGameManager
         REGame.world._registerObject(REGame.map);
 
         // Create unique units
-        REData.actors.forEach(x => {
-            if (x.id > 0) {
-                const unit = SEntityFactory.newActor(x.id);
-                unit.prefabKey = `Actor:${x.id}`;
-                //unit.floorId = LFlo;//x.initialFloorId;
-                unit.x = x.initialX;
-                unit.y = x.initialY;
-                REGame.system.uniqueActorUnits.push(unit.entityId());
+        for (const entityId of REData.actors) {
+            if (entityId > 0) {
+                const actor = REData.entities[entityId].actorData();
+                if (actor.id > 0) {
+                    const unit = SEntityFactory.newActor(entityId);
+                    unit.prefabKey = `Actor:${actor.id}`;
+                    //unit.floorId = LFlo;//x.initialFloorId;
+                    unit.x = actor.initialX;
+                    unit.y = actor.initialY;
+                    REGame.system.uniqueActorUnits.push(unit.entityId());
+                }
             }
-        });
+        }
 
         // TODO: とりあえずまずは全部同じにしてテスト
         //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
