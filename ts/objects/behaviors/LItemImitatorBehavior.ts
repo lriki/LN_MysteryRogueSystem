@@ -99,7 +99,7 @@ export class LItemImitatorBehavior extends LBehavior {
         //return "Damage2";
     }
 
-    queryFactionId(): number | undefined {
+    queryOutwardFactionId(): number | undefined {
         return REData.system.factions.neutral;
     }
 
@@ -114,7 +114,7 @@ export class LItemImitatorBehavior extends LBehavior {
             const e = args as WalkEventArgs;
 
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
-            if (Helpers.isHostile(e.walker, self) &&
+            if (Helpers.isHostileFactionId(e.walker.getOutwardFactionId(), self.getInnermostFactionId()) &&
                 e.targetX == self.x && e.targetY == self.y) {
                 console.log("removeThisState");
                 this.parentAs(LState)?.removeThisState();

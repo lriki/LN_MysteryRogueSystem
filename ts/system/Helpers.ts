@@ -78,13 +78,13 @@ export class Helpers {
 
     // 敵対勢力であるかを確認
     public static isHostile(subject: LEntity, target: LEntity): boolean {
-        return this.isHostileFactionId(subject.getFactionId(), target.getFactionId());
+        return this.isHostileFactionId(subject.getOutwardFactionId(), target.getOutwardFactionId());
     }
 
     // 味方であるかを確認
     // (target が subject に対して中立である場合は false を返すので注意)
     public static isFriend(subject: LEntity, target: LEntity): boolean {
-        return this.isFriendFactionId(subject.getFactionId(), target.getFactionId());
+        return this.isFriendFactionId(subject.getOutwardFactionId(), target.getOutwardFactionId());
     }
 
     public static isHostileFactionId(subject: DFactionId, target: DFactionId): boolean {

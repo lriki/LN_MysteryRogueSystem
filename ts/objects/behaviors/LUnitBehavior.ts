@@ -88,8 +88,12 @@ export class LUnitBehavior extends LBehavior {
 
 
 
+    
+    public queryInnermostFactionId(): number | undefined {
+        return this._factionId;
+    }
 
-    public queryFactionId(): number | undefined {
+    public queryOutwardFactionId(): number | undefined {
         return this._factionId;
     }
 

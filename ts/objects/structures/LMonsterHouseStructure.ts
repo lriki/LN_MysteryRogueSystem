@@ -50,7 +50,7 @@ export class LMonsterHouseStructure extends LStructure {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
             // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
-            if (Helpers.isHostileFactionId(this.monsterHouseFactionId(), entity.getFactionId()) &&
+            if (Helpers.isHostileFactionId(this.monsterHouseFactionId(), entity.getOutwardFactionId()) &&
                 this.monsterHouseState() == MonsterHouseState.Sleeping) {
                 this.startMonsterHouse(context);
             }

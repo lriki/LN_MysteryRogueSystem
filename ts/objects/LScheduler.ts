@@ -132,7 +132,7 @@ export class LScheduler {
             REGame.map.entities().forEach(entity => {
                 const behavior = entity.findBehavior(LUnitBehavior);
                 if (behavior) {
-                    const factionId = entity.getFactionId();
+                    const factionId = entity.getOutwardFactionId();
                     assert(factionId > 0);
                     assert(behavior.speedLevel() != 0);
 

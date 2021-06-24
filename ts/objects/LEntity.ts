@@ -327,14 +327,22 @@ export class LEntity extends LObject
         return undefined;
     }
     
-    public getFactionId(): number {
+    public getInnermostFactionId(): number {
         for (const b of this.collectBehaviors().reverse()) {
-            const v = b.queryFactionId();
+            const v = b.queryInnermostFactionId();
             if (v) return v;
         }
         return REData.system.factions.neutral;
     }
-    
+
+    public getOutwardFactionId(): number {
+        for (const b of this.collectBehaviors().reverse()) {
+            const v = b.queryOutwardFactionId();
+            if (v) return v;
+        }
+        return REData.system.factions.neutral;
+    }
+
     public getHomeLayer(): number {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryHomeLayer();
