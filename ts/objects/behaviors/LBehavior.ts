@@ -37,6 +37,7 @@ import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/DParameter";
 import { BlockLayerKind } from "../LBlockLayer";
+import { LEventResult } from "../LEventServer";
 
 export enum DecisionPhase {
     Prepare,
@@ -228,7 +229,7 @@ export abstract class LBehavior extends LObject {
 
     onAttached(): void {}
     onDetached(): void {}
-    onEvent(eventId: DEventId, args: any): void {}
+    onEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
 
 
 
@@ -314,6 +315,10 @@ export abstract class LBehavior extends LObject {
     //}
 
     public abstract clone(newOwner: LEntity): LBehavior;
+
+    //--------------------
+
+    //this.parentAs(LState)?.removeThisState();
 }
 
 /*

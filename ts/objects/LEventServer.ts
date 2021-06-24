@@ -12,7 +12,10 @@ interface EventSubscriber {
     behaviorId: LBehaviorId,
 }
 
-
+export enum LEventResult {
+    Pass,
+    Handled,
+}
 
 
 /*
@@ -36,6 +39,13 @@ interface EventSubscriber {
 
 */
 
+/**
+ * 
+ * Command との違い
+ * ----------
+ * - Command: 特定の Entity や攻撃対象など、行いたい動作に対して関係者が決まっているメソッドとして使う。
+ * - Event: Commandの前後のタイミングを他に通知して、未知の割り込み動作を許可するタイミングとして使う。
+ */
 export class LEventServer {
     private _entries: EventSubscriber[] = [];
     
@@ -55,12 +65,16 @@ export class LEventServer {
         }
     }
 
-    send(eventId: DEventId, args: any): void {
-        this._entries.forEach(e => {
+    public send(eventId: DEventId, args: any): boolean {
+        for (const e of this._entries) {
             if (e.eventId == eventId) {
                 const b = REGame.world.behavior(e.behaviorId);
-                b.onEvent(eventId, args);
+                const r = b.onEvent(eventId, args);
+                if (r != LEventResult.Pass) {
+                    return false;
+                }
             }
-        });
+        }
+        return true;
     }
 }

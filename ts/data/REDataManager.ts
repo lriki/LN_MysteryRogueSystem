@@ -53,6 +53,7 @@ export class REDataManager
             DBasics.events = {
                 roomEnterd: 1,
                 roomLeaved: 2,
+                preWalk: 3,
             }
         }
 

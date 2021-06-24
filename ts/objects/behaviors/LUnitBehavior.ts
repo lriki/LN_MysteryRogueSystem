@@ -27,6 +27,7 @@ import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
 import { onGrounded } from "../internal";
+import { WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 
 /**
  * 
@@ -133,6 +134,9 @@ export class LUnitBehavior extends LBehavior {
         else if (activity instanceof LMoveAdjacentActivity) {
 
             const offset = Helpers.dirToTileOffset(activity.direction());
+            
+            const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
+            if (!REGame.eventServer.send(DBasics.events.preWalk, args)) return REResponse.Canceled;
 
             const layer = self.getHomeLayer();
             if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {

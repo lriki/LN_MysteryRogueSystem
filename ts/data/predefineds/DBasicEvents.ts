@@ -8,9 +8,18 @@ export interface RoomEventArgs {
     oldRoomId: number,
 }
 
+export interface WalkEventArgs {
+    walker: LEntity;
+    targetX: number;
+    targetY: number;
+}
+
+// TODO: symbol や string にしたほうがいいかも。
 export interface DBasicEvents {
     /** 何らかの Entity が部屋に侵入した */
     roomEnterd: DEventId, // RoomEventArgs
     roomLeaved: DEventId, // RoomEventArgs
+
+    preWalk: DEventId,
 }
 

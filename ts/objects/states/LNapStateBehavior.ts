@@ -8,6 +8,7 @@ import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
+import { LEventResult } from "../LEventServer";
 
 export class LNapStateBehavior extends LBehavior {
     private _hostileEnterd: boolean = false;
@@ -26,7 +27,7 @@ export class LNapStateBehavior extends LBehavior {
 
     }
 
-    onEvent(eventId: DEventId, args: any): void {
+    onEvent(eventId: DEventId, args: any): LEventResult {
         // handleRoomEnterd
         if (eventId == DBasics.events.roomEnterd) {
             const entity = this.ownerEntity();
@@ -38,6 +39,7 @@ export class LNapStateBehavior extends LBehavior {
                 this._hostileEnterd = true;
             }
         }
+        return LEventResult.Pass;
     }
 
     onQueryProperty(propertyId: number): any {

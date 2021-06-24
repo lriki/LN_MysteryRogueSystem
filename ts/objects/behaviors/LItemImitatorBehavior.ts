@@ -1,13 +1,20 @@
 import { assert } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 import { DItem, DItemDataId } from "ts/data/DItem";
+import { DEventId, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { REData } from "ts/data/REData";
+import { Helpers } from "ts/system/Helpers";
+import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
+import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { LBehavior } from "./LBehavior";
+import { LState } from "../states/LState";
+import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
@@ -66,10 +73,13 @@ export class LItemImitatorBehavior extends LBehavior {
         const item = SEntityFactory.newItem(REData.getItemFuzzy("kキュアリーフ").id);
         item.setParent(this);
         this._itemEntityId = item.entityId();
+
+        REGame.eventServer.subscribe(DBasics.events.preWalk, this);
     }
     
     onDetached(): void {
         assert(this._itemEntityId.hasAny());
+        REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
         this.itemEntity().clearParent();
     }
 
@@ -81,7 +91,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return REGame.world.entity(this._itemEntityId);
     }
     
-    public queryCharacterFileName(): string | undefined {
+    queryCharacterFileName(): string | undefined {
         const b = this.itemEntity().getBehavior(LItemBehavior);
         const e = REData.entities[b.itemData().entityId];
         const p = REData.prefabs[e.prefabId];
@@ -89,8 +99,29 @@ export class LItemImitatorBehavior extends LBehavior {
         //return "Damage2";
     }
 
-    public queryFactionId(): number | undefined {
+    queryFactionId(): number | undefined {
         return REData.system.factions.neutral;
+    }
+
+    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        return SPhaseResult.Handled;
+    }
+
+    onEvent(eventId: DEventId, args: any): LEventResult {
+        const self = this.ownerEntity();
+
+        if (eventId == DBasics.events.preWalk) {
+            const e = args as WalkEventArgs;
+
+            // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
+            if (Helpers.isHostile(e.walker, self) &&
+                e.targetX == self.x && e.targetY == self.y) {
+                console.log("removeThisState");
+                this.parentAs(LState)?.removeThisState();
+                return LEventResult.Handled;
+            }
+        }
+        return LEventResult.Pass;
     }
 
     /*
