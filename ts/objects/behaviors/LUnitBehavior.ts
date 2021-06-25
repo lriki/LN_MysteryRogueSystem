@@ -27,7 +27,7 @@ import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
 import { onGrounded } from "../internal";
-import { WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
+import { PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { DPrefabImage } from "ts/data/DPrefab";
 
 /**
@@ -146,6 +146,7 @@ export class LUnitBehavior extends LBehavior {
 
             const offset = Helpers.dirToTileOffset(activity.direction());
             
+            // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
             if (!REGame.eventServer.send(DBasics.events.preWalk, args)) return REResponse.Canceled;
 
@@ -198,6 +199,11 @@ export class LUnitBehavior extends LBehavior {
             }
         }
         else if (activity instanceof LPutActivity) {
+            
+            // Prepare event
+            const args: PutEventArgs = { actor: self };
+            if (!REGame.eventServer.send(DBasics.events.prePut, args)) return REResponse.Canceled;
+
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findBehavior(LInventoryBehavior);
             assert(itemEntity);

@@ -17,12 +17,12 @@ import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
 import { SStateFactory } from "ts/system/SStateFactory";
 import { LParty, LPartyId } from "./LParty";
-import { LanguageServiceMode } from "typescript";
+import { isThisTypeNode, LanguageServiceMode } from "typescript";
 import { DParameterId } from "ts/data/DParameter";
 import { SAbilityFactory } from "ts/system/SAbilityFactory";
 import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
-import { DEntity, DEntityId } from "ts/data/DEntity";
+import { DEntity, DEntityId, DEntityNamePlate } from "ts/data/DEntity";
 import { DPrefabImage } from "ts/data/DPrefab";
 
 enum BlockLayer
@@ -328,6 +328,14 @@ export class LEntity extends LObject
     //----------------------------------------
     // Property
 
+    public getDisplayName(): DEntityNamePlate {
+        for (const b of this.collectBehaviors().reverse()) {
+            const v = b.queryDisplayName();
+            if (v) return v;
+        }
+        return this.data().display;
+    }
+
     public getCharacterImage(): DPrefabImage | undefined {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryCharacterFileName();
@@ -352,7 +360,7 @@ export class LEntity extends LObject
         return REData.system.factions.neutral;
     }
 
-    public getHomeLayer(): number {
+    public getHomeLayer(): BlockLayerKind {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryHomeLayer();
             if (v) return v;

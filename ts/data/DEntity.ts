@@ -10,6 +10,13 @@ import { REData } from "./REData";
 
 export type DEntityId = number;
 
+export interface DEntityNamePlate {
+    name: string;
+    iconIndex: number;
+}
+
+
+
 /**
  * [2021/6/22] Database 修正について
  * ----------
@@ -35,6 +42,9 @@ export class DEntity {
     prefabId: DPrefabId;
     
     entity: DEntityProperties;
+    
+    display: DEntityNamePlate;
+
 
     actor: RE_Data_Actor | undefined;
 
@@ -46,6 +56,7 @@ export class DEntity {
         this.id = id;
         this.prefabId = 0;
         this.entity = DEntityProperties_Default();
+        this.display = { name: "null", iconIndex: 0 };
         this.itemData = undefined;
         this.enemy = undefined;
     }

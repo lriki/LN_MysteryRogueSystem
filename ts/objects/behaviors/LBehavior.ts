@@ -39,6 +39,7 @@ import { DParameterId } from "ts/data/DParameter";
 import { BlockLayerKind } from "../LBlockLayer";
 import { LEventResult } from "../LEventServer";
 import { DPrefabImage } from "ts/data/DPrefab";
+import { DEntityNamePlate } from "ts/data/DEntity";
 
 export enum DecisionPhase {
     Prepare,
@@ -241,6 +242,7 @@ export abstract class LBehavior extends LObject {
     //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
 
+    public queryDisplayName(): DEntityNamePlate | undefined { return undefined; }
     public queryCharacterFileName(): DPrefabImage | undefined { return undefined; }
     
     public queryInnermostFactionId(): number | undefined { return undefined; }

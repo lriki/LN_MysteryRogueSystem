@@ -54,6 +54,7 @@ export class REDataManager
                 roomEnterd: 1,
                 roomLeaved: 2,
                 preWalk: 3,
+                prePut: 4,
             }
         }
 
@@ -425,8 +426,8 @@ export class REDataManager
         $dataItems.forEach(x => {
             const [entity, item] = REData.newItem();
             if (x) {
-                item.name = x.name;
-                item.iconIndex = x.iconIndex ?? 0;
+                entity.display.name = x.name;
+                entity.display.iconIndex = x.iconIndex ?? 0;
 
                 const effect: DEffect = {
                     ...DEffect_Default(),
@@ -465,8 +466,8 @@ export class REDataManager
         $dataWeapons.forEach(x => {
             const [entity, item] = REData.newItem();
             if (x) {
-                item.name = x.name;
-                item.iconIndex = x.iconIndex ?? 0;
+                entity.display.name = x.name;
+                entity.display.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
@@ -477,8 +478,8 @@ export class REDataManager
         $dataArmors.forEach(x => {
             const [entity, item] = REData.newItem();
             if (x) {
-                item.name = x.name;
-                item.iconIndex = x.iconIndex ?? 0;
+                entity.display.name = x.name;
+                entity.display.iconIndex = x.iconIndex ?? 0;
                 item.equipmentParts = x.etypeId ? [x.etypeId] : [];
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
@@ -498,7 +499,7 @@ export class REDataManager
         $dataEnemies.forEach(x => {
             const [entity, enemy] = REData.newEnemy();
             if (x) {
-                enemy.name = x.name;
+                entity.display.name = x.name;
                 enemy.exp = x.exp;
                 if (x.params) {
                     enemy.idealParams = x.params;

@@ -2,6 +2,7 @@ import { DEntityId } from "./DEntity";
 
 export type DEnemyId = number;
 
+
 /**
  * モンスターデータ。
  * 
@@ -17,11 +18,6 @@ export class DEnemy {
 
     entityId: DEntityId;
 
-    //key: string;
-
-    /** Name. */
-    name: string;
-
     /** 取得経験値 */
     exp: number;
 
@@ -35,8 +31,6 @@ export class DEnemy {
     constructor(id: DEnemyId, entityId: DEntityId) {
         this.id = id;
         this.entityId = entityId;
-        //this.key = "";
-        this.name = "";
         this.exp = 0;
         this.idealParams = [];
         this.traits = [];

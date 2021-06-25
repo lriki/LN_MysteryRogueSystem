@@ -18,16 +18,14 @@ export class RESystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
         { id: 1, defaultValue: 0 },  // itemId
-        { id: 2, defaultValue: "null" },  // name
-        { id: 3, defaultValue: 1 },  // idleSequel
-        { id: 4, defaultValue: [] },  // equipmentSlots
+        { id: 2, defaultValue: 1 },  // idleSequel
+        { id: 3, defaultValue: [] },  // equipmentSlots
     ];
 
     static properties: EntityProperties = {
         itemId: 1,
-        name: 2,
-        idleSequel: 3,
-        equipmentSlots: 4,
+        idleSequel: 2,
+        equipmentSlots: 3,
     };
 
     // System

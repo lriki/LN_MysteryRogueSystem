@@ -74,12 +74,6 @@ export class DItem {
 
     entityId: DEntityId;
 
-    /** Name */
-    name: string;
-
-
-    iconIndex: number;
-
     rmmzScope: DRmmzEffectScope;
 
 
@@ -101,8 +95,6 @@ export class DItem {
     constructor(id: DItemDataId, entityId: DEntityId) {
         this.id = id;
         this.entityId = entityId;
-        this.name = "null";
-        this.iconIndex = 0;
         this.rmmzScope = 0;
         this.animationId = 0;
         this.effectSet = new DEffectSet();

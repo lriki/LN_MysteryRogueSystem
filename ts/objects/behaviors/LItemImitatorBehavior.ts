@@ -2,11 +2,12 @@ import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { DPrefabImage } from "ts/data/DPrefab";
-import { DEventId, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
+import { DEventId, PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
+import { SActionCommon } from "ts/system/SActionCommon";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { BlockLayerKind } from "../LBlockLayer";
@@ -66,7 +67,6 @@ export class LItemImitatorBehavior extends LBehavior {
 
     public constructor() {
         super();
-        console.log("LItemImitatorBehavior");
     }
 
     onAttached(): void {
@@ -76,11 +76,13 @@ export class LItemImitatorBehavior extends LBehavior {
         this._itemEntityId = item.entityId();
 
         REGame.eventServer.subscribe(DBasics.events.preWalk, this);
+        REGame.eventServer.subscribe(DBasics.events.prePut, this);
     }
     
     onDetached(): void {
         assert(this._itemEntityId.hasAny());
         REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
+        REGame.eventServer.unsubscribe(DBasics.events.prePut, this);
         this.itemEntity().clearParent();
     }
 
@@ -112,10 +114,24 @@ export class LItemImitatorBehavior extends LBehavior {
         if (eventId == DBasics.events.preWalk) {
             const e = args as WalkEventArgs;
 
+            /*
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
             if (Helpers.isHostileFactionId(e.walker.getOutwardFactionId(), self.getInnermostFactionId()) &&
                 e.targetX == self.x && e.targetY == self.y) {
                 this.parentAs(LState)?.removeThisState();
+                return LEventResult.Handled;
+            }
+            */
+        }
+        else if (eventId == DBasics.events.prePut) {
+            const e = args as PutEventArgs;
+            if (Helpers.isHostileFactionId(e.actor.getOutwardFactionId(), self.getInnermostFactionId())) {
+                this.parentAs(LState)?.removeThisState();
+                
+                self.removeFromParent();
+                REGame.map.appearEntity(self, e.actor.x, e.actor.y);
+                SActionCommon.postDropOrDestroy(RESystem.commandContext, self, self.getHomeLayer(), 0);
+
                 return LEventResult.Handled;
             }
         }

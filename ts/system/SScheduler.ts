@@ -6,6 +6,7 @@ import { RunStepInfo } from "ts/objects/LScheduler";
 import { DecisionPhase } from "ts/objects/internal";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { SActionCommon } from "./SActionCommon";
+import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 
 
 

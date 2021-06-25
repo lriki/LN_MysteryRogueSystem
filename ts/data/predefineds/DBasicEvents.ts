@@ -14,6 +14,10 @@ export interface WalkEventArgs {
     targetY: number;
 }
 
+export interface PutEventArgs {
+    actor: LEntity;
+}
+
 // TODO: symbol や string にしたほうがいいかも。
 export interface DBasicEvents {
     /** 何らかの Entity が部屋に侵入した */
@@ -21,5 +25,6 @@ export interface DBasicEvents {
     roomLeaved: DEventId, // RoomEventArgs
 
     preWalk: DEventId,
+    prePut: DEventId,
 }
 

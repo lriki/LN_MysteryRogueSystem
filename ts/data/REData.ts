@@ -339,7 +339,7 @@ export class REData
         else {
             const entityId = this.monsters.find(id => {
                 const e = this.entities[id];
-                return e.enemyData().name == pattern || (e.entity.key != "" && e.entity.key == pattern);
+                return e.display.name == pattern || (e.entity.key != "" && e.entity.key == pattern);
             });
             if (!entityId)
                 return undefined;
@@ -382,7 +382,7 @@ export class REData
         else {
             const entityId = this.items.find(id => {
                 const e = this.entities[id];
-                return e.item().name == pattern || (e.entity.key != "" && e.entity.key == pattern);
+                return e.display.name == pattern || (e.entity.key != "" && e.entity.key == pattern);
             });
             if (!entityId)
                 return undefined;
@@ -428,7 +428,7 @@ export class REData
         else {
             const entityId = this.monsters.find(id => {
                 const e = this.entities[id];
-                return e.enemyData().name == pattern || (e.entity.key != "" && e.entity.key == pattern);
+                return e.display.name == pattern || (e.entity.key != "" && e.entity.key == pattern);
             });
             if (!entityId)
                 return undefined;

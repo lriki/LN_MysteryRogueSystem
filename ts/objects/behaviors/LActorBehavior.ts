@@ -220,13 +220,6 @@ export class LActorBehavior extends LBattlerBehavior {
         return actions;
     }
 
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.name)
-            return this.actor().name;
-        else
-            super.onQueryProperty(propertyId);
-    }
-
     onCollectTraits(result: IDataTrait[]): void {
         super.onCollectTraits(result);
         for (const t of this.actor().traits){

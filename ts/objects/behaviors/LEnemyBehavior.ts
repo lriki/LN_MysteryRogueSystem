@@ -48,13 +48,6 @@ export class LEnemyBehavior extends LBattlerBehavior {
     // Game_Enemy.prototype.exp
     public exp(): number {
         return this.enemyData().exp;
-    };
-
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.name)
-            return this.enemyData().name;
-        else
-            super.onQueryProperty(propertyId);
     }
 
     onCollectTraits(result: IDataTrait[]): void {

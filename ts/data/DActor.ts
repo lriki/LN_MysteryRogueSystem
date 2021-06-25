@@ -12,8 +12,6 @@ export class RE_Data_Actor {
     /** ID (0 is Invalid). */
     id: DActorId;
 
-    /** Name. */
-    name: string;
 
     /** 初期配置フロア */
     //initialFloorId: number;
@@ -37,7 +35,6 @@ export class RE_Data_Actor {
 
     constructor(id: DActorId) {
         this.id = id;
-        this.name = "null";
         this.initialX = 0;
         this.initialY = 0;
         this.classId = 0;
@@ -48,7 +45,6 @@ export class RE_Data_Actor {
     }
 
     public setup(data: IDataActor) {
-        this.name = data.name;
         this.classId = data.classId;
         this.initialLevel = data.initialLevel;
         this.maxLevel = data.maxLevel;

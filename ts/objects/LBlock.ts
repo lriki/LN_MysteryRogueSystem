@@ -238,7 +238,7 @@ export class LBlock// extends LObject
     addEntity(layerKind: BlockLayerKind, entity: LEntity) {
         const layer = this._layers[layerKind];
         assert(!layer.isContains(entity));  // 複数追加禁止
-        assert(!layer.isOccupied());        // 既に占有されている時は追加禁止
+        //assert(!layer.isOccupied());        // 既に占有されている時は追加禁止
 
         if (layerKind == BlockLayerKind.Terrain) {
             // Tile Layer への複数追加は禁止

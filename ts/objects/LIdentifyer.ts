@@ -73,15 +73,17 @@ interface IdentificationStatus {
 export class LIdentifyer {
 
     resolveDescription(entity: LEntity): LEntityDescription {
+        const displayName = entity.getDisplayName();
         const itemId = entity.queryProperty(RESystem.properties.itemId) as number;
         if (itemId > 0) {
             const item = REData.itemData(itemId);
             //return new LEntityDescription(item.iconIndex, "白い草", DescriptionHighlightLevel.UserIdentified);
-            return new LEntityDescription(item.iconIndex, item.name, DescriptionHighlightLevel.Identified);
+            return new LEntityDescription(displayName.iconIndex, displayName.name, DescriptionHighlightLevel.Identified);
         }
         else {
             //return new LEntityDescription(0, "炎", DescriptionHighlightLevel.Identified);
-            throw new Error("NotImplemented");
+            //throw new Error("NotImplemented");
+            return new LEntityDescription(displayName.iconIndex, displayName.name, DescriptionHighlightLevel.Identified);
         }
     }
 

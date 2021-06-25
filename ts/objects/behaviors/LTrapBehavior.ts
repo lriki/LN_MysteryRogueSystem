@@ -49,15 +49,6 @@ export class LTrapBehavior extends LBehavior {
         return this._exposed;
     }
 
-    //public setExposed(value: boolean): void {
-    //    this._exposed = value;
-    //}
-
-    public trapName(): string {
-        const itemId = this.ownerEntity().queryProperty(RESystem.properties.itemId) as number;
-        const item = REData.itemData(itemId);
-        return item.name;
-    }
     
     onQueryReactions(actions: DActionId[]): DActionId[] {
         const result = actions.filter(x => x != DBasics.actions.PickActionId);
@@ -73,6 +64,7 @@ export class LTrapBehavior extends LBehavior {
     }
     
     [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): REResponse {
+        const self = this.ownerEntity();
         const target = e.sender;
 
         // この罠にかかることができる？
@@ -81,7 +73,7 @@ export class LTrapBehavior extends LBehavior {
         this._exposed = true;
 
 
-        context.postMessage(tr("{0} を踏んだ！", this.trapName()));
+        context.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
 
         const trapItem = this.ownerEntity().getBehavior(LItemBehavior);

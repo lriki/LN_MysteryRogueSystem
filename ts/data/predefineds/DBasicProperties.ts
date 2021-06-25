@@ -22,7 +22,6 @@ export interface EntityProperties {
      */
     itemId: number; // deprecated?: name
 
-    name: number;
 
     /**
      * Visual としての Idle 状態での再生 Sequel.
