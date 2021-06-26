@@ -44,11 +44,11 @@ export class SActionCommon {
                 .filter(b => !b.layer(targetLayer).isContainsAnyEntity());
             if (candidates.length > 0) {
                 const block = context.random().select(candidates);
-                //context.postSequel(entity, RESystem.sequels.dropSequel);
-                context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
-                context.postCall(() => {
+                //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
+                //context.postCall(() => {
                     SMovementCommon.locateEntity(entity, block.x(), block.y(), targetLayer);
-                });
+                    context.postSequel(entity, RESystem.sequels.dropSequel);
+                //});
                 return;
             }
         }

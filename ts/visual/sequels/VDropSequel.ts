@@ -4,7 +4,7 @@ import { REVisualSequel } from "../REVisualSequel";
 import { REVisualSequelContext } from "../REVisualSequelContext";
 import { REVisual_Entity } from "../REVisual_Entity";
 
-const DROP_TIME = 10;
+const DROP_TIME = 16;
 const DROP_RADIUS = 0.2;
 
 
@@ -13,14 +13,19 @@ export class VDropSequel extends REVisualSequel {
 
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
 
+        const frameCount = context.frameCount();
         const entity = visual.entity();
 
-        const ratio = context.frameCount() / DROP_TIME;
+        const velocityX = (entity.x - context.startPosition().x) / DROP_TIME;
+        const velocityY = (entity.y - context.startPosition().y) / DROP_TIME;
+
+
+        const ratio = frameCount / DROP_TIME;
 
 
         let ox = 0;
         let oy = 0;
-        const dir = context.sequel().args().movingDir;
+        const dir = context.sequel().args()?.movingDir;
         if (dir) {
             const offset = Helpers.dirToTileOffset(dir);
             ox = offset.x * ((1.0 - ratio) * DROP_RADIUS);
@@ -30,11 +35,17 @@ export class VDropSequel extends REVisualSequel {
 
         const pos = context.startPosition();
         //pos.y -= context.frameCount();
-        const y = Math.sin(Math.PI * ratio);
+        const jy = Math.sin(Math.PI * ratio);
 
-        visual.setPosition(new Vector2(ox + pos.x, oy + pos.y - y));
+
         
-        if (context.frameCount() > DROP_TIME) {
+
+
+        visual.setPosition(new Vector2(
+            (velocityX * frameCount) + (ox + pos.x),
+            (velocityY * frameCount) + (oy + pos.y - jy)));
+        
+        if (frameCount > DROP_TIME) {
             visual.resetPosition();
             context.end();
         }
