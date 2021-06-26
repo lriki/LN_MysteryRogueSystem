@@ -23,10 +23,9 @@ export class LEquipmentBehavior extends LBehavior {
         assert( this.ownerEntity().hasBehavior(LItemBehavior));
     }
     
-    onQueryReactions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(actions: DActionId[]): void {
         actions.push(DBasics.actions.EquipActionId);
         actions.push(DBasics.actions.EquipOffActionId);
-        return actions;
     }
     
     onOwnerRemoveFromParent(owner: LObject): void {

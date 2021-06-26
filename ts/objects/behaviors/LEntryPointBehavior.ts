@@ -20,8 +20,8 @@ export class LEntryPointBehavior extends LBehavior {
         return BlockLayerKind.Ground;
     }
 
-    onQueryReactions(actions: DActionId[]): DActionId[] {
-        return [DBasics.actions.BackwardFloorActionId];
+    onQueryReactions(actions: DActionId[]): void {
+        actions.push(DBasics.actions.BackwardFloorActionId);
     }
     
     /*

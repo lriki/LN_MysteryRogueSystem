@@ -23,10 +23,9 @@ export class LStaffItemBehavior extends LBehavior {
     }
 
     
-    onQueryReactions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(actions: DActionId[]): void {
         // "振る" ができる
         actions.push(DBasics.actions.WaveActionId);
-        return actions;
     }
 
     //onQueryActions(actions: DActionId[]): DActionId[] {

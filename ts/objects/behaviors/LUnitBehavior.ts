@@ -129,10 +129,8 @@ export class LUnitBehavior extends LBehavior {
         ]);
     }
 
-    onQueryReactions(actions: DActionId[]): DActionId[] {
-        return actions.concat([
-            DBasics.actions.AttackActionId
-        ]);
+    onQueryReactions(actions: DActionId[]): void {
+        actions.push(DBasics.actions.AttackActionId);
     }
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {

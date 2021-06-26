@@ -50,9 +50,8 @@ export class LTrapBehavior extends LBehavior {
     }
 
     
-    onQueryReactions(actions: DActionId[]): DActionId[] {
-        const result = actions.filter(x => x != DBasics.actions.PickActionId);
-        return result;
+    onQueryReactions(actions: DActionId[]): void {
+        actions.mutableRemove(x => x == DBasics.actions.PickActionId);
     }
 
     onAttached(): void {

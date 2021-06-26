@@ -75,9 +75,8 @@ export class LProjectableBehavior extends LBehavior {
 
 
     
-    onQueryReactions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(actions: DActionId[]): void {
         actions.push(DBasics.actions.ThrowActionId);
-        return actions;
     }
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {

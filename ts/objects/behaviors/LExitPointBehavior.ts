@@ -42,8 +42,8 @@ export class LExitPointBehavior extends LBehavior {
         return BlockLayerKind.Ground;
     }
 
-    onQueryReactions(actions: DActionId[]): DActionId[] {
-        return [DBasics.actions.ForwardFloorActionId];
+    onQueryReactions(actions: DActionId[]): void {
+        actions.push(DBasics.actions.ForwardFloorActionId);
     }
     
     [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): REResponse {

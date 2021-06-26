@@ -16,12 +16,11 @@ export class LItemBehavior_Grass1 extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemBehavior_Grass1);
-        return b
+        return b;
     }
 
-    onQueryReactions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(actions: DActionId[]): void {
         actions.push(DBasics.actions.EatActionId);
-        return actions;
     }
     
     [onEatReaction](args: CommandArgs, context: SCommandContext): REResponse {

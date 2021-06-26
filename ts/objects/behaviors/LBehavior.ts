@@ -285,7 +285,7 @@ export abstract class LBehavior extends LObject {
      * 
      * なお "階段" Entity がこのメソッドで PickAction を返すと、階段を拾うことができてしまう。
      */
-    public onQueryReactions(actions: DActionId[]): DActionId[] { return actions; }
+    public onQueryReactions(actions: DActionId[]): void { }
 
     
     public onRefreshStatus(): void { }

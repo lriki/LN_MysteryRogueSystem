@@ -16,9 +16,8 @@ export class LEatableBehavior extends LBehavior {
         return b
     }
 
-    onQueryReactions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(actions: DActionId[]): void {
         actions.push(DBasics.actions.EatActionId);
-        return actions;
     }
 
     

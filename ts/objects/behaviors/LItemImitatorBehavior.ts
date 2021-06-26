@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityNamePlate } from "ts/data/DEntity";
 import { DItem, DItemDataId } from "ts/data/DItem";
@@ -99,6 +100,13 @@ export class LItemImitatorBehavior extends LBehavior {
 
     queryHomeLayer(): BlockLayerKind | undefined {
         return BlockLayerKind.Ground;
+    }
+    
+    onQueryReactions(actions: DActionId[]): DActionId[] {
+        for (const a of this.itemEntity().queryReactions()) {
+            actions.push(a);
+        }
+        return actions;
     }
 
     public itemEntity(): LEntity {
