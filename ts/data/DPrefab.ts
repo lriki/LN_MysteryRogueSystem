@@ -33,6 +33,10 @@ export interface DPrefabImage {
     direction: number;
     pattern: number;
     characterIndex: number;
+    
+    directionFix: boolean;
+    stepAnime: boolean;
+    walkAnime: boolean;
 }
 
 /**
@@ -56,6 +60,9 @@ export class DPrefab {
             direction: 2,
             pattern: 0,
             characterIndex: 0,
+            directionFix: false,
+            stepAnime: false,
+            walkAnime: false,
         };
     }
 

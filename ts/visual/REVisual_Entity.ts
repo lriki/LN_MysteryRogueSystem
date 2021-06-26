@@ -118,6 +118,17 @@ export class REVisual_Entity
             const charactorImage = this.entity().getCharacterImage();
             if (charactorImage) {
                 event.setImage(charactorImage.characterName, charactorImage.characterIndex);
+
+                if (event.isDirectionFixed() != charactorImage.directionFix) {
+                    event.setDirection(charactorImage.direction);
+                    event.setDirectionFix(charactorImage.directionFix);
+                }
+
+                event.setStepAnime(charactorImage.stepAnime);
+                event.setWalkAnime(charactorImage.walkAnime);
+                if (!charactorImage.stepAnime && !charactorImage.walkAnime) {
+                    event.setPattern(charactorImage.pattern);
+                }
             }
 
             

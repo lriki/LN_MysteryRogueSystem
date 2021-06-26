@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
+import { DEntityNamePlate } from "ts/data/DEntity";
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId, PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
@@ -86,18 +87,22 @@ export class LItemImitatorBehavior extends LBehavior {
         this.itemEntity().clearParent();
     }
 
-    queryHomeLayer(): BlockLayerKind | undefined {
-        return BlockLayerKind.Ground;
-    }
-
-    public itemEntity(): LEntity {
-        return REGame.world.entity(this._itemEntityId);
+    queryDisplayName(): DEntityNamePlate | undefined {
+        return this.itemEntity().data().display;
     }
     
     queryCharacterFileName(): DPrefabImage | undefined {
         const e = this.itemEntity().data();
         const p = REData.prefabs[e.prefabId];
         return p.image;
+    }
+
+    queryHomeLayer(): BlockLayerKind | undefined {
+        return BlockLayerKind.Ground;
+    }
+
+    public itemEntity(): LEntity {
+        return REGame.world.entity(this._itemEntityId);
     }
 
     queryOutwardFactionId(): number | undefined {

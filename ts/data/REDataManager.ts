@@ -378,6 +378,7 @@ export class REDataManager
         $dataActors.forEach(x => {
             const [entity, actor] = REData.newActor();
             if (x) {
+                entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 actor.setup(x);
             }
@@ -500,6 +501,7 @@ export class REDataManager
             const [entity, enemy] = REData.newEnemy();
             if (x) {
                 entity.display.name = x.name;
+                entity.display.iconIndex = 71;
                 enemy.exp = x.exp;
                 if (x.params) {
                     enemy.idealParams = x.params;
@@ -688,6 +690,9 @@ export class REDataManager
                 prefab.image.direction = event.pages[0].image.direction;
                 prefab.image.pattern = event.pages[0].image.pattern;
                 prefab.image.characterIndex = event.pages[0].image.characterIndex;
+                prefab.image.directionFix = event.pages[0].directionFix;
+                prefab.image.stepAnime = event.pages[0].stepAnime;
+                prefab.image.walkAnime = event.pages[0].walkAnime;
 
                 REData.prefabs.push(prefab);
                 if (data.enemy) {
