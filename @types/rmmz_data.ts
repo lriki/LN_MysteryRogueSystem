@@ -452,7 +452,7 @@ declare interface IDataMapEventPage
         variableValid?: boolean;
         variableValue?: number;
     };
-    directionFix?: boolean;
+    directionFix: boolean;
     image: {
         tileId: number;
         characterName: string;
@@ -474,10 +474,10 @@ declare interface IDataMapEventPage
     moveSpeed?: number;
     moveType?: number;
     priorityType?: number;
-    stepAnime?: boolean;
+    stepAnime: boolean;
     through?: boolean;
     trigger?: number;
-    walkAnime?: boolean;
+    walkAnime: boolean;
 }
 
 declare interface IDataMapEvent
