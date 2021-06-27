@@ -7,7 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { SGameManager } from "ts/system/SGameManager";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { DEntityInstance } from "ts/data/DEntity";
+import { DEntitySpawner } from "ts/data/DEntity";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { SActivityFactory } from "ts/system/SActivityFactory";
@@ -102,7 +102,7 @@ test("CharacterAI.ActionPattern", () => {
     const initialHP = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
 
     // enemy1 
-    const enemy1 = SEntityFactory.newEntity({ entityId: REData.getEntity("kEnemy_ドラゴン").id, stateIds: [] });
+    const enemy1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(REData.getEntity("kEnemy_ドラゴン").id));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 4, 4);
 

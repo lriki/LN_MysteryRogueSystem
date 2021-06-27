@@ -24,6 +24,7 @@ import { DTrait } from "./DTraits";
 import { REData_Parameter } from "./DParameter";
 import { DEffectHitType } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
+import { DTroop } from "./DTroop";
 
 
 export enum REFloorMapKind
@@ -182,6 +183,7 @@ export class REData
     static monsterHouses: DMonsterHouse[] = [];
     static prefabs: DPrefab[] = [];
     static entities: DEntity[] = [];
+    static troops: DTroop[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;

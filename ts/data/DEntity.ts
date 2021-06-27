@@ -6,6 +6,7 @@ import { DHelpers } from "./DHelper";
 import { DItem } from "./DItem";
 import { DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
+import { DTroop, DTroopId } from "./DTroop";
 import { REData } from "./REData";
 
 export type DEntityId = number;
@@ -81,41 +82,49 @@ export class DEntity {
 
 
 
-export interface DEntityInstance {
-    entityId: DEntityId;
-    stateIds: DStateId[];
-}
+export class DEntitySpawner {
+    public troopId: DTroopId;
+    public entityId: DEntityId;
+    public stateIds: DStateId[];
 
-export function DEntityInstance_Default(): DEntityInstance {
-    return {
-        entityId: 0,
-        stateIds: [],
-    };
-}
-
-export function DEntity_makeFromEventData(event: IDataMapEvent): DEntityInstance | undefined {
-    return DEntity_makeFromEventPageData(event.id, event.pages[0]);
-}
-
-export function DEntity_makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntityInstance | undefined {
-    const entityMetadata = DHelpers.readEntityMetadataFromPage(page, eventId);
-    if (!entityMetadata) return undefined;
-    
-    const entity: DEntityInstance = {
-        entityId: REData.entities.findIndex(x => x.entity.key == entityMetadata.data),
-        stateIds: [],
-    };
-
-    for (const stateKey of entityMetadata.states) {
-        const index = REData.states.findIndex(s => s.key == stateKey);
-        if (index > 0) {
-            entity.stateIds.push(index);
-        }
-        else {
-            throw new Error(`State "${stateKey}" not found.`);
-        }
+    public constructor() {
+        this.troopId = 0;
+        this.entityId = 0;
+        this.stateIds = [];
     }
 
-    return entity;
+    public static makeSingle(entityId: DEntityId, stateIds?: DStateId[]): DEntitySpawner {
+        const data = new DEntitySpawner();
+        data.entityId = entityId;
+        if (stateIds) data.stateIds = stateIds;
+        return data;
+    }
+
+    public static makeFromEventData(event: IDataMapEvent): DEntitySpawner | undefined {
+        return this.makeFromEventPageData(event.id, event.pages[0]);
+    }
+
+    public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner | undefined {
+        const entityMetadata = DHelpers.readEntityMetadataFromPage(page, eventId);
+        if (!entityMetadata) return undefined;
+        
+        const entity = new DEntitySpawner();
+        entity.troopId = entityMetadata.troopId;
+        entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.data);
+
+        for (const stateKey of entityMetadata.states) {
+            const index = REData.states.findIndex(s => s.key == stateKey);
+            if (index > 0) {
+                entity.stateIds.push(index);
+            }
+            else {
+                throw new Error(`State "${stateKey}" not found.`);
+            }
+        }
+
+        return entity;
+    }
+
+
 }
 

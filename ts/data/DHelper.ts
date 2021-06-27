@@ -1,4 +1,5 @@
 import { DMapId } from "./DLand";
+import { DTroopId } from "./DTroop";
 
 
 export interface RMMZFloorMetadata {
@@ -29,13 +30,17 @@ interface RMMZEventRawMetadata {
     //prefab: string;
     data: string;
     states?: string[];
+    troopId?: DTroopId;
 }
 
 
 export interface RMMZEventEntityMetadata {
+    
     data: string;
 
     states: string[];
+
+    troopId: DTroopId;
 }
 
 export class DHelpers {
@@ -183,6 +188,7 @@ export class DHelpers {
                     return {
                         data: rawData.data,
                         states: rawData.states ?? [],
+                        troopId: rawData.troopId ?? 0,
                     };
                 }
                 else {

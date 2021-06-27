@@ -198,16 +198,16 @@ declare interface IDataPage
 
 declare interface IDataTroop
 {
-    id?: number;
-    members?: {
-        enemyId?: number;
-        x?: number;
-        y?: number;
-        hidden?: boolean;
+    id: number;
+    members: {
+        enemyId: number;
+        x: number;
+        y: number;
+        hidden: boolean;
     }[];
-    name?: string;
-    pages?: IDataPage[];
-    meta?: any;
+    name: string;
+    pages: IDataPage[];
+    meta: any;
 }
 
 declare interface IDataState

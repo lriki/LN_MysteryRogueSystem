@@ -12,6 +12,7 @@ import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBeh
 import { REData } from "ts/data/REData";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
+import { DEntitySpawner } from "ts/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -30,7 +31,7 @@ test("Abilities.Enemy.ItemImitator", () => {
     const initialHP = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity({ entityId: REData.getEntity("kEnemy_スライム").id, stateIds: [REData.getStateFuzzy("kState_UTアイテム擬態").id] });
+    const enemy1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UTアイテム擬態").id]));
     enemy1._name = "enemy1";
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);

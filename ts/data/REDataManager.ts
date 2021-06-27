@@ -22,6 +22,7 @@ import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
 import { DEntity } from './DEntity';
+import { DTroop } from './DTroop';
 
 
 declare global {  
@@ -659,6 +660,16 @@ export class REDataManager
                         displayName: undefined,
                         fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100 };
                 }
+            }
+        }
+
+        REData.troops = [];
+        for (const x of $dataTroops) {
+            const troop = new DTroop(REData.troops.length);
+            REData.troops.push(troop);
+            if (x) {
+                troop.key = x.name;
+                troop.members = x.members.map(m => REData.monsters[m.enemyId]);
             }
         }
 

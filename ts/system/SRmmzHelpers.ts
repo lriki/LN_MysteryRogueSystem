@@ -12,7 +12,7 @@ import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
 import { DEntityKindId } from "ts/data/DEntityKind";
-import { DEntityInstance, DEntity_makeFromEventData, DEntity_makeFromEventPageData } from "ts/data/DEntity";
+import { DEntitySpawner } from "ts/data/DEntity";
 
 
 
@@ -23,9 +23,9 @@ import { DEntityInstance, DEntity_makeFromEventData, DEntity_makeFromEventPageDa
  */
 export class SRmmzHelpers {
 
-    static readEntityMetadata(event: Game_Event): DEntityInstance | undefined {
+    static readEntityMetadata(event: Game_Event): DEntitySpawner | undefined {
         if (event._pageIndex >= 0) {
-            return DEntity_makeFromEventPageData(event.eventId(), event.page());
+            return DEntitySpawner.makeFromEventPageData(event.eventId(), event.page());
         }
         else {
             return undefined;
@@ -45,7 +45,7 @@ export class SRmmzHelpers {
     public static createEntitiesFromRmmzFixedMapEventData(): void {
         $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
             if (e) {
-                const data = DEntity_makeFromEventData(e);
+                const data = DEntitySpawner.makeFromEventData(e);
                 if (data) {
                     if (data.entityId < 0) {
                         throw new Error("Invalid enity data.");
@@ -57,7 +57,7 @@ export class SRmmzHelpers {
         });
     }
 
-    public static createEntityFromRmmzEvent(data: DEntityInstance, eventId: number, x: number, y: number): void {
+    public static createEntityFromRmmzEvent(data: DEntitySpawner, eventId: number, x: number, y: number): void {
         const entity = SEntityFactory.newEntity(data)
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
