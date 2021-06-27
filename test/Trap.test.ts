@@ -7,7 +7,7 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
-import { DEntitySpawner } from "ts/data/DEntity";
+import { DEntityCreateInfo } from "ts/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -25,7 +25,7 @@ test("Trap.Basic", () => {
     TestEnv.performFloorTransfer();
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_SleepTrap));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap));
     trap1._name = "trap1";
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動
@@ -51,7 +51,7 @@ test("Trap.Enemy", () => {
     TestEnv.performFloorTransfer();
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_SleepTrap));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap));
     trap1._name = "trap1";
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動

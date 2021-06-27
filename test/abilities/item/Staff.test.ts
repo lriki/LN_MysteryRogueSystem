@@ -9,7 +9,7 @@ import { TestEnv } from "../../TestEnv";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
-import { DEntitySpawner } from "ts/data/DEntity";
+import { DEntityCreateInfo } from "ts/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -30,7 +30,7 @@ test("Items.Staff.Knockback", () => {
     const inventory = actor1.getBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(REData.getEntity("kふきとばしの杖").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id));
     item1._name = "item1";
     inventory.addEntity(item1);
     

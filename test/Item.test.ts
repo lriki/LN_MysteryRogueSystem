@@ -13,7 +13,7 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DBasics } from "ts/data/DBasics";
-import { DEntitySpawner } from "ts/data/DEntity";
+import { DEntityCreateInfo } from "ts/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -31,7 +31,7 @@ test("PickAndPut", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item1._name = "item1";
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
@@ -86,7 +86,7 @@ test("PickAtMoved", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // (5, 5) へ配置
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item1._name = "item1";
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
@@ -130,9 +130,9 @@ test("Item.ThrowAndDrop", () => {
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
-    const item2 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     actor1.getBehavior(LInventoryBehavior).addEntity(item2);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -167,7 +167,7 @@ test("Item.DropAndDestroy", () => {
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
 
     // 床にアイテムを敷き詰める
@@ -175,7 +175,7 @@ test("Item.DropAndDestroy", () => {
     const oy = 2//5;
     for (let y = 0; y < 7; y++) {
         for (let x = 0; x < 7; x++) {
-            const item = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+            const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
             REGame.world._transferEntity(item, TestEnv.FloorId_FlatMap50x50, ox + x, oy + y);
         }
     }

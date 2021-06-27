@@ -12,7 +12,7 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
-import { DEntitySpawner } from "ts/data/DEntity";
+import { DEntityCreateInfo } from "ts/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -42,11 +42,11 @@ test("Equipment.EquipOnOff", () => {
     const inventory = actor1.getBehavior(LInventoryBehavior);
 
     // 武器 入手
-    const weapon1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Weapon1));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));
     inventory.addEntity(weapon1);
 
     // 盾 入手
-    const shield1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Shield1));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
     inventory.addEntity(shield1);
 
     // [装備]
@@ -91,11 +91,11 @@ test("Equipment.Put_Throw", () => {
     const equipmens = actor1.getBehavior(LEquipmentUserBehavior);
 
     // 武器 入手
-    const weapon1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Weapon1));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));
     inventory.addEntity(weapon1);
 
     // 盾 入手
-    const shield1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Shield1));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
     inventory.addEntity(shield1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -137,7 +137,7 @@ test("Equipment.Curse", () => {
     const equipmens = actor1.getBehavior(LEquipmentUserBehavior);
 
     // 武器 入手 (呪い付き)
-    const weapon1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Weapon1, [REData.getStateFuzzy("UT呪い").id]));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getStateFuzzy("UT呪い").id]));
     inventory.addEntity(weapon1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

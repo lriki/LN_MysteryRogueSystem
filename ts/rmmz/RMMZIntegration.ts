@@ -40,6 +40,7 @@ export class RMMZIntegration extends SIntegration {
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityData) {
                 SRmmzHelpers.createEntityFromRmmzEvent(e._entityData, e.eventId(), e.x, e.y);
+                
             }
         });
         //RESystem.minimapData.refresh();

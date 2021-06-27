@@ -1,5 +1,5 @@
 
-import { DEntitySpawner } from "./DEntity";
+import { DEntityCreateInfo } from "./DEntity";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
@@ -16,7 +16,7 @@ export interface DFloorId {
 */
 
 export interface DAppearanceTableEntity {
-    entity: DEntitySpawner;
+    entity: DEntityCreateInfo;
     prefabName: string; // TODO: 必要？
     startFloorNumber: number;
     lastFloorNumber: number;
@@ -190,7 +190,7 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
                 prefabName: REData.prefabs[entityData.prefabId].key,
                 startFloorNumber: x,
                 lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
-                entity: DEntitySpawner.makeSingle(entityData.id),
+                entity: DEntityCreateInfo.makeSingle(entityData.id),
             };
             table.entities.push(tableItem);
 

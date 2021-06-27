@@ -1,6 +1,6 @@
 import { DBasics } from "ts/data/DBasics";
 import { DEffect, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
-import { DEntitySpawner } from "ts/data/DEntity";
+import { DEntityCreateInfo } from "ts/data/DEntity";
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
@@ -83,7 +83,7 @@ export class SEffectPerformer {
         }
         else if (effect.scope.range == DEffectFieldScopeRange.StraightProjectile) {
             
-            const bullet = SEntityFactory.newEntity(DEntitySpawner.makeSingle(REData.getEntity(effect.scope.projectilePrefabKey).id));
+            const bullet = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(effect.scope.projectilePrefabKey).id));
             REGame.map.appearEntity(bullet, performer.x, performer.y);
             bullet.dir = performer.dir;
 

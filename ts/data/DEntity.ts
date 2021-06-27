@@ -81,8 +81,28 @@ export class DEntity {
 
 
 
+// こっちは Entity 単体の生成引数
+export class DEntityCreateInfo {
+    //public troopId: DTroopId;
+    public entityId: DEntityId;
+    public stateIds: DStateId[];
 
-export class DEntitySpawner {
+    public constructor() {
+        //this.troopId = 0;
+        this.entityId = 0;
+        this.stateIds = [];
+    }
+
+    public static makeSingle(entityId: DEntityId, stateIds?: DStateId[]): DEntityCreateInfo {
+        const data = new DEntityCreateInfo();
+        data.entityId = entityId;
+        if (stateIds) data.stateIds = stateIds;
+        return data;
+    }
+}
+
+// こっちは Event の metadata としての情報
+export class DEntitySpawner2 {
     public troopId: DTroopId;
     public entityId: DEntityId;
     public stateIds: DStateId[];
@@ -93,22 +113,15 @@ export class DEntitySpawner {
         this.stateIds = [];
     }
 
-    public static makeSingle(entityId: DEntityId, stateIds?: DStateId[]): DEntitySpawner {
-        const data = new DEntitySpawner();
-        data.entityId = entityId;
-        if (stateIds) data.stateIds = stateIds;
-        return data;
-    }
-
-    public static makeFromEventData(event: IDataMapEvent): DEntitySpawner | undefined {
+    public static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined {
         return this.makeFromEventPageData(event.id, event.pages[0]);
     }
 
-    public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner | undefined {
+    public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner2 | undefined {
         const entityMetadata = DHelpers.readEntityMetadataFromPage(page, eventId);
         if (!entityMetadata) return undefined;
         
-        const entity = new DEntitySpawner();
+        const entity = new DEntitySpawner2();
         entity.troopId = entityMetadata.troopId;
         entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.data);
 
@@ -124,7 +137,5 @@ export class DEntitySpawner {
 
         return entity;
     }
-
-
 }
 

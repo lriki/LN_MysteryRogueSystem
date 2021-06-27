@@ -7,7 +7,7 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { DEntity, DEntitySpawner } from "ts/data/DEntity";
+import { DEntity, DEntityCreateInfo } from "ts/data/DEntity";
 import { SActivityFactory } from "ts/system/SActivityFactory";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -30,7 +30,7 @@ test("Activity.Eat", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // アイテム作成
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
 
     // インベントリに入れる
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
@@ -62,7 +62,7 @@ test("Activity.Throw", () => {
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
-    const entityData = DEntitySpawner.makeSingle(TestEnv.EntityId_Herb);
+    const entityData = DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb);
     const item1 = SEntityFactory.newEntity(entityData);
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
     const item2 = SEntityFactory.newEntity(entityData);
@@ -127,7 +127,7 @@ test("Activity.ThrowAndHit", () => {
     SDebugHelpers.setHP(enemy1, 1); // HP1
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -157,12 +157,12 @@ test("Activity.Exchange", () => {
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item1._name = "item1";
     inventory.addEntity(item1);
 
     // 足元にアイテムを作る
-    const item2 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(TestEnv.EntityId_Herb));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item2._name = "item2";
     REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);
 

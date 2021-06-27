@@ -14,7 +14,7 @@ import { TileShape } from "ts/objects/LBlock";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { REData } from "ts/data/REData";
-import { DEntitySpawner } from "ts/data/DEntity";
+import { DEntityCreateInfo } from "ts/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -38,7 +38,7 @@ test("Items.Sanctuary", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: actor1 と enemy1 の間に聖域を置いてみる
-    const item1 = SEntityFactory.newEntity(DEntitySpawner.makeSingle(REData.getEntity("kItem_サンクチュアリスクロール").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_サンクチュアリスクロール").id));
     item1._name = "item1";
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
