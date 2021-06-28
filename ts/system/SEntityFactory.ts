@@ -180,11 +180,14 @@ export class SEntityFactory {
         return entity;
     }
 
-    public static spawnTroopMembers(mx: number, my: number, party: LParty, troop: DTroop, stateIds: DStateId[]): void {
+    public static spawnTroopAndMembers(troop: DTroop, mx: number, my: number, stateIds: DStateId[]): void {
+        const party = REGame.world.newParty();
+
         for (const entityId of troop.members) {
             const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds));
             party.addMember(entity);
-            const block = SMovementCommon.selectNearbyLocatableBlock(REGame.world.random(), entity.x, entity.y, entity.getHomeLayer());
+            const block = SMovementCommon.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer());
+
             if (block) {
                 REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
             }

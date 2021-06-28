@@ -198,7 +198,7 @@ export class LEntity extends LObject
     //--------------------
     // 以下、一時的に Entity に直接持たせてる Attr. 利用率とかで、別途 Attr クラスに分けたりする。
 
-    dir: number = 4;        // Numpad Dir
+    dir: number = 2;        // Numpad Dir
 
     // Block を占有するかどうか
     blockOccupied: boolean = true;

@@ -1,5 +1,6 @@
 import { DMapId } from "./DLand";
 import { DTroopId } from "./DTroop";
+import { REData } from "./REData";
 
 
 export interface RMMZFloorMetadata {
@@ -30,7 +31,7 @@ interface RMMZEventRawMetadata {
     //prefab: string;
     data: string;
     states?: string[];
-    troopId?: DTroopId;
+    troop?: string;
 }
 
 
@@ -182,17 +183,18 @@ export class DHelpers {
                 eval(`rawData = ${block}`);
 
                 if (rawData) {
-                    if (!rawData.data && !rawData.troopId) {
-                        throw new Error(`Event#${eventId} - @RE-Entity.prefab not specified.`);
+                    if (!rawData.data && !rawData.troop) {
+                        throw new Error(`Event#${eventId} - @RE-Entity not specified.`);
                     }
-                    if (rawData.data && rawData.troopId) {
+                    if (rawData.data && rawData.troop) {
                         throw new Error(`Event#${eventId} - It is not possible to specify both @RE-Entity.data and @RE-Entity.troop.`);
                     }
 
+                    const rawData_ = rawData;
                     return {
                         data: rawData.data,
                         states: rawData.states ?? [],
-                        troopId: rawData.troopId ?? 0,
+                        troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
                     };
                 }
                 else {

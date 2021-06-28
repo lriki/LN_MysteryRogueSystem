@@ -24,7 +24,7 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     onDetached(): void {
-
+        REGame.eventServer.unsubscribe(DBasics.events.roomEnterd, this);
     }
 
     onEvent(eventId: DEventId, args: any): LEventResult {

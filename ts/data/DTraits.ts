@@ -60,6 +60,9 @@ export enum DTraits {
     /** 地獄耳 */
     UnitVisitor,
 
+    /** 何らかのアクションを受けたらステート解除。(仮眠や金縛りの解除で使う) */
+    StateRemoveByEffect,
+
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 
 }

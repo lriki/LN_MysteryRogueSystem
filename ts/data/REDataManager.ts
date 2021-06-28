@@ -984,6 +984,10 @@ export class REDataManager
             case "kState_UTアイテム擬態":
                 data.behaviors.push("LItemImitatorBehavior");
                 break;
+            case "kState_仮眠2":
+                data.behaviors.push("LDoze2Behavior");
+                data.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
+                break;
         }
     }
 }

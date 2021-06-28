@@ -49,8 +49,7 @@ export class SRmmzHelpers {
                 const data = DEntitySpawner2.makeFromEventData(e);
                 if (data) {
                     if (data.troopId > 0) {
-                        const party = REGame.world.newParty();
-                        SEntityFactory.spawnTroopMembers(e.x, e.y, party, REData.troops[data.troopId], data.stateIds);
+                        SEntityFactory.spawnTroopAndMembers( REData.troops[data.troopId], e.x, e.y,data.stateIds);
                     }
                     else {
                         if (data.entityId < 0) {

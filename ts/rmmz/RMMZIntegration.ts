@@ -12,6 +12,7 @@ import { GameMapBuilder } from "./GameMapBuilder";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { SDialog } from "ts/system/SDialog";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 
 export class RMMZIntegration extends SIntegration {
     onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
@@ -39,8 +40,13 @@ export class RMMZIntegration extends SIntegration {
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
             if (e && e._entityData) {
-                SRmmzHelpers.createEntityFromRmmzEvent(e._entityData, e.eventId(), e.x, e.y);
-                
+                const data = e._entityData;
+                if (data.troopId > 0) {
+                    SEntityFactory.spawnTroopAndMembers( REData.troops[data.troopId], e.x, e.y,data.stateIds);
+                }
+                else {
+                    SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
+                }
             }
         });
         //RESystem.minimapData.refresh();
