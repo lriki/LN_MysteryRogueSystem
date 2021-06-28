@@ -26,5 +26,7 @@ export interface DBasicEvents {
 
     preWalk: DEventId,
     prePut: DEventId,
+    
+    effectReacted: DEventId,
 }
 

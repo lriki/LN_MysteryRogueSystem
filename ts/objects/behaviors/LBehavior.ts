@@ -232,6 +232,7 @@ export abstract class LBehavior extends LObject {
     onAttached(): void {}
     onDetached(): void {}
     onEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
+    onPartyEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
 
 
 
@@ -313,6 +314,7 @@ export abstract class LBehavior extends LObject {
     /** 1行動消費単位の終了時点 */
     onStepEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
 
+    onPertyChanged(self: LEntity): void { }
 
     
     //public removeThisState(): void {

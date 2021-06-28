@@ -56,6 +56,7 @@ export class REDataManager
                 roomLeaved: 2,
                 preWalk: 3,
                 prePut: 4,
+                effectReacted: 5,
             }
         }
 
@@ -985,7 +986,7 @@ export class REDataManager
                 data.behaviors.push("LItemImitatorBehavior");
                 break;
             case "kState_仮眠2":
-                data.behaviors.push("LDoze2Behavior");
+                //data.behaviors.push("LDoze2Behavior");
                 data.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
                 break;
         }

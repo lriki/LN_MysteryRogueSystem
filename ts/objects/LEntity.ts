@@ -24,6 +24,7 @@ import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
 import { DEntity, DEntityId, DEntityNamePlate } from "ts/data/DEntity";
 import { DPrefabImage } from "ts/data/DPrefab";
+import { DEventId } from "ts/data/predefineds/DBasicEvents";
 
 enum BlockLayer
 {
@@ -897,6 +898,12 @@ export class LEntity extends LObject
     //----------------------------------------
     // 
 
+    public sendPartyEvent(eventId: DEventId, args: any): boolean {
+        if (this._partyId > 0) {
+            return REGame.world.party(this._partyId).send(eventId, args);
+        }
+        return true;
+    }
     
 
 

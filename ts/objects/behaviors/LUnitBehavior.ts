@@ -315,6 +315,10 @@ export class LUnitBehavior extends LBehavior {
                 }
             }
 
+            context.postCall(() => {
+                self.sendPartyEvent(DBasics.events.effectReacted, undefined);
+            });
+
             return REResponse.Succeeded;
         }
         

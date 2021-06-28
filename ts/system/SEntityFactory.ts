@@ -32,6 +32,7 @@ import { DTroop } from "ts/data/DTroop";
 import { LParty } from "ts/objects/LParty";
 import { DStateId } from "ts/data/DState";
 import { SMovementCommon } from "./SMovementCommon";
+import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 
 export class SEntityFactory {
     static newActor(entityId: DEntityId): LEntity {
@@ -218,6 +219,10 @@ export class SEntityFactory {
             case "kEnemy_ミミック":
                 entity.addBehavior(LItemImitatorBehavior);
                 break;
+            case "kEnemy_フロックウルフ":
+                entity.addBehavior(LFlockBehavior);
+                break;
+
         }
 
     }
