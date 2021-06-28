@@ -36,26 +36,19 @@ export class SActionCommon {
      * 
      */
     public static postDropOrDestroy(context: SCommandContext, entity: LEntity, targetLayer: BlockLayerKind, blowDirection: number): void {
-
-        const maxDistance = 3;
-        for (let distance = 0; distance <= maxDistance; distance++) {
-            // 落下できる周辺 Block を集める
-            const candidates = REGame.map.getEdgeBlocks(entity.x, entity.y, distance)
-                .filter(b => !b.layer(targetLayer).isContainsAnyEntity());
-            if (candidates.length > 0) {
-                const block = context.random().select(candidates);
-                //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
-                //context.postCall(() => {
-                    SMovementCommon.locateEntity(entity, block.x(), block.y(), targetLayer);
-                    context.postSequel(entity, RESystem.sequels.dropSequel);
-                //});
-                return;
-            }
+        const block = SMovementCommon.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer);
+        if (block) {
+            //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
+            //context.postCall(() => {
+                SMovementCommon.locateEntity(entity, block.x(), block.y(), targetLayer);
+                context.postSequel(entity, RESystem.sequels.dropSequel);
+            //});
         }
-
-        // 落下できるところが無ければ Entity 削除
-        context.postMessage(tr2("消えてしまった…。"));
-        context.postDestroy(entity);
+        else {
+            // 落下できるところが無ければ Entity 削除
+            context.postMessage(tr2("消えてしまった…。"));
+            context.postDestroy(entity);
+        }
     }
 
 

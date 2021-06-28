@@ -13,6 +13,7 @@ import { RESystem } from "./RESystem";
 import { DHelpers, RMMZEventEntityMetadata, RMMZEventPrefabMetadata } from "ts/data/DHelper";
 import { DEntityKindId } from "ts/data/DEntityKind";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/data/DEntity";
+import { LWorld } from "ts/objects/LWorld";
 
 
 
@@ -47,11 +48,17 @@ export class SRmmzHelpers {
             if (e) {
                 const data = DEntitySpawner2.makeFromEventData(e);
                 if (data) {
-                    if (data.entityId < 0) {
-                        throw new Error("Invalid enity data.");
+                    if (data.troopId > 0) {
+                        const party = REGame.world.newParty();
+                        SEntityFactory.spawnTroopMembers(e.x, e.y, party, REData.troops[data.troopId], data.stateIds);
                     }
-
-                    this.createEntityFromRmmzEvent(data, e.id, e.x, e.y);
+                    else {
+                        if (data.entityId < 0) {
+                            throw new Error("Invalid enity data.");
+                        }
+    
+                        this.createEntityFromRmmzEvent(data, e.id, e.x, e.y);
+                    }
                 }
             }
         });

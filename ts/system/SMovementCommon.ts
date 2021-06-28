@@ -8,6 +8,7 @@ import { LMap, MovingMethod } from "ts/objects/LMap";
 import { Helpers } from "./Helpers";
 import { RESystem } from "./RESystem";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
+import { LRandom } from "ts/objects/LRandom";
 
 export interface SPoint {
     x: number;
@@ -182,6 +183,19 @@ export class SMovementCommon {
         return result;
     }
     private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
+
+    /** entity を配置できる直近の Block を選択する。 */
+    public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layer: BlockLayerKind): LBlock | undefined {
+        const maxDistance = 3;
+        for (let distance = 0; distance <= maxDistance; distance++) {
+            const candidates = REGame.map.getEdgeBlocks(mx, my, distance)
+                .filter(b => !b.layer(layer).isContainsAnyEntity());
+            if (candidates.length > 0) {
+                return rand.select(candidates);
+            }
+        }
+        return undefined;
+    }
 
     /**
      * 2つの Entity が隣接しているかどうか

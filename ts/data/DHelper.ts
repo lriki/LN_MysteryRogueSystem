@@ -182,9 +182,13 @@ export class DHelpers {
                 eval(`rawData = ${block}`);
 
                 if (rawData) {
-                    if (!rawData.data) {
+                    if (!rawData.data && !rawData.troopId) {
                         throw new Error(`Event#${eventId} - @RE-Entity.prefab not specified.`);
                     }
+                    if (rawData.data && rawData.troopId) {
+                        throw new Error(`Event#${eventId} - It is not possible to specify both @RE-Entity.data and @RE-Entity.troop.`);
+                    }
+
                     return {
                         data: rawData.data,
                         states: rawData.states ?? [],

@@ -28,6 +28,10 @@ import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
 import { DPrefab, DPrefabDataSource, DPrefabId } from "ts/data/DPrefab";
 import { DEnemy, DEnemyId } from "ts/data/DEnemy";
 import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavior";
+import { DTroop } from "ts/data/DTroop";
+import { LParty } from "ts/objects/LParty";
+import { DStateId } from "ts/data/DState";
+import { SMovementCommon } from "./SMovementCommon";
 
 export class SEntityFactory {
     static newActor(entityId: DEntityId): LEntity {
@@ -176,13 +180,19 @@ export class SEntityFactory {
         return entity;
     }
 
-    /*
-    static newEntityFromPrefabName(prefabName: string): LEntity {
-        const id = REData.prefabs.findIndex(x => x.key == prefabName);
-        if (id < 0) throw new Error(`Prefab "${prefabName}" not found.`);
-        return this.newEntity({ prefabId: id, stateIds: [] });
+    public static spawnTroopMembers(mx: number, my: number, party: LParty, troop: DTroop, stateIds: DStateId[]): void {
+        for (const entityId of troop.members) {
+            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds));
+            party.addMember(entity);
+            const block = SMovementCommon.selectNearbyLocatableBlock(REGame.world.random(), entity.x, entity.y, entity.getHomeLayer());
+            if (block) {
+                REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
+            }
+            else {
+                // 配置できないなら無理に出さない
+            }
+        }
     }
-    */
 
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)

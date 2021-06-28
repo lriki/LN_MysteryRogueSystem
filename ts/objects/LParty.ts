@@ -12,6 +12,11 @@ import { LEntityId } from "./LObject";
 
 export type LPartyId = number;
 
+/**
+ * 仲間キャラや、グループで動くモンスターをまとめる仕組み。
+ * RMMZ の Party と Troop を合わせたようなもの。
+ * member がいなくなると、GC される。
+ */
 export class LParty {
     private _id: LPartyId = 0;
     private _members: LEntityId[] = [];
