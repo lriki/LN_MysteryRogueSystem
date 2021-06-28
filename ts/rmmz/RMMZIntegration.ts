@@ -43,6 +43,9 @@ export class RMMZIntegration extends SIntegration {
                 const data = e._entityData;
                 if (data.troopId > 0) {
                     SEntityFactory.spawnTroopAndMembers( REData.troops[data.troopId], e.x, e.y,data.stateIds);
+                    e.setTransparent(true);
+                    // TODO: troop に限らず、固定マップに配置されているイベントは一律非表示にして、
+                    // Entity 情報から 動的イベントを生成する流れに統一したほうがいいかも。
                 }
                 else {
                     SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
