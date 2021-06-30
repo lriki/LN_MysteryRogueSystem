@@ -1,3 +1,4 @@
+import { DStateGroupId } from "./DStateGroup";
 import { DTraitId } from "./DTraits";
 import { REData } from "./REData";
 
@@ -63,6 +64,9 @@ export class DState {
     // TODO: deprecated
     behaviors: string[];
 
+    stateGroupKeys: string[];
+    stateGroupIds: DStateGroupId[];
+
     public constructor(id: DStateId) {
         this.id = id;
         this.displayName = "";
@@ -78,6 +82,19 @@ export class DState {
         this.message4 = "";
         this.traits = [];
         this.behaviors = [];
+        this.stateGroupKeys = [];
+        this.stateGroupIds = [];
+    }
+
+    public import(data: IDataState): void {
+        if (data.meta) {
+            {
+                const raws = data.meta["RE-StateGroup"];
+                if (raws) {
+                    this.stateGroupKeys = (raws instanceof Array) ? raws : [raws];
+                }
+            }
+        }
     }
 }
 

@@ -297,12 +297,15 @@ export class REDataManager
 
         // Import States
         {
+            REData.stateGroups = [new DStateGroup(0)];  // dummy
             for (const x of $dataStates) {
                 const state = new DState(REData.states.length);
                 REData.states.push(state);
                 if (x) {
                     if (x.meta && x.meta["RE-Kind"] == "StateGroup") {
                         const stateGroup = new DStateGroup(REData.stateGroups.length);
+                        stateGroup.name = x.name;
+                        stateGroup.key = x.meta["RE-Key"];
                         REData.stateGroups.push(stateGroup);
                     }
                     else {
@@ -319,6 +322,7 @@ export class REDataManager
                         state.message4 = x.message4 ?? "";
                         state.traits = x.meta ? makeStateTraitsFromMeta(x.meta) : [];
                         state.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
+                        state.import(x);
     
                         if (state.autoRemovalTiming == DAutoRemovalTiming.AfterAction) {
                             // TODO:
@@ -666,6 +670,7 @@ export class REDataManager
             }
         }
 
+        // Import Troop
         REData.troops = [];
         for (const x of $dataTroops) {
             const troop = new DTroop(REData.troops.length);
@@ -676,7 +681,23 @@ export class REDataManager
             }
         }
 
-        REData.system.link(testMode);
+        // Link
+        {
+            REData.system.link(testMode);
+
+            for (const state of REData.states) {
+                for (const key of state.stateGroupKeys) {
+                    const id = REData.stateGroups.findIndex(x => x.key == key);
+                    if (id > 0) {
+                        state.stateGroupIds.push(id);
+                    }
+                    else {
+                        throw new Error(`StateGroup not found. ${key}`);
+                    }
+                }
+            }
+
+        }
 
         // Load Prefabs
         this.beginLoadPrefabs();
