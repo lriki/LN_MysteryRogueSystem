@@ -6,7 +6,7 @@ import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
-import { DAutoRemovalTiming, DState, DState_makeDefault, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
+import { DAutoRemovalTiming, DState, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
@@ -23,6 +23,7 @@ import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
 import { DEntity } from './DEntity';
 import { DTroop } from './DTroop';
+import { DStateGroup } from './DStateGroup';
 
 
 declare global {  
@@ -296,37 +297,38 @@ export class REDataManager
 
         // Import States
         {
-            REData.states = $dataStates.map((x, i) => {
+            for (const x of $dataStates) {
+                const state = new DState(REData.states.length);
+                REData.states.push(state);
                 if (x) {
-                    let state: DState = {
-                        id: i,
-                        key: x.meta ? x.meta["RE-Key"] : "",
-                        displayName: x.name,
-                        restriction: x.restriction,
-                        iconIndex: x.iconIndex ?? 0,
-                        autoRemovalTiming: x.autoRemovalTiming,
-                        minTurns: x.minTurns,
-                        maxTurns: x.maxTurns,
-                        message1: x.message1 ?? "",
-                        message2: x.message2 ?? "",
-                        message3: x.message3 ?? "",
-                        message4: x.message4 ?? "",
-                        traits: x.meta ? makeStateTraitsFromMeta(x.meta) : [],
-                        behaviors: x.meta ? makeStateBehaviorsFromMeta(x.meta) : [],
-                    };
-
-                    if (state.autoRemovalTiming == DAutoRemovalTiming.AfterAction) {
-                        // TODO:
-                        //console.error("[行動終了時の自動解除] は未実装です。");
+                    if (x.meta && x.meta["RE-Kind"] == "StateGroup") {
+                        const stateGroup = new DStateGroup(REData.stateGroups.length);
+                        REData.stateGroups.push(stateGroup);
                     }
-
-                    this.setupDirectly_State(state);
-                    return state;
+                    else {
+                        state.key = x.meta ? x.meta["RE-Key"]: "";
+                        state.displayName = x.name;
+                        state.restriction = x.restriction;
+                        state.iconIndex = x.iconIndex ?? 0;
+                        state.autoRemovalTiming = x.autoRemovalTiming;
+                        state.minTurns = x.minTurns;
+                        state.maxTurns = x.maxTurns;
+                        state.message1 = x.message1 ?? "";
+                        state.message2 = x.message2 ?? "";
+                        state.message3 = x.message3 ?? "";
+                        state.message4 = x.message4 ?? "";
+                        state.traits = x.meta ? makeStateTraitsFromMeta(x.meta) : [];
+                        state.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
+    
+                        if (state.autoRemovalTiming == DAutoRemovalTiming.AfterAction) {
+                            // TODO:
+                            //console.error("[行動終了時の自動解除] は未実装です。");
+                        }
+    
+                        this.setupDirectly_State(state);
+                    }
                 }
-                else {
-                    return { ...DState_makeDefault(), id: i };
-                }
-            });
+            }
 
             // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
             DBasics.states = {

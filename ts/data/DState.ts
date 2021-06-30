@@ -30,7 +30,7 @@ export enum DStateRestriction {
     NotAction = 4,
 }
 
-export interface DState {
+export class DState {
     /** ID (0 is Invalid). */
     id: DStateId;
 
@@ -62,24 +62,22 @@ export interface DState {
 
     // TODO: deprecated
     behaviors: string[];
-}
 
-export function DState_makeDefault(): DState {
-    return {
-        id: 0,
-        displayName: "",
-        key: "",
-        restriction: 0,
-        iconIndex: 0,
-        autoRemovalTiming: DAutoRemovalTiming.None,
-        minTurns: 0,
-        maxTurns: 0,
-        message1: "",
-        message2: "",
-        message3: "",
-        message4: "",
-        traits: [],
-        behaviors: [],
+    public constructor(id: DStateId) {
+        this.id = id;
+        this.displayName = "";
+        this.key = "";
+        this.restriction = 0;
+        this.iconIndex = 0;
+        this.autoRemovalTiming = DAutoRemovalTiming.None;
+        this.minTurns = 0;
+        this.maxTurns = 0;
+        this.message1 = "";
+        this.message2 = "";
+        this.message3 = "";
+        this.message4 = "";
+        this.traits = [];
+        this.behaviors = [];
     }
 }
 

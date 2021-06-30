@@ -1,7 +1,7 @@
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
 import { isParameter } from "typescript";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
-import { DState, DState_makeDefault } from "./DState";
+import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
@@ -25,6 +25,7 @@ import { REData_Parameter } from "./DParameter";
 import { DEffectHitType } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
+import { DStateGroup } from "./DStateGroup";
 
 
 export enum REFloorMapKind
@@ -179,6 +180,7 @@ export class REData
     static items: DEntityId[] = [];
     static traits: DTrait[] = [];
     static states: DState[] = [];
+    static stateGroups: DStateGroup[] = [];
     static abilities: DAbility[] = [];
     static monsterHouses: DMonsterHouse[] = [];
     static prefabs: DPrefab[] = [];
@@ -216,7 +218,7 @@ export class REData
 
         this.items = [];
 
-        this.states = [DState_makeDefault()];
+        this.states = [];
         //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
         this.entities = [new DEntity(0)];
