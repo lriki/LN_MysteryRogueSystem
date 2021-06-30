@@ -5,7 +5,7 @@ import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinor
 import { RunStepInfo } from "ts/objects/LScheduler";
 import { DecisionPhase } from "ts/objects/internal";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
-import { SActionCommon } from "./SActionCommon";
+import { UAction } from "../usecases/UAction";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 
 
@@ -367,7 +367,7 @@ export class SScheduler
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {
-                    SActionCommon.postDropOrDestroy(RESystem.commandContext, entity, homeLayer, 0);
+                    UAction.postDropOrDestroy(RESystem.commandContext, entity, homeLayer, 0);
                 }
             }
         }

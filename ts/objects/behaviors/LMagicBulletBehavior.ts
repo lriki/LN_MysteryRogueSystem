@@ -2,7 +2,7 @@ import { Helpers } from "ts/system/Helpers";
 import { RECommand, REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { BlockLayerKind } from "../LBlockLayer";
@@ -77,7 +77,7 @@ export class LMagicBulletBehavior extends LBehavior {
             }
         }
 
-        if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
+        if (UMovement.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             // recall

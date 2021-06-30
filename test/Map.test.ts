@@ -3,7 +3,7 @@ import { SGameManager } from "ts/system/SGameManager";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { LFloorId } from "ts/objects/LFloorId";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
@@ -82,35 +82,35 @@ test("TransformRotationBlock", () => {
     // "左前" を1周変換してみる
     {
         // 回転無し
-        let pos = SMovementCommon.transformRotationBlock(-1, -1, 8);
+        let pos = UMovement.transformRotationBlock(-1, -1, 8);
         expect(pos.x).toBe(-1);
         expect(pos.y).toBe(-1);
     
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 9);
+        pos = UMovement.transformRotationBlock(-1, -1, 9);
         expect(pos.x).toBe(0);
         expect(pos.y).toBe(-1);
 
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 6);
+        pos = UMovement.transformRotationBlock(-1, -1, 6);
         expect(pos.x).toBe(1);
         expect(pos.y).toBe(-1);
 
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 3);
+        pos = UMovement.transformRotationBlock(-1, -1, 3);
         expect(pos.x).toBe(1);
         expect(pos.y).toBe(0);
 
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 2);
+        pos = UMovement.transformRotationBlock(-1, -1, 2);
         expect(pos.x).toBe(1);
         expect(pos.y).toBe(1);
 
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 1);
+        pos = UMovement.transformRotationBlock(-1, -1, 1);
         expect(pos.x).toBe(0);
         expect(pos.y).toBe(1);
 
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 4);
+        pos = UMovement.transformRotationBlock(-1, -1, 4);
         expect(pos.x).toBe(-1);
         expect(pos.y).toBe(1);
 
-        pos = SMovementCommon.transformRotationBlock(-1, -1, 7);
+        pos = UMovement.transformRotationBlock(-1, -1, 7);
         expect(pos.x).toBe(-1);
         expect(pos.y).toBe(0);
     }
@@ -118,35 +118,35 @@ test("TransformRotationBlock", () => {
     // 桂馬の "右前" を1周変換してみる
     {
         // 回転無し
-        let pos = SMovementCommon.transformRotationBlock(1, -2, 8);
+        let pos = UMovement.transformRotationBlock(1, -2, 8);
         expect(pos.x).toBe(1);
         expect(pos.y).toBe(-2);
     
-        pos = SMovementCommon.transformRotationBlock(1, -2, 9);
+        pos = UMovement.transformRotationBlock(1, -2, 9);
         expect(pos.x).toBe(2);
         expect(pos.y).toBe(-1);
 
-        pos = SMovementCommon.transformRotationBlock(1, -2, 6);
+        pos = UMovement.transformRotationBlock(1, -2, 6);
         expect(pos.x).toBe(2);
         expect(pos.y).toBe(1);
 
-        pos = SMovementCommon.transformRotationBlock(1, -2, 3);
+        pos = UMovement.transformRotationBlock(1, -2, 3);
         expect(pos.x).toBe(1);
         expect(pos.y).toBe(2);
 
-        pos = SMovementCommon.transformRotationBlock(1, -2, 2);
+        pos = UMovement.transformRotationBlock(1, -2, 2);
         expect(pos.x).toBe(-1);
         expect(pos.y).toBe(2);
 
-        pos = SMovementCommon.transformRotationBlock(1, -2, 1);
+        pos = UMovement.transformRotationBlock(1, -2, 1);
         expect(pos.x).toBe(-2);
         expect(pos.y).toBe(1);
 
-        pos = SMovementCommon.transformRotationBlock(1, -2, 4);
+        pos = UMovement.transformRotationBlock(1, -2, 4);
         expect(pos.x).toBe(-2);
         expect(pos.y).toBe(-1);
 
-        pos = SMovementCommon.transformRotationBlock(1, -2, 7);
+        pos = UMovement.transformRotationBlock(1, -2, 7);
         expect(pos.x).toBe(-1);
         expect(pos.y).toBe(-2);
     }

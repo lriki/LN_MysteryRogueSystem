@@ -4,10 +4,10 @@ import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
-import { CandidateSkillAction, SActionCommon } from "ts/system/SActionCommon";
+import { CandidateSkillAction, UAction } from "ts/usecases/UAction";
 import { SAIHelper } from "ts/system/SAIHelper";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 import { LDirectionChangeActivity } from "./activities/LDirectionChangeActivity";
 import { LMoveAdjacentActivity } from "./activities/LMoveAdjacentActivity";
 import { LBlock } from "./LBlock";
@@ -110,7 +110,7 @@ export class LCharacterAI {
             }
 
             this._requiredSkillAction = undefined;
-            const candidates = SActionCommon.makeCandidateSkillActions(self, this._primaryTargetEntityId);
+            const candidates = UAction.makeCandidateSkillActions(self, this._primaryTargetEntityId);
             const skillAction = context.random().selectOrUndefined(candidates);
             if (skillAction) {
                 if (skillAction.action.skillId == RESystem.skills.move) {
@@ -304,7 +304,7 @@ export class LCharacterAI {
                         this._targetPositionY = block.y();
                     }
                     else {
-                        self.dir = SMovementCommon.reverseDir(self.dir);
+                        self.dir = UMovement.reverseDir(self.dir);
                     }
                 }
             } 
@@ -318,7 +318,7 @@ export class LCharacterAI {
             // これは SFC シレン Wiki には乗っていない細工。
             // 部屋内から目的地にたどり着いたとき、現在の向きと通路の方向が直角だと、左折の法則で通路に侵入できなくなる。
             // 対策として、このときは隣接している通路ブロックへの移動を優先する。
-            const blocks = SMovementCommon.getMovableAdjacentTiles(self).filter(b => b.isPassageway());
+            const blocks = UMovement.getMovableAdjacentTiles(self).filter(b => b.isPassageway());
             if (blocks.length > 0) {
                 moveToPassageWay = blocks[context.random().nextIntWithMax(blocks.length)];
             }
@@ -349,7 +349,7 @@ export class LCharacterAI {
 
         // 左折の法則による移動
         if (moveToLHRule) {
-            const block = SMovementCommon.getMovingCandidateBlockAsLHRule(self);
+            const block = UMovement.getMovingCandidateBlockAsLHRule(self);
             if (block) {
                 this.postMoveToAdjacent(self, block, context);
 
@@ -364,7 +364,7 @@ export class LCharacterAI {
         this._noActionTurnCount++;
         if (this._noActionTurnCount >= 6) {
             // 6連続で移動できなかったときはランダム移動
-            const candidates = SMovementCommon.getMovableAdjacentTiles(self);
+            const candidates = UMovement.getMovableAdjacentTiles(self);
             if (candidates.length > 0) {
                 const block = candidates[context.random().nextIntWithMax(candidates.length)];
                 this.postMoveToAdjacent(self, block, context);
@@ -385,7 +385,7 @@ export class LCharacterAI {
         assert(this.canModeToTarget(self));
 
         const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
-        if (dir != 0 && SMovementCommon.checkPassageToDir(self, dir)) {
+        if (dir != 0 && UMovement.checkPassageToDir(self, dir)) {
             context.postActivity(LDirectionChangeActivity.make(self, dir));
             context.postActivity(LMoveAdjacentActivity.make(self, dir));
             //this.moveToAdjacent(self, block, context);
@@ -421,7 +421,7 @@ export class LCharacterAI {
                 console.log("this._requiredSkillAction", this._requiredSkillAction);
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
-                if (SActionCommon.checkEntityWithinSkillActionRange(self, this._requiredSkillAction)) {
+                if (UAction.checkEntityWithinSkillActionRange(self, this._requiredSkillAction)) {
                     //const dir = SAIHelper.entityDistanceToDir(self, target);
                     
                     //context.postActivity(LDirectionChangeActivity.make(self, dir));

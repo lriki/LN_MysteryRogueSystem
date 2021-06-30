@@ -13,7 +13,7 @@ import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "./SEffectContext";
 import { SEntityFactory } from "./SEntityFactory";
-import { SMovementCommon } from "./SMovementCommon";
+import { UMovement } from "../usecases/UMovement";
 
 
 export class SEffectPerformer {
@@ -63,7 +63,7 @@ export class SEffectPerformer {
                     //effectContext.addEffector(effector);
 
 
-                    if (SMovementCommon.checkDiagonalWallCornerCrossing(performer, performer.dir)) {
+                    if (UMovement.checkDiagonalWallCornerCrossing(performer, performer.dir)) {
                         // 斜め向きで壁の角と交差しているので通常攻撃は通らない
                     }
                     else {

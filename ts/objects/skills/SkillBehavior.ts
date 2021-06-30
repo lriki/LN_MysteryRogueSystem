@@ -10,7 +10,7 @@ import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { onAttackReaction } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { DEffectCause } from "ts/data/DEffect";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 
 /*
 export abstract class LSkillBehavior {

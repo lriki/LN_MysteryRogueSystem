@@ -31,7 +31,7 @@ import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavio
 import { DTroop } from "ts/data/DTroop";
 import { LParty } from "ts/objects/LParty";
 import { DStateId } from "ts/data/DState";
-import { SMovementCommon } from "./SMovementCommon";
+import { UMovement } from "../usecases/UMovement";
 import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 
 export class SEntityFactory {
@@ -187,7 +187,7 @@ export class SEntityFactory {
         for (const entityId of troop.members) {
             const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds));
             party.addMember(entity);
-            const block = SMovementCommon.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer());
+            const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer());
 
             if (block) {
                 REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());

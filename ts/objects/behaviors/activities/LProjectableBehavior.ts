@@ -10,10 +10,10 @@ import { REResponse } from "ts/system/RECommand";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/objects/LMap";
-import { SActionCommon } from "ts/system/SActionCommon";
+import { UAction } from "ts/usecases/UAction";
 import { DEffect, DEffectCause, DRmmzEffectScope } from "ts/data/DEffect";
 import { LEntityId } from "ts/objects/LObject";
 
@@ -115,7 +115,7 @@ export class LProjectableBehavior extends LBehavior {
         const ty = self.y + offset.y;
 
 
-        if (SMovementCommon.moveEntity(self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
+        if (UMovement.moveEntity(self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
@@ -188,13 +188,13 @@ export class LProjectableBehavior extends LBehavior {
 
     private endMoving(context: SCommandContext, self: LEntity): void {
         this.clearKnockback();
-        SActionCommon.postStepOnGround(context, self);
+        UAction.postStepOnGround(context, self);
 
         // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
         // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
 
         context.postCall(() => {
-            SActionCommon.postDropOrDestroy(context, self, self.getHomeLayer(), this.blowDirection);
+            UAction.postDropOrDestroy(context, self, self.getHomeLayer(), this.blowDirection);
         });
 
         // HomeLayer へ移動

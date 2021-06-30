@@ -5,8 +5,8 @@ import { REGame } from "ts/objects/REGame";
 import { LBlock } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap, MovingMethod } from "ts/objects/LMap";
-import { Helpers } from "./Helpers";
-import { RESystem } from "./RESystem";
+import { Helpers } from "../system/Helpers";
+import { RESystem } from "../system/RESystem";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { LRandom } from "ts/objects/LRandom";
 
@@ -24,7 +24,7 @@ interface Edge {
     endOffset: number;
 }
 
-export class SMovementCommon {
+export class UMovement {
     // 8 を基準に時計回り
     private static readonly _edgeOffsetTable: number[] = [
         0,
@@ -211,10 +211,10 @@ export class SMovementCommon {
      */
     public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
         const map = REGame.map;
-        if (SMovementCommon.isDiagonalMoving(d)) {
+        if (UMovement.isDiagonalMoving(d)) {
             // 斜め場合
-            const fl = SMovementCommon.rotatePositionByDir(7, d);  // 左前
-            const fr = SMovementCommon.rotatePositionByDir(9, d);  // 右前
+            const fl = UMovement.rotatePositionByDir(7, d);  // 左前
+            const fr = UMovement.rotatePositionByDir(9, d);  // 右前
             const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
             const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
             if (flBlock.isWallLikeShape()) return true;

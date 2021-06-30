@@ -9,18 +9,18 @@ import { LEntity } from "ts/objects/LEntity";
 import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { preProcessFile } from "typescript";
-import { Helpers } from "./Helpers";
-import { RESystem } from "./RESystem";
-import { SCommandContext } from "./SCommandContext";
-import { SEffectSubject } from "./SEffectContext";
-import { SMovementCommon } from "./SMovementCommon";
+import { Helpers } from "../system/Helpers";
+import { RESystem } from "../system/RESystem";
+import { SCommandContext } from "../system/SCommandContext";
+import { SEffectSubject } from "../system/SEffectContext";
+import { UMovement } from "./UMovement";
 
 export interface CandidateSkillAction {
     action: IDataAction;
     targets: LEntity[];     // ターゲット候補。
 }
 
-export class SActionCommon {
+export class UAction {
     public static postStepOnGround(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         const layer = block.layer(BlockLayerKind.Ground);
@@ -36,11 +36,11 @@ export class SActionCommon {
      * 
      */
     public static postDropOrDestroy(context: SCommandContext, entity: LEntity, targetLayer: BlockLayerKind, blowDirection: number): void {
-        const block = SMovementCommon.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer);
+        const block = UMovement.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer);
         if (block) {
             //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
             //context.postCall(() => {
-                SMovementCommon.locateEntity(entity, block.x(), block.y(), targetLayer);
+                UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
                 context.postSequel(entity, RESystem.sequels.dropSequel);
             //});
         }
@@ -113,7 +113,7 @@ export class SActionCommon {
         if (Math.abs(dy) > 1) return false; // 隣接 Block への攻撃ではない
 
         const d = Helpers.offsetToDir(dx, dy);
-        if (SMovementCommon.checkDiagonalWallCornerCrossing(self, d)) return false;    // 壁があるので攻撃できない
+        if (UMovement.checkDiagonalWallCornerCrossing(self, d)) return false;    // 壁があるので攻撃できない
 
         return true;
     }
@@ -150,7 +150,7 @@ export class SActionCommon {
         }
 
         // 攻撃対象が隣接していれば、"移動" を外す
-        if (primaryTargetId.hasAny() && SMovementCommon.checkEntityAdjacent(performer, REGame.world.entity(primaryTargetId))) {
+        if (primaryTargetId.hasAny() && UMovement.checkEntityAdjacent(performer, REGame.world.entity(primaryTargetId))) {
             result.mutableRemove(x => x.action.skillId == RESystem.skills.move);
         }
 
@@ -160,10 +160,10 @@ export class SActionCommon {
     }
 
     private static testFactionMatch(performer: LEntity, target: LEntity, scope: DRmmzEffectScope): boolean {
-        if (SActionCommon.isForFriend(scope)) {
+        if (UAction.isForFriend(scope)) {
             if (Helpers.isFriend(performer, target)) return true;
         }
-        else if (SActionCommon.isForOpponent(scope)) {
+        else if (UAction.isForOpponent(scope)) {
             if (Helpers.isHostile(performer, target)) return true;
         }
         else {
@@ -177,7 +177,7 @@ export class SActionCommon {
         
         if (scope.range == DEffectFieldScopeRange.Front1) {
             // ターゲット候補を集める
-            const candidates = SMovementCommon.getAdjacentEntities(performer).filter(target => {
+            const candidates = UMovement.getAdjacentEntities(performer).filter(target => {
                 if (!this.testFactionMatch(performer, target, rmmzEffectScope)) return false;
 
                 if (!this.checkAdjacentDirectlyAttack(performer, target)) return false; // 壁の角など、隣接攻撃できなければダメ
@@ -219,7 +219,7 @@ export class SActionCommon {
         }
         else if (scope.range == DEffectFieldScopeRange.StraightProjectile) {
             let candidates: LEntity[] = [];
-            for (const dir of SMovementCommon.directions) {
+            for (const dir of UMovement.directions) {
                 //const [ox, oy] = Helpers._dirToTileOffsetTable[dir];
                 const ox = Helpers._dirToTileOffsetTable[dir].x;
                 const oy = Helpers._dirToTileOffsetTable[dir].y;

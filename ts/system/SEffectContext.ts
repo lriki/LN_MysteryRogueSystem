@@ -13,7 +13,7 @@ import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
 import { DEffect, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying } from "ts/data/DEffect";
-import { SActionCommon } from "./SActionCommon";
+import { UAction } from "../usecases/UAction";
 
 
 enum SParameterEffectApplyType {
@@ -435,9 +435,9 @@ export class SEffectContext {
     // Game_Action.prototype.testLifeAndDeath
     private testLifeAndDeath(targetBattlerBehavior: LBattlerBehavior) {
         const itemScope = this._effectorFact.rmmzEffectScope()
-        if (SActionCommon.isForOpponent(itemScope) || SActionCommon.isForAliveFriend(itemScope)) {
+        if (UAction.isForOpponent(itemScope) || UAction.isForAliveFriend(itemScope)) {
             return targetBattlerBehavior.isAlive();
-        } else if (SActionCommon.isForDeadFriend(itemScope)) {
+        } else if (UAction.isForDeadFriend(itemScope)) {
             return targetBattlerBehavior.isDead();
         } else {
             return true;

@@ -13,7 +13,7 @@ import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
 import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { REData } from "ts/data/REData";
 
@@ -219,7 +219,7 @@ export class VManualActionDialogVisual extends VDialog {
             this._updateMode = UpdateMode.DirSelecting;
             REGame.map.increaseRevision();
             REVisual.guideGrid?.setVisible(true);
-            entity.dir = SMovementCommon.getNextAdjacentEntityDirCW(entity);
+            entity.dir = UMovement.getNextAdjacentEntityDirCW(entity);
         }
         else if (Input.isTriggered("menu")) {
             SoundManager.playOk();
@@ -313,7 +313,7 @@ export class VManualActionDialogVisual extends VDialog {
         }
 
         if (this.isMoveButtonPressed() &&
-            SMovementCommon.checkPassageToDir(entity, dir)) {
+            UMovement.checkPassageToDir(entity, dir)) {
 
             if (this.isDashButtonPressed()) {
                 const behavior = entity.findBehavior(LUnitBehavior);

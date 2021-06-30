@@ -9,7 +9,7 @@ import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
-import { SActionCommon } from "ts/system/SActionCommon";
+import { UAction } from "ts/usecases/UAction";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { BlockLayerKind } from "../LBlockLayer";
@@ -127,14 +127,13 @@ export class LItemImitatorBehavior extends LBehavior {
         if (eventId == DBasics.events.preWalk) {
             const e = args as WalkEventArgs;
 
-            /*
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
             if (Helpers.isHostileFactionId(e.walker.getOutwardFactionId(), self.getInnermostFactionId()) &&
                 e.targetX == self.x && e.targetY == self.y) {
                 this.parentAs(LState)?.removeThisState();
                 return LEventResult.Handled;
             }
-            */
+            
         }
         else if (eventId == DBasics.events.prePut) {
             const e = args as PutEventArgs;
@@ -143,7 +142,7 @@ export class LItemImitatorBehavior extends LBehavior {
                 
                 self.removeFromParent();
                 REGame.map.appearEntity(self, e.actor.x, e.actor.y);
-                SActionCommon.postDropOrDestroy(RESystem.commandContext, self, self.getHomeLayer(), 0);
+                UAction.postDropOrDestroy(RESystem.commandContext, self, self.getHomeLayer(), 0);
 
                 return LEventResult.Handled;
             }

@@ -10,7 +10,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, tr, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DActionId } from "ts/data/DAction";
-import { SMovementCommon } from "ts/system/SMovementCommon";
+import { UMovement } from "ts/usecases/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
@@ -149,7 +149,7 @@ export class LUnitBehavior extends LBehavior {
             if (!REGame.eventServer.send(DBasics.events.preWalk, args)) return REResponse.Canceled;
 
             const layer = self.getHomeLayer();
-            if (SMovementCommon.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
+            if (UMovement.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
@@ -305,7 +305,7 @@ export class LUnitBehavior extends LBehavior {
 
 
             // 相手の方向を向く
-            self.dir = SMovementCommon.getLookAtDir(self, effectContext.effectorFact().subject());
+            self.dir = UMovement.getLookAtDir(self, effectContext.effectorFact().subject());
 
             for (const target of targets) {
                 if (target._effectResult.isHit()) {
