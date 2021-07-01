@@ -211,9 +211,9 @@ export class SEntityFactory {
 
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
-            case "kEnemy_ミミック":
-                entity.addBehavior(LItemImitatorBehavior);
-                break;
+            //case "kEnemy_ミミック":
+            //    entity.addBehavior(LItemImitatorBehavior);
+                //break;
             case "kEnemy_フロックウルフ":
                 entity.addBehavior(LFlockBehavior);
                 break;
