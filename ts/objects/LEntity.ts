@@ -443,7 +443,7 @@ export class LEntity extends LObject
 
     addState(stateId: DStateId, refresh: boolean = true) {
         const states = this.states();
-        const index = states.findIndex(s => s.stateId() == stateId);
+        const index = states.findIndex(s => s.stateDataId() == stateId);
         if (index >= 0) {
             states[index].recast();
         }
@@ -467,12 +467,12 @@ export class LEntity extends LObject
     }
     
     public isStateAffected(stateId: DStateId): boolean {
-        return this.states().findIndex(s => s.stateId() == stateId) >= 0;
+        return this.states().findIndex(s => s.stateDataId() == stateId) >= 0;
     }
 
     removeState(stateId: DStateId) {
         const states = this.states();
-        const index = states.findIndex(s => s.stateId() == stateId);
+        const index = states.findIndex(s => s.stateDataId() == stateId);
         if (index >= 0) {
             states[index].clearParent();
             states[index].onDetached();

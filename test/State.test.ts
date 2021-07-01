@@ -38,7 +38,7 @@ test("State_Brace", () => {
     // ハングせずに stepSimulation を抜けてくればOK.
 
     // 1回 Simulation しただけでは解除されていないこと。
-    expect(actor1.states()[0].stateId()).toBe(TestEnv.StateId_Sleep);
+    expect(actor1.states()[0].stateDataId()).toBe(TestEnv.StateId_Sleep);
 });
 
 test("State.AutoRemove", () => {

@@ -118,7 +118,7 @@ export class LState extends LObject {
         return this.__objectId();
     }
 
-    public stateId(): number {
+    public stateDataId(): DStateId {
         return this._stateId;
     }
 

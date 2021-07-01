@@ -1014,4 +1014,12 @@ export class REDataManager
                 break;
         }
     }
+    
+    static setupDirectly_StateGroup(data: DStateGroup) {
+        switch (data.key) {
+            case "kStateGroup_睡眠系":
+                data.exclusive = true;
+                break;
+        }
+    }
 }

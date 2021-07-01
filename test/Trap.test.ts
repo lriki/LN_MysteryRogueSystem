@@ -39,7 +39,7 @@ test("Trap.Basic", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(actor1.states()[0].stateId()).toBe(TestEnv.StateId_Sleep);   // 睡眠状態
+    expect(actor1.states()[0].stateDataId()).toBe(TestEnv.StateId_Sleep);   // 睡眠状態
 });
 
 test("Trap.Enemy", () => {
