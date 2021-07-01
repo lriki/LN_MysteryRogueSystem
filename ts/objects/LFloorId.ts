@@ -55,6 +55,14 @@ export class LFloorId {
         return new LFloorId(landId, floorNumber);
     }
 
+    public static makeFromKeys(landKey: string, floorKey: string): LFloorId {
+        const land = REData.lands.find(x => x.name == landKey);
+        if (!land) throw new Error(`Land "${landKey}" not found.`);
+        const floorNumber = land.floorInfos.findIndex(x => x && x.key == floorKey);
+        if (floorNumber <= 0) throw new Error(`Floor "${floorKey}" not found.`);
+        return new LFloorId(land.id, floorNumber);
+    }
+
     public static makeByRmmzFixedMapName(fixedMapName: string): LFloorId {
         const mapId = $dataMapInfos.findIndex(x => x && x.name == fixedMapName);
         const landId = REData.maps[mapId].landId;

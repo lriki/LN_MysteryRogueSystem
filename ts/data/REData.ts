@@ -6,7 +6,7 @@ import { DSystem } from "./DSystem";
 import { DSkill } from "./DSkill";
 import { DClass, DClassId, DClass_Default } from "./DClass";
 import { DItem, DItemDataId } from "./DItem";
-import { DLand, DLand_Default } from "./DLand";
+import { DFloorInfo, DLand, DLand_Default } from "./DLand";
 import { DEntityKind, DEntityKindId } from "./DEntityKind";
 import { DSequel } from "./DSequel";
 import { DEnemy, DEnemyId } from "./DEnemy";

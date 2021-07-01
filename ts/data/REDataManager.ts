@@ -662,7 +662,8 @@ export class REDataManager
 
                 // null 回避のため、REシステム管理外のマップの FloorInfo を作っておく
                 if (mapData.landId == DHelpers.RmmzNormalMapLandId) {
-                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.id] = { 
+                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.id] = {
+                        key: "",
                         template: undefined,
                         displayName: undefined,
                         fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100 };

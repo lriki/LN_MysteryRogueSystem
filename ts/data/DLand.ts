@@ -43,6 +43,7 @@ export interface DAppearanceTable {
 }
 
 export interface DFloorInfo {
+    key: string;
     template: string | undefined;
     displayName: string | undefined;
     fixedMapName: string;
@@ -142,6 +143,7 @@ export function buildFloorTable(mapData: IDataMap): DFloorInfo[] {
         const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
         if (floorData) {
             const info: DFloorInfo = {
+                key: event.name,
                 template: floorData.template ?? undefined,
                 displayName: floorData.displayName ?? undefined,
                 fixedMapName: floorData.fixedMap ?? "",
