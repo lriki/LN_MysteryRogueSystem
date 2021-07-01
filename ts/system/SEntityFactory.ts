@@ -37,7 +37,6 @@ import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 export class SEntityFactory {
     static newActor(entityId: DEntityId): LEntity {
         const e = REGame.world.spawnEntity(entityId);
-        e.prefabKey = REData.prefabs[e.data().prefabId].key;
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
@@ -58,7 +57,6 @@ export class SEntityFactory {
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
         e.addBehavior(LEnemyBehavior);
-        //e.addBehavior(LEntityDivisionBehavior);
         this.setupDirectly_Enemy(e, enemyEntityData);
         return e;
     }
@@ -127,7 +125,6 @@ export class SEntityFactory {
 
     static newMagicBullet(ownerItem: LEntity): LEntity {
         const e = REGame.world.spawnEntity(REData.getEntity("kSystem_MagicBullet").id);
-        e.prefabKey = "pMagicBullet";
         //e.addBehavior(LCommonBehavior);
 
         e.addBehavior(LMagicBulletBehavior, ownerItem);
@@ -136,7 +133,6 @@ export class SEntityFactory {
 
     static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {
         const e = REGame.world.spawnEntity(entityId);
-        e.prefabKey = prefab.key;
         e.addBehavior(LProjectableBehavior);
         return e;
     }
@@ -177,7 +173,6 @@ export class SEntityFactory {
             entity.addState(stateId);
         }
 
-        entity.prefabKey = prefab.key;
         return entity;
     }
 

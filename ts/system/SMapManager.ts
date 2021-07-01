@@ -63,7 +63,6 @@ export class SMapManager {
 
 
                 const entity = SEntityFactory.newExitPoint();
-                entity.prefabKey = prefab.prefabName;
                 
                 console.log("exitPoint prefab", prefab);
                 console.log("exitPoint floorId", floorId);

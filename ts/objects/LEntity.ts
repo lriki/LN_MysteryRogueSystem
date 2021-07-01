@@ -164,7 +164,6 @@ export class LEntity extends LObject
     _iconName: string = '';
     //_blockLayer: BlockLayer = BlockLayer.Unit;
 
-    prefabKey: string | undefined = undefined;//{ kind: DEntityKindId, id: number } = { kind: 0, id: 0 };
     rmmzEventId: number = 0;
 
     /**
@@ -236,7 +235,6 @@ export class LEntity extends LObject
         entity._name = this._name;
         entity._displayName = this._displayName;
         entity._iconName = this._iconName;
-        entity.prefabKey = this.prefabKey;
         entity.rmmzEventId = 0; // 固定マップのイベントを参照するわけではないのでリセット
         entity.inhabitsCurrentFloor = this.inhabitsCurrentFloor;
         entity.floorId = LFloorId.makeEmpty();

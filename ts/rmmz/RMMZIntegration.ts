@@ -49,6 +49,7 @@ export class RMMZIntegration extends SIntegration {
                 }
                 else {
                     SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
+                    e.setTransparent(true);
                 }
             }
         });
@@ -99,24 +100,18 @@ export class RMMZIntegration extends SIntegration {
         assert(databaseMap);
         assert(databaseMap.events);
 
-        if (entity.prefabKey) {
-            if (entity.inhabitsCurrentFloor) {
-                // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
-                // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
-            }
-            else {
-                // Prefab 検索
-                const eventData = SRmmzHelpers.getPrefabEventData(entity.prefabKey);
-
-                //  entity に対応する動的イベントを新たに生成する
-                const event = $gameMap.spawnREEvent(eventData);
-                entity.rmmzEventId = event.eventId();
-            }
+        if (entity.inhabitsCurrentFloor) {
+            // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
+            // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
         }
         else {
-            throw new Error(`${entity.debugDisplayName()} は Prefab が指定されていません。`);
-            // Tile などは RMMZ のイベント化する必要はない
-            return;
+            // Prefab 検索
+            //const eventData = SRmmzHelpers.getPrefabEventData(entity.prefabKey);
+            const eventData = SRmmzHelpers.getPrefabEventData(REData.prefabs[entity.data().prefabId].key);
+
+            //  entity に対応する動的イベントを新たに生成する
+            const event = $gameMap.spawnREEvent(eventData);
+            entity.rmmzEventId = event.eventId();
         }
 
         REVisual.entityVisualSet?.createVisual(entity);
