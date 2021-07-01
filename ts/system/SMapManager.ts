@@ -55,9 +55,7 @@ export class SMapManager {
             if (exitPoint) {
                 const appearanceTable = REData.lands[floorId.landId()].appearanceTable;
                 const prefab = appearanceTable.system[floorId.floorNumber()].find(e => {
-                    const entityData = REData.entities[e.entity.entityId];
-                    const p = REData.prefabs[entityData.prefabId];
-                    return p.isExitPoint();
+                    return e.spawiInfo.isExitPoint();
                 });
                 assert(prefab);
 
@@ -100,11 +98,8 @@ export class SMapManager {
         for (let i = 0; i < enemyCount; i++) {
             const candidateBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Unit);
             if (candidateBlocks.length > 0) {
-                const entity = this.newEnemy();
-                if (entity) {
-                    const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
-                    REGame.world._transferEntity(entity, floorId, block.x(), block.y());
-                }
+                const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
+                this.spawnEnemy(block.x(), block.y());
             }
         }
 
@@ -113,11 +108,8 @@ export class SMapManager {
         for (let i = 0; i < itemCount; i++) {
             const candidateBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Ground);
             if (candidateBlocks.length > 0) {
-                const entity = this.newItem();
-                if (entity) {
-                    const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
-                    REGame.world._transferEntity(entity, floorId, block.x(), block.y());
-                }
+                const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
+                this.spawnItem(block.x(), block.y());
             }
         }
 
@@ -126,11 +118,8 @@ export class SMapManager {
         for (let i = 0; i < trapCount; i++) {
             const candidateBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Ground);
             if (candidateBlocks.length > 0) {
-                const entity = this.newTrap();
-                if (entity) {
-                    const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
-                    REGame.world._transferEntity(entity, floorId, block.x(), block.y());
-                }
+                const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
+                const entity = this.spawnTrap(block.x(), block.y());
             }
         }
     }
@@ -229,9 +218,6 @@ export class SMapManager {
     }
 
     private spawnRandomEnemy(): void {
-        const floorId = this._map.floorId();
-        const entity = this.newEnemy();
-        if (!entity) return;
 
         // 空いている Block をランダムに選択して配置する
         const spawnableBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Unit);
@@ -245,7 +231,7 @@ export class SMapManager {
         const candidateBlocks = spawnableBlocks.filter(b => Math.abs(b.x() - px) > paramEnemySpawnInvalidArea && Math.abs(b.y() - py) > paramEnemySpawnInvalidArea);
         if (candidateBlocks.length > 0) {
             const block = candidateBlocks[REGame.world.random().nextIntWithMax(candidateBlocks.length)];
-            REGame.world._transferEntity(entity, floorId, block.x(), block.y());
+            this.spawnEnemy(block.x(), block.y());
         }
         else {
             // 非常に小さい単一の部屋しかなかったようなケース
@@ -253,36 +239,47 @@ export class SMapManager {
     }
 
     /** 出現テーブルからランダムに選択して Entity を作る */
-    private newEnemy(): LEntity | undefined {
+    private spawnEnemy(mx: number, my: number): void {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
-        if (table.enemies.length == 0) return undefined;    // 出現テーブルが空
+        if (table.enemies.length == 0) return;    // 出現テーブルが空
         const list = table.enemies[floorId.floorNumber()];
-        if (list.length == 0) return undefined;    // 出現テーブルが空
+        if (list.length == 0) return;    // 出現テーブルが空
+
         const data = list[REGame.world.random().nextIntWithMax(list.length)];
-        return SEntityFactory.newEntity(data.entity);
+        if (data.spawiInfo.troopId > 0) {
+            SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
+        }
+        else {
+            const entity = SEntityFactory.newEntity(data.spawiInfo);
+            REGame.world._transferEntity(entity, floorId, mx, my);
+        }
     }
 
     /** 出現テーブルからランダムに選択して Item を作る */
-    private newItem(): LEntity | undefined {
+    private spawnItem(mx: number, my: number): void {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.items.length == 0) return undefined;    // 出現テーブルが空
         const list = table.items[floorId.floorNumber()];
         if (list.length == 0) return undefined;    // 出現テーブルが空
+
         const data = list[REGame.world.random().nextIntWithMax(list.length)];
-        return SEntityFactory.newEntity(data.entity);
+        const entity = SEntityFactory.newEntity(data.spawiInfo);
+        REGame.world._transferEntity(entity, floorId, mx, my);
     }
 
     /** 出現テーブルからランダムに選択して Trap を作る */
-    private newTrap(): LEntity | undefined {
+    private spawnTrap(mx: number, my: number): void {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.traps.length == 0) return undefined;    // 出現テーブルが空
         const list = table.traps[floorId.floorNumber()];
         if (list.length == 0) return undefined;    // 出現テーブルが空
+
         const data = list[REGame.world.random().nextIntWithMax(list.length)];
-        return SEntityFactory.newEntity(data.entity);
+        const entity = SEntityFactory.newEntity(data.spawiInfo);
+        REGame.world._transferEntity(entity, floorId, mx, my);
     }
 }
 

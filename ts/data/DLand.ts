@@ -1,5 +1,5 @@
 
-import { DEntityCreateInfo } from "./DEntity";
+import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
@@ -16,8 +16,8 @@ export interface DFloorId {
 */
 
 export interface DAppearanceTableEntity {
-    entity: DEntityCreateInfo;
-    prefabName: string; // TODO: 必要？
+    //entity: DEntityCreateInfo;
+    spawiInfo: DEntitySpawner2;
     startFloorNumber: number;
     lastFloorNumber: number;
 }
@@ -181,16 +181,20 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
             const x = event.x;
             const y = event.y;
 
-            const entityData = REData.findEntity(entityMetadata.data);
-            if (!entityData) {
+            //const entityData = REData.findEntity(entityMetadata.data);
+            //if (!entityData) {
+            //    throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+            //}
+            const spawnInfo = DEntitySpawner2.makeFromEventData(event);
+            if (!spawnInfo) {
                 throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
             }
 
             const tableItem: DAppearanceTableEntity = {
-                prefabName: REData.prefabs[entityData.prefabId].key,
                 startFloorNumber: x,
                 lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
-                entity: DEntityCreateInfo.makeSingle(entityData.id),
+                //entity: DEntityCreateInfo.makeSingle(entityData.id),
+                spawiInfo: spawnInfo,
             };
             table.entities.push(tableItem);
 
@@ -210,17 +214,18 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
     }
 
     for (const entity of table.entities) {
-        const entityData = REData.entities[entity.entity.entityId];
-        const prefab = REData.prefabs[entityData.prefabId];
+        const spawnInfo = entity.spawiInfo;
         for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
-
-            if (prefab.isEnemyKind()) {
+            if (spawnInfo.troopId > 0) {
+                table.enemies[i].push(entity);        // troop は enemy と一緒にしてみる
+            }
+            else if (spawnInfo.isEnemyKind()) {
                 table.enemies[i].push(entity);
             }
-            else if (prefab.isTrapKind()) {
+            else if (spawnInfo.isTrapKind()) {
                 table.traps[i].push(entity);
             }
-            else if (prefab.isItemKind()) {
+            else if (spawnInfo.isItemKind()) {
                 table.items[i].push(entity);
             }
             else {

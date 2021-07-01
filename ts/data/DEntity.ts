@@ -4,7 +4,7 @@ import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
 import { DItem } from "./DItem";
-import { DPrefabId } from "./DPrefab";
+import { DPrefabDataSource, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroop, DTroopId } from "./DTroop";
 import { REData } from "./REData";
@@ -102,16 +102,43 @@ export class DEntityCreateInfo {
 }
 
 // こっちは Event の metadata としての情報
-export class DEntitySpawner2 {
+export class DEntitySpawner2 extends DEntityCreateInfo {
     public troopId: DTroopId;
-    public entityId: DEntityId;
-    public stateIds: DStateId[];
+    //public entityId: DEntityId;
+    //public stateIds: DStateId[];
 
     public constructor() {
+        super();
         this.troopId = 0;
-        this.entityId = 0;
-        this.stateIds = [];
+        //this.entityId = 0;
+        //this.stateIds = [];
     }
+    
+    public isEnemyKind(): boolean {
+        if (this.entityId <= 0) return false;
+        return REData.prefabs[REData.entities[this.entityId].prefabId].isEnemyKind();
+    }
+
+    public isItemKind(): boolean {
+        if (this.entityId <= 0) return false;
+        return REData.prefabs[REData.entities[this.entityId].prefabId].isItemKind();
+    }
+
+    public isTrapKind(): boolean {
+        if (this.entityId <= 0) return false;
+        return REData.prefabs[REData.entities[this.entityId].prefabId].isTrapKind();
+    }
+
+    public isEntryPoint(): boolean {
+        if (this.entityId <= 0) return false;
+        return REData.prefabs[REData.entities[this.entityId].prefabId].isEntryPoint();
+    }
+
+    public isExitPoint(): boolean {
+        if (this.entityId <= 0) return false;
+        return REData.prefabs[REData.entities[this.entityId].prefabId].isExitPoint();
+    }
+
 
     public static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined {
         return this.makeFromEventPageData(event.id, event.pages[0]);
