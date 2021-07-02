@@ -69,6 +69,16 @@ Game_Map.prototype.setup = function(mapId: number) {
         throw new Error();
     }
 
+    // onStart trigger
+    {
+        for (const event of this.events()) {
+            if (event._reEventData && event._reEventData.trigger && event._reEventData.trigger == "onStart") {
+                if (event.x == 0) {
+                    event.start();
+                }
+            }
+        }
+    }
     
 
     Log.d("RMMZ map setup finished.");

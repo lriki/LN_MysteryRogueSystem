@@ -139,7 +139,6 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         return REData.prefabs[REData.entities[this.entityId].prefabId].isExitPoint();
     }
 
-
     public static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined {
         return this.makeFromEventPageData(event.id, event.pages[0]);
     }

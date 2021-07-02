@@ -16,12 +16,16 @@ export interface DFloorId {
 */
 
 export interface DAppearanceTableEntity {
-    //entity: DEntityCreateInfo;
-    spawiInfo: DEntitySpawner2;
     startFloorNumber: number;
     lastFloorNumber: number;
+    spawiInfo: DEntitySpawner2;
 }
 
+export interface DAppearanceTableEvent {
+    startFloorNumber: number;
+    lastFloorNumber: number;
+    rmmzEventId: number;
+}
 
 export interface DAppearanceTable {
     /** すべての Entity と出現範囲 */
@@ -29,17 +33,20 @@ export interface DAppearanceTable {
 
     maxFloors: number;
 
-    /** 階段など、RESystem によって特別扱いされるもの。 */
+    /** 階段など、RESystem によって特別扱いされるもの。 [フロア番号][] */
     system: DAppearanceTableEntity[][];
 
-    /** Enemy のテーブル。初期配置の他、ターン経過によって出現する。 */
+    /** Enemy のテーブル。初期配置の他、ターン経過によって出現する。 [フロア番号][]  */
     enemies: DAppearanceTableEntity[][];
 
-    /** Trap のテーブル。Item とは出現率が別管理なので、分けておく。 */
+    /** Trap のテーブル。Item とは出現率が別管理なので、分けておく。 [フロア番号][]  */
     traps: DAppearanceTableEntity[][];
 
-    /** Item のテーブル。Trap とは出現率が別管理なので、分けておく。 */
+    /** Item のテーブル。Trap とは出現率が別管理なので、分けておく。 [フロア番号][] */
     items: DAppearanceTableEntity[][];
+
+    /** Event のテーブル。 [フロア番号][] */
+    events: DAppearanceTableEvent[][];
 }
 
 export interface DFloorInfo {
@@ -123,6 +130,7 @@ export function DLand_Default(): DLand {
             enemies: [],
             traps: [],
             items: [],
+            events: [],
         },
         //eventTable: { entities: [] },
         //itemTable: { entities: [] },
@@ -174,14 +182,19 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
         enemies: [],
         traps: [],
         items: [],
+        events: [],
     };
+    const eventList: DAppearanceTableEvent[] = [];
 
+    // まずは Entity, Event を集計し、maxFloors を調べる
     for (const event of mapData.events) {
         if (!event) continue;
+        const x = event.x;
+        const y = event.y;
+
+        // @RE-Entity
         const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0], event.id);
         if (entityMetadata) {
-            const x = event.x;
-            const y = event.y;
 
             //const entityData = REData.findEntity(entityMetadata.data);
             //if (!entityData) {
@@ -193,13 +206,23 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
             }
 
             const tableItem: DAppearanceTableEntity = {
+                spawiInfo: spawnInfo,
                 startFloorNumber: x,
                 lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
-                //entity: DEntityCreateInfo.makeSingle(entityData.id),
-                spawiInfo: spawnInfo,
             };
             table.entities.push(tableItem);
-
+            table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
+        }
+        
+        // @RE-Event
+        const eventMetadata = DHelpers.readREEventMetadataFromPage(event.pages[0]);
+        if (eventMetadata) {
+            const tableItem: DAppearanceTableEvent = {
+                rmmzEventId: event.id,
+                startFloorNumber: x,
+                lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
+            };
+            eventList.push(tableItem);
             table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
         }
     }
@@ -208,11 +231,13 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
     table.enemies = new Array(table.maxFloors);
     table.traps = new Array(table.maxFloors);
     table.items = new Array(table.maxFloors);
+    table.events = new Array(table.maxFloors);
     for (let i = 0; i < table.maxFloors; i++) {
         table.system[i] = [];
         table.enemies[i] = [];
         table.traps[i] = [];
         table.items[i] = [];
+        table.events[i] = [];
     }
 
     for (const entity of table.entities) {
@@ -233,6 +258,12 @@ export function buildAppearanceTable(mapData: IDataMap, mapId: number): DAppeara
             else {
                 table.system[i].push(entity);
             }
+        }
+    }
+    
+    for (const event of eventList) {
+        for (let i = event.startFloorNumber; i <= event.lastFloorNumber; i++) {
+            table.events[i].push(event);
         }
     }
 

@@ -1,5 +1,5 @@
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/data/DEntity";
-import { RMMZEventEntityMetadata } from "ts/data/DHelper";
+import { DHelpers, RMMZEventEntityMetadata, RmmzREEventMetadata } from "ts/data/DHelper";
 import { REGame } from "ts/objects/REGame";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { RMMZHelper } from "./RMMZHelper";
@@ -7,6 +7,7 @@ import { RMMZHelper } from "./RMMZHelper";
 declare global {
     interface Game_Event {
         _entityData: DEntitySpawner2 | undefined;
+        _reEventData: RmmzREEventMetadata | undefined;
 
         isREEntity(): boolean;
         isREEvent(): boolean;
@@ -44,6 +45,7 @@ Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
     this._entityData = SRmmzHelpers.readEntityMetadata(this);
+    this._reEventData = (this._pageIndex >= 0) ? DHelpers.readREEventMetadataFromPage(this.page()) : undefined;
 }
 
 Game_Event.prototype.isREEntity = function(): boolean {

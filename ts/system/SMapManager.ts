@@ -122,6 +122,12 @@ export class SMapManager {
                 const entity = this.spawnTrap(block.x(), block.y());
             }
         }
+
+        // Event 配置
+        const eventTable = this._map.land2().landData().appearanceTable.events[floorId.floorNumber()];
+        for (const i of eventTable) {
+            RESystem.integration.onLocateRmmzEvent(i.rmmzEventId, 0, 0);
+        }
     }
 
     private setupFixedMap(initialMap: FMap): void {

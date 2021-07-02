@@ -15,7 +15,7 @@ import { paramLandExitResultVariableId } from "ts/PluginParameters";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 
 export class RMMZIntegration extends SIntegration {
-    onReserveTransferMap(mapId: number, x: number, y:number, d: number): void {
+    onReserveTransferMap(mapId: number, x: number, y: number, d: number): void {
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
 
         // マップ遷移後、同一マップへの遷移でも Game_Map.setup が実行されるようにする。Scene_Load の処理と同じ。
@@ -29,6 +29,11 @@ export class RMMZIntegration extends SIntegration {
         // この後のコアスクリプト側の流れ
         // - Scene_Map.prototype.updateTransferPlayer() にて、新しい Scene_Map が作成され Scene 遷移する。
         // 
+    }
+
+    onLocateRmmzEvent(eventId: number, x: number, y: number): void {
+        const rmmzEvent = $gameMap.event(eventId);
+        rmmzEvent.locate(0, 0);
     }
 
     onLoadFixedMapData(map: FMap): void {
@@ -55,6 +60,8 @@ export class RMMZIntegration extends SIntegration {
         });
         //RESystem.minimapData.refresh();
     }
+
+
     
     onRefreshGameMap(map: LMap, initialMap: FMap): void {
         const builder = new GameMapBuilder();

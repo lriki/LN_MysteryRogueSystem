@@ -44,6 +44,14 @@ export interface RMMZEventEntityMetadata {
     troopId: DTroopId;
 }
 
+interface RmmzREEventRawMetadata {
+    trigger?: string;
+}
+
+export interface RmmzREEventMetadata {
+    trigger?: string;
+}
+
 export class DHelpers {
     public static TILE_ID_E = 768;
     public static TILE_ID_A5 = 1536;
@@ -195,6 +203,44 @@ export class DHelpers {
                         data: rawData.data,
                         states: rawData.states ?? [],
                         troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
+                    };
+                }
+                else {
+                    return undefined;
+                }
+            }
+        }
+        return undefined;
+    }
+
+    static readREEventMetadataFromPage(page: IDataMapEventPage): RmmzREEventMetadata | undefined {
+
+        let list = page.list;
+        if (list) {
+            // collect comments
+            let comments = "";
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].code == 108 || list[i].code == 408) {
+                    if (list[i].parameters) {
+                        comments += list[i].parameters;
+                    }
+                }
+            }
+    
+            let index = comments.indexOf("@RE-Event");
+            if (index >= 0) {
+                let block = comments.substring(index + 6);
+                block = block.substring(
+                    block.indexOf("{"),
+                    block.indexOf("}") + 1);
+
+                let rawData: RmmzREEventRawMetadata | undefined;
+                eval(`rawData = ${block}`);
+
+                if (rawData) {
+                    const rawData_ = rawData;
+                    return {
+                        trigger: rawData_.trigger,
                     };
                 }
                 else {

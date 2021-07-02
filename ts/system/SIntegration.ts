@@ -11,7 +11,9 @@ export abstract class SIntegration {
      * REシステム内から、 RMMZ マップを移動する必要があるときに呼び出される。
      * (ゲームオーバー時に拠点フロアへ戻るときなど)
      */
-    abstract onReserveTransferMap(mapId: number, x: number, y:number, d: number): void;
+    abstract onReserveTransferMap(mapId: number, x: number, y: number, d: number): void;
+
+    abstract onLocateRmmzEvent(eventId: number, x: number, y: number): void;
 
     abstract onLoadFixedMapData(map: FMap): void;
     
