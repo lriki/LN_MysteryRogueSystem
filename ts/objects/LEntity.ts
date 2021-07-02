@@ -669,6 +669,7 @@ export class LEntity extends LObject
     queryReactions(): DActionId[] {
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
+        // FIXME: 既定では拾ったり投げたりできないほうがいいかも。階段とか罠とか、間違って操作してしまう。やっぱりすべてに共通なものをここに置きたい。
         let result: DActionId[] = [
             //DBasics.actions.ExchangeActionId,
             DBasics.actions.ThrowActionId,
@@ -688,8 +689,11 @@ export class LEntity extends LObject
         //for (let i = 0; i < this._basicBehaviors.length; i++) {
             //result = REGame.world.behavior(this._basicBehaviors[i]).onQueryReactions(result);
         //}
+        console.log("s---", result);
         for (const b of this.collectBehaviors()) {
+            console.log("b", b);
             b.onQueryReactions(result);
+            console.log("result", result);
         }
         return result;
     }

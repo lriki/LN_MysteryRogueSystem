@@ -35,7 +35,7 @@ export class LExitPointBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LExitPointBehavior);
-        return b
+        return b;
     }
 
     queryHomeLayer(): BlockLayerKind | undefined {
@@ -43,7 +43,10 @@ export class LExitPointBehavior extends LBehavior {
     }
 
     onQueryReactions(actions: DActionId[]): void {
+        actions.splice(0);
         actions.push(DBasics.actions.ForwardFloorActionId);
+        //actions.mutableRemoveAll(x => x == DBasics.actions.PickActionId);
+        //actions.mutableRemoveAll(x => x == DBasics.actions.ThrowActionId);
     }
     
     [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): REResponse {

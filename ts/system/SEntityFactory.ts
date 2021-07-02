@@ -111,15 +111,15 @@ export class SEntityFactory {
 
     static newEntryPoint(): LEntity {
         const e = REGame.world.spawnEntity(REData.getEntity("kEntryPoint").id);
-        e.addBehavior(LEntryPointBehavior);
         e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LEntryPointBehavior);
         return e;
     }
 
     static newExitPoint(): LEntity {
         const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
-        e.addBehavior(LExitPointBehavior);
         e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LExitPointBehavior);
         return e;
     }
 

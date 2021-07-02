@@ -31,7 +31,7 @@ export class VFeetDialog extends VDialog {
         this.addWindow(this._entityNameWindow);
 
         this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-        
+
         const self = this;
         this._commandWindow.setActionList2(this._model.actions().map(actionId => {
             return {
