@@ -158,15 +158,15 @@ export class LState extends LObject {
 
     }
     onAttached(): void {
-        this._stateBehabiors.forEach(b => {
-            //b._ownerEntityId = this.ownerEntity().id();
-            //b._setOwnerObjectId(this.objectId());
-            (REGame.world.behavior(b) as LBehavior).onAttached();
-        });
+        for (const b of this.stateBehabiors()) {
+            b.onAttached();
+        }
     }
 
     onDetached(): void {
-        this.stateBehabiors();
+        for (const b of this.stateBehabiors()) {
+            b.onDetached();
+        }
     }
 
     public removeThisState(): void {

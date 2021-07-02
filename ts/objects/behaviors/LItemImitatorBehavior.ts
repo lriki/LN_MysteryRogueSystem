@@ -79,9 +79,11 @@ export class LItemImitatorBehavior extends LBehavior {
 
         REGame.eventServer.subscribe(DBasics.events.preWalk, this);
         REGame.eventServer.subscribe(DBasics.events.prePut, this);
+        console.log("LItemImitatorBehavior.onAttached");
     }
     
     onDetached(): void {
+        console.log("LItemImitatorBehavior.onDetached");
         assert(this._itemEntityId.hasAny());
         REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
         REGame.eventServer.unsubscribe(DBasics.events.prePut, this);
