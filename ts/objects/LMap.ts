@@ -166,7 +166,7 @@ export class LMap extends LObject
         return this._floorId.hasAny() && this._width > 0;
     }
 
-    floorId(): LFloorId {
+    public floorId(): LFloorId {
         return this._floorId;
     }
 

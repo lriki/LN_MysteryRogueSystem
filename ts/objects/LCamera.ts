@@ -46,12 +46,12 @@ import { LFloorId } from "./LFloorId";
  * 3. 既定の Game_Map.setup() 後、performFloorTransfer() で現在の $gameMap や $dataMap を元にフロアを構築する。
  * 
  */
-export class LCamera
-{
+export class LCamera {
     private _focusedEntityId: LEntityId = LEntityId.makeEmpty();
     private _transferingNewFloorId: LFloorId = LFloorId.makeEmpty();
     private _transferingNewX: number = 0;
     private _transferingNewY: number = 0;
+    
 
     focusedEntityId(): LEntityId {
         return this._focusedEntityId;

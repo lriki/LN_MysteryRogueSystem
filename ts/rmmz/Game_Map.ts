@@ -22,7 +22,6 @@ Game_Map.prototype.setup = function(mapId: number) {
     REGame.map.releaseMap();
     REGame.messageHistory.clear();
 
-    
     _Game_Map_setup.call(this, mapId);
 
     // performTransfer() が呼ばれる時点では、RMMZ のマップ情報はロード済み。
@@ -34,20 +33,8 @@ Game_Map.prototype.setup = function(mapId: number) {
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
 
-    let floorId: LFloorId;
-    if (REDataManager.isLandMap(mapId)) {
-        floorId = new LFloorId(REData.lands.findIndex(x => x.rmmzMapId == mapId), $gamePlayer._newX);
-    }
-    else if (REDataManager.isRESystemMap(mapId)) {
-        // 固定マップへの直接遷移
-        floorId = LFloorId.makeByRmmzFixedMapId(mapId);
-    }
-    else {
-        // 管理外マップへの遷移
-        floorId = LFloorId.makeByRmmzNormalMapId(mapId);
-    }
+    const floorId = LFloorId.makeFromMapTransfarInfo(mapId, $gamePlayer._newX);
 
-    
 
     if (floorId.isEntitySystemMap()) {
         // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
@@ -59,15 +46,18 @@ Game_Map.prototype.setup = function(mapId: number) {
         $gamePlayer.hideFollowers();
     }
 
+    /*
     const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    console.log("playerEntity", playerEntity);
     if (playerEntity) {
         REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
         assert(REGame.camera.isFloorTransfering());
-        SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
     }
     else {
         throw new Error();
     }
+    */
+    SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
 
     // onStart trigger
     {

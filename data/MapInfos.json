@@ -24,8 +24,8 @@ null,
 {"id":22,"expanded":false,"name":"7:装備品は 旅の友","order":26,"parentId":19,"scrollX":819,"scrollY":553},
 {"id":23,"expanded":true,"name":"10:杖","order":27,"parentId":19,"scrollX":1081,"scrollY":604},
 {"id":24,"expanded":false,"name":"x:モンスターハウス","order":28,"parentId":19,"scrollX":1081,"scrollY":604},
-{"id":25,"expanded":true,"name":"RE-UnitTest","order":5,"parentId":0,"scrollX":811,"scrollY":453.5},
-{"id":26,"expanded":true,"name":"RE-Land:UnitTestDungeon1","order":6,"parentId":25,"scrollX":811,"scrollY":461.5},
+{"id":25,"expanded":true,"name":"RE-UnitTest","order":5,"parentId":0,"scrollX":811,"scrollY":461.5},
+{"id":26,"expanded":true,"name":"RE-Land:UnitTestDungeon1","order":6,"parentId":25,"scrollX":811,"scrollY":453.5},
 {"id":27,"expanded":true,"name":"RE-FixedMaps:","order":7,"parentId":26,"scrollX":811,"scrollY":453.5},
 {"id":28,"expanded":false,"name":"FlatMap50x50","order":8,"parentId":27,"scrollX":811,"scrollY":453.5},
 {"id":29,"expanded":false,"name":"RE-ExitMap","order":29,"parentId":17,"scrollX":811,"scrollY":453},
@@ -41,5 +41,5 @@ null,
 {"id":39,"expanded":false,"name":"CharacterAI","order":10,"parentId":27,"scrollX":811,"scrollY":454.5},
 {"id":40,"expanded":true,"name":"Sandbox-ドラゴン","order":11,"parentId":27,"scrollX":811,"scrollY":458.5},
 {"id":41,"expanded":true,"name":"Sandbox-フロックウルフ","order":12,"parentId":27,"scrollX":811,"scrollY":461.5},
-{"id":42,"expanded":true,"name":"Sandbox-ミミック","order":13,"parentId":27,"scrollX":811,"scrollY":458.5}
+{"id":42,"expanded":true,"name":"Sandbox-ミミック","order":13,"parentId":27,"scrollX":811,"scrollY":453.5}
 ]

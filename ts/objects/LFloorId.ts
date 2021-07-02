@@ -2,6 +2,7 @@ import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
 import { DFloorInfo, DLand, DLandId } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
+import { REDataManager } from "ts/data/REDataManager";
 
 /**
  * LandId と フロア番号によってフロアを識別するもの。
@@ -11,6 +12,21 @@ import { REData } from "ts/data/REData";
  * - REシステム管理下のすべてのマップは Land 内の Floor として扱った方が都合がよい。
  *   - 例えば固定マップで召喚の罠を踏んだ時の出現エネミーはどこのテーブルからとる？
  * - FloorId を静的なものにしてしまうと、動的な Land 生成に対応しづらくなる。
+ * 
+ * Land 内からの固定マップ遷移について
+ * ----------
+ * フロアを進んだり直接遷移するときの仕組みは、"Land定義マップの Y=0 へ Player を移動する" に統一する。
+ * これによって、
+ * - 階段を進んだ時の ProceedFloorForward プラグインコマンド
+ * - プレイヤー初期位置指定による遷移
+ * - ゲーム中の [場所移動] 空の遷移
+ * すべて同じように遷移できる仕組みとする。
+ * 
+ * Player(というかフォーカスのある Entity) の移動処理は、LCamera.reserveFloorTransfer() にすべて流れてくるが、
+ * ここで次にロードするマップを選択する。
+ * 厳密には
+ * - LFloorId.rmmzMapId() で、ロードするべきマップを取得 (ランダムマップならLand定義マップID, 固定マップならそのマップID)
+ * - その後、RMMZIntegration 経由で $gamePlayer.reserveTransfer に流して、実際にマップ移動する。
  */
 export class LFloorId {
     /** LandId==DHelpers.RmmzNormalMapLandId は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
@@ -83,6 +99,22 @@ export class LFloorId {
 
     public static makeByRmmzNormalMapId(mapId: number): LFloorId {
         return new LFloorId(DHelpers.RmmzNormalMapLandId, mapId);
+    }
+
+    public static makeFromMapTransfarInfo(mapId: number, x: number) {
+        let floorId: LFloorId;
+        if (REDataManager.isLandMap(mapId)) {
+            floorId = new LFloorId(REData.lands.findIndex(x => x.rmmzMapId == mapId), x);
+        }
+        else if (REDataManager.isRESystemMap(mapId)) {
+            // 固定マップへの遷移
+            floorId = LFloorId.makeByRmmzFixedMapId(mapId);
+        }
+        else {
+            // 管理外マップへの遷移
+            floorId = LFloorId.makeByRmmzNormalMapId(mapId);
+        }
+        return floorId;
     }
 
     public landData(): DLand {

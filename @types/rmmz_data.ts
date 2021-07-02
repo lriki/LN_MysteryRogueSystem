@@ -330,9 +330,9 @@ declare interface IDataSystem
     ship?: IVehicle;
     skillTypes?: string[];
     sounds?: IDataSound[];
-    startMapId?: number;
-    startX?: number;
-    startY?: number;
+    startMapId: number;
+    startX: number;
+    startY: number;
     switches?: string[];
     terms: {
         basic: string[];

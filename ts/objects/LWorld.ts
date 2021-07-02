@@ -224,7 +224,13 @@ export class LWorld
      * 
      * このメソッドで移動しても、足元に対するアクションは行わない。(罠を踏んだり、アイテムを拾ったりしない)
      */
-    _transferEntity(entity: LEntity, floorId: LFloorId, x: number, y: number): boolean {
+    _transferEntity(entity: LEntity, floorId: LFloorId, x: number = -1, y: number = -1): boolean {
+        if (REGame.map.floorId() != floorId && floorId.isRandomMap()) {
+            // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
+            assert(x < 0);
+            assert(y < 0);
+        }
+
         if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);

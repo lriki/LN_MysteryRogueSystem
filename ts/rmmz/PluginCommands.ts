@@ -49,7 +49,9 @@ PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(thi
             assert(result);
         }
         else {
-            REGame.world._transferEntity(entity, LFloorId.make(floorId.landId(), newFloorNumber), newFloorNumber, 0);
+            const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
+            console.log("newFloorId", newFloorId);
+            REGame.world._transferEntity(entity, newFloorId);
 
             // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
             // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。

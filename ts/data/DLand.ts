@@ -53,7 +53,7 @@ export interface DFloorInfo {
     key: string;
     template: string | undefined;
     displayName: string | undefined;
-    fixedMapName: string;
+    fixedMapName: string;   // Land から固定マップへの遷移については LFloorId のコメント参照。
 
     /** false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
     //entitySystem: boolean;

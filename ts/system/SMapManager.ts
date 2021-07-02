@@ -136,8 +136,6 @@ export class SMapManager {
 
         const enterdEntities = this.enterEntitiesToCurrentMap();
 
-
-
         const entryPoint = initialMap.entryPoint();
         assert(entryPoint);
         for (const entity of enterdEntities) {

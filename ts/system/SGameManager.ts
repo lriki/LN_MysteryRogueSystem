@@ -28,6 +28,7 @@ import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { LBlock } from "ts/objects/LBlock";
+import { LFloorId } from "ts/objects/LFloorId";
 
 /**
  */
@@ -78,7 +79,7 @@ export class SGameManager
         // TODO: とりあえずまずは全部同じにしてテスト
         //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
 
-        // 1 番 Actor をデフォルトで操作可能とする
+        // 1 番 Actor をデフォルトで操作可能 (Player) とする
         const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         REGame.system.mainPlayerEntityId = firstActor.entityId();
         const unit = firstActor.findBehavior(LUnitBehavior);
@@ -87,13 +88,16 @@ export class SGameManager
         }
         REGame.camera.focus(firstActor);
 
-        // 1 番 Actor を Party に入れる
+        // Player を Party に入れる
         const party = REGame.world.newParty();
         party.addMember(firstActor);
 
-        // この時点で移動しようとしてはならない。
-        // RMMZ 側の Game_Player.performTransfer をフックする。
-        assert(!REGame.camera.isFloorTransfering());
+        // Player の初期位置を、RMMZ 初期位置に合わせる
+        const floorId = LFloorId.makeFromMapTransfarInfo($dataSystem.startMapId, $dataSystem.startX);
+        if (floorId.isRandomMap())
+            REGame.world._transferEntity(firstActor, floorId);
+        else
+            REGame.world._transferEntity(firstActor, floorId, $dataSystem.startX, $dataSystem.startY);
     }
 
     

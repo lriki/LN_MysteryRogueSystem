@@ -156,10 +156,10 @@ export class SEntityFactory {
             entity = this.newItem(prefab.dataId);
         }
         else if (prefab.isEntryPoint()) {
-            entity = this.newExitPoint();
+            entity = this.newEntryPoint();
         }
         else if (prefab.isExitPoint()) {
-            entity = this.newEntryPoint();
+            entity = this.newExitPoint();
         }
         else if (prefab.dataSource = DPrefabDataSource.Ornament) {
             entity = this.newOrnament(data.entityId, prefab);
