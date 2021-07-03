@@ -118,6 +118,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
             return block;
         }
         else {
+            console.log("mapdata", map.rmmzFixedMapData());
             // 固定マップの場合、EntryPoint を基準とする
             const entryPointEvent = map.rmmzFixedMapData().events.find(e => {
                 if (!e) return false;

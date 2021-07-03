@@ -2,13 +2,12 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DStateId } from "ts/data/DState";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { LBackwardFloorActivity } from "ts/objects/activities/LBackwardFloorActivity";
 import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
 import { LEatActivity } from "ts/objects/activities/LEatActivity";
 import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
 import { LExchangeActivity } from "ts/objects/activities/LExchangeActivity";
-import { LForwardFloorActivity } from "ts/objects/activities/LForwardFloorActivity";
+import { LProceedFloorActivity } from "ts/objects/activities/LProceedFloorActivity";
 import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LPutActivity } from "ts/objects/activities/LPutActivity";
@@ -38,9 +37,9 @@ export class SActivityFactory {
             case DBasics.actions.ExchangeActionId:
                 return new LExchangeActivity();
             case DBasics.actions.ForwardFloorActionId:
-                return new LForwardFloorActivity();
+                return new LProceedFloorActivity();
             case DBasics.actions.BackwardFloorActionId:
-                return new LBackwardFloorActivity();
+                return new LProceedFloorActivity();
             case DBasics.actions.EquipActionId:
                 return new LEquipActivity();
             case DBasics.actions.EquipOffActionId:

@@ -35,7 +35,7 @@ Game_Player.prototype.performTransfer = function() {
     const oldIsTransferring = this.isTransferring();
 
     
-    console.log("_Game_Player_performTransfer");
+    console.log("_Game_Player_performTransfer", this.newMapId());
 
     // $gameMap.setup() などはオリジナルの処理の中で行われる
     _Game_Player_performTransfer.call(this);

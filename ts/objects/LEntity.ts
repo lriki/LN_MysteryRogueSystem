@@ -236,7 +236,7 @@ export class LEntity extends LObject
         entity._displayName = this._displayName;
         entity._iconName = this._iconName;
         entity.rmmzEventId = 0; // 固定マップのイベントを参照するわけではないのでリセット
-        entity.inhabitsCurrentFloor = this.inhabitsCurrentFloor;
+        entity.inhabitsCurrentFloor = false;    // true のまま引き継いでしまうと、新たに生成された Entity に対応する RMMZ Event が生成されない
         entity.floorId = LFloorId.makeEmpty();
         entity.x = 0;
         entity.y = 0;

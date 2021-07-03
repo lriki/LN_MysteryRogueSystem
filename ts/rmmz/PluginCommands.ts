@@ -35,22 +35,21 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
     const entity = REGame.camera.focusedEntity();
     if (entity) {
-
         const floorId = entity.floorId;
         const newFloorNumber = floorId.floorNumber() + 1;
 
+        // 最後のフロアを踏破した？
         if (newFloorNumber > REGame.map.land2().maxFloorNumber()) {
             $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Goal / 100));
 
             const exitRMMZMapId = floorId.landData().exitRMMZMapId;
             assert(exitRMMZMapId > 0);
-            // 最後のフロアを踏破した
+            
             const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
             assert(result);
         }
         else {
             const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
-            console.log("newFloorId", newFloorId);
             REGame.world._transferEntity(entity, newFloorId);
 
             // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
@@ -60,7 +59,33 @@ PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(thi
     }
 });
 
-PluginManager.registerCommand(pluginName, "RE-ProceedFloorBackword", (args: any) => {
-});
+PluginManager.registerCommand(pluginName, "RE-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
+    console.log("RE-ProceedFloorBackword");
+    const entity = REGame.camera.focusedEntity();
+    if (entity) {
+        const floorId = entity.floorId;
+        const newFloorNumber = floorId.floorNumber() - 1;
 
+        console.log("newFloorNumber", newFloorNumber);
+
+        // 最初のフロアから戻った？
+        if (newFloorNumber <= 0) {
+            $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Escape / 100));
+
+            const exitRMMZMapId = floorId.landData().exitRMMZMapId;
+            assert(exitRMMZMapId > 0);
+            
+            const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
+            assert(result);
+        }
+        else {
+            const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
+            REGame.world._transferEntity(entity, newFloorId);
+
+            // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
+            // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。
+            this.setWaitMode("transfer");
+        }
+    }
+});
 

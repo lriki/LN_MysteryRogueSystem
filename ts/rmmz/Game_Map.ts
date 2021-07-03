@@ -33,18 +33,8 @@ Game_Map.prototype.setup = function(mapId: number) {
     // performTransfer() は同一マップ内で位置だけ移動するときも呼び出されるため、
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
 
-    const floorId = LFloorId.makeFromMapTransfarInfo(mapId, $gamePlayer._newX);
 
 
-    if (floorId.isEntitySystemMap()) {
-        // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
-        // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
-        if (REDataManager.isLandMap(mapId)) {
-            this.events().forEach(e => e.setTransparent(true));
-        }
-
-        $gamePlayer.hideFollowers();
-    }
 
     /*
     const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -57,7 +47,24 @@ Game_Map.prototype.setup = function(mapId: number) {
         throw new Error();
     }
     */
+    console.log("Game_Map", mapId);
+
+
+    if (REGame.camera.isFloorTransfering()) {
+        if (REGame.camera.transferingNewFloorId().isEntitySystemMap()) {
+            // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
+            // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
+            if (REDataManager.isLandMap(mapId)) {
+                this.events().forEach(e => e.setTransparent(true));
+            }
+
+            $gamePlayer.hideFollowers();
+        }
+    }
+
+    console.log("Game_Map");
     SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
+
 
     // onStart trigger
     {

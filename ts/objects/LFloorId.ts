@@ -160,10 +160,12 @@ export class LFloorId {
     }
 
     public isRandomMap(): boolean {
+        if (!this.isRESystem()) return false;
         return this.rmmzFixedMapId() <= 0;
     }
 
     public isFixedMap(): boolean {
+        if (!this.isRESystem()) return false;
         return this.rmmzFixedMapId() > 0;
     }
 

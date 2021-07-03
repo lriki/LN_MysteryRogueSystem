@@ -150,22 +150,26 @@ DataManager.isMapLoaded = function() {
 
 const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
-    _DataManager_createGameObjects.call(DataManager);
-
+    _DataManager_createGameObjects.call(this);
     SGameManager.createGameObjects();
 }
 
+const _DataManager_setupNewGame = DataManager.setupNewGame;
+DataManager.setupNewGame = function() {
+    _DataManager_setupNewGame.call(this);
+    SGameManager.setupNewGame();
+}
 
 const _DataManager_makeSaveContents = DataManager.makeSaveContents;
 DataManager.makeSaveContents = function() {
-    const contents = _DataManager_makeSaveContents.call(DataManager);
+    const contents = _DataManager_makeSaveContents.call(this);
     contents.re = SGameManager.makeSaveContents();
     return contents;
 };
 
 const _DataManager_extractSaveContents = DataManager.extractSaveContents;
 DataManager.extractSaveContents = function(contents) {
-    _DataManager_extractSaveContents.call(DataManager, contents);
+    _DataManager_extractSaveContents.call(this, contents);
     SGameManager.extractSaveContents(contents.re);
 }
 

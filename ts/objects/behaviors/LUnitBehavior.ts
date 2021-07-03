@@ -19,7 +19,7 @@ import { LPickActivity } from "../activities/LPickActivity";
 import { LWaveActivity } from "../activities/LWaveActivity";
 import { LPutActivity } from "../activities/LPutActivity";
 import { LThrowActivity } from "../activities/LThrowActivity";
-import { LForwardFloorActivity } from "../activities/LForwardFloorActivity";
+import { LProceedFloorActivity } from "../activities/LProceedFloorActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { LExchangeActivity } from "../activities/LExchangeActivity";
@@ -159,7 +159,7 @@ export class LUnitBehavior extends LBehavior {
                 return REResponse.Succeeded;
             }
         }
-        else if (activity instanceof LForwardFloorActivity) {
+        else if (activity instanceof LProceedFloorActivity) {
 
             const reactor = activity.object();
             if (reactor) {

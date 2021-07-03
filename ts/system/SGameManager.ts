@@ -29,6 +29,7 @@ import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { LBlock } from "ts/objects/LBlock";
 import { LFloorId } from "ts/objects/LFloorId";
+import { UTransfer } from "ts/usecases/UTransfer";
 
 /**
  */
@@ -36,7 +37,7 @@ export class SGameManager
 {
     // DataManager.createGameObjects に従って呼び出される。
     // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。
-    static createGameObjects(): void {
+    public static createGameObjects(): void {
         RESystem.sequelContext = new SSequelContext();
         RESystem.commandContext = new SCommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new SDialogContext(RESystem.commandContext);
@@ -58,7 +59,6 @@ export class SGameManager
         REGame.floorDirector = new LFloorDirector();
         REGame.borderWall = new LBlock(-1, -1);
 
-        
         REGame.world._registerObject(REGame.map);
 
         // Create unique units
@@ -75,6 +75,12 @@ export class SGameManager
                 }
             }
         }
+    }
+
+    /**
+     * 
+     */
+    public static setupNewGame() {
 
         // TODO: とりあえずまずは全部同じにしてテスト
         //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
@@ -93,11 +99,14 @@ export class SGameManager
         party.addMember(firstActor);
 
         // Player の初期位置を、RMMZ 初期位置に合わせる
+        UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY);
+        /*
         const floorId = LFloorId.makeFromMapTransfarInfo($dataSystem.startMapId, $dataSystem.startX);
         if (floorId.isRandomMap())
             REGame.world._transferEntity(firstActor, floorId);
         else
             REGame.world._transferEntity(firstActor, floorId, $dataSystem.startX, $dataSystem.startY);
+            */
     }
 
     
