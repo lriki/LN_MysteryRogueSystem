@@ -19,7 +19,7 @@ afterAll(() => {
 });
 
 test("State_Brace", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -42,7 +42,7 @@ test("State_Brace", () => {
 });
 
 test("State.AutoRemove", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

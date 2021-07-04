@@ -71,7 +71,7 @@ test("Basic1", () => {
    // ac._destinationX = 1000;
 
     // NewGame.
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -137,7 +137,7 @@ test("Basic1", () => {
 test("Basic.TurnOrderTable", () => {
     //--------------------
     // 準備
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 - x1 速
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

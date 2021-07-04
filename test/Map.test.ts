@@ -25,7 +25,7 @@ test("MapTransfarDirectly", () => {
 
     //--------------------
     // 準備
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // 最初に Player を REシステム管理外の 通常マップに配置しておく
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -153,7 +153,7 @@ test("TransformRotationBlock", () => {
 });
 
 test("MoveDiagonal_CollideWalls", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

@@ -23,7 +23,7 @@ afterAll(() => {
 
 test("Equipment.EquipOnOff", () => {
     // New Game
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -81,7 +81,7 @@ test("Equipment.EquipOnOff", () => {
 });
 
 test("Equipment.Put_Throw", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -127,7 +127,7 @@ test("Equipment.Put_Throw", () => {
 });
 
 test("Equipment.Curse", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

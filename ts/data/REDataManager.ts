@@ -1,7 +1,7 @@
 //import 'types/index.d.ts'
 import fs from 'fs';
-import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
-import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
+//import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
+//import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
@@ -207,13 +207,6 @@ export class REDataManager
             AttackActionId: REData.addAction("Attack", ""),
         };
         
-
-        // Behaviors
-        RESystem.behaviors = {
-            decision: REData.addBehavior("Decision", () => new LDecisionBehavior()),
-            unit: REData.addBehavior("Unit", () => new LUnitBehavior()),
-            //genericState: REData.addBehavior("GenericState", () => new LGenericState()),
-        };
 
         // Sequels
         RESystem.sequels = {

@@ -12,13 +12,13 @@ afterAll(() => {
 });
 
 test("Abilities.Enemy.Flock", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     const floor = LFloorId.makeFromKeys("RE-Land:UnitTestDungeon1", "kFloor_UTフロックウルフ(ランダム)");
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, floor, 0, 0);
+    REGame.world._transferEntity(actor1, floor);
     TestEnv.performFloorTransfer();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

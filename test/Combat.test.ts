@@ -22,7 +22,7 @@ test("Combat.DamageAndCollapse", () => {
 
     //--------------------
     // 準備
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -55,7 +55,7 @@ test("Combat.DamageAndGameover", () => {
 
     //--------------------
     // 準備
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

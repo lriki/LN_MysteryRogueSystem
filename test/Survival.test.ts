@@ -22,7 +22,7 @@ afterAll(() => {
 });
 
 test("Survival.FP", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

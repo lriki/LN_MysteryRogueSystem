@@ -24,7 +24,7 @@ afterAll(() => {
 });
 
 test("Items.Sanctuary", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

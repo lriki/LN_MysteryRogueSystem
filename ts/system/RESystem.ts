@@ -4,7 +4,6 @@ import { SIntegration } from "./SIntegration";
 import { BasicSequels } from "ts/data/predefineds/DBasicSequels";
 import { BasicSkills } from "ts/data/predefineds/DBasicSkills";
 import { BasicItems } from "ts/data/predefineds/DBasicItems";
-import { BasicBehaviors } from "ts/data/predefineds/DBasicBehaviors";
 import { EntityProperties, EntityProperty } from "ts/data/predefineds/DBasicProperties";
 import { SSequelContext } from "./SSequelContext";
 import { SCommandContext } from "./SCommandContext";
@@ -39,7 +38,6 @@ export class RESystem {
     static groundRules: SGroundRules;
 
     // Database
-    static behaviors: BasicBehaviors;
     static sequels: BasicSequels;
     static skills: BasicSkills;
     static items: BasicItems;

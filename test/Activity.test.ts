@@ -23,7 +23,7 @@ afterAll(() => {
 });
 
 test("Activity.Eat", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -53,7 +53,7 @@ test("Activity.Eat", () => {
 });
 
 test("Activity.Throw", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -112,7 +112,7 @@ test("Activity.Throw", () => {
 
 
 test("Activity.ThrowAndHit", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -147,7 +147,7 @@ test("Activity.ThrowAndHit", () => {
 
 // [交換]
 test("Activity.Exchange", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

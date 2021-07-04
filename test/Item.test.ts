@@ -24,7 +24,7 @@ afterAll(() => {
 
 test("PickAndPut", () => {
     // New Game
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -79,7 +79,7 @@ test("PickAndPut", () => {
 
 test("PickAtMoved", () => {
     // New Game
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -121,7 +121,7 @@ test("PickAtMoved", () => {
 });
 
 test("Item.ThrowAndDrop", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -158,7 +158,7 @@ test("Item.ThrowAndDrop", () => {
 });
 
 test("Item.DropAndDestroy", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

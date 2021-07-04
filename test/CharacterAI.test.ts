@@ -26,7 +26,7 @@ afterAll(() => {
 });
 
 test("CharacterAI.Moving1", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -62,7 +62,7 @@ test("CharacterAI.Moving1", () => {
 
 // 壁角斜め方向への攻撃はしない
 test("CharacterAI.AttackOnDiagonalEdge", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -92,7 +92,7 @@ test("CharacterAI.AttackOnDiagonalEdge", () => {
 
 
 test("CharacterAI.ActionPattern", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

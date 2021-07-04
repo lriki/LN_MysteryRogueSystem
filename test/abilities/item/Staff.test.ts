@@ -19,7 +19,7 @@ afterAll(() => {
 });
 
 test("Items.Staff.Knockback", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
     const dc = RESystem.dialogContext;
 
     // actor1 配置

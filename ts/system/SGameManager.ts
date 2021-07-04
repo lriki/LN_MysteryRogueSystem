@@ -77,9 +77,7 @@ export class SGameManager
         }
     }
 
-    /**
-     * 
-     */
+    // もともとは createGameObjects() と一緒だったが、タイミングを Game_Player の位置設定後にしたかったため分けた
     public static setupNewGame() {
 
         // TODO: とりあえずまずは全部同じにしてテスト

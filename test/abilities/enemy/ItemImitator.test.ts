@@ -22,7 +22,7 @@ afterAll(() => {
 });
 
 test("Abilities.Enemy.ItemImitator", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

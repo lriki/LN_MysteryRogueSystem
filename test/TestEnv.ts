@@ -123,6 +123,11 @@ export class TestEnv {
         }
     }
 
+    public static newGame(): void {
+        SGameManager.createGameObjects();
+        SGameManager.setupNewGame();
+    }
+
     public static padZero(v: number, length: number) {
         return String(v).padStart(length, "0");
     }

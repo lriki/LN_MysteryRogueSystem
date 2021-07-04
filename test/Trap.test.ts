@@ -17,7 +17,7 @@ afterAll(() => {
 });
 
 test("Trap.Basic", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -43,7 +43,7 @@ test("Trap.Basic", () => {
 });
 
 test("Trap.Enemy", () => {
-    SGameManager.createGameObjects();
+    TestEnv.newGame();
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
