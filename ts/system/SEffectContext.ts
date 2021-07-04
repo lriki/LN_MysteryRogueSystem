@@ -12,7 +12,7 @@ import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
-import { DEffect, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying } from "ts/data/DEffect";
+import { DEffect, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DOtherEffectQualifying } from "ts/data/DEffect";
 import { UAction } from "../usecases/UAction";
 
 
@@ -379,6 +379,9 @@ export class SEffectContext {
                 for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
                     this.applyItemEffect(targetBattlerBehavior, effect, result);
                 }
+                for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
+                    this.applyOtherEffect(targetBattlerBehavior, effect, result);
+                }
                 this.applyItemUserEffect(targetBattlerBehavior);
             }
             //this.updateLastTarget(target);
@@ -629,6 +632,17 @@ export class SEffectContext {
                 throw new Error("Not implemented.");
                 //this.itemEffectCommonEvent(target, effect);
                 break;
+        }
+    }
+    
+    // Game_Action.prototype.applyItemEffect
+    public applyOtherEffect(target: LBattlerBehavior, effect: DOtherEffectQualifying, result: LEffectResult): void {
+        switch (effect.key) {
+            case "kEffect_変化":
+                console.log("変化ーーー");
+                break;
+            default:
+                throw new Error("Not implemented.");
         }
     }
     

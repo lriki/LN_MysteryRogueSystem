@@ -33,10 +33,17 @@ import { LParty } from "ts/objects/LParty";
 import { DStateId } from "ts/data/DState";
 import { UMovement } from "../usecases/UMovement";
 import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
+import { assert } from "ts/Common";
 
 export class SEntityFactory {
-    static newActor(entityId: DEntityId): LEntity {
+    public static newActor(entityId: DEntityId): LEntity {
         const e = REGame.world.spawnEntity(entityId);
+        this.buildActor(e);
+        return e;
+    }
+
+    public static buildActor(e: LEntity): void {
+        assert(e.behaviorIds().length === 0);
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
@@ -47,23 +54,32 @@ export class SEntityFactory {
         e.addBehavior(LActorBehavior);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
         e.addBehavior(LEaterBehavior);
         e.addBehavior(LSurvivorBehavior);
-        return e;
     }
 
-    static newMonster(enemyEntityData: DEntity): LEntity {
+    public static newMonster(enemyEntityData: DEntity): LEntity {
         const e = REGame.world.spawnEntity(enemyEntityData.id);
+        this.buildMonster(e, enemyEntityData);
+        return e;
+    }
+    
+    public static buildMonster(e: LEntity, enemyEntityData: DEntity): void {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
         e.addBehavior(LEnemyBehavior);
         this.setupDirectly_Enemy(e, enemyEntityData);
-        return e;
     }
 
-    static newItem(itemId: DItemDataId): LEntity {
+    public static newItem(itemId: DItemDataId): LEntity {
         const item = REData.itemData(itemId);
         const e = REGame.world.spawnEntity(item.entityId);
+        this.buildItem(e, itemId);
+        return e;
+    }
+    
+    public static buildItem(e: LEntity, itemId: DItemDataId): void {
+        const item = REData.itemData(itemId);
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior);
@@ -85,59 +101,66 @@ export class SEntityFactory {
 
         //e.addAbility(REData.abilities[1].id);  // TODO: Test
         this.setupDirectly_Item(e, entityData);
-        return e;
     }
 
-    /*
-    static newEquipment(itemId: number): LEntity {
-        const e = REGame.world.spawnEntity();
-        e.addBehavior(LCommonBehavior);
-        e.addBehavior(LProjectableBehavior);
-        e.addBehavior(LItemBehavior, itemId);
-        e.addBehavior(LEquipmentBehavior);
-        return e;
-    }
-    */
-
-    static newTrap(itemId: DItemDataId): LEntity {
+    public static newTrap(itemId: DItemDataId): LEntity {
         const item = REData.itemData(itemId);
         const e = REGame.world.spawnEntity(item.entityId);
+        this.buildTrap(e, itemId);
+        return e;
+    }
+    
+    public static buildTrap(e: LEntity, itemId: DItemDataId): void {
+        const item = REData.itemData(itemId);
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LItemBehavior);
         e.addBehavior(LTrapBehavior);
+    }
+
+    public static newEntryPoint(): LEntity {
+        const e = REGame.world.spawnEntity(REData.getEntity("kEntryPoint").id);
+        this.buildEntryPoint(e);
         return e;
     }
 
-    static newEntryPoint(): LEntity {
-        const e = REGame.world.spawnEntity(REData.getEntity("kEntryPoint").id);
+    public static buildEntryPoint(e: LEntity): void {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LEntryPointBehavior);
+    }
+
+    public static newExitPoint(): LEntity {
+        const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
+        this.buildExitPoint(e);
         return e;
     }
 
-    static newExitPoint(): LEntity {
-        const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
+    public static buildExitPoint(e: LEntity): void {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LExitPointBehavior);
-        return e;
     }
 
-    static newMagicBullet(ownerItem: LEntity): LEntity {
+    public static newMagicBullet(ownerItem: LEntity): LEntity {
         const e = REGame.world.spawnEntity(REData.getEntity("kSystem_MagicBullet").id);
-        //e.addBehavior(LCommonBehavior);
+        this.buildMagicBullet(e, ownerItem);
+        return e;
+    }
 
+    public static buildMagicBullet(e: LEntity, ownerItem: LEntity): void {
         e.addBehavior(LMagicBulletBehavior, ownerItem);
-        return e;
     }
 
-    static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {
+    public static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {
         const e = REGame.world.spawnEntity(entityId);
-        e.addBehavior(LProjectableBehavior);
+        this.buildOrnament(e, prefab);
         return e;
     }
 
-    static newEntity(data: DEntityCreateInfo): LEntity {
+    public static buildOrnament(e: LEntity, prefab: DPrefab): void {
+        e.addBehavior(LProjectableBehavior);
+    }
+
+    public static newEntity(data: DEntityCreateInfo): LEntity {
         const entityData = REData.entities[data.entityId];
         const prefab = REData.prefabs[entityData.prefabId];
         let entity: LEntity;

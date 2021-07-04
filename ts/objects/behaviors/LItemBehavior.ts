@@ -79,6 +79,7 @@ export class LItemBehavior extends LBehavior {
         const effect = itemData.effectSet.effect(cause);
         if (effect) {
 
+            console.log("applyEffect", effect);
 
             const effectSubject = new SEffectorFact(subject.entity(), effect, itemData.rmmzScope, SEffectIncidentType.IndirectAttack);
             const effectContext = new SEffectContext(effectSubject);

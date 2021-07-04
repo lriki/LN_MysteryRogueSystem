@@ -995,7 +995,7 @@ export class REDataManager
                 data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 break;
             case "kItem_チェンジの杖":
-                data.effectSet.setSkill(DEffectCause.Hit, REData.getSkill("kSkill_変化"));
+                data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 break;
             case "k眠りガス":
                 break;
