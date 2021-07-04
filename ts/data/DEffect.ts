@@ -40,6 +40,7 @@ export interface DPerformeSkillQualifying {
 }
 
 export interface DOtherEffectQualifying {
+    key: string,
 }
 
 export enum DRmmzEffectScope {
@@ -152,7 +153,7 @@ export interface DEffect {
      */
     parameterQualifyings: DParameterQualifying[];
     //rmmzItemEffectQualifying: DRmmzItemEffectQualifying[];
-    performeSkillQualifyings: DPerformeSkillQualifying[];
+    //performeSkillQualifyings: DPerformeSkillQualifying[];
     otherEffectQualifyings: DOtherEffectQualifying[];
 
     /**
@@ -175,7 +176,7 @@ export function DEffect_Default(): DEffect {
         rmmzAnimationId: 0,
         parameterQualifyings: [],
         //rmmzItemEffectQualifying: [],
-        performeSkillQualifyings: [],
+        //performeSkillQualifyings: [],
         otherEffectQualifyings: [],
         specialEffectQualifyings: [],
     };
@@ -190,7 +191,7 @@ export function DEffect_Clone(s: DEffect): DEffect {
         rmmzAnimationId: s.rmmzAnimationId,
         parameterQualifyings: s.parameterQualifyings.slice(),
         //rmmzItemEffectQualifying: s.rmmzItemEffectQualifying.slice(),
-        performeSkillQualifyings: s.performeSkillQualifyings.slice(),
+        //performeSkillQualifyings: s.performeSkillQualifyings.slice(),
         otherEffectQualifyings: s.otherEffectQualifyings.slice(),
         specialEffectQualifyings: s.specialEffectQualifyings.slice(),
     };

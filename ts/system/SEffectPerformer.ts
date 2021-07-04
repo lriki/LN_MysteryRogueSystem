@@ -44,11 +44,13 @@ export class SEffectPerformer {
 
         const subject = performer.getBehavior(LBattlerBehavior);
 
-
+        
         if (effect.scope.range == DEffectFieldScopeRange.Front1) {
 
             // TODO: ユーザー側モーション
             context.postSequel(performer, RESystem.sequels.attack);
+
+            console.log("performeEffect 1");
             
             // TODO: 正面3方向攻撃とかの場合はここをループする
             //for ()
@@ -62,6 +64,7 @@ export class SEffectPerformer {
                     const effectContext = new SEffectContext(effectSubject);
                     //effectContext.addEffector(effector);
 
+                    console.log("performeEffect 2");
 
                     if (UMovement.checkDiagonalWallCornerCrossing(performer, performer.dir)) {
                         // 斜め向きで壁の角と交差しているので通常攻撃は通らない

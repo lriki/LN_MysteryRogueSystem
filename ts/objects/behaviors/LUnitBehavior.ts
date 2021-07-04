@@ -315,6 +315,9 @@ export class LUnitBehavior extends LBehavior {
                 }
             }
 
+            
+            console.log("onAttackReaction");
+
             context.postCall(() => {
                 self.sendPartyEvent(DBasics.events.effectReacted, undefined);
             });

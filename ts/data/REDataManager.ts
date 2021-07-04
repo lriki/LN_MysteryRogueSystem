@@ -967,6 +967,9 @@ export class REDataManager
                 data.effect.scope.length = Infinity;
                 data.effect.scope.projectilePrefabKey = "kSystem_炎のブレス";
                 break;
+            case "kSkill_変化":
+                data.effect.otherEffectQualifyings.push({key: "kEffect_変化"});
+                break;
         }
     }
     
@@ -986,13 +989,14 @@ export class REDataManager
                 });
                 data.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(data.effectSet.mainEffect()));
                 break;
-
             case "kフレイムリーフ":
                 data.effectSet.setEffect(DEffectCause.Hit, data.effectSet.mainEffect());
                 //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
                 data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 break;
-                
+            case "kItem_チェンジの杖":
+                data.effectSet.setSkill(DEffectCause.Hit, REData.getSkill("kSkill_変化"));
+                break;
             case "k眠りガス":
                 break;
         }
