@@ -1,7 +1,7 @@
 //=============================================================================
 // LN_RoguelikeEngine.js
 // ----------------------------------------------------------------------------
-// Copyright (c) 2020 lriki
+// Copyright (c) 2021 lriki
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 // ----------------------------------------------------------------------------
@@ -10,7 +10,7 @@
 //=============================================================================
 
 /*:ja
- * @plugindesc LN_RoguelikeEngine v0.0.1
+ * @plugindesc LN_RoguelikeEngine v0.1.0
  * @author lriki
  *
  * @help test.
