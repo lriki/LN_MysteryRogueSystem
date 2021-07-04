@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "MoveDiagonal_CollideWalls"
+                "-t", "Items.Staff.Knockback"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

@@ -129,7 +129,8 @@ export class LWorld
      * 出現させるには transfarEntity() を呼び出す必要がある。
      */
     spawnEntity(entityDataId: DEntityId): LEntity {
-        const entity = new LEntity(entityDataId);
+        const entity = new LEntity();
+        entity.setup(entityDataId);
         this._registerObject(entity);
         return entity;
     }

@@ -199,6 +199,39 @@ export class SEntityFactory {
         return entity;
     }
 
+    public static buildEntity(entity: LEntity) {
+        const dataId = entity.dataId();
+        assert(dataId > 0);
+        const entityData = REData.entities[dataId];
+        const prefab = REData.prefabs[entityData.prefabId];
+        
+        if (prefab.isEnemyKind()) {
+            const entityId = REData.monsters[prefab.dataId];
+            if (entityId)
+                this.buildMonster(entity, REData.entities[entityId]);
+            else
+                throw new Error("Invalid enemy key: " + prefab.key);
+        }
+        else if (prefab.isTrapKind()) {
+            this.buildTrap(entity, prefab.dataId);
+        }
+        else if (prefab.isItemKind()) {
+            this.buildItem(entity, prefab.dataId);
+        }
+        else if (prefab.isEntryPoint()) {
+            this.buildEntryPoint(entity);
+        }
+        else if (prefab.isExitPoint()) {
+            this.buildExitPoint(entity);
+        }
+        else if (prefab.dataSource = DPrefabDataSource.Ornament) {
+            this.buildOrnament(entity, prefab);
+        }
+        else {
+            throw new Error("Not implemented.");
+        }
+    }
+
     public static spawnTroopAndMembers(troop: DTroop, mx: number, my: number, stateIds: DStateId[]): void {
         const party = REGame.world.newParty();
 

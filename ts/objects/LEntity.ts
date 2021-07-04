@@ -25,6 +25,7 @@ import { BlockLayerKind } from "./LBlockLayer";
 import { DEntity, DEntityId, DEntityNamePlate } from "ts/data/DEntity";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 
 enum BlockLayer
 {
@@ -92,7 +93,7 @@ enum BlockLayer
  */
 export class LEntity extends LObject
 {
-    private _entityDataId: DEntityId;
+    private _entityDataId: DEntityId = 0;
 
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
 
@@ -100,14 +101,28 @@ export class LEntity extends LObject
     
     //private _parentIsMap = false;
 
-    public constructor(entityDataId: DEntityId) {
+    public constructor() {
         super(LObjectType.Entity);
+    }
+
+    // TODO: setupInstance にまとめたいかも
+    public setup(entityDataId: DEntityId): void {
         this._entityDataId = entityDataId;
+    }
+
+    public setupInstance(entityDataId: DEntityId): void {
+        this.clearInstance();
+        this._entityDataId = entityDataId;
+        SEntityFactory.buildEntity(this);
     }
 
     //----------------------------------------
     // Object Reference Management
     
+    public dataId(): DEntityId {
+        return this._entityDataId;
+    }
+
     public data(): DEntity {
         return REData.entities[this._entityDataId];
     }
@@ -273,11 +288,13 @@ export class LEntity extends LObject
         }
         REGame.scheduler.invalidateEntity(this);
 
+        this.clearInstance();
+    }
 
+    private clearInstance(): void {
         this.removeAllBehaviors();
+        //this.removeAllAbilities();    // TODO: assert するのでコメントアウト
         this.removeAllStates();
-
-
     }
 
     protected onRemoveChild(obj: LObject): void {

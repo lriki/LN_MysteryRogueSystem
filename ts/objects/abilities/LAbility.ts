@@ -96,4 +96,6 @@ export class LAbility extends LObject {
             b.destroy();
         });
     }
+    
+    onRemoveChild(entity: LEntity): void {}
 }
