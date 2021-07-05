@@ -988,6 +988,7 @@ export class REDataManager
                 data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 break;
             case "kItem_チェンジの杖":
+                //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)
@@ -997,7 +998,12 @@ export class REDataManager
                     もし炎ブレススキルと合わせるなら、魔法弾スキルを効果の数だけ用意することになる。
                     でも実際はそのほうがいいかもしれない。投げ当てと魔法弾で効果が変わるものもあるため。(トンネルの杖)
                     でもやっぱりほとんどの魔法弾は、投げ当てと同じ効果を発動する。そういった設定も欲しいかも。
-                    
+
+                    ある種の、elona の「銃器」みたいな考えの方がいいだろうか？
+                    杖と魔法弾、銃と弾丸。
+                    弾丸の威力に銃の性能が反映されるように、魔法弾の効果に杖の効果が反映される感じ。
+                    投げと魔法弾で異なる効果は、魔法弾に独自の Effect を持たせる。
+                    そうでなければ、魔法弾は「自分を射出したEntity(杖) の Cause.Hit の効果を発動する」とか。
                 */
                 break;
             case "k眠りガス":
