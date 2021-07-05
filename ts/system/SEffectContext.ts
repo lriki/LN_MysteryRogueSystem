@@ -327,11 +327,13 @@ export class SEffectContext {
             
             result.showResultMessages(commandContext, target);
 
-            const battler = target.getBehavior(LBattlerBehavior);
-            if (battler.isDead()) {
-                deadCount++;
-                if (battler instanceof LEnemyBehavior) {
-                    totalExp += battler.exp();
+            const battler = target.findBehavior(LBattlerBehavior);
+            if (battler) {  // apply() で changeInstance() することがあるので、getBehavior ではなく findBehavior でチェック
+                if (battler.isDead()) {
+                    deadCount++;
+                    if (battler instanceof LEnemyBehavior) {
+                        totalExp += battler.exp();
+                    }
                 }
             }
         }
@@ -380,7 +382,7 @@ export class SEffectContext {
                     this.applyItemEffect(targetBattlerBehavior, effect, result);
                 }
                 for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
-                    this.applyOtherEffect(targetBattlerBehavior, effect, result);
+                    this.applyOtherEffect(target, targetBattlerBehavior, effect, result);
                 }
                 this.applyItemUserEffect(targetBattlerBehavior);
             }
@@ -636,9 +638,10 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.applyItemEffect
-    public applyOtherEffect(target: LBattlerBehavior, effect: DOtherEffectQualifying, result: LEffectResult): void {
+    public applyOtherEffect(targetEntity: LEntity, target: LBattlerBehavior, effect: DOtherEffectQualifying, result: LEffectResult): void {
         switch (effect.key) {
             case "kEffect_変化":
+                targetEntity.setupInstance(REData.getEntity("kキュアリーフ").id);
                 console.log("変化ーーー");
                 break;
             default:

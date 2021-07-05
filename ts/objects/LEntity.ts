@@ -114,6 +114,11 @@ export class LEntity extends LObject
         this.clearInstance();
         this._entityDataId = entityDataId;
         SEntityFactory.buildEntity(this);
+
+        // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
+        if (this.floorId.equals(REGame.map.floorId())) {
+            RESystem.integration.onEntityReEnterMap(this);
+        }
     }
 
     //----------------------------------------
@@ -244,7 +249,7 @@ export class LEntity extends LObject
      * クローンは特定の親に属していない状態となるため、このあと直ちにマップ上への配置やインベントリへの追加などを行うこと。
      * そうしなければ GC により削除される。
      */
-     public clone(): LEntity {
+    public clone(): LEntity {
         const entity = REGame.world.spawnEntity(this._entityDataId);
         entity._partyId = this._partyId;
         entity._name = this._name;

@@ -132,6 +132,11 @@ export class RMMZIntegration extends SIntegration {
         entity.rmmzEventId = 0;
     }
 
+    onEntityReEnterMap(entity: LEntity): void {
+        this.onEntityLeavedMap(entity);
+        this.onEntityEnteredMap(entity);
+    }
+
     onSetLandExitResult(result: LandExitResult): void {
         $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(result / 100));
     }

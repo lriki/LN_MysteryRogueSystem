@@ -39,5 +39,7 @@ export abstract class SIntegration {
     /** Entity が Map から離れたとき。 */
     abstract onEntityLeavedMap(entity: LEntity): void;
 
+    abstract onEntityReEnterMap(entity: LEntity): void;
+
     abstract onSetLandExitResult(result: LandExitResult): void;
 }

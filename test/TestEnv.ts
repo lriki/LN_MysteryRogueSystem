@@ -238,6 +238,10 @@ export class TestEnvIntegration extends SIntegration {
         // Visual 表示は伴わない
     }
     
+    onEntityReEnterMap(entity: LEntity): void {
+        // Visual 表示は伴わない
+    }
+
     onSetLandExitResult(result: LandExitResult): void {
     }
 }
