@@ -17,6 +17,13 @@ export class DSkill {
     /** Cost */
     paramCosts: DParameterId[];
 
+    /**
+     * エディタで指定される Scope.
+     * 
+     * この情報は実際の効果範囲を示すものではなく、AIなどで使用する参考情報となる。
+     * つまり、効果の実態がダメージなのか回復なのか、や、投げて使うのか食べ使うのか、といった
+     * 実際の振る舞いは関係なしに、「普通に使うときは敵味方どちらを対象とするか？」を指定する。
+     */
     rmmzEffectScope: DRmmzEffectScope;
 
     //effectSet: DEffectSet;
