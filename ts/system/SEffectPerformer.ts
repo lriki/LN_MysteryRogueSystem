@@ -1,5 +1,5 @@
 import { DBasics } from "ts/data/DBasics";
-import { DEffect, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEmittor, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
@@ -34,7 +34,7 @@ export class SEffectPerformer {
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
 
-        const effect = skill.effect();
+        const effect = skill.emittor();
         if (effect) {
             this.performeEffect(context, performer, effect, undefined);
         }
@@ -47,7 +47,7 @@ export class SEffectPerformer {
      * @param effect 
      * @param emittor 杖など
      */
-    public performeEffect(context: SCommandContext, performer: LEntity, effect: DEffect, emittor: DItem | undefined): void {
+    public performeEffect(context: SCommandContext, performer: LEntity, effect: DEmittor, emittor: DItem | undefined): void {
 
         const subject = performer.getBehavior(LBattlerBehavior);
 
@@ -77,7 +77,7 @@ export class SEffectPerformer {
                         // 斜め向きで壁の角と交差しているので通常攻撃は通らない
                     }
                     else {
-                        const rmmzAnimationId = (effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : effect.rmmzAnimationId;
+                        const rmmzAnimationId = (effect.effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : effect.effect.rmmzAnimationId;
                         if (rmmzAnimationId > 0) {
                             context.postAnimation(target, rmmzAnimationId, true);
                         }

@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DAction, DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
-import { DEffectId } from "./DEffect";
+import { DEmittorId } from "./DEffect";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
@@ -20,7 +20,7 @@ export interface DEntityNamePlate {
 
 export interface DReaction {
     actionId: DActionId;
-    emittingEffect: DEffectId;
+    emittingEffect: DEmittorId;
 }
 
 /**
@@ -86,7 +86,7 @@ export class DEntity {
         return this.enemy;
     }
 
-    public addReaction(actionId: DActionId, effectId: DEffectId): void {
+    public addReaction(actionId: DActionId, effectId: DEmittorId): void {
         if (!this.reactions.find(x => x.actionId == actionId && x.emittingEffect == effectId)) {
             this.reactions.push({ actionId: actionId, emittingEffect: effectId });
         }

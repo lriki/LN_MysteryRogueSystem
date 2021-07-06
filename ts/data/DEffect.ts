@@ -116,13 +116,87 @@ export interface DEffectFieldScope {
     projectilePrefabKey: string,
 }
 
-export type DEffectId = number;
+export type DEmittorId = number;
+
+export class DEffect {
+
+    /**
+     * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
+     * 前方3方向など複数攻撃対象がいる場合は個別にクリティカルが発生することになる。
+     * 攻撃の発生元での会心判定は Action として行うこと。
+     * 
+     * IDataSkill.damage.critical
+     */
+     critical: boolean;
+
+     /**
+      * IDataSkill.successRate
+      * IDataItem.successRate
+      * 整数値。0~100
+      */
+     successRate: number;
+ 
+     hitType: DEffectHitType;
+ 
+     /**
+      * ターゲット側アニメーション。
+      * なお、ユーザー側アニメーションは Effect ではなく Item や Skill 側に付く点に注意。
+      * Item が複数の Effect を持つときでも、ユーザー側は Item 自体に対応する見た目の動作をとる。
+      */
+     rmmzAnimationId: number;
+ 
+     /**
+      * IDataSkill.damage
+      * IDataItem.damage
+      */
+     parameterQualifyings: DParameterQualifying[];
+     //rmmzItemEffectQualifying: DRmmzItemEffectQualifying[];
+     //performeSkillQualifyings: DPerformeSkillQualifying[];
+     otherEffectQualifyings: DOtherEffectQualifying[];
+ 
+     /**
+      * IDataSkill.effects
+      * IDataItem.effects
+      */
+     specialEffectQualifyings: IDataEffect[];
+ 
+    constructor() {
+        //this.id = id;
+        //this.scope = {
+        //    area: DEffectFieldScopeArea.Room,
+        //    range: DEffectFieldScopeRange.Front1,
+        //    length: -1,
+        //    projectilePrefabKey: "" };
+        this.critical = false;
+        this.successRate = 100;
+        this.hitType = DEffectHitType.Certain;
+        this.rmmzAnimationId = 0;
+        this.parameterQualifyings = [];
+        //rmmzItemEffectQualifying = [];
+        //performeSkillQualifyings = [];
+        this.otherEffectQualifyings = [];
+        this.specialEffectQualifyings = [];
+    }
+ 
+    public copyFrom(src: DEffect): void {
+        //this.scope = { ...src.scope };
+        this.critical = src.critical;
+        this.successRate = src.successRate;
+        this.hitType = src.hitType;
+        this.rmmzAnimationId = src.rmmzAnimationId;
+        this.parameterQualifyings = src.parameterQualifyings.slice();
+        //this.rmmzItemEffectQualifying = src.rmmzItemEffectQualifying.slice();
+        //this.performeSkillQualifyings = src.performeSkillQualifyings.slice();
+        this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
+        this.specialEffectQualifyings = src.specialEffectQualifyings.slice();
+    }
+}
 
 /**
  * RMMZ の Skill と Item の共通パラメータ
  */
-export class DEffect {
-    id: DEffectId;
+export class DEmittor {
+    id: DEmittorId;
 
     
     /**
@@ -148,76 +222,23 @@ export class DEffect {
      * SkillやItemは主に Effect 発動の前段となる、発動条件を定義するために主に使う。あとは発動時メッセージなど。Effect の入れ物と考えたほうがいいかも。
      */
     scope: DEffectFieldScope;
+
+    effect: DEffect;
     
-    /**
-     * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
-     * 前方3方向など複数攻撃対象がいる場合は個別にクリティカルが発生することになる。
-     * 攻撃の発生元での会心判定は Action として行うこと。
-     * 
-     * IDataSkill.damage.critical
-     */
-    critical: boolean;
-
-    /**
-     * IDataSkill.successRate
-     * IDataItem.successRate
-     * 整数値。0~100
-     */
-    successRate: number;
-
-    hitType: DEffectHitType;
-
-    /**
-     * ターゲット側アニメーション。
-     * なお、ユーザー側アニメーションは Effect ではなく Item や Skill 側に付く点に注意。
-     * Item が複数の Effect を持つときでも、ユーザー側は Item 自体に対応する見た目の動作をとる。
-     */
-    rmmzAnimationId: number;
-
-    /**
-     * IDataSkill.damage
-     * IDataItem.damage
-     */
-    parameterQualifyings: DParameterQualifying[];
-    //rmmzItemEffectQualifying: DRmmzItemEffectQualifying[];
-    //performeSkillQualifyings: DPerformeSkillQualifying[];
-    otherEffectQualifyings: DOtherEffectQualifying[];
-
-    /**
-     * IDataSkill.effects
-     * IDataItem.effects
-     */
-    specialEffectQualifyings: IDataEffect[];
-
-    constructor(id: DEffectId) {
+    constructor(id: DEmittorId) {
         this.id = id;
         this.scope = {
-            area: DEffectFieldScopeArea.Room,
-            range: DEffectFieldScopeRange.Front1,
-            length: -1,
-            projectilePrefabKey: "" };
-        this.critical = false;
-        this.successRate = 100;
-        this.hitType = DEffectHitType.Certain;
-        this.rmmzAnimationId = 0;
-        this.parameterQualifyings = [];
-        //rmmzItemEffectQualifying = [];
-        //performeSkillQualifyings = [];
-        this.otherEffectQualifyings = [];
-        this.specialEffectQualifyings = [];
+           area: DEffectFieldScopeArea.Room,
+           range: DEffectFieldScopeRange.Front1,
+           length: -1,
+           projectilePrefabKey: ""
+        };
+        this.effect = new DEffect();
     }
-
-    public copyFrom(src: DEffect): void {
+    
+    public copyFrom(src: DEmittor): void {
         this.scope = { ...src.scope };
-        this.critical = src.critical;
-        this.successRate = src.successRate;
-        this.hitType = src.hitType;
-        this.rmmzAnimationId = src.rmmzAnimationId;
-        this.parameterQualifyings = src.parameterQualifyings.slice();
-        //this.rmmzItemEffectQualifying = src.rmmzItemEffectQualifying.slice();
-        //this.performeSkillQualifyings = src.performeSkillQualifyings.slice();
-        this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
-        this.specialEffectQualifyings = src.specialEffectQualifyings.slice();
+        this.effect.copyFrom(src.effect);
     }
 }
 
@@ -235,10 +256,10 @@ export enum DEffectCause {
 }
 
 export class DEffectSet {
-    private _effects: (DEffect | undefined)[] = [];
+    private _effects: (DEmittor | undefined)[] = [];
     private _skills: (DSkill | undefined)[] = [];
 
-    public setEffect(cause: DEffectCause, value: DEffect): void {
+    public setEffect(cause: DEffectCause, value: DEmittor): void {
         this._effects[cause] = value;
     }
 
@@ -246,13 +267,13 @@ export class DEffectSet {
         this._skills[cause] = value;
     }
 
-    public mainEffect(): DEffect {
+    public mainEffect(): DEmittor {
         const e = this._effects[DEffectCause.Affect];
         assert(e);
         return e;
     }
 
-    public effect(cause: DEffectCause): DEffect | undefined {
+    public effect(cause: DEffectCause): DEmittor | undefined {
         return this._effects[cause];
     }
 
@@ -260,13 +281,13 @@ export class DEffectSet {
         return this._skills[cause];
     }
 
-    public aquireEffect(cause: DEffectCause): DEffect {
+    public aquireEffect(cause: DEffectCause): DEmittor {
         let effect = this._effects[cause];
         if (effect) {
             return effect;
         }
         else {
-            effect = REData.newEffect();
+            effect = REData.newEmittor();
             this._effects[cause] = effect;
             return effect;
         }

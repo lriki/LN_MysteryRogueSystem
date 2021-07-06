@@ -55,7 +55,7 @@ export class LItemBehavior extends LBehavior {
         const effectPerformer = new SEffectPerformer();
         const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
         for (const reaction of reactions) {
-            const effect = REData.getEffectById(reaction.emittingEffect);
+            const effect = REData.getEmittorById(reaction.emittingEffect);
             effectPerformer.performeEffect(context, activity.subject(), effect, this.itemData());
 
             /*

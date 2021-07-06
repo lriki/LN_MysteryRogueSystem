@@ -22,7 +22,7 @@ import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
 import { REData_Parameter } from "./DParameter";
-import { DEffect, DEffectHitType, DEffectId } from "./DEffect";
+import { DEmittor, DEffectHitType, DEmittorId } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
@@ -186,7 +186,7 @@ export class REData
     static prefabs: DPrefab[] = [];
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
-    static effects: DEffect[] = [];
+    static emittors: DEmittor[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -223,7 +223,7 @@ export class REData
         //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
         this.entities = [new DEntity(0)];
-        this.effects = [new DEffect(0)];
+        this.emittors = [new DEmittor(0)];
     }
 
     static addEntityKind(name: string, prefabKind: string): number {
@@ -322,23 +322,23 @@ export class REData
 
     //--------------------
 
-    static newEffect(): DEffect {
-        const newId = this.effects.length;
-        const data = new DEffect(newId);
-        this.effects.push(data);
+    static newEmittor(): DEmittor {
+        const newId = this.emittors.length;
+        const data = new DEmittor(newId);
+        this.emittors.push(data);
         return data;
     }
 
-    static cloneEffect(src: DEffect): DEffect {
-        const newId = this.effects.length;
-        const data = new DEffect(newId);
+    static cloneEmittor(src: DEmittor): DEmittor {
+        const newId = this.emittors.length;
+        const data = new DEmittor(newId);
         data.copyFrom(src);
-        this.effects.push(data);
+        this.emittors.push(data);
         return data;
     }
     
-    static getEffectById(id: DEffectId): DEffect {
-        const d = this.effects[id];
+    static getEmittorById(id: DEmittorId): DEmittor {
+        const d = this.emittors[id];
         if (d) return d;
         throw new Error(`Effect "${id}" not found.`);
     }

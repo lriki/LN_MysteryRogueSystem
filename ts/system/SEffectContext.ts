@@ -12,7 +12,7 @@ import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
-import { DEffect, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DOtherEffectQualifying } from "ts/data/DEffect";
+import { DEmittor, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DOtherEffectQualifying } from "ts/data/DEffect";
 import { UAction } from "../usecases/UAction";
 
 
@@ -92,7 +92,7 @@ export class SEffectSubject {
 // 攻撃側
 export class SEffectorFact {
     private _subject: LEntity;
-    private _subjectEffect: DEffect;
+    private _subjectEffect: DEmittor;
     private _subjectBattlerBehavior: LBattlerBehavior | undefined;
 
     // 適用側 (攻撃側) の関係者。
@@ -109,9 +109,9 @@ export class SEffectorFact {
     private _successRate: number;       // 0~100
     private _incidentType: SEffectIncidentType;
 
-    public constructor(subject: LEntity, effect: DEffect, incidentType: SEffectIncidentType) {
+    public constructor(subject: LEntity, emittor: DEmittor, incidentType: SEffectIncidentType) {
         this._subject = subject;
-        this._subjectEffect = effect;
+        this._subjectEffect = emittor;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
         this._incidentType = incidentType;
 
@@ -124,11 +124,11 @@ export class SEffectorFact {
             this._parameterEffects[i] = undefined;
         }
 
-        this._hitType = effect.hitType;
-        this._successRate = effect.successRate;
+        this._hitType = emittor.effect.hitType;
+        this._successRate = emittor.effect.successRate;
 
         // Effect 展開
-        this._subjectEffect.parameterQualifyings.forEach(x => {
+        this._subjectEffect.effect.parameterQualifyings.forEach(x => {
             this._parameterEffects[x.parameterId] = new SParameterEffect(x);
         });
         
@@ -145,7 +145,7 @@ export class SEffectorFact {
         return this._subjectBattlerBehavior;
     }
 
-    public subjectEffect(): DEffect {
+    public subjectEffect(): DEmittor {
         return this._subjectEffect;
     }
 
@@ -222,7 +222,7 @@ export class SEffectorFact {
         const subjectBehavior = this.subjectBehavior();
         const cri = (subjectBehavior) ? subjectBehavior.xparam(DBasics.xparams.cri) : 1.0;
 
-        return this._subjectEffect.critical
+        return this._subjectEffect.effect.critical
             ? cri * (1 - target.xparam(DBasics.xparams.cev))
             : 0;
     };
@@ -369,10 +369,10 @@ export class SEffectContext {
                 }
     
                 // Effect
-                for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
+                for (const effect of this._effectorFact.subjectEffect().effect.specialEffectQualifyings) {
                     this.applyItemEffect(targetBattlerBehavior, effect, result);
                 }
-                for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
+                for (const effect of this._effectorFact.subjectEffect().effect.otherEffectQualifyings) {
                     this.applyOtherEffect(target, targetBattlerBehavior, effect, result);
                 }
                 this.applyItemUserEffect(targetBattlerBehavior);

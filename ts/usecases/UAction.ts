@@ -1,6 +1,6 @@
 import { assert, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { DEffect, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEmittor, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { LBlock } from "ts/objects/LBlock";
@@ -126,7 +126,7 @@ export class UAction {
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
         for (const action of actions) {
             const skill = REData.skills[action.skillId];
-            const effect = skill.effect();
+            const effect = skill.emittor();
             const targets = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
             if (targets.length > 0) {
                 result.push({ action: action, targets: targets });
@@ -283,7 +283,7 @@ export class UAction {
     /** skillAction の射程範囲内に、有効なターゲットが１つでも含まれているか確認する */
     public static checkEntityWithinSkillActionRange(performer: LEntity, skillAction: CandidateSkillAction): boolean {
         const skill = REData.skills[skillAction.action.skillId];
-        const effect = skill.effect();
+        const effect = skill.emittor();
         //let count = 0;
         const entities = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
         for (const target of skillAction.targets) {
