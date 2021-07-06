@@ -960,6 +960,11 @@ export class REDataManager
                 data.effect.scope.length = Infinity;
                 data.effect.scope.projectilePrefabKey = "kSystem_炎のブレス";
                 break;
+            case "kSkill_魔法弾発射_一般":
+                data.effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                data.effect.scope.length = Infinity;
+                data.effect.scope.projectilePrefabKey = "kSystem_MagicBullet";
+                break;
             case "kSkill_変化":
                 data.effect.otherEffectQualifyings.push({key: "kEffect_変化"});
                 break;
@@ -990,6 +995,7 @@ export class REDataManager
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
+                entity.addReaction(DBasics.actions.WaveActionId);
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)
                     ----------

@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DAction, DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
@@ -16,7 +17,9 @@ export interface DEntityNamePlate {
     iconIndex: number;
 }
 
-
+export interface DReaction {
+    actionId: DActionId;
+}
 
 /**
  * [2021/6/22] Database 修正について
@@ -53,6 +56,9 @@ export class DEntity {
 
     enemy: DEnemy | undefined;
 
+    /** この Entity が受け付ける Action のリスト */
+    reactions: DActionId[];
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;
@@ -60,6 +66,7 @@ export class DEntity {
         this.display = { name: "null", iconIndex: 0 };
         this.itemData = undefined;
         this.enemy = undefined;
+        this.reactions = [];
     }
     
     public actorData(): RE_Data_Actor {
@@ -75,6 +82,12 @@ export class DEntity {
     public enemyData(): DEnemy {
         assert(this.enemy);
         return this.enemy;
+    }
+
+    public addReaction(value: DActionId): void {
+        if (!this.reactions.find(x => x == value)) {
+            this.reactions.push(value);
+        }
     }
 }
 

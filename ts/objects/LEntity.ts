@@ -692,12 +692,13 @@ export class LEntity extends LObject
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
         // FIXME: 既定では拾ったり投げたりできないほうがいいかも。階段とか罠とか、間違って操作してしまう。やっぱりすべてに共通なものをここに置きたい。
-        let result: DActionId[] = [
+        let result: DActionId[] = this.data().reactions.concat(
+        [
             //DBasics.actions.ExchangeActionId,
             DBasics.actions.ThrowActionId,
             DBasics.actions.FallActionId,
             DBasics.actions.DropActionId,
-        ];
+        ]);
 
         if (this.isOnGround()) {
             // Ground Layer 上に存在していれば、拾われる可能性がある

@@ -20,7 +20,45 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test("Items.ChangeEntityInstance", () => {
+test("Items.ChangeEntityInstance.Wave", () => {
+    TestEnv.newGame();
+
+    // actor1 配置
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    actor1.dir = 6;
+    TestEnv.performFloorTransfer();
+    const inventory = actor1.getBehavior(LInventoryBehavior);
+
+    // item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_チェンジの杖").id));
+    item1._name = "item1";
+    inventory.addEntity(item1);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
+    enemy1._name = "enemy1";
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    const entityDataId = enemy1.dataId();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // item1 は [振る] ことができる
+    expect(item1.queryReactions().includes(DBasics.actions.WaveActionId)).toBe(true);
+    
+    // [振る]
+    const activity1 = SActivityFactory.newActivity(DBasics.actions.WaveActionId);
+    activity1._setup(actor1, item1);
+    RESystem.dialogContext.postActivity(activity1);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(enemy1.dataId()).not.toBe(entityDataId); // 種類が変わっていること
+});
+
+
+test("Items.ChangeEntityInstance.Throw", () => {
     TestEnv.newGame();
 
     // actor1 配置
@@ -51,7 +89,5 @@ test("Items.ChangeEntityInstance", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.dataId()).not.toBe(entityDataId);
-    //expect(enemy1.hasBehavior(LEnemyBehavior)).toBe(false);
-    //expect(enemy1.hasBehavior(LItemBehavior)).toBe(true);
+    expect(enemy1.dataId()).not.toBe(entityDataId); // 種類が変わっていること
 });
