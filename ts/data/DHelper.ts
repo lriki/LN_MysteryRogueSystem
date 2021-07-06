@@ -144,10 +144,17 @@ export class DHelpers {
             DRmmzEffectScope.Friend_All_Dead]);
     }
 
-    public static isForFriend(temScope: DRmmzEffectScope): boolean {
-        return this.isForAliveFriend(temScope) || this.isForDeadFriend(temScope);
+    public static isForFriend(itemScope: DRmmzEffectScope): boolean {
+        return this.isForAliveFriend(itemScope) || this.isForDeadFriend(itemScope);
     }
     
+    public static isSingle(itemScope: DRmmzEffectScope): boolean {
+        return this.checkItemScope(itemScope, [
+            DRmmzEffectScope.Friend_Single_Dead,
+            DRmmzEffectScope.Friend_Single_Alive,
+            DRmmzEffectScope.Opponent_Single]);
+    }
+
     static readFloorMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZFloorMetadata | undefined {
 
         let list = page.list;

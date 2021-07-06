@@ -416,6 +416,11 @@ export class REDataManager
                 skill.rmmzEffectScope = x.scope ?? DRmmzEffectScope.None;
                 skill.parseMetadata(x.meta);
 
+                if (DHelpers.isForFriend(skill.rmmzEffectScope)) {
+                //if (DHelpers.isSingle(skill.rmmzEffectScope)) {
+                    emittor.scope.range = DEffectFieldScopeRange.Performer;
+                }
+
                 this.setupDirectly_Skill(skill);
             }
         });
@@ -460,6 +465,7 @@ export class REDataManager
                 item.animationId = x.animationId;
 
                 if (DHelpers.isForFriend(item.rmmzScope)) {
+                //if (DHelpers.isSingle(item.rmmzScope)) {
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
                 }
             }

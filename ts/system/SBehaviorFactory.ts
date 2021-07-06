@@ -1,6 +1,5 @@
 import { LEntity } from "../objects/LEntity";
 import { LBehavior } from "ts/objects/behaviors/LBehavior";
-import { LStaffItemBehavior } from "ts/objects/behaviors/LStaffItemBehavior";
 import { REGame } from "ts/objects/REGame";
 import { LDebugMoveRightState } from "ts/objects/states/DebugMoveRightState";
 import { LNapStateBehavior } from "ts/objects/states/LNapStateBehavior";
@@ -41,7 +40,6 @@ export class SBehaviorFactory {
         { fullName: "LGenericRMMZStateBehavior", friendlyName: "_GenericRMMZState", create: () => new LGenericRMMZStateBehavior() },
         { fullName: "LItemBehavior", friendlyName: "_Item", create: () => new LItemBehavior() },
         { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
-        { fullName: "LStaffItemBehavior", friendlyName: "StaffItem", create: () => new LStaffItemBehavior() },
         { fullName: "LEatableBehavior", friendlyName: "Eatable", create: () => new LEatableBehavior() },
         { fullName: "LItemImitatorBehavior", friendlyName: "ItemImitator", create: () => new LItemImitatorBehavior() },
         

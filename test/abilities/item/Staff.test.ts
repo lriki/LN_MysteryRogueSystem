@@ -38,17 +38,43 @@ test("Items.Staff.Knockback", () => {
     const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-    // [振る]
-    const activity1 = SActivityFactory.newActivity(DBasics.actions.WaveActionId);
-    activity1._setup(actor1, item1);
-    dc.postActivity(activity1);
-    dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    // 振ってみる
+    {
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        
+        // [振る]
+        const activity2 = SActivityFactory.newActivity(DBasics.actions.WaveActionId);
+        activity2._setup(actor1, item1);
+        dc.postActivity(activity2);
+        dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
+        expect(enemy1.x).toBe(20);
+    }
 
-    // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
-    expect(enemy1.x).toBe(20);
+
+
+    // 投げてみる
+    {
+
+        REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        
+        // [投げる]
+        const activity1 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
+        activity1._setup(actor1, item1);
+        dc.postActivity(activity1);
+        dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+        // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
+        expect(enemy1.x).toBe(20);
+
+    }
+
 });

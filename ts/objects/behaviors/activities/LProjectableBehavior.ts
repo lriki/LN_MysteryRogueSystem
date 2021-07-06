@@ -11,7 +11,7 @@ import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } fr
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { UMovement } from "ts/usecases/UMovement";
-import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
+import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/objects/LMap";
 import { UAction } from "ts/usecases/UAction";
 import { DEmittor, DEffectCause, DRmmzEffectScope, DEffect } from "ts/data/DEffect";
@@ -121,6 +121,7 @@ export class LProjectableBehavior extends LBehavior {
             common.blowMoveCount--;
 
 
+            
 
             // 他 Unit との衝突判定
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(BlockLayerKind.Unit);
@@ -128,7 +129,10 @@ export class LProjectableBehavior extends LBehavior {
                 context.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,
                     () => {
-                        context.post(self, hitTarget, args.subject, args, onCollideAction, () => {
+                        const args2: CollideActionArgs = {
+                            dir: common.blowDirection,
+                        };
+                        context.post(self, hitTarget, args.subject, args2, onCollideAction, () => {
                             return true;
                         });
                         return true;

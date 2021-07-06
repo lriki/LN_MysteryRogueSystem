@@ -36,7 +36,7 @@ export class SEmittorPerformer {
 
         const effect = skill.emittor();
         if (effect) {
-            this.performeEffect(context, performer, effect, undefined);
+            this.performeEffect(context, performer, effect, performer.dir, undefined);
         }
     }
     
@@ -47,7 +47,7 @@ export class SEmittorPerformer {
      * @param emittor 
      * @param item 杖など
      */
-    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, item: DItem | undefined): void {
+    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, item: DItem | undefined): void {
 
         const subject = performer.getBehavior(LBattlerBehavior);
 
@@ -56,7 +56,7 @@ export class SEmittorPerformer {
 
             console.log("applyEffect", emittor);
 
-            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, performer.dir);
+            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             const effectContext = new SEffectContext(effectSubject);
     
             if (item) {
