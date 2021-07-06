@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DParameterId } from "./DParameter";
 import { DSkill } from "./DSkill";
+import { REData } from "./REData";
 
 
 
@@ -115,10 +116,14 @@ export interface DEffectFieldScope {
     projectilePrefabKey: string,
 }
 
+export type DEffectId = number;
+
 /**
  * RMMZ の Skill と Item の共通パラメータ
  */
-export interface DEffect {
+export class DEffect {
+    id: DEffectId;
+
     
     /**
      * 効果適用範囲
@@ -132,7 +137,7 @@ export interface DEffect {
      * ゾワゾワの巻物などが分かりやすいか。これは使う(読む)ことで Performer の周囲8マスに効果を発動する。Ornament は発生しない直接適用。
      * 薬草など草は、使う(飲む)ことで、Performer 自身に効果を適用する。
      * 矢は使う(撃つ)ことで、スタックを減らし投射する。
-     * 壺は、使う=入れたアイテムを消費or[押す]で詰め物を消費、と考えると抽象化しやすいかも。ユニークな効果が多いのでBehavior実装大目になるけど。
+     * 壺は、使う=入れたアイテムを消費or[押す]で詰め物を消費、と考えると抽象化しやすいかも。ユニークな効果が多いのでBehavior実装多めになるけど。
      * 
      * 本当は Item と Effect を分離してエディタで設定できる方が、実は自然なのかもしれない。新種道具とか考えると特に。
      * 
@@ -183,41 +188,39 @@ export interface DEffect {
      * IDataItem.effects
      */
     specialEffectQualifyings: IDataEffect[];
-}
 
-export function DEffect_Default(): DEffect {
-    return {
-        scope: {
+    constructor(id: DEffectId) {
+        this.id = id;
+        this.scope = {
             area: DEffectFieldScopeArea.Room,
             range: DEffectFieldScopeRange.Front1,
             length: -1,
-            projectilePrefabKey: "" },
-        critical: false,
-        successRate: 100,
-        hitType: DEffectHitType.Certain,
-        rmmzAnimationId: 0,
-        parameterQualifyings: [],
-        //rmmzItemEffectQualifying: [],
-        //performeSkillQualifyings: [],
-        otherEffectQualifyings: [],
-        specialEffectQualifyings: [],
-    };
-};
+            projectilePrefabKey: "" };
+        this.critical = false;
+        this.successRate = 100;
+        this.hitType = DEffectHitType.Certain;
+        this.rmmzAnimationId = 0;
+        this.parameterQualifyings = [];
+        //rmmzItemEffectQualifying = [];
+        //performeSkillQualifyings = [];
+        this.otherEffectQualifyings = [];
+        this.specialEffectQualifyings = [];
+    }
 
-export function DEffect_Clone(s: DEffect): DEffect {
-    return {
-        scope: { ...s.scope },
-        critical: s.critical,
-        successRate: s.successRate,
-        hitType: s.hitType,
-        rmmzAnimationId: s.rmmzAnimationId,
-        parameterQualifyings: s.parameterQualifyings.slice(),
-        //rmmzItemEffectQualifying: s.rmmzItemEffectQualifying.slice(),
-        //performeSkillQualifyings: s.performeSkillQualifyings.slice(),
-        otherEffectQualifyings: s.otherEffectQualifyings.slice(),
-        specialEffectQualifyings: s.specialEffectQualifyings.slice(),
-    };
+    public copyFrom(src: DEffect): void {
+        this.scope = { ...src.scope };
+        this.critical = src.critical;
+        this.successRate = src.successRate;
+        this.hitType = src.hitType;
+        this.rmmzAnimationId = src.rmmzAnimationId;
+        this.parameterQualifyings = src.parameterQualifyings.slice();
+        //this.rmmzItemEffectQualifying = src.rmmzItemEffectQualifying.slice();
+        //this.performeSkillQualifyings = src.performeSkillQualifyings.slice();
+        this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
+        this.specialEffectQualifyings = src.specialEffectQualifyings.slice();
+    }
 }
+
 
 /** Effect の発生要因。実際にどれを選択するかは Behavior に依る。 */
 export enum DEffectCause {
@@ -263,7 +266,7 @@ export class DEffectSet {
             return effect;
         }
         else {
-            effect = DEffect_Default();
+            effect = REData.newEffect();
             this._effects[cause] = effect;
             return effect;
         }

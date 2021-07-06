@@ -33,7 +33,7 @@ export class SEffectPerformer {
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
 
-        const effect = skill.effect;
+        const effect = skill.effect();
         if (effect) {
             this.performeEffect(context, performer, effect, skill.rmmzEffectScope);
         }

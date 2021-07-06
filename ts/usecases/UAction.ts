@@ -126,7 +126,7 @@ export class UAction {
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
         for (const action of actions) {
             const skill = REData.skills[action.skillId];
-            const effect = skill.effect;
+            const effect = skill.effect();
             const targets = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
             if (targets.length > 0) {
                 result.push({ action: action, targets: targets });
@@ -283,7 +283,7 @@ export class UAction {
     /** skillAction の射程範囲内に、有効なターゲットが１つでも含まれているか確認する */
     public static checkEntityWithinSkillActionRange(performer: LEntity, skillAction: CandidateSkillAction): boolean {
         const skill = REData.skills[skillAction.action.skillId];
-        const effect = skill.effect;
+        const effect = skill.effect();
         //let count = 0;
         const entities = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
         for (const target of skillAction.targets) {

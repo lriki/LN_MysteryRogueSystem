@@ -17,7 +17,7 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
-import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DEffect_Clone, DEffect_Default, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange } from './DEffect';
+import { DEffect, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
@@ -395,15 +395,13 @@ export class REDataManager
                 //const skill = REData.skills[id];
                 skill.paramCosts[DBasics.params.mp] = x.mpCost;
                 skill.paramCosts[DBasics.params.tp] = x.tpCost;
-                
-                const effect: DEffect = {
-                    ...DEffect_Default(),
-                    critical: false,
-                    successRate: x.successRate,
-                    hitType: x.hitType,
-                    rmmzAnimationId: x.animationId,
-                    specialEffectQualifyings: x.effects,
-                }
+
+                const effect = REData.newEffect();
+                effect.critical = false;
+                effect.successRate = x.successRate;
+                effect.hitType = x.hitType;
+                effect.rmmzAnimationId = x.animationId;
+                effect.specialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
@@ -414,7 +412,7 @@ export class REDataManager
                 skill.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
                 skill.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
                 */
-                skill.effect = effect;
+                skill.effectId = effect.id;
                 skill.rmmzEffectScope = x.scope ?? DRmmzEffectScope.None;
                 skill.parseMetadata(x.meta);
 
@@ -431,13 +429,11 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
 
-                const effect: DEffect = {
-                    ...DEffect_Default(),
-                    critical: false,
-                    successRate: x.successRate,
-                    hitType: x.hitType,
-                    specialEffectQualifyings: x.effects,
-                }
+                const effect = REData.newEffect();
+                effect.critical = false;
+                effect.successRate = x.successRate;
+                effect.hitType = x.hitType;
+                effect.specialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
@@ -954,19 +950,20 @@ export class REDataManager
     }
 
     static setupDirectly_Skill(data: DSkill) {
+        const effect = data.effect();
         switch (data.key) {
             case "kSkill_炎のブレス_直線":
-                data.effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
-                data.effect.scope.length = Infinity;
-                data.effect.scope.projectilePrefabKey = "kSystem_炎のブレス";
+                effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                effect.scope.length = Infinity;
+                effect.scope.projectilePrefabKey = "kSystem_炎のブレス";
                 break;
             case "kSkill_魔法弾発射_一般":
-                data.effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
-                data.effect.scope.length = Infinity;
-                data.effect.scope.projectilePrefabKey = "kSystem_MagicBullet";
+                effect.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                effect.scope.length = Infinity;
+                effect.scope.projectilePrefabKey = "kSystem_MagicBullet";
                 break;
             case "kSkill_変化":
-                data.effect.otherEffectQualifyings.push({key: "kEffect_変化"});
+                effect.otherEffectQualifyings.push({key: "kEffect_変化"});
                 break;
         }
     }
@@ -985,7 +982,7 @@ export class REDataManager
                     applyType: DParameterEffectApplyType.Recover,
                     variance: 0,
                 });
-                data.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(data.effectSet.mainEffect()));
+                data.effectSet.setEffect(DEffectCause.Hit, REData.cloneEffect(data.effectSet.mainEffect()));
                 break;
             case "kフレイムリーフ":
                 data.effectSet.setEffect(DEffectCause.Hit, data.effectSet.mainEffect());
@@ -994,7 +991,7 @@ export class REDataManager
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
-                data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
+                data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect());
                 entity.addReaction(DBasics.actions.WaveActionId);
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)

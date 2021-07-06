@@ -1,4 +1,4 @@
-import { DEffect, DRmmzEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
+import { DEffect, DRmmzEffectScope, DEffectSet } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DEquipmentPartId } from "./DEquipmentPart";

@@ -22,7 +22,7 @@ import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
 import { REData_Parameter } from "./DParameter";
-import { DEffectHitType } from "./DEffect";
+import { DEffect, DEffectHitType, DEffectId } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
@@ -186,6 +186,7 @@ export class REData
     static prefabs: DPrefab[] = [];
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
+    static effects: DEffect[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -222,6 +223,7 @@ export class REData
         //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
         this.entities = [new DEntity(0)];
+        this.effects = [new DEffect(0)];
     }
 
     static addEntityKind(name: string, prefabKind: string): number {
@@ -316,6 +318,29 @@ export class REData
         const d = this.findEntity(pattern);
         if (d) return d;
         throw new Error(`Entity "${pattern}" not found.`);
+    }
+
+    //--------------------
+
+    static newEffect(): DEffect {
+        const newId = this.effects.length;
+        const data = new DEffect(newId);
+        this.effects.push(data);
+        return data;
+    }
+
+    static cloneEffect(src: DEffect): DEffect {
+        const newId = this.effects.length;
+        const data = new DEffect(newId);
+        data.copyFrom(src);
+        this.effects.push(data);
+        return data;
+    }
+    
+    static getEffectById(id: DEffectId): DEffect {
+        const d = this.effects[id];
+        if (d) return d;
+        throw new Error(`Effect "${id}" not found.`);
     }
 
     //--------------------

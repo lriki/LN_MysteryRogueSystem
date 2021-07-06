@@ -1,5 +1,6 @@
-import { DEffect, DRmmzEffectScope, DEffectSet, DEffect_Default } from "./DEffect";
+import { DEffect, DRmmzEffectScope, DEffectSet, DEffectId } from "./DEffect";
 import { DParameterId } from "./DParameter";
+import { REData } from "./REData";
 
 export type DSkillDataId = number;
 
@@ -37,7 +38,7 @@ export class DSkill {
     // 例えば Scope。ドラゴン草の炎ブレスは貫通Projectileを生成するが、
     // こういった「どの範囲に効果を出すか？Projectileとして効果を放出するか？」は Scope の一環として
     // 指定する方が (絶対かはわからないけど) どちらかと言えば自然だろう。
-    effect: DEffect;
+    effectId: DEffectId;
 
     constructor(id: DSkillDataId) {
 
@@ -48,13 +49,17 @@ export class DSkill {
         this.paramCosts = [];
         this.rmmzEffectScope = DRmmzEffectScope.None;
         //effectSet: new DEffectSet(),
-        this.effect = DEffect_Default();
+        this.effectId = 0;
     }
 
     public parseMetadata(meta: any | undefined): void {
         if (!meta) return;
         this.key = meta["RE-Key"];
         this.kind = meta["RE-Kind"];
+    }
+
+    public effect(): DEffect {
+        return REData.getEffectById(this.effectId);
     }
 
     
