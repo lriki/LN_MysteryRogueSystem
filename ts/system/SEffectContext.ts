@@ -107,17 +107,12 @@ export class SEffectorFact {
     private _parameterEffects: (SParameterEffect | undefined)[];  // Index of DParameterDataId
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
-
-    // 実際の攻撃対象選択ではなく、戦闘不能を有効対象とするか、などを判断するために参照する。
-    private _rmmzEffectScope: DRmmzEffectScope = 0;
-
     private _incidentType: SEffectIncidentType;
 
-    public constructor(subject: LEntity, effect: DEffect, rmmzEffectScope: DRmmzEffectScope, incidentType: SEffectIncidentType) {
+    public constructor(subject: LEntity, effect: DEffect, incidentType: SEffectIncidentType) {
         this._subject = subject;
         this._subjectEffect = effect;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
-        this._rmmzEffectScope = rmmzEffectScope;
         this._incidentType = incidentType;
 
         // subject の現在値を初期パラメータとする。
@@ -152,10 +147,6 @@ export class SEffectorFact {
 
     public subjectEffect(): DEffect {
         return this._subjectEffect;
-    }
-
-    public rmmzEffectScope(): DRmmzEffectScope {
-        return this._rmmzEffectScope;
     }
 
     public incidentType(): SEffectIncidentType {
@@ -438,7 +429,8 @@ export class SEffectContext {
     };
 
     // Game_Action.prototype.testLifeAndDeath
-    private testLifeAndDeath(targetBattlerBehavior: LBattlerBehavior) {
+    private testLifeAndDeath(targetBattlerBehavior: LBattlerBehavior): boolean {
+        /*
         const itemScope = this._effectorFact.rmmzEffectScope()
         if (UAction.isForOpponent(itemScope) || UAction.isForAliveFriend(itemScope)) {
             return targetBattlerBehavior.isAlive();
@@ -447,6 +439,8 @@ export class SEffectContext {
         } else {
             return true;
         }
+        */
+       return true;
     }
 
     // Game_Action.prototype.makeDamageValue
@@ -642,6 +636,7 @@ export class SEffectContext {
         switch (effect.key) {
             case "kEffect_変化":
                 targetEntity.setupInstance(REData.getEntity("kキュアリーフ").id);
+                //targetEntity.setupInstance(REData.getEntity("kEnemy_ドラゴン").id);
                 console.log("変化ーーー");
                 break;
             default:

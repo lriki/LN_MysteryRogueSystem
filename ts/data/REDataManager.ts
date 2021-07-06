@@ -992,7 +992,7 @@ export class REDataManager
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect());
-                entity.addReaction(DBasics.actions.WaveActionId);
+                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").effect().id);
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)
                     ----------

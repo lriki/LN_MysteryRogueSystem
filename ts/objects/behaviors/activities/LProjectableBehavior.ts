@@ -56,13 +56,13 @@ export class LProjectableBehavior extends LBehavior {
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
     
-    public static startMoveAsSkillEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, effect: DEffect): void {
+    public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effect: DEffect): void {
         const common = entity.findBehavior(LProjectableBehavior);
         assert(common);
 
         common._effect = effect;
         common.blowDirection = dir;
-        common.blowMoveCount = effect.scope.length;
+        common.blowMoveCount = length;
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -165,10 +165,9 @@ export class LProjectableBehavior extends LBehavior {
             context.postDestroy(self);
             //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
             
-            const rmmzScope = DRmmzEffectScope.Opponent_Single; // itemData.rmmzScope,
             const animationId = 1;  // TODO:
 
-            const effectSubject = new SEffectorFact(subject.entity(), this._effect, rmmzScope, SEffectIncidentType.IndirectAttack);
+            const effectSubject = new SEffectorFact(subject.entity(), this._effect, SEffectIncidentType.IndirectAttack);
             const effectContext = new SEffectContext(effectSubject);
     
             context.postAnimation(target, animationId, true);

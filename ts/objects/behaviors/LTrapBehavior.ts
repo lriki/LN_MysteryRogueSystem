@@ -80,7 +80,7 @@ export class LTrapBehavior extends LBehavior {
         const effect = itemData.effectSet.effect(DEffectCause.Affect);
 
         if (effect) {
-            const subject = new SEffectorFact(e.self, effect, itemData.rmmzScope, SEffectIncidentType.IndirectAttack);
+            const subject = new SEffectorFact(e.self, effect, SEffectIncidentType.IndirectAttack);
             const effectContext = new SEffectContext(subject);
 
             //console.log(result);

@@ -692,7 +692,7 @@ export class LEntity extends LObject
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
         // FIXME: 既定では拾ったり投げたりできないほうがいいかも。階段とか罠とか、間違って操作してしまう。やっぱりすべてに共通なものをここに置きたい。
-        let result: DActionId[] = this.data().reactions.concat(
+        let result: DActionId[] = this.data().reactions.map(x => x.actionId).concat(
         [
             //DBasics.actions.ExchangeActionId,
             DBasics.actions.ThrowActionId,
@@ -841,6 +841,9 @@ export class LEntity extends LObject
         return this._callBehaviorIterationHelper(x => x.onActivity(this, context, activity));
     }
 
+    _sendActivityReaction(context: SCommandContext, activity: LActivity): REResponse {
+        return this._callBehaviorIterationHelper(x => x.onActivityReaction(this, context, activity));
+    }
     
 
     makeSaveContents(): any {

@@ -299,7 +299,7 @@ export abstract class LBehavior extends LObject {
 
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
-    //onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
     onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): REResponse { return REResponse.Pass; }
 
 
@@ -327,25 +327,3 @@ export abstract class LBehavior extends LObject {
 
     //this.parentAs(LState)?.removeThisState();
 }
-
-/*
-例：聖域の巻物を拾うとき
-----------
-### player.onPreAction
-Player に Attach されている Behavior の onPreAction.
-自分の状態を元に行動の可否を決める。
-もし Player が手封じ状態であれば実行不能。メッセージを表示して Cancel。ターンを消費。
-
-### item.onPreReaction
-Item に Attach されている Behavior の onPreReaction.
-もし床に張り付いている状態であれば実行不能。メッセージを表示して Cancel。ターンを消費。
-拾うときにアイテムをモンスター化したいとかもここ。
-
-### player.onAction
-ItemEntity を Map から取り除き、インベントリに追加する。
-持ち物が一杯だった場合はメッセージを表示して Cancel。ターンを消費。
-
-
-
-
-*/

@@ -151,7 +151,15 @@ export class SCommandContext
     public postActivity(activity: LActivity) {
         const m1 = () => {
             Log.doCommand("Activity");
-            return activity.subject()._sendActivity(this, activity);
+            const r = activity.subject()._sendActivity(this, activity);
+            if (r != REResponse.Canceled) {
+                if (activity.hasObject()) {
+                    this.postCall(() => {
+                        activity.object()._sendActivityReaction(this, activity);
+                    });
+                }
+            }
+            return r;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Activity", m1));
 

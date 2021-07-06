@@ -1,5 +1,5 @@
 import { DBasics } from "ts/data/DBasics";
-import { DEffect, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEffect, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
@@ -14,6 +14,7 @@ import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "./SEffectContext";
 import { SEntityFactory } from "./SEntityFactory";
 import { UMovement } from "../usecases/UMovement";
+import { DItem } from "ts/data/DItem";
 
 
 export class SEffectPerformer {
@@ -35,11 +36,18 @@ export class SEffectPerformer {
 
         const effect = skill.effect();
         if (effect) {
-            this.performeEffect(context, performer, effect, skill.rmmzEffectScope);
+            this.performeEffect(context, performer, effect, undefined);
         }
     }
     
-    public performeEffect(context: SCommandContext, performer: LEntity, effect: DEffect, rmmzEffectScope: DRmmzEffectScope): void {
+    /**
+     * 
+     * @param context 
+     * @param performer 
+     * @param effect 
+     * @param emittor 杖など
+     */
+    public performeEffect(context: SCommandContext, performer: LEntity, effect: DEffect, emittor: DItem | undefined): void {
 
         const subject = performer.getBehavior(LBattlerBehavior);
 
@@ -59,7 +67,7 @@ export class SEffectPerformer {
                 const block = REGame.map.block(front.x, front.y);
                 const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
                 if (target) {
-                    const effectSubject = new SEffectorFact(performer, effect, rmmzEffectScope, SEffectIncidentType.DirectAttack);
+                    const effectSubject = new SEffectorFact(performer, effect, SEffectIncidentType.DirectAttack);
                     const effectContext = new SEffectContext(effectSubject);
                     //effectContext.addEffector(effector);
 
@@ -90,8 +98,14 @@ export class SEffectPerformer {
             bullet.dir = performer.dir;
 
             //context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
+
+
+            const emittorEffect = emittor?.effectSet.effect(DEffectCause.Hit);
+
+            const actualEffect = emittorEffect ?? effect;
+
             
-            LProjectableBehavior.startMoveAsSkillEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, effect);
+            LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, effect.scope.length, actualEffect);
             //throw new Error("Not implemented.");
 
 

@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 import { DEffectCause } from "ts/data/DEffect";
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
@@ -6,6 +7,9 @@ import { REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
+import { SEffectPerformer } from "ts/system/SEffectPerformer";
+import { LActivity } from "../activities/LActivity";
+import { LWaveActivity } from "../activities/LWaveActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onCollideAction, onEatReaction } from "./LBehavior";
@@ -43,8 +47,33 @@ export class LItemBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
 
+    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+        if (activity instanceof LWaveActivity) {
+            console.log("aa LWaveActivity");
+        }
 
+        const effectPerformer = new SEffectPerformer();
+        const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
+        for (const reaction of reactions) {
+            const effect = REData.getEffectById(reaction.emittingEffect);
+            effectPerformer.performeEffect(context, activity.subject(), effect, this.itemData());
+
+            /*
+            const effectSubject = new SEffectorFact(subject.entity(), effect, itemData.rmmzScope, SEffectIncidentType.IndirectAttack);
+            const effectContext = new SEffectContext(effectSubject);
     
+            context.postAnimation(target, itemData.animationId, true);
+    
+            // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
+            context.postCall(() => {
+                effectContext.applyWithWorth(context, [target]);
+            });
+            */
+        }
+
+        return REResponse.Pass;
+    }
+
     [onEatReaction](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Eat);
@@ -81,7 +110,7 @@ export class LItemBehavior extends LBehavior {
 
             console.log("applyEffect", effect);
 
-            const effectSubject = new SEffectorFact(subject.entity(), effect, itemData.rmmzScope, SEffectIncidentType.IndirectAttack);
+            const effectSubject = new SEffectorFact(subject.entity(), effect, SEffectIncidentType.IndirectAttack);
             const effectContext = new SEffectContext(effectSubject);
     
             context.postAnimation(target, itemData.animationId, true);

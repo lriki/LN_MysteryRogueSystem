@@ -32,6 +32,10 @@ export class LActivity {
         return REGame.world.entity(this._subject);
     }
 
+    public hasObject(): boolean {
+        return this._object.hasAny();
+    }
+
     public object(): LEntity {
         return REGame.world.entity(this._object);
     }
