@@ -7,7 +7,7 @@ import { REResponse } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
-import { SEffectPerformer } from "ts/system/SEffectPerformer";
+import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { LWaveActivity } from "../activities/LWaveActivity";
 import { LEntity } from "../LEntity";
@@ -52,7 +52,7 @@ export class LItemBehavior extends LBehavior {
             console.log("aa LWaveActivity");
         }
 
-        const effectPerformer = new SEffectPerformer();
+        const effectPerformer = new SEmittorPerformer();
         const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
         for (const reaction of reactions) {
             const effect = REData.getEmittorById(reaction.emittingEffect);
@@ -105,12 +105,15 @@ export class LItemBehavior extends LBehavior {
 
         const item = this.ownerEntity().getBehavior(LItemBehavior);
         const itemData = item.itemData();
-        const effect = itemData.effectSet.effect(cause);
-        if (effect) {
+        const emittor = itemData.effectSet.effect(cause);
+        if (emittor) {
+            console.log("postPerformEmittor", emittor);
+            context.postPerformEmittor(target, emittor, itemData);
 
-            console.log("applyEffect", effect);
+            /*
+            console.log("applyEffect", emittor);
 
-            const effectSubject = new SEffectorFact(subject.entity(), effect, SEffectIncidentType.IndirectAttack);
+            const effectSubject = new SEffectorFact(subject.entity(), emittor.effect, SEffectIncidentType.IndirectAttack);
             const effectContext = new SEffectContext(effectSubject);
     
             context.postAnimation(target, itemData.animationId, true);
@@ -119,6 +122,7 @@ export class LItemBehavior extends LBehavior {
             context.postCall(() => {
                 effectContext.applyWithWorth(context, [target]);
             });
+            */
         }
         
         const skill = itemData.effectSet.skill(cause);

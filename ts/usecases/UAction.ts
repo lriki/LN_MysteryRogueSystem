@@ -1,6 +1,7 @@
 import { assert, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEmittor, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DHelpers } from "ts/data/DHelper";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { LBlock } from "ts/objects/LBlock";
@@ -61,46 +62,6 @@ export class UAction {
 
 
 
-    
-    
-    
-    // Game_Action.prototype.checkItemScope
-    private static checkItemScope(itemScope: DRmmzEffectScope, list: DRmmzEffectScope[]) {
-        return list.includes(itemScope);
-    }
-
-    // Game_Action.prototype.isForOpponent
-    public static isForOpponent(itemScope: DRmmzEffectScope): boolean {
-        return this.checkItemScope(itemScope, [
-            DRmmzEffectScope.Opponent_Single,
-            DRmmzEffectScope.Opponent_All,
-            DRmmzEffectScope.Opponent_Random_1,
-            DRmmzEffectScope.Opponent_Random_2,
-            DRmmzEffectScope.Opponent_Random_3,
-            DRmmzEffectScope.Opponent_Random_4,
-            DRmmzEffectScope.Everyone]);
-    }
-
-    // Game_Action.prototype.isForAliveFriend
-    public static isForAliveFriend(itemScope: DRmmzEffectScope): boolean {
-        return this.checkItemScope(itemScope, [
-            DRmmzEffectScope.Friend_Single_Alive,
-            DRmmzEffectScope.Friend_All_Alive,
-            DRmmzEffectScope.User,
-            DRmmzEffectScope.Everyone]);
-    }
-
-    // Game_Action.prototype.isForDeadFriend
-    public static isForDeadFriend(itemScope: DRmmzEffectScope): boolean {
-        return this.checkItemScope(itemScope, [
-            DRmmzEffectScope.Friend_Single_Dead,
-            DRmmzEffectScope.Friend_All_Dead]);
-    }
-
-    public static isForFriend(temScope: DRmmzEffectScope): boolean {
-        return this.isForAliveFriend(temScope) || this.isForDeadFriend(temScope);
-    }
-
 
     private static checkAdjacentDirectlyAttack(self: LEntity, target: LEntity): boolean {
         const map = REGame.map;
@@ -160,10 +121,10 @@ export class UAction {
     }
 
     private static testFactionMatch(performer: LEntity, target: LEntity, scope: DRmmzEffectScope): boolean {
-        if (UAction.isForFriend(scope)) {
+        if (DHelpers.isForFriend(scope)) {
             if (Helpers.isFriend(performer, target)) return true;
         }
-        else if (UAction.isForOpponent(scope)) {
+        else if (DHelpers.isForOpponent(scope)) {
             if (Helpers.isHostile(performer, target)) return true;
         }
         else {

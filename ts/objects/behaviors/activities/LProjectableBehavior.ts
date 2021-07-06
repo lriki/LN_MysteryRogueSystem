@@ -14,7 +14,7 @@ import { UMovement } from "ts/usecases/UMovement";
 import { CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/objects/LMap";
 import { UAction } from "ts/usecases/UAction";
-import { DEmittor, DEffectCause, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEmittor, DEffectCause, DRmmzEffectScope, DEffect } from "ts/data/DEffect";
 import { LEntityId } from "ts/objects/LObject";
 
 /**
@@ -32,7 +32,7 @@ export class LProjectableBehavior extends LBehavior {
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
     //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
-    private _effect: DEmittor | undefined;
+    private _effect: DEffect | undefined;
     //private _effectSubject: LEntityId | undefined;
 
     public clone(newOwner: LEntity): LBehavior {
@@ -56,11 +56,11 @@ export class LProjectableBehavior extends LBehavior {
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
     
-    public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, emittor: DEmittor): void {
+    public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effect: DEffect): void {
         const common = entity.findBehavior(LProjectableBehavior);
         assert(common);
 
-        common._effect = emittor;
+        common._effect = effect;
         common.blowDirection = dir;
         common.blowMoveCount = length;
         

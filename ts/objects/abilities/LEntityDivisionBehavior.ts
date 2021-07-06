@@ -29,7 +29,6 @@ export class LEntityDivisionBehavior extends LBehavior {
         if (candidates.length > 1) {
             const newBlock = candidates[context.random().nextIntWithMax(candidates.length)];
             const newEntity = self.clone();
-            console.log("clone");
             REGame.world._transferEntity(newEntity, self.floorId, newBlock.x(), newBlock.y());
 
             context.postSequel(newEntity, RESystem.sequels.MoveSequel).setStartPosition(self.x, self.y);

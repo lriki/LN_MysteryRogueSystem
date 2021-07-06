@@ -15,7 +15,9 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LRandom } from "ts/objects/LRandom";
-import { SEffectPerformer } from "./SEffectPerformer";
+import { SEmittorPerformer } from "./SEmittorPerformer";
+import { DEmittor } from "ts/data/DEffect";
+import { DItem } from "ts/data/DItem";
 
 export type MCEntryProc = () => REResponse;
 export type CommandResultCallback = () => boolean;
@@ -446,11 +448,23 @@ export class SCommandContext
         Log.postCommand("SkipPart");
     }
 
+    postPerformEmittor(performer: LEntity, emittor: DEmittor, item: DItem | undefined): void {
+        const m1 = () => {
+            Log.doCommand("PerformSkill");
+            //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
+            const effectPerformer = new SEmittorPerformer();
+            effectPerformer.performeEffect(this, performer, emittor, item);
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));
+        Log.postCommand("PerformSkill");
+    }
+
     postPerformSkill(performer: LEntity, skillId: DSkillDataId): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
             //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
-            const effectPerformer = new SEffectPerformer();
+            const effectPerformer = new SEmittorPerformer();
             effectPerformer.performeSkill(skillId, performer, this);
             return REResponse.Succeeded;
         };

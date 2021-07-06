@@ -1,3 +1,4 @@
+import { DRmmzEffectScope } from "./DEffect";
 import { DMapId } from "./DLand";
 import { DTroopId } from "./DTroop";
 import { REData } from "./REData";
@@ -103,6 +104,48 @@ export class DHelpers {
             (this.isTileA3(tileId) || this.isTileA4(tileId)) &&
             this.getAutotileKind(tileId) % 16 >= 8
         );
+    }
+
+    
+
+    
+    
+    
+    // Game_Action.prototype.checkItemScope
+    private static checkItemScope(itemScope: DRmmzEffectScope, list: DRmmzEffectScope[]) {
+        return list.includes(itemScope);
+    }
+
+    // Game_Action.prototype.isForOpponent
+    public static isForOpponent(itemScope: DRmmzEffectScope): boolean {
+        return this.checkItemScope(itemScope, [
+            DRmmzEffectScope.Opponent_Single,
+            DRmmzEffectScope.Opponent_All,
+            DRmmzEffectScope.Opponent_Random_1,
+            DRmmzEffectScope.Opponent_Random_2,
+            DRmmzEffectScope.Opponent_Random_3,
+            DRmmzEffectScope.Opponent_Random_4,
+            DRmmzEffectScope.Everyone]);
+    }
+
+    // Game_Action.prototype.isForAliveFriend
+    public static isForAliveFriend(itemScope: DRmmzEffectScope): boolean {
+        return this.checkItemScope(itemScope, [
+            DRmmzEffectScope.Friend_Single_Alive,
+            DRmmzEffectScope.Friend_All_Alive,
+            DRmmzEffectScope.User,
+            DRmmzEffectScope.Everyone]);
+    }
+
+    // Game_Action.prototype.isForDeadFriend
+    public static isForDeadFriend(itemScope: DRmmzEffectScope): boolean {
+        return this.checkItemScope(itemScope, [
+            DRmmzEffectScope.Friend_Single_Dead,
+            DRmmzEffectScope.Friend_All_Dead]);
+    }
+
+    public static isForFriend(temScope: DRmmzEffectScope): boolean {
+        return this.isForAliveFriend(temScope) || this.isForDeadFriend(temScope);
     }
     
     static readFloorMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZFloorMetadata | undefined {

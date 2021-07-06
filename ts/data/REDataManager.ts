@@ -458,6 +458,10 @@ export class REDataManager
                 item.rmmzScope = x.scope ?? DRmmzEffectScope.None;
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 item.animationId = x.animationId;
+
+                if (DHelpers.isForFriend(item.rmmzScope)) {
+                    emittor.scope.range = DEffectFieldScopeRange.Performer;
+                }
             }
         });
         REData.weaponDataIdOffset = REData.items.length;
@@ -975,7 +979,9 @@ export class REDataManager
         const data = entity.item();
         switch (entity.entity.key) {
             case "kキュアリーフ":
-                data.effectSet.aquireEffect(DEffectCause.Eat).effect.parameterQualifyings.push({
+                const emittor = data.effectSet.aquireEffect(DEffectCause.Eat);
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.effect.parameterQualifyings.push({
                     parameterId: DBasics.params.fp,
                     elementId: 0,
                     formula: "5",
