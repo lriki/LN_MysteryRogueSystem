@@ -14,6 +14,7 @@ import { STextManager } from "./STextManager";
 import { DTraits } from "ts/data/DTraits";
 import { DEmittor, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DOtherEffectQualifying, DEffect } from "ts/data/DEffect";
 import { UAction } from "../usecases/UAction";
+import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 
 
 enum SParameterEffectApplyType {
@@ -109,11 +110,14 @@ export class SEffectorFact {
     private _successRate: number;       // 0~100
     private _incidentType: SEffectIncidentType;
 
-    public constructor(subject: LEntity, effect: DEffect, incidentType: SEffectIncidentType) {
+    private _direction: number;
+
+    public constructor(subject: LEntity, effect: DEffect, incidentType: SEffectIncidentType, dir: number) {
         this._subject = subject;
         this._subjectEffect = effect;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
         this._incidentType = incidentType;
+        this._direction = dir;
 
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
@@ -151,6 +155,10 @@ export class SEffectorFact {
 
     public incidentType(): SEffectIncidentType {
         return this._incidentType;
+    }
+
+    public direction(): number {
+        return this._direction;
     }
 
     //--------------------
@@ -314,7 +322,7 @@ export class SEffectContext {
         let deadCount = 0;
         let totalExp = 0;
         for (const target of targets) {
-            const result = this.apply(target);
+            const result = this.apply(commandContext, target);
             
             result.showResultMessages(commandContext, target);
 
@@ -339,7 +347,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private apply(target: LEntity): LEffectResult {
+    private apply(commandContext: SCommandContext, target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -373,7 +381,7 @@ export class SEffectContext {
                     this.applyItemEffect(targetBattlerBehavior, effect, result);
                 }
                 for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
-                    this.applyOtherEffect(target, targetBattlerBehavior, effect, result);
+                    this.applyOtherEffect(commandContext, target, targetBattlerBehavior, effect, result);
                 }
                 this.applyItemUserEffect(targetBattlerBehavior);
             }
@@ -632,9 +640,13 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.applyItemEffect
-    public applyOtherEffect(targetEntity: LEntity, target: LBattlerBehavior, effect: DOtherEffectQualifying, result: LEffectResult): void {
+    public applyOtherEffect(commandContext: SCommandContext, targetEntity: LEntity, target: LBattlerBehavior, effect: DOtherEffectQualifying, result: LEffectResult): void {
         switch (effect.key) {
-            case "kEffect_変化":
+            case "kSystemEffect_ふきとばし":
+                const subject = this._effectorFact.subject();
+                LProjectableBehavior.startMoveAsProjectile(commandContext, targetEntity, new SEffectSubject(subject), this._effectorFact.direction(), 10);
+                break;
+            case "kSystemEffect_変化":
                 targetEntity.setupInstance(REData.getEntity("kキュアリーフ").id);
                 //targetEntity.setupInstance(REData.getEntity("kEnemy_ドラゴン").id);
                 console.log("変化ーーー");

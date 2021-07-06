@@ -80,7 +80,7 @@ export class LTrapBehavior extends LBehavior {
         const emittor = itemData.effectSet.effect(DEffectCause.Affect);
 
         if (emittor) {
-            const subject = new SEffectorFact(e.self, emittor.effect, SEffectIncidentType.IndirectAttack);
+            const subject = new SEffectorFact(e.self, emittor.effect, SEffectIncidentType.IndirectAttack, target.dir);
             const effectContext = new SEffectContext(subject);
 
             //console.log(result);

@@ -966,8 +966,11 @@ export class REDataManager
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
                 break;
+            case "kSkill_ふきとばし":
+                emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                break;
             case "kSkill_変化":
-                emittor.effect.otherEffectQualifyings.push({key: "kEffect_変化"});
+                emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
                 break;
         }
     }
@@ -995,6 +998,11 @@ export class REDataManager
                 //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
                 data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
+                break;
+            case "kふきとばしの杖":
+                //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
+                data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
+                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);

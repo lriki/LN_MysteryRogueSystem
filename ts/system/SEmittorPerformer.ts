@@ -56,7 +56,7 @@ export class SEmittorPerformer {
 
             console.log("applyEffect", emittor);
 
-            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack);
+            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, performer.dir);
             const effectContext = new SEffectContext(effectSubject);
     
             if (item) {
@@ -83,7 +83,7 @@ export class SEmittorPerformer {
                 const block = REGame.map.block(front.x, front.y);
                 const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
                 if (target) {
-                    const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.DirectAttack);
+                    const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.DirectAttack, performer.dir);
                     const effectContext = new SEffectContext(effectSubject);
                     //effectContext.addEffector(effector);
 

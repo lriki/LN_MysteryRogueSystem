@@ -167,7 +167,7 @@ export class LProjectableBehavior extends LBehavior {
             
             const animationId = 1;  // TODO:
 
-            const effectSubject = new SEffectorFact(subject.entity(), this._effect, SEffectIncidentType.IndirectAttack);
+            const effectSubject = new SEffectorFact(subject.entity(), this._effect, SEffectIncidentType.IndirectAttack, this.blowDirection);
             const effectContext = new SEffectContext(effectSubject);
     
             context.postAnimation(target, animationId, true);
