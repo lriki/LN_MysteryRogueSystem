@@ -48,9 +48,9 @@
             "type": "nwjs",
             "request": "launch",
             "nwjsVersion": "0.48.4",
-            "webRoot": "${workspaceFolder}/NewData",
+            "webRoot": "${workspaceFolder}",
             "reloadAfterAttached": true,
-            "runtimeArgs": ["${workspaceFolder}/NewData", "test"]
+            "runtimeArgs": ["${workspaceFolder}", "test"]
         }
     ]
 }

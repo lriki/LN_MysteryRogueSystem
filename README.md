@@ -23,7 +23,7 @@ RPG ツクール MZ 用の、ターン性ローグライクシステムの開発
 | Shift+方向キー | ダッシュ |
 | Shift+Z | 足踏み |
 | W | 斜め移動モード |
-
+s
 拠点マップの操作は RPGツクール標準と同様です。
 
 
@@ -44,6 +44,7 @@ npm run test -- -t Basic1
 
 ```
 code --install-extension msjsdiag.debugger-for-chrome
+code --install-extension ruakr.vsc-nwjs
 ```
 
 

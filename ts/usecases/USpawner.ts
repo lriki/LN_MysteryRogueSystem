@@ -13,17 +13,19 @@ export class USpawner {
         const table = floorId.landData().appearanceTable;
 
         const enemyList = table.enemies[floorId.floorNumber()];
-        for (const enemy of enemyList) {
-            if (enemy.spawiInfo.troopId > 0) {
-                // グループ出現
-                const troop = REData.troops[enemy.spawiInfo.troopId];
-                for (const m of troop.members) {
-                    result.add(m);
+        if (enemyList) {
+            for (const enemy of enemyList) {
+                if (enemy.spawiInfo.troopId > 0) {
+                    // グループ出現
+                    const troop = REData.troops[enemy.spawiInfo.troopId];
+                    for (const m of troop.members) {
+                        result.add(m);
+                    }
                 }
-            }
-            else {
-                // 単体出現
-                result.add(enemy.spawiInfo.entityId);
+                else {
+                    // 単体出現
+                    result.add(enemy.spawiInfo.entityId);
+                }
             }
         }
 

@@ -649,6 +649,7 @@ export class SEffectContext {
                 break;
             case "kSystemEffect_変化":
                 const entityData = commandContext.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
+                //const entityData = REData.getEntity("kキュアリーフ");
                 targetEntity.setupInstance(entityData.id);
                 break;
             default:
