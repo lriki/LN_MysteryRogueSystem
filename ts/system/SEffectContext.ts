@@ -15,6 +15,7 @@ import { DTraits } from "ts/data/DTraits";
 import { DEmittor, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DOtherEffectQualifying, DEffect } from "ts/data/DEffect";
 import { UAction } from "../usecases/UAction";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
+import { USpawner } from "ts/usecases/USpawner";
 
 
 enum SParameterEffectApplyType {
@@ -448,7 +449,7 @@ export class SEffectContext {
             return true;
         }
         */
-       return true;
+        return true;
     }
 
     // Game_Action.prototype.makeDamageValue
@@ -647,7 +648,14 @@ export class SEffectContext {
                 LProjectableBehavior.startMoveAsProjectile(commandContext, targetEntity, new SEffectSubject(subject), this._effectorFact.direction(), 10);
                 break;
             case "kSystemEffect_変化":
-                targetEntity.setupInstance(REData.getEntity("kキュアリーフ").id);
+                const entityData = commandContext.random().selectOrUndefined(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
+                if (entityData) {
+                    targetEntity.setupInstance(entityData.id);
+                }
+                else {
+                    throw new Error("Not implemented.");
+                }
+                //targetEntity.setupInstance(REData.getEntity("kキュアリーフ").id);
                 //targetEntity.setupInstance(REData.getEntity("kEnemy_ドラゴン").id);
                 console.log("変化ーーー");
                 break;

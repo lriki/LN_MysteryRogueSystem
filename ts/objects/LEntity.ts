@@ -291,12 +291,11 @@ export class LEntity extends LObject
         if (this.floorId == REGame.map.floorId()) {
             REGame.map._removeEntity(this);
         }
-        REGame.scheduler.invalidateEntity(this);
-
         this.clearInstance();
     }
 
     private clearInstance(): void {
+        REGame.scheduler.invalidateEntity(this);
         this.removeAllBehaviors();
         //this.removeAllAbilities();    // TODO: assert するのでコメントアウト
         this.removeAllStates();
