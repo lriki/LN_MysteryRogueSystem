@@ -54,7 +54,6 @@ export class SEmittorPerformer {
         
         if (emittor.scope.range == DEffectFieldScopeRange.Performer) {
 
-            console.log("applyEffect", emittor);
 
             const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             const effectContext = new SEffectContext(effectSubject);

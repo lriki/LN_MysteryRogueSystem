@@ -110,7 +110,6 @@ export class LItemBehavior extends LBehavior {
         const itemData = item.itemData();
         const emittor = itemData.effectSet.effect(cause);
         if (emittor) {
-            console.log("postPerformEmittor", emittor);
             context.postPerformEmittor(target, emittor, effectDir, itemData);
 
             /*
