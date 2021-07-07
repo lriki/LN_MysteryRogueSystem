@@ -39,7 +39,6 @@ export class LUnitBehavior extends LBehavior {
     _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
-    _actionTokenCount: number = 0;
     _targetingEntityId: number = 0;   // AIMinor Phase で、攻撃対象を確定したかどうか。以降、Run 内では iterationCount が残っていても MinorAction を行わない
 
     _straightDashing: boolean = false;
@@ -51,7 +50,6 @@ export class LUnitBehavior extends LBehavior {
         b._speedLevel = this._speedLevel;
         b._waitTurnCount = this._waitTurnCount;
         b._manualMovement = this._manualMovement;
-        b._actionTokenCount = this._actionTokenCount;
         b._targetingEntityId = this._targetingEntityId;
         b._straightDashing = this._straightDashing;
         b._fastforwarding = this._fastforwarding;
@@ -72,10 +70,6 @@ export class LUnitBehavior extends LBehavior {
 
     manualMovement(): boolean { return this._manualMovement; }
     setManualMovement(value: boolean): LUnitBehavior { this._manualMovement = value; return this; }
-
-    actionTokenCount(): number { return this._actionTokenCount; }
-    setActionTokenCount(value: number): LUnitBehavior { this._actionTokenCount = value; return this; }
-    clearActionTokenCount(): void { this._actionTokenCount = 0; }
 
 
 

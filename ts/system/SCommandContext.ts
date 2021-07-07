@@ -387,12 +387,12 @@ export class SCommandContext
 
         // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
         // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
-        assert(behavior.actionTokenCount() > 0);
+        assert(entity.actionTokenCount() > 0);
 
         const m1 = () => {
             Log.doCommand("ConsumeActionToken");
             
-            behavior.setActionTokenCount(behavior.actionTokenCount() - 1);  // ここで借金することもあり得る
+            entity.setActionTokenCount(entity.actionTokenCount() - 1);  // ここで借金することもあり得る
             entity._actionConsumed = true;
 
             
@@ -439,7 +439,7 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("SkipPart");
             
-            behavior.clearActionTokenCount();
+            entity.clearActionTokenCount();
             entity._actionConsumed = true;
 
             return REResponse.Succeeded;

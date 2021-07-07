@@ -243,6 +243,16 @@ export class LEntity extends LObject
 
     _located: boolean = false;
 
+
+    // 変化によるインスタンス再構築でも行動回数を維持したい。（モンスターは変化の杖の効果を受けたターンは行動できる）
+    _actionTokenCount: number = 0;
+    
+    actionTokenCount(): number { return this._actionTokenCount; }
+    setActionTokenCount(value: number): void { this._actionTokenCount = value; }
+    clearActionTokenCount(): void { this._actionTokenCount = 0; }
+
+
+
     /**
      * この Entity のクローンを作成し、World に登録する。
      * Behavior, State など子要素もディープクローンされる。
@@ -261,6 +271,7 @@ export class LEntity extends LObject
         entity.x = 0;
         entity.y = 0;
         entity.dir = this.dir;
+        entity._actionTokenCount = 0;   // 新しく作られた Entity は Scheduler には入っていないので、ActionToken を持っているのは不自然
         //entity.blockOccupied = this.blockOccupied;
         //entity.immediatelyAfterAdjacentMoving = this.immediatelyAfterAdjacentMoving;
         //entity._effectResult = new LEffectResult();
@@ -292,10 +303,10 @@ export class LEntity extends LObject
             REGame.map._removeEntity(this);
         }
         this.clearInstance();
+        REGame.scheduler.invalidateEntity(this);
     }
 
     private clearInstance(): void {
-        REGame.scheduler.invalidateEntity(this);
         this.removeAllBehaviors();
         //this.removeAllAbilities();    // TODO: assert するのでコメントアウト
         this.removeAllStates();

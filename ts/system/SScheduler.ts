@@ -211,6 +211,7 @@ export class SScheduler
         // ターン開始時の各 unit の設定更新
         REGame.scheduler.units().forEach(unit => {
             const behavior = unit.behavior;
+            const entity = REGame.world.entity(unit.entityId);
 
             // 鈍足状態の対応。待ちターン数を更新
             if (behavior.speedLevel() < 0) {
@@ -226,7 +227,7 @@ export class SScheduler
             if (behavior.waitTurnCount() == 0) {
                 // 行動トークンを、速度の分だけ配る。鈍足状態でも 1 つ配る。
                 // リセットではなく追加である点に注意。借金している場合に備える。
-                behavior.setActionTokenCount(behavior.actionTokenCount() + Math.max(1, behavior.speedLevel()));
+                entity.setActionTokenCount(entity.actionTokenCount() + Math.max(1, behavior.speedLevel()));
             }
             else {
                 // 鈍足状態。このターンは行動トークンをもらえない。

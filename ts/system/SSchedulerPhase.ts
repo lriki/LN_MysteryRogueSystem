@@ -34,7 +34,7 @@ export class SSchedulerPhase_Prepare extends SSchedulerPhase {
 export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
-        if (entity && unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
+        if (entity && unit.behavior.manualMovement() && entity.actionTokenCount() > 0) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
             //REGame.scheduler.setCurrentTurnEntity(entity);
         }
@@ -47,7 +47,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         
-        if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0 &&
+        if (entity && !unit.behavior.manualMovement() && entity.actionTokenCount() > 0 &&
             unit.behavior._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
             //REGame.scheduler.setCurrentTurnEntity(entity);
@@ -102,7 +102,7 @@ export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
 export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
-        if (entity && !unit.behavior.manualMovement() && unit.behavior.actionTokenCount() > 0) {
+        if (entity && !unit.behavior.manualMovement() && entity.actionTokenCount() > 0) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
         }
     }
