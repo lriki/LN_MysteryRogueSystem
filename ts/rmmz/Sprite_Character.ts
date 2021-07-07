@@ -12,11 +12,13 @@ declare global {
         // StateIcon 関係
         _stateIconSprite: Sprite;
         _stateIcons: number[];
+        _reRevision: number;
+
         setStateIcons(icons: number[]): void;
         
         // 動的イベント関係
         //_prefabSpriteIdRE: number;
-        isRECharacterExtinct(): boolean;
+        //isRECharacterExtinct(): boolean;
         endAllEffect(): void;
         removeREPrefabEventSprite(index: number): void;
         findVisual(): REVisual_Entity | undefined;
@@ -50,6 +52,8 @@ Sprite_Character.prototype.initMembers = function() {
     this._stateIconSprite = new Sprite(bitmap);
     this._stateIconSprite.visible = false;  // ちらつき回避
     this.addChild(this._stateIconSprite);
+
+    this._reRevision = 0;
 }
 
 // 8 方向パターン
@@ -67,6 +71,13 @@ Sprite_Character.prototype.characterPatternY = function() {
 const _Sprite_Character_update = Sprite_Character.prototype.update;
 Sprite_Character.prototype.update = function() {
     _Sprite_Character_update.call(this);
+
+    if (this._reRevision != this._character.reRevision()) {
+        this._reRevision = this._character.reRevision();
+        this._stateIcons = [];
+        this._stateIconSprite.visible = false;
+    }
+
 
     const visual = this.findVisual();
     if (visual) {
@@ -109,9 +120,9 @@ Sprite_Character.prototype.update = function() {
 
 }
 
-Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
-    return this._character.isREExtinct();
-}
+//Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
+//    return this._character.isREExtinct();
+//}
 
 
 Sprite_Character.prototype.endAllEffect = function() {

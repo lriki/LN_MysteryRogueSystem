@@ -91,6 +91,10 @@ export class DEntity {
             this.reactions.push({ actionId: actionId, emittingEffect: effectId });
         }
     }
+
+    public verify(): void {
+        
+    }
 }
 
 

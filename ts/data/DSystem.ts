@@ -1,3 +1,4 @@
+import { DEntityId } from "./DEntity";
 import { DStateId } from "./DState";
 import { DFactionId, REData } from "./REData";
 
@@ -30,6 +31,10 @@ export class DSystem {
 
     public states: DSystemStates;
 
+
+    /** 出現テーブルが何もないときに Enemy の Spawn が要求されたときに生成する Entity */
+    public fallbackEnemyEntityId: DEntityId;
+
     constructor() {
         this.elements = $dataSystem.elements ?? [];
         this.factions = {
@@ -43,6 +48,7 @@ export class DSystem {
             curse: 0,
             seal: 0,
         }
+        this.fallbackEnemyEntityId = 0;
     }
 
     public link(testMode: boolean): void {
@@ -56,5 +62,7 @@ export class DSystem {
             this.states.curse = REData.getStateFuzzy("kState_UT呪い").id;
             this.states.seal = REData.getStateFuzzy("kState_UT封印").id;
         }
+
+        this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム").entityId;
     }
 }

@@ -3,6 +3,7 @@ import { REGame } from "../objects/REGame";
 import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "../system/RESystem";
 import { REVisual } from "../visual/REVisual";
+import { REData } from "ts/data/REData";
 
 /*
 import { ImGuiIO } from "../imgui-js/imgui";
@@ -85,10 +86,11 @@ Scene_Boot.prototype.isReady = function() {
     // ベースの isReady の中から onDatabaseLoaded が呼び出される
     const result = _Scene_Boot_isReady.call(this);
 
-    if (!window["RE_databaseMap"]) {
+    if (!window["RE_databaseMap"] && !REDataManager.isImportCompleted()) {
         return false;
     }
     else {
+        REData.verify();
         // Database マップの読み込みが完了
         return result;
     }

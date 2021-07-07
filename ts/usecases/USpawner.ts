@@ -1,4 +1,5 @@
 import { DEntity, DEntityId } from "ts/data/DEntity";
+import { DSystem } from "ts/data/DSystem";
 import { REData } from "ts/data/REData";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
@@ -24,6 +25,10 @@ export class USpawner {
                 // 単体出現
                 result.add(enemy.spawiInfo.entityId);
             }
+        }
+
+        if (result.size == 0) {
+            result.add(REData.system.fallbackEnemyEntityId);
         }
         
         return Array.from(result.values()).map(x => REData.entities[x]);

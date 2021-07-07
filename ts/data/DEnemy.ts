@@ -1,4 +1,5 @@
-import { DEntityId } from "./DEntity";
+import { DEntity, DEntityId } from "./DEntity";
+import { REData } from "./REData";
 
 export type DEnemyId = number;
 
@@ -35,6 +36,10 @@ export class DEnemy {
         this.idealParams = [];
         this.traits = [];
         this.actions = [];
+    }
+
+    public entity(): DEntity {
+        return REData.entities[this.entityId];
     }
 }
 

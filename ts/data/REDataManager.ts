@@ -928,6 +928,8 @@ export class REDataManager
         return window["RE_databaseMap"];
     }
 
+    static loadingDataFileCount = 0;
+    static loadedDataFileCount = 0;
     
     //--------------------------------------------------
     // DataManager の実装
@@ -941,14 +943,19 @@ export class REDataManager
             onLoad(data);
         }
         else {
+            this.loadingDataFileCount++;
             const xhr = new XMLHttpRequest();
             const url = "data/" + src;
             xhr.open("GET", url);
             xhr.overrideMimeType("application/json");
-            xhr.onload = () => this.onXhrLoad(xhr, src, url, onLoad);
+            xhr.onload = () => this.onXhrLoad(xhr, src, url, (obj) => { onLoad(obj); this.loadedDataFileCount++; });
             xhr.onerror = () => DataManager.onXhrError(src, src, url);
             xhr.send();
         }
+    }
+
+    public static isImportCompleted(): boolean {
+        return this.loadingDataFileCount == this.loadedDataFileCount;
     }
 
     private static onXhrLoad(xhr: XMLHttpRequest, src: string, url: string, onLoad: (obj: any) => void) {

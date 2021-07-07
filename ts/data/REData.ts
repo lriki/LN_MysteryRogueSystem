@@ -513,4 +513,10 @@ export class REData
         if (d) return d;
         throw new Error(`Skill "${pattern}" not found.`);
     }
+
+    //--------------------
+
+    public static verify(): void {
+        this.entities.forEach(x => x.verify());
+    }
 }

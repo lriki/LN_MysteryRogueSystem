@@ -648,16 +648,8 @@ export class SEffectContext {
                 LProjectableBehavior.startMoveAsProjectile(commandContext, targetEntity, new SEffectSubject(subject), this._effectorFact.direction(), 10);
                 break;
             case "kSystemEffect_変化":
-                const entityData = commandContext.random().selectOrUndefined(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
-                if (entityData) {
-                    targetEntity.setupInstance(entityData.id);
-                }
-                else {
-                    throw new Error("Not implemented.");
-                }
-                //targetEntity.setupInstance(REData.getEntity("kキュアリーフ").id);
-                //targetEntity.setupInstance(REData.getEntity("kEnemy_ドラゴン").id);
-                console.log("変化ーーー");
+                const entityData = commandContext.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
+                targetEntity.setupInstance(entityData.id);
                 break;
             default:
                 throw new Error("Not implemented.");

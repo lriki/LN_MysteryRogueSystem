@@ -42,6 +42,15 @@
                 "--remote-debugging-port=9222",
                 "--autoplay-policy=no-user-gesture-required"
             ]
+        },
+        {
+            "name": "Debug NWjs",
+            "type": "nwjs",
+            "request": "launch",
+            "nwjsVersion": "0.48.4",
+            "webRoot": "${workspaceFolder}/NewData",
+            "reloadAfterAttached": true,
+            "runtimeArgs": ["${workspaceFolder}/NewData", "test"]
         }
     ]
 }

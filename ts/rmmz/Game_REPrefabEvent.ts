@@ -35,5 +35,6 @@ export class Game_REPrefabEvent extends Game_Event {
     setSpritePrepared(value: boolean) {
         this._spritePrepared = true;
     }
+
 }
 

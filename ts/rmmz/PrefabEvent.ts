@@ -51,11 +51,12 @@ Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent): Game_REPre
         return event;
     }
     else {
-        const event = this._events[eventId];
+        const event = this._events[eventId] as Game_REPrefabEvent;
         assert(event instanceof Game_REPrefabEvent);
 
         // 再構築
         $dataMap.events[eventId] = eventData;
+        event.increaseRERevision();
         event.initMembers();
         event.refresh();
         return event;

@@ -62,7 +62,6 @@ Game_Map.prototype.setup = function(mapId: number) {
         }
     }
 
-    console.log("Game_Map");
     SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
 
 
