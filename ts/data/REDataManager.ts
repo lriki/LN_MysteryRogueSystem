@@ -994,6 +994,9 @@ export class REDataManager
     static setupDirectly_DItem(entity: DEntity) {
         const data = entity.item();
         switch (entity.entity.key) {
+            case "kウッドアロー":
+                data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});
+                break;
             case "kキュアリーフ":
                 const emittor = data.effectSet.aquireEffect(DEffectCause.Eat);
                 emittor.scope.range = DEffectFieldScopeRange.Performer;

@@ -26,6 +26,7 @@ import { DEntity, DEntityId, DEntityNamePlate } from "ts/data/DEntity";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/system/SEntityFactory";
+import { DTraits } from "ts/data/DTraits";
 
 enum BlockLayer
 {
@@ -272,6 +273,7 @@ export class LEntity extends LObject
         entity.y = 0;
         entity.dir = this.dir;
         entity._actionTokenCount = 0;   // 新しく作られた Entity は Scheduler には入っていないので、ActionToken を持っているのは不自然
+        entity._stackCount = this._stackCount;  // "分裂" という意味ではスタック数もコピーしてもよさそう。TODO: タイトル要求と大きくかかわるのでオプションにした方がいいかも。
         //entity.blockOccupied = this.blockOccupied;
         //entity.immediatelyAfterAdjacentMoving = this.immediatelyAfterAdjacentMoving;
         //entity._effectResult = new LEffectResult();
@@ -941,6 +943,37 @@ export class LEntity extends LObject
     }
     
 
+    //----------------------------------------
+    // Stack support
+
+    _stackCount: number = 1;
+
+    public checkStackable(other: LEntity): boolean {
+        if (!this.collectTraits().find(x => x.code == DTraits.Stackable)) return false;
+        if (!other.collectTraits().find(x => x.code == DTraits.Stackable)) return false;
+
+        // TODO: 今は矢だけなのでこれでよいが、アタッチされているAbilityなども見るべき
+        return this.dataId() == other.dataId();
+    }
+
+    /**
+     * 指定 Entity をスタックに入れ、削除する。
+     */
+    public increaseStack(other: LEntity): void {
+        assert(this.checkStackable(other));
+        this._stackCount++;
+        other.destroy();
+    }
+
+    /**
+     * スタックを減らして新しい Entity を作成する。
+     */
+    public decreaseStack(): LEntity {
+        assert(this._stackCount >= 2);
+        const newEntity = this.clone();
+        newEntity._stackCount = 1;
+        return newEntity;
+    }
 
     
     //----------------------------------------

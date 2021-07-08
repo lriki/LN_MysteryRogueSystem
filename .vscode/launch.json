@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Items.ChangeEntityInstance.Wave"
+                "-t", "Items.Arrow"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

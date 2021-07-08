@@ -63,6 +63,8 @@ export enum DTraits {
     /** 何らかのアクションを受けたらステート解除。(仮眠や金縛りの解除で使う) */
     StateRemoveByEffect,
 
+    Stackable,
+
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 
 }
