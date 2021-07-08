@@ -177,7 +177,7 @@ export class LUnitBehavior extends LBehavior {
                         itemEntity, self, subject, undefined, testPickOutItem,
                         () => {
                             REGame.map._removeEntity(itemEntity);
-                            inventory.addEntity(itemEntity);
+                            inventory.addEntityWithStacking(itemEntity);
                             
                             const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(self), DescriptionHighlightLevel.UnitName);
                             context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));

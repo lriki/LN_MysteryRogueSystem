@@ -110,12 +110,26 @@ export class LInventoryBehavior extends LBehavior {
 
     public addEntity(entity: LEntity) {
         assert(!entity.parentEntity());
+        assert(!entity.isDestroyed());
 
         const id = entity.entityId();
         assert(this._entities.find(x => x.equals(id)) === undefined);
         this._entities.push(id);
         
         entity.setParent(this);
+    }
+
+    public addEntityWithStacking(entity: LEntity): void {
+        assert(!entity.parentEntity());
+
+        for (const item of this.entities()) {
+            if (item.checkStackable(entity)) {
+                item.increaseStack(entity);
+                return;
+            }
+        }
+
+        this.addEntity(entity);
     }
 
     public removeEntity(entity: LEntity) {

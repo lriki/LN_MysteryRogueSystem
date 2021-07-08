@@ -29,7 +29,7 @@ export interface DParameterQualifying {
     /** IDataSkill.damage.type  */
     applyType: DParameterEffectApplyType;
 
-    /** 分散度 */
+    /** 分散度 (%) */
     variance: number;
 }
 

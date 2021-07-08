@@ -73,6 +73,8 @@ test("Items.Arrow", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
+    const data = REData.getEntity("kウッドアロー");
+
     const hp = enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });

@@ -47,7 +47,13 @@ code --install-extension msjsdiag.debugger-for-chrome
 code --install-extension ruakr.vsc-nwjs
 ```
 
+```
+./build.ps1
+```
 
+```
+cloc ts --include-lang=TypeScript
+```
 
 用語整理
 ----------

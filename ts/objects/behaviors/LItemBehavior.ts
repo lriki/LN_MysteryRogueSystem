@@ -47,6 +47,14 @@ export class LItemBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
 
+    onCollectTraits(result: IDataTrait[]): void {
+        super.onCollectTraits(result);
+        
+        for (const trait of this.itemData().traits){
+            result.push(trait);
+        }
+    }
+
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         if (activity instanceof LWaveActivity) {
             console.log("aa LWaveActivity");

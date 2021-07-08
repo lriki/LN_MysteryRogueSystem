@@ -948,6 +948,10 @@ export class LEntity extends LObject
 
     _stackCount: number = 1;
 
+    public canStack(): boolean {
+        return !!this.collectTraits().find(x => x.code == DTraits.Stackable);
+    }
+
     public checkStackable(other: LEntity): boolean {
         if (!this.collectTraits().find(x => x.code == DTraits.Stackable)) return false;
         if (!other.collectTraits().find(x => x.code == DTraits.Stackable)) return false;

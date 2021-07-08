@@ -480,6 +480,22 @@ export class REDataManager
                 item.parameters = x.params ?? [];
                 item.traits = x.traits ?? [];
                 entity.entity = parseMetaToEntityProperties(x.meta);
+
+                // 投げ当て Effect
+                const emittor = REData.newEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.effect.critical = false;
+                emittor.effect.successRate = 100;
+                emittor.effect.hitType = DEffectHitType.Physical;
+                const q: DParameterQualifying = {
+                    parameterId: DBasics.params.hp,
+                    elementId: 0,
+                    formula: "10",
+                    applyType: DParameterEffectApplyType.Damage,
+                    variance: 20,
+                };
+                emittor.effect.parameterQualifyings.push(q);
+                item.effectSet.setEffect(DEffectCause.Hit, emittor);
             }
         });
         REData.armorDataIdOffset = REData.items.length;
