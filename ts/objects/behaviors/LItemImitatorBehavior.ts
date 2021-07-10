@@ -7,7 +7,7 @@ import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId, PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { REData } from "ts/data/REData";
 import { Helpers } from "ts/system/Helpers";
-import { SPhaseResult } from "ts/system/RECommand";
+import { REResponse, SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { UAction } from "ts/usecases/UAction";
 import { SCommandContext } from "ts/system/SCommandContext";
@@ -18,7 +18,7 @@ import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LState } from "../states/LState";
-import { DecisionPhase, LBehavior } from "./LBehavior";
+import { CommandArgs, DecisionPhase, LBehavior, testPickOutItem } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
@@ -121,6 +121,21 @@ export class LItemImitatorBehavior extends LBehavior {
         return SPhaseResult.Handled;
     }
 
+    [testPickOutItem](args: CommandArgs, context: SCommandContext): REResponse {
+        const actor = args.sender;
+        const self = args.self;
+        if (Helpers.isHostileFactionId(actor.getOutwardFactionId(), self.getInnermostFactionId())) {
+            this.parentAs(LState)?.removeThisState();
+            
+            self.removeFromParent();
+            REGame.map.appearEntity(self, actor.x, actor.y);
+            UAction.postDropOrDestroy(RESystem.commandContext, self, self.getHomeLayer(), 0);
+
+            return REResponse.Canceled;
+        }
+        return REResponse.Pass;
+    }
+    
     onEvent(eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
@@ -136,6 +151,7 @@ export class LItemImitatorBehavior extends LBehavior {
             
         }
         else if (eventId == DBasics.events.prePut) {
+            /*
             const e = args as PutEventArgs;
             if (Helpers.isHostileFactionId(e.actor.getOutwardFactionId(), self.getInnermostFactionId())) {
                 this.parentAs(LState)?.removeThisState();
@@ -146,6 +162,7 @@ export class LItemImitatorBehavior extends LBehavior {
 
                 return LEventResult.Handled;
             }
+            */
         }
         return LEventResult.Pass;
     }
