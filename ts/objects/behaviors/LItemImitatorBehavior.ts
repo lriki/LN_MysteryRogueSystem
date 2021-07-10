@@ -18,7 +18,7 @@ import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LState } from "../states/LState";
-import { CommandArgs, DecisionPhase, LBehavior, testPickOutItem } from "./LBehavior";
+import { CommandArgs, DecisionPhase, LBehavior, LNameDisplay, testPickOutItem } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
@@ -88,8 +88,10 @@ export class LItemImitatorBehavior extends LBehavior {
         this.itemEntity().clearParent();
     }
 
-    queryDisplayName(): DEntityNamePlate | undefined {
-        return this.itemEntity().data().display;
+    queryDisplayName(): LNameDisplay | undefined {
+        const itemEntity = this.itemEntity();
+        const data = itemEntity.data();
+        return { name: data.makeDisplayName(itemEntity._stackCount), iconIndex: data.display.iconIndex };
     }
     
     queryCharacterFileName(): DPrefabImage | undefined {

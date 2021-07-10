@@ -1,4 +1,4 @@
-import { DecisionPhase, LBehavior } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LNameDisplay } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -361,12 +361,13 @@ export class LEntity extends LObject
     //----------------------------------------
     // Property
 
-    public getDisplayName(): DEntityNamePlate {
+    public getDisplayName(): LNameDisplay {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryDisplayName();
             if (v) return v;
         }
-        return this.data().display;
+        const data = this.data();
+        return { name: data.makeDisplayName(this._stackCount), iconIndex: data.display.iconIndex };
     }
 
     public getCharacterImage(): DPrefabImage | undefined {
@@ -960,6 +961,11 @@ export class LEntity extends LObject
         return this.dataId() == other.dataId();
     }
 
+    public isStacked(): boolean {
+        assert(this._stackCount >= 1);
+        return this._stackCount >= 2;
+    }
+
     /**
      * 指定 Entity をスタックに入れ、削除する。
      */
@@ -974,6 +980,7 @@ export class LEntity extends LObject
      */
     public decreaseStack(): LEntity {
         assert(this._stackCount >= 2);
+        this._stackCount--;
         const newEntity = this.clone();
         newEntity._stackCount = 1;
         return newEntity;

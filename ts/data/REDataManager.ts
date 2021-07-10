@@ -1011,6 +1011,7 @@ export class REDataManager
         const data = entity.item();
         switch (entity.entity.key) {
             case "kウッドアロー":
+                entity.display.stackedName = "%1本の" + entity.display.name;
                 data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});
                 break;
             case "kキュアリーフ":

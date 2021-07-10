@@ -15,6 +15,7 @@ export type DEntityId = number;
 
 export interface DEntityNamePlate {
     name: string;
+    stackedName: string;
     iconIndex: number;
 }
 
@@ -65,7 +66,7 @@ export class DEntity {
         this.id = id;
         this.prefabId = 0;
         this.entity = DEntityProperties_Default();
-        this.display = { name: "null", iconIndex: 0 };
+        this.display = { name: "null", stackedName: "null(%1)", iconIndex: 0 };
         this.itemData = undefined;
         this.enemy = undefined;
         this.reactions = [];
@@ -90,6 +91,13 @@ export class DEntity {
         if (!this.reactions.find(x => x.actionId == actionId && x.emittingEffect == effectId)) {
             this.reactions.push({ actionId: actionId, emittingEffect: effectId });
         }
+    }
+
+    public makeDisplayName(stackCont: number): string {
+        if (stackCont >= 2)
+            return this.display.stackedName.format(stackCont);
+        else
+            return this.display.name;
     }
 
     public verify(): void {
