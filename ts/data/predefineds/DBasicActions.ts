@@ -1,3 +1,4 @@
+import { DActionId } from "../DAction";
 
 
 export interface DBasicActions
@@ -5,12 +6,12 @@ export interface DBasicActions
     //----------------------------------------
     // Standard Actions.
 
-    DirectionChangeActionId: number;
+    DirectionChangeActionId: DActionId;
 
     /** 隣接タイルへの移動 */
-    MoveToAdjacentActionId: number;
+    MoveToAdjacentActionId: DActionId;
 
-    //moveToAdjacentAsProjectile: number;
+    //moveToAdjacentAsProjectile: DActionId;
 
 
     /**
@@ -18,7 +19,7 @@ export interface DBasicActions
      * 
      * 壺に入れるのか、矢束に混ぜるのかなどの判断が必要になることがあるため、インベントリへの追加は actor が行う。
      */
-    PickActionId: number;
+    PickActionId: DActionId;
 
     /**
      * 置こうとしている・置かれようとしている・置く・置かれた
@@ -26,7 +27,7 @@ export interface DBasicActions
      * Entity を Map に配置するのは actor 側にしてみる。(「撃つ」と同じ)
      * reactor 側で土偶オブジェクト化などが必要であれば、配置された状態から処理を始めることになる。
      */
-    PutActionId: number;
+    PutActionId: DActionId;
 
     /** 
      * 交換
@@ -34,29 +35,30 @@ export interface DBasicActions
      * [拾う][置く] とは区別する。お金を拾うとき、シレン5などでは [拾う] では所持金に加算されるが、[交換] ではアイテムと交換できる。
      * (SFC シレンではそうではないようだが http://twist.jpn.org/sfcsiren/index.php?%E3%82%AE%E3%82%BF%E3%83%B3%E6%8A%95%E3%81%92)
      */
-    ExchangeActionId: number;
+    ExchangeActionId: DActionId;
     
     /**
      * 投げる
      */
-    ThrowActionId: number;
+    ThrowActionId: DActionId;
     
     /**
      * 放り投げる
      */
-    FlungActionId: number;
+    FlungActionId: DActionId;
 
     /**
      * 撃つ
      * 
      * 矢束の数を減らすなど、単なる「投げる」とは異なるので分ける必要がある。
+     * シレン2だと、アメンジャはスタックされた矢をまとめて投げてくる。
      * 
      * Projectile を作る必要があるが、そうしないと reactor は存在しないので、
      * 矢Entity のインスタンス化は actor 側で行う。
      * 
      * インスタンス化された Entity は actor と同じブロックに配置され、例えば矢であればそこから 10回 移動する。
      */
-    ShootingActionId: number;
+    ShootingActionId: DActionId;
     
     /**
      * 衝突しようとしている・衝突されようとしている・衝突する・衝突された
@@ -67,7 +69,7 @@ export interface DBasicActions
      * 例えば投げ与えられた装備品を装備する仲間キャラなどは、この Command をハンドリングする。
      * はね返しの盾なども同様。
      */
-    CollideActionId: number;
+    CollideActionId: DActionId;
 
     /** 
      * 効果を与えようとしている・効果を与えられようとしている・効果を与える・効果を与えられた
@@ -77,7 +79,7 @@ export interface DBasicActions
      * 
      * 投げ当てた時と飲んだ時で効果が違うアイテムがあるので、その場合は EffectContext も参照する必要がある。
      */
-    AffectActionId: number;
+    AffectActionId: DActionId;
 
     /**
      * 転がす
@@ -86,7 +88,7 @@ export interface DBasicActions
      * 大砲の弾は投げることもできるし (ウルロイド)、撃ったり (オヤジ戦車) 吹き飛ばすこともできる (杖)。転がっている間はワナが起動する。
      * これらとは原因アクションを区別するために、「転がす」が必要となる。
      */
-    RollActionId: number;
+    RollActionId: DActionId;
     
     /**
      * 落ちようとしている・落ちられようとしている・落ちる・落ちられた
@@ -101,7 +103,7 @@ export interface DBasicActions
      * Trap に落下したときの Sequel 順序は 落下 > 起動音&発動中表示 > アイテム床へ落下 > ワナ効果発動
      * 
      */
-    FallActionId: number;
+    FallActionId: DActionId;
 
     /**
      * 落ちようとしている・落ちられようとしている・落ちる・落ちられた
@@ -113,24 +115,24 @@ export interface DBasicActions
      * また、[Fall] で罠の上に落ちたアイテムが、さらに周囲の空いている Block へ落ちるときにも使用する。
      * 周辺がアイテムだらけでスペースがない場合は消滅する。
      */
-    DropActionId: number;
+    DropActionId: DActionId;
 
     /** 踏む */
-    StepOnActionId: number;
+    StepOnActionId: DActionId;
 
     /** 捨てる */
-    TrashActionId: number;
+    TrashActionId: DActionId;
 
     // TODO: ↓このあたりは言葉がちがうだけでやることは同じなので、グループ化できるようにしてみたい
     /** 進む () */
-    ForwardFloorActionId: number;
+    ForwardFloorActionId: DActionId;
     /** 降りる */
-    //StairsDownActionId: number;
+    //StairsDownActionId: DActionId;
     /** 登る */
-    //StairsUpActionId: number;
+    //StairsUpActionId: DActionId;
 
     /** 戻る */
-    BackwardFloorActionId: number;
+    BackwardFloorActionId: DActionId;
 
     //----------------------------------------
     // Item Actions.
@@ -139,38 +141,38 @@ export interface DBasicActions
      * 装備しようとしている・装備されようとしている・装備する・装備された
      *
      */
-    EquipActionId: number;
+    EquipActionId: DActionId;
 
     /**
      * (装備を)外そうとしている・外されようとしている・外す・外された
      *
      * 呪いのため外せないチェックは reactor(武器Entity) 側で行う。
      */
-    EquipOffActionId: number;
+    EquipOffActionId: DActionId;
 
     /** 食べる */
-    EatActionId: number;
+    EatActionId: DActionId;
 
     /** 飲む (UI 表示名区別のため、[食べる] とは別定義。効果は同一でよさそう) */
-    TakeActionId: number;
+    TakeActionId: DActionId;
     
     /** かじる (UI 表示名区別のため、[食べる] とは別定義。効果は同一でよさそう) */
-    BiteActionId: number;
+    BiteActionId: DActionId;
 
     /** [43] 読む */
-    ReadActionId: number;
+    ReadActionId: DActionId;
 
     /** [44] 振る */
-    WaveActionId: number;
+    WaveActionId: DActionId;
 
     /** [45] 押す */
-    PushActionId: number;
+    PushActionId: DActionId;
 
     /** [46] 入れる */
-    PutInActionId: number;
+    PutInActionId: DActionId;
 
     /** [47] 出す ※「みる（のぞく）」は Window 遷移のための UI アクションなので、CommandType ではない */
-    PickOutActionId: number;
+    PickOutActionId: DActionId;
     
     /**
      * 識別する
@@ -178,17 +180,17 @@ export interface DBasicActions
      * 巻物や草を使ったとき、手封じの壺を使ったとき、拾ったときなど、状況に応じて識別が発生するタイミングは多くあるため、
      * 必要な時に識別できるように Command 化しておく。
      */
-    IdentifyActionId: number;
+    IdentifyActionId: DActionId;
 
     /**
      * アイテムを渡す
      */
-    //passItem: number;
+    //passItem: DActionId;
 
     //----------------------------------------
     // Combat Actions.
 
     
-    AttackActionId: number; // TODO: deprecated
+    AttackActionId: DActionId; // TODO: deprecated
 }
 

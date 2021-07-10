@@ -235,6 +235,11 @@ export class LUnitBehavior extends LBehavior {
                 .then(() => {
                     //itemEntity.callRemoveFromWhereabouts(context);
 
+                    itemEntity.removeFromParent();
+                    itemEntity.x = self.x;
+                    itemEntity.y = self.y;
+
+                    /*
                     let actual: LEntity;
                     if (itemEntity.isStacked()) {
                         // スタックされていれば減らして新たな entity を生成
@@ -250,9 +255,10 @@ export class LUnitBehavior extends LBehavior {
 
                     actual.x = self.x;
                     actual.y = self.y;
+                    */
 
 
-                    context.post(actual, self, subject, undefined, onThrowReaction)
+                    context.post(itemEntity, self, subject, undefined, onThrowReaction)
                         .then(() => {
                             context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
                             return true;
