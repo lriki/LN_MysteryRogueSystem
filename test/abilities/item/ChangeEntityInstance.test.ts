@@ -6,12 +6,12 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -47,8 +47,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     expect(item1.queryReactions().includes(DBasics.actions.WaveActionId)).toBe(true);
     
     // [振る]
-    const activity1 = SActivityFactory.newActivity(DBasics.actions.WaveActionId);
-    activity1._setup(actor1, item1);
+    const activity1 = LActivity.makeWave(actor1, item1);
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
@@ -83,8 +82,7 @@ test("Items.ChangeEntityInstance.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [投げる]
-    const activity = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity._setup(actor1, item1);
+    const activity = LActivity.makeThrow(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     

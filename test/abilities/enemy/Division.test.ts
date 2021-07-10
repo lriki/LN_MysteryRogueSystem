@@ -6,7 +6,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 import { REData } from "ts/data/REData";

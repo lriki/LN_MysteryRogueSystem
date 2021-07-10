@@ -14,10 +14,8 @@ import { LBehavior } from "./LBehavior";
 import { LEquipmentBehavior } from "./LEquipmentBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
-import { LEquipActivity } from "../activities/LEquipActivity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/data/DParameter";
-import { LEquipOffActivity } from "../activities/LEquipOffActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { testPickOutItem } from "../internal";
@@ -118,7 +116,7 @@ NOTE:
 
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
-        if (activity instanceof LEquipActivity) {
+        if (activity.actionId() == DBasics.actions.EquipActionId) {
             this.refreshSlots();
 
             const itemEntity = activity.object();
@@ -158,7 +156,7 @@ NOTE:
 
             return REResponse.Succeeded;
         }
-        else if (activity instanceof LEquipOffActivity) {
+        else if (activity.actionId() == DBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
             
             context.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)

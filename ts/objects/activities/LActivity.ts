@@ -1,3 +1,5 @@
+import { DActionId } from "ts/data/DAction";
+import { DBasics } from "ts/data/DBasics";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -13,19 +15,20 @@ import { REGame } from "../REGame";
  * それらは派生クラスで実装する。
  */
 export class LActivity {
+    private _actionId: DActionId;
     private _subject: LEntityId;    // Command 送信対象 (主語)
     private _object: LEntityId;     // (目的語)
+    private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
 
-    public constructor() {
-        this._subject = LEntityId.makeEmpty();
-        this._object = LEntityId.makeEmpty();
+    public constructor(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number) {
+        this._actionId = actionId;
+        this._subject = subject.entityId();
+        this._object = object ? object.entityId() : LEntityId.makeEmpty();
+        this._direction = dir ?? 0;
     }
 
-    public _setup(subject: LEntity, object: LEntity | undefined): void {
-        this._subject = subject.entityId();
-        if (object) {
-            this._object = object.entityId();
-        }
+    public actionId(): DActionId {
+        return this._actionId;
     }
 
     public subject(): LEntity {
@@ -38,6 +41,58 @@ export class LActivity {
 
     public object(): LEntity {
         return REGame.world.entity(this._object);
+    }
+
+    public direction(): number {
+        return this._direction;
+    }
+
+    public hasDirection(): boolean {
+        return this._direction != 0;
+    }
+
+    //--------------------
+    // Utils
+
+    public static makeDirectionChange(subject: LEntity, dir: number): LActivity {
+        return new LActivity(DBasics.actions.DirectionChangeActionId, subject, undefined, dir);
+    }
+
+    public static makeMoveToAdjacent(subject: LEntity, dir: number): LActivity {
+        return new LActivity(DBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
+    }
+
+    public static makePick(subject: LEntity): LActivity {
+        return new LActivity(DBasics.actions.PickActionId, subject);
+    }
+
+    public static makePut(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.PutActionId, subject, object);
+    }
+
+    public static makeThrow(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.ThrowActionId, subject, object);
+    }
+
+    public static makeExchange(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.ExchangeActionId, subject, object);
+    }
+
+    public static makeEquip(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.EquipActionId, subject, object);
+    }
+
+    public static makeEquipOff(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.EquipOffActionId, subject, object);
+    }
+
+    
+    public static makeEat(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.EatActionId, subject, object);
+    }
+
+    public static makeWave(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.WaveActionId, subject, object);
     }
 }
 

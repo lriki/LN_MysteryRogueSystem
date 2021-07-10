@@ -1,6 +1,5 @@
 import { TestEnv } from "./TestEnv";
 import { DBasics } from "ts/data/DBasics";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REGame } from "ts/objects/REGame";
 import { RESystem } from "ts/system/RESystem";
@@ -10,7 +9,6 @@ import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { TileShape } from "ts/objects/LBlock";

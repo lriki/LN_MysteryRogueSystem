@@ -1,5 +1,4 @@
 import { assert } from "ts/Common";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";

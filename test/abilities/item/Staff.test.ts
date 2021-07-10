@@ -6,10 +6,10 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -44,8 +44,7 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
         // [振る]
-        const activity2 = SActivityFactory.newActivity(DBasics.actions.WaveActionId);
-        activity2._setup(actor1, item1);
+        const activity2 = LActivity.makeWave(actor1, item1);
         dc.postActivity(activity2);
         dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
         
@@ -65,8 +64,7 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
         // [投げる]
-        const activity1 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-        activity1._setup(actor1, item1);
+        const activity1 = LActivity.makeThrow(actor1, item1);
         dc.postActivity(activity1);
         dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
         

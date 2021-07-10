@@ -6,13 +6,12 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 import { REData } from "ts/data/REData";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { DEntityCreateInfo } from "ts/data/DEntity";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -39,7 +38,7 @@ test("Abilities.Enemy.ItemImitator", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // Enemy の上に移動してみる
-    RESystem.dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

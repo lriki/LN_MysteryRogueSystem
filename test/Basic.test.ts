@@ -9,10 +9,9 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { DBasics } from "ts/data/DBasics";
-import { LDirectionChangeActivity } from "ts/objects/activities/LDirectionChangeActivity";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 //import "js/rmmz_objects.js"
 
@@ -96,7 +95,7 @@ test("Basic1", () => {
         expect((dialog1 instanceof REManualActionDialog)).toBe(true);
     
         // 向き変更。行動を消費せず Dialog を閉じる
-        dialogContext.postActivity(LDirectionChangeActivity.make(actor1, 9));
+        dialogContext.postActivity(LActivity.makeDirectionChange(actor1, 9));
         dialogContext.activeDialog().submit();
     
         // この時点では向きは変更されていない
@@ -117,7 +116,7 @@ test("Basic1", () => {
 
     // 一歩下に移動してみる (ターン消費あり)
     {
-        dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 2));
+        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 2));
         dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
         // シミュレーション実行。実際に移動が行われる
@@ -256,7 +255,7 @@ test("Basic.TurnOrderTable", () => {
     // 移動量から実際に行動した数を判断する
     {
         // player を右へ移動
-        dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
         dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
         // AI行動決定
@@ -278,7 +277,7 @@ test("Basic.TurnOrderTable", () => {
     // 2ターン目
     {
         // player を右へ移動
-        dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
         dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
         // AI行動決定

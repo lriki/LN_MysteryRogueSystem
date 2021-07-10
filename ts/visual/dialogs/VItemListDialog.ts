@@ -5,11 +5,11 @@ import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehav
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 import { REGame } from "ts/objects/REGame";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 export class VItemListDialog extends VDialog {
     private _model: LItemListDialog;
@@ -124,9 +124,8 @@ export class VItemListDialog extends VDialog {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
             
-            const activity = SActivityFactory.newActivity(actionId);
             // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-            activity._setup(this._model.entity(), itemEntity);
+            const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
             
             RESystem.dialogContext.postActivity(activity);
             this.submit();

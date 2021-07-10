@@ -5,8 +5,6 @@ import { DBasics } from "ts/data/DBasics";
 import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
-import { LPickActivity } from "ts/objects/activities/LPickActivity";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
@@ -16,6 +14,7 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 import { UMovement } from "ts/usecases/UMovement";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { REData } from "ts/data/REData";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 enum UpdateMode {
     Normal,
@@ -109,7 +108,7 @@ export class VManualActionDialogVisual extends VDialog {
                         }
                         else {
                             // 歩行移動時に足元に拾えるものがあれば取得試行
-                            context.postActivity(LPickActivity.make(entity));
+                            context.postActivity(LActivity.makePick(entity));
                         }
     
     
@@ -321,7 +320,7 @@ export class VManualActionDialogVisual extends VDialog {
                 behavior._straightDashing = true;
             }
 
-            context.postActivity(LMoveAdjacentActivity.make(entity, dir));
+            context.postActivity(LActivity.makeMoveToAdjacent(entity, dir));
             this._model.consumeAction();
             this._model.submit();
 

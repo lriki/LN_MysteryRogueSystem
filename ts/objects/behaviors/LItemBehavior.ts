@@ -9,7 +9,6 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
-import { LWaveActivity } from "../activities/LWaveActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onEatReaction } from "./LBehavior";
@@ -56,7 +55,7 @@ export class LItemBehavior extends LBehavior {
     }
 
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
-        if (activity instanceof LWaveActivity) {
+        if (activity.actionId() == DBasics.actions.WaveActionId) {
             console.log("aa LWaveActivity");
                 
             const subject = activity.subject();

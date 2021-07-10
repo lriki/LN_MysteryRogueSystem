@@ -3,9 +3,9 @@ import { DActionId } from "ts/data/DAction";
 import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { VActionCommandWindow } from "../windows/VActionCommandWindow";
 import { VDialog } from "./VDialog";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 /**
  * [足元]
@@ -48,9 +48,8 @@ export class VFeetDialog extends VDialog {
         const entity = RESystem.dialogContext.causeEntity();
         assert(entity);
 
-        const activity = SActivityFactory.newActivity(actionId);
         // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-        activity._setup(entity, this._model.targetEntity());
+        const activity = new LActivity(actionId, entity, this._model.targetEntity(), entity.dir);
 
         RESystem.dialogContext.postActivity(activity);
         this._model.submit();

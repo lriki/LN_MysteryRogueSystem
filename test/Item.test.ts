@@ -1,7 +1,4 @@
 import { assert } from "ts/Common";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
-import { LPickActivity } from "ts/objects/activities/LPickActivity";
-import { LPutActivity } from "ts/objects/activities/LPutActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
@@ -11,9 +8,9 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DBasics } from "ts/data/DBasics";
 import { DEntityCreateInfo } from "ts/data/DEntity";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -42,13 +39,13 @@ test("PickAndPut", () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 足元のアイテムを拾う
-    dialogContext.postActivity(LPickActivity.make(actor1));
+    dialogContext.postActivity(LActivity.makePick(actor1));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -65,7 +62,7 @@ test("PickAndPut", () => {
     expect(inventory.entities()[0]).toBe(item1);
 
     // item1 を置く
-    dialogContext.postActivity(LPutActivity.make(actor1, item1));
+    dialogContext.postActivity(LActivity.makePut(actor1, item1));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -102,7 +99,7 @@ test("PickAtMoved", () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -111,7 +108,7 @@ test("PickAtMoved", () => {
     expect(enemy1.x).toBe(19);  // enemy は 1歩近づいてきている
 
     // 足元のアイテムを拾う
-    dialogContext.postActivity(LPickActivity.make(actor1));
+    dialogContext.postActivity(LActivity.makePick(actor1));
     dialogContext.postReopen();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -138,16 +135,14 @@ test("Item.ThrowAndDrop", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [投げる]
-    const activity1 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity1._setup(actor1, item1);
+    const activity1 = LActivity.makeThrow(actor1, item1);
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [投げる]
-    const activity2 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity2._setup(actor1, item2);
+    const activity2 = LActivity.makeThrow(actor1, item2);
     RESystem.dialogContext.postActivity(activity2);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
@@ -183,8 +178,7 @@ test("Item.DropAndDestroy", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [投げる]
-    const activity1 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity1._setup(actor1, item1);
+    const activity1 = LActivity.makeThrow(actor1, item1);
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     

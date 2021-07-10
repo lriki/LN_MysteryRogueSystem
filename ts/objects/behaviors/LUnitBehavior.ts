@@ -13,16 +13,8 @@ import { DActionId } from "ts/data/DAction";
 import { UMovement } from "ts/usecases/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
-import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
-import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
-import { LPickActivity } from "../activities/LPickActivity";
-import { LWaveActivity } from "../activities/LWaveActivity";
-import { LPutActivity } from "../activities/LPutActivity";
-import { LThrowActivity } from "../activities/LThrowActivity";
-import { LProceedFloorActivity } from "../activities/LProceedFloorActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SMessageBuilder } from "ts/system/SMessageBuilder";
-import { LExchangeActivity } from "../activities/LExchangeActivity";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
@@ -130,11 +122,11 @@ export class LUnitBehavior extends LBehavior {
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         const subject = new SEffectSubject(self);
 
-        if (activity instanceof LDirectionChangeActivity) {
+        if (activity.actionId() == DBasics.actions.DirectionChangeActionId) {
             self.dir = activity.direction();
             return REResponse.Succeeded;
         }
-        else if (activity instanceof LMoveAdjacentActivity) {
+        else if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
 
             const offset = Helpers.dirToTileOffset(activity.direction());
             
@@ -153,7 +145,8 @@ export class LUnitBehavior extends LBehavior {
                 return REResponse.Succeeded;
             }
         }
-        else if (activity instanceof LProceedFloorActivity) {
+        else if (activity.actionId() == DBasics.actions.ForwardFloorActionId ||
+            activity.actionId() == DBasics.actions.BackwardFloorActionId) {
 
             const reactor = activity.object();
             if (reactor) {
@@ -161,7 +154,7 @@ export class LUnitBehavior extends LBehavior {
             }
 
         }
-        else if (activity instanceof LPickActivity) {
+        else if (activity.actionId() == DBasics.actions.PickActionId) {
 
             const inventory = self.findBehavior(LInventoryBehavior);
             if (inventory) {
@@ -190,7 +183,7 @@ export class LUnitBehavior extends LBehavior {
 
             }
         }
-        else if (activity instanceof LPutActivity) {
+        else if (activity.actionId() == DBasics.actions.PutActionId) {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
@@ -222,7 +215,7 @@ export class LUnitBehavior extends LBehavior {
             }
             return REResponse.Succeeded;
         }
-        else if (activity instanceof LThrowActivity) {
+        else if (activity.actionId() == DBasics.actions.ThrowActionId) {
             // [投げる] は便利コマンドのようなもの。
             // 具体的にどのように振舞うのか (直線に飛ぶのか、放物線状に動くのか、転がるのか) を決めるのは相手側
 
@@ -268,7 +261,7 @@ export class LUnitBehavior extends LBehavior {
                 });
             return REResponse.Succeeded;
         }
-        else if (activity instanceof LExchangeActivity) {
+        else if (activity.actionId() == DBasics.actions.ExchangeActionId) {
             
             const inventory = self.getBehavior(LInventoryBehavior);
             const item1 = activity.object();
@@ -292,7 +285,7 @@ export class LUnitBehavior extends LBehavior {
             }
 
         }
-        else if (activity instanceof LWaveActivity) {
+        else if (activity.actionId() == DBasics.actions.WaveActionId) {
             context.postSequel(self, RESystem.sequels.attack);
 
             const reactor = activity.object();

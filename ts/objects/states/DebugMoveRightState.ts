@@ -3,9 +3,9 @@ import { DecisionPhase, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
-import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 import { MovingMethod } from "../LMap";
+import { DBasics } from "ts/data/DBasics";
+import { LActivity } from "../activities/LActivity";
 
 export class LDebugMoveRightState extends LBehavior {
 
@@ -26,8 +26,8 @@ export class LDebugMoveRightState extends LBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(entity, dir, MovingMethod.Walk)) {
-                context.postActivity(LDirectionChangeActivity.make(entity, dir));
-                context.postActivity(LMoveAdjacentActivity.make(entity, dir));
+                context.postActivity(LActivity.makeDirectionChange(entity, dir));
+                context.postActivity(LActivity.makeMoveToAdjacent(entity, dir));
             }
             context.postConsumeActionToken(entity);
             return SPhaseResult.Handled;

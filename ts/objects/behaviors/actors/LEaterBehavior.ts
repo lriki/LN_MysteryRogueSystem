@@ -1,7 +1,6 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { LEatActivity } from "ts/objects/activities/LEatActivity";
 import { LEntity } from "ts/objects/LEntity";
 import { REResponse } from "ts/system/RECommand";
 import { SEffectSubject } from "ts/system/SEffectContext";
@@ -24,7 +23,7 @@ export class LEaterBehavior extends LBehavior {
 
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
-        if (activity instanceof LEatActivity) {
+        if (activity.actionId() == DBasics.actions.EatActionId) {
             console.log("------eat");
 
             const reactor = activity.object();

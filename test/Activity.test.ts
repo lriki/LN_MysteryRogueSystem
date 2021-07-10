@@ -8,12 +8,12 @@ import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntity, DEntityCreateInfo } from "ts/data/DEntity";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { REData } from "ts/data/REData";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -40,8 +40,7 @@ test("Activity.Eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる] Post
-    const activity = SActivityFactory.newActivity(DBasics.actions.EatActionId);
-    activity._setup(actor1, item1);
+    const activity = LActivity.makeEat(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
@@ -74,8 +73,7 @@ test("Activity.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [投げる] Post
-    const activity = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity._setup(actor1, item1);
+    const activity = LActivity.makeThrow(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
@@ -93,8 +91,7 @@ test("Activity.Throw", () => {
     actor1.dir = 2;
 
     // [投げる] Post
-    const activity2 = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity2._setup(actor1, item2);
+    const activity2 = LActivity.makeThrow(actor1, item2);
     RESystem.dialogContext.postActivity(activity2);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
@@ -133,8 +130,7 @@ test("Activity.ThrowAndHit", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [投げる] Post
-    const activity = SActivityFactory.newActivity(DBasics.actions.ThrowActionId);
-    activity._setup(actor1, item1);
+    const activity = LActivity.makeThrow(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
@@ -169,8 +165,7 @@ test("Activity.Exchange", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [交換]
-    const activity = SActivityFactory.newActivity(DBasics.actions.ExchangeActionId);
-    activity._setup(actor1, item1);
+    const activity = LActivity.makeExchange(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     

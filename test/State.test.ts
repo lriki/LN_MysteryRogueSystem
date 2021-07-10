@@ -6,7 +6,6 @@ import { LFloorId } from "ts/objects/LFloorId";
 import { UMovement } from "ts/usecases/UMovement";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { TileShape } from "ts/objects/LBlock";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { assert } from "ts/Common";

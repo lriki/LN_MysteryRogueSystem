@@ -6,12 +6,12 @@ import { LFloorId } from "ts/objects/LFloorId";
 import { UMovement } from "ts/usecases/UMovement";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { TileShape } from "ts/objects/LBlock";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { FMap, FSector } from "ts/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -168,7 +168,7 @@ test("MoveDiagonal_CollideWalls", () => {
     
     // player を右下へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 3));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 3));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

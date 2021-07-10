@@ -1,5 +1,4 @@
 import { assert } from "ts/Common";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
@@ -8,6 +7,7 @@ import { TestEnv } from "./TestEnv";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -34,7 +34,7 @@ test("Trap.Basic", () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

@@ -8,12 +8,11 @@ import { CandidateSkillAction, UAction } from "ts/usecases/UAction";
 import { SAIHelper } from "ts/system/SAIHelper";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { UMovement } from "ts/usecases/UMovement";
-import { LDirectionChangeActivity } from "./activities/LDirectionChangeActivity";
-import { LMoveAdjacentActivity } from "./activities/LMoveAdjacentActivity";
 import { LBlock } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
+import { LActivity } from "./activities/LActivity";
 
 /*
     - 逃げるAIは全く別の CharacterAI作ったほうがいいかもしれない。
@@ -355,7 +354,7 @@ export class LCharacterAI {
 
                 // 移動後、向きを target へ向けておく
                 const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
-                context.postActivity(LDirectionChangeActivity.make(self, dir));
+                context.postActivity(LActivity.makeDirectionChange(self, dir));
 
                 return true;
             }
@@ -386,8 +385,8 @@ export class LCharacterAI {
 
         const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
         if (dir != 0 && UMovement.checkPassageToDir(self, dir)) {
-            context.postActivity(LDirectionChangeActivity.make(self, dir));
-            context.postActivity(LMoveAdjacentActivity.make(self, dir));
+            context.postActivity(LActivity.makeDirectionChange(self, dir));
+            context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             //this.moveToAdjacent(self, block, context);
             context.postConsumeActionToken(self);
             return true;
@@ -399,8 +398,8 @@ export class LCharacterAI {
     
     private postMoveToAdjacent(self: LEntity, block: LBlock, context: SCommandContext): void {
         const dir = Helpers.offsetToDir(block.x() - self.x, block.y() - self.y);
-        context.postActivity(LDirectionChangeActivity.make(self, dir));
-        context.postActivity(LMoveAdjacentActivity.make(self, dir));
+        context.postActivity(LActivity.makeDirectionChange(self, dir));
+        context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
         context.postConsumeActionToken(self);
     }
     

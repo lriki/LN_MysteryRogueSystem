@@ -1,18 +1,13 @@
 import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
-import { REResponse, SPhaseResult } from "../../system/RECommand";
+import { SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
-import { Helpers } from "ts/system/Helpers";
-import { RESystem } from "ts/system/RESystem";
-import { SAIHelper } from "ts/system/SAIHelper";
-import { LEntityId } from "../LObject";
-import { LDirectionChangeActivity } from "../activities/LDirectionChangeActivity";
-import { LMoveAdjacentActivity } from "../activities/LMoveAdjacentActivity";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { UMovement } from "ts/usecases/UMovement";
 import { LCharacterAI } from "../LCharacterAI";
+import { LActivity } from "../activities/LActivity";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -37,7 +32,7 @@ export class LDecisionBehavior extends LBehavior {
             behavior._fastforwarding = false;
 
             if (behavior._straightDashing && UMovement.checkDashStopBlock(entity)) {
-                context.postActivity(LMoveAdjacentActivity.make(entity, entity.dir));
+                context.postActivity(LActivity.makeMoveToAdjacent(entity, entity.dir));
                 context.postConsumeActionToken(entity);
                 return SPhaseResult.Handled;
             }

@@ -1,18 +1,14 @@
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { LEquipActivity } from "ts/objects/activities/LEquipActivity";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
-import { LEquipOffActivity } from "ts/objects/activities/LEquipOffActivity";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
-import { LPutActivity } from "ts/objects/activities/LPutActivity";
-import { LThrowActivity } from "ts/objects/activities/LThrowActivity";
 import { DEntityCreateInfo } from "ts/data/DEntity";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -34,7 +30,7 @@ test("Equipment.EquipOnOff", () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);    // 行動確定
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -50,8 +46,8 @@ test("Equipment.EquipOnOff", () => {
     inventory.addEntity(shield1);
 
     // [装備]
-    dialogContext.postActivity(LEquipActivity.make(actor1, weapon1));
-    dialogContext.postActivity(LEquipActivity.make(actor1, shield1));
+    dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
+    dialogContext.postActivity(LActivity.makeEquip(actor1, shield1));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -68,8 +64,8 @@ test("Equipment.EquipOnOff", () => {
     expect(shield1.parentObject()).toBe(inventory);
     
     // [はずす]
-    dialogContext.postActivity(LEquipOffActivity.make(actor1, weapon1));
-    dialogContext.postActivity(LEquipOffActivity.make(actor1, shield1));
+    dialogContext.postActivity(LActivity.makeEquipOff(actor1, weapon1));
+    dialogContext.postActivity(LActivity.makeEquipOff(actor1, shield1));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -101,14 +97,14 @@ test("Equipment.Put_Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LEquipActivity.make(actor1, weapon1));
-    RESystem.dialogContext.postActivity(LEquipActivity.make(actor1, shield1));
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [置く]
-    RESystem.dialogContext.postActivity(LPutActivity.make(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makePut(actor1, weapon1));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -117,7 +113,7 @@ test("Equipment.Put_Throw", () => {
     expect(weapon1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
     
     // [投げる]
-    RESystem.dialogContext.postActivity(LThrowActivity.make(actor1, shield1));
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, shield1));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -143,7 +139,7 @@ test("Equipment.Curse", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LEquipActivity.make(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -151,7 +147,7 @@ test("Equipment.Curse", () => {
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 装備できていること。
     
     // [はずす]
-    RESystem.dialogContext.postActivity(LEquipOffActivity.make(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makeEquipOff(actor1, weapon1));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -160,7 +156,7 @@ test("Equipment.Curse", () => {
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 外れないこと。
     
     // [置く]
-    RESystem.dialogContext.postActivity(LPutActivity.make(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makePut(actor1, weapon1));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

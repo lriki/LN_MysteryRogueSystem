@@ -1,6 +1,5 @@
 import { TestEnv } from "./TestEnv";
 import { DBasics } from "ts/data/DBasics";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REGame } from "ts/objects/REGame";
 import { RESystem } from "ts/system/RESystem";
@@ -10,9 +9,9 @@ import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -41,7 +40,7 @@ test("Survival.FP", () => {
     //--------------------
     // 移動で FP が減少するか？
 
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -54,7 +53,7 @@ test("Survival.FP", () => {
     // FP 0 にしてから移動してみる
 
     SDebugHelpers.setFP(actor1, 0);
-    dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -69,8 +68,7 @@ test("Survival.FP", () => {
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
 
     // [食べる]
-    const activity = SActivityFactory.newActivity(DBasics.actions.EatActionId);
-    activity._setup(actor1, item1);
+    const activity = LActivity.makeEat(actor1, item1);
     RESystem.dialogContext.postActivity(activity);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     

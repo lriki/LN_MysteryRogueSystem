@@ -6,15 +6,14 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { SActivityFactory } from "ts/system/SActivityFactory";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
-import { LMoveAdjacentActivity } from "ts/objects/activities/LMoveAdjacentActivity";
 import { TileShape } from "ts/objects/LBlock";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -54,7 +53,7 @@ test("Items.Sanctuary", () => {
     expect(enemy1.y).toBe(11);
     
     // player を右へ移動。聖域の上に乗る
-    RESystem.dialogContext.postActivity(LMoveAdjacentActivity.make(actor1, 6));
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
