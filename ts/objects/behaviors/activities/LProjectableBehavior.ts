@@ -114,6 +114,8 @@ export class LProjectableBehavior extends LBehavior {
         const tx = self.x + offset.x;
         const ty = self.y + offset.y;
 
+        self.dir = this.blowDirection;
+
 
         if (UMovement.moveEntity(self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
