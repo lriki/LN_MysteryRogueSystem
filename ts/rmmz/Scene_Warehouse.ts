@@ -1,8 +1,8 @@
-import { LWarehouseDialog } from "ts/system/dialogs/LWarehouseDialog";
+import { SWarehouseDialog } from "ts/system/dialogs/SWarehouseDialog";
 import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
 
 export class Scene_Warehouse extends Scene_MenuBase {
-    static dialogData: LWarehouseDialog;
+    static dialogData: SWarehouseDialog;
 
     private _dialogNavigator: REDialogVisualNavigator;
 

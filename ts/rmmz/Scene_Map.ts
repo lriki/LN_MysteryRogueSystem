@@ -8,7 +8,7 @@ import { REVisual } from "../visual/REVisual";
 import { VDirectionArrow } from "ts/visual/VDirectionArrow";
 import { REGame } from "ts/objects/REGame";
 import { RMMZHelper } from "./RMMZHelper";
-import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
+import { SMainMenuDialog } from "ts/system/dialogs/SMainMenuDialog";
 
 declare global {
     interface Scene_Map {
@@ -153,7 +153,7 @@ Scene_Map.prototype.callMenu = function() {
         this.menuCalling = false;
         const actorEntity = REGame.camera.focusedEntity();
         assert(actorEntity);
-        RESystem.commandContext.openDialog(actorEntity, new LMainMenuDialog(actorEntity), false);
+        RESystem.commandContext.openDialog(actorEntity, new SMainMenuDialog(actorEntity), false);
     }
 };
 

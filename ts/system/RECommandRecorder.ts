@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import { assert } from 'ts/Common';
 import { DActionId } from 'ts/data/DAction';
-import { LCommandPlaybackDialog } from 'ts/system/dialogs/LCommandPlaybackDialog';
+import { SCommandPlaybackDialog } from 'ts/system/dialogs/SCommandPlaybackDialog';
 import { LEntityId } from 'ts/objects/LObject';
 import { REGame } from 'ts/objects/REGame';
 import { LMap } from 'ts/objects/LMap';
@@ -65,7 +65,7 @@ export class RECommandRecorder {
         this._playbackCommandIndex = 0;
     }
 
-    public runPlaybackCommand(dialog: LCommandPlaybackDialog): void {
+    public runPlaybackCommand(dialog: SCommandPlaybackDialog): void {
         assert(this._playbackCommands);
         assert(this.isPlayback());
 
@@ -81,7 +81,7 @@ export class RECommandRecorder {
         } while (this._playbackCommandIndex < this._playbackCommands.length);
     }
 
-    private doCommand(dialog: LCommandPlaybackDialog, cmd: RERecordingCommand): boolean {
+    private doCommand(dialog: SCommandPlaybackDialog, cmd: RERecordingCommand): boolean {
         switch (cmd.type) {
             case RERecordingCommandType.Action: {
                 const actionId: number = cmd.data.actionId;

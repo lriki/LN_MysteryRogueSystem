@@ -1,17 +1,17 @@
-import { LWarehouseDialog } from "ts/system/dialogs/LWarehouseDialog";
+import { SWarehouseDialog } from "ts/system/dialogs/SWarehouseDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWindow";
-import { LWarehouseStoreDialog } from "ts/system/dialogs/LWarehouseStoreDialog";
-import { LWarehouseWithdrawDialog } from "ts/system/dialogs/LWarehouseWithdrawDialog";
+import { SWarehouseStoreDialog } from "ts/system/dialogs/SWarehouseStoreDialog";
+import { SWarehouseWithdrawDialog } from "ts/system/dialogs/SWarehouseWithdrawDialog";
 import { VDialog } from "./VDialog";
 
 export class VWarehouseDialog extends VDialog {
-    private _model: LWarehouseDialog;
+    private _model: SWarehouseDialog;
     //private _inventory: LInventoryBehavior;
     private _commandWindow: VWarehouseMenuCommandWindow;
 
-    constructor(model: LWarehouseDialog) {
+    constructor(model: SWarehouseDialog) {
         super(model);
         this._model = model;
         //this._inventory = this._model.userEntity().getBehavior(LInventoryBehavior);
@@ -35,7 +35,7 @@ export class VWarehouseDialog extends VDialog {
     private handleStoreCommand() {
         const user = this._model.userEntity();
         const inventory = user.getBehavior(LInventoryBehavior);
-        this.openSubDialog(new LWarehouseStoreDialog(user, inventory), (result: any) => {
+        this.openSubDialog(new SWarehouseStoreDialog(user, inventory), (result: any) => {
             this._model.storeItems(result as LEntity[]);
         });
 
@@ -45,7 +45,7 @@ export class VWarehouseDialog extends VDialog {
 
         const user = this._model.userEntity();
         const inventory = this._model.warehouseEntity().getBehavior(LInventoryBehavior);
-        this.openSubDialog(new LWarehouseWithdrawDialog(user, inventory), (result: any) => {
+        this.openSubDialog(new SWarehouseWithdrawDialog(user, inventory), (result: any) => {
             this._model.withdrawItems(result as LEntity[]);
         });
     }

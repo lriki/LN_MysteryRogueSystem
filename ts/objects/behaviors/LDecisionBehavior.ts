@@ -1,4 +1,4 @@
-import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
+import { SManualActionDialog } from "ts/system/dialogs/SManualDecisionDialog";
 import { SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
@@ -37,7 +37,7 @@ export class LDecisionBehavior extends LBehavior {
                 return SPhaseResult.Handled;
             }
             else {
-                const dialog = new REManualActionDialog();
+                const dialog = new SManualActionDialog();
                 dialog.dashingEntry = behavior._straightDashing;
                 context.openDialog(entity, dialog, false);
                 behavior._straightDashing = false;

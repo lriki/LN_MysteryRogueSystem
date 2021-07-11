@@ -10,7 +10,7 @@ import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, DecisionPhase, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { SSequelContext } from "./SSequelContext";
-import { LCommandPlaybackDialog } from "ts/system/dialogs/LCommandPlaybackDialog";
+import { SCommandPlaybackDialog } from "ts/system/dialogs/SCommandPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
@@ -230,7 +230,7 @@ export class SCommandContext
             RESystem.dialogContext.setCauseEntity(causeEntity);
 
             if (REGame.recorder.isPlayback()) {
-                RESystem.dialogContext.open(new LCommandPlaybackDialog());
+                RESystem.dialogContext.open(new SCommandPlaybackDialog());
             }
             else {
                 RESystem.dialogContext.open(dialogModel);

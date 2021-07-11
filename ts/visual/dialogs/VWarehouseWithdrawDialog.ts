@@ -1,13 +1,13 @@
 import { tr } from "ts/Common";
-import { LWarehouseWithdrawDialog } from "ts/system/dialogs/LWarehouseWithdrawDialog";
+import { SWarehouseWithdrawDialog } from "ts/system/dialogs/SWarehouseWithdrawDialog";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase } from "./VItemListDialogBase";
 
 export class VWarehouseWithdrawDialog extends VItemListDialogBase {
-    private _model: LWarehouseWithdrawDialog;
+    private _model: SWarehouseWithdrawDialog;
 
-    public constructor(model: LWarehouseWithdrawDialog) {
+    public constructor(model: SWarehouseWithdrawDialog) {
         super(model.entity(), model.inventory(), model);
         this._model = model;
     }

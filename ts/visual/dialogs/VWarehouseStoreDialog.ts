@@ -1,5 +1,5 @@
 import { tr } from "ts/Common";
-import { LWarehouseStoreDialog } from "ts/system/dialogs/LWarehouseStoreDialog";
+import { SWarehouseStoreDialog } from "ts/system/dialogs/SWarehouseStoreDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
@@ -7,11 +7,11 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
 export class VWarehouseStoreDialog extends VDialog {
-    _model: LWarehouseStoreDialog;
+    _model: SWarehouseStoreDialog;
     _itemListWindow: VItemListWindow;
     _commandWindow: VFlexCommandWindow;
 
-    public constructor(model: LWarehouseStoreDialog) {
+    public constructor(model: SWarehouseStoreDialog) {
         super(model);
         this._model = model;
         
@@ -41,7 +41,7 @@ export class VWarehouseStoreDialog extends VDialog {
 
             this._commandWindow.clear();
             this._commandWindow.addSystemCommand(tr("預ける"), "store", () => this.handleStore(items));
-            this._commandWindow.refresh();
+            
             this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
 
             this._itemListWindow.deactivate();

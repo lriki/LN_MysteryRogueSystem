@@ -2,13 +2,13 @@ import { assert, tr2 } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
 import { RESystem } from "ts/system/RESystem";
 import { DBasics } from "ts/data/DBasics";
-import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
+import { SManualActionDialog } from "ts/system/dialogs/SManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/objects/LEntity";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "ts/system/SDialogContext";
-import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
-import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
+import { LFeetDialog } from "ts/system/dialogs/SFeetDialog";
+import { SMainMenuDialog } from "ts/system/dialogs/SMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { UMovement } from "ts/usecases/UMovement";
@@ -25,7 +25,7 @@ enum UpdateMode {
 export class VManualActionDialogVisual extends VDialog {
     private readonly MovingInputInterval = 5;
 
-    private _model: REManualActionDialog;
+    private _model: SManualActionDialog;
     private _updateMode: UpdateMode = UpdateMode.Normal;
     private _waitCount: number = 0; // キーボード操作では 1 フレームでピッタリ斜め入力するのが難しいので、最後の入力から少し待てるようにする
     //private _dirSelecting: boolean = false;
@@ -35,7 +35,7 @@ export class VManualActionDialogVisual extends VDialog {
 
     private _crossDiagonalCount: number = 0;    // 
 
-    public constructor(model: REManualActionDialog) {
+    public constructor(model: SManualActionDialog) {
         super(model);
         this._model = model;
     }
@@ -222,7 +222,7 @@ export class VManualActionDialogVisual extends VDialog {
         }
         else if (Input.isTriggered("menu")) {
             SoundManager.playOk();
-            this.openSubDialog(new LMainMenuDialog(entity), d => {
+            this.openSubDialog(new SMainMenuDialog(entity), d => {
                 if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
             });
             return;
@@ -257,7 +257,7 @@ export class VManualActionDialogVisual extends VDialog {
         }
         else if (Input.isTriggered("menu")) {
             this.endDirectionSelecting();
-            this.openSubDialog(new LMainMenuDialog(entity), d => {
+            this.openSubDialog(new SMainMenuDialog(entity), d => {
                 if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
             });
             return;

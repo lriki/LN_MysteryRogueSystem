@@ -1,5 +1,5 @@
 
-import { REManualActionDialog } from "ts/system/dialogs/REManualDecisionDialog";
+import { SManualActionDialog } from "ts/system/dialogs/SManualDecisionDialog";
 import { Vector2 } from "ts/math/Vector2";
 import { REDialogVisualNavigator } from "ts/visual/dialogs/REDialogVisual";
 import { VManualActionDialogVisual } from "ts/visual/dialogs/VManualActionDialogVisual";
@@ -10,7 +10,7 @@ import { VCollapseSequel } from "./sequels/CollapseSequel";
 import { VAttackSequel } from "./sequels/AttackSequel";
 import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
 import { REVisualSequel_Move } from "./sequels/VMoveSequel";
-import { LWarehouseDialog } from "ts/system/dialogs/LWarehouseDialog";
+import { SWarehouseDialog } from "ts/system/dialogs/SWarehouseDialog";
 import { VWarehouseDialog } from "./dialogs/VWarehouseDialog";
 import { DSequel, DSequelId } from "ts/data/DSequel";
 import { VIdleSequel } from "./sequels/VIdleSequel";
@@ -19,17 +19,17 @@ import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
 import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
 import { VDropSequel } from "./sequels/VDropSequel";
-import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
+import { SMainMenuDialog } from "ts/system/dialogs/SMainMenuDialog";
 import { VMainMenuDialog } from "./dialogs/VMenuDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
-import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
+import { LFeetDialog } from "ts/system/dialogs/SFeetDialog";
 import { VFeetDialog } from "./dialogs/VFeetDialog";
 import { SDialog } from "ts/system/SDialog";
-import { LWarehouseStoreDialog } from "ts/system/dialogs/LWarehouseStoreDialog";
+import { SWarehouseStoreDialog } from "ts/system/dialogs/SWarehouseStoreDialog";
 import { VWarehouseStoreDialog } from "./dialogs/VWarehouseStoreDialog";
-import { LWarehouseWithdrawDialog } from "ts/system/dialogs/LWarehouseWithdrawDialog";
+import { SWarehouseWithdrawDialog } from "ts/system/dialogs/SWarehouseWithdrawDialog";
 import { VWarehouseWithdrawDialog } from "./dialogs/VWarehouseWithdrawDialog";
-import { LItemListDialog } from "ts/system/dialogs/LItemListDialog";
+import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
 import { VItemListDialog } from "./dialogs/VItemListDialog";
 
 /**
@@ -73,21 +73,21 @@ export class REVisual_Manager
     }
 
     openDialog(model: SDialog): void {
-        if (model instanceof REManualActionDialog)
+        if (model instanceof SManualActionDialog)
             this._dialogNavigator._openDialog(new VManualActionDialogVisual(model));
         else if (model instanceof SEventExecutionDialog)
             this._dialogNavigator._openDialog(new REEventExecutionDialogVisual(model));
-        else if (model instanceof LWarehouseDialog)
+        else if (model instanceof SWarehouseDialog)
             this._dialogNavigator._openDialog(new VWarehouseDialog(model));
-        else if (model instanceof LWarehouseStoreDialog)
+        else if (model instanceof SWarehouseStoreDialog)
             this._dialogNavigator._openDialog(new VWarehouseStoreDialog(model));
-        else if (model instanceof LWarehouseWithdrawDialog)
+        else if (model instanceof SWarehouseWithdrawDialog)
             this._dialogNavigator._openDialog(new VWarehouseWithdrawDialog(model));
-        else if (model instanceof LMainMenuDialog)
+        else if (model instanceof SMainMenuDialog)
             this._dialogNavigator._openDialog(new VMainMenuDialog(model));
         else if (model instanceof LFeetDialog)
             this._dialogNavigator._openDialog(new VFeetDialog(model));
-        else if (model instanceof LItemListDialog)
+        else if (model instanceof SItemListDialog)
             this._dialogNavigator._openDialog(new VItemListDialog(model));
             
 

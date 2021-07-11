@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { LandExitResult, REData } from "ts/data/REData";
-import { LWarehouseDialog } from "ts/system/dialogs/LWarehouseDialog";
+import { SWarehouseDialog } from "ts/system/dialogs/SWarehouseDialog";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
@@ -26,7 +26,7 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
         const warehouseEntity = REGame.world.entity(REGame.system.uniqueActorUnits[actorId - 1]);
         const actorEntity = REGame.camera.focusedEntity();
         assert(actorEntity);
-        RESystem.commandContext.openDialog(actorEntity, new LWarehouseDialog(actorEntity.entityId(), warehouseEntity.entityId()), false);
+        RESystem.commandContext.openDialog(actorEntity, new SWarehouseDialog(actorEntity.entityId(), warehouseEntity.entityId()), false);
         //REVisual.manager._dialogNavigator.push(new VWarehouseDialog(warehouseEntity));
     }
 });

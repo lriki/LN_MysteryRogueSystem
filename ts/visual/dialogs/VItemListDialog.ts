@@ -1,21 +1,21 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { LItemListDialog } from "ts/system/dialogs/LItemListDialog";
+import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { RESystem } from "ts/system/RESystem";
-import { VActionCommandWindow, ActionCommand } from "../windows/VActionCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 import { REGame } from "ts/objects/REGame";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { REData } from "ts/data/REData";
+import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 
 export class VItemListDialog extends VDialog {
-    private _model: LItemListDialog;
+    private _model: SItemListDialog;
     _itemListWindow: VItemListWindow;// | undefined;
-    _commandWindow: VActionCommandWindow | undefined;
+    _commandWindow: VFlexCommandWindow | undefined;
 
     /**
      * 
@@ -26,15 +26,15 @@ export class VItemListDialog extends VDialog {
      * 必ずしも Inventory を持っている Entity ではない点に注意。
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
-    constructor(model: LItemListDialog) {
+    constructor(model: SItemListDialog) {
         super(model);
         this._model = model;
         
         const y = 100;
         const cw = 200;
         this._itemListWindow = new VItemListWindow(this._model.inventory(), new Rectangle(0, y, Graphics.boxWidth - cw, 400));
-        this._itemListWindow.setHandler("ok", this.onItemOk.bind(this));
-        this._itemListWindow.setHandler("cancel", this.onItemCancel.bind(this));
+        this._itemListWindow.setHandler("ok", this.handleItemOk.bind(this));
+        this._itemListWindow.setHandler("cancel", this.handleItemCancel.bind(this));
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
 
@@ -50,9 +50,13 @@ export class VItemListDialog extends VDialog {
 
 
         //const actions = [DBasics.actions.PickActionId, DBasics.actions.AttackActionId];
-        this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-        this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
+        //this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
+        //this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
+        //this.addWindow(this._commandWindow);
+
+        this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
         this.addWindow(this._commandWindow);
+
 
         this.activateItemWindow();
     }
@@ -60,7 +64,7 @@ export class VItemListDialog extends VDialog {
     onUpdate() {
     }
 
-    onItemOk(): void {
+    private handleItemOk(): void {
         if (this._itemListWindow && this._commandWindow) {
 
             const itemEntity = this._itemListWindow.selectedItem();
@@ -100,6 +104,11 @@ export class VItemListDialog extends VDialog {
                 }
             }
 
+            for (const actionId of actualActions) {
+                this._commandWindow.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
+            }
+
+            /*
             const self = this;
             this._commandWindow.setActionList2(actualActions.map(actionId => {
                 return {
@@ -107,16 +116,19 @@ export class VItemListDialog extends VDialog {
                     handler: (x) => self.onAction(x),
                 };
             }));
+            */
 
             this._itemListWindow.deactivate();
+            this._commandWindow.makeCommandList();
             this._commandWindow.openness = 255;
             this._commandWindow.activate();
         }
     }
         
-    onItemCancel(): void {
+    private handleItemCancel(): void {
         this.cancel();
     }
+
 
     onCommandCancel(): void {
         if (this._itemListWindow && this._commandWindow) {
@@ -126,13 +138,14 @@ export class VItemListDialog extends VDialog {
         }
     }
 
-    onAction(actionId: DActionId): void {
+    private handleAction(actionId: DActionId): void {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
             
             // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-            const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
             
+
+            const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
             RESystem.dialogContext.postActivity(activity);
             this.submit();
         }

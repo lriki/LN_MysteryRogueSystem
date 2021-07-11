@@ -3,7 +3,7 @@ import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { SDialog } from "../SDialog";
 
-export class LMainMenuDialog extends SDialog {
+export class SMainMenuDialog extends SDialog {
     private _entityId: LEntityId;
 
     constructor(entity: LEntity) {

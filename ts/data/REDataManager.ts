@@ -1060,6 +1060,10 @@ export class REDataManager
                 break;
             case "k眠りガス":
                 break;
+            case "kItem_保存の壺":
+                entity.addReaction(DBasics.actions.PutInActionId, 0);
+                entity.addReaction(DBasics.actions.PickOutActionId, 0);
+                break;
         }
     }
 

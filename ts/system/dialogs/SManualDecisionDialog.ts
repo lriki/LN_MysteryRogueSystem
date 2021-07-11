@@ -1,7 +1,7 @@
 import { SDialogContext } from "ts/system/SDialogContext";
 import { SDialog } from "../SDialog";
 
-export class REManualActionDialog extends SDialog
+export class SManualActionDialog extends SDialog
 {
     dashingEntry: boolean = false;
 

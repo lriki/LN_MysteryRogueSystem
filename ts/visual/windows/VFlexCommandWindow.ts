@@ -36,7 +36,14 @@ export class VFlexCommandWindow extends Window_Command {
         this.refresh();
     }
 
-    public addActionCommand(action: DActionId, handler: ActionCommandHandler): void {
+    public addActionCommand(actionId: DActionId, commandId: string, handler: ActionCommandHandler): void {
+        this._commands.push({
+            actionId: actionId,
+            displayText: REData.actions[actionId].displayName,
+            commandId: commandId,
+            actionHandler: handler,
+            systemHandler: undefined,
+        });
     }
 
     public addSystemCommand(text: string, commandId: string, systemHandler: SystemCommandHandler): void {
@@ -66,8 +73,9 @@ export class VFlexCommandWindow extends Window_Command {
                     });
                 }
                 else {
-                    this.addCommand(REData.actions[x.actionId].displayName, `action:${x.actionId}`, true, undefined);
-                    this.setHandler(`action:${x.actionId}`, () => {
+                    console.log("x.displayText", x.displayText);
+                    this.addCommand(x.displayText, x.commandId, true, undefined);
+                    this.setHandler(x.commandId, () => {
                         if (x.actionHandler) {
                             x.actionHandler(x.actionId);
                         }
@@ -75,6 +83,8 @@ export class VFlexCommandWindow extends Window_Command {
                 }
     
             });
+            
+            this.refresh();
         }
     }
     

@@ -4,7 +4,7 @@ import { SDialog } from "ts/system/SDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
 
 
-export class LCommandPlaybackDialog extends SDialog {
+export class SCommandPlaybackDialog extends SDialog {
     
     isVisualIntegration(): boolean {
         return false;

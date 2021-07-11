@@ -1,20 +1,20 @@
 
-import { LItemListDialog } from "ts/system/dialogs/LItemListDialog";
-import { LMainMenuDialog } from "ts/system/dialogs/LMainMenuDialog";
+import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
+import { SMainMenuDialog } from "ts/system/dialogs/SMainMenuDialog";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { STextManager } from "ts/system/STextManager";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";
-import { LFeetDialog } from "ts/system/dialogs/LFeetDialog";
+import { LFeetDialog } from "ts/system/dialogs/SFeetDialog";
 import { tr2 } from "ts/Common";
 import { TileShape } from "ts/objects/LBlock";
 
 export class VMainMenuDialog extends VDialog {
-    _model: LMainMenuDialog;
+    _model: SMainMenuDialog;
     _commandWindow: VMenuCommandWindow | undefined;
 
-    constructor(model: LMainMenuDialog) {
+    constructor(model: SMainMenuDialog) {
         super(model);
         this._model = model;
     }
@@ -41,7 +41,7 @@ export class VMainMenuDialog extends VDialog {
         const entity = this._model.entity();
         const inventory = entity.findBehavior(LInventoryBehavior);
         if (inventory) {
-            this.openSubDialog(new LItemListDialog(entity, inventory), d => {
+            this.openSubDialog(new SItemListDialog(entity, inventory), d => {
                 if (d.isSubmitted()) this.submit();
             });
         }

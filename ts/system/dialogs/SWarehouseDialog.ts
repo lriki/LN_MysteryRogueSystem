@@ -10,7 +10,7 @@ import { RESystem } from "ts/system/RESystem";
 import { DialogSubmitMode, SDialog } from "../SDialog";
 import { SEffectSubject } from "ts/system/SEffectContext";
 
-export class LWarehouseDialog extends SDialog {
+export class SWarehouseDialog extends SDialog {
     private _userEntityId: LEntityId;
     private _warehouseEntityId: LEntityId;
 

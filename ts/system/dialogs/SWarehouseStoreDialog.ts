@@ -4,14 +4,16 @@ import { LBehaviorId, LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { SDialog } from "../SDialog";
 
-export class LItemListDialog extends SDialog {
+export class SWarehouseStoreDialog extends SDialog {
     private _actorEntityId: LEntityId;
     private _inventoryBehaviorId: LBehaviorId;
+    private _resultItems: LEntityId[];
 
     public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
         super();
         this._actorEntityId = actorEntity.entityId();
         this._inventoryBehaviorId = inventory.id();
+        this._resultItems = [];
     }
 
     public entity(): LEntity {
@@ -22,4 +24,11 @@ export class LItemListDialog extends SDialog {
         return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
+    public setResultItems(items: LEntity[]) {
+        this._resultItems = items.map(e => e.entityId());
+    }
+
+    public resultItems(): LEntity[] {
+        return this._resultItems.map(e => REGame.world.entity(e));
+    }
 }
