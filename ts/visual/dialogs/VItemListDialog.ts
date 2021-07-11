@@ -11,11 +11,14 @@ import { REGame } from "ts/objects/REGame";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { REData } from "ts/data/REData";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
+import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
+import { tr2 } from "ts/Common";
 
 export class VItemListDialog extends VDialog {
     private _model: SItemListDialog;
     _itemListWindow: VItemListWindow;// | undefined;
     _commandWindow: VFlexCommandWindow | undefined;
+    //_peekItemListWindow: VItemListWindow;
 
     /**
      * 
@@ -32,11 +35,20 @@ export class VItemListDialog extends VDialog {
         
         const y = 100;
         const cw = 200;
-        this._itemListWindow = new VItemListWindow(this._model.inventory(), new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow.setInventory(this._model.inventory());
         this._itemListWindow.setHandler("ok", this.handleItemOk.bind(this));
         this._itemListWindow.setHandler("cancel", this.handleItemCancel.bind(this));
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
+
+        /*
+        this._peekItemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._peekItemListWindow.setHandler("ok", this.handleItemOk.bind(this));
+        this._peekItemListWindow.setHandler("cancel", this.handleItemCancel.bind(this));
+        this._peekItemListWindow.forceSelect(0);
+        this.addWindow(this._itemListWindow);
+        */
 
         const equipmentUser = this._model.entity().findBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
@@ -104,6 +116,11 @@ export class VItemListDialog extends VDialog {
                 }
             }
 
+            if (itemEntity.hasBehavior(LStorageBehavior)) {
+                this._commandWindow.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
+                this._commandWindow.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePeek());
+            }
+
             for (const actionId of actualActions) {
                 this._commandWindow.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
             }
@@ -119,7 +136,7 @@ export class VItemListDialog extends VDialog {
             */
 
             this._itemListWindow.deactivate();
-            this._commandWindow.makeCommandList();
+            this._commandWindow.refresh();
             this._commandWindow.openness = 255;
             this._commandWindow.activate();
         }
@@ -151,11 +168,23 @@ export class VItemListDialog extends VDialog {
         }
     }
 
+    private handlePeek(): void {
+        const itemEntity = this._itemListWindow.selectedItem();
+        const inventory = itemEntity.getBehavior(LInventoryBehavior);
+        this.openSubDialog(new SItemListDialog(this._model.entity(), inventory), (result: any) => {
+            this.submit();
+        });
+    }
+
+    private handlePutIn(): void {
+        
+    }
+
     private activateItemWindow() {
         if (this._itemListWindow) {
             this._itemListWindow.refresh();
             this._itemListWindow.activate();
         }
-    };
+    }
 
 }

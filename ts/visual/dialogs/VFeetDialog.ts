@@ -47,7 +47,7 @@ export class VFeetDialog extends VDialog {
         */
         this._commandWindow.setHandler("cancel", () => this.cancel());
         this.addWindow(this._commandWindow);
-        this._commandWindow.makeCommandList();
+        this._commandWindow.refresh();
         this._commandWindow.open();
     }
 

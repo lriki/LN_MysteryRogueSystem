@@ -34,6 +34,7 @@ import { DStateId } from "ts/data/DState";
 import { UMovement } from "../usecases/UMovement";
 import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 import { assert } from "ts/Common";
+import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -261,6 +262,10 @@ export class SEntityFactory {
             case "kItem_サンクチュアリスクロール":
                 entity.addBehavior(LSanctuaryBehavior);
                 entity.addBehavior(LClingFloorBehavior);
+                break;
+            case "kItem_保存の壺":
+                entity.addBehavior(LInventoryBehavior);
+                entity.addBehavior(LStorageBehavior);
                 break;
         }
     }

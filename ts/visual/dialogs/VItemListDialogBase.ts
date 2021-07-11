@@ -18,7 +18,8 @@ export class VItemListDialogBase extends VDialog {
         
         const y = 100;
         const cw = 200;
-        this._itemListWindow = new VItemListWindow(this._inventory, new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400));
+        this._itemListWindow.setInventory(this._inventory);
         this._itemListWindow.setHandler("ok", () => this.handleItemSubmit());
         this._itemListWindow.setHandler("cancel", () => this.handleItemCancel());
         this._itemListWindow.forceSelect(0);

@@ -61,6 +61,7 @@ export class VFlexCommandWindow extends Window_Command {
         this.refresh();
     }
     
+    // override. 外部から再構築したいときは refresh を呼ぶこと。
     makeCommandList(): void {
         if (this._commands) {
             this._commands.forEach((x, i) => {
@@ -81,10 +82,7 @@ export class VFlexCommandWindow extends Window_Command {
                         }
                     });
                 }
-    
             });
-            
-            this.refresh();
         }
     }
     

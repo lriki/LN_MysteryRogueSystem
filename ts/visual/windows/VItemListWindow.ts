@@ -9,12 +9,16 @@ import { isThisTypeNode } from "typescript";
 /**
  */
 export class VItemListWindow extends Window_Selectable {
-    private _inventory: LInventoryBehavior;
+    private _inventory: LInventoryBehavior | undefined;;
     private _equipmentUser: LEquipmentUserBehavior | undefined;
     private _entities: LEntity[];
 
-    constructor(inventory: LInventoryBehavior, rect: Rectangle) {
+    constructor(rect: Rectangle) {
         super(rect);
+        this._entities = [];
+    }
+
+    public setInventory(inventory: LInventoryBehavior): void {
         this._inventory = inventory;
         this._entities = inventory.entities();
         this.refresh();
