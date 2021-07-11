@@ -209,7 +209,7 @@ export class REData
         this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false }];
         this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
-        this.actions = [{id: 0, displayName: 'null', typeName: ""}];
+        this.actions = [{id: 0, displayName: 'null', typeName: "", priority: 0}];
         this.sequels = [{id: 0, name: 'null', parallel: false}];
         this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
@@ -257,12 +257,13 @@ export class REData
         return newId;
     }
     
-    static addAction(displayName: string, typeName: string): number {
+    static addAction(displayName: string, typeName: string, priority?: number): number {
         const newId = this.actions.length;
         this.actions.push({
             id: newId,
             displayName: displayName,
             typeName: typeName,
+            priority: priority ?? 0,
         });
         return newId;
     }

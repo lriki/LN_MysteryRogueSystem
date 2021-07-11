@@ -216,6 +216,8 @@ export class LUnitBehavior extends LBehavior {
             return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.ThrowActionId) {
+            // FIXME: [撃つ] とかなり似ているので、長くなるようならまとめたほうがいいかも
+
             // [投げる] は便利コマンドのようなもの。
             // 具体的にどのように振舞うのか (直線に飛ぶのか、放物線状に動くのか、転がるのか) を決めるのは相手側
 
@@ -254,6 +256,40 @@ export class LUnitBehavior extends LBehavior {
                     context.post(itemEntity, self, subject, undefined, onThrowReaction)
                         .then(() => {
                             context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                            return true;
+                        });
+
+                    return true;
+                });
+            return REResponse.Succeeded;
+        }
+        else if (activity.actionId() == DBasics.actions.ShootingActionId) {
+            // FIXME: [投げる] とかなり似ているので、長くなるようならまとめたほうがいいかも
+            const itemEntity = activity.object();
+            assert(itemEntity);
+
+            context.post(itemEntity, self, subject, undefined, onPreThrowReaction)
+                .then(() => {
+                    let actual: LEntity;
+                    if (itemEntity.isStacked()) {
+                        // スタックされていれば減らして新たな entity を生成
+                        actual = itemEntity.decreaseStack();
+                        //console.log("self.floorId", self.floorId);
+                        //REGame.world._transferEntity(actual, self.floorId, self.x, self.y);
+                    }
+                    else {
+                        // スタックされていなければそのまま打ち出す
+                        itemEntity.removeFromParent();
+                        actual = itemEntity;
+                    }
+
+                    actual.x = self.x;
+                    actual.y = self.y;
+
+
+                    context.post(actual, self, subject, undefined, onThrowReaction)
+                        .then(() => {
+                            context.postMessage(tr("{0} を撃った", REGame.identifyer.makeDisplayText(actual)));
                             return true;
                         });
 

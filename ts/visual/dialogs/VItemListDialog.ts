@@ -10,6 +10,7 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 import { REGame } from "ts/objects/REGame";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { REData } from "ts/data/REData";
 
 export class VItemListDialog extends VDialog {
     private _model: LItemListDialog;
@@ -72,7 +73,12 @@ export class VItemListDialog extends VDialog {
             const actualActions = reactions
                 .filter(actionId => actions.includes(actionId))
                 .distinct()
-                .sort();    // ID順にソート
+                .sort((a, b) => {
+                    const ad = REData.actions[a];
+                    const bd = REData.actions[b];
+                    if (ad.priority == bd.priority) return ad.id - bd.id;
+                    return bd.priority - ad.priority;   // 降順
+                });
             
 
             // [装備] [はずす] チェック

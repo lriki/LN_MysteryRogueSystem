@@ -215,6 +215,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     
     onQueryActions(actions: DActionId[]): DActionId[] {
+        actions.push(DBasics.actions.ShootingActionId);
         actions.push(DBasics.actions.EatActionId);
         actions.push(DBasics.actions.WaveActionId);
         return actions;

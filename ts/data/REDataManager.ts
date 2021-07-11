@@ -180,7 +180,7 @@ export class REDataManager
             ExchangeActionId: REData.addAction("交換", "LExchangeActivity"),//"Exchange"),
             ThrowActionId: REData.addAction("投げる", "LThrowActivity"),
             FlungActionId: REData.addAction("Flung", ""),
-            ShootingActionId: REData.addAction("Shooting", ""),
+            ShootingActionId: REData.addAction("撃つ", "", 1000),
             CollideActionId: REData.addAction("Collide", ""),
             AffectActionId: REData.addAction("Affect", ""),
             RollActionId: REData.addAction("Roll", "",),
@@ -1013,6 +1013,7 @@ export class REDataManager
             case "kウッドアロー":
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});
+                entity.addReaction(DBasics.actions.ShootingActionId, 0);
                 break;
             case "kキュアリーフ":
                 const emittor = data.effectSet.aquireEffect(DEffectCause.Eat);

@@ -21,7 +21,7 @@ export interface DEntityNamePlate {
 
 export interface DReaction {
     actionId: DActionId;
-    emittingEffect: DEmittorId;
+    emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
 }
 
 /**
