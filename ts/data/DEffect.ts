@@ -151,8 +151,13 @@ export class DEffect {
       * IDataItem.damage
       */
      parameterQualifyings: DParameterQualifying[];
-     //rmmzItemEffectQualifying: DRmmzItemEffectQualifying[];
-     //performeSkillQualifyings: DPerformeSkillQualifying[];
+
+     /**
+      * パラメータ変化以外のすべてのエフェクト。
+      * これらを実現するにはコードで頑張る必要がある。
+      * ほとんどの特殊効果はこれを持つ必要があるはず。
+      * コアスクリプトだと EFFECT_XXXX に相当する。
+      */
      otherEffectQualifyings: DOtherEffectQualifying[];
  
      /**

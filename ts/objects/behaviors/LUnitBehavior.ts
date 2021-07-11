@@ -112,6 +112,7 @@ export class LUnitBehavior extends LBehavior {
             DBasics.actions.PutActionId,
             //DBasics.actions.ExchangeActionId,
             DBasics.actions.ThrowActionId,
+            DBasics.actions.ReadActionId,
         ]);
     }
 

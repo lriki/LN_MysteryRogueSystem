@@ -1064,6 +1064,11 @@ export class REDataManager
                 entity.addReaction(DBasics.actions.PutInActionId, 0);
                 entity.addReaction(DBasics.actions.PickOutActionId, 0);
                 break;
+            case "kItem_エスケープスクロール":
+                data.effectSet.mainEffect().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.addReaction(DBasics.actions.ReadActionId, 0);
+                break;
+                
         }
     }
 
