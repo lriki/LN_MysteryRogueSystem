@@ -97,6 +97,10 @@ export class REVisualSequelContext {
         this._cancellationLocked = false;
     }
 
+    public startAnimation(rmmzAnimationId: number) {
+        $gameTemp.requestAnimation([this._entityVisual.rmmzEvent()], rmmzAnimationId, false);
+    }
+
     end() {
         this.unlockCancellation();
         this._cuurentFinished = true;

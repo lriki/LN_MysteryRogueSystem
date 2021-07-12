@@ -13,6 +13,7 @@ import { DParameterId, DSParamId, DXParamId } from "ts/data/DParameter";
 import { LFloorId } from "../LFloorId";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
 import { assert } from "ts/Common";
+import { UTransfer } from "ts/usecases/UTransfer";
 //import { paramLandExitResultVariableId } from "ts/PluginParameters";
 //import { LandExitResult } from "ts/rmmz/RMMZHelper";
 
@@ -423,10 +424,9 @@ export class LBattlerBehavior extends LBehavior {
             
             if (entity.isUnique()) {
                 if (entity == REGame.camera.focusedEntity()) {
-                    RESystem.integration.onSetLandExitResult(LandExitResult.Gameover);
                     context.postWait(entity, 100);
                     context.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
-                    context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
+                    UTransfer.exitLand(context, entity, LandExitResult.Gameover);
                 }
                 else {
                     // 仲間等

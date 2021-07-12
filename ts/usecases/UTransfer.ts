@@ -1,9 +1,12 @@
 import { assert } from "ts/Common";
 import { DHelpers } from "ts/data/DHelper";
-import { REData } from "ts/data/REData";
+import { LandExitResult, REData } from "ts/data/REData";
 import { REDataManager } from "ts/data/REDataManager";
+import { LEntity } from "ts/objects/LEntity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
+import { RESystem } from "ts/system/RESystem";
+import { SCommandContext } from "ts/system/SCommandContext";
 import { createNoSubstitutionTemplateLiteral } from "typescript";
 
 
@@ -71,5 +74,12 @@ export class UTransfer {
         }
 
         //$gamePlayer.reserveTransfer();
+    }
+
+    public static exitLand(context: SCommandContext, entity: LEntity, result: LandExitResult): void {
+        assert(entity == REGame.camera.focusedEntity());    // Player であるはず
+
+        RESystem.integration.onSetLandExitResult(result);
+        context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
     }
 }

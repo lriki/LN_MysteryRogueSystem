@@ -31,6 +31,7 @@ import { SWarehouseWithdrawDialog } from "ts/system/dialogs/SWarehouseWithdrawDi
 import { VWarehouseWithdrawDialog } from "./dialogs/VWarehouseWithdrawDialog";
 import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
 import { VItemListDialog } from "./dialogs/VItemListDialog";
+import { VEscapeSequel } from "./sequels/VEscapeSequel";
 
 /**
  */
@@ -53,6 +54,7 @@ export class REVisual_Manager
         this._visualSequelFactory[RESystem.sequels.CollapseSequel] = () => new VCollapseSequel();
         this._visualSequelFactory[RESystem.sequels.commonStopped] = () => new VCommonStoppedSequel();
         this._visualSequelFactory[RESystem.sequels.asleep] = () => new VAsleepSequel();
+        this._visualSequelFactory[RESystem.sequels.escape] = () => new VEscapeSequel();
     }
 
     tileSize(): Vector2 {

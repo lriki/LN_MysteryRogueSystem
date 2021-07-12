@@ -273,7 +273,7 @@ export class DEffectSet {
         this._skills[cause] = value;
     }
 
-    public mainEffect(): DEmittor {
+    public mainEmittor(): DEmittor {
         const e = this._effects[DEffectCause.Affect];
         assert(e);
         return e;

@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItemEffect } from "ts/data/DItemEffect";
-import { REData } from "ts/data/REData";
+import { LandExitResult, REData } from "ts/data/REData";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { Helpers } from "./Helpers";
@@ -16,6 +16,9 @@ import { DEmittor, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, 
 import { UAction } from "../usecases/UAction";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { USpawner } from "ts/usecases/USpawner";
+import { RESystem } from "./RESystem";
+import { LFloorId } from "ts/objects/LFloorId";
+import { UTransfer } from "ts/usecases/UTransfer";
 
 
 enum SParameterEffectApplyType {
@@ -651,6 +654,10 @@ export class SEffectContext {
                 const entityData = commandContext.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
                 //const entityData = REData.getEntity("kキュアリーフ");
                 targetEntity.setupInstance(entityData.id);
+                break;
+            case "kSystemEffect_脱出":
+                commandContext.postSequel(targetEntity, RESystem.sequels.escape);
+                UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
                 break;
             default:
                 throw new Error("Not implemented.");

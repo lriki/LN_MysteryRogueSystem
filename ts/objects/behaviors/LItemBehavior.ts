@@ -64,22 +64,18 @@ export class LItemBehavior extends LBehavior {
             for (const reaction of reactions) {
                 const effect = REData.getEmittorById(reaction.emittingEffect);
                 effectPerformer.performeEffect(context, subject, effect, subject.dir, this.itemData());
-
-                /*
-                const effectSubject = new SEffectorFact(subject.entity(), effect, itemData.rmmzScope, SEffectIncidentType.IndirectAttack);
-                const effectContext = new SEffectContext(effectSubject);
-        
-                context.postAnimation(target, itemData.animationId, true);
-        
-                // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-                context.postCall(() => {
-                    effectContext.applyWithWorth(context, [target]);
-                });
-                */
             }
         }
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
             console.log("read");
+
+            const subject = activity.subject();
+            const effectPerformer = new SEmittorPerformer();
+            const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
+            for (const reaction of reactions) {
+                const effect = REData.getEmittorById(reaction.emittingEffect);
+                effectPerformer.performeEffect(context, subject, effect, subject.dir, this.itemData());
+            }
         }
 
 

@@ -197,7 +197,7 @@ export class REDataManager
             EatActionId: REData.addAction("Eat", ""),
             TakeActionId: REData.addAction("Take", ""),
             BiteActionId: REData.addAction("Bite", ""),
-            ReadActionId: REData.addAction("Read", "",),
+            ReadActionId: REData.addAction("読む", "", 1000),
             WaveActionId: REData.addAction("振る", "LWaveActivity"),
             PushActionId: REData.addAction("Push", ""),
             PutInActionId: REData.addAction("PickIn",""),
@@ -218,6 +218,7 @@ export class REDataManager
             CollapseSequel: REData.addSequel("Collapse"),
             commonStopped: REData.addSequel("commonStopped"),
             asleep: REData.addSequel("asleep"),
+            escape: REData.addSequel("escape"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         
@@ -1025,10 +1026,10 @@ export class REDataManager
                     applyType: DParameterEffectApplyType.Recover,
                     variance: 0,
                 });
-                data.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(data.effectSet.mainEffect()));
+                data.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(data.effectSet.mainEmittor()));
                 break;
             case "kフレイムリーフ":
-                data.effectSet.setEffect(DEffectCause.Hit, data.effectSet.mainEffect());
+                data.effectSet.setEffect(DEffectCause.Hit, data.effectSet.mainEmittor());
                 //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
                 data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
@@ -1065,8 +1066,8 @@ export class REDataManager
                 entity.addReaction(DBasics.actions.PickOutActionId, 0);
                 break;
             case "kItem_エスケープスクロール":
-                data.effectSet.mainEffect().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
-                entity.addReaction(DBasics.actions.ReadActionId, 0);
+                data.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.addReaction(DBasics.actions.ReadActionId, data.effectSet.mainEmittor().id);
                 break;
                 
         }
