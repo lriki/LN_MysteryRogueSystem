@@ -117,6 +117,8 @@ export const onEatReaction = Symbol("onEatReaction");
  */
 export const onWaveReaction = Symbol("onWaveReaction");
 
+//export const onReadReaction = Symbol("onReadReaction");
+
 /**
  * (階段など) 進まれた
  */

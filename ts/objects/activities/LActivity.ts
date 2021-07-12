@@ -94,5 +94,9 @@ export class LActivity {
     public static makeWave(subject: LEntity, object: LEntity): LActivity {
         return new LActivity(DBasics.actions.WaveActionId, subject, object);
     }
+
+    public static makeRead(subject: LEntity, object: LEntity): LActivity {
+        return new LActivity(DBasics.actions.ReadActionId, subject, object);
+    }
 }
 

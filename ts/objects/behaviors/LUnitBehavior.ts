@@ -327,11 +327,16 @@ export class LUnitBehavior extends LBehavior {
 
             const reactor = activity.object();
             if (reactor) {
-                //context.postReaction(DBasics.actions.WaveActionId, reactor, actor, cmd.effectContext());
-                
                 context.post(reactor, self, subject, undefined, onWaveReaction);
+                // TODO: onWaveReaction 使ってない。onActivityReaction に共通化した。
             }
             
+            return REResponse.Succeeded;
+        }
+        // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
+        else if (activity.actionId() == DBasics.actions.ReadActionId) {
+            context.postSequel(self, RESystem.sequels.attack);
+            // 続いて onActivityReaction を実行する。
             return REResponse.Succeeded;
         }
         

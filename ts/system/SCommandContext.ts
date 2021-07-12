@@ -154,7 +154,7 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Activity");
             const r = activity.subject()._sendActivity(this, activity);
-            if (r != REResponse.Canceled) {
+            if (r != REResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
                 if (activity.hasObject()) {
                     this.postCall(() => {
                         activity.object()._sendActivityReaction(this, activity);

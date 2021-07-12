@@ -78,6 +78,9 @@ export class LItemBehavior extends LBehavior {
                 */
             }
         }
+        else if (activity.actionId() == DBasics.actions.ReadActionId) {
+            console.log("read");
+        }
 
 
         return REResponse.Pass;
