@@ -28,12 +28,12 @@ import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
 import { LLand } from "ts/objects/LLand";
 import { LParty } from "ts/objects/LParty";
 import { LCharacterAI } from "ts/objects/LCharacterAI";
-import { LParamInstance } from "ts/objects/behaviors/LBattlerBehavior";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 import { REBlockLayer } from "ts/objects/LBlockLayer";
+import { LParam } from "ts/objects/LParam";
 
 
 function createInstance(name: string): any {
@@ -88,8 +88,8 @@ function createInstance(name: string): any {
             return Object.create(LBlock.prototype);
         case "LCharacterAI":
             return Object.create(LCharacterAI.prototype);
-        case "LParamInstance":
-            return Object.create(LParamInstance.prototype);
+        case "LParam":
+            return Object.create(LParam.prototype);
         case "LSurvivorBehavior":
             return Object.create(LSurvivorBehavior.prototype);
         case "LEquipmentBehavior":

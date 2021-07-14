@@ -54,7 +54,7 @@ export class LActorBehavior extends LBattlerBehavior {
         this.initExp();
         this.initSkills();
         //this.initEquips(actor.equips);
-        this.clearParamPlus();
+        this._params.clearParamPlus();
         this.recoverAll();
     }
 

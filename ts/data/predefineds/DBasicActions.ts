@@ -1,8 +1,7 @@
 import { DActionId } from "../DAction";
 
 
-export interface DBasicActions
-{
+export interface DBasicActions {
     //----------------------------------------
     // Standard Actions.
 

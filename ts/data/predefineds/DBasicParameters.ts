@@ -4,6 +4,11 @@
 
 import { DParameterId, DSParamId, DXParamId } from "../DParameter";
 
+// [2021/7/14] 強化値や使用回数は Paramter にする必要ある？
+// ----------
+// エディタからカスタムパラメータとして制御できるようにするための対策。
+// モンスターの特技によって、強化値-1 だったり -3 だったりは、エディタから指定したいところ。
+// 
 export interface DBasicParameters {
     // RMMZ 基礎パラメータ。(Game_Battler.params(x)) 並び順が一致するようにしておく。
     hp: DParameterId; // = 0    // HP / Maximum Hit Points
@@ -41,8 +46,10 @@ export interface DBasicParameters {
     exr: number;    // EXperience Rate
     */
 
-    fp: number;    // 満腹度
-
+    fp: DParameterId;    // 満腹度
+    upgradeValue: DParameterId; // 装備の修正値
+    remaining: DParameterId; // 装備の修正値
+    capacity: DParameterId; // (壺の)容量
 }
 
 

@@ -20,7 +20,7 @@ import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onEatReacti
 export class LItemBehavior extends LBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemBehavior);
-        return b
+        return b;
     }
 
     public constructor() {

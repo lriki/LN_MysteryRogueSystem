@@ -74,7 +74,10 @@ export class REDataManager
             { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0 },
             { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0 },
             //----------
-            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 1000 },  // 満腹度
+            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 1000 },
+            { id: 11, name: "UpgradeValue", battlerParamId: -1, initialIdealValue: 99 },
+            { id: 12, name: "Remaining", battlerParamId: -1, initialIdealValue: 99 },
+            { id: 13, name: "Capacity", battlerParamId: -1, initialIdealValue: 8 },
         ]
         DBasics.params = {
             hp: REData.parameters.findIndex(x => x.name == "HP"),
@@ -87,6 +90,9 @@ export class REDataManager
             luk: REData.parameters.findIndex(x => x.name == "LUK"),
             tp: REData.parameters.findIndex(x => x.name == "TP"),
             fp: REData.parameters.findIndex(x => x.name == "FP"),
+            upgradeValue: REData.parameters.findIndex(x => x.name == "UpgradeValue"),
+            remaining: REData.parameters.findIndex(x => x.name == "Remaining"),
+            capacity: REData.parameters.findIndex(x => x.name == "Capacity"),
         };
         // RMMZ のパラメータID との一致を検証
         assert(REData.parameters[DBasics.params.hp].battlerParamId === 0);
