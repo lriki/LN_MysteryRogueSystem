@@ -27,6 +27,7 @@ import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { DTraits } from "ts/data/DTraits";
+import { LParamSet } from "./LParam";
 
 enum BlockLayer
 {
@@ -96,6 +97,7 @@ export class LEntity extends LObject
 {
     private _entityDataId: DEntityId = 0;
 
+    private _params: LParamSet;
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
 
     _partyId: LPartyId = 0;
@@ -104,6 +106,7 @@ export class LEntity extends LObject
 
     public constructor() {
         super(LObjectType.Entity);
+        this._params = new LParamSet();
     }
 
     // TODO: setupInstance にまとめたいかも
@@ -137,32 +140,6 @@ export class LEntity extends LObject
         //return this._id;
         return this.__objectId();
     }
-
-    /*
-    public hasOwner(): boolean {
-        return super.hasOwner() || this._parentIsMap;
-    }
-
-    public ownerIsMap(): boolean {
-        return this._parentIsMap;
-    }
-
-    public setOwner(owner: LEntity): void {
-        assert(!this._parentIsMap);
-        super.setOwner(owner);
-    }
-
-    public setOwnerMap(owner: LMap): void {
-        assert(this.ownerObjectId().isEmpty());
-        assert(!this.hasOwner());
-        this._parentIsMap = true;
-    }
-
-    public clearOwner(): void {
-        super.clearOwner();
-        this._parentIsMap = false;
-    }
-    */
 
     public isGCReady(): boolean {
         // 何らかのフロア上にいる場合は削除されない (明示的に除外されなければならない)
@@ -279,6 +256,8 @@ export class LEntity extends LObject
         //entity._effectResult = new LEffectResult();
         //entity._actionConsumed = this._actionConsumed;
         //entity._located = this._located;
+        entity._params.copyTo(this._params);
+
 
         for (const i of this.basicBehaviors()) {
             const i2 = i.clone(entity);
@@ -357,6 +336,9 @@ export class LEntity extends LObject
             return REGame.world.party(this._partyId);
     }
 
+    public params(): LParamSet {
+        return this._params;
+    }
 
     //----------------------------------------
     // Property

@@ -19,29 +19,31 @@ import { LParam, LParamSet } from "../LParam";
 //import { LandExitResult } from "ts/rmmz/RMMZHelper";
 
 export class LBattlerBehavior extends LBehavior {
-    _params: LParamSet;
 
     constructor() {
         super();
-        this._params = new LParamSet();
-        this._params.acquireParam(DBasics.params.hp);
-        this._params.acquireParam(DBasics.params.mp);
-        this._params.acquireParam(DBasics.params.atk);
-        this._params.acquireParam(DBasics.params.def);
-        this._params.acquireParam(DBasics.params.mat);
-        this._params.acquireParam(DBasics.params.mdf);
-        this._params.acquireParam(DBasics.params.agi);
-        this._params.acquireParam(DBasics.params.luk);
-        this._params.acquireParam(DBasics.params.tp);
-        this._params.acquireParam(DBasics.params.fp);
     }
 
     public clone(newOwner: LEntity): LBehavior {
         throw new Error();  // LBattlerBehavior 自体の clone は禁止
     }
 
-    public copyTo(other: LBattlerBehavior): void {
-        other._params.copyTo(this._params);
+    public paramSet(): LParamSet {
+        return this.ownerEntity().params();
+    }
+
+    onAttached(): void {
+        const params = this.paramSet();
+        params.acquireParam(DBasics.params.hp);
+        params.acquireParam(DBasics.params.mp);
+        params.acquireParam(DBasics.params.atk);
+        params.acquireParam(DBasics.params.def);
+        params.acquireParam(DBasics.params.mat);
+        params.acquireParam(DBasics.params.mdf);
+        params.acquireParam(DBasics.params.agi);
+        params.acquireParam(DBasics.params.luk);
+        params.acquireParam(DBasics.params.tp);
+        params.acquireParam(DBasics.params.fp);
     }
 
     /**
@@ -51,7 +53,7 @@ export class LBattlerBehavior extends LBehavior {
      * 拠点へ戻ったときなどで完全リセットしたいときに使う。
      */
     public resetAllConditions(): void {
-        this._params.resetAllConditions();
+        this.paramSet().resetAllConditions();
         this.clearStates();
     }
 
@@ -61,16 +63,16 @@ export class LBattlerBehavior extends LBehavior {
     }
 
     actualParam(paramId: DParameterId): number {
-        return this.idealParam(paramId) - this._params.param(paramId).actualParamDamge();
+        return this.idealParam(paramId) - this.paramSet().param(paramId).actualParamDamge();
     }
 
     setActualDamgeParam(paramId: DParameterId, value: number): void {
-        this._params.param(paramId).setActualDamgeParam(value);
+        this.paramSet().param(paramId).setActualDamgeParam(value);
         this.refresh();
     }
     
     gainActualParam(paramId: DParameterId, value: number): void {
-        this._params.param(paramId).gainActualParam(value);
+        this.paramSet().param(paramId).gainActualParam(value);
         this.refresh();
     }
 
@@ -108,7 +110,7 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.paramPlus
     idealParamPlus(paramId: DParameterId): number {
-        return this._params.param(paramId).idealParamPlus()+ this.ownerEntity().queryIdealParameterPlus(paramId);
+        return this.paramSet().param(paramId).idealParamPlus()+ this.ownerEntity().queryIdealParameterPlus(paramId);
     }
 
     // Game_BattlerBase.prototype.paramBasePlus
@@ -123,7 +125,7 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.paramBuffRate
     paramBuffRate(paramId: DParameterId): number {
-        return this._params.param(paramId).buff() * 0.25 + 1.0;
+        return this.paramSet().param(paramId).buff() * 0.25 + 1.0;
     };
     
     // バフや成長によるパラメータ上限値の最小値。
@@ -241,7 +243,7 @@ export class LBattlerBehavior extends LBehavior {
 
         //console.log("refresh--------");
         // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
-        for (const param of this._params.params()) {
+        for (const param of this.paramSet().params()) {
             if (param) {
                 const max = this.idealParam(param.parameterId());
                 param.setActualDamgeParam(param.actualParamDamge().clamp(0, max));
@@ -266,7 +268,7 @@ export class LBattlerBehavior extends LBehavior {
 
         // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
         if (dead && this.actualParam(DBasics.params.hp) != 0) {
-            this._params.param(DBasics.params.hp).setActualDamgeParam(this.idealParam(DBasics.params.hp));
+            this.paramSet().param(DBasics.params.hp).setActualDamgeParam(this.idealParam(DBasics.params.hp));
             this.ownerEntity().removeAllStates();
         }
     
@@ -289,7 +291,7 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
         this.clearStates();
-        this._params.params().forEach(x => x?.clearDamage());
+        this.paramSet().params().forEach(x => x?.clearDamage());
         //for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
 
         //    this._actualParamDamges[paramId] = 0;

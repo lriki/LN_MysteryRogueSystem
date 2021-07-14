@@ -15,8 +15,7 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 export class LEnemyBehavior extends LBattlerBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEnemyBehavior);
-        this.copyTo(b);
-        return b
+        return b;
     }
 
     public constructor() {
@@ -24,6 +23,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     }
 
     onAttached(): void {
+        super.onAttached();
         this.recoverAll();
     }
 

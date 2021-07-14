@@ -45,6 +45,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
 
     onAttached(): void {
+        super.onAttached();
         this._classId = this.actor().classId;
 
         //this._name = actor.name;
@@ -54,7 +55,7 @@ export class LActorBehavior extends LBattlerBehavior {
         this.initExp();
         this.initSkills();
         //this.initEquips(actor.equips);
-        this._params.clearParamPlus();
+        this.paramSet().clearParamPlus();
         this.recoverAll();
     }
 
