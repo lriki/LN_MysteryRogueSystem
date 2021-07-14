@@ -22,8 +22,6 @@ export class DEnemy {
     /** 取得経験値 */
     exp: number;
 
-    /** 各基本パラメータ (index は DParamId とは関係ない点に注意。RMMZ のもの) */
-    idealParams: number[];
 
     traits: IDataTrait[];
 
@@ -33,7 +31,6 @@ export class DEnemy {
         this.id = id;
         this.entityId = entityId;
         this.exp = 0;
-        this.idealParams = [];
         this.traits = [];
         this.actions = [];
     }

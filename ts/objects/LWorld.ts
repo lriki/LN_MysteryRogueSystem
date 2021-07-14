@@ -130,7 +130,7 @@ export class LWorld
      */
     spawnEntity(entityDataId: DEntityId): LEntity {
         const entity = new LEntity();
-        entity.setup(entityDataId);
+        entity.setupInstance(entityDataId);
         this._registerObject(entity);
         return entity;
     }

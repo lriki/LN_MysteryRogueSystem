@@ -33,6 +33,9 @@ test("Items.Staff.Knockback", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id));
     item1._name = "item1";
     inventory.addEntity(item1);
+
+    const dn = item1.getDisplayName();
+    expect(dn.name.includes("[5]")).toBe(true);
     
     // enemy1
     const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));

@@ -42,7 +42,8 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
     // Game_Enemy.prototype.paramBase
     onGetIdealParamBase(paramId: DParameterId): number {
-        return this.enemyData().idealParams[REData.parameters[paramId].battlerParamId];
+        const param = this.enemyData().entity().idealParams[paramId];
+        return (param === undefined) ? 0 : param;
     }
 
     // Game_Enemy.prototype.exp

@@ -83,6 +83,10 @@ export class LParamSet {
         other._params = this._params.map(x => x ? x.clone() : undefined);
     }
 
+    public clear(): void {
+        this._params = [];
+    }
+
     public acquireParam(paramId: DParameterId): LParam {
         const param = this._params[paramId];
         if (param) {

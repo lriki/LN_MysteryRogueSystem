@@ -534,18 +534,17 @@ export class REDataManager
                 entity.display.iconIndex = 71;
                 enemy.exp = x.exp;
                 if (x.params) {
-                    enemy.idealParams = x.params;
-                    /*
-                    // see: Object.defineProperties
-                    enemy.idealParams[DBasics.params.hp] = x.params[0];
-                    enemy.idealParams[DBasics.params.mp] = x.params[1];
-                    enemy.idealParams[DBasics.params.atk] = x.params[2];
-                    enemy.idealParams[DBasics.params.def] = x.params[3];
-                    enemy.idealParams[DBasics.params.mat] = x.params[4];
-                    enemy.idealParams[DBasics.params.mdf] = x.params[5];
-                    enemy.idealParams[DBasics.params.agi] = x.params[6];
-                    enemy.idealParams[DBasics.params.luk] = x.params[7];
-                    */
+                    //enemy.idealParams = x.params;
+                    
+                    entity.idealParams[DBasics.params.hp] = x.params[0];
+                    entity.idealParams[DBasics.params.mp] = x.params[1];
+                    entity.idealParams[DBasics.params.atk] = x.params[2];
+                    entity.idealParams[DBasics.params.def] = x.params[3];
+                    entity.idealParams[DBasics.params.mat] = x.params[4];
+                    entity.idealParams[DBasics.params.mdf] = x.params[5];
+                    entity.idealParams[DBasics.params.agi] = x.params[6];
+                    entity.idealParams[DBasics.params.luk] = x.params[7];
+                    
                 }
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
@@ -1044,11 +1043,13 @@ export class REDataManager
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[DBasics.params.remaining] = 5;
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[DBasics.params.remaining] = 3;
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)
                     ----------

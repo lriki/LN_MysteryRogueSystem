@@ -109,19 +109,31 @@ export class LEntity extends LObject
         this._params = new LParamSet();
     }
 
-    // TODO: setupInstance にまとめたいかも
-    public setup(entityDataId: DEntityId): void {
-        this._entityDataId = entityDataId;
-    }
-
     public setupInstance(entityDataId: DEntityId): void {
-        this.clearInstance();
-        this._entityDataId = entityDataId;
-        SEntityFactory.buildEntity(this);
+        if (this._entityDataId > 0) {
+            // Change Instance
 
-        // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
-        if (this.floorId.equals(REGame.map.floorId())) {
-            RESystem.integration.onEntityReEnterMap(this);
+            this.clearInstance();
+            this._entityDataId = entityDataId;
+            SEntityFactory.buildEntity(this);
+
+            // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
+            if (this.floorId.equals(REGame.map.floorId())) {
+                RESystem.integration.onEntityReEnterMap(this);
+            }
+        }
+        else {
+            this._entityDataId = entityDataId;
+        }
+
+        this._params.clear();
+        const params = this.data().idealParams;
+        for (let i = 0; i < params.length; i++) {
+            const value = params[i];
+            if (value !== undefined) {
+                const param = this._params.acquireParam(i);
+                param.setActualDamgeParam(this.idealParam(i) - value);
+            }
         }
     }
 
@@ -414,6 +426,12 @@ export class LEntity extends LObject
         return (param) ? this.idealParam(paramId) - param.actualParamDamge() : 0;
     }
 
+    /** 直接設定 */
+    public setActualParam(paramId: DParameterId, value: number): void {
+        const max = this.idealParam(paramId);
+        this.setActualDamgeParam(paramId, max - value);
+    }
+
     public setActualDamgeParam(paramId: DParameterId, value: number): void {
         const param = this._params.param(paramId);
         if (param) {
@@ -545,7 +563,15 @@ export class LEntity extends LObject
             if (v) return v;
         }
         const data = this.data();
-        return { name: data.makeDisplayName(this._stackCount), iconIndex: data.display.iconIndex };
+        let name = data.makeDisplayName(this._stackCount);
+
+        // TODO: test
+        const remaining = this._params.param(DBasics.params.remaining);
+        if (remaining) {
+            name += `[${this.actualParam(DBasics.params.remaining)}]`;
+        }
+
+        return { name: name, iconIndex: data.display.iconIndex };
     }
 
     public getCharacterImage(): DPrefabImage | undefined {

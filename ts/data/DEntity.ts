@@ -6,6 +6,7 @@ import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
 import { DItem } from "./DItem";
+import { DParameterId } from "./DParameter";
 import { DPrefabDataSource, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroop, DTroopId } from "./DTroop";
@@ -59,6 +60,13 @@ export class DEntity {
 
     enemy: DEnemy | undefined;
 
+    
+    /** 
+     * 各基本パラメータ。Enemy のパラメータや、Item の使用回数など。
+     * Index は rmmz の params とは異なるので注意。
+     */
+    idealParams: (number | undefined)[];
+
     /** この Entity が受け付ける Action のリスト */
     reactions: DReaction[];
 
@@ -69,6 +77,7 @@ export class DEntity {
         this.display = { name: "null", stackedName: "null(%1)", iconIndex: 0 };
         this.itemData = undefined;
         this.enemy = undefined;
+        this.idealParams = [];
         this.reactions = [];
     }
     
