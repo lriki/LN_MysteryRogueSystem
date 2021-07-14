@@ -27,7 +27,7 @@ test("Abilities.Enemy.ItemImitator", () => {
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
-    const initialHP = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
+    const initialHP = actor1.actualParam(DBasics.params.hp);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UTアイテム擬態").id]));
@@ -46,6 +46,6 @@ test("Abilities.Enemy.ItemImitator", () => {
     // 移動は失敗している
     expect(actor1.x).toBe(10);
     
-    const hp = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
+    const hp = actor1.actualParam(DBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });

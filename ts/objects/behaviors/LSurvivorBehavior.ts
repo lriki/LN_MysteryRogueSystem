@@ -27,11 +27,10 @@ export class LSurvivorBehavior extends LBehavior {
         if (phase == DecisionPhase.UpdateState) {
 
             // FP 減少
-            const battler = this.ownerEntity().getBehavior(LBattlerBehavior);
-            battler.gainActualParam(DBasics.params.fp, -1);
+            entity.gainActualParam(DBasics.params.fp, -1);
 
 
-            switch (battler.actualParam(DBasics.params.fp)) {
+            switch (entity.actualParam(DBasics.params.fp)) {
                 case 3:
                     context.postBalloon(entity, 6, false);
                     context.postMessage(tr2("だめだ！　もう倒れそうだ！"));
@@ -49,17 +48,17 @@ export class LSurvivorBehavior extends LBehavior {
 
 
 
-            if (battler.actualParam(DBasics.params.fp) <= 0) {
+            if (entity.actualParam(DBasics.params.fp) <= 0) {
                 // 満腹度 0 による HP 減少
-                battler.gainActualParam(DBasics.params.hp, -1);
+                entity.gainActualParam(DBasics.params.hp, -1);
 
-                if (battler.isDeathStateAffected()) {
+                if (entity.isDeathStateAffected()) {
                     context.postMessage(tr2("おなかがすいて倒れた・・・"));
                 }
             }
             else {
                 // HP自動回復
-                battler.gainActualParam(DBasics.params.hp, 1);
+                entity.gainActualParam(DBasics.params.hp, 1);
             }
 
 

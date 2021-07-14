@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { DParameterId } from "ts/data/DParameter";
+import { LEntity } from "./LEntity";
 
 
 export class LParam {
@@ -107,10 +108,25 @@ export class LParamSet {
         return this._params;
     }
     
-    public param(paramId: DParameterId): LParam {
+    public param(paramId: DParameterId): LParam | undefined {
+        return this._params[paramId];
+    }
+    
+    public getParam(paramId: DParameterId): LParam {
         const param = this._params[paramId];
         assert(param);
         return param;
+    }
+
+    public refresh(owner: LEntity): void {
+        // min/max clamp.
+        // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
+        for (const param of this._params) {
+            if (param) {
+                const max = owner.idealParam(param.parameterId());
+                param.setActualDamgeParam(param.actualParamDamge().clamp(0, max));
+            }
+        }
     }
     
 }

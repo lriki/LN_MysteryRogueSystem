@@ -5,20 +5,12 @@ import { DBasics } from "ts/data/DBasics";
 
 export class SDebugHelpers {
     public static setHP(entity: LEntity, value: number): void {
-        const battler = entity.findBehavior(LBattlerBehavior);
-        if (battler) {
-            const mhp = battler.idealParam(DBasics.params.hp);
-            battler.setActualDamgeParam(DBasics.params.hp, mhp - value);
-            //const hp = battler.actualParam(DBasics.params.hp);
-            //console.log(hp);
-        }
+        const mhp = entity.idealParam(DBasics.params.hp);
+        entity.setActualDamgeParam(DBasics.params.hp, mhp - value);
     }
     
     public static setFP(entity: LEntity, value: number): void {
-        const battler = entity.findBehavior(LBattlerBehavior);
-        if (battler) {
-            const max = battler.idealParam(DBasics.params.fp);
-            battler.setActualDamgeParam(DBasics.params.fp, max - value);
-        }
+        const max = entity.idealParam(DBasics.params.fp);
+        entity.setActualDamgeParam(DBasics.params.fp, max - value);
     }
 }

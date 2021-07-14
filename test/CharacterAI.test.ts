@@ -97,7 +97,7 @@ test("CharacterAI.ActionPattern", () => {
     actor1._name = "actor1";
     REGame.world._transferEntity(actor1, TestEnv.FloorId_CharacterAI, 2, 4);
     TestEnv.performFloorTransfer();
-    const initialHP = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
+    const initialHP = actor1.actualParam(DBasics.params.hp);
 
     // enemy1 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ドラゴン").id));
@@ -113,7 +113,7 @@ test("CharacterAI.ActionPattern", () => {
     REGame.world.random().resetSeed(4);     // 炎を吐く乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
-    const hp = actor1.getBehavior(LActorBehavior).actualParam(DBasics.params.hp);
+    const hp = actor1.actualParam(DBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

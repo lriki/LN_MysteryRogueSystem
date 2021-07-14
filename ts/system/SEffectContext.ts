@@ -207,11 +207,8 @@ export class SEffectorFact {
     public hitRate(): number {
         const successRate = this._successRate;
         if (this.isPhysical()) {
-            const subjectBehavior = this.subjectBehavior();
-            const hit = (subjectBehavior) ? subjectBehavior.xparam(DBasics.xparams.hit) : 1.0;
-            //console.log("successRate", successRate);
-            //console.log("subjectBehavior", subjectBehavior);
-            //console.log("hit", hit);
+            const subject = this.subject();
+            const hit = (subject) ? subject.xparamOrDefault(DBasics.xparams.hit, 100) : 1.0;
             return successRate * 0.01 * hit;
         } else {
             return successRate * 0.01;
@@ -219,7 +216,7 @@ export class SEffectorFact {
     }
 
     // Game_Action.prototype.itemEva
-    public evaRate(target: LBattlerBehavior): number {
+    public evaRate(target: LEntity): number {
         if (this.isPhysical()) {
             return target.xparam(DBasics.xparams.eva);
         } else if (this.isMagical()) {
@@ -230,9 +227,9 @@ export class SEffectorFact {
     }
 
     // Game_Action.prototype.itemCri
-    public criRate(target: LBattlerBehavior): number {
-        const subjectBehavior = this.subjectBehavior();
-        const cri = (subjectBehavior) ? subjectBehavior.xparam(DBasics.xparams.cri) : 1.0;
+    public criRate(target: LEntity): number {
+        const subject = this.subject();
+        const cri = (subject) ? subject.xparam(DBasics.xparams.cri) : 1.0;
 
         return this._subjectEffect.critical
             ? cri * (1 - target.xparam(DBasics.xparams.cev))
@@ -240,9 +237,9 @@ export class SEffectorFact {
     };
 
     // Game_Action.prototype.lukEffectRate
-    public lukEffectRate(target: LBattlerBehavior): number {
-        const subjectBehavior = this.subjectBehavior();
-        const subject_luk = subjectBehavior ? subjectBehavior.actualParam(DBasics.params.luk) : 0.0;
+    public lukEffectRate(target: LEntity): number {
+        const subject = this.subject();
+        const subject_luk = subject ? subject.actualParam(DBasics.params.luk) : 0.0;
         const target_luk = target.actualParam(DBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     };
@@ -362,27 +359,27 @@ export class SEffectContext {
 
 
             // 命中判定
-            this.judgeHits(targetBattlerBehavior, result);
+            this.judgeHits(target, result);
             
             result.physical = this._effectorFact.isPhysical();
 
             if (result.isHit()) {
                 if (this._effectorFact.hasParamDamage()) {
-                    result.critical = Math.random() < this._effectorFact.criRate(targetBattlerBehavior);
+                    result.critical = Math.random() < this._effectorFact.criRate(target);
                 }
                 
                 // Damage
                 for (let i = 0; i < REData.parameters.length; i++) {
                     const pe = this._effectorFact.parameterEffect(i);
                     if (pe && pe.applyType != SParameterEffectApplyType.None) {
-                        const value = this.makeDamageValue(pe, targetBattlerBehavior, result.critical);
-                        this.executeDamage(pe, targetBattlerBehavior, value, result);
+                        const value = this.makeDamageValue(pe, target, targetBattlerBehavior, result.critical);
+                        this.executeDamage(pe, target, value, result);
                     }
                 }
     
                 // Effect
                 for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
-                    this.applyItemEffect(targetBattlerBehavior, effect, result);
+                    this.applyItemEffect(target, effect, result);
                 }
                 for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
                     this.applyOtherEffect(commandContext, target, targetBattlerBehavior, effect, result);
@@ -408,8 +405,8 @@ export class SEffectContext {
         return result;
     }
 
-    private judgeHits(target: LBattlerBehavior, result: LEffectResult): void {
-        const subject = this._effectorFact.subjectBehavior();
+    private judgeHits(target: LEntity, result: LEffectResult): void {
+        const subject = this._effectorFact.subject();
 
         if (subject) {
             if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
@@ -456,8 +453,8 @@ export class SEffectContext {
     }
 
     // Game_Action.prototype.makeDamageValue
-    private makeDamageValue(paramEffect: SParameterEffect, target: LBattlerBehavior, critical: boolean): number {
-        const baseValue = this.evalDamageFormula(paramEffect, target);
+    private makeDamageValue(paramEffect: SParameterEffect, target: LEntity, targetBehavior: LBattlerBehavior, critical: boolean): number {
+        const baseValue = this.evalDamageFormula(paramEffect, targetBehavior);
         let value = baseValue * this.calcElementRate(paramEffect, target);
         if (this._effectorFact.isPhysical()) {
             value *= target.sparam(DBasics.sparams.pdr);
@@ -472,7 +469,7 @@ export class SEffectContext {
             value = this.applyCritical(value);
         }
         value = this.applyVariance(value, paramEffect.variance);
-        value = this.applyGuard(value, target);
+        value = this.applyGuard(value, target, targetBehavior);
         value = Math.round(value);
         return value;
     }
@@ -493,9 +490,9 @@ export class SEffectContext {
     };
     
     // Game_Action.prototype.calcElementRate
-    private calcElementRate(paramEffect: SParameterEffect, target: LBattlerBehavior): number {
+    private calcElementRate(paramEffect: SParameterEffect, target: LEntity): number {
         if (paramEffect.elementId < 0) {
-            const subjectBehavior = this._effectorFact.subjectBehavior();
+            const subjectBehavior = this._effectorFact.subject();
             const attackElements = subjectBehavior ? subjectBehavior.attackElements() : [];
             return this.elementsMaxRate(target, attackElements);
         } else {
@@ -504,7 +501,7 @@ export class SEffectContext {
     };
     
     // Game_Action.prototype.elementsMaxRate
-    private elementsMaxRate(target: LBattlerBehavior, elements: number[]): number {
+    private elementsMaxRate(target: LEntity, elements: number[]): number {
         if (elements.length > 0) {
             const rates = elements.map(elementId => target.elementRate(elementId));
             return Math.max(...rates);
@@ -526,8 +523,8 @@ export class SEffectContext {
     };
     
     // Game_Action.prototype.applyGuard
-    private applyGuard(damage: number, target: LBattlerBehavior): number {
-        return damage / (damage > 0 && target.isGuard() ? 2 * target.sparam(DBasics.sparams.grd) : 1);
+    private applyGuard(damage: number, target: LEntity, targetBehavior: LBattlerBehavior): number {
+        return damage / (damage > 0 && targetBehavior.isGuard() ? 2 * target.sparam(DBasics.sparams.grd) : 1);
     };
 
 
@@ -537,7 +534,7 @@ export class SEffectContext {
 
     // Game_Action.prototype.executeDamage
     // Game_Action.prototype.executeHpDamage
-    private executeDamage(paramEffect: SParameterEffect, target: LBattlerBehavior, value: number, result: LEffectResult): void {
+    private executeDamage(paramEffect: SParameterEffect, target: LEntity, value: number, result: LEffectResult): void {
         //const b = target.findBehavior(LBattlerBehavior);
         //assert(b);
 
@@ -575,7 +572,7 @@ export class SEffectContext {
     // Game_Action.prototype.gainDrainedHp
     public gainDrainedParam(paramEffect: SParameterEffect, value: number): void {
         if (paramEffect.isDrain) {
-            let gainTarget = this._effectorFact.subjectBehavior();
+            let gainTarget = this._effectorFact.subject();
             // TODO:
             //if (this._reflectionTarget) {
             //    gainTarget = this._reflectionTarget;
@@ -587,7 +584,7 @@ export class SEffectContext {
     }
 
     // Game_Action.prototype.applyItemEffect
-    public applyItemEffect(target: LBattlerBehavior, effect: IDataEffect, result: LEffectResult): void {
+    public applyItemEffect(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
         switch (effect.code) {
             case DItemEffect.EFFECT_RECOVER_HP:
                 throw new Error("Not implemented.");
@@ -672,7 +669,7 @@ export class SEffectContext {
     }
 
     // Game_Action.prototype.itemEffectAddState
-    private itemEffectAddState(target: LBattlerBehavior, effect: IDataEffect, result: LEffectResult): void {
+    private itemEffectAddState(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
         if (effect.dataId === 0) {
             // ID=0 は "通常攻撃" という特殊な状態付加となる。
             // RESystem としては処理不要。
@@ -682,14 +679,14 @@ export class SEffectContext {
     }
 
     // Game_Action.prototype.itemEffectAddNormalState
-    private itemEffectAddNormalState(target: LBattlerBehavior, effect: IDataEffect, result: LEffectResult): void {
+    private itemEffectAddNormalState(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
         let chance = effect.value1;
         if (!this._effectorFact.isCertainHit()) {
             chance *= target.stateRate(effect.dataId);
             chance *= this._effectorFact.lukEffectRate(target);
         }
         if (Math.random() < chance) {
-            target.ownerEntity().addState(effect.dataId);
+            target.addState(effect.dataId);
             result.makeSuccess();
         }
     }

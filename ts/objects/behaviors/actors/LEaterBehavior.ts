@@ -24,8 +24,6 @@ export class LEaterBehavior extends LBehavior {
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         if (activity.actionId() == DBasics.actions.EatActionId) {
-            console.log("------eat");
-
             const reactor = activity.object();
             if (reactor) {
                 context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);

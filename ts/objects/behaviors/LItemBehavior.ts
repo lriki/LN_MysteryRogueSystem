@@ -56,8 +56,6 @@ export class LItemBehavior extends LBehavior {
 
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         if (activity.actionId() == DBasics.actions.WaveActionId) {
-            console.log("aa LWaveActivity");
-                
             const subject = activity.subject();
             const effectPerformer = new SEmittorPerformer();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);

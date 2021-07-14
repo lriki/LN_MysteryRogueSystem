@@ -138,7 +138,7 @@ test("Activity.ThrowAndHit", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(true);     // item は削除されている
-    expect(enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp) > 1).toBe(true); // HP が回復していること。
+    expect(enemy1.actualParam(DBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });
 
 // [交換]

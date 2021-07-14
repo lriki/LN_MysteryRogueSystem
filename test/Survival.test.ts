@@ -28,12 +28,11 @@ test("Survival.FP", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
-    const behavior = actor1.getBehavior(LBattlerBehavior);
-    expect(behavior.actualParam(DBasics.params.fp)).toBe(1000); // 初期 FP は 1000
+    expect(actor1.actualParam(DBasics.params.fp)).toBe(1000); // 初期 FP は 1000
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    expect(behavior.actualParam(DBasics.params.fp)).toBe(1000); // Dialog 開いた状態なので未行動。FP消費はされていない。
+    expect(actor1.actualParam(DBasics.params.fp)).toBe(1000); // Dialog 開いた状態なので未行動。FP消費はされていない。
 
     const dialogContext = RESystem.dialogContext;
 
@@ -45,9 +44,9 @@ test("Survival.FP", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    expect(behavior.actualParam(DBasics.params.fp)).toBe(999);  // FP が減少していること
+    expect(actor1.actualParam(DBasics.params.fp)).toBe(999);  // FP が減少していること
 
-    const prevHP = behavior.actualParam(DBasics.params.hp);
+    const prevHP = actor1.actualParam(DBasics.params.hp);
 
     //--------------------
     // FP 0 にしてから移動してみる
@@ -58,7 +57,7 @@ test("Survival.FP", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    expect(behavior.actualParam(DBasics.params.hp)).toBe(prevHP - 1);   // HP が減少していること
+    expect(actor1.actualParam(DBasics.params.hp)).toBe(prevHP - 1);   // HP が減少していること
 
     
     //--------------------
@@ -74,7 +73,7 @@ test("Survival.FP", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(behavior.actualParam(DBasics.params.fp)).toBe(5);  // 草を食べた分だけ FP が回復していること
+    expect(actor1.actualParam(DBasics.params.fp)).toBe(5);  // 草を食べた分だけ FP が回復していること
 
 
     //--------------------
@@ -95,5 +94,5 @@ test("Survival.FP", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(REGame.world.findEntity(item2.entityId())).toBe(undefined);  // UT薬草は Player と衝突したので消滅している
-    expect(behavior.actualParam(DBasics.params.fp)).toBe(4);            // 投げ当てたときの効果は発動するが、FP は回復しない
+    expect(actor1.actualParam(DBasics.params.fp)).toBe(4);            // 投げ当てたときの効果は発動するが、FP は回復しない
 });

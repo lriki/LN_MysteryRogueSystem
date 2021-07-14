@@ -47,7 +47,7 @@ test("Items.Arrow", () => {
     const enemy1 = SEntityFactory.newMonster(REData.getEnemy("kEnemy_ウルフ").entity());
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
-    const initialHP = enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp);
+    const initialHP = enemy1.actualParam(DBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -73,7 +73,7 @@ test("Items.Arrow", () => {
 
     const data = REData.getEntity("kウッドアロー");
 
-    const hp = enemy1.getBehavior(LBattlerBehavior).actualParam(DBasics.params.hp);
+    const hp = enemy1.actualParam(DBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

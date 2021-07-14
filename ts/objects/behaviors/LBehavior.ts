@@ -263,6 +263,10 @@ export abstract class LBehavior extends LObject {
     //       - 土偶は落とすとアイテム、立てるとUnitのようにふるまう
     public queryHomeLayer(): BlockLayerKind | undefined { return undefined; }
 
+
+    public onGetIdealParamBase(paramId: DParameterId): number | undefined {
+        return 0;
+    }
     
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。

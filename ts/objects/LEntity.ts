@@ -18,7 +18,7 @@ import { LFloorId } from "./LFloorId";
 import { SStateFactory } from "ts/system/SStateFactory";
 import { LParty, LPartyId } from "./LParty";
 import { isThisTypeNode, LanguageServiceMode } from "typescript";
-import { DParameterId } from "ts/data/DParameter";
+import { DParameterId, DSParamId, DXParamId } from "ts/data/DParameter";
 import { SAbilityFactory } from "ts/system/SAbilityFactory";
 import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
@@ -343,9 +343,198 @@ export class LEntity extends LObject
         return this._params;
     }
 
-    public refreshConditions(): void {
-        this.basicBehaviors().forEach(b => b.onRefreshConditions());
+    // 現在の上限値。
+    // システム上、HP,MP 等のほか、攻撃力、満腹度など様々なパラメータの減少が発生するため、
+    // RMMZ のような _hp, _mp, _tp といったフィールドは用意せず、すべて同じように扱う。
+    // Game_BattlerBase.prototype.param
+    idealParam(paramId: DParameterId): number {
+        const value =
+            this.idealParamBasePlus(paramId) *
+            this.idealParamRate(paramId) *
+            this.paramBuffRate(paramId);
+        const maxValue = this.paramMax(paramId);
+        const minValue = this.paramMin(paramId);
+        return Math.round(value.clamp(minValue, maxValue));
     }
+
+    // 現在のレベルやクラスに応じた基礎値。
+    // 例えば FP だと常に 100. バフやアイテムによる最大 FP 上昇量は含まない。
+    // Game_BattlerBase.prototype.paramBase
+    private idealParamBase(paramId: DParameterId): number {
+        const data = REData.parameters[paramId];
+        const battlerParam = data.battlerParamId;
+        if (battlerParam >= 0) {
+            return this.getIdealParamBase(paramId);
+        }
+        else {
+            return data.initialIdealValue;
+        }
+    }
+
+    // Game_BattlerBase.prototype.paramPlus
+    // 成長アイテム使用による、半永久的な上限加算値
+    idealParamPlus(paramId: DParameterId): number {
+        const param = this._params.param(paramId);
+        return (param) ? param.idealParamPlus() + this.queryIdealParameterPlus(paramId) : 0;
+    }
+
+    // Game_BattlerBase.prototype.paramBasePlus
+    idealParamBasePlus(paramId: DParameterId): number {
+        return Math.max(0, this.idealParamBase(paramId) + this.idealParamPlus(paramId));
+    };
+    
+    // Game_BattlerBase.prototype.paramRate
+    idealParamRate(paramId: DParameterId): number {
+        return this.traitsPi(DTraits.TRAIT_PARAM, paramId);
+    };
+
+    // Game_BattlerBase.prototype.paramBuffRate
+    // バフ適用レベル (正負の整数値。正規化されたレートではない点に注意)
+    paramBuffRate(paramId: DParameterId): number {
+        const param = this._params.param(paramId);
+        return (param) ? param.buff() * 0.25 + 1.0 : 0;
+    };
+    
+    // バフや成長によるパラメータ上限値の最小値。
+    // 現在の上限値を取得したいときは idealParam() を使うこと。
+    // Game_BattlerBase.prototype.paramMin
+    paramMin(paramId: DParameterId): number {
+        return 0;
+    };
+    
+    // バフや成長によるパラメータ上限値の最大値。
+    // 現在の上限値を取得したいときは idealParam() を使うこと。
+    // Game_BattlerBase.prototype.paramMax
+    paramMax(paramId: DParameterId): number {
+        return Infinity;
+    };
+
+    public actualParam(paramId: DParameterId): number {
+        const param = this._params.param(paramId);
+        return (param) ? this.idealParam(paramId) - param.actualParamDamge() : 0;
+    }
+
+    public setActualDamgeParam(paramId: DParameterId, value: number): void {
+        const param = this._params.param(paramId);
+        if (param) {
+            param.setActualDamgeParam(value);
+            this.refreshConditions();
+        }
+    }
+    
+    public gainActualParam(paramId: DParameterId, value: number): void {
+        const param = this._params.param(paramId);
+        if (param) {
+            param.gainActualParam(value);
+            this.refreshConditions();
+        }
+    }
+
+    public refreshConditions(): void {
+        // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
+        const hpParam = this._params.param(DBasics.params.hp);
+        if (hpParam) {
+            const dead = this.isDeathStateAffected();
+            if (dead && this.actualParam(DBasics.params.hp) != 0) {
+                hpParam.setActualDamgeParam(this.idealParam(DBasics.params.hp));
+                this.removeAllStates();
+            }
+        }
+
+        this._params.refresh(this);
+        this.basicBehaviors().forEach(b => b.onRefreshConditions());
+        
+    
+        // refresh 後、HP が 0 なら DeadState を付加する
+        if (this.actualParam(DBasics.params.hp) === 0) {
+            this.addState(DBasics.states.dead, false);
+        } else {
+            this.removeState(DBasics.states.dead);
+        }
+    }
+
+    // Game_BattlerBase.prototype.isDeathStateAffected
+    isDeathStateAffected(): boolean {
+        return this.isStateAffected(DBasics.states.dead);
+    }
+
+    //----------------------------------------
+    // Traits
+    
+    // Game_BattlerBase.prototype.allTraits
+    private allTraits(): IDataTrait[] {
+        return this.collectTraits();
+    };
+
+    // Game_BattlerBase.prototype.traits
+    public traits(code: number): IDataTrait[] {
+        return this.allTraits().filter(trait => trait.code === code);
+    };
+
+    // Game_BattlerBase.prototype.traitsWithId
+    public traitsWithId(code: number, id: number): IDataTrait[] {
+        return this.allTraits().filter(
+            trait => trait.code === code && trait.dataId === id
+        );
+    };
+
+    // Game_BattlerBase.prototype.traitsPi
+    private traitsPi(code: number, id: number): number {
+        return this.traitsWithId(code, id).reduce((r, trait) => r * trait.value, 1);
+    }
+
+    // Game_BattlerBase.prototype.traitsSum
+    private traitsSum(code: number, id: number): number {
+        const traits = this.traitsWithId(code, id);
+        return traits.reduce((r, trait) => r + trait.value, 0);
+    }
+
+    private traitsSumOrDefault(code: number, id: number, defaultValue: number): number {
+        const traits = this.traitsWithId(code, id);
+        return (traits.length == 0) ? defaultValue : traits.reduce((r, trait) => r + trait.value, 0);
+    }
+
+    // Game_BattlerBase.prototype.traitsSumAll
+    private traitsSumAll(code: number): number {
+        return this.traits(code).reduce((r, trait) => r + trait.value, 0);
+    };
+    
+    // Game_BattlerBase.prototype.traitsSet
+    private traitsSet(code: number): number[] {
+        const emptyNumbers: number[] = [];
+        return this.traits(code).reduce((r, trait) => r.concat(trait.dataId), emptyNumbers);
+    };
+
+    // Game_BattlerBase.prototype.xparam
+    public xparam(xparamId: DXParamId): number {
+        return this.traitsSum(DTraits.TRAIT_XPARAM, xparamId);
+    }
+
+    public xparamOrDefault(xparamId: DXParamId, defaultValue: number): number {
+        return this.traitsSumOrDefault(DTraits.TRAIT_XPARAM, xparamId, defaultValue);
+    }
+    
+    // Game_BattlerBase.prototype.sparam
+    public sparam(sparamId: DSParamId): number  {
+        return this.traitsPi(DTraits.TRAIT_SPARAM, sparamId);
+    }
+
+    // Game_BattlerBase.prototype.elementRate
+    public elementRate(elementId: number): number {
+        return this.traitsPi(DTraits.TRAIT_ELEMENT_RATE, elementId);
+    }
+
+    // ステート有効度
+    // Game_BattlerBase.prototype.stateRate
+    public stateRate(stateId: DStateId): number {
+        return this.traitsPi(DTraits.TRAIT_STATE_RATE, stateId);
+    };
+    
+    // Game_BattlerBase.prototype.attackElements
+    public attackElements(): number[] {
+        return this.traitsSet(DTraits.TRAIT_ATTACK_ELEMENT);
+    }
+
 
     //----------------------------------------
     // Property
@@ -391,6 +580,13 @@ export class LEntity extends LObject
         return BlockLayerKind.Ground;
     }
 
+    public getIdealParamBase(paramId: DParameterId): number {
+        for (const b of this.collectBehaviors().reverse()) {
+            const v = b.onGetIdealParamBase(paramId);
+            if (v) return v;
+        }
+        return 0;
+    }
     
 
     //----------------------------------------

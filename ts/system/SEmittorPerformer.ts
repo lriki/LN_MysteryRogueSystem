@@ -71,8 +71,6 @@ export class SEmittorPerformer {
 
             // TODO: ユーザー側モーション
             context.postSequel(performer, RESystem.sequels.attack);
-
-            console.log("performeEffect 1");
             
             // TODO: 正面3方向攻撃とかの場合はここをループする
             //for ()

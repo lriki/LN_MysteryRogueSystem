@@ -38,10 +38,10 @@ export class VHudWindow extends Window_Base {
         const inventory = entity.findBehavior(LInventoryBehavior);
         if (!inventory) return;
 
-        const hp = battler.actualParam(DBasics.params.hp);
-        const mhp = battler.idealParam(DBasics.params.hp);
-        const fp = battler.actualParam(DBasics.params.fp);
-        const mfp = battler.idealParam(DBasics.params.fp);
+        const hp = entity.actualParam(DBasics.params.hp);
+        const mhp = entity.idealParam(DBasics.params.hp);
+        const fp = entity.actualParam(DBasics.params.fp);
+        const mfp = entity.idealParam(DBasics.params.fp);
 
         this.drawFloorNumber(0, 0, entity.floorId);
         this.drawLevel(150, 0, battler.level, battler.currentExp() / battler.nextLevelExp());
