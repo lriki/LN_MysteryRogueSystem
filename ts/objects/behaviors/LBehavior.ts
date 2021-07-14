@@ -296,7 +296,7 @@ export abstract class LBehavior extends LObject {
     public onQueryReactions(actions: DActionId[]): void { }
 
     
-    public onRefreshStatus(): void { }
+    public onRefreshConditions(): void { }
 
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、

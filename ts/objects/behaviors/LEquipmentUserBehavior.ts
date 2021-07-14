@@ -144,7 +144,7 @@ NOTE:
             else {
                 slot.itemEntityId = itemEntity.entityId();
 
-                this.ownerEntity().refreshStatus();
+                this.ownerEntity().refreshConditions();
     
                 SSoundManager.playEquip();
                 context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));

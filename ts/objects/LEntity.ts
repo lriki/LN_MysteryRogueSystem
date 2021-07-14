@@ -336,8 +336,15 @@ export class LEntity extends LObject
             return REGame.world.party(this._partyId);
     }
 
+    //--------------------------------------------------------------------------------
+    // Parameters
+
     public params(): LParamSet {
         return this._params;
+    }
+
+    public refreshConditions(): void {
+        this.basicBehaviors().forEach(b => b.onRefreshConditions());
     }
 
     //----------------------------------------
@@ -735,10 +742,6 @@ export class LEntity extends LObject
 
     public queryIdealParameterPlus(parameterId: DParameterId): number {
         return this.basicBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
-    }
-
-    public refreshStatus(): void {
-        this.basicBehaviors().forEach(b => b.onRefreshStatus());
     }
 
     /** @deprecated  use collectBehaviors*/

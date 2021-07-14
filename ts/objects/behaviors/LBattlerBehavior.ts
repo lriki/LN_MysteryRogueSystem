@@ -343,7 +343,7 @@ export class LBattlerBehavior extends LBehavior {
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }
     
-    onRefreshStatus(): void {
+    onRefreshConditions(): void {
         this.refresh();
     }
     
