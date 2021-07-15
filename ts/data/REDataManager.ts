@@ -204,7 +204,7 @@ export class REDataManager
             TakeActionId: REData.addAction("Take", ""),
             BiteActionId: REData.addAction("Bite", ""),
             ReadActionId: REData.addAction("読む", "", 1000),
-            WaveActionId: REData.addAction("振る", "LWaveActivity"),
+            WaveActionId: REData.addAction("振る", "LWaveActivity", 1000),
             PushActionId: REData.addAction("Push", ""),
             PutInActionId: REData.addAction("PickIn",""),
             PickOutActionId: REData.addAction("PickOut", ""),
