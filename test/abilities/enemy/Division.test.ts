@@ -37,7 +37,7 @@ test("Abilities.Enemy.Division", () => {
     
     // 右を向いて攻撃
     actor1.dir = 6;
-    RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack);
+    RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack, undefined);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     const entityCount = REGame.map.entities().length;

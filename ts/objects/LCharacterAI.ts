@@ -425,7 +425,7 @@ export class LCharacterAI {
                     //context.postActivity(LDirectionChangeActivity.make(self, dir));
     
                     //context.postPerformSkill(self, RESystem.skills.normalAttack);
-                    context.postPerformSkill(self, this._requiredSkillAction.action.skillId);
+                    context.postPerformSkill(self, this._requiredSkillAction.action.skillId, undefined);
                     context.postConsumeActionToken(self);
                     return SPhaseResult.Handled;
                 }

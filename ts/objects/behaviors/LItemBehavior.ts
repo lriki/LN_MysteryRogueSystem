@@ -133,8 +133,7 @@ export class LItemBehavior extends LBehavior {
         
         const skill = itemData.effectSet.skill(cause);
         if (skill) {
-            console.log("postPerformSkill", skill);
-            context.postPerformSkill(subject.entity(), skill.id);
+            context.postPerformSkill(subject.entity(), skill.id, self);
         }
     }
 

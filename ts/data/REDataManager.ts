@@ -19,7 +19,7 @@ import { DItem } from './DItem';
 import { DTraits } from './DTraits';
 import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange } from './DEffect';
 import { DSystem } from './DSystem';
-import { DSkill } from './DSkill';
+import { DSkill, DSkillCostSource } from './DSkill';
 import { DEnemy } from './DEnemy';
 import { DEntity } from './DEntity';
 import { DTroop } from './DTroop';
@@ -400,8 +400,8 @@ export class REDataManager
             if (x) {
                 //const id = REData.addSkill(x.name ?? "null");
                 //const skill = REData.skills[id];
-                skill.paramCosts[DBasics.params.mp] = x.mpCost;
-                skill.paramCosts[DBasics.params.tp] = x.tpCost;
+                skill.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, x.mpCost);
+                skill.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, x.tpCost);
 
                 const emittor = REData.newEmittor();
                 emittor.effect.critical = false;
@@ -1000,6 +1000,7 @@ export class REDataManager
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
+                data.setParamCost(DSkillCostSource.Actor, DBasics.params.remaining, 1);
                 break;
             case "kSkill_ふきとばし":
                 emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});

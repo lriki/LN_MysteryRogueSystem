@@ -1,7 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
 import { DEmittor, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DEntityCreateInfo } from "ts/data/DEntity";
-import { DSkillDataId } from "ts/data/DSkill";
+import { DSkill, DSkillCostSource, DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -15,6 +15,7 @@ import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } fr
 import { SEntityFactory } from "./SEntityFactory";
 import { UMovement } from "../usecases/UMovement";
 import { DItem } from "ts/data/DItem";
+import { assert } from "ts/Common";
 
 
 export class SEmittorPerformer {
@@ -24,7 +25,7 @@ export class SEmittorPerformer {
      * 
      * 単純にスキルを発動する。地形や相手の状態による成否はこの中で判断する。
      */
-    public performeSkill(skillId: DSkillDataId, performer: LEntity, context: SCommandContext): void {
+    public performeSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId, item: LEntity | undefined): void {
 
         const skill = REData.skills[skillId];
         ///const effector = new SEffectorFact(entity, skill.effect);
@@ -34,11 +35,62 @@ export class SEmittorPerformer {
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
 
+        // コストで発動可否判断
+        if (!this.canPaySkillCost(performer, skill, item)) {
+            return;
+        }
+
+        // コスト消費
+        this.paySkillCost(performer, skill, item);
+
+
         const effect = skill.emittor();
         if (effect) {
             this.performeEffect(context, performer, effect, performer.dir, undefined);
         }
     }
+
+    private canPaySkillCost(performer: LEntity, skill: DSkill, item: LEntity | undefined): boolean {
+        const performerCosts = skill.paramCosts[DSkillCostSource.Actor];
+        for (let paramId = 0; paramId < performerCosts.length; paramId++) {
+            const cost = performerCosts[paramId];
+            if (cost !== undefined) {
+                if (performer.actualParam(paramId) < cost) return false;
+            }
+        }
+
+        const itemCosts = skill.paramCosts[DSkillCostSource.Item];
+        for (let paramId = 0; paramId < itemCosts.length; paramId++) {
+            const cost = itemCosts[paramId];
+            if (cost !== undefined) {
+                if (!item) return false;    // ItemCost があるのに item が無い場合は発動不可能
+                if (item.actualParam(paramId) < cost) return false;
+            }
+        }
+
+        return true;
+    }
+    
+    private paySkillCost(performer: LEntity, skill: DSkill, item: LEntity | undefined): void {
+        const performerCosts = skill.paramCosts[DSkillCostSource.Actor];
+        for (let paramId = 0; paramId < performerCosts.length; paramId++) {
+            const cost = performerCosts[paramId];
+            if (cost !== undefined) {
+                performer.gainActualParam(paramId, -cost);
+            }
+        }
+
+        const itemCosts = skill.paramCosts[DSkillCostSource.Item];
+        for (let paramId = 0; paramId < itemCosts.length; paramId++) {
+            const cost = itemCosts[paramId];
+            if (cost !== undefined) {
+                assert(item);
+                item.gainActualParam(paramId, -cost);
+            }
+        }
+    }
+
+
     
     /**
      * 

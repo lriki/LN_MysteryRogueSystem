@@ -460,12 +460,12 @@ export class SCommandContext
         Log.postCommand("PerformSkill");
     }
 
-    postPerformSkill(performer: LEntity, skillId: DSkillDataId): void {
+    postPerformSkill(performer: LEntity, skillId: DSkillDataId, item: LEntity | undefined): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
             //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
             const effectPerformer = new SEmittorPerformer();
-            effectPerformer.performeSkill(skillId, performer, this);
+            effectPerformer.performeSkill(this, performer, skillId, item);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));

@@ -338,7 +338,7 @@ export class VManualActionDialogVisual extends VDialog {
         // TODO: NPC 話かけ
         
         // [通常攻撃] スキル発動
-        context.commandContext().postPerformSkill(entity, RESystem.skills.normalAttack);
+        context.commandContext().postPerformSkill(entity, RESystem.skills.normalAttack, undefined);
         this._model.consumeAction();
         this._model.submit();
         
