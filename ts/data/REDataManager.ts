@@ -1045,7 +1045,7 @@ export class REDataManager
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
-                entity.idealParams[DBasics.params.remaining] = 5;
+                entity.idealParams[DBasics.params.remaining] = 1;
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);

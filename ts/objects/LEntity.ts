@@ -466,10 +466,12 @@ export class LEntity extends LObject
         
     
         // refresh 後、HP が 0 なら DeadState を付加する
-        if (this.actualParam(DBasics.params.hp) === 0) {
-            this.addState(DBasics.states.dead, false);
-        } else {
-            this.removeState(DBasics.states.dead);
+        if (this.idealParam(DBasics.params.hp) !== 0) {
+            if (this.actualParam(DBasics.params.hp) === 0) {
+                this.addState(DBasics.states.dead, false);
+            } else {
+                this.removeState(DBasics.states.dead);
+            }
         }
     }
 
