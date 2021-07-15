@@ -206,26 +206,36 @@ export enum DSkillCostSource {
     Item,
 }
 
+export enum DParamCostType {
+    Decrease,
+    Increase,
+}
+
+export interface DParamCost {
+    type: DParamCostType;
+    value: number;
+}
+
 
 export class DEmittorCost {
     
 
     /** Cost [DSkillCostSource][DParameterId] */
-    paramCosts: number[][];
+    paramCosts: DParamCost[][];
     
     constructor() {
         this.paramCosts = [];
     }
     
 
-    public setParamCost(source: DSkillCostSource, paramId: DParameterId, value: number): void {
+    public setParamCost(source: DSkillCostSource, paramId: DParameterId, paramCost: DParamCost): void {
         let costs = this.paramCosts[source];
         if (!costs) {
             costs = [];
             this.paramCosts[source] = costs;
         }
 
-        costs[paramId] = value;
+        costs[paramId] = paramCost;
     }
 
 

@@ -34,8 +34,12 @@ test("Items.Staff.Knockback", () => {
     item1._name = "item1";
     inventory.addEntity(item1);
 
+    // Entity作成時に指定しない場合は DEntity の remaining パラメータから初期値が取られる
     const dn = item1.getDisplayName();
     expect(dn.name.includes("[5]")).toBe(true);
+
+    // 残り使用回数を [1] にしておく
+    item1.setActualParam(DBasics.params.remaining, 1);
     
     // enemy1
     const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
@@ -53,15 +57,25 @@ test("Items.Staff.Knockback", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-        // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
-        expect(enemy1.x).toBe(20);
+        expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
+        expect(item1.actualParam(DBasics.params.remaining)).toBe(0);    // 使用回数が減っている
     }
 
-
+    // 振ってみる (使用回数切れ)
+    {
+        // [振る]
+        const activity2 = LActivity.makeWave(actor1, item1);
+        dc.postActivity(activity2);
+        dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+        expect(enemy1.x).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
+        expect(item1.actualParam(DBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
+    }
 
     // 投げてみる
     {
-
         REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -73,8 +87,8 @@ test("Items.Staff.Knockback", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-        // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
-        expect(enemy1.x).toBe(20);
+        
+        expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
 
     }
 

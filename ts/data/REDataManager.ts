@@ -17,7 +17,7 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
-import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource } from './DEffect';
+import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
@@ -408,8 +408,8 @@ export class REDataManager
                 emittor.effect.rmmzAnimationId = x.animationId;
                 emittor.effect.specialEffectQualifyings = x.effects;
 
-                emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, x.mpCost);
-                emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, x.tpCost);
+                emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
+                emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
 
                 if (x.damage.type > 0) {
                     emittor.effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
@@ -1001,7 +1001,7 @@ export class REDataManager
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
-                data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, 1);
+                data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
             case "kSkill_ふきとばし":
                 emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});

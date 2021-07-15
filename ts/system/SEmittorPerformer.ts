@@ -1,5 +1,5 @@
 import { DBasics } from "ts/data/DBasics";
-import { DEmittor, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope, DSkillCostSource, DEmittorCost } from "ts/data/DEffect";
+import { DEmittor, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost } from "ts/data/DEffect";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
@@ -16,6 +16,7 @@ import { SEntityFactory } from "./SEntityFactory";
 import { UMovement } from "../usecases/UMovement";
 import { DItem } from "ts/data/DItem";
 import { assert } from "ts/Common";
+import { DParameterId } from "ts/data/DParameter";
 
 
 export class SEmittorPerformer {
@@ -41,13 +42,39 @@ export class SEmittorPerformer {
         }
     }
 
+    private canPayParamCost(entity: LEntity, paramId: DParameterId, cost: DParamCost): boolean {
+        if (cost.type == DParamCostType.Decrease) {
+            if (entity.actualParam(paramId) < cost.value) return false;
+        }
+        else if (cost.type == DParamCostType.Increase) {
+            const d = entity.idealParam(paramId) - entity.actualParam(paramId);
+            if (d < cost.value) return false;
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
+        return true;
+    }
+
+    private payParamCost(entity: LEntity, paramId: DParameterId, cost: DParamCost): void {
+        if (cost.type == DParamCostType.Decrease) {
+            entity.gainActualParam(paramId, -cost.value);
+        }
+        else if (cost.type == DParamCostType.Increase) {
+            entity.gainActualParam(paramId, cost.value);
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
+    }
+
     private canPaySkillCost(performer: LEntity, costs: DEmittorCost, item: LEntity | undefined): boolean {
         const performerCosts = costs.paramCosts[DSkillCostSource.Actor];
         if (performerCosts) {
             for (let paramId = 0; paramId < performerCosts.length; paramId++) {
                 const cost = performerCosts[paramId];
                 if (cost !== undefined) {
-                    if (performer.actualParam(paramId) < cost) return false;
+                    if (!this.canPayParamCost(performer, paramId, cost)) return false;
                 }
             }
         }
@@ -61,14 +88,13 @@ export class SEmittorPerformer {
                 const cost = itemCosts[paramId];
                 if (cost !== undefined) {
                     if (!item) return false;    // ItemCost があるのに item が無い場合は発動不可能
-                    if (item.actualParam(paramId) < cost) return false;
+                    if (!this.canPayParamCost(item, paramId, cost)) return false;
                 }
             }
         }
         else {
             // No cost. Available.
         }
-
 
         return true;
     }
@@ -79,7 +105,7 @@ export class SEmittorPerformer {
             for (let paramId = 0; paramId < performerCosts.length; paramId++) {
                 const cost = performerCosts[paramId];
                 if (cost !== undefined) {
-                    performer.gainActualParam(paramId, -cost);
+                    this.payParamCost(performer, paramId, cost);
                 }
             }
         }
@@ -90,7 +116,7 @@ export class SEmittorPerformer {
                 const cost = itemCosts[paramId];
                 if (cost !== undefined) {
                     assert(item);
-                    item.gainActualParam(paramId, -cost);
+                    this.payParamCost(item, paramId, cost);
                 }
             }
         }
