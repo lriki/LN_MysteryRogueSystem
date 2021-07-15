@@ -1,7 +1,7 @@
 import { DBasics } from "ts/data/DBasics";
-import { DEmittor, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
+import { DEmittor, DEffectCause, DEffectFieldScopeRange, DRmmzEffectScope, DSkillCostSource, DEmittorCost } from "ts/data/DEffect";
 import { DEntityCreateInfo } from "ts/data/DEntity";
-import { DSkill, DSkillCostSource, DSkillDataId } from "ts/data/DSkill";
+import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
@@ -35,57 +35,63 @@ export class SEmittorPerformer {
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
 
-        // コストで発動可否判断
-        if (!this.canPaySkillCost(performer, skill, item)) {
-            return;
-        }
-
-        // コスト消費
-        this.paySkillCost(performer, skill, item);
-
-
         const effect = skill.emittor();
         if (effect) {
-            this.performeEffect(context, performer, effect, performer.dir, undefined);
+            this.performeEffect(context, performer, effect, performer.dir, undefined, undefined);
         }
     }
 
-    private canPaySkillCost(performer: LEntity, skill: DSkill, item: LEntity | undefined): boolean {
-        const performerCosts = skill.paramCosts[DSkillCostSource.Actor];
-        for (let paramId = 0; paramId < performerCosts.length; paramId++) {
-            const cost = performerCosts[paramId];
-            if (cost !== undefined) {
-                if (performer.actualParam(paramId) < cost) return false;
+    private canPaySkillCost(performer: LEntity, costs: DEmittorCost, item: LEntity | undefined): boolean {
+        const performerCosts = costs.paramCosts[DSkillCostSource.Actor];
+        if (performerCosts) {
+            for (let paramId = 0; paramId < performerCosts.length; paramId++) {
+                const cost = performerCosts[paramId];
+                if (cost !== undefined) {
+                    if (performer.actualParam(paramId) < cost) return false;
+                }
             }
+        }
+        else {
+            // No cost. Available.
         }
 
-        const itemCosts = skill.paramCosts[DSkillCostSource.Item];
-        for (let paramId = 0; paramId < itemCosts.length; paramId++) {
-            const cost = itemCosts[paramId];
-            if (cost !== undefined) {
-                if (!item) return false;    // ItemCost があるのに item が無い場合は発動不可能
-                if (item.actualParam(paramId) < cost) return false;
+        const itemCosts = costs.paramCosts[DSkillCostSource.Item];
+        if (itemCosts) {
+            for (let paramId = 0; paramId < itemCosts.length; paramId++) {
+                const cost = itemCosts[paramId];
+                if (cost !== undefined) {
+                    if (!item) return false;    // ItemCost があるのに item が無い場合は発動不可能
+                    if (item.actualParam(paramId) < cost) return false;
+                }
             }
         }
+        else {
+            // No cost. Available.
+        }
+
 
         return true;
     }
     
-    private paySkillCost(performer: LEntity, skill: DSkill, item: LEntity | undefined): void {
-        const performerCosts = skill.paramCosts[DSkillCostSource.Actor];
-        for (let paramId = 0; paramId < performerCosts.length; paramId++) {
-            const cost = performerCosts[paramId];
-            if (cost !== undefined) {
-                performer.gainActualParam(paramId, -cost);
+    private paySkillCost(performer: LEntity, costs: DEmittorCost, item: LEntity | undefined): void {
+        const performerCosts = costs.paramCosts[DSkillCostSource.Actor];
+        if (performerCosts) {
+            for (let paramId = 0; paramId < performerCosts.length; paramId++) {
+                const cost = performerCosts[paramId];
+                if (cost !== undefined) {
+                    performer.gainActualParam(paramId, -cost);
+                }
             }
         }
 
-        const itemCosts = skill.paramCosts[DSkillCostSource.Item];
-        for (let paramId = 0; paramId < itemCosts.length; paramId++) {
-            const cost = itemCosts[paramId];
-            if (cost !== undefined) {
-                assert(item);
-                item.gainActualParam(paramId, -cost);
+        const itemCosts = costs.paramCosts[DSkillCostSource.Item];
+        if (itemCosts) {
+            for (let paramId = 0; paramId < itemCosts.length; paramId++) {
+                const cost = itemCosts[paramId];
+                if (cost !== undefined) {
+                    assert(item);
+                    item.gainActualParam(paramId, -cost);
+                }
             }
         }
     }
@@ -97,9 +103,21 @@ export class SEmittorPerformer {
      * @param context 
      * @param performer 
      * @param emittor 
-     * @param item 杖など
+     * @param itemData 杖など
      */
-    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, item: DItem | undefined): void {
+    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined, itemData: DItem | undefined): void {
+
+
+        // コストで発動可否判断
+        if (!this.canPaySkillCost(performer, emittor.costs, itemEntity)) {
+            return;
+        }
+
+        // コスト消費
+        this.paySkillCost(performer, emittor.costs, itemEntity);
+
+
+
 
         const subject = performer.getBehavior(LBattlerBehavior);
 
@@ -110,8 +128,8 @@ export class SEmittorPerformer {
             const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             const effectContext = new SEffectContext(effectSubject);
     
-            if (item) {
-                context.postAnimation(performer, item.animationId, true);
+            if (itemData) {
+                context.postAnimation(performer, itemData.animationId, true);
             }
     
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
@@ -164,7 +182,7 @@ export class SEmittorPerformer {
             //context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
 
 
-            const emittorEffect = item?.effectSet.effect(DEffectCause.Hit);
+            const emittorEffect = itemData?.effectSet.effect(DEffectCause.Hit);
 
             const actualEmittor = emittorEffect ?? emittor;
 

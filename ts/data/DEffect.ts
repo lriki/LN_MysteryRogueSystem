@@ -198,12 +198,53 @@ export class DEffect {
     }
 }
 
+export enum DSkillCostSource {
+    /** スキルの使用者 */
+    Actor,
+
+    /** スキルの発生元となった Entity。杖を振ったときは、振った人が Actor, 杖アイテムが Item. */
+    Item,
+}
+
+
+export class DEmittorCost {
+    
+
+    /** Cost [DSkillCostSource][DParameterId] */
+    paramCosts: number[][];
+    
+    constructor() {
+        this.paramCosts = [];
+    }
+    
+
+    public setParamCost(source: DSkillCostSource, paramId: DParameterId, value: number): void {
+        let costs = this.paramCosts[source];
+        if (!costs) {
+            costs = [];
+            this.paramCosts[source] = costs;
+        }
+
+        costs[paramId] = value;
+    }
+
+
+    
+}
+
 /**
  * RMMZ の Skill と Item の共通パラメータ
  */
 export class DEmittor {
     id: DEmittorId;
 
+    /**
+     * Cost は Emittor が持つ。
+     * 杖から出る魔法弾がイメージしやすいかも。
+     * 新種道具を考えると、魔法弾には複数の Effect が込められているが、
+     * 使用回数は魔法弾1つにつき1つ減る。
+     */
+    costs: DEmittorCost;
     
     /**
      * 効果適用範囲
@@ -233,6 +274,7 @@ export class DEmittor {
     
     constructor(id: DEmittorId) {
         this.id = id;
+        this.costs = new DEmittorCost();
         this.scope = {
            area: DEffectFieldScopeArea.Room,
            range: DEffectFieldScopeRange.Front1,

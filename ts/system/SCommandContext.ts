@@ -448,12 +448,12 @@ export class SCommandContext
         Log.postCommand("SkipPart");
     }
 
-    postPerformEmittor(performer: LEntity, emittor: DEmittor, effectDir: number, item: DItem | undefined): void {
+    postPerformEmittor(performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined, itemData: DItem | undefined): void {
         const m1 = () => {
             Log.doCommand("PerformSkill");
             //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
             const effectPerformer = new SEmittorPerformer();
-            effectPerformer.performeEffect(this, performer, emittor, effectDir, item);
+            effectPerformer.performeEffect(this, performer, emittor, effectDir, itemEntity, itemData);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));

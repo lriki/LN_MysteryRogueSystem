@@ -17,9 +17,9 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DItem } from './DItem';
 import { DTraits } from './DTraits';
-import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange } from './DEffect';
+import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource } from './DEffect';
 import { DSystem } from './DSystem';
-import { DSkill, DSkillCostSource } from './DSkill';
+import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
 import { DEntity } from './DEntity';
 import { DTroop } from './DTroop';
@@ -400,8 +400,6 @@ export class REDataManager
             if (x) {
                 //const id = REData.addSkill(x.name ?? "null");
                 //const skill = REData.skills[id];
-                skill.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, x.mpCost);
-                skill.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, x.tpCost);
 
                 const emittor = REData.newEmittor();
                 emittor.effect.critical = false;
@@ -409,6 +407,9 @@ export class REDataManager
                 emittor.effect.hitType = x.hitType;
                 emittor.effect.rmmzAnimationId = x.animationId;
                 emittor.effect.specialEffectQualifyings = x.effects;
+
+                emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, x.mpCost);
+                emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, x.tpCost);
 
                 if (x.damage.type > 0) {
                     emittor.effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
@@ -1000,7 +1001,7 @@ export class REDataManager
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
-                data.setParamCost(DSkillCostSource.Actor, DBasics.params.remaining, 1);
+                data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, 1);
                 break;
             case "kSkill_ふきとばし":
                 emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});

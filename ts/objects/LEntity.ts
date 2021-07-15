@@ -441,6 +441,8 @@ export class LEntity extends LObject
     }
     
     public gainActualParam(paramId: DParameterId, value: number): void {
+        if (value === 0) return;    // refresh とか発生させる意味なし
+
         const param = this._params.param(paramId);
         if (param) {
             param.gainActualParam(value);

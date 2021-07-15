@@ -4,14 +4,6 @@ import { REData } from "./REData";
 
 export type DSkillDataId = number;
 
-export enum DSkillCostSource {
-    /** スキルの使用者 */
-    Actor,
-
-    /** スキルの発生元となった Entity。杖を振ったときは、振った人が Actor, 杖アイテムが Item. */
-    Item,
-}
-
 export class DSkill {
     /** ID (0 is Invalid). */
     id: DSkillDataId;
@@ -21,9 +13,6 @@ export class DSkill {
 
     /** Name */
     name: string;
-
-    /** Cost [DSkillCostSource][DParameterId] */
-    paramCosts: number[][];
 
     /**
      * エディタで指定される Scope.
@@ -53,7 +42,6 @@ export class DSkill {
         this.name = "null";
         this.key = "";
         this.kind = "";
-        this.paramCosts = [];
         this.rmmzEffectScope = DRmmzEffectScope.None;
         //effectSet: new DEffectSet(),
         this.emittorId = 0;
@@ -68,17 +56,5 @@ export class DSkill {
     public emittor(): DEmittor {
         return REData.getEmittorById(this.emittorId);
     }
-
-    public setParamCost(source: DSkillCostSource, paramId: DParameterId, value: number): void {
-        let costs = this.paramCosts[source];
-        if (!costs) {
-            costs = [];
-            this.paramCosts[source] = costs;
-        }
-
-        costs[paramId] = value;
-    }
-
-    
 }
 
