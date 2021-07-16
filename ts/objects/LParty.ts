@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
-import { DMonsterHouseId } from "ts/data/DMonsterHouse";
+import { DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
 import { DFactionId, REData } from "ts/data/REData";
 import { FRoom } from "ts/floorgen/FMapData";
 import { SCommandContext } from "ts/system/SCommandContext";

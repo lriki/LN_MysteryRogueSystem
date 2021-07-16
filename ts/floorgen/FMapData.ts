@@ -1,10 +1,11 @@
 import { assert } from "ts/Common";
 import { DMapId } from "ts/data/DLand";
-import { DMonsterHouseId } from "ts/data/DMonsterHouse";
+import { DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LRandom } from "ts/objects/LRandom";
 import { TileShape } from "ts/objects/LBlock";
 import { FStructure } from "./FStructure";
+import { LStructure } from "ts/objects/structures/LStructure";
 
 
 export enum FDirection {
@@ -382,7 +383,7 @@ export class FMapBlock {
     private _roomId: FRoomId;
     private _doorway: boolean;  // 部屋の入口
     private _continuation: boolean; // ゴールとなる階段から地続きであるか
-    private _monsterHouseTypeId: DMonsterHouseId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
+    private _monsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
 
     public constructor(x: number, y: number) {
         this._x = x;
@@ -420,11 +421,11 @@ export class FMapBlock {
         return this._blockComponent;
     }
 
-    public setMonsterHouseTypeId(value: DMonsterHouseId): void {
+    public setMonsterHouseTypeId(value: DMonsterHouseTypeId): void {
         this._monsterHouseTypeId = value;
     }
 
-    public monsterHouseTypeId(): DMonsterHouseId {
+    public monsterHouseTypeId(): DMonsterHouseTypeId {
         return this._monsterHouseTypeId;
     }
     
@@ -484,6 +485,7 @@ export class FRoom {
     private _y1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
     private _x2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
     private _y2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _structures: FStructure[] = [];
 
     public constructor(map: FMap, id: FRoomId, sector: FSector) {
         this._map = map;
@@ -565,6 +567,14 @@ export class FRoom {
             }
         }
         return result;
+    }
+
+    public addStructureRef(value: FStructure): void {
+        this._structures.push(value);
+    }
+
+    public structures(): readonly FStructure[] {
+        return this._structures;
     }
 }
 

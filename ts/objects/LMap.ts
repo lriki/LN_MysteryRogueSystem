@@ -152,7 +152,7 @@ export class LMap extends LObject
             this._structures = data.structures().map(x => {
                 if (x instanceof FMonsterHouseStructure) {
                     const s = new LMonsterHouseStructure();
-                    s.setup(x);
+                    s.setup(x.roomId(), x.monsterHouseTypeId());
                     return s;
                 }
                 else {

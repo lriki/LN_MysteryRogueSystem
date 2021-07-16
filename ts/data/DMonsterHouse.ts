@@ -1,8 +1,8 @@
 
-export type DMonsterHouseId = number;
+export type DMonsterHouseTypeId = number;
 
-export interface DMonsterHouse {
-    id: DMonsterHouseId;
+export interface DMonsterHouseType {
+    id: DMonsterHouseTypeId;
     name: string;
 }
 

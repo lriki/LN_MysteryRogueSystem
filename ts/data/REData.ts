@@ -15,7 +15,7 @@ import { DEquipmentType } from "./DEquipmentType";
 import { DEquipmentPart } from "./DEquipmentPart";
 import { RE_Data_Actor } from "./DActor";
 import { DAbility, DAbilityId } from "./DAbility";
-import { DMonsterHouse } from "./DMonsterHouse";
+import { DMonsterHouseType } from "./DMonsterHouse";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
 import { DTemplateMap, DTemplateMapId, DTemplateMap_Default } from "./DMap";
@@ -182,7 +182,7 @@ export class REData
     static states: DState[] = [];
     static stateGroups: DStateGroup[] = [];
     static abilities: DAbility[] = [];
-    static monsterHouses: DMonsterHouse[] = [];
+    static monsterHouses: DMonsterHouseType[] = [];
     static prefabs: DPrefab[] = [];
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];

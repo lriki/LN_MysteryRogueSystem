@@ -32,7 +32,7 @@ export class DSystem {
     public states: DSystemStates;
 
 
-    floorRoundLimit: number = 10;
+    floorRoundLimit: number = 1000;
 
     /** 出現テーブルが何もないときに Enemy の Spawn が要求されたときに生成する Entity */
     public fallbackEnemyEntityId: DEntityId;

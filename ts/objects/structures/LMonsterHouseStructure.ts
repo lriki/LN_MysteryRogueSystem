@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { DMonsterHouseId } from "ts/data/DMonsterHouse";
+import { DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
 import { DFactionId, REData } from "ts/data/REData";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { Helpers } from "ts/system/Helpers";
@@ -9,22 +9,22 @@ import { REGame } from "../REGame";
 import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
-import { LUnitBehavior } from "../behaviors/LUnitBehavior";
 
 export class LMonsterHouseStructure extends LStructure {
     private _roomId: LRoomId = 0
-    private _monsterHouseTypeId: DMonsterHouseId = 0;
+    private _monsterHouseTypeId: DMonsterHouseTypeId = 0;
     private _monsterHouseFactionId: DFactionId = 0;
     private _monsterHouseState: MonsterHouseState = MonsterHouseState.Sleeping;
 
-    public setup(structure: FMonsterHouseStructure): void {
-        this._roomId = structure.roomId();
-        this._monsterHouseTypeId = structure.monsterHouseTypeId();
+    // モンスターハウスの巻物などで動的に生成されることもあるため、FMonsterHouseStructure は参照しないようにする
+    public setup(roomId: LRoomId, monsterHouseTypeId: DMonsterHouseTypeId): void {
+        this._roomId = roomId;
+        this._monsterHouseTypeId = monsterHouseTypeId;
         this._monsterHouseFactionId = REData.system.factions.enemy;
         this._monsterHouseState = MonsterHouseState.Sleeping;
     }
 
-    public monsterHouseTypeId(): DMonsterHouseId {
+    public monsterHouseTypeId(): DMonsterHouseTypeId {
         return this._monsterHouseTypeId;
     }
 

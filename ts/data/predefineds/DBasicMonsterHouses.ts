@@ -1,7 +1,7 @@
-import { DMonsterHouseId } from "../DMonsterHouse";
+import { DMonsterHouseTypeId } from "../DMonsterHouse";
 
 export interface DBasicMonsterHouses {
-    fixed: DMonsterHouseId;
-    normal: DMonsterHouseId;
+    fixed: DMonsterHouseTypeId;
+    normal: DMonsterHouseTypeId;
 }
 
