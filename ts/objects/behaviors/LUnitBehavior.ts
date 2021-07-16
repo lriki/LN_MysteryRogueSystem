@@ -14,13 +14,13 @@ import { UMovement } from "ts/usecases/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
-import { SMessageBuilder } from "ts/system/SMessageBuilder";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
 import { onGrounded } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { DPrefabImage } from "ts/data/DPrefab";
+import { UName } from "ts/usecases/UName";
 
 /**
  * 
@@ -173,7 +173,7 @@ export class LUnitBehavior extends LBehavior {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntityWithStacking(itemEntity);
                             
-                            const name = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(self), DescriptionHighlightLevel.UnitName);
+                            const name = LEntityDescription.makeDisplayText(UName.makeUnitNameByFocused(self), DescriptionHighlightLevel.UnitName);
                             context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));
                             SSoundManager.playPickItem();
 

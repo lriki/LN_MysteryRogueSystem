@@ -32,6 +32,7 @@ import { VWarehouseWithdrawDialog } from "./dialogs/VWarehouseWithdrawDialog";
 import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
 import { VItemListDialog } from "./dialogs/VItemListDialog";
 import { VEscapeSequel } from "./sequels/VEscapeSequel";
+import { VEarthquake2Sequel } from "./sequels/VEarthquake2Sequel";
 
 /**
  */
@@ -55,6 +56,9 @@ export class REVisual_Manager
         this._visualSequelFactory[RESystem.sequels.commonStopped] = () => new VCommonStoppedSequel();
         this._visualSequelFactory[RESystem.sequels.asleep] = () => new VAsleepSequel();
         this._visualSequelFactory[RESystem.sequels.escape] = () => new VEscapeSequel();
+        this._visualSequelFactory[RESystem.sequels.earthquake2] = () => new VEarthquake2Sequel();
+
+        
     }
 
     tileSize(): Vector2 {

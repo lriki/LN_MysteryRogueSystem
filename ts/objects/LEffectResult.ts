@@ -5,13 +5,13 @@ import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdent
 import { LEntity } from "ts/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "../system/RESystem";
-import { SMessageBuilder } from "../system/SMessageBuilder";
 import { DBasics } from "ts/data/DBasics";
 import { DParameterId } from "ts/data/DParameter";
 import { STextManager } from "ts/system/STextManager";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LActorBehavior } from "./behaviors/LActorBehavior";
 import { SSoundManager } from "ts/system/SSoundManager";
+import { UName } from "ts/usecases/UName";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 export class LParamEffectResult {
@@ -138,7 +138,7 @@ export class LEffectResult {
     // Window_BattleLog.prototype.displayActionResults
     public showResultMessages(context: SCommandContext, entity: LEntity): void {
 
-        const targetName = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+        const targetName = UName.makeUnitNameByFocused(entity);
         
         if (this.missed) {
             context.postMessage(tr2("TEST: 外れた。"));
@@ -193,7 +193,7 @@ export class LEffectResult {
     // ターン終了時に表示するべき結果メッセージ。
     // 特に複数の敵を倒したときの取得経験値は合計したものを1度で出したい。
     public showResultMessagesDeferred(context: SCommandContext, entity: LEntity): void {
-        const targetName = LEntityDescription.makeDisplayText(SMessageBuilder.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
+        const targetName = LEntityDescription.makeDisplayText(UName.makeUnitNameByFocused(entity), DescriptionHighlightLevel.UnitName);
 
         if (this.gainedExp > 0) {
             const text = STextManager.obtainExp.format(this.gainedExp, STextManager.exp);

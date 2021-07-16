@@ -225,6 +225,7 @@ export class REDataManager
             commonStopped: REData.addSequel("commonStopped"),
             asleep: REData.addSequel("asleep"),
             escape: REData.addSequel("escape"),
+            earthquake2: REData.addSequel("earthquake2"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         

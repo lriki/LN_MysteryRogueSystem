@@ -29,4 +29,6 @@ export interface BasicSequels {
     asleep: number;
 
     escape: DSequelId;
+
+    earthquake2: DSequelId;
 }

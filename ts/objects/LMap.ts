@@ -61,7 +61,7 @@ export class LMap extends LObject
     private _rooms: LRoom[] = [];
     private _structures: LStructure[] = [];
     private _mapdataRevision: number = 1;
-
+    private _roundCount: number = 0;
 
     constructor() {
         super(LObjectType.Map);
@@ -91,6 +91,14 @@ export class LMap extends LObject
         this._mapdataRevision++;
     }
 
+    public roundCount(): number {
+        return this._roundCount;
+    }
+
+    public increaseRoundCount(): void {
+        this._roundCount++;
+    }
+
     private setupEmptyMap(width: number, height: number) {
 
         this._width = width;
@@ -107,7 +115,7 @@ export class LMap extends LObject
     }
 
     private build(data: FMap): void {
-
+        this._roundCount = 0;
         {
             const width = data.width();
             const height = data.height();

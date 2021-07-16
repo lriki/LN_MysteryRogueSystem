@@ -8,6 +8,7 @@ import { RESystem } from "ts/system/RESystem";
 import { VWarehouseDialog } from "ts/visual/dialogs/VWarehouseDialog";
 import { REVisual } from "ts/visual/REVisual";
 import { Scene_Warehouse } from "./Scene_Warehouse";
+import { UTransfer } from "ts/usecases/UTransfer";
 
 const pluginName: string = "LN_RoguelikeEngine";
 
@@ -33,30 +34,7 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 
 
 PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
-    const entity = REGame.camera.focusedEntity();
-    if (entity) {
-        const floorId = entity.floorId;
-        const newFloorNumber = floorId.floorNumber() + 1;
-
-        // 最後のフロアを踏破した？
-        if (newFloorNumber > REGame.map.land2().maxFloorNumber()) {
-            $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Goal / 100));
-
-            const exitRMMZMapId = floorId.landData().exitRMMZMapId;
-            assert(exitRMMZMapId > 0);
-            
-            const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
-            assert(result);
-        }
-        else {
-            const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
-            REGame.world._transferEntity(entity, newFloorId);
-
-            // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
-            // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。
-            this.setWaitMode("transfer");
-        }
-    }
+    UTransfer.proceedFloorForward();
 });
 
 PluginManager.registerCommand(pluginName, "RE-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {

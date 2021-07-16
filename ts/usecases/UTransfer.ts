@@ -5,6 +5,7 @@ import { REDataManager } from "ts/data/REDataManager";
 import { LEntity } from "ts/objects/LEntity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
+import { paramLandExitResultVariableId } from "ts/PluginParameters";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { createNoSubstitutionTemplateLiteral } from "typescript";
@@ -76,10 +77,46 @@ export class UTransfer {
         //$gamePlayer.reserveTransfer();
     }
 
+    /**
+     * entity を今いる Land から抜けさせ、ExitMap へ移動させる。
+     */
     public static exitLand(context: SCommandContext, entity: LEntity, result: LandExitResult): void {
         assert(entity == REGame.camera.focusedEntity());    // Player であるはず
 
         RESystem.integration.onSetLandExitResult(result);
         context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
     }
+
+    public static proceedFloorForward(interpreter?: Game_Interpreter | undefined) {
+        const entity = REGame.camera.focusedEntity();
+        if (entity) {
+            const floorId = entity.floorId;
+            const newFloorNumber = floorId.floorNumber() + 1;
+
+            // 最後のフロアを踏破した？
+            if (newFloorNumber > REGame.map.land2().maxFloorNumber()) {
+                $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Goal / 100));
+
+                const exitRMMZMapId = floorId.landData().exitRMMZMapId;
+                assert(exitRMMZMapId > 0);
+                
+                
+                $gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
+                //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
+                //assert(result);
+            }
+            else {
+                const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
+                REGame.world._transferEntity(entity, newFloorId);
+            }
+
+            if (interpreter) {
+                // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
+                // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。
+                interpreter.setWaitMode("transfer");
+            }
+        }
+    }
+
+
 }

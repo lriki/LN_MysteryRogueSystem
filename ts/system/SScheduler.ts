@@ -1,4 +1,4 @@
-import { assert, Log } from "../Common";
+import { assert, Log, tr2 } from "../Common";
 import { REGame } from "../objects/REGame";
 import { RESystem } from "./RESystem";
 import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_Prepare, SSchedulerPhase_ResolveAdjacentAndMovingTarget } from "./SSchedulerPhase";
@@ -7,6 +7,9 @@ import { DecisionPhase } from "ts/objects/internal";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { UAction } from "../usecases/UAction";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
+import { REData } from "ts/data/REData";
+import { UTransfer } from "ts/usecases/UTransfer";
+import { UName } from "ts/usecases/UName";
 
 
 
@@ -335,6 +338,21 @@ export class SScheduler
             this._phase = SchedulerPhase.RunStarting;
         }
         else {
+
+            {
+                REGame.map.increaseRoundCount();
+                if (REGame.map.roundCount() >= REData.system.floorRoundLimit) {
+                    const entity = REGame.camera.focusedEntity();
+                    if (entity) {
+                        RESystem.commandContext.postMessage(tr2("地震だ！\\|"));
+                        RESystem.commandContext.postMessage(tr2("%1は地割れに飲み込まれた！").format(UName.makeUnitNameByFocused(entity)));
+                        RESystem.commandContext.postSequel(entity, RESystem.sequels.earthquake2);
+                        RESystem.commandContext.postWait(entity, 60);
+                        RESystem.commandContext.postCall(() => { UTransfer.proceedFloorForward(); });
+                    }
+                }
+            }
+
             this._phase = SchedulerPhase.RoundEnding;
         }
     }

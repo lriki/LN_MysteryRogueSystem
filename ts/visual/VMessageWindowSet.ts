@@ -17,7 +17,7 @@ export class VMessageWindowSet {
     private _hudSpriteSet: VHudWindow;
 
     private _logWindow: VMessageLogWindow;
-    private _messageWindow: VMessageWindow;
+    //private _messageWindow: VMessageWindow;
 
     // コアスクリプトのフェード機能は Window 全体にも影響する。つまり、黒画面の上に文字だけ出すような演出ができない。
     // そのため黒Spriteで画面を覆うようにすることで独自のフェード処理を実装する。
@@ -48,8 +48,8 @@ export class VMessageWindowSet {
         this._logWindow = new VMessageLogWindow(REGame.messageHistory, this.messageWindowRect());
         this._scene.addWindow(this._logWindow);
 
-        this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());
-        this._scene.addWindow(this._messageWindow);
+        //this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());
+        //this._scene.addWindow(this._messageWindow);
 
         this._floorNameWindow = new VFloorNameWindow(new Rectangle(0, 0, Graphics.boxWidth, Graphics.boxHeight));
         this._scene.addWindow(this._floorNameWindow);
