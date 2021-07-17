@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Items.Staff.Knockback"
+                "-t", "concretes.item.脱出の巻物"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

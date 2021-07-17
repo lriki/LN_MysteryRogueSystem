@@ -1010,6 +1010,9 @@ export class REDataManager
             case "kSkill_変化":
                 emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
                 break;
+            case "kSkill_投げ当て_1ダメ":
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                break;
         }
     }
     
@@ -1046,7 +1049,7 @@ export class REDataManager
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
-                entity.idealParams[DBasics.params.remaining] = 1;
+                entity.idealParams[DBasics.params.remaining] = 5;
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
@@ -1078,6 +1081,7 @@ export class REDataManager
             case "kItem_エスケープスクロール":
                 data.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(DBasics.actions.ReadActionId, data.effectSet.mainEmittor().id);
+                data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
                 
         }

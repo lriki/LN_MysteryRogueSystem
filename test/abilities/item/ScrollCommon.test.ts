@@ -20,7 +20,6 @@ afterAll(() => {
 
 test("Item.ScrollCommon", () => {
     TestEnv.newGame();
-    const dc = RESystem.dialogContext;
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -37,8 +36,8 @@ test("Item.ScrollCommon", () => {
         
     // [読む]
     const activity2 = LActivity.makeRead(actor1, item1);
-    dc.postActivity(activity2);
-    dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(activity2);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

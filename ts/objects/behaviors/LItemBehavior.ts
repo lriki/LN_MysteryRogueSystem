@@ -113,6 +113,7 @@ export class LItemBehavior extends LBehavior {
         const item = this.ownerEntity().getBehavior(LItemBehavior);
         const itemData = item.itemData();
         const emittor = itemData.effectSet.effect(cause);
+        
         if (emittor) {
             context.postPerformEmittor(target, emittor, effectDir, self, itemData);
 

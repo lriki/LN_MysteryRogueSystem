@@ -200,6 +200,8 @@ export class SEmittorPerformer {
             }
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
+
+            // Projectile を発射する Emittor.
             
             const bullet = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(emittor.scope.projectilePrefabKey).id));
             REGame.map.appearEntity(bullet, performer.x, performer.y);
@@ -208,6 +210,8 @@ export class SEmittorPerformer {
             //context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
 
 
+            // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
+            // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
             const emittorEffect = itemData?.effectSet.effect(DEffectCause.Hit);
 
             const actualEmittor = emittorEffect ?? emittor;

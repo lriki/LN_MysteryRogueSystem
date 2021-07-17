@@ -138,7 +138,6 @@ export class FMapBuildPass_MakeMonsterHouse extends FMapBuildPass {
                 const s = new FMonsterHouseStructure(room.id(), DBasics.monsterHouses.normal);  // TODO: 今は通常のみ
                 map.addStructure(s);
                 room.addStructureRef(s);
-                console.log("FMonsterHouseStructure", room);
             }
         }
     }

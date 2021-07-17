@@ -122,17 +122,20 @@ export class DEntityCreateInfo {
     //public troopId: DTroopId;
     public entityId: DEntityId;
     public stateIds: DStateId[];
+    public debugName: string;
 
     public constructor() {
         //this.troopId = 0;
         this.entityId = 0;
         this.stateIds = [];
+        this.debugName = "";
     }
 
-    public static makeSingle(entityId: DEntityId, stateIds?: DStateId[]): DEntityCreateInfo {
+    public static makeSingle(entityId: DEntityId, stateIds?: DStateId[], debugName?: string): DEntityCreateInfo {
         const data = new DEntityCreateInfo();
         data.entityId = entityId;
         if (stateIds) data.stateIds = stateIds;
+        if (debugName) data.debugName = debugName;
         return data;
     }
 }

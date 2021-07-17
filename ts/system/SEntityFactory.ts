@@ -197,6 +197,8 @@ export class SEntityFactory {
             entity.addState(stateId);
         }
 
+        entity._name = data.debugName;
+
         return entity;
     }
 
