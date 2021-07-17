@@ -4,14 +4,22 @@ import { LBehaviorId, LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
 import { SDialog } from "../SDialog";
 
+export enum SItemListMode {
+    Use,
+    Selection,
+}
+
 export class SItemListDialog extends SDialog {
     private _actorEntityId: LEntityId;
     private _inventoryBehaviorId: LBehaviorId;
+    private _mode: SItemListMode;
+    private _selectedEntity: LEntity | undefined;
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, mode: SItemListMode) {
         super();
         this._actorEntityId = actorEntity.entityId();
         this._inventoryBehaviorId = inventory.id();
+        this._mode = mode;
     }
 
     public entity(): LEntity {
@@ -22,4 +30,15 @@ export class SItemListDialog extends SDialog {
         return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
+    public mode(): SItemListMode {
+        return this._mode;
+    }
+
+    public setSelectedEntity(entity: LEntity): void {
+        this._selectedEntity = entity;
+    }
+
+    public selectedEntity(): LEntity | undefined {
+        return this._selectedEntity;
+    }
 }

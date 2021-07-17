@@ -18,12 +18,14 @@ export class LActivity {
     private _actionId: DActionId;
     private _subject: LEntityId;    // Command 送信対象 (主語)
     private _object: LEntityId;     // (目的語)
+    private _objects2: LEntityId[];
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
 
     public constructor(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number) {
         this._actionId = actionId;
         this._subject = subject.entityId();
         this._object = object ? object.entityId() : LEntityId.makeEmpty();
+        this._objects2 = [];
         this._direction = dir ?? 0;
     }
 
@@ -41,6 +43,10 @@ export class LActivity {
 
     public object(): LEntity {
         return REGame.world.entity(this._object);
+    }
+
+    public objects2(): LEntity[] {
+        return this._objects2.map(x => REGame.world.entity(x));
     }
 
     public direction(): number {
@@ -97,6 +103,12 @@ export class LActivity {
 
     public static makeRead(subject: LEntity, object: LEntity): LActivity {
         return new LActivity(DBasics.actions.ReadActionId, subject, object);
+    }
+
+    public static makePutIn(subject: LEntity, storage: LEntity, item: LEntity): LActivity {
+        const a = new LActivity(DBasics.actions.PutInActionId, subject, storage);
+        a._objects2 = [item.entityId()];
+        return a;
     }
 }
 

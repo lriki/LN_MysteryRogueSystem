@@ -339,6 +339,19 @@ export class LUnitBehavior extends LBehavior {
             // 続いて onActivityReaction を実行する。
             return REResponse.Succeeded;
         }
+        else if (activity.actionId() == DBasics.actions.PutInActionId) {
+            const selfInventory = self.getBehavior(LInventoryBehavior);
+            const storage = activity.object();
+            const storageInventory = storage.getBehavior(LInventoryBehavior);
+            const items = activity.objects2();
+            
+            for (const item of items) {
+                item.removeFromParent();
+                storageInventory.addEntity(item);
+                context.postMessage(tr("{0} を入れた。", REGame.identifyer.makeDisplayText(item)));
+                
+            }
+        }
         
         return REResponse.Pass;
     }

@@ -1,6 +1,6 @@
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
-import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
+import { SItemListDialog, SItemListMode } from "ts/system/dialogs/SItemListDialog";
 import { LEquipmentUserBehavior } from "ts/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/objects/LEntity";
@@ -12,7 +12,8 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { REData } from "ts/data/REData";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
-import { tr2 } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
+import { TileShape } from "ts/objects/LBlock";
 
 export class VItemListDialog extends VDialog {
     private _model: SItemListDialog;
@@ -32,6 +33,9 @@ export class VItemListDialog extends VDialog {
     constructor(model: SItemListDialog) {
         super(model);
         this._model = model;
+
+        
+        console.log("VItemListDialog", this._model.inventory());
         
         const y = 100;
         const cw = 200;
@@ -77,6 +81,76 @@ export class VItemListDialog extends VDialog {
     }
 
     private handleItemOk(): void {
+        switch (this._model.mode()) {
+            case SItemListMode.Use:
+                this.showCommandListWindow();
+                break;
+            case SItemListMode.Selection:
+                this._model.setSelectedEntity(this._itemListWindow.selectedItem());
+                this.submit();
+                break;
+            default:
+                throw new Error("Unreachable.");
+        }
+    }
+        
+    private handleItemCancel(): void {
+        this.cancel();
+    }
+
+
+    onCommandCancel(): void {
+        if (this._itemListWindow && this._commandWindow) {
+            this._itemListWindow.activate();
+            this._commandWindow.deactivate();
+            this._commandWindow.openness = 0;
+        }
+    }
+
+    private handleAction(actionId: DActionId): void {
+        if (this._itemListWindow) {
+            const itemEntity = this._itemListWindow.selectedItem();
+            
+            // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
+            
+
+            const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+            RESystem.dialogContext.postActivity(activity);
+            this.submit();
+        }
+    }
+
+    private handlePeek(): void {
+        const itemEntity = this._itemListWindow.selectedItem();
+        const inventory = itemEntity.getBehavior(LInventoryBehavior);
+        this.openSubDialog(new SItemListDialog(this._model.entity(), inventory, SItemListMode.Selection), (result: any) => {
+            this.submit();
+        });
+    }
+
+    private handlePutIn(): void {
+        const storage = this._itemListWindow.selectedItem();
+        const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
+        this.openSubDialog(model, (result: any) => {
+            const item = model.selectedEntity();
+            assert(item);
+            const activity = LActivity.makePutIn(this._model.entity(), storage, item);
+            RESystem.dialogContext.postActivity(activity);
+
+            console.log("handlePutIn gogo");
+            this.submit();
+        });
+    }
+
+    private activateItemWindow() {
+        if (this._itemListWindow) {
+            this._itemListWindow.refresh();
+            this._itemListWindow.activate();
+        }
+    }
+
+    private showCommandListWindow(): void {
+
         if (this._itemListWindow && this._commandWindow) {
 
             const itemEntity = this._itemListWindow.selectedItem();
@@ -124,7 +198,7 @@ export class VItemListDialog extends VDialog {
 
                 if (itemEntity.hasBehavior(LStorageBehavior)) {
                     this._commandWindow.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
-                    this._commandWindow.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePeek());
+                    this._commandWindow.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePutIn());
                 }
             }
 
@@ -155,51 +229,6 @@ export class VItemListDialog extends VDialog {
             this._commandWindow.refresh();
             this._commandWindow.openness = 255;
             this._commandWindow.activate();
-        }
-    }
-        
-    private handleItemCancel(): void {
-        this.cancel();
-    }
-
-
-    onCommandCancel(): void {
-        if (this._itemListWindow && this._commandWindow) {
-            this._itemListWindow.activate();
-            this._commandWindow.deactivate();
-            this._commandWindow.openness = 0;
-        }
-    }
-
-    private handleAction(actionId: DActionId): void {
-        if (this._itemListWindow) {
-            const itemEntity = this._itemListWindow.selectedItem();
-            
-            // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-            
-
-            const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
-            RESystem.dialogContext.postActivity(activity);
-            this.submit();
-        }
-    }
-
-    private handlePeek(): void {
-        const itemEntity = this._itemListWindow.selectedItem();
-        const inventory = itemEntity.getBehavior(LInventoryBehavior);
-        this.openSubDialog(new SItemListDialog(this._model.entity(), inventory), (result: any) => {
-            this.submit();
-        });
-    }
-
-    private handlePutIn(): void {
-        
-    }
-
-    private activateItemWindow() {
-        if (this._itemListWindow) {
-            this._itemListWindow.refresh();
-            this._itemListWindow.activate();
         }
     }
 
