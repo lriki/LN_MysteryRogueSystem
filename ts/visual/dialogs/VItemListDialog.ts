@@ -88,6 +88,48 @@ export class VItemListDialog extends VDialog {
             const reactions = itemEntity.queryReactions();
             const actualActions = reactions
                 .filter(actionId => actions.includes(actionId))
+                .distinct();
+
+            // コマンドカスタマイズ。
+            // ここで行うのはあくまで見た目に関係するもの。
+            // Actor や Item が性質として持っている ActionList と、実際に UI からどれを選択できるようにするかは別物なので、
+            // 例えば「Item に非表示 Action を持たせる」みたいな案があったが、それはやっぱりおかしいだろう。
+            // 操作性はタイトルとして決める。そしてタイトルごとに大きく変えるべきは View。なのでここで対応してみる。
+            {
+                // [装備] [はずす] チェック
+                {
+                    const equipments = actorEntity.getBehavior(LEquipmentUserBehavior);
+                    if (equipments.isEquipped(itemEntity))
+                        actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
+                    else
+                        actualActions.mutableRemove(x => x == DBasics.actions.EquipOffActionId);  // [はずす] を除く
+                }
+    
+                // 足元に何かあれば [置く] を [交換] にする
+                {
+                    const feetEntity = REGame.map.firstFeetEntity(actorEntity);
+                    if (feetEntity) {
+                        if (actualActions.mutableRemove(x => x == DBasics.actions.PutActionId)) {
+                            actualActions.push(DBasics.actions.ExchangeActionId);
+                        }
+                    }
+                }
+    
+                // [撃つ] があれば [投げる] を除く
+                {
+                    if (actualActions.includes(DBasics.actions.ShootingActionId)) {
+                        actualActions.mutableRemove(x => x == DBasics.actions.ThrowActionId);
+                    }
+                }
+
+                if (itemEntity.hasBehavior(LStorageBehavior)) {
+                    this._commandWindow.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
+                    this._commandWindow.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePeek());
+                }
+            }
+
+
+            const finalActions = actualActions
                 .distinct()
                 .sort((a, b) => {
                     const ad = REData.actions[a];
@@ -95,33 +137,7 @@ export class VItemListDialog extends VDialog {
                     if (ad.priority == bd.priority) return ad.id - bd.id;
                     return bd.priority - ad.priority;   // 降順
                 });
-            
-
-            // [装備] [はずす] チェック
-            {
-                const equipments = actorEntity.getBehavior(LEquipmentUserBehavior);
-                if (equipments.isEquipped(itemEntity))
-                    actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
-                else
-                    actualActions.mutableRemove(x => x == DBasics.actions.EquipOffActionId);  // [はずす] を除く
-            }
-
-            // 足元に何かあれば [置く] を [交換] にする
-            {
-                const feetEntity = REGame.map.firstFeetEntity(actorEntity);
-                if (feetEntity) {
-                    if (actualActions.mutableRemove(x => x == DBasics.actions.PutActionId)) {
-                        actualActions.push(DBasics.actions.ExchangeActionId);
-                    }
-                }
-            }
-
-            if (itemEntity.hasBehavior(LStorageBehavior)) {
-                this._commandWindow.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
-                this._commandWindow.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePeek());
-            }
-
-            for (const actionId of actualActions) {
+            for (const actionId of finalActions) {
                 this._commandWindow.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
             }
 

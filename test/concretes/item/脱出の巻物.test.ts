@@ -55,6 +55,7 @@ test("concretes.item.脱出の巻物", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
         expect(initialHP - enemy1.actualParam(DBasics.params.hp)).toBe(1);  // 1ダメージを受けているはず
+        expect(item2.isDestroyed()).toBe(true); // item2 は消える
     }
 
     {
