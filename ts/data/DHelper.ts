@@ -168,7 +168,7 @@ export class DHelpers {
     public static findFirstAnnotationFromPage(annotation: string, page: IDataMapEventPage): string | undefined {
         let list = page.list;
         if (list) {
-            // collect comments
+            // Collect comments.
             let comments = "";
             for (let i = 0; i < list.length; i++) {
                 if (list[i].code == 108 || list[i].code == 408) {
@@ -178,7 +178,7 @@ export class DHelpers {
                 }
             }
     
-            console.log("comments", comments);
+            // Find annotation block.
             let index = comments.indexOf(annotation);
             if (index >= 0) {
                 let block = comments.substring(index + annotation.length);

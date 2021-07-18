@@ -49,6 +49,10 @@ export class LActivity {
         return this._objects2.map(x => REGame.world.entity(x));
     }
 
+    public setObjects2(objects: LEntity[]): void {
+        this._objects2 = objects.map(x => x.entityId());
+    }
+
     public direction(): number {
         return this._direction;
     }

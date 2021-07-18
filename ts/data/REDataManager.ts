@@ -1083,6 +1083,12 @@ export class REDataManager
                 entity.addReaction(DBasics.actions.ReadActionId, data.effectSet.mainEmittor().id);
                 data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
+            case "kItem_識別の巻物":
+                data.effectSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
+                data.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
+                entity.addReaction(DBasics.actions.ReadActionId, data.effectSet.mainEmittor().id);
+                data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                break;
                 
         }
     }

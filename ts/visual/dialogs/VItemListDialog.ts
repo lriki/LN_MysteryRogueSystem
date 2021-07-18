@@ -15,6 +15,7 @@ import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
 import { assert, tr2 } from "ts/Common";
 import { TileShape } from "ts/objects/LBlock";
 import { SDetailsDialog } from "ts/system/dialogs/SDetailsDialog";
+import { UAction } from "ts/usecases/UAction";
 
 export class VItemListDialog extends VDialog {
     private _model: SItemListDialog;
@@ -112,12 +113,24 @@ export class VItemListDialog extends VDialog {
         if (this._itemListWindow) {
             const itemEntity = this._itemListWindow.selectedItem();
             
-            // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-            
-
-            const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
-            RESystem.dialogContext.postActivity(activity);
-            this.submit();
+            if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
+                // 対象アイテムの選択が必要
+                
+                const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
+                this.openSubDialog(model, (result: any) => {
+                    const item = model.selectedEntity();
+                    assert(item);
+                    const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+                    activity.setObjects2([item]);
+                    RESystem.dialogContext.postActivity(activity);
+                    this.submit();
+                });
+            }
+            else {
+                const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+                RESystem.dialogContext.postActivity(activity);
+                this.submit();
+            }
         }
     }
 

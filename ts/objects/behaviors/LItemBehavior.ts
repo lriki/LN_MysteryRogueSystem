@@ -60,19 +60,17 @@ export class LItemBehavior extends LBehavior {
             const effectPerformer = new SEmittorPerformer();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
             for (const reaction of reactions) {
-                const effect = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, effect, subject.dir, self, this.itemData());
+                const emittor = REData.getEmittorById(reaction.emittingEffect);
+                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, this.itemData());
             }
         }
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
-            console.log("read");
-
             const subject = activity.subject();
             const effectPerformer = new SEmittorPerformer();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
             for (const reaction of reactions) {
-                const effect = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, effect, subject.dir, self, this.itemData());
+                const emittor = REData.getEmittorById(reaction.emittingEffect);
+                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, this.itemData());
             }
         }
 
