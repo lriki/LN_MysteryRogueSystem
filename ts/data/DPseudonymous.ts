@@ -6,7 +6,7 @@ interface NameEntry
     names: string[];
 }
 
-export class DUnknownNames {
+export class DPseudonymous {
     private _names: Map<string, string[]>;
 
     public constructor() {

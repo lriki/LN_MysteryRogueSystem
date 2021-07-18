@@ -724,7 +724,7 @@ export class REDataManager
 
         }
 
-        this.loadDataFile("rogue/Pseudonymous.json", (obj) => REData.unknownNames.setup(obj));
+        this.loadDataFile("rogue/Pseudonymous.json", (obj) => REData.pseudonymous.setup(obj));
 
         // Load Prefabs
         this.beginLoadPrefabs();

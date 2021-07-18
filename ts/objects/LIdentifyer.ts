@@ -92,8 +92,8 @@ export class LIdentifyer {
     public reset(): void {
         this._identificationStates = [];
 
-        for (const kind of REData.unknownNames.kinds()) {
-            const names = REData.unknownNames.getNameList(kind);
+        for (const kind of REData.pseudonymous.kinds()) {
+            const names = REData.pseudonymous.getNameList(kind);
             const entities = REData.entities.filter(x => x.entity.kind == kind);
             if (names.length < entities.length) {
                 throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
