@@ -33,6 +33,8 @@ import { SItemListDialog } from "ts/system/dialogs/SItemListDialog";
 import { VItemListDialog } from "./dialogs/VItemListDialog";
 import { VEscapeSequel } from "./sequels/VEscapeSequel";
 import { VEarthquake2Sequel } from "./sequels/VEarthquake2Sequel";
+import { SDetailsDialog } from "ts/system/dialogs/SDetailsDialog";
+import { VDetailsDialog } from "./dialogs/VDetailsDialog";
 
 /**
  */
@@ -95,6 +97,8 @@ export class REVisual_Manager
             this._dialogNavigator._openDialog(new VFeetDialog(model));
         else if (model instanceof SItemListDialog)
             this._dialogNavigator._openDialog(new VItemListDialog(model));
+        else if (model instanceof SDetailsDialog)
+            this._dialogNavigator._openDialog(new VDetailsDialog(model));
             
 
             

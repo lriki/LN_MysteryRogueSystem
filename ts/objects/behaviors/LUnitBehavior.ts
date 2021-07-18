@@ -349,7 +349,6 @@ export class LUnitBehavior extends LBehavior {
                 item.removeFromParent();
                 storageInventory.addEntity(item);
                 context.postMessage(tr("{0} を入れた。", REGame.identifyer.makeDisplayText(item)));
-                
             }
         }
         

@@ -14,6 +14,7 @@ import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
 import { assert, tr2 } from "ts/Common";
 import { TileShape } from "ts/objects/LBlock";
+import { SDetailsDialog } from "ts/system/dialogs/SDetailsDialog";
 
 export class VItemListDialog extends VDialog {
     private _model: SItemListDialog;
@@ -142,10 +143,27 @@ export class VItemListDialog extends VDialog {
         });
     }
 
+    private handleDetails(): void {
+        const itemEntity = this._itemListWindow.selectedItem();
+        const model = new SDetailsDialog(itemEntity);
+        this.openSubDialog(model, (result: any) => {
+            this.activateCommandWindow();
+        });
+    }
+
     private activateItemWindow() {
         if (this._itemListWindow) {
             this._itemListWindow.refresh();
             this._itemListWindow.activate();
+        }
+    }
+
+    private activateCommandWindow() {
+        if (this._commandWindow) {
+            this._itemListWindow.deactivate();
+            this._commandWindow.refresh();
+            this._commandWindow.openness = 255;
+            this._commandWindow.activate();
         }
     }
 
@@ -215,6 +233,9 @@ export class VItemListDialog extends VDialog {
                 this._commandWindow.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
             }
 
+            // [説明] を終端に追加
+            this._commandWindow.addSystemCommand(tr2("説明"), "details", x => this.handleDetails());
+
             /*
             const self = this;
             this._commandWindow.setActionList2(actualActions.map(actionId => {
@@ -225,10 +246,7 @@ export class VItemListDialog extends VDialog {
             }));
             */
 
-            this._itemListWindow.deactivate();
-            this._commandWindow.refresh();
-            this._commandWindow.openness = 255;
-            this._commandWindow.activate();
+            this.activateCommandWindow();
         }
     }
 

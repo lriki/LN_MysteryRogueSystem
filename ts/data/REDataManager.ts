@@ -442,6 +442,7 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
+                entity.description = x.description;
 
                 const emittor = REData.newEmittor();
                 emittor.effect.critical = false;

@@ -53,6 +53,7 @@ export class DEntity {
     
     display: DEntityNamePlate;
 
+    description: string;
 
     actor: RE_Data_Actor | undefined;
 
@@ -75,6 +76,7 @@ export class DEntity {
         this.prefabId = 0;
         this.entity = DEntityProperties_Default();
         this.display = { name: "null", stackedName: "null(%1)", iconIndex: 0 };
+        this.description = "";
         this.itemData = undefined;
         this.enemy = undefined;
         this.idealParams = [];

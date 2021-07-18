@@ -98,7 +98,7 @@ declare interface IDataSkill
 declare interface IDataAllItem
 {
     id: number;
-    description?: string;
+    description: string;
     name: string;
     note: string;
     iconIndex: number;
