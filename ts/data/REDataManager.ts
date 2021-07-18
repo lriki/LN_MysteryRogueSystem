@@ -10,7 +10,7 @@ import { DAutoRemovalTiming, DState, makeStateBehaviorsFromMeta, makeStateTraits
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { buildAppearanceTable, buildFloorTable, DLand, DLand_Default } from "./DLand";
+import { DLand } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
@@ -558,17 +558,15 @@ export class REDataManager
         // Import Lands
         // 最初に Land を作る
         REData.lands = [];
-        REData.lands.push(DLand_Default()); // [0] dummy
-        REData.lands.push({ ...DLand_Default(), id: 1 }); // [1] REシステム管理外の RMMZ マップを表す Land
+        REData.lands.push(new DLand(0)); // [0] dummy
+        REData.lands.push(new DLand(1)); // [1] REシステム管理外の RMMZ マップを表す Land
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info && info.name?.startsWith("RE-Land:")) {
-                REData.lands.push({
-                    ...DLand_Default(),
-                    id: REData.lands.length,
-                    name: info.name,
-                    rmmzMapId: i,
-                });
+                const land = new DLand(REData.lands.length);
+                land.name = info.name;
+                land.rmmzMapId = i;
+                REData.lands.push(land);
             }
         }
 
@@ -822,9 +820,8 @@ export class REDataManager
     }
 
     private static beginLoadLandDatabase(land: DLand): void {
-        if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => { 
-            land.floorInfos = buildFloorTable(obj);
-            land.appearanceTable = buildAppearanceTable(obj, land.rmmzMapId);
+        if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => {
+            land.import(obj);
         });
         //if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.appearanceTable = buildAppearanceTable(obj); });
     }

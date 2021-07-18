@@ -1,7 +1,13 @@
+import { assert } from "ts/Common";
 import { DRmmzEffectScope } from "./DEffect";
 import { DMapId } from "./DLand";
 import { DTroopId } from "./DTroop";
 import { REData } from "./REData";
+
+
+export interface RmmzLandMetadata {
+    identified?: string;
+}
 
 
 export interface RMMZFloorMetadata {
@@ -153,6 +159,45 @@ export class DHelpers {
             DRmmzEffectScope.Friend_Single_Dead,
             DRmmzEffectScope.Friend_Single_Alive,
             DRmmzEffectScope.Opponent_Single]);
+    }
+
+    public static findFirstAnnotationFromEvent(annotation: string, event: IDataMapEvent): string | undefined {
+        return this.findFirstAnnotationFromPage(annotation, event.pages[0]);
+    }
+
+    public static findFirstAnnotationFromPage(annotation: string, page: IDataMapEventPage): string | undefined {
+        let list = page.list;
+        if (list) {
+            // collect comments
+            let comments = "";
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].code == 108 || list[i].code == 408) {
+                    if (list[i].parameters) {
+                        comments += list[i].parameters;
+                    }
+                }
+            }
+    
+            console.log("comments", comments);
+            let index = comments.indexOf(annotation);
+            if (index >= 0) {
+                let block = comments.substring(index + annotation.length);
+                block = block.substring(
+                    block.indexOf("{"),
+                    block.indexOf("}") + 1);
+                return block;
+            }
+        }
+        return undefined;
+    }
+
+    public static readLandMetadata(event: IDataMapEvent): RmmzLandMetadata | undefined {
+        const block = this.findFirstAnnotationFromEvent("@RE-Land", event);
+        if (!block) return undefined;
+        let rawData: RmmzLandMetadata | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
     }
 
     static readFloorMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZFloorMetadata | undefined {

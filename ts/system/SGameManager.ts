@@ -120,7 +120,7 @@ export class SGameManager
 
             // 別 Land への遷移？
             if (newFloorId.landId() != currentFloorId.landId()) {
-                REGame.identifyer.reset();
+                REGame.identifyer.reset(newFloorId.landData());
             }
     
             if (newFloorId.isEntitySystemMap()) {

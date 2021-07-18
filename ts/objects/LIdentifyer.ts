@@ -1,4 +1,5 @@
 import { tr2 } from "ts/Common";
+import { DLand, DLandId } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { LEntity } from "./LEntity";
@@ -86,30 +87,40 @@ interface IdentificationState {
  * 
  */
 export class LIdentifyer {
-    /** 種別としての識別済みフラグ. Index: DEntityId */
+    /** 種別としての識別済みフラグ。undefined の場合、その Entity は常に識別済み。 Index: DEntityId */
     private _identificationStates: (IdentificationState | undefined)[] = [];
 
-    public reset(): void {
+    public reset(land: DLand): void {
         this._identificationStates = [];
 
         for (const kind of REData.pseudonymous.kinds()) {
-            const names = REData.pseudonymous.getNameList(kind);
-            const entities = REData.entities.filter(x => x.entity.kind == kind);
-            if (names.length < entities.length) {
-                throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
+            if (this.checkIdentifiedKind(land, kind)) {
+                // land 内では、この kind は常に識別状態
             }
-
-            names.mutableShuffle();
-
-            for (let i = 0; i < entities.length; i++) {
-                const entity = entities[i];
-                this._identificationStates[entity.id] = {
-                    nameIdentified: false,
-                    pseudonym: names[i],
-                    nickname: undefined,
-                };
+            else {
+                const names = REData.pseudonymous.getNameList(kind);
+                const entities = REData.entities.filter(x => x.entity.kind == kind);
+                if (names.length < entities.length) {
+                    throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
+                }
+    
+                names.mutableShuffle();
+    
+                for (let i = 0; i < entities.length; i++) {
+                    const entity = entities[i];
+                    this._identificationStates[entity.id] = {
+                        nameIdentified: false,
+                        pseudonym: names[i],
+                        nickname: undefined,
+                    };
+                }
             }
         }
+    }
+
+    public checkIdentifiedKind(land: DLand, kind: string): boolean {
+        if (land.identifiedKinds.includes("all")) return true;
+        return land.identifiedKinds.includes(kind);
     }
 
     public resolveDescription(entity: LEntity): LEntityDescription {
