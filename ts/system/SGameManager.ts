@@ -113,8 +113,16 @@ export class SGameManager
     // - ランダムマップの場合は、テーブル定義マップがロード済みであること。
     static performFloorTransfer() {
         if (REGame.camera.isFloorTransfering()) {
+            //const focusedEntity = REGame.camera.focusedEntity();
+            //const currentFloorId = focusedEntity ? focusedEntity.floorId : LFloorId.makeEmpty();
+            const currentFloorId = REGame.map.floorId();
             const newFloorId = REGame.camera.transferingNewFloorId();
 
+            // 別 Land への遷移？
+            if (newFloorId.landId() != currentFloorId.landId()) {
+                REGame.identifyer.reset();
+            }
+    
             if (newFloorId.isEntitySystemMap()) {
                 const mapSeed = REGame.world.random().nextInt();
                 console.log("seed:", mapSeed);
@@ -149,7 +157,7 @@ export class SGameManager
                 // Entity を登場させない、通常の RMMZ マップ
                 REGame.map.setupForRMMZDefaultMap(newFloorId);
             }
-    
+
             RESystem.minimapData.clear();
             RESystem.scheduler.clear();
             REGame.camera.clearFloorTransfering();

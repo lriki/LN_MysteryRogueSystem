@@ -47,7 +47,6 @@ Game_Map.prototype.setup = function(mapId: number) {
         throw new Error();
     }
     */
-    console.log("Game_Map", mapId);
 
 
     if (REGame.camera.isFloorTransfering()) {

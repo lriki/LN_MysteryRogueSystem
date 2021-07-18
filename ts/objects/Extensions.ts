@@ -6,6 +6,7 @@ declare global {
         mutableResize(newSize: number, defaultValue: T): void;
         mutableRemove(predicate: (x: T) => boolean): boolean;
         mutableRemoveAll(predicate: (x: T) => boolean): boolean;
+        mutableShuffle(): void;
         distinct(): Array<T>;
     }
 }
@@ -35,6 +36,18 @@ Array.prototype.mutableRemoveAll = function<T>(predicate: (x: T) => boolean): bo
         }
     }
     return count > 0;
+}
+
+Array.prototype.mutableShuffle = function(): void {
+    for (var i = (this.length - 1); 0 < i; i--) {
+        // 0〜(i+1)の範囲で値を取得
+        var r = Math.floor(Math.random() * (i + 1));
+    
+        // 要素の並び替えを実行
+        var tmp = this[i];
+        this[i] = this[r];
+        this[r] = tmp;
+    }
 }
 
 Array.prototype.distinct = function<T>(): Array<T> {

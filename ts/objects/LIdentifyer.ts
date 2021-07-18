@@ -1,6 +1,8 @@
+import { tr2 } from "ts/Common";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { LEntity } from "./LEntity";
+import { REGame } from "./REGame";
 
 export enum DescriptionHighlightLevel {
     Identified,         // 識別済み。白テキスト
@@ -60,31 +62,76 @@ export class LEntityDescription {
 
 // アイテム種別全体を通した識別済み情報
 // NOTE: 名前は一度識別するとすべてに適用されるが、呪いの有無や修正値は使ってみないとわからないので、そちらは Entity が持つ。
-interface IdentificationStatus {
+interface IdentificationState {
     nameIdentified: boolean;    // 名前識別済み
     pseudonym: string;          // ランダム割り当てされた名前
-    nickname: string;           // ユーザー指定の仮名
+    nickname: string | undefined;           // ユーザー指定の仮名
 }
 
 /**
  * 
  * インスタンスはグローバルで唯一なものとし、必要なタイミングで初期化して使う。
+ * 
+ * 
+ * 仕様メモ
+ * ----------
+ * 
+ * - 新種道具は常に識別済み。
+ * 
+ * - ダンジョン突入時、持っているアイテムは識別済み。
+ * 
+ * - 識別済みは次の２つで現される。
+ *      - グローバルな識別済みフラグ: 種類の識別。名前がわかる。
+ *      - ローカルな識別済みフラグ: Entity 単位の識別。杖の使用回数がわかる。
+ * 
  */
 export class LIdentifyer {
+    /** 種別としての識別済みフラグ. Index: DEntityId */
+    private _identificationStates: (IdentificationState | undefined)[] = [];
 
-    resolveDescription(entity: LEntity): LEntityDescription {
-        const displayName = entity.getDisplayName();
-        const itemId = entity.queryProperty(RESystem.properties.itemId) as number;
-        if (itemId > 0) {
-            const item = REData.itemData(itemId);
-            //return new LEntityDescription(item.iconIndex, "白い草", DescriptionHighlightLevel.UserIdentified);
-            return new LEntityDescription(displayName.iconIndex, displayName.name, DescriptionHighlightLevel.Identified);
+    public reset(): void {
+        this._identificationStates = [];
+
+        for (const kind of REData.unknownNames.kinds()) {
+            const names = REData.unknownNames.getNameList(kind);
+            const entities = REData.entities.filter(x => x.entity.kind == kind);
+            if (names.length < entities.length) {
+                throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
+            }
+
+            names.mutableShuffle();
+
+            for (let i = 0; i < entities.length; i++) {
+                const entity = entities[i];
+                this._identificationStates[entity.id] = {
+                    nameIdentified: false,
+                    pseudonym: names[i],
+                    nickname: undefined,
+                };
+            }
         }
-        else {
-            //return new LEntityDescription(0, "炎", DescriptionHighlightLevel.Identified);
-            //throw new Error("NotImplemented");
-            return new LEntityDescription(displayName.iconIndex, displayName.name, DescriptionHighlightLevel.Identified);
+    }
+
+    public resolveDescription(entity: LEntity): LEntityDescription {
+        const dataId = entity.dataId();
+
+        const state = this._identificationStates[dataId];
+        let globalIdentified = true;
+        let pseudonym = "";
+        let level = DescriptionHighlightLevel.Identified;
+        if (state) {
+            globalIdentified = state.nameIdentified;
+            pseudonym = state.pseudonym;
+            level = DescriptionHighlightLevel.Unidentified;
         }
+
+        const display = entity.getDisplayName();
+        let displayName = pseudonym;
+        if (globalIdentified) {
+            displayName = display.name;
+        }
+
+        return new LEntityDescription(display.iconIndex, displayName, level);
     }
 
     // ユーティリティ

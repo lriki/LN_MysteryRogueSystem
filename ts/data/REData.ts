@@ -26,6 +26,7 @@ import { DEmittor, DEffectHitType, DEmittorId } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
+import { DUnknownNames } from "./DUnknownNames";
 
 
 export enum REFloorMapKind
@@ -187,6 +188,7 @@ export class REData
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
     static emittors: DEmittor[] = [];
+    static unknownNames: DUnknownNames = new DUnknownNames();
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
