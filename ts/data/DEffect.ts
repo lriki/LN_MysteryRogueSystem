@@ -129,44 +129,44 @@ export class DEffect {
      * 
      * IDataSkill.damage.critical
      */
-     critical: boolean;
+    critical: boolean;
 
-     /**
+    /**
       * IDataSkill.successRate
       * IDataItem.successRate
       * 整数値。0~100
       */
-     successRate: number;
- 
-     hitType: DEffectHitType;
- 
-     /**
+    successRate: number;
+
+    hitType: DEffectHitType;
+
+    /**
       * ターゲット側アニメーション。
       * なお、ユーザー側アニメーションは Effect ではなく Item や Skill 側に付く点に注意。
       * Item が複数の Effect を持つときでも、ユーザー側は Item 自体に対応する見た目の動作をとる。
       */
-     rmmzAnimationId: number;
- 
-     /**
+    rmmzAnimationId: number;
+
+    /**
       * IDataSkill.damage
       * IDataItem.damage
       */
-     parameterQualifyings: DParameterQualifying[];
+    parameterQualifyings: DParameterQualifying[];
 
-     /**
+    /**
       * パラメータ変化以外のすべてのエフェクト。
       * これらを実現するにはコードで頑張る必要がある。
       * ほとんどの特殊効果はこれを持つ必要があるはず。
       * コアスクリプトだと EFFECT_XXXX に相当する。
       */
-     otherEffectQualifyings: DOtherEffectQualifying[];
- 
-     /**
+    otherEffectQualifyings: DOtherEffectQualifying[];
+
+    /**
       * IDataSkill.effects
       * IDataItem.effects
       */
-     specialEffectQualifyings: IDataEffect[];
- 
+    specialEffectQualifyings: IDataEffect[];
+
     constructor() {
         //this.id = id;
         //this.scope = {
@@ -184,7 +184,7 @@ export class DEffect {
         this.otherEffectQualifyings = [];
         this.specialEffectQualifyings = [];
     }
- 
+
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
         this.critical = src.critical;
@@ -287,10 +287,10 @@ export class DEmittor {
         this.id = id;
         this.costs = new DEmittorCost();
         this.scope = {
-           area: DEffectFieldScopeArea.Room,
-           range: DEffectFieldScopeRange.Front1,
-           length: -1,
-           projectilePrefabKey: ""
+            area: DEffectFieldScopeArea.Room,
+            range: DEffectFieldScopeRange.Front1,
+            length: -1,
+            projectilePrefabKey: ""
         };
         this.effect = new DEffect();
     }

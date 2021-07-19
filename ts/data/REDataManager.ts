@@ -448,6 +448,7 @@ export class REDataManager
                 emittor.effect.critical = false;
                 emittor.effect.successRate = x.successRate;
                 emittor.effect.hitType = x.hitType;
+                emittor.effect.rmmzAnimationId = x.animationId;
                 emittor.effect.specialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
@@ -472,7 +473,7 @@ export class REDataManager
 
                 item.rmmzScope = x.scope ?? DRmmzEffectScope.None;
                 entity.entity = parseMetaToEntityProperties(x.meta);
-                item.animationId = x.animationId;
+                //item.animationId = x.animationId;
 
                 if (DHelpers.isForFriend(item.rmmzScope)) {
                 //if (DHelpers.isSingle(item.rmmzScope)) {

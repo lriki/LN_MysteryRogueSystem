@@ -154,8 +154,8 @@ export class SEmittorPerformer {
             const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             const effectContext = new SEffectContext(effectSubject);
     
-            if (itemData) {
-                context.postAnimation(performer, itemData.animationId, true);
+            if (emittor.effect.rmmzAnimationId) {
+                context.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
             }
     
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。

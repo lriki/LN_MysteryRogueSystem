@@ -77,7 +77,7 @@ export class DItem {
     rmmzScope: DRmmzEffectScope;
 
 
-    animationId: number;
+    //animationId: number;
     
     //effect: DEffect;
     effectSet: DEffectSet;
@@ -96,7 +96,7 @@ export class DItem {
         this.id = id;
         this.entityId = entityId;
         this.rmmzScope = 0;
-        this.animationId = 0;
+        //this.animationId = 0;
         this.effectSet = new DEffectSet();
         //this.effect = {
         //    ...DEffect_Default,
