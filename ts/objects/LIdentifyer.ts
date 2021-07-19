@@ -1,4 +1,5 @@
 import { tr2 } from "ts/Common";
+import { DEntity, DEntityId } from "ts/data/DEntity";
 import { DLand, DLandId } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
@@ -121,6 +122,13 @@ export class LIdentifyer {
     public checkIdentifiedKind(land: DLand, kind: string): boolean {
         if (land.identifiedKinds.includes("all")) return true;
         return land.identifiedKinds.includes(kind);
+    }
+
+    public identifyGlobal(entityDataId: DEntityId): void {
+        const state = this._identificationStates[entityDataId];
+        if (state) {
+            state.nameIdentified = true;
+        }
     }
 
     public resolveDescription(entity: LEntity): LEntityDescription {

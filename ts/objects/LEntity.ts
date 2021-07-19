@@ -1204,5 +1204,15 @@ export class LEntity extends LObject
     public debugDisplayName(): string {
         return `Entity:${this._name}(${this.entityId().index2()}:${this.entityId().key2()})`;
     }
+
+    //----------------------------------------
+    // Fomula properties
+
+    public get atk(): number {
+        return this.actualParam(DBasics.params.atk);
+    }
+    public get def(): number {
+        return this.actualParam(DBasics.params.def);
+    }
 }
 

@@ -209,11 +209,5 @@ export class LBattlerBehavior extends LBehavior {
 
 
 
-    public get atk(): number {
-        return this.ownerEntity().actualParam(DBasics.params.atk);
-    }
-    public get def(): number {
-        return this.ownerEntity().actualParam(DBasics.params.def);
-    }
 }
 

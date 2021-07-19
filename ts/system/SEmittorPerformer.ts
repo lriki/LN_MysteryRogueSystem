@@ -38,7 +38,7 @@ export class SEmittorPerformer {
 
         const effect = skill.emittor();
         if (effect) {
-            this.performeEffect(context, performer, effect, performer.dir, undefined);
+            this.performeEffect(context, performer, effect, performer.dir, undefined, []);
         }
     }
 
@@ -131,7 +131,7 @@ export class SEmittorPerformer {
      * @param emittor 
      * @param itemData 杖など
      */
-    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined): void {
+    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined, selectedItems: LEntity[]): void {
 
 
         // コストで発動可否判断
@@ -221,6 +221,13 @@ export class SEmittorPerformer {
             //throw new Error("Not implemented.");
 
 
+        }
+        else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
+            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+            const effectContext = new SEffectContext(effectSubject);
+
+
+            effectContext.applyWithWorth(context, selectedItems);
         }
         else {
             throw new Error("Not implemented.");

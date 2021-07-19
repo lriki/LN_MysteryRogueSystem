@@ -323,7 +323,7 @@ export class SEffectContext {
         let deadCount = 0;
         let totalExp = 0;
         for (const target of targets) {
-            const result = this.apply(commandContext, target);
+            const result = this.applyWithHitTest(commandContext, target);
             
             result.showResultMessages(commandContext, target);
 
@@ -348,7 +348,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private apply(commandContext: SCommandContext, target: LEntity): LEffectResult {
+    private applyWithHitTest(commandContext: SCommandContext, target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -364,32 +364,12 @@ export class SEffectContext {
             result.physical = this._effectorFact.isPhysical();
 
             if (result.isHit()) {
-                if (this._effectorFact.hasParamDamage()) {
-                    result.critical = Math.random() < this._effectorFact.criRate(target);
-                }
-                
-                // Damage
-                for (let i = 0; i < REData.parameters.length; i++) {
-                    const pe = this._effectorFact.parameterEffect(i);
-                    if (pe && pe.applyType != SParameterEffectApplyType.None) {
-                        const value = this.makeDamageValue(pe, target, targetBattlerBehavior, result.critical);
-                        this.executeDamage(pe, target, value, result);
-                    }
-                }
-    
-                // Effect
-                for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
-                    this.applyItemEffect(target, effect, result);
-                }
-                for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
-                    this.applyOtherEffect(commandContext, target, targetBattlerBehavior, effect, result);
-                }
-                this.applyItemUserEffect(targetBattlerBehavior);
+                this.applyCore(commandContext, target, result);
             }
             //this.updateLastTarget(target);
         }
         else {
-            assert(0);
+            this.applyCore(commandContext, target, result);
         }
 
 
@@ -435,7 +415,7 @@ export class SEffectContext {
         // NOTE: コアスクリプトではバトル中かどうかで成否判定が変わったりするが、
         // 本システムでは常に戦闘中のようにふるまう。
         return this.testLifeAndDeath(target);
-    };
+    }
 
     // Game_Action.prototype.testLifeAndDeath
     private testLifeAndDeath(targetBattlerBehavior: LBattlerBehavior): boolean {
@@ -452,9 +432,37 @@ export class SEffectContext {
         return true;
     }
 
+    private applyCore(commandContext: SCommandContext, target: LEntity, result: LEffectResult): void {
+
+        if (this._effectorFact.hasParamDamage()) {
+            result.critical = Math.random() < this._effectorFact.criRate(target);
+        }
+        
+        // Damage
+        for (let i = 0; i < REData.parameters.length; i++) {
+            const pe = this._effectorFact.parameterEffect(i);
+            if (pe && pe.applyType != SParameterEffectApplyType.None) {
+                const value = this.makeDamageValue(pe, target, result.critical);
+                this.executeDamage(pe, target, value, result);
+            }
+        }
+
+        // Effect
+        for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
+            this.applyItemEffect(target, effect, result);
+        }
+        for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
+            this.applyOtherEffect(commandContext, target, effect, result);
+        }
+        this.applyItemUserEffect(target);
+    }
+
+
+
+
     // Game_Action.prototype.makeDamageValue
-    private makeDamageValue(paramEffect: SParameterEffect, target: LEntity, targetBehavior: LBattlerBehavior, critical: boolean): number {
-        const baseValue = this.evalDamageFormula(paramEffect, targetBehavior);
+    private makeDamageValue(paramEffect: SParameterEffect, target: LEntity, critical: boolean): number {
+        const baseValue = this.evalDamageFormula(paramEffect, target);
         let value = baseValue * this.calcElementRate(paramEffect, target);
         if (this._effectorFact.isPhysical()) {
             value *= target.sparam(DBasics.sparams.pdr);
@@ -469,15 +477,15 @@ export class SEffectContext {
             value = this.applyCritical(value);
         }
         value = this.applyVariance(value, paramEffect.variance);
-        value = this.applyGuard(value, target, targetBehavior);
+        value = this.applyGuard(value, target);
         value = Math.round(value);
         return value;
     }
 
     // Game_Action.prototype.evalDamageFormula
-    private evalDamageFormula(paramEffect: SParameterEffect, target: LBattlerBehavior): number {
+    private evalDamageFormula(paramEffect: SParameterEffect, target: LEntity): number {
         try {
-            const a = this._effectorFact.subjectBehavior(); // eslint-disable-line no-unused-vars
+            const a = this._effectorFact.subject(); // eslint-disable-line no-unused-vars
             const b = target; // eslint-disable-line no-unused-vars
             // UnitTest から実行される場合に備えて undefined チェック
             const v = (typeof $gameVariables == "undefined") ? undefined : $gameVariables._data; // eslint-disable-line no-unused-vars
@@ -523,8 +531,12 @@ export class SEffectContext {
     };
     
     // Game_Action.prototype.applyGuard
-    private applyGuard(damage: number, target: LEntity, targetBehavior: LBattlerBehavior): number {
-        return damage / (damage > 0 && targetBehavior.isGuard() ? 2 * target.sparam(DBasics.sparams.grd) : 1);
+    private applyGuard(damage: number, target: LEntity): number {
+        //const targetBehavior = this._effectorFact();
+        const isGuard = false;//(targetBehavior) ? targetBehavior.isGuard() : false;
+        // TODO: guard
+
+        return damage / (damage > 0 && isGuard ? 2 * target.sparam(DBasics.sparams.grd) : 1);
     };
 
 
@@ -641,7 +653,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.applyItemEffect
-    public applyOtherEffect(commandContext: SCommandContext, targetEntity: LEntity, target: LBattlerBehavior, effect: DOtherEffectQualifying, result: LEffectResult): void {
+    public applyOtherEffect(commandContext: SCommandContext, targetEntity: LEntity, effect: DOtherEffectQualifying, result: LEffectResult): void {
         switch (effect.key) {
             case "kSystemEffect_ふきとばし":
                 const subject = this._effectorFact.subject();
@@ -656,13 +668,16 @@ export class SEffectContext {
                 commandContext.postSequel(targetEntity, RESystem.sequels.escape);
                 UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
                 break;
+            case "kSystemEffect_識別":
+                REGame.identifyer.identifyGlobal(targetEntity.dataId());
+                break;
             default:
                 throw new Error("Not implemented.");
         }
     }
     
     // Game_Action.prototype.applyItemUserEffect
-    private applyItemUserEffect(target: LBattlerBehavior): void {
+    private applyItemUserEffect(target: LEntity): void {
         // TODO:
         //const value = Math.floor(this.item().tpGain * this.subject().tcr);
         //this.subject().gainSilentTp(value);

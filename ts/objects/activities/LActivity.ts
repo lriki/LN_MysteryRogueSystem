@@ -105,8 +105,10 @@ export class LActivity {
         return new LActivity(DBasics.actions.WaveActionId, subject, object);
     }
 
-    public static makeRead(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.ReadActionId, subject, object);
+    public static makeRead(subject: LEntity, object: LEntity, targets?: LEntity[]): LActivity {
+        const a = new LActivity(DBasics.actions.ReadActionId, subject, object);
+        if (targets) a.setObjects2(targets);
+        return a;
     }
 
     public static makePutIn(subject: LEntity, storage: LEntity, item: LEntity): LActivity {
