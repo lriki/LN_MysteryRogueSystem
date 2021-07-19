@@ -61,7 +61,7 @@ export class LItemBehavior extends LBehavior {
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
             for (const reaction of reactions) {
                 const emittor = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, this.itemData());
+                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self);
             }
         }
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
@@ -70,7 +70,7 @@ export class LItemBehavior extends LBehavior {
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
             for (const reaction of reactions) {
                 const emittor = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, this.itemData());
+                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self);
             }
         }
 
@@ -110,10 +110,10 @@ export class LItemBehavior extends LBehavior {
 
         const item = this.ownerEntity().getBehavior(LItemBehavior);
         const itemData = item.itemData();
-        const emittor = itemData.effectSet.effect(cause);
+        const emittor = self.data().effectSet.effect(cause);
         
         if (emittor) {
-            context.postPerformEmittor(target, emittor, effectDir, self, itemData);
+            context.postPerformEmittor(target, emittor, effectDir, self);
 
             /*
             console.log("applyEffect", emittor);
@@ -130,7 +130,7 @@ export class LItemBehavior extends LBehavior {
             */
         }
         
-        const skill = itemData.effectSet.skill(cause);
+        const skill = self.data().effectSet.skill(cause);
         if (skill) {
             context.postPerformSkill(subject.entity(), skill.id, self);
         }

@@ -38,7 +38,7 @@ export class SEmittorPerformer {
 
         const effect = skill.emittor();
         if (effect) {
-            this.performeEffect(context, performer, effect, performer.dir, undefined, undefined);
+            this.performeEffect(context, performer, effect, performer.dir, undefined);
         }
     }
 
@@ -131,7 +131,7 @@ export class SEmittorPerformer {
      * @param emittor 
      * @param itemData 杖など
      */
-    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined, itemData: DItem | undefined): void {
+    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined): void {
 
 
         // コストで発動可否判断
@@ -212,7 +212,7 @@ export class SEmittorPerformer {
 
             // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
             // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
-            const emittorEffect = itemData?.effectSet.effect(DEffectCause.Hit);
+            const emittorEffect = itemEntity?.data().effectSet.effect(DEffectCause.Hit);
 
             const actualEmittor = emittorEffect ?? emittor;
 

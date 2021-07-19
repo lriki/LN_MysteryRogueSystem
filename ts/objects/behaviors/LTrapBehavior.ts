@@ -75,9 +75,9 @@ export class LTrapBehavior extends LBehavior {
         context.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
 
-        const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
-        const itemData = trapItem.itemData();
-        const emittor = itemData.effectSet.effect(DEffectCause.Affect);
+        //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
+        //const itemData = trapItem.itemData();
+        const emittor = self.data().effectSet.effect(DEffectCause.Affect);
 
         if (emittor) {
             const subject = new SEffectorFact(e.self, emittor.effect, SEffectIncidentType.IndirectAttack, target.dir);

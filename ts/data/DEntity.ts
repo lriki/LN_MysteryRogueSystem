@@ -1,7 +1,7 @@
 import { assert } from "ts/Common";
 import { DAction, DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
-import { DEmittorId } from "./DEffect";
+import { DEffectSet, DEmittorId } from "./DEffect";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
@@ -70,6 +70,15 @@ export class DEntity {
 
     /** この Entity が受け付ける Action のリスト */
     reactions: DReaction[];
+    
+    
+    /**
+     * 元々 DItem が持っていたが、例えば Entity が何かと衝突したときに発動する効果を定義する、というのは、モンスターの特殊能力でも使いたい。
+     * 例えば衝突したら相手にノックバック効果を与えるモンスターもある。
+     * 
+     * TODO: reactions とまとめられないか考えたいところ。
+     */
+    effectSet: DEffectSet;
 
     constructor(id: DEntityId) {
         this.id = id;
@@ -81,6 +90,7 @@ export class DEntity {
         this.enemy = undefined;
         this.idealParams = [];
         this.reactions = [];
+        this.effectSet = new DEffectSet();
     }
     
     public actorData(): RE_Data_Actor {

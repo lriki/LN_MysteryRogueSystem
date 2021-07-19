@@ -79,8 +79,6 @@ export class DItem {
 
     //animationId: number;
     
-    //effect: DEffect;
-    effectSet: DEffectSet;
 
     /** このアイテム(装備品) を装備できる部位 */
     equipmentParts: DEquipmentPartId[];
@@ -97,7 +95,6 @@ export class DItem {
         this.entityId = entityId;
         this.rmmzScope = 0;
         //this.animationId = 0;
-        this.effectSet = new DEffectSet();
         //this.effect = {
         //    ...DEffect_Default,
         //    parameterQualifyings: [],
