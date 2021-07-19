@@ -21,7 +21,7 @@ import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEff
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DEnemy } from './DEnemy';
-import { DEntity } from './DEntity';
+import { DEntity, DIdentificationDifficulty } from './DEntity';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 
@@ -1057,6 +1057,7 @@ export class REDataManager
                 entity.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 entity.idealParams[DBasics.params.remaining] = 3;
+                entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)
                     ----------

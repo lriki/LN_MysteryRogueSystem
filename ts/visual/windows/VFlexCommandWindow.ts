@@ -74,7 +74,6 @@ export class VFlexCommandWindow extends Window_Command {
                     });
                 }
                 else {
-                    console.log("x.displayText", x.displayText);
                     this.addCommand(x.displayText, x.commandId, true, undefined);
                     this.setHandler(x.commandId, () => {
                         if (x.actionHandler) {
@@ -84,6 +83,8 @@ export class VFlexCommandWindow extends Window_Command {
                 }
             });
         }
+
+        //this.addCommand(TextManager.cancel, "cancel", true, undefined);
     }
     
     processOk(): void {

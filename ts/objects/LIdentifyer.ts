@@ -1,5 +1,5 @@
 import { tr2 } from "ts/Common";
-import { DEntity, DEntityId } from "ts/data/DEntity";
+import { DEntity, DEntityId, DIdentificationDifficulty } from "ts/data/DEntity";
 import { DLand, DLandId } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
@@ -88,7 +88,7 @@ interface IdentificationState {
  * 
  */
 export class LIdentifyer {
-    /** 種別としての識別済みフラグ。undefined の場合、その Entity は常に識別済み。 Index: DEntityId */
+    /** 種別としての識別済みフラグ。undefined の場合、その Entity は常に少なくとも名前は識別済み。 Index: DEntityId */
     private _identificationStates: (IdentificationState | undefined)[] = [];
 
     public reset(land: DLand): void {
@@ -100,7 +100,7 @@ export class LIdentifyer {
             }
             else {
                 const names = REData.pseudonymous.getNameList(kind);
-                const entities = REData.entities.filter(x => x.entity.kind == kind);
+                const entities = REData.entities.filter(x => x.entity.kind == kind && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
                 if (names.length < entities.length) {
                     throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
                 }

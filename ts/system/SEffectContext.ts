@@ -1,4 +1,4 @@
-import { assert } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DItemEffect } from "ts/data/DItemEffect";
 import { LandExitResult, REData } from "ts/data/REData";
@@ -669,7 +669,10 @@ export class SEffectContext {
                 UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
                 break;
             case "kSystemEffect_識別":
+                const name1 = REGame.identifyer.makeDisplayText(targetEntity);
                 REGame.identifyer.identifyGlobal(targetEntity.dataId());
+                const name2 = REGame.identifyer.makeDisplayText(targetEntity);
+                commandContext.postMessage(tr2("%1は%2だった。").format(name1, name2));
                 break;
             default:
                 throw new Error("Not implemented.");

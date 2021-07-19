@@ -37,8 +37,6 @@ export class VItemListDialog extends VDialog {
         this._model = model;
 
         
-        console.log("VItemListDialog", this._model.inventory());
-        
         const y = 100;
         const cw = 200;
         this._itemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400));
@@ -66,15 +64,9 @@ export class VItemListDialog extends VDialog {
         const y = 100;
         const cw = 200;
 
-
-        //const actions = [DBasics.actions.PickActionId, DBasics.actions.AttackActionId];
-        //this._commandWindow = new VActionCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-        //this._commandWindow.setHandler("cancel", this.onCommandCancel.bind(this));
-        //this.addWindow(this._commandWindow);
-
         this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
+        this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
         this.addWindow(this._commandWindow);
-
 
         this.activateItemWindow();
     }
@@ -101,7 +93,7 @@ export class VItemListDialog extends VDialog {
     }
 
 
-    onCommandCancel(): void {
+    handleCommandCancel(): void {
         if (this._itemListWindow && this._commandWindow) {
             this._itemListWindow.activate();
             this._commandWindow.deactivate();
@@ -183,6 +175,7 @@ export class VItemListDialog extends VDialog {
     private showCommandListWindow(): void {
 
         if (this._itemListWindow && this._commandWindow) {
+            this._commandWindow.clear();
 
             const itemEntity = this._itemListWindow.selectedItem();
             const actorEntity = this._model.entity();

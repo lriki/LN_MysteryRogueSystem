@@ -14,6 +14,13 @@ import { REData } from "./REData";
 
 export type DEntityId = number;
 
+export enum DIdentificationDifficulty {
+    Clear,          // 呪いなども含めて常に識別済み。お金など。
+    NameGuessed,    // 名前は常にわかる。装備品など。修正値や呪いはわからない。
+    Obscure,        // 名前もわからない。
+    //Individual,
+}
+
 export interface DEntityNamePlate {
     name: string;
     stackedName: string;
@@ -55,6 +62,8 @@ export class DEntity {
 
     description: string;
 
+    identificationDifficulty: DIdentificationDifficulty;
+
     actor: RE_Data_Actor | undefined;
 
     itemData: DItem | undefined;
@@ -86,6 +95,7 @@ export class DEntity {
         this.entity = DEntityProperties_Default();
         this.display = { name: "null", stackedName: "null(%1)", iconIndex: 0 };
         this.description = "";
+        this.identificationDifficulty = DIdentificationDifficulty.Clear;
         this.itemData = undefined;
         this.enemy = undefined;
         this.idealParams = [];
