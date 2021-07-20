@@ -10,6 +10,8 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { LFloorId } from "ts/objects/LFloorId";
+import { UName } from "ts/usecases/UName";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -20,7 +22,6 @@ afterAll(() => {
 
 test("Items.Staff.Knockback", () => {
     TestEnv.newGame();
-    const dc = RESystem.dialogContext;
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -52,8 +53,8 @@ test("Items.Staff.Knockback", () => {
         
         // [振る]
         const activity2 = LActivity.makeWave(actor1, item1);
-        dc.postActivity(activity2);
-        dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.postActivity(activity2);
+        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -65,8 +66,8 @@ test("Items.Staff.Knockback", () => {
     {
         // [振る]
         const activity2 = LActivity.makeWave(actor1, item1);
-        dc.postActivity(activity2);
-        dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.postActivity(activity2);
+        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -82,8 +83,8 @@ test("Items.Staff.Knockback", () => {
         
         // [投げる]
         const activity1 = LActivity.makeThrow(actor1, item1);
-        dc.postActivity(activity1);
-        dc.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.postActivity(activity1);
+        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -93,3 +94,34 @@ test("Items.Staff.Knockback", () => {
     }
 
 });
+
+test("Items.Staff.Identify", () => {
+    TestEnv.newGame();
+
+    // Player を未時期別アイテムが出現するダンジョンへ配置する
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    TestEnv.performFloorTransfer();
+    const inventory = actor1.getBehavior(LInventoryBehavior);
+
+    // item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id, [], "item1"));
+    inventory.addEntity(item1);
+
+    const nameView1 = item1.getDisplayName();
+    const name1 = UName.makeNameAsItem(item1);
+    expect(name1.includes(nameView1.name)).toBe(false);   // 未識別状態なので、元の名前とは異なる表示名になっている
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        
+    // [振る]
+    const activity2 = LActivity.makeWave(actor1, item1);
+    RESystem.dialogContext.postActivity(activity2);
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    const name2 = UName.makeNameAsItem(item1);
+    expect(name2.includes("-1")).toBe(true);    // "ふきとばしの杖[-1]" のように表示される
+});
+

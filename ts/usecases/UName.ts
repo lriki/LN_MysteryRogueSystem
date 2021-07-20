@@ -30,5 +30,9 @@ export class UName {
 
         return name;
     }
+
+    public static makeNameAsItem(entity: LEntity): string {
+        return REGame.identifyer.makeDisplayText(entity);
+    }
     
 }

@@ -670,6 +670,7 @@ export class SEffectContext {
                 break;
             case "kSystemEffect_識別":
                 const name1 = REGame.identifyer.makeDisplayText(targetEntity);
+                targetEntity.setIndividualIdentified(true);
                 REGame.identifyer.identifyGlobal(targetEntity.dataId());
                 const name2 = REGame.identifyer.makeDisplayText(targetEntity);
                 commandContext.postMessage(tr2("%1は%2だった。").format(name1, name2));

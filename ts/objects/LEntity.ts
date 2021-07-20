@@ -358,6 +358,10 @@ export class LEntity extends LObject
         return this._individualIdentified;
     }
 
+    public setIndividualIdentified(value: boolean): void {
+        this._individualIdentified = value;
+    }
+
     //--------------------------------------------------------------------------------
     // Parameters
 

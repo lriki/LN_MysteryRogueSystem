@@ -52,10 +52,12 @@ export class LEntityDescription {
     }
 
     public displayText(): string {
-        let text = `\\I[${this._iconIndex}]${LEntityDescription.makeDisplayText(this._name, this._highlightLevel)}`;
+        const color = LEntityDescription.getColorNumber(this._highlightLevel);
+        let text = `\\I[${this._iconIndex}]\\C[${color}]${this._name}`;
         if (this._capacity) {
             text += `[${this._capacity}]`;
         }
+        text += `\\C[0]`;
         return text;
     }
 
@@ -164,7 +166,7 @@ export class LIdentifyer {
 
         // 種別(名前)識別済みの有無は個体識別済みよりも強い。
         // 仮に個体識別済みでも、種別未識別であれば正しい名前を表示することはできない。
-        if (state) {
+        if (state && !state.nameIdentified) {
             globalIdentified = state.nameIdentified;
             pseudonym = state.pseudonym;
             level = DescriptionHighlightLevel.Unidentified;

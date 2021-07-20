@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.識別の巻物"
+                "-t", "Items.Staff.Identify"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
