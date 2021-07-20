@@ -50,9 +50,11 @@ export enum DecisionPhase {
     AIMajor,
 }
 
-export interface LNameDisplay {
+export interface LNameView {
     name: string;
     iconIndex: number;
+    capacity?: number;
+    initialCapacity?: number;
 }
 
 export interface CommandArgs {
@@ -250,7 +252,7 @@ export abstract class LBehavior extends LObject {
     //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
 
-    public queryDisplayName(): LNameDisplay | undefined { return undefined; }
+    public queryDisplayName(): LNameView | undefined { return undefined; }
     public queryCharacterFileName(): DPrefabImage | undefined { return undefined; }
     
     public queryInnermostFactionId(): number | undefined { return undefined; }

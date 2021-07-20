@@ -26,6 +26,7 @@ export class LEntityDescription {
     private _iconIndex: number;
     private _name: string;
     private _highlightLevel: DescriptionHighlightLevel;
+    private _capacity: number | undefined;
 
     private static _levelColorTable: number[] = [
         0,  // Identified
@@ -35,10 +36,11 @@ export class LEntityDescription {
         23,  // Number
     ];
     
-    constructor(iconIndex: number, name: string, level: DescriptionHighlightLevel) {
+    constructor(iconIndex: number, name: string, level: DescriptionHighlightLevel, capacity: number | undefined) {
         this._iconIndex = iconIndex;
         this._name = name;
         this._highlightLevel = level;
+        this._capacity = capacity;
     }
 
     public iconIndex(): number {
@@ -50,14 +52,28 @@ export class LEntityDescription {
     }
 
     public displayText(): string {
-        return `\\I[${this._iconIndex}]${LEntityDescription.makeDisplayText(this._name, this._highlightLevel)}`;
+        let text = `\\I[${this._iconIndex}]${LEntityDescription.makeDisplayText(this._name, this._highlightLevel)}`;
+        if (this._capacity) {
+            text += `[${this._capacity}]`;
+        }
+        return text;
     }
+
+    /*
+    public displayTextWithoutIcon(): string {
+        let text = `${LEntityDescription.makeDisplayText(this._name, this._highlightLevel)}`;
+        if (this._capacity) {
+            text += `[${this._capacity}]`;
+        }
+        return text;
+    }
+    */
     
-    static getColorNumber(level: DescriptionHighlightLevel): number {
+    private static getColorNumber(level: DescriptionHighlightLevel): number {
         return this._levelColorTable[level];
     }
 
-    static makeDisplayText(name: string, level: DescriptionHighlightLevel): string {
+    public static makeDisplayText(name: string, level: DescriptionHighlightLevel): string {
         return `\\C[${this.getColorNumber(level)}]${name}\\C[0]`;
     }
 }
@@ -135,12 +151,14 @@ export class LIdentifyer {
         const dataId = entity.dataId();
 
         const state = this._identificationStates[dataId];
+        let individualIdentified = true;
         let globalIdentified = true;
         let pseudonym = "";
         let level = DescriptionHighlightLevel.Identified;
 
         // 個体識別済み？
         if (!entity.individualIdentified()) {
+            individualIdentified = false;
             level = DescriptionHighlightLevel.Unidentified;
         }
 
@@ -152,13 +170,25 @@ export class LIdentifyer {
             level = DescriptionHighlightLevel.Unidentified;
         }
 
-        const display = entity.getDisplayName();
+        const nameView = entity.getDisplayName();
         let displayName = pseudonym;
         if (globalIdentified) {
-            displayName = display.name;
+            displayName = nameView.name;
         }
 
-        return new LEntityDescription(display.iconIndex, displayName, level);
+        let capacity = undefined;
+        if (nameView.capacity && nameView.initialCapacity) {
+            if (!individualIdentified || !globalIdentified) {
+                // 何かしら未識別？
+                capacity = nameView.capacity - nameView.initialCapacity;
+            }
+            else {
+                // 識別済み
+                capacity = nameView.capacity;
+            }
+        }
+
+        return new LEntityDescription(nameView.iconIndex, displayName, level, capacity);
     }
 
     // ユーティリティ

@@ -8,12 +8,14 @@ export class LParam {
     private _actualParamDamge: number;       // ダメージ値
     private _idealParamPlus: number;      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     private _buff: number;              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
+    private _initialActualValue: number;      // 初期値。未識別状態の使用回数を表すのに使う。
 
     constructor(id: DParameterId) {
         this._dataId = id;
         this._actualParamDamge = 0;
         this._idealParamPlus = 0;
         this._buff = 0;
+        this._initialActualValue = 0;
     }
 
     public clone(): LParam {
@@ -60,6 +62,14 @@ export class LParam {
 
     public clearParamPlus(): void {
         this._idealParamPlus = 0;
+    }
+
+    public resetInitialActualValue(value: number): void {
+        this._initialActualValue = value;
+    }
+
+    public initialActualValue(): number {
+        return this._initialActualValue;
     }
 }
 

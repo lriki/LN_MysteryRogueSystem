@@ -1,4 +1,4 @@
-import { DecisionPhase, LBehavior, LNameDisplay } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LNameView } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -140,6 +140,7 @@ export class LEntity extends LObject
                 param.setActualDamgeParam(this.idealParam(i) - value);
             }
         }
+        this.resetInitialActualParam();
     }
 
     //----------------------------------------
@@ -368,7 +369,7 @@ export class LEntity extends LObject
     // システム上、HP,MP 等のほか、攻撃力、満腹度など様々なパラメータの減少が発生するため、
     // RMMZ のような _hp, _mp, _tp といったフィールドは用意せず、すべて同じように扱う。
     // Game_BattlerBase.prototype.param
-    idealParam(paramId: DParameterId): number {
+    public idealParam(paramId: DParameterId): number {
         const value =
             this.idealParamBasePlus(paramId) *
             this.idealParamRate(paramId) *
@@ -394,24 +395,24 @@ export class LEntity extends LObject
 
     // Game_BattlerBase.prototype.paramPlus
     // 成長アイテム使用による、半永久的な上限加算値
-    idealParamPlus(paramId: DParameterId): number {
+    public idealParamPlus(paramId: DParameterId): number {
         const param = this._params.param(paramId);
         return (param) ? param.idealParamPlus() + this.queryIdealParameterPlus(paramId) : 0;
     }
 
     // Game_BattlerBase.prototype.paramBasePlus
-    idealParamBasePlus(paramId: DParameterId): number {
+    public idealParamBasePlus(paramId: DParameterId): number {
         return Math.max(0, this.idealParamBase(paramId) + this.idealParamPlus(paramId));
     };
     
     // Game_BattlerBase.prototype.paramRate
-    idealParamRate(paramId: DParameterId): number {
+    public idealParamRate(paramId: DParameterId): number {
         return this.traitsPi(DTraits.TRAIT_PARAM, paramId);
     };
 
     // Game_BattlerBase.prototype.paramBuffRate
     // バフ適用レベル (正負の整数値。正規化されたレートではない点に注意)
-    paramBuffRate(paramId: DParameterId): number {
+    public paramBuffRate(paramId: DParameterId): number {
         const param = this._params.param(paramId);
         return (param) ? param.buff() * 0.25 + 1.0 : 0;
     };
@@ -419,14 +420,14 @@ export class LEntity extends LObject
     // バフや成長によるパラメータ上限値の最小値。
     // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMin
-    paramMin(paramId: DParameterId): number {
+    public paramMin(paramId: DParameterId): number {
         return 0;
     };
     
     // バフや成長によるパラメータ上限値の最大値。
     // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMax
-    paramMax(paramId: DParameterId): number {
+    public paramMax(paramId: DParameterId): number {
         return Infinity;
     };
 
@@ -456,6 +457,14 @@ export class LEntity extends LObject
         if (param) {
             param.gainActualParam(value);
             this.refreshConditions();
+        }
+    }
+
+    private resetInitialActualParam(): void {
+        for (const param of this._params.params()) {
+            if (param) {
+                param.resetInitialActualValue(this.actualParam(param.parameterId()));
+            }
         }
     }
 
@@ -570,7 +579,7 @@ export class LEntity extends LObject
     //----------------------------------------
     // Property
 
-    public getDisplayName(): LNameDisplay {
+    public getDisplayName(): LNameView {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryDisplayName();
             if (v) return v;
@@ -578,13 +587,17 @@ export class LEntity extends LObject
         const data = this.data();
         let name = data.makeDisplayName(this._stackCount);
 
+        const result: LNameView = { name: name, iconIndex: data.display.iconIndex };
+
         // TODO: test
         const remaining = this._params.param(DBasics.params.remaining);
         if (remaining) {
-            name += `[${this.actualParam(DBasics.params.remaining)}]`;
+            //name += `[${}]`;
+            result.capacity = this.actualParam(DBasics.params.remaining);
+            result.initialCapacity = remaining.initialActualValue();
         }
 
-        return { name: name, iconIndex: data.display.iconIndex };
+        return result;
     }
 
     public getCharacterImage(): DPrefabImage | undefined {
