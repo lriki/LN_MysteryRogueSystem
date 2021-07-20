@@ -100,6 +100,11 @@ export class LEntity extends LObject
     private _params: LParamSet;
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
 
+    /**
+     * この Entity 個体として識別済みであるか。
+     */
+    private _individualIdentified: boolean = false;
+
     _partyId: LPartyId = 0;
     
     //private _parentIsMap = false;
@@ -346,6 +351,10 @@ export class LEntity extends LObject
             return undefined;
         else
             return REGame.world.party(this._partyId);
+    }
+
+    public individualIdentified(): boolean {
+        return this._individualIdentified;
     }
 
     //--------------------------------------------------------------------------------

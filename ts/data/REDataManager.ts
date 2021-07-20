@@ -1039,6 +1039,7 @@ export class REDataManager
                     variance: 0,
                 });
                 entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
+                entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 break;
             case "kフレイムリーフ":
                 entity.effectSet.setEffect(DEffectCause.Hit, entity.effectSet.mainEmittor());

@@ -138,6 +138,14 @@ export class LIdentifyer {
         let globalIdentified = true;
         let pseudonym = "";
         let level = DescriptionHighlightLevel.Identified;
+
+        // 個体識別済み？
+        if (!entity.individualIdentified()) {
+            level = DescriptionHighlightLevel.Unidentified;
+        }
+
+        // 種別(名前)識別済みの有無は個体識別済みよりも強い。
+        // 仮に個体識別済みでも、種別未識別であれば正しい名前を表示することはできない。
         if (state) {
             globalIdentified = state.nameIdentified;
             pseudonym = state.pseudonym;

@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.脱出の巻物"
+                "-t", "concretes.item.識別の巻物"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
