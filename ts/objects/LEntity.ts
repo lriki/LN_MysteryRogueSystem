@@ -22,7 +22,7 @@ import { DParameterId, DSParamId, DXParamId } from "ts/data/DParameter";
 import { SAbilityFactory } from "ts/system/SAbilityFactory";
 import { REData } from "ts/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
-import { DEntity, DEntityId, DEntityNamePlate } from "ts/data/DEntity";
+import { DEntity, DEntityId, DEntityNamePlate, DIdentificationDifficulty } from "ts/data/DEntity";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/system/SEntityFactory";
@@ -130,6 +130,9 @@ export class LEntity extends LObject
         else {
             this._entityDataId = entityDataId;
         }
+
+        // 初期識別状態
+        this._individualIdentified = (this.data().identificationDifficulty == DIdentificationDifficulty.Clear);
 
         this._params.clear();
         const params = this.data().idealParams;
@@ -258,6 +261,7 @@ export class LEntity extends LObject
     public clone(): LEntity {
         const entity = REGame.world.spawnEntity(this._entityDataId);
         entity._partyId = this._partyId;
+        entity._individualIdentified = this._individualIdentified;
         entity._name = this._name;
         entity._displayName = this._displayName;
         entity._iconName = this._iconName;
@@ -275,6 +279,7 @@ export class LEntity extends LObject
         //entity._actionConsumed = this._actionConsumed;
         //entity._located = this._located;
         entity._params.copyTo(this._params);
+
 
 
         for (const i of this.basicBehaviors()) {
@@ -591,7 +596,12 @@ export class LEntity extends LObject
         const data = this.data();
         let name = data.makeDisplayName(this._stackCount);
 
-        const result: LNameView = { name: name, iconIndex: data.display.iconIndex };
+        const result: LNameView = { name: name, iconIndex: data.display.iconIndex, upgrades: 0 };
+
+        const upgrades = this._params.param(DBasics.params.upgradeValue);
+        if (upgrades) {
+            result.upgrades = this.actualParam(DBasics.params.upgradeValue);
+        }
 
         // TODO: test
         const remaining = this._params.param(DBasics.params.remaining);

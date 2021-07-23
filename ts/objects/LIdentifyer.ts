@@ -26,6 +26,7 @@ export class LEntityDescription {
     private _iconIndex: number;
     private _name: string;
     private _highlightLevel: DescriptionHighlightLevel;
+    private _upgrades: number;
     private _capacity: number | undefined;
 
     private static _levelColorTable: number[] = [
@@ -36,10 +37,11 @@ export class LEntityDescription {
         23,  // Number
     ];
     
-    constructor(iconIndex: number, name: string, level: DescriptionHighlightLevel, capacity: number | undefined) {
+    constructor(iconIndex: number, name: string, level: DescriptionHighlightLevel, upgrades: number, capacity: number | undefined) {
         this._iconIndex = iconIndex;
         this._name = name;
         this._highlightLevel = level;
+        this._upgrades = upgrades;
         this._capacity = capacity;
     }
 
@@ -54,6 +56,9 @@ export class LEntityDescription {
     public displayText(): string {
         const color = LEntityDescription.getColorNumber(this._highlightLevel);
         let text = `\\I[${this._iconIndex}]\\C[${color}]${this._name}`;
+        if (this._upgrades != 0) {
+            text += (this._upgrades > 0) ? `+${this._upgrades}` : this._upgrades.toString();
+        }
         if (this._capacity) {
             text += `[${this._capacity}]`;
         }
@@ -103,6 +108,16 @@ interface IdentificationState {
  * - 識別済みは次の２つで現される。
  *      - グローバルな識別済みフラグ: 種類の識別。名前がわかる。
  *      - ローカルな識別済みフラグ: Entity 単位の識別。杖の使用回数がわかる。
+ * 
+ * - いかすしの巻物は、未識別だと [食べる] コマンドが表示されない。
+ * 
+ * [食べる] [読む] などはいつどうやって識別する？
+ * ----------
+ * 
+ * コマンド(Activity)の機能として識別するべき？
+ * それともアイテム側の機能として「食べられたとき」に識別するべき？
+ * 
+ * 
  * 
  */
 export class LIdentifyer {
@@ -178,6 +193,11 @@ export class LIdentifyer {
             displayName = nameView.name;
         }
 
+        let upgrades = 0;
+        if (individualIdentified && globalIdentified) {
+            upgrades = nameView.upgrades;
+        }
+
         let capacity = undefined;
         if (nameView.capacity && nameView.initialCapacity) {
             if (!individualIdentified || !globalIdentified) {
@@ -190,7 +210,7 @@ export class LIdentifyer {
             }
         }
 
-        return new LEntityDescription(nameView.iconIndex, displayName, level, capacity);
+        return new LEntityDescription(nameView.iconIndex, displayName, level, upgrades, capacity);
     }
 
     // ユーティリティ

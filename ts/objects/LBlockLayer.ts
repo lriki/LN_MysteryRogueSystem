@@ -20,9 +20,11 @@ export enum BlockLayerKind {
     System = 4,
 }
 
+// 同一レイヤーに、同時に複数の Entity は存在可能。
+// 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
+// またシレン2のバグから推測することもできる。
+// http://shiren2.lsx3.com/?plugin=paraedit&parnum=17&page=%A5%D0%A5%B0&refer=%A5%D0%A5%B0
 export class REBlockLayer {
-    // 同一レイヤーに、同時に複数の Entity は存在可能。
-    // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
     private _entityIds: LEntityId[] = [];
 
     public entityIds(): readonly LEntityId[] {

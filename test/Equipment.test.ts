@@ -9,6 +9,8 @@ import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { LFloorId } from "ts/objects/LFloorId";
+import { DBasics } from "ts/data/DBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -166,3 +168,32 @@ test("Equipment.Curse", () => {
 
 
 });
+
+test("Equipment.UpgradeValue", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    TestEnv.performFloorTransfer();
+
+    // item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kゴブリンのこん棒").id, [], "item1"));
+
+    // 修正値+2
+    item1.setActualParam(DBasics.params.upgradeValue, 2);
+
+    // 識別前は表示名に +2 が含まれない
+    const name1 = REGame.identifyer.makeDisplayText(item1);
+    expect(name1.includes("+2")).toBe(false);
+
+    // 識別してみる
+    item1.setIndividualIdentified(true);
+
+    // 識別後は +2 が含まれる
+    const name2 = REGame.identifyer.makeDisplayText(item1);
+    expect(name2.includes("+2")).toBe(true);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+});
+

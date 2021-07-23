@@ -1023,6 +1023,10 @@ export class REDataManager
     static setupDirectly_DItem(entity: DEntity) {
         const data = entity.item();
         switch (entity.entity.key) {
+            case "kゴブリンのこん棒":
+                entity.idealParams[DBasics.params.upgradeValue] = 0;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                break;
             case "kウッドアロー":
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});

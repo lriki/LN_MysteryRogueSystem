@@ -15,9 +15,9 @@ import { REData } from "./REData";
 export type DEntityId = number;
 
 export enum DIdentificationDifficulty {
-    Clear,          // 呪いなども含めて常に識別済み。お金など。
-    NameGuessed,    // 名前は常にわかる。装備品など。修正値や呪いはわからない。
-    Obscure,        // 名前もわからない。
+    Clear = 0,          // 呪いなども含めて常に識別済み。お金など。
+    NameGuessed = 1,    // 名前は常にわかる。装備品など。修正値や呪いはわからない。
+    Obscure = 2,        // 名前もわからない。
     //Individual,
 }
 

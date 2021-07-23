@@ -89,9 +89,7 @@ export class LItemImitatorBehavior extends LBehavior {
     }
 
     queryDisplayName(): LNameView | undefined {
-        const itemEntity = this.itemEntity();
-        const data = itemEntity.data();
-        return { name: data.makeDisplayName(itemEntity._stackCount), iconIndex: data.display.iconIndex };
+        return this.itemEntity().getDisplayName();
     }
     
     queryCharacterFileName(): DPrefabImage | undefined {

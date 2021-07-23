@@ -53,6 +53,7 @@ export enum DecisionPhase {
 export interface LNameView {
     name: string;
     iconIndex: number;
+    upgrades: number;
     capacity?: number;
     initialCapacity?: number;
 }
