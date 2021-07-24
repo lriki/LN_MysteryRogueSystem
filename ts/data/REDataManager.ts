@@ -199,9 +199,9 @@ export class REDataManager
             BackwardFloorActionId: REData.addAction("戻る", "LBackwardFloorActivity"),
             //StairsDownActionId: REData.addAction("StairsDown"),
             //StairsUpActionId: REData.addAction("StairsUp"),
-            EquipActionId: REData.addAction("装備", "LEquipActivity"),
+            EquipActionId: REData.addAction("装備", "LEquipActivity", 1000),
             EquipOffActionId: REData.addAction("はずす", "LEquipOffActivity"),
-            EatActionId: REData.addAction("Eat", ""),
+            EatActionId: REData.addAction("食べる", "", 1000),
             TakeActionId: REData.addAction("Take", ""),
             BiteActionId: REData.addAction("Bite", ""),
             ReadActionId: REData.addAction("読む", "", 1000),
@@ -505,6 +505,7 @@ export class REDataManager
                     formula: "10",
                     applyType: DParameterEffectApplyType.Damage,
                     variance: 20,
+                    silent: false,
                 };
                 emittor.effect.parameterQualifyings.push(q);
                 entity.effectSet.setEffect(DEffectCause.Hit, emittor);
@@ -891,6 +892,7 @@ export class REDataManager
                 formula: damage.formula ?? "0",
                 applyType: applyType,
                 variance: damage.variance ?? 0,
+                silent: false,
         };
     }
 
@@ -1053,6 +1055,7 @@ export class REDataManager
                     formula: "5",
                     applyType: DParameterEffectApplyType.Recover,
                     variance: 0,
+                    silent: true,
                 });
                 entity.effectSet.setEffect(DEffectCause.Eat, emittor);
                 entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));

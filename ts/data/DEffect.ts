@@ -31,6 +31,9 @@ export interface DParameterQualifying {
 
     /** 分散度 (%) */
     variance: number;
+
+    /** メッセージを出さないようにする。 */
+    silent: boolean;
 }
 
 //export interface DRmmzItemEffectQualifying {

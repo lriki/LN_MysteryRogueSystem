@@ -42,6 +42,7 @@ export enum SEffectIncidentType {
 // 関連する情報を統合した最終的な Effect として作り上げるために使う。
 export class SParameterEffect {
     paramId: DParameterId;
+    qualifying: DParameterQualifying
     
     elementId: number;  // (Index of DSystem.elements)
 
@@ -56,6 +57,7 @@ export class SParameterEffect {
     variance: number;
 
     public constructor(data: DParameterQualifying) {
+        this.qualifying = data;
         switch (data.applyType) {
             case DParameterEffectApplyType.Damage:
                 this.applyType = SParameterEffectApplyType.Damage;
@@ -564,10 +566,12 @@ export class SEffectContext {
         }
         result.makeSuccess();
 
-        const paramResult = new LParamEffectResult();
-        paramResult.damage = value;
-        paramResult.drain = paramEffect.isDrain;
-        result.paramEffects[paramEffect.paramId] = paramResult;
+        if (!paramEffect.qualifying.silent) {
+            const paramResult = new LParamEffectResult();
+            paramResult.damage = value;
+            paramResult.drain = paramEffect.isDrain;
+            result.paramEffects[paramEffect.paramId] = paramResult;
+        }
 
         target.gainActualParam(paramEffect.paramId, -value);
         if (value > 0) {

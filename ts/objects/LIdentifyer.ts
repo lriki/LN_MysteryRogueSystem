@@ -218,7 +218,21 @@ export class LIdentifyer {
             }
         }
 
-        return new LEntityDescription(nameView.iconIndex, displayName, level, upgrades, capacity);
+        
+        let iconIndex = nameView.iconIndex;
+        if (!individualIdentified || !globalIdentified) {
+            // 何かしら未識別？
+        }
+        else if (individualIdentified) {
+            // 個体識別済み
+            const states = entity.states();
+            if (states.length > 0) {
+                const state = states[0];
+                iconIndex = state.stateData().iconIndex;
+            }
+        }
+
+        return new LEntityDescription(iconIndex, displayName, level, upgrades, capacity);
     }
 
     // ユーティリティ
