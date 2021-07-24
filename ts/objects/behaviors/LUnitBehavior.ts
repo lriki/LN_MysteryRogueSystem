@@ -17,7 +17,7 @@ import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { REData } from "ts/data/REData";
 import { MovingMethod } from "../LMap";
-import { onGrounded } from "../internal";
+import { onGrounded, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { UName } from "ts/usecases/UName";
@@ -168,7 +168,8 @@ export class LUnitBehavior extends LBehavior {
                     const itemEntity = targetEntities[0];
     
                     context.post(
-                        itemEntity, self, subject, undefined, testPickOutItem,
+                        self, itemEntity, subject, undefined, testPutInItem,
+                        //itemEntity, self, subject, undefined, testPickOutItem,
                         () => {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntityWithStacking(itemEntity);

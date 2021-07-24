@@ -670,7 +670,7 @@ export class SEffectContext {
                 UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
                 break;
             case "kSystemEffect_識別":
-                UIdentify.identify(commandContext, targetEntity);
+                UIdentify.identify(commandContext, targetEntity, true);
                 break;
             default:
                 throw new Error("Not implemented.");

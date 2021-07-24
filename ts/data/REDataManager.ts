@@ -1027,6 +1027,17 @@ export class REDataManager
             case "kゴブリンのこん棒":
                 entity.idealParams[DBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
+                break;
+            case "kシルバーソード":
+                entity.idealParams[DBasics.params.upgradeValue] = -1;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
+                break;
+            case "kレザーシールド":
+                entity.idealParams[DBasics.params.upgradeValue] = -1;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kウッドアロー":
                 entity.display.stackedName = "%1本の" + entity.display.name;
@@ -1034,7 +1045,7 @@ export class REDataManager
                 entity.addReaction(DBasics.actions.ShootingActionId, 0);
                 break;
             case "kキュアリーフ":
-                const emittor = entity.effectSet.aquireEffect(DEffectCause.Eat);
+                const emittor = REData.cloneEmittor(entity.effectSet.mainEmittor());//entity.effectSet.aquireEffect(DEffectCause.Eat);
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effect.parameterQualifyings.push({
                     parameterId: DBasics.params.fp,
@@ -1043,6 +1054,7 @@ export class REDataManager
                     applyType: DParameterEffectApplyType.Recover,
                     variance: 0,
                 });
+                entity.effectSet.setEffect(DEffectCause.Eat, emittor);
                 entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 entity.identifiedTiming = DIdentifiedTiming.Eat;

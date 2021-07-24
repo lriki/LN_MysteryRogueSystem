@@ -19,6 +19,8 @@ import { DParameterId } from "ts/data/DParameter";
 import { SSoundManager } from "ts/system/SSoundManager";
 import { SEffectSubject } from "ts/system/SEffectContext";
 import { testPickOutItem } from "../internal";
+import { UIdentify } from "ts/usecases/UIdentify";
+import { DIdentifiedTiming } from "ts/data/DIdentifyer";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -145,6 +147,8 @@ NOTE:
                 slot.itemEntityId = itemEntity.entityId();
 
                 this.ownerEntity().refreshConditions();
+
+                UIdentify.identifyByTiming(context, self, itemEntity, DIdentifiedTiming.Equip, false);
     
                 SSoundManager.playEquip();
                 context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
