@@ -66,6 +66,9 @@ export class DEntity {
     identificationDifficulty: DIdentificationDifficulty;
     identifiedTiming: DIdentifiedTiming;
 
+    /** 祝福・呪い・封印状態になるか。 */
+    canModifierState: boolean;
+
     actor: RE_Data_Actor | undefined;
 
     itemData: DItem | undefined;
@@ -99,6 +102,7 @@ export class DEntity {
         this.description = "";
         this.identificationDifficulty = DIdentificationDifficulty.Clear;
         this.identifiedTiming = DIdentifiedTiming.None;
+        this.canModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;
         this.idealParams = [];

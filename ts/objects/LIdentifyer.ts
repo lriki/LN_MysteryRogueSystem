@@ -166,6 +166,7 @@ export class LIdentifyer {
 
     public resolveDescription(entity: LEntity): LEntityDescription {
         const dataId = entity.dataId();
+        const entityData = entity.data();
 
         const state = this._identificationStates[dataId];
         let individualIdentified = true;
@@ -182,10 +183,17 @@ export class LIdentifyer {
         // 種別(名前)識別済みの有無は個体識別済みよりも強い。
         // 仮に個体識別済みでも、種別未識別であれば正しい名前を表示することはできない。
         if (state && !state.nameIdentified) {
-            globalIdentified = state.nameIdentified;
+            globalIdentified = false;
             pseudonym = state.pseudonym;
             level = DescriptionHighlightLevel.Unidentified;
         }
+
+        // 呪い状態などを受けないものは、名前識別済みであれば個体識別済みとする
+        if (globalIdentified && !entityData.canModifierState) {
+            individualIdentified = true;
+            level = DescriptionHighlightLevel.Identified;
+        }
+
 
         const nameView = entity.getDisplayName();
         let displayName = pseudonym;

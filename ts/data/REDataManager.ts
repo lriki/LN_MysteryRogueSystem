@@ -1046,6 +1046,7 @@ export class REDataManager
                 entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 entity.identifiedTiming = DIdentifiedTiming.Eat;
+                entity.canModifierState = false;
                 break;
             case "kフレイムリーフ":
                 entity.effectSet.setEffect(DEffectCause.Hit, entity.effectSet.mainEmittor());
