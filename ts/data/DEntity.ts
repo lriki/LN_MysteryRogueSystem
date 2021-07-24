@@ -5,6 +5,7 @@ import { DEffectSet, DEmittorId } from "./DEffect";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
+import { DIdentifiedTiming } from "./DIdentifyer";
 import { DItem } from "./DItem";
 import { DParameterId } from "./DParameter";
 import { DPrefabDataSource, DPrefabId } from "./DPrefab";
@@ -63,6 +64,7 @@ export class DEntity {
     description: string;
 
     identificationDifficulty: DIdentificationDifficulty;
+    identifiedTiming: DIdentifiedTiming;
 
     actor: RE_Data_Actor | undefined;
 
@@ -96,6 +98,7 @@ export class DEntity {
         this.display = { name: "null", stackedName: "null(%1)", iconIndex: 0 };
         this.description = "";
         this.identificationDifficulty = DIdentificationDifficulty.Clear;
+        this.identifiedTiming = DIdentifiedTiming.None;
         this.itemData = undefined;
         this.enemy = undefined;
         this.idealParams = [];

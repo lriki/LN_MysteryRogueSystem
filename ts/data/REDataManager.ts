@@ -24,6 +24,7 @@ import { DEnemy } from './DEnemy';
 import { DEntity, DIdentificationDifficulty } from './DEntity';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
+import { DIdentifiedTiming } from './DIdentifyer';
 
 
 declare global {  
@@ -1044,6 +1045,7 @@ export class REDataManager
                 });
                 entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                entity.identifiedTiming = DIdentifiedTiming.Eat;
                 break;
             case "kフレイムリーフ":
                 entity.effectSet.setEffect(DEffectCause.Hit, entity.effectSet.mainEmittor());

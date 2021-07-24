@@ -7,6 +7,8 @@ import { SEffectSubject } from "ts/system/SEffectContext";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LBehavior, onEatReaction } from "../LBehavior";
 import { REGame } from "ts/objects/REGame";
+import { UIdentify } from "ts/usecases/UIdentify";
+import { DIdentifiedTiming } from "ts/data/DIdentifyer";
 
 
 export class LEaterBehavior extends LBehavior {
@@ -26,6 +28,7 @@ export class LEaterBehavior extends LBehavior {
         if (activity.actionId() == DBasics.actions.EatActionId) {
             const reactor = activity.object();
             if (reactor) {
+                UIdentify.identifyByTiming(context, self, reactor, DIdentifiedTiming.Eat);
                 context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);
             }
             

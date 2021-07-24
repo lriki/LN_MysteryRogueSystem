@@ -50,6 +50,6 @@ test("generally.草", () => {
 
     const name2 = REGame.identifyer.makeDisplayText(item2);
 
-
-    
+    // 食べれば、同種のアイテムは識別される。
+    expect(name2).not.toBe(name1);
 });
