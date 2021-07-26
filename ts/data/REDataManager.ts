@@ -10,7 +10,7 @@ import { DAutoRemovalTiming, DState, makeStateBehaviorsFromMeta, makeStateTraits
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DLand } from "./DLand";
+import { DFloorMonsterHouse, DLand } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
@@ -237,8 +237,8 @@ export class REDataManager
 
         REData.monsterHouses = [
             { id: 0, name: "null" },
-            { id: 1, name: "Fixed" },
-            { id: 2, name: "Normal" },
+            { id: 1, name: "fixed" },
+            { id: 2, name: "normal" },
         ];
         DBasics.monsterHouses = {
             fixed: 1,
@@ -691,7 +691,9 @@ export class REDataManager
                         key: "",
                         template: undefined,
                         displayName: undefined,
-                        fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100 };
+                        fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100,
+                        monsterHouse: new DFloorMonsterHouse(undefined),
+                    };
                 }
             }
         }

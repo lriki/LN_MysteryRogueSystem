@@ -1,6 +1,6 @@
 
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
-import { DHelpers } from "./DHelper";
+import { DHelpers, RmmzMonsterHouseMetadata } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
 
@@ -49,6 +49,31 @@ export interface DAppearanceTable {
     events: DAppearanceTableEvent[][];
 }
 
+export class DFloorStructures {
+
+}
+
+export interface DFloorMonsterHousePattern {
+    name: string;
+    rating: number; // %
+}
+
+export class DFloorMonsterHouse {
+    public rating: number;    // %
+    public patterns: DFloorMonsterHousePattern[];
+
+    constructor(data: RmmzMonsterHouseMetadata | undefined) {
+        if (data) {
+            this.rating = data.rate;
+            this.patterns = data.patterns.map((x): DFloorMonsterHousePattern => { return { name: (x[0] as string), rating: (x[1] as number) }; });
+        }
+        else {
+            this.rating = 0;
+            this.patterns = [];
+        }
+    }
+}
+
 export interface DFloorInfo {
     key: string;
     template: string | undefined;
@@ -67,6 +92,9 @@ export interface DFloorInfo {
     bgmName: string;
     bgmVolume: 90;
     bgmPitch: number;
+
+    //structures: DFloorStructures;
+    monsterHouse: DFloorMonsterHouse;
 }
 
 /**
@@ -166,6 +194,9 @@ export class DLand {
             // @RE-Floor 設定を取り出す
             const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
             if (floorData) {
+                //const structures = DHelpers.readStructuresMetadata(event);
+                const monsterHouses = DHelpers.readMonsterHouseMetadata(event);
+
                 const info: DFloorInfo = {
                     key: event.name,
                     template: floorData.template ?? undefined,
@@ -175,6 +206,7 @@ export class DLand {
                     bgmName: floorData.bgm ? floorData.bgm[0] : "",
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
+                    monsterHouse: new DFloorMonsterHouse(monsterHouses),
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

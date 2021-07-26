@@ -498,7 +498,7 @@ export class SEffectContext {
         } catch (e) {
             return 0;
         }
-    };
+    }
     
     // Game_Action.prototype.calcElementRate
     private calcElementRate(paramEffect: SParameterEffect, target: LEntity): number {
@@ -509,7 +509,7 @@ export class SEffectContext {
         } else {
             return target.elementRate(paramEffect.elementId);
         }
-    };
+    }
     
     // Game_Action.prototype.elementsMaxRate
     private elementsMaxRate(target: LEntity, elements: number[]): number {
@@ -519,19 +519,19 @@ export class SEffectContext {
         } else {
             return 1;
         }
-    };
+    }
     
     // Game_Action.prototype.applyCritical
     private applyCritical(damage: number): number {
         return damage * 3;
-    };
+    }
     
     // Game_Action.prototype.applyVariance
     private applyVariance(damage: number, variance: number): number {
         const amp = Math.floor(Math.max((Math.abs(damage) * variance) / 100, 0));
         const v = Helpers.randomInt(amp + 1) + Helpers.randomInt(amp + 1) - amp;
         return damage >= 0 ? damage + v : damage - v;
-    };
+    }
     
     // Game_Action.prototype.applyGuard
     private applyGuard(damage: number, target: LEntity): number {
@@ -540,7 +540,7 @@ export class SEffectContext {
         // TODO: guard
 
         return damage / (damage > 0 && isGuard ? 2 * target.sparam(DBasics.sparams.grd) : 1);
-    };
+    }
 
 
 

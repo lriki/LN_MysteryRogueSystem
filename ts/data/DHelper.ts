@@ -9,7 +9,13 @@ export interface RmmzLandMetadata {
     identified?: string;
 }
 
+export interface RmmzStructuresMetadata {
+}
 
+export interface RmmzMonsterHouseMetadata {
+    rate: number;
+    patterns: any[];
+}
 export interface RMMZFloorMetadata {
     template?: string;
     displayName?: string;
@@ -195,6 +201,24 @@ export class DHelpers {
         const block = this.findFirstAnnotationFromEvent("@RE-Land", event);
         if (!block) return undefined;
         let rawData: RmmzLandMetadata | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
+    }
+
+    public static readStructuresMetadata(event: IDataMapEvent): RmmzStructuresMetadata | undefined {
+        const block = this.findFirstAnnotationFromEvent("@RE-Structures", event);
+        if (!block) return undefined;
+        let rawData: RmmzStructuresMetadata | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
+    }
+    
+    public static readMonsterHouseMetadata(event: IDataMapEvent): RmmzMonsterHouseMetadata | undefined {
+        const block = this.findFirstAnnotationFromEvent("@RE-MonsterHouse", event);
+        if (!block) return undefined;
+        let rawData: RmmzMonsterHouseMetadata | undefined;
         eval(`rawData = ${block}`);
         assert(rawData);
         return rawData;

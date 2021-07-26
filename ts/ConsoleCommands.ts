@@ -2,6 +2,7 @@ import { REData } from "./data/REData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
 import { TileShape } from "./objects/LBlock";
 import { LEntity } from "./objects/LEntity";
+import { LMap } from "./objects/LMap";
 import { REGame } from "./objects/REGame";
 import { RESystem } from "./system/RESystem";
 import { SDebugHelpers } from "./system/SDebugHelpers";
@@ -17,6 +18,9 @@ function entities(domain?: string): LEntity[] {
     }
 }
 
+function mapInfo(): LMap {
+    return REGame.map;
+}
 
 function setHP(entityId: number, value: number) {
     const e = REGame.world.entityByIndex(entityId);
@@ -50,6 +54,7 @@ function visitAll() {
 
 (window as any).re = {
     entities: entities,
+    mapInfo: mapInfo,
     setHP: setHP,
     setFP: setFP,
     addState: addState,

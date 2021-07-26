@@ -1,10 +1,9 @@
 import { FMapBuildPass } from "./passes/FMapBuildPass";
 import { FMap, FMapBlock } from "./FMapData";
 import { FMarkContinuationPass } from "./passes/FMarkContinuationPass";
-import { FMonsterHouseStructure } from "./FStructure";
 import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPass";
 import { FMakeTileKindPass } from "./passes/FMakeTileKindPass";
-import { DBasics } from "ts/data/DBasics";
+import { FMakeMonsterHousePass } from "./passes/FMakeMonsterHousePass";
 
 
 export class FMapBuilder {
@@ -15,7 +14,7 @@ export class FMapBuilder {
             new FMarkContinuationPass(),
             new FMakeTileKindPass(),
             new FEntryPointAndExitPointPass(),
-            new FMapBuildPass_MakeMonsterHouse(),
+            new FMakeMonsterHousePass(),
         ];
         // Apply passes
         passes.forEach(pass => pass.execute(data));
@@ -26,7 +25,7 @@ export class FMapBuilder {
             new FMapBuildPass_MakeRoomId(),
             new FMapBuildPass_ResolveRoomShapes(),
             new FMarkContinuationPass(),
-            new FMapBuildPass_MakeMonsterHouse(),
+            new FMakeMonsterHousePass(),
         ];
         // Apply passes
         passes.forEach(pass => pass.execute(data));
@@ -106,40 +105,3 @@ export class FMapBuildPass_ResolveRoomShapes extends FMapBuildPass {
         }
     }
 }
-
-// Room の形状や、固定マップから設定された Block 情報などをもとにモンスターハウスとなる Room をマークする。
-export class FMapBuildPass_MakeMonsterHouse extends FMapBuildPass {
-    public execute(map: FMap): void {
-        // Room 内の Block に固定マップから指定された MonsterHouse フラグが設定されている場合、
-        // その Room をもとにして MonsterHouse を作る。
-        for (const room of map.rooms()) {
-            room.forEachBlocks((block) => {
-                const mh = block.monsterHouseTypeId();
-                if (mh > 0) {
-                    const structure = map.structures().find(s => s instanceof FMonsterHouseStructure && s.monsterHouseTypeId() == mh);
-                    if (structure) {
-                        // この部屋は MonsterHouse としてマーク済み
-                    }
-                    else {
-                        const s = new FMonsterHouseStructure(room.id(), mh);
-                        map.addStructure(s);
-                        room.addStructureRef(s);
-                    }
-                }
-            });
-        }
-
-        // TODO: test
-        // モンスターハウスが1つもなければランダム生成を試す。
-        if (!map.structures().find(x => x instanceof FMonsterHouseStructure)) {
-            const candidates = map.rooms().filter(x => x.structures().length == 0);
-            const room = map.random().selectOrUndefined(candidates);
-            if (room) {
-                const s = new FMonsterHouseStructure(room.id(), DBasics.monsterHouses.normal);  // TODO: 今は通常のみ
-                map.addStructure(s);
-                room.addStructureRef(s);
-            }
-        }
-    }
-}
-
