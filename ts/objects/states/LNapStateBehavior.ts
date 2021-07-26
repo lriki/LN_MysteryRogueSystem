@@ -50,7 +50,10 @@ export class LNapStateBehavior extends LBehavior {
     }
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
-        if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
+        if (phase == DecisionPhase.UpdateState) {
+            return SPhaseResult.Pass;
+        }
+        else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
                 //this.removeThisState();
                 this.parentAs(LState)?.removeThisState();

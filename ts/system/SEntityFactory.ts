@@ -235,14 +235,16 @@ export class SEntityFactory {
         }
     }
 
-    public static spawnTroopAndMembers(troop: DTroop, mx: number, my: number, stateIds: DStateId[]): void {
+    public static spawnTroopAndMembers(troop: DTroop, mx: number, my: number, stateIds: DStateId[]): LEntity[] {
+        const result = [];
         const party = REGame.world.newParty();
 
         for (const entityId of troop.members) {
             const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds));
             party.addMember(entity);
-            const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer());
+            result.push(entity);
 
+            const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer());
             if (block) {
                 REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
             }
@@ -250,6 +252,8 @@ export class SEntityFactory {
                 // 配置できないなら無理に出さない
             }
         }
+
+        return result;
     }
 
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、

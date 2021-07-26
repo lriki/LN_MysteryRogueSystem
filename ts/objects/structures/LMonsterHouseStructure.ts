@@ -24,6 +24,10 @@ export class LMonsterHouseStructure extends LStructure {
         this._monsterHouseState = MonsterHouseState.Sleeping;
     }
 
+    public roomId(): LRoomId {
+        return this._roomId;
+    }
+
     public monsterHouseTypeId(): DMonsterHouseTypeId {
         return this._monsterHouseTypeId;
     }

@@ -178,12 +178,16 @@ export class LMap extends LObject
         return this._floorId;
     }
 
-    public rooms(): LRoom[] {
+    public rooms(): readonly LRoom[] {
         return this._rooms;
     }
 
     public room(roomId: LRoomId): LRoom {
         return this._rooms[roomId];
+    }
+
+    public structures(): readonly LStructure[] {
+        return this._structures;
     }
 
     public land2(): LLand {

@@ -29,7 +29,6 @@ export class FMakeMonsterHousePass extends FMapBuildPass {
             });
         }
 
-        // TODO: test
         // モンスターハウスが1つもなければランダム生成を試す。
         if (!map.structures().find(x => x instanceof FMonsterHouseStructure)) {
             const monsterHouse = map.floorId().floorInfo().monsterHouse;
