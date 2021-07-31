@@ -284,7 +284,7 @@ export class SMapManager {
     }
 
     /** 出現テーブルからランダムに選択して Item を作る */
-    private spawnItem(mx: number, my: number): void {
+    public spawnItem(mx: number, my: number): void {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.items.length == 0) return undefined;    // 出現テーブルが空
@@ -297,7 +297,7 @@ export class SMapManager {
     }
 
     /** 出現テーブルからランダムに選択して Trap を作る */
-    private spawnTrap(mx: number, my: number): void {
+    public spawnTrap(mx: number, my: number): void {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.traps.length == 0) return undefined;    // 出現テーブルが空

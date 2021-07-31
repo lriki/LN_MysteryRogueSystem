@@ -236,9 +236,9 @@ export class REDataManager
         };
 
         REData.monsterHouses = [
-            { id: 0, name: "null" },
-            { id: 1, name: "fixed" },
-            { id: 2, name: "normal" },
+            { id: 0, name: "null", bgm: { name: "", pan: 0, pitch: 100, volume: 90 } },
+            { id: 1, name: "fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+            { id: 2, name: "normal", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
         ];
         DBasics.monsterHouses = {
             fixed: 1,

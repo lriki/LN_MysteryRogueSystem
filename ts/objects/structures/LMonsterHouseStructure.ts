@@ -1,5 +1,5 @@
-import { assert } from "ts/Common";
-import { DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
+import { assert, tr2 } from "ts/Common";
+import { DMonsterHouseType, DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
 import { DFactionId, REData } from "ts/data/REData";
 import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { Helpers } from "ts/system/Helpers";
@@ -32,6 +32,10 @@ export class LMonsterHouseStructure extends LStructure {
         return this._monsterHouseTypeId;
     }
 
+    public monsterHouseData(): DMonsterHouseType {
+        return REData.monsterHouses[this._monsterHouseTypeId];
+    }
+
     public monsterHouseFactionId(): DFactionId {
         return this._monsterHouseFactionId;
     }
@@ -45,7 +49,8 @@ export class LMonsterHouseStructure extends LStructure {
         assert(this._monsterHouseState == MonsterHouseState.Sleeping);
 
         context.postWaitSequel();
-        context.postMessage("モンスターハウスだ！");
+        context.postMessage(tr2("モンスターハウスだ！"));
+        AudioManager.playBgm(this.monsterHouseData().bgm, 0);
 
         this._monsterHouseState = MonsterHouseState.Activated;
     }
