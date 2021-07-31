@@ -15,8 +15,6 @@ export function tr(text: string, ...keys: any[]): string {
         result = result.replace(re, keys[i]);
     }
     return result; 
-
-    //return fuzzyFormat(text, keys);
 }
 
 export function tr2(text: string): string {

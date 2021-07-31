@@ -32,6 +32,10 @@ function setFP(entityId: number, value: number) {
     SDebugHelpers.setFP(e, value);
 }
 
+function setVariable(id: number, value: number) {
+    $gameVariables.setValue(id, value);
+}
+
 /**
  * 
  * @param entityId 
@@ -59,6 +63,7 @@ function visitAll() {
     setFP: setFP,
     addState: addState,
     visitAll: visitAll,
+    setVariable: setVariable,
 
 };
 
