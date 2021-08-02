@@ -187,3 +187,70 @@ test("Item.DropAndDestroy", () => {
     // 置くところが無いので削除される
     expect(item1.isDestroyed()).toBe(true);
 });
+
+test("Items.Stack", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.performFloorTransfer();
+    const inventory = actor1.getBehavior(LInventoryBehavior);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // 矢1本
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id));
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+
+    // 足元のアイテムを拾う
+    RESystem.dialogContext.postActivity(LActivity.makePick(actor1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // 矢2本
+    const info2 = DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id);
+    info2.stackCount = 2;
+    const item2 = SEntityFactory.newEntity(info2);
+    REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+
+    // 足元のアイテムを拾う
+    RESystem.dialogContext.postActivity(LActivity.makePick(actor1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(item1._stackCount).toBe(3);  // 3本にまとめられている
+
+    // 矢99本
+    const info3 = DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id);
+    info2.stackCount = 99;
+    const item3 = SEntityFactory.newEntity(info2);
+    REGame.world._transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+
+    // 足元のアイテムを拾う
+    RESystem.dialogContext.postActivity(LActivity.makePick(actor1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(item1._stackCount).toBe(99);  // 99本が最大
+
+    // 矢1本
+    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id));
+    REGame.world._transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+
+    // 足元のアイテムを拾う
+    RESystem.dialogContext.postActivity(LActivity.makePick(actor1));
+    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(item1._stackCount).toBe(99);  // 99本が最大
+
+    expect(item2.isDestroyed()).toBe(true); // item1 へスタックされ、item2 自体は消える
+    expect(item3.isDestroyed()).toBe(true); // item1 へスタックされ、item3 自体は消える
+    expect(item4.isDestroyed()).toBe(true); // item1 へスタックされ、item4 自体は消える
+});
+

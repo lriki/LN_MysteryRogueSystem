@@ -36,6 +36,7 @@ import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 import { assert } from "ts/Common";
 import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
 import { DBasics } from "ts/data/DBasics";
+import { LFloorId } from "ts/objects/LFloorId";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -162,7 +163,7 @@ export class SEntityFactory {
         e.addBehavior(LProjectableBehavior);
     }
 
-    public static newEntity(data: DEntityCreateInfo): LEntity {
+    public static newEntity(data: DEntityCreateInfo, floorId?: LFloorId): LEntity {
         const entityData = REData.entities[data.entityId];
         const prefab = REData.prefabs[entityData.prefabId];
         let entity: LEntity;
@@ -199,6 +200,14 @@ export class SEntityFactory {
         }
 
         entity._name = data.debugName;
+        entity._stackCount = data.stackCount;
+
+        // 個体識別済みチェック
+        if (floorId) {
+            if (floorId.landData().checkIdentifiedEntity(entity.kindData())) {
+                entity.setIndividualIdentified(true);
+            }
+        }
 
         return entity;
     }
@@ -241,7 +250,7 @@ export class SEntityFactory {
         const party = REGame.world.newParty();
 
         for (const entityId of troop.members) {
-            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds));
+            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), REGame.map.floorId());
             party.addMember(entity);
             result.push(entity);
 

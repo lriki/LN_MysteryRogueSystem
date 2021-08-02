@@ -60,7 +60,7 @@ export class LEntityDescription {
         if (this._upgrades != 0) {
             text += (this._upgrades > 0) ? `+${this._upgrades}` : this._upgrades.toString();
         }
-        if (this._capacity) {
+        if (this._capacity !== undefined) {
             text += `[${this._capacity}]`;
         }
         text += `\\C[0]`;
@@ -129,7 +129,7 @@ export class LIdentifyer {
         this._identificationStates = [];
 
         for (const kind of REData.pseudonymous.kinds()) {
-            if (this.checkIdentifiedKind(land, kind)) {
+            if (land.checkIdentifiedKind(kind)) {
                 // land 内では、この kind は常に識別状態
             }
             else {
@@ -151,12 +151,6 @@ export class LIdentifyer {
                 }
             }
         }
-    }
-
-    public checkIdentifiedKind(land: DLand, kind: DEntityKind): boolean {
-        const e = land.identifiedKinds[kind.id];
-        if (!e) return false;   // 省略されているなら未識別
-        return e >= DLandIdentificationLevel.Kind;
     }
 
     public identifyGlobal(entityDataId: DEntityId): void {
@@ -209,7 +203,7 @@ export class LIdentifyer {
         }
 
         let capacity = undefined;
-        if (nameView.capacity && nameView.initialCapacity) {
+        if (nameView.capacity !== undefined && nameView.initialCapacity) {
             if (!individualIdentified || !globalIdentified) {
                 // 何かしら未識別？
                 capacity = nameView.capacity - nameView.initialCapacity;

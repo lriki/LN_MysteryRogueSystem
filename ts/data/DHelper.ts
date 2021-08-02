@@ -45,6 +45,7 @@ interface RMMZEventRawMetadata {
     data: string;
     states?: string[];
     troop?: string;
+    stack?: number;
 }
 
 
@@ -55,6 +56,8 @@ export interface RMMZEventEntityMetadata {
     states: string[];
 
     troopId: DTroopId;
+
+    stackCount: number;
 }
 
 interface RmmzREEventRawMetadata {
@@ -322,6 +325,7 @@ export class DHelpers {
                         data: rawData.data,
                         states: rawData.states ?? [],
                         troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
+                        stackCount: rawData.stack ?? 1,
                     };
                 }
                 else {

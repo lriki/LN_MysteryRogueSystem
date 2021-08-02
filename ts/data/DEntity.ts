@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { LFloorId } from "ts/objects/LFloorId";
 import { DAction, DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
 import { DEffectSet, DEmittorId } from "./DEffect";
@@ -152,12 +153,14 @@ export class DEntityCreateInfo {
     public entityId: DEntityId;
     public stateIds: DStateId[];
     public debugName: string;
+    public stackCount: number;
 
     public constructor() {
         //this.troopId = 0;
         this.entityId = 0;
         this.stateIds = [];
         this.debugName = "";
+        this.stackCount = 1;
     }
 
     public static makeSingle(entityId: DEntityId, stateIds?: DStateId[], debugName?: string): DEntityCreateInfo {
@@ -218,6 +221,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         const entity = new DEntitySpawner2();
         entity.troopId = entityMetadata.troopId;
         entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.data);
+        entity.stackCount = entityMetadata.stackCount;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);

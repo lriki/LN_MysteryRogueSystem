@@ -28,6 +28,7 @@ import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { DTraits } from "ts/data/DTraits";
 import { LParamSet } from "./LParam";
+import { DEntityKind, DEntityKindId } from "ts/data/DEntityKind";
 
 enum BlockLayer
 {
@@ -155,6 +156,14 @@ export class LEntity extends LObject
 
     public data(): DEntity {
         return REData.entities[this._entityDataId];
+    }
+
+    public kindDataId(): DEntityKindId {
+        return this.data().entity.kindId;
+    }
+
+    public kindData(): DEntityKind {
+        return REData.entityKinds[this.data().entity.kindId];
     }
 
     public entityId(): LEntityId {
@@ -1218,7 +1227,7 @@ export class LEntity extends LObject
      */
     public increaseStack(other: LEntity): void {
         assert(this.checkStackable(other));
-        this._stackCount++;
+        this._stackCount = Math.min(this._stackCount + other._stackCount, 99);
         other.destroy();
     }
 

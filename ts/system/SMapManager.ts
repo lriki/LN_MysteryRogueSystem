@@ -277,14 +277,14 @@ export class SMapManager {
             return SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
         }
         else {
-            const entity = SEntityFactory.newEntity(data.spawiInfo);
+            const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
             REGame.world._transferEntity(entity, floorId, mx, my);
             return [entity];
         }
     }
 
     /** 出現テーブルからランダムに選択して Item を作る */
-    public spawnItem(mx: number, my: number): void {
+    public spawnItem(mx: number, my: number): LEntity | undefined {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
         if (table.items.length == 0) return undefined;    // 出現テーブルが空
@@ -292,8 +292,10 @@ export class SMapManager {
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
         const data = list[this.rand().nextIntWithMax(list.length)];
-        const entity = SEntityFactory.newEntity(data.spawiInfo);
+        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
         REGame.world._transferEntity(entity, floorId, mx, my);
+
+        return entity;
     }
 
     /** 出現テーブルからランダムに選択して Trap を作る */
@@ -305,7 +307,7 @@ export class SMapManager {
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
         const data = list[this.rand().nextIntWithMax(list.length)];
-        const entity = SEntityFactory.newEntity(data.spawiInfo);
+        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
         REGame.world._transferEntity(entity, floorId, mx, my);
     }
 }

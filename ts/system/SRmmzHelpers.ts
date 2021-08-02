@@ -64,7 +64,7 @@ export class SRmmzHelpers {
     }
 
     public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): void {
-        const entity = SEntityFactory.newEntity(data)
+        const entity = SEntityFactory.newEntity(data, REGame.map.floorId());
         entity.rmmzEventId = eventId;
         entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);

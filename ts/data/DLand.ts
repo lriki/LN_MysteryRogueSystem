@@ -1,5 +1,6 @@
 
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
+import { DEntityKind } from "./DEntityKind";
 import { DHelpers, RmmzMonsterHouseMetadata } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
@@ -224,6 +225,18 @@ export class DLand {
             default:
                 throw new Error(`IdentificationLevel "${str}" is invalid.`);
         }
+    }
+    
+    public checkIdentifiedKind(kind: DEntityKind): boolean {
+        const e = this.identifiedKinds[kind.id];
+        if (!e) return false;   // 省略されているなら未識別
+        return e >= DLandIdentificationLevel.Kind;
+    }
+
+    public checkIdentifiedEntity(kind: DEntityKind): boolean {
+        const e = this.identifiedKinds[kind.id];
+        if (!e) return false;   // 省略されているなら未識別
+        return e >= DLandIdentificationLevel.Entity;
     }
 
     public static buildFloorTable(mapData: IDataMap): DFloorInfo[] {
