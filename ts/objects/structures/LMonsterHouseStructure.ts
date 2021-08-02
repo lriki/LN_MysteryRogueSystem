@@ -1,7 +1,6 @@
 import { assert, tr2 } from "ts/Common";
 import { DMonsterHouseType, DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
 import { DFactionId, REData } from "ts/data/REData";
-import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { Helpers } from "ts/system/Helpers";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { MonsterHouseState } from "../LRoom";

@@ -97,6 +97,17 @@ export interface DFloorInfo {
     monsterHouse: DFloorMonsterHouse;
 }
 
+export enum DLandIdentificationLevel {
+    /** 未識別 */
+    Unknown,
+
+    /** 種別識別済み */
+    Kind,
+
+    /** 個体識別済み */
+    Entity,
+}
+
 /**
  * ダンジョンや町ひとつ分。
  */
@@ -141,7 +152,8 @@ export class DLand {
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
     floorIds: DMapId[];
 
-    identifiedKinds: string[];
+    /** (index: DEntityKindId) */
+    identifiedKinds: (DLandIdentificationLevel | undefined)[];
 
     public constructor(id: DLandId) {
         this.id = id;
@@ -180,11 +192,38 @@ export class DLand {
             if (!event) continue;
             const data = DHelpers.readLandMetadata(event);
             if (data) {
-                if (data.identified) this.identifiedKinds = data.identified.split(",");
+                if (data.identifications) {
+                    for (const pair of data.identifications) {
+                        const tokens = pair.split(":");
+                        const key = tokens[0];
+
+                        if (key.toLowerCase() == "all") {
+                            const level = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
+                            for (const kind of REData.entityKinds) {
+                                this.identifiedKinds[kind.id] = level;
+                            }
+                        }
+                        else {
+                            const kind = REData.getEntityKind(key.toLowerCase());
+                            this.identifiedKinds[kind.id] = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
+                        }
+                    }
+                    
+                }
                 break;
             }
         }
+    }
 
+    private parseLandIdentificationLevel(str: string): DLandIdentificationLevel {
+        switch (str) {
+            case "entity":
+                return DLandIdentificationLevel.Entity;
+            case "kind":
+                return DLandIdentificationLevel.Kind;
+            default:
+                throw new Error(`IdentificationLevel "${str}" is invalid.`);
+        }
     }
 
     public static buildFloorTable(mapData: IDataMap): DFloorInfo[] {

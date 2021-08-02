@@ -1,4 +1,6 @@
+import { DEntityKindId } from "./DEntityKind";
 import { DPrefabId } from "./DPrefab";
+import { REData } from "./REData";
 
 
 
@@ -16,7 +18,7 @@ export interface DEntityProperties {
     /** RE-Key */
     key: string;
 
-    kind: string;
+    kindId: DEntityKindId;
     behaviorNames: string[];
     commandNames: string[];
     reactionNames: string[];
@@ -39,7 +41,7 @@ export interface DEntityProperties {
 export function DEntityProperties_Default(): DEntityProperties {
     return {
         key: "",
-        kind: "",
+        kindId: 0,
         behaviorNames: [],
         commandNames: [],
         reactionNames: [],
@@ -56,9 +58,11 @@ export function DEntityProperties_Default(): DEntityProperties {
 
 export function parseMetaToEntityProperties(meta: any | undefined): DEntityProperties {
     if (meta) {
+        const kindName = meta["RE-Kind"];
+        const kind = kindName ? REData.findEntityKind(kindName) : undefined;
         const data: DEntityProperties = {
             key: meta["RE-Key"] ?? "",
-            kind: meta["RE-Kind"],
+            kindId: kind ? kind.id : 0,
             behaviorNames: [],
             commandNames: [],
             reactionNames: [],

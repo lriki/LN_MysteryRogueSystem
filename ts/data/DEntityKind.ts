@@ -24,11 +24,11 @@ export interface DEntityKind
     /** ID (0 is Invalid). */
     id: DEntityKindId;
 
+    /** name. */
+    name: string;
     /** Name. */
     displayName: string;
 
-    /** prefabKind. */
-    prefabKind: string;
 
     
 }

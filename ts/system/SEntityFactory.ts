@@ -35,6 +35,7 @@ import { UMovement } from "../usecases/UMovement";
 import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 import { assert } from "ts/Common";
 import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
+import { DBasics } from "ts/data/DBasics";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -87,8 +88,8 @@ export class SEntityFactory {
 
         const entityData = REData.entities[item.entityId]
 
-        if (entityData.entity.kind == "Weapon" ||
-            entityData.entity.kind == "Shield") {
+        if (entityData.entity.kindId == DBasics.entityKinds.WeaponKindId ||
+            entityData.entity.kindId == DBasics.entityKinds.ShieldKindId) {
             e.addBehavior(LEquipmentBehavior);
         }
 

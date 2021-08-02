@@ -1,4 +1,6 @@
 import { assert } from "ts/Common";
+import { DEntityKind, DEntityKindId } from "./DEntityKind";
+import { REData } from "./REData";
 
 interface NameEntry
 {
@@ -6,34 +8,45 @@ interface NameEntry
     names: string[];
 }
 
+interface NameEntry2 {
+    names: string[];
+}
+
 export class DPseudonymous {
-    private _names: Map<string, string[]>;
+    private _names: (NameEntry2 | undefined)[];   // index: DEntityKindId
 
     public constructor() {
-        this._names = new Map<string, string[]>();
+        this._names = [];
     }
     
     public setup(data: any): void {
         const list = data as NameEntry[];
         for (const e of list) {
-            this._names.set(e.kind, e.names);
+            const kind = REData.getEntityKind(e.kind);
+            this._names[kind.id] = { names: e.names };
         }
     }
 
-    public kinds(): string[] {
+    public kinds(): DEntityKind[] {
         const result = [];
-        for (const [k, v] of this._names) {
-            result.push(k);
+        for (let i = 0; i < this._names.length; i++) {
+            if (this._names[i]) {
+                result.push(REData.entityKinds[i]);
+            }
         }
         return result;
     }
 
-    public nameList(kind: string): string[] | undefined {
-        return this._names.get(kind);
+    public nameList(kindId: DEntityKindId): string[] | undefined {
+        const e = this._names[kindId];
+        if (e)
+            return e.names;
+        else
+            return undefined;
     }
 
-    public getNameList(kind: string): string[] {
-        const list = this._names.get(kind);
+    public getNameList(kindId: DEntityKindId): string[] {
+        const list = this.nameList(kindId);
         assert(list);
         return list;
     }

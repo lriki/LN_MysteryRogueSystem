@@ -1,3 +1,4 @@
+import { DBasics } from "./DBasics";
 import { REData } from "./REData";
 
 export type DPrefabId = number;
@@ -75,7 +76,7 @@ export class DPrefab {
     }
 
     public isTrapKind(): boolean {
-        return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kind == "Trap";
+        return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kindId == DBasics.entityKinds.TrapKindId;
     }
 
     public isEntryPoint(): boolean {

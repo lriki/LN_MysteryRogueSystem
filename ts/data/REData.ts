@@ -199,7 +199,7 @@ export class REData
     static _behaviorFactories: (() => LBehavior)[] = [];
 
     static reset() {
-        this.entityKinds = [{ id: 0, displayName: 'null', prefabKind: "" }];
+        this.entityKinds = [{ id: 0, displayName: 'null', name: "" }];
 
         this.classes = [];
         this.addClass("null");
@@ -228,22 +228,26 @@ export class REData
         this.emittors = [new DEmittor(0)];
     }
 
-    static addEntityKind(name: string, prefabKind: string): number {
+    static addEntityKind(displayName: string, name: string): number {
         const newId = this.entityKinds.length;
         this.entityKinds.push({
             id: newId,
-            displayName: name,
-            prefabKind: prefabKind,
+            name: name,
+            displayName: displayName,
         });
         return newId;
     }
-    
-    static getEntityKindsId(prefabKind: string): DEntityKindId {
-        const index = this.entityKinds.findIndex(x => x.prefabKind == prefabKind);
-        if (index >= 0)
-            return index;
-        else
-            throw new Error(`EntityKind '${prefabKind}' not found.`);
+
+    static findEntityKind(pattern: string): DEntityKind | undefined {
+        const k = pattern.toLowerCase();
+        const kind = REData.entityKinds.find(x => x.name.toLowerCase() === k);
+        return kind;
+    }
+
+    static getEntityKind(pattern: string): DEntityKind {
+        const kind = this.findEntityKind(pattern);
+        if (!kind) throw new Error(`EntityKind "${pattern}" not found.`);
+        return kind;
     }
     
     /**

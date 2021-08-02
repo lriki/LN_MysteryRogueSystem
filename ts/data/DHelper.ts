@@ -6,7 +6,7 @@ import { REData } from "./REData";
 
 
 export interface RmmzLandMetadata {
-    identified?: string;
+    identifications?: string[];
 }
 
 export interface RmmzStructuresMetadata {

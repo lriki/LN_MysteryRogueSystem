@@ -1,6 +1,7 @@
 import { tr2 } from "ts/Common";
 import { DEntity, DEntityId, DIdentificationDifficulty } from "ts/data/DEntity";
-import { DLand, DLandId } from "ts/data/DLand";
+import { DEntityKind } from "ts/data/DEntityKind";
+import { DLand, DLandId, DLandIdentificationLevel } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
 import { LEntity } from "./LEntity";
@@ -132,8 +133,8 @@ export class LIdentifyer {
                 // land 内では、この kind は常に識別状態
             }
             else {
-                const names = REData.pseudonymous.getNameList(kind);
-                const entities = REData.entities.filter(x => x.entity.kind == kind && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
+                const names = REData.pseudonymous.getNameList(kind.id);
+                const entities = REData.entities.filter(x => x.entity.kindId == kind.id && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
                 if (names.length < entities.length) {
                     throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
                 }
@@ -152,9 +153,10 @@ export class LIdentifyer {
         }
     }
 
-    public checkIdentifiedKind(land: DLand, kind: string): boolean {
-        if (land.identifiedKinds.includes("all")) return true;
-        return land.identifiedKinds.includes(kind);
+    public checkIdentifiedKind(land: DLand, kind: DEntityKind): boolean {
+        const e = land.identifiedKinds[kind.id];
+        if (!e) return false;   // 省略されているなら未識別
+        return e >= DLandIdentificationLevel.Kind;
     }
 
     public identifyGlobal(entityDataId: DEntityId): void {

@@ -116,7 +116,7 @@ export class REDataManager
             FoodKindId: REData.addEntityKind("食料", "Food"),
             grass: REData.addEntityKind("草", "Grass"),
             ScrollKindId: REData.addEntityKind("巻物", "Scroll"),
-            WandKindId: REData.addEntityKind("杖", "Wand"),
+            WandKindId: REData.addEntityKind("杖", "Staff"),
             PotKindId: REData.addEntityKind("壺", "Pot"),
             DiscountTicketKindId: REData.addEntityKind("割引券", "DiscountTicket"),
             BuildingMaterialKindId: REData.addEntityKind("材料", "BuildingMaterial"),
