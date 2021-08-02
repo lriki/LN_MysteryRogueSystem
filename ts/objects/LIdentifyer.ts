@@ -207,6 +207,9 @@ export class LIdentifyer {
             if (!individualIdentified || !globalIdentified) {
                 // 何かしら未識別？
                 capacity = nameView.capacity - nameView.initialCapacity;
+
+                // 未識別で1回も使用していない場合は回数欄は表示しない
+                if (capacity === 0) capacity = undefined;
             }
             else {
                 // 識別済み

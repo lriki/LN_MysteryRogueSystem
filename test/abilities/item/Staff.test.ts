@@ -111,6 +111,7 @@ test("Items.Staff.Identify", () => {
     const nameView1 = item1.getDisplayName();
     const name1 = UName.makeNameAsItem(item1);
     expect(name1.includes(nameView1.name)).toBe(false);   // 未識別状態なので、元の名前とは異なる表示名になっている
+    expect(name1.includes("[0]\\")).toBe(false);    // "ふきとばしの杖[-1]" のように表示される
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
