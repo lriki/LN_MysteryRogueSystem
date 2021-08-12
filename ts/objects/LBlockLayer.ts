@@ -27,6 +27,9 @@ export enum BlockLayerKind {
 export class REBlockLayer {
     private _entityIds: LEntityId[] = [];
 
+    public constructor() {
+    }
+
     public entityIds(): readonly LEntityId[] {
         return this._entityIds;
     }

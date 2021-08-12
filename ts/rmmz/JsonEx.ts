@@ -33,7 +33,15 @@ import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
 import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 import { REBlockLayer } from "ts/objects/LBlockLayer";
-import { LParam } from "ts/objects/LParam";
+import { LParam, LParamSet } from "ts/objects/LParam";
+import { LDecisionBehavior } from "ts/objects/behaviors/LDecisionBehavior";
+import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
+import { LExitPointBehavior } from "ts/objects/behaviors/LExitPointBehavior";
+import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
+import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
+import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
+import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 
 function createInstance(name: string): any {
@@ -96,7 +104,25 @@ function createInstance(name: string): any {
             return Object.create(LEquipmentBehavior.prototype);
         case "LItemBehavior_Grass1":
             return Object.create(LItemBehavior_Grass1.prototype);
-
+        case "LParamSet":
+            return Object.create(LParamSet.prototype);
+        case "LDecisionBehavior":
+            return Object.create(LDecisionBehavior.prototype);
+        case "LUnitBehavior":
+            return Object.create(LUnitBehavior.prototype);
+        case "LExitPointBehavior":
+            return Object.create(LExitPointBehavior.prototype);
+        case "LTrapBehavior":
+            return Object.create(LTrapBehavior.prototype);
+        case "LSanctuaryBehavior":
+            return Object.create(LSanctuaryBehavior.prototype);
+        case "LClingFloorBehavior":
+            return Object.create(LClingFloorBehavior.prototype);
+        case "LFlockBehavior":
+            return Object.create(LFlockBehavior.prototype);
+        case "LActivity":
+            return Object.create(LActivity.prototype);
+            
             
             
     }

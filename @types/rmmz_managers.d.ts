@@ -896,7 +896,7 @@ declare namespace StorageManager{
 	/**
 	 * 
 	 */
-	function fileDirectoryPath(): void;
+	function fileDirectoryPath(): string;
 		
 	/**
 	 * 

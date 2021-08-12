@@ -1,5 +1,6 @@
 import { REData } from "ts/data/REData";
 import { LFloorId } from "ts/objects/LFloorId";
+import { RESystem } from "ts/system/RESystem";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
@@ -13,6 +14,8 @@ declare global {
     }
 }
 
+// Map 移動したときに呼ばれる。
+// セーブデータをロードしたときは呼ばれない。
 var _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
 
@@ -63,6 +66,8 @@ Game_Map.prototype.setup = function(mapId: number) {
 
     SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
 
+    // レコーディング開始
+    REGame.recorder.startRecording();
 
     // onStart trigger
     {

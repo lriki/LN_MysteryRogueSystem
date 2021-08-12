@@ -106,7 +106,7 @@ DataManager.loadMapData = function(mapId) {
         _DataManager_loadMapData.call(DataManager, mapId);
     }
     */
-    REGame.map.releaseMap();
+    //REGame.map.releaseMap();
     _DataManager_loadMapData.call(DataManager, mapId);
 }
 
@@ -199,3 +199,12 @@ DataManager.extractMetadata = function(data: any): void {
     }
 }
 
+const _DataManager_saveGame = DataManager.saveGame;
+DataManager.saveGame = function(savefileId) {
+    return _DataManager_saveGame.call(this, savefileId);
+}
+
+const _DataManager_loadGame = DataManager.loadGame;
+DataManager.loadGame = function(savefileId) {
+    return _DataManager_loadGame.call(this, savefileId);
+}

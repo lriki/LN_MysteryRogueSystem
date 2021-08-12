@@ -9,6 +9,7 @@ import { LMap } from 'ts/objects/LMap';
 import { RECommand } from './RECommand';
 import { RESystem } from './RESystem';
 import { LActivity } from 'ts/objects/activities/LActivity';
+import { RmmzStorageManager } from 'ts/rmmz/StorageManager';
 
 export enum RERecordingCommandType {
     Activity = 1,
@@ -24,11 +25,17 @@ export class RECommandRecorder {
     private _stream: fs.WriteStream | undefined;
     private _playbackCommands: RERecordingCommand[] | undefined;
     private _playbackCommandIndex: number = 0;
+    private _savefileId: number = 0;
     
     constructor() {
-        this.startRecording();
+        //this.startRecording();
         //this.startPlayback();
     }
+
+    public setSavefileId(id: number): void {
+        this._savefileId = id;
+    }
+
 
     public isRecording(): boolean {
         return this._stream != undefined;
@@ -39,26 +46,38 @@ export class RECommandRecorder {
     }
 
     public startRecording(): void {
-        this._stream = fs.createWriteStream("test.txt");
+        this._stream = fs.createWriteStream(this.filePath());
+    }
+
+    public restartRecording(): void {
+        const options = {
+            flags: "a"  // 追加書き込みモード
+        };
+        this._stream = fs.createWriteStream(this.filePath(), options);
+    }
+
+    private filePath(): string {
+        const dir = RmmzStorageManager.fileDirectoryPath();
+        return dir + `re${this._savefileId}.record`;
     }
 
     public push(cmd: RERecordingCommand): void {
         assert(this._stream);
 
         // 平均実行時間は 0.02[ms]
-        this._stream.write(JSON.stringify(cmd) + ",\n");
+        this._stream.write(JsonEx.stringify(cmd) + ",\n");
     }
 
     public startPlayback(): void {
-        const data = fs.readFileSync("test.txt", { encoding: "utf8" });
+        const data = fs.readFileSync(this.filePath(), { encoding: "utf8" });
         const json = "[" + data.substring(0, data.length - 2) + "]";
 
-        this._playbackCommands = JSON.parse(json);
+        this._playbackCommands = JsonEx.parse(json);
         console.log("_playbackCommands", this._playbackCommands);
         this._playbackCommandIndex = 0;
     }
 
-    public runPlaybackCommand(dialog: SCommandPlaybackDialog): void {
+    public runPlaybackCommand(dialog: SCommandPlaybackDialog): boolean {
         assert(this._playbackCommands);
         assert(this.isPlayback());
 
@@ -72,6 +91,8 @@ export class RECommandRecorder {
             }
 
         } while (this._playbackCommandIndex < this._playbackCommands.length);
+
+        return this._playbackCommandIndex < this._playbackCommands.length;
     }
 
     private doCommand(dialog: SCommandPlaybackDialog, cmd: RERecordingCommand): boolean {

@@ -44,8 +44,8 @@ export class RMMZIntegration extends SIntegration {
         
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
-            if (e && e._entityData) {
-                const data = e._entityData;
+            const data = SRmmzHelpers.readEntityMetadata(e);
+            if (e && data) {
                 if (data.troopId > 0) {
                     SEntityFactory.spawnTroopAndMembers( REData.troops[data.troopId], e.x, e.y,data.stateIds);
                     e.setTransparent(true);

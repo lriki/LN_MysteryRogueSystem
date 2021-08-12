@@ -29,6 +29,16 @@ export class SDialogContext
 
     private pop(): void {
         this._dialogs.pop();
+
+        if (this._dialogs.length == 0) {
+            
+            if (REGame.recorder.isRecording()) {
+                REGame.recorder.push({
+                    type: RERecordingCommandType.CloseMainDialog,
+                    activity: null,
+                });
+            }
+        }
     }
 
     public dialogs(): readonly SDialog[] {
@@ -68,7 +78,7 @@ export class SDialogContext
         }
     }
     
-    closeDialog() {
+    _closeDialog() {
         this.pop();
         RESystem.integration.onDialogClosed(this);
     }

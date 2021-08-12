@@ -36,6 +36,7 @@ export class RESystem {
     static minimapData: SMinimapData;
     static mapManager: SMapManager;
     static groundRules: SGroundRules;
+    static requestedPlayback: boolean = false;
 
     // Database
     static sequels: BasicSequels;

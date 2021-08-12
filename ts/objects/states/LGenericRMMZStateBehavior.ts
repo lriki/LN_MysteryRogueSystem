@@ -10,7 +10,7 @@ import { LDecisionBehavior } from "../behaviors/LDecisionBehavior";
 import { REGame } from "../REGame";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
-    private _stateTurn: number | undefined = 0;
+    private _stateTurn: number | null = 0;
     //private _persistent: boolean = false;   // 永続ステータス？
     
     constructor() {
@@ -25,14 +25,17 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     
     // Game_BattlerBase.prototype.isStateExpired 
     private isStateExpired(): boolean {
-        return this._stateTurn != undefined && this._stateTurn <= 0;
+        return this._stateTurn !== null && this._stateTurn <= 0;
     }
 
     // Game_BattlerBase.prototype.resetStateCounts
     private resetStateCounts(): void {
         const state = this.stateData();
+        
+        console.log("state", state);
+
         if (state.autoRemovalTiming == DAutoRemovalTiming.None) {
-            this._stateTurn = undefined;
+            this._stateTurn = null;
         }
         else if (state.autoRemovalTiming == DAutoRemovalTiming.TurnEnd) {
             if (state.minTurns ==  state.maxTurns) {
@@ -46,6 +49,9 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         else {
             throw new Error("Not implemented");
         }
+
+        
+        console.log("this._stateTurn", this._stateTurn);
     }
 
     
@@ -72,7 +78,6 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
     onAttached(): void {
         this.resetStateCounts();
-        //console.log("LStateTrait_GenericRMMZState");
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
     }
 

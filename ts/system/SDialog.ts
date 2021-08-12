@@ -40,8 +40,7 @@ export class SDialog {
     public submit(): void {
         this._dialogResult = true;
 
-
-        RESystem.dialogContext.closeDialog();
+        RESystem.dialogContext._closeDialog();
         
         if (this._resultCallback) {
             this._resultCallback(this);
@@ -50,7 +49,8 @@ export class SDialog {
 
     public cancel(): void {
         this._dialogResult = false;
-        RESystem.dialogContext.closeDialog();
+
+        RESystem.dialogContext._closeDialog();
         
         if (this._resultCallback) {
             this._resultCallback(this);

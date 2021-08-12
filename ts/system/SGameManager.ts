@@ -30,6 +30,7 @@ import { SGroundRules } from "./SGroundRules";
 import { LBlock } from "ts/objects/LBlock";
 import { LFloorId } from "ts/objects/LFloorId";
 import { UTransfer } from "ts/usecases/UTransfer";
+import { LObjectType } from "ts/objects/LObject";
 
 /**
  */
@@ -45,6 +46,7 @@ export class SGameManager
         RESystem.minimapData = new SMinimapData();
         RESystem.mapManager = new SMapManager();
         RESystem.groundRules = new SGroundRules();
+        RESystem.requestedPlayback = false;
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();
@@ -169,7 +171,7 @@ export class SGameManager
         let contents: any = {};
         contents.system = REGame.system;
         contents.world = REGame.world;
-        contents.map = REGame.map;
+        //contents.map = REGame.map;
         contents.camera = REGame.camera;
         contents.scheduler = REGame.scheduler;
         console.log("contents", contents);
@@ -180,9 +182,12 @@ export class SGameManager
         console.log("extractSaveContents contents", contents);
         REGame.system = contents.system;
         REGame.world = contents.world;
-        REGame.map = contents.map;
         REGame.camera = contents.camera;
         REGame.scheduler = contents.scheduler;
+        
+        const map = REGame.world.objects().find(x => x && x.objectType() == LObjectType.Map);
+        assert(map);
+        REGame.map = map as LMap;
     }
 }
 

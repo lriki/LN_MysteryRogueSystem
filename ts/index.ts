@@ -21,6 +21,8 @@ import './system/internal';
 import './system/SEntityFactory';
 import './rmmz/Scene_Boot';
 import './rmmz/Scene_Map';
+import './rmmz/Scene_Save';
+import './rmmz/Scene_Load';
 import './rmmz/Tilemap'
 import './rmmz/Sprite_Character'
 import './rmmz/Spriteset_Map'

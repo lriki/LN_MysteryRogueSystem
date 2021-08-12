@@ -6,7 +6,8 @@ import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Event {
-        _entityData: DEntitySpawner2 | undefined;
+        //_entityData: DEntitySpawner2 | undefined;
+        _isREEntity: boolean;
         _reEventData: RmmzREEventMetadata | undefined;
 
         isREEntity(): boolean;
@@ -44,12 +45,12 @@ var _Game_Event_setupPageSettings = Game_Event.prototype.setupPageSettings;
 Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
-    this._entityData = SRmmzHelpers.readEntityMetadata(this);
+    this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this);
     this._reEventData = (this._pageIndex >= 0) ? DHelpers.readREEventMetadataFromPage(this.page()) : undefined;
 }
 
 Game_Event.prototype.isREEntity = function(): boolean {
-    return !!this._entityData;
+    return this._isREEntity;
 }
 
 Game_Event.prototype.isREEvent = function() {

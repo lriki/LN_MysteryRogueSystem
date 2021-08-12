@@ -432,7 +432,8 @@ export class UMovement {
 
     public static moveEntity(entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
-        assert(entity.floorId == map.floorId());
+
+        assert(entity.floorId.equals(map.floorId()));
 
         if (!map.isValidPosition(x, y)) {
             return false;   // マップ外への移動
@@ -463,7 +464,7 @@ export class UMovement {
      */
     public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
         const map = REGame.map;
-        assert(entity.floorId == map.floorId());
+        assert(entity.floorId.equals(map.floorId()));
 
         const oldBlock = map.block(entity.x, entity.y);
         const newBlock = map.block(x, y);

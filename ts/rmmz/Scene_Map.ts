@@ -168,3 +168,24 @@ Scene_Map.prototype.isMenuCalled = function() {
 };
 */
 
+
+const _Scene_Map_shouldAutosave = Scene_Map.prototype.shouldAutosave;
+Scene_Map.prototype.shouldAutosave = function() {
+    if (REGame.map.floorId().isEntitySystemMap()) {
+        return true;
+    }
+    else {
+        return _Scene_Map_shouldAutosave.call(this);
+    }
+}
+
+const _Scene_Map_isAutosaveEnabled = Scene_Map.prototype.isAutosaveEnabled;
+Scene_Base.prototype.isAutosaveEnabled = function() {
+    if (REGame.map.floorId().isEntitySystemMap()) {
+        return true;
+    }
+    else {
+        return _Scene_Map_isAutosaveEnabled.call(this);
+    }
+}
+

@@ -444,7 +444,7 @@ export class LMap extends LObject
         //assert(entity.ownerIsMap());
         //entity.clearOwner();
 
-        assert(entity.floorId == this.floorId());
+        assert(entity.floorId.equals(this.floorId()));
         
         if (entity.floorId.isRESystem()) {
             const block = this.block(entity.x, entity.y);
