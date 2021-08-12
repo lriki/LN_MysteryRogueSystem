@@ -30,6 +30,7 @@ s
 ### ビルド実行
 
 ```
+npm install
 ./build.ps1
 ```
 
@@ -42,10 +43,8 @@ npm run test
 npm run test -- -t Basic1
 ```
 
-```
-code --install-extension msjsdiag.debugger-for-chrome
-code --install-extension ruakr.vsc-nwjs
-```
+
+
 
 ```
 ./build.ps1
@@ -54,6 +53,15 @@ code --install-extension ruakr.vsc-nwjs
 ```
 cloc ts --include-lang=TypeScript
 ```
+
+### ブラウザ上でデバッグ実行するには
+
+```
+code --install-extension msjsdiag.debugger-for-chrome
+code --install-extension ruakr.vsc-nwjs
+```
+
+`F1` > `nwjs install` > `0.48.4`
 
 用語整理
 ----------

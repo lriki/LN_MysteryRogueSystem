@@ -102,7 +102,7 @@ export enum DEffectHitType {
 
 
 export enum DEffectFieldScopeRange {
-    Performer,
+    Performer,  // 発動者自身
     Front1,
     StraightProjectile,
     PointProjectile,        // 投石やスカイドラゴンの炎

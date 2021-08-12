@@ -1,4 +1,5 @@
 import { LEntity } from "ts/objects/LEntity";
+import { DSkillDataId } from "../DSkill";
 
 export type DEventId = number;
 
@@ -18,6 +19,13 @@ export interface PutEventArgs {
     actor: LEntity;
 }
 
+export interface SkillEmittedArgs {
+    performer: LEntity;
+    targets: LEntity[];
+    skillId: DSkillDataId;  // Skill ではない場合は 0.
+}
+
+
 // TODO: symbol や string にしたほうがいいかも。
 export interface DBasicEvents {
     /** 何らかの Entity が部屋に侵入した */
@@ -28,5 +36,11 @@ export interface DBasicEvents {
     prePut: DEventId,
     
     effectReacted: DEventId,
+
+    /**
+     * スキル発動後。スキル自体の発動失敗 (MP切れ等) では発生しない。
+     * 発動した場合はターゲットの有無・命中有無にかかわらず、このイベントが発生する。
+     */
+    skillEmitted: DEventId, // SkillEmittedArgs
 }
 

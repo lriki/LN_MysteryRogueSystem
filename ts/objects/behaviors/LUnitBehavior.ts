@@ -133,7 +133,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
-            if (!REGame.eventServer.send(DBasics.events.preWalk, args)) return REResponse.Canceled;
+            if (!REGame.eventServer.publish(DBasics.events.preWalk, args)) return REResponse.Canceled;
 
             const layer = self.getHomeLayer();
             if (UMovement.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
@@ -189,7 +189,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
-            if (!REGame.eventServer.send(DBasics.events.prePut, args)) return REResponse.Canceled;
+            if (!REGame.eventServer.publish(DBasics.events.prePut, args)) return REResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findBehavior(LInventoryBehavior);

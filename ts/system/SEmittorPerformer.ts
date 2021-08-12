@@ -17,6 +17,7 @@ import { UMovement } from "../usecases/UMovement";
 import { DItem } from "ts/data/DItem";
 import { assert } from "ts/Common";
 import { DParameterId } from "ts/data/DParameter";
+import { SkillEmittedArgs } from "ts/data/predefineds/DBasicEvents";
 
 
 export class SEmittorPerformer {
@@ -38,7 +39,7 @@ export class SEmittorPerformer {
 
         const effect = skill.emittor();
         if (effect) {
-            this.performeEffect(context, performer, effect, performer.dir, undefined, []);
+            this.performeEffect(context, performer, effect, performer.dir, undefined, [], skillId);
         }
     }
 
@@ -122,6 +123,14 @@ export class SEmittorPerformer {
         }
     }
 
+    private raiseSkillEmitted(performer: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
+        const args: SkillEmittedArgs = {
+            performer: performer,
+            targets: targets,
+            skillId: skillId,
+        };
+        REGame.eventServer.publish(DBasics.events.skillEmitted, args)
+    }
 
     
     /**
@@ -131,7 +140,14 @@ export class SEmittorPerformer {
      * @param emittor 
      * @param itemData 杖など
      */
-    public performeEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined, selectedItems: LEntity[]): void {
+    public performeEffect(
+        context: SCommandContext,
+        performer: LEntity,
+        emittor: DEmittor,
+        effectDir: number,
+        itemEntity: LEntity | undefined,
+        selectedItems: LEntity[],
+        skillId: DSkillDataId): void {
 
 
         // コストで発動可否判断
@@ -159,6 +175,8 @@ export class SEmittorPerformer {
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
             context.postCall(() => {
                 effectContext.applyWithWorth(context, [performer]);
+
+                if (skillId > 0) this.raiseSkillEmitted(performer, [performer], skillId);
             });
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
@@ -170,9 +188,7 @@ export class SEmittorPerformer {
             //for ()
             {
                 // 攻撃対象決定
-                const front = Helpers.makeEntityFrontPosition(performer, 1);
-                const block = REGame.map.block(front.x, front.y);
-                const target = context.findReactorEntityInBlock(block, DBasics.actions.AttackActionId);
+                const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
                 if (target) {
                     const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.DirectAttack, performer.dir);
                     const effectContext = new SEffectContext(effectSubject);
@@ -189,11 +205,16 @@ export class SEmittorPerformer {
                         }
                         
                         // TODO: SEffectSubject はダミー
-                        context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction);
-
-                        //context.postReaction(DBasics.actions.AttackActionId, reacor, entity, effectContext);
+                        context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
+                            .then(() => {
+                                if (skillId > 0) this.raiseSkillEmitted(performer, [target], skillId);
+                                return true;
+                            });
                     }
-                    
+                }
+                else {
+                    // target が無くても、スキル発動したことは伝える
+                    if (skillId > 0) this.raiseSkillEmitted(performer, [], skillId);
                 }
             }
         }

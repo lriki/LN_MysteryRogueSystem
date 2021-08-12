@@ -65,7 +65,7 @@ export class LEventServer {
         }
     }
 
-    public send(eventId: DEventId, args: any): boolean {
+    public publish(eventId: DEventId, args: any): boolean {
         for (const e of this._entries) {
             if (e.eventId == eventId) {
                 const b = REGame.world.behavior(e.behaviorId);

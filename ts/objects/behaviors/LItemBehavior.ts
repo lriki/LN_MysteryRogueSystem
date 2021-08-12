@@ -61,7 +61,7 @@ export class LItemBehavior extends LBehavior {
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
             for (const reaction of reactions) {
                 const emittor = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, []);
+                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, [], 0);
             }
         }
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
@@ -70,7 +70,7 @@ export class LItemBehavior extends LBehavior {
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
             for (const reaction of reactions) {
                 const emittor = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, activity.objects2());
+                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, activity.objects2(), 0);
             }
         }
 

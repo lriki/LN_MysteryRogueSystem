@@ -12,6 +12,9 @@ import { DEffectCause } from "ts/data/DEffect";
 import { LEntity } from "../LEntity";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { REGame } from "../REGame";
+import { DEventId, SkillEmittedArgs } from "ts/data/predefineds/DBasicEvents";
+import { LEventResult } from "../LEventServer";
+import { UMovement } from "ts/usecases/UMovement";
 
 
 /**
@@ -56,8 +59,29 @@ export class LTrapBehavior extends LBehavior {
 
     onAttached(): void {
         assert(this.ownerEntity().findBehavior(LItemBehavior));
+        REGame.eventServer.subscribe(DBasics.events.skillEmitted, this);
     }
 
+    onDetached(): void {
+        REGame.eventServer.unsubscribe(DBasics.events.skillEmitted, this);
+    }
+
+    onEvent(eventId: DEventId, args: any): LEventResult {
+        if (eventId == DBasics.events.skillEmitted) {
+            const entity = this.ownerEntity();
+            const e = args as SkillEmittedArgs;
+            if (this.checkValidTarget(e.performer) &&           // 攻撃者はこの罠にかかることができる？
+                e.skillId == RESystem.skills.normalAttack &&    // 通常攻撃？
+                e.targets.length == 0 &&                        // 攻撃対象がない？（明示的な空振り）
+                UMovement.checkDiagonalWallCornerCrossing(e.performer, e.performer.dir) &&  // 壁角チェック
+                UMovement.getFrontBlock(e.performer).containsEntity(entity)) {     // 目の前にこの罠がある？
+                // 空振りによる発見
+                this._exposed = true;
+            }
+        }
+        return LEventResult.Pass;
+    }
+    
     private checkValidTarget(entity: LEntity): boolean {
         return entity.getOutwardFactionId() === REData.system.trapTargetFactionId;
     }

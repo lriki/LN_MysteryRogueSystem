@@ -453,7 +453,7 @@ export class SCommandContext
             Log.doCommand("PerformSkill");
             //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
             const effectPerformer = new SEmittorPerformer();
-            effectPerformer.performeEffect(this, performer, emittor, effectDir, itemEntity, selectedItems);
+            effectPerformer.performeEffect(this, performer, emittor, effectDir, itemEntity, selectedItems, 0);
             return REResponse.Succeeded;
         };
         this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));

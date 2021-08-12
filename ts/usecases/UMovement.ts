@@ -90,6 +90,15 @@ export class UMovement {
     }
 
     /**
+     * Entity の正面の Block を取得する
+     */
+    public static getFrontBlock(entity: LEntity): LBlock {
+        const front = Helpers.makeEntityFrontPosition(entity, 1);
+        const block = REGame.map.block(front.x, front.y);
+        return block;
+    }
+
+    /**
      * Entity の周囲 8 マスの Block を取得する。(有効座標のみ)
      */
     public static getAdjacentBlocks(entity: LEntity): LBlock[] {
@@ -480,8 +489,8 @@ export class UMovement {
                 oldRoomId: oldBlock._roomId,
             };
         
-            REGame.eventServer.send(DBasics.events.roomEnterd, args);
-            REGame.eventServer.send(DBasics.events.roomLeaved, args);
+            REGame.eventServer.publish(DBasics.events.roomEnterd, args);
+            REGame.eventServer.publish(DBasics.events.roomLeaved, args);
         }
 
         entity._located = true;
