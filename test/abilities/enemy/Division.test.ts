@@ -6,10 +6,10 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 import { REData } from "ts/data/REData";
 import { UAction } from "ts/usecases/UAction";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -39,7 +39,8 @@ test("Abilities.Enemy.Division", () => {
     // 右を向いて攻撃
     actor1.dir = 6;
     UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
 
     const entityCount = REGame.map.entities().length;
 

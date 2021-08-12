@@ -4,7 +4,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
@@ -39,8 +38,8 @@ test("Trap.Basic", () => {
     
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -70,7 +69,8 @@ test("Trap.Enemy", () => {
     
     // 足踏み
     const dialogContext = RESystem.dialogContext;
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -100,7 +100,8 @@ test("Trap.Attack", () => {
     // 右を向いて攻撃
     actor1.dir = 6;
     UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -120,7 +121,8 @@ test("Trap.Attack", () => {
     // 右を向いて攻撃
     actor1.dir = 6;
     UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -141,7 +143,8 @@ test("Trap.Attack", () => {
     // 右下を向いて攻撃
     actor1.dir = 3;
     UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

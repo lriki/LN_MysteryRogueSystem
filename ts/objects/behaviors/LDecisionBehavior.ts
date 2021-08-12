@@ -32,8 +32,7 @@ export class LDecisionBehavior extends LBehavior {
             behavior._fastforwarding = false;
 
             if (behavior._straightDashing && UMovement.checkDashStopBlock(entity)) {
-                context.postActivity(LActivity.makeMoveToAdjacent(entity, entity.dir));
-                context.postConsumeActionToken(entity);
+                context.postActivity(LActivity.makeMoveToAdjacent(entity, entity.dir).withConsumeAction());
                 return SPhaseResult.Handled;
             }
             else {

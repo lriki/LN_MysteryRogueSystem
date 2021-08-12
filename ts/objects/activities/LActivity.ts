@@ -20,6 +20,7 @@ export class LActivity {
     private _object: LEntityId;     // (目的語)
     private _objects2: LEntityId[];
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
+    private _consumeAction: boolean;
 
     public constructor(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number) {
         this._actionId = actionId;
@@ -27,6 +28,7 @@ export class LActivity {
         this._object = object ? object.entityId() : LEntityId.makeEmpty();
         this._objects2 = [];
         this._direction = dir ?? 0;
+        this._consumeAction = false;
     }
 
     public actionId(): DActionId {
@@ -61,8 +63,21 @@ export class LActivity {
         return this._direction != 0;
     }
 
+    public withConsumeAction(): this {
+        this._consumeAction = true;
+        return this;
+    }
+
+    public isConsumeAction(): boolean {
+        return this._consumeAction;
+    }
+
     //--------------------
     // Utils
+
+    public static make(subject: LEntity): LActivity {
+        return new LActivity(0, subject);
+    }
 
     public static makeDirectionChange(subject: LEntity, dir: number): LActivity {
         return new LActivity(DBasics.actions.DirectionChangeActionId, subject, undefined, dir);

@@ -6,7 +6,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
@@ -43,9 +42,9 @@ test("concretes.item.識別の巻物", () => {
 
     {
         // [読む]
-        const activity = LActivity.makeRead(actor1, item1, [item2]);
+        const activity = LActivity.makeRead(actor1, item1, [item2]).withConsumeAction();
         RESystem.dialogContext.postActivity(activity);
-        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.activeDialog().submit();
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     

@@ -6,7 +6,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
@@ -52,9 +51,9 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
         // [振る]
-        const activity2 = LActivity.makeWave(actor1, item1);
+        const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity2);
-        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.activeDialog().submit();
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -65,9 +64,9 @@ test("Items.Staff.Knockback", () => {
     // 振ってみる (使用回数切れ)
     {
         // [振る]
-        const activity2 = LActivity.makeWave(actor1, item1);
+        const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity2);
-        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.activeDialog().submit();
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -82,9 +81,9 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
         // [投げる]
-        const activity1 = LActivity.makeThrow(actor1, item1);
+        const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity1);
-        RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        RESystem.dialogContext.activeDialog().submit();
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -116,9 +115,9 @@ test("Items.Staff.Identify", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
     // [振る]
-    const activity2 = LActivity.makeWave(actor1, item1);
+    const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity2);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

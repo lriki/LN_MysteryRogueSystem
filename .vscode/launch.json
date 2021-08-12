@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Basic1"
+                "-t", "Survival.FP"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

@@ -132,11 +132,35 @@ export class SCommandContext
     }
 
 
-    
+    postConsumeActionToken(entity: LEntity): void {
+        const behavior = entity.findBehavior(LUnitBehavior);
+        assert(behavior);
+
+        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
+        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
+        assert(entity.actionTokenCount() > 0);
+
+        const m1 = () => {
+            Log.doCommand("ConsumeActionToken");
+
+            this.attemptConsumeActionToken(entity);
+            
+
+            return REResponse.Succeeded;
+        };
+        this._recodingCommandList.push(new RECCMessageCommand("ConsumeActionToken", m1));
+        Log.postCommand("ConsumeActionToken");
+    }
 
     public postActivity(activity: LActivity) {
         const m1 = () => {
             Log.doCommand("Activity");
+
+            if (activity.isConsumeAction()) {
+                const entity = activity.subject();
+                this.attemptConsumeActionToken(entity);
+            }
+
             const r = activity.subject()._sendActivity(this, activity);
             if (r != REResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
                 if (activity.hasObject()) {
@@ -150,6 +174,45 @@ export class SCommandContext
         this._recodingCommandList.push(new RECCMessageCommand("Activity", m1));
 
         Log.postCommand("Activity");
+    }
+
+    private attemptConsumeActionToken(entity: LEntity): void {
+
+        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
+        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
+        assert(entity.actionTokenCount() > 0);
+
+        entity.setActionTokenCount(entity.actionTokenCount() - 1);  // ここで借金することもあり得る
+        
+            // ターンエンド
+            {
+                //const entity = REGame.scheduler.currentTurnEntity();
+                //if (entity) {
+                    // 風来のシレン Wiki の行動順ではそれぞれ Phase が分かれているように見えるが、
+                    // 実際のステート更新は、各 step の終了時で行われるべき。
+                    //
+                    // 例えば倍速 Enemy の場合、次のような順で処理が動いてほしい。
+                    // - 敵行動
+                    // - 混乱解除判定
+                    // - 敵行動
+                    // - 混乱解除判定
+                    // 
+                    // これを阻害する可能性として、Scheduler.md にまとめている「Run のマージ」という仕組みがある。
+                    // ステート更新を SSchedulerPhase にしてしまうと、
+                    // - 敵行動
+                    // - 敵行動
+                    // - 混乱解除判定
+                    // - 混乱解除判定
+                    // という順で実行されてしまう。
+                    //
+                    // そのため onTurnEnd のタイミングでステート更新をかける。
+                    //
+                    entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
+
+                //    REGame.scheduler.clearCurrentTurnEntity();
+                //}
+            }
+    
     }
 
     callSymbol<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym): REResponse {
@@ -365,57 +428,6 @@ export class SCommandContext
     }
     */
 
-    postConsumeActionToken(entity: LEntity): void {
-        const behavior = entity.findBehavior(LUnitBehavior);
-        assert(behavior);
-
-        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
-        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
-        assert(entity.actionTokenCount() > 0);
-
-        const m1 = () => {
-            Log.doCommand("ConsumeActionToken");
-            
-            entity.setActionTokenCount(entity.actionTokenCount() - 1);  // ここで借金することもあり得る
-            entity._actionConsumed = true;
-
-            
-
-            // ターンエンド
-            {
-                //const entity = REGame.scheduler.currentTurnEntity();
-                //if (entity) {
-                    // 風来のシレン Wiki の行動順ではそれぞれ Phase が分かれているように見えるが、
-                    // 実際のステート更新は、各 step の終了時で行われるべき。
-                    //
-                    // 例えば倍速 Enemy の場合、次のような順で処理が動いてほしい。
-                    // - 敵行動
-                    // - 混乱解除判定
-                    // - 敵行動
-                    // - 混乱解除判定
-                    // 
-                    // これを阻害する可能性として、Scheduler.md にまとめている「Run のマージ」という仕組みがある。
-                    // ステート更新を SSchedulerPhase にしてしまうと、
-                    // - 敵行動
-                    // - 敵行動
-                    // - 混乱解除判定
-                    // - 混乱解除判定
-                    // という順で実行されてしまう。
-                    //
-                    // そのため onTurnEnd のタイミングでステート更新をかける。
-                    //
-                    entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
-
-                //    REGame.scheduler.clearCurrentTurnEntity();
-                //}
-            }
-
-            return REResponse.Succeeded;
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("ConsumeActionToken", m1));
-        Log.postCommand("ConsumeActionToken");
-    }
-
     postSkipPart(entity: LEntity): void {
         const behavior = entity.findBehavior(LUnitBehavior);
         assert(behavior);
@@ -424,7 +436,6 @@ export class SCommandContext
             Log.doCommand("SkipPart");
             
             entity.clearActionTokenCount();
-            entity._actionConsumed = true;
 
             return REResponse.Succeeded;
         };

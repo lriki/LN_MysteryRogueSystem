@@ -7,7 +7,6 @@ import { TestEnv } from "./TestEnv";
 import "./Extension";
 import "./../ts/objects/Extensions";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { UAction } from "ts/usecases/UAction";
@@ -44,7 +43,8 @@ test("Combat.DamageAndCollapse", () => {
     const dialogContext = RESystem.dialogContext;
     actor1.dir = 6;
     UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -77,8 +77,8 @@ test("Combat.DamageAndGameover", () => {
     
     // Player を左へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4));
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される
     // onTurnEnd 時までに戦闘不能が回復されなければゲームオーバーとなり、

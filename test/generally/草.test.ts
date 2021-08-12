@@ -8,10 +8,6 @@ import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./../TestEnv";
 import { DEntity, DEntityCreateInfo } from "ts/data/DEntity";
-import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
-import { DialogSubmitMode } from "ts/system/SDialog";
-import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
@@ -42,9 +38,9 @@ test("generally.草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる]
-    const activity = LActivity.makeEat(actor1, item1);
+    const activity = LActivity.makeEat(actor1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

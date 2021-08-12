@@ -4,9 +4,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
-import { REData } from "ts/data/REData";
-import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { DBasics } from "ts/data/DBasics";
 

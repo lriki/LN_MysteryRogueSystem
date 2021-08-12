@@ -3,8 +3,6 @@ import { DBasics } from "ts/data/DBasics";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REGame } from "ts/objects/REGame";
 import { RESystem } from "ts/system/RESystem";
-import { DialogSubmitMode } from "ts/system/SDialog";
-import { SGameManager } from "ts/system/SGameManager";
 import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { SEntityFactory } from "ts/system/SEntityFactory";
@@ -39,8 +37,8 @@ test("Survival.FP", () => {
     //--------------------
     // 移動で FP が減少するか？
 
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
@@ -52,8 +50,8 @@ test("Survival.FP", () => {
     // FP 0 にしてから移動してみる
 
     SDebugHelpers.setFP(actor1, 0);
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
@@ -67,9 +65,9 @@ test("Survival.FP", () => {
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
 
     // [食べる]
-    const activity = LActivity.makeEat(actor1, item1);
+    const activity = LActivity.makeEat(actor1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -89,7 +87,8 @@ test("Survival.FP", () => {
     LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, item2, subject, 4, 5);
 
     // Player は何もしない (FP は 1 減る)
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

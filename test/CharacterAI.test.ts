@@ -3,9 +3,6 @@ import { DBasics } from "ts/data/DBasics";
 import { LBattlerBehavior } from "ts/objects/behaviors/LBattlerBehavior";
 import { REGame } from "ts/objects/REGame";
 import { RESystem } from "ts/system/RESystem";
-import { DialogSubmitMode } from "ts/system/SDialog";
-import { SGameManager } from "ts/system/SGameManager";
-import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
@@ -40,7 +37,8 @@ test("CharacterAI.Moving1", () => {
     
     // 足踏み
     const dialogContext = RESystem.dialogContext;
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
@@ -49,7 +47,8 @@ test("CharacterAI.Moving1", () => {
     expect(enemy1.y).toBe(4);
 
     // 足踏み
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
@@ -79,7 +78,8 @@ test("CharacterAI.AttackOnDiagonalEdge", () => {
     
     // 足踏み
     const dialogContext = RESystem.dialogContext;
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
@@ -108,7 +108,8 @@ test("CharacterAI.ActionPattern", () => {
     
     // 足踏み
     const dialogContext = RESystem.dialogContext;
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    dialogContext.activeDialog().submit();
 
     REGame.world.random().resetSeed(4);     // 炎を吐く乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

@@ -8,7 +8,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
@@ -52,8 +51,8 @@ test("Items.Arrow", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 足元のアイテムを拾う
-    RESystem.dialogContext.postActivity(LActivity.makePick(actor1));
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -65,9 +64,9 @@ test("Items.Arrow", () => {
     expect(item1.queryReactions().includes(DBasics.actions.ThrowActionId)).toBe(true);
     
     // [撃つ]
-    const activity1 = LActivity.makeThrow(actor1, item1);
+    const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity1);
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

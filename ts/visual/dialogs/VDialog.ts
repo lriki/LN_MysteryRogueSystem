@@ -1,5 +1,5 @@
 import { assert } from "ts/Common";
-import { DialogSubmitMode, LDialogResultCallback, SDialog } from "ts/system/SDialog";
+import { SDialog } from "ts/system/SDialog";
 import { RESystem } from "ts/system/RESystem";
 import { REVisual } from "../REVisual";
 import { DialogResultCallback, REDialogVisualNavigator } from "./REDialogVisual";
@@ -42,7 +42,7 @@ export class VDialog {
 
     protected submit() {
         //this._dialogResult = true;
-        this._baseModel.submit(DialogSubmitMode.Close);
+        this._baseModel.submit();
         //REVisual.manager?._dialogNavigator.pop();
 
         //if (this._resultCallback) {

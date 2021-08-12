@@ -4,11 +4,6 @@ import { SDialogContext } from "./SDialogContext";
 
 export type LDialogResultCallback = (result: any) => void;
 
-export enum DialogSubmitMode {
-    Close,
-    ConsumeAction,
-}
-
 
 
 /**
@@ -42,11 +37,11 @@ export class SDialog {
         return true;
     }
 
-    public submit(mode: DialogSubmitMode): void {
+    public submit(): void {
         this._dialogResult = true;
 
 
-        RESystem.dialogContext.closeDialog(mode);
+        RESystem.dialogContext.closeDialog();
         
         if (this._resultCallback) {
             this._resultCallback(this);
@@ -55,7 +50,7 @@ export class SDialog {
 
     public cancel(): void {
         this._dialogResult = false;
-        RESystem.dialogContext.closeDialog(DialogSubmitMode.Close);
+        RESystem.dialogContext.closeDialog();
         
         if (this._resultCallback) {
             this._resultCallback(this);

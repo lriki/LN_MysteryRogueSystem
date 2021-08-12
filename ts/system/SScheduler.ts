@@ -294,9 +294,6 @@ export class SScheduler
                     // まだ iterationCount が残っているので、同じ Step を再び実行する
                 }
 
-                if (step.unit.entityId.hasAny()) {
-                    REGame.world.entity(step.unit.entityId)._actionConsumed = false;
-                }
             }
             else {
                 // 向き変更のみなど、行動トークンは消費しなかった

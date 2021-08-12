@@ -7,7 +7,6 @@ import { UMovement } from "ts/usecases/UMovement";
 import { Helpers } from "ts/system/Helpers";
 import { RESystem } from "ts/system/RESystem";
 import { TileShape } from "ts/objects/LBlock";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { FMap, FSector } from "ts/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/floorgen/FMapBuilder";
@@ -168,8 +167,8 @@ test("MoveDiagonal_CollideWalls", () => {
     
     // player を右下へ移動
     const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 3));
-    dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 3).withConsumeAction());
+    dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     

@@ -1,6 +1,7 @@
 
+import { assert } from "ts/Common";
+import { LActivity } from "ts/objects/activities/LActivity";
 import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { VDialog } from "./VDialog";
 
 export class REEventExecutionDialogVisual extends VDialog {
@@ -20,7 +21,10 @@ export class REEventExecutionDialogVisual extends VDialog {
         // マップ遷移後にもイベント実行を続けることもあるので、
         // $gameMap.event() は参照せずに $gameMap.isEventRunning() で実行中かを判断する。
         if (!$gameMap.isEventRunning()) {
-            this._model.submit(DialogSubmitMode.ConsumeAction);
+            const entity = this.dialogContext().causeEntity();
+            assert(entity);
+            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+            this.submit();
         }
     }
 }

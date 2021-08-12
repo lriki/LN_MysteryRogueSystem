@@ -247,7 +247,6 @@ export class LEntity extends LObject
     // それらすべての関数で EffectContext を持ちまわるのはかなり煩雑なコードになってしまう。
     _effectResult: LEffectResult = new LEffectResult();
 
-    _actionConsumed: boolean = false;
 
     _located: boolean = false;
 

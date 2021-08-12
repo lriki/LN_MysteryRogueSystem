@@ -9,7 +9,6 @@ import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { DBasics } from "ts/data/DBasics";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
 
@@ -96,7 +95,7 @@ test("Basic1", () => {
     
         // 向き変更。行動を消費せず Dialog を閉じる
         dialogContext.postActivity(LActivity.makeDirectionChange(actor1, 9));
-        dialogContext.activeDialog().submit(DialogSubmitMode.Close);
+        dialogContext.activeDialog().submit();
     
         // この時点では向きは変更されていない
         expect(actor1.dir != 9).toBe(true);
@@ -116,8 +115,8 @@ test("Basic1", () => {
 
     // 一歩下に移動してみる (ターン消費あり)
     {
-        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 2));
-        dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 2).withConsumeAction());
+        dialogContext.activeDialog().submit();
     
         // シミュレーション実行。実際に移動が行われる
         RESystem.scheduler.stepSimulation();
@@ -255,8 +254,8 @@ test("Basic.TurnOrderTable", () => {
     // 移動量から実際に行動した数を判断する
     {
         // player を右へ移動
-        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
-        dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+        dialogContext.activeDialog().submit();
     
         // AI行動決定
         RESystem.scheduler.stepSimulation();
@@ -277,8 +276,8 @@ test("Basic.TurnOrderTable", () => {
     // 2ターン目
     {
         // player を右へ移動
-        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
-        dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+        dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+        dialogContext.activeDialog().submit();
     
         // AI行動決定
         RESystem.scheduler.stepSimulation();

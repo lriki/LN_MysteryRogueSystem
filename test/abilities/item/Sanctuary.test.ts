@@ -6,8 +6,6 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { DialogSubmitMode } from "ts/system/SDialog";
-import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
 import { TileShape } from "ts/objects/LBlock";
 import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/system/SEffectContext";
@@ -44,7 +42,7 @@ test("Items.Sanctuary", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // 足踏み
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -53,8 +51,8 @@ test("Items.Sanctuary", () => {
     expect(enemy1.y).toBe(11);
     
     // player を右へ移動。聖域の上に乗る
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6));
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -68,7 +66,8 @@ test("Items.Sanctuary", () => {
     LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, enemy1, new SEffectSubject(actor1), 4, 10);
 
     // 足踏み
-    RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     

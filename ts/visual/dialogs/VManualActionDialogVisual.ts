@@ -10,7 +10,6 @@ import { SDialogContext } from "ts/system/SDialogContext";
 import { LFeetDialog } from "ts/system/dialogs/SFeetDialog";
 import { SMainMenuDialog } from "ts/system/dialogs/SMainMenuDialog";
 import { VDialog } from "./VDialog";
-import { DialogSubmitMode } from "ts/system/SDialog";
 import { UMovement } from "ts/usecases/UMovement";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { REData } from "ts/data/REData";
@@ -80,7 +79,8 @@ export class VManualActionDialogVisual extends VDialog {
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
             entity.getBehavior(LUnitBehavior)._fastforwarding = true;
-            this._model.submit(DialogSubmitMode.ConsumeAction);
+            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+            this._model.submit();
             return;
         }
 
@@ -117,7 +117,7 @@ export class VManualActionDialogVisual extends VDialog {
                     }
                     else {
                         this.openSubDialog(new LFeetDialog(targetEntity), d => {
-                            if (d.isSubmitted()) this._model.submit(DialogSubmitMode.Close);
+                            if (d.isSubmitted()) this._model.submit();
                         });
                     }
                     return;
@@ -223,7 +223,10 @@ export class VManualActionDialogVisual extends VDialog {
         else if (Input.isTriggered("menu")) {
             SoundManager.playOk();
             this.openSubDialog(new SMainMenuDialog(entity), d => {
-                if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
+                if (d.isSubmitted()) {
+                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+                    this._model.submit();
+                }
             });
             return;
         }
@@ -258,7 +261,10 @@ export class VManualActionDialogVisual extends VDialog {
         else if (Input.isTriggered("menu")) {
             this.endDirectionSelecting();
             this.openSubDialog(new SMainMenuDialog(entity), d => {
-                if (d.isSubmitted()) this._model.submit(DialogSubmitMode.ConsumeAction);
+                if (d.isSubmitted()) {
+                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+                    this._model.submit();
+                }
             });
             return;
         }
@@ -320,8 +326,8 @@ export class VManualActionDialogVisual extends VDialog {
                 behavior._straightDashing = true;
             }
 
-            context.postActivity(LActivity.makeMoveToAdjacent(entity, dir));
-            this._model.submit(DialogSubmitMode.ConsumeAction);
+            context.postActivity(LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction());
+            this._model.submit();
 
             // TODO: test
             //SceneManager._scene.executeAutosave();
@@ -337,10 +343,12 @@ export class VManualActionDialogVisual extends VDialog {
         // TODO: NPC 話かけ
         
         // [通常攻撃] スキル発動
+        // TODO: ↓ Activity にまとめていいかも
         SEmittorPerformer.makeWithSkill(entity, RESystem.skills.normalAttack)
             .performe(context.commandContext());
         
-        this._model.submit(DialogSubmitMode.ConsumeAction);
+        context.postActivity(LActivity.make(entity).withConsumeAction());
+        this._model.submit();
         
         return true;
     }
