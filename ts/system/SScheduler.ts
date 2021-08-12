@@ -128,8 +128,25 @@ export class SScheduler
                 break;
             }
 
-            // Dialog の処理はイベント実行よりも優先する。
-            // 行商人の処理など。
+
+            // Dialog 表示中でも update を抜けた時に詰まれているコマンドは実行されるようにしたい。
+            // 向き変更なども Activity 化しておかないと、行動履歴が付けづらい。
+            // そのため Dialog の update 前に Command 実行しておく。
+            if (commandContext.isRunning()) {
+                commandContext._processCommand();
+
+                if (!commandContext.isRunning()) {
+                    // _processCommand() の後で isRunning が落ちていたら、
+                    // 実行中コマンドリストの実行が完了した。
+                    this.onCommandChainConsumed();
+                }
+
+                RESystem.sequelContext.attemptFlush();
+                continue;
+            }
+            
+
+            let continue_cc = true;
             if (dialogContext._hasDialogModel()) {
                 dialogContext._update();
 
@@ -146,21 +163,12 @@ export class SScheduler
                     if (entity) {
                         entity.immediatelyAfterAdjacentMoving = false;
                     }
+                    continue_cc = false;
                 }
             }
-
-            if (commandContext.isRunning()) {
-                commandContext._processCommand();
-
-                if (!commandContext.isRunning()) {
-                    // _processCommand() の後で isRunning が落ちていたら、
-                    // 実行中コマンドリストの実行が完了した。
-                    this.onCommandChainConsumed();
-                }
-
-                RESystem.sequelContext.attemptFlush();
-            }
-            else {
+            
+            if (continue_cc)
+            {
                 // 実行予約が溜まっているなら submit して実行開始する。
                 // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
                 //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
@@ -179,6 +187,7 @@ export class SScheduler
 
         this._occupy = false;
     }
+    
 
     private stepSimulationInternal(): void {
         switch (this._phase) {

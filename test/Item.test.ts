@@ -109,7 +109,7 @@ test("PickAtMoved", () => {
 
     // 足元のアイテムを拾う
     dialogContext.postActivity(LActivity.makePick(actor1));
-    dialogContext.postReopen();
+    //dialogContext.postReopen();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

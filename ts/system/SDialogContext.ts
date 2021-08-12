@@ -110,6 +110,7 @@ export class SDialogContext
     /**
      * 移動後のアイテム拾いや矢弾の装備など、ターンを消費しないが、一度コマンドチェーンを実行したいときに使う。
      */
+    /*
     public postReopen(): void {
         const entity = this.causeEntity();
         const model = this.activeDialog();
@@ -119,6 +120,7 @@ export class SDialogContext
         assert(entity);
         this._commandContext.openDialog(entity, model, true);
     }
+    */
 
     setCauseEntity(value: LEntity) {
         this._causeEntity = value;

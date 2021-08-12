@@ -86,7 +86,6 @@ export class VManualActionDialogVisual extends VDialog {
         }
 
         if (Input.isTriggered("pageup")) {
-            console.log("pageup");
             entity.addState(REData.getStateFuzzy("kState_UTアイテム擬態").id);
             this._model.consumeAction();
             this._model.submit();
@@ -114,7 +113,7 @@ export class VManualActionDialogVisual extends VDialog {
     
     
                         // コマンドチェーンを動かす
-                        context.postReopen();
+                        //context.postReopen();
                     }
                     else {
                         this.openSubDialog(new LFeetDialog(targetEntity), d => {
@@ -219,7 +218,7 @@ export class VManualActionDialogVisual extends VDialog {
             this._updateMode = UpdateMode.DirSelecting;
             REGame.map.increaseRevision();
             REVisual.guideGrid?.setVisible(true);
-            entity.dir = UMovement.getNextAdjacentEntityDirCW(entity);
+            context.postActivity(LActivity.makeDirectionChange(entity, UMovement.getNextAdjacentEntityDirCW(entity)));
         }
         else if (Input.isTriggered("menu")) {
             SoundManager.playOk();
@@ -268,7 +267,7 @@ export class VManualActionDialogVisual extends VDialog {
             
             if (this._waitCount <= 0 && Input.dir8 != 0 && Input.dir8 != entity.dir) {
                 //context.closeDialog(false); // 行動消費無しで close
-                entity.dir = Input.dir8;
+                context.postActivity(LActivity.makeDirectionChange(entity, Input.dir8));
                 REGame.map.increaseRevision();
                 this._waitCount = 10;
             }
@@ -309,7 +308,7 @@ export class VManualActionDialogVisual extends VDialog {
         if (dir != 0) {
             // postActivity(LDirectionChangeActivity) で向きを変更する場合、コマンドチェーンを実行する必要がある。
             // 今はそこまで必要ではないので、直接変更してしまう。
-            entity.dir = dir;
+            context.postActivity(LActivity.makeDirectionChange(entity, dir));
         }
 
         if (this.isMoveButtonPressed() &&

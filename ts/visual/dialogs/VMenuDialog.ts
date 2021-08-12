@@ -57,7 +57,7 @@ export class VMainMenuDialog extends VDialog {
         else {
             this.commandContext().postMessage(tr2("足元には何もない。"));
             this.cancel();
-            this.dialogContext().postReopen();
+            //this.dialogContext().postReopen();
         }
     }
 

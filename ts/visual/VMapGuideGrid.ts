@@ -12,6 +12,7 @@ export class VMapGuideGrid {
     private _mapHeight: number = 0;
     private _visible: boolean = false;
     private _mapdataRevision: number = 0;
+    private _entityDir: number = 0;
 
     public setVisible(v: boolean): void {
         this._visible = v;
@@ -23,9 +24,21 @@ export class VMapGuideGrid {
     }
 
     public update(): void {
+        let refresh = false;
+
+        const entity = REGame.camera.focusedEntity();
         if (this._mapdataRevision != REGame.map.mapdataRevision()) {
-            this.refresh();
             this._mapdataRevision = REGame.map.mapdataRevision();
+            refresh = true;
+        }
+
+        if (entity && this._entityDir != entity.dir) {
+            this._entityDir = entity.dir;
+            refresh = true;
+        }
+
+        if (refresh) {
+            this.refresh();
         }
     }
 
