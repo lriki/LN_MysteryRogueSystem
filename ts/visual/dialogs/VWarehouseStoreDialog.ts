@@ -5,6 +5,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 export class VWarehouseStoreDialog extends VDialog {
     _model: SWarehouseStoreDialog;
@@ -65,7 +66,7 @@ export class VWarehouseStoreDialog extends VDialog {
 
     private handleStore(items: LEntity[]): void {
         this._model.setResultItems(items);
-        this._model.submit();
+        this._model.submit(DialogSubmitMode.Close);
     }
 
     private activateItemWindow() {

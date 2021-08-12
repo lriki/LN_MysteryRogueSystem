@@ -96,7 +96,7 @@ test("Basic1", () => {
     
         // 向き変更。行動を消費せず Dialog を閉じる
         dialogContext.postActivity(LActivity.makeDirectionChange(actor1, 9));
-        dialogContext.activeDialog().submit();
+        dialogContext.activeDialog().submit(DialogSubmitMode.Close);
     
         // この時点では向きは変更されていない
         expect(actor1.dir != 9).toBe(true);

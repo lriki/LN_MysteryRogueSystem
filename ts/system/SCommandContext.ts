@@ -133,22 +133,6 @@ export class SCommandContext
 
 
     
-    /**
-     * カスタムの RE-Command のように、プラグインとして事前定義できないコマンド実行 Action の呼び出し
-     */
-    postActionOneWay(actionId: number, actor: LEntity, reactor: LEntity | undefined, effectContext: SEffectContext | undefined, args?: any) {
-        assert(actionId > 0);
-        
-        const actualCommand = new RECommand(actionId, actor, reactor, effectContext, args);
-
-        const m3 = () => {
-            Log.doCommand("Action");
-            return actor._sendAction(this, actualCommand);
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("sendAction", m3));
-
-        Log.postCommand("ActionOneWay");
-    }
 
     public postActivity(activity: LActivity) {
         const m1 = () => {

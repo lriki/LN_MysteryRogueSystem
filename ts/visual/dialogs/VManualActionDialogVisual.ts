@@ -80,17 +80,17 @@ export class VManualActionDialogVisual extends VDialog {
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
             entity.getBehavior(LUnitBehavior)._fastforwarding = true;
-            this._model.consumeAction();
-            this._model.submit();
+            this._model.submit(DialogSubmitMode.ConsumeAction);
             return;
         }
 
+        /*
         if (Input.isTriggered("pageup")) {
             entity.addState(REData.getStateFuzzy("kState_UTアイテム擬態").id);
-            this._model.consumeAction();
-            this._model.submit();
+            this._model.submit(DialogSubmitMode.ConsumeAction);
             return;
         }
+        */
 
 
         
@@ -117,7 +117,7 @@ export class VManualActionDialogVisual extends VDialog {
                     }
                     else {
                         this.openSubDialog(new LFeetDialog(targetEntity), d => {
-                            if (d.isSubmitted()) this._model.submit();
+                            if (d.isSubmitted()) this._model.submit(DialogSubmitMode.Close);
                         });
                     }
                     return;
@@ -321,8 +321,7 @@ export class VManualActionDialogVisual extends VDialog {
             }
 
             context.postActivity(LActivity.makeMoveToAdjacent(entity, dir));
-            this._model.consumeAction();
-            this._model.submit();
+            this._model.submit(DialogSubmitMode.ConsumeAction);
 
             // TODO: test
             //SceneManager._scene.executeAutosave();
@@ -341,8 +340,7 @@ export class VManualActionDialogVisual extends VDialog {
         SEmittorPerformer.makeWithSkill(entity, RESystem.skills.normalAttack)
             .performe(context.commandContext());
         
-        this._model.consumeAction();
-        this._model.submit();
+        this._model.submit(DialogSubmitMode.ConsumeAction);
         
         return true;
     }

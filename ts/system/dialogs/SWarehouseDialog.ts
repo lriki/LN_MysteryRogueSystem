@@ -95,7 +95,6 @@ export class SWarehouseDialog extends SDialog {
                 });
         })
 
-        this.consumeAction();
-        this.submit();
+        this.submit(DialogSubmitMode.ConsumeAction);
     }
 }

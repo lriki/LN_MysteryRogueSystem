@@ -41,19 +41,12 @@ export class SDialog {
     public isVisualIntegration(): boolean {
         return true;
     }
-    
-    consumeAction(): void {
-        return RESystem.dialogContext.consumeAction();
-    }
 
-    public submit(mode?: DialogSubmitMode): void {
+    public submit(mode: DialogSubmitMode): void {
         this._dialogResult = true;
 
-        if (mode == DialogSubmitMode.ConsumeAction) {
-            this.consumeAction();
-        } 
 
-        RESystem.dialogContext.closeDialog();
+        RESystem.dialogContext.closeDialog(mode);
         
         if (this._resultCallback) {
             this._resultCallback(this);
@@ -62,7 +55,7 @@ export class SDialog {
 
     public cancel(): void {
         this._dialogResult = false;
-        RESystem.dialogContext.closeDialog();
+        RESystem.dialogContext.closeDialog(DialogSubmitMode.Close);
         
         if (this._resultCallback) {
             this._resultCallback(this);

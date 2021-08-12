@@ -6,6 +6,7 @@ import { RESystem } from "ts/system/RESystem";
 import { VDialog } from "./VDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 /**
  * [足元]
@@ -59,6 +60,6 @@ export class VFeetDialog extends VDialog {
         const activity = new LActivity(actionId, entity, this._model.targetEntity(), entity.dir);
 
         RESystem.dialogContext.postActivity(activity);
-        this._model.submit();
+        this._model.submit(DialogSubmitMode.Close);
     }
 }

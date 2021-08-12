@@ -6,7 +6,7 @@ import { SCommandContext } from "./SCommandContext";
 import { RERecordingCommandType } from "./RECommandRecorder";
 import { RESystem } from "./RESystem";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { SDialog } from "./SDialog";
+import { DialogSubmitMode, SDialog } from "./SDialog";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 
 export class SDialogContext
@@ -59,50 +59,39 @@ export class SDialogContext
 
     public postActivity(activity: LActivity): void {
         this._commandContext.postActivity(activity);
-    }
 
-    // deprecated: レコーディングもあわせて postActivity へ
-    postAction(actionId: number, actor: LEntity, reactor: LEntity | undefined, args?: any) {
-        
-
-        //this._commandContext.postActionTwoWay(actionId, actor, reactor, args);
-        this._commandContext.postActionOneWay(actionId, actor, reactor, undefined, args);
-        
         if (REGame.recorder.isRecording()) {
             REGame.recorder.push({
-                type: RERecordingCommandType.Action,
-                data: {
-                    actionId: actionId,
-                    actorEntityId: actor.entityId(),
-                    reactorEntityId: (reactor) ? reactor.entityId() : 0,
-                    args: args,
-                }
+                type: RERecordingCommandType.Activity,
+                activity: activity,
             });
         }
-        
     }
-
-    consumeAction(): void {
-        if (this._causeEntity) {
-            // RMMZイベント起動Dialog では、causeEntity が「階段Entity」等になることがある。
-            // 行動順が回らない Entity の ActionToken を消費することはできないのでガードする。
-            if (this._causeEntity.findBehavior(LUnitBehavior)) {
-                this._commandContext.postConsumeActionToken(this._causeEntity);
-            }
+    
+    closeDialog(mode: DialogSubmitMode) {
+        
+        if (mode == DialogSubmitMode.ConsumeAction) {
+            if (this._causeEntity) {
+                // RMMZイベント起動Dialog では、causeEntity が「階段Entity」等になることがある。
+                // 行動順が回らない Entity の ActionToken を消費することはできないのでガードする。
+                if (this._causeEntity.findBehavior(LUnitBehavior)) {
+                    this._commandContext.postConsumeActionToken(this._causeEntity);
+                }
+                
+                /*
+                if (REGame.recorder.isRecording()) {
+                    REGame.recorder.push({
+                        type: RERecordingCommandType.ConsumeActionToken,
+                        data: {
+                            entityId: this._causeEntity.entityId(),
+                        }
+                    });
+                }
+                */
             
-            if (REGame.recorder.isRecording()) {
-                REGame.recorder.push({
-                    type: RERecordingCommandType.ConsumeActionToken,
-                    data: {
-                        entityId: this._causeEntity.entityId(),
-                    }
-                });
             }
-        
         }
-    }
 
-    closeDialog() {
         this.pop();
         RESystem.integration.onDialogClosed(this);
     }

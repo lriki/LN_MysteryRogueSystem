@@ -3,6 +3,7 @@ import { SWarehouseWithdrawDialog } from "ts/system/dialogs/SWarehouseWithdrawDi
 import { LEntity } from "ts/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase } from "./VItemListDialogBase";
+import { DialogSubmitMode } from "ts/system/SDialog";
 
 export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     private _model: SWarehouseWithdrawDialog;
@@ -21,6 +22,6 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     
     private handleWithdraw(items: LEntity[]): void {
         this._model.setResultItems(items);
-        this._model.submit();
+        this._model.submit(DialogSubmitMode.Close);
     }
 }

@@ -8,23 +8,16 @@ import { REGame } from 'ts/objects/REGame';
 import { LMap } from 'ts/objects/LMap';
 import { RECommand } from './RECommand';
 import { RESystem } from './RESystem';
+import { LActivity } from 'ts/objects/activities/LActivity';
 
 export enum RERecordingCommandType {
-    Action = 1,
-    Sequel = 2,
-    ConsumeActionToken = 3,
+    Activity = 1,
+    CloseMainDialog = 2,    // CommandChain 内部から Open された Dialog が Close されたとき。
 }
 
 export interface RERecordingCommand {
     type: RERecordingCommandType,
-    data: any,
-}
-
-export interface RERecordingCommandArgs_Action {
-    actionId: DActionId,
-    actorEntityId: LEntityId,
-    reactorEntityId: LEntityId,
-    args: any,
+    activity: LActivity | null,
 }
 
 export class RECommandRecorder {
@@ -83,6 +76,21 @@ export class RECommandRecorder {
 
     private doCommand(dialog: SCommandPlaybackDialog, cmd: RERecordingCommand): boolean {
         switch (cmd.type) {
+            case RERecordingCommandType.Activity: {
+                assert(cmd.activity);
+                RESystem.commandContext.postActivity(cmd.activity);
+                return true;
+            }
+            case RERecordingCommandType.CloseMainDialog: {
+                return false;
+            }
+            default:
+                throw new Error("Unreachable.");
+                break;
+        }
+
+        /*
+        switch (cmd.type) {
             case RERecordingCommandType.Action: {
                 const actionId: number = cmd.data.actionId;
                 const actorEntityId = new LEntityId(cmd.data.actorEntityId._index, cmd.data.actorEntityId._key);
@@ -109,5 +117,6 @@ export class RECommandRecorder {
                 throw new Error();
                 break;
         }
+        */
     }
 }
