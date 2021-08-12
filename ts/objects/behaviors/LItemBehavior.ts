@@ -57,20 +57,21 @@ export class LItemBehavior extends LBehavior {
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         if (activity.actionId() == DBasics.actions.WaveActionId) {
             const subject = activity.subject();
-            const effectPerformer = new SEmittorPerformer();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
             for (const reaction of reactions) {
-                const emittor = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, [], 0);
+                SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
+                    .setItemEntity(self)
+                    .performe(context);
             }
         }
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
             const subject = activity.subject();
-            const effectPerformer = new SEmittorPerformer();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
             for (const reaction of reactions) {
-                const emittor = REData.getEmittorById(reaction.emittingEffect);
-                effectPerformer.performeEffect(context, subject, emittor, subject.dir, self, activity.objects2(), 0);
+                SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
+                    .setItemEntity(self)
+                    .setSelectedTargetItems(activity.objects2())
+                    .performe(context);
             }
         }
 
@@ -107,32 +108,26 @@ export class LItemBehavior extends LBehavior {
     }
     
     private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {
-
         const item = this.ownerEntity().getBehavior(LItemBehavior);
-        const itemData = item.itemData();
         const emittor = self.data().effectSet.effect(cause);
         
         if (emittor) {
-            context.postPerformEmittor(target, emittor, effectDir, self, []);
-
-            /*
-            console.log("applyEffect", emittor);
-
-            const effectSubject = new SEffectorFact(subject.entity(), emittor.effect, SEffectIncidentType.IndirectAttack);
-            const effectContext = new SEffectContext(effectSubject);
-    
-            context.postAnimation(target, itemData.animationId, true);
-    
-            // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
             context.postCall(() => {
-                effectContext.applyWithWorth(context, [target]);
+                SEmittorPerformer.makeWithEmitor(target, emittor)
+                    .setItemEntity(self)
+                    .setDffectDirection(effectDir)
+                    .performe(context);
             });
-            */
         }
         
         const skill = self.data().effectSet.skill(cause);
         if (skill) {
-            context.postPerformSkill(subject.entity(), skill.id, self);
+            context.postCall(() => {
+                SEmittorPerformer.makeWithSkill(subject.entity(), skill.id)
+                    .setItemEntity(self)
+                    .setDffectDirection(effectDir)
+                    .performe(context);
+            });
         }
     }
 

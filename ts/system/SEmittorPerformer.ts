@@ -22,12 +22,89 @@ import { SkillEmittedArgs } from "ts/data/predefineds/DBasicEvents";
 
 export class SEmittorPerformer {
 
+    /** 発動者 */
+    private _performer: LEntity;
+
+    /** スキルとして発動する場合のスキルID. スキルではない場合 0. */
+    private _skillId: DSkillDataId = 0;
+
+    /** 発動する効果 */
+    private _emittor: DEmittor | undefined;
+
+    /** 発動元となったアイテム (杖など) */
+    private _itemEntity: LEntity | undefined;
+
+    /** Emittor がアイテムを対象とする場合、その対象となるアイテム */
+    private _selectedTargetItems: LEntity[] = [];
+
+    /** 対象に効果を適用する際の基準となる向き。ノックバック方向等に使用する。0 の場合、performer の向きを採用する。 */
+    private _effectDirection = 0;
+
+    private constructor(performer: LEntity) {
+        this._performer = performer;
+    }
+
+    public static makeWithSkill(performer: LEntity, skillId: DSkillDataId): SEmittorPerformer {
+        assert(skillId > 0);
+        const i = new SEmittorPerformer(performer);
+        i._skillId = skillId;
+        return i;
+    }
+
+    public static makeWithEmitor(performer: LEntity, emittor: DEmittor): SEmittorPerformer {
+        const i = new SEmittorPerformer(performer);
+        i._emittor = emittor;
+        return i;
+    }
+
+    public setSkillId(value: DSkillDataId): this {
+        this._skillId = value;
+        return this;
+    }
+
+    public setEmittor(value: DEmittor): this {
+        this._emittor = value;
+        return this;
+    }
+
+    public setItemEntity(value: LEntity): this {
+        this._itemEntity = value;
+        return this;
+    }
+
+    public setSelectedTargetItems(value: LEntity[]): this {
+        this._selectedTargetItems = value;
+        return this;
+    }
+
+    public setDffectDirection(value: number): this {
+        this._effectDirection = value;
+        return this;
+    }
+
+    public performe(context: SCommandContext): void {
+        if (this._skillId > 0) {
+            this.performeSkill(context, this._performer, this._skillId);
+        }
+        else if (this._emittor) {
+            this.performeEffect(context, this._performer, this._emittor, (this._effectDirection > 0) ? this._effectDirection : this._performer.dir, this._itemEntity,  this._selectedTargetItems, 0);
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
+    }
+
+
+
+
+
+
     /**
      * スキル発動
      * 
      * 単純にスキルを発動する。地形や相手の状態による成否はこの中で判断する。
      */
-    public performeSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId, item: LEntity | undefined): void {
+    private performeSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId): void {
 
         const skill = REData.skills[skillId];
         ///const effector = new SEffectorFact(entity, skill.effect);
@@ -140,7 +217,7 @@ export class SEmittorPerformer {
      * @param emittor 
      * @param itemData 杖など
      */
-    public performeEffect(
+    private performeEffect(
         context: SCommandContext,
         performer: LEntity,
         emittor: DEmittor,

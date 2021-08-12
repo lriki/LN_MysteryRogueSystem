@@ -13,6 +13,7 @@ import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
 import { LActivity } from "./activities/LActivity";
+import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 
 /*
     - 逃げるAIは全く別の CharacterAI作ったほうがいいかもしれない。
@@ -420,12 +421,7 @@ export class LCharacterAI {
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
                 if (UAction.checkEntityWithinSkillActionRange(self, this._requiredSkillAction)) {
-                    //const dir = SAIHelper.entityDistanceToDir(self, target);
-                    
-                    //context.postActivity(LDirectionChangeActivity.make(self, dir));
-    
-                    //context.postPerformSkill(self, RESystem.skills.normalAttack);
-                    context.postPerformSkill(self, this._requiredSkillAction.action.skillId, undefined);
+                    SEmittorPerformer.makeWithSkill(self, this._requiredSkillAction.action.skillId).performe(context);
                     context.postConsumeActionToken(self);
                     return SPhaseResult.Handled;
                 }

@@ -10,6 +10,7 @@ import { SDebugHelpers } from "ts/system/SDebugHelpers";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { UAction } from "ts/usecases/UAction";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -42,7 +43,7 @@ test("Combat.DamageAndCollapse", () => {
     // 右を向いて攻撃
     const dialogContext = RESystem.dialogContext;
     actor1.dir = 6;
-    dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack, undefined);
+    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
     dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

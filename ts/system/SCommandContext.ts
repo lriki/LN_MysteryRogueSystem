@@ -447,30 +447,7 @@ export class SCommandContext
         this._recodingCommandList.push(new RECCMessageCommand("SkipPart", m1));
         Log.postCommand("SkipPart");
     }
-
-    postPerformEmittor(performer: LEntity, emittor: DEmittor, effectDir: number, itemEntity: LEntity | undefined, selectedItems: LEntity[]): void {
-        const m1 = () => {
-            Log.doCommand("PerformSkill");
-            //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
-            const effectPerformer = new SEmittorPerformer();
-            effectPerformer.performeEffect(this, performer, emittor, effectDir, itemEntity, selectedItems, 0);
-            return REResponse.Succeeded;
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));
-        Log.postCommand("PerformSkill");
-    }
-
-    postPerformSkill(performer: LEntity, skillId: DSkillDataId, item: LEntity | undefined): void {
-        const m1 = () => {
-            Log.doCommand("PerformSkill");
-            //RESystem.skillBehaviors[skillId].onPerforme(skillId, performer, this);
-            const effectPerformer = new SEmittorPerformer();
-            effectPerformer.performeSkill(this, performer, skillId, item);
-            return REResponse.Succeeded;
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("PerformSkill", m1));
-        Log.postCommand("PerformSkill");
-    }
+    
 
     // Skill や Item などの効果適用。
     // MP cost など発動可能判定は呼び出す前に済ませること。

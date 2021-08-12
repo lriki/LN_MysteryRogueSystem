@@ -11,6 +11,8 @@ import { LActivity } from "ts/objects/activities/LActivity";
 import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { DBasics } from "ts/data/DBasics";
 import { TileShape } from "ts/objects/LBlock";
+import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
+import { UAction } from "ts/usecases/UAction";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -97,7 +99,7 @@ test("Trap.Attack", () => {
     
     // 右を向いて攻撃
     actor1.dir = 6;
-    RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack, undefined);
+    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -117,7 +119,7 @@ test("Trap.Attack", () => {
 
     // 右を向いて攻撃
     actor1.dir = 6;
-    RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack, undefined);
+    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -138,7 +140,7 @@ test("Trap.Attack", () => {
 
     // 右下を向いて攻撃
     actor1.dir = 3;
-    RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack, undefined);
+    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

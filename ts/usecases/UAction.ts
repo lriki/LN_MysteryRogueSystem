@@ -3,6 +3,7 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DEmittor, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DHelpers } from "ts/data/DHelper";
+import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { LBlock } from "ts/objects/LBlock";
@@ -10,6 +11,7 @@ import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { LEntity } from "ts/objects/LEntity";
 import { LEntityId } from "ts/objects/LObject";
 import { REGame } from "ts/objects/REGame";
+import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { preProcessFile } from "typescript";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
@@ -23,6 +25,13 @@ export interface CandidateSkillAction {
 }
 
 export class UAction {
+
+    public static postPerformSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId): void {
+        context.postCall(() => {
+            SEmittorPerformer.makeWithSkill(performer, skillId).performe(context);
+        });
+    }
+
     public static postStepOnGround(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         const layer = block.layer(BlockLayerKind.Ground);
@@ -53,7 +62,7 @@ export class UAction {
         }
     }
 
-
+    
 
 
 

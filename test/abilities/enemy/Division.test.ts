@@ -9,6 +9,7 @@ import { TestEnv } from "../../TestEnv";
 import { DialogSubmitMode } from "ts/system/SDialog";
 import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
 import { REData } from "ts/data/REData";
+import { UAction } from "ts/usecases/UAction";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -37,7 +38,7 @@ test("Abilities.Enemy.Division", () => {
     
     // 右を向いて攻撃
     actor1.dir = 6;
-    RESystem.dialogContext.commandContext().postPerformSkill(actor1, RESystem.skills.normalAttack, undefined);
+    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
     RESystem.dialogContext.activeDialog().submit(DialogSubmitMode.ConsumeAction);
 
     const entityCount = REGame.map.entities().length;

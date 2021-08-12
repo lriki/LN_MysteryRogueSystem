@@ -73,7 +73,7 @@ export class LTrapBehavior extends LBehavior {
             if (this.checkValidTarget(e.performer) &&           // 攻撃者はこの罠にかかることができる？
                 e.skillId == RESystem.skills.normalAttack &&    // 通常攻撃？
                 e.targets.length == 0 &&                        // 攻撃対象がない？（明示的な空振り）
-                UMovement.checkDiagonalWallCornerCrossing(e.performer, e.performer.dir) &&  // 壁角チェック
+                !UMovement.checkDiagonalWallCornerCrossing(e.performer, e.performer.dir) &&  // 壁角チェック
                 UMovement.getFrontBlock(e.performer).containsEntity(entity)) {     // 目の前にこの罠がある？
                 // 空振りによる発見
                 this._exposed = true;
