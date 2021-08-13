@@ -27,7 +27,7 @@ enum SubTile {
 export class GameMapBuilder {
 
 
-    public build(coreMap: LMap, initialMap: FMap): void {
+    public build(coreMap: LMap): void {
         const floorData = coreMap.floorData();
         const templateMap = floorData.template ? REData.templateMaps.find(x => x.name == floorData.template) : REData.templateMaps[1];
         assert(templateMap);
@@ -80,6 +80,7 @@ export class GameMapBuilder {
             }
         }
 
+        console.log("$dataMap.data", $dataMap.data);
     }
 
     private width(): number {

@@ -189,18 +189,25 @@ export class SGameManager
         assert(map);
         REGame.map = map as LMap;
 
-        
-
-        if (REGame.recorder.attemptStartPlayback(true)) {
-            while (REGame.recorder.isPlayback()) {
-                RESystem.scheduler.stepSimulation();
+        // コアスクリプト側が例外を捨てているので、そのままだとこの辺りで発生したエラーの詳細がわからなくなる。
+        // そのため独自に catch してエラーを出力している。
+        try {
+            if (REGame.recorder.attemptStartPlayback(true)) {
+                while (REGame.recorder.isPlayback()) {
+                    RESystem.scheduler.stepSimulation();
+                }
+    
+                // Silent モードのクリアは、すべての Playback simulation が終わってから行う。
+                // そうしないと、例えば最後に杖を振る Activity がある場合、魔法弾の生成が非 Silent で実行されるため
+                // View まで流れてしまい、まだ未ロードのマップ情報を参照しようとしてしまう。
+                REGame.recorder.clearSilentPlayback();
             }
-
-            // Silent モードのクリアは、すべての Playback simulation が終わってから行う。
-            // そうしないと、例えば最後に杖を振る Activity がある場合、魔法弾の生成が非 Silent で実行されるため
-            // View まで流れてしまい、まだ未ロードのマップ情報を参照しようとしてしまう。
-            REGame.recorder.clearSilentPlayback();
         }
+        catch (e) {
+            console.error(e);
+            throw e;  
+        }
+
     }
 }
 

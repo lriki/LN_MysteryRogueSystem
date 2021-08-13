@@ -23,7 +23,7 @@ Scene_Map.prototype.isReady = function() {
 
 const _Scene_Map_onMapLoaded = Scene_Map.prototype.onMapLoaded;
 Scene_Map.prototype.onMapLoaded = function() {
-    return _Scene_Map_onMapLoaded.call(this);
+    _Scene_Map_onMapLoaded.call(this);
 }
 
 // 遷移後、フェードイン開始前
@@ -44,6 +44,13 @@ Scene_Map.prototype.create = function() {
 
 const _Scene_Map_createDisplayObjects = Scene_Map.prototype.createDisplayObjects;
 Scene_Map.prototype.createDisplayObjects = function() {
+
+    // refresh はホントは onMapLoaded のフック内で呼ぶのが自然な気がするが、
+    // createDisplayObjects() の前に呼んでおきたい。
+    // そうしないと、特にランダムダンジョン内にいるときのセーブデータをロードした後、Tilemap 生成とのタイミングの問題で何も表示されなくなる。
+    if (REGame.map.floorId().isEntitySystemMap()) {
+        RESystem.integration.refreshGameMap(REGame.map);
+    }
 
     // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく
     assert(!REVisual.entityVisualSet);

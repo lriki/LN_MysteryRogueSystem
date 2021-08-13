@@ -36,5 +36,10 @@ export class Game_REPrefabEvent extends Game_Event {
         this._spritePrepared = true;
     }
 
+    // ベースで event() を呼び出してしまうため封印
+    refresh() {
+
+    }
+
 }
 

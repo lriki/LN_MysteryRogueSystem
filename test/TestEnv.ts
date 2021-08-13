@@ -206,7 +206,7 @@ export class TestEnvIntegration extends SIntegration {
         SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData();
     }
 
-    onRefreshGameMap(map: LMap, initialMap: FMap): void {
+    onRefreshGameMap(map: LMap): void {
         // Visual 表示は伴わない
     }
 

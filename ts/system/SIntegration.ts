@@ -20,7 +20,7 @@ export abstract class SIntegration {
     
     abstract onLoadFixedMapEvents(): void;
 
-    protected abstract onRefreshGameMap(map: LMap, initialMap: FMap): void;
+    protected abstract onRefreshGameMap(map: LMap): void;
 
     protected abstract onFlushSequelSet(sequelSet: SSequelSet): void;
 
@@ -48,9 +48,9 @@ export abstract class SIntegration {
     //--------------------
     // Visual notifications
 
-    public refreshGameMap(map: LMap, initialMap: FMap): void {
+    public refreshGameMap(map: LMap): void {
         if (!REGame.recorder.isSilentPlayback()) {
-            this.onRefreshGameMap(map, initialMap);
+            this.onRefreshGameMap(map);
         }
     }
 

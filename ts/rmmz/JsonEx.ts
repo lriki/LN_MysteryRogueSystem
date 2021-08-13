@@ -42,6 +42,7 @@ import { LSanctuaryBehavior } from "ts/objects/behaviors/LSanctuaryBehavior";
 import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
 import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 import { LActivity } from "ts/objects/activities/LActivity";
+import { LMonsterHouseStructure } from "ts/objects/structures/LMonsterHouseStructure";
 
 
 function createInstance(name: string): any {
@@ -122,7 +123,9 @@ function createInstance(name: string): any {
             return Object.create(LFlockBehavior.prototype);
         case "LActivity":
             return Object.create(LActivity.prototype);
-            
+        case "LMonsterHouseStructure":
+            return Object.create(LMonsterHouseStructure.prototype);
+
             
             
     }

@@ -63,9 +63,9 @@ export class RMMZIntegration extends SIntegration {
 
 
     
-    onRefreshGameMap(map: LMap, initialMap: FMap): void {
+    onRefreshGameMap(map: LMap): void {
         const builder = new GameMapBuilder();
-        builder.build(map, initialMap);
+        builder.build(map);
     }
 
     onFlushSequelSet(sequelSet: SSequelSet): void {
