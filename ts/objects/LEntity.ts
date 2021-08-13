@@ -311,7 +311,7 @@ export class LEntity extends LObject
 
     onFinalize(): void {
         // 現在マップ上の Entity 削除
-        if (this.floorId == REGame.map.floorId()) {
+        if (this.floorId.equals(REGame.map.floorId())) {
             REGame.map._removeEntity(this);
         }
         this.clearInstance();

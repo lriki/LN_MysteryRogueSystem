@@ -24,12 +24,14 @@ export class SDialogContext
     }
 
     public open(dialog: SDialog): void {
+        dialog._openedFloorId = REGame.map.floorId().clone();
         this._dialogs.push(dialog);
         RESystem.integration.openDialog(dialog);
     }
 
     private pop(): void {
         const dialogIsPlaybck = this.activeDialog() instanceof SActivityPlaybackDialog;
+        const otherFloorOpened = !this.activeDialog()._openedFloorId.equals(REGame.map.floorId());
 
         this._dialogs.pop();
 
@@ -39,6 +41,9 @@ export class SDialogContext
                 if (dialogIsPlaybck) {
                     // SCommandPlaybackDialog が最後のコマンドを実行し終えた時に備える。
                     // ここで記録してしまうと、回想が終わるたびに "待機" が増えてしまう。
+                }
+                else if (otherFloorOpened) {
+                    
                 }
                 else {
                     REGame.recorder.push({

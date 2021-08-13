@@ -387,7 +387,7 @@ export class LMap extends LObject
     _addEntityInternal(entity: LEntity): void {
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、
         // floorId は外部で設定済みであることを前提とする。
-        assert(entity.floorId == this.floorId());
+        assert(entity.floorId.equals(this.floorId()));
         assert(entity.entityId().hasAny());
         assert(!entity.hasParent());
 
@@ -413,7 +413,7 @@ export class LMap extends LObject
 
     // appearEntity の、マップ遷移時用
     _reappearEntity(entity: LEntity): void {
-        assert(entity.floorId == this.floorId());
+        assert(entity.floorId.equals(this.floorId()));
         //assert(!entity.isTile());   // Tile は setup で追加済みのため、間違って追加されないようにチェック
         
         const block = this.block(entity.x, entity.y);

@@ -209,13 +209,14 @@ export class SGameManager {
         // コアスクリプト側が例外を捨てているので、そのままだとこの辺りで発生したエラーの詳細がわからなくなる。
         // そのため独自に catch してエラーを出力している。
         try {
-            if (0) {
+            if (1) {
                 REGame.recorder.attemptStartPlayback(false);
             }
             else {
                 if (REGame.recorder.attemptStartPlayback(true)) {
                     //while (REGame.recorder.isPlayback()) {
-                    while (!REGame.recorder.checkPlaybackRemaining(2)) {
+                    while (!REGame.recorder.checkPlaybackRemaining(4)) {
+                        console.log("---");
                         RESystem.scheduler.stepSimulation();
                     }
         

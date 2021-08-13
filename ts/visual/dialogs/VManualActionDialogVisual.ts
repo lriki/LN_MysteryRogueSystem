@@ -321,13 +321,17 @@ export class VManualActionDialogVisual extends VDialog {
         if (this.isMoveButtonPressed() &&
             UMovement.checkPassageToDir(entity, dir)) {
 
+            const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction();
+            
             if (this.isDashButtonPressed()) {
-                const behavior = entity.findBehavior(LUnitBehavior);
-                assert(behavior);
-                behavior._straightDashing = true;
+                //const behavior = entity.findBehavior(LUnitBehavior);
+                //assert(behavior);
+                //behavior._straightDashing = true;
+                activity.withFastForward();
             }
 
-            context.postActivity(LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction());
+            context.postActivity(activity);
+
             this._model.submit();
 
             // TODO: test

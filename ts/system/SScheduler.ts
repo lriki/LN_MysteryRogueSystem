@@ -389,6 +389,7 @@ export class SScheduler
             for (const entity of REGame.map.entities()) {
                 const block = REGame.map.block(entity.x, entity.y);
                 const currentLayer = block.findEntityLayerKind(entity);
+                //console.log("entity", entity);
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {

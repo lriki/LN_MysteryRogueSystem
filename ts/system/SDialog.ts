@@ -1,3 +1,4 @@
+import { LFloorId } from "ts/objects/LFloorId";
 import { RESystem } from "./RESystem";
 import { SDialogContext } from "./SDialogContext";
 
@@ -30,6 +31,10 @@ export type LDialogResultCallback = (result: any) => void;
 export class SDialog {
     _resultCallback: LDialogResultCallback | undefined;
     _dialogResult: boolean = false;
+
+    // この Dialog を開いたフロア。
+    // 複数のフロアにまたがって実行されるとき、Close を Recorder に記録しないように制御するために使う。
+    _openedFloorId: LFloorId = LFloorId.makeEmpty();
     
     onUpdate(context: SDialogContext): void { }
 

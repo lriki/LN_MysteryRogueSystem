@@ -136,6 +136,10 @@ export class LUnitBehavior extends LBehavior {
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
             if (!REGame.eventServer.publish(DBasics.events.preWalk, args)) return REResponse.Canceled;
 
+            if (activity.isFastForward()) {
+                this._straightDashing = true;
+            }
+
             const layer = self.getHomeLayer();
             if (UMovement.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);

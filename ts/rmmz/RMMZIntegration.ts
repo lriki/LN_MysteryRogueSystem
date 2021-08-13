@@ -21,7 +21,8 @@ export class RMMZIntegration extends SIntegration {
         // マップ遷移後、同一マップへの遷移でも Game_Map.setup が実行されるようにする。Scene_Load の処理と同じ。
         $gamePlayer.requestMapReload();
 
-        // 主に演出のため ExitMap への遷移時にプレイヤーの表示をOFFにする
+        // 主に演出のため ExitMap への遷移時にプレイヤーの表示をOFFにする。
+        // 対策しないと、ExitMap へ移動したときに一瞬プレイヤーが見えてしまう。
         if (REData.maps[mapId].exitMap) {
             $gamePlayer.setTransparent(true);
         }

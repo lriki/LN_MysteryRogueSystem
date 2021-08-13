@@ -21,6 +21,7 @@ export interface LActivityData {
     skillId: DSkillDataId,
     direction: number;
     consumeAction: boolean;
+    fastForward: boolean;
 }
 
 /**
@@ -41,6 +42,7 @@ export class LActivity {
     private _skillId: DSkillDataId;
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
     private _consumeAction: boolean;
+    private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
 
     public constructor() {
         this._actionId = 0;
@@ -50,6 +52,7 @@ export class LActivity {
         this._skillId = 0;
         this._direction = 0;
         this._consumeAction = false;
+        this._fastForward = false;
     }
 
     public setup(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number): this {
@@ -59,6 +62,7 @@ export class LActivity {
         this._objects2 = [];
         this._direction = dir ?? 0;
         this._consumeAction = false;
+        this._fastForward = false;
         return this;
     }
 
@@ -107,6 +111,15 @@ export class LActivity {
         return this._consumeAction;
     }
 
+    public withFastForward(): this {
+        this._fastForward = true;
+        return this;
+    }
+
+    public isFastForward(): boolean {
+        return this._fastForward;
+    }
+
     public toData(): LActivityData {
         return {
             actionId: this._actionId,
@@ -116,6 +129,7 @@ export class LActivity {
             skillId: this._skillId,
             direction: this._direction,
             consumeAction: this._consumeAction,
+            fastForward: this._fastForward,
         }
     }
 
@@ -128,6 +142,7 @@ export class LActivity {
         i._skillId = data.skillId;
         i._direction = data.direction;
         i._consumeAction = data.consumeAction;
+        i._fastForward = data.fastForward;
         return i;
     }
 

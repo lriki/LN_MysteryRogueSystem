@@ -232,7 +232,7 @@ export class LWorld
             assert(y < 0);
         }
 
-        if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId() == entity.floorId) {
+        if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId().equals(entity.floorId)) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);
         }

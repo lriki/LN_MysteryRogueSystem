@@ -25,6 +25,7 @@ export class LMessageHistory {
         
     clear(): void {
         this._texts = [];
+        this._lastViewLineIndex = -1;
     }
 
     add(text: string): void {
