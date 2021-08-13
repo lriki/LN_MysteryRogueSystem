@@ -26,12 +26,14 @@ export interface CandidateSkillAction {
 
 export class UAction {
 
+    /*
     // TODO: Activity 経由で設定したい。.withConsumeAction()と一緒に使いたいので。
     public static postPerformSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId): void {
         context.postCall(() => {
             SEmittorPerformer.makeWithSkill(performer, skillId).performe(context);
         });
     }
+    */
 
     public static postStepOnGround(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);

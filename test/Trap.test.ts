@@ -99,8 +99,7 @@ test("Trap.Attack", () => {
     
     // 右を向いて攻撃
     actor1.dir = 6;
-    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -119,9 +118,7 @@ test("Trap.Attack", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
 
     // 右を向いて攻撃
-    actor1.dir = 6;
-    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -141,9 +138,7 @@ test("Trap.Attack", () => {
     REGame.map.block(10, 11)._tileShape = TileShape.Wall;
 
     // 右下を向いて攻撃
-    actor1.dir = 3;
-    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 3).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

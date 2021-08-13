@@ -79,8 +79,6 @@ export class GameMapBuilder {
                 */
             }
         }
-
-        console.log("$dataMap.data", $dataMap.data);
     }
 
     private width(): number {

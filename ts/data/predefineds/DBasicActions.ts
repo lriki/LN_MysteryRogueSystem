@@ -189,6 +189,7 @@ export interface DBasicActions {
     //----------------------------------------
     // Combat Actions.
 
+    performSkill: DActionId;
     
     AttackActionId: DActionId; // TODO: deprecated
 }

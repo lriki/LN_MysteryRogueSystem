@@ -80,6 +80,10 @@ Game_Map.prototype.setup = function(mapId: number) {
         }
     }
     
+    // 新しいマップへの移動時は、遅くてもここで RMMZ 側の Map への更新をかけておく。
+    // Game_Map.setup は抜けるとこの後する Game_Player の locate が行われるが、それまでにマップのサイズを確定させておく必要がある。
+    // そうしないと、focusedEntity と Game_Player の位置同期がずれる。
+    RESystem.mapManager.attemptRefreshVisual();
 
     Log.d("RMMZ map setup finished.");
 }

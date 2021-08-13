@@ -189,6 +189,9 @@ export class SGameManager
         assert(map);
         REGame.map = map as LMap;
 
+        // Visual 側の準備が整い次第、Game レイヤーが持っているマップ情報を Visual に反映してほしい
+        RESystem.mapManager.requestRefreshVisual();
+
         // コアスクリプト側が例外を捨てているので、そのままだとこの辺りで発生したエラーの詳細がわからなくなる。
         // そのため独自に catch してエラーを出力している。
         try {

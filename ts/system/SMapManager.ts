@@ -25,6 +25,7 @@ export class SMapManager {
     private _map: LMap;
     private _enemySpanwRate: number = 10;
     private _enemySpawnCount: number = 0;   // TODO: これは Ojbect 側に持って行かないとまずいかも
+    private _needRefreshVisual: boolean = false;
 
     constructor() {
         this._map = REGame.map;
@@ -57,7 +58,7 @@ export class SMapManager {
     private setupRandomMap(initialMap: FMap): void {
         const floorId = this._map.floorId();
 
-        
+        this.requestRefreshVisual();
 
         // 階段を配置する
         {
@@ -171,6 +172,17 @@ export class SMapManager {
 
     public setupInitial(): void {
 
+    }
+
+    public requestRefreshVisual(): void {
+        this._needRefreshVisual = true;
+    }
+
+    public attemptRefreshVisual(): void {
+        if (this._needRefreshVisual) {
+            RESystem.integration.refreshGameMap(REGame.map);
+            this._needRefreshVisual = false;
+        }
     }
 
     public updateRound(): void {

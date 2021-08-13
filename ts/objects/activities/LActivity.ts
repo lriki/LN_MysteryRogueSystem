@@ -1,5 +1,7 @@
+import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
+import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -16,6 +18,7 @@ export interface LActivityData {
     subject: LEntityIdData;
     object: LEntityIdData;
     objects2: LEntityIdData[];
+    skillId: DSkillDataId,
     direction: number;
     consumeAction: boolean;
 }
@@ -35,6 +38,7 @@ export class LActivity {
     private _subject: LEntityId;    // Command 送信対象 (主語)
     private _object: LEntityId;     // (目的語)
     private _objects2: LEntityId[];
+    private _skillId: DSkillDataId;
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
     private _consumeAction: boolean;
 
@@ -43,6 +47,7 @@ export class LActivity {
         this._subject = LEntityId.makeEmpty();
         this._object = LEntityId.makeEmpty();
         this._objects2 = [];
+        this._skillId = 0;
         this._direction = 0;
         this._consumeAction = false;
     }
@@ -81,6 +86,10 @@ export class LActivity {
         this._objects2 = objects.map(x => x.entityId());
     }
 
+    public skillId(): DSkillDataId {
+        return this._skillId;
+    }
+
     public direction(): number {
         return this._direction;
     }
@@ -104,6 +113,7 @@ export class LActivity {
             subject: { index: this._subject.index2(), key: this._subject.key2() },
             object: { index: this._object.index2(), key: this._object.key2() },
             objects2: this._objects2.map(x => { return { index: x.index2(), key: x.key2() }; }),
+            skillId: this._skillId,
             direction: this._direction,
             consumeAction: this._consumeAction,
         }
@@ -115,6 +125,7 @@ export class LActivity {
         i._subject = new LEntityId(data.subject.index, data.subject.key);
         i._object = new LEntityId(data.object.index, data.object.key);
         i._objects2 = data.objects2.map(x => new LEntityId(x.index, x.key));
+        i._skillId = data.skillId;
         i._direction = data.direction;
         i._consumeAction = data.consumeAction;
         return i;
@@ -177,6 +188,14 @@ export class LActivity {
     public static makePutIn(subject: LEntity, storage: LEntity, item: LEntity): LActivity {
         const a = (new LActivity()).setup(DBasics.actions.PutInActionId, subject, storage);
         a._objects2 = [item.entityId()];
+        return a;
+    }
+
+    public static makePerformSkill(subject: LEntity, skillId: DSkillDataId, dirToFace?: number): LActivity {
+        assert(skillId > 0);
+        const a = (new LActivity()).setup(DBasics.actions.performSkill, subject);
+        if (dirToFace !== undefined) a._direction = dirToFace;
+        a._skillId = skillId;
         return a;
     }
 }

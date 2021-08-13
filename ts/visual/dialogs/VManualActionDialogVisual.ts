@@ -15,6 +15,7 @@ import { LTrapBehavior } from "ts/objects/behaviors/LTrapBehavior";
 import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
+import { REVisual_Entity } from "../REVisual_Entity";
 
 enum UpdateMode {
     Normal,
@@ -343,11 +344,7 @@ export class VManualActionDialogVisual extends VDialog {
         // TODO: NPC 話かけ
         
         // [通常攻撃] スキル発動
-        // TODO: ↓ Activity にまとめていいかも
-        SEmittorPerformer.makeWithSkill(entity, RESystem.skills.normalAttack)
-            .performe(context.commandContext());
-        
-        context.postActivity(LActivity.make(entity).withConsumeAction());
+        context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction());
         this._model.submit();
         
         return true;

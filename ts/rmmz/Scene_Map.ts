@@ -49,7 +49,7 @@ Scene_Map.prototype.createDisplayObjects = function() {
     // createDisplayObjects() の前に呼んでおきたい。
     // そうしないと、特にランダムダンジョン内にいるときのセーブデータをロードした後、Tilemap 生成とのタイミングの問題で何も表示されなくなる。
     if (REGame.map.floorId().isEntitySystemMap()) {
-        RESystem.integration.refreshGameMap(REGame.map);
+        RESystem.mapManager.attemptRefreshVisual();
     }
 
     // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく

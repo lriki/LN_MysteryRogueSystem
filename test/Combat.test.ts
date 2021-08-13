@@ -41,9 +41,7 @@ test("Combat.DamageAndCollapse", () => {
     
     // 右を向いて攻撃
     const dialogContext = RESystem.dialogContext;
-    actor1.dir = 6;
-    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

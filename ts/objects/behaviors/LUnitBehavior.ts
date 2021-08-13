@@ -21,6 +21,7 @@ import { onGrounded, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { UName } from "ts/usecases/UName";
+import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 
 /**
  * 
@@ -145,6 +146,11 @@ export class LUnitBehavior extends LBehavior {
                 
                 return REResponse.Succeeded;
             }
+        }
+        else if (activity.actionId() == DBasics.actions.performSkill) {
+            if (activity.hasDirection()) self.dir = activity.direction();
+            SEmittorPerformer.makeWithSkill(self, activity.skillId()).performe(context);
+            return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.ForwardFloorActionId ||
             activity.actionId() == DBasics.actions.BackwardFloorActionId) {

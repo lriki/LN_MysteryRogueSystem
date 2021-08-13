@@ -37,9 +37,7 @@ test("Abilities.Enemy.Division", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // 右を向いて攻撃
-    actor1.dir = 6;
-    UAction.postPerformSkill(RESystem.dialogContext.commandContext(), actor1, RESystem.skills.normalAttack);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     const entityCount = REGame.map.entities().length;
