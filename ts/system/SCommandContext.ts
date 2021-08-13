@@ -1,4 +1,4 @@
-import { checkContinuousResponse, RECommand, REResponse } from "./RECommand";
+import { checkContinuousResponse, REResponse } from "./RECommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/Common";
@@ -10,7 +10,7 @@ import { RESystem } from "./RESystem";
 import { DSkillDataId } from "ts/data/DSkill";
 import { CommandArgs, DecisionPhase, LBehavior } from "ts/objects/behaviors/LBehavior";
 import { SSequelContext } from "./SSequelContext";
-import { SCommandPlaybackDialog } from "ts/system/dialogs/SCommandPlaybackDialog";
+import { SActivityPlaybackDialog } from "ts/system/dialogs/SActivityPlaybackDialog";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
@@ -277,7 +277,7 @@ export class SCommandContext
             RESystem.dialogContext.setCauseEntity(causeEntity);
 
             if (REGame.recorder.isPlayback()) {
-                RESystem.dialogContext.open(new SCommandPlaybackDialog());
+                RESystem.dialogContext.open(new SActivityPlaybackDialog());
             }
             else {
                 RESystem.dialogContext.open(dialogModel);

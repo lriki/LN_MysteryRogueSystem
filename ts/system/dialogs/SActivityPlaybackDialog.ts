@@ -3,8 +3,10 @@ import { REGame } from "ts/objects/REGame";
 import { SDialog } from "ts/system/SDialog";
 import { SDialogContext } from "ts/system/SDialogContext";
 
-
-export class SCommandPlaybackDialog extends SDialog {
+/**
+ * Playback 中に他の Dialog の代用となる特殊な Dialog.
+ */
+export class SActivityPlaybackDialog extends SDialog {
     
     isVisualIntegration(): boolean {
         return false;

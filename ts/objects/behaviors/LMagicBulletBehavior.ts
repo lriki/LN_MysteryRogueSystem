@@ -1,5 +1,5 @@
 import { Helpers } from "ts/system/Helpers";
-import { RECommand, REResponse } from "ts/system/RECommand";
+import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { UMovement } from "ts/usecases/UMovement";

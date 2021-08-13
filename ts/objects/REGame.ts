@@ -6,7 +6,7 @@ import { LSystem } from "./LSystem";
 import { SScheduler } from "../system/SScheduler";
 import { SIntegration } from "../system/SIntegration";
 import { LCamera } from "./LCamera";
-import { RECommandRecorder } from "ts/system/RECommandRecorder";
+import { SActivityRecorder } from "ts/system/SActivityRecorder";
 import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
@@ -34,7 +34,7 @@ export class REGame
     static camera: LCamera;
     static scheduler: LScheduler;
     static identifyer: LIdentifyer;
-    static recorder: RECommandRecorder;
+    static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
     static message: LMessage;
     static eventServer: LEventServer;

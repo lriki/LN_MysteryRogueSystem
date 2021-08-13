@@ -3,7 +3,7 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
-import { RECommand, REResponse } from "ts/system/RECommand";
+import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SEventExecutionDialog } from "ts/system/dialogs/EventExecutionDialog";

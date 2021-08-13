@@ -3,12 +3,12 @@ import { assert } from "ts/Common";
 import { REGame } from "../objects/REGame";
 import { LEntity } from "../objects/LEntity";
 import { SCommandContext } from "./SCommandContext";
-import { RERecordingCommandType } from "./RECommandRecorder";
+import { ActivityRecordingCommandType } from "./SActivityRecorder";
 import { RESystem } from "./RESystem";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { SDialog } from "./SDialog";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
-import { SCommandPlaybackDialog } from "./dialogs/SCommandPlaybackDialog";
+import { SActivityPlaybackDialog } from "./dialogs/SActivityPlaybackDialog";
 
 export class SDialogContext
 {
@@ -29,7 +29,7 @@ export class SDialogContext
     }
 
     private pop(): void {
-        const dialogIsPlaybck = this.activeDialog() instanceof SCommandPlaybackDialog;
+        const dialogIsPlaybck = this.activeDialog() instanceof SActivityPlaybackDialog;
 
         this._dialogs.pop();
 
@@ -42,7 +42,7 @@ export class SDialogContext
                 }
                 else {
                     REGame.recorder.push({
-                        type: RERecordingCommandType.CloseMainDialog,
+                        type: ActivityRecordingCommandType.CloseMainDialog,
                         activity: null,
                     });
                 }
@@ -81,7 +81,7 @@ export class SDialogContext
 
         if (REGame.recorder.isRecording()) {
             REGame.recorder.push({
-                type: RERecordingCommandType.Activity,
+                type: ActivityRecordingCommandType.Activity,
                 activity: activity.toData(),
             });
         }

@@ -7,7 +7,7 @@ import { REData } from "../data/REData";
 import { SScheduler } from "./SScheduler";
 import { LCamera } from "../objects/LCamera";
 import { RESystem } from "./RESystem";
-import { RECommandRecorder } from "./RECommandRecorder";
+import { SActivityRecorder } from "./SActivityRecorder";
 import { assert, Log } from "ts/Common";
 import { LMessage } from "ts/objects/LMessage";
 import { LMessageHistory } from "ts/objects/LMessageHistory";
@@ -54,7 +54,7 @@ export class SGameManager
         REGame.camera = new LCamera();
         REGame.scheduler = new LScheduler();
         REGame.identifyer = new LIdentifyer();
-        REGame.recorder = new RECommandRecorder();
+        REGame.recorder = new SActivityRecorder();
         REGame.messageHistory = new LMessageHistory();
         REGame.message = new LMessage();
         REGame.eventServer = new LEventServer();

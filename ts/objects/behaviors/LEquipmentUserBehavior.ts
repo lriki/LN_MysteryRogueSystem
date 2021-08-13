@@ -4,7 +4,7 @@ import { DBasics } from "ts/data/DBasics";
 import { DEquipmentPartId } from "ts/data/DEquipmentPart";
 import { DItem } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
-import { RECommand, REResponse } from "ts/system/RECommand";
+import { REResponse } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { LEntityId } from "../LObject";
