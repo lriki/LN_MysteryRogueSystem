@@ -1,10 +1,6 @@
 import { LMap } from "./LMap";
-import { REDataManager } from "../data/REDataManager";
-import { LEntity } from "./LEntity";
 import { LWorld } from "./LWorld";
 import { LSystem } from "./LSystem";
-import { SScheduler } from "../system/SScheduler";
-import { SIntegration } from "../system/SIntegration";
 import { LCamera } from "./LCamera";
 import { SActivityRecorder } from "ts/system/SActivityRecorder";
 import { LMessage } from "./LMessage";
@@ -13,7 +9,6 @@ import { LIdentifyer } from "./LIdentifyer";
 import { SSequelSet } from "../system/SSequel";
 import { SImmediatelyCommandExecuteScheduler } from "ts/system/SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "./LEventServer";
-import { SMinimapData } from "ts/system/SMinimapData";
 import { LFloorDirector } from "./LFloorDirector";
 import { LBlock } from "./LBlock";
 import { LScheduler } from "./LScheduler";

@@ -54,7 +54,7 @@ export class RMMZIntegration extends SIntegration {
                 }
                 else {
                     SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
-                    //e.setTransparent(true);
+                    e.setTransparent(true);
                 }
             }
         });
