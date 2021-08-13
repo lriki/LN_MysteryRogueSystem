@@ -3,7 +3,6 @@ import './objects/Extensions'
 export function assert(condition: any, msg?: string): asserts condition {
     if (!condition) {
         console.error("assert: " + msg);
-        console.trace();
         throw new Error(msg);
     }
 }

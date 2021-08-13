@@ -32,9 +32,20 @@ export class SMapManager {
         this._enemySpawnCount = this._enemySpanwRate;
     }
 
-    public setMap(map: LMap, initialMap: FMap): void {
+    public setMap(map: LMap): void {
         this._map = map;
-        const newFloorId = map.floorId();
+    }
+
+    public map(): LMap {
+        return this._map;
+    }
+
+    public rand(): LRandom {
+        return REGame.world.random();
+    }
+
+    public setupMap(initialMap: FMap): void {
+        const newFloorId = this._map.floorId();
 
         if (newFloorId.isNormalMap()) {
             
@@ -45,14 +56,6 @@ export class SMapManager {
         else {
             this.setupFixedMap(initialMap);
         }
-    }
-
-    public map(): LMap {
-        return this._map;
-    }
-
-    public rand(): LRandom {
-        return REGame.world.random();
     }
 
     private setupRandomMap(initialMap: FMap): void {
@@ -180,7 +183,13 @@ export class SMapManager {
 
     public attemptRefreshVisual(): void {
         if (this._needRefreshVisual) {
-            RESystem.integration.refreshGameMap(REGame.map);
+            if (this._map.floorId().isRandomMap()) {
+                RESystem.integration.refreshGameMap(REGame.map);
+            }
+            else {
+                // 固定マップの場合は RMMZ 側で既に準備済みなので更新不要
+            }
+            
             this._needRefreshVisual = false;
         }
     }

@@ -54,6 +54,11 @@ export class SActivityRecorder {
         //return this._playbackCommands != undefined && this._playbackCommandIndex < this._playbackCommands.length;
     }
 
+    public checkPlaybackRemaining(count: number): boolean {
+        assert(this._playbackCommands);
+        return (this._playbackCommands.length - this._playbackCommandIndex) <= count;
+    }
+
     public startRecording(): Promise<boolean> {
         this.closeFile();
 

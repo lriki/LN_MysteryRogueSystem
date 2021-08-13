@@ -23,7 +23,7 @@ export class REEventExecutionDialogVisual extends VDialog {
         if (!$gameMap.isEventRunning()) {
             const entity = this.dialogContext().causeEntity();
             assert(entity);
-            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+            this.dialogContext().postActivity(LActivity.make(entity));
             this.submit();
         }
     }

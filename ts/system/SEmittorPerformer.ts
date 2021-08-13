@@ -243,7 +243,7 @@ export class SEmittorPerformer {
         
         if (emittor.scope.range == DEffectFieldScopeRange.Performer) {
             const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
-            const effectContext = new SEffectContext(effectSubject);
+            const effectContext = new SEffectContext(effectSubject, context.random());
     
             if (emittor.effect.rmmzAnimationId) {
                 context.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
@@ -268,7 +268,7 @@ export class SEmittorPerformer {
                 const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
                 if (target) {
                     const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.DirectAttack, performer.dir);
-                    const effectContext = new SEffectContext(effectSubject);
+                    const effectContext = new SEffectContext(effectSubject, context.random());
                     //effectContext.addEffector(effector);
 
 
@@ -320,7 +320,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
             const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
-            const effectContext = new SEffectContext(effectSubject);
+            const effectContext = new SEffectContext(effectSubject, context.random());
 
 
             effectContext.applyWithWorth(context, selectedItems);

@@ -20,6 +20,7 @@ import { RESystem } from "./RESystem";
 import { LFloorId } from "ts/objects/LFloorId";
 import { UTransfer } from "ts/usecases/UTransfer";
 import { UIdentify } from "ts/usecases/UIdentify";
+import { LRandom } from "ts/objects/LRandom";
 
 
 enum SParameterEffectApplyType {
@@ -300,6 +301,7 @@ export class SEffectorFact {
 export class SEffectContext {
 
     private _effectorFact: SEffectorFact;
+    private _rand: LRandom;
 
     // 経験値など、報酬に関わるフィードバックを得る人。
     // 基本は effectors と同じだが、反射や投げ返しを行ったときは経験値を得る人が変わるため、その対応のために必要となる。
@@ -314,8 +316,9 @@ export class SEffectContext {
     //private _targetBattlerBehavior: LBattlerBehavior;
 
 
-    constructor(subject: SEffectorFact) {
+    constructor(subject: SEffectorFact, rand: LRandom) {
         this._effectorFact = subject;
+        this._rand = rand;
     }
 
     public effectorFact(): SEffectorFact {
@@ -405,11 +408,11 @@ export class SEffectContext {
             // 罠Entityなど。
         }
 
-        const hitRate = this._effectorFact.hitRate();       // 攻撃側命中率
-        const evaRate = this._effectorFact.evaRate(target); // 受け側回避率
+        const hitRate = this._effectorFact.hitRate() * 100;       // 攻撃側命中率
+        const evaRate = this._effectorFact.evaRate(target) * 100; // 受け側回避率
 
-        result.missed = result.used && Math.random() >= hitRate;
-        result.evaded = !result.missed && Math.random() < evaRate;
+        result.missed = result.used && this._rand.nextIntWithMax(100) >= hitRate;
+        result.evaded = !result.missed && this._rand.nextIntWithMax(100) < evaRate;
     }
 
     
@@ -438,7 +441,8 @@ export class SEffectContext {
     private applyCore(commandContext: SCommandContext, target: LEntity, result: LEffectResult): void {
 
         if (this._effectorFact.hasParamDamage()) {
-            result.critical = Math.random() < this._effectorFact.criRate(target);
+            const criRate = this._effectorFact.criRate(target) * 100;
+            result.critical = (this._rand.nextIntWithMax(100) < criRate);
         }
         
         // Damage
@@ -529,7 +533,7 @@ export class SEffectContext {
     // Game_Action.prototype.applyVariance
     private applyVariance(damage: number, variance: number): number {
         const amp = Math.floor(Math.max((Math.abs(damage) * variance) / 100, 0));
-        const v = Helpers.randomInt(amp + 1) + Helpers.randomInt(amp + 1) - amp;
+        const v = this._rand.nextIntWithMax(amp + 1) + this._rand.nextIntWithMax(amp + 1) - amp;
         return damage >= 0 ? damage + v : damage - v;
     }
     
@@ -705,7 +709,8 @@ export class SEffectContext {
             chance *= target.stateRate(effect.dataId);
             chance *= this._effectorFact.lukEffectRate(target);
         }
-        if (Math.random() < chance) {
+
+        if (this._rand.nextIntWithMax(100) < (chance * 100)) {
             target.addState(effect.dataId);
             result.makeSuccess();
         }

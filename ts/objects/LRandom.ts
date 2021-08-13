@@ -26,6 +26,7 @@ export class LRandom {
         this._y = this._z;
         this._z = this._w;
         this._w = (this._w ^ (this._w >> 19)) ^ (t ^ (t >> 8));
+
         return this._w;
     }
     

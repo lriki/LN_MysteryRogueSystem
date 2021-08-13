@@ -153,8 +153,19 @@ export class SCommandContext
     }
 
     public postActivity(activity: LActivity) {
+        
+
+        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
+        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
+        if (activity.isConsumeAction()) {
+            console.log("activity", activity);
+            assert(activity.subject().actionTokenCount() > 0);
+        }
+
         const m1 = () => {
             Log.doCommand("Activity");
+
+            console.log("activity", activity);
 
             if (activity.isConsumeAction()) {
                 const entity = activity.subject();

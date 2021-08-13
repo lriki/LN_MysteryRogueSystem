@@ -31,14 +31,12 @@ import { LBlock } from "ts/objects/LBlock";
 import { LFloorId } from "ts/objects/LFloorId";
 import { UTransfer } from "ts/usecases/UTransfer";
 import { LObjectType } from "ts/objects/LObject";
+import { DBasics } from "ts/data/DBasics";
 
 /**
  */
-export class SGameManager
-{
-    // DataManager.createGameObjects に従って呼び出される。
-    // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。
-    public static createGameObjects(): void {
+export class SGameManager {
+    public static createSystemObjects(): void {
         RESystem.sequelContext = new SSequelContext();
         RESystem.commandContext = new SCommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new SDialogContext(RESystem.commandContext);
@@ -47,6 +45,12 @@ export class SGameManager
         RESystem.mapManager = new SMapManager();
         RESystem.groundRules = new SGroundRules();
         RESystem.requestedPlayback = false;
+    }
+
+    // DataManager.createGameObjects に従って呼び出される。
+    // ゲーム起動時に1回呼び出される点に注意。NewGame 選択時に改めて1回呼び出される。
+    public static createGameObjects(): void {
+        this.createSystemObjects();
         REGame.immediatelyCommandExecuteScheduler = new SImmediatelyCommandExecuteScheduler();
         REGame.system = new LSystem();
         REGame.world = new LWorld();
@@ -107,6 +111,9 @@ export class SGameManager
         else
             REGame.world._transferEntity(firstActor, floorId, $dataSystem.startX, $dataSystem.startY);
             */
+           
+        // test
+        //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
     }
 
     
@@ -152,7 +159,8 @@ export class SGameManager
                 // マップ構築
                 REGame.map._removeAllEntities();
                 REGame.map.setup(newFloorId, mapData);
-                RESystem.mapManager.setMap(REGame.map, mapData);
+                RESystem.mapManager.setMap(REGame.map);
+                RESystem.mapManager.setupMap(mapData);
     
             }
             else {
@@ -179,7 +187,9 @@ export class SGameManager
     }
 
     public static loadGame(contents: any) {
-        console.log("extractSaveContents contents", contents);
+        console.log("loadGame ---------------");
+        this.createSystemObjects();
+
         REGame.system = contents.system;
         REGame.world = contents.world;
         REGame.camera = contents.camera;
@@ -188,22 +198,32 @@ export class SGameManager
         const map = REGame.world.objects().find(x => x && x.objectType() == LObjectType.Map);
         assert(map);
         REGame.map = map as LMap;
+        RESystem.mapManager.setMap(REGame.map);
 
         // Visual 側の準備が整い次第、Game レイヤーが持っているマップ情報を Visual に反映してほしい
         RESystem.mapManager.requestRefreshVisual();
 
+        // test
+        //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
+
         // コアスクリプト側が例外を捨てているので、そのままだとこの辺りで発生したエラーの詳細がわからなくなる。
         // そのため独自に catch してエラーを出力している。
         try {
-            if (REGame.recorder.attemptStartPlayback(true)) {
-                while (REGame.recorder.isPlayback()) {
-                    RESystem.scheduler.stepSimulation();
+            if (0) {
+                REGame.recorder.attemptStartPlayback(false);
+            }
+            else {
+                if (REGame.recorder.attemptStartPlayback(true)) {
+                    //while (REGame.recorder.isPlayback()) {
+                    while (!REGame.recorder.checkPlaybackRemaining(2)) {
+                        RESystem.scheduler.stepSimulation();
+                    }
+        
+                    // Silent モードのクリアは、すべての Playback simulation が終わってから行う。
+                    // そうしないと、例えば最後に杖を振る Activity がある場合、魔法弾の生成が非 Silent で実行されるため
+                    // View まで流れてしまい、まだ未ロードのマップ情報を参照しようとしてしまう。
+                    REGame.recorder.clearSilentPlayback();
                 }
-    
-                // Silent モードのクリアは、すべての Playback simulation が終わってから行う。
-                // そうしないと、例えば最後に杖を振る Activity がある場合、魔法弾の生成が非 Silent で実行されるため
-                // View まで流れてしまい、まだ未ロードのマップ情報を参照しようとしてしまう。
-                REGame.recorder.clearSilentPlayback();
             }
         }
         catch (e) {

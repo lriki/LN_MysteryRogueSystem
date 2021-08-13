@@ -5,12 +5,22 @@ import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
+import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Map {
         //isRMMZDefaultSystemMap(): boolean;
         //isRESystemMap(): boolean;
+        unlinkREEvents(): void;
+    }
+}
+
+Game_Map.prototype.unlinkREEvents = function(): void {
+    for (const event of this.events()) {
+        if (event instanceof Game_REPrefabEvent) {
+            $dataMap.events[event.eventId()] = null;
+        }
     }
 }
 
@@ -24,6 +34,10 @@ Game_Map.prototype.setup = function(mapId: number) {
     // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
     REGame.map.releaseMap();
     REGame.messageHistory.clear();
+    
+    // Game_Map.setup が呼ばれるのは、マップが切り替わるとき。
+    // タイミングの都合で DataManager.onLoad によって前のマップの REEvent が $dataMap.event に含まれているので、これを削除しておく。
+    this.unlinkREEvents();
 
     _Game_Map_setup.call(this, mapId);
 
