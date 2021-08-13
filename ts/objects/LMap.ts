@@ -394,7 +394,7 @@ export class LMap extends LObject
         this._entityIds.push(entity.entityId());
         entity.setParent(this);
 
-        RESystem.integration.onEntityEnteredMap(entity);
+        RESystem.integration.entityEnteredMap(entity);
     }
 
     /**
@@ -457,7 +457,7 @@ export class LMap extends LObject
         
         entity.floorId = LFloorId.makeEmpty();
         entity.clearParent();
-        RESystem.integration.onEntityLeavedMap(entity);
+        RESystem.integration.entityLeavedMap(entity);
     }
 
     onRemoveChild(obj: LObject): void {

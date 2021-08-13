@@ -93,7 +93,7 @@ export class SScheduler
             //}
 
             // Sequel 終了待ち
-            if (RESystem.integration.onCheckVisualSequelRunning()) {
+            if (RESystem.integration.checkVisualSequelRunning()) {
                 // Sequel 実行中
                 break;
             }
@@ -124,7 +124,7 @@ export class SScheduler
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!commandContext.isRunning() && RESystem.integration.onCheckVisualSequelRunning()) {
+            if (!commandContext.isRunning() && RESystem.integration.checkVisualSequelRunning()) {
                 break;
             }
 

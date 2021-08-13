@@ -178,7 +178,7 @@ export class SGameManager
         return contents;
     }
 
-    public static extractSaveContents(contents: any) {
+    public static loadGame(contents: any) {
         console.log("extractSaveContents contents", contents);
         REGame.system = contents.system;
         REGame.world = contents.world;

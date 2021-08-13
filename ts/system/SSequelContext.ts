@@ -33,7 +33,7 @@ export class SSequelContext {
             if (REGame.signalFlushSequelSet) {
                 REGame.signalFlushSequelSet(this._sequelSet);
             }
-            RESystem.integration.onFlushSequelSet(this._sequelSet);
+            RESystem.integration.flushSequelSet(this._sequelSet);
 
             this._sequelSet = new SSequelSet();
         }

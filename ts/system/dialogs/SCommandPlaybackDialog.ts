@@ -11,7 +11,6 @@ export class SCommandPlaybackDialog extends SDialog {
     }
 
     onUpdate(context: SDialogContext): void {
-        console.log("LCommandPlaybackDialog update");
         assert(REGame.recorder.isPlayback());
 
 

@@ -8,6 +8,7 @@ import { RESystem } from "./RESystem";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { SDialog } from "./SDialog";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
+import { SCommandPlaybackDialog } from "./dialogs/SCommandPlaybackDialog";
 
 export class SDialogContext
 {
@@ -24,19 +25,27 @@ export class SDialogContext
 
     public open(dialog: SDialog): void {
         this._dialogs.push(dialog);
-        RESystem.integration.onOpenDialog(dialog);
+        RESystem.integration.openDialog(dialog);
     }
 
     private pop(): void {
+        const dialogIsPlaybck = this.activeDialog() instanceof SCommandPlaybackDialog;
+
         this._dialogs.pop();
 
         if (this._dialogs.length == 0) {
             
             if (REGame.recorder.isRecording()) {
-                REGame.recorder.push({
-                    type: RERecordingCommandType.CloseMainDialog,
-                    activity: null,
-                });
+                if (dialogIsPlaybck) {
+                    // SCommandPlaybackDialog が最後のコマンドを実行し終えた時に備える。
+                    // ここで記録してしまうと、回想が終わるたびに "待機" が増えてしまう。
+                }
+                else {
+                    REGame.recorder.push({
+                        type: RERecordingCommandType.CloseMainDialog,
+                        activity: null,
+                    });
+                }
             }
         }
     }
@@ -80,7 +89,7 @@ export class SDialogContext
     
     _closeDialog() {
         this.pop();
-        RESystem.integration.onDialogClosed(this);
+        RESystem.integration.dialogClosed(this);
     }
 
     /**
@@ -118,7 +127,7 @@ export class SDialogContext
         dialog.onUpdate(this);
 
         if (dialog.isVisualIntegration()) {
-            RESystem.integration.onUpdateDialog(this);
+            RESystem.integration.updateDialog(this);
         }
         //REGame.recorder._recording = false;
 

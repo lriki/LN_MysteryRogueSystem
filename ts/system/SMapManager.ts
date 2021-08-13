@@ -58,7 +58,7 @@ export class SMapManager {
         const floorId = this._map.floorId();
 
         
-        RESystem.integration.onRefreshGameMap(REGame.map, initialMap);
+        RESystem.integration.refreshGameMap(REGame.map, initialMap);
 
         // 階段を配置する
         {

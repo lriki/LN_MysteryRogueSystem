@@ -2,6 +2,7 @@ import { LandExitResult } from "ts/data/REData";
 import { FMap } from "ts/floorgen/FMapData";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
+import { REGame } from "ts/objects/REGame";
 import { SSequelSet } from "ts/system/SSequel";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
@@ -19,27 +20,88 @@ export abstract class SIntegration {
     
     abstract onLoadFixedMapEvents(): void;
 
-    abstract onRefreshGameMap(map: LMap, initialMap: FMap): void;
+    protected abstract onRefreshGameMap(map: LMap, initialMap: FMap): void;
 
-    abstract onFlushSequelSet(sequelSet: SSequelSet): void;
+    protected abstract onFlushSequelSet(sequelSet: SSequelSet): void;
 
-    abstract onCheckVisualSequelRunning(): boolean;
+    protected abstract onCheckVisualSequelRunning(): boolean;
     
     /** Dialog が開かれたとき。 */
-    abstract onOpenDialog(model: SDialog): void;
+    protected abstract onOpenDialog(model: SDialog): void;
 
-    abstract onUpdateDialog(context: SDialogContext): void;
+    protected abstract onUpdateDialog(context: SDialogContext): void;
 
     /** Dialog が閉じられたとき。 */
-    abstract onDialogClosed(context: SDialogContext): void;
+    protected abstract onDialogClosed(context: SDialogContext): void;
 
     /** Entity が Map 上に出現したとき。 */
-    abstract onEntityEnteredMap(entity: LEntity): void;
+    protected abstract onEntityEnteredMap(entity: LEntity): void;
 
     /** Entity が Map から離れたとき。 */
-    abstract onEntityLeavedMap(entity: LEntity): void;
+    protected abstract onEntityLeavedMap(entity: LEntity): void;
 
-    abstract onEntityReEnterMap(entity: LEntity): void;
+    protected abstract onEntityReEnterMap(entity: LEntity): void;
 
     abstract onSetLandExitResult(result: LandExitResult): void;
+
+
+    //--------------------
+    // Visual notifications
+
+    public refreshGameMap(map: LMap, initialMap: FMap): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onRefreshGameMap(map, initialMap);
+        }
+    }
+
+    public flushSequelSet(sequelSet: SSequelSet): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onFlushSequelSet(sequelSet);
+        }
+    }
+
+    public checkVisualSequelRunning(): boolean {
+        if (!REGame.recorder.isSilentPlayback()) {
+            return this.onCheckVisualSequelRunning();
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public openDialog(model: SDialog): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onOpenDialog(model);
+        }
+    }
+
+    public updateDialog(context: SDialogContext): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onUpdateDialog(context);
+        }
+    }
+
+    public dialogClosed(context: SDialogContext): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onDialogClosed(context);
+        }
+    }
+
+    public entityEnteredMap(entity: LEntity): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onEntityEnteredMap(entity);
+        }
+    }
+
+    public entityLeavedMap(entity: LEntity): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onEntityLeavedMap(entity);
+        }
+    }
+
+    public entityReEnterMap(entity: LEntity): void {
+        if (!REGame.recorder.isSilentPlayback()) {
+            this.onEntityReEnterMap(entity);
+        }
+    }
 }

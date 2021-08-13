@@ -33,6 +33,7 @@ export class RECommandRecorder {
     private _playbackCommands: RERecordingCommand[] | undefined;
     private _playbackCommandIndex: number = 0;
     private _savefileId: number = 0;
+    private _silentPlayback: boolean = false;
     
     constructor() {
         //this.startRecording();
@@ -121,7 +122,7 @@ export class RECommandRecorder {
         this._stream.write(JSON.stringify(cmd) + ",\n");
     }
 
-    public startPlayback(): void {
+    public startPlayback(silent: boolean): void {
         this.closeFile();
 
         const data = fs.readFileSync(this.filePath(), { encoding: "utf8" });
@@ -131,6 +132,11 @@ export class RECommandRecorder {
         console.log("_playbackCommands", this._playbackCommands);
         this._playbackCommandIndex = 0;
         this._recorderMode = RecorderMode.Playback;
+        this._silentPlayback = silent;
+    }
+
+    public isSilentPlayback(): boolean {
+        return this._silentPlayback;
     }
 
     private closeFile(): void {
@@ -160,6 +166,7 @@ export class RECommandRecorder {
         }
         else {
             this._recorderMode == RecorderMode.Idle;
+            this._silentPlayback = false;
             return false;
         }
     }

@@ -170,7 +170,7 @@ DataManager.makeSaveContents = function() {
 const _DataManager_extractSaveContents = DataManager.extractSaveContents;
 DataManager.extractSaveContents = function(contents) {
     _DataManager_extractSaveContents.call(this, contents);
-    SGameManager.extractSaveContents(contents.re);
+    SGameManager.loadGame(contents.re);
 }
 
 // メモ欄に同じタグが複数あった場合、配列としてmetaプロパティに登録する。

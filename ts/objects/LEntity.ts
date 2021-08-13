@@ -125,7 +125,7 @@ export class LEntity extends LObject
 
             // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
             if (this.floorId.equals(REGame.map.floorId())) {
-                RESystem.integration.onEntityReEnterMap(this);
+                RESystem.integration.entityReEnterMap(this);
             }
         }
         else {
