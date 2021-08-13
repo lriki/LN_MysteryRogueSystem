@@ -122,17 +122,29 @@ export class RECommandRecorder {
         this._stream.write(JSON.stringify(cmd) + ",\n");
     }
 
-    public startPlayback(silent: boolean): void {
+    public attemptStartPlayback(silent: boolean): boolean {
         this.closeFile();
 
-        const data = fs.readFileSync(this.filePath(), { encoding: "utf8" });
-        const json = "[" + data.substring(0, data.length - 2) + "]";
+        const filepath = this.filePath();
+        
+        if (!fs.existsSync(filepath)) {
+            // ファイルが無かった。実行不要。
+            return false;
+        }
 
+        const data = fs.readFileSync(filepath, { encoding: "utf8" });
+        const json = "[" + data.substring(0, data.length - 2) + "]";
         this._playbackCommands = JSON.parse(json);
-        console.log("_playbackCommands", this._playbackCommands);
+        
+        if (!this._playbackCommands || this._playbackCommands.length == 0) {
+            // ファイルが空っぽだった。実行不要。
+            return false;
+        }
+
         this._playbackCommandIndex = 0;
         this._recorderMode = RecorderMode.Playback;
         this._silentPlayback = silent;
+        return true;
     }
 
     public isSilentPlayback(): boolean {

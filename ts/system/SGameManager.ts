@@ -188,6 +188,14 @@ export class SGameManager
         const map = REGame.world.objects().find(x => x && x.objectType() == LObjectType.Map);
         assert(map);
         REGame.map = map as LMap;
+
+        
+
+        if (REGame.recorder.attemptStartPlayback(true)) {
+            while (REGame.recorder.isPlayback()) {
+                RESystem.scheduler.stepSimulation();
+            }
+        }
     }
 }
 
