@@ -144,6 +144,10 @@ export class SActivityRecorder {
         return true;
     }
 
+    public clearSilentPlayback(): void {
+        this._silentPlayback = false;
+    }
+
     public isSilentPlayback(): boolean {
         return this._silentPlayback;
     }
@@ -175,7 +179,7 @@ export class SActivityRecorder {
         }
         else {
             this._recorderMode == RecorderMode.Idle;
-            this._silentPlayback = false;
+            //this._silentPlayback = false;
             return false;
         }
     }

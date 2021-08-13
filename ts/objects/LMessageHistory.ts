@@ -1,3 +1,4 @@
+import { REGame } from "./REGame";
 
 
 export type ChoiceCallback = (n: number) => void;
@@ -15,6 +16,8 @@ export type ChoiceCallback = (n: number) => void;
 export class LMessageHistory {
     // 履歴。Floor 開始から現在までの全てのメッセージを行単位で保持する
     private _texts: string[];
+    
+    _lastViewLineIndex: number = -1
 
     constructor() {
         this._texts = [];
@@ -26,6 +29,10 @@ export class LMessageHistory {
 
     add(text: string): void {
         this._texts.push(text);
+
+        if (REGame.recorder.isSilentPlayback()) {
+            this._lastViewLineIndex = this._texts.length;
+        }
     }
 
     hasText(): boolean {

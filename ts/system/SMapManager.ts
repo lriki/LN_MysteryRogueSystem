@@ -24,7 +24,7 @@ import { LRandom } from "ts/objects/LRandom";
 export class SMapManager {
     private _map: LMap;
     private _enemySpanwRate: number = 10;
-    private _enemySpawnCount: number = 0;   // 
+    private _enemySpawnCount: number = 0;   // TODO: これは Ojbect 側に持って行かないとまずいかも
 
     constructor() {
         this._map = REGame.map;

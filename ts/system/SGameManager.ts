@@ -195,6 +195,11 @@ export class SGameManager
             while (REGame.recorder.isPlayback()) {
                 RESystem.scheduler.stepSimulation();
             }
+
+            // Silent モードのクリアは、すべての Playback simulation が終わってから行う。
+            // そうしないと、例えば最後に杖を振る Activity がある場合、魔法弾の生成が非 Silent で実行されるため
+            // View まで流れてしまい、まだ未ロードのマップ情報を参照しようとしてしまう。
+            REGame.recorder.clearSilentPlayback();
         }
     }
 }

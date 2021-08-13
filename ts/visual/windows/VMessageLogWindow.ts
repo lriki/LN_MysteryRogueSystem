@@ -29,8 +29,7 @@ interface TextLineState {
 export class VMessageLogWindow extends Window_Base {
     private _message: LMessageHistory;
     private _waitCount: number = 0;
-    private _autoScroll: boolean = true;
-    private _lastViewLineIndex: number = -1;
+    private _autoScroll: boolean = true;;
     private _autoScrollCount: number = 0;
     private _autoScrollCountMax: number = 10;
     private _maxLines: number = 2;
@@ -95,7 +94,7 @@ export class VMessageLogWindow extends Window_Base {
         // 今表示している終端行移行にもログ行が溜まっている場合は表示を続行したい
         return (
             this._message.hasText() &&
-            this._lastViewLineIndex < this._message.texts().length - 1
+            this._message._lastViewLineIndex < this._message.texts().length - 1
         );
     }
     
@@ -152,7 +151,7 @@ export class VMessageLogWindow extends Window_Base {
     }
 
     private startNewMessageAndScroll() {
-        const text = this._message.texts()[this._lastViewLineIndex + 1];
+        const text = this._message.texts()[this._message._lastViewLineIndex + 1];
 
         const textState: TextLineState = (this.createTextState(text, 0, 0, 0) as TextLineState);
         textState.x = this.newLineX(textState);
@@ -181,7 +180,7 @@ export class VMessageLogWindow extends Window_Base {
 
         this._textLines.push(textState);
 
-        this._lastViewLineIndex++;
+        this._message._lastViewLineIndex++;
 
         if (this._textLines.length > this.maxLines()) {
             // Start scroll
