@@ -114,10 +114,10 @@ export class RMMZIntegration extends SIntegration {
         else {
             // Prefab 検索
             //const eventData = SRmmzHelpers.getPrefabEventData(entity.prefabKey);
-            const eventData = SRmmzHelpers.getPrefabEventData(REData.prefabs[entity.data().prefabId].key);
+            const id = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
 
             //  entity に対応する動的イベントを新たに生成する
-            const event = $gameMap.spawnREEvent(eventData);
+            const event = $gameMap.spawnREEvent(id);
             entity.rmmzEventId = event.eventId();
         }
 

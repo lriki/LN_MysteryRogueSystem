@@ -11,6 +11,7 @@
  * コアスクリプトはそのような状態を想定していないためクラッシュする。
  */
 
+import { SRmmzHelpers } from 'ts/system/SRmmzHelpers';
 import { assert } from '../Common';
 import { REDataManager } from '../data/REDataManager';
 import { REVisual } from '../visual/REVisual';
@@ -26,15 +27,19 @@ import { Game_REPrefabEvent } from './Game_REPrefabEvent';
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(eventData: IDataMapEvent): Game_REPrefabEvent;
+        spawnREEvent(prefabEventDataId: number): Game_REPrefabEvent;
         //spawnREEventFromCurrentMapEvent(eventId: number): Game_REPrefabEvent;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent): Game_REPrefabEvent {
+Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPrefabEvent {
     if (!$dataMap.events) {
         throw new Error();
     }
+
+    assert(prefabEventDataId > 0);
+
+    const eventData = SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
 
     // フリー状態の REEvent を探してみる
     let eventId = this._events.findIndex(e => (e instanceof Game_REPrefabEvent) && e.isREExtinct());
@@ -47,6 +52,7 @@ Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent): Game_REPre
         $dataMap.events[eventId] = eventData;
         
         const event = new Game_REPrefabEvent(REDataManager.databaseMapId, eventId);
+        event._prefabEventDataId = prefabEventDataId;
         this._events[eventId] = event;
         return event;
     }
@@ -56,6 +62,7 @@ Game_Map.prototype.spawnREEvent = function(eventData: IDataMapEvent): Game_REPre
 
         // 再構築
         $dataMap.events[eventId] = eventData;
+        event._prefabEventDataId = prefabEventDataId;
         event.increaseRERevision();
         event.initMembers();
         event.refresh();

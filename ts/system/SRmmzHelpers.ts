@@ -70,20 +70,30 @@ export class SRmmzHelpers {
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
     }
 
-    public static getPrefabEventData(prefabName: string): IDataMapEvent {
+    public static getPrefabEventDataId(prefabName: string): number {
         const databaseMap = REDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
 
         const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabName : false);
         if (index >= 0) {
-            const event = databaseMap.events[index];
-            if (event) return event;
-            throw new Error(`${prefabName} not found in RE-Database map.`);
+            return index;
+            //const event = databaseMap.events[index];
+            //if (event) return event;
+            //throw new Error(`${prefabName} not found in RE-Database map.`);
         }
         else {
             throw new Error(`${prefabName} not found in RE-Database map.`);
         }
+    }
+    
+    public static getPrefabEventDataById(id: number): IDataMapEvent {
+        const databaseMap = REDataManager.databaseMap();
+        assert(databaseMap);
+        assert(databaseMap.events);
+        const event = databaseMap.events[id];
+        if (event) return event;
+        throw new Error(`${id} not found in RE-Database map.`);
     }
 
     public static getRegionId(x: number, y: number): number {

@@ -3,6 +3,7 @@ import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
 import { REData, REFloorMapKind } from "../data/REData";
 import { assert } from "../Common";
+import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 
 /*
  [2020/11/2] マップ読み込みメモ
@@ -208,3 +209,15 @@ const _DataManager_loadGame = DataManager.loadGame;
 DataManager.loadGame = function(savefileId) {
     return _DataManager_loadGame.call(this, savefileId);
 }
+
+const _DataManager_onLoad = DataManager.onLoad;
+DataManager.onLoad = function(object) {
+    _DataManager_onLoad.call(this, object);
+    if (object === $dataMap && $gameMap) {
+        for (const event of $gameMap.events()) {
+            if (event instanceof Game_REPrefabEvent) {
+                event.restorePrefabEventData();
+            }
+        }
+    }
+};
