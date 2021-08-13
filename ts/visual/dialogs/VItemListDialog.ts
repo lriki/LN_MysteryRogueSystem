@@ -112,14 +112,14 @@ export class VItemListDialog extends VDialog {
                 this.openSubDialog(model, (result: any) => {
                     const item = model.selectedEntity();
                     assert(item);
-                    const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+                    const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
                     activity.setObjects2([item]);
                     RESystem.dialogContext.postActivity(activity);
                     this.submit();
                 });
             }
             else {
-                const activity = new LActivity(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+                const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
                 RESystem.dialogContext.postActivity(activity);
                 this.submit();
             }

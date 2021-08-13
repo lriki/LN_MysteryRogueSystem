@@ -8,7 +8,7 @@ import { REGame } from 'ts/objects/REGame';
 import { LMap } from 'ts/objects/LMap';
 import { RECommand } from './RECommand';
 import { RESystem } from './RESystem';
-import { LActivity } from 'ts/objects/activities/LActivity';
+import { LActivity, LActivityData } from 'ts/objects/activities/LActivity';
 import { RmmzStorageManager } from 'ts/rmmz/StorageManager';
 
 export enum RERecordingCommandType {
@@ -18,10 +18,17 @@ export enum RERecordingCommandType {
 
 export interface RERecordingCommand {
     type: RERecordingCommandType,
-    activity: LActivity | null,
+    activity: LActivityData | null,
+}
+
+enum RecorderMode {
+    Idle,
+    Recording,
+    Playback,
 }
 
 export class RECommandRecorder {
+    private _recorderMode: RecorderMode = RecorderMode.Idle;
     private _stream: fs.WriteStream | undefined;
     private _playbackCommands: RERecordingCommand[] | undefined;
     private _playbackCommandIndex: number = 0;
@@ -36,45 +43,101 @@ export class RECommandRecorder {
         this._savefileId = id;
     }
 
+    public isIdle(): boolean {
+        return this._recorderMode == RecorderMode.Idle;
+    }
 
     public isRecording(): boolean {
-        return this._stream != undefined;
+        return this._recorderMode == RecorderMode.Recording;
     }
 
     public isPlayback(): boolean {
-        return this._playbackCommands != undefined && this._playbackCommandIndex < this._playbackCommands.length;
+        return this._recorderMode == RecorderMode.Playback;
+        //return this._playbackCommands != undefined && this._playbackCommandIndex < this._playbackCommands.length;
     }
 
-    public startRecording(): void {
+    public startRecording(): Promise<boolean> {
+        this.closeFile();
+
+        this._recorderMode = RecorderMode.Recording;
+
+        return new Promise(async (resolve, reject) => {
+            this._stream = fs.createWriteStream(this.filePath());
+            this._stream.on('open', () => resolve(true));
+            this._stream.on('error', () => reject(false));
+        });
+
+        /*
         this._stream = fs.createWriteStream(this.filePath());
+        assert(this._stream);
+        this._stream.on('open', () => {
+            console.log("createReadStream");
+        });
+        this._stream.on('ready', () => {
+            console.log("2");
+        });
+        this._stream.on('finish', () => {
+            console.log("3");
+        });
+        */
+    }
+    
+    public stopRecording(): Promise<boolean> {
+
+        if (this._stream) {
+            this._stream.close();
+            this._recorderMode = RecorderMode.Idle;
+    
+            
+        }
+        
+        return new Promise(async (resolve, reject) => {
+            if (this._stream) {
+                this._stream.on('close', () => resolve(true));
+            }
+        });
     }
 
     public restartRecording(): void {
+        this.closeFile();
+
         const options = {
             flags: "a"  // 追加書き込みモード
         };
         this._stream = fs.createWriteStream(this.filePath(), options);
+        this._recorderMode = RecorderMode.Recording;
     }
 
     private filePath(): string {
+        //const dir = RESystem.unittest ? "" : RmmzStorageManager.fileDirectoryPath();
         const dir = RmmzStorageManager.fileDirectoryPath();
-        return dir + `re${this._savefileId}.record`;
+        return (dir + `re${this._savefileId}.record`).replace(/\\/g, "/");
     }
 
     public push(cmd: RERecordingCommand): void {
         assert(this._stream);
 
         // 平均実行時間は 0.02[ms]
-        this._stream.write(JsonEx.stringify(cmd) + ",\n");
+        this._stream.write(JSON.stringify(cmd) + ",\n");
     }
 
     public startPlayback(): void {
+        this.closeFile();
+
         const data = fs.readFileSync(this.filePath(), { encoding: "utf8" });
         const json = "[" + data.substring(0, data.length - 2) + "]";
 
-        this._playbackCommands = JsonEx.parse(json);
+        this._playbackCommands = JSON.parse(json);
         console.log("_playbackCommands", this._playbackCommands);
         this._playbackCommandIndex = 0;
+        this._recorderMode = RecorderMode.Playback;
+    }
+
+    private closeFile(): void {
+        if (this._stream) {
+            this._stream.close();
+            this._stream = undefined;
+        }
     }
 
     public runPlaybackCommand(dialog: SCommandPlaybackDialog): boolean {
@@ -92,14 +155,20 @@ export class RECommandRecorder {
 
         } while (this._playbackCommandIndex < this._playbackCommands.length);
 
-        return this._playbackCommandIndex < this._playbackCommands.length;
+        if (this._playbackCommandIndex < this._playbackCommands.length) {
+            return true;
+        }
+        else {
+            this._recorderMode == RecorderMode.Idle;
+            return false;
+        }
     }
 
     private doCommand(dialog: SCommandPlaybackDialog, cmd: RERecordingCommand): boolean {
         switch (cmd.type) {
             case RERecordingCommandType.Activity: {
                 assert(cmd.activity);
-                RESystem.commandContext.postActivity(cmd.activity);
+                RESystem.commandContext.postActivity(LActivity.makeFromData(cmd.activity));
                 return true;
             }
             case RERecordingCommandType.CloseMainDialog: {

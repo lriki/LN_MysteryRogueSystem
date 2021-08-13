@@ -37,6 +37,7 @@ export class RESystem {
     static mapManager: SMapManager;
     static groundRules: SGroundRules;
     static requestedPlayback: boolean = false;
+    static unittest: boolean = false;
 
     // Database
     static sequels: BasicSequels;

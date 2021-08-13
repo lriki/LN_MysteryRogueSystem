@@ -24,7 +24,7 @@ test("Combat.DamageAndCollapse", () => {
     // 準備
     TestEnv.newGame();
 
-    // actor1
+    // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
@@ -58,7 +58,7 @@ test("Combat.DamageAndGameover", () => {
     // 準備
     TestEnv.newGame();
 
-    // actor1
+    // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1._name = "actor1";
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // 配置

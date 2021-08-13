@@ -71,6 +71,7 @@ export class TestEnv {
         REData.reset();
         REDataManager.loadData(true);
         RESystem.integration = new TestEnvIntegration();
+        RESystem.unittest = true;
         //REDataManager.loadPrefabDatabaseMap();
         {
             // Database マップ読み込み開始

@@ -56,7 +56,7 @@ export class VFeetDialog extends VDialog {
         assert(entity);
 
         // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-        const activity = new LActivity(actionId, entity, this._model.targetEntity(), entity.dir);
+        const activity =(new LActivity).setup(actionId, entity, this._model.targetEntity(), entity.dir);
 
         RESystem.dialogContext.postActivity(activity);
         this._model.submit();

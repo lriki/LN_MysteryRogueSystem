@@ -73,7 +73,7 @@ export class SDialogContext
         if (REGame.recorder.isRecording()) {
             REGame.recorder.push({
                 type: RERecordingCommandType.Activity,
-                activity: activity,
+                activity: activity.toData(),
             });
         }
     }

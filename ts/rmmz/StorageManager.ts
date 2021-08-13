@@ -4,9 +4,9 @@ import { assert } from "ts/Common";
 export class RmmzStorageManager {
 
     public static fileDirectoryPath(): string {
-        assert(process.mainModule);
+        //assert(process.mainModule);
         const path = require("path");
-        const base = path.dirname(process.mainModule.filename);
+        const base = process.cwd();//path.dirname(process.mainModule.filename);
         return path.join(base, "save/");
     };
 }

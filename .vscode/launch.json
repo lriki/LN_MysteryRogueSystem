@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Survival.FP"
+                "-t", "Recorder.Basic1"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

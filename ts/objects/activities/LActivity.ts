@@ -4,6 +4,22 @@ import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 
+export interface LEntityIdData {
+    index: number;
+    key: number;
+}
+
+// LActivity を保存するためのデータ。
+// UnitTest では JsonEx が使えなかったり、JsonEx 使うと型情報を含むため Save/Load の時間が気になったりするので用意したもの。
+export interface LActivityData {
+    actionId: DActionId;
+    subject: LEntityIdData;
+    object: LEntityIdData;
+    objects2: LEntityIdData[];
+    direction: number;
+    consumeAction: boolean;
+}
+
 /**
  * 主に GUI 上から選択できる各種行動
  * 
@@ -22,13 +38,23 @@ export class LActivity {
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
     private _consumeAction: boolean;
 
-    public constructor(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number) {
+    public constructor() {
+        this._actionId = 0;
+        this._subject = LEntityId.makeEmpty();
+        this._object = LEntityId.makeEmpty();
+        this._objects2 = [];
+        this._direction = 0;
+        this._consumeAction = false;
+    }
+
+    public setup(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number): this {
         this._actionId = actionId;
         this._subject = subject.entityId();
         this._object = object ? object.entityId() : LEntityId.makeEmpty();
         this._objects2 = [];
         this._direction = dir ?? 0;
         this._consumeAction = false;
+        return this;
     }
 
     public actionId(): DActionId {
@@ -72,62 +98,84 @@ export class LActivity {
         return this._consumeAction;
     }
 
+    public toData(): LActivityData {
+        return {
+            actionId: this._actionId,
+            subject: { index: this._subject.index2(), key: this._subject.key2() },
+            object: { index: this._object.index2(), key: this._object.key2() },
+            objects2: this._objects2.map(x => { return { index: x.index2(), key: x.key2() }; }),
+            direction: this._direction,
+            consumeAction: this._consumeAction,
+        }
+    }
+
+    public static makeFromData(data: LActivityData): LActivity {
+        const i = new LActivity();
+        i._actionId = data.actionId;
+        i._subject = new LEntityId(data.subject.index, data.subject.key);
+        i._object = new LEntityId(data.object.index, data.object.key);
+        i._objects2 = data.objects2.map(x => new LEntityId(x.index, x.key));
+        i._direction = data.direction;
+        i._consumeAction = data.consumeAction;
+        return i;
+    }
+
     //--------------------
     // Utils
 
     public static make(subject: LEntity): LActivity {
-        return new LActivity(0, subject);
+        return (new LActivity()).setup(0, subject);
     }
 
     public static makeDirectionChange(subject: LEntity, dir: number): LActivity {
-        return new LActivity(DBasics.actions.DirectionChangeActionId, subject, undefined, dir);
+        return (new LActivity()).setup(DBasics.actions.DirectionChangeActionId, subject, undefined, dir);
     }
 
     public static makeMoveToAdjacent(subject: LEntity, dir: number): LActivity {
-        return new LActivity(DBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
+        return (new LActivity()).setup(DBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
     }
 
     public static makePick(subject: LEntity): LActivity {
-        return new LActivity(DBasics.actions.PickActionId, subject);
+        return (new LActivity()).setup(DBasics.actions.PickActionId, subject);
     }
 
     public static makePut(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.PutActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.PutActionId, subject, object);
     }
 
     public static makeThrow(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.ThrowActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.ThrowActionId, subject, object);
     }
 
     public static makeExchange(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.ExchangeActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.ExchangeActionId, subject, object);
     }
 
     public static makeEquip(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.EquipActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.EquipActionId, subject, object);
     }
 
     public static makeEquipOff(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.EquipOffActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.EquipOffActionId, subject, object);
     }
 
     
     public static makeEat(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.EatActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.EatActionId, subject, object);
     }
 
     public static makeWave(subject: LEntity, object: LEntity): LActivity {
-        return new LActivity(DBasics.actions.WaveActionId, subject, object);
+        return (new LActivity()).setup(DBasics.actions.WaveActionId, subject, object);
     }
 
     public static makeRead(subject: LEntity, object: LEntity, targets?: LEntity[]): LActivity {
-        const a = new LActivity(DBasics.actions.ReadActionId, subject, object);
+        const a = (new LActivity()).setup(DBasics.actions.ReadActionId, subject, object);
         if (targets) a.setObjects2(targets);
         return a;
     }
 
     public static makePutIn(subject: LEntity, storage: LEntity, item: LEntity): LActivity {
-        const a = new LActivity(DBasics.actions.PutInActionId, subject, storage);
+        const a = (new LActivity()).setup(DBasics.actions.PutInActionId, subject, storage);
         a._objects2 = [item.entityId()];
         return a;
     }
