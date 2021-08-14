@@ -157,16 +157,7 @@ NOTE:
                     context.postMessage(tr2("%1 は装備できない。").format(REGame.identifyer.makeDisplayText(itemEntity)));
                 }
             }
-
-            /*
-            if (!slot) {
-                // ここまでで slot が見つからなければ装備不可能
-                context.postMessage(tr2("%1 は装備できない。").format(REGame.identifyer.makeDisplayText(itemEntity)));
-            }
-            else {
-            }
-            */
-
+            
             return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.EquipOffActionId) {

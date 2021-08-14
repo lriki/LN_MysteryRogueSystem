@@ -239,6 +239,7 @@ export class LEntity extends LObject
     // Unit の状態異常のほか、アイテムの呪い、祝福、封印などでも使用する。
     // とりあえず Entity に持たせて様子見。
     _states: LStateId[] = [];
+    _needVisualRefresh: boolean = false;
     
     _abilities: LAbilityId[] = [];
 
@@ -287,6 +288,7 @@ export class LEntity extends LObject
         //entity._actionConsumed = this._actionConsumed;
         //entity._located = this._located;
         entity._params.copyTo(this._params);
+        entity._needVisualRefresh = true;   // とりあえず
 
 
 
@@ -747,6 +749,7 @@ export class LEntity extends LObject
             this._states.push(state.id());
             state.onAttached();
             this._effectResult.pushAddedState(stateId);
+            this._needVisualRefresh = true;
         }
 
         if (refresh) {
@@ -770,6 +773,7 @@ export class LEntity extends LObject
             states[index].onDetached();
             this._states.splice(index, 1);
             this._effectResult.pushRemovedState(stateId);
+            this._needVisualRefresh = true;
         }
     }
 
@@ -780,6 +784,7 @@ export class LEntity extends LObject
             s.onDetached();
         });
         this._states = [];
+        this._needVisualRefresh = true;
     }
 
     

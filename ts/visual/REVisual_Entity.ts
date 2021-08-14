@@ -109,6 +109,7 @@ export class REVisual_Entity
         if (this._rmmzEventId >= 0) {
             const tileSize = REVisual.manager.tileSize();
             const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
+            const entity = this.entity();
 
             // 姿勢同期
             event._x = this._position.x;
@@ -117,7 +118,7 @@ export class REVisual_Entity
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
 
-            const charactorImage = this.entity().getCharacterImage();
+            const charactorImage = entity.getCharacterImage();
             if (charactorImage) {
                 event.setImage(charactorImage.characterName, charactorImage.characterIndex);
 
@@ -133,7 +134,12 @@ export class REVisual_Entity
                 }
             }
 
-            this.updateEventPage(event);
+            if (entity._needVisualRefresh) {
+                entity._needVisualRefresh = false;
+                event.refresh();
+            }
+
+            //this.updateEventPage(event);
 
             
             const sprite = this.rmmzSprite();
@@ -182,7 +188,7 @@ export class REVisual_Entity
             }
         }
     }
-
+/*
     private updateEventPage(event: Game_REPrefabEvent): void {
         const index = this.getEventPageIndex();
         event.setPageIndex(index);
@@ -202,5 +208,6 @@ export class REVisual_Entity
         }
         return 0;
     }
+    */
 }
 

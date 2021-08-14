@@ -100,8 +100,15 @@ export class UTransfer {
                 const exitRMMZMapId = floorId.landData().exitRMMZMapId;
                 assert(exitRMMZMapId > 0);
                 
-                
-                $gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
+                console.log("踏破！");
+                console.log("exitRMMZMapId", exitRMMZMapId);
+
+                const newFloorId = LFloorId.makeByRmmzNormalMapId(exitRMMZMapId)
+
+                //const newFloorId = LFloorId.make(DHelpers.RmmzNormalMapLandId, exitRMMZMapId);
+                REGame.world._transferEntity(entity, newFloorId);
+
+                //$gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
                 //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
                 //assert(result);
             }

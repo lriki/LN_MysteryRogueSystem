@@ -48,9 +48,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPr
         eventId = this._events.length;
         
         const event = new Game_REPrefabEvent(REDataManager.databaseMapId, eventId);
-        event._prefabEventDataId = prefabEventDataId;
-        event._eventData = eventData;
-        event.refresh();
+        event.setupPrefab(prefabEventDataId, eventData);
         this._events[eventId] = event;
         return event;
     }
@@ -59,12 +57,9 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPr
         assert(event instanceof Game_REPrefabEvent);
 
         // 再構築
-        event._prefabEventDataId = prefabEventDataId;
-        event._eventData = eventData;
-        //event.refresh();
-        event.increaseRERevision();
         event.initMembers();
-        event.refresh();
+        event.increaseRERevision();
+        event.setupPrefab(prefabEventDataId, eventData);
         return event;
     }
 }

@@ -30,7 +30,7 @@ export interface RMMZEventPrefabMetadata {
     enemy?: string;
     system?: string;
 
-    projectilePage?: string;    // Projectile として移動中にアクティブになるイベントページ (1~)
+    //projectilePage?: string;    // Projectile として移動中にアクティブになるイベントページ (1~)
 
     // deprecated
     weaponId?: number;
@@ -68,10 +68,18 @@ export interface RMMZEventEntityMetadata {
 
 interface RmmzREEventRawMetadata {
     trigger?: string;
+    condition_state?: string;
+    //conditions?: {
+    //    state?: string,
+    //}
 }
 
 export interface RmmzREEventMetadata {
     trigger?: string;
+    condition_state?: string;
+    //conditions?: {
+    //    state?: string,
+    //}
 }
 
 export class DHelpers {
@@ -357,6 +365,7 @@ export class DHelpers {
                     const rawData_ = rawData;
                     return {
                         trigger: rawData_.trigger,
+                        condition_state: rawData_.condition_state,
                     };
                 }
                 else {

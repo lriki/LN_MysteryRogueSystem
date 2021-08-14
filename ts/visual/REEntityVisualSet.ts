@@ -6,6 +6,7 @@ import { SSequelSet } from "ts/system/SSequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { assert } from "ts/Common";
+import { Game_REPrefabEvent } from "ts/rmmz/Game_REPrefabEvent";
 
 
 /**
@@ -172,8 +173,11 @@ export class REEntityVisualSet {
             throw new Error();
         }
 
+        assert(event instanceof Game_REPrefabEvent);
+
 
         const visual = new REVisual_Entity(entity, event.eventId());
+        //event._visualId = this._visualEntities.length;
         this._visualEntities.push(visual);
     }
 }
