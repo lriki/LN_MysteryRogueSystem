@@ -171,14 +171,18 @@ export class LEffectResult {
             for (const stateId of this.addedStates) {
                 const state = REData.states[stateId];
                 const stateText = isActor ? state.message1 : state.message2;
-                context.postMessage(stateText.format(targetName));
+                if (stateText) {
+                    context.postMessage(stateText.format(targetName));
+                }
             }
         }
         // Game_Actor.prototype.showRemovedStates
         {
             for (const stateId of this.removedStates) {
                 const state = REData.states[stateId];
-                context.postMessage(state.message4.format(targetName));
+                if (state.message4) {
+                    context.postMessage(state.message4.format(targetName));
+                }
             }
         }
 

@@ -396,6 +396,8 @@ export class SCommandContext
     }
 
     postMessage(text: string) {
+        assert(text);   // 空メッセージが来るときは何かおかしいことが多いのでガードしておく
+        
         const m1 = () => {
             Log.doCommand("Message");
             REGame.messageHistory.add(text);

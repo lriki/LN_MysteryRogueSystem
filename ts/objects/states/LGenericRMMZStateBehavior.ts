@@ -32,8 +32,6 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     private resetStateCounts(): void {
         const state = this.stateData();
         
-        console.log("state", state);
-
         if (state.autoRemovalTiming == DAutoRemovalTiming.None) {
             this._stateTurn = null;
         }
@@ -49,12 +47,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         else {
             throw new Error("Not implemented");
         }
-
-        
-        console.log("this._stateTurn", this._stateTurn);
     }
-
-    
 
     private updateStateTurns(): void {
         if (this._stateTurn && this._stateTurn > 0) {
