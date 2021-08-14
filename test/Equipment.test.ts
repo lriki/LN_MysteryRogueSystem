@@ -133,10 +133,13 @@ test("Equipment.Curse", () => {
     const inventory = actor1.getBehavior(LInventoryBehavior);
     const equipmens = actor1.getBehavior(LEquipmentUserBehavior);
 
+    // 武器 入手 (呪い無し)
+    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, []));
+    inventory.addEntity(weapon2);
+
     // 武器 入手 (呪い付き)
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getStateFuzzy("UT呪い").id]));
     REGame.world._transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    //inventory.addEntity(weapon1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -146,7 +149,7 @@ test("Equipment.Curse", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-    expect(actor1.getBehavior(LInventoryBehavior).entities()[0]).toBe(weapon1);   // アイテムを拾えていること
+    expect(inventory.contains(weapon1)).toBe(true);   // アイテムを拾えていること
 
     // [装備]
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1).withConsumeAction());
@@ -155,6 +158,15 @@ test("Equipment.Curse", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 装備できていること。
+    
+    // 呪われていない武器を [装備]
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon2).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(equipmens.isEquipped(weapon1)).toBe(true);   // 呪われた武器は外せない
+    expect(equipmens.isEquipped(weapon2)).toBe(false);
     
     // [はずす]
     RESystem.dialogContext.postActivity(LActivity.makeEquipOff(actor1, weapon1).withConsumeAction());

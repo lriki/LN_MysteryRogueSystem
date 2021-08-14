@@ -5,7 +5,7 @@ import { DEquipmentPartId } from "ts/data/DEquipmentPart";
 import { DItem } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
 import { REResponse } from "ts/system/RECommand";
-import { SCommandContext } from "ts/system/SCommandContext";
+import { RECCMessageCommand, SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -134,36 +134,67 @@ NOTE:
             // まず空きが無いか調べてみる
             let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
 
-            // 空きが無ければ交換対象を探す
-            if (!slot) {
+            if (slot) {
+                // 空きがあればそのまま装備
+                this.equipOn(context, self, slot, itemEntity);
+            }
+            else {
+                // 空きが無ければ交換対象を探す
                 slot = this._slots.find(x => x.partId == itemPart);
+                if (slot) {
+                    const localSlot = slot;
+
+                    // まずは外す
+                    this.equipOff(context, self, REGame.world.entity(localSlot.itemEntityId))
+                        .then(() => {
+                            // 外せたら装備する
+                            this.equipOn(context, self, localSlot, itemEntity);
+                            return true;
+                        });
+                }
+                else {
+                    // ここまでで slot が見つからなければ装備不可能
+                    context.postMessage(tr2("%1 は装備できない。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+                }
             }
 
+            /*
             if (!slot) {
                 // ここまでで slot が見つからなければ装備不可能
                 context.postMessage(tr2("%1 は装備できない。").format(REGame.identifyer.makeDisplayText(itemEntity)));
             }
             else {
-                slot.itemEntityId = itemEntity.entityId();
-
-                this.ownerEntity().refreshConditions();
-
-                UIdentify.identifyByTiming(context, self, itemEntity, DIdentifiedTiming.Equip, false);
-    
-                SSoundManager.playEquip();
-                context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
-
-                if (itemEntity.isCursed()) {
-                    context.postMessage(tr2("呪われていた！"));
-                }
             }
+            */
 
             return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
-            
-            context.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
+            this.equipOff(context, self, itemEntity);
+
+            return REResponse.Succeeded;
+        }
+        return REResponse.Pass;
+    }
+
+    private equipOn(context: SCommandContext, self: LEntity, slot: SlotPart2, itemEntity: LEntity): void {
+        slot.itemEntityId = itemEntity.entityId();
+
+        this.ownerEntity().refreshConditions();
+
+        UIdentify.identifyByTiming(context, self, itemEntity, DIdentifiedTiming.Equip, false);
+
+        SSoundManager.playEquip();
+        context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+
+        if (itemEntity.isCursed()) {
+            context.postMessage(tr2("呪われていた！"));
+        }
+    }
+
+    private equipOff(context: SCommandContext, self: LEntity, itemEntity: LEntity): RECCMessageCommand {
+        return context.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
             .then(() => {
                 const removed = this.removeEquitment(itemEntity);
                 this._revisitonNumber++;
@@ -177,10 +208,6 @@ NOTE:
                 }
                 return true;
             });
-
-            return REResponse.Succeeded;
-        }
-        return REResponse.Pass;
     }
     
     public removeEquitment(itemEntity: LEntity): boolean {
