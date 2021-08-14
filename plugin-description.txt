@@ -10,7 +10,7 @@
 //=============================================================================
 
 /*:ja
- * @plugindesc LN_RoguelikeEngine v0.1.0
+ * @plugindesc LN_RoguelikeEngine v0.2.0
  * @author lriki
  *
  * @help test.
