@@ -301,7 +301,8 @@ export class LUnitBehavior extends LBehavior {
 
                     context.post(actual, self, subject, undefined, onThrowReaction)
                         .then(() => {
-                            context.postMessage(tr("{0} を撃った", REGame.identifyer.makeDisplayText(actual)));
+                            console.log("...", UName.makeNameAsItem(actual));
+                            context.postMessage(tr("{0} を撃った", UName.makeNameAsItem(actual)));
                             return true;
                         });
 

@@ -213,6 +213,7 @@ DataManager.loadGame = function(savefileId) {
 const _DataManager_onLoad = DataManager.onLoad;
 DataManager.onLoad = function(object) {
     _DataManager_onLoad.call(this, object);
+    /*
     if (object === $dataMap && $gameMap) {
         for (const event of $gameMap.events()) {
             if (event instanceof Game_REPrefabEvent) {
@@ -220,4 +221,5 @@ DataManager.onLoad = function(object) {
             }
         }
     }
-};
+    */
+}

@@ -16,6 +16,7 @@ import { MovingMethod } from "ts/objects/LMap";
 import { UAction } from "ts/usecases/UAction";
 import { DEmittor, DEffectCause, DRmmzEffectScope, DEffect } from "ts/data/DEffect";
 import { LEntityId } from "ts/objects/LObject";
+import { REData } from "ts/data/REData";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -52,6 +53,8 @@ export class LProjectableBehavior extends LBehavior {
         //common.blowMoveCountMax = distance;
         
         //entity.dir = args.sender.dir;
+
+        entity.addState(REData.getStateFuzzy("kSystemState_Projectile").id, false);
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -63,6 +66,8 @@ export class LProjectableBehavior extends LBehavior {
         common._effect = effect;
         common.blowDirection = dir;
         common.blowMoveCount = length;
+        
+        entity.addState(REData.getStateFuzzy("kSystemState_Projectile").id, false);
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -193,6 +198,10 @@ export class LProjectableBehavior extends LBehavior {
 
     private endMoving(context: SCommandContext, self: LEntity): void {
         this.clearKnockback();
+
+        
+        self.removeState(REData.getStateFuzzy("kSystemState_Projectile").id);
+
         UAction.postStepOnGround(context, self);
 
         // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。

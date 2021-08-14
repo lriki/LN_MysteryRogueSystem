@@ -793,6 +793,14 @@ export class REDataManager
                 else {
                     //throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
                 }
+
+                for (let i = 1; i < event.pages.length; i++) {
+                    const pageData = DHelpers.readPrefabSubPageMetadata(event.pages[i]);
+                    if (pageData) {
+                        if (pageData.state === undefined) throw new Error(`@RE-PrefabSubPage requires state field.`);
+                        prefab.subPages.push({ stateId: REData.getStateFuzzy(pageData.state).id, rmmzEventPageIndex: i });
+                    }
+                }
             }
 
             // Link Prefab and Entity

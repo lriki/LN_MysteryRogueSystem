@@ -9,7 +9,7 @@ import { DHelpers } from "./DHelper";
 import { DIdentifiedTiming } from "./DIdentifyer";
 import { DItem } from "./DItem";
 import { DParameterId } from "./DParameter";
-import { DPrefabDataSource, DPrefabId } from "./DPrefab";
+import { DPrefab, DPrefabDataSource, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroop, DTroopId } from "./DTroop";
 import { REData } from "./REData";
@@ -109,6 +109,10 @@ export class DEntity {
         this.idealParams = [];
         this.reactions = [];
         this.effectSet = new DEffectSet();
+    }
+
+    public prefab(): DPrefab {
+        return REData.prefabs[this.prefabId];
     }
     
     public actorData(): RE_Data_Actor {

@@ -1,4 +1,5 @@
 import { DBasics } from "./DBasics";
+import { DStateId } from "./DState";
 import { REData } from "./REData";
 
 export type DPrefabId = number;
@@ -40,6 +41,11 @@ export interface DPrefabImage {
     walkAnime: boolean;
 }
 
+export interface DPrefabPageInfo {
+    stateId: DStateId,
+    rmmzEventPageIndex: number,
+}
+
 /**
  * DPrefab
  * 
@@ -54,6 +60,7 @@ export class DPrefab {
     dataSource: DPrefabDataSource = DPrefabDataSource.Unknown;
     dataId: number = 0;
     image: DPrefabImage;
+    subPages: DPrefabPageInfo[];
 
     public constructor() {
         this.image = {
@@ -65,6 +72,7 @@ export class DPrefab {
             stepAnime: false,
             walkAnime: false,
         };
+        this.subPages = [];
     }
 
     public isEnemyKind(): boolean {

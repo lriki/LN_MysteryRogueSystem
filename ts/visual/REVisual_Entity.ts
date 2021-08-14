@@ -9,6 +9,8 @@ import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
 import { SNavigationHelper } from "ts/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
+import { LState } from "ts/objects/states/LState";
+import { Game_REPrefabEvent } from "ts/rmmz/Game_REPrefabEvent";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -106,7 +108,7 @@ export class REVisual_Entity
         
         if (this._rmmzEventId >= 0) {
             const tileSize = REVisual.manager.tileSize();
-            const event = $gameMap.event(this._rmmzEventId);
+            const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
 
             // 姿勢同期
             event._x = this._position.x;
@@ -130,6 +132,8 @@ export class REVisual_Entity
                     event.setPattern(charactorImage.pattern);
                 }
             }
+
+            this.updateEventPage(event);
 
             
             const sprite = this.rmmzSprite();
@@ -177,6 +181,26 @@ export class REVisual_Entity
                 }
             }
         }
+    }
+
+    private updateEventPage(event: Game_REPrefabEvent): void {
+        const index = this.getEventPageIndex();
+        event.setPageIndex(index);
+    }
+    
+    private getEventPageIndex(): number {
+        const prefab = this.entity().data().prefab();
+        if (prefab.subPages.length > 0) {
+            for (const stateId of this.entity()._states) {
+                const state = REGame.world.object(stateId) as LState;
+                for (const subPage of prefab.subPages) {
+                    if (subPage.stateId == state.stateDataId()) {
+                        return subPage.rmmzEventPageIndex;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 }
 

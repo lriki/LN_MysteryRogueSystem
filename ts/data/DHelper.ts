@@ -30,6 +30,8 @@ export interface RMMZEventPrefabMetadata {
     enemy?: string;
     system?: string;
 
+    projectilePage?: string;    // Projectile として移動中にアクティブになるイベントページ (1~)
+
     // deprecated
     weaponId?: number;
     // deprecated
@@ -38,6 +40,10 @@ export interface RMMZEventPrefabMetadata {
     itemId?: number;    // RMMZ データベース上の ItemId
     // deprecated
     enemyId?: number;   // RMMZ データベース上の EnemyId
+}
+
+export interface RmmzEventPrefabSubPageMetadata {
+    state?: string;
 }
 
 interface RMMZEventRawMetadata {
@@ -226,6 +232,24 @@ export class DHelpers {
         assert(rawData);
         return rawData;
     }
+    
+    public static readPrefabMetadata(event: IDataMapEvent): RMMZEventPrefabMetadata | undefined {
+        const block = this.findFirstAnnotationFromEvent("@REPrefab", event);
+        if (!block) return undefined;
+        let rawData: RMMZEventPrefabMetadata | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
+    }
+    
+    public static readPrefabSubPageMetadata(page: IDataMapEventPage): RmmzEventPrefabSubPageMetadata | undefined {
+        const block = this.findFirstAnnotationFromPage("@RE-PrefabSubPage", page);
+        if (!block) return undefined;
+        let rawData: RmmzEventPrefabSubPageMetadata | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
+    }
 
     static readFloorMetadataFromPage(page: IDataMapEventPage, eventId: number): RMMZFloorMetadata | undefined {
 
@@ -252,37 +276,6 @@ export class DHelpers {
                 eval(`rawData = ${block}`);
 
                 return rawData;
-            }
-        }
-        return undefined;
-    }
-    
-    static readPrefabMetadata(event: IDataMapEvent): RMMZEventPrefabMetadata | undefined {
-        if (event.pages && event.pages.length > 0) {
-            const page = event.pages[0];
-            const list = page.list;
-            if (list) {
-                // collect comments
-                let comments = "";
-                for (let i = 0; i < list.length; i++) {
-                    if (list[i].code == 108 || list[i].code == 408) {
-                        if (list[i].parameters) {
-                            comments += list[i].parameters;
-                        }
-                    }
-                }
-        
-                let index = comments.indexOf("@REPrefab");
-                if (index >= 0) {
-                    let block = comments.substring(index + 6);
-                    block = block.substring(
-                        block.indexOf("{"),
-                        block.indexOf("}") + 1);
-
-                    let metadata: RMMZEventPrefabMetadata | undefined;
-                    eval(`metadata = ${block}`);
-                    return metadata;
-                }
             }
         }
         return undefined;

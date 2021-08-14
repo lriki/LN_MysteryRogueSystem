@@ -226,8 +226,11 @@ export class LIdentifyer {
             // 個体識別済み
             const states = entity.states();
             if (states.length > 0) {
-                const state = states[0];
-                iconIndex = state.stateData().iconIndex;
+                // 祝福など、アイコン表示したいステートが付いているか？
+                const state = states.find(x => x.stateData().displayNameIcon);
+                if (state) {
+                    iconIndex = state.stateData().iconIndex;
+                }
             }
         }
 

@@ -54,16 +54,18 @@ export class DSystem {
     }
 
     public link(testMode: boolean): void {
-        if (!testMode) {
-            this.states.bless = REData.getStateFuzzy("kState_UT祝福").id;
-            this.states.curse = REData.getStateFuzzy("kState_UT呪い").id;
-            this.states.seal = REData.getStateFuzzy("kState_UT封印").id;
-        }
-        else {
-            this.states.bless = REData.getStateFuzzy("kState_UT祝福").id;
-            this.states.curse = REData.getStateFuzzy("kState_UT呪い").id;
-            this.states.seal = REData.getStateFuzzy("kState_UT封印").id;
-        }
+
+        const bless = REData.getStateFuzzy("kState_UT祝福");
+        const curse = REData.getStateFuzzy("kState_UT呪い")
+        const seal = REData.getStateFuzzy("kState_UT封印");
+
+        bless.displayNameIcon = true;
+        curse.displayNameIcon = true;
+        seal.displayNameIcon = true;
+
+        this.states.bless = bless.id;
+        this.states.curse = curse.id;
+        this.states.seal = seal.id;
 
         this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム").entityId;
     }

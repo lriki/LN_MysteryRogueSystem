@@ -45,6 +45,8 @@ export class DState {
 
     iconIndex: number;
 
+    displayNameIcon: boolean;
+
     /** 自動解除のタイミング */
     autoRemovalTiming: DAutoRemovalTiming;
 
@@ -73,6 +75,7 @@ export class DState {
         this.key = "";
         this.restriction = 0;
         this.iconIndex = 0;
+        this.displayNameIcon = false;
         this.autoRemovalTiming = DAutoRemovalTiming.None;
         this.minTurns = 0;
         this.maxTurns = 0;

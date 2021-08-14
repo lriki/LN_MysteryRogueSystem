@@ -47,12 +47,10 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPr
         // 見つからなければ新しく作る
         eventId = this._events.length;
         
-        // 新しい Game_Event に対応する IDataMapEvent を登録する。
-        // こうしておかないと、Game_Event のコンストラクタの locate で例外する。
-        $dataMap.events[eventId] = eventData;
-        
         const event = new Game_REPrefabEvent(REDataManager.databaseMapId, eventId);
         event._prefabEventDataId = prefabEventDataId;
+        event._eventData = eventData;
+        event.refresh();
         this._events[eventId] = event;
         return event;
     }
@@ -61,8 +59,9 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPr
         assert(event instanceof Game_REPrefabEvent);
 
         // 再構築
-        $dataMap.events[eventId] = eventData;
         event._prefabEventDataId = prefabEventDataId;
+        event._eventData = eventData;
+        //event.refresh();
         event.increaseRERevision();
         event.initMembers();
         event.refresh();
