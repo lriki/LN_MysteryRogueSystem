@@ -21,6 +21,7 @@ import { DPrefab, DPrefabId } from 'ts/data/DPrefab';
 import { SDialogContext } from 'ts/system/SDialogContext';
 import { SDialog } from 'ts/system/SDialog';
 import { DEntityId } from 'ts/data/DEntity';
+import { LBlock } from 'ts/objects/LBlock';
 
 declare global {
     interface Number {
@@ -204,6 +205,10 @@ export class TestEnvIntegration extends SIntegration {
 
     onLoadFixedMapEvents(): void {
         SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData();
+    }
+    
+    onUpdateBlock(block: LBlock): void {
+        // Visual 表示は伴わない
     }
 
     onRefreshGameMap(map: LMap): void {

@@ -13,6 +13,7 @@ export interface DTemplateMap {
     wallHeadAutoTileKind: number,
     wallEdgeAutoTileKind: number,
     floorAutoTileKind: number,
+    itemShopFloorAutoTileKind: number,
 
 }
 
@@ -25,6 +26,7 @@ export function DTemplateMap_Default(): DTemplateMap {
         wallHeadAutoTileKind: 0,
         wallEdgeAutoTileKind: 0,
         floorAutoTileKind: 0,
+        itemShopFloorAutoTileKind: 0,
     };
 }
 
@@ -33,5 +35,6 @@ export function buildTemplateMapData(mapData: IDataMap, data: DTemplateMap): voi
     data.wallHeadAutoTileKind = DHelpers.getAutotileKind(DHelpers.getMapTopTile(mapData, 1, 1));
     data.wallEdgeAutoTileKind = DHelpers.getAutotileKind(DHelpers.getMapTopTile(mapData, 1, 2));
     data.floorAutoTileKind = DHelpers.getAutotileKind(DHelpers.getMapTopTile(mapData, 1, 3));
+    data.itemShopFloorAutoTileKind = DHelpers.getAutotileKind(DHelpers.getMapTopTile(mapData, 1, 7));
 }
 

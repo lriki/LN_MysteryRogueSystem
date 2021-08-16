@@ -16,6 +16,8 @@ import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { SMonsterHouseBuilder } from "./map/SMonsterHouseBuilder";
 import { LMonsterHouseStructure } from "ts/objects/structures/LMonsterHouseStructure";
 import { LRandom } from "ts/objects/LRandom";
+import { LItemShopStructure } from "ts/objects/structures/LItemShopStructure";
+import { SItemShopBuilder } from "./map/SItemShopBuilder";
 
 
 /**
@@ -64,6 +66,7 @@ export class SMapManager {
         this.requestRefreshVisual();
 
         // 階段を配置する
+                // TODO: お店の外
         {
             const exitPoint = initialMap.exitPont();
             if (exitPoint) {
@@ -86,16 +89,7 @@ export class SMapManager {
         
         const enterdEntities = this.enterEntitiesToCurrentMap();
 
-        // モンスターハウス
-        for (const s of this._map.structures()) {
-            if (s instanceof LMonsterHouseStructure) {
-                const monsterHouseBuilder = new SMonsterHouseBuilder();
-                monsterHouseBuilder.build(this, s, this.rand());
-            }
-            else {
-                throw new Error("Not implemented.");
-            }
-        }
+        this.buildStructurs();
 
         // この Floor にいるべき Entity を配置する
         {
@@ -158,6 +152,7 @@ export class SMapManager {
     private setupFixedMap(initialMap: FMap): void {
         RESystem.integration.onLoadFixedMapEvents();
 
+        this.buildStructurs();
 
         const enterdEntities = this.enterEntitiesToCurrentMap();
 
@@ -175,6 +170,25 @@ export class SMapManager {
 
     public setupInitial(): void {
 
+    }
+
+    public buildStructurs(): void {
+        console.log("this._map.structures()", this._map.structures());
+        // モンスターハウス
+        for (const s of this._map.structures()) {
+            if (s instanceof LMonsterHouseStructure) {
+                const builder = new SMonsterHouseBuilder();
+                builder.build(this, s, this.rand());
+            }
+            else if (s instanceof LItemShopStructure) {
+                console.log("ItemShop!!");
+                const builder = new SItemShopBuilder();
+                builder.build(this, s, this.rand());
+            }
+            else {
+                throw new Error("Not implemented.");
+            }
+        }
     }
 
     public requestRefreshVisual(): void {

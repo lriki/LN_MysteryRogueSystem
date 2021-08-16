@@ -6,7 +6,8 @@ import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { LMap } from "ts/objects/LMap";
 import { SMinimapData } from "ts/system/SMinimapData";
-import { TileShape } from "ts/objects/LBlock";
+import { LBlock, LBlockSystemDecoration, TileShape } from "ts/objects/LBlock";
+import { DTemplateMap } from "ts/data/DMap";
 
 
 interface Point {
@@ -24,61 +25,83 @@ enum SubTile {
 /**
  * RE Core 側で生成されたマップ (ランダムマップ) を、RMMZ 側のマップデータに反映する。
  */
-export class GameMapBuilder {
+export class VMapEditor {
+    private _coreMap: LMap;
+    private _templateMap: DTemplateMap;
 
-
-    public build(coreMap: LMap): void {
+    public constructor(coreMap: LMap) {
+        this._coreMap = coreMap;
         const floorData = coreMap.floorData();
         const templateMap = floorData.template ? REData.templateMaps.find(x => x.name == floorData.template) : REData.templateMaps[1];
         assert(templateMap);
+        this._templateMap = templateMap;
+    }
 
-        $dataMap.tilesetId = templateMap.tilesetId;
-        $dataMap.width = coreMap.width();
-        $dataMap.height = coreMap.height();
+    public build(): void {
+        $dataMap.tilesetId = this._templateMap.tilesetId;
+        $dataMap.width = this._coreMap.width();
+        $dataMap.height = this._coreMap.height();
         $dataMap.data = new Array<number>($dataMap.width * $dataMap.height * 5);
         $gameMap.changeTileset($dataMap.tilesetId);
-        
-        for (let y = 0; y < $dataMap.height; y++) {
-            for (let x = 0; x < $dataMap.width; x++) {
-                const block = coreMap.block(x, y);
 
-                switch (block.tileShape()) {
-                    case TileShape.Floor:
-                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
-                        break;
-                    case TileShape.Wall:
-                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
-                        if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
-                            this.putAutoTile(x, y, 1, templateMap.wallEdgeAutoTileKind);
-                        }
-                        else {
-                            this.putAutoTile(x, y, 1, templateMap.wallHeadAutoTileKind);
-                        }
-                        break;
-                    default:
-                        throw new Error("Not implemented.");
+        if (this._coreMap.floorId().isFixedMap()) {
+
+        }
+        else {
+            for (let y = 0; y < $dataMap.height; y++) {
+                for (let x = 0; x < $dataMap.width; x++) {
+                    const block = this._coreMap.block(x, y);
+                    this.refreshBlock(block);
                 }
-                
-                /*
-                switch (block._blockComponent) {
-                    case FBlockComponent.None:
-                        if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
-                            this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
-                        }
-                        else {
-                            this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
-                        }
-                        break;
-                    case FBlockComponent.Room:
-                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
-                        break;
-                    case FBlockComponent.Passageway:
-                        this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
-                        break;
-                }
-                */
             }
         }
+    }
+
+    public refreshBlock(block: LBlock): void {
+        const x = block.x();
+        const y = block.y();
+
+        switch (block.tileShape()) {
+            case TileShape.Floor:
+                if (block.systemDecoration() == LBlockSystemDecoration.ItemShop) {
+                    // お店の床装飾
+                    this.putAutoTile(x, y, 0, this._templateMap.itemShopFloorAutoTileKind);
+                }
+                else {
+                    this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
+                }
+                break;
+            case TileShape.Wall:
+                this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
+                if (this.isValidPos(x, y + 1) && this._coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
+                    this.putAutoTile(x, y, 1, this._templateMap.wallEdgeAutoTileKind);
+                }
+                else {
+                    this.putAutoTile(x, y, 1, this._templateMap.wallHeadAutoTileKind);
+                }
+                break;
+            default:
+                throw new Error("Not implemented.");
+        }
+        
+        /*
+        switch (block._blockComponent) {
+            case FBlockComponent.None:
+                if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
+                    this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
+                }
+                else {
+                    this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
+                }
+                break;
+            case FBlockComponent.Room:
+                this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
+                break;
+            case FBlockComponent.Passageway:
+                this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
+                break;
+        }
+        */
     }
 
     private width(): number {

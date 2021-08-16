@@ -13,7 +13,6 @@ export class LItemShopStructure extends LStructure {
     public setup(roomId: LRoomId, itemShopTypeId: DItemShopTypeId): void {
         this._roomId = roomId;
         this._itemShopTypeId = itemShopTypeId;
-        console.log("ItemShop!");
     }
 
     public roomId(): LRoomId {

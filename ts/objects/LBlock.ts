@@ -1,5 +1,4 @@
 import { assert } from "ts/Common";
-import { MapDataProvidor } from "./MapDataProvidor";
 import { LEntity } from "./LEntity";
 import { LMap } from "./LMap";
 import { FBlockComponent } from "ts/floorgen/FMapData";
@@ -9,6 +8,7 @@ import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
 import { LSanctuaryBehavior } from "./behaviors/LSanctuaryBehavior";
 import { BlockLayerKind, REBlockLayer } from "./LBlockLayer";
 import { LRoom } from "./LRoom";
+import { RESystem } from "ts/system/RESystem";
 
 export type LRoomId = number;
 
@@ -32,6 +32,11 @@ export enum TileShape {
 
 //	/** マップの外周の壊せない壁。配列外を示すダミー要素。 */
 //	BorderWall,
+}
+
+export enum LBlockSystemDecoration {
+    None,
+    ItemShop,
 }
 
 /**
@@ -141,7 +146,7 @@ export class LBlock// extends LObject
     // 常に持たせておくとデータ量もそれなりになるので、今はオプションにしておく。
     // Note: [0] ... 地面 (A タイル)
     // Note: [1,2,3] ... 装飾 (B, C タイル. "自動" モードでは後ろの番号から配置されていく)
-    private _tileIds: number[] | undefined;
+    //private _tileIds: (number | undefined)[];
 
     private _layers: REBlockLayer[];    // 要素番号は BlockLayerKind
 
@@ -157,8 +162,18 @@ export class LBlock// extends LObject
     
     _tileShape: TileShape = TileShape.Floor;
 
+    // お店の床など、ゲームシステムとして明示したい装飾
+    _systemDecoration: LBlockSystemDecoration = LBlockSystemDecoration.None;
+
+    // 小石など、ゲームシステムとか関係ない装飾
+    _visualDecorationType: number = 0;   // 0:invalid
+    _visualDecorationIndex: number = 0;  // 0~
+
+
+
 
     constructor(x: number, y: number) {
+        //this._tileIds = [];
         this._x = x;
         this._y = y;
         this._layers = [new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer()];
@@ -180,15 +195,15 @@ export class LBlock// extends LObject
     }
 
     /** 表示用 TileId. 通行判定や部屋内判定に使用するものではない点に注意。 */
-    public tileIds(): number[] | undefined {
-        return this._tileIds;
-    }
+    //public tileIds(): number[] | undefined {
+    //    return this._tileIds;
+    //}
 
     /** 表示用 TileId. 通行判定や部屋内判定に使用するものではない点に注意。 */
-    public setTileIds(tileIds: number[]): void {
-        this._tileIds = tileIds;
-        MapDataProvidor.onUpdateBlock(this);
-    }
+    //public setTileIds(z: number, tileId: number): void {
+    //    this._tileIds[z] = tileId;
+    //    RESystem.integration.onUpdateTile(this._x, this._y, z, tileId);
+    //}
 
     //tile(): LEntity {
     //    return this._layers[BlockLayerKind.Terrain].entities()[0];
@@ -198,6 +213,20 @@ export class LBlock// extends LObject
         //const attr = this.tile().findAttribute(RETileAttribute);
         //return attr ? attr.tileKind() : TileKind.Void;
         return this._tileShape;
+    }
+
+    public setSystemDecoration(value: LBlockSystemDecoration): void {
+        this._systemDecoration = value;
+        RESystem.integration.onUpdateBlock(this);
+    }
+
+    public systemDecoration(): LBlockSystemDecoration {
+        return this._systemDecoration;
+    }
+
+    public setVisualDecoration(type: number, index: number): void {
+        this._visualDecorationType = type;
+        this._visualDecorationIndex = index;
     }
 
     public isFloorLikeShape(): boolean {

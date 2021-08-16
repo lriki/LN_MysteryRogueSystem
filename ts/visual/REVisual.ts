@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { REGame } from "ts/objects/REGame";
+import { VMapEditor } from "ts/rmmz/VMapEditor";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisual_Manager } from "./REVisual_Manager";
 import { VDirectionArrow } from "./VDirectionArrow";
@@ -22,6 +23,7 @@ export class REVisual
 {
     // グローバルな情報
     static manager: REVisual_Manager | undefined;
+    static mapBuilder: VMapEditor | undefined;
     
     // Scene 単位の情報
     static scene: Scene_Map;

@@ -8,11 +8,12 @@ import { SIntegration } from "../system/SIntegration";
 import { REVisual } from "../visual/REVisual";
 import { SRmmzHelpers } from "ts/system/SRmmzHelpers";
 import { LMap } from "ts/objects/LMap";
-import { GameMapBuilder } from "./GameMapBuilder";
+import { VMapEditor } from "./VMapEditor";
 import { SDialogContext } from "ts/system/SDialogContext";
 import { SDialog } from "ts/system/SDialog";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
 import { SEntityFactory } from "ts/system/SEntityFactory";
+import { LBlock } from "ts/objects/LBlock";
 
 export class RMMZIntegration extends SIntegration {
     onReserveTransferMap(mapId: number, x: number, y: number, d: number): void {
@@ -62,11 +63,33 @@ export class RMMZIntegration extends SIntegration {
         //RESystem.minimapData.refresh();
     }
 
+    onUpdateBlock(block: LBlock): void {
+        console.log("onUpdateBlock", arguments);
+
+        if (REVisual.mapBuilder) {
+            //const width = $dataMap.width;
+            //const height = $dataMap.height;
+            //$dataMap.data[(z * height + y) * width + x] = tileId;
+
+            console.log("onUpdateTile", arguments);
+            //REVisual.mapBuilder.setTileId
+            //REVisual.mapBuilder.set
+            REVisual.mapBuilder.refreshBlock(block);
+    
+            if (REVisual.spriteset) {
+                console.log("refresh");
+                REVisual.spriteset._tilemap.refresh();
+            }
+        }
+    }
+
 
     
     onRefreshGameMap(map: LMap): void {
-        const builder = new GameMapBuilder();
-        builder.build(map);
+        REVisual.mapBuilder = new VMapEditor(map);
+        REVisual.mapBuilder.build();
+        //const builder = new GameMapBuilder();
+        //builder.build(map);
     }
 
     onFlushSequelSet(sequelSet: SSequelSet): void {

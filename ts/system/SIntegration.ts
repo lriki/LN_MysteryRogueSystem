@@ -1,5 +1,6 @@
 import { LandExitResult } from "ts/data/REData";
 import { FMap } from "ts/floorgen/FMapData";
+import { LBlock } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
 import { LMap } from "ts/objects/LMap";
 import { REGame } from "ts/objects/REGame";
@@ -19,6 +20,11 @@ export abstract class SIntegration {
     abstract onLoadFixedMapData(map: FMap): void;
     
     abstract onLoadFixedMapEvents(): void;
+
+    abstract onUpdateBlock(block: LBlock): void;
+
+
+
 
     protected abstract onRefreshGameMap(map: LMap): void;
 

@@ -1,11 +1,20 @@
-import { DEntity, DEntityId } from "ts/data/DEntity";
+import { DEntity, DEntityCreateInfo, DEntityId } from "ts/data/DEntity";
 import { DSystem } from "ts/data/DSystem";
 import { REData } from "ts/data/REData";
+import { LEntity } from "ts/objects/LEntity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { REGame } from "ts/objects/REGame";
+import { SEntityFactory } from "ts/system/SEntityFactory";
 
 
 export class USpawner {
+
+    public static spawnSingleEntity(entityKey: string, mx: number, my: number): LEntity {
+        const floorId = REGame.map.floorId();
+        const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(entityKey).id), floorId);
+        REGame.world._transferEntity(entity, floorId, mx, my);
+        return entity;
+    }
 
     public static getEnemiesFromSpawnTable(floorId: LFloorId): DEntity[] {
         const result = new Set<DEntityId>();
