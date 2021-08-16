@@ -7,6 +7,9 @@ export var paramFixedMapRoomRegionId = 1;
 // 固定マップで部屋及びモンスターハウスをマークするためのリージョンID
 export var paramFixedMapMonsterHouseRoomRegionId = 2;
 
+// 固定マップで部屋及び店をマークするためのリージョンID
+export var paramFixedMapItemShopRoomRegionId = 3;
+
 // 固定マップで通路をマークするためのリージョンID
 export var paramFixedMapPassagewayRegionId = 8;
 

@@ -27,6 +27,7 @@ import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
 import { DPseudonymous } from "./DPseudonymous";
+import { DItemShopType } from "./DItemShop";
 
 
 export enum REFloorMapKind
@@ -184,6 +185,7 @@ export class REData
     static stateGroups: DStateGroup[] = [];
     static abilities: DAbility[] = [];
     static monsterHouses: DMonsterHouseType[] = [];
+    static itemShops: DItemShopType[] = [];
     static prefabs: DPrefab[] = [];
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];

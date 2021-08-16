@@ -6,6 +6,7 @@ import { LRandom } from "ts/objects/LRandom";
 import { TileShape } from "ts/objects/LBlock";
 import { FStructure } from "./FStructure";
 import { LStructure } from "ts/objects/structures/LStructure";
+import { DItemShopTypeId } from "ts/data/DItemShop";
 
 
 export enum FDirection {
@@ -384,6 +385,7 @@ export class FMapBlock {
     private _doorway: boolean;  // 部屋の入口
     private _continuation: boolean; // ゴールとなる階段から地続きであるか
     private _monsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
+    private _itemShopTypeId: DItemShopTypeId;
 
     public constructor(x: number, y: number) {
         this._x = x;
@@ -395,6 +397,7 @@ export class FMapBlock {
         this._doorway = false;
         this._continuation = false;
         this._monsterHouseTypeId = 0;
+        this._itemShopTypeId = 0;
     }
 
     public x(): number {
@@ -427,6 +430,14 @@ export class FMapBlock {
 
     public monsterHouseTypeId(): DMonsterHouseTypeId {
         return this._monsterHouseTypeId;
+    }
+
+    public setItemShopTypeId(value: DItemShopTypeId): void {
+        this._itemShopTypeId = value;
+    }
+
+    public itemShopTypeId(): DItemShopTypeId {
+        return this._itemShopTypeId;
     }
     
     public setSectorId(value: FSectorId): void {

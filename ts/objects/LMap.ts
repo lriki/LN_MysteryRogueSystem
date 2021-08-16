@@ -9,7 +9,7 @@ import { DFloorInfo, DLand } from "ts/data/DLand";
 import { LEntityId, LObject, LObjectType } from "./LObject";
 import { LRoom } from "./LRoom";
 import { LStructure } from "./structures/LStructure";
-import { FMonsterHouseStructure } from "ts/floorgen/FStructure";
+import { FItemShopStructure, FMonsterHouseStructure } from "ts/floorgen/FStructure";
 import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { LFloorId } from "./LFloorId";
@@ -17,6 +17,7 @@ import { LLand } from "./LLand";
 import { UMovement } from "ts/usecases/UMovement";
 import { FMap } from "ts/floorgen/FMapData";
 import { BlockLayerKind } from "./LBlockLayer";
+import { LItemShopStructure } from "./structures/LItemShopStructure";
 
 export enum MovingMethod {
     Walk,
@@ -153,6 +154,11 @@ export class LMap extends LObject
                 if (x instanceof FMonsterHouseStructure) {
                     const s = new LMonsterHouseStructure();
                     s.setup(x.roomId(), x.monsterHouseTypeId());
+                    return s;
+                }
+                else if (x instanceof FItemShopStructure) {
+                    const s = new LItemShopStructure();
+                    s.setup(x.roomId(), x.itemShopTypeId());
                     return s;
                 }
                 else {

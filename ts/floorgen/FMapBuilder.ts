@@ -4,6 +4,7 @@ import { FMarkContinuationPass } from "./passes/FMarkContinuationPass";
 import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPass";
 import { FMakeTileKindPass } from "./passes/FMakeTileKindPass";
 import { FMakeMonsterHousePass } from "./passes/FMakeMonsterHousePass";
+import { FMakeItemShopPass } from "./passes/FMakeItemShopPass";
 
 
 export class FMapBuilder {
@@ -15,6 +16,7 @@ export class FMapBuilder {
             new FMakeTileKindPass(),
             new FEntryPointAndExitPointPass(),
             new FMakeMonsterHousePass(),
+            new FMakeItemShopPass(),
         ];
         // Apply passes
         passes.forEach(pass => pass.execute(data));
@@ -26,6 +28,7 @@ export class FMapBuilder {
             new FMapBuildPass_ResolveRoomShapes(),
             new FMarkContinuationPass(),
             new FMakeMonsterHousePass(),
+            new FMakeItemShopPass(),
         ];
         // Apply passes
         passes.forEach(pass => pass.execute(data));

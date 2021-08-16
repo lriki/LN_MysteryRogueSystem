@@ -246,6 +246,16 @@ export class REDataManager
             fixed: 1,
             normal: 2,
         };
+
+        REData.itemShops = [
+            { id: 0, name: "null", bgm: { name: "", pan: 0, pitch: 100, volume: 90 } },
+            { id: 1, name: "fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+            { id: 2, name: "normal", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+        ];
+        DBasics.itemShops = {
+            fixed: 1,
+            normal: 2,
+        };
     }
 
     static loadData(testMode: boolean): void

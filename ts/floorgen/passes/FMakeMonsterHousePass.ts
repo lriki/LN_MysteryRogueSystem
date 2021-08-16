@@ -1,5 +1,3 @@
-import { tr2 } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
 import { DFloorMonsterHousePattern } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 import { LRandom } from "ts/objects/LRandom";

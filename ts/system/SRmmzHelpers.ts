@@ -6,7 +6,7 @@ import { FBlockComponent, FMap } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
 import { TileShape } from "ts/objects/LBlock";
 import { LEntity } from "ts/objects/LEntity";
-import { paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
+import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/PluginParameters";
 import { SEntityFactory } from "./internal";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { RESystem } from "./RESystem";
@@ -134,6 +134,10 @@ export class SRmmzHelpers {
                 else if (regionId == paramFixedMapMonsterHouseRoomRegionId) {
                     block.setComponent(FBlockComponent.Room);
                     block.setMonsterHouseTypeId(DBasics.monsterHouses.fixed);
+                }
+                else if (regionId == paramFixedMapItemShopRoomRegionId) {
+                    block.setComponent(FBlockComponent.Room);
+                    block.setItemShopTypeId(DBasics.itemShops.fixed);
                 }
                 else if (regionId == paramFixedMapPassagewayRegionId) {
                     block.setComponent(FBlockComponent.Passageway);

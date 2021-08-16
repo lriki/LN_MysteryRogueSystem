@@ -1,3 +1,4 @@
+import { DItemShopTypeId } from "ts/data/DItemShop";
 import { DMonsterHouseTypeId } from "ts/data/DMonsterHouse";
 import { FRoomId } from "./FMapData";
 
@@ -27,4 +28,29 @@ export class FMonsterHouseStructure extends FStructure {
         return this._monsterHouseTypeId;
     }
 }
+
+
+export class FItemShopStructure extends FStructure {
+    private _roomId: FRoomId;
+    private _itemShopTypeId: DItemShopTypeId;
+    
+    constructor(roomId: FRoomId, itemShopTypeId: DItemShopTypeId) {
+        super();
+        this._roomId = roomId;
+        this._itemShopTypeId = itemShopTypeId;
+    }
+
+    public roomId(): FRoomId{
+        return this._roomId;
+    }
+
+    public setItemShopTypeId(value: DItemShopTypeId): void {
+        this._itemShopTypeId = value;
+    }
+
+    public itemShopTypeId(): DItemShopTypeId {
+        return this._itemShopTypeId;
+    }
+}
+
 
