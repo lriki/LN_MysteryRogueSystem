@@ -403,6 +403,7 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 actor.setup(x);
+                this.setupDirectly_Actor(actor);
             }
         });
 
@@ -1013,6 +1014,14 @@ export class REDataManager
             onLoad(JSON.parse(xhr.responseText));
         } else {
             DataManager.onXhrError(src, src, url);
+        }
+    }
+
+    static setupDirectly_Actor(data: RE_Data_Actor) {
+        switch (data.id) {
+            case 1:
+                data.traits.push({ code: DTraits.Proficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                break;
         }
     }
 

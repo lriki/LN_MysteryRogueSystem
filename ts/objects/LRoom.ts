@@ -103,7 +103,7 @@ export class LRoom {
 
     /** 部屋の入口 Block リスト。埋蔵金部屋など、入り口が無い場合は空リストを返す。 */
     public doorwayBlocks(): LBlock[] {
-        const result:LBlock [] = [];
+        const result: LBlock [] = [];
         this.forEachBlocks(b => {
             if (b.isDoorway()) result.push(b);
         });

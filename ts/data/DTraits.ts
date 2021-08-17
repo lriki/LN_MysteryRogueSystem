@@ -65,6 +65,13 @@ export enum DTraits {
 
     Stackable,
 
+    /**
+     * アイテム種別ごとの練度。
+     * dataId: DEntityKindId
+     * value: 練度。1.0 で等倍
+     */
+    Proficiency,
+
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 
 }

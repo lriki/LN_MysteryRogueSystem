@@ -21,6 +21,7 @@ import { LFloorId } from "ts/objects/LFloorId";
 import { UTransfer } from "ts/usecases/UTransfer";
 import { UIdentify } from "ts/usecases/UIdentify";
 import { LRandom } from "ts/objects/LRandom";
+import { DEntityKindId } from "ts/data/DEntityKind";
 
 
 enum SParameterEffectApplyType {
@@ -117,15 +118,20 @@ export class SEffectorFact {
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
     private _incidentType: SEffectIncidentType;
+    private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
 
     private _direction: number;
+
+    private _genericEffectRate: number;
 
     public constructor(subject: LEntity, effect: DEffect, incidentType: SEffectIncidentType, dir: number) {
         this._subject = subject;
         this._subjectEffect = effect;
         this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
         this._incidentType = incidentType;
+        this._incidentEntityKind = 0;
         this._direction = dir;
+        this._genericEffectRate = 1.0;
 
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
@@ -149,6 +155,20 @@ export class SEffectorFact {
         });
     }
 
+    public withIncidentEntityKind(value: DEntityKindId): this {
+        this._incidentEntityKind = value;
+
+        // この種類を扱うのは得意？
+        if (this._incidentEntityKind > 0) {
+            this._genericEffectRate = this._subject.traitsPi(DTraits.Proficiency, this._incidentEntityKind);
+        }
+        else {
+            this._incidentEntityKind = 1.0;
+        }
+
+        return this;
+    }
+
     public subject(): LEntity {
         return this._subject;
     }
@@ -163,6 +183,10 @@ export class SEffectorFact {
 
     public incidentType(): SEffectIncidentType {
         return this._incidentType;
+    }
+
+    public incidentEntityKind(): DEntityKindId {
+        return this._incidentEntityKind;
     }
 
     public direction(): number {
@@ -238,7 +262,7 @@ export class SEffectorFact {
         return this._subjectEffect.critical
             ? cri * (1 - target.xparam(DBasics.xparams.cev))
             : 0;
-    };
+    }
 
     // Game_Action.prototype.lukEffectRate
     public lukEffectRate(target: LEntity): number {
@@ -246,7 +270,11 @@ export class SEffectorFact {
         const subject_luk = subject ? subject.actualParam(DBasics.params.luk) : 0.0;
         const target_luk = target.actualParam(DBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
-    };
+    }
+
+    public genericEffectRate(): number {
+        return this._genericEffectRate;
+    }
 
     /*
     public hasAnyValidParameterEffects(): boolean {
@@ -344,7 +372,6 @@ export class SEffectContext {
             }
         }
         
-
         if (deadCount > 0) {
             const awarder = this._effectorFact.subjectBehavior();
             if (awarder) {
@@ -485,6 +512,7 @@ export class SEffectContext {
         }
         value = this.applyVariance(value, paramEffect.variance);
         value = this.applyGuard(value, target);
+        value = this.applyProficiency(value);
         value = Math.round(value);
         return value;
     }
@@ -545,6 +573,11 @@ export class SEffectContext {
 
         return damage / (damage > 0 && isGuard ? 2 * target.sparam(DBasics.sparams.grd) : 1);
     }
+
+    private applyProficiency(damage: number): number {
+        return damage * this._effectorFact.genericEffectRate();
+    }
+    
 
 
 

@@ -523,22 +523,22 @@ export class LEntity extends LObject
     // Game_BattlerBase.prototype.allTraits
     private allTraits(): IDataTrait[] {
         return this.collectTraits();
-    };
+    }
 
     // Game_BattlerBase.prototype.traits
     public traits(code: number): IDataTrait[] {
         return this.allTraits().filter(trait => trait.code === code);
-    };
+    }
 
     // Game_BattlerBase.prototype.traitsWithId
     public traitsWithId(code: number, id: number): IDataTrait[] {
         return this.allTraits().filter(
             trait => trait.code === code && trait.dataId === id
         );
-    };
+    }
 
     // Game_BattlerBase.prototype.traitsPi
-    private traitsPi(code: number, id: number): number {
+    public traitsPi(code: number, id: number): number {
         return this.traitsWithId(code, id).reduce((r, trait) => r * trait.value, 1);
     }
 
@@ -556,13 +556,13 @@ export class LEntity extends LObject
     // Game_BattlerBase.prototype.traitsSumAll
     private traitsSumAll(code: number): number {
         return this.traits(code).reduce((r, trait) => r + trait.value, 0);
-    };
+    }
     
     // Game_BattlerBase.prototype.traitsSet
     private traitsSet(code: number): number[] {
         const emptyNumbers: number[] = [];
         return this.traits(code).reduce((r, trait) => r.concat(trait.dataId), emptyNumbers);
-    };
+    }
 
     // Game_BattlerBase.prototype.xparam
     public xparam(xparamId: DXParamId): number {
