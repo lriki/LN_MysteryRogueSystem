@@ -46,19 +46,40 @@ export class SItemShopBuilder {
     private getShopkeeperHomeBlock(doorway: LBlock): LBlock {
         assert(doorway.isDoorway());
 
-        const adjacents = UBlock.getAdjacentBlocks8(REGame.map, doorway);
+        const adjacents = UBlock.adjacentBlocks4(REGame.map, doorway);
         const passageway = adjacents.filter(x => x.isPassageway() && x.isFloorLikeShape());
 
-        let vertical = false;
+        // 店主の移動帯の向きは？
+        let horizontal = false;
+        let pair = [];
         if (passageway.length == 1 && (doorway.x() - passageway[0].x()) == 0) {
-            vertical = true;
+            horizontal = true;
+            // ■通■
+            // □□□
+
+            const b1 = REGame.map.tryGetBlock(doorway.x() - 1, doorway.y());
+            if (b1) pair.push(b1);
+            const b2 = REGame.map.tryGetBlock(doorway.x() + 1, doorway.y());
+            if (b2) pair.push(b2);
         }
         else {
             // 部屋の隅に通路が生成されている場合など、水平・垂直判断ができない場合は水平にしてみる
-            vertical = false;
+            horizontal = false;
+            // □■
+            // □通
+            // □■
+
+            const b1 = REGame.map.tryGetBlock(doorway.x(), doorway.y() - 1);
+            if (b1) pair.push(b1);
+            const b2 = REGame.map.tryGetBlock(doorway.x(), doorway.y() + 1);
+            if (b2) pair.push(b2);
         }
 
-        for (const block of UBlock.getAdjacentBlocks8(REGame.map, doorway) {
+        if (horizontal) {
+
+        }
+
+        for (const block of UBlock.getAdjacentBlocks8(REGame.map, doorway)) {
 
         }
     }

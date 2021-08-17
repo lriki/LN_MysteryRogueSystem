@@ -8,8 +8,20 @@ import { UMovement } from "./UMovement";
  */
 export class UBlock {
 
+    public static pos(a1: any, a2: any): [number, number] {
+        if (a1 instanceof LBlock) {
+            return [a1.x(), a1.y()];
+        }
+        else {
+            return [a1, a2];
+        }
+    }
+
     /** 指定座標の周囲 4 Block を取得する */
-    public static adjacentBlocks4(map: LMap, x: number, y: number, ): LBlock[] {
+    public static adjacentBlocks4(map: LMap, x: number, y: number): LBlock[];
+    public static adjacentBlocks4(map: LMap, block: LBlock, _?: any): LBlock[];
+    public static adjacentBlocks4(map: LMap, a1: any, a2: any): LBlock[] {
+        const [x, y] = this.pos(a1, a2);
         return [
             map.block(x, y - 1),
             map.block(x - 1, y),
