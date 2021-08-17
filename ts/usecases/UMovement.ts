@@ -9,6 +9,7 @@ import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { LRandom } from "ts/objects/LRandom";
+import { UBlock } from "ts/usecases/UBlock";
 
 export interface SPoint {
     x: number;
@@ -43,7 +44,7 @@ export class UMovement {
         1, 2, 3, 4, 6, 7, 8, 9,
     ];
 
-    public static adjacentOffsets: number[][] = [
+    public static adjacent8Offsets: number[][] = [
         [-1, -1], [0, -1], [1, -1],
         [-1, 0], [1, 0],
         [-1, 1], [0, 1], [1, 1],
@@ -106,7 +107,7 @@ export class UMovement {
         assert(map.floorId().equals(entity.floorId));
 
         const blocks: LBlock[] = [];
-        for (const offset of this.adjacentOffsets) {
+        for (const offset of this.adjacent8Offsets) {
             const x = entity.x + offset[0];
             const y = entity.y + offset[1];
             if (map.isValidPosition(x, y)) {
@@ -413,14 +414,12 @@ export class UMovement {
         if (block.layer(BlockLayerKind.Ground).isContainsAnyEntity()) return false;     // 足元に何かしらある場合はダッシュ停止
         if (block._roomId != frontBlock._roomId) return false;                          // 部屋と部屋や、部屋と通路の境界
 
+        if (UBlock.adjacentBlocks8XY(map, x, y).find(b => b.layer(BlockLayerKind.Unit).isContainsAnyEntity() || b.layer(BlockLayerKind.Ground).isContainsAnyEntity())) return false;
 
-        if (map.adjacentBlocks8(x, y).find(b => b.layer(BlockLayerKind.Unit).isContainsAnyEntity() || b.layer(BlockLayerKind.Ground).isContainsAnyEntity())) return false;
-
-        
         if (block.isPassageway()) {
             const back = Helpers.dirToTileOffset(this.reverseDir(entity.dir));
-            const count1 = map.adjacentBlocks4(x + back.x, y + back.y).filter(b => b.isFloorLikeShape()).length;
-            const count2 = map.adjacentBlocks4(x, y).filter(b => b.isFloorLikeShape()).length;
+            const count1 = UBlock.adjacentBlocks4(map, x + back.x, y + back.y).filter(b => b.isFloorLikeShape()).length;
+            const count2 = UBlock.adjacentBlocks4(map, x, y).filter(b => b.isFloorLikeShape()).length;
             if (count1 < count2) return false;
         }
         else {
@@ -506,7 +505,7 @@ export class UMovement {
         }
         else {
             // 通路なら外周1タイルを通過済みにする
-            this.adjacentOffsets.forEach(offset => {
+            this.adjacent8Offsets.forEach(offset => {
                 const x = block.x() + offset[0];
                 const y = block.y() + offset[1];
                 if (map.isValidPosition(x, y)) {

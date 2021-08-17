@@ -229,6 +229,7 @@ export class LBlock// extends LObject
         this._visualDecorationIndex = index;
     }
 
+    /** 地面上で、歩行による移動が可能であるか。(中空や水地形ではない) */
     public isFloorLikeShape(): boolean {
         return this._tileShape == TileShape.Floor;
     }

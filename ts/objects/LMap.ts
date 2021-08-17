@@ -256,30 +256,6 @@ export class LMap extends LObject
         }
     }
 
-    /** 指定座標の周囲 4 Block を取得する */
-    public adjacentBlocks4(x: number, y: number): LBlock[] {
-        return [
-            this.block(x, y - 1),
-            this.block(x - 1, y),
-            this.block(x + 1, y),
-            this.block(x, y + 1),
-        ];
-    }
-
-    /** 指定座標の周囲 8 Block を取得する */
-    public adjacentBlocks8(x: number, y: number): LBlock[] {
-        return [
-            this.block(x - 1, y - 1),
-            this.block(x, y - 1),
-            this.block(x + 1, y - 1),
-            this.block(x - 1, y),
-            this.block(x + 1, y),
-            this.block(x - 1, y + 1),
-            this.block(x, y + 1),
-            this.block(x + 1, y + 1),
-        ];
-    }
-
     /**
      * 
      * distance=0 の時は足元。
