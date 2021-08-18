@@ -79,14 +79,6 @@ export class DItem {
 
     //animationId: number;
     
-
-    /** このアイテム(装備品) を装備できる部位 */
-    equipmentParts: DEquipmentPartId[];
-
-    /** 装備したときに適用する parameters */
-    parameters: number[];
-
-    /** 装備したときに適用する Trait */
     traits: IDataTrait[];
 
     
@@ -100,8 +92,6 @@ export class DItem {
         //    parameterQualifyings: [],
         //    specialEffects: [],
         //},
-        this.equipmentParts = [];
-        this.parameters = [];
         this.traits = [];
     }
 
@@ -110,4 +100,21 @@ export class DItem {
     }
 }
 
+export class DEquipment {
+    
+    /** このアイテム(装備品) を装備できる部位 */
+    equipmentParts: DEquipmentPartId[];
+
+    /** 装備したときに適用する parameters */
+    parameters: number[];
+
+    /** 装備したときに、装備者に対して適用する Trait */
+    traits: IDataTrait[];
+
+    constructor() {
+        this.equipmentParts = [];
+        this.parameters = [];
+        this.traits = [];
+    }
+}
 

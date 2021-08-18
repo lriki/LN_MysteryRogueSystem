@@ -7,7 +7,7 @@ import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
 import { DIdentifiedTiming } from "./DIdentifyer";
-import { DItem } from "./DItem";
+import { DEquipment, DItem } from "./DItem";
 import { DParameterId } from "./DParameter";
 import { DPrefab, DPrefabDataSource, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
@@ -73,6 +73,8 @@ export class DEntity {
     actor: RE_Data_Actor | undefined;
 
     itemData: DItem | undefined;
+
+    equipment: DEquipment | undefined;
 
     enemy: DEnemy | undefined;
 

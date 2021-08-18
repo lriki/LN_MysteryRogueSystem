@@ -93,8 +93,9 @@ NOTE:
     // Game_Actor.prototype.paramPlus
     onQueryIdealParameterPlus(parameterId: DParameterId): number {
         const a = this.equippedItemEntities().reduce((r, e) => {
-            const itemBehavior = e.getBehavior(LItemBehavior);
-            return r + (itemBehavior.itemData().parameters[parameterId] ?? 0);
+            //const itemBehavior = e.getBehavior(LItemBehavior);
+            const equipment = e.data().equipment;
+            return equipment ? r + (equipment.parameters[parameterId] ?? 0) : 0;
         }, 0);
 
         return a;
@@ -109,9 +110,12 @@ NOTE:
     onCollectTraits(result: IDataTrait[]): void {
         super.onCollectTraits(result);
 
-        for (const item of this.equippedItems()){
-            for (const trait of item.traits){
-                result.push(trait);
+        for (const entity of this.equippedItemEntities()) {
+            const equipment = entity.data().equipment;
+            if (equipment) {
+                for (const trait of equipment.traits) {
+                    result.push(trait);
+                }
             }
         }
     }
@@ -123,9 +127,12 @@ NOTE:
 
             const itemEntity = activity.object();
             assert(itemEntity);
-            const itemBehavior = itemEntity.getBehavior(LItemBehavior);
-            const equipmentBehavior = itemEntity.getBehavior(LEquipmentBehavior);
-            const itemPart = itemBehavior.itemData().equipmentParts[0];
+            //const itemBehavior = itemEntity.getBehavior(LItemBehavior);
+            //const equipmentBehavior = itemEntity.getBehavior(LEquipmentBehavior);
+            //const itemPart = itemBehavior.itemData().equipmentParts[0];
+            const equipment = itemEntity.data().equipment;
+            assert(equipment);
+            const itemPart = equipment.equipmentParts[0];
 
             const inventory = self.getBehavior(LInventoryBehavior);
             //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);

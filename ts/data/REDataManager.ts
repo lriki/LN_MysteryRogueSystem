@@ -15,7 +15,7 @@ import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
-import { DItem } from './DItem';
+import { DEquipment, DItem } from './DItem';
 import { DTraits } from './DTraits';
 import { DEmittor, DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType } from './DEffect';
 import { DSystem } from './DSystem';
@@ -501,9 +501,10 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
-                item.equipmentParts = x.etypeId ? [x.etypeId] : [];
-                item.parameters = x.params ?? [];
-                item.traits = x.traits ?? [];
+                entity.equipment = new DEquipment();
+                entity.equipment.equipmentParts = x.etypeId ? [x.etypeId] : [];
+                entity.equipment.parameters = x.params ?? [];
+                entity.equipment.traits = x.traits ?? [];
                 entity.entity = parseMetaToEntityProperties(x.meta);
 
                 // 投げ当て Effect
@@ -530,9 +531,10 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
-                item.equipmentParts = x.etypeId ? [x.etypeId] : [];
-                item.parameters = x.params ?? [];
-                item.traits = x.traits ?? [];
+                entity.equipment = new DEquipment();
+                entity.equipment.equipmentParts = x.etypeId ? [x.etypeId] : [];
+                entity.equipment.parameters = x.params ?? [];
+                entity.equipment.traits = x.traits ?? [];
                 entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
@@ -1020,7 +1022,7 @@ export class REDataManager
     static setupDirectly_Actor(data: RE_Data_Actor) {
         switch (data.id) {
             case 1:
-                data.traits.push({ code: DTraits.Proficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                //data.traits.push({ code: DTraits.Proficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
                 break;
         }
     }
