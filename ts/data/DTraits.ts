@@ -66,11 +66,22 @@ export enum DTraits {
     Stackable,
 
     /**
-     * アイテム種別ごとの練度。
+     * アイテム種別ごとの "使うとき" の練度。
+     * 食べる・投げる・読む等。攻撃でも有効。
+     * 
      * dataId: DEntityKindId
      * value: 練度。1.0 で等倍
      */
-    Proficiency,
+    EffectProficiency,
+
+    /**
+     * アイテム種別ごとの "装備したとき" の練度。
+     * 
+     * 
+     * dataId: DEntityKindId
+     * value: 練度。1.0 で等倍
+     */
+    EquipmentProficiency,
 
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 

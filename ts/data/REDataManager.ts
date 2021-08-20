@@ -502,9 +502,16 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.equipment = new DEquipment();
-                entity.equipment.equipmentParts = x.etypeId ? [x.etypeId] : [];
-                entity.equipment.parameters = x.params ?? [];
-                entity.equipment.traits = x.traits ?? [];
+                entity.equipment.equipmentParts = [x.etypeId];
+                entity.equipment.parameters[DBasics.params.hp] = x.params[0];
+                entity.equipment.parameters[DBasics.params.mp] = x.params[1];
+                entity.equipment.parameters[DBasics.params.atk] = x.params[2];
+                entity.equipment.parameters[DBasics.params.def] = x.params[3];
+                entity.equipment.parameters[DBasics.params.mat] = x.params[4];
+                entity.equipment.parameters[DBasics.params.mdf] = x.params[5];
+                entity.equipment.parameters[DBasics.params.agi] = x.params[6];
+                entity.equipment.parameters[DBasics.params.luk] = x.params[7];
+                entity.equipment.traits = x.traits;
                 entity.entity = parseMetaToEntityProperties(x.meta);
 
                 // 投げ当て Effect
@@ -532,9 +539,16 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.equipment = new DEquipment();
-                entity.equipment.equipmentParts = x.etypeId ? [x.etypeId] : [];
-                entity.equipment.parameters = x.params ?? [];
-                entity.equipment.traits = x.traits ?? [];
+                entity.equipment.equipmentParts = [x.etypeId]
+                entity.equipment.parameters[DBasics.params.hp] = x.params[0];
+                entity.equipment.parameters[DBasics.params.mp] = x.params[1];
+                entity.equipment.parameters[DBasics.params.atk] = x.params[2];
+                entity.equipment.parameters[DBasics.params.def] = x.params[3];
+                entity.equipment.parameters[DBasics.params.mat] = x.params[4];
+                entity.equipment.parameters[DBasics.params.mdf] = x.params[5];
+                entity.equipment.parameters[DBasics.params.agi] = x.params[6];
+                entity.equipment.parameters[DBasics.params.luk] = x.params[7];
+                entity.equipment.traits = x.traits;
                 entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
@@ -1023,6 +1037,7 @@ export class REDataManager
         switch (data.id) {
             case 1:
                 //data.traits.push({ code: DTraits.Proficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                //data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.1 });
                 break;
         }
     }
@@ -1166,6 +1181,11 @@ export class REDataManager
             case "kState_仮眠2":
                 //data.behaviors.push("LDoze2Behavior");
                 data.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
+                break;
+            case "kState_UT魔法使い":
+                data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
+                data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
+                data.traits.push({ code: DTraits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
                 break;
         }
     }

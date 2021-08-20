@@ -21,6 +21,7 @@ import { SEffectSubject } from "ts/system/SEffectContext";
 import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/data/DIdentifyer";
+import { DTraits } from "ts/data/DTraits";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -92,10 +93,12 @@ NOTE:
 
     // Game_Actor.prototype.paramPlus
     onQueryIdealParameterPlus(parameterId: DParameterId): number {
+        const self = this.ownerEntity();
         const a = this.equippedItemEntities().reduce((r, e) => {
-            //const itemBehavior = e.getBehavior(LItemBehavior);
-            const equipment = e.data().equipment;
-            return equipment ? r + (equipment.parameters[parameterId] ?? 0) : 0;
+            const data = e.data();
+            const rate = self.traitsPi(DTraits.EquipmentProficiency, e.kindDataId());
+            const equipment = data.equipment;
+            return equipment ? r + ((equipment.parameters[parameterId] ?? 0) * rate) : 0;
         }, 0);
 
         return a;

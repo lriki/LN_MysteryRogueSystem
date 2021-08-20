@@ -160,7 +160,7 @@ export class SEffectorFact {
 
         // この種類を扱うのは得意？
         if (this._incidentEntityKind > 0) {
-            this._genericEffectRate = this._subject.traitsPi(DTraits.Proficiency, this._incidentEntityKind);
+            this._genericEffectRate = this._subject.traitsPi(DTraits.EffectProficiency, this._incidentEntityKind);
         }
         else {
             this._incidentEntityKind = 1.0;

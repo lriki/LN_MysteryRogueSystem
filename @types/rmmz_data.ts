@@ -124,9 +124,9 @@ declare interface IDataItem extends IDataAllItem
 
 declare interface IDataEquipItem extends IDataAllItem
 {
-    etypeId?: number;
-    traits?: IDataTrait[];
-    params?: number[];
+    etypeId: number;
+    traits: IDataTrait[];
+    params: number[];
 }
 
 declare interface IDataWeapon extends IDataEquipItem

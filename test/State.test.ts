@@ -9,6 +9,11 @@ import { RESystem } from "ts/system/RESystem";
 import { TileShape } from "ts/objects/LBlock";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { assert } from "ts/Common";
+import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
+import { DEntityCreateInfo } from "ts/data/DEntity";
+import { SEntityFactory } from "ts/system/SEntityFactory";
+import { LActivity } from "ts/objects/activities/LActivity";
+import { REData } from "ts/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -65,4 +70,44 @@ test("State.AutoRemove", () => {
     const state = REGame.world.findEntity(stateObjectId);
     expect(state).toBe(undefined);
 
+});
+
+test("State.Proficiency", () => {
+    TestEnv.newGame();
+    
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.performFloorTransfer();
+
+    const inventory = actor1.getBehavior(LInventoryBehavior);
+
+    // 武器 入手
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));
+    inventory.addEntity(weapon1);
+
+    // 盾 入手
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
+    inventory.addEntity(shield1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // [装備]
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    const atk1 = actor1.atk;
+    const def1 = actor1.def;
+    
+    // 武器と防具の強さが 50% になる Trait を持つ State 
+    actor1.addState(REData.getStateFuzzy("kState_UT魔法使い").id);
+
+    const atk2 = actor1.atk;
+    const def2 = actor1.def;
+
+    expect(atk1 > atk2).toBe(true);
+    expect(def1 > def2).toBe(true);
 });
