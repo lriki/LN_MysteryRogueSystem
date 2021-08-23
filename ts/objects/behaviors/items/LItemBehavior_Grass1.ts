@@ -10,7 +10,7 @@ import { DEffectCause } from "ts/data/DEffect";
 import { REGame } from "ts/objects/REGame";
 
 /**
- * 
+ * @deprecated see kItem_スピードドラッグ
  */
 export class LItemBehavior_Grass1 extends LBehavior {
     

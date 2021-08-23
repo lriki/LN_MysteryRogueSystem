@@ -1094,6 +1094,9 @@ export class REDataManager
                 data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(DBasics.actions.ShootingActionId, 0);
                 break;
+            case "kItem_スピードドラッグ":
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                break;
             case "kキュアリーフ":
                 const emittor = REData.cloneEmittor(entity.effectSet.mainEmittor());//entity.effectSet.aquireEffect(DEffectCause.Eat);
                 emittor.scope.range = DEffectFieldScopeRange.Performer;

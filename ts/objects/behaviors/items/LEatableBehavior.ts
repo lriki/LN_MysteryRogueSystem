@@ -7,7 +7,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { CommandArgs, LBehavior, onEatReaction } from "../LBehavior";
 
 /**
- * 
+ * @deprecated kItem_スピードドラッグ
  */
 export class LEatableBehavior extends LBehavior {
 

@@ -1,6 +1,7 @@
 import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DEffectCause } from "ts/data/DEffect";
+import { DIdentifiedTiming } from "ts/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/data/DItem";
 import { REData } from "ts/data/REData";
 import { REResponse } from "ts/system/RECommand";
@@ -8,6 +9,7 @@ import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/system/SEffectContext";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
+import { UIdentify } from "ts/usecases/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -55,6 +57,7 @@ export class LItemBehavior extends LBehavior {
     }
 
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+        // [振られた]
         if (activity.actionId() == DBasics.actions.WaveActionId) {
             const subject = activity.subject();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
@@ -64,6 +67,7 @@ export class LItemBehavior extends LBehavior {
                     .performe(context);
             }
         }
+        // [読まれた]
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
             const subject = activity.subject();
             const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
@@ -73,6 +77,17 @@ export class LItemBehavior extends LBehavior {
                     .setSelectedTargetItems(activity.objects2())
                     .performe(context);
             }
+        }
+        // [食べられた]
+        else if (activity.actionId() == DBasics.actions.EatActionId) {
+            console.log("EatActionId!!!!!!!!!!!");
+            const reactor = activity.object();
+            if (reactor) {
+                UIdentify.identifyByTiming(context, self, reactor, DIdentifiedTiming.Eat);
+                context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);
+            }
+            
+            return REResponse.Succeeded;
         }
 
 

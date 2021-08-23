@@ -312,8 +312,19 @@ export abstract class LBehavior extends LObject {
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    
+    /**
+     * Activity の処理。
+     * [飲む] [振る] [読む] など。
+     */
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    
+    /**
+     * Activity を受ける側の処理。
+     * [飲まれた] [振られた] [読まれた] など。
+     */
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+
     onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): REResponse { return REResponse.Pass; }
 
 

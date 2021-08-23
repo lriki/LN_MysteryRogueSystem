@@ -10,7 +10,9 @@ import { REGame } from "ts/objects/REGame";
 import { UIdentify } from "ts/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/data/DIdentifyer";
 
-
+/**
+ * @deprecated see kItem_スピードドラッグ
+ */
 export class LEaterBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
