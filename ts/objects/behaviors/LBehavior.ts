@@ -40,6 +40,7 @@ import { BlockLayerKind } from "../LBlockLayer";
 import { LEventResult } from "../LEventServer";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { DEntityNamePlate } from "ts/data/DEntity";
+import { LCharacterAI } from "../LCharacterAI";
 
 export enum DecisionPhase {
     Prepare,
@@ -301,6 +302,10 @@ export abstract class LBehavior extends LObject {
      * なお "階段" Entity がこのメソッドで PickAction を返すと、階段を拾うことができてしまう。
      */
     public onQueryReactions(actions: DActionId[]): void { }
+
+    public onQueryCharacterAI(characterAIs: LCharacterAI[]): void { }
+    
+
 
     
     public onRefreshConditions(): void { }

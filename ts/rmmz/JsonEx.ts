@@ -27,7 +27,7 @@ import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectab
 import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
 import { LLand } from "ts/objects/LLand";
 import { LParty } from "ts/objects/LParty";
-import { LCharacterAI } from "ts/objects/LCharacterAI";
+import { LCharacterAI_Normal } from "ts/objects/LCharacterAI";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
@@ -96,7 +96,7 @@ function createInstance(name: string): any {
         case "LBlock":
             return Object.create(LBlock.prototype);
         case "LCharacterAI":
-            return Object.create(LCharacterAI.prototype);
+            return Object.create(LCharacterAI_Normal.prototype);
         case "LParam":
             return Object.create(LParam.prototype);
         case "LSurvivorBehavior":

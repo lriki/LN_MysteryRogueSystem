@@ -6,7 +6,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { UMovement } from "ts/usecases/UMovement";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI_Normal } from "../LCharacterAI";
 import { LActivity } from "../activities/LActivity";
 
 /**

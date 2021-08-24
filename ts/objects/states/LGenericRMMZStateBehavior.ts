@@ -8,10 +8,12 @@ import { DAutoRemovalTiming, DState, DStateId, DStateRestriction } from "ts/data
 import { assert } from "ts/Common";
 import { LDecisionBehavior } from "../behaviors/LDecisionBehavior";
 import { REGame } from "../REGame";
+import { LConfusionAI } from "../ai/LConfusionAI";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
     private _stateTurn: number | null = 0;
     //private _persistent: boolean = false;   // 永続ステータス？
+    private _characterAI: LConfusionAI | undefined;
     
     constructor() {
         super();
@@ -72,6 +74,11 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     onAttached(): void {
         this.resetStateCounts();
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
+        
+        const state = this.stateData();
+        if (state.restriction == DStateRestriction.AttackToOther) {
+            this._characterAI = new LConfusionAI();
+        }
     }
 
     onDetached(): void {
@@ -91,6 +98,15 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     //count = 0;
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        if (this._characterAI) {
+            if (phase == DecisionPhase.AIMinor) {
+                return this._characterAI.thinkMoving(context, entity);
+            }
+            else if (phase == DecisionPhase.AIMajor) {
+                return this._characterAI.thinkAction(context, entity);
+            }
+        }
+
         // 解除判定
         if (phase == DecisionPhase.UpdateState) {
             this.updateStateTurns();
@@ -116,8 +132,9 @@ export class LGenericRMMZStateBehavior extends LBehavior {
                 return SPhaseResult.Handled;
             }
             else {
-                throw new Error("Not implemented.");
-                return SPhaseResult.Handled;
+                //throw new Error("Not implemented.");
+                //return SPhaseResult.Handled;
+                return SPhaseResult.Pass;
             }
         }
         else {

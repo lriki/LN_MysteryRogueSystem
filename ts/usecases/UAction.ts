@@ -3,7 +3,7 @@ import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DEmittor, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DHelpers } from "ts/data/DHelper";
-import { DSkillDataId } from "ts/data/DSkill";
+import { DSkill, DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { LBlock } from "ts/objects/LBlock";
@@ -101,6 +101,16 @@ export class UAction {
         return true;
     }
 
+    /**
+     * スキルの効果範囲内にいる、有効な対象を取得する
+     * @param performer 
+     * @param skill 
+     */
+    public static getSkillEffectiveTargets(performer: LEntity, skill: DSkill, checkFaction: boolean): LEntity[] {
+        const effect = skill.emittor();
+        return this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope, checkFaction);
+    }
+
     public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): CandidateSkillAction[] {
         const actions = performer.collectSkillActions();
         const result: CandidateSkillAction[] = [];
@@ -108,9 +118,7 @@ export class UAction {
 
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
         for (const action of actions) {
-            const skill = REData.skills[action.skillId];
-            const effect = skill.emittor();
-            const targets = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
+            const targets = this.getSkillEffectiveTargets(performer, REData.skills[action.skillId], true);
             if (targets.length > 0) {
                 result.push({ action: action, targets: targets });
             }
@@ -156,12 +164,14 @@ export class UAction {
         return false;
     }
     
-    private static searchTargetEntities(performer: LEntity, scope: DEffectFieldScope, rmmzEffectScope: DRmmzEffectScope): LEntity[] {
+    private static searchTargetEntities(performer: LEntity, scope: DEffectFieldScope, rmmzEffectScope: DRmmzEffectScope, checkFaction: boolean): LEntity[] {
         
         if (scope.range == DEffectFieldScopeRange.Front1) {
             // ターゲット候補を集める
             const candidates = UMovement.getAdjacentEntities(performer).filter(target => {
-                if (!this.testFactionMatch(performer, target, rmmzEffectScope)) return false;
+                if (checkFaction) {
+                    if (!this.testFactionMatch(performer, target, rmmzEffectScope)) return false;
+                }
 
                 if (!this.checkAdjacentDirectlyAttack(performer, target)) return false; // 壁の角など、隣接攻撃できなければダメ
 
@@ -264,12 +274,13 @@ export class UAction {
     }
 
     /** skillAction の射程範囲内に、有効なターゲットが１つでも含まれているか確認する */
-    public static checkEntityWithinSkillActionRange(performer: LEntity, skillAction: CandidateSkillAction): boolean {
-        const skill = REData.skills[skillAction.action.skillId];
+    //public static checkEntityWithinSkillActionRange(performer: LEntity, skillAction: CandidateSkillAction): boolean {
+    public static checkEntityWithinSkillActionRange(performer: LEntity, skill: DSkill, checkFaction: boolean, targets: LEntity[]): boolean {
+        //const skill = REData.skills[skillAction.action.skillId];
         const effect = skill.emittor();
         //let count = 0;
-        const entities = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope);
-        for (const target of skillAction.targets) {
+        const entities = this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope, checkFaction);
+        for (const target of targets) {//skillAction.targets) {
             if (!!entities.find(x => x == target)) {
                 return true;
             }

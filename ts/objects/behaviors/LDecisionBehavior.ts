@@ -6,7 +6,7 @@ import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { UMovement } from "ts/usecases/UMovement";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI, LCharacterAI_Normal } from "../LCharacterAI";
 import { LActivity } from "../activities/LActivity";
 
 /**
@@ -16,12 +16,16 @@ import { LActivity } from "../activities/LActivity";
  * 状態異常による行動制限(&経過ターンのデクリメント)・暴走は、状態異常の Behavior 側で onDecisionPhase() をフックして実装する。
  */
 export class LDecisionBehavior extends LBehavior {
-    _characterAI: LCharacterAI = new LCharacterAI();
+    _characterAI: LCharacterAI = new LCharacterAI_Normal();
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LDecisionBehavior);
         b._characterAI = this._characterAI.clone();
         return b;
+    }
+
+    onQueryCharacterAI(characterAIs: LCharacterAI[]): void {
+        characterAIs.push(this._characterAI);
     }
 
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
@@ -45,7 +49,7 @@ export class LDecisionBehavior extends LBehavior {
 
         }
         else if (phase == DecisionPhase.AIMinor) {
-            return this._characterAI.thinkMoving(entity, context);
+            return this._characterAI.thinkMoving(context, entity);
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
 
@@ -53,7 +57,7 @@ export class LDecisionBehavior extends LBehavior {
             return SPhaseResult.Pass;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            return this._characterAI.thinkAction(entity, context);
+            return this._characterAI.thinkAction(context, entity);
             
         }
 

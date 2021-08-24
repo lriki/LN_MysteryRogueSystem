@@ -89,6 +89,18 @@ export class UMovement {
             default: return 2;
         }
     }
+    
+    /**
+     * Entity に隣接する指定した方向にある Block を取得する。
+     * @param entity 
+     * @param dir 
+     * @returns 
+     */
+    static getAdjacentBlock(entity: LEntity, dir: number): LBlock {
+        const offset = Helpers._dirToTileOffsetTable[dir];
+        const block = REGame.map.block(entity.x + offset.x, entity.y + offset.y);
+        return block;
+    }
 
     /**
      * Entity の正面の Block を取得する

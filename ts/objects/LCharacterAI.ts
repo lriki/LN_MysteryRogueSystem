@@ -16,6 +16,25 @@ import { LActivity } from "./activities/LActivity";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 
 /*
+
+    [2021/8/24] タグのような仕組みを使うのはどうだろう
+    ----------
+    タイプタグとか。これは Behavior の方にも流用できそうな感じ。
+
+    とりあえず AI で考えると、
+
+    - entity.getAITagList() で、Behavior をなめて AITag リストを取り出す。
+    - AITag は Normal, Escape, Confuse, ShopKeeper
+
+    いやタグだけじゃ足りないかも。
+    状態を持っておく構造体が必要になる。
+
+    そうするとやっぱりクラスを返す、で十分な気が…。
+
+
+
+    ----------
+
     - 逃げるAIは全く別の CharacterAI作ったほうがいいかもしれない。
     - 隣接していても必ず矢を撃ってくるAI
 
@@ -42,6 +61,7 @@ import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
     [2021/8/17] AI の変更・包含(合成)
     ----------
     - ステート"恐怖"などで Entity はそのまま、ステート要因で逃げAIがアクティブになることがある。
+    - 混乱、目つぶし
     - 店主は、攻撃対象 Entity がいる場合は通常の敵と同じように行動する。
 
     やっぱり Behavior ごとに実装してオーバーライドがベターかな…。
@@ -50,11 +70,25 @@ import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 
 */
 
+
+
+/**
+ * Run のマージにより 1Run 内に複数回行動する場合、まず thinkMoving() が
+ * 複数回呼ばれ、そのあと Token が残っている分だけ thinkAction() が呼ばれる。
+ */
+export abstract class LCharacterAI {
+    public abstract clone(): LCharacterAI;
+
+    public abstract thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult;
+    
+    public abstract thinkAction(context: SCommandContext, self: LEntity): SPhaseResult;
+}
+
 /**
  * https://yttm-work.jp/game_ai/game_ai_0001.html
  * https://wiki.denfaminicogamer.jp/ai_wiki/%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BCAI
  */
-export class LCharacterAI {
+export class LCharacterAI_Normal extends LCharacterAI {
     
     // 最初のフェーズで決定する、メインの行動対象 Entity.
     // 基本的に敵対 Entity であり、移動処理のために使用する。
@@ -78,7 +112,7 @@ export class LCharacterAI {
     private _noActionTurnCount: number = 0;
 
     public clone(): LCharacterAI {
-        const i = new LCharacterAI();
+        const i = new LCharacterAI_Normal();
         i._primaryTargetEntityId = this._primaryTargetEntityId.clone();
         i._targetPositionX = this._targetPositionX;
         i._targetPositionY = this._targetPositionY;
@@ -88,7 +122,7 @@ export class LCharacterAI {
         return i;
     }
 
-    public thinkMoving(self: LEntity, context: SCommandContext): SPhaseResult {
+    public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
 
 
         // http://twist.jpn.org/sfcsiren/index.php?%E3%82%BF%E3%83%BC%E3%83%B3%E3%81%AE%E9%A0%86%E7%95%AA
@@ -412,7 +446,7 @@ export class LCharacterAI {
         context.postConsumeActionToken(self);
     }
     
-    public thinkAction(self: LEntity, context: SCommandContext): SPhaseResult {
+    public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
 
         //if (this._attackTargetEntityId.hasAny()) {
         if (this._requiredSkillAction) {
@@ -428,7 +462,7 @@ export class LCharacterAI {
 
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
-                if (UAction.checkEntityWithinSkillActionRange(self, this._requiredSkillAction)) {
+                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], true, this._requiredSkillAction.targets)) {
                     SEmittorPerformer.makeWithSkill(self, this._requiredSkillAction.action.skillId).performe(context);
                     context.postConsumeActionToken(self);
                     return SPhaseResult.Handled;
