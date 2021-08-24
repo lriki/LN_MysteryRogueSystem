@@ -29,6 +29,7 @@
     },
     "scripts": {
         "build": "webpack",
-        "test": "jest"
+        "test": "jest",
+        "doc": "typedoc --out tsdoc ts --exclude \"**/*.d.ts\""
     }
 }
