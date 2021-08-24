@@ -69,6 +69,12 @@ export class DState {
     stateGroupKeys: string[];
     stateGroupIds: DStateGroupId[];
 
+
+
+    minBuffLevel: number;
+    maxBuffLevel: number;
+    parameterBuffFormulas: (string | undefined)[];    // Index is DParameterId.
+
     public constructor(id: DStateId) {
         this.id = id;
         this.displayName = "";
@@ -87,6 +93,9 @@ export class DState {
         this.behaviors = [];
         this.stateGroupKeys = [];
         this.stateGroupIds = [];
+        this.minBuffLevel = -2;
+        this.maxBuffLevel = 2;
+        this.parameterBuffFormulas = [];
     }
 
     public import(data: IDataState): void {

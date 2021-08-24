@@ -27,6 +27,7 @@ export class LEaterBehavior extends LBehavior {
 
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+        /*
         if (activity.actionId() == DBasics.actions.EatActionId) {
             const reactor = activity.object();
             if (reactor) {
@@ -36,7 +37,8 @@ export class LEaterBehavior extends LBehavior {
             
             return REResponse.Succeeded;
         }
-        
+        */
+       
         return REResponse.Pass;
     }
 

@@ -31,6 +31,8 @@ export type LStateId = LObjectId;
 - 速度ステートグループ(鈍足, 倍速, 3倍速 を排他)  ※"ステート無効化"でも排他は表現できるが新たな付加ができなくなるので、新たな仕組みが要る。
 
 その他の操作は次の通り。
+- バフステートは付加時に絶対・相対でレベルを指定できる。
+- 同一パラメータに対して複数のバフステートを定義できる。例えば、解除条件が違うケースを想定する。
 - 速度バフを解除するには [速度バフ] ステートを解除する。
 - オオイカリ状態等で速度変化を禁止する場合、上記ステートすべてに対する "ステート無効化" を設定する。
 
@@ -116,6 +118,7 @@ export class LState extends LObject {
     //private _ownerEntity: LEntity | undefined;    // シリアライズしない
     _stateId: DStateId = 0;
     _stateBehabiors: LBehaviorId[] = []; // LStateTraitBehavior
+    _level: number = 0;
 
     public constructor() {
         super(LObjectType.State);
@@ -125,6 +128,7 @@ export class LState extends LObject {
     public clone(newOwner: LEntity): LState {
         const state = new LState();
         state._stateId = this._stateId;
+        state._level = this._level;
 
         for (const i of this.stateBehabiors()) {
             const i2 = i.clone(newOwner);
@@ -158,6 +162,14 @@ export class LState extends LObject {
 
     public behaviorIds(): LBehaviorId[] {
         return this._stateBehabiors;
+    }
+
+    public level(): number {
+        return this._level;
+    }
+
+    public setLevel(value: number): void {
+        this._level = value;
     }
 
     /** 全ての Behavior を除外します。 */

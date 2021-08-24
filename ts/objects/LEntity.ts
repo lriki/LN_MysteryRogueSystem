@@ -45,6 +45,11 @@ enum BlockLayer
     Projectile,
 }
 
+export enum LStateLevelType {
+    AbsoluteValue,
+    RelativeValue,
+}
+
 /**
  * [2021/5/27] 祝福・呪い・封印
  * ----------
@@ -735,22 +740,52 @@ export class LEntity extends LObject
     //--------------------------------------------------------------------------------
     // State
 
-    addState(stateId: DStateId, refresh: boolean = true) {
+    addState(stateId: DStateId, refresh: boolean = true, level: number = 1, levelType: LStateLevelType = LStateLevelType.RelativeValue) {
+        if (levelType == LStateLevelType.AbsoluteValue && level == 0) return;   // level=0 となる場合は設定不要
+
         const states = this.states();
         const index = states.findIndex(s => s.stateDataId() == stateId);
+        let state;
+        let newState = true;
         if (index >= 0) {
-            states[index].recast();
+            state = states[index];
+            newState = false;
         }
         else {
-            const state = SStateFactory.newState(stateId);
+            state = SStateFactory.newState(stateId);
+        }
+
+        // Level 設定
+        switch (levelType) {
+            case LStateLevelType.AbsoluteValue:
+                state.setLevel(level);
+                break;
+            case LStateLevelType.RelativeValue:
+                state.setLevel(state.level() + level);
+                break;
+            default:
+                throw new Error("Unreachable.");
+        }
+
+        if (newState) {
+            assert(state.level() > 0);
             state.setParent(this);
-            
             assert(state.hasId());
             this._states.push(state.id());
             state.onAttached();
             this._effectResult.pushAddedState(stateId);
             this._needVisualRefresh = true;
         }
+        else {
+            if (state.level() == 0) {
+                this.removeState(stateId);
+            }
+            else {
+                states[index].recast();
+            }
+        }
+
+
 
         if (refresh) {
             

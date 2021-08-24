@@ -80,16 +80,16 @@ export class LItemBehavior extends LBehavior {
         }
         // [食べられた]
         else if (activity.actionId() == DBasics.actions.EatActionId) {
+            const subject = activity.subject();
             console.log("EatActionId!!!!!!!!!!!");
             const reactor = activity.object();
             if (reactor) {
-                UIdentify.identifyByTiming(context, self, reactor, DIdentifiedTiming.Eat);
-                context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);
+                UIdentify.identifyByTiming(context, subject, reactor, DIdentifiedTiming.Eat);
+                context.post(reactor, subject, new SEffectSubject(subject), undefined, onEatReaction);
             }
             
             return REResponse.Succeeded;
         }
-
 
         return REResponse.Pass;
     }
@@ -123,7 +123,6 @@ export class LItemBehavior extends LBehavior {
     }
     
     private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {
-        const item = this.ownerEntity().getBehavior(LItemBehavior);
         const emittor = self.data().effectSet.effect(cause);
         
         if (emittor) {

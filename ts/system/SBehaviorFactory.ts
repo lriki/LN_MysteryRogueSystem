@@ -15,7 +15,6 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { LActorBehavior } from "ts/objects/behaviors/LActorBehavior";
 import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
-import { LEatableBehavior } from "ts/objects/behaviors/items/LEatableBehavior";
 import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
 import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavior";
 
@@ -40,7 +39,6 @@ export class SBehaviorFactory {
         { fullName: "LGenericRMMZStateBehavior", friendlyName: "_GenericRMMZState", create: () => new LGenericRMMZStateBehavior() },
         { fullName: "LItemBehavior", friendlyName: "_Item", create: () => new LItemBehavior() },
         { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
-        { fullName: "LEatableBehavior", friendlyName: "Eatable", create: () => new LEatableBehavior() },
         { fullName: "LItemImitatorBehavior", friendlyName: "ItemImitator", create: () => new LItemImitatorBehavior() },
         
         
