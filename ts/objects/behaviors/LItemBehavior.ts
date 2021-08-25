@@ -123,14 +123,15 @@ export class LItemBehavior extends LBehavior {
     }
     
     private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {
-        const emittor = self.data().effectSet.emittor(cause);
-        
-        if (emittor) {
+        const emittors = self.data().effectSet.emittors(cause);
+        if (emittors.length > 0) {
             context.postCall(() => {
-                SEmittorPerformer.makeWithEmitor(target, emittor)
-                    .setItemEntity(self)
-                    .setDffectDirection(effectDir)
-                    .performe(context);
+                for (const emittor of emittors) {
+                    SEmittorPerformer.makeWithEmitor(target, emittor)
+                        .setItemEntity(self)
+                        .setDffectDirection(effectDir)
+                        .performe(context);
+                }
             });
         }
         

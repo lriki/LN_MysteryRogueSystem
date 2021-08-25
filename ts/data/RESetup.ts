@@ -1,0 +1,133 @@
+import { assert } from "ts/Common";
+import { DBasics } from "./DBasics";
+import { DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType } from "./DEffect";
+import { DEntity, DIdentificationDifficulty } from "./DEntity";
+import { DIdentifiedTiming } from "./DIdentifyer";
+import { DTraits } from "./DTraits";
+import { REData } from "./REData";
+
+export class RESetup {
+    
+    // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
+    // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
+    // そのためここで直定義して一通り作ってみた後、再検討する。
+    public static setupDirectly_DItem(entity: DEntity) {
+        const data = entity.item();
+        switch (entity.entity.key) {
+            case "kゴブリンのこん棒":
+                entity.idealParams[DBasics.params.upgradeValue] = 0;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
+                break;
+            case "kシルバーソード":
+                entity.idealParams[DBasics.params.upgradeValue] = -1;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
+                break;
+            case "kレザーシールド":
+                entity.idealParams[DBasics.params.upgradeValue] = -1;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
+                break;
+            case "kウッドアロー":
+                entity.display.stackedName = "%1本の" + entity.display.name;
+                data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});
+                entity.addReaction(DBasics.actions.ShootingActionId, 0);
+                break;
+            case "kItem_スピードドラッグ":
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                break;
+            case "kパニックドラッグ":
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                //entity.effectSet.setEffect(DEffectCause.Eat, emittor);
+                //entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
+                break;
+            case "kキュアリーフ":
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
+                this.setupGrassCommon(entity);
+                break;
+            case "k火炎草70_50":
+                entity.effectSet.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_火炎草ブレス").emittor());
+                this.setupGrassCommon(entity);
+
+                //const emittor = entity.effectSet.emittor(DEffectCause.Eat);
+                //assert(emittor);
+                //emittor.scope.range = DEffectFieldScopeRange.Front1;
+                //entity.effectSet.setEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
+                //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
+                //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
+                //entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                break;
+            case "kふきとばしの杖":
+                //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
+                entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
+                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[DBasics.params.remaining] = 5;
+                entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                break;
+            case "kItem_チェンジの杖":
+                //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
+                entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
+                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[DBasics.params.remaining] = 3;
+                entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                /*
+                    杖のメモ (2021/7/5時点のこうしたい)
+                    ----------
+                    [振る] はスキルの発動。火炎草が "Eat" でブレススキルを発動するのと同じ。
+                    魔法弾はスキル側が生成する。
+                    もし炎ブレススキルと合わせるなら、魔法弾スキルを効果の数だけ用意することになる。
+                    でも実際はそのほうがいいかもしれない。投げ当てと魔法弾で効果が変わるものもあるため。(トンネルの杖)
+                    でもやっぱりほとんどの魔法弾は、投げ当てと同じ効果を発動する。そういった設定も欲しいかも。
+
+                    ある種の、elona の「銃器」みたいな考えの方がいいだろうか？
+                    杖と魔法弾、銃と弾丸。
+                    弾丸の威力に銃の性能が反映されるように、魔法弾の効果に杖の効果が反映される感じ。
+                    投げと魔法弾で異なる効果は、魔法弾に独自の Effect を持たせる。
+                    そうでなければ、魔法弾は「自分を射出したEntity(杖) の Cause.Hit の効果を発動する」とか。
+                */
+                break;
+            case "k眠りガス":
+                break;
+            case "kItem_保存の壺":
+                entity.addReaction(DBasics.actions.PutInActionId, 0);
+                entity.addReaction(DBasics.actions.PickOutActionId, 0);
+                break;
+            case "kItem_エスケープスクロール":
+                entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
+                entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                break;
+            case "kItem_識別の巻物":
+                entity.effectSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
+                entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
+                entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
+                entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                break;
+                
+        }
+    }
+
+    private static setupGrassCommon(entity: DEntity): void {
+        // FP 回復
+        const emittor = REData.newEmittor();
+        emittor.scope.range = DEffectFieldScopeRange.Performer;
+        emittor.effect.parameterQualifyings.push({
+            parameterId: DBasics.params.fp,
+            elementId: 0,
+            formula: "5",
+            applyType: DParameterEffectApplyType.Recover,
+            variance: 0,
+            silent: true,
+        });
+        entity.effectSet.addEmittor(DEffectCause.Eat, emittor);
+
+        // 投げ当てで MainEmittor 発動
+        entity.effectSet.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
+
+        entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+        entity.identifiedTiming = DIdentifiedTiming.Eat;
+        entity.canModifierState = false;
+    }
+}
+

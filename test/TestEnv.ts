@@ -41,6 +41,7 @@ export class TestEnv {
     public static UnitTestLandId: DLandId;
     public static FloorId_DefaultNormalMap: LFloorId = LFloorId.makeEmpty();
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
+    public static FloorId_UnitTestFlatMap50x50: LFloorId = LFloorId.makeEmpty();
     public static FloorId_CharacterAI: LFloorId = LFloorId.makeEmpty();
     public static FloorId_RandomMapFloor: LFloorId = LFloorId.makeEmpty();
     public static StateId_Sleep: DStateId;
@@ -86,6 +87,7 @@ export class TestEnv {
         this.UnitTestLandId = REData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
         this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.maps.findIndex(m => DHelpers.getMapName(m.mapId) == "拠点メイン"));
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
+        this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
         this.StateId_Sleep = REData.getStateFuzzy("UT睡眠").id;

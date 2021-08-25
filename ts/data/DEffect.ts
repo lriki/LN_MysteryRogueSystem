@@ -318,11 +318,20 @@ export enum DEffectCause {
 }
 
 export class DEffectSet {
-    private _emittors: (DEmittor | undefined)[] = [];
+    // 1つの cause に複数の Emittor を持つ必要がある。
+    // 例えばドラゴン草は、[飲む] に対応して 「"自分の" FPを5回復する」「"相手に" 炎を飛ばす」といったスコープの異なる2つの効果がある。
+    private _emittors: (DEmittor[] | undefined)[] = [];
+    //private _mainEmittor: DEmittor | undefined;
+
     private _skills: (DSkill | undefined)[] = [];
 
-    public setEmittor(cause: DEffectCause, value: DEmittor): void {
-        this._emittors[cause] = value;
+    public setMainEmittor(emittor: DEmittor): void {
+        this._emittors[DEffectCause.Affect] = [emittor];
+    }
+
+    public addEmittor(cause: DEffectCause, emittor: DEmittor): void {
+        const list = this.aquireEmittorList(cause);
+        list.push(emittor);
     }
 
     public setSkill(cause: DEffectCause, value: DSkill): void {
@@ -330,19 +339,21 @@ export class DEffectSet {
     }
 
     public mainEmittor(): DEmittor {
-        const e = this._emittors[DEffectCause.Affect];
-        assert(e);
-        return e;
+        const list = this._emittors[DEffectCause.Affect];
+        assert(list);
+        return list[0];
     }
 
-    public emittor(cause: DEffectCause): DEmittor | undefined {
-        return this._emittors[cause];
+    public emittors(cause: DEffectCause): DEmittor[] {
+        const list = this._emittors[cause];
+        return list ? list : [];
     }
 
     public skill(cause: DEffectCause): DSkill | undefined {
         return this._skills[cause];
     }
 
+    /*
     public aquireEmittor(cause: DEffectCause): DEmittor {
         let effect = this._emittors[cause];
         if (effect) {
@@ -352,6 +363,19 @@ export class DEffectSet {
             effect = REData.newEmittor();
             this._emittors[cause] = effect;
             return effect;
+        }
+    }
+    */
+
+    private aquireEmittorList(cause: DEffectCause): DEmittor[] {
+        let list = this._emittors[cause];
+        if (list) {
+            return list;
+        }
+        else {
+            list = [];
+            this._emittors[cause] = list;
+            return list;
         }
     }
 

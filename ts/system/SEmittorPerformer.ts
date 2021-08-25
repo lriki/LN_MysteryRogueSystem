@@ -310,9 +310,14 @@ export class SEmittorPerformer {
 
             // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
             // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
-            const emittorEffect = itemEntity?.data().effectSet.emittor(DEffectCause.Hit);
+            const emittorEffects = itemEntity?.data().effectSet.emittors(DEffectCause.Hit);
 
-            const actualEmittor = emittorEffect ?? emittor;
+            //const actualEmittor = emittorEffects ?? emittor;
+            let actualEmittor = emittor;
+            if (emittorEffects) {
+                assert(emittorEffects.length == 1); // TODO: 今は一つだけ
+                actualEmittor = emittorEffects[0];
+            }
 
             
             LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, emittor.scope.length, actualEmittor.effect);
