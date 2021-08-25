@@ -334,7 +334,7 @@ export class REDataManager
                         state.message2 = x.message2 ?? "";
                         state.message3 = x.message3 ?? "";
                         state.message4 = x.message4 ?? "";
-                        state.traits = x.meta ? makeStateTraitsFromMeta(x.meta) : [];
+                        state.traits = x.traits.concat(x.meta ? makeStateTraitsFromMeta(x.meta) : []);
                         state.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
                         state.import(x);
     

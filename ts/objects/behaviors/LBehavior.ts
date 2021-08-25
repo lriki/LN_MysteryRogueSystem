@@ -310,11 +310,15 @@ export abstract class LBehavior extends LObject {
     
     public onRefreshConditions(): void { }
 
+
+
     // 従来ver は Command 扱いだった。
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
+
+    public onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity { return activity; }
 
     onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
     

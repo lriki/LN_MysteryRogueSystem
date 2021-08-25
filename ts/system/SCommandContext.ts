@@ -152,7 +152,14 @@ export class SCommandContext
         Log.postCommand("ConsumeActionToken");
     }
 
-    public postActivity(activity: LActivity) {
+    public postActivity(srcActivity: LActivity, withPreprocess: boolean = true) {
+
+        let activity = srcActivity;
+        if (withPreprocess) {
+            for (const b of srcActivity.subject().collectBehaviors().reverse()) {
+                activity = b.onPreprocessActivity(this, activity);
+            }
+        }
 
         // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
         // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。

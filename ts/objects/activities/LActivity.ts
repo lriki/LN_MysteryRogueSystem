@@ -94,6 +94,11 @@ export class LActivity {
         return this._skillId;
     }
 
+    public withDirection(d: number): this {
+        this._direction = d;
+        return this;
+    }
+
     public direction(): number {
         return this._direction;
     }

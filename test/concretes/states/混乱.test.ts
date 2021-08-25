@@ -18,7 +18,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-test("concretes.states.混乱", () => {
+test("concretes.states.混乱.move", () => {
     TestEnv.newGame();
 
     // Player
@@ -28,6 +28,29 @@ test("concretes.states.混乱", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT混乱").id], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+
+    // 10 ターン分 シミュレーション実行
+    RESystem.scheduler.stepSimulation();
+    for (let i = 0; i < 10; i++) {
+        RESystem.dialogContext.activeDialog().submit();
+        RESystem.scheduler.stepSimulation();
+    }
+
+    // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
+    expect(enemy1.x > 11).toBe(true);
+});
+
+test("concretes.states.混乱.attack", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.performFloorTransfer();
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT混乱").id, REData.getStateFuzzy("kState_UTからぶり").id], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 周りを移動できない Enemy で囲ってみる
@@ -57,9 +80,64 @@ test("concretes.states.混乱", () => {
         RESystem.scheduler.stepSimulation();
     }
 
-    const message = REGame.message;
-
-    // 近づいてくることはまずないはず
-    expect(enemy1.x > 11).toBe(true);
+    // 混乱中はランダムに選択された進行方向に何らかのキャラクターがいる場合は攻撃を行う。
+    // 周囲8マス全部囲まれているときは毎ターン攻撃が発生することになる。
+    expect(TestEnv.integration.skillEmittedCount).toBe(10);
 });
 
+test("concretes.states.混乱.movePlayer", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.performFloorTransfer();
+    actor1.addState(REData.getStateFuzzy("kState_UT混乱").id);
+
+    // 10 ターン分 シミュレーション実行
+    RESystem.scheduler.stepSimulation();
+    for (let i = 0; i < 10; i++) {
+        // 右へ移動しようとする
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+
+        RESystem.scheduler.stepSimulation();
+    }
+
+    // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
+    expect(actor1.x < 20).toBe(true);
+});
+
+test("concretes.states.混乱.throw", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.performFloorTransfer();
+    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const items = [];
+    for (let i = 0; i < 5; i++) {
+        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "enemy1"));
+        inventory.addEntity(items[i]);
+    }
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+
+    RESystem.scheduler.stepSimulation();
+    for (let i = 0; i < 5; i++) {
+        // HP1 にする
+        enemy1.setActualParam(DBasics.params.hp, 1);
+
+        // 投げる
+        RESystem.dialogContext.postActivity(LActivity.makeDirectionChange(actor1, 6));
+        RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]));
+        RESystem.dialogContext.activeDialog().submit();
+        RESystem.scheduler.stepSimulation();
+
+        // 混乱は投げには影響しないので、命中してHP回復しているはず
+        expect(enemy1.actualParam(DBasics.params.hp) > 5).toBe(true);
+    }
+});

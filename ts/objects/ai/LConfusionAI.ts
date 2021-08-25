@@ -7,6 +7,7 @@ import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { CandidateSkillAction, UAction } from "ts/usecases/UAction";
 import { UMovement } from "ts/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
+import { LActivityPreprocessor } from "../activities/LActivityPreprocessor";
 import { LCharacterAI } from "../LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
@@ -18,6 +19,14 @@ interface SkillAction {
 };
 
 export class LConfusionAI extends LCharacterAI {
+
+    /*
+    そもそも混乱は AI として実装するべき？ Activity のハンドラの中でフックしてもよいのでは？
+    ----------
+    Player と AI で処理が全く違う。
+    特に AI は Move と Action を別のフェーズで行う必要があるため、そのケアは CharacterAI 側でしか実装できない。
+    */
+
     private _candidateSkillActions: SkillAction[];
 
     public constructor() {
@@ -69,7 +78,7 @@ export class LConfusionAI extends LCharacterAI {
             // 攻撃候補が有効なまま存在していれば、相手の方を向いて攻撃
             if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[action.skillId], false, [target])) {
                 context.postActivity(LActivity.makeDirectionChange(self,  UMovement.getLookAtDir(self, target)));
-                SEmittorPerformer.makeWithSkill(self, action.skillId).performe(context);
+                context.postActivity(LActivity.makePerformSkill(self, RESystem.skills.normalAttack));
             }
             
             this._candidateSkillActions.shift();
@@ -78,5 +87,11 @@ export class LConfusionAI extends LCharacterAI {
         // 攻撃の成否に関わらず行動を消費する。
         context.postConsumeActionToken(self);
         return SPhaseResult.Handled;
+    }
+}
+
+export class LConfusionActivityPreprocessor extends LActivityPreprocessor {
+    public preprocess(src: LActivity): LActivity {
+        throw new Error("Method not implemented.");
     }
 }

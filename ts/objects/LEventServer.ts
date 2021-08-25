@@ -1,5 +1,6 @@
 import { assert } from "ts/Common";
 import { DEventId } from "ts/data/predefineds/DBasicEvents";
+import { RESystem } from "ts/system/RESystem";
 import { LBehavior } from "./behaviors/LBehavior";
 import { LBehaviorId } from "./LObject";
 import { REGame } from "./REGame";
@@ -71,10 +72,12 @@ export class LEventServer {
                 const b = REGame.world.behavior(e.behaviorId);
                 const r = b.onEvent(eventId, args);
                 if (r != LEventResult.Pass) {
+                    RESystem.integration.onEventPublished(eventId, args, true);
                     return false;
                 }
             }
         }
+        RESystem.integration.onEventPublished(eventId, args, false);
         return true;
     }
 }

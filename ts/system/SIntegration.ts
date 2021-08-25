@@ -1,3 +1,4 @@
+import { DEventId } from "ts/data/predefineds/DBasicEvents";
 import { LandExitResult } from "ts/data/REData";
 import { FMap } from "ts/floorgen/FMapData";
 import { LBlock } from "ts/objects/LBlock";
@@ -9,6 +10,9 @@ import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 
 export abstract class SIntegration {
+    public abstract onEventPublished(eventId: DEventId, args: any, handled: boolean): void;
+
+
     /**
      * REシステム内から、 RMMZ マップを移動する必要があるときに呼び出される。
      * (ゲームオーバー時に拠点フロアへ戻るときなど)

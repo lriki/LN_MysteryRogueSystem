@@ -14,8 +14,13 @@ import { SDialog } from "ts/system/SDialog";
 import { paramLandExitResultVariableId } from "ts/PluginParameters";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { LBlock } from "ts/objects/LBlock";
+import { DEventId } from "ts/data/predefineds/DBasicEvents";
 
 export class RMMZIntegration extends SIntegration {
+    onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
+
+    }
+
     onReserveTransferMap(mapId: number, x: number, y: number, d: number): void {
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
 

@@ -9,6 +9,10 @@ import { assert } from "ts/Common";
 import { LDecisionBehavior } from "../behaviors/LDecisionBehavior";
 import { REGame } from "../REGame";
 import { LConfusionAI } from "../ai/LConfusionAI";
+import { LActivity } from "../activities/LActivity";
+import { LUnitBehavior } from "../behaviors/LUnitBehavior";
+import { DBasics } from "ts/data/DBasics";
+import { UMovement } from "ts/usecases/UMovement";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
     private _stateTurn: number | null = 0;
@@ -140,5 +144,21 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         else {
             return SPhaseResult.Pass;
         }
+    }
+
+    onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {
+        const state = this.stateData();
+        if (state.restriction == DStateRestriction.AttackToOther) {
+            const unit = activity.subject().findBehavior(LUnitBehavior);
+            if (unit && unit.manualMovement()) {
+                if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
+                    const dir = context.random().select(UMovement.directions);
+                    activity.withDirection(dir);
+                    return activity;
+                }
+            }
+        }
+
+        return activity;
     }
 }

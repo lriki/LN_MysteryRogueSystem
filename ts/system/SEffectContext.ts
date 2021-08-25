@@ -236,7 +236,7 @@ export class SEffectorFact {
         const successRate = this._successRate;
         if (this.isPhysical()) {
             const subject = this.subject();
-            const hit = (subject) ? subject.xparamOrDefault(DBasics.xparams.hit, 100) : 1.0;
+            const hit = (subject) ? subject.xparamOrDefault(DBasics.xparams.hit, 1.0) : 1.0;
             return successRate * 0.01 * hit;
         } else {
             return successRate * 0.01;

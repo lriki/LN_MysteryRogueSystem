@@ -22,6 +22,8 @@ import { SDialogContext } from 'ts/system/SDialogContext';
 import { SDialog } from 'ts/system/SDialog';
 import { DEntityId } from 'ts/data/DEntity';
 import { LBlock } from 'ts/objects/LBlock';
+import { DEventId } from 'ts/data/predefineds/DBasicEvents';
+import { DBasics } from 'ts/data/DBasics';
 
 declare global {
     interface Number {
@@ -35,7 +37,7 @@ Number.prototype.clamp = function(min: number, max: number): number{
 };
 
 export class TestEnv {
-
+    public static integration: TestEnvIntegration;
     public static UnitTestLandId: DLandId;
     public static FloorId_DefaultNormalMap: LFloorId = LFloorId.makeEmpty();
     public static FloorId_FlatMap50x50: LFloorId = LFloorId.makeEmpty();
@@ -71,7 +73,8 @@ export class TestEnv {
         this.loadRmmzDatabase();
         REData.reset();
         REDataManager.loadData(true);
-        RESystem.integration = new TestEnvIntegration();
+        this.integration = new TestEnvIntegration();
+        RESystem.integration = this.integration;
         RESystem.unittest = true;
         //REDataManager.loadPrefabDatabaseMap();
         {
@@ -179,6 +182,14 @@ export class TestEnv {
 }
 
 export class TestEnvIntegration extends SIntegration {
+    public skillEmittedCount: number = 0;
+
+    onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
+        if (eventId == DBasics.events.skillEmitted) {
+            this.skillEmittedCount++;
+        }
+    }
+
     onReserveTransferMap(mapId: number): void {
         // Game では $gamePlayer.reserveTransfer() でマップ遷移を予約し、Scene 側でマップデータをロードしてもらう。
         // Test では Camera の transfar 情報を使うため設定不要。マップデータも、TestEnv.performFloorTransfer() でロードする。
