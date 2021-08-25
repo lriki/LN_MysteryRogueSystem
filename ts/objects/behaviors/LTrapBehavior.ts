@@ -101,7 +101,7 @@ export class LTrapBehavior extends LBehavior {
 
         //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
         //const itemData = trapItem.itemData();
-        const emittor = self.data().effectSet.effect(DEffectCause.Affect);
+        const emittor = self.data().effectSet.emittor(DEffectCause.Affect);
 
         if (emittor) {
             const subject = new SEffectorFact(e.self, emittor.effect, SEffectIncidentType.IndirectAttack, target.dir);

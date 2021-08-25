@@ -52,6 +52,10 @@ export class LParam {
         return this._idealParamPlus;
     }
 
+    public setIdealParamPlus(value: number): void {
+        this._idealParamPlus = value;
+    }
+
     public buff(): number {
         return this._buff;
     }

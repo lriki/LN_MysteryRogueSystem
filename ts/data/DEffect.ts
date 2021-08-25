@@ -318,11 +318,11 @@ export enum DEffectCause {
 }
 
 export class DEffectSet {
-    private _effects: (DEmittor | undefined)[] = [];
+    private _emittors: (DEmittor | undefined)[] = [];
     private _skills: (DSkill | undefined)[] = [];
 
-    public setEffect(cause: DEffectCause, value: DEmittor): void {
-        this._effects[cause] = value;
+    public setEmittor(cause: DEffectCause, value: DEmittor): void {
+        this._emittors[cause] = value;
     }
 
     public setSkill(cause: DEffectCause, value: DSkill): void {
@@ -330,27 +330,27 @@ export class DEffectSet {
     }
 
     public mainEmittor(): DEmittor {
-        const e = this._effects[DEffectCause.Affect];
+        const e = this._emittors[DEffectCause.Affect];
         assert(e);
         return e;
     }
 
-    public effect(cause: DEffectCause): DEmittor | undefined {
-        return this._effects[cause];
+    public emittor(cause: DEffectCause): DEmittor | undefined {
+        return this._emittors[cause];
     }
 
     public skill(cause: DEffectCause): DSkill | undefined {
         return this._skills[cause];
     }
 
-    public aquireEffect(cause: DEffectCause): DEmittor {
-        let effect = this._effects[cause];
+    public aquireEmittor(cause: DEffectCause): DEmittor {
+        let effect = this._emittors[cause];
         if (effect) {
             return effect;
         }
         else {
             effect = REData.newEmittor();
-            this._effects[cause] = effect;
+            this._emittors[cause] = effect;
             return effect;
         }
     }

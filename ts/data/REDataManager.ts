@@ -470,7 +470,7 @@ export class REDataManager
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
 
-                entity.effectSet.setEffect(DEffectCause.Affect, emittor);
+                entity.effectSet.setEmittor(DEffectCause.Affect, emittor);
                 // TODO:
                 //item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
                 //item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
@@ -529,7 +529,7 @@ export class REDataManager
                     silent: false,
                 };
                 emittor.effect.parameterQualifyings.push(q);
-                entity.effectSet.setEffect(DEffectCause.Hit, emittor);
+                entity.effectSet.setEmittor(DEffectCause.Hit, emittor);
             }
         });
         REData.armorDataIdOffset = REData.items.length;
@@ -1113,28 +1113,28 @@ export class REDataManager
                     variance: 0,
                     silent: true,
                 });
-                entity.effectSet.setEffect(DEffectCause.Eat, emittor);
-                entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
+                entity.effectSet.setEmittor(DEffectCause.Eat, emittor);
+                entity.effectSet.setEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 entity.identifiedTiming = DIdentifiedTiming.Eat;
                 entity.canModifierState = false;
                 break;
             case "kフレイムリーフ":
-                entity.effectSet.setEffect(DEffectCause.Hit, entity.effectSet.mainEmittor());
+                entity.effectSet.setEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
                 //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
                 entity.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線"));
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
                 break;
             case "kふきとばしの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
-                entity.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
+                entity.effectSet.setEmittor(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 entity.idealParams[DBasics.params.remaining] = 5;
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
-                entity.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
+                entity.effectSet.setEmittor(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 entity.idealParams[DBasics.params.remaining] = 3;
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
@@ -1163,13 +1163,13 @@ export class REDataManager
             case "kItem_エスケープスクロール":
                 entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
-                entity.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                entity.effectSet.setEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_識別の巻物":
                 entity.effectSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
                 entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
                 entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
-                entity.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                entity.effectSet.setEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
                 
         }

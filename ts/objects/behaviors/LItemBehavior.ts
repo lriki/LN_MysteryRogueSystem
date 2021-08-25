@@ -123,7 +123,7 @@ export class LItemBehavior extends LBehavior {
     }
     
     private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {
-        const emittor = self.data().effectSet.effect(cause);
+        const emittor = self.data().effectSet.emittor(cause);
         
         if (emittor) {
             context.postCall(() => {
