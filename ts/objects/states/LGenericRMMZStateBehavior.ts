@@ -150,10 +150,19 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         const state = this.stateData();
         if (state.restriction == DStateRestriction.AttackToOther) {
             const unit = activity.subject().findBehavior(LUnitBehavior);
-            if (unit && unit.manualMovement()) {
+            if (unit && unit.manualMovement()) {    // Player?
+
+                // 歩行移動であれば、方向をランダムにする
                 if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
                     const dir = context.random().select(UMovement.directions);
                     activity.withDirection(dir);
+                    return activity;
+                }
+
+                // 通常攻撃であれば、方向をランダムにする
+                if (activity.actionId() == DBasics.actions.performSkill && activity.skillId() == RESystem.skills.normalAttack) {
+                    const dir = context.random().select(UMovement.directions);
+                    activity.withEntityDirection(dir);
                     return activity;
                 }
             }

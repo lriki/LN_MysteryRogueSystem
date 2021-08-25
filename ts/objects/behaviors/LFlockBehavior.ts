@@ -22,13 +22,11 @@ export class LFlockBehavior extends LBehavior {
 
     onPertyChanged(self: LEntity): void {
         if (self.partyId() > 0) {
-            console.log("onPertyChanged");
             REGame.world.party(self.partyId()).subscribe(DBasics.events.effectReacted, this);
         }
     }
     
     onPartyEvent(eventId: DEventId, args: any): LEventResult {
-        console.log("onPartyEvent");
         if (eventId == DBasics.events.effectReacted) {
             this.ownerEntity().removeState(REData.getStateFuzzy("kState_仮眠2").id);
         }

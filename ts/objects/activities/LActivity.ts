@@ -20,6 +20,7 @@ export interface LActivityData {
     objects2: LEntityIdData[];
     skillId: DSkillDataId,
     direction: number;
+    entityDirection: number;
     consumeAction: boolean;
     fastForward: boolean;
 }
@@ -41,6 +42,7 @@ export class LActivity {
     private _objects2: LEntityId[];
     private _skillId: DSkillDataId;
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
+    private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
     private _consumeAction: boolean;
     private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
 
@@ -51,6 +53,7 @@ export class LActivity {
         this._objects2 = [];
         this._skillId = 0;
         this._direction = 0;
+        this._entityDirection = 0;
         this._consumeAction = false;
         this._fastForward = false;
     }
@@ -61,6 +64,7 @@ export class LActivity {
         this._object = object ? object.entityId() : LEntityId.makeEmpty();
         this._objects2 = [];
         this._direction = dir ?? 0;
+        this._entityDirection = 0;
         this._consumeAction = false;
         this._fastForward = false;
         return this;
@@ -106,6 +110,15 @@ export class LActivity {
     public hasDirection(): boolean {
         return this._direction != 0;
     }
+    
+    public entityDirection(): number {
+        return this._entityDirection;
+    }
+
+    public withEntityDirection(dir: number): this {
+        this._entityDirection = dir;
+        return this;
+    }
 
     public withConsumeAction(): this {
         this._consumeAction = true;
@@ -133,6 +146,7 @@ export class LActivity {
             objects2: this._objects2.map(x => { return { index: x.index2(), key: x.key2() }; }),
             skillId: this._skillId,
             direction: this._direction,
+            entityDirection: this._entityDirection,
             consumeAction: this._consumeAction,
             fastForward: this._fastForward,
         }
@@ -146,6 +160,7 @@ export class LActivity {
         i._objects2 = data.objects2.map(x => new LEntityId(x.index, x.key));
         i._skillId = data.skillId;
         i._direction = data.direction;
+        i._entityDirection = data.entityDirection;
         i._consumeAction = data.consumeAction;
         i._fastForward = data.fastForward;
         return i;
@@ -159,7 +174,7 @@ export class LActivity {
     }
 
     public static makeDirectionChange(subject: LEntity, dir: number): LActivity {
-        return (new LActivity()).setup(DBasics.actions.DirectionChangeActionId, subject, undefined, dir);
+        return (new LActivity()).setup(DBasics.actions.DirectionChangeActionId, subject, undefined, dir).withEntityDirection(dir);
     }
 
     public static makeMoveToAdjacent(subject: LEntity, dir: number): LActivity {
@@ -189,7 +204,6 @@ export class LActivity {
     public static makeEquipOff(subject: LEntity, object: LEntity): LActivity {
         return (new LActivity()).setup(DBasics.actions.EquipOffActionId, subject, object);
     }
-
     
     public static makeEat(subject: LEntity, object: LEntity): LActivity {
         return (new LActivity()).setup(DBasics.actions.EatActionId, subject, object);

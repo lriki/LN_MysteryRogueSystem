@@ -1,15 +1,12 @@
-import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
-import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { LFloorId } from "ts/objects/LFloorId";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -22,9 +19,7 @@ test("concretes.states.混乱.move", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT混乱").id], "enemy1"));
@@ -45,9 +40,7 @@ test("concretes.states.混乱.attack", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT混乱").id, REData.getStateFuzzy("kState_UTからぶり").id], "enemy1"));
@@ -89,9 +82,7 @@ test("concretes.states.混乱.movePlayer", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(REData.getStateFuzzy("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
@@ -108,13 +99,36 @@ test("concretes.states.混乱.movePlayer", () => {
     expect(actor1.x < 20).toBe(true);
 });
 
+test("concretes.states.混乱.attackPlayer", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    actor1.addState(REData.getStateFuzzy("kState_UT混乱").id);
+
+    // 10 ターン分 シミュレーション実行
+    RESystem.scheduler.stepSimulation();
+    let count = 0;
+    for (let i = 0; i < 10; i++) {
+        // 右に向かって攻撃してみる
+        RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack).withEntityDirection(6));
+        RESystem.dialogContext.activeDialog().submit();
+
+        RESystem.scheduler.stepSimulation();
+
+        if (actor1.dir != 6) count++;
+    }
+
+    // 少なくとも1回以上、変な方向に向かって攻撃した
+    expect(count > 0).toBe(true);
+});
+
+
 test("concretes.states.混乱.throw", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory = actor1.getBehavior(LInventoryBehavior);
     const items = [];
     for (let i = 0; i < 5; i++) {
@@ -132,8 +146,7 @@ test("concretes.states.混乱.throw", () => {
         enemy1.setActualParam(DBasics.params.hp, 1);
 
         // 投げる
-        RESystem.dialogContext.postActivity(LActivity.makeDirectionChange(actor1, 6));
-        RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]));
+        RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();
 

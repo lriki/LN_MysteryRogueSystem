@@ -100,6 +100,13 @@ export class TestEnv {
         //actor1._name = "actor1";
     }
 
+    public static setupPlayer(floorId: LFloorId, mx: number, my: number): LEntity {
+        const player = REGame.world.entity(REGame.system.mainPlayerEntityId);
+        REGame.world._transferEntity(player, floorId, mx, my);
+        TestEnv.performFloorTransfer();
+        return player;
+    }
+
     public static performFloorTransfer(): void {
         assert(REGame.camera.isFloorTransfering());
         this.loadMapData(REGame.camera.transferingNewFloorId().rmmzMapId());

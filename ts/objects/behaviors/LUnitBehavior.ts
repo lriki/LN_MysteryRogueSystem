@@ -124,8 +124,12 @@ export class LUnitBehavior extends LBehavior {
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         const subject = new SEffectSubject(self);
 
+        if (activity.entityDirection() > 0) {
+            self.dir = activity.entityDirection();
+        }
+
         if (activity.actionId() == DBasics.actions.DirectionChangeActionId) {
-            self.dir = activity.direction();
+            //self.dir = activity.direction();
             return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
