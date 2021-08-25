@@ -1097,6 +1097,11 @@ export class REDataManager
             case "kItem_スピードドラッグ":
                 entity.addReaction(DBasics.actions.EatActionId, 0);
                 break;
+            case "kパニックドラッグ":
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                //entity.effectSet.setEffect(DEffectCause.Eat, emittor);
+                //entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
+                break;
             case "kキュアリーフ":
                 const emittor = REData.cloneEmittor(entity.effectSet.mainEmittor());//entity.effectSet.aquireEffect(DEffectCause.Eat);
                 emittor.scope.range = DEffectFieldScopeRange.Performer;

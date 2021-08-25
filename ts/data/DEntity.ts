@@ -132,9 +132,9 @@ export class DEntity {
         return this.enemy;
     }
 
-    public addReaction(actionId: DActionId, effectId: DEmittorId): void {
-        if (!this.reactions.find(x => x.actionId == actionId && x.emittingEffect == effectId)) {
-            this.reactions.push({ actionId: actionId, emittingEffect: effectId });
+    public addReaction(actionId: DActionId, emittorId: DEmittorId): void {
+        if (!this.reactions.find(x => x.actionId == actionId && x.emittingEffect == emittorId)) {
+            this.reactions.push({ actionId: actionId, emittingEffect: emittorId });
         }
     }
 

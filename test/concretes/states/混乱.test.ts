@@ -123,7 +123,6 @@ test("concretes.states.混乱.attackPlayer", () => {
     expect(count > 0).toBe(true);
 });
 
-
 test("concretes.states.混乱.throw", () => {
     TestEnv.newGame();
 
