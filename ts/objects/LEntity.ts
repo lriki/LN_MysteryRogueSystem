@@ -545,6 +545,7 @@ export class LEntity extends LObject
         if (param) {
             param.addBuff(buff);
             this.refreshConditions();
+            this._effectResult.pushAddedBuff(buff.paramId);
         }
     }
 
@@ -553,6 +554,7 @@ export class LEntity extends LObject
         if (param) {
             param.removeBuff();
             this.refreshConditions();
+            this._effectResult.pushRemovedBuff(paramId);
         }
     }
 

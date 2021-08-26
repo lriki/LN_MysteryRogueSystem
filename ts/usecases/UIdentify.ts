@@ -15,13 +15,20 @@ export class UIdentify {
     }
 
     public static identify(context: SCommandContext, target: LEntity, withMessage: boolean): void {
-        const name1 = REGame.identifyer.makeDisplayText(target);
-        target.setIndividualIdentified(true);
-        REGame.identifyer.identifyGlobal(target.dataId());
-        const name2 = REGame.identifyer.makeDisplayText(target);
 
-        if (withMessage) {
-            context.postMessage(tr2("%1は%2だった。").format(name1, name2));
+        if (REGame.identifyer.checkGlobalIdentified(target)) {
+            // 既に名前識別済みであれば個体識別するだけでOK
+            target.setIndividualIdentified(true);
+        }
+        else {
+            // 名前未識別であればメッセージも表示する
+            const name1 = REGame.identifyer.makeDisplayText(target);
+            target.setIndividualIdentified(true);
+            REGame.identifyer.identifyGlobal(target.dataId());
+            const name2 = REGame.identifyer.makeDisplayText(target);
+            if (withMessage) {
+                context.postMessage(tr2("%1は%2だった。").format(name1, name2));
+            }
         }
     } 
 }

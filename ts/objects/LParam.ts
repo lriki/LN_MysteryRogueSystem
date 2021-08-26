@@ -127,18 +127,20 @@ export class LParam {
         this._mulBuff.turn = 0;
     }
 
-    public updateBuffs(): void {
+    public updateBuffs(owner: LEntity): void {
         if (this._addBuff.turn > 0) {
             this._addBuff.turn--;
         }
         if (this._addBuff.turn <= 0) {
             this._addBuff.level = 0;
+            owner._effectResult.pushRemovedBuff(this.parameterId());
         }
         if (this._mulBuff.turn > 0) {
             this._mulBuff.turn--;
         }
         if (this._mulBuff.turn <= 0) {
             this._mulBuff.level = 0;
+            owner._effectResult.pushRemovedBuff(this.parameterId());
         }
     }
 }
@@ -202,9 +204,9 @@ export class LParamSet {
         return param;
     }
 
-    public updateBuffs(): void {
+    public updateBuffs(owner: LEntity): void {
         for (const param of this._params) {
-            if (param) param.updateBuffs();
+            if (param) param.updateBuffs(owner);
         }
     }
 

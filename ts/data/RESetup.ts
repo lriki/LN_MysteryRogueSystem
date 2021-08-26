@@ -103,6 +103,7 @@ export class RESetup {
                     turn: 10,
                 });
                 entity.effectSet.addEmittor(DEffectCause.Eat, emittor);
+                entity.effectSet.addEmittor(DEffectCause.Hit, emittor);
 
                 break;
             case "kパニックドラッグ":

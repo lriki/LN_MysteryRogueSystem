@@ -237,6 +237,15 @@ export class LIdentifyer {
         return new LEntityDescription(iconIndex, displayName, level, upgrades, capacity);
     }
 
+    public checkGlobalIdentified(entity: LEntity): boolean {
+        const dataId = entity.dataId();
+        const state = this._identificationStates[dataId];
+        if (!state)
+            return true;
+        else
+            return state.nameIdentified;
+    }
+
     // ユーティリティ
     makeDisplayText(entity: LEntity): string {
         return this.resolveDescription(entity).displayText();

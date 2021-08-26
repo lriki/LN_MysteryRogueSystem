@@ -12,7 +12,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.grass.すばやさ草", () => {
+test("concretes.item.grass.すばやさ草.eat", () => {
     TestEnv.newGame();
 
     // Player
@@ -60,5 +60,31 @@ test("concretes.item.grass.すばやさ草", () => {
     
     // "草" の共通テスト
     TestUtils.testCommonGrassEnd(actor1, item1);
+});
+
+test("concretes.item.grass.すばやさ草.throw", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+
+    // Enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+
+    // アイテム作成 & インベントリに入れる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item3"));
+    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    
+    // [投げる]
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // 倍速状態になる
+    expect(REGame.scheduler.getSpeedLevel(enemy1)).toBe(2);
 });
 

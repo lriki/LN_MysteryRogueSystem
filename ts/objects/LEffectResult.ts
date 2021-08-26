@@ -64,11 +64,10 @@ export class LEffectResult {
 
     addedStates: DStateId[] = [];
     removedStates: DStateId[] = [];
-    /*
-    this.addedBuffs = [];
-    this.addedDebuffs = [];
-    this.removedBuffs = [];
-    */
+
+    addedBuffs: DParameterId[] = [];
+    addedDebuffs: DParameterId[] = [];
+    removedBuffs: DParameterId[] = [];
 
     // 効果を受けたのは、Camera がフォーカスしている勢力に属する者であるか
     focusedFriendly: boolean = true;
@@ -93,9 +92,9 @@ export class LEffectResult {
         this.paramEffects = [];
         this.addedStates = [];
         this.removedStates = [];
-        //this.addedBuffs = [];
-        //this.addedDebuffs = [];
-        //this.removedBuffs = [];
+        this.addedBuffs = [];
+        this.addedDebuffs = [];
+        this.removedBuffs = [];
         this.focusedFriendly = true;
         this.levelup = false;
         this.gainedExp = 0;
@@ -125,6 +124,42 @@ export class LEffectResult {
         }
     }
     
+    // Game_ActionResult.prototype.isBuffAdded
+    public isBuffAdded(paramId: DParameterId): boolean {
+        return this.addedBuffs.includes(paramId);
+    }
+
+    // Game_ActionResult.prototype.pushAddedBuff
+    public pushAddedBuff(paramId: DParameterId): void{
+        if (!this.isBuffAdded(paramId)) {
+            this.addedBuffs.push(paramId);
+        }
+    }
+
+    // Game_ActionResult.prototype.isDebuffAdded 
+    public isDebuffAdded(paramId: DParameterId): boolean {
+        return this.addedDebuffs.includes(paramId);
+    }
+    
+    // Game_ActionResult.prototype.pushAddedDebuff
+    public pushAddedDebuff(paramId: DParameterId): void {
+        if (!this.isDebuffAdded(paramId)) {
+            this.addedDebuffs.push(paramId);
+        }
+    }
+    
+    // Game_ActionResult.prototype.isBuffRemoved
+    public isBuffRemoved(paramId: DParameterId): boolean{
+        return this.removedBuffs.includes(paramId);
+    }
+    
+    // Game_ActionResult.prototype.pushRemovedBuff
+    public pushRemovedBuff(paramId: DParameterId): void {
+        if (!this.isBuffRemoved(paramId)) {
+            this.removedBuffs.push(paramId);
+        }
+    }
+
     // Game_ActionResult.prototype.addedStateObjects
     addedStateObjects(): DState[] {
         return this.addedStates.map(id => REData.states[id]);
@@ -183,6 +218,21 @@ export class LEffectResult {
                 if (state.message4) {
                     context.postMessage(state.message4.format(targetName));
                 }
+            }
+        }
+        // Window_BattleLog.prototype.displayChangedBuffs
+        {
+            for (const paramId of this.addedBuffs) {
+                const text = STextManager.buffAdd.format(targetName, STextManager.param(REData.parameters[paramId].battlerParamId));
+                context.postMessage(text);
+            }
+            for (const paramId of this.addedDebuffs) {
+                const text = STextManager.debuffAdd.format(targetName, STextManager.param(REData.parameters[paramId].battlerParamId));
+                context.postMessage(text);
+            }
+            for (const paramId of this.removedBuffs) {
+                const text = STextManager.buffRemove.format(targetName, STextManager.param(REData.parameters[paramId].battlerParamId));
+                context.postMessage(text);
             }
         }
 
