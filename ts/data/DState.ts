@@ -56,6 +56,8 @@ export class DState {
     /** 継続ターン数 Max */
     maxTurns: number;
 
+    priority: number;
+
     message1: string;
     message2: string;
     message3: string;
@@ -74,6 +76,9 @@ export class DState {
     minBuffLevel: number;
     maxBuffLevel: number;
     parameterBuffFormulas: (string | undefined)[];    // Index is DParameterId.
+    // ツクールの TRAIT では定数加算することができない。割合変化のみ。そのため用意したもの
+
+    autoAdditionCondition: string | undefined;
 
     public constructor(id: DStateId) {
         this.id = id;
@@ -85,6 +90,7 @@ export class DState {
         this.autoRemovalTiming = DAutoRemovalTiming.None;
         this.minTurns = 0;
         this.maxTurns = 0;
+        this.priority = 0;
         this.message1 = "";
         this.message2 = "";
         this.message3 = "";

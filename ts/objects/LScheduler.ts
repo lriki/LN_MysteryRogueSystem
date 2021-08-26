@@ -128,7 +128,8 @@ export class LScheduler {
         if (b && b._speedLevel != 0) return b._speedLevel;
 
         const agi = entity.actualParam(DBasics.params.agi);
-        return Math.ceil(agi / 100.0);
+        const v = (agi >= 0) ? Math.ceil(agi / 100.0) : Math.floor(agi / 100);
+        return v;
     }
     
     public buildOrderTable(): void {

@@ -13,6 +13,7 @@ import { LActivity } from "../activities/LActivity";
 import { LUnitBehavior } from "../behaviors/LUnitBehavior";
 import { DBasics } from "ts/data/DBasics";
 import { UMovement } from "ts/usecases/UMovement";
+import { DParameterId } from "ts/data/DParameter";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
     private _stateTurn: number | null = 0;
@@ -69,6 +70,12 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         }
     }
     
+    private state(): LState {
+        const parent = this.parentAs(LState);
+        assert(parent);
+        return parent;
+    }
+
     private stateData(): DState {
         const parent = this.parentAs(LState);
         assert(parent);
@@ -99,6 +106,23 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             return super.onQueryProperty(propertyId);
     }
 
+    onQueryIdealParameterPlus(parameterId: DParameterId): number {
+        const data = this.stateData();
+        const formula = data.parameterBuffFormulas[parameterId];
+        if (formula) {
+            const slv = this.state().level();
+            try {
+                const v = eval(formula);
+                return v;
+            } catch (e) {
+                console.error(e);
+                return 0;
+            } 
+        }
+
+        return 0;
+    }
+    
     //count = 0;
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {

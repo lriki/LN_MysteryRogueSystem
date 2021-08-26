@@ -3,10 +3,60 @@ import { DBasics } from "./DBasics";
 import { DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
+import { DState } from "./DState";
+import { DStateGroup } from "./DStateGroup";
 import { DTraits } from "./DTraits";
 import { REData } from "./REData";
 
 export class RESetup {
+    
+    public static setupDirectly_State(data: DState) {
+        switch (data.key) {
+            case "kState_UT気配察知":
+                data.traits.push({ code: DTraits.UnitVisitor, dataId: 0, value: 0 });
+                break;
+            case "kState_UnitTest_攻撃必中":
+                data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_UTアイテム擬態":
+                data.behaviors.push("LItemImitatorBehavior");
+                break;
+            case "kState_仮眠2":
+                //data.behaviors.push("LDoze2Behavior");
+                data.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
+                break;
+            case "kState_UT魔法使い":
+                data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
+                data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
+                data.traits.push({ code: DTraits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                break;
+            case "kState_UT速度バフ":
+                data.minBuffLevel = -1;
+                data.maxBuffLevel = 2;
+                data.parameterBuffFormulas[DBasics.params.agi] = "100*slv";
+                break;
+            case "kState_UT鈍足":
+                data.autoAdditionCondition = "a.agi<0";
+                break;
+            case "kState_UT倍速":
+                data.autoAdditionCondition = "a.agi>=100";
+                break;
+            case "kState_UT3倍速":
+                data.autoAdditionCondition = "a.agi>=200";
+                break;
+        }
+    }
+    
+    public static setupDirectly_StateGroup(data: DStateGroup) {
+        switch (data.key) {
+            case "kStateGroup_睡眠系":
+                data.exclusive = true;
+                break;
+            case "kStateGroup_SG速度変化":
+                data.exclusive = true;
+                break;
+        }
+    }
     
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)

@@ -66,21 +66,21 @@ export class REDataManager
 
         // Parameters
         REData.parameters = [
-            { id: 0, name: "null", battlerParamId: -1, initialIdealValue: 0 },
-            { id: 1, name: "HP", battlerParamId: 0, initialIdealValue: 0 },
-            { id: 2, name: "MP", battlerParamId: 1, initialIdealValue: 0 },
-            { id: 3, name: "ATK", battlerParamId: 2, initialIdealValue: 0 },
-            { id: 4, name: "DEF", battlerParamId: 3, initialIdealValue: 0 },
-            { id: 5, name: "MAT", battlerParamId: 4, initialIdealValue: 0 },
-            { id: 6, name: "MDF", battlerParamId: 5, initialIdealValue: 0 },
-            { id: 7, name: "AGI", battlerParamId: 6, initialIdealValue: 0 },
-            { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0 },
-            { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0 },
+            { id: 0, name: "null", battlerParamId: -1, initialIdealValue: 0, minValue: 0, maxValue: Infinity },
+            { id: 1, name: "HP", battlerParamId: 0, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 2, name: "MP", battlerParamId: 1, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 3, name: "ATK", battlerParamId: 2, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 4, name: "DEF", battlerParamId: 3, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 5, name: "MAT", battlerParamId: 4, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 6, name: "MDF", battlerParamId: 5, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 7, name: "AGI", battlerParamId: 6, initialIdealValue: 0, minValue: -100, maxValue: Infinity  },
+            { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
+            { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0, minValue: 0, maxValue: Infinity  },
             //----------
-            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 1000 },
-            { id: 11, name: "UpgradeValue", battlerParamId: -1, initialIdealValue: 99 },
-            { id: 12, name: "Remaining", battlerParamId: -1, initialIdealValue: 99 },
-            { id: 13, name: "Capacity", battlerParamId: -1, initialIdealValue: 8 },
+            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 1000, minValue: 0, maxValue: Infinity },
+            { id: 11, name: "UpgradeValue", battlerParamId: -1, initialIdealValue: 99 , minValue: 0, maxValue: Infinity },
+            { id: 12, name: "Remaining", battlerParamId: -1, initialIdealValue: 99, minValue: 0, maxValue: Infinity  },
+            { id: 13, name: "Capacity", battlerParamId: -1, initialIdealValue: 8, minValue: 0, maxValue: Infinity  },
         ]
         DBasics.params = {
             hp: REData.parameters.findIndex(x => x.name == "HP"),
@@ -322,6 +322,7 @@ export class REDataManager
                         stateGroup.name = x.name;
                         stateGroup.key = x.meta["RE-Key"];
                         REData.stateGroups.push(stateGroup);
+                        RESetup.setupDirectly_StateGroup(stateGroup);
                     }
                     else {
                         state.key = x.meta ? x.meta["RE-Key"]: "";
@@ -331,6 +332,7 @@ export class REDataManager
                         state.autoRemovalTiming = x.autoRemovalTiming;
                         state.minTurns = x.minTurns;
                         state.maxTurns = x.maxTurns;
+                        state.priority = x.priority;
                         state.message1 = x.message1 ?? "";
                         state.message2 = x.message2 ?? "";
                         state.message3 = x.message3 ?? "";
@@ -344,7 +346,7 @@ export class REDataManager
                             //console.error("[行動終了時の自動解除] は未実装です。");
                         }
     
-                        this.setupDirectly_State(state);
+                        RESetup.setupDirectly_State(state);
                     }
                 }
             }
@@ -1076,34 +1078,4 @@ export class REDataManager
     }
     
 
-    static setupDirectly_State(data: DState) {
-        switch (data.key) {
-            case "kState_UT気配察知":
-                data.traits.push({ code: DTraits.UnitVisitor, dataId: 0, value: 0 });
-                break;
-            case "kState_UnitTest_攻撃必中":
-                data.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
-                break;
-            case "kState_UTアイテム擬態":
-                data.behaviors.push("LItemImitatorBehavior");
-                break;
-            case "kState_仮眠2":
-                //data.behaviors.push("LDoze2Behavior");
-                data.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
-                break;
-            case "kState_UT魔法使い":
-                data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
-                data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
-                data.traits.push({ code: DTraits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
-                break;
-        }
-    }
-    
-    static setupDirectly_StateGroup(data: DStateGroup) {
-        switch (data.key) {
-            case "kStateGroup_睡眠系":
-                data.exclusive = true;
-                break;
-        }
-    }
 }

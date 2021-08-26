@@ -29,6 +29,7 @@ import { SEntityFactory } from "ts/system/SEntityFactory";
 import { DTraits } from "ts/data/DTraits";
 import { LParamSet } from "./LParam";
 import { DEntityKind, DEntityKindId } from "ts/data/DEntityKind";
+import { UState } from "ts/usecases/UState";
 
 enum BlockLayer
 {
@@ -426,33 +427,36 @@ export class LEntity extends LObject
 
     // Game_BattlerBase.prototype.paramBasePlus
     public idealParamBasePlus(paramId: DParameterId): number {
-        return Math.max(0, this.idealParamBase(paramId) + this.idealParamPlus(paramId));
-    };
+        return this.idealParamBase(paramId) + this.idealParamPlus(paramId);
+        //return Math.max(0, this.idealParamBase(paramId) + this.idealParamPlus(paramId));
+    }
     
     // Game_BattlerBase.prototype.paramRate
     public idealParamRate(paramId: DParameterId): number {
         return this.traitsPi(DTraits.TRAIT_PARAM, paramId);
-    };
+    }
 
     // Game_BattlerBase.prototype.paramBuffRate
     // バフ適用レベル (正負の整数値。正規化されたレートではない点に注意)
     public paramBuffRate(paramId: DParameterId): number {
         const param = this._params.param(paramId);
         return (param) ? param.buff() * 0.25 + 1.0 : 0;
-    };
+    }
     
     // バフや成長によるパラメータ上限値の最小値。
     // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMin
     public paramMin(paramId: DParameterId): number {
-        return 0;
+        const data = REData.parameters[paramId];
+        return data ? data.minValue : 0;
     };
     
     // バフや成長によるパラメータ上限値の最大値。
     // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMax
     public paramMax(paramId: DParameterId): number {
-        return Infinity;
+        const data = REData.parameters[paramId];
+        return data ? data.maxValue : Infinity;
     };
 
     public actualParam(paramId: DParameterId): number {
@@ -741,8 +745,17 @@ export class LEntity extends LObject
     // State
 
     addState(stateId: DStateId, refresh: boolean = true, level: number = 1, levelType: LStateLevelType = LStateLevelType.RelativeValue) {
+
         if (levelType == LStateLevelType.AbsoluteValue && level == 0) return;   // level=0 となる場合は設定不要
 
+        this._states = UState.resolveStates(this, [{ stateId: stateId, level: level, levelType: levelType }], []).map(s => s.id());
+
+        const aa = this.agi;
+
+        // 自動追加の更新を行う
+        this._states = UState.resolveStates(this, [], []).map(s => s.id());
+
+        /*
         const states = this.states();
         const index = states.findIndex(s => s.stateDataId() == stateId);
         let state;
@@ -790,6 +803,7 @@ export class LEntity extends LObject
         if (refresh) {
             
         }
+        */
     }
 
     public states(): readonly LState[] {
@@ -806,10 +820,14 @@ export class LEntity extends LObject
         if (index >= 0) {
             states[index].clearParent();
             states[index].onDetached();
-            this._states.splice(index, 1);
             this._effectResult.pushRemovedState(stateId);
             this._needVisualRefresh = true;
+            this._states.splice(index, 1);
         }
+    }
+
+    onStateRemoving(state: LState) {
+
     }
 
     /** 全ての State を除外します。 */
@@ -1051,7 +1069,7 @@ export class LEntity extends LObject
     }
 
     public queryIdealParameterPlus(parameterId: DParameterId): number {
-        return this.basicBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
+        return this.collectBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
     }
 
     /** @deprecated  use collectBehaviors*/
@@ -1297,6 +1315,9 @@ export class LEntity extends LObject
     }
     public get def(): number {
         return this.actualParam(DBasics.params.def);
+    }
+    public get agi(): number {
+        return this.actualParam(DBasics.params.agi);
     }
 }
 

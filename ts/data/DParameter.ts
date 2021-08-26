@@ -54,5 +54,8 @@ export interface REData_Parameter
 
     /** 拡張パラメータの時の、初期値 */
     initialIdealValue: number;
+
+    minValue: number;
+    maxValue: number;
 }
 
