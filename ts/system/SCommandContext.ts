@@ -221,6 +221,7 @@ export class SCommandContext
                     //
                     // そのため onTurnEnd のタイミングでステート更新をかける。
                     //
+                    entity.params().updateBuffs();
                     entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
 
                 //    REGame.scheduler.clearCurrentTurnEntity();

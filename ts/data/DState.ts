@@ -73,9 +73,9 @@ export class DState {
 
 
 
-    minBuffLevel: number;
-    maxBuffLevel: number;
-    parameterBuffFormulas: (string | undefined)[];    // Index is DParameterId.
+    //minBuffLevel: number;
+    //maxBuffLevel: number;
+    //parameterBuffFormulas: (string | undefined)[];    // Index is DParameterId.
     // ツクールの TRAIT では定数加算することができない。割合変化のみ。そのため用意したもの
 
     autoAdditionCondition: string | undefined;
@@ -99,9 +99,9 @@ export class DState {
         this.behaviors = [];
         this.stateGroupKeys = [];
         this.stateGroupIds = [];
-        this.minBuffLevel = -2;
-        this.maxBuffLevel = 2;
-        this.parameterBuffFormulas = [];
+        //this.minBuffLevel = -2;
+        //this.maxBuffLevel = 2;
+        //this.parameterBuffFormulas = [];
     }
 
     public import(data: IDataState): void {

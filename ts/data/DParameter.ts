@@ -57,5 +57,10 @@ export interface REData_Parameter
 
     minValue: number;
     maxValue: number;
+
+
+    addBuffCoe: number;
+    mulBuffCore: number;
+
 }
 

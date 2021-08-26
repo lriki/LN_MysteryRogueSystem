@@ -30,7 +30,7 @@ import { DTraits } from "ts/data/DTraits";
 import { LParamSet } from "./LParam";
 import { DEntityKind, DEntityKindId } from "ts/data/DEntityKind";
 import { UState } from "ts/usecases/UState";
-import { LStateLevelType } from "ts/data/DEffect";
+import { DParamBuff, LStateLevelType } from "ts/data/DEffect";
 
 enum BlockLayer
 {
@@ -391,10 +391,15 @@ export class LEntity extends LObject
     // RMMZ のような _hp, _mp, _tp といったフィールドは用意せず、すべて同じように扱う。
     // Game_BattlerBase.prototype.param
     public idealParam(paramId: DParameterId): number {
+        const a1 = this.idealParamBasePlus(paramId);
+        const a2 = this.idealParamRate(paramId);
+        const a3 =  this.paramBuffRate(paramId);
+        const a4 = this.paramBuffPlus(paramId);
         const value =
-            this.idealParamBasePlus(paramId) *
-            this.idealParamRate(paramId) *
-            this.paramBuffRate(paramId);
+            a1 *
+            a2 *
+            a3 +
+            a4;
         const maxValue = this.paramMax(paramId);
         const minValue = this.paramMin(paramId);
         return Math.round(value.clamp(minValue, maxValue));
@@ -436,7 +441,17 @@ export class LEntity extends LObject
     // バフ適用レベル (正負の整数値。正規化されたレートではない点に注意)
     public paramBuffRate(paramId: DParameterId): number {
         const param = this._params.param(paramId);
-        return (param) ? param.buff() * 0.25 + 1.0 : 0;
+        if (param) {
+            return (param.buff() * 0.25 + 1.0) * param.buffRate();
+        }
+        else {
+            return 1.0;
+        }
+    }
+
+    public paramBuffPlus(paramId: DParameterId): number {
+        const param = this._params.param(paramId);
+        return (param) ? param.buffPlus() : 0;
     }
     
     // バフや成長によるパラメータ上限値の最小値。
@@ -521,6 +536,26 @@ export class LEntity extends LObject
     isDeathStateAffected(): boolean {
         return this.isStateAffected(DBasics.states.dead);
     }
+
+    //--------------------------------------------------------------------------------
+    // Buff
+
+    public addBuff(buff: DParamBuff): void {
+        const param = this._params.param(buff.paramId);
+        if (param) {
+            param.addBuff(buff);
+            this.refreshConditions();
+        }
+    }
+
+    public removeBuff(paramId: DParameterId): void {
+        const param = this._params.param(paramId);
+        if (param) {
+            param.removeBuff();
+            this.refreshConditions();
+        }
+    }
+
 
     //----------------------------------------
     // Traits
@@ -850,6 +885,7 @@ export class LEntity extends LObject
     public isSealed(): boolean {
         return this.isStateAffected(REData.system.states.seal);
     }
+
 
     //--------------------------------------------------------------------------------
     // LAbility

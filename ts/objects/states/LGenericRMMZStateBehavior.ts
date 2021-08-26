@@ -106,6 +106,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             return super.onQueryProperty(propertyId);
     }
 
+    /*
     onQueryIdealParameterPlus(parameterId: DParameterId): number {
         const data = this.stateData();
         const formula = data.parameterBuffFormulas[parameterId];
@@ -122,6 +123,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
         return 0;
     }
+    */
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (this._characterAI) {

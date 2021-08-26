@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.grass.すばやさ草"
+                "-t", "Abilities.Enemy.ItemImitator"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

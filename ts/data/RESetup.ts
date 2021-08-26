@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "./DBasics";
-import { DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType, LStateLevelType } from "./DEffect";
+import { DBuffMode, DBuffOp, DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType, LStateLevelType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
 import { DState } from "./DState";
@@ -30,11 +30,13 @@ export class RESetup {
                 data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
                 data.traits.push({ code: DTraits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
                 break;
+                /*
             case "kState_UT速度バフ":
                 data.minBuffLevel = -1;
                 data.maxBuffLevel = 2;
                 data.parameterBuffFormulas[DBasics.params.agi] = "100*slv";
                 break;
+                */
             case "kState_UT鈍足":
                 data.autoAdditionCondition = "a.agi<0";
                 break;
@@ -90,16 +92,17 @@ export class RESetup {
                 entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
 
-                /*
                 const emittor = REData.newEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effect.stateAdditionQualifying.push({
-                    stateId: REData.getStateFuzzy("kState_UT倍速").id,
+                emittor.effect.buffQualifying.push({
+                    paramId: DBasics.params.agi,
+                    mode: DBuffMode.Strength,
                     level: 1,
-                    levelType: LStateLevelType.AbsoluteValue,
+                    levelType: LStateLevelType.RelativeValue,
+                    op: DBuffOp.Add,
+                    turn: 10,
                 });
                 entity.effectSet.addEmittor(DEffectCause.Eat, emittor);
-                */
 
                 break;
             case "kパニックドラッグ":

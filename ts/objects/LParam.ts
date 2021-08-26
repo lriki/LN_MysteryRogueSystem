@@ -1,7 +1,14 @@
 import { assert } from "ts/Common";
+import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/data/DEffect";
 import { DParameterId } from "ts/data/DParameter";
+import { REData } from "ts/data/REData";
 import { LEntity } from "./LEntity";
 
+interface LParamBuff {
+    //mode: DBuffMode,
+    level: number;
+    turn: number;
+}
 
 export class LParam {
     private _dataId: DParameterId;
@@ -9,6 +16,8 @@ export class LParam {
     private _idealParamPlus: number;      // 成長アイテム使用による上限加算値 -> Game_BattlerBase._paramPlus
     private _buff: number;              // バフ適用レベル (正負の整数値) -> Game_BattlerBase._buffs
     private _initialActualValue: number;      // 初期値。未識別状態の使用回数を表すのに使う。
+    private _addBuff: LParamBuff;
+    private _mulBuff: LParamBuff;
 
     constructor(id: DParameterId) {
         this._dataId = id;
@@ -16,6 +25,8 @@ export class LParam {
         this._idealParamPlus = 0;
         this._buff = 0;
         this._initialActualValue = 0;
+        this._addBuff = { level: 0, turn: 0, };
+        this._mulBuff = { level: 0, turn: 0, };
     }
 
     public clone(): LParam {
@@ -39,6 +50,14 @@ export class LParam {
     public actualParamDamge(): number {
         return this._actualParamDamge;
     }
+    
+    public getAddBuff(): LParamBuff {
+        return this._addBuff;
+    }
+
+    public getMulBuff(): LParamBuff {
+        return this._mulBuff;
+    }
 
     public setActualDamgeParam(value: number): void {
         this._actualParamDamge = value;
@@ -60,6 +79,14 @@ export class LParam {
         return this._buff;
     }
 
+    public buffPlus(): number {
+        return this._addBuff.level * REData.parameters[this._dataId].addBuffCoe;
+    }
+
+    public buffRate(): number {
+        return this._mulBuff.level * REData.parameters[this._dataId].mulBuffCore + 1.0;
+    }
+
     public clearDamage(): void {
         this._actualParamDamge = 0;
     }
@@ -74,6 +101,45 @@ export class LParam {
 
     public initialActualValue(): number {
         return this._initialActualValue;
+    }
+
+    public addBuff(buff: DParamBuff): void {
+        const b = (buff.op == DBuffOp.Add) ? this._addBuff : this._mulBuff;
+
+        switch (buff.levelType) {
+            case LStateLevelType.AbsoluteValue:
+                b.level = buff.level;
+                break;
+            case LStateLevelType.RelativeValue:
+                b.level += buff.level;
+                break;
+            default:
+                throw new Error("Unreachable.");
+        }
+
+        b.turn = buff.turn;
+    }
+
+    public removeBuff(): void {
+        this._addBuff.level = 0;
+        this._addBuff.turn = 0;
+        this._mulBuff.level = 0;
+        this._mulBuff.turn = 0;
+    }
+
+    public updateBuffs(): void {
+        if (this._addBuff.turn > 0) {
+            this._addBuff.turn--;
+        }
+        if (this._addBuff.turn <= 0) {
+            this._addBuff.level = 0;
+        }
+        if (this._mulBuff.turn > 0) {
+            this._mulBuff.turn--;
+        }
+        if (this._mulBuff.turn <= 0) {
+            this._mulBuff.level = 0;
+        }
     }
 }
 
@@ -136,13 +202,32 @@ export class LParamSet {
         return param;
     }
 
+    public updateBuffs(): void {
+        for (const param of this._params) {
+            if (param) param.updateBuffs();
+        }
+    }
+
     public refresh(owner: LEntity): void {
         // min/max clamp.
         // 再帰防止のため、setActualParam() ではなく直接フィールドへ設定する
         for (const param of this._params) {
             if (param) {
-                const max = owner.idealParam(param.parameterId());
-                param.setActualDamgeParam(param.actualParamDamge().clamp(0, max));
+                const ideal = owner.idealParam(param.parameterId());
+                let actual = (ideal - param.actualParamDamge());
+
+                const min = REData.parameters[param.parameterId()].minValue;
+                if (actual < min) {
+                    actual = min;
+                }
+                if (actual > ideal) {
+                    actual = ideal;
+                }
+
+                if (ideal < 0)
+                    param.setActualDamgeParam(actual - ideal);
+                else
+                    param.setActualDamgeParam(ideal - actual);
             }
         }
     }

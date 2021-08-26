@@ -81,7 +81,6 @@ export class LItemBehavior extends LBehavior {
         // [食べられた]
         else if (activity.actionId() == DBasics.actions.EatActionId) {
             const subject = activity.subject();
-            console.log("EatActionId!!!!!!!!!!!");
             const reactor = activity.object();
             if (reactor) {
                 UIdentify.identifyByTiming(context, subject, reactor, DIdentifiedTiming.Eat);

@@ -485,6 +485,9 @@ export class SEffectContext {
         for (const effect of this._effectorFact.subjectEffect().specialEffectQualifyings) {
             this.applyItemEffect(target, effect, result);
         }
+        for (const buff of this._effectorFact.subjectEffect().buffQualifying) {
+            target.addBuff(buff);
+        }
         for (const effect of this._effectorFact.subjectEffect().otherEffectQualifyings) {
             this.applyOtherEffect(commandContext, target, effect, result);
         }

@@ -52,11 +52,13 @@ export enum LStateLevelType {
     RelativeValue,
 }
 
+/*
 export interface DStateAdditionQualifying {
     stateId: string;
     level: number;
     levelType: LStateLevelType,
 }
+*/
 
 export enum DRmmzEffectScope {
     /** なし */
@@ -132,6 +134,27 @@ export interface DEffectFieldScope {
     projectilePrefabKey: string,
 }
 
+
+export enum DBuffMode {
+    Strength,
+    Weakness,
+}
+
+export enum DBuffOp {
+    Add,
+    Mul,
+}
+
+export interface DParamBuff {
+    paramId: DParameterId;
+    mode: DBuffMode,
+    level: number;
+    levelType: LStateLevelType;
+    op: DBuffOp;
+    turn: number;
+    //formula: string;
+}
+
 export type DEmittorId = number;
 
 export class DEffect {
@@ -185,7 +208,7 @@ export class DEffect {
      * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
      * こちらはレベルと共に指定できる。
      */
-    stateAdditionQualifying: DStateAdditionQualifying[];
+    buffQualifying: DParamBuff[];
     
 
     constructor() {
@@ -204,7 +227,7 @@ export class DEffect {
         //performeSkillQualifyings = [];
         this.otherEffectQualifyings = [];
         this.specialEffectQualifyings = [];
-        this.stateAdditionQualifying = [];
+        this.buffQualifying = [];
     }
 
     public copyFrom(src: DEffect): void {
