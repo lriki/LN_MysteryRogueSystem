@@ -30,6 +30,7 @@ import { DTraits } from "ts/data/DTraits";
 import { LParamSet } from "./LParam";
 import { DEntityKind, DEntityKindId } from "ts/data/DEntityKind";
 import { UState } from "ts/usecases/UState";
+import { LStateLevelType } from "ts/data/DEffect";
 
 enum BlockLayer
 {
@@ -44,11 +45,6 @@ enum BlockLayer
 
     /** 発射物。矢、魔法弾、吹き飛ばされたUnitなど。 */
     Projectile,
-}
-
-export enum LStateLevelType {
-    AbsoluteValue,
-    RelativeValue,
 }
 
 /**
@@ -750,11 +746,9 @@ export class LEntity extends LObject
 
         this._states = UState.resolveStates(this, [{ stateId: stateId, level: level, levelType: levelType }], []).map(s => s.id());
 
-        const aa = this.agi;
-
         // 自動追加の更新を行う
         this._states = UState.resolveStates(this, [], []).map(s => s.id());
-
+        this._needVisualRefresh = true;
         /*
         const states = this.states();
         const index = states.findIndex(s => s.stateDataId() == stateId);
@@ -809,12 +803,19 @@ export class LEntity extends LObject
     public states(): readonly LState[] {
         return this._states.map(id => REGame.world.object(id) as LState);
     }
-    
+
     public isStateAffected(stateId: DStateId): boolean {
         return this.states().findIndex(s => s.stateDataId() == stateId) >= 0;
     }
 
     removeState(stateId: DStateId) {
+        this._states = UState.resolveStates(this, [], [stateId]).map(s => s.id());
+
+        // 自動追加の更新を行う
+        this._states = UState.resolveStates(this, [], []).map(s => s.id());
+        this._needVisualRefresh = true;
+
+        /*
         const states = this.states();
         const index = states.findIndex(s => s.stateDataId() == stateId);
         if (index >= 0) {
@@ -824,10 +825,7 @@ export class LEntity extends LObject
             this._needVisualRefresh = true;
             this._states.splice(index, 1);
         }
-    }
-
-    onStateRemoving(state: LState) {
-
+        */
     }
 
     /** 全ての State を除外します。 */

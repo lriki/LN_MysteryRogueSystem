@@ -1,8 +1,9 @@
 import { assert } from "ts/Common";
+import { LStateLevelType } from "ts/data/DEffect";
 import { DState, DStateId } from "ts/data/DState";
 import { DStateGroup } from "ts/data/DStateGroup";
 import { REData } from "ts/data/REData";
-import { LEntity, LStateLevelType } from "ts/objects/LEntity";
+import { LEntity } from "ts/objects/LEntity";
 import { LState } from "ts/objects/states/LState";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { SStateFactory } from "ts/system/SStateFactory";

@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { DBasics } from "./DBasics";
-import { DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType } from "./DEffect";
+import { DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType, LStateLevelType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
 import { DState } from "./DState";
@@ -85,7 +85,22 @@ export class RESetup {
                 entity.addReaction(DBasics.actions.ShootingActionId, 0);
                 break;
             case "kItem_スピードドラッグ":
+                this.setupGrassCommon(entity);
                 entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
+                entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
+
+                /*
+                const emittor = REData.newEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.effect.stateAdditionQualifying.push({
+                    stateId: REData.getStateFuzzy("kState_UT倍速").id,
+                    level: 1,
+                    levelType: LStateLevelType.AbsoluteValue,
+                });
+                entity.effectSet.addEmittor(DEffectCause.Eat, emittor);
+                */
+
                 break;
             case "kパニックドラッグ":
                 entity.addReaction(DBasics.actions.EatActionId, 0);
@@ -93,12 +108,12 @@ export class RESetup {
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
                 break;
             case "kキュアリーフ":
-                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 this.setupGrassCommon(entity);
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 break;
             case "k火炎草70_50":
-                entity.effectSet.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_火炎草ブレス").emittor());
                 this.setupGrassCommon(entity);
+                entity.effectSet.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_火炎草ブレス").emittor());
 
                 //const emittor = entity.effectSet.emittor(DEffectCause.Eat);
                 //assert(emittor);

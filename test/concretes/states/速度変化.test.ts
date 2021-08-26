@@ -1,13 +1,10 @@
-import { DBasics } from "ts/data/DBasics";
 import { REGame } from "ts/objects/REGame";
-import { SEntityFactory } from "ts/system/SEntityFactory";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/data/REData";
-import { DEntityCreateInfo } from "ts/data/DEntity";
-import { LActivity } from "ts/objects/activities/LActivity";
 import { assert } from "ts/Common";
-import { LStateLevelType } from "ts/objects/LEntity";
+import { LStateLevelType } from "ts/data/DEffect";
+import { LActivity } from "ts/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -15,7 +12,6 @@ beforeAll(() => {
 
 test("concretes.states.速度変化", () => {
     TestEnv.newGame();
-
     const stateId = REData.getStateFuzzy("kState_UT速度バフ").id;
 
     // Player
@@ -52,34 +48,38 @@ test("concretes.states.速度変化", () => {
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT倍速").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT3倍速").id)).toBe(false);
 
+    // 解除
+    actor1.removeState(stateId);
+    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(1);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT3倍速").id)).toBe(false);
+
     RESystem.scheduler.stepSimulation();
+});
 
+test("concretes.states.速度変化.remove", () => {
+    TestEnv.newGame();
+    const stateId = REData.getStateFuzzy("kState_UT速度バフ").id;
 
-
-    /*
-    const actorHP1 = actor1.actualParam(DBasics.params.hp);
-    
-    // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UTからぶり").id], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    const enemyHP1 = enemy1.actualParam(DBasics.params.hp);
+    // Player
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    actor1.addState(stateId);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
-        // Player は右を向いて攻撃
-        RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        // 10 ターンの間はステートが追加されている
+        expect(actor1.isStateAffected(stateId)).toBe(true);
 
+        // 待機
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
         RESystem.scheduler.stepSimulation();
     }
 
-    // 互いに HP 減少は無い
-    expect(actor1.actualParam(DBasics.params.hp)).toBe(actorHP1);
-    expect(enemy1.actualParam(DBasics.params.hp)).toBe(enemyHP1);
-
-    // 攻撃自体は互いに行われている
-    expect(TestEnv.integration.skillEmittedCount).toBe(20);
-    */
+    // 10 ターンで解除
+    const bb = actor1.collectBehaviors();
+    expect(actor1.isStateAffected(stateId)).toBe(false);
 });
-

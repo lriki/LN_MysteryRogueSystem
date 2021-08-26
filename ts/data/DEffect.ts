@@ -47,6 +47,17 @@ export interface DOtherEffectQualifying {
     key: string,
 }
 
+export enum LStateLevelType {
+    AbsoluteValue,
+    RelativeValue,
+}
+
+export interface DStateAdditionQualifying {
+    stateId: string;
+    level: number;
+    levelType: LStateLevelType,
+}
+
 export enum DRmmzEffectScope {
     /** なし */
     None = 0,
@@ -170,6 +181,13 @@ export class DEffect {
       */
     specialEffectQualifyings: IDataEffect[];
 
+    /**
+     * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
+     * こちらはレベルと共に指定できる。
+     */
+    stateAdditionQualifying: DStateAdditionQualifying[];
+    
+
     constructor() {
         //this.id = id;
         //this.scope = {
@@ -186,6 +204,7 @@ export class DEffect {
         //performeSkillQualifyings = [];
         this.otherEffectQualifyings = [];
         this.specialEffectQualifyings = [];
+        this.stateAdditionQualifying = [];
     }
 
     public copyFrom(src: DEffect): void {
