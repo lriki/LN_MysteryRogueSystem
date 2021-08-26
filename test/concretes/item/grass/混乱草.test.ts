@@ -17,7 +17,6 @@ beforeAll(() => {
 });
 
 test("concretes.item.grass.混乱草", () => {
-    /*
     TestEnv.newGame();
 
     // Player
@@ -32,9 +31,6 @@ test("concretes.item.grass.混乱草", () => {
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパニックドラッグ").id, [], "item2"));
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getBehavior(LInventoryBehavior).addEntity(item2);
-
-    // [食べる] ができる
-    expect(item1.queryReactions().includes(DBasics.actions.EatActionId)).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -55,6 +51,5 @@ test("concretes.item.grass.混乱草", () => {
 
     // 混乱状態になる
     expect(!!enemy1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT混乱").id)).toBe(true);
-    */
 });
 

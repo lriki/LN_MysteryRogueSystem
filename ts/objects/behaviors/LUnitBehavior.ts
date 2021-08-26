@@ -29,7 +29,7 @@ import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 export class LUnitBehavior extends LBehavior {
     
     private _factionId: number = REData.system.factions.neutral;
-    _speedLevel: number = 1;     // 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
+    _speedLevel: number = 0;     // ユニットテスト用。 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
     _targetingEntityId: number = 0;   // AIMinor Phase で、攻撃対象を確定したかどうか。以降、Run 内では iterationCount が残っていても MinorAction を行わない
@@ -55,7 +55,7 @@ export class LUnitBehavior extends LBehavior {
     //factionId(): number { return this._factionId; }
     setFactionId(value: number): LUnitBehavior { this._factionId = value; return this; }
 
-    speedLevel(): number { return this._speedLevel; }
+    //speedLevel(): number { return this._speedLevel; }
     setSpeedLevel(value: number): LUnitBehavior { this._speedLevel = value; return this; }
 
     waitTurnCount(): number { return this._waitTurnCount; }

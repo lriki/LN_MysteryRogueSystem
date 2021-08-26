@@ -10,6 +10,7 @@ import { LEnemyBehavior } from "ts/objects/behaviors/LEnemyBehavior";
 import { REData } from "ts/data/REData";
 import { UTransfer } from "ts/usecases/UTransfer";
 import { UName } from "ts/usecases/UName";
+import { DBasics } from "ts/data/DBasics";
 
 
 
@@ -225,8 +226,10 @@ export class SScheduler
             const behavior = unit.behavior;
             const entity = REGame.world.entity(unit.entityId);
 
+            const speedLevel = REGame.scheduler.getSpeedLevel(entity);
+
             // 鈍足状態の対応。待ちターン数を更新
-            if (behavior.speedLevel() < 0) {
+            if (speedLevel < 0) {
                 if (behavior.waitTurnCount() == 0) {
                     behavior.setWaitTurnCount(1);
                 }
@@ -239,7 +242,7 @@ export class SScheduler
             if (behavior.waitTurnCount() == 0) {
                 // 行動トークンを、速度の分だけ配る。鈍足状態でも 1 つ配る。
                 // リセットではなく追加である点に注意。借金している場合に備える。
-                entity.setActionTokenCount(entity.actionTokenCount() + Math.max(1, behavior.speedLevel()));
+                entity.setActionTokenCount(entity.actionTokenCount() + Math.max(1, speedLevel));
             }
             else {
                 // 鈍足状態。このターンは行動トークンをもらえない。

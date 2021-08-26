@@ -1,4 +1,5 @@
 import { assert } from "ts/Common";
+import { DBasics } from "ts/data/DBasics";
 import { DFactionId, REData } from "ts/data/REData";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
@@ -120,6 +121,15 @@ export class LScheduler {
     public actorEntities(): LEntity[] {
         return this._actorEntities.map(id => REGame.world.entity(id));
     }
+
+    public getSpeedLevel(entity: LEntity): number {
+        // TODO: ユニットテスト用。後で消す
+        const b = entity.findBehavior(LUnitBehavior);
+        if (b && b._speedLevel != 0) return b._speedLevel;
+
+        const agi = entity.actualParam(DBasics.params.agi);
+        return Math.ceil(agi / 100.0);
+    }
     
     public buildOrderTable(): void {
         this._actorEntities = [];
@@ -134,9 +144,11 @@ export class LScheduler {
                 if (behavior) {
                     const factionId = entity.getOutwardFactionId();
                     assert(factionId > 0);
-                    assert(behavior.speedLevel() != 0);
 
-                    let actionCount = behavior.speedLevel();
+                    const speedLevel = this.getSpeedLevel(entity);
+                    assert(speedLevel != 0);
+
+                    let actionCount = speedLevel;
                     
                     // 鈍足状態の対応
                     if (actionCount < 0) {

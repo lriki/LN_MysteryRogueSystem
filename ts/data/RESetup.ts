@@ -39,8 +39,8 @@ export class RESetup {
                 break;
             case "kパニックドラッグ":
                 entity.addReaction(DBasics.actions.EatActionId, 0);
-                //entity.effectSet.setEffect(DEffectCause.Eat, emittor);
-                //entity.effectSet.setEffect(DEffectCause.Hit, REData.cloneEmittor(entity.effectSet.mainEmittor()));
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
+                entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
                 break;
             case "kキュアリーフ":
                 entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());

@@ -17,20 +17,27 @@ afterAll(() => {
 
 test("concretes.states.混乱.move", () => {
     TestEnv.newGame();
+    const stateId = REData.getStateFuzzy("kState_UT混乱").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT混乱").id], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [stateId], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
+        // 10 ターンの間はステートが追加されている
+        expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();
     }
+
+    // 10 ターンで解除
+    expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
     expect(enemy1.x > 11).toBe(true);
