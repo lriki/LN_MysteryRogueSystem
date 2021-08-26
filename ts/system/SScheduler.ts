@@ -87,6 +87,8 @@ export class SScheduler
         const dialogContext = RESystem.dialogContext;
         const commandContext = RESystem.commandContext;
 
+        //console.log("---------stepSimulation");
+
         while (true) {
             // フレーム待ち
             //if (REGame.scheduler.updateWaiting()) {
@@ -220,6 +222,8 @@ export class SScheduler
         RESystem.mapManager.updateRound();
 
         REGame.scheduler.buildOrderTable();
+
+        console.log("run", REGame.scheduler.runs());
         
         // ターン開始時の各 unit の設定更新
         REGame.scheduler.units().forEach(unit => {

@@ -123,8 +123,6 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         return 0;
     }
     
-    //count = 0;
-    
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (this._characterAI) {
             if (phase == DecisionPhase.AIMinor) {

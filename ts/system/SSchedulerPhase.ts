@@ -32,11 +32,17 @@ export class SSchedulerPhase_Prepare extends SSchedulerPhase {
 }
 
 export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
+    onStart(scheduler: SScheduler): void {
+    }
+
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {
         const entity = REGame.world.findEntity(unit.entityId);
         if (entity && unit.behavior.manualMovement() && entity.actionTokenCount() > 0) {
+
+            // 倍速対策。Pallarel 付きでも強制的に Flush.
+            RESystem.sequelContext.flushSequelSet();
+
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
-            //REGame.scheduler.setCurrentTurnEntity(entity);
         }
     }
 }
@@ -87,7 +93,8 @@ export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
     onStart(scheduler: SScheduler): void {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
-        RESystem.sequelContext.flushSequelSet();
+        //RESystem.sequelContext.flushSequelSet();
+        RESystem.sequelContext.attemptFlush();
     }
     
     onProcess(scheduler: SScheduler, unit: UnitInfo): void {

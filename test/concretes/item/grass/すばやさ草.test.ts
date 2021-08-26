@@ -1,23 +1,15 @@
-import { assert } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
 import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
-import { SGameManager } from "ts/system/SGameManager";
 import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
 import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
-import { LFloorId } from "ts/objects/LFloorId";
-import { LIdentifyer } from "ts/objects/LIdentifyer";
 import { TestUtils } from "test/TestUtils";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
-});
-
-afterAll(() => {
 });
 
 test("concretes.item.grass.すばやさ草", () => {
