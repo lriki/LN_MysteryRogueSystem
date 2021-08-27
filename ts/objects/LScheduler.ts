@@ -400,8 +400,12 @@ export class LScheduler {
             }
         }
 
+        // Table 調整が必要？
         if (changesUnits.length > 0) {
             const curRun = this._runs[this._currentRun];
+
+            // 次の Run を取り出す。
+            // 無ければ終端に新たな Run を作る。
             let newRun: RunInfo;
             if (this._currentRun >= this._runs.length - 1) {
                 newRun = {
@@ -428,7 +432,9 @@ export class LScheduler {
 
             // 現在 Run に残っている「未行動で行動速度が遅い」Entity は、行動を次の Run に移す。
             for (const step2 of curRun.steps) {
-                if (step2.actedCount == 0 && step2.unit().speedLevel < maxSpeed) {
+                // ※行動済みかどうかは actedCount と iterationCountMax の比較で行う。
+                //   単に iteration 完了かだけでは、本当に取るべき行動をすべて取ったかは判断できない。
+                if (step2.actedCount < step2.iterationCountMax() && step2.unit().speedLevel < maxSpeed) {
                     const step = newRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
                     if (step) {
                         // 残っている IterationCount をマージする
