@@ -132,7 +132,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
             // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
             const target = REGame.map.getVisibilityEntities(self)
                 .filter(e => Helpers.isHostile(self, e))
-                .sort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
+                .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
             if (target) {
                 this._targetPositionX = target.x;
@@ -256,7 +256,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
             const roomId = REGame.map.roomId(self);
             const target = REGame.map.entitiesInRoom(roomId)
                 .filter(e => Helpers.isHostile(self, e))
-                .sort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
+                .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
             if (target) {
                 this._targetPositionX = target.x;

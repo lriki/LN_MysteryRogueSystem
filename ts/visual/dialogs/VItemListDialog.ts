@@ -229,7 +229,7 @@ export class VItemListDialog extends VDialog {
 
             const finalActions = actualActions
                 .distinct()
-                .sort((a, b) => {
+                .immutableSort((a, b) => {
                     const ad = REData.actions[a];
                     const bd = REData.actions[b];
                     if (ad.priority == bd.priority) return ad.id - bd.id;

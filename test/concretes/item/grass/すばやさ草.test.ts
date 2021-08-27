@@ -7,6 +7,7 @@ import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
+import { DBasics } from "ts/data/DBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -17,6 +18,11 @@ test("concretes.item.grass.すばやさ草.eat", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
+    enemy1.addState(DBasics.states.debug_MoveRight);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item1"));
@@ -39,6 +45,8 @@ test("concretes.item.grass.すばやさ草.eat", () => {
 
     // 倍速になる
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(2);
+    
+    expect(enemy1.x).toBe(10);  // まだ enemy にターンは回らないので移動していない
 
     // [食べる] 2個め
     RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item2).withConsumeAction());

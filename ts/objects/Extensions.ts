@@ -8,6 +8,7 @@ declare global {
         mutableRemoveAll(predicate: (x: T) => boolean): boolean;
         mutableShuffle(): void;
         distinct(): Array<T>;
+        immutableSort(compareFn?: (a: T, b: T) => number): Array<T>;
     }
 }
 
@@ -52,6 +53,11 @@ Array.prototype.mutableShuffle = function(): void {
 
 Array.prototype.distinct = function<T>(): Array<T> {
     return Array.from(new Set(this));
+}
+
+
+Array.prototype.immutableSort = function<T>(compareFn?: (a: T, b: T) => number): Array<T> {
+    return Object.assign([], this).sort(compareFn);
 }
 
 export {}

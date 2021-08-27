@@ -208,19 +208,19 @@ export class LScheduler {
 
 
 
-    public actionScheduleTable(): RunInfo[] {
+    public actionScheduleTable(): readonly RunInfo[] {
         return this._runs;
     }
 
-    public runs(): RunInfo[] {
+    public runs(): readonly RunInfo[] {
         return this._runs;
     }
 
-    public units2(): LTOUnit[] {
+    public units2(): readonly LTOUnit[] {
         return this._units2;
     }
 
-    public actorEntities(): LEntity[] {
+    public actorEntities(): readonly LEntity[] {
         return this._actorEntities.map(id => REGame.world.entity(id));
     }
 
@@ -275,7 +275,8 @@ export class LScheduler {
         }
 
         // 勢力順にソート
-        this._units2 = this._units2.sort((a, b) => { return REData.factions[a.factionId()].schedulingOrder - REData.factions[b.factionId()].schedulingOrder; });
+        const sortedUnits = this._units2.immutableSort((a, b) => { return REData.factions[a.factionId()].schedulingOrder - REData.factions[b.factionId()].schedulingOrder; });
+        //const sortedUnits = this._units2;
 
         this._runs = new Array(runCount);
         for (let i = 0; i < this._runs.length; i++) {
@@ -283,7 +284,7 @@ export class LScheduler {
         }
 
         // Faction にかかわらず、マニュアル操作 Unit は最優先で追加する
-        this._units2.forEach(unit => {
+        sortedUnits.forEach(unit => {
             if (unit.behavior().manualMovement()) {
                 for (let i = 0; i < unit.actionCount; i++) {
                     this._runs[i].steps.push(new LTOStep(unit));
@@ -292,7 +293,7 @@ export class LScheduler {
         });
 
         // 次は倍速以上の NPC. これは前から詰めていく。
-        this._units2.forEach(unit => {
+        sortedUnits.forEach(unit => {
             if (!unit.behavior().manualMovement() && unit.actionCount >= 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
                     this._runs[i].steps.push(new LTOStep(unit));
@@ -301,7 +302,7 @@ export class LScheduler {
         });
 
         // 最後に等速以下の NPC を後ろから詰めていく
-        this._units2.forEach(unit => {
+        sortedUnits.forEach(unit => {
             if (!unit.behavior().manualMovement() && unit.actionCount < 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
                     this._runs[this._runs.length - 1 - i].steps.push(new LTOStep(unit));  // 後ろから詰めていく
@@ -376,6 +377,7 @@ export class LScheduler {
                     }
                 }
             }
+
         }
     }
 
@@ -402,6 +404,7 @@ export class LScheduler {
 
         // Table 調整が必要？
         if (changesUnits.length > 0) {
+            console.log("TO Refresh!!");
             const curRun = this._runs[this._currentRun];
 
             // 次の Run を取り出す。
