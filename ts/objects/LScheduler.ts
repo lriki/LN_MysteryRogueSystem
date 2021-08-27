@@ -389,7 +389,8 @@ export class LScheduler {
             if (unit.isValid()) {
                 const entity = unit.entity();
                 unit.speedLevel2 = this.getSpeedLevel(entity);
-                if (unit.speedLevel < unit.speedLevel2) {
+                if (unit.speedLevel2 > unit.speedLevel) {
+                    // 速度アップ
                     changesUnits.push(unit);
                     const diff = unit.speedLevel2 - unit.speedLevel;
                     maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
@@ -398,6 +399,10 @@ export class LScheduler {
                     // 速度の増減分だけ、行動トークンも調整する。
                     // 例えば速度が増えた時は次の Run で追加の行動が発生するので、動けるようになる。
                     entity.setActionTokenCount(entity.actionTokenCount() + diff);
+                }
+                if (unit.speedLevel2 < unit.speedLevel) {
+                    // 速度ダウン
+                    entity.setActionTokenCount(entity.actionTokenCount() - 1);
                 }
             }
         }

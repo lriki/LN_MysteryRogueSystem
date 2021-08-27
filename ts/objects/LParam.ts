@@ -130,17 +130,17 @@ export class LParam {
     public updateBuffs(owner: LEntity): void {
         if (this._addBuff.turn > 0) {
             this._addBuff.turn--;
-        }
-        if (this._addBuff.turn <= 0) {
-            this._addBuff.level = 0;
-            owner._effectResult.pushRemovedBuff(this.parameterId());
+            if (this._addBuff.turn <= 0) {
+                this._addBuff.level = 0;
+                owner._effectResult.pushRemovedBuff(this.parameterId());
+            }
         }
         if (this._mulBuff.turn > 0) {
             this._mulBuff.turn--;
-        }
-        if (this._mulBuff.turn <= 0) {
-            this._mulBuff.level = 0;
-            owner._effectResult.pushRemovedBuff(this.parameterId());
+            if (this._mulBuff.turn <= 0) {
+                this._mulBuff.level = 0;
+                owner._effectResult.pushRemovedBuff(this.parameterId());
+            }
         }
     }
 }

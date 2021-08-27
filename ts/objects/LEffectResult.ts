@@ -82,6 +82,7 @@ export class LEffectResult {
     }
 
     clear(): void {
+        console.log("clear");
         this.used = false;
         this.missed = false;
         this.evaded = false;
@@ -138,6 +139,7 @@ export class LEffectResult {
 
     // Game_ActionResult.prototype.isDebuffAdded 
     public isDebuffAdded(paramId: DParameterId): boolean {
+        console.log("isDebuffAdded", paramId);
         return this.addedDebuffs.includes(paramId);
     }
     

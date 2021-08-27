@@ -286,6 +286,9 @@ export class SScheduler
         if (REGame.scheduler._currentStep < 0) {
             // 初回
             REGame.scheduler._currentStep++;
+            
+            //const step = run.steps[REGame.scheduler._currentStep];
+            //step.unit().entity()._effectResult.clear();
         }
         else {
             const step = run.steps[REGame.scheduler._currentStep];
@@ -306,6 +309,8 @@ export class SScheduler
                 this.onStepEnd(step);
                 if (step.isIterationClosed()) {
                     REGame.scheduler._currentStep++;
+                    
+                    //step.unit().entity()._effectResult.clear();
                 }
                 else {
                     // まだ iterationCount が残っているので、同じ Step を再び実行する
@@ -340,7 +345,15 @@ export class SScheduler
             const step = run.steps[REGame.scheduler._currentStep];
             if (step.isValid()) {
                 const unit = step.unit();
+                const entity = unit.entity();
+                //const result = entity._effectResult;
+               // result.clear();
+
                 phase.onProcess(this, unit);
+
+                
+        
+               // result.showResultMessages(RESystem.commandContext, entity);
             }
 
 
@@ -432,7 +445,7 @@ export class SScheduler
         if (unit.isValid()) {
             const entity = unit.entity();
 
-
+            //entity._effectResult.showResultMessages(RESystem.commandContext, entity);
 
             entity._effectResult.showResultMessagesDeferred(RESystem.commandContext, entity);
             entity._effectResult.clear();

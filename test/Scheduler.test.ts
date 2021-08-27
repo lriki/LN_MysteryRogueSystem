@@ -133,3 +133,26 @@ test("Scheduler.ChangeSpeed4", () => {
 
     expect(enemy1.x).toBe(11);  // Enemy に 1度だけ turn がまわる
 });
+
+test("Scheduler.ChangeSpeed5", () => {
+    TestEnv.newGame();
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
+    enemy1.addState(DBasics.states.debug_MoveRight);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // Enemy を鈍足化して [待機]
+    enemy1.getBehavior(LUnitBehavior).setSpeedLevel(-1);
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    expect(enemy1.x).toBe(10);  // 速度ダウンを検知したときに行動トークンが削られるので、Enemy に Turn はまわらない
+});

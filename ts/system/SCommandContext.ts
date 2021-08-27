@@ -221,7 +221,10 @@ export class SCommandContext
                     //
                     // そのため onTurnEnd のタイミングでステート更新をかける。
                     //
+                    entity._effectResult.clear();   // TODO: 仮
                     entity.params().updateBuffs(entity);
+                    entity._effectResult.showResultMessages(RESystem.commandContext, entity);   // TODO: 仮
+
                     entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
 
                 //    REGame.scheduler.clearCurrentTurnEntity();
