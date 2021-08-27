@@ -363,7 +363,7 @@ export class LScheduler {
                 for (let i2 = i1 - 1; i2 >= 0; i2--) {
                     const step2 = flatSteps[i2];
     
-                    if (step2.unit().factionId != step1.unit().factionId) {
+                    if (step2.unit().factionId() != step1.unit().factionId()) {
                         // 別勢力の行動予定が見つかったら終了
                         break;
                     }
@@ -383,13 +383,13 @@ export class LScheduler {
 
     public attemptRefreshTurnOrderTable(): void {
         // 各 Entity の最新の SpeedLevel を取得しながら、Refresh が必要かチェックする
-        const changesUnits = [];
+        const changesUnits: LTOUnit[] = [];
         let maxSpeed = 0;
         for (const unit of this._units2) {
             if (unit.isValid()) {
                 const entity = unit.entity();
                 unit.speedLevel2 = this.getSpeedLevel(entity);
-                if (unit.speedLevel != unit.speedLevel2) {
+                if (unit.speedLevel < unit.speedLevel2) {
                     changesUnits.push(unit);
                     const diff = unit.speedLevel2 - unit.speedLevel;
                     maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
@@ -404,8 +404,13 @@ export class LScheduler {
 
         // Table 調整が必要？
         if (changesUnits.length > 0) {
-            console.log("TO Refresh!!");
             const curRun = this._runs[this._currentRun];
+
+            //console.log("TO Refresh!!", this);
+            //this.count++;
+            //if (this.count >= 2) {
+            //    throw new Error();
+            //}
 
             // 次の Run を取り出す。
             // 無ければ終端に新たな Run を作る。
@@ -420,7 +425,7 @@ export class LScheduler {
                 newRun = this._runs[this._currentRun + 1];
             }
 
-            // 次の Run に Step を増やす。
+            // 次の Run に、増速した Unit の Step を増やす。
             // もし既に Step がある場合は、iteration を増やす。
             for (const unit of changesUnits) {
                 const step = newRun.steps.find(s =>  unit.entityId().equals(s.unit().entityId()));
@@ -429,30 +434,62 @@ export class LScheduler {
                 }
                 else {
                     // Step 新規作成
-                    newRun.steps.push(new LTOStep(unit));
+                    newRun.steps.unshift(new LTOStep(unit));
                 }
             }
 
-            // 現在 Run に残っている「未行動で行動速度が遅い」Entity は、行動を次の Run に移す。
+            //for (let iStep2 = this._currentStep + 1; iStep2 < curRun.steps.length; iStep2++) {
+             //   const step2 = curRun.steps[iStep2];
+            for (const step2 of curRun.steps) {
+                if (step2.isIterationClosed()) continue;
+                if (!!changesUnits.find(x => x.id() == step2.unitId())) continue;   // 今回増速した人は対象外
+
+                let newStep = newRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
+                if (!newStep) {
+                    newStep = new LTOStep(step2.unit());
+                    newRun.steps.unshift(newStep);
+                }
+
+                if (step2.remainIterationCount() == 1) {
+                    newStep.setIterationCountMax(1);
+                    step2.invalidate();
+                }
+                else if (step2.remainIterationCount() >= 2) {
+                    const rem = step2.remainIterationCount() - 1;
+                    step2.setIterationCountMax(1);
+                    newStep.setIterationCountMax(rem);
+                }
+            }
+
+            /*
+            // 現在 Run に残っている行動を次の Run に移す。
             for (const step2 of curRun.steps) {
                 // ※行動済みかどうかは actedCount と iterationCountMax の比較で行う。
                 //   単に iteration 完了かだけでは、本当に取るべき行動をすべて取ったかは判断できない。
-                if (step2.actedCount < step2.iterationCountMax() && step2.unit().speedLevel < maxSpeed) {
+                if (step2.actedCount < step2.iterationCountMax()) {// && step2.unit().speedLevel < maxSpeed) {
                     const step = newRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
                     if (step) {
-                        // 残っている IterationCount をマージする
-                        step.setIterationCountMax(step.remainIterationCount());
+                        //if (step2.unit().speedLevel < maxSpeed) {
+                            // 残っている IterationCount をマージする
+                            step.setIterationCountMax(step2.remainIterationCount());
+                        //}
+                        //else {
+                            
+                        //}
                     }
                     else {
                         // Step 新規作成
-                        newRun.steps.push(new LTOStep(step2.unit()));
+                        newRun.steps.unshift(new LTOStep(step2.unit()));
+                    step2.invalidate();
                     }
 
-                    step2.invalidate();
                 }
             }
+            */
+            
         }
     }
+    //count = 0;
 
     public invalidateEntity(entity: LEntity) {
         const index = this._units2.findIndex(x => x.entityId().equals(entity.entityId()));
