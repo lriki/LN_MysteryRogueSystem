@@ -708,6 +708,7 @@ export class SEffectContext {
                 const entityData = commandContext.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
                 //const entityData = REData.getEntity("kキュアリーフ");
                 targetEntity.setupInstance(entityData.id);
+                REGame.scheduler.resetEntity(targetEntity);
                 break;
             case "kSystemEffect_脱出":
                 commandContext.postSequel(targetEntity, RESystem.sequels.escape);

@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Abilities.Enemy.ItemImitator"
+                "-t", "Items.ChangeEntityInstance.Throw"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

@@ -209,42 +209,42 @@ test("Basic.TurnOrderTable", () => {
 
         const run0 = runs[0].steps;
         expect(run0.length).toBe(5);
-        expect(REGame.world.entity(run0[0].unit.entityId)).toEqual(actor1);  // 先頭は Player
+        expect(REGame.world.entity(run0[0].unit().entityId())).toEqual(actor1);  // 先頭は Player
         expect(run0[0].iterationCount).toEqual(1);
-        expect(REGame.world.entity(run0[1].unit.entityId)).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
+        expect(REGame.world.entity(run0[1].unit().entityId())).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
         expect(run0[1].iterationCount).toEqual(2);
-        expect(REGame.world.entity(run0[2].unit.entityId)).toEqual(enemy4);
+        expect(REGame.world.entity(run0[2].unit().entityId())).toEqual(enemy4);
         expect(run0[2].iterationCount).toEqual(2);
-        expect(REGame.world.entity(run0[3].unit.entityId)).toEqual(enemy5);
+        expect(REGame.world.entity(run0[3].unit().entityId())).toEqual(enemy5);
         expect(run0[3].iterationCount).toEqual(3);
-        expect(REGame.world.entity(run0[4].unit.entityId)).toEqual(enemy6);
+        expect(REGame.world.entity(run0[4].unit().entityId())).toEqual(enemy6);
         expect(run0[4].iterationCount).toEqual(3);
 
         const run1 = runs[1].steps;
         expect(run1.length).toBe(4);
-        expect(REGame.world.entity(run1[0].unit.entityId)).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
+        expect(REGame.world.entity(run1[0].unit().entityId())).toEqual(enemy3);  // 以降、x2速以上の Enemy が積まれている
         expect(run1[0].iterationCount).toEqual(0);
-        expect(REGame.world.entity(run1[1].unit.entityId)).toEqual(enemy4);
+        expect(REGame.world.entity(run1[1].unit().entityId())).toEqual(enemy4);
         expect(run1[1].iterationCount).toEqual(0);
-        expect(REGame.world.entity(run1[2].unit.entityId)).toEqual(enemy5);
+        expect(REGame.world.entity(run1[2].unit().entityId())).toEqual(enemy5);
         expect(run1[2].iterationCount).toEqual(0);
-        expect(REGame.world.entity(run1[3].unit.entityId)).toEqual(enemy6);
+        expect(REGame.world.entity(run1[3].unit().entityId())).toEqual(enemy6);
         expect(run1[3].iterationCount).toEqual(0);
 
         // 最後の Run には、x2速以上の余りと、x1速以下の Entity が積まれている
         const run2 = runs[2].steps;
         expect(run2.length).toBe(6);
-        expect(REGame.world.entity(run2[0].unit.entityId)).toEqual(enemy5);  // x3 優先
+        expect(REGame.world.entity(run2[0].unit().entityId())).toEqual(enemy5);  // x3 優先
         expect(run2[0].iterationCount).toEqual(0);
-        expect(REGame.world.entity(run2[1].unit.entityId)).toEqual(enemy6);  // x3 優先
+        expect(REGame.world.entity(run2[1].unit().entityId())).toEqual(enemy6);  // x3 優先
         expect(run2[1].iterationCount).toEqual(0);
-        expect(REGame.world.entity(run2[2].unit.entityId)).toEqual(enemy1);  // x1
+        expect(REGame.world.entity(run2[2].unit().entityId())).toEqual(enemy1);  // x1
         expect(run2[2].iterationCount).toEqual(1);
-        expect(REGame.world.entity(run2[3].unit.entityId)).toEqual(enemy2);  // x1
+        expect(REGame.world.entity(run2[3].unit().entityId())).toEqual(enemy2);  // x1
         expect(run2[3].iterationCount).toEqual(1);
-        expect(REGame.world.entity(run2[4].unit.entityId)).toEqual(enemy7);  // x0.5 鈍足でも x1 と同じく、行動予定は積む
+        expect(REGame.world.entity(run2[4].unit().entityId())).toEqual(enemy7);  // x0.5 鈍足でも x1 と同じく、行動予定は積む
         expect(run2[4].iterationCount).toEqual(1);
-        expect(REGame.world.entity(run2[5].unit.entityId)).toEqual(enemy8);  // x0.5 鈍足でも x1 と同じく、行動予定は積む
+        expect(REGame.world.entity(run2[5].unit().entityId())).toEqual(enemy8);  // x0.5 鈍足でも x1 と同じく、行動予定は積む
         expect(run2[5].iterationCount).toEqual(1);
     }
 

@@ -2,7 +2,6 @@ import { assert, Log, tr2 } from "../Common";
 import { REGame } from "../objects/REGame";
 import { RESystem } from "./RESystem";
 import { SSchedulerPhase, SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_Prepare, SSchedulerPhase_ResolveAdjacentAndMovingTarget } from "./SSchedulerPhase";
-import { RunStepInfo } from "ts/objects/LScheduler";
 import { DecisionPhase } from "ts/objects/internal";
 import { BlockLayerKind } from "ts/objects/LBlockLayer";
 import { UAction } from "../usecases/UAction";
@@ -11,6 +10,7 @@ import { REData } from "ts/data/REData";
 import { UTransfer } from "ts/usecases/UTransfer";
 import { UName } from "ts/usecases/UName";
 import { DBasics } from "ts/data/DBasics";
+import { LTOStep } from "ts/objects/LScheduler";
 
 
 
@@ -224,9 +224,9 @@ export class SScheduler
         REGame.scheduler.buildOrderTable();
         
         // ターン開始時の各 unit の設定更新
-        REGame.scheduler.units().forEach(unit => {
-            const behavior = unit.behavior;
-            const entity = REGame.world.entity(unit.entityId);
+        REGame.scheduler.units2().forEach(unit => {
+            const behavior = unit.behavior();
+            const entity = unit.entity();
 
             const speedLevel = REGame.scheduler.getSpeedLevel(entity);
 
@@ -268,7 +268,11 @@ export class SScheduler
 
         REGame.scheduler.runs().forEach(run => {
             run.steps.forEach(step => {
-                step.unit.behavior._targetingEntityId = 0;
+                if (step.isValid()) {
+                    step.unit().behavior()._targetingEntityId = 0;
+                    const entity = step.unit().entity();
+                    step.startingActionTokenCount = entity.actionTokenCount();
+                }
             });
         });
 
@@ -286,6 +290,14 @@ export class SScheduler
         else {
             const step = run.steps[REGame.scheduler._currentStep];
             const next = true;//step.unit.entityId.isEmpty() || REGame.world.entity(step.unit.entityId)._actionConsumed;
+
+            
+            if (step.unit().isValid()) {
+                const entity = step.unit().entity();
+                if (step.startingActionTokenCount > entity.actionTokenCount()) {
+                    step.actedCount++;
+                }
+            }
 
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
             if (next) {
@@ -326,8 +338,11 @@ export class SScheduler
             }
             
             const step = run.steps[REGame.scheduler._currentStep];
-            const unit = step.unit;
-            phase.onProcess(this, unit);
+            if (step.isValid()) {
+                const unit = step.unit();
+                phase.onProcess(this, unit);
+            }
+
 
             if (RESystem.commandContext.isRunning()) {
                 // onProcess で何かコマンドが積まれていたらそれを実行しに行く
@@ -394,7 +409,6 @@ export class SScheduler
             for (const entity of REGame.map.entities()) {
                 const block = REGame.map.block(entity.x, entity.y);
                 const currentLayer = block.findEntityLayerKind(entity);
-                //console.log("entity", entity);
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {
@@ -407,27 +421,29 @@ export class SScheduler
     // 1行動トークンの消費を終えたタイミング。
     // 手番が終了し、次の人へ手番が移る直前。
     // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
-    private onStepEnd(step: RunStepInfo): void {
+    private onStepEnd(step: LTOStep): void {
 
         REGame.scheduler.actorEntities().forEach(entity => {
             entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
         });
 
         
-        const unit = step.unit;
-        if (unit.entityId.hasAny()) {
-            const entity = REGame.world.entity(unit.entityId);
+        const unit = step.unit();
+        if (unit.isValid()) {
+            const entity = unit.entity();
 
 
 
             entity._effectResult.showResultMessagesDeferred(RESystem.commandContext, entity);
             entity._effectResult.clear();
         }
+
+        REGame.scheduler.attemptRefreshTurnOrderTable();
     }
 
 
 
-    _foreachRunSteps(start: RunStepInfo, func: (step: RunStepInfo) => boolean) {
+    _foreachRunSteps(start: LTOStep, func: (step: LTOStep) => boolean) {
         const runs = REGame.scheduler.runs();
         let each = false;
         for (let i = 0; i < runs.length; i++) {

@@ -89,7 +89,9 @@ export class LWorld
 
     public behavior(id: LBehaviorId): LBehavior {
         const e = this.findBehavior(id);
-        if (!e) throw new Error(`Invalid behavior type. (id: [${id.index2()}, ${id.key2()}])`);
+        if (!e) {
+            throw new Error(`Invalid behavior type. (id: [${id.index2()}, ${id.key2()}])`);
+        }
         return e;
     }
 

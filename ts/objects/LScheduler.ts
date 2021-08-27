@@ -2,33 +2,113 @@ import { assert } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { DFactionId, REData } from "ts/data/REData";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
+import { TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
-import { LEntityId } from "./LObject";
+import { LBehaviorId, LEntityId } from "./LObject";
 import { REGame } from "./REGame";
 
-export interface UnitInfo
-{
-    entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
+export type LTOUnitId = number;
+export class LTOUnit {
+    private _id: LTOUnitId;
+    private _entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
     //attr: LUnitAttribute;     // cache for avoiding repeated find.
-    behavior: LUnitBehavior;
+    private _behaviorId: LBehaviorId;
+    private _factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
+
     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
-    factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
+    speedLevel: number;     // 最新の Table を作った時の SpeedLevel. Entity のものと変化がある場合は Table を変更する必要がある。
+    speedLevel2: number;    // Refresh 時の一時変数
+
+    public constructor(id: LTOUnitId, entity: LEntity, behavior: LUnitBehavior, actionCount: number) {
+        this._id = id;
+        this._entityId = entity.entityId();
+        this._behaviorId = behavior.id();
+        this.actionCount = actionCount;
+        this.speedLevel = 0;
+        this.speedLevel2 = 0;
+
+        this._factionId = entity.getOutwardFactionId();
+        assert(this._factionId > 0);
+    }
+
+    public id(): number {
+        return this._id;
+    }
+
+    public entityId(): LEntityId {
+        return this._entityId;
+    }
+
+    public entity(): LEntity {
+        return REGame.world.entity(this._entityId);
+    }
+
+    public factionId(): number {
+        return this._factionId;
+    }
+
+    public behavior(): LUnitBehavior {
+        return REGame.world.behavior(this._behaviorId) as LUnitBehavior;
+    }
+
+    public isValid(): boolean {
+        return this._entityId.hasAny();
+    }
+
+    public invalidate(): void {
+        this._entityId = LEntityId.makeEmpty();
+    }
+
+    public resetEntity(entity: LEntity): void {
+        this._entityId = entity.entityId();
+        this._behaviorId = entity.getBehavior(LUnitBehavior).id();
+    }
 }
 
-export interface RunStepInfo
-{
-    unit: UnitInfo;         // 行動させたい unit
+export class LTOStep {
+
+    private _unitId: LTOUnitId;         // 行動させたい unit
     iterationCount: number;    // 何回連続行動できるか。Run のマージなどで 0 になることもある。
-};
+
+    startingActionTokenCount: number;   // Run 開始時の Entity の ActionTokenCount.
+    actedCount: number;         // 行動したか
+
+    public constructor(unit: LTOUnit) {
+        this._unitId = unit.id();
+        this.iterationCount = 1;
+        this.startingActionTokenCount = 0;
+        this.actedCount = 0;
+    }
+
+    public unitId(): number {
+        return this._unitId;
+    }
+
+    public unit(): LTOUnit {
+        assert(this._unitId >= 0);
+        return REGame.scheduler.units2()[this._unitId];
+    }
+
+    public isValid(): boolean {
+        return this._unitId >= 0 && this.unit().isValid();
+    }
+
+    public invalidate(): void {
+        this._unitId = -1;
+        this.iterationCount = 0;
+    }
+}
+
+
 
 export interface RunInfo
 {
-    steps: RunStepInfo[];
+    steps: LTOStep[];
 };
 
 export class LScheduler {
-    private _actorEntities: LEntityId[] = [];   // Part 中に行動する全 Entity
-    private _units: UnitInfo[] = [];
+    private _actorEntities: LEntityId[] = [];   // Round 中に行動する全 Entity
+    private _units2: LTOUnit[] = [];    
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
     public _currentStep: number = 0;
@@ -39,7 +119,7 @@ export class LScheduler {
 
     public clear() {
         this._actorEntities = [];
-        this._units = [];
+        this._units2 = [];
         this._runs = [];
         this._currentRun = 0;
         this._currentStep = 0;
@@ -114,8 +194,8 @@ export class LScheduler {
         return this._runs;
     }
 
-    public units(): UnitInfo[] {
-        return this._units;
+    public units2(): LTOUnit[] {
+        return this._units2;
     }
 
     public actorEntities(): LEntity[] {
@@ -132,9 +212,28 @@ export class LScheduler {
         return v;
     }
     
+    private newUnit(entity: LEntity, behavior: LUnitBehavior): LTOUnit {
+        const speedLevel = this.getSpeedLevel(entity);
+        assert(speedLevel != 0);
+
+        let actionCount = speedLevel;
+        
+        // 鈍足状態の対応
+        if (actionCount < 0) {
+            actionCount = 1;
+        }
+
+        const unit = new LTOUnit(this._units2.length, entity, behavior, actionCount);
+        unit.speedLevel = speedLevel;
+        unit.speedLevel2 = speedLevel;
+
+        this._units2.push(unit);
+        return unit;
+    }
+
     public buildOrderTable(): void {
         this._actorEntities = [];
-        this._units = [];
+        this._units2 = [];
 
         let runCount = 0;
 
@@ -143,28 +242,10 @@ export class LScheduler {
             REGame.map.entities().forEach(entity => {
                 const behavior = entity.findBehavior(LUnitBehavior);
                 if (behavior) {
-                    const factionId = entity.getOutwardFactionId();
-                    assert(factionId > 0);
-
-                    const speedLevel = this.getSpeedLevel(entity);
-                    assert(speedLevel != 0);
-
-                    let actionCount = speedLevel;
-                    
-                    // 鈍足状態の対応
-                    if (actionCount < 0) {
-                        actionCount = 1;
-                    }
-
-                    this._units.push({
-                        entityId: entity.entityId(),
-                        behavior: behavior,
-                        actionCount: actionCount,
-                        factionId: factionId,
-                    });
+                    const unit = this.newUnit(entity, behavior);
 
                     // このターン内の最大行動回数 (phase 数) を調べる
-                    runCount = Math.max(runCount, actionCount);
+                    runCount = Math.max(runCount, unit.actionCount);
 
                     this._actorEntities.push(entity.entityId());
                 }
@@ -172,7 +253,7 @@ export class LScheduler {
         }
 
         // 勢力順にソート
-        this._units = this._units.sort((a, b) => { return REData.factions[a.factionId].schedulingOrder - REData.factions[b.factionId].schedulingOrder; });
+        this._units2 = this._units2.sort((a, b) => { return REData.factions[a.factionId()].schedulingOrder - REData.factions[b.factionId()].schedulingOrder; });
 
         this._runs = new Array(runCount);
         for (let i = 0; i < this._runs.length; i++) {
@@ -180,37 +261,28 @@ export class LScheduler {
         }
 
         // Faction にかかわらず、マニュアル操作 Unit は最優先で追加する
-        this._units.forEach(unit => {
-            if (unit.behavior.manualMovement()) {
+        this._units2.forEach(unit => {
+            if (unit.behavior().manualMovement()) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].steps.push({
-                        unit: unit,
-                        iterationCount: 1,
-                    });
+                    this._runs[i].steps.push(new LTOStep(unit));
                 }
             }
         });
 
         // 次は倍速以上の NPC. これは前から詰めていく。
-        this._units.forEach(unit => {
-            if (!unit.behavior.manualMovement() && unit.actionCount >= 2) {
+        this._units2.forEach(unit => {
+            if (!unit.behavior().manualMovement() && unit.actionCount >= 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[i].steps.push({
-                        unit: unit,
-                        iterationCount: 1,
-                    });
+                    this._runs[i].steps.push(new LTOStep(unit));
                 }
             }
         });
 
         // 最後に等速以下の NPC を後ろから詰めていく
-        this._units.forEach(unit => {
-            if (!unit.behavior.manualMovement() && unit.actionCount < 2) {
+        this._units2.forEach(unit => {
+            if (!unit.behavior().manualMovement() && unit.actionCount < 2) {
                 for (let i = 0; i < unit.actionCount; i++) {
-                    this._runs[this._runs.length - 1 - i].steps.push({  	// 後ろから詰めていく
-                        unit: unit,
-                        iterationCount: 1,
-                    });
+                    this._runs[this._runs.length - 1 - i].steps.push(new LTOStep(unit));  // 後ろから詰めていく
                 }
             }
         });
@@ -218,6 +290,47 @@ export class LScheduler {
 
         // Merge
         {
+            /*
+            for (let iRun = this._runs.length - 1; iRun >= 1; iRun--) {
+                const steps = this._runs[iRun].steps;
+                for (let iStep = steps.length - 1; iStep >= 1; iStep--) {
+                    const step1 = steps[iStep];
+
+                    let iRun2 = iRun;
+                    let iStep2 = iStep - 1;
+                    for (; iRun2 >= 0; iRun2--) {
+                        for (; iStep2 >= 0; iStep2--) {
+                            const step2 = this._runs[iRun2].steps[iStep2];
+                            
+                            if (step2.unit.factionId != step1.unit.factionId) {
+                                // 別勢力の行動予定が見つかったら終了
+                                iRun2 = -1;
+                                break;
+                            }
+            
+                            if (step2.unit.entityId.equals(step1.unit.entityId)) {
+                                const newStep: RunStepInfo = {
+                                    unit: step1.unit,
+                                    iterationCount: 1,
+                                };
+                                this._runs[iRun2].steps.splice(iStep2, 0, newStep);
+
+                                // 勢力をまたがずに同一 entity の行動予定が見つかったら、
+                                // そちらへ iterationCount をマージする。
+                                //step2.iterationCount += step1.iterationCount;
+                                step1.iterationCount = 0;
+                                iRun2 = -1;
+                                break;
+                            }
+                        }
+                    }
+    
+                }
+
+            }
+*/
+
+
             const flatSteps = this._runs.flatMap(x => x.steps);
     
             for (let i1 = flatSteps.length - 1; i1 >= 0; i1--) {
@@ -227,12 +340,12 @@ export class LScheduler {
                 for (let i2 = i1 - 1; i2 >= 0; i2--) {
                     const step2 = flatSteps[i2];
     
-                    if (step2.unit.factionId != step1.unit.factionId) {
+                    if (step2.unit().factionId != step1.unit().factionId) {
                         // 別勢力の行動予定が見つかったら終了
                         break;
                     }
     
-                    if (step2.unit.entityId.equals(step1.unit.entityId)) {
+                    if (step2.unit().entityId().equals(step1.unit().entityId())) {
                         // 勢力をまたがずに同一 entity の行動予定が見つかったら、
                         // そちらへ iterationCount をマージする。
                         step2.iterationCount += step1.iterationCount;
@@ -244,12 +357,82 @@ export class LScheduler {
         }
     }
 
+    public attemptRefreshTurnOrderTable(): void {
+        // 各 Entity の最新の SpeedLevel を取得しながら、Refresh が必要かチェックする
+        const changesUnits = [];
+        let maxSpeed = 0;
+        for (const unit of this._units2) {
+            if (unit.isValid()) {
+                const entity = unit.entity();
+                unit.speedLevel2 = this.getSpeedLevel(entity);
+                if (unit.speedLevel != unit.speedLevel2) {
+                    changesUnits.push(unit);
+                    const diff = unit.speedLevel2 - unit.speedLevel;
+                    maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
+                    unit.speedLevel = unit.speedLevel2;
+                    
+                    // 速度の増減分だけ、行動トークンも調整する。
+                    // 例えば速度が増えた時は次の Run で追加の行動が発生するので、動けるようになる。
+                    entity.setActionTokenCount(entity.actionTokenCount() + diff);
+                }
+            }
+        }
+
+        if (changesUnits.length > 0) {
+            const curRun = this._runs[this._currentRun];
+            let newRun: RunInfo;
+            if (this._currentRun >= this._runs.length - 1) {
+                newRun = {
+                    steps: [],
+                };
+                this._runs.push(newRun);
+            }
+            else {
+                newRun = this._runs[this._currentRun + 1];
+            }
+
+            // 次の Run に Step を増やす。
+            // もし既に Step がある場合は、iteration を増やす。
+            for (const unit of changesUnits) {
+                const step = newRun.steps.find(s =>  unit.entityId().equals(s.unit().entityId()));
+                if (step) {
+                    step.iterationCount++;
+                }
+                else {
+                    newRun.steps.push(new LTOStep(unit));
+                }
+            }
+
+            // 現在 Run に残っている「未行動で行動速度が遅い」Entity は、行動を次の Run に移す。
+            for (const step2 of curRun.steps) {
+                if (step2.actedCount == 0 && step2.unit().speedLevel < maxSpeed) {
+                    const step = newRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
+                    if (step) {
+                        step.iterationCount++;
+                    }
+                    else {
+                        newRun.steps.push(new LTOStep(step2.unit()));
+                    }
+
+                    step2.invalidate();
+                }
+            }
+        }
+    }
+
     public invalidateEntity(entity: LEntity) {
-        const index = this._units.findIndex(x => x.entityId.equals(entity.entityId()));
+        const index = this._units2.findIndex(x => x.entityId().equals(entity.entityId()));
         if (index >= 0) {
-            this._units[index].entityId = LEntityId.makeEmpty();
+            this._units2[index].invalidate();
             
             this._actorEntities = this._actorEntities.filter(x => !x.equals(entity.entityId()));
+        }
+    }
+    
+    public resetEntity(entity: LEntity) {
+        const index = this._units2.findIndex(x => x.entityId().equals(entity.entityId()));
+        if (index >= 0) {
+            this._units2[index].resetEntity(entity);
         }
     }
 }
