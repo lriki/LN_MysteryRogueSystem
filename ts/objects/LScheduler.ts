@@ -68,14 +68,16 @@ export class LTOUnit {
 export class LTOStep {
 
     private _unitId: LTOUnitId;         // 行動させたい unit
-    iterationCount: number;    // 何回連続行動できるか。Run のマージなどで 0 になることもある。
+    private _iterationCountMax: number;    // 何回連続行動できるか。Run のマージなどで 0 になることもある。
+    iterationCount2: number;
 
     startingActionTokenCount: number;   // Run 開始時の Entity の ActionTokenCount.
     actedCount: number;         // 行動したか
 
     public constructor(unit: LTOUnit) {
         this._unitId = unit.id();
-        this.iterationCount = 1;
+        this._iterationCountMax = 1;
+        this.iterationCount2 = 0;
         this.startingActionTokenCount = 0;
         this.actedCount = 0;
     }
@@ -89,13 +91,33 @@ export class LTOStep {
         return REGame.scheduler.units2()[this._unitId];
     }
 
+    public iterationCountMax(): number {
+        return this._iterationCountMax;
+    }
+
+    public setIterationCountMax(value: number): void {
+        this._iterationCountMax = value;
+    }
+
+    public remainIterationCount(): number {
+        return (this._iterationCountMax - this.iterationCount2).clamp(0, this._iterationCountMax);
+    }
+
+    public isIterationClosed(): boolean {
+        return this.iterationCount2 >= this._iterationCountMax;
+    }
+
+    public increaseIterationCount(): void {
+        this.iterationCount2++;
+    }
+
     public isValid(): boolean {
         return this._unitId >= 0 && this.unit().isValid();
     }
 
     public invalidate(): void {
         this._unitId = -1;
-        this.iterationCount = 0;
+        this._iterationCountMax = 0;
     }
 }
 
@@ -348,8 +370,8 @@ export class LScheduler {
                     if (step2.unit().entityId().equals(step1.unit().entityId())) {
                         // 勢力をまたがずに同一 entity の行動予定が見つかったら、
                         // そちらへ iterationCount をマージする。
-                        step2.iterationCount += step1.iterationCount;
-                        step1.iterationCount = 0;
+                        step2.setIterationCountMax(step2.iterationCountMax() + step1.iterationCountMax());
+                        step1.setIterationCountMax(0);
                         break;
                     }
                 }
@@ -396,9 +418,10 @@ export class LScheduler {
             for (const unit of changesUnits) {
                 const step = newRun.steps.find(s =>  unit.entityId().equals(s.unit().entityId()));
                 if (step) {
-                    step.iterationCount++;
+                    step.setIterationCountMax(step.iterationCountMax() + 1);
                 }
                 else {
+                    // Step 新規作成
                     newRun.steps.push(new LTOStep(unit));
                 }
             }
@@ -408,9 +431,11 @@ export class LScheduler {
                 if (step2.actedCount == 0 && step2.unit().speedLevel < maxSpeed) {
                     const step = newRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
                     if (step) {
-                        step.iterationCount++;
+                        // 残っている IterationCount をマージする
+                        step.setIterationCountMax(step.remainIterationCount());
                     }
                     else {
+                        // Step 新規作成
                         newRun.steps.push(new LTOStep(step2.unit()));
                     }
 

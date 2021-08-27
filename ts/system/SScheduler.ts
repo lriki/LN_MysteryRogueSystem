@@ -302,9 +302,9 @@ export class SScheduler
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
             if (next) {
                 // 行動トークンを消費する行動がとられた。または、無効化されている
-                step.iterationCount--;
+                step.increaseIterationCount();
                 this.onStepEnd(step);
-                if (step.iterationCount <= 0) {
+                if (step.isIterationClosed()) {
                     REGame.scheduler._currentStep++;
                 }
                 else {
