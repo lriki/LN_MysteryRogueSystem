@@ -1,5 +1,3 @@
-import { DBasics } from "ts/data/DBasics";
-import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { SEntityFactory } from "ts/system/SEntityFactory";
 import { RESystem } from "ts/system/RESystem";
@@ -8,13 +6,9 @@ import { REData } from "ts/data/REData";
 import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { SView } from "ts/system/SView";
-import { REVisual_Entity } from "ts/visual/REVisual_Entity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
-});
-
-afterAll(() => {
 });
 
 test("concretes.states.目つぶし", () => {

@@ -54,6 +54,11 @@ npm run test -- -t Basic1
 cloc ts --include-lang=TypeScript
 ```
 
+```
+mkdocs build
+mkdocs serve
+```
+
 ### ブラウザ上でデバッグ実行するには
 
 ```

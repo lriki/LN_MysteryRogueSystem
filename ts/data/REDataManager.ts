@@ -853,6 +853,11 @@ export class REDataManager
                     }
                 }
             }
+
+            DBasics.prefabs = {
+                illusionActor: REData.getPrefab("pまどわしUnit").id,
+                illusionItem: REData.getPrefab("pまどわしItem").id,
+            };
             
             // Load Land database
             for (const land of REData.lands) {

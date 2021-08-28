@@ -12,6 +12,8 @@ import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LState } from "ts/objects/states/LState";
 import { Game_REPrefabEvent } from "ts/rmmz/Game_REPrefabEvent";
 import { SView } from "ts/system/SView";
+import { DPrefabImage } from "ts/data/DPrefab";
+import { LEntityId } from "ts/objects/LObject";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -108,7 +110,7 @@ export class REVisual_Entity
         this._sequelContext._update();
         
         if (this._rmmzEventId >= 0) {
-            const tileSize = REVisual.manager.tileSize();
+            //const tileSize = REVisual.manager.tileSize();
             const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
             const entity = this.entity();
 
@@ -119,7 +121,7 @@ export class REVisual_Entity
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
 
-            const charactorImage = entity.getCharacterImage();
+            const charactorImage = this.getCharacterImage(entity);
             if (charactorImage) {
                 event.setImage(charactorImage.characterName, charactorImage.characterIndex);
 
@@ -140,7 +142,7 @@ export class REVisual_Entity
                 event.refresh();
             }
 
-            //this.updateEventPage(event);
+            
 
             event.setTransparent(!SView.getEntityVisibility(entity));
 
@@ -192,6 +194,11 @@ export class REVisual_Entity
             }
         }
     }
+
+    private getCharacterImage(entity: LEntity): DPrefabImage | undefined {
+        return entity.getCharacterImage();
+    }
+
 /*
     private updateEventPage(event: Game_REPrefabEvent): void {
         const index = this.getEventPageIndex();

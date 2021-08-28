@@ -1,4 +1,5 @@
 import { tr2 } from "ts/Common";
+import { DPrefabImage } from "ts/data/DPrefab";
 import { DStateRestriction } from "ts/data/DState";
 import { REGame } from "ts/objects/REGame";
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
@@ -8,6 +9,11 @@ import { LEntity } from "../objects/LEntity";
 export interface TilemapViewInfo {
     visible: boolean;
     tilesetId: number | undefined;
+}
+
+export interface SEntityVisibility {
+    visible: boolean;
+    image?: DPrefabImage;
 }
 
 /**
@@ -49,15 +55,15 @@ export class SView {
         return { visible: true, tilesetId: undefined };
     }
     
-    public static getEntityVisibility(entity: LEntity): boolean {
+    public static getEntityVisibility(entity: LEntity): SEntityVisibility {
         const subject = REGame.camera.focusedEntity();
         if (subject && !subject.entityId().equals(entity.entityId())) {
             
             if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
-                return false;
+                return { visible: false };
             }
         }
 
-        return true;
+        return { visible: true };
     }
 }
