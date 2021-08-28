@@ -11,6 +11,7 @@ import { RMMZHelper } from "ts/rmmz/RMMZHelper";
 import { Helpers } from "./Helpers";
 import { SGameManager } from "./SGameManager";
 import { SNavigationHelper } from "./SNavigationHelper";
+import { SView } from "./SView";
 
 enum SubTile {
     UL,
@@ -143,7 +144,10 @@ export class SMinimapData {
         }
 
         for (const entity of map.entities()) {
-            if (entity.entityId().equals(subject.entityId())) {
+            if (!SView.getEntityVisibility(entity)) {
+                // 何も表示しない
+            }
+            else if (entity.entityId().equals(subject.entityId())) {
                 this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
             }
             else {

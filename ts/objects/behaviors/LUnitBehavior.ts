@@ -22,6 +22,7 @@ import { PutEventArgs, WalkEventArgs } from "ts/data/predefineds/DBasicEvents";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { UName } from "ts/usecases/UName";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
+import { DStateRestriction } from "ts/data/DState";
 
 /**
  * 
@@ -380,8 +381,11 @@ export class LUnitBehavior extends LBehavior {
             effectContext.applyWithWorth(context, targets);
 
 
-            // 相手の方向を向く
-            self.dir = UMovement.getLookAtDir(self, effectContext.effectorFact().subject());
+            
+            if (!self.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
+                // 相手の方向を向く
+                self.dir = UMovement.getLookAtDir(self, effectContext.effectorFact().subject());
+            }
 
             for (const target of targets) {
                 if (target._effectResult.isHit()) {

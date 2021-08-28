@@ -53,18 +53,21 @@ export class LBlindAI extends LCharacterAI {
             return SPhaseResult.Handled;
         }
 
-        // 右方向へ移動してみる
-        const rightDir = UMovement.rotateDir(6, self.dir);
-        if (UMovement.checkPassageToDir(self, rightDir)) {
+        // 向いている方向以外へランダムにしてみる
+        const newDir = context.random().select(UMovement.directions.filter(x => x != frontDir));
+        //const rightDir = UMovement.rotateDir(6, self.dir);
+        if (UMovement.checkPassageToDir(self, newDir)) {
             context.postActivity(
-                LActivity.makeMoveToAdjacent(self, rightDir)
-                .withEntityDirection(rightDir)
+                LActivity.makeMoveToAdjacent(self, newDir)
+                .withEntityDirection(newDir)
                 .withConsumeAction());
             return SPhaseResult.Handled;
         }
         
-        // ここまで来てしまったら何もせず待機行動。
-        context.postConsumeActionToken(self);
+        // ここまで来てしまったら向きだけ変えて待機。
+        context.postActivity(
+            LActivity.makeDirectionChange(self, newDir)
+            .withConsumeAction());
         return SPhaseResult.Handled;
     }
     

@@ -11,6 +11,7 @@ import { SNavigationHelper } from "ts/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LState } from "ts/objects/states/LState";
 import { Game_REPrefabEvent } from "ts/rmmz/Game_REPrefabEvent";
+import { SView } from "ts/system/SView";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -140,6 +141,9 @@ export class REVisual_Entity
             }
 
             //this.updateEventPage(event);
+
+            event.setTransparent(!SView.getEntityVisibility(entity));
+
 
             
             const sprite = this.rmmzSprite();

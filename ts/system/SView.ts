@@ -48,4 +48,16 @@ export class SView {
 
         return { visible: true, tilesetId: undefined };
     }
+    
+    public static getEntityVisibility(entity: LEntity): boolean {
+        const subject = REGame.camera.focusedEntity();
+        if (subject && !subject.entityId().equals(entity.entityId())) {
+            
+            if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
