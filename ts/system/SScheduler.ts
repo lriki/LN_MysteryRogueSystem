@@ -384,7 +384,7 @@ export class SScheduler
                     const entity = REGame.camera.focusedEntity();
                     if (entity) {
                         RESystem.commandContext.postMessage(tr2("地震だ！\\|"));
-                        RESystem.commandContext.postMessage(tr2("%1は地割れに飲み込まれた！").format(UName.makeUnitNameByFocused(entity)));
+                        RESystem.commandContext.postMessage(tr2("%1は地割れに飲み込まれた！").format(UName.makeUnitName(entity)));
                         RESystem.commandContext.postSequel(entity, RESystem.sequels.earthquake2);
                         RESystem.commandContext.postWait(entity, 60);
                         RESystem.commandContext.postCall(() => { UTransfer.proceedFloorForward(); });

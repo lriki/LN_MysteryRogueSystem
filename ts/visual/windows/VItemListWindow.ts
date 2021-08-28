@@ -3,6 +3,7 @@ import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/objects/REGame";
 import { LEntity } from "ts/objects/LEntity";
 import { isThisTypeNode } from "typescript";
+import { UName } from "ts/usecases/UName";
 
 
 
@@ -99,7 +100,7 @@ export class VItemListWindow extends Window_Selectable {
         if (item) {
             const iconY = y + (this.lineHeight() - ImageManager.iconHeight) / 2;
             const nameX = x + ImageManager.iconWidth;
-            const desc = REGame.identifyer.resolveDescription(item)
+            const desc = UName.makeNameAsItem(item);
 
             // State Icon
             {
@@ -113,7 +114,7 @@ export class VItemListWindow extends Window_Selectable {
                 const itemWidth = Math.max(0, width - textMargin);
                 this.resetTextColor();
 
-                this.drawTextEx(desc.displayText(), nameX, y, itemWidth);
+                this.drawTextEx(desc, nameX, y, itemWidth);
 
                 // 装備していればアイコンを表示する
                 if (this._equipmentUser && this._equipmentUser.isEquipped(item)) {

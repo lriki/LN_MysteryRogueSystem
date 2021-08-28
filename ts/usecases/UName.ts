@@ -2,37 +2,28 @@ import { assert } from "ts/Common";
 import { LEntity } from "ts/objects/LEntity";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/objects/LIdentifyer";
 import { REGame } from "ts/objects/REGame";
+import { SView } from "ts/system/SView";
 
 export class UName {
 
     /**
      * [focus] から見た [entity] のユニット名。アイコンを伴わない。
      */
-     public static makeUnitNameByFocused(entity: LEntity): string {
-        const watcher = REGame.camera.focusedEntity();
-        assert(watcher);
-        return this.makeUnitName(watcher, entity);
+    public static makeUnitName(entity: LEntity, viewSubject?: LEntity): string {
+        if (!viewSubject) viewSubject = REGame.camera.focusedEntity();
+        assert(viewSubject);
+        const nameView = SView.getLookNames(viewSubject, entity);
+        const targetName = LEntityDescription.makeDisplayText(nameView.name, DescriptionHighlightLevel.UnitName);
+        return targetName;
     }
 
     /**
-     * [focus] から見た [entity] のユニット名。アイコンを伴わない。
+     * アイコンを伴う。識別状態によってテキストの色が変わる。
      */
-    public static makeUnitName(watcher: LEntity, entity: LEntity): string {
-        const targetName = LEntityDescription.makeDisplayText(this.makeTargetName(entity), DescriptionHighlightLevel.UnitName);
-        return targetName;
-    }
-    
-    private static makeTargetName(/*subject: REGame_Entity, */target: LEntity): string {
-        
-        const name = target.getDisplayName().name;
-
-        // TODO: player(watcher) が暗闇状態等の時は、ここで "なにものか" に名前を変えたりする
-
-        return name;
-    }
-
-    public static makeNameAsItem(entity: LEntity): string {
-        return REGame.identifyer.makeDisplayText(entity);
+    public static makeNameAsItem(entity: LEntity, viewSubject?: LEntity): string {
+        if (!viewSubject) viewSubject = REGame.camera.focusedEntity();
+        assert(viewSubject);
+        return REGame.identifyer.makeDisplayText(viewSubject, entity);
     }
     
 }

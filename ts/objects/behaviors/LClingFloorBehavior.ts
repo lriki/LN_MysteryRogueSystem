@@ -2,6 +2,7 @@ import { tr2 } from "ts/Common";
 import { DBasics } from "ts/data/DBasics";
 import { REResponse, SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
+import { UName } from "ts/usecases/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
@@ -24,7 +25,7 @@ export class LClingFloorBehavior extends LBehavior {
     [testPickOutItem](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         if (this._cling) {
-            context.postMessage(tr2("%1 地面にはりついている。").format(REGame.identifyer.makeDisplayText(self)));
+            context.postMessage(tr2("%1 地面にはりついている。").format(UName.makeNameAsItem(self)));
             return REResponse.Canceled;
         }
         else {

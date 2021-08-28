@@ -1,4 +1,6 @@
+import { TilemapRendererId } from "ts/rmmz/Tilemap";
 import { RESystem } from "ts/system/RESystem";
+import { SView } from "ts/system/SView";
 import { REVisual } from "./REVisual";
 import { VDirectionArrow } from "./VDirectionArrow";
 import { VHudWindow } from "./VHudWindow";
@@ -41,7 +43,9 @@ export class VSpriteSet {
         //this._spritesetMap._baseSprite.addChild(this._minimapTilemap);
         //REVisual.scene._windowLayer.
         this._spritesetMap.addChild(this._minimapTilemap);
-        this._minimapTilemap.setRendererId(2);
+        this._minimapTilemap.setRendererId(TilemapRendererId.Minimap);
+
+        this._spritesetMap._tilemap.setRendererId(TilemapRendererId.Default);
         
         const bitmaps = [];
         const tilesetNames = ["World_A1","RE-Minimap_A2","","","RE-Minimap_A5","World_B","World_C","",""];
@@ -73,6 +77,10 @@ export class VSpriteSet {
         
         this._initialUpdate  = false;
 
+
+        //this._spritesetMap._tilemap.visible = SView.getTilemapView().visible;
+        
+        //this._spritesetMap._tilemap.setBitmaps([]);
     }
 }
 

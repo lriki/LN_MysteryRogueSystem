@@ -1,6 +1,7 @@
 import { DTextManager } from "ts/data/DTextManager";
 import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
+import { UName } from "ts/usecases/UName";
 
 export class VDetailsWindow extends Window_Base {
     private _entity: LEntity;
@@ -32,7 +33,7 @@ export class VDetailsWindow extends Window_Base {
         const rect = this.baseTextRect();
         this.contents.clear();
 
-        const summary = REGame.identifyer.makeDisplayText(this._entity);
+        const summary = UName.makeNameAsItem(this._entity);
 
 
         const lineHeight = this.lineHeight();

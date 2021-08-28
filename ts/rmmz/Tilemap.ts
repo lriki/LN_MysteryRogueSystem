@@ -1,6 +1,12 @@
 import { FBlockComponent } from "ts/floorgen/FMapData";
 import { REGame } from "ts/objects/REGame";
+import { SView } from "ts/system/SView";
 import { REVisual } from "ts/visual/REVisual";
+
+export enum TilemapRendererId {
+    Default,
+    Minimap = 2,
+}
 
 const show = false;
 const showAutotileShapeId = false;
@@ -81,7 +87,10 @@ const WALL_AUTOTILE_TABLE2: number[][][] = [
 
 const _Tilemap__addSpot = Tilemap.prototype._addSpot;
 Tilemap.prototype._addSpot = function(startX, startY, x, y) {
+
+
     _Tilemap__addSpot.call(this, startX, startY, x, y);
+    
 
     const mx = startX + x;
     const my = startY + y;
@@ -283,7 +292,7 @@ declare global {
 
     namespace Tilemap {
         interface Layer {
-            _rendererId: number;
+            _rendererId: TilemapRendererId;
             _images: Bitmap[];
         }
     }
@@ -302,6 +311,17 @@ Tilemap.Layer.prototype.render = function(renderer: any) {
     const tilemapRenderer = this._rendererId == 2 ? renderer.plugins.rpgtilemap : renderer.plugins.rpgtilemap2;
     const shader = tilemapRenderer.getShader();
     const matrix = shader.uniforms.uProjectionMatrix;
+
+    // "めつぶし" 状態の対応。
+    // Tilemap.visible は子 Sprite すべてを非表示にするためキャラクターが消えてしまう。
+    // そのため Tilemap だけを表示しないように、ここで対策する。
+    if (this._rendererId == TilemapRendererId.Default) {
+        if (!SView.getTilemapView().visible) {
+            return;
+        }
+    }
+
+
     
     renderer.batch.setObjectRenderer(tilemapRenderer);
     renderer.projection.projectionMatrix.copyTo(matrix);

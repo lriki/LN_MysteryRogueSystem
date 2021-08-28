@@ -4,6 +4,7 @@ import { DEntityKind } from "ts/data/DEntityKind";
 import { DLand, DLandId, DLandIdentificationLevel } from "ts/data/DLand";
 import { REData } from "ts/data/REData";
 import { RESystem } from "ts/system/RESystem";
+import { SView } from "ts/system/SView";
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
 
@@ -160,7 +161,7 @@ export class LIdentifyer {
         }
     }
 
-    public resolveDescription(entity: LEntity): LEntityDescription {
+    public resolveDescription(viewSubject: LEntity, entity: LEntity): LEntityDescription {
         const dataId = entity.dataId();
         const entityData = entity.data();
 
@@ -191,7 +192,7 @@ export class LIdentifyer {
         }
 
 
-        const nameView = entity.getDisplayName();
+        const nameView = SView.getLookNames(viewSubject, entity);
         let displayName = pseudonym;
         if (globalIdentified) {
             displayName = nameView.name;
@@ -247,7 +248,7 @@ export class LIdentifyer {
     }
 
     // ユーティリティ
-    makeDisplayText(entity: LEntity): string {
-        return this.resolveDescription(entity).displayText();
+    makeDisplayText(viewSubject: LEntity, entity: LEntity): string {
+        return this.resolveDescription(viewSubject, entity).displayText();
     }
 }

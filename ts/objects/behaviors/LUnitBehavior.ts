@@ -188,8 +188,8 @@ export class LUnitBehavior extends LBehavior {
                             REGame.map._removeEntity(itemEntity);
                             inventory.addEntityWithStacking(itemEntity);
                             
-                            const name = LEntityDescription.makeDisplayText(UName.makeUnitNameByFocused(self), DescriptionHighlightLevel.UnitName);
-                            context.postMessage(tr("{0} は {1} をひろった", name, REGame.identifyer.makeDisplayText(itemEntity)));
+                            const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
+                            context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
                             SSoundManager.playPickItem();
 
                             return true;
@@ -221,7 +221,7 @@ export class LUnitBehavior extends LBehavior {
                         //inventory.removeEntity(itemEntity);
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
-                        context.postMessage(tr("{0} を置いた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                        context.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
                         context.post(itemEntity, self, subject, undefined, onGrounded);
                         return true;
                     });
@@ -271,7 +271,7 @@ export class LUnitBehavior extends LBehavior {
 
                     context.post(itemEntity, self, subject, undefined, onThrowReaction)
                         .then(() => {
-                            context.postMessage(tr("{0} を投げた。", REGame.identifyer.makeDisplayText(itemEntity)));
+                            context.postMessage(tr("{0} を投げた。", UName.makeNameAsItem(itemEntity)));
                             return true;
                         });
 
@@ -330,7 +330,7 @@ export class LUnitBehavior extends LBehavior {
                 REGame.map.appearEntity(item1, self.x, self.y);
                 inventory.addEntity(item2);
 
-                context.postMessage(tr("{0} と {1} を交換した。", REGame.identifyer.makeDisplayText(item1), REGame.identifyer.makeDisplayText(item2)));
+                context.postMessage(tr("{0} と {1} を交換した。", UName.makeNameAsItem(item1), UName.makeNameAsItem(item2)));
                 SSoundManager.playPickItem();
             }
             else {
@@ -364,7 +364,7 @@ export class LUnitBehavior extends LBehavior {
             for (const item of items) {
                 item.removeFromParent();
                 storageInventory.addEntity(item);
-                context.postMessage(tr("{0} を入れた。", REGame.identifyer.makeDisplayText(item)));
+                context.postMessage(tr("{0} を入れた。", UName.makeNameAsItem(item)));
             }
         }
         

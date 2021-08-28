@@ -11,6 +11,7 @@ import { DEntity, DEntityCreateInfo } from "ts/data/DEntity";
 import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
+import { UName } from "ts/usecases/UName";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -33,7 +34,7 @@ test("generally.草", () => {
     actor1.getBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getBehavior(LInventoryBehavior).addEntity(item2);
 
-    const name1 = REGame.identifyer.makeDisplayText(item2);
+    const name1 = UName.makeNameAsItem(item2);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -44,7 +45,7 @@ test("generally.草", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    const name2 = REGame.identifyer.makeDisplayText(item2);
+    const name2 = UName.makeNameAsItem(item2);
 
     // 食べれば、同種のアイテムは識別される。
     expect(name2).not.toBe(name1);

@@ -1,6 +1,7 @@
 import { REData } from "ts/data/REData";
 import { LFloorId } from "ts/objects/LFloorId";
 import { RESystem } from "ts/system/RESystem";
+import { SView } from "ts/system/SView";
 import { assert, Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
@@ -26,7 +27,7 @@ Game_Map.prototype.unlinkREEvents = function(): void {
 
 // Map 移動したときに呼ばれる。
 // セーブデータをロードしたときは呼ばれない。
-var _Game_Map_setup = Game_Map.prototype.setup;
+const _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
 
     // 先に REMap をクリーンアップしておく。
@@ -116,7 +117,17 @@ Game_Map.prototype.setTileData = function(x: number, y: number, z: number, value
 }
 */
 
-var _Game_Map_update = Game_Map.prototype.update;
+
+const _Game_Map_tileset = Game_Map.prototype.tileset;
+Game_Map.prototype.tileset = function() {
+    const view = SView.getTilemapView();
+    if (view.tilesetId)
+        return $dataTilesets[view.tilesetId];
+    else
+        return _Game_Map_tileset.call(this);
+};
+
+const _Game_Map_update = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
 

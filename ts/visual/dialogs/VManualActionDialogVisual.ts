@@ -16,6 +16,7 @@ import { REData } from "ts/data/REData";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { REVisual_Entity } from "../REVisual_Entity";
+import { UName } from "ts/usecases/UName";
 
 enum UpdateMode {
     Normal,
@@ -105,7 +106,7 @@ export class VManualActionDialogVisual extends VDialog {
                     if (actions.includes(DBasics.actions.PickActionId)) {
     
                         if (this._model.dashingEntry) {
-                            context.commandContext().postMessage(tr2("%1 に乗った。").format(REGame.identifyer.makeDisplayText(targetEntity)));
+                            context.commandContext().postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
                         }
                         else {
                             // 歩行移動時に足元に拾えるものがあれば取得試行

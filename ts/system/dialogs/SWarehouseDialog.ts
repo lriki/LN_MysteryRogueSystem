@@ -9,6 +9,7 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { SDialog } from "../SDialog";
 import { SEffectSubject } from "ts/system/SEffectContext";
+import { UName } from "ts/usecases/UName";
 
 export class SWarehouseDialog extends SDialog {
     private _userEntityId: LEntityId;
@@ -54,7 +55,7 @@ export class SWarehouseDialog extends SDialog {
                             userInventory.removeEntity(item);
                             warehouseInventory.addEntity(item);
 
-                            context.postMessage(tr("{0} を預けた。", REGame.identifyer.makeDisplayText(item)));
+                            context.postMessage(tr("{0} を預けた。", UName.makeNameAsItem(item)));
                             return true;
                         });
                     return true;
@@ -88,7 +89,7 @@ export class SWarehouseDialog extends SDialog {
                             warehouseInventory.removeEntity(item);
                             userInventory.addEntity(item);
 
-                            context.postMessage(tr("{0} を取り出した。", REGame.identifyer.makeDisplayText(item)));
+                            context.postMessage(tr("{0} を取り出した。", UName.makeNameAsItem(item)));
                             return true;
                         });
                     return true;

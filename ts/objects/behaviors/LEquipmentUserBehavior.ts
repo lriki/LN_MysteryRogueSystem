@@ -22,6 +22,7 @@ import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/data/DIdentifyer";
 import { DTraits } from "ts/data/DTraits";
+import { UName } from "ts/usecases/UName";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -164,7 +165,7 @@ NOTE:
                 }
                 else {
                     // ここまでで slot が見つからなければ装備不可能
-                    context.postMessage(tr2("%1 は装備できない。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+                    context.postMessage(tr2("%1 は装備できない。").format(UName.makeNameAsItem(itemEntity)));
                 }
             }
             
@@ -187,7 +188,7 @@ NOTE:
         UIdentify.identifyByTiming(context, self, itemEntity, DIdentifiedTiming.Equip, false);
 
         SSoundManager.playEquip();
-        context.postMessage(tr2("%1 を装備した。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+        context.postMessage(tr2("%1 を装備した。").format(UName.makeNameAsItem(itemEntity)));
 
         if (itemEntity.isCursed()) {
             context.postMessage(tr2("呪われていた！"));
@@ -202,7 +203,7 @@ NOTE:
                 
                 if (removed) {
                     SSoundManager.playEquip();
-                    context.postMessage(tr2("%1 をはずした。").format(REGame.identifyer.makeDisplayText(itemEntity)));
+                    context.postMessage(tr2("%1 をはずした。").format(UName.makeNameAsItem(itemEntity)));
                 }
                 else {
                     context.postMessage(tr2("何も起こらなかった。"));

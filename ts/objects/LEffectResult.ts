@@ -175,7 +175,7 @@ export class LEffectResult {
     // Window_BattleLog.prototype.displayActionResults
     public showResultMessages(context: SCommandContext, entity: LEntity): void {
 
-        const targetName = UName.makeUnitNameByFocused(entity);
+        const targetName = UName.makeUnitName(entity);
         
         if (this.missed) {
             context.postMessage(tr2("TEST: 外れた。"));
@@ -249,7 +249,7 @@ export class LEffectResult {
     // ターン終了時に表示するべき結果メッセージ。
     // 特に複数の敵を倒したときの取得経験値は合計したものを1度で出したい。
     public showResultMessagesDeferred(context: SCommandContext, entity: LEntity): void {
-        const targetName = LEntityDescription.makeDisplayText(UName.makeUnitNameByFocused(entity), DescriptionHighlightLevel.UnitName);
+        const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
 
         if (this.gainedExp > 0) {
             const text = STextManager.obtainExp.format(this.gainedExp, STextManager.exp);

@@ -11,6 +11,7 @@ import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { LIdentifyer } from "ts/objects/LIdentifyer";
+import { UName } from "ts/usecases/UName";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -36,7 +37,7 @@ test("concretes.item.識別の巻物", () => {
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item2"));
     inventory.addEntity(item2);
 
-    const name1 = REGame.identifyer.makeDisplayText(item2);
+    const name1 = UName.makeNameAsItem(item2);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -48,7 +49,7 @@ test("concretes.item.識別の巻物", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-        const name2 = REGame.identifyer.makeDisplayText(item2);
+        const name2 = UName.makeNameAsItem(item2);
         expect(name1).not.toBe(name2);  // 少なくとも、識別の前後で表示名が変わっていること
     }
 });

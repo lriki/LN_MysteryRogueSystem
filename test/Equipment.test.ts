@@ -10,6 +10,7 @@ import { DEntityCreateInfo } from "ts/data/DEntity";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LFloorId } from "ts/objects/LFloorId";
 import { DBasics } from "ts/data/DBasics";
+import { UName } from "ts/usecases/UName";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -204,14 +205,14 @@ test("Equipment.UpgradeValue", () => {
     item1.setActualParam(DBasics.params.upgradeValue, 2);
 
     // 識別前は表示名に +2 が含まれない
-    const name1 = REGame.identifyer.makeDisplayText(item1);
+    const name1 = UName.makeNameAsItem(item1);
     expect(name1.includes("+2")).toBe(false);
 
     // 識別してみる
     item1.setIndividualIdentified(true);
 
     // 識別後は +2 が含まれる
-    const name2 = REGame.identifyer.makeDisplayText(item1);
+    const name2 = UName.makeNameAsItem(item1);
     expect(name2.includes("+2")).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
