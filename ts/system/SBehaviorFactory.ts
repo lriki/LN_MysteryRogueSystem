@@ -17,6 +17,7 @@ import { LItemBehavior } from "ts/objects/behaviors/LItemBehavior";
 import { LEntryPointBehavior } from "ts/objects/behaviors/LEntryPointBehavior";
 import { LGenericRMMZStateBehavior } from "ts/objects/states/LGenericRMMZStateBehavior";
 import { LItemImitatorBehavior } from "ts/objects/behaviors/LItemImitatorBehavior";
+import { LIllusionStateBehavior } from "ts/objects/states/LIllusionStateBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -40,6 +41,7 @@ export class SBehaviorFactory {
         { fullName: "LItemBehavior", friendlyName: "_Item", create: () => new LItemBehavior() },
         { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
         { fullName: "LItemImitatorBehavior", friendlyName: "ItemImitator", create: () => new LItemImitatorBehavior() },
+        { fullName: "LIllusionStateBehavior", friendlyName: "IllusionState", create: () => new LIllusionStateBehavior() },
         
         
         

@@ -9,6 +9,7 @@ declare global {
         mutableShuffle(): void;
         distinct(): Array<T>;
         immutableSort(compareFn?: (a: T, b: T) => number): Array<T>;
+        selectMin(fn: (a: T, b: T) => number): T | undefined;
     }
 }
 
@@ -58,6 +59,17 @@ Array.prototype.distinct = function<T>(): Array<T> {
 
 Array.prototype.immutableSort = function<T>(compareFn?: (a: T, b: T) => number): Array<T> {
     return Object.assign([], this).sort(compareFn);
+}
+
+Array.prototype.selectMin = function<T>(fn: (a: T, b: T) => number): T | undefined {
+    if (this.length <= 0) return undefined;
+    let m = this[0];
+    for (let i = 1; i < this.length; i++) {
+        if (fn(m, this[i])) {
+            m = this[i];
+        }
+    }
+    return m;
 }
 
 export {}

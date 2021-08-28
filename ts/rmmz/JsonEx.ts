@@ -27,7 +27,6 @@ import { LProjectableBehavior } from "ts/objects/behaviors/activities/LProjectab
 import { LEaterBehavior } from "ts/objects/behaviors/actors/LEaterBehavior";
 import { LLand } from "ts/objects/LLand";
 import { LParty } from "ts/objects/LParty";
-import { LCharacterAI_Normal } from "ts/objects/LCharacterAI";
 import { LSurvivorBehavior } from "ts/objects/behaviors/LSurvivorBehavior";
 import { LEquipmentBehavior } from "ts/objects/behaviors/LEquipmentBehavior";
 import { LItemBehavior_Grass1 } from "ts/objects/behaviors/items/LItemBehavior_Grass1";
@@ -43,6 +42,7 @@ import { LClingFloorBehavior } from "ts/objects/behaviors/LClingFloorBehavior";
 import { LFlockBehavior } from "ts/objects/behaviors/LFlockBehavior";
 import { LActivity } from "ts/objects/activities/LActivity";
 import { LMonsterHouseStructure } from "ts/objects/structures/LMonsterHouseStructure";
+import { LCharacterAI_Normal } from "ts/objects/ai/LStandardAI";
 
 
 function createInstance(name: string): any {

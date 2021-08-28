@@ -2,6 +2,9 @@ import { assert } from "ts/Common";
 import { DActionId } from "ts/data/DAction";
 import { DBasics } from "ts/data/DBasics";
 import { DSkill, DSkillDataId } from "ts/data/DSkill";
+import { SAIHelper } from "ts/system/SAIHelper";
+import { UMovement } from "ts/usecases/UMovement";
+import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -178,6 +181,13 @@ export class LActivity {
     }
 
     public static makeMoveToAdjacent(subject: LEntity, dir: number): LActivity {
+        return (new LActivity()).setup(DBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
+    }
+
+    public static makeMoveToAdjacentBlock(subject: LEntity, block: LBlock): LActivity {
+        //assert(UMovement.blockDistance(subject.x, subject.y, block.x(), block.y()) <= 1);    // 隣接ブロックであること
+        assert(UMovement.checkAdjacent(subject.x, subject.y, block.x(), block.y()));    // 隣接ブロックであること
+        const dir = SAIHelper.distanceToDir(subject.x, subject.y, block.x(), block.y());
         return (new LActivity()).setup(DBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
     }
 

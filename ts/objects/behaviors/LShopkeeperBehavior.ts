@@ -1,13 +1,8 @@
-import { SManualActionDialog } from "ts/system/dialogs/SManualDecisionDialog";
-import { SPhaseResult } from "../../system/RECommand";
-import { SCommandContext } from "../../system/SCommandContext";
-import { DecisionPhase, LBehavior } from "./LBehavior";
+
+import { LBehavior } from "./LBehavior";
 import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
-import { LUnitBehavior } from "./LUnitBehavior";
-import { UMovement } from "ts/usecases/UMovement";
-import { LCharacterAI_Normal } from "../LCharacterAI";
-import { LActivity } from "../activities/LActivity";
+
 
 /**
  */

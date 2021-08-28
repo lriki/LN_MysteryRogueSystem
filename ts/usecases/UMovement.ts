@@ -40,6 +40,11 @@ export class UMovement {
         { x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 0 }, { x: 1, y: 0 }
     ];
 
+    // 正面3方向用オフセット
+    private static readonly way3Offsets: SPoint[] = [
+        { x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }
+    ];
+
     public static directions: number[] = [
         1, 2, 3, 4, 6, 7, 8, 9,
     ];
@@ -49,6 +54,12 @@ export class UMovement {
         [-1, 0], [1, 0],
         [-1, 1], [0, 1], [1, 1],
     ];
+
+    public static distanceSq(x1: number, y1: number, x2: number, y2: number): number {
+        const x = x1 - x2;
+        const y = y1 - y2;
+        return (x * x) + (y * y);
+    }
 
     /**
      * 向き反転
@@ -167,7 +178,7 @@ export class UMovement {
     /**
      * 左折の法則に従い、移動候補にできる Block を優先度順に取得する。
      */
-    public static getMovingCandidateBlockAsLHRule(entity: LEntity): LBlock | undefined {
+    public static getMovingCandidateBlockAsLHRule(entity: LEntity, dir: number): LBlock | undefined {
         /*
         const result: LBlock[] = [];
         for (const offset of this.LHRuleOffsets) {
@@ -179,7 +190,7 @@ export class UMovement {
         const map = REGame.map;
         const oldBlock = map.block(entity.x, entity.y);
         for (const offset of this.LHRuleOffsets) {
-            const pos = this.transformRotationBlock(offset.x, offset.y, entity.dir);
+            const pos = this.transformRotationBlock(offset.x, offset.y, dir);
             const block = map.tryGetBlock(entity.x + pos.x, entity.y + pos.y);
             if (block && this.checkPassageBlockToBlock(entity, oldBlock, block, MovingMethod.Walk)) {
                 return block;
@@ -187,6 +198,23 @@ export class UMovement {
         }
         return undefined;
     }
+
+    /**
+     * dir 方向の正面 3 Block を取得する。
+     */
+    public static getWay3FrontBlocks(entity: LEntity, dir: number): LBlock[] {
+        const result = [];
+        const map = REGame.map;
+        for (const offset of this.way3Offsets) {
+            const pos = this.transformRotationBlock(offset.x, offset.y, dir);
+            const block = map.tryGetBlock(entity.x + pos.x, entity.y + pos.y);
+            if (block) {
+                result.push(block);
+            }
+        }
+        return result;
+    }
+    
 
     /**
      * "移動" できる隣接 Block を取得する
@@ -217,6 +245,15 @@ export class UMovement {
             }
         }
         return undefined;
+    }
+
+    /**
+     * 2つの 座標 が隣接しているかどうか
+     */
+     public static checkAdjacent(x1: number, y1: number, x2: number, y2: number): boolean {
+        const dx = x1 - x2;
+        const dy = y1 - y2;
+        return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
     }
 
     /**

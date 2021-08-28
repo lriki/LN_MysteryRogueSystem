@@ -87,7 +87,6 @@ export class DState {
 
     traits: IDataTrait[];
 
-    // TODO: deprecated
     behaviors: string[];
 
     stateGroupKeys: string[];

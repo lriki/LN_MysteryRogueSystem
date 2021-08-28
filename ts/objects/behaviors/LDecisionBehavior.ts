@@ -6,8 +6,9 @@ import { LEntity } from "ts/objects/LEntity";
 import { REGame } from "ts/objects/REGame";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { UMovement } from "ts/usecases/UMovement";
-import { LCharacterAI, LCharacterAI_Normal } from "../LCharacterAI";
+import { LCharacterAI } from "../LCharacterAI";
 import { LActivity } from "../activities/LActivity";
+import { LCharacterAI_Normal } from "../ai/LStandardAI";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.

@@ -26,7 +26,7 @@ test("concretes.states.目つぶし", () => {
 
     expect(SView.getLookNames(actor1, enemy1).name != enemy1.getDisplayName().name).toBe(true);
     expect(SView.getTilemapView().visible).toBe(false);
-    expect(SView.getEntityVisibility(enemy1)).toBe(false);
+    expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

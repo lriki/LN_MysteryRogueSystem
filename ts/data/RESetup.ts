@@ -49,6 +49,9 @@ export class RESetup {
             case "kState_UT目つぶし":
                 data.restriction = DStateRestriction.Blind;
                 break;
+            case "kState_UTまどわし":
+                data.behaviors.push("LIllusionStateBehavior");
+                break;
         }
     }
     
@@ -115,6 +118,11 @@ export class RESetup {
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
                 break;
             case "kパニックドラッグ":
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
+                entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
+                break;
+            case "kマッドドラッグ":
                 entity.addReaction(DBasics.actions.EatActionId, 0);
                 entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());

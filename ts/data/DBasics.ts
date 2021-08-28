@@ -14,8 +14,7 @@ import { DFactionId } from "./REData";
 /**
  * ゲームシステムとして重要な定義済みデータを保持する
  */
-export class DBasics
-{
+export class DBasics {
     static events: DBasicEvents;
     static actions: DBasicActions;
     static entityKinds: BasicEntityKinds;

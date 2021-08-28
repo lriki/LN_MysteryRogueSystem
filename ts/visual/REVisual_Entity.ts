@@ -11,7 +11,7 @@ import { SNavigationHelper } from "ts/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
 import { LState } from "ts/objects/states/LState";
 import { Game_REPrefabEvent } from "ts/rmmz/Game_REPrefabEvent";
-import { SView } from "ts/system/SView";
+import { SEntityVisibility, SView } from "ts/system/SView";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { LEntityId } from "ts/objects/LObject";
 
@@ -121,7 +121,11 @@ export class REVisual_Entity
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
             event.setDirection(this._entity.dir);
 
-            const charactorImage = this.getCharacterImage(entity);
+            
+            const visibility = SView.getEntityVisibility(entity);
+
+
+            const charactorImage = this.getCharacterImage(entity, visibility);
             if (charactorImage) {
                 event.setImage(charactorImage.characterName, charactorImage.characterIndex);
 
@@ -142,9 +146,10 @@ export class REVisual_Entity
                 event.refresh();
             }
 
-            
 
-            event.setTransparent(!SView.getEntityVisibility(entity));
+
+
+            event.setTransparent(!visibility.visible);
 
 
             
@@ -195,7 +200,11 @@ export class REVisual_Entity
         }
     }
 
-    private getCharacterImage(entity: LEntity): DPrefabImage | undefined {
+    private getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabImage | undefined {
+        if (visibility.image) {
+            return visibility.image;
+        }
+        
         return entity.getCharacterImage();
     }
 
