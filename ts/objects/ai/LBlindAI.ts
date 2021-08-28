@@ -1,5 +1,6 @@
 import { DSkillDataId } from "ts/data/DSkill";
 import { REData } from "ts/data/REData";
+import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { RESystem } from "ts/system/RESystem";
 import { SCommandContext } from "ts/system/SCommandContext";
@@ -18,15 +19,7 @@ interface SkillAction {
     target: LEntityId;
 };
 
-export class LConfusionAI extends LCharacterAI {
-
-    /*
-    そもそも混乱は AI として実装するべき？ Activity のハンドラの中でフックしてもよいのでは？
-    ----------
-    Player と AI で処理が全く違う。
-    特に AI は Move と Action を別のフェーズで行う必要があるため、そのケアは CharacterAI 側でしか実装できない。
-    */
-
+export class LBlindAI extends LCharacterAI {
     private _candidateSkillActions: SkillAction[];
 
     public constructor() {
@@ -35,34 +28,38 @@ export class LConfusionAI extends LCharacterAI {
     }
 
     public clone(): LCharacterAI {
-        const i = new LConfusionAI();
-        for (const s of this._candidateSkillActions) {
-            i._candidateSkillActions.push({ skillId: s.skillId, target: s.target });
-        }
+        const i = new LBlindAI();
         return i;
     }
     
     public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
-        // 方向決定
-        const dir = context.random().select(UMovement.directions);
-
-        // どのような理由があれ、向きは変更する
-        context.postActivity(LActivity.makeDirectionChange(self, dir));
 
         // 移動してみる。移動出来たら行動を消費する。
-        if (UMovement.checkPassageToDir(self, dir)) {
-            context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-            context.postConsumeActionToken(self);
+        const frontDir = self.dir;
+        if (UMovement.checkPassageToDir(self, frontDir)) {
+            context.postActivity(
+                LActivity.makeMoveToAdjacent(self, frontDir)
+                .withConsumeAction());
             return SPhaseResult.Handled;
         }
 
         // 通常攻撃できるか試してみる。
         // 実際の攻撃は Major フェーズで行いたいので、ここでは行動は消費しない。
         // 攻撃候補を覚えておく。
-        const block = UMovement.getAdjacentBlock(self, dir);
+        const block = UMovement.getAdjacentBlock(self, frontDir);
         const targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.x() && e.y == block.y());
         if (targets.length > 0) {
             this._candidateSkillActions.push({ skillId: RESystem.skills.normalAttack, target: targets[0].entityId() });
+            return SPhaseResult.Handled;
+        }
+
+        // 右方向へ移動してみる
+        const rightDir = UMovement.rotateDir(6, self.dir);
+        if (UMovement.checkPassageToDir(self, rightDir)) {
+            context.postActivity(
+                LActivity.makeMoveToAdjacent(self, rightDir)
+                .withEntityDirection(rightDir)
+                .withConsumeAction());
             return SPhaseResult.Handled;
         }
         
@@ -89,11 +86,5 @@ export class LConfusionAI extends LCharacterAI {
         // 攻撃の成否に関わらず行動を消費する。
         context.postConsumeActionToken(self);
         return SPhaseResult.Handled;
-    }
-}
-
-export class LConfusionActivityPreprocessor extends LActivityPreprocessor {
-    public preprocess(src: LActivity): LActivity {
-        throw new Error("Method not implemented.");
     }
 }

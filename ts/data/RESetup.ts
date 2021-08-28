@@ -3,7 +3,7 @@ import { DBasics } from "./DBasics";
 import { DBuffMode, DBuffOp, DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType, LStateLevelType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
-import { DState } from "./DState";
+import { DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { DTraits } from "./DTraits";
 import { REData } from "./REData";
@@ -45,6 +45,9 @@ export class RESetup {
                 break;
             case "kState_UT3倍速":
                 data.autoAdditionCondition = "a.agi>=200";
+                break;
+            case "kState_UT目つぶし":
+                data.restriction = DStateRestriction.Blind;
                 break;
         }
     }
@@ -105,6 +108,11 @@ export class RESetup {
                 entity.effectSet.addEmittor(DEffectCause.Eat, emittor);
                 entity.effectSet.addEmittor(DEffectCause.Hit, emittor);
 
+                break;
+            case "kブラインドドラッグ":
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
+                entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
                 break;
             case "kパニックドラッグ":
                 entity.addReaction(DBasics.actions.EatActionId, 0);

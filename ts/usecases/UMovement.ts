@@ -261,6 +261,18 @@ export class UMovement {
     }
     
     /**
+     * entity が指定した隣接位置へ移動できるかを確認する。
+     */
+    /*
+    public static checkPassageToAdjacent(entity: LEntity, mx: number, my: number): boolean {
+        const map = REGame.map;
+        const oldBlock = map.block(entity.x, entity.y);
+        const newBlock = map.block(mx, my);
+        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
+    }
+    */
+    
+    /**
      * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
      * 
      * 地形および Block 性質を判断材料とする点に注意。 (Block 種類及び Block 性質と、Entity 性質の確認)
@@ -413,6 +425,12 @@ export class UMovement {
     public static rotatePositionByDir(localDir: number, dir: number): SPoint {
         const localPos = Helpers.dirToTileOffset(localDir);
         return this.transformRotationBlock(localPos.x, localPos.y, dir);
+    }
+
+    public static rotateDir(localDir: number, dir: number): number {
+        const localPos = Helpers.dirToTileOffset(localDir);
+        const pos = this.transformRotationBlock(localPos.x, localPos.y, dir);
+        return Helpers.offsetToDir(pos.x, pos.y);
     }
 
     public static checkDashStopBlock(entity: LEntity): boolean {

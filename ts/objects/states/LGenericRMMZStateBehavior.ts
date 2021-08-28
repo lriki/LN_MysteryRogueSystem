@@ -14,11 +14,13 @@ import { LUnitBehavior } from "../behaviors/LUnitBehavior";
 import { DBasics } from "ts/data/DBasics";
 import { UMovement } from "ts/usecases/UMovement";
 import { DParameterId } from "ts/data/DParameter";
+import { LBlindAI } from "../ai/LBlindAI";
+import { LCharacterAI } from "../LCharacterAI";
 
 export class LGenericRMMZStateBehavior extends LBehavior {
     private _stateTurn: number | null = 0;
     //private _persistent: boolean = false;   // 永続ステータス？
-    private _characterAI: LConfusionAI | undefined;
+    private _characterAI: LCharacterAI | undefined;
     
     constructor() {
         super();
@@ -89,6 +91,9 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         const state = this.stateData();
         if (state.restriction == DStateRestriction.AttackToOther) {
             this._characterAI = new LConfusionAI();
+        }
+        else if (state.restriction == DStateRestriction.Blind) {
+            this._characterAI = new LBlindAI();
         }
     }
 

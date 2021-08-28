@@ -29,6 +29,28 @@ export enum DStateRestriction {
 
     /** [RMMZ] 行動できない */
     NotAction = 4,
+
+    
+    /** 暗闇 */
+    Blind = 5,
+}
+export namespace DStateRestriction {
+    export function fromRmmzRestriction(value: number) {
+        switch(value) {
+            case 0:
+                return DStateRestriction.None;
+            case 1:
+                return DStateRestriction.AttcakToOpponent;
+            case 2:
+                return DStateRestriction.AttackToOther;
+            case 3:
+                return DStateRestriction.AttcakToFriend;
+            case 4:
+                return DStateRestriction.NotAction;
+            default:
+                throw new Error("Unreachable.");
+        }
+    }
 }
 
 export class DState {

@@ -6,7 +6,7 @@ import { RESystem } from "ts/system/RESystem";
 import { assert } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
-import { DAutoRemovalTiming, DState, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
+import { DAutoRemovalTiming, DState, DStateRestriction, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
@@ -327,7 +327,7 @@ export class REDataManager
                     else {
                         state.key = x.meta ? x.meta["RE-Key"]: "";
                         state.displayName = x.name;
-                        state.restriction = x.restriction;
+                        state.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
                         state.iconIndex = x.iconIndex ?? 0;
                         state.autoRemovalTiming = x.autoRemovalTiming;
                         state.minTurns = x.minTurns;
