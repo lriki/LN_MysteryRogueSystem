@@ -113,6 +113,7 @@ export class RESetup {
 
                 break;
             case "kブラインドドラッグ":
+                this.setupGrassCommon(entity);
                 entity.addReaction(DBasics.actions.EatActionId, 0);
                 entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
@@ -123,6 +124,7 @@ export class RESetup {
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
                 break;
             case "kマッドドラッグ":
+                this.setupGrassCommon(entity);
                 entity.addReaction(DBasics.actions.EatActionId, 0);
                 entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
