@@ -184,7 +184,9 @@ export class LGenericRMMZStateBehavior extends LBehavior {
                 // 歩行移動であれば、方向をランダムにする
                 if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
                     const dir = context.random().select(UMovement.directions);
-                    activity.withDirection(dir);
+                    activity
+                        .withDirection(dir)
+                        .withEntityDirection(dir);
                     return activity;
                 }
 
