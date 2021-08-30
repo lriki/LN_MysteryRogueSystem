@@ -83,6 +83,13 @@ export enum DTraits {
      */
     EquipmentProficiency,
 
+    /**
+     * Activity を禁止する。
+     * 
+     * dataId: DActionId
+     */
+    SealActivity,
+
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 
 }

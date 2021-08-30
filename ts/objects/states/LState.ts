@@ -288,13 +288,17 @@ export class LState extends LObject {
 
     public collectTraits(result: IDataTrait[]): void {
         this.stateData().traits.forEach(x => result.push(x));
-        this.iterateBehaviors(x => x.onCollectTraits(result));
+        this.iterateBehaviors(x => {
+            x.onCollectTraits(result);
+            return true;
+        });
     }
 
-    public iterateBehaviors(func: (b: LBehavior) => void): void {
+    public iterateBehaviors(func: (b: LBehavior) => boolean): boolean {
         for (const id of this._stateBehabiors) {
-            func(REGame.world.behavior(id));
+            if (!func(REGame.world.behavior(id))) return false;
         }
+        return true;
     }
 
     // deprecated:

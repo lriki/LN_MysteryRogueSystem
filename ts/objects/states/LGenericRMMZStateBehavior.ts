@@ -1,11 +1,11 @@
-import { SPhaseResult } from "ts/system/RECommand";
+import { REResponse, SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
 import { RESystem } from "ts/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { DAutoRemovalTiming, DState, DStateId, DStateRestriction } from "ts/data/DState";
-import { assert } from "ts/Common";
+import { assert, tr2 } from "ts/Common";
 import { LDecisionBehavior } from "../behaviors/LDecisionBehavior";
 import { REGame } from "../REGame";
 import { LConfusionAI } from "../ai/LConfusionAI";
@@ -16,6 +16,8 @@ import { UMovement } from "ts/usecases/UMovement";
 import { DParameterId } from "ts/data/DParameter";
 import { LBlindAI } from "../ai/LBlindAI";
 import { LCharacterAI } from "../LCharacterAI";
+import { DTraits } from "ts/data/DTraits";
+import { UName } from "ts/usecases/UName";
 
 
 
@@ -172,6 +174,16 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         else {
             return SPhaseResult.Pass;
         }
+    }
+    
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+        if (self.traitsWithId(DTraits.SealActivity, activity.actionId()).length > 0) {
+            const data = this.stateData();
+            const targetName = UName.makeUnitName(self);
+            context.postMessage(data.message3.format(targetName));
+            return REResponse.Canceled;
+        }
+        return REResponse.Pass;
     }
 
     onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {

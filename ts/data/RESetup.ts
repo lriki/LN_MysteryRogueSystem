@@ -52,6 +52,10 @@ export class RESetup {
             case "kState_UTまどわし":
                 data.behaviors.push("LIllusionStateBehavior");
                 break;
+            case "kState_UTくちなし":
+                data.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.EatActionId, value: 0 });
+                data.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.ReadActionId, value: 0 });
+                break;
         }
     }
     
@@ -179,6 +183,11 @@ export class RESetup {
             case "kItem_保存の壺":
                 entity.addReaction(DBasics.actions.PutInActionId, 0);
                 entity.addReaction(DBasics.actions.PickOutActionId, 0);
+                break;
+            case "kItem_ノーマウススクロール":
+                //entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
+                entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_エスケープスクロール":
                 entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});

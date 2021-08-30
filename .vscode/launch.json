@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Scheduler.ChangeSpeed5"
+                "-t", "concretes.item.grass.目つぶし草"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

@@ -23,6 +23,7 @@ import { DPrefabImage } from "ts/data/DPrefab";
 import { UName } from "ts/usecases/UName";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { DStateRestriction } from "ts/data/DState";
+import { DTraits } from "ts/data/DTraits";
 
 /**
  * 
@@ -124,6 +125,12 @@ export class LUnitBehavior extends LBehavior {
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
         const subject = new SEffectSubject(self);
+
+        //if (self.traitsWithId(DTraits.SealActivity, activity.actionId()).length > 0) {
+            //context.postMessage(tr2("行動できなかった！"));
+            //return REResponse.Succeeded;
+        //}
+
 
         if (activity.entityDirection() > 0) {
             self.dir = activity.entityDirection();

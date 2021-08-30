@@ -1173,11 +1173,27 @@ export class LEntity extends LObject
         }
     }
 
+    public iterateBehaviorsReverse(func: (b: LBehavior) => boolean): boolean {
+        for (let i = this._states.length - 1; i >= 0; i--) {
+            const j = REGame.world.object(this._states[i]) as LState;
+            if (!j.iterateBehaviors(b => func(b))) return false;
+        }
+        for (let i = this._abilities.length - 1; i >= 0; i--) {
+            const j = REGame.world.object(this._abilities[i]) as LAbility;
+            if (!j.iterateBehaviors(b => func(b))) return false;
+        }
+        for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
+            const j = REGame.world.behavior(this._basicBehaviors[i]) ;
+            if (!func(j)) return false;
+        }
+        return true;
+    }
+
     public collectBehaviors(): LBehavior[] {
         const result: LBehavior[] = [];
         for (const i of this._basicBehaviors) result.push(REGame.world.behavior(i));
-        for (const i of this.states()) i.iterateBehaviors(b => result.push(b));
-        for (const i of this.abilities()) i.iterateBehaviors(b => result.push(b));
+        for (const i of this.states()) i.iterateBehaviors(b => { result.push(b); return true });
+        for (const i of this.abilities()) i.iterateBehaviors(b => { result.push(b); return true });
         return result;
     }
 
@@ -1200,7 +1216,12 @@ export class LEntity extends LObject
     }
 
     _sendActivity(context: SCommandContext, activity: LActivity): REResponse {
-        return this._callBehaviorIterationHelper(x => x.onActivity(this, context, activity));
+        let result = REResponse.Pass;
+        this.iterateBehaviorsReverse(b => {
+            result = b.onActivity(this, context, activity);
+            return result == REResponse.Pass;
+        });
+        return result;
     }
 
     _sendActivityReaction(context: SCommandContext, activity: LActivity): REResponse {
