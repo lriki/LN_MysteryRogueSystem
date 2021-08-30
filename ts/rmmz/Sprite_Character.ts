@@ -1,6 +1,7 @@
 import { REVisual } from 'ts/visual/REVisual';
 import { REVisual_Entity } from 'ts/visual/REVisual_Entity';
 import { VCharacterSpriteSet } from 'ts/visual/VCharacterSpriteSet';
+import { VHelper } from 'ts/visual/VHelper';
 import { assert } from '../Common';
 
 declare global {
@@ -92,12 +93,7 @@ Sprite_Character.prototype.update = function() {
         // Update state icon
         {
             if (this._stateIcons.length > 0) {
-                const iconIndex = this._stateIcons[0];  // TODO: 複数
-                const pw = ImageManager.iconWidth;
-                const ph = ImageManager.iconHeight;
-                const sx = (iconIndex % 16) * pw;
-                const sy = Math.floor(iconIndex / 16) * ph;
-                this._stateIconSprite.setFrame(sx, sy, pw, ph);
+                VHelper.setIconFrame(this._stateIconSprite, this._stateIcons[0]);   // TODO: 複数
                 this._stateIconSprite.anchor.x = 0.5;
                 this._stateIconSprite.anchor.y = 1;
                 this._stateIconSprite.y = this.bitmap ? -this.patternHeight() : 0;  // bitmap が無いと Character の高さが取れないので

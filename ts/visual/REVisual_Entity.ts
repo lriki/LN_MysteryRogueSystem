@@ -83,6 +83,14 @@ export class REVisual_Entity
         return this._position;
     }
 
+    setX(value: number): void {
+        this._position.x = value;
+    }
+
+    setY(value: number): void {
+        this._position.y = value;
+    }
+
     setPosition(value: Vector2): void {
         this._position = value;
     }
@@ -107,7 +115,6 @@ export class REVisual_Entity
     _update() {
         assert(REVisual.manager);
 
-        this._sequelContext._update();
         
         if (this._rmmzEventId >= 0) {
             //const tileSize = REVisual.manager.tileSize();
@@ -150,6 +157,12 @@ export class REVisual_Entity
 
 
             event.setTransparent(!visibility.visible);
+
+
+
+            
+            this._sequelContext._update();
+
 
 
             

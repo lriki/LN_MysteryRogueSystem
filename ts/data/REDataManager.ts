@@ -230,6 +230,7 @@ export class REDataManager
             asleep: REData.addSequel("asleep"),
             escape: REData.addSequel("escape"),
             earthquake2: REData.addSequel("earthquake2"),
+            useItem: REData.addSequel("useItem"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         

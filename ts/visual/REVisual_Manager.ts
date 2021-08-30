@@ -35,6 +35,7 @@ import { VEscapeSequel } from "./sequels/VEscapeSequel";
 import { VEarthquake2Sequel } from "./sequels/VEarthquake2Sequel";
 import { SDetailsDialog } from "ts/system/dialogs/SDetailsDialog";
 import { VDetailsDialog } from "./dialogs/VDetailsDialog";
+import { VUseItemSequel } from "./sequels/VUseItemSequel";
 
 /**
  */
@@ -59,6 +60,7 @@ export class REVisual_Manager
         this._visualSequelFactory[RESystem.sequels.asleep] = () => new VAsleepSequel();
         this._visualSequelFactory[RESystem.sequels.escape] = () => new VEscapeSequel();
         this._visualSequelFactory[RESystem.sequels.earthquake2] = () => new VEarthquake2Sequel();
+        this._visualSequelFactory[RESystem.sequels.useItem] = () => new VUseItemSequel();
 
         
     }

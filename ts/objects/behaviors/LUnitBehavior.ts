@@ -357,9 +357,13 @@ export class LUnitBehavior extends LBehavior {
             
             return REResponse.Succeeded;
         }
+        else if (activity.actionId() == DBasics.actions.EatActionId) {
+            context.postSequel(self, RESystem.sequels.useItem, activity.object());
+            return REResponse.Succeeded;
+        }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
-            context.postSequel(self, RESystem.sequels.attack);
+            context.postSequel(self, RESystem.sequels.useItem, activity.object());
             // 続いて onActivityReaction を実行する。
             return REResponse.Succeeded;
         }
