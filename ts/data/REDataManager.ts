@@ -329,9 +329,6 @@ export class REDataManager
                         state.displayName = x.name;
                         state.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
                         state.iconIndex = x.iconIndex ?? 0;
-                        state.autoRemovalTiming = x.autoRemovalTiming;
-                        state.minTurns = x.minTurns;
-                        state.maxTurns = x.maxTurns;
                         state.priority = x.priority;
                         state.message1 = x.message1 ?? "";
                         state.message2 = x.message2 ?? "";
@@ -340,11 +337,6 @@ export class REDataManager
                         state.traits = x.traits.concat(x.meta ? makeStateTraitsFromMeta(x.meta) : []);
                         state.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
                         state.import(x);
-    
-                        if (state.autoRemovalTiming == DAutoRemovalTiming.AfterAction) {
-                            // TODO:
-                            //console.error("[行動終了時の自動解除] は未実装です。");
-                        }
     
                         RESetup.setupDirectly_State(state);
                     }

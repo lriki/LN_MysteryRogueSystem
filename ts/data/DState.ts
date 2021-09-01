@@ -13,7 +13,47 @@ export enum DAutoRemovalTiming {
 
     /** [RMMZ] ターン終了時 */
     TurnEnd = 2,
+
+    ActualParam,
+    HitDamage,
 }
+
+export interface DAutoRemoval_None {
+    kind: DAutoRemovalTiming.None;
+}
+
+export interface DAutoRemoval_AfterAction {
+    kind: DAutoRemovalTiming.AfterAction;
+}
+
+export interface DAutoRemoval_TurnEnd {
+    kind: DAutoRemovalTiming.TurnEnd;
+
+    /** 継続ターン数 Min */
+    minTurns: number;
+
+    /** 継続ターン数 Max */
+    maxTurns: number;
+}
+
+export interface DAutoRemoval_ActualParam {
+    kind: DAutoRemovalTiming.ActualParam;
+    formula: string;
+}
+
+export interface DAutoRemoval_HitDamage {
+    kind: DAutoRemovalTiming.HitDamage;
+}
+
+export type DAutoRemoval =
+    DAutoRemoval_None |
+    DAutoRemoval_AfterAction |
+    DAutoRemoval_TurnEnd |
+    DAutoRemoval_ActualParam |
+    DAutoRemoval_HitDamage;
+
+
+
 
 export enum DStateRestriction {
     None = 0,
@@ -70,13 +110,8 @@ export class DState {
     displayNameIcon: boolean;
 
     /** 自動解除のタイミング */
-    autoRemovalTiming: DAutoRemovalTiming;
-
-    /** 継続ターン数 Min */
-    minTurns: number;
-
-    /** 継続ターン数 Max */
-    maxTurns: number;
+    //autoRemovalTiming: DAutoRemovalTiming;
+    autoRemovals: DAutoRemoval[];
 
     priority: number;
 
@@ -108,9 +143,10 @@ export class DState {
         this.restriction = 0;
         this.iconIndex = 0;
         this.displayNameIcon = false;
-        this.autoRemovalTiming = DAutoRemovalTiming.None;
-        this.minTurns = 0;
-        this.maxTurns = 0;
+        //this.autoRemovalTiming = DAutoRemovalTiming.None;
+        this.autoRemovals = [];
+        //this.minTurns = 0;
+        //this.maxTurns = 0;
         this.priority = 0;
         this.message1 = "";
         this.message2 = "";
@@ -133,6 +169,23 @@ export class DState {
                     this.stateGroupKeys = (raws instanceof Array) ? raws : [raws];
                 }
             }
+        }
+
+        switch (data.autoRemovalTiming) {
+            case 0: // None
+                break;
+            case 1: // AfterAction
+                this.autoRemovals.push({ kind: DAutoRemovalTiming.AfterAction });
+                break;
+            case 2: // TurnEnd
+                this.autoRemovals.push({
+                    kind: DAutoRemovalTiming.TurnEnd,
+                    minTurns: data.minTurns,
+                    maxTurns: data.maxTurns,
+                });
+                break;
+            default:
+                throw new Error("Unreachable.");
         }
     }
 }
