@@ -17,13 +17,14 @@ test("concretes.states.かなしばり.FP", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    actor1.setActualParam(DBasics.params.fp, 20);
     actor1.addState(stateId);
 
     let count = 0;
     while (true) {
         RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-        if (actor1.states().find(x => x.stateDataId() == stateId)) {
+        if (!actor1.states().find(x => x.stateDataId() == stateId)) {
             break;
         }
 
@@ -47,12 +48,11 @@ test("concretes.states.かなしばり.Attack", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    // ダメージを受けており、ステートは解除されている
+    // 被ダメージにかかわらず、攻撃試行されればステートは解除されている
     const hp2 = actor1.actualParam(DBasics.params.hp);
-    expect(hp2 < hp1).toBe(true);
-    expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
 });

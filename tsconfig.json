@@ -29,7 +29,7 @@
             "es2015"
         ]
     },
-    "files": [
-      "ts/main.ts"
-    ]
+    //"files": [
+    //  "ts/main.ts"
+    //]
 }
