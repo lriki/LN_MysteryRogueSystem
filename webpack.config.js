@@ -10,7 +10,7 @@ const METADATA = fs.readFileSync("./plugin-description.txt").toString();
 module.exports = {
     //mode: 'production',
     mode: 'development',
-    entry: './ts/index.ts',
+    entry: './ts/main.ts',
     target: 'node',
     output: {
         path: __dirname,

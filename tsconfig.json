@@ -7,11 +7,8 @@
         "strict": true,
         "esModuleInterop": true,
 
-        // NOTE: https://qiita.com/tetradice/items/b89a5dd41fcebf96379e
         "baseUrl": "./",
-        //"paths": {"rmmz": ["types/*"]},
-        //"paths": {"rpgmaker-mz": ["types/rpgmaker-mz"]},
-        "typeRoots" : ["./node_modules/@types", "./@types", "./imgui-js"],
+        "typeRoots" : ["./node_modules/@types", "ts/@types"],
 
         // for Debug
         "sourceMap": true,
@@ -21,6 +18,8 @@
           "imgui-js": [ "../build/imgui" ],
         },
 
+        "skipLibCheck": true    ,                             /* Skip type checking all .d.ts files. */
+
         "lib": [
             "es6",
             "es5",
@@ -29,5 +28,8 @@
             "es2015.promise",
             "es2015"
         ]
-    }
+    },
+    "files": [
+      "ts/main.ts"
+    ]
 }
