@@ -1,11 +1,12 @@
 import { assert } from "ts/Common";
-import { DState, DStateId } from "ts/data/DState";
+import { DAutoRemovalTiming, DState, DStateId } from "ts/data/DState";
 import { REData } from "ts/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/system/RECommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "../behaviors/LBehavior";
+import { DParameterId } from "ts/data/DParameter";
 
 export type LStateId = LObjectId;
 
@@ -315,6 +316,19 @@ export class LState extends LObject {
             }
         }
         return response;
+    }
+
+    //------------------------------------------------------------------------------
+    //
+
+
+    public checkRemoveAtDamageTesting(paramId: DParameterId): boolean {
+        for (const r of this.stateData().autoRemovals) {
+            if (r.kind == DAutoRemovalTiming.DamageTesting && r.paramId == paramId) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

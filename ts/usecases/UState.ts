@@ -1,6 +1,6 @@
 import { assert } from "ts/Common";
 import { LStateLevelType } from "ts/data/DEffect";
-import { DState, DStateId } from "ts/data/DState";
+import { DAutoRemovalTiming, DState, DStateId } from "ts/data/DState";
 import { DStateGroup } from "ts/data/DStateGroup";
 import { REData } from "ts/data/REData";
 import { LEntity } from "ts/objects/LEntity";
@@ -27,6 +27,16 @@ interface WorkStateGroup {
 
 export class UState {
 
+    /**
+     * ステート追加・削除のメイン処理
+     * 
+     * ステートには能力値の変化を与えるものや、現在の能力値によって自動付加されるものがある。
+     * 例えばステートをまとめて追加する場合、ひとつ追加するたびに自動付加の判定を行うと、
+     * 想定外のステート追加が一瞬発生してすぐ削除されるなど予測しづらい副作用を伴うことがある。
+     * 
+     * そのため一度にまとめて追加する場合はまず先にすべてのステートを評価し、
+     * 本当に消すべきもの・残すべきもの・追加するべきものを判断して必要な操作だけを行えるようにする。
+     */
     public static resolveStates(entity: LEntity, newStates: StateAddition[], removeStateIds: DStateId[]): LState[] {
         const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), removing: false, new: false, level: s.level() }; });
         const stateGroups: WorkStateGroup[] = REData.stateGroups.map(sg => { return { data: sg, states: [] }; });
@@ -67,7 +77,7 @@ export class UState {
             }
         }
 
-        // 既存ステートのうち自動付加条件を持つものは、満たされてないものに削除マークをつける
+        // 既存ステートのうち自動付加・自動削除条件を持つものは、満たされてないものに削除マークをつける
         for (const state of currentStates) {
             if (state.data.autoAdditionCondition) {
                 const a = entity;
@@ -75,6 +85,11 @@ export class UState {
                 if (!cond) {
                     state.removing = true;
                 }
+            }
+
+            // 削除のチェック
+            if (this.checkRemoveAtActualParam(state.data, entity)) {
+                state.removing = true;
             }
         }
 
@@ -170,4 +185,17 @@ export class UState {
         return result;
     }
 
+    
+    private static checkRemoveAtActualParam(data: DState, entity: LEntity): boolean {
+        const a = entity;
+        for (const r of data.autoRemovals) {
+            if (r.kind == DAutoRemovalTiming.ActualParam) {
+                const v = eval(r.formula);
+                if (v === true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -22,6 +22,7 @@ import { UTransfer } from "ts/usecases/UTransfer";
 import { UIdentify } from "ts/usecases/UIdentify";
 import { LRandom } from "ts/objects/LRandom";
 import { DEntityKindId } from "ts/data/DEntityKind";
+import { DStateId } from "ts/data/DState";
 
 
 enum SParameterEffectApplyType {
@@ -229,6 +230,10 @@ export class SEffectorFact {
         return this._parameterEffects.findIndex(x => x && x.applyType != SParameterEffectApplyType.None) >= 0;
     }
 
+    public parameterEffects(): readonly (SParameterEffect | undefined)[] {
+        return this._parameterEffects;
+    }
+
     // 0.0~1.0
     // クラスの特徴などで [追加能力値:命中+x] が無いと 0 になり全く命中しなくなる。
     // Game_Action.prototype.itemHit
@@ -413,6 +418,22 @@ export class SEffectContext {
         }
         else { // subject は味方以外 (敵・NPC)
             result.focusedFriendly = true;  // 敵 vs 敵のときは、味方用のメッセージを表示したい ("ダメージを受けた！")
+        }
+
+        // ダメージ試行時のステート解除判定 (かなしばりなど)
+        // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
+        {
+            const removeStates: DStateId[] = [];
+            for (const p of this._effectorFact.parameterEffects()) {
+                if (p && !p.isRecover()) {
+                    target.iterateStates(s => {
+                        if (s.checkRemoveAtDamageTesting(p.paramId)) {
+                            removeStates.push(s.stateDataId());
+                        }
+                    });
+                }
+            }
+            target.removeStates(removeStates);
         }
 
         return result;

@@ -530,6 +530,9 @@ export class LEntity extends LObject
                 this.removeState(DBasics.states.dead);
             }
         }
+
+        // ステートの Refresh
+        this._states = UState.resolveStates(this, [], []).map(s => s.id());
     }
 
     // Game_BattlerBase.prototype.isDeathStateAffected
@@ -845,8 +848,8 @@ export class LEntity extends LObject
         return this.states().findIndex(s => s.stateDataId() == stateId) >= 0;
     }
 
-    removeState(stateId: DStateId) {
-        this._states = UState.resolveStates(this, [], [stateId]).map(s => s.id());
+    public removeStates(stateIds: DStateId[]) {
+        this._states = UState.resolveStates(this, [], stateIds).map(s => s.id());
 
         // 自動追加の更新を行う
         this._states = UState.resolveStates(this, [], []).map(s => s.id());
@@ -863,6 +866,10 @@ export class LEntity extends LObject
             this._states.splice(index, 1);
         }
         */
+    }
+
+    removeState(stateId: DStateId) {
+        this.removeStates([stateId]);
     }
 
     /** 全ての State を除外します。 */
@@ -1173,6 +1180,12 @@ export class LEntity extends LObject
         }
     }
 
+    public iterateStates(func: (s: LState) => void): void {
+        for (const id of this._states) {
+            func(REGame.world.object(id) as LState);
+        }
+    }
+
     public iterateBehaviorsReverse(func: (b: LBehavior) => boolean): boolean {
         for (let i = this._states.length - 1; i >= 0; i--) {
             const j = REGame.world.object(this._states[i]) as LState;
@@ -1375,6 +1388,9 @@ export class LEntity extends LObject
     }
     public get agi(): number {
         return this.actualParam(DBasics.params.agi);
+    }
+    public get fp(): number {
+        return this.actualParam(DBasics.params.fp);
     }
 }
 

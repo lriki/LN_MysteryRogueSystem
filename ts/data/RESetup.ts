@@ -3,7 +3,7 @@ import { DBasics } from "./DBasics";
 import { DBuffMode, DBuffOp, DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType, LStateLevelType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
-import { DState, DStateRestriction } from "./DState";
+import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { DTraits } from "./DTraits";
 import { REData } from "./REData";
@@ -55,6 +55,10 @@ export class RESetup {
             case "kState_UTくちなし":
                 data.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.EatActionId, value: 0 });
                 data.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.ReadActionId, value: 0 });
+                break;
+            case "kState_UTかなしばり":
+                data.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: DBasics.params.hp });
+                data.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 0" });
                 break;
         }
     }

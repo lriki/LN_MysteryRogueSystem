@@ -1,3 +1,4 @@
+import { DParameterId } from "./DParameter";
 import { DStateGroupId } from "./DStateGroup";
 import { DTraitId } from "./DTraits";
 import { REData } from "./REData";
@@ -15,7 +16,7 @@ export enum DAutoRemovalTiming {
     TurnEnd = 2,
 
     ActualParam,
-    HitDamage,
+    DamageTesting,
 }
 
 export interface DAutoRemoval_None {
@@ -38,11 +39,12 @@ export interface DAutoRemoval_TurnEnd {
 
 export interface DAutoRemoval_ActualParam {
     kind: DAutoRemovalTiming.ActualParam;
-    formula: string;
+    formula: string;    // 条件が満たされたら削除する
 }
 
-export interface DAutoRemoval_HitDamage {
-    kind: DAutoRemovalTiming.HitDamage;
+export interface DAutoRemoval_DamageTesting {
+    kind: DAutoRemovalTiming.DamageTesting;
+    paramId: DParameterId,
 }
 
 export type DAutoRemoval =
@@ -50,7 +52,7 @@ export type DAutoRemoval =
     DAutoRemoval_AfterAction |
     DAutoRemoval_TurnEnd |
     DAutoRemoval_ActualParam |
-    DAutoRemoval_HitDamage;
+    DAutoRemoval_DamageTesting;
 
 
 
@@ -109,9 +111,6 @@ export class DState {
 
     displayNameIcon: boolean;
 
-    /** 自動解除のタイミング */
-    //autoRemovalTiming: DAutoRemovalTiming;
-    autoRemovals: DAutoRemoval[];
 
     priority: number;
 
@@ -136,6 +135,10 @@ export class DState {
 
     autoAdditionCondition: string | undefined;
 
+    /** 自動解除のタイミング */
+    //autoRemovalTiming: DAutoRemovalTiming;
+    autoRemovals: DAutoRemoval[];
+
     public constructor(id: DStateId) {
         this.id = id;
         this.displayName = "";
@@ -144,7 +147,6 @@ export class DState {
         this.iconIndex = 0;
         this.displayNameIcon = false;
         //this.autoRemovalTiming = DAutoRemovalTiming.None;
-        this.autoRemovals = [];
         //this.minTurns = 0;
         //this.maxTurns = 0;
         this.priority = 0;
@@ -159,6 +161,7 @@ export class DState {
         //this.minBuffLevel = -2;
         //this.maxBuffLevel = 2;
         //this.parameterBuffFormulas = [];
+        this.autoRemovals = [];
     }
 
     public import(data: IDataState): void {
