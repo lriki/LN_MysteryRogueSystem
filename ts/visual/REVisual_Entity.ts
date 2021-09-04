@@ -121,12 +121,6 @@ export class REVisual_Entity
             const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
             const entity = this.entity();
 
-            // 姿勢同期
-            event._x = this._position.x;
-            event._y = this._position.y;
-            event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
-            event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
-            event.setDirection(this._entity.dir);
 
             
             const visibility = SView.getEntityVisibility(entity);
@@ -158,11 +152,19 @@ export class REVisual_Entity
 
             event.setTransparent(!visibility.visible);
 
+            event.setDirection(this._entity.dir);
 
 
-            
+            // Sequel の更新は、
+            // - 表示プロパティの後で行う必要がある。こうしないと、Sequel 更新内での不透明度の調整が効かなくなる。
+            // - 姿勢同期の前で行う必要がある。こうしないと、座標更新が1フレーム遅れてカクカクして見えてしまう。
             this._sequelContext._update();
 
+            // 姿勢同期
+            event._x = this._position.x;
+            event._y = this._position.y;
+            event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
+            event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
 
 
             

@@ -149,6 +149,12 @@ export class RESetup {
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
                 //entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 break;
+            case "kItem_しびれ草":
+                this.setupGrassCommon(entity);
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
+                console.log("kItem_しびれ草", entity);
+                break;
             case "kふきとばしの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
