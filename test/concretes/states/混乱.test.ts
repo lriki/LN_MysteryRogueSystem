@@ -12,9 +12,6 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-afterAll(() => {
-});
-
 test("concretes.states.混乱.move", () => {
     TestEnv.newGame();
     const stateId = REData.getStateFuzzy("kState_UT混乱").id;
