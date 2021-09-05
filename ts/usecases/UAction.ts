@@ -21,7 +21,7 @@ import { UMovement } from "./UMovement";
 
 export interface CandidateSkillAction {
     action: IDataAction;
-    targets: LEntity[];     // ターゲット候補。
+    targets: LEntity[];     // ターゲット候補。TODO: id にする
 }
 
 export class UAction {
@@ -301,4 +301,14 @@ export class UAction {
         return !!entities.find(x => x == target);
     }
     */
+   
+    /**
+     * self の視界内にいる敵対 Entity のうち、一番近いものを検索する。
+     */
+     public static findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
+        return REGame.map.getVisibilityEntities(self)
+                .filter(e => Helpers.isHostile(self, e))
+                .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
+                .find(e => Helpers.isHostile(self, e));
+    }
 }

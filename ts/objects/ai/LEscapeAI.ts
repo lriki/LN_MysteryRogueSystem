@@ -93,7 +93,7 @@ export class LEscapeAI extends LCharacterAI {
     public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
 
         
-        const target = this.findInSightNearlyHostileEntity(self);
+        const target = UAction.findInSightNearlyHostileEntity(self);
         if (target/* && !target.entityId().equals(this._targetEntityId)*/) {
 
             //this._targetEntityId = target.entityId().clone();

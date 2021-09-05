@@ -73,13 +73,4 @@ export abstract class LCharacterAI {
     
     public abstract thinkAction(context: SCommandContext, self: LEntity): SPhaseResult;
 
-    /**
-     * self の視界内にいる敵対 Entity のうち、一番近いものを検索する。
-     */
-    protected findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
-        return REGame.map.getVisibilityEntities(self)
-                .filter(e => Helpers.isHostile(self, e))
-                .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
-                .find(e => Helpers.isHostile(self, e));
-    }
 }

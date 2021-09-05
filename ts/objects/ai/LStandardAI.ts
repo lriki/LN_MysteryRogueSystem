@@ -14,6 +14,7 @@ import { REGame } from "./../REGame";
 import { LActivity } from "./../activities/LActivity";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
 import { LCharacterAI } from "./LCharacterAI";
+import { LActionDeterminer } from "./LActionDeterminer";
 
 /**
  * https://yttm-work.jp/game_ai/game_ai_0001.html
@@ -21,33 +22,22 @@ import { LCharacterAI } from "./LCharacterAI";
  */
 export class LCharacterAI_Normal extends LCharacterAI {
     
-    // 最初のフェーズで決定する、メインの行動対象 Entity.
-    // 基本的に敵対 Entity であり、移動処理のために使用する。
-    // 通常の AI はここに向かって移動する。
-    // 逃げ AI はここから離れるように移動する。
-    private _primaryTargetEntityId: LEntityId = LEntityId.makeEmpty();
     
     // 移動ターゲットとなる座標。
     // _primaryTargetEntity ではなく、部屋の入り口などを示すこともある。
     private _targetPositionX: number = -1;
     private _targetPositionY: number = -1;
 
-    // スキル適用対象。
-    // 味方に回復や支援を行うモンスターは、_primaryTargetEntity で敵の方向に向かいつつ、
-    // 範囲内にいる味方はこの値でターゲットする。
-    // 最初のフェーズで決定したあと実査には Major フェーズで行動を起こすが、
-    // そのときこの値でターゲットした対象が効果範囲を外れていた場合はもう一度 Minor と同じ試行処理を回す。
-    //private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
-    private _requiredSkillAction: CandidateSkillAction | undefined;
+    private _actionDeterminer = new LActionDeterminer();
+
 
     private _noActionTurnCount: number = 0;
 
     public clone(): LCharacterAI {
         const i = new LCharacterAI_Normal();
-        i._primaryTargetEntityId = this._primaryTargetEntityId.clone();
         i._targetPositionX = this._targetPositionX;
         i._targetPositionY = this._targetPositionY;
-        i._requiredSkillAction = this._requiredSkillAction ? { ...this._requiredSkillAction } : undefined;
+        i._actionDeterminer = this._actionDeterminer.clone();
         //i._attackTargetEntityId = this._attackTargetEntityId.clone();
         i._noActionTurnCount = this._noActionTurnCount;
         return i;
@@ -56,74 +46,19 @@ export class LCharacterAI_Normal extends LCharacterAI {
     public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
 
 
-        // http://twist.jpn.org/sfcsiren/index.php?%E3%82%BF%E3%83%BC%E3%83%B3%E3%81%AE%E9%A0%86%E7%95%AA
-        // の移動目標位置決定はもう少し後の Phase なのだが、敵対 Entity への移動目標位置決定はこの Phase で行う。
-        // こうしておかないと、Player の移動を追うように Enemy が移動できなくなる。
-        {
-            // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
-            const target = this.findInSightNearlyHostileEntity(self);
-            if (target) {
-                this._targetPositionX = target.x;
-                this._targetPositionY = target.y;
-                this._primaryTargetEntityId = target.entityId().clone();
 
-                
-                // TODO: 仮
-                const dir = SAIHelper.entityDistanceToDir(self, target);
-                self.dir = dir;
-            }
-            else {
-                //console.log("NotImplemented.");
-                //this._targetPositionX = -1;
-                //this._targetPositionY = -1;
-                this._primaryTargetEntityId = LEntityId.makeEmpty();
-            }
-
-            this._requiredSkillAction = undefined;
-            const candidates = UAction.makeCandidateSkillActions(self, this._primaryTargetEntityId);
-            const skillAction = context.random().selectOrUndefined(candidates);
-            if (skillAction) {
-                if (skillAction.action.skillId == RESystem.skills.move) {
-                    // 移動
-                    //this._attackTargetEntityId = LEntityId.makeEmpty();
-                }
-                else {
-                    this._requiredSkillAction = skillAction;
-                    //this._attackTargetEntityId = target.entityId();
-
-                }
-
-            }
-            else {
-                //this._attackTargetEntityId = LEntityId.makeEmpty();
-                // 見失ったときも targetPosition は維持
-            }
         
-            /*
-            if (target) {
-                const targetBlock = REGame.map.block(target.x, target.y);
-                // target は最も近い Entity となっているので、これと隣接しているか確認し、攻撃対象とする
-                // TODO: このあたり、遠距離攻撃モンスターとかは変わる
-                if (LCharacterAI.checkAdjacentDirectlyAttack(self, target) &&
-                    targetBlock &&!targetBlock.checkPurifier(self)) {     // 聖域の巻物とか無ければ隣接攻撃可能。
-                    this._attackTargetEntityId = target.entityId();
-                }
-                else {
-                    this._attackTargetEntityId = LEntityId.makeEmpty();
-    
-                    // 見失ったときも targetPosition は維持
-                }
-            }
-            */
+        this._actionDeterminer.decide(context, self);
 
+        // 攻撃目標が設定されていれば、それを移動目標とする
+        if (this._actionDeterminer.hasPrimaryTarget()) {
+            const target = this._actionDeterminer.primaryTarget();
+            this._targetPositionX = target.x;
+            this._targetPositionY = target.y;
         }
 
-        
-
-        
         // 攻撃対象が設定されていれば、このフェーズでは何もしない
-        //if (this._requiredSkillAction?.targets.hasAny() && ) {
-        if (this._requiredSkillAction) {
+        if (this._actionDeterminer.isMajorActionRequested()) {
             return SPhaseResult.Pass;
         }
         
@@ -375,37 +310,8 @@ export class LCharacterAI_Normal extends LCharacterAI {
     }
     
     public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
-
-        //if (this._attackTargetEntityId.hasAny()) {
-        if (this._requiredSkillAction) {
-
-            //// 通常攻撃
-            {
-                //const target = REGame.world.entity(this._attackTargetEntityId);
-                // 発動可否チェック。本当に隣接している？
-                //let valid = false;
-                //if (Helpers.checkAdjacent(self, target)) {
-                //    valid = true;
-                //}
-
-
-                // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
-                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], true, this._requiredSkillAction.targets)) {
-                    SEmittorPerformer.makeWithSkill(self, this._requiredSkillAction.action.skillId).performe(context);
-                    context.postConsumeActionToken(self);
-                    return SPhaseResult.Handled;
-                }
-                else {
-                    // 
-                    throw new Error("Not implemented.");
-                }
-                
-            }
-
-
-        }
-        else {
-
+        if (this._actionDeterminer.perform(context, self)) {
+            return SPhaseResult.Handled;
         }
         return SPhaseResult.Pass;
     }
