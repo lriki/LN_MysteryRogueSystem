@@ -37,6 +37,7 @@ import { assert } from "ts/Common";
 import { LStorageBehavior } from "ts/objects/behaviors/LStorageBehavior";
 import { DBasics } from "ts/data/DBasics";
 import { LFloorId } from "ts/objects/LFloorId";
+import { LRatedRandomAIBehavior } from "ts/objects/behaviors/LRatedRandomAIBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -288,6 +289,9 @@ export class SEntityFactory {
 
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
+            case "kEnemy_バット":
+                entity.addBehavior(LRatedRandomAIBehavior);
+                break;
             case "kEnemy_スピリットスライム":
                 entity.addBehavior(LEntityDivisionBehavior);
                 break;
