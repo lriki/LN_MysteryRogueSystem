@@ -15,7 +15,7 @@ import { DBasics } from "ts/data/DBasics";
 import { UMovement } from "ts/usecases/UMovement";
 import { DParameterId } from "ts/data/DParameter";
 import { LBlindAI } from "../ai/LBlindAI";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 
 export class LIllusionStateBehavior extends LBehavior {

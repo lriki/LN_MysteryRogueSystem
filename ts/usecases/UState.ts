@@ -185,7 +185,6 @@ export class UState {
         return result;
     }
 
-    
     private static checkRemoveAtActualParam(data: DState, entity: LEntity): boolean {
         const a = entity;
         for (const r of data.autoRemovals) {
@@ -198,4 +197,15 @@ export class UState {
         }
         return false;
     }
+
+    public static attemptRemoveStateAtFloorTransfer(entity: LEntity): void {
+        const removes: DStateId[] = [];
+        entity.iterateStates(s => {
+            if (s.stateData().autoRemovals.find(x => x.kind == DAutoRemovalTiming.FloorTransfer)) {
+                removes.push(s.stateDataId());
+            }
+        });
+        entity.removeStates(removes);
+    }
+    
 }

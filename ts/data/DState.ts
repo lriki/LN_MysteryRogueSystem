@@ -17,6 +17,7 @@ export enum DAutoRemovalTiming {
 
     ActualParam,
     DamageTesting,
+    FloorTransfer,
 }
 
 export interface DAutoRemoval_None {
@@ -47,12 +48,17 @@ export interface DAutoRemoval_DamageTesting {
     paramId: DParameterId,
 }
 
+export interface DAutoRemoval_FloorTransfer {
+    kind: DAutoRemovalTiming.FloorTransfer;
+}
+
 export type DAutoRemoval =
     DAutoRemoval_None |
     DAutoRemoval_AfterAction |
     DAutoRemoval_TurnEnd |
     DAutoRemoval_ActualParam |
-    DAutoRemoval_DamageTesting;
+    DAutoRemoval_DamageTesting |
+    DAutoRemoval_FloorTransfer;
 
 
 

@@ -13,7 +13,7 @@ import { LEntityId } from "./../LObject";
 import { REGame } from "./../REGame";
 import { LActivity } from "./../activities/LActivity";
 import { SEmittorPerformer } from "ts/system/SEmittorPerformer";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI } from "./LCharacterAI";
 
 /**
  * https://yttm-work.jp/game_ai/game_ai_0001.html

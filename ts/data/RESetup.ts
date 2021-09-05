@@ -55,6 +55,7 @@ export class RESetup {
             case "kState_UTくちなし":
                 data.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.EatActionId, value: 0 });
                 data.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.ReadActionId, value: 0 });
+                data.autoRemovals.push({ kind: DAutoRemovalTiming.FloorTransfer });
                 break;
             case "kState_UTかなしばり":
                 data.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: DBasics.params.hp });

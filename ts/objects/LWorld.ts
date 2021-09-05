@@ -13,6 +13,7 @@ import { LParty, LPartyId } from "./LParty";
 import { UMovement } from "ts/usecases/UMovement";
 import { RESystem } from "ts/system/RESystem";
 import { DEntityId } from "ts/data/DEntity";
+import { UState } from "ts/usecases/UState";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -240,6 +241,11 @@ export class LWorld
         }
 
         const oldLandId = entity.floorId.landId();
+
+        // Floor 間移動?
+        if (!entity.floorId.equals(floorId)) {
+            UState.attemptRemoveStateAtFloorTransfer(entity);
+        }
 
         if (REGame.map.floorId().equals(floorId)) {
             if (entity.floorId.equals(floorId)) {

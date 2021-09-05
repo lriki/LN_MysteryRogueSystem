@@ -2,8 +2,8 @@
 import { Helpers } from "ts/system/Helpers";
 import { SPhaseResult } from "ts/system/RECommand";
 import { SCommandContext } from "ts/system/SCommandContext";
-import { LEntity } from "./LEntity";
-import { REGame } from "./REGame";
+import { LEntity } from "../LEntity";
+import { REGame } from "../REGame";
 
 /*
 

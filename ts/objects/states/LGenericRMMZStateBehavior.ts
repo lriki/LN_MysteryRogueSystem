@@ -15,7 +15,7 @@ import { DBasics } from "ts/data/DBasics";
 import { UMovement } from "ts/usecases/UMovement";
 import { DParameterId } from "ts/data/DParameter";
 import { LBlindAI } from "../ai/LBlindAI";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI } from "../ai/LCharacterAI";
 import { DTraits } from "ts/data/DTraits";
 import { UName } from "ts/usecases/UName";
 

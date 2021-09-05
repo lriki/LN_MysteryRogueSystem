@@ -9,7 +9,7 @@ import { CandidateSkillAction, UAction } from "ts/usecases/UAction";
 import { UMovement } from "ts/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LActivityPreprocessor } from "../activities/LActivityPreprocessor";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";

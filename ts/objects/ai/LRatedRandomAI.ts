@@ -6,7 +6,6 @@ import { SCommandContext } from "ts/system/SCommandContext";
 import { UAction } from "ts/usecases/UAction";
 import { UMovement } from "ts/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
-import { LActivityPreprocessor } from "../activities/LActivityPreprocessor";
 import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
@@ -17,15 +16,7 @@ interface SkillAction {
     target: LEntityId;
 };
 
-export class LConfusionAI extends LCharacterAI {
-
-    /*
-    そもそも混乱は AI として実装するべき？ Activity のハンドラの中でフックしてもよいのでは？
-    ----------
-    Player と AI で処理が全く違う。
-    特に AI は Move と Action を別のフェーズで行う必要があるため、そのケアは CharacterAI 側でしか実装できない。
-    */
-
+export class LRatedRandomAI extends LCharacterAI {
     private _candidateSkillActions: SkillAction[];
 
     public constructor() {
@@ -34,7 +25,7 @@ export class LConfusionAI extends LCharacterAI {
     }
 
     public clone(): LCharacterAI {
-        const i = new LConfusionAI();
+        const i = new LRatedRandomAI();
         for (const s of this._candidateSkillActions) {
             i._candidateSkillActions.push({ skillId: s.skillId, target: s.target });
         }
@@ -91,8 +82,3 @@ export class LConfusionAI extends LCharacterAI {
     }
 }
 
-export class LConfusionActivityPreprocessor extends LActivityPreprocessor {
-    public preprocess(src: LActivity): LActivity {
-        throw new Error("Method not implemented.");
-    }
-}

@@ -40,7 +40,7 @@ import { BlockLayerKind } from "../LBlockLayer";
 import { LEventResult } from "../LEventServer";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { DEntityNamePlate } from "ts/data/DEntity";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI } from "../ai/LCharacterAI";
 
 export enum DecisionPhase {
     Prepare,

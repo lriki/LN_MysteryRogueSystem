@@ -10,7 +10,7 @@ import { CandidateSkillAction, UAction } from "ts/usecases/UAction";
 import { UMovement } from "ts/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LActivityPreprocessor } from "../activities/LActivityPreprocessor";
-import { LCharacterAI } from "../LCharacterAI";
+import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { MovingMethod } from "../LMap";
 import { LEntityId } from "../LObject";
@@ -131,7 +131,6 @@ export class LEscapeAI extends LCharacterAI {
                         if (doorway) {
                             // 出口を目的地設定して移動
                             this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
-                            console.log("かんねん", doorway);
                         }
                         else {
                             // 出口の内部屋。通常の移動プロセスにしたがう
