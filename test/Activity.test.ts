@@ -31,7 +31,7 @@ test("Activity.Eat", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
 
     // インベントリに入れる
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     TestEnv.performFloorTransfer();
 
@@ -46,7 +46,7 @@ test("Activity.Eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
-    expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(0);
+    expect(actor1.getEntityBehavior(LInventoryBehavior).entities().length).toBe(0);
 });
 
 test("Activity.Throw", () => {
@@ -61,9 +61,9 @@ test("Activity.Throw", () => {
     // アイテムを作ってインベントリに入れる
     const entityData = DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb);
     const item1 = SEntityFactory.newEntity(entityData);
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     const item2 = SEntityFactory.newEntity(entityData);
-    actor1.getBehavior(LInventoryBehavior).addEntity(item2);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     // 投げ当てテスト用に壁を作る
     REGame.map.block(actor1.x, actor1.y + 2)._tileShape = TileShape.Wall;
@@ -79,7 +79,7 @@ test("Activity.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
-    expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(1);
+    expect(actor1.getEntityBehavior(LInventoryBehavior).entities().length).toBe(1);
 
     // とりあえず、Actor 位置より右に落ちること。
     expect(item1.x > 10).toBe(true);
@@ -97,7 +97,7 @@ test("Activity.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
-    expect(actor1.getBehavior(LInventoryBehavior).entities().length).toBe(0);
+    expect(actor1.getEntityBehavior(LInventoryBehavior).entities().length).toBe(0);
 
     // 壁の手前に落ちていること
     expect(item2.x).toBe(actor1.x);
@@ -123,7 +123,7 @@ test("Activity.ThrowAndHit", () => {
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -147,7 +147,7 @@ test("Activity.Exchange", () => {
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1.dir = 6; // 右を向く
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる

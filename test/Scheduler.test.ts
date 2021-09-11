@@ -28,7 +28,7 @@ test("Scheduler.ChangeSpeed1", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 倍速化して [待機]
-    actor1.getBehavior(LUnitBehavior).setSpeedLevel(2);
+    actor1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2);
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -52,7 +52,7 @@ test("Scheduler.ChangeSpeed2", () => {
     // Players
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item3"));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
@@ -95,12 +95,12 @@ test("Scheduler.ChangeSpeed3", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(DBasics.states.debug_MoveRight);
-    enemy1.getBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
+    enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 倍速化して [待機]
-    actor1.getBehavior(LUnitBehavior).setSpeedLevel(2);
+    actor1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2);
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -115,13 +115,13 @@ test("Scheduler.ChangeSpeed4", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.getBehavior(LUnitBehavior).setSpeedLevel(3);
+    actor1.getEntityBehavior(LUnitBehavior).setSpeedLevel(3);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(DBasics.states.debug_MoveRight);
-    enemy1.getBehavior(LUnitBehavior).setSpeedLevel(2);
+    enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -148,7 +148,7 @@ test("Scheduler.ChangeSpeed5", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy を鈍足化して [待機]
-    enemy1.getBehavior(LUnitBehavior).setSpeedLevel(-1);
+    enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(-1);
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 

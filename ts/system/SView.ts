@@ -30,7 +30,7 @@ export class SView {
     public static getLookNames(subject: LEntity, entity: LEntity): LNameView {
         if (!subject.entityId().equals(entity.entityId())) {
             
-            if (entity.findBehavior(LUnitBehavior)) {
+            if (entity.findEntityBehavior(LUnitBehavior)) {
                 if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
                     return {
                         name: tr2("なにものか"),
@@ -72,12 +72,13 @@ export class SView {
         const subject = REGame.camera.focusedEntity();
         if (subject && !subject.entityId().equals(entity.entityId())) {
             
+            // 目つぶし状態
             if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
                 return { visible: false };
             }
 
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
-                if (entity.findBehavior(LUnitBehavior)) {
+                if (entity.findEntityBehavior(LUnitBehavior)) {
                     return { visible: true, image: REData.prefabs[DBasics.prefabs.illusionActor].image };
                 }
                 else {

@@ -30,7 +30,7 @@ export class LSanctuaryBehavior extends LBehavior {
         const target = e.sender;
 
         // 戦闘不能ステート 付加
-        if (target.findBehavior(LEnemyBehavior)) {
+        if (target.findEntityBehavior(LEnemyBehavior)) {
             target.addState(DBasics.states.dead);
         }
         

@@ -27,7 +27,7 @@ test("Items.Staff.Knockback", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.dir = 6;
     TestEnv.performFloorTransfer();
-    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id));
@@ -101,7 +101,7 @@ test("Items.Staff.Identify", () => {
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
     TestEnv.performFloorTransfer();
-    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id, [], "item1"));

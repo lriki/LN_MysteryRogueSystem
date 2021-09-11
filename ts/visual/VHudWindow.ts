@@ -33,9 +33,9 @@ export class VHudWindow extends Window_Base {
 
         const entity = REGame.camera.focusedEntity();
         if (!entity) return;
-        const battler = entity.findBehavior(LActorBehavior);
+        const battler = entity.findEntityBehavior(LActorBehavior);
         if (!battler) return;
-        const inventory = entity.findBehavior(LInventoryBehavior);
+        const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return;
 
         const hp = entity.actualParam(DBasics.params.hp);

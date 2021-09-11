@@ -1,4 +1,4 @@
-import { DecisionPhase, LBehavior, LNameView } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LBehaviorGroup, LNameView } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -713,7 +713,7 @@ export class LEntity extends LObject
     //----------------------------------------
     // Behavior
 
-    basicBehaviors(): LBehavior[] {
+    private basicBehaviors(): LBehavior[] {
         return this._basicBehaviors.map(x => REGame.world.behavior(x));
     }
 
@@ -734,26 +734,6 @@ export class LEntity extends LObject
         behavior.onAttached();
         return behavior;
     }
-
-    /*
-    addBasicBehavior(behavior: LBehavior) {
-        assert(behavior.hasId());
-        assert(this.entityId().index > 0);
-
-        this._basicBehaviors.push(behavior.id());
-        behavior.setOwner(this);
-        behavior.onAttached();
-    }
-    */
-    
-
-    //addAdhocBehavior(value: REGame_Behavior) {
-    //    this._adhocBehaviors.unshift(value);
-    //}
-
-    //addBehavior(value: LBehavior) {
-    //    this._basicBehaviors.unshift(value);
-    //}
 
     removeBehavior(behavior: LBehavior) {
         const index = this._basicBehaviors.findIndex(x => x.equals(behavior.id()));
@@ -1005,7 +985,11 @@ export class LEntity extends LObject
         return !this.isDestroyed();
     }
 
-    findBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T | undefined {
+    /**
+     * この Entity に直接アタッチされている Behavior を検索します。
+     * State や Ability にアタッチされている Behavior は対象外です。
+     */
+    public findEntityBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T | undefined {
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             const a = REGame.world.behavior(this._basicBehaviors[i]);
             if (a instanceof ctor) {
@@ -1015,14 +999,15 @@ export class LEntity extends LObject
         return undefined;
     }
 
-    getBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T {
-        const b = this.findBehavior<T>(ctor);
+    /**
+     * この Entity に直接アタッチされている Behavior を取得します。
+     * State や Ability にアタッチされている Behavior は対象外です。
+     * 見つからない場合は例外が発生します。
+     */
+    public getEntityBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T {
+        const b = this.findEntityBehavior<T>(ctor);
         if (!b) throw new Error();
         return b;
-    }
-
-    hasBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): boolean {
-        return this.findBehavior<T>(ctor) != undefined;
     }
 
     private _iterateBehaviors(func: (x: LBehavior) => boolean) {
@@ -1173,7 +1158,7 @@ export class LEntity extends LObject
     }
     */
 
-    /** @deprecated  use collectBehaviors*/
+    /** @deprecated  use iterateBehaviors2*/
     public iterateBehaviors(func: (b: LBehavior) => void): void {
         for (const id of this._basicBehaviors) {
             func(REGame.world.behavior(id));
@@ -1186,27 +1171,54 @@ export class LEntity extends LObject
         }
     }
 
+    public iterateBehaviors2(func: (b: LBehavior) => boolean): boolean {
+        const sealedSpecialAbility = this.traits(DTraits.SealSpecialAbility).length > 0;
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            const j = REGame.world.behavior(this._basicBehaviors[i]) ;
+            if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
+            if (!func(j)) return false;
+        }
+
+        for (let i = 0; i < this._states.length; i++) {
+            const j = REGame.world.object(this._states[i]) as LState;
+            if (!j.iterateBehaviors(b => func(b))) return false;
+        }
+
+        for (let i = 0; i < this._abilities.length; i++) {
+            const j = REGame.world.object(this._abilities[i]) as LAbility;
+            if (!j.iterateBehaviors(b => func(b))) return false;
+        }
+
+        return true;
+    }
+
     public iterateBehaviorsReverse(func: (b: LBehavior) => boolean): boolean {
         for (let i = this._states.length - 1; i >= 0; i--) {
             const j = REGame.world.object(this._states[i]) as LState;
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
+
         for (let i = this._abilities.length - 1; i >= 0; i--) {
             const j = REGame.world.object(this._abilities[i]) as LAbility;
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
+
+        const sealedSpecialAbility = this.traits(DTraits.SealSpecialAbility).length > 0;
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
+            if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
             if (!func(j)) return false;
         }
+
         return true;
     }
 
     public collectBehaviors(): LBehavior[] {
         const result: LBehavior[] = [];
-        for (const i of this._basicBehaviors) result.push(REGame.world.behavior(i));
-        for (const i of this.states()) i.iterateBehaviors(b => { result.push(b); return true });
-        for (const i of this.abilities()) i.iterateBehaviors(b => { result.push(b); return true });
+        this.iterateBehaviors2(b => {
+            result.push(b);
+            return true;
+        });
         return result;
     }
 

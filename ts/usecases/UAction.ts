@@ -4,6 +4,7 @@ import { DBasics } from "ts/data/DBasics";
 import { DEmittor, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/data/DEffect";
 import { DHelpers } from "ts/data/DHelper";
 import { DSkill, DSkillDataId } from "ts/data/DSkill";
+import { DTraits } from "ts/data/DTraits";
 import { REData } from "ts/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/objects/internal";
 import { LBlock } from "ts/objects/LBlock";
@@ -301,13 +302,17 @@ export class UAction {
         return !!entities.find(x => x == target);
     }
     */
+
+    public static chekcVisible(subject: LEntity, target: LEntity): boolean {
+        return (target.traits(DTraits.Invisible).length == 0);
+    }
    
     /**
      * self の視界内にいる敵対 Entity のうち、一番近いものを検索する。
      */
-     public static findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
-        return REGame.map.getVisibilityEntities(self)
-                .filter(e => Helpers.isHostile(self, e))
+    public static findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
+        return REGame.map.getInsightEntities(self)
+                .filter(e => Helpers.isHostile(self, e) && this.chekcVisible(self, e))
                 .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
     }

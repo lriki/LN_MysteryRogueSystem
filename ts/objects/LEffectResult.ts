@@ -259,7 +259,7 @@ export class LEffectResult {
 
         // Game_Actor.prototype.displayLevelUp
         if (this.levelup) {
-            const battler = entity.getBehavior(LBattlerBehavior);
+            const battler = entity.getEntityBehavior(LBattlerBehavior);
             if (battler instanceof LActorBehavior) {
                 const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level);
                 context.postMessage(text);

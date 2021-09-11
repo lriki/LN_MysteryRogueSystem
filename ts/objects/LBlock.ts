@@ -345,8 +345,8 @@ export class LBlock// extends LObject
     /** 指定した Entity にとって、この Block が浄化属性 (聖域の巻物) となるか */
     public checkPurifier(entity: LEntity): boolean {
         // FIXME: とりあえず決め打ちで、Enemy に対する SanctuaryBehavior のみチェックする
-        if (entity.findBehavior(LEnemyBehavior)) {
-            const sanctuary = this.findEntity(e => !!e.findBehavior(LSanctuaryBehavior));
+        if (entity.findEntityBehavior(LEnemyBehavior)) {
+            const sanctuary = this.findEntity(e => !!e.findEntityBehavior(LSanctuaryBehavior));
             if (sanctuary) {
                 // TODO: 張り付き？
                 return true;

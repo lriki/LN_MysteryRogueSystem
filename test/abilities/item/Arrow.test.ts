@@ -30,7 +30,7 @@ test("Items.Arrow", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.dir = 6;
     TestEnv.performFloorTransfer();
-    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id));

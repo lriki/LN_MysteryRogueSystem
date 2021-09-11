@@ -29,7 +29,7 @@ export class SNavigationHelper {
         const targetBlock = REGame.map.block(target.x, target.y);
 
         // Trap は未発見の場合、どのような勢力からであっても不可視
-        const trap = target.findBehavior(LTrapBehavior);
+        const trap = target.findEntityBehavior(LTrapBehavior);
         if (trap && !trap.exposed()) return false;
 
         // 味方は常に視認可能

@@ -144,7 +144,7 @@ export class SMinimapData {
         }
 
         for (const entity of map.entities()) {
-            if (!SView.getEntityVisibility(entity)) {
+            if (!SView.getEntityVisibility(entity).visible) {
                 // 何も表示しない
             }
             else if (entity.entityId().equals(subject.entityId())) {
@@ -152,13 +152,13 @@ export class SMinimapData {
             }
             else {
                 if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
-                    if (entity.hasBehavior(LTrapBehavior)) {
+                    if (entity.findEntityBehavior(LTrapBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
                     }
-                    else if (entity.hasBehavior(LItemBehavior)) {
+                    else if (entity.findEntityBehavior(LItemBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
                     }
-                    else if (entity.hasBehavior(LBattlerBehavior)) {
+                    else if (entity.findEntityBehavior(LBattlerBehavior)) {
                         if (Helpers.isHostile(subject, entity)) {
                             // 敵対勢力
                             this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
@@ -168,7 +168,7 @@ export class SMinimapData {
                             this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
                         }
                     }
-                    else if (entity.hasBehavior(LExitPointBehavior)) {
+                    else if (entity.findEntityBehavior(LExitPointBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);
                     }
                 }

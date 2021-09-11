@@ -49,7 +49,7 @@ test("PickAndPut", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    const inventory = actor1.findBehavior(LInventoryBehavior);
+    const inventory = actor1.findEntityBehavior(LInventoryBehavior);
     assert(inventory);
 
     // item1 は Map 上から外れている
@@ -113,7 +113,7 @@ test("PickAtMoved", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.x).toBe(19);  // enemy は動いていない (ターンは回っていない)
-    expect(actor1.getBehavior(LInventoryBehavior).entities()[0]).toBe(item1);   // アイテムを拾えていること
+    expect(actor1.getEntityBehavior(LInventoryBehavior).entities()[0]).toBe(item1);   // アイテムを拾えていること
 });
 
 test("Item.ThrowAndDrop", () => {
@@ -127,9 +127,9 @@ test("Item.ThrowAndDrop", () => {
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item2);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -162,7 +162,7 @@ test("Item.DropAndDestroy", () => {
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 床にアイテムを敷き詰める
     const ox = 7//10;
@@ -194,7 +194,7 @@ test("Items.Stack", () => {
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
-    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

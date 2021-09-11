@@ -60,7 +60,7 @@ export class VCharacterSpriteSet {
 
     public update(): void {
         const visual = this._owner.findVisual();
-        const equipments = visual?.entity().findBehavior(LEquipmentUserBehavior);
+        const equipments = visual?.entity().findEntityBehavior(LEquipmentUserBehavior);
 
         if (visual && equipments) {
             if (this._revisionNumber != equipments.revisitonNumber()) {

@@ -59,7 +59,13 @@ export class RESetup {
                 break;
             case "kState_UTかなしばり":
                 data.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: DBasics.params.hp });
-                data.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 0" });
+                data.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 3" });
+                break;
+            case "kState_UT封印":
+                data.traits.push({ code: DTraits.SealSpecialAbility, dataId: DBasics.actions.EatActionId, value: 0 });
+                break;
+            case "kState_UT透明":
+                data.traits.push({ code: DTraits.Invisible, dataId: 0, value: 0 });
                 break;
         }
     }
@@ -158,7 +164,11 @@ export class RESetup {
                 this.setupGrassCommon(entity);
                 entity.addReaction(DBasics.actions.EatActionId, 0);
                 entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
-                console.log("kItem_しびれ草", entity);
+                break;
+            case "kItem_きえさり草":
+                this.setupGrassCommon(entity);
+                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.effectSet.addEmittor(DEffectCause.Eat, entity.effectSet.mainEmittor());
                 break;
             case "kふきとばしの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
@@ -166,6 +176,11 @@ export class RESetup {
                 entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 entity.idealParams[DBasics.params.remaining] = 5;
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                break;
+            case "kItem_シールの杖":
+                entity.effectSet.addEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
+                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[DBasics.params.remaining] = 5;
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);

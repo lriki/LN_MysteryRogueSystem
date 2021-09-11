@@ -19,7 +19,7 @@ export class LEntityDivisionBehavior extends LBehavior {
 
     [onDirectAttackDamaged](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
-        const battler = self.getBehavior(LBattlerBehavior);
+        const battler = self.getEntityBehavior(LBattlerBehavior);
         if (battler.isDeathStateAffected()) return REResponse.Pass;
 
         const selfBlock = REGame.map.block(self.x, self.y);

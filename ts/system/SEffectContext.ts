@@ -128,7 +128,7 @@ export class SEffectorFact {
     public constructor(subject: LEntity, effect: DEffect, incidentType: SEffectIncidentType, dir: number) {
         this._subject = subject;
         this._subjectEffect = effect;
-        this._subjectBattlerBehavior = subject.findBehavior(LBattlerBehavior);
+        this._subjectBattlerBehavior = subject.findEntityBehavior(LBattlerBehavior);
         this._incidentType = incidentType;
         this._incidentEntityKind = 0;
         this._direction = dir;
@@ -151,8 +151,9 @@ export class SEffectorFact {
             this._parameterEffects[x.parameterId] = new SParameterEffect(x);
         });
         
-        this._subject.basicBehaviors().forEach(x => {
-            x.onCollectEffector(this._subject, this);
+        this._subject.iterateBehaviors2(b => {
+            b.onCollectEffector(this._subject, this);
+            return true;
         });
     }
 
@@ -366,7 +367,7 @@ export class SEffectContext {
             
             result.showResultMessages(commandContext, target);
 
-            const battler = target.findBehavior(LBattlerBehavior);
+            const battler = target.findEntityBehavior(LBattlerBehavior);
             if (battler) {  // apply() で changeInstance() することがあるので、getBehavior ではなく findBehavior でチェック
                 if (battler.isDead()) {
                     deadCount++;
@@ -387,7 +388,7 @@ export class SEffectContext {
     
     // Game_Action.prototype.apply
     private applyWithHitTest(commandContext: SCommandContext, target: LEntity): LEffectResult {
-        const targetBattlerBehavior = target.findBehavior(LBattlerBehavior);
+        const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
 

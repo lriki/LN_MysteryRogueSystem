@@ -61,7 +61,7 @@ export class LTOUnit {
 
     public resetEntity(entity: LEntity): void {
         this._entityId = entity.entityId();
-        this._behaviorId = entity.getBehavior(LUnitBehavior).id();
+        this._behaviorId = entity.getEntityBehavior(LUnitBehavior).id();
     }
 }
 
@@ -226,7 +226,7 @@ export class LScheduler {
 
     public getSpeedLevel(entity: LEntity): number {
         // TODO: ユニットテスト用。後で消す
-        const b = entity.findBehavior(LUnitBehavior);
+        const b = entity.findEntityBehavior(LUnitBehavior);
         if (b && b._speedLevel != 0) return b._speedLevel;
 
         const agi = entity.actualParam(DBasics.params.agi);
@@ -262,7 +262,7 @@ export class LScheduler {
         // 行動できるすべての entity を集める
         {
             REGame.map.entities().forEach(entity => {
-                const behavior = entity.findBehavior(LUnitBehavior);
+                const behavior = entity.findEntityBehavior(LUnitBehavior);
                 if (behavior) {
                     const unit = this.newUnit(entity, behavior);
 

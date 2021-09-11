@@ -34,7 +34,7 @@ test("State_Brace", () => {
     actor1.addState(TestEnv.StateId_Sleep);
 
     // 行動できる Entity は Player(行動不能) しかいない状態。
-    assert(REGame.map.entities().filter(e => e.findBehavior(LUnitBehavior)).length == 1);
+    assert(REGame.map.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
 
     // シミュレーション実行
     RESystem.scheduler.stepSimulation();
@@ -80,7 +80,7 @@ test("State.Proficiency", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
-    const inventory = actor1.getBehavior(LInventoryBehavior);
+    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // 武器 入手
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));

@@ -33,7 +33,7 @@ export class LDecisionBehavior extends LBehavior {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
 
-            const behavior = entity.getBehavior(LUnitBehavior);
+            const behavior = entity.getEntityBehavior(LUnitBehavior);
             behavior._fastforwarding = false;
 
             if (behavior._straightDashing && UMovement.checkDashStopBlock(entity)) {

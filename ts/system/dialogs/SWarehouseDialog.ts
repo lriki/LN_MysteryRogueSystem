@@ -32,8 +32,8 @@ export class SWarehouseDialog extends SDialog {
     public storeItems(items: LEntity[]): void {
         const user = this.userEntity();
         const warehouse = this.warehouseEntity();
-        const userInventory = user.getBehavior(LInventoryBehavior);
-        const warehouseInventory = warehouse.getBehavior(LInventoryBehavior);
+        const userInventory = user.getEntityBehavior(LInventoryBehavior);
+        const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
 
         console.log("!!!!!  storeItems", items);
@@ -68,8 +68,8 @@ export class SWarehouseDialog extends SDialog {
     public withdrawItems(items: LEntity[]): void {
         const user = this.userEntity();
         const warehouse = this.warehouseEntity();
-        const userInventory = user.getBehavior(LInventoryBehavior);
-        const warehouseInventory = warehouse.getBehavior(LInventoryBehavior);
+        const userInventory = user.getEntityBehavior(LInventoryBehavior);
+        const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
         const context = RESystem.commandContext;
 

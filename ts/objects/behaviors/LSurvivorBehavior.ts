@@ -32,17 +32,17 @@ export class LSurvivorBehavior extends LBehavior {
 
             switch (entity.actualParam(DBasics.params.fp)) {
                 case 3:
-                    context.postBalloon(entity, 6, false);
-                    context.postMessage(tr2("だめだ！　もう倒れそうだ！"));
-                    context.postWait(entity, 10);
+                    //context.postBalloon(entity, 6, false);
+                    context.postMessage(tr2("だめだ！ もう倒れそうだ！"));
+                    //context.postWait(entity, 10);
                     break;
                 case 2:
                     context.postMessage(tr2("早く・・・なにか食べないと・・・"))
-                    context.postWait(entity, 10);
+                    //context.postWait(entity, 10);
                     break;
                 case 1:
                     context.postMessage(tr2("飢え死にしてしまう！"));
-                    context.postWait(entity, 10);
+                    //context.postWait(entity, 10);
                     break;
             } 
 

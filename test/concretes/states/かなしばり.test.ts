@@ -32,7 +32,7 @@ test("concretes.states.かなしばり.FP", () => {
     }
    
     const fp = actor1.actualParam(DBasics.params.fp);
-    expect(fp === 0).toBe(true);    // 空腹になっている
+    expect(fp === 3).toBe(true);    // 空腹になっている
     expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
 });
 

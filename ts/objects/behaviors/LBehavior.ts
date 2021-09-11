@@ -51,6 +51,11 @@ export enum DecisionPhase {
     AIMajor,
 }
 
+export enum LBehaviorGroup {
+    Underlying = 0,
+    SpecialAbility = 1,
+}
+
 export interface LNameView {
     name: string;
     iconIndex: number;
@@ -253,6 +258,7 @@ export abstract class LBehavior extends LObject {
 
     //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
+    public behaviorGroup(): LBehaviorGroup { return LBehaviorGroup.Underlying; }
 
     public queryDisplayName(): LNameView | undefined { return undefined; }
     public queryCharacterFileName(): DPrefabImage | undefined { return undefined; }

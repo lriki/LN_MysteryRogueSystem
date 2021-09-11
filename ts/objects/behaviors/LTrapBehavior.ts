@@ -58,7 +58,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     onAttached(): void {
-        assert(this.ownerEntity().findBehavior(LItemBehavior));
+        assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
         REGame.eventServer.subscribe(DBasics.events.skillEmitted, this);
     }
 

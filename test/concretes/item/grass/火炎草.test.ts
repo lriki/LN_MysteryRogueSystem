@@ -30,8 +30,8 @@ test("concretes.item.grass.火炎草.test", () => {
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1"));
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item2"));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
-    actor1.getBehavior(LInventoryBehavior).addEntity(item2);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     TestUtils.testCommonGrassBegin(actor1, item1);
 

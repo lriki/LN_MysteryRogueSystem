@@ -20,7 +20,7 @@ export class LEquipmentBehavior extends LBehavior {
     }
     
     onAttached(): void {
-        assert( this.ownerEntity().hasBehavior(LItemBehavior));
+        assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
     }
     
     onQueryReactions(actions: DActionId[]): void {
@@ -33,7 +33,7 @@ export class LEquipmentBehavior extends LBehavior {
         if (inventory instanceof LInventoryBehavior) {
             const unit = inventory.ownerEntity();
 
-            const behavior = unit.getBehavior(LEquipmentUserBehavior);
+            const behavior = unit.getEntityBehavior(LEquipmentUserBehavior);
             const removed = behavior.removeEquitment(this.ownerEntity());
             assert(removed);
 

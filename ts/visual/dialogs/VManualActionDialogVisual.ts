@@ -80,7 +80,7 @@ export class VManualActionDialogVisual extends VDialog {
 
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
-            entity.getBehavior(LUnitBehavior)._fastforwarding = true;
+            entity.getEntityBehavior(LUnitBehavior)._fastforwarding = true;
             this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
             this._model.submit();
             return;
@@ -100,7 +100,7 @@ export class VManualActionDialogVisual extends VDialog {
             entity.immediatelyAfterAdjacentMoving = false;
 
             const targetEntity = REGame.map.firstFeetEntity(entity);
-            if (targetEntity && !targetEntity.findBehavior(LTrapBehavior)) {
+            if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
                 const actions = targetEntity.queryReactions();
                 if (actions.length > 0) {
                     if (actions.includes(DBasics.actions.PickActionId)) {

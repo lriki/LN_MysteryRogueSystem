@@ -8,7 +8,7 @@ import { LRatedRandomAI } from "../ai/LRatedRandomAI";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
-import { CommandArgs, DecisionPhase, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
+import { CommandArgs, DecisionPhase, LBehavior, LBehaviorGroup, onGrounded, testPickOutItem } from "./LBehavior";
 
 /**
  * 
@@ -29,6 +29,10 @@ export class LRatedRandomAIBehavior extends LBehavior {
         const b = REGame.world.spawn(LRatedRandomAIBehavior);
         b._characterAI = this._characterAI.clone() as LRatedRandomAI;
         return b;
+    }
+
+    public behaviorGroup(): LBehaviorGroup {
+        return LBehaviorGroup.SpecialAbility;
     }
 
     onQueryCharacterAI(characterAIs: LCharacterAI[]): void {

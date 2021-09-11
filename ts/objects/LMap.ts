@@ -344,7 +344,7 @@ export class LMap extends LObject
     }
 
     /** entity の視界内の Entity を取得する */
-    public getVisibilityEntities(subject: LEntity): LEntity[] {
+    public getInsightEntities(subject: LEntity): LEntity[] {
         if (subject.isOnRoom()) {
             return this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
         }

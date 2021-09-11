@@ -46,7 +46,7 @@ export class REVisualSequelContext {
     public isDashing(): boolean {
         const entty = REGame.camera.focusedEntity();
         if (!entty) return false;
-        const behavior = entty.findBehavior(LUnitBehavior);
+        const behavior = entty.findEntityBehavior(LUnitBehavior);
         if (!behavior) return false;
         return behavior._straightDashing || behavior._fastforwarding;
     }

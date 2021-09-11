@@ -14,6 +14,7 @@ import { Game_REPrefabEvent } from "ts/rmmz/Game_REPrefabEvent";
 import { SEntityVisibility, SView } from "ts/system/SView";
 import { DPrefabImage } from "ts/data/DPrefab";
 import { LEntityId } from "ts/objects/LObject";
+import { DTraits } from "ts/data/DTraits";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -166,53 +167,67 @@ export class REVisual_Entity
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
 
+            this.updateOpacity(entity, event);
+
 
             
             const sprite = this.rmmzSprite();
             if (sprite) {
                 const entity = this.entity();
 
-                if (entity.findBehavior(LUnitBehavior)) {
+                if (entity.findEntityBehavior(LUnitBehavior)) {
                     sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
                 }
 
-                if (this._initialUpdate) {
-                    this._initialUpdate = false;
-                    this._prevVisibility = this.isVisible();
-                    if (!this._prevVisibility) {
-                        event.setOpacity(0);
-                    }
-                }
-
-                const opacityFrames = 10;
-                const visible = this.isVisible();
-                if (this._prevVisibility != visible) {
-                    this._prevVisibility = visible;
-                    if (visible) {
-                        // フェードイン
-                        this._visibilityOpacityStart = event.opacity();
-                        this._visibilityOpacityTarget = 255;
-                        this._visibilityFrame = opacityFrames;
-                    }
-                    else {
-                        // フェードアウト
-                        this._visibilityOpacityStart = event.opacity();
-                        this._visibilityOpacityTarget = 0;
-                        this._visibilityFrame = opacityFrames;
-                    }
-                }
-
-                if (this._visibilityFrame > 0) {
-                    this._visibilityFrame--;
-                    if (this._visibilityFrame > 0) {
-                        event.setOpacity(Helpers.lerp(this._visibilityOpacityTarget, this._visibilityOpacityStart, this._visibilityFrame / opacityFrames));
-                    }
-                    else {
-                        event.setOpacity(this._visibilityOpacityTarget);
-                    }
-                }
             }
         }
+    }
+
+    private updateOpacity(entity: LEntity, event: Game_REPrefabEvent): void {
+
+        // 初回更新時に、現在の表示状態を覚えておく。フェードインを正しく開始できるようにするため。
+        if (this._initialUpdate) {
+            this._initialUpdate = false;
+            this._prevVisibility = this.isVisible();
+            if (!this._prevVisibility) {
+                event.setOpacity(0);
+            }
+        }
+
+        // フェードイン・フェードアウトの開始判定。
+        const opacityFrames = 10;
+        const visible = this.isVisible();
+        if (this._prevVisibility != visible) {
+            this._prevVisibility = visible;
+            if (visible) {
+                // フェードイン
+                this._visibilityOpacityStart = event.opacity();
+                this._visibilityOpacityTarget = this.getActualOpacity(this._entity);
+                this._visibilityFrame = opacityFrames;
+            }
+            else {
+                // フェードアウト
+                this._visibilityOpacityStart = event.opacity();
+                this._visibilityOpacityTarget = 0;
+                this._visibilityFrame = opacityFrames;
+            }
+        }
+
+        let opacity = 255;
+        if (this._visibilityFrame > 0) {
+            this._visibilityFrame--;
+            if (this._visibilityFrame > 0) {
+                opacity = (Helpers.lerp(this._visibilityOpacityTarget, this._visibilityOpacityStart, this._visibilityFrame / opacityFrames));
+            }
+            else {
+                opacity = this._visibilityOpacityTarget;
+            }
+        }
+        else {
+            opacity = this.getActualOpacity(entity);
+        }
+
+        event.setOpacity(opacity);
     }
 
     private getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabImage | undefined {
@@ -221,6 +236,20 @@ export class REVisual_Entity
         }
         
         return entity.getCharacterImage();
+    }
+
+    private getActualOpacity(entity: LEntity): number {
+        if (entity.traits(DTraits.Invisible).length > 0) {
+            if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
+                return 127;
+            }
+            else {
+                return 0;
+            }
+        }
+        else {
+            return 255;
+        }
     }
 
 /*

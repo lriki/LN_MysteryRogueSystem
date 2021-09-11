@@ -133,7 +133,7 @@ export class SCommandContext
 
 
     postConsumeActionToken(entity: LEntity): void {
-        const behavior = entity.findBehavior(LUnitBehavior);
+        const behavior = entity.findEntityBehavior(LUnitBehavior);
         assert(behavior);
 
         // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
@@ -449,7 +449,7 @@ export class SCommandContext
     */
 
     postSkipPart(entity: LEntity): void {
-        const behavior = entity.findBehavior(LUnitBehavior);
+        const behavior = entity.findEntityBehavior(LUnitBehavior);
         assert(behavior);
 
         const m1 = () => {

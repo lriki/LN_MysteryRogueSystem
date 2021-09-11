@@ -189,7 +189,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {
         const state = this.stateData();
         if (state.restriction == DStateRestriction.AttackToOther) {
-            const unit = activity.subject().findBehavior(LUnitBehavior);
+            const unit = activity.subject().findEntityBehavior(LUnitBehavior);
             if (unit && unit.manualMovement()) {    // Player?
 
                 // 歩行移動であれば、方向をランダムにする

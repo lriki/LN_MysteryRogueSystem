@@ -28,9 +28,9 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item1"));
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item2"));
     const item3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item3"));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
-    actor1.getBehavior(LInventoryBehavior).addEntity(item2);
-    actor1.getBehavior(LInventoryBehavior).addEntity(item3);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item3);
     
     // "草" の共通テスト
     TestUtils.testCommonGrassBegin(actor1, item1);
@@ -82,7 +82,7 @@ test("concretes.item.grass.すばやさ草.throw", () => {
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item3"));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     

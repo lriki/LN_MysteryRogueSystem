@@ -90,6 +90,13 @@ export enum DTraits {
      */
     SealActivity,
 
+    /**
+     * 特殊能力封印
+     */
+    SealSpecialAbility,
+
+    Invisible,
+
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 
 }

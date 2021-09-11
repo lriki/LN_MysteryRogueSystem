@@ -108,7 +108,7 @@ test("Trap.Attack", () => {
     expect(hp2 < hp1).toBe(true);
 
     // 敵に効果がある状態では、罠は露出しない
-    const behavior1 = trap1.getBehavior(LTrapBehavior);
+    const behavior1 = trap1.getEntityBehavior(LTrapBehavior);
     expect(behavior1.exposed()).toBe(false);
 
     //--------------------
@@ -123,7 +123,7 @@ test("Trap.Attack", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 露出している
-    const behavior2 = trap1.getBehavior(LTrapBehavior);
+    const behavior2 = trap1.getEntityBehavior(LTrapBehavior);
     expect(behavior2.exposed()).toBe(true);
 
     //--------------------
@@ -143,7 +143,7 @@ test("Trap.Attack", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 露出しない
-    const behavior3 = trap2.getBehavior(LTrapBehavior);
+    const behavior3 = trap2.getEntityBehavior(LTrapBehavior);
     expect(behavior3.exposed()).toBe(false);
 });
 

@@ -44,7 +44,7 @@ export class LProjectableBehavior extends LBehavior {
     }
 
     public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
-        const common = entity.findBehavior(LProjectableBehavior);
+        const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
 
         // 普通のアイテムは吹き飛ばし扱いで移動開始
@@ -60,7 +60,7 @@ export class LProjectableBehavior extends LBehavior {
     }
     
     public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effect: DEffect): void {
-        const common = entity.findBehavior(LProjectableBehavior);
+        const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
 
         common._effect = effect;
@@ -109,7 +109,7 @@ export class LProjectableBehavior extends LBehavior {
     [onMoveAsProjectile](args: CommandArgs, context: SCommandContext): REResponse {
         const self = args.self;
         
-        const common = self.findBehavior(LProjectableBehavior);
+        const common = self.findEntityBehavior(LProjectableBehavior);
         assert(common);
         assert(this.blowDirection != 0);
         

@@ -179,7 +179,7 @@ export class LUnitBehavior extends LBehavior {
         }
         else if (activity.actionId() == DBasics.actions.PickActionId) {
 
-            const inventory = self.findBehavior(LInventoryBehavior);
+            const inventory = self.findEntityBehavior(LInventoryBehavior);
             if (inventory) {
             
                 const block = REGame.map.block(self.x, self.y);
@@ -214,7 +214,7 @@ export class LUnitBehavior extends LBehavior {
             if (!REGame.eventServer.publish(DBasics.events.prePut, args)) return REResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
-            const inventory = self.findBehavior(LInventoryBehavior);
+            const inventory = self.findEntityBehavior(LInventoryBehavior);
             assert(itemEntity);
             assert(inventory);
             
@@ -324,7 +324,7 @@ export class LUnitBehavior extends LBehavior {
         }
         else if (activity.actionId() == DBasics.actions.ExchangeActionId) {
             
-            const inventory = self.getBehavior(LInventoryBehavior);
+            const inventory = self.getEntityBehavior(LInventoryBehavior);
             const item1 = activity.object();
             const block = REGame.map.block(self.x, self.y);
             const layer = block.layer(BlockLayerKind.Ground);
@@ -368,9 +368,9 @@ export class LUnitBehavior extends LBehavior {
             return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.PutInActionId) {
-            const selfInventory = self.getBehavior(LInventoryBehavior);
+            const selfInventory = self.getEntityBehavior(LInventoryBehavior);
             const storage = activity.object();
-            const storageInventory = storage.getBehavior(LInventoryBehavior);
+            const storageInventory = storage.getEntityBehavior(LInventoryBehavior);
             const items = activity.objects2();
             
             for (const item of items) {

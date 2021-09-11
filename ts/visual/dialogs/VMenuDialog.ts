@@ -39,7 +39,7 @@ export class VMainMenuDialog extends VDialog {
 
     private handleItem() {
         const entity = this._model.entity();
-        const inventory = entity.findBehavior(LInventoryBehavior);
+        const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (inventory) {
             this.openSubDialog(new SItemListDialog(entity, inventory, SItemListMode.Use), d => {
                 if (d.isSubmitted()) this.submit();

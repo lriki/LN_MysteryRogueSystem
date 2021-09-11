@@ -54,7 +54,7 @@ export class VItemListDialog extends VDialog {
         this.addWindow(this._itemListWindow);
         */
 
-        const equipmentUser = this._model.entity().findBehavior(LEquipmentUserBehavior);
+        const equipmentUser = this._model.entity().findEntityBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
             this._itemListWindow.setEquipmentUser(equipmentUser);
         }
@@ -128,7 +128,7 @@ export class VItemListDialog extends VDialog {
 
     private handlePeek(): void {
         const itemEntity = this._itemListWindow.selectedItem();
-        const inventory = itemEntity.getBehavior(LInventoryBehavior);
+        const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
         this.openSubDialog(new SItemListDialog(this._model.entity(), inventory, SItemListMode.Selection), (result: any) => {
             this.submit();
         });
@@ -196,7 +196,7 @@ export class VItemListDialog extends VDialog {
             {
                 // [装備] [はずす] チェック
                 {
-                    const equipments = actorEntity.getBehavior(LEquipmentUserBehavior);
+                    const equipments = actorEntity.getEntityBehavior(LEquipmentUserBehavior);
                     if (equipments.isEquipped(itemEntity))
                         actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
                     else
@@ -220,7 +220,7 @@ export class VItemListDialog extends VDialog {
                     }
                 }
 
-                if (itemEntity.hasBehavior(LStorageBehavior)) {
+                if (itemEntity.findEntityBehavior(LStorageBehavior)) {
                     this._commandWindow.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
                     this._commandWindow.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePutIn());
                 }

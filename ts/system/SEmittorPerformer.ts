@@ -238,7 +238,7 @@ export class SEmittorPerformer {
 
 
 
-        const subject = performer.getBehavior(LBattlerBehavior);
+        const subject = performer.getEntityBehavior(LBattlerBehavior);
 
         
         if (emittor.scope.range == DEffectFieldScopeRange.Performer) {

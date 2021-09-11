@@ -74,7 +74,7 @@ NOTE:
     }
     
     public equippedItems(): DItem[] {
-        return this.equippedItemEntities().map(x => x.getBehavior(LItemBehavior).itemData());
+        return this.equippedItemEntities().map(x => x.getEntityBehavior(LItemBehavior).itemData());
     }
 
     public revisitonNumber(): number {
@@ -138,7 +138,7 @@ NOTE:
             assert(equipment);
             const itemPart = equipment.equipmentParts[0];
 
-            const inventory = self.getBehavior(LInventoryBehavior);
+            const inventory = self.getEntityBehavior(LInventoryBehavior);
             //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);
 
 

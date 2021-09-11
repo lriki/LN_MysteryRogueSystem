@@ -62,7 +62,7 @@ test("Survival.FP", () => {
 
     // UT薬草をインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getBehavior(LInventoryBehavior).addEntity(item1);
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // [食べる]
     const activity = LActivity.makeEat(actor1, item1).withConsumeAction();
