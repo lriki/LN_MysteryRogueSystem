@@ -1,15 +1,10 @@
-import { assert } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
-import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame } from "ts/objects/REGame";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { SGameManager } from "ts/system/SGameManager";
-import { RESystem } from "ts/system/RESystem";
+import { REGame } from "ts/re/objects/REGame";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { LEntityDivisionBehavior } from "ts/objects/abilities/LEntityDivisionBehavior";
-import { REData } from "ts/data/REData";
-import { UAction } from "ts/usecases/UAction";
-import { LActivity } from "ts/objects/activities/LActivity";
+import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
+import { REData } from "ts/re/data/REData";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

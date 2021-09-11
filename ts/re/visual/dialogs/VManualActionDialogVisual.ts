@@ -1,0 +1,355 @@
+import { assert, tr2 } from "ts/re/Common";
+import { REGame } from "ts/re/objects/REGame";
+import { RESystem } from "ts/re/system/RESystem";
+import { DBasics } from "ts/re/data/DBasics";
+import { SManualActionDialog } from "ts/re/system/dialogs/SManualDecisionDialog";
+import { REVisual } from "../REVisual";
+import { LEntity } from "ts/re/objects/LEntity";
+import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
+import { SDialogContext } from "ts/re/system/SDialogContext";
+import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
+import { VDialog } from "./VDialog";
+import { UMovement } from "ts/re/usecases/UMovement";
+import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
+import { LActivity } from "ts/re/objects/activities/LActivity";
+import { UName } from "ts/re/usecases/UName";
+
+enum UpdateMode {
+    Normal,
+    DirSelecting,
+    DiagonalMoving,
+}
+
+export class VManualActionDialogVisual extends VDialog {
+    private readonly MovingInputInterval = 5;
+
+    private _model: SManualActionDialog;
+    private _updateMode: UpdateMode = UpdateMode.Normal;
+    private _waitCount: number = 0; // キーボード操作では 1 フレームでピッタリ斜め入力するのが難しいので、最後の入力から少し待てるようにする
+    //private _dirSelecting: boolean = false;
+    private _directionButtonPresseCount: number = 0;
+    private _moveButtonPresseCount: number = 0;
+    private _movingInputWaitCount = -1;
+
+    private _crossDiagonalCount: number = 0;    // 
+
+    public constructor(model: SManualActionDialog) {
+        super(model);
+        this._model = model;
+    }
+
+    private actionButton(): string {
+        return "ok";
+    }
+
+    private dashButton(): string {
+        return "shift";
+    }
+
+    private directionButton(): string {
+        return "shift";
+    }
+
+    private isOffDirectionButton(): boolean {
+        return this._directionButtonPresseCount < 0;
+    }
+
+    private isDashButtonPressed(): boolean {
+        return Input.isPressed(this.dashButton());
+    }
+    
+    private isMoveButtonPressed(): boolean {
+        return this._moveButtonPresseCount > 0;
+    }
+
+    onStop() {
+        this.endDirectionSelecting();
+    }
+
+    onUpdate() {
+        this.updateInput();
+
+
+        const context = RESystem.dialogContext;
+        const entity = context.causeEntity();
+        if (!entity) return;
+
+        // 足踏み
+        if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
+            entity.getEntityBehavior(LUnitBehavior)._fastforwarding = true;
+            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+            this._model.submit();
+            return;
+        }
+
+        /*
+        if (Input.isTriggered("pageup")) {
+            entity.addState(REData.getStateFuzzy("kState_UTアイテム擬態").id);
+            this._model.submit(DialogSubmitMode.ConsumeAction);
+            return;
+        }
+        */
+
+
+        
+        if (entity.immediatelyAfterAdjacentMoving) {
+            entity.immediatelyAfterAdjacentMoving = false;
+
+            const targetEntity = REGame.map.firstFeetEntity(entity);
+            if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
+                const actions = targetEntity.queryReactions();
+                if (actions.length > 0) {
+                    if (actions.includes(DBasics.actions.PickActionId)) {
+    
+                        if (this._model.dashingEntry) {
+                            context.commandContext().postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
+                        }
+                        else {
+                            // 歩行移動時に足元に拾えるものがあれば取得試行
+                            context.postActivity(LActivity.makePick(entity));
+                        }
+    
+    
+                        // コマンドチェーンを動かす
+                        //context.postReopen();
+                    }
+                    else {
+                        this.openSubDialog(new LFeetDialog(targetEntity), d => {
+                            if (d.isSubmitted()) this._model.submit();
+                        });
+                    }
+                    return;
+                }
+            }
+        }
+
+        switch (this._updateMode) {
+            case UpdateMode.Normal:
+                this.updateNormal(context, entity);
+                break;
+            case UpdateMode.DirSelecting:
+                this.updateDirSelecting(context, entity);
+                break;
+            case UpdateMode.DiagonalMoving:
+                this.updateDiagonalMoving(context, entity);
+                break;
+            default:
+                break;
+        }
+        
+    }
+
+    private updateInput(): void {
+
+        if (this._directionButtonPresseCount == 0) {
+            if (Input.isTriggered(this.directionButton())) {
+                // 向き関係は Dialog が開いた後、初めて押されたら、入力処理を受け付ける。
+                // こうしておかないと、ダッシュでキー押しっぱなし → 離すで向き変更モードに入ってしまう。
+                this._directionButtonPresseCount = 1;
+            }
+        }
+        else {
+            if (Input.isPressed(this.directionButton())) {
+                this._directionButtonPresseCount++;
+            }
+            else if (this._directionButtonPresseCount < 0) {
+                this._directionButtonPresseCount = 1;
+            }
+            else if (this._directionButtonPresseCount > 1) {
+                this._directionButtonPresseCount = -1;
+            }
+        }
+
+        if (this._moveButtonPresseCount == 0) {
+            if (Input.isTriggered("left") ||
+                Input.isTriggered("right") ||
+                Input.isTriggered("up") ||
+                Input.isTriggered("down")) {
+                this._moveButtonPresseCount = 1;
+            }
+            if (!Input.isPressed(this.dashButton())) {
+                this._moveButtonPresseCount = 1;
+            }
+        }
+        else {
+            if (Input.isTriggered("left") ||
+                Input.isTriggered("right") ||
+                Input.isTriggered("up") ||
+                Input.isTriggered("down")) {
+                this._moveButtonPresseCount++;
+            }
+        }
+
+        if (this._movingInputWaitCount < 0) {
+            if (Input.dir8 != 0) {
+                this._movingInputWaitCount = this.MovingInputInterval;
+            }
+        }
+        else if (Input.dir8 != 0) {
+            this._movingInputWaitCount++;
+        }
+        else {
+            this._movingInputWaitCount = 0;
+        }
+
+        // 斜め移動ボタン押しっぱなしの時は常時 DiagonalMoving にする。
+        // 以前は updateNormal() の中で行っていたが、そこだと最初の onUpdate() で updateDiagonalMoving() に流れないため、移動がカクカクする。
+        if (Input.isPressed("pagedown")) {
+            this._updateMode = UpdateMode.DiagonalMoving;
+        }
+    }
+
+    private updateNormal(context: SDialogContext, entity: LEntity): void {
+        let dir = Input.dir8;
+
+        // 移動
+        if (dir != 0 && this._movingInputWaitCount >= this.MovingInputInterval) {
+            this.attemptMoveEntity(context, entity, dir);
+            return;
+        }
+        // アクション
+        else if (Input.isTriggered(this.actionButton())) {
+            this.attemptFrontAction(context, entity);
+            return;
+        }
+        else if (this.isOffDirectionButton()) {
+            this._updateMode = UpdateMode.DirSelecting;
+            REGame.map.increaseRevision();
+            REVisual.guideGrid?.setVisible(true);
+            context.postActivity(LActivity.makeDirectionChange(entity, UMovement.getNextAdjacentEntityDirCW(entity)));
+        }
+        else if (Input.isTriggered("menu")) {
+            SoundManager.playOk();
+            this.openSubDialog(new SMainMenuDialog(entity), d => {
+                if (d.isSubmitted()) {
+                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+                    this._model.submit();
+                }
+            });
+            return;
+        }
+    }
+
+    private endDirectionSelecting(): void {
+        assert(REVisual.spriteSet2);
+        const arrow =  REVisual.spriteSet2.directionArrow();
+        REVisual.guideGrid?.setVisible(false);
+        this._updateMode = UpdateMode.Normal;
+        arrow.setDirection(0);
+    }
+
+    private updateDirSelecting(context: SDialogContext, entity: LEntity): void {
+        assert(REVisual.entityVisualSet);
+        assert(REVisual.spriteSet2);
+        const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
+        const sprite = visual.getRmmzSprite();
+        const arrow =  REVisual.spriteSet2.directionArrow();
+        //arrow.setPosition(sprite.x, sprite.y);
+        arrow.setDirection(entity.dir);
+
+        // アクション
+        if (Input.isTriggered("ok")) {
+            this.attemptFrontAction(context, entity);
+            this.endDirectionSelecting();
+            return;
+        }
+        else if (this.isOffDirectionButton()) {
+            this.endDirectionSelecting();
+        }
+        else if (Input.isTriggered("menu")) {
+            this.endDirectionSelecting();
+            this.openSubDialog(new SMainMenuDialog(entity), d => {
+                if (d.isSubmitted()) {
+                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+                    this._model.submit();
+                }
+            });
+            return;
+        }
+        else {
+            if (this._waitCount > 0) this._waitCount--;
+            
+            if (this._waitCount <= 0 && Input.dir8 != 0 && Input.dir8 != entity.dir) {
+                //context.closeDialog(false); // 行動消費無しで close
+                context.postActivity(LActivity.makeDirectionChange(entity, Input.dir8));
+                REGame.map.increaseRevision();
+                this._waitCount = 10;
+            }
+        }
+    }
+
+    private updateDiagonalMoving(context: SDialogContext,entity: LEntity): void {
+        assert(REVisual.entityVisualSet);
+        assert(REVisual.spriteSet2);
+        const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
+        const sprite = visual.getRmmzSprite();
+        const arrow =  REVisual.spriteSet2.directionArrow();
+        //arrow.setPosition(sprite.x, sprite.y);
+
+        this._crossDiagonalCount++;
+        if (this._crossDiagonalCount > 3) {
+            REVisual.spriteSet2?.directionArrow().setCrossDiagonal(true);
+        }
+
+        if (Input.isPressed("pagedown")) {
+            const dir = Input.dir8;
+            if (dir == 1 || dir == 3 || dir == 7 || dir == 9) {
+                this.attemptMoveEntity(context, entity, dir);
+                arrow.setCrossDiagonal(false);
+                this._crossDiagonalCount = 0;
+            }
+        }
+        else {
+            arrow.setCrossDiagonal(false);
+            this._crossDiagonalCount = 0;
+            this._updateMode = UpdateMode.Normal;
+        }
+    }
+
+    private attemptMoveEntity(context: SDialogContext, entity: LEntity, dir: number): boolean {
+
+        // 向きは移動成否にかかわらず変える
+        if (dir != 0) {
+            // postActivity(LDirectionChangeActivity) で向きを変更する場合、コマンドチェーンを実行する必要がある。
+            // 今はそこまで必要ではないので、直接変更してしまう。
+            context.postActivity(LActivity.makeDirectionChange(entity, dir));
+        }
+
+        if (this.isMoveButtonPressed() &&
+            UMovement.checkPassageToDir(entity, dir)) {
+
+            const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction();
+            
+            if (this.isDashButtonPressed()) {
+                //const behavior = entity.findBehavior(LUnitBehavior);
+                //assert(behavior);
+                //behavior._straightDashing = true;
+                activity.withFastForward();
+            }
+
+            context.postActivity(activity);
+
+            this._model.submit();
+
+            // TODO: test
+            //SceneManager._scene.executeAutosave();
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private attemptFrontAction(context: SDialogContext, entity: LEntity): boolean {
+        // TODO: NPC 話かけ
+        
+        // [通常攻撃] スキル発動
+        context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction());
+        this._model.submit();
+        
+        return true;
+    }
+}
+

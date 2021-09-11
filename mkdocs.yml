@@ -1,0 +1,23 @@
+site_name: My Docs
+docs_dir: mkdocs
+site_dir: mksite
+
+markdown_extensions:
+    - admonition
+
+theme:
+    name: material
+    features:
+        - navigation.tabs
+    language: ja
+    icon:
+        logo: material/school
+        repo: fontawesome/brands/git-alt
+    #favicon: favicon.png
+    
+nav:
+    - Manual: index.md
+    - 内部的なこと:
+        - index: dev/index.md
+        - XX: dev/xx.md
+        - 未整理メモ: dev/Unorganized.md

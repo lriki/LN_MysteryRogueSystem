@@ -1,16 +1,14 @@
-import { REGame } from "ts/objects/REGame";
-import { SGameManager } from "ts/system/SGameManager";
+import { REGame } from "ts/re/objects/REGame";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
-import { LFloorId } from "ts/objects/LFloorId";
-import { UMovement } from "ts/usecases/UMovement";
-import { Helpers } from "ts/system/Helpers";
-import { RESystem } from "ts/system/RESystem";
-import { TileShape } from "ts/objects/LBlock";
-import { FMap, FSector } from "ts/floorgen/FMapData";
-import { FGenericRandomMapGenerator } from "ts/floorgen/FGenericRandomMapGenerator";
-import { FMapBuilder } from "ts/floorgen/FMapBuilder";
-import { LActivity } from "ts/objects/activities/LActivity";
+import { LFloorId } from "ts/re/objects/LFloorId";
+import { UMovement } from "ts/re/usecases/UMovement";
+import { RESystem } from "ts/re/system/RESystem";
+import { TileShape } from "ts/re/objects/LBlock";
+import { FMap } from "ts/re/floorgen/FMapData";
+import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
+import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

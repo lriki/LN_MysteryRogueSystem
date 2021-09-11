@@ -1,10 +1,10 @@
-import { REGame } from "ts/objects/REGame";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { RESystem } from "ts/system/RESystem";
+import { REGame } from "ts/re/objects/REGame";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/data/REData";
-import { DEntityCreateInfo } from "ts/data/DEntity";
-import { DBasics } from "ts/data/DBasics";
+import { REData } from "ts/re/data/REData";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
+import { DBasics } from "ts/re/data/DBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

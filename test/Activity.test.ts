@@ -1,17 +1,15 @@
-import { assert } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
-import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { REGame } from "ts/objects/REGame";
-import { TileShape } from "ts/objects/LBlock";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { SGameManager } from "ts/system/SGameManager";
-import { RESystem } from "ts/system/RESystem";
+import { DBasics } from "ts/re/data/DBasics";
+import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { REGame } from "ts/re/objects/REGame";
+import { TileShape } from "ts/re/objects/LBlock";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { DEntity, DEntityCreateInfo } from "ts/data/DEntity";
-import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { BlockLayerKind } from "ts/objects/LBlockLayer";
-import { REData } from "ts/data/REData";
-import { LActivity } from "ts/objects/activities/LActivity";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
+import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
+import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
+import { REData } from "ts/re/data/REData";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

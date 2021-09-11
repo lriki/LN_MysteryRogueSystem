@@ -1,11 +1,11 @@
-import { REGame } from "ts/objects/REGame";
-import { RESystem } from "ts/system/RESystem";
+import { REGame } from "ts/re/objects/REGame";
+import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/data/REData";
-import { assert } from "ts/Common";
-import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/data/DEffect";
-import { LActivity } from "ts/objects/activities/LActivity";
-import { DBasics } from "ts/data/DBasics";
+import { REData } from "ts/re/data/REData";
+import { assert } from "ts/re/Common";
+import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
+import { LActivity } from "ts/re/objects/activities/LActivity";
+import { DBasics } from "ts/re/data/DBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

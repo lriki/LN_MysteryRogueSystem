@@ -1,16 +1,15 @@
 // NOTE:
 //   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
 
-import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
-import { SManualActionDialog } from "ts/system/dialogs/SManualDecisionDialog";
-import { REGame } from "ts/objects/REGame";
-import { SGameManager } from "ts/system/SGameManager";
-import { RESystem } from "ts/system/RESystem";
+import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
+import { SManualActionDialog } from "ts/re/system/dialogs/SManualDecisionDialog";
+import { REGame } from "ts/re/objects/REGame";
+import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { DBasics } from "ts/data/DBasics";
-import { REData } from "ts/data/REData";
-import { LActivity } from "ts/objects/activities/LActivity";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { DBasics } from "ts/re/data/DBasics";
+import { REData } from "ts/re/data/REData";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 
 //import "js/rmmz_objects.js"
 

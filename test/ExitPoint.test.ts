@@ -1,11 +1,9 @@
-import { assert } from "ts/Common";
-import { REGame } from "ts/objects/REGame";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { SGameManager } from "ts/system/SGameManager";
-import { RESystem } from "ts/system/RESystem";
+import { assert } from "ts/re/Common";
+import { REGame } from "ts/re/objects/REGame";
+import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { LFloorId } from "ts/objects/LFloorId";
-import { DBasics } from "ts/data/DBasics";
+import { LFloorId } from "ts/re/objects/LFloorId";
+import { DBasics } from "ts/re/data/DBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

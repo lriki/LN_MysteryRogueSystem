@@ -1,19 +1,14 @@
-import { REGame } from "ts/objects/REGame";
-import { SGameManager } from "ts/system/SGameManager";
+import { REGame } from "ts/re/objects/REGame";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
-import { LFloorId } from "ts/objects/LFloorId";
-import { UMovement } from "ts/usecases/UMovement";
-import { Helpers } from "ts/system/Helpers";
-import { RESystem } from "ts/system/RESystem";
-import { TileShape } from "ts/objects/LBlock";
-import { LUnitBehavior } from "ts/objects/behaviors/LUnitBehavior";
-import { assert } from "ts/Common";
-import { LInventoryBehavior } from "ts/objects/behaviors/LInventoryBehavior";
-import { DEntityCreateInfo } from "ts/data/DEntity";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { LActivity } from "ts/objects/activities/LActivity";
-import { REData } from "ts/data/REData";
+import { RESystem } from "ts/re/system/RESystem";
+import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
+import { assert } from "ts/re/Common";
+import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { LActivity } from "ts/re/objects/activities/LActivity";
+import { REData } from "ts/re/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

@@ -1,8 +1,8 @@
-import { assert } from "ts/Common";
-import { DBasics } from "ts/data/DBasics";
-import { DEffectCause } from "ts/data/DEffect";
-import { LEntity } from "ts/objects/LEntity";
-import { UName } from "ts/usecases/UName";
+import { assert } from "ts/re/Common";
+import { DBasics } from "ts/re/data/DBasics";
+import { DEffectCause } from "ts/re/data/DEffect";
+import { LEntity } from "ts/re/objects/LEntity";
+import { UName } from "ts/re/usecases/UName";
 
 
 export class TestUtils {

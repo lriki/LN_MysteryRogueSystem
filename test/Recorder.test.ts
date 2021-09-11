@@ -1,18 +1,7 @@
 
-import { REGame } from "ts/objects/REGame";
-import { SEntityFactory } from "ts/system/SEntityFactory";
-import { SGameManager } from "ts/system/SGameManager";
-import { RESystem } from "ts/system/RESystem";
 import { TestEnv } from "./TestEnv";
-
 import "./Extension";
-import "./../ts/objects/Extensions";
-import { SDebugHelpers } from "ts/system/SDebugHelpers";
-import { REData } from "ts/data/REData";
-import { LActivity } from "ts/objects/activities/LActivity";
-import { UAction } from "ts/usecases/UAction";
-import { DBasics } from "ts/data/DBasics";
-import { assert } from "ts/Common";
+import "./../ts/re/objects/Extensions";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
