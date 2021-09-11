@@ -20,6 +20,7 @@ import "./re/objects/LSystem";
 import "./re/system/internal";
 import "./re/system/SEntityFactory";
 import "./re/rmmz/Scene_Boot";
+import "./re/rmmz/Scene_Title";
 import "./re/rmmz/Scene_Map";
 import "./re/rmmz/Scene_Save";
 import "./re/rmmz/Scene_Load";
