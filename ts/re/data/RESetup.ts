@@ -114,7 +114,7 @@ export class RESetup {
 
                 const emittor = REData.newEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effect.buffQualifying.push({
+                emittor.effect.targetQualifyings.buffQualifying.push({
                     paramId: DBasics.params.agi,
                     mode: DBuffMode.Strength,
                     level: 1,
@@ -215,13 +215,13 @@ export class RESetup {
                 entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_エスケープスクロール":
-                entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.effectSet.mainEmittor().effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
                 entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_識別の巻物":
                 entity.effectSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
-                entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
+                entity.effectSet.mainEmittor().effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
                 entity.addReaction(DBasics.actions.ReadActionId, entity.effectSet.mainEmittor().id);
                 entity.effectSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
@@ -233,7 +233,7 @@ export class RESetup {
         // FP 回復
         const emittor = REData.newEmittor();
         emittor.scope.range = DEffectFieldScopeRange.Performer;
-        emittor.effect.parameterQualifyings.push({
+        emittor.effect.targetQualifyings.parameterQualifyings.push({
             parameterId: DBasics.params.fp,
             elementId: 0,
             formula: "5",

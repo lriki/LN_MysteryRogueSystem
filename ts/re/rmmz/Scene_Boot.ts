@@ -3,7 +3,6 @@ import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "../system/RESystem";
 import { REVisual } from "../visual/REVisual";
 import { REData } from "ts/re/data/REData";
-import { registerExtensions } from "ts/extensions";
 
 /*
 import { ImGuiIO } from "../imgui-js/imgui";

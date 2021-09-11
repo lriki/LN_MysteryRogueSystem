@@ -9,13 +9,14 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
-import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "./SEffectContext";
+import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { SEntityFactory } from "./SEntityFactory";
 import { UMovement } from "../usecases/UMovement";
 import { assert } from "ts/re/Common";
 import { DParameterId } from "ts/re/data/DParameter";
 import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DSkillDataId } from "../data/DSkill";
+import { SEffectorFact } from "./SEffectApplyer";
 
 
 export class SEmittorPerformer {

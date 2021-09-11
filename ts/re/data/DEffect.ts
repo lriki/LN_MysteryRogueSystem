@@ -154,6 +154,36 @@ export interface DParamBuff {
     //formula: string;
 }
 
+export interface DQualifyings {
+
+    /**
+      * IDataSkill.damage
+      * IDataItem.damage
+      */
+     parameterQualifyings: DParameterQualifying[];
+
+     /**
+       * パラメータ変化以外のすべてのエフェクト。
+       * これらを実現するにはコードで頑張る必要がある。
+       * ほとんどの特殊効果はこれを持つ必要があるはず。
+       * コアスクリプトだと EFFECT_XXXX に相当する。
+       */
+     otherEffectQualifyings: DOtherEffectQualifying[];
+ 
+     /**
+       * IDataSkill.effects
+       * IDataItem.effects
+       */
+     specialEffectQualifyings: IDataEffect[];
+ 
+     /**
+      * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
+      * こちらはレベルと共に指定できる。
+      */
+     buffQualifying: DParamBuff[];
+     
+}
+
 export type DEmittorId = number;
 
 export class DEffect {
@@ -183,32 +213,10 @@ export class DEffect {
       */
     rmmzAnimationId: number;
 
-    /**
-      * IDataSkill.damage
-      * IDataItem.damage
-      */
-    parameterQualifyings: DParameterQualifying[];
 
-    /**
-      * パラメータ変化以外のすべてのエフェクト。
-      * これらを実現するにはコードで頑張る必要がある。
-      * ほとんどの特殊効果はこれを持つ必要があるはず。
-      * コアスクリプトだと EFFECT_XXXX に相当する。
-      */
-    otherEffectQualifyings: DOtherEffectQualifying[];
+    targetQualifyings: DQualifyings;
 
-    /**
-      * IDataSkill.effects
-      * IDataItem.effects
-      */
-    specialEffectQualifyings: IDataEffect[];
-
-    /**
-     * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
-     * こちらはレベルと共に指定できる。
-     */
-    buffQualifying: DParamBuff[];
-    
+    selfQualifyings: DQualifyings;
 
     constructor() {
         //this.id = id;
@@ -221,12 +229,18 @@ export class DEffect {
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
         this.rmmzAnimationId = 0;
-        this.parameterQualifyings = [];
-        //rmmzItemEffectQualifying = [];
-        //performeSkillQualifyings = [];
-        this.otherEffectQualifyings = [];
-        this.specialEffectQualifyings = [];
-        this.buffQualifying = [];
+        this.targetQualifyings = {
+            parameterQualifyings: [],
+            otherEffectQualifyings: [],
+            specialEffectQualifyings : [],
+            buffQualifying: [],
+        };
+        this.selfQualifyings = {
+            parameterQualifyings: [],
+            otherEffectQualifyings: [],
+            specialEffectQualifyings : [],
+            buffQualifying: [],
+        };
     }
 
     public copyFrom(src: DEffect): void {
@@ -235,11 +249,19 @@ export class DEffect {
         this.successRate = src.successRate;
         this.hitType = src.hitType;
         this.rmmzAnimationId = src.rmmzAnimationId;
-        this.parameterQualifyings = src.parameterQualifyings.slice();
-        //this.rmmzItemEffectQualifying = src.rmmzItemEffectQualifying.slice();
-        //this.performeSkillQualifyings = src.performeSkillQualifyings.slice();
-        this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
-        this.specialEffectQualifyings = src.specialEffectQualifyings.slice();
+        
+        this.targetQualifyings = {
+            parameterQualifyings: src.targetQualifyings.parameterQualifyings.slice(),
+            otherEffectQualifyings: src.targetQualifyings.otherEffectQualifyings.slice(),
+            specialEffectQualifyings :src.targetQualifyings.specialEffectQualifyings.slice(),
+            buffQualifying: src.targetQualifyings.buffQualifying.slice(),
+        };
+        this.selfQualifyings = {
+            parameterQualifyings: src.selfQualifyings.parameterQualifyings.slice(),
+            otherEffectQualifyings: src.selfQualifyings.otherEffectQualifyings.slice(),
+            specialEffectQualifyings :src.selfQualifyings.specialEffectQualifyings.slice(),
+            buffQualifying: src.selfQualifyings.buffQualifying.slice(),
+        };
     }
 }
 

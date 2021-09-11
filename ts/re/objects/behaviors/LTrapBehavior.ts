@@ -4,7 +4,7 @@ import { DBasics } from "ts/re/data/DBasics";
 import { REData } from "ts/re/data/REData";
 import { REResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SEffectContext, SEffectIncidentType, SEffectorFact } from "ts/re/system/SEffectContext";
+import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
@@ -14,6 +14,7 @@ import { REGame } from "../REGame";
 import { DEventId, SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/re/usecases/UMovement";
+import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 
 
 /**

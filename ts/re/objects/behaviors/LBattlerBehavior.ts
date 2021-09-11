@@ -5,11 +5,11 @@ import { LBehavior } from "ts/re/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { REResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SEffectorFact } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { DBasics } from "ts/re/data/DBasics";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LParamSet } from "../LParam";
+import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 
 export class LBattlerBehavior extends LBehavior {
 

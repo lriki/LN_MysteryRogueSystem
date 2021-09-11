@@ -29,7 +29,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
-import { SEffectContext, SEffectorFact, SEffectSubject } from "ts/re/system/SEffectContext";
+import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { RECommand, REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LObject, LObjectType } from "../LObject";
@@ -41,6 +41,7 @@ import { LEventResult } from "../LEventServer";
 import { DPrefabImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
+import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 
 export enum DecisionPhase {
     Prepare,

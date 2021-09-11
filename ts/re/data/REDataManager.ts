@@ -411,13 +411,13 @@ export class REDataManager
                 emittor.effect.successRate = x.successRate;
                 emittor.effect.hitType = x.hitType;
                 emittor.effect.rmmzAnimationId = x.animationId;
-                emittor.effect.specialEffectQualifyings = x.effects;
+                emittor.effect.targetQualifyings.specialEffectQualifyings = x.effects;
 
                 emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
                 emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
 
                 if (x.damage.type > 0) {
-                    emittor.effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    emittor.effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 /*
                 skill.effectSet.setEffect(DEffectCause.Affect, effect);
@@ -453,10 +453,10 @@ export class REDataManager
                 emittor.effect.successRate = x.successRate;
                 emittor.effect.hitType = x.hitType;
                 emittor.effect.rmmzAnimationId = x.animationId;
-                emittor.effect.specialEffectQualifyings = x.effects;
+                emittor.effect.targetQualifyings.specialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
-                    emittor.effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    emittor.effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
 
@@ -519,7 +519,7 @@ export class REDataManager
                     variance: 20,
                     silent: false,
                 };
-                emittor.effect.parameterQualifyings.push(q);
+                emittor.effect.targetQualifyings.parameterQualifyings.push(q);
                 entity.effectSet.addEmittor(DEffectCause.Hit, emittor);
             }
         });
@@ -1053,10 +1053,10 @@ export class REDataManager
                 data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
             case "kSkill_ふきとばし":
-                emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                emittor.effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 break;
             case "kSkill_変化":
-                emittor.effect.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
+                emittor.effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
                 break;
             case "kSkill_投げ当て_1ダメ":
                 emittor.scope.range = DEffectFieldScopeRange.Performer;

@@ -7,7 +7,7 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { Helpers } from "ts/re/system/Helpers";
 import { REResponse } from "ts/re/system/RECommand";
-import { SEffectContext, SEffectIncidentType, SEffectorFact, SEffectSubject } from "ts/re/system/SEffectContext";
+import { SEffectContext, SEffectIncidentType, SEffectSubject } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -16,6 +16,7 @@ import { MovingMethod } from "ts/re/objects/LMap";
 import { UAction } from "ts/re/usecases/UAction";
 import { DEffect } from "ts/re/data/DEffect";
 import { REData } from "ts/re/data/REData";
+import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
