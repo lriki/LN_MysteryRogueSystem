@@ -31,9 +31,8 @@ test("CharacterAI.Moving1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
     // 足踏み
-    const dialogContext = RESystem.dialogContext;
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    dialogContext.activeDialog().submit();
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
@@ -43,7 +42,7 @@ test("CharacterAI.Moving1", () => {
 
     // 足踏み
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    dialogContext.activeDialog().submit();
+    RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     

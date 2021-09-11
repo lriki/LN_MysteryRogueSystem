@@ -5,7 +5,6 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { SView } from "ts/re/system/SView";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -16,30 +15,38 @@ test("concretes.states.透明", () => {
     const stateId = REData.getStateFuzzy("kState_UT透明").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(stateId);
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 11, 3);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [stateId], "enemy1"));
-    enemy1.dir = 6; // 右へ
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
 
-    expect(SView.getLookNames(actor1, enemy1).name != enemy1.getDisplayName().name).toBe(true);
-    expect(SView.getTilemapView().visible).toBe(false);
-    expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
+    //expect(SView.getLookNames(actor1, enemy1).name != enemy1.getDisplayName().name).toBe(true);
+    //expect(SView.getTilemapView().visible).toBe(false);
+    //expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
 
-    // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
-    for (let i = 0; i < 10; i++) {
-        // 10 ターンの間はステートが追加されている
-        expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
-        expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+    
+    // 足踏み
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    // enemy1 は Player に向かって↑に移動している
+    expect(enemy1.x).toBe(11);
+    expect(enemy1.y).toBe(5);
 
-        // 待機
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+    // Player 透明化
+    actor1.addState(stateId);
 
-        RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
-    }
+    // 足踏み
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
+    // enemy1 は Player を視認できなくなったので通路へ向かって移動している
+    expect(enemy1.x).toBe(12);
+    expect(enemy1.y).toBe(4);
 });

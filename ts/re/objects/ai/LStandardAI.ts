@@ -25,14 +25,19 @@ export class LCharacterAI_Normal extends LCharacterAI {
     public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
 
 
-
+        const hasPrimaryTarget = this._actionDeterminer.hasPrimaryTarget();
         
         this._actionDeterminer.decide(context, self);
 
-        // 攻撃目標が設定されていれば、それを移動目標とする
-        if (this._actionDeterminer.hasPrimaryTarget()) {
-            const target = this._actionDeterminer.primaryTarget();
-            this._moveDeterminer.setTargetPosition(target.x, target.y);
+        // 攻撃目標が新たに設定されていれば、それを移動目標とする
+        if (hasPrimaryTarget != this._actionDeterminer.hasPrimaryTarget()) {
+            if (this._actionDeterminer.hasPrimaryTarget()) {
+                const target = this._actionDeterminer.primaryTarget();
+                this._moveDeterminer.setTargetPosition(target.x, target.y);
+            }
+            else {
+                this._moveDeterminer.setTargetPosition(-1, -1);
+            }
         }
 
         // 攻撃対象が設定されていれば、このフェーズでは何もしない
