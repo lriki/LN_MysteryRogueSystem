@@ -208,6 +208,15 @@ export class SEmittorPerformer {
         REGame.eventServer.publish(DBasics.events.skillEmitted, args)
     }
 
+    private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
+        for (const target of targets) {
+            entity.iterateBehaviorsReverse(b => {
+                b.onSkillPerformed(context, entity, target, skillId);
+                return true;
+            });
+        }
+    }
+
     
     /**
      * 
@@ -253,7 +262,10 @@ export class SEmittorPerformer {
             context.postCall(() => {
                 effectContext.applyWithWorth(context, [performer]);
 
-                if (skillId > 0) this.raiseSkillEmitted(performer, [performer], skillId);
+                if (skillId > 0) {
+                    this.raiseSkillEmitted(performer, [performer], skillId);
+                    this.callSkillPerformed(context, performer, [performer], skillId);
+                }
             });
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
@@ -285,7 +297,10 @@ export class SEmittorPerformer {
                         // TODO: SEffectSubject はダミー
                         context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
                             .then(() => {
-                                if (skillId > 0) this.raiseSkillEmitted(performer, [target], skillId);
+                                if (skillId > 0) {
+                                    this.raiseSkillEmitted(performer, [target], skillId);
+                                    this.callSkillPerformed(context, performer, [performer], skillId);
+                                }
                                 return true;
                             });
                     }

@@ -35,6 +35,7 @@ import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";
 import { DBasics } from "ts/re/data/DBasics";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/re/objects/behaviors/LRatedRandomAIBehavior";
+import { RESystem } from "./RESystem";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -282,6 +283,7 @@ export class SEntityFactory {
                 entity.addBehavior(LStorageBehavior);
                 break;
         }
+        RESystem.ext.onNewEntity(entity, entityData);
     }
 
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
@@ -295,9 +297,8 @@ export class SEntityFactory {
             case "kEnemy_フロックウルフ":
                 entity.addBehavior(LFlockBehavior);
                 break;
-
         }
-
+        RESystem.ext.onNewEntity(entity, entityData);
     }
 }
 

@@ -32,7 +32,7 @@ import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { RECommand, REResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
-import { LBehaviorId, LObject, LObjectType } from "../LObject";
+import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/re/data/DParameter";
@@ -42,6 +42,7 @@ import { DPrefabImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
+import { DSkillDataId } from "ts/re/data/DSkill";
 
 export enum DecisionPhase {
     Prepare,
@@ -356,6 +357,12 @@ export abstract class LBehavior extends LObject {
     onStepEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
 
     onPertyChanged(self: LEntity): void { }
+
+    /**
+     * self が発動したスキルの処理が終わった (成否は target の result を確認すること)
+     * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。
+     */
+    onSkillPerformed(context: SCommandContext, self: LEntity, target: LEntity, skillId: DSkillDataId): void {}
 
     
     //public removeThisState(): void {

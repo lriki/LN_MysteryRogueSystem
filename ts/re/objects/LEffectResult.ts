@@ -52,7 +52,7 @@ export class LEffectResult {
 
     // 効果適用の成否。false の場合、 "%1には効かなかった！"
     // used, missed, evaded の判定後、実際に防御側のパラメータを変動させたかどうか。
-    success: boolean = false;  // TODO: NotImplemented
+    success: boolean = false;
 
     // HP に関係する効果であったか。文字の色を変えたりする
     hpAffected = false;  // TODO: NotImplemented
