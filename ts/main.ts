@@ -30,3 +30,5 @@ import "./re/rmmz/Window_MapName";
 import "./re/rmmz/PluginCommands";
 import "./re/rmmz/JsonEx";
 import "./re/ConsoleCommands";
+
+import "./extensions/index";

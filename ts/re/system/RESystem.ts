@@ -10,6 +10,7 @@ import { SMinimapData } from "./SMinimapData";
 import { SMapManager } from "./SMapManager";
 import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
+import { RESystemExtension } from "./RESystemExtension";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -26,6 +27,7 @@ export class RESystem {
     };
 
     // System
+    static ext: RESystemExtension = new RESystemExtension();
     static sequelContext: SSequelContext;
     static commandContext: SCommandContext;
     static dialogContext: SDialogContext;

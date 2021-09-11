@@ -24,6 +24,7 @@ import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
 import { DPseudonymous } from "./DPseudonymous";
 import { DItemShopType } from "./DItemShop";
+import { REDataExtension } from "./REDataExtension";
 
 
 export enum REFloorMapKind
@@ -157,6 +158,8 @@ export class REData
     
     // Common defineds.
     static NormalAttackSkillId: number = 1;
+
+    static ext: REDataExtension = new REDataExtension();
 
     static system: DSystem;
     //static equipTypes: DEquipmentType[] = [];

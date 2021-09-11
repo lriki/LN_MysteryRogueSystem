@@ -12,6 +12,7 @@ import { LEventServer } from "./LEventServer";
 import { LFloorDirector } from "./LFloorDirector";
 import { LBlock } from "./LBlock";
 import { LScheduler } from "./LScheduler";
+import { REGameExtension } from "./REGameExtension";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -22,6 +23,7 @@ export class REGame
 {
     static readonly TILE_LAYER_COUNT: number = 6;
 
+    static ext: REGameExtension = new REGameExtension();
     static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
     static system: LSystem;
     static world: LWorld;
