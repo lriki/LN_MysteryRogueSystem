@@ -6,6 +6,10 @@ import { assert } from "ts/re/Common";
 import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBasics } from "ts/re/data/DBasics";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
+import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -107,4 +111,69 @@ test("concretes.states.速度変化.remove", () => {
 
     // 10 ターンで解除
     expect(param.getAddBuff().level == 0).toBe(true);
+});
+
+
+test("concretes.states.速度変化.Issue1", () => {
+    TestEnv.newGame();
+    const buff1: DParamBuff = {
+        paramId: DBasics.params.agi,
+        mode: DBuffMode.Strength,
+        level: 1,
+        levelType: LStateLevelType.RelativeValue,
+        op: DBuffOp.Add,
+        turn: 10,
+    };
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    //actor1.addBuff(buff1);
+    //const param = actor1.params().param(DBasics.params.agi);
+    //assert(param);
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item1"));
+    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
+
+    const wait = () => {
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+    }
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    
+    //----------
+    // Round
+    expect(enemy1.x).toBe(30);
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+
+    expect(enemy1.x).toBe(30);
+    const buf = actor1.params().params()[DBasics.params.agi];
+    assert(buf);
+    buf.getAddBuff().turn = 2;  // テスト用に残りターン数調整。あと2回ManualAction取ると通常速度に戻るイメージ。
+    wait();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+
+    //----------
+    // Round
+    expect(enemy1.x).toBe(29);
+    wait();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    // ↑この中で速度変化は解除される
+
+    expect(enemy1.x).toBe(28);
+    wait();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+
+
+    /*
+    NOTE: シレン5ではシレンがすばやさ草を飲んだ後、13回歩くと「速度が元に戻った」メッセージがでる。
+    「戻った」と表示された直後１ターン、動くことができる。
+    草を飲んだあと、２回行動すると等速モンスターも動く。
+
+    */
 });

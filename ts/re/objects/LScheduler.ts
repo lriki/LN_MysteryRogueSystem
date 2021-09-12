@@ -402,6 +402,7 @@ export class LScheduler {
                 if (unit.speedLevel2 < unit.speedLevel) {
                     // 速度ダウン
                     entity.setActionTokenCount(entity.actionTokenCount() - 1);
+                    unit.speedLevel = unit.speedLevel2;
                 }
             }
         }
