@@ -1,7 +1,8 @@
 import { DBasics } from "./DBasics";
-import { DBuffMode, DBuffOp, DEffectCause, DEffectFieldScopeRange, DParameterEffectApplyType, LStateLevelType } from "./DEffect";
+import { DBuffMode, DBuffOp, DEffectCause, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
+import { DSkill } from "./DSkill";
 import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { DTraits } from "./DTraits";
@@ -65,6 +66,9 @@ export class RESetup {
                 break;
             case "kState_UT透明":
                 data.traits.push({ code: DTraits.Invisible, dataId: 0, value: 0 });
+                break;
+            case "kState_UT足つかみ":
+                data.behaviors.push("LGrabFootBehavior");
                 break;
         }
     }
@@ -228,6 +232,42 @@ export class RESetup {
                 
         }
     }
+    
+    static setupDirectly_Skill(data: DSkill) {
+        const emittor = data.emittor();
+        switch (data.key) {
+            case "kSkill_炎のブレス_直線":
+                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                emittor.scope.length = Infinity;
+                emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
+                break;
+            case "kSkill_魔法弾発射_一般":
+                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                emittor.scope.length = Infinity;
+                emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
+                data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
+                break;
+            case "kSkill_ふきとばし":
+                emittor.effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                break;
+            case "kSkill_変化":
+                emittor.effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
+                break;
+            case "kSkill_投げ当て_1ダメ":
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                break;
+            case "kSkill_火炎草ブレス":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                //emittor.scope.length = Infinity;
+                //emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
+                break;
+            case "kSkill_足つかみ":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.effect.selfQualifyings.specialEffectQualifyings.push({code: Game_Action.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
+                break;
+        }
+    }
+    
 
     private static setupGrassCommon(entity: DEntity): void {
         // FP 回復

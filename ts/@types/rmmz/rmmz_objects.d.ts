@@ -3,6 +3,145 @@ import * as PIXI from "pixi.js";
 
 declare global {
 
+    
+/**
+ * -----------------------------------------------------------------------------
+ * Game_Action
+ * 
+ * The game object class for a battle action.
+ */
+ export class Game_Action extends Game_Character {
+
+    initialize(subject: any, forcing: any): void;
+    clear(): void;
+    setSubject(subject: any): void;
+    subject(): Game_Actor;
+    friendsUnit(): Game_Party;
+    opponentsUnit(): Game_Troop;
+    setEnemyAction(action: any): void;
+    setAttack(): void;
+    setGuard(): void;
+    setSkill(skillId: number): void;
+    setItem(itemId: any): void;
+    setItemObject(object: any): void;
+    setTarget(targetIndex: number): void;
+    item(): void;
+    isSkill(): boolean;
+    isItem(): boolean;
+    numRepeats(): number;
+    checkItemScope(list: Game_Action.prototype.CheckItemScope0): boolean;
+    isForOpponent(): boolean;
+    isForFriend(): boolean;
+    isForEveryone(): boolean;
+    isForAliveFriend(): boolean;
+    isForDeadFriend(): boolean;
+    isForUser(): boolean;
+    isForOne(): boolean;
+    isForRandom(): boolean;
+    isForAll(): boolean;
+    needsSelection(): boolean;
+    numTargets(): number;
+    checkDamageType(list: Game_Action.prototype.CheckDamageType0): boolean;
+    isHpEffect(): boolean;
+    isMpEffect(): boolean;
+    isDamage(): boolean;
+    isRecover(): boolean;
+    isDrain(): boolean;
+    isHpRecover(): boolean;
+    isMpRecover(): boolean;
+    isCertainHit(): boolean;
+    isPhysical(): boolean;
+    isMagical(): boolean;
+    isAttack(): boolean;
+    isGuard(): boolean;
+    isMagicSkill(): boolean;
+    decideRandomTarget(): void;
+    setConfusion(): void;
+    prepare(): void;
+    isValid(): /* !this._forcing */ any;
+    speed(): void;
+    makeTargets(): Game_Action.prototype.MakeTargetsRet;
+    repeatTargets(targets: Game_Action.prototype.RepeatTargets0): Array<any>;
+    confusionTarget(): Game_Enemy;
+    targetsForEveryone(): Game_Action.prototype.TargetsForEveryoneRet;
+    targetsForOpponents(): Game_Action.prototype.TargetsForOpponentsRet;
+    targetsForFriends(): Game_Action.prototype.TargetsForFriendsRet;
+    randomTargets(unit: Game_Troop): Game_Action.prototype.RandomTargetsRet;
+    targetsForDead(unit: Game_Party): Game_Action.prototype.TargetsForDeadRet;
+    targetsForAlive(unit: Game_Party | Game_Troop): Array<Game_Enemy>;
+    targetsForDeadAndAlive(unit: Game_Party): Game_Action.prototype.TargetsForDeadAndAliveRet;
+    evaluate(): number;
+    itemTargetCandidates(): Game_Action.prototype.ItemTargetCandidatesRet;
+    evaluateWithTarget(target: Game_Actor): number;
+    testApply(target: Game_Actor): boolean;
+    testLifeAndDeath(target: Game_Actor): boolean;
+    hasItemAnyValidEffects(target: Game_Actor): void;
+    testItemEffect(target: Game_Actor, effect: any): boolean;
+    itemCnt(target: /* Game_Action.prototype.+Game_BattlerBase */ any):  /* error */ any;
+    itemMrf(target: any):  /* error */ any;
+    itemHit(): number;
+    itemEva(target: Game_Actor):  /* error */ any;
+    itemCri(target: Game_Actor): number;
+    apply(target: Game_Actor): void;
+    makeDamageValue(target: Game_Actor, critical: boolean): number;
+    evalDamageFormula(target: Game_Actor): number;
+    calcElementRate(target: Game_Actor): number;
+    elementsMaxRate(target: Game_Actor, elements: Game_Action.prototype.ElementsMaxRate1): number;
+    applyCritical(damage: number): number;
+    applyVariance(damage: number, variance: any): number;
+    applyGuard(damage: number, target: Game_Actor): number;
+    executeDamage(target: Game_Actor, value: number): void;
+    executeHpDamage(target: Game_Actor, value: number): void;
+    executeMpDamage(target: Game_Actor, value: number): void;
+    gainDrainedHp(value: number): void;
+    gainDrainedMp(value: number): void;
+    applyItemEffect(target: Game_Actor, effect: any): void;
+    itemEffectRecoverHp(target: Game_Actor, effect: any): void;
+    itemEffectRecoverMp(target: Game_Actor, effect: any): void;
+    itemEffectGainTp(target: Game_Actor, effect: any): void;
+    itemEffectAddState(target: Game_Actor, effect: any): void;
+    itemEffectAddAttackState(target: Game_Actor, effect: any): void;
+    itemEffectAddNormalState(target: Game_Actor, effect: any): void;
+    itemEffectRemoveState(target: Game_Actor, effect: any): void;
+    itemEffectAddBuff(target: Game_Actor, effect: any): void;
+    itemEffectAddDebuff(target: Game_Actor, effect: any): void;
+    itemEffectRemoveBuff(target: Game_Actor, effect: any): void;
+    itemEffectRemoveDebuff(target: Game_Actor, effect: any): void;
+    itemEffectSpecial(target: Game_Actor, effect: any): void;
+    itemEffectGrow(target: Game_Actor, effect: any): void;
+    itemEffectLearnSkill(target: Game_Actor, effect: any): void;
+    itemEffectCommonEvent(): void;
+    makeSuccess(target: Game_Actor): void;
+    applyItemUserEffect(): void;
+    lukEffectRate(target: Game_Actor): number;
+    applyGlobal(): void;
+    updateLastUsed(): void;
+    updateLastSubject(): void;
+    updateLastTarget(target: Game_Actor): void;
+
+    static EFFECT_RECOVER_HP: number;
+    static EFFECT_RECOVER_MP: number;
+    static EFFECT_GAIN_TP: number;
+    static EFFECT_ADD_STATE: number;
+    static EFFECT_REMOVE_STATE: number;
+    static EFFECT_ADD_BUFF: number;
+    static EFFECT_ADD_DEBUFF: number;
+    static EFFECT_REMOVE_BUFF: number;
+    static EFFECT_REMOVE_DEBUFF: number;
+    static EFFECT_SPECIAL: number;
+    static EFFECT_GROW: number;
+    static EFFECT_LEARN_SKILL: number;
+    static EFFECT_COMMON_EVENT: number;
+    static SPECIAL_EFFECT_ESCAPE: number;
+    static HITTYPE_CERTAIN: number;
+    static HITTYPE_PHYSICAL: number;
+    static HITTYPE_MAGICAL: number;
+
+    _subjectActorId: number;
+    _subjectEnemyIndex: number;
+    _forcing: boolean;
+    _targetIndex: number;
+}
 
 /**
  * -----------------------------------------------------------------------------

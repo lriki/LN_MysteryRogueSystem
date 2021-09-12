@@ -18,6 +18,7 @@ import { LEntryPointBehavior } from "ts/re/objects/behaviors/LEntryPointBehavior
 import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
 import { LItemImitatorBehavior } from "ts/re/objects/behaviors/LItemImitatorBehavior";
 import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehavior";
+import { LGrabFootBehavior } from "../objects/states/LGrabFootBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -42,6 +43,7 @@ export class SBehaviorFactory {
         { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
         { fullName: "LItemImitatorBehavior", friendlyName: "ItemImitator", create: () => new LItemImitatorBehavior() },
         { fullName: "LIllusionStateBehavior", friendlyName: "IllusionState", create: () => new LIllusionStateBehavior() },
+        { fullName: "LGrabFootBehavior", friendlyName: "FootBehavior", create: () => new LGrabFootBehavior() },
         
         
         

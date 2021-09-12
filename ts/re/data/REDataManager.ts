@@ -434,7 +434,7 @@ export class REDataManager
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
                 }
 
-                this.setupDirectly_Skill(skill);
+                RESetup.setupDirectly_Skill(skill);
             }
         });
 
@@ -1038,36 +1038,5 @@ export class REDataManager
         }
     }
 
-    static setupDirectly_Skill(data: DSkill) {
-        const emittor = data.emittor();
-        switch (data.key) {
-            case "kSkill_炎のブレス_直線":
-                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
-                emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
-                break;
-            case "kSkill_魔法弾発射_一般":
-                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
-                emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
-                data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
-                break;
-            case "kSkill_ふきとばし":
-                emittor.effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
-                break;
-            case "kSkill_変化":
-                emittor.effect.targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
-                break;
-            case "kSkill_投げ当て_1ダメ":
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
-                break;
-            case "kSkill_火炎草ブレス":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
-                //emittor.scope.length = Infinity;
-                //emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
-                break;
-        }
-    }
-    
 
 }

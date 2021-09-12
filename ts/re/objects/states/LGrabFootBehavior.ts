@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
+import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "../behaviors/LBehavior";
 
 /**
  * 足つかみ。
@@ -33,4 +33,11 @@ export class LGrabFootBehavior extends LBehavior {
     }
 
     
+    onAttached(): void {
+        console.log("LGrabFootBehavior");
+    }
+
+    onDetached(): void {
+
+    }
 }
