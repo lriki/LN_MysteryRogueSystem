@@ -725,7 +725,7 @@ export class REDataManager
             REData.troops.push(troop);
             if (x) {
                 troop.key = x.name;
-                troop.members = x.members.map(m => REData.monsters[m.enemyId]);
+                troop.members = x.members.map(m => REData.enemies[m.enemyId]);
             }
         }
 

@@ -168,7 +168,7 @@ export class SEntityFactory {
         let entity: LEntity;
 
         if (prefab.isEnemyKind()) {
-            const entityId = REData.monsters[prefab.dataId];
+            const entityId = REData.enemies[prefab.dataId];
             if (entityId)
                 entity = SEntityFactory.newMonster(REData.entities[entityId]);
             else
@@ -218,7 +218,7 @@ export class SEntityFactory {
         const prefab = REData.prefabs[entityData.prefabId];
         
         if (prefab.isEnemyKind()) {
-            const entityId = REData.monsters[prefab.dataId];
+            const entityId = REData.enemies[prefab.dataId];
             if (entityId)
                 this.buildMonster(entity, REData.entities[entityId]);
             else

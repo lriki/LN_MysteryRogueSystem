@@ -167,7 +167,7 @@ export class REData
     static entityKinds: DEntityKind[] = [];
     static classes: DClass[] = [];
     static actors: DEntityId[] = [];
-    static monsters: DEntityId[] = [];
+    static enemies: DEntityId[] = [];
     static lands: DLand[] = [];
     static maps: DMap[] = [];    // 1~マップ最大数までは、MapId と一致する。それより後は Land の Floor.
     static templateMaps: DTemplateMap[] = [];
@@ -207,7 +207,7 @@ export class REData
 
         this.actors = [];
 
-        this.monsters = [];
+        this.enemies = [];
         this.lands = [];
         this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false }];
         this.templateMaps = [DTemplateMap_Default()];
@@ -362,7 +362,7 @@ export class REData
     }
 
     static actorEntity(id: DEnemyId): DEntity {
-        return this.entities[this.monsters[id]];
+        return this.entities[this.enemies[id]];
     }
 
     static actorData(id: DEnemyId): RE_Data_Actor {
@@ -374,7 +374,7 @@ export class REData
         if (!isNaN(id)) 
             return this.entities[this.actors[id]].actorData();
         else {
-            const entityId = this.monsters.find(id => {
+            const entityId = this.enemies.find(id => {
                 const e = this.entities[id];
                 return e.display.name == pattern || (e.entity.key != "" && e.entity.key == pattern);
             });
@@ -444,14 +444,14 @@ export class REData
 
     static newEnemy(): [DEntity, DEnemy] {
         const entity = REData.newEntity();
-        const data = new DEnemy(REData.monsters.length, entity.id);
-        REData.monsters.push(entity.id);
+        const data = new DEnemy(REData.enemies.length, entity.id);
+        REData.enemies.push(entity.id);
         entity.enemy = data;
         return [entity, data];
     }
 
     static enemyEntity(id: DEnemyId): DEntity {
-        return this.entities[this.monsters[id]];
+        return this.entities[this.enemies[id]];
     }
 
     static enemyData(id: DEnemyId): DEnemy {
@@ -461,9 +461,9 @@ export class REData
     static findEnemy(pattern: string): DEnemy | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
-            return this.entities[this.monsters[id]].enemyData();
+            return this.entities[this.enemies[id]].enemyData();
         else {
-            const entityId = this.monsters.find(id => {
+            const entityId = this.enemies.find(id => {
                 const e = this.entities[id];
                 return e.display.name == pattern || (e.entity.key != "" && e.entity.key == pattern);
             });
