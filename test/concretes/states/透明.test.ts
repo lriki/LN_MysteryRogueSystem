@@ -5,6 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { SView } from "ts/re/system/SView";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -21,9 +22,8 @@ test("concretes.states.透明", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [stateId], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
 
-    //expect(SView.getLookNames(actor1, enemy1).name != enemy1.getDisplayName().name).toBe(true);
-    //expect(SView.getTilemapView().visible).toBe(false);
-    //expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
+    // Minimap には表示されない
+    expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
