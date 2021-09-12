@@ -25,7 +25,7 @@ export class LBattlerBehavior extends LBehavior {
         return this.ownerEntity().params();
     }
 
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         const params = this.paramSet();
         params.acquireParam(DBasics.params.hp);
         params.acquireParam(DBasics.params.mp);

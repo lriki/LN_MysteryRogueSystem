@@ -315,6 +315,11 @@ export class LBlock// extends LObject
         return result;
     }
 
+    public getFirstEntity(layerKind?: BlockLayerKind): LEntity | undefined {
+        const entities = this.getEntities(layerKind);
+        return entities.length > 0 ? entities[0] : undefined;
+    }
+
     /** Entity が含まれている Layer を検索する */
     public findEntityLayerKind(entity: LEntity): BlockLayerKind | undefined {
         const index = this._layers.findIndex(x => x.isContains(entity));

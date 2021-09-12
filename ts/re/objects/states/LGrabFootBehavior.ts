@@ -5,6 +5,12 @@ import { UName } from "ts/re/usecases/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "../behaviors/LBehavior";
+import { UMovement } from "ts/re/usecases/UMovement";
+import { BlockLayerKind } from "../LBlockLayer";
+import { LEntityId } from "../LObject";
+import { DBasics } from "ts/re/data/DBasics";
+import { DEventId, RoomEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
+import { LEventResult } from "../LEventServer";
 
 /**
  * 足つかみ。
@@ -27,17 +33,41 @@ export class LGrabFootBehavior extends LBehavior {
     ステートの仕組み自体にに手を入れるよりは Event で対応したほうが、後々メンテも楽だろう。
     */
 
+    private _targetId: LEntityId;
+
+    public constructor() {
+        super();
+        this._targetId = LEntityId.makeEmpty();
+    }
+
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LGrabFootBehavior);
-        return b
+        return b;
     }
-
     
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         console.log("LGrabFootBehavior");
+        const target = UMovement.getFrontBlock(self).getFirstEntity(BlockLayerKind.Unit);
+        if (target) {
+            this._targetId  = target.entityId();
+        }
+        
+        REGame.eventServer.subscribe(DBasics.events.preWalk, this);
     }
 
-    onDetached(): void {
+    onDetached(self: LEntity): void {
+        REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
+    }
 
+    onEvent(eventId: DEventId, args: any): LEventResult {
+        if (eventId == DBasics.events.preWalk) {
+            console.log("args", args);
+            const e = (args as WalkEventArgs);
+            if (e.walker.entityId().equals(this._targetId)) {
+                console.log("つかまれている");
+                return LEventResult.Pass;
+            }
+        }
+        return LEventResult.Pass;
     }
 }

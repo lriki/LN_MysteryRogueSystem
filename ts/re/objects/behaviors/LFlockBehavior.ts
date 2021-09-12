@@ -14,10 +14,10 @@ export class LFlockBehavior extends LBehavior {
         return b
     }
     
-    onAttached(): void {
+    onAttached(self: LEntity): void {
     }
 
-    onDetached(): void {
+    onDetached(self: LEntity): void {
     }
 
     onPertyChanged(self: LEntity): void {

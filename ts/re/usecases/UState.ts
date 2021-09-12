@@ -150,7 +150,7 @@ export class UState {
                 const state = oldStates.find(s => s.stateDataId() == workState.data.id);
                 if (state) {
                     state.clearParent();
-                    state.onDetached();
+                    state.onDetached(entity);
                     entity._effectResult.pushRemovedState(workState.data.id);
                 }
             }
@@ -173,7 +173,7 @@ export class UState {
                     state = SStateFactory.newState(workState.data.id);
                     state.setParent(entity);
                     assert(state.hasId());
-                    state.onAttached();
+                    state.onAttached(entity);
                     entity._effectResult.pushAddedState(workState.data.id);
                 }
 

@@ -731,7 +731,7 @@ export class LEntity extends LObject
         assert(this.entityId().hasAny());
         this._basicBehaviors.push(behavior.id());
         behavior.setParent(this);
-        behavior.onAttached();
+        behavior.onAttached(this);
         return behavior;
     }
 
@@ -740,7 +740,7 @@ export class LEntity extends LObject
         if (index >= 0) {
             this._basicBehaviors.splice(index, 1);
             behavior.clearParent();
-            behavior.onDetached();
+            behavior.onDetached(this);
             behavior.destroy();
         }
     }
@@ -749,7 +749,7 @@ export class LEntity extends LObject
     public removeAllBehaviors(): void {
         this.basicBehaviors().forEach(b => {
             b.clearParent();
-            b.onDetached();
+            b.onDetached(this);
             b.destroy();
         });
         this._basicBehaviors = [];
@@ -858,7 +858,7 @@ export class LEntity extends LObject
     public removeAllStates(): void {
         this.states().forEach(s => {
             s.clearParent();
-            s.onDetached();
+            s.onDetached(this);
         });
         this._states = [];
         this._needVisualRefresh = true;
@@ -891,21 +891,21 @@ export class LEntity extends LObject
 
             assert(ability.hasId());
             this._abilities.push(ability.id());
-            ability.onAttached();
+            ability.onAttached(this);
         }
     }
 
     removeAbility(abilityId: DAbilityId) {
         const index = this._abilities.findIndex(id => (REGame.world.ability(id)).abilityId() == abilityId);
         if (index >= 0) {
-            REGame.world.ability(this._abilities[index]).onDetached();
+            REGame.world.ability(this._abilities[index]).onDetached(this);
             this._abilities.splice(index, 1);
         }
     }
 
     removeAllAbilities() {
         this.abilities().forEach(s => {
-            s.onDetached();
+            s.onDetached(this);
         });
         this._abilities = [];
     }

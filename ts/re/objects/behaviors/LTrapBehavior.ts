@@ -57,12 +57,12 @@ export class LTrapBehavior extends LBehavior {
         actions.mutableRemove(x => x == DBasics.actions.PickActionId);
     }
 
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
         REGame.eventServer.subscribe(DBasics.events.skillEmitted, this);
     }
 
-    onDetached(): void {
+    onDetached(self: LEntity): void {
         REGame.eventServer.unsubscribe(DBasics.events.skillEmitted, this);
     }
 

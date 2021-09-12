@@ -20,8 +20,8 @@ export class LEnemyBehavior extends LBattlerBehavior {
         super();
     }
 
-    onAttached(): void {
-        super.onAttached();
+    onAttached(self: LEntity): void {
+        super.onAttached(self);
         this.recoverAll();
     }
 

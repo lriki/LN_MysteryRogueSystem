@@ -16,7 +16,7 @@ export class LSurvivorBehavior extends LBehavior {
         return b
     }
 
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         //const battler = this.ownerEntity().getBehavior(LBattlerBehavior);
         //battler.setupExParam(DBasics.params.fp);
     }

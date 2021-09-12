@@ -83,7 +83,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         return parent.stateData();
     }
 
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         this.resetStateCounts();
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
         
@@ -96,7 +96,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         }
     }
 
-    onDetached(): void {
+    onDetached(self: LEntity): void {
 
     }
 

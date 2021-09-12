@@ -247,9 +247,10 @@ export class LState extends LObject {
 
     /** 全ての Behavior を除外します。 */
     public removeAllBehaviors(): void {
+        const self = this.parentObject() as LEntity;
         this.stateBehabiors().forEach(b => {
             b.clearParent();
-            b.onDetached();
+            b.onDetached(self);
             b.destroy();
         });
         this._stateBehabiors = [];
@@ -268,15 +269,15 @@ export class LState extends LObject {
         // 同じ state が add された
 
     }
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         for (const b of this.stateBehabiors()) {
-            b.onAttached();
+            b.onAttached(self);
         }
     }
 
-    onDetached(): void {
+    onDetached(self: LEntity): void {
         for (const b of this.stateBehabiors()) {
-            b.onDetached();
+            b.onDetached(self);
         }
     }
 

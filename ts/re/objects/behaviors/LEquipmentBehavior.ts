@@ -19,7 +19,7 @@ export class LEquipmentBehavior extends LBehavior {
         return b
     }
     
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
     }
     

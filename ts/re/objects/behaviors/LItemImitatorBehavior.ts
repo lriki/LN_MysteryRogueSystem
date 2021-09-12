@@ -68,7 +68,7 @@ export class LItemImitatorBehavior extends LBehavior {
         super();
     }
 
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         assert(this._itemEntityId.isEmpty());
         const item = SEntityFactory.newItem(REData.getItemFuzzy("kキュアリーフ").item().id);
         item.setParent(this);
@@ -78,7 +78,7 @@ export class LItemImitatorBehavior extends LBehavior {
         REGame.eventServer.subscribe(DBasics.events.prePut, this);
     }
     
-    onDetached(): void {
+    onDetached(self: LEntity): void {
         assert(this._itemEntityId.hasAny());
         REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
         REGame.eventServer.unsubscribe(DBasics.events.prePut, this);

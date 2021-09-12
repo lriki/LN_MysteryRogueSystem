@@ -19,22 +19,22 @@ export class LNapStateBehavior extends LBehavior {
         return b
     }
 
-    onAttached(): void {
+    onAttached(self: LEntity): void {
         REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
     }
 
-    onDetached(): void {
+    onDetached(self: LEntity): void {
         REGame.eventServer.unsubscribe(DBasics.events.roomEnterd, this);
     }
 
     onEvent(eventId: DEventId, args: any): LEventResult {
         // handleRoomEnterd
         if (eventId == DBasics.events.roomEnterd) {
+            const e = (args as RoomEventArgs);
             const entity = this.ownerEntity();
             const block = REGame.map.block(entity.x, entity.y);
             const roomId = block._roomId;
 
-            const e = (args as RoomEventArgs);
             if (Helpers.isHostile(e.entity, entity) && e.newRoomId == roomId) {
                 this._hostileEnterd = true;
             }

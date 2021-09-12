@@ -83,16 +83,16 @@ export class LAbility extends LObject {
         return true;
     }
 
-    public onAttached(): void {
+    public onAttached(self: LEntity): void {
         this.behabiors().forEach(b => {
             b.setParent(this);
-            b.onAttached();
+            b.onAttached(self);
         });
     }
 
-    public onDetached(): void {
+    public onDetached(self: LEntity): void {
         this.behabiors().forEach(b => {
-            b.onDetached();
+            b.onDetached(self);
             b.destroy();
         });
     }
