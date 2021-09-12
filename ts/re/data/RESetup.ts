@@ -2,6 +2,7 @@ import { DBasics } from "./DBasics";
 import { DBuffMode, DBuffOp, DEffectCause, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
+import { DItemEffect } from "./DItemEffect";
 import { DSkill } from "./DSkill";
 import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
@@ -263,7 +264,7 @@ export class RESetup {
                 break;
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effect.selfQualifyings.specialEffectQualifyings.push({code: Game_Action.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
+                emittor.effect.selfQualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
                 break;
         }
     }

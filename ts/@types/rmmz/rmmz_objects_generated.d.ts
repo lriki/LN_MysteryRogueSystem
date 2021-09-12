@@ -29,58 +29,6 @@ declare namespace Game_SelfSwitches.prototype {
     // Game_SelfSwitches.prototype.setValue.!0
     type SetValue0 = Array</* number,number,? */ any>;
 }
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.checkItemScope.!0
-    type CheckItemScope0 = Array<number>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.checkDamageType.!0
-    type CheckDamageType0 = Array<number>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.makeTargets.!ret
-    type MakeTargetsRet = Array<any>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.repeatTargets.!0
-    type RepeatTargets0 = Array<Game_Enemy>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.targetsForOpponents.!ret
-    type TargetsForOpponentsRet = Array<Game_Enemy>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.targetsForFriends.!ret
-    type TargetsForFriendsRet = Array<Game_Actor>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.randomTargets.!ret
-    type RandomTargetsRet = Array<Game_Enemy>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.targetsForDead.!ret
-    type TargetsForDeadRet = Array<Game_Enemy>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.targetsForDeadAndAlive.!ret
-    type TargetsForDeadAndAliveRet = Array<any>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.itemTargetCandidates.!ret
-    type ItemTargetCandidatesRet = Array<Game_Actor>;
-}
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.elementsMaxRate.!1
-    type ElementsMaxRate1 = Array<number>;
-}
-declare namespace Game_ActionResult.prototype {
-    // Game_ActionResult.prototype.addedStateObjects.!ret
-    type AddedStateObjectsRet = Array<any>;
-}
-declare namespace Game_ActionResult.prototype {
-    // Game_ActionResult.prototype.removedStateObjects.!ret
-    type RemovedStateObjectsRet = Array<any>;
-}
 declare namespace Game_BattlerBase.prototype {
     // Game_BattlerBase.prototype.states.!ret
     type StatesRet = Array<any>;
@@ -264,15 +212,7 @@ declare namespace Game_Temp.prototype {
     interface RequestAnimation0 {
     }
 }
-declare namespace Game_Action.prototype {
-    // Game_Action.prototype.targetsForEveryone.!ret
 
-    /**
-     * 
-     */
-    interface TargetsForEveryoneRet {
-    }
-}
 declare namespace Game_Map.prototype {
     // Game_Map.prototype.vehicles.!ret
 

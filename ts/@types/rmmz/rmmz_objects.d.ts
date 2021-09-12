@@ -10,7 +10,7 @@ declare global {
  * 
  * The game object class for a battle action.
  */
- export class Game_Action extends Game_Character {
+ export class Game_Action {
 
     initialize(subject: any, forcing: any): void;
     clear(): void;
@@ -29,7 +29,7 @@ declare global {
     isSkill(): boolean;
     isItem(): boolean;
     numRepeats(): number;
-    checkItemScope(list: Game_Action.prototype.CheckItemScope0): boolean;
+    checkItemScope(list: number[]): boolean;
     isForOpponent(): boolean;
     isForFriend(): boolean;
     isForEveryone(): boolean;
@@ -41,7 +41,7 @@ declare global {
     isForAll(): boolean;
     needsSelection(): boolean;
     numTargets(): number;
-    checkDamageType(list: Game_Action.prototype.CheckDamageType0): boolean;
+    checkDamageType(list: number[]): boolean;
     isHpEffect(): boolean;
     isMpEffect(): boolean;
     isDamage(): boolean;
@@ -60,24 +60,24 @@ declare global {
     prepare(): void;
     isValid(): /* !this._forcing */ any;
     speed(): void;
-    makeTargets(): Game_Action.prototype.MakeTargetsRet;
-    repeatTargets(targets: Game_Action.prototype.RepeatTargets0): Array<any>;
+    makeTargets(): any[];
+    repeatTargets(targets: Game_Enemy[]): Array<any>;
     confusionTarget(): Game_Enemy;
-    targetsForEveryone(): Game_Action.prototype.TargetsForEveryoneRet;
-    targetsForOpponents(): Game_Action.prototype.TargetsForOpponentsRet;
-    targetsForFriends(): Game_Action.prototype.TargetsForFriendsRet;
-    randomTargets(unit: Game_Troop): Game_Action.prototype.RandomTargetsRet;
-    targetsForDead(unit: Game_Party): Game_Action.prototype.TargetsForDeadRet;
-    targetsForAlive(unit: Game_Party | Game_Troop): Array<Game_Enemy>;
-    targetsForDeadAndAlive(unit: Game_Party): Game_Action.prototype.TargetsForDeadAndAliveRet;
+    targetsForEveryone(): Game_Battler[];
+    targetsForOpponents(): Game_Enemy[];
+    targetsForFriends(): Game_Actor[];
+    randomTargets(unit: Game_Troop): Game_Enemy[];
+    targetsForDead(unit: Game_Party): Game_Enemy[];
+    targetsForAlive(unit: Game_Party | Game_Troop): Game_Enemy[];
+    targetsForDeadAndAlive(unit: Game_Party): Game_Battler[];
     evaluate(): number;
-    itemTargetCandidates(): Game_Action.prototype.ItemTargetCandidatesRet;
+    itemTargetCandidates(): Game_Actor[];
     evaluateWithTarget(target: Game_Actor): number;
     testApply(target: Game_Actor): boolean;
     testLifeAndDeath(target: Game_Actor): boolean;
     hasItemAnyValidEffects(target: Game_Actor): void;
     testItemEffect(target: Game_Actor, effect: any): boolean;
-    itemCnt(target: /* Game_Action.prototype.+Game_BattlerBase */ any):  /* error */ any;
+    itemCnt(target: any):  /* error */ any;
     itemMrf(target: any):  /* error */ any;
     itemHit(): number;
     itemEva(target: Game_Actor):  /* error */ any;
@@ -86,7 +86,7 @@ declare global {
     makeDamageValue(target: Game_Actor, critical: boolean): number;
     evalDamageFormula(target: Game_Actor): number;
     calcElementRate(target: Game_Actor): number;
-    elementsMaxRate(target: Game_Actor, elements: Game_Action.prototype.ElementsMaxRate1): number;
+    elementsMaxRate(target: Game_Actor, elements: Game_Action.prototype.ElementsMaxRate1): number[];
     applyCritical(damage: number): number;
     applyVariance(damage: number, variance: any): number;
     applyGuard(damage: number, target: Game_Actor): number;
