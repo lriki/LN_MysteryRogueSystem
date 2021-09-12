@@ -29,13 +29,14 @@ export class LCharacterAI_Normal extends LCharacterAI {
         
         this._actionDeterminer.decide(context, self);
 
-        // 攻撃目標が新たに設定されていれば、それを移動目標とする
-        if (hasPrimaryTarget != this._actionDeterminer.hasPrimaryTarget()) {
-            if (this._actionDeterminer.hasPrimaryTarget()) {
-                const target = this._actionDeterminer.primaryTarget();
-                this._moveDeterminer.setTargetPosition(target.x, target.y);
-            }
-            else {
+
+        if (this._actionDeterminer.hasPrimaryTarget()) {
+            // 攻撃対象が設定されていれば、常に目標座標を更新し続ける
+            const target = this._actionDeterminer.primaryTarget();
+            this._moveDeterminer.setTargetPosition(target.x, target.y);
+        }
+        else {
+            if (hasPrimaryTarget != this._actionDeterminer.hasPrimaryTarget()) {
                 this._moveDeterminer.setTargetPosition(-1, -1);
             }
         }
