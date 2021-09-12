@@ -46,7 +46,6 @@ export class LGrabFootBehavior extends LBehavior {
     }
     
     onAttached(self: LEntity): void {
-        console.log("LGrabFootBehavior");
         const target = UMovement.getFrontBlock(self).getFirstEntity(BlockLayerKind.Unit);
         if (target) {
             this._targetId  = target.entityId();
@@ -61,7 +60,6 @@ export class LGrabFootBehavior extends LBehavior {
 
     onEvent(eventId: DEventId, args: any): LEventResult {
         if (eventId == DBasics.events.preWalk) {
-            console.log("args", args);
             const e = (args as WalkEventArgs);
             if (e.walker.entityId().equals(this._targetId)) {
                 console.log("つかまれている");
