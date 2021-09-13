@@ -17,6 +17,7 @@ export interface TilemapViewInfo {
 
 export interface SEntityVisibility {
     visible: boolean;
+    translucent: boolean;
     image?: DPrefabImage;
 }
 
@@ -70,29 +71,39 @@ export class SView {
     }
     
     public static getEntityVisibility(entity: LEntity): SEntityVisibility {
-        // 透明状態
-        if (entity.traits(DTraits.Invisible).length > 0) {
-            return { visible: false };
-        }
 
         const subject = REGame.camera.focusedEntity();
         if (subject && !subject.entityId().equals(entity.entityId())) {
+            // entity は操作中キャラ以外
             
             // 目つぶし状態
             if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
-                return { visible: false };
+                return { visible: false, translucent: false };
+            }
+            
+            // 透明状態
+            if (entity.traits(DTraits.Invisible).length > 0) {
+                return { visible: false, translucent: false };
             }
 
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
                 if (entity.findEntityBehavior(LUnitBehavior)) {
-                    return { visible: true, image: REData.prefabs[DBasics.prefabs.illusionActor].image };
+                    return { visible: true, translucent: false, image: REData.prefabs[DBasics.prefabs.illusionActor].image };
                 }
                 else {
-                    return { visible: true, image: REData.prefabs[DBasics.prefabs.illusionItem].image };
+                    return { visible: true, translucent: false, image: REData.prefabs[DBasics.prefabs.illusionItem].image };
                 }
             }
         }
+        else {
+            // entity は操作中キャラ
 
-        return { visible: true };
+            // 透明状態
+            if (entity.traits(DTraits.Invisible).length > 0) {
+                return { visible: true, translucent: true };
+            }
+        }
+
+        return { visible: true, translucent: false };
     }
 }

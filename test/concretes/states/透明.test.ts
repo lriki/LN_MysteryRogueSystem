@@ -11,7 +11,20 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.states.透明", () => {
+test("concretes.states.透明.Plaer", () => {
+    TestEnv.newGame();
+    const stateId = REData.getStateFuzzy("kState_UT透明").id;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 11, 3);
+    actor1.addState(stateId);
+
+    expect(SView.getEntityVisibility(actor1).visible).toBe(true);
+    expect(SView.getEntityVisibility(actor1).translucent).toBe(true);
+});
+
+
+test("concretes.states.透明.Enemy", () => {
     TestEnv.newGame();
     const stateId = REData.getStateFuzzy("kState_UT透明").id;
 

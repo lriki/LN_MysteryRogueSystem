@@ -165,7 +165,7 @@ export class REVisual_Entity
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
 
-            this.updateOpacity(entity, event);
+            this.updateOpacity(entity, event, visibility);
 
 
             
@@ -181,7 +181,7 @@ export class REVisual_Entity
         }
     }
 
-    private updateOpacity(entity: LEntity, event: Game_REPrefabEvent): void {
+    private updateOpacity(entity: LEntity, event: Game_REPrefabEvent, visibility: SEntityVisibility): void {
 
         // 初回更新時に、現在の表示状態を覚えておく。フェードインを正しく開始できるようにするため。
         if (this._initialUpdate) {
@@ -200,7 +200,7 @@ export class REVisual_Entity
             if (visible) {
                 // フェードイン
                 this._visibilityOpacityStart = event.opacity();
-                this._visibilityOpacityTarget = this.getActualOpacity(this._entity);
+                this._visibilityOpacityTarget = this.getActualOpacity(this._entity, visibility);
                 this._visibilityFrame = opacityFrames;
             }
             else {
@@ -222,7 +222,7 @@ export class REVisual_Entity
             }
         }
         else {
-            opacity = this.getActualOpacity(entity);
+            opacity = this.getActualOpacity(entity, visibility);
         }
 
         event.setOpacity(opacity);
@@ -236,7 +236,11 @@ export class REVisual_Entity
         return entity.getCharacterImage();
     }
 
-    private getActualOpacity(entity: LEntity): number {
+    private getActualOpacity(entity: LEntity, visibility: SEntityVisibility): number {
+        if (!visibility.visible) return 0;
+        if (visibility.translucent) return 127;
+        return 255;
+        /*
         if (entity.traits(DTraits.Invisible).length > 0) {
             if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
                 return 127;
@@ -248,6 +252,7 @@ export class REVisual_Entity
         else {
             return 255;
         }
+        */
     }
 
 /*

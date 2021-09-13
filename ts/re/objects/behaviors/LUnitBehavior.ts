@@ -23,6 +23,7 @@ import { DPrefabImage } from "ts/re/data/DPrefab";
 import { UName } from "ts/re/usecases/UName";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { DStateRestriction } from "ts/re/data/DState";
+import { SView } from "ts/re/system/SView";
 
 /**
  * 
@@ -393,8 +394,11 @@ export class LUnitBehavior extends LBehavior {
 
             
             if (!self.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
-                // 相手の方向を向く
-                self.dir = UMovement.getLookAtDir(self, effectContext.effectorFact().subject());
+                // 相手が可視であれば、その方向を向く
+                const subject = effectContext.effectorFact().subject();
+                if (SView.getEntityVisibility(subject).visible) {
+                    self.dir = UMovement.getLookAtDir(self, subject);
+                }
             }
 
             for (const target of targets) {
