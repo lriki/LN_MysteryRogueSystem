@@ -249,7 +249,7 @@ export abstract class LBehavior extends LObject {
 
     onAttached(self: LEntity): void {}
     onDetached(self: LEntity): void {}
-    onEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
+    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
     onPartyEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
 
 

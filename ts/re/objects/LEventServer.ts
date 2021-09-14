@@ -1,6 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { RESystem } from "ts/re/system/RESystem";
+import { SCommandContext } from "../system/SCommandContext";
 import { LBehavior } from "./behaviors/LBehavior";
 import { LBehaviorId } from "./LObject";
 import { REGame } from "./REGame";
@@ -66,11 +67,11 @@ export class LEventServer {
         }
     }
 
-    public publish(eventId: DEventId, args: any): boolean {
+    public publish(context: SCommandContext, eventId: DEventId, args: any): boolean {
         for (const e of this._entries) {
             if (e.eventId == eventId) {
                 const b = REGame.world.behavior(e.behaviorId);
-                const r = b.onEvent(eventId, args);
+                const r = b.onEvent(context, eventId, args);
                 if (r != LEventResult.Pass) {
                     RESystem.integration.onEventPublished(eventId, args, true);
                     return false;

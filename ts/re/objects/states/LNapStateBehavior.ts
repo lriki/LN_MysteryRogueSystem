@@ -27,7 +27,7 @@ export class LNapStateBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(DBasics.events.roomEnterd, this);
     }
 
-    onEvent(eventId: DEventId, args: any): LEventResult {
+    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
         // handleRoomEnterd
         if (eventId == DBasics.events.roomEnterd) {
             const e = (args as RoomEventArgs);

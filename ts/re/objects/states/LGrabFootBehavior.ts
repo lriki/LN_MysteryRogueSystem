@@ -20,7 +20,7 @@ import { LEventResult } from "../LEventServer";
 export class LGrabFootBehavior extends LBehavior {
 
     /*
-    影縫い状態とは違うのか？
+    影縫い状態とは違うの？
     ----------
     SFCトルネコのマドハンドのように、掴まれている状態で移動しようとしたら
     相手にモーション取らせるようなケースでは、ステート扱いしないほうが良い。
@@ -58,12 +58,12 @@ export class LGrabFootBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
     }
 
-    onEvent(eventId: DEventId, args: any): LEventResult {
+    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
         if (eventId == DBasics.events.preWalk) {
             const e = (args as WalkEventArgs);
             if (e.walker.entityId().equals(this._targetId)) {
-                console.log("つかまれている");
-                return LEventResult.Pass;
+                context.postMessage(tr2("%1は身動きが取れない！").format(UName.makeUnitName(e.walker)));
+                return LEventResult.Handled;
             }
         }
         return LEventResult.Pass;

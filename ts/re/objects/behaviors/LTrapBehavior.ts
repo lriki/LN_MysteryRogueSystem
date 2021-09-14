@@ -66,7 +66,7 @@ export class LTrapBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(DBasics.events.skillEmitted, this);
     }
 
-    onEvent(eventId: DEventId, args: any): LEventResult {
+    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
         if (eventId == DBasics.events.skillEmitted) {
             const entity = this.ownerEntity();
             const e = args as SkillEmittedArgs;

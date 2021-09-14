@@ -146,14 +146,14 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
-            if (!REGame.eventServer.publish(DBasics.events.preWalk, args)) return REResponse.Canceled;
+            if (!REGame.eventServer.publish(context, DBasics.events.preWalk, args)) return REResponse.Canceled;
 
             if (activity.isFastForward()) {
                 this._straightDashing = true;
             }
 
             const layer = self.getHomeLayer();
-            if (UMovement.moveEntity(self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
+            if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
                 context.postSequel(self, RESystem.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
@@ -211,7 +211,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
-            if (!REGame.eventServer.publish(DBasics.events.prePut, args)) return REResponse.Canceled;
+            if (!REGame.eventServer.publish(context, DBasics.events.prePut, args)) return REResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findEntityBehavior(LInventoryBehavior);

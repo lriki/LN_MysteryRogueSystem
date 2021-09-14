@@ -10,6 +10,7 @@ import { RESystem } from "../system/RESystem";
 import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { LRandom } from "ts/re/objects/LRandom";
 import { UBlock } from "ts/re/usecases/UBlock";
+import { SCommandContext } from "../system/SCommandContext";
 
 export interface SPoint {
     x: number;
@@ -496,7 +497,7 @@ export class UMovement {
         return true;
     }
 
-    public static moveEntity(entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: BlockLayerKind): boolean {
+    public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: BlockLayerKind): boolean {
         const map = REGame.map;
 
         assert(entity.floorId.equals(map.floorId()));
@@ -513,7 +514,7 @@ export class UMovement {
             entity.x = x;
             entity.y = y;
             newBlock.addEntity(toLayer, entity);
-            this._postLocate(entity, oldBlock, newBlock, map);
+            this._postLocate(entity, oldBlock, newBlock, map, context);
             return true;
         }
         else {
@@ -541,23 +542,25 @@ export class UMovement {
         entity.x = x;
         entity.y = y;
         newBlock.addEntity(layer, entity);
-        this._postLocate(entity, oldBlock, newBlock, map);
+        this._postLocate(entity, oldBlock, newBlock, map, undefined);
     }
     
-    private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap) {
+    private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap, context: SCommandContext | undefined) {
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
 
-        if (oldBlock._roomId != newBlock._roomId) {
-            const args: RoomEventArgs = {
-                entity: entity,
-                newRoomId: newBlock._roomId,
-                oldRoomId: oldBlock._roomId,
-            };
-        
-            REGame.eventServer.publish(DBasics.events.roomEnterd, args);
-            REGame.eventServer.publish(DBasics.events.roomLeaved, args);
+        if (context) {
+            if (oldBlock._roomId != newBlock._roomId) {
+                const args: RoomEventArgs = {
+                    entity: entity,
+                    newRoomId: newBlock._roomId,
+                    oldRoomId: oldBlock._roomId,
+                };
+            
+                REGame.eventServer.publish(context, DBasics.events.roomEnterd, args);
+                REGame.eventServer.publish(context, DBasics.events.roomLeaved, args);
+            }
         }
 
         entity._located = true;

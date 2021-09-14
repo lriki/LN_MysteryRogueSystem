@@ -199,13 +199,13 @@ export class SEmittorPerformer {
         }
     }
 
-    private raiseSkillEmitted(performer: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
+    private raiseSkillEmitted(context: SCommandContext, performer: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
         const args: SkillEmittedArgs = {
             performer: performer,
             targets: targets,
             skillId: skillId,
         };
-        REGame.eventServer.publish(DBasics.events.skillEmitted, args)
+        REGame.eventServer.publish(context, DBasics.events.skillEmitted, args)
     }
 
     private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
@@ -263,7 +263,7 @@ export class SEmittorPerformer {
                 effectContext.applyWithWorth(context, [performer]);
 
                 if (skillId > 0) {
-                    this.raiseSkillEmitted(performer, [performer], skillId);
+                    this.raiseSkillEmitted(context, performer, [performer], skillId);
                     this.callSkillPerformed(context, performer, [performer], skillId);
                 }
             });
@@ -298,7 +298,7 @@ export class SEmittorPerformer {
                         context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
                             .then(() => {
                                 if (skillId > 0) {
-                                    this.raiseSkillEmitted(performer, [target], skillId);
+                                    this.raiseSkillEmitted(context, performer, [target], skillId);
                                     this.callSkillPerformed(context, performer, [performer], skillId);
                                 }
                                 return true;
@@ -307,7 +307,7 @@ export class SEmittorPerformer {
                 }
                 else {
                     // target が無くても、スキル発動したことは伝える
-                    if (skillId > 0) this.raiseSkillEmitted(performer, [], skillId);
+                    if (skillId > 0) this.raiseSkillEmitted(context, performer, [], skillId);
                 }
             }
         }

@@ -133,7 +133,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return REResponse.Pass;
     }
     
-    onEvent(eventId: DEventId, args: any): LEventResult {
+    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
         if (eventId == DBasics.events.preWalk) {

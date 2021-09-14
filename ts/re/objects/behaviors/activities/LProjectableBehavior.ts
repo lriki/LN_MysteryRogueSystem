@@ -122,7 +122,7 @@ export class LProjectableBehavior extends LBehavior {
         self.dir = this.blowDirection;
 
 
-        if (UMovement.moveEntity(self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
+        if (UMovement.moveEntity(context, self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
             context.postSequel(self, RESystem.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
