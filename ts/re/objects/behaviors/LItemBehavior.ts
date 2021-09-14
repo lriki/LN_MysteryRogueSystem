@@ -76,6 +76,7 @@ export class LItemBehavior extends LBehavior {
                     .setItemEntity(self)
                     .setSelectedTargetItems(activity.objects2())
                     .performe(context);
+                context.postDestroy(self);
             }
         }
         // [食べられた]
