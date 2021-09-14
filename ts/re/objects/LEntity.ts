@@ -1394,6 +1394,9 @@ export class LEntity extends LObject
     //----------------------------------------
     // Fomula properties
 
+    public get hp(): number {
+        return this.actualParam(DBasics.params.hp);
+    }
     public get atk(): number {
         return this.actualParam(DBasics.params.atk);
     }

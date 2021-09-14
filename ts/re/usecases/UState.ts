@@ -38,6 +38,7 @@ export class UState {
      * 本当に消すべきもの・残すべきもの・追加するべきものを判断して必要な操作だけを行えるようにする。
      */
     public static resolveStates(entity: LEntity, newStates: StateAddition[], removeStateIds: DStateId[]): LState[] {
+        const entityData = entity.data();
         const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), removing: false, new: false, level: s.level() }; });
         const stateGroups: WorkStateGroup[] = REData.stateGroups.map(sg => { return { data: sg, states: [] }; });
 
@@ -100,6 +101,15 @@ export class UState {
                 const cond = eval(data.autoAdditionCondition);
                 if (cond === true) {
                     currentStates.push({ data: data, removing: false, new: true, level: 1 });
+                }
+            }
+        }
+        for (const data of entityData.autoAdditionStates) {
+            if (!currentStates.find(s => s.data.id == data.stateId)) {
+                const a = entity;
+                const cond = eval(data.condition);
+                if (cond === true) {
+                    currentStates.push({ data: REData.states[data.stateId], removing: false, new: true, level: 1 });
                 }
             }
         }

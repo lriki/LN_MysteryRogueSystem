@@ -552,7 +552,7 @@ export class REDataManager
         }
         
 
-        // Import Monsters
+        // Import Enemies
         $dataEnemies.forEach(x => {
             const [entity, enemy] = REData.newEnemy();
             if (x) {
@@ -575,6 +575,8 @@ export class REDataManager
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
                 entity.entity = parseMetaToEntityProperties(x.meta);
+
+                RESetup.setupEnemy(entity);
             }
         });
 

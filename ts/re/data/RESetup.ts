@@ -268,6 +268,15 @@ export class RESetup {
                 break;
         }
     }
+
+    public static setupEnemy(entity: DEntity): void {
+        const data = entity.enemyData();
+        switch (entity.entity.key) {
+            case "kEnemy_ブラストミミック":
+                entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
+                break;
+        }
+    }
     
 
     private static setupGrassCommon(entity: DEntity): void {

@@ -32,6 +32,11 @@ export interface DReaction {
     emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
 }
 
+export interface DEntityAutoAdditionState {
+    stateId: DStateId;
+    condition: string;
+}
+
 /**
  * [2021/6/22] Database 修正について
  * ----------
@@ -95,6 +100,12 @@ export class DEntity {
      */
     effectSet: DEffectSet;
 
+    /**
+     * 自動追加ステート。
+     * これによって、HPが少なくなったら逃げ出したり、自爆したりといったコントロールを行う。
+     */
+    autoAdditionStates: DEntityAutoAdditionState[];
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;
@@ -109,6 +120,7 @@ export class DEntity {
         this.idealParams = [];
         this.reactions = [];
         this.effectSet = new DEffectSet();
+        this.autoAdditionStates = [];
     }
 
     public prefab(): DPrefab {
