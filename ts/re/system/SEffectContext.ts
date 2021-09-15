@@ -178,6 +178,17 @@ export class SEffectContext {
             target.removeStates(removeStates);
         }
 
+        // Animation
+        {
+            const effectData = effect.data();
+            const behavior = this._effectorFact.subjectBehavior();
+            const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
+            const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
+            if (rmmzAnimationId > 0) {
+                commandContext.postAnimation(target, rmmzAnimationId, true);
+             }
+        }
+
         return result;
     }
 

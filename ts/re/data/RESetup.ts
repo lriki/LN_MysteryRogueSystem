@@ -68,6 +68,11 @@ export class RESetup {
                 break;
             case "kState_UT透明":
                 data.effect.traits.push({ code: DTraits.Invisible, dataId: 0, value: 0 });
+                data.submatchStates.push(REData.getStateFuzzy("kState_UT透明_モンスター").id);
+                break;
+            case "kState_UT透明_モンスター":
+                data.effect.traits.push({ code: DTraits.Invisible, dataId: 0, value: 0 });
+                data.effect.matchConditions.kindId = DBasics.entityKinds.MonsterKindId;
                 break;
             case "kState_UT足つかみ":
                 data.effect.behaviors.push("LGrabFootBehavior");

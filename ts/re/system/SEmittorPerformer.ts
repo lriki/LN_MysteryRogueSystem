@@ -255,9 +255,9 @@ export class SEmittorPerformer {
             if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
             const effectContext = new SEffectContext(effectSubject, context.random());
     
-            //if (emittor.effect.rmmzAnimationId) {
+            // if (emittor.effect.rmmzAnimationId) {
             //    context.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
-           // }
+            // }
     
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
             context.postCall(() => {
@@ -290,10 +290,10 @@ export class SEmittorPerformer {
                         // 斜め向きで壁の角と交差しているので通常攻撃は通らない
                     }
                     else {
-                        //const rmmzAnimationId = (emittor.effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : emittor.effect.rmmzAnimationId;
-                        //if (rmmzAnimationId > 0) {
-                        ////    context.postAnimation(target, rmmzAnimationId, true);
-                        //}
+                        // const rmmzAnimationId = (emittor.effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : emittor.effect.rmmzAnimationId;
+                        // if (rmmzAnimationId > 0) {
+                        //    context.postAnimation(target, rmmzAnimationId, true);
+                        // }
                         
                         // TODO: SEffectSubject はダミー
                         context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)

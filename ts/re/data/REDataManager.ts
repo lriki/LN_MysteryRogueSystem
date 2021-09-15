@@ -583,6 +583,7 @@ export class REDataManager
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
                 entity.entity = parseMetaToEntityProperties(x.meta);
+                entity.entity.kindId = DBasics.entityKinds.MonsterKindId;
 
                 RESetup.setupEnemy(entity);
             }

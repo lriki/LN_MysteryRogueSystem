@@ -201,6 +201,7 @@ export class UState {
                     assert(workState.new);
                     
                     state = SStateFactory.newState(workState.data.id);
+                    state._submatchEffectIndex = workState.submatchEffectIndex;
                     state.setParent(entity);
                     assert(state.hasId());
                     state.onAttached(entity);
@@ -216,7 +217,7 @@ export class UState {
     }
 
     private static selectEffectIndex(entity: LEntity, state: DState): number {
-        for (let i = 0; i < state.submatchStates.length; i++) {
+        for (let i = state.submatchStates.length - 1; i >= 0; i--) {
             const stateId = state.submatchStates[i];
             const effect = REData.states[stateId].effect;
             if (this.meetsConditions(entity, effect)) {
@@ -229,8 +230,11 @@ export class UState {
     private static meetsConditions(entity: LEntity, effect: DStateEffect): boolean {
         //const entityData = entity.data();
 
-        if (effect.matchConditions.kindId != 0 && effect.matchConditions.kindId !=entity.kindDataId()) {
-            return false;
+        if (effect.matchConditions.kindId != 0) {
+            const kindId = entity.kindDataId();
+            if (effect.matchConditions.kindId != kindId) {
+                return false;
+            }
         }
         return true;
     }
