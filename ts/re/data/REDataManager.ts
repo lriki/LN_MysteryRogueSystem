@@ -333,10 +333,11 @@ export class REDataManager
                         state.effect.traits = x.traits.concat(x.meta ? makeStateTraitsFromMeta(x.meta) : []);
                         state.effect.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
                         state.import(x);
-    
-                        RESetup.setupDirectly_State(state);
                     }
                 }
+            }
+            for (const state of REData.states) {
+                RESetup.setupDirectly_State(state);
             }
 
             // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
