@@ -4,7 +4,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
-import { DAutoRemovalTiming, DState, DStateRestriction } from "ts/re/data/DState";
+import { DAutoRemovalTiming, DState, DStateEffect, DStateRestriction } from "ts/re/data/DState";
 import { assert } from "ts/re/Common";
 import { REGame } from "../REGame";
 import { LConfusionAI } from "../ai/LConfusionAI";
@@ -41,11 +41,11 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.resetStateCounts
     private resetStateCounts(): void {
-        const state = this.stateData();
+        const effect = this.stateEffect();
 
         
         this._stateTurn = null;
-        const data = state.autoRemovals.find(x => x.kind == DAutoRemovalTiming.TurnEnd);
+        const data = effect.autoRemovals.find(x => x.kind == DAutoRemovalTiming.TurnEnd);
         if (data && data.kind === DAutoRemovalTiming.TurnEnd) {
             if (data.minTurns ==  data.maxTurns) {
                 this._stateTurn = data.maxTurns;
@@ -83,15 +83,21 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         return parent.stateData();
     }
 
+    private stateEffect(): DStateEffect {
+        const parent = this.parentAs(LState);
+        assert(parent);
+        return parent.stateEffect();
+    }
+
     onAttached(self: LEntity): void {
         this.resetStateCounts();
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
         
-        const state = this.stateData();
-        if (state.restriction == DStateRestriction.AttackToOther) {
+        const effect = this.stateEffect();
+        if (effect.restriction == DStateRestriction.AttackToOther) {
             this._characterAI = new LConfusionAI();
         }
-        else if (state.restriction == DStateRestriction.Blind) {
+        else if (effect.restriction == DStateRestriction.Blind) {
             this._characterAI = new LBlindAI();
         }
     }
@@ -152,11 +158,11 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         else if (phase == DecisionPhase.Manual ||
             phase == DecisionPhase.AIMinor ||
             phase == DecisionPhase.AIMajor) {
-            const state = this.stateData();
-            if (state.restriction == DStateRestriction.None) {
+            const effect = this.stateEffect();
+            if (effect.restriction == DStateRestriction.None) {
                 return SPhaseResult.Pass;
             }
-            else if (state.restriction == DStateRestriction.NotAction) {
+            else if (effect.restriction == DStateRestriction.NotAction) {
 
                 context.postConsumeActionToken(entity);
 
@@ -185,8 +191,8 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
 
     onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {
-        const state = this.stateData();
-        if (state.restriction == DStateRestriction.AttackToOther) {
+        const effect = this.stateEffect();
+        if (effect.restriction == DStateRestriction.AttackToOther) {
             const unit = activity.subject().findEntityBehavior(LUnitBehavior);
             if (unit && unit.manualMovement()) {    // Player?
 

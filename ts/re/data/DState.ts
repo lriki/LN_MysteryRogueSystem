@@ -1,3 +1,5 @@
+import { DMatchConditions } from "./DCommon";
+import { DEffect } from "./DEffect";
 import { DParameterId } from "./DParameter";
 import { DStateGroupId } from "./DStateGroup";
 import { DTraitId } from "./DTraits";
@@ -101,6 +103,34 @@ export namespace DStateRestriction {
     }
 }
 
+export class DStateEffect {
+
+    /** このステートが Match の子効果として定義される際の有効化条件 */
+    matchConditions: DMatchConditions;
+
+    /** Restriction */
+    restriction: DStateRestriction;
+
+
+    traits: IDataTrait[];
+
+    behaviors: string[];
+
+
+    /** 自動解除のタイミング */
+    //autoRemovalTiming: DAutoRemovalTiming;
+    autoRemovals: DAutoRemoval[];
+
+
+    public constructor() {
+        this.matchConditions = { kindId: 0 };
+        this.restriction = 0;
+        this.traits = [];
+        this.behaviors = [];
+        this.autoRemovals = [];
+    }
+}
+
 export class DState {
     /** ID (0 is Invalid). */
     id: DStateId;
@@ -109,9 +139,6 @@ export class DState {
 
     /** Name */
     displayName: string;
-
-    /** Restriction */
-    restriction: DStateRestriction;
 
     iconIndex: number;
 
@@ -125,31 +152,23 @@ export class DState {
     message3: string;
     message4: string;
 
-    traits: IDataTrait[];
-
-    behaviors: string[];
-
     stateGroupKeys: string[];
     stateGroupIds: DStateGroupId[];
-
 
 
     //minBuffLevel: number;
     //maxBuffLevel: number;
     //parameterBuffFormulas: (string | undefined)[];    // Index is DParameterId.
     // ツクールの TRAIT では定数加算することができない。割合変化のみ。そのため用意したもの
-
     autoAdditionCondition: string | undefined;
 
-    /** 自動解除のタイミング */
-    //autoRemovalTiming: DAutoRemovalTiming;
-    autoRemovals: DAutoRemoval[];
+    effect: DStateEffect;
+    submatchStates: DStateId[];
 
     public constructor(id: DStateId) {
         this.id = id;
         this.displayName = "";
         this.key = "";
-        this.restriction = 0;
         this.iconIndex = 0;
         this.displayNameIcon = false;
         //this.autoRemovalTiming = DAutoRemovalTiming.None;
@@ -160,14 +179,14 @@ export class DState {
         this.message2 = "";
         this.message3 = "";
         this.message4 = "";
-        this.traits = [];
-        this.behaviors = [];
         this.stateGroupKeys = [];
         this.stateGroupIds = [];
         //this.minBuffLevel = -2;
         //this.maxBuffLevel = 2;
         //this.parameterBuffFormulas = [];
-        this.autoRemovals = [];
+        this.autoAdditionCondition = undefined;
+        this.effect = new DStateEffect();
+        this.submatchStates = [];
     }
 
     public import(data: IDataState): void {
@@ -184,10 +203,10 @@ export class DState {
             case 0: // None
                 break;
             case 1: // AfterAction
-                this.autoRemovals.push({ kind: DAutoRemovalTiming.AfterAction });
+                this.effect.autoRemovals.push({ kind: DAutoRemovalTiming.AfterAction });
                 break;
             case 2: // TurnEnd
-                this.autoRemovals.push({
+                this.effect.autoRemovals.push({
                     kind: DAutoRemovalTiming.TurnEnd,
                     minTurns: data.minTurns,
                     maxTurns: data.maxTurns,
@@ -229,3 +248,4 @@ export function makeStateBehaviorsFromMeta(meta: any): string[] {
     }
     return [];
 }
+

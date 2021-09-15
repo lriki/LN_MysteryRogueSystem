@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DAutoRemovalTiming, DState, DStateId } from "ts/re/data/DState";
+import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
 import { checkContinuousResponse, REResponse } from "ts/re/system/RECommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
@@ -49,6 +49,17 @@ export type LStateId = LObjectId;
 そうしないと、「あるEntityに透明ステートがついているか？」を判断するときに条件が増える。
 ガワは「透明」実際の効果は「透明(エネミー)」のように、LState の中で透過的に扱えるようにしたほうがいいだろう。
 
+
+### 敵・味方で効果の変わる効果(スキル)
+
+こちらもステートと同じ仕組みが要るかも。
+代表例は爆発。プレイヤー・仲間にはダメージ。敵・アイテムは消滅。
+
+普通の攻撃はアイテムには通らないけど、その辺も制御できるようにする必要がある。
+スキルはデフォルトで Unit のみ、条件を追加すればアイテムも可能、とか。
+罠壊しはこの仕組みでできるかも。
+
+内部的には、Emittor は同一。Effect が異なる。
 
 
 [2021/8/29] 封印
@@ -230,6 +241,7 @@ Traitでダメージ計算式みたいに評価式指定かな。
 export class LState extends LObject {
     //private _ownerEntity: LEntity | undefined;    // シリアライズしない
     _stateId: DStateId = 0;
+    _submatchEffectIndex: number = -1;
     _stateBehabiors: LBehaviorId[] = []; // LStateTraitBehavior
     _level: number = 0;
 
@@ -267,6 +279,19 @@ export class LState extends LObject {
 
     public stateData(): DState {
         return REData.states[this._stateId];
+    }
+
+    public stateEffect(): DStateEffect {
+        const data = this.stateData();
+        
+        if (this._submatchEffectIndex >= 0)
+            return REData.states[data.submatchStates[this._submatchEffectIndex]].effect;
+        else
+            return data.effect;
+    }
+
+    public submatchEffectIndex(): number {
+        return this._submatchEffectIndex;
     }
     
     public stateBehabiors(): readonly LBehavior[] {
@@ -329,7 +354,7 @@ export class LState extends LObject {
     }
 
     public collectTraits(result: IDataTrait[]): void {
-        this.stateData().traits.forEach(x => result.push(x));
+        this.stateEffect().traits.forEach(x => result.push(x));
         this.iterateBehaviors(x => {
             x.onCollectTraits(result);
             return true;
@@ -364,12 +389,16 @@ export class LState extends LObject {
 
 
     public checkRemoveAtDamageTesting(paramId: DParameterId): boolean {
-        for (const r of this.stateData().autoRemovals) {
+        for (const r of this.stateEffect().autoRemovals) {
             if (r.kind == DAutoRemovalTiming.DamageTesting && r.paramId == paramId) {
                 return true;
             }
         }
         return false;
     }
+}
+
+export class LStateEffectView {
+
 }
 

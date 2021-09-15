@@ -33,7 +33,7 @@ export class SView {
         if (!subject.entityId().equals(entity.entityId())) {
             
             if (entity.findEntityBehavior(LUnitBehavior)) {
-                if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
+                if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
                     return {
                         name: tr2("なにものか"),
                         iconIndex: 0,
@@ -59,7 +59,7 @@ export class SView {
         const subject = REGame.camera.focusedEntity();
         if (subject) {
             
-            if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
+            if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
                 return {
                     visible: false,
                     tilesetId: 0,
@@ -77,7 +77,7 @@ export class SView {
             // entity は操作中キャラ以外
             
             // 目つぶし状態
-            if (subject.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
+            if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
                 return { visible: false, translucent: false };
             }
             

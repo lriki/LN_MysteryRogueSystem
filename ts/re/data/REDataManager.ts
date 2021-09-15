@@ -322,15 +322,15 @@ export class REDataManager
                     else {
                         state.key = x.meta ? x.meta["RE-Key"]: "";
                         state.displayName = x.name;
-                        state.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
+                        state.effect.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
                         state.iconIndex = x.iconIndex ?? 0;
                         state.priority = x.priority;
                         state.message1 = x.message1 ?? "";
                         state.message2 = x.message2 ?? "";
                         state.message3 = x.message3 ?? "";
                         state.message4 = x.message4 ?? "";
-                        state.traits = x.traits.concat(x.meta ? makeStateTraitsFromMeta(x.meta) : []);
-                        state.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
+                        state.effect.traits = x.traits.concat(x.meta ? makeStateTraitsFromMeta(x.meta) : []);
+                        state.effect.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
                         state.import(x);
     
                         RESetup.setupDirectly_State(state);

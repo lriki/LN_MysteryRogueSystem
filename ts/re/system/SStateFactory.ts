@@ -16,7 +16,7 @@ export class SStateFactory {
         
         //const behabiors: LStateTraitBehavior[] = [behavior];
         const behabiors: LBehavior[] = [behavior];
-        for (const behaviorName of state.stateData().behaviors) {
+        for (const behaviorName of state.stateEffect().behaviors) {
             const b = SBehaviorFactory.createBehavior(behaviorName);// as LStateTraitBehavior;
             if (!b) throw new Error(`Behavior "${behaviorName}" specified in state "${stateId}:${state.stateData().displayName}" is invalid.`);
             behabiors.push(b);

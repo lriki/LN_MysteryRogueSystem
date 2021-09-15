@@ -393,7 +393,7 @@ export class LUnitBehavior extends LBehavior {
 
 
             
-            if (!self.states().find(s => s.stateData().restriction == DStateRestriction.Blind)) {
+            if (!self.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
                 // 相手が可視であれば、その方向を向く
                 const subject = effectContext.effectorFact().subject();
                 if (SView.getEntityVisibility(subject).visible) {

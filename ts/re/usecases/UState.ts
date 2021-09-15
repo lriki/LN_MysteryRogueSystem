@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { LStateLevelType } from "ts/re/data/DEffect";
-import { DAutoRemovalTiming, DState, DStateId } from "ts/re/data/DState";
+import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
 import { DStateGroup } from "ts/re/data/DStateGroup";
 import { REData } from "ts/re/data/REData";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -16,6 +16,7 @@ export interface StateAddition {
 
 interface WorkState {
     data: DState;
+    submatchEffectIndex: number;
     removing: boolean;
     new: boolean;
     level: number;
@@ -26,6 +27,13 @@ interface WorkStateGroup {
 }
 
 export class UState {
+
+    private static effect(state: WorkState): DStateEffect {
+        if (state.submatchEffectIndex >= 0)
+            return REData.states[state.submatchEffectIndex].effect;
+        else
+            return state.data.effect;
+    }
 
     /**
      * ステート追加・削除のメイン処理
@@ -39,7 +47,7 @@ export class UState {
      */
     public static resolveStates(entity: LEntity, newStates: StateAddition[], removeStateIds: DStateId[]): LState[] {
         const entityData = entity.data();
-        const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), removing: false, new: false, level: s.level() }; });
+        const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), submatchEffectIndex: s.submatchEffectIndex(), removing: false, new: false, level: s.level() }; });
         const stateGroups: WorkStateGroup[] = REData.stateGroups.map(sg => { return { data: sg, states: [] }; });
 
         // 新規ステート
@@ -48,7 +56,12 @@ export class UState {
             if (state) {
             }
             else {
-                state = { data: REData.states[newState.stateId], removing: false, new: true, level: 0 };
+                state = {
+                    data: REData.states[newState.stateId],
+                    submatchEffectIndex: this.selectEffectIndex(entity, REData.states[newState.stateId]),
+                    removing: false,
+                    new: true,
+                    level: 0 };
                 currentStates.push(state);
             }
 
@@ -89,7 +102,7 @@ export class UState {
             }
 
             // 削除のチェック
-            if (this.checkRemoveAtActualParam(state.data, entity)) {
+            if (this.checkRemoveAtActualParam(this.effect(state), entity)) {
                 state.removing = true;
             }
         }
@@ -100,7 +113,11 @@ export class UState {
                 const a = entity;
                 const cond = eval(data.autoAdditionCondition);
                 if (cond === true) {
-                    currentStates.push({ data: data, removing: false, new: true, level: 1 });
+                    currentStates.push({
+                        data: data,
+                        submatchEffectIndex: this.selectEffectIndex(entity, data),
+                        removing: false,
+                        new: true, level: 1 });
                 }
             }
         }
@@ -109,7 +126,10 @@ export class UState {
                 const a = entity;
                 const cond = eval(data.condition);
                 if (cond === true) {
-                    currentStates.push({ data: REData.states[data.stateId], removing: false, new: true, level: 1 });
+                    currentStates.push({
+                        data: REData.states[data.stateId],
+                        submatchEffectIndex: this.selectEffectIndex(entity, REData.states[data.stateId]),
+                        removing: false, new: true, level: 1 });
                 }
             }
         }
@@ -195,9 +215,29 @@ export class UState {
         return result;
     }
 
-    private static checkRemoveAtActualParam(data: DState, entity: LEntity): boolean {
+    private static selectEffectIndex(entity: LEntity, state: DState): number {
+        for (let i = 0; i < state.submatchStates.length; i++) {
+            const stateId = state.submatchStates[i];
+            const effect = REData.states[stateId].effect;
+            if (this.meetsConditions(entity, effect)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static meetsConditions(entity: LEntity, effect: DStateEffect): boolean {
+        //const entityData = entity.data();
+
+        if (effect.matchConditions.kindId != 0 && effect.matchConditions.kindId !=entity.kindDataId()) {
+            return false;
+        }
+        return true;
+    }
+
+    private static checkRemoveAtActualParam(effect: DStateEffect, entity: LEntity): boolean {
         const a = entity;
-        for (const r of data.autoRemovals) {
+        for (const r of effect.autoRemovals) {
             if (r.kind == DAutoRemovalTiming.ActualParam) {
                 const v = eval(r.formula);
                 if (v === true) {
@@ -211,7 +251,7 @@ export class UState {
     public static attemptRemoveStateAtFloorTransfer(entity: LEntity): void {
         const removes: DStateId[] = [];
         entity.iterateStates(s => {
-            if (s.stateData().autoRemovals.find(x => x.kind == DAutoRemovalTiming.FloorTransfer)) {
+            if (s.stateEffect().autoRemovals.find(x => x.kind == DAutoRemovalTiming.FloorTransfer)) {
                 removes.push(s.stateDataId());
             }
         });

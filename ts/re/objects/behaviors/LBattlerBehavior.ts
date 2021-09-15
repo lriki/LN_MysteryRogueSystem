@@ -142,15 +142,15 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.restriction
     // 各種 restriction を集計し、制約が最も強いものを返す。
-    public restriction(): DStateRestriction {
-        const restrictions = this.states().map(state => state.restriction);
-        return Math.max(0, ...restrictions);
-    }
+    //public restriction(): DStateRestriction {
+   //     const restrictions = this.states().map(state => state.restriction);
+   //     return Math.max(0, ...restrictions);
+   // }
     
     // Game_BattlerBase.prototype.restriction
-    public isRestricted(): boolean {
-        return this.restriction() > 0;
-    }
+    //public isRestricted(): boolean {
+    //    return this.restriction() > 0;
+    //}
 
     // Game_Actor.prototype.attackAnimationId1
     public attackAnimationId(): number {
