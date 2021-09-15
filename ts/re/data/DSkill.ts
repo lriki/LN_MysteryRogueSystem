@@ -1,4 +1,5 @@
-import { DEmittor, DRmmzEffectScope, DEffectSet, DEmittorId } from "./DEffect";
+import { DRmmzEffectScope } from "./DEffect";
+import { DEmittor, DEmittorId } from "./DEmittor";
 import { DParameterId } from "./DParameter";
 import { REData } from "./REData";
 

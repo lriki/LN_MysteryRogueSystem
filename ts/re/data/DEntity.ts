@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
-import { DEffectSet, DEmittorId } from "./DEffect";
+import { DEmittorSet, DEmittorId } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
@@ -98,7 +98,7 @@ export class DEntity {
      * 
      * TODO: reactions とまとめられないか考えたいところ。
      */
-    effectSet: DEffectSet;
+    emittorSet: DEmittorSet;
 
     /**
      * 自動追加ステート。
@@ -119,7 +119,7 @@ export class DEntity {
         this.enemy = undefined;
         this.idealParams = [];
         this.reactions = [];
-        this.effectSet = new DEffectSet();
+        this.emittorSet = new DEmittorSet();
         this.autoAdditionStates = [];
     }
 

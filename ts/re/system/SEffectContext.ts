@@ -10,16 +10,10 @@ import { LEnemyBehavior } from "ts/re/objects/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
 import { DTraits } from "ts/re/data/DTraits";
-import { DEffectHitType, DParameterEffectApplyType, DParameterQualifying, DOtherEffectQualifying, DEffect } from "ts/re/data/DEffect";
-import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
-import { USpawner } from "ts/re/usecases/USpawner";
-import { RESystem } from "./RESystem";
-import { UTransfer } from "ts/re/usecases/UTransfer";
-import { UIdentify } from "ts/re/usecases/UIdentify";
 import { LRandom } from "ts/re/objects/LRandom";
 import { DEntityKindId } from "ts/re/data/DEntityKind";
 import { DStateId } from "ts/re/data/DState";
-import { SEffectApplyer, SEffectorFact, SEffectQualifyings } from "./SEffectApplyer";
+import { SEffect, SEffectApplyer, SEffectorFact, SEffectQualifyings } from "./SEffectApplyer";
 
 
 export enum SEffectIncidentType {
@@ -109,7 +103,8 @@ export class SEffectContext {
         let deadCount = 0;
         let totalExp = 0;
         for (const target of targets) {
-            const result = this.applyWithHitTest(commandContext, target);
+            const effect = this._effectorFact.selectEffect(target);
+            const result = this.applyWithHitTest(commandContext, effect, target);
             
             result.showResultMessages(commandContext, target);
 
@@ -133,7 +128,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private applyWithHitTest(commandContext: SCommandContext, target: LEntity): LEffectResult {
+    private applyWithHitTest(commandContext: SCommandContext, effect: SEffect, target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -144,24 +139,24 @@ export class SEffectContext {
 
 
             // 命中判定
-            this.judgeHits(target, result);
+            this.judgeHits(effect, target, result);
             
-            result.physical = this._effectorFact.isPhysical();
+            result.physical = effect.isPhysical();
 
             if (result.isHit()) {
-                this.applyCore(commandContext, target, result);
+                this.applyCore(commandContext, effect, target, result);
             }
             //this.updateLastTarget(target);
         }
         else {
-            this.applyCore(commandContext, target, result);
+            this.applyCore(commandContext, effect, target, result);
         }
 
 
         const focusedEntity = REGame.camera.focusedEntity();
-        const friendlySubject = focusedEntity ? Helpers.isFriend(this._effectorFact.subject(), focusedEntity) : false;
+        const friendlySubject = focusedEntity ? Helpers.isFriend(effect.subject(), focusedEntity) : false;
         if (friendlySubject) {  // subject は味方
-            result.focusedFriendly = Helpers.isFriend(this._effectorFact.subject(), target);
+            result.focusedFriendly = Helpers.isFriend(effect.subject(), target);
         }
         else { // subject は味方以外 (敵・NPC)
             result.focusedFriendly = true;  // 敵 vs 敵のときは、味方用のメッセージを表示したい ("ダメージを受けた！")
@@ -171,7 +166,7 @@ export class SEffectContext {
         // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
         {
             const removeStates: DStateId[] = [];
-            for (const p of this._effectorFact.targetApplyer().parameterEffects()) {
+            for (const p of effect.targetApplyer().parameterEffects()) {
                 if (p && !p.isRecover()) {
                     target.iterateStates(s => {
                         if (s.checkRemoveAtDamageTesting(p.paramId)) {
@@ -186,7 +181,7 @@ export class SEffectContext {
         return result;
     }
 
-    private judgeHits(target: LEntity, result: LEffectResult): void {
+    private judgeHits(effect: SEffect, target: LEntity, result: LEffectResult): void {
         const subject = this._effectorFact.subject();
 
         if (subject) {
@@ -203,8 +198,8 @@ export class SEffectContext {
             // 罠Entityなど。
         }
 
-        const hitRate = this._effectorFact.hitRate() * 100;       // 攻撃側命中率
-        const evaRate = this._effectorFact.evaRate(target) * 100; // 受け側回避率
+        const hitRate = effect.hitRate() * 100;       // 攻撃側命中率
+        const evaRate = effect.evaRate(target) * 100; // 受け側回避率
 
         result.missed = result.used && this._rand.nextIntWithMax(100) >= hitRate;
         result.evaded = !result.missed && this._rand.nextIntWithMax(100) < evaRate;
@@ -233,15 +228,15 @@ export class SEffectContext {
         return true;
     }
 
-    private applyCore(commandContext: SCommandContext, target: LEntity, result: LEffectResult): void {
+    private applyCore(commandContext: SCommandContext, effect: SEffect, target: LEntity, result: LEffectResult): void {
 
-        if (this._effectorFact.targetApplyer().hasParamDamage()) {
-            const criRate = this._effectorFact.criRate(target) * 100;
+        if (effect.targetApplyer().hasParamDamage()) {
+            const criRate = effect.criRate(target) * 100;
             result.critical = (this._rand.nextIntWithMax(100) < criRate);
         }
         
-        const applyer = new SEffectApplyer(this._effectorFact, this._rand);
-        applyer.apply(commandContext, this._effectorFact.targetApplyer(), target);
+        const applyer = new SEffectApplyer(effect, this._rand);
+        applyer.apply(commandContext, effect.targetApplyer(), target);
         applyer.apply(commandContext, this._effectorFact.selfApplyer(), this._effectorFact.subject());
     }
 

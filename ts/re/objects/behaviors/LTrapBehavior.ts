@@ -8,13 +8,13 @@ import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext
 import { RESystem } from "ts/re/system/RESystem";
 import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
-import { DEffectCause } from "ts/re/data/DEffect";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { DEventId, SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
+import { DEffectCause } from "ts/re/data/DEmittor";
 
 
 /**
@@ -101,13 +101,13 @@ export class LTrapBehavior extends LBehavior {
 
         //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
         //const itemData = trapItem.itemData();
-        const emittors = self.data().effectSet.emittors(DEffectCause.Affect);
+        const emittors = self.data().emittorSet.emittors(DEffectCause.Affect);
         assert(emittors.length == 1);   // TODO: とりあえず
 
         const emittor = emittors[0];
 
         if (emittor) {
-            const subject = new SEffectorFact(e.self, emittor.effect, SEffectIncidentType.IndirectAttack, target.dir);
+            const subject = new SEffectorFact(e.self, emittor.effectSet, SEffectIncidentType.IndirectAttack, target.dir);
             const effectContext = new SEffectContext(subject, context.random());
 
             //console.log(result);

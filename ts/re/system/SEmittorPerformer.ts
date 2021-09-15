@@ -1,5 +1,5 @@
 import { DBasics } from "ts/re/data/DBasics";
-import { DEmittor, DEffectCause, DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost } from "ts/re/data/DEffect";
+import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
@@ -17,6 +17,7 @@ import { DParameterId } from "ts/re/data/DParameter";
 import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DSkillDataId } from "../data/DSkill";
 import { SEffectorFact } from "./SEffectApplyer";
+import { DEffectCause, DEmittor } from "../data/DEmittor";
 
 
 export class SEmittorPerformer {
@@ -250,13 +251,13 @@ export class SEmittorPerformer {
 
         
         if (emittor.scope.range == DEffectFieldScopeRange.Performer) {
-            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+            const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
             const effectContext = new SEffectContext(effectSubject, context.random());
     
-            if (emittor.effect.rmmzAnimationId) {
-                context.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
-            }
+            //if (emittor.effect.rmmzAnimationId) {
+            //    context.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
+           // }
     
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
             context.postCall(() => {
@@ -279,7 +280,7 @@ export class SEmittorPerformer {
                 // 攻撃対象決定
                 const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
                 if (target) {
-                    const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.DirectAttack, performer.dir);
+                    const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
                     if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                     const effectContext = new SEffectContext(effectSubject, context.random());
                     //effectContext.addEffector(effector);
@@ -289,10 +290,10 @@ export class SEmittorPerformer {
                         // 斜め向きで壁の角と交差しているので通常攻撃は通らない
                     }
                     else {
-                        const rmmzAnimationId = (emittor.effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : emittor.effect.rmmzAnimationId;
-                        if (rmmzAnimationId > 0) {
-                            context.postAnimation(target, rmmzAnimationId, true);
-                        }
+                        //const rmmzAnimationId = (emittor.effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : emittor.effect.rmmzAnimationId;
+                        //if (rmmzAnimationId > 0) {
+                        ////    context.postAnimation(target, rmmzAnimationId, true);
+                        //}
                         
                         // TODO: SEffectSubject はダミー
                         context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
@@ -324,7 +325,7 @@ export class SEmittorPerformer {
 
             // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
             // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
-            const emittorEffects = itemEntity?.data().effectSet.emittors(DEffectCause.Hit);
+            const emittorEffects = itemEntity?.data().emittorSet.emittors(DEffectCause.Hit);
 
             //const actualEmittor = emittorEffects ?? emittor;
             let actualEmittor = emittor;
@@ -334,13 +335,13 @@ export class SEmittorPerformer {
             }
 
             
-            LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, emittor.scope.length, actualEmittor.effect);
+            LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, emittor.scope.length, actualEmittor.effectSet);
             //throw new Error("Not implemented.");
 
 
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
-            const effectSubject = new SEffectorFact(performer, emittor.effect, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+            const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
             const effectContext = new SEffectContext(effectSubject, context.random());
 

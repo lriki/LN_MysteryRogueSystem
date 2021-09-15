@@ -1,6 +1,5 @@
-import { DEmittor, DRmmzEffectScope, DEffectSet } from "./DEffect";
+import { DRmmzEffectScope } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
-import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DEquipmentPartId } from "./DEquipmentPart";
 import { REData } from "./REData";
 

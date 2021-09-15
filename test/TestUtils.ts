@@ -1,9 +1,8 @@
 import { assert } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
-import { DEffectCause } from "ts/re/data/DEffect";
+import { DEffectCause } from "ts/re/data/DEmittor";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
-
 
 export class TestUtils {
     public static testCommonGrassBegin(actor: LEntity, item: LEntity) {
@@ -17,11 +16,11 @@ export class TestUtils {
         expect(item.queryReactions().includes(DBasics.actions.EatActionId)).toBe(true);
 
         // [食べる] に対応する Emittor がある？
-        const emittors = data.effectSet.emittors(DEffectCause.Eat);
+        const emittors = data.emittorSet.emittors(DEffectCause.Eat);
         assert(!!emittors);
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!emittors.find(e => !!e.effect.targetQualifyings.parameterQualifyings.find(x => x.parameterId == DBasics.params.fp && x.formula == "5")));
+        expect(!!emittors.find(e => !!e.effectSet.effects[0].targetQualifyings.parameterQualifyings.find(x => x.parameterId == DBasics.params.fp && x.formula == "5")));
 
         // おなかを減らしておく
         actor.setActualParam(DBasics.params.fp, 500);

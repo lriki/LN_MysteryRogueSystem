@@ -14,7 +14,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/re/objects/LMap";
 import { UAction } from "ts/re/usecases/UAction";
-import { DEffect } from "ts/re/data/DEffect";
+import { DEffect, DEffectSet } from "ts/re/data/DEffect";
 import { REData } from "ts/re/data/REData";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 
@@ -33,7 +33,7 @@ export class LProjectableBehavior extends LBehavior {
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
     //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
-    private _effect: DEffect | undefined;
+    private _effectSet: DEffectSet | undefined;
     //private _effectSubject: LEntityId | undefined;
 
     public clone(newOwner: LEntity): LBehavior {
@@ -59,11 +59,11 @@ export class LProjectableBehavior extends LBehavior {
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
     
-    public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effect: DEffect): void {
+    public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEffectSet): void {
         const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
 
-        common._effect = effect;
+        common._effectSet = effectSet;
         common.blowDirection = dir;
         common.blowMoveCount = length;
         
@@ -168,7 +168,7 @@ export class LProjectableBehavior extends LBehavior {
     }
     
     [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
-        if (this._effect) {
+        if (this._effectSet) {
             const self = args.self;
             const target = args.sender;
             const subject = args.subject;
@@ -178,7 +178,7 @@ export class LProjectableBehavior extends LBehavior {
             
             const animationId = 1;  // TODO:
 
-            const effectSubject = new SEffectorFact(subject.entity(), this._effect, SEffectIncidentType.IndirectAttack, this.blowDirection);
+            const effectSubject = new SEffectorFact(subject.entity(), this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
             const effectContext = new SEffectContext(effectSubject, context.random());
     
             context.postAnimation(target, animationId, true);

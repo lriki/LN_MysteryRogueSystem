@@ -18,13 +18,13 @@ import { DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
 import { REData_Parameter } from "./DParameter";
-import { DEmittor, DEmittorId } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
 import { DPseudonymous } from "./DPseudonymous";
 import { DItemShopType } from "./DItemShop";
 import { REDataExtension } from "./REDataExtension";
+import { DEmittor, DEmittorId } from "./DEmittor";
 
 
 export enum REFloorMapKind

@@ -14,12 +14,13 @@ import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTraits } from './DTraits';
-import { DEffectCause, DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType } from './DEffect';
+import { DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { RESetup } from './RESetup';
+import { DEffectCause } from './DEmittor';
 
 
 declare global {  
@@ -407,18 +408,20 @@ export class REDataManager
                 //const skill = REData.skills[id];
 
                 const emittor = REData.newEmittor();
-                emittor.effect.critical = false;
-                emittor.effect.successRate = x.successRate;
-                emittor.effect.hitType = x.hitType;
-                emittor.effect.rmmzAnimationId = x.animationId;
-                emittor.effect.targetQualifyings.specialEffectQualifyings = x.effects;
+                const effect = new DEffect();
+                effect.critical = false;
+                effect.successRate = x.successRate;
+                effect.hitType = x.hitType;
+                effect.rmmzAnimationId = x.animationId;
+                effect.targetQualifyings.specialEffectQualifyings = x.effects;
 
                 emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
                 emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
 
                 if (x.damage.type > 0) {
-                    emittor.effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
+                emittor.effectSet.effects.push(effect);
                 /*
                 skill.effectSet.setEffect(DEffectCause.Affect, effect);
                 // TODO:
@@ -449,18 +452,20 @@ export class REDataManager
                 entity.description = x.description;
 
                 const emittor = REData.newEmittor();
-                emittor.effect.critical = false;
-                emittor.effect.successRate = x.successRate;
-                emittor.effect.hitType = x.hitType;
-                emittor.effect.rmmzAnimationId = x.animationId;
-                emittor.effect.targetQualifyings.specialEffectQualifyings = x.effects;
+                const effect = new DEffect();
+                effect.critical = false;
+                effect.successRate = x.successRate;
+                effect.hitType = x.hitType;
+                effect.rmmzAnimationId = x.animationId;
+                effect.targetQualifyings.specialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
-                    emittor.effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
+                emittor.effectSet.effects.push(effect);
 
-                entity.effectSet.setMainEmittor(emittor);
+                entity.emittorSet.setMainEmittor(emittor);
                 // TODO:
                 //item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
                 //item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
@@ -508,9 +513,10 @@ export class REDataManager
                 // TODO: ここでいいの？
                 const emittor = REData.newEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effect.critical = false;
-                emittor.effect.successRate = 100;
-                emittor.effect.hitType = DEffectHitType.Physical;
+                const effect = new DEffect();
+                effect.critical = false;
+                effect.successRate = 100;
+                effect.hitType = DEffectHitType.Physical;
                 const q: DParameterQualifying = {
                     parameterId: DBasics.params.hp,
                     elementId: 0,
@@ -519,8 +525,9 @@ export class REDataManager
                     variance: 20,
                     silent: false,
                 };
-                emittor.effect.targetQualifyings.parameterQualifyings.push(q);
-                entity.effectSet.addEmittor(DEffectCause.Hit, emittor);
+                effect.targetQualifyings.parameterQualifyings.push(q);
+                emittor.effectSet.effects.push(effect);
+                entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
             }
         });
         REData.armorDataIdOffset = REData.items.length;

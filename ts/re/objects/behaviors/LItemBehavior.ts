@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
-import { DEffectCause } from "ts/re/data/DEffect";
+import { DEffectCause } from "ts/re/data/DEmittor";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
@@ -123,7 +123,8 @@ export class LItemBehavior extends LBehavior {
     }
     
     private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {
-        const emittors = self.data().effectSet.emittors(cause);
+        const entityData = self.data();
+        const emittors = entityData.emittorSet.emittors(cause);
         if (emittors.length > 0) {
             context.postCall(() => {
                 for (const emittor of emittors) {
@@ -135,7 +136,7 @@ export class LItemBehavior extends LBehavior {
             });
         }
         
-        const skill = self.data().effectSet.skill(cause);
+        const skill = entityData.emittorSet.skill(cause);
         if (skill) {
             context.postCall(() => {
                 SEmittorPerformer.makeWithSkill(subject.entity(), skill.id)
