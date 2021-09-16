@@ -23,7 +23,7 @@ export interface DSystemStates {
 }
 
 export class DSystem {
-    public elements: string[];    // IDataSystem.elements (0 is Invalid)
+    //public elements: string[];    // IDataSystem.elements (0 is Invalid)
 
     public factions: DSystemFactions;
 
@@ -38,7 +38,7 @@ export class DSystem {
     public fallbackEnemyEntityId: DEntityId;
 
     constructor() {
-        this.elements = $dataSystem.elements ?? [];
+        //this.elements = $dataSystem.elements ?? [];
         this.factions = {
             player: 1,
             enemy: 2,

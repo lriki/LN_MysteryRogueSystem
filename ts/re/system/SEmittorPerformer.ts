@@ -18,6 +18,7 @@ import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DSkillDataId } from "../data/DSkill";
 import { SEffectorFact } from "./SEffectApplyer";
 import { DEffectCause, DEmittor } from "../data/DEmittor";
+import { USearch } from "../usecases/USearch";
 
 
 export class SEmittorPerformer {
@@ -347,6 +348,25 @@ export class SEmittorPerformer {
 
 
             effectContext.applyWithWorth(context, selectedItems);
+        }
+        else if (emittor.scope.range == DEffectFieldScopeRange.Around) {
+            const targets: LEntity[] = [];
+            USearch.iterateAroundEntities(performer.x, performer.y, emittor.scope.length, (entity) => {
+                targets.push(entity);
+            });
+
+            const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
+            if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+            const effectContext = new SEffectContext(effectSubject, context.random());
+            
+            context.postCall(() => {
+                effectContext.applyWithWorth(context, targets);
+                if (skillId > 0) {
+                    this.raiseSkillEmitted(context, performer, targets, skillId);
+                    this.callSkillPerformed(context, performer, targets, skillId);
+                }
+            });
+
         }
         else {
             throw new Error("Not implemented.");

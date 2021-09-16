@@ -1,4 +1,5 @@
 import { DBasics } from "./DBasics";
+import { DSpecialEffectCodes } from "./DCommon";
 import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
@@ -273,6 +274,11 @@ export class RESetup {
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 emittor.effectSet.selfEffect.selfQualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
+                break;
+            case "kSkill_大爆発":
+                emittor.scope.range = DEffectFieldScopeRange.Around;
+                emittor.scope.length = 1;
+                emittor.effectSet.effects[0].targetQualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
                 break;
         }
     }

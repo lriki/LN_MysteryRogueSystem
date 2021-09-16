@@ -308,7 +308,7 @@ declare interface IDataSystem
     currencyUnit?: string;
     defeatMe?: IDataSound;
     editMapId?: number;
-    elements?: string[];
+    elements: string[];
     equipTypes?: string[];
     gameTitle?: string;
     gameoverMe?: IDataSound;

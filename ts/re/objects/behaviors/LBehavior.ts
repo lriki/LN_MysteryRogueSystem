@@ -41,7 +41,7 @@ import { LEventResult } from "../LEventServer";
 import { DPrefabImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
-import { SEffectorFact } from "ts/re/system/SEffectApplyer";
+import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DSkillDataId } from "ts/re/data/DSkill";
 
 export enum DecisionPhase {
@@ -147,6 +147,9 @@ export const onAttackReaction = Symbol("onAttackReaction");
  */
 export const onDirectAttackDamaged = Symbol("onDirectAttackDamaged");
 
+export const onEffectResult = Symbol("onEffectResult");
+
+
 /**
  * 接地した。
  * 
@@ -154,6 +157,9 @@ export const onDirectAttackDamaged = Symbol("onDirectAttackDamaged");
  * そういった落下完了までの諸々の処理が解決され、本当に地面上に着地したときに呼ばれる。
  */
 export const onGrounded = Symbol("onGrounded");
+
+
+
 
 
 export interface CollideActionArgs {
@@ -342,6 +348,8 @@ export abstract class LBehavior extends LObject {
      */
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
 
+    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): REResponse { return REResponse.Pass; }
+
     onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): REResponse { return REResponse.Pass; }
 
 
@@ -363,6 +371,8 @@ export abstract class LBehavior extends LObject {
      * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。
      */
     onSkillPerformed(context: SCommandContext, self: LEntity, target: LEntity, skillId: DSkillDataId): void {}
+
+
 
     
     //public removeThisState(): void {

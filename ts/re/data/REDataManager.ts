@@ -21,6 +21,7 @@ import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { RESetup } from './RESetup';
 import { DEffectCause } from './DEmittor';
+import { DAttackElement } from './DAttackElement';
 
 
 declare global {  
@@ -260,6 +261,17 @@ export class REDataManager
         this.setupCommonData();
 
         REData.system = new DSystem();
+
+        // Import AttackElements
+        REData.attackElements = [];
+        for (const x of $dataSystem.elements) {
+            const e = new DAttackElement(REData.attackElements.length);
+            REData.attackElements.push(e);
+            if (x) {
+                e.name = x;
+            }
+        }
+        
         
         if ($dataSystem.equipTypes) {
             REData.equipmentParts = $dataSystem.equipTypes.map((x, i) => {

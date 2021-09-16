@@ -120,6 +120,7 @@ export enum DEffectFieldScopeRange {
     StraightProjectile,
     PointProjectile,        // 投石やスカイドラゴンの炎
     Selection,   // 対象となるアイテムを選択する。識別の巻物など、対象となる持ち物を選んで効果を発動するももの。
+    Around, // 周囲
 }
 
 export enum DEffectFieldScopeArea {

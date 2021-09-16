@@ -36,6 +36,7 @@ import { DBasics } from "ts/re/data/DBasics";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/re/objects/behaviors/LRatedRandomAIBehavior";
 import { RESystem } from "./RESystem";
+import { LSelfExplosionBehavior } from "../objects/behaviors/LSelfExplosionBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -297,6 +298,10 @@ export class SEntityFactory {
             case "kEnemy_フロックウルフ":
                 entity.addBehavior(LFlockBehavior);
                 break;
+            case "kEnemy_ブラストミミック":
+                entity.addBehavior(LSelfExplosionBehavior);
+                break;
+                
         }
         RESystem.ext.onNewEntity(entity, entityData);
     }

@@ -25,6 +25,7 @@ import { DPseudonymous } from "./DPseudonymous";
 import { DItemShopType } from "./DItemShop";
 import { REDataExtension } from "./REDataExtension";
 import { DEmittor, DEmittorId } from "./DEmittor";
+import { DAttackElement } from "./DAttackElement";
 
 
 export enum REFloorMapKind
@@ -163,6 +164,7 @@ export class REData
 
     static system: DSystem;
     //static equipTypes: DEquipmentType[] = [];
+    static attackElements: DAttackElement[] = [];
     static equipmentParts: DEquipmentPart[] = [];
     static entityKinds: DEntityKind[] = [];
     static classes: DClass[] = [];

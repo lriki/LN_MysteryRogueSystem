@@ -11,6 +11,7 @@ import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
 import { REGame } from "../objects/REGame";
+import { UEffect } from "../usecases/UEffect";
 import { UIdentify } from "../usecases/UIdentify";
 import { USpawner } from "../usecases/USpawner";
 import { UTransfer } from "../usecases/UTransfer";
@@ -228,18 +229,11 @@ export class SEffectorFact {
     public selectEffect(entity: LEntity): SEffect {
         for (let i = this._effects.length - 1; i >= 0; i--) {
             const data = this._effects[i].data();
-            if (this.meetsCondition(entity, data)) {
+            if (UEffect.meetsCondition(entity, data)) {
                 return this._effects[i];
             }
         }
         throw new Error("Unreachable.");
-    }
-
-    private meetsCondition(entity: LEntity, effect: DEffect): boolean {
-        if (effect.matchConditions.kindId != 0 && effect.matchConditions.kindId !=entity.kindDataId()) {
-            return false;
-        }
-        return true;
     }
 }
 

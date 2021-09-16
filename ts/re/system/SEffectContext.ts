@@ -14,6 +14,8 @@ import { LRandom } from "ts/re/objects/LRandom";
 import { DEntityKindId } from "ts/re/data/DEntityKind";
 import { DStateId } from "ts/re/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectQualifyings } from "./SEffectApplyer";
+import { onEffectResult } from "../objects/internal";
+import { REResponse } from "./RECommand";
 
 
 export enum SEffectIncidentType {
@@ -189,6 +191,10 @@ export class SEffectContext {
              }
         }
 
+        {
+            commandContext.post(target, effect.subject(), new SEffectSubject(this._effectorFact.subject()), undefined, onEffectResult);
+        }
+
         return result;
     }
 
@@ -240,6 +246,16 @@ export class SEffectContext {
     }
 
     private applyCore(commandContext: SCommandContext, effect: SEffect, target: LEntity, result: LEffectResult): void {
+
+        // Override?
+        {
+            let result = REResponse.Pass;
+            target.iterateBehaviorsReverse(b => {
+                result = b.onPreApplyEffect(commandContext, target, effect);
+                return result == REResponse.Pass;
+            });
+            if (result != REResponse.Pass) return; 
+        }
 
         if (effect.targetApplyer().hasParamDamage()) {
             const criRate = effect.criRate(target) * 100;

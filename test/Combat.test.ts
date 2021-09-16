@@ -37,9 +37,8 @@ test("Combat.DamageAndCollapse", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // 右を向いて攻撃
-    const dialogContext = RESystem.dialogContext;
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
-    dialogContext.activeDialog().submit();
+    RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -71,9 +70,8 @@ test("Combat.DamageAndGameover", () => {
     RESystem.scheduler.stepSimulation();
     
     // Player を左へ移動
-    const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
-    dialogContext.activeDialog().submit();
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
     
     // Enemy の目の前に移動してしまったので、攻撃される。→ 倒される
     // onTurnEnd 時までに戦闘不能が回復されなければゲームオーバーとなり、
