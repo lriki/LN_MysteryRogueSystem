@@ -100,9 +100,24 @@ export class LUnitBehavior extends LBehavior {
     }
 
     queryCharacterFileName(): DPrefabImage | undefined {
-        const e = this.ownerEntity().data();
+        const self = this.ownerEntity();
+        const e = self.data();
         const p = REData.prefabs[e.prefabId];
-        return p.image;
+        
+        const image = { ...p.image };
+        if (p.stateImages.length > 0) {
+            self.iterateStates(s => {
+                const i = p.stateImages.find(x => x.stateId == s.stateDataId());
+                if (i) {
+                    image.characterName = i.characterName;
+                    image.characterIndex = i.characterIndex;
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        return image;
     }
 
     queryHomeLayer(): BlockLayerKind | undefined {

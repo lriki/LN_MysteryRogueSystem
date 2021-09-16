@@ -4,7 +4,7 @@ import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { LRoomId } from "./LBlock";
 import { RESystem } from "ts/re/system/RESystem";
-import { DStateId } from "ts/re/data/DState";
+import { DState, DStateId } from "ts/re/data/DState";
 import { assert } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "./LObject";
@@ -864,6 +864,17 @@ export class LEntity extends LObject
         this._needVisualRefresh = true;
     }
 
+    public hasState(stateId: DStateId): boolean {
+        let result = false;
+        this.iterateStates((s) => {
+            if (s.stateDataId() == stateId) {
+                result = true;
+                return false;
+            }
+            return true;
+        });
+        return result;
+    }
     
     public isBlessed(): boolean {
         return this.isStateAffected(REData.system.states.bless);
@@ -1167,9 +1178,9 @@ export class LEntity extends LObject
         }
     }
 
-    public iterateStates(func: (s: LState) => void): void {
+    public iterateStates(func: (s: LState) => boolean): void {
         for (const id of this._states) {
-            func(REGame.world.object(id) as LState);
+            if (!func(REGame.world.object(id) as LState)) return;
         }
     }
 

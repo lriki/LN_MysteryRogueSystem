@@ -41,6 +41,12 @@ export interface DPrefabImage {
     walkAnime: boolean;
 }
 
+export interface DPrefabStateImage {
+    stateId: DStateId;
+    characterName: string;
+    characterIndex: number;
+};
+
 export interface DPrefabPageInfo {
     stateId: DStateId,
     rmmzEventPageIndex: number,
@@ -61,6 +67,7 @@ export class DPrefab {
     dataId: number = 0;
     image: DPrefabImage;
     subPages: DPrefabPageInfo[];
+    stateImages: DPrefabStateImage[];
 
     public constructor() {
         this.image = {
@@ -73,6 +80,7 @@ export class DPrefab {
             walkAnime: false,
         };
         this.subPages = [];
+        this.stateImages = [];
     }
 
     public isEnemyKind(): boolean {

@@ -246,6 +246,13 @@ export class SEmittorPerformer {
         this.paySkillCost(performer, emittor.costs, itemEntity);
 
 
+        // 発動側アニメーション
+        {
+            console.log("performeEffect!!", emittor);
+            if (emittor.selfAnimationId > 0) {
+                context.postAnimation(performer, emittor.selfAnimationId, true);
+            }
+        }
 
 
         const subject = performer.getEntityBehavior(LBattlerBehavior);

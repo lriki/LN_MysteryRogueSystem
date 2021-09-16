@@ -279,6 +279,7 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Around;
                 emittor.scope.length = 1;
                 emittor.effectSet.effects[0].targetQualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
+                emittor.selfAnimationId = 109;
                 break;
         }
     }
@@ -287,7 +288,7 @@ export class RESetup {
         const data = entity.enemyData();
         switch (entity.entity.key) {
             case "kEnemy_ブラストミミック":
-                entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
+                //entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
                 break;
         }
     }

@@ -44,6 +44,9 @@ export type DEmittorId = number;
      */
     scope: DEffectFieldScope;
 
+    /** 発動側アニメーションID */
+    selfAnimationId: number;
+
     effectSet: DEffectSet;
     
     constructor(id: DEmittorId) {
@@ -56,6 +59,7 @@ export type DEmittorId = number;
             projectilePrefabKey: ""
         };
         //this.effects = [];// = new DEffect();
+        this.selfAnimationId = 0;
         this.effectSet = new DEffectSet();
     }
     

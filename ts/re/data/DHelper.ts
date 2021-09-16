@@ -24,11 +24,20 @@ export interface RMMZFloorMetadata {
     bgm?: any[];
 }
 
-export interface RMMZEventPrefabMetadata {
+/*
+export interface RmmzEventPrefabStateImage {
+    characterName: string;
+    characterIndex: number;
+}
+*/
+
+export interface RmmzEventPrefabMetadata {
     kind?: string;   // TODO: 必須にしてみる
     item?: string;
     enemy?: string;
     system?: string;
+
+    stateImages?: any[]; // [stateId, characterName, characterIndex]
 
     //projectilePage?: string;    // Projectile として移動中にアクティブになるイベントページ (1~)
 
@@ -40,6 +49,8 @@ export interface RMMZEventPrefabMetadata {
     itemId?: number;    // RMMZ データベース上の ItemId
     // deprecated
     enemyId?: number;   // RMMZ データベース上の EnemyId
+
+
 }
 
 export interface RmmzEventPrefabSubPageMetadata {
@@ -241,10 +252,10 @@ export class DHelpers {
         return rawData;
     }
     
-    public static readPrefabMetadata(event: IDataMapEvent): RMMZEventPrefabMetadata | undefined {
+    public static readPrefabMetadata(event: IDataMapEvent): RmmzEventPrefabMetadata | undefined {
         const block = this.findFirstAnnotationFromEvent("@REPrefab", event);
         if (!block) return undefined;
-        let rawData: RMMZEventPrefabMetadata | undefined;
+        let rawData: RmmzEventPrefabMetadata | undefined;
         eval(`rawData = ${block}`);
         assert(rawData);
         return rawData;

@@ -801,6 +801,9 @@ export class REDataManager
                 prefab.image.directionFix = event.pages[0].directionFix;
                 prefab.image.stepAnime = event.pages[0].stepAnime;
                 prefab.image.walkAnime = event.pages[0].walkAnime;
+                if (data.stateImages) {
+                    prefab.stateImages = data.stateImages.map(x => { return { stateId: REData.getStateFuzzy(x[0]).id, characterName: x[1], characterIndex: x[2]}; });
+                }
 
                 REData.prefabs.push(prefab);
                 if (data.enemy) {

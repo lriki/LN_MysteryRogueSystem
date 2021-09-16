@@ -258,6 +258,7 @@ export class UState {
             if (s.stateEffect().autoRemovals.find(x => x.kind == DAutoRemovalTiming.FloorTransfer)) {
                 removes.push(s.stateDataId());
             }
+            return true;
         });
         entity.removeStates(removes);
     }

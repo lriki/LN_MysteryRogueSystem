@@ -8,7 +8,7 @@ import { TileShape } from "ts/re/objects/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/re/PluginParameters";
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/re/data/DEntity";
-import { RMMZEventPrefabMetadata } from "../data/DHelper";
+import { RmmzEventPrefabMetadata } from "../data/DHelper";
 
 
 
@@ -29,7 +29,7 @@ export class SRmmzHelpers {
     }
 
 
-    public static isItemPrefab(data: RMMZEventPrefabMetadata): boolean {
+    public static isItemPrefab(data: RmmzEventPrefabMetadata): boolean {
         return !!data.itemId;
     }
 

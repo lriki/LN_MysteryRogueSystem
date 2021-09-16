@@ -174,6 +174,7 @@ export class SEffectContext {
                         if (s.checkRemoveAtDamageTesting(p.paramId)) {
                             removeStates.push(s.stateDataId());
                         }
+                        return true;
                     });
                 }
             }
