@@ -227,6 +227,7 @@ export class REDataManager
             escape: REData.addSequel("escape"),
             earthquake2: REData.addSequel("earthquake2"),
             useItem: REData.addSequel("useItem"),
+            explosion: REData.addSequel("explosion"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         

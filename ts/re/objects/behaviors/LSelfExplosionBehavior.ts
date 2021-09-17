@@ -75,9 +75,10 @@ export class LSelfExplosionBehavior extends LBehavior {
 
         const mhp = self.idealParam(DBasics.params.hp);
         const hp = self.actualParam(DBasics.params.hp);
-        if (hp < 10) {
+        if (hp < 50) {
             const skill = REData.getSkill("kSkill_大爆発");
             context.postActivity(LActivity.makePerformSkill(self, skill.id));
+            context.postCall(() => context.postDestroy(self));
             return REResponse.Succeeded;
         }
         if (hp < mhp * 0.3) {
