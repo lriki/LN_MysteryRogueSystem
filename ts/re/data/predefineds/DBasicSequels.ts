@@ -33,4 +33,6 @@ export interface BasicSequels {
     earthquake2: DSequelId;
 
     useItem: DSequelId;
+
+    explosion: DSequelId;
 }
