@@ -114,10 +114,6 @@ export class LItemImitatorBehavior extends LBehavior {
         return REData.system.factions.neutral;
     }
 
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
-        return SPhaseResult.Handled;
-    }
-
     [testPickOutItem](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const actor = args.sender;
         const self = args.self;

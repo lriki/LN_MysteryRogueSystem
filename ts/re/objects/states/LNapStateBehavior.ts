@@ -47,7 +47,7 @@ export class LNapStateBehavior extends LBehavior {
         return DBasics.sequels.asleep;
     }
     
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.UpdateState) {
             return SPhaseResult.Pass;
         }
@@ -62,7 +62,7 @@ export class LNapStateBehavior extends LBehavior {
         }
         else {
             // Skip action
-            context.postConsumeActionToken(entity);
+            context.postConsumeActionToken(self);
             return SPhaseResult.Handled;
         }
     }

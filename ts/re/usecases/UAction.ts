@@ -111,18 +111,25 @@ export class UAction {
 
     public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): CandidateSkillAction[] {
         const actions = performer.collectSkillActions();
-        const result: CandidateSkillAction[] = [];
+        let result: CandidateSkillAction[] = [];
         let hasAdjacentAction = false;
 
+
+
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
+        let maxRating = 0;
         for (const action of actions) {
             const targets = this.getSkillEffectiveTargets(performer, REData.skills[action.skillId], true);
             if (targets.length > 0) {
                 result.push({ action: action, targets: targets });
+                maxRating = Math.max(maxRating, action.rating);
             }
-            //if (action.skillId == RESystem.skills.move) {
-            //}
         }
+
+        // 最大 Rating からの差が 10 以内を有効とする
+        result = result.filter(x => x.action.rating >= maxRating - 10);
+
+
 
         // "移動" は特別扱い。まずは常に使用できるものとして追加しておく
         if (!result.find(x => x.action.skillId == RESystem.skills.move)) {

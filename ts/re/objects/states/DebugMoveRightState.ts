@@ -13,7 +13,7 @@ export class LDebugMoveRightState extends LBehavior {
         return b
     }
 
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
@@ -24,14 +24,14 @@ export class LDebugMoveRightState extends LBehavior {
             //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
 
-            if (dir != 0 && REGame.map.checkPassage(entity, dir, MovingMethod.Walk)) {
-                context.postActivity(LActivity.makeDirectionChange(entity, dir));
-                context.postActivity(LActivity.makeMoveToAdjacent(entity, dir));
+            if (dir != 0 && REGame.map.checkPassage(self, dir, MovingMethod.Walk)) {
+                context.postActivity(LActivity.makeDirectionChange(self, dir));
+                context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }
-            context.postConsumeActionToken(entity);
+            context.postConsumeActionToken(self);
             return SPhaseResult.Handled;
         }
 
-        return super.onDecisionPhase(entity, context, phase);
+        return super.onDecisionPhase(context, self, phase);
     }
 }

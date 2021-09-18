@@ -22,15 +22,15 @@ export class LSurvivorBehavior extends LBehavior {
         //battler.setupExParam(DBasics.params.fp);
     }
 
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
 
             // FP 減少
-            entity.gainActualParam(DBasics.params.fp, -1);
+            self.gainActualParam(DBasics.params.fp, -1);
 
 
-            switch (entity.actualParam(DBasics.params.fp)) {
+            switch (self.actualParam(DBasics.params.fp)) {
                 case 3:
                     //context.postBalloon(entity, 6, false);
                     context.postMessage(tr2("だめだ！ もう倒れそうだ！"));
@@ -48,17 +48,17 @@ export class LSurvivorBehavior extends LBehavior {
 
 
 
-            if (entity.actualParam(DBasics.params.fp) <= 0) {
+            if (self.actualParam(DBasics.params.fp) <= 0) {
                 // 満腹度 0 による HP 減少
-                entity.gainActualParam(DBasics.params.hp, -1);
+                self.gainActualParam(DBasics.params.hp, -1);
 
-                if (entity.isDeathStateAffected()) {
+                if (self.isDeathStateAffected()) {
                     context.postMessage(tr2("おなかがすいて倒れた・・・"));
                 }
             }
             else {
                 // HP自動回復
-                entity.gainActualParam(DBasics.params.hp, 1);
+                self.gainActualParam(DBasics.params.hp, 1);
             }
 
 

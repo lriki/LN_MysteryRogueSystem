@@ -20,13 +20,13 @@ export class LIllusionStateBehavior extends LBehavior {
         return b
     }
     
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (this._characterAI) {
             if (phase == DecisionPhase.AIMinor) {
-                return this._characterAI.thinkMoving(context, entity);
+                return this._characterAI.thinkMoving(context, self);
             }
             else if (phase == DecisionPhase.AIMajor) {
-                return this._characterAI.thinkAction(context, entity);
+                return this._characterAI.thinkAction(context, self);
             }
         }
 

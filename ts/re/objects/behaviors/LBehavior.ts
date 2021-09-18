@@ -333,7 +333,7 @@ export abstract class LBehavior extends LObject {
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
+    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
     public onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity { return activity; }
 
@@ -371,6 +371,7 @@ export abstract class LBehavior extends LObject {
 
     /** 主に AI 行動決定用に、スキルの一覧を取得する */
     onCollectSkillActions(result: IDataAction[]): void {}
+
 
     /** 1行動消費単位の終了時点 */
     onStepEnd(context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }

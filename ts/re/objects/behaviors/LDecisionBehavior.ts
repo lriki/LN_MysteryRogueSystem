@@ -31,28 +31,28 @@ export class LDecisionBehavior extends LBehavior {
         characterAIs.push(this._characterAI);
     }
 
-    onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
 
-            const behavior = entity.getEntityBehavior(LUnitBehavior);
+            const behavior = self.getEntityBehavior(LUnitBehavior);
             behavior._fastforwarding = false;
 
-            if (behavior._straightDashing && UMovement.checkDashStopBlock(entity)) {
-                context.postActivity(LActivity.makeMoveToAdjacent(entity, entity.dir).withConsumeAction());
+            if (behavior._straightDashing && UMovement.checkDashStopBlock(self)) {
+                context.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction());
                 return SPhaseResult.Handled;
             }
             else {
                 const dialog = new SManualActionDialog();
                 dialog.dashingEntry = behavior._straightDashing;
-                context.openDialog(entity, dialog, false);
+                context.openDialog(self, dialog, false);
                 behavior._straightDashing = false;
                 return SPhaseResult.Handled;
             }
 
         }
         else if (phase == DecisionPhase.AIMinor) {
-            return this._characterAI.thinkMoving(context, entity);
+            return this._characterAI.thinkMoving(context, self);
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
 
@@ -60,7 +60,7 @@ export class LDecisionBehavior extends LBehavior {
             return SPhaseResult.Pass;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            return this._characterAI.thinkAction(context, entity);
+            return this._characterAI.thinkAction(context, self);
             
         }
 

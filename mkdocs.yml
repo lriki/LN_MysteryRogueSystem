@@ -17,6 +17,8 @@ theme:
     
 nav:
     - Manual: index.md
+    - 拡張:
+        - index: dev/index.md
     - 内部的なこと:
         - index: dev/index.md
         - XX: dev/xx.md

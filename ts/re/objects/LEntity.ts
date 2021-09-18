@@ -1253,7 +1253,7 @@ export class LEntity extends LObject
 
     _callDecisionPhase(context: SCommandContext, phase: DecisionPhase): SPhaseResult {
         for (const b of this.collectBehaviors().reverse()) {
-            const result = b.onDecisionPhase(this, context, phase);
+            const result = b.onDecisionPhase(context, this, phase);
             if (result != SPhaseResult.Pass) return result;
         }
         return SPhaseResult.Pass;
