@@ -1,5 +1,5 @@
 import { DBasics } from "ts/re/data/DBasics";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -17,10 +17,10 @@ export class LEntityDivisionBehavior extends LBehavior {
         return b
     }
 
-    [onDirectAttackDamaged](args: CommandArgs, context: SCommandContext): REResponse {
+    [onDirectAttackDamaged](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         const battler = self.getEntityBehavior(LBattlerBehavior);
-        if (battler.isDeathStateAffected()) return REResponse.Pass;
+        if (battler.isDeathStateAffected()) return SCommandResponse.Pass;
 
         const selfBlock = REGame.map.block(self.x, self.y);
 
@@ -38,7 +38,7 @@ export class LEntityDivisionBehavior extends LBehavior {
             // 周囲に空きが無いため分裂できない
         }
 
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
 }

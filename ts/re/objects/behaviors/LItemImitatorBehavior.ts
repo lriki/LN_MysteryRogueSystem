@@ -5,7 +5,7 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
-import { REResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { UAction } from "ts/re/usecases/UAction";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -118,7 +118,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return SPhaseResult.Handled;
     }
 
-    [testPickOutItem](args: CommandArgs, context: SCommandContext): REResponse {
+    [testPickOutItem](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const actor = args.sender;
         const self = args.self;
         if (Helpers.isHostileFactionId(actor.getOutwardFactionId(), self.getInnermostFactionId())) {
@@ -128,9 +128,9 @@ export class LItemImitatorBehavior extends LBehavior {
             REGame.map.appearEntity(self, actor.x, actor.y);
             UAction.postDropOrDestroy(RESystem.commandContext, self, self.getHomeLayer(), 0);
 
-            return REResponse.Canceled;
+            return SCommandResponse.Canceled;
         }
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
     
     onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {

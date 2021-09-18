@@ -2,7 +2,7 @@ import { assert, RESerializable, tr } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { REData } from "ts/re/data/REData";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
@@ -87,12 +87,12 @@ export class LTrapBehavior extends LBehavior {
         return entity.getOutwardFactionId() === REData.system.trapTargetFactionId;
     }
     
-    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): REResponse {
+    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
         const target = e.sender;
 
         // この罠にかかることができる？
-        if (!this.checkValidTarget(target)) return REResponse.Pass;
+        if (!this.checkValidTarget(target)) return SCommandResponse.Pass;
 
         this._exposed = true;
 
@@ -130,7 +130,7 @@ export class LTrapBehavior extends LBehavior {
 
 
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 }
 

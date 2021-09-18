@@ -6,7 +6,7 @@ import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { Helpers } from "ts/re/system/Helpers";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -85,15 +85,15 @@ export class LProjectableBehavior extends LBehavior {
         actions.push(DBasics.actions.ThrowActionId);
     }
 
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         
 
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
     
     // 投げられた
-    [onThrowReaction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onThrowReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
 
         const self = args.self;
 
@@ -103,11 +103,11 @@ export class LProjectableBehavior extends LBehavior {
         LProjectableBehavior.startMoveAsProjectile(context, self, args.subject, args.sender.dir, 5);
 
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
     
     // Projectile として移動
-    [onMoveAsProjectile](args: CommandArgs, context: SCommandContext): REResponse {
+    [onMoveAsProjectile](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         
         const common = self.findEntityBehavior(LProjectableBehavior);
@@ -146,7 +146,7 @@ export class LProjectableBehavior extends LBehavior {
                         return true;
                     });
 
-                return REResponse.Succeeded;
+                return SCommandResponse.Handled;
             }
         
 
@@ -159,16 +159,16 @@ export class LProjectableBehavior extends LBehavior {
                 context.post(self, self, args.subject, undefined, onMoveAsProjectile);
             }
                 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else {
             this.endMoving(context ,self);
         }
 
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
     
-    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         if (this._effectSet) {
             const self = args.self;
             const target = args.sender;
@@ -189,11 +189,11 @@ export class LProjectableBehavior extends LBehavior {
                 effectContext.applyWithWorth(context, [target]);
             });
             
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else {
 
-            return REResponse.Pass;
+            return SCommandResponse.Pass;
         }
     }
 

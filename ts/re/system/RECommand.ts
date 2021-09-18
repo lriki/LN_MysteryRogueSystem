@@ -15,14 +15,14 @@ import { SEffectContext } from "./SEffectContext";
  * 例外は「武器を振るだけでステータスダウン」のような、Command の成否にかかわらず実行したい処理です。
  * 
  */
-export enum REResponse
+export enum SCommandResponse
 {
     /** 
      * 目的の処理を、意味のある結果を以って実行し終え、Command は実行済みであることを示します。
      * 
      * Behavior の実装の中でこのコマンドを return した場合、後続の Behavior に Command は通知されません。
      */
-    Succeeded,
+    Handled,
 
     /** RECommand はハンドリングされませんでした。続けて後続の Behavior に RECommand を通知します。 */
     Pass,
@@ -54,8 +54,8 @@ export enum SPhaseResult {
     Handled,
 }
 
-export function checkContinuousResponse(r: REResponse): boolean {
-    return r == REResponse.Pass;
+export function checkContinuousResponse(r: SCommandResponse): boolean {
+    return r == SCommandResponse.Pass;
 }
 
 /** Command 表現及び引数 */

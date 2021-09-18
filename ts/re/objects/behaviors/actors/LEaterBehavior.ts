@@ -2,7 +2,7 @@ import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
@@ -25,7 +25,7 @@ export class LEaterBehavior extends LBehavior {
     }
 
     
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         /*
         if (activity.actionId() == DBasics.actions.EatActionId) {
             const reactor = activity.object();
@@ -38,7 +38,7 @@ export class LEaterBehavior extends LBehavior {
         }
         */
        
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
 }

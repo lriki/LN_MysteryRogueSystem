@@ -4,7 +4,7 @@ import { DBasics } from "ts/re/data/DBasics";
 import { DSpecialEffectCodes } from "ts/re/data/DCommon";
 import { DEnemyId, DEnemy } from "ts/re/data/DEnemy";
 import { DParameterId } from "ts/re/data/DParameter";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffect } from "ts/re/system/SEffectApplyer";
 import { LBehavior } from "../internal";
@@ -68,13 +68,13 @@ export class LEnemyBehavior extends LBattlerBehavior {
         }
     }
     
-    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): REResponse {
+    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse {
         const effectData = effect.data();
         if (effectData.targetQualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
             self.addState(DBasics.states.dead);
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 }
 

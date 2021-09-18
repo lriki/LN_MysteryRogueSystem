@@ -1,5 +1,5 @@
 import { Helpers } from "ts/re/system/Helpers";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -33,7 +33,7 @@ export class LMagicBulletBehavior extends LBehavior {
     }
     
     // 射程無限・壁反射を伴うため、通常の MoveAsProjectile とは異なる処理が必要となる。
-    [onMoveAsMagicBullet](args: CommandArgs, context: SCommandContext): REResponse {
+    [onMoveAsMagicBullet](args: CommandArgs, context: SCommandContext): SCommandResponse {
         this.ownerEntity().blockOccupied = false;   // TODO: これは onQueryProperty にしたい
 
         const self = args.self;
@@ -64,7 +64,7 @@ export class LMagicBulletBehavior extends LBehavior {
                     });
 
                 
-                return REResponse.Succeeded;
+                return SCommandResponse.Handled;
             }
 
             // TODO: ふきとばしの杖など一部の魔法弾は床に落ちているものとも衝突する
@@ -72,7 +72,7 @@ export class LMagicBulletBehavior extends LBehavior {
                 const entity2 = block.aliveEntity(BlockLayerKind.Ground);
                 if (entity2) {
                     self.destroy();
-                    return REResponse.Succeeded;
+                    return SCommandResponse.Handled;
                     
                 }
             }
@@ -84,24 +84,24 @@ export class LMagicBulletBehavior extends LBehavior {
             // recall
             context.post(self, self, args.subject, undefined, onMoveAsMagicBullet);
 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else {
             self.destroy();
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
 
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
     
-    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const ownerItem = REGame.world.entity(this._ownerItemEntityId);
         const target = args.sender;
 
         // ownerItem の onCollideAction へ中継する
         context.post(ownerItem, target, args.subject, args.args, onCollideAction);
 
-        return REResponse.Succeeded;
+        return SCommandResponse.Handled;
     }
 }
 

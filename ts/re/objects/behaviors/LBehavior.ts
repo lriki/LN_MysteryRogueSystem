@@ -30,7 +30,7 @@ import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
-import { RECommand, REResponse, SPhaseResult } from "../../system/RECommand";
+import { RECommand, SCommandResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
@@ -337,23 +337,28 @@ export abstract class LBehavior extends LObject {
 
     public onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity { return activity; }
 
-    onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): REResponse { return REResponse.Pass; }
+    onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): SCommandResponse { return SCommandResponse.Pass; }
     
+    /**
+     * onActivity が呼び出される前に呼び出されます。
+     */
+     onPreActivity(context: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+
     /**
      * Activity の処理。
      * [飲む] [振る] [読む] など。
      */
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
     
     /**
      * Activity を受ける側の処理。
      * [飲まれた] [振られた] [読まれた] など。
      */
-    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse { return REResponse.Pass; }
+    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
 
-    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): REResponse { return REResponse.Pass; }
+    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }
 
-    onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): REResponse { return REResponse.Pass; }
+    onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): SCommandResponse { return SCommandResponse.Pass; }
 
 
 
@@ -365,7 +370,7 @@ export abstract class LBehavior extends LObject {
     onCollectSkillActions(result: IDataAction[]): void {}
 
     /** 1行動消費単位の終了時点 */
-    onStepEnd(context: SCommandContext): REResponse { return REResponse.Pass; }
+    onStepEnd(context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
     onPertyChanged(self: LEntity): void { }
 

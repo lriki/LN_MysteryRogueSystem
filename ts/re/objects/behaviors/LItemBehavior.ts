@@ -4,7 +4,7 @@ import { DEffectCause } from "ts/re/data/DEmittor";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
@@ -56,7 +56,7 @@ export class LItemBehavior extends LBehavior {
         }
     }
 
-    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
         if (activity.actionId() == DBasics.actions.WaveActionId) {
             const subject = activity.subject();
@@ -88,13 +88,13 @@ export class LItemBehavior extends LBehavior {
                 context.post(reactor, subject, new SEffectSubject(subject), undefined, onEatReaction);
             }
             
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
 
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
-    [onEatReaction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onEatReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Eat, self.dir);
 
@@ -103,10 +103,10 @@ export class LItemBehavior extends LBehavior {
         // actor 側で destroy するのは望ましくない。
         self.destroy();
 
-        return REResponse.Succeeded;
+        return SCommandResponse.Handled;
     }
 
-    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         
         context.postDestroy(self);
@@ -119,7 +119,7 @@ export class LItemBehavior extends LBehavior {
         //LProjectableBehavior.startMoveAsProjectile(context, args.sender, a.dir, 5);
         
 
-        return REResponse.Succeeded;
+        return SCommandResponse.Handled;
     }
     
     private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {

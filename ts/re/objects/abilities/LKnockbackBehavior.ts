@@ -1,4 +1,4 @@
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LProjectableBehavior } from "../behaviors/activities/LProjectableBehavior";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction } from "../behaviors/LBehavior";
@@ -13,13 +13,13 @@ export class LKnockbackBehavior extends LBehavior {
         return b
     }
 
-    [onCollideAction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         
         const a = args.args as CollideActionArgs;
 
         LProjectableBehavior.startMoveAsProjectile(context, args.sender, args.subject, a.dir, 10);
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 }
 

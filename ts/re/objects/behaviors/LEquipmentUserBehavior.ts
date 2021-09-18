@@ -4,7 +4,7 @@ import { DBasics } from "ts/re/data/DBasics";
 import { DEquipmentPartId } from "ts/re/data/DEquipmentPart";
 import { DItem } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { RECCMessageCommand, SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { LEntityId } from "../LObject";
@@ -124,7 +124,7 @@ NOTE:
     }
 
     
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         if (activity.actionId() == DBasics.actions.EquipActionId) {
             this.refreshSlots();
 
@@ -168,15 +168,15 @@ NOTE:
                 }
             }
             
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
             this.equipOff(context, self, itemEntity);
 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
     private equipOn(context: SCommandContext, self: LEntity, slot: SlotPart2, itemEntity: LEntity): void {

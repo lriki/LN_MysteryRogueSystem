@@ -1,6 +1,6 @@
 import { RESerializable } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -25,7 +25,7 @@ export class LSanctuaryBehavior extends LBehavior {
     }
 
     
-    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): REResponse {
+    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): SCommandResponse {
         const target = e.sender;
 
         // 戦闘不能ステート 付加
@@ -33,7 +33,7 @@ export class LSanctuaryBehavior extends LBehavior {
             target.addState(DBasics.states.dead);
         }
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
 }

@@ -1,4 +1,4 @@
-import { REResponse } from "../../system/RECommand";
+import { SCommandResponse } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
@@ -139,7 +139,7 @@ export class LUnitBehavior extends LBehavior {
         actions.push(DBasics.actions.AttackActionId);
     }
 
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         const subject = new SEffectSubject(self);
 
         //if (self.traitsWithId(DTraits.SealActivity, activity.actionId()).length > 0) {
@@ -154,7 +154,7 @@ export class LUnitBehavior extends LBehavior {
 
         if (activity.actionId() == DBasics.actions.DirectionChangeActionId) {
             //self.dir = activity.direction();
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
 
@@ -162,7 +162,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
-            if (!REGame.eventServer.publish(context, DBasics.events.preWalk, args)) return REResponse.Canceled;
+            if (!REGame.eventServer.publish(context, DBasics.events.preWalk, args)) return SCommandResponse.Canceled;
 
             if (activity.isFastForward()) {
                 this._straightDashing = true;
@@ -176,13 +176,13 @@ export class LUnitBehavior extends LBehavior {
                 self.immediatelyAfterAdjacentMoving = true;
                 this._requiredFeetProcess = true;
                 
-                return REResponse.Succeeded;
+                return SCommandResponse.Handled;
             }
         }
         else if (activity.actionId() == DBasics.actions.performSkill) {
             if (activity.hasDirection()) self.dir = activity.direction();
             SEmittorPerformer.makeWithSkill(self, activity.skillId()).performe(context);
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.ForwardFloorActionId ||
             activity.actionId() == DBasics.actions.BackwardFloorActionId) {
@@ -227,7 +227,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
-            if (!REGame.eventServer.publish(context, DBasics.events.prePut, args)) return REResponse.Canceled;
+            if (!REGame.eventServer.publish(context, DBasics.events.prePut, args)) return SCommandResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findEntityBehavior(LInventoryBehavior);
@@ -253,7 +253,7 @@ export class LUnitBehavior extends LBehavior {
             else {
                 context.postMessage(tr("置けなかった。"));
             }
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.ThrowActionId) {
             // FIXME: [撃つ] とかなり似ているので、長くなるようならまとめたほうがいいかも
@@ -301,7 +301,7 @@ export class LUnitBehavior extends LBehavior {
 
                     return true;
                 });
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.ShootingActionId) {
             // FIXME: [投げる] とかなり似ているので、長くなるようならまとめたほうがいいかも
@@ -336,7 +336,7 @@ export class LUnitBehavior extends LBehavior {
 
                     return true;
                 });
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.ExchangeActionId) {
             
@@ -371,17 +371,17 @@ export class LUnitBehavior extends LBehavior {
                 // TODO: onWaveReaction 使ってない。onActivityReaction に共通化した。
             }
             
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.EatActionId) {
             context.postSequel(self, DBasics.sequels.useItem, activity.object());
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
             context.postSequel(self, DBasics.sequels.useItem, activity.object());
             // 続いて onActivityReaction を実行する。
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == DBasics.actions.PutInActionId) {
             const selfInventory = self.getEntityBehavior(LInventoryBehavior);
@@ -396,10 +396,10 @@ export class LUnitBehavior extends LBehavior {
             }
         }
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
     
-    [onAttackReaction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onAttackReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         //const effectContext = cmd.effectContext();
         const effectContext: SEffectContext = args.args.effectContext;
@@ -431,14 +431,14 @@ export class LUnitBehavior extends LBehavior {
                 self.sendPartyEvent(DBasics.events.effectReacted, undefined);
             });
 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
 
-    [onWalkedOnTopAction](args: CommandArgs, context: SCommandContext): REResponse {
-        return REResponse.Pass;
+    [onWalkedOnTopAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+        return SCommandResponse.Pass;
     }
 }

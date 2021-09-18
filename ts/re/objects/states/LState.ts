@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
-import { checkContinuousResponse, REResponse } from "ts/re/system/RECommand";
+import { checkContinuousResponse, SCommandResponse } from "ts/re/system/RECommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -370,12 +370,12 @@ export class LState extends LObject {
     }
 
     // deprecated:
-    _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
-        let response = REResponse.Pass;
+    _callStateIterationHelper(func: (x: LBehavior) => SCommandResponse): SCommandResponse {
+        let response = SCommandResponse.Pass;
         for (let i = this._stateBehabiors.length - 1; i >= 0; i--) {
             const behavior = (REGame.world.behavior(this._stateBehabiors[i]) as LBehavior);
             const r = func(behavior);
-            if (r != REResponse.Pass) {
+            if (r != SCommandResponse.Pass) {
                 response = r;
             }
             if (checkContinuousResponse(r)) {

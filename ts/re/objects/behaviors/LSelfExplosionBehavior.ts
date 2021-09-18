@@ -1,5 +1,5 @@
 import { tr2 } from "ts/re/Common";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
 import { LEntity } from "../LEntity";
@@ -69,7 +69,7 @@ export class LSelfExplosionBehavior extends LBehavior {
     }
     
 
-    [onEffectResult](args: CommandArgs, context: SCommandContext): REResponse {
+    [onEffectResult](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
 
 
@@ -79,17 +79,17 @@ export class LSelfExplosionBehavior extends LBehavior {
             const skill = REData.getSkill("kSkill_大爆発");
             context.postActivity(LActivity.makePerformSkill(self, skill.id));
             context.postCall(() => context.postDestroy(self));
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         if (hp < mhp * 0.3) {
             const stateId = REData.getStateFuzzy("kState_UT自爆着火").id;
             if (!self.hasState(stateId)) {
                 self.addState(stateId);
             }
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         }
         
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 }
 

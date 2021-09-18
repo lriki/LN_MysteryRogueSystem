@@ -1,6 +1,6 @@
 import { DecisionPhase, LBehavior, LBehaviorGroup, LNameView } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
-import { RECommand, REResponse, SPhaseResult } from "../system/RECommand";
+import { RECommand, SCommandResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { LRoomId } from "./LBlock";
 import { RESystem } from "ts/re/system/RESystem";
@@ -1130,20 +1130,20 @@ export class LEntity extends LObject
     }
 
     /** @deprecated  use collectBehaviors*/
-    _callBehaviorIterationHelper(func: (b: LBehavior) => REResponse): REResponse {
+    _callBehaviorIterationHelper(func: (b: LBehavior) => SCommandResponse): SCommandResponse {
         const abilities = this.abilities();
-        let response = REResponse.Pass;
+        let response = SCommandResponse.Pass;
         for (let i = abilities.length - 1; i >= 0; i--) {
             for (const b of abilities[i].behabiors()) {
                 let r = func(b);
-                if (r != REResponse.Pass) {
+                if (r != SCommandResponse.Pass) {
                     response = r;
                 }
             }
         }
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
             let r = func(REGame.world.behavior((this._basicBehaviors[i])));
-            if (r != REResponse.Pass) {
+            if (r != SCommandResponse.Pass) {
                 response = r;
             }
         }
@@ -1153,9 +1153,9 @@ export class LEntity extends LObject
     // TODO: State と通常の Behavior を分けるのやめる。
     // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
     /** @deprecated  use collectBehaviors*/
-    _callStateIterationHelper(func: (x: LBehavior) => REResponse): REResponse {
+    _callStateIterationHelper(func: (x: LBehavior) => SCommandResponse): SCommandResponse {
         const states = this.states();
-        let response = REResponse.Pass;
+        let response = SCommandResponse.Pass;
         for (let i = states.length - 1; i >= 0; i--) {
             response = states[i]._callStateIterationHelper(func);
         }
@@ -1265,20 +1265,27 @@ export class LEntity extends LObject
         //return SPhaseResult.Pass;
     }
 
-    _sendAction(context: SCommandContext, cmd: RECommand): REResponse {
+    _sendAction(context: SCommandContext, cmd: RECommand): SCommandResponse {
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
-    _sendActivity(context: SCommandContext, activity: LActivity): REResponse {
-        let result = REResponse.Pass;
+    _sendActivity(context: SCommandContext, activity: LActivity): SCommandResponse {
+        let result = SCommandResponse.Pass;
+        
+        this.iterateBehaviorsReverse(b => {
+            result = b.onPreActivity(context, this, activity);
+            return result == SCommandResponse.Pass;
+        });
+        if (result != SCommandResponse.Pass) return result;
+
         this.iterateBehaviorsReverse(b => {
             result = b.onActivity(this, context, activity);
-            return result == REResponse.Pass;
+            return result == SCommandResponse.Pass;
         });
         return result;
     }
 
-    _sendActivityReaction(context: SCommandContext, activity: LActivity): REResponse {
+    _sendActivityReaction(context: SCommandContext, activity: LActivity): SCommandResponse {
         return this._callBehaviorIterationHelper(x => x.onActivityReaction(this, context, activity));
     }
     

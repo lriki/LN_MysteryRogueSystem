@@ -3,7 +3,7 @@ import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/re/objects/behaviors/LBehavior";
 import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
 import { LEntity } from "../LEntity";
@@ -57,12 +57,12 @@ export class LExitPointBehavior extends LBehavior {
         actions.push(DBasics.actions.ForwardFloorActionId);
     }
     
-    [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): REResponse {
+    [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const entity = args.self;
 
         context.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId), false);
 
-        return REResponse.Succeeded;
+        return SCommandResponse.Handled;
     }
     
 }

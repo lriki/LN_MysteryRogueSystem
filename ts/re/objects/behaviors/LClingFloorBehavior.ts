@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { REResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
 import { LEntity } from "../LEntity";
@@ -21,20 +21,20 @@ export class LClingFloorBehavior extends LBehavior {
     }
 
     
-    [testPickOutItem](args: CommandArgs, context: SCommandContext): REResponse {
+    [testPickOutItem](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         if (this._cling) {
             context.postMessage(tr2("%1 地面にはりついている。").format(UName.makeNameAsItem(self)));
-            return REResponse.Canceled;
+            return SCommandResponse.Canceled;
         }
         else {
-            return REResponse.Pass;
+            return SCommandResponse.Pass;
         }
     }
 
-    [onGrounded](args: CommandArgs, context: SCommandContext): REResponse {
+    [onGrounded](args: CommandArgs, context: SCommandContext): SCommandResponse {
         this._cling = true;
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
     
 }

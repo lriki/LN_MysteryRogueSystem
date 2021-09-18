@@ -15,7 +15,7 @@ import { DEntityKindId } from "ts/re/data/DEntityKind";
 import { DStateId } from "ts/re/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectQualifyings } from "./SEffectApplyer";
 import { onEffectResult } from "../objects/internal";
-import { REResponse } from "./RECommand";
+import { SCommandResponse } from "./RECommand";
 
 
 export enum SEffectIncidentType {
@@ -250,12 +250,12 @@ export class SEffectContext {
 
         // Override?
         {
-            let result = REResponse.Pass;
+            let result = SCommandResponse.Pass;
             target.iterateBehaviorsReverse(b => {
                 result = b.onPreApplyEffect(commandContext, target, effect);
-                return result == REResponse.Pass;
+                return result == SCommandResponse.Pass;
             });
-            if (result != REResponse.Pass) return; 
+            if (result != SCommandResponse.Pass) return; 
         }
 
         if (effect.targetApplyer().hasParamDamage()) {

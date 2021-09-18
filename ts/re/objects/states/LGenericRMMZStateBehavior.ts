@@ -1,4 +1,4 @@
-import { REResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
@@ -177,14 +177,14 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         }
     }
     
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): REResponse {
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         if (self.traitsWithId(DTraits.SealActivity, activity.actionId()).length > 0) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
             context.postMessage(data.message3.format(targetName));
-            return REResponse.Canceled;
+            return SCommandResponse.Canceled;
         }
-        return REResponse.Pass;
+        return SCommandResponse.Pass;
     }
 
     onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {

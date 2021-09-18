@@ -1,4 +1,4 @@
-import { checkContinuousResponse, REResponse } from "./RECommand";
+import { checkContinuousResponse, SCommandResponse } from "./RECommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/re/Common";
@@ -15,7 +15,7 @@ import { LFloorId } from "ts/re/objects/LFloorId";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { LRandom } from "ts/re/objects/LRandom";
 
-export type MCEntryProc = () => REResponse;
+export type MCEntryProc = () => SCommandResponse;
 export type CommandResultCallback = () => boolean;
 
 /*
@@ -64,7 +64,7 @@ export class RECCMessageCommand {
     public call(context: SCommandContext): void {
         
         if (this._entryFunc) {
-            this._result = this._entryFunc() != REResponse.Canceled;
+            this._result = this._entryFunc() != SCommandResponse.Canceled;
         }
         else if (this._chainFunc) {
             //assert(this._prev);
@@ -103,8 +103,8 @@ export class SCommandContext
     private _runningCommandList: RECCMessageCommand[] = [];
     private _afterChainCommandList: RECCMessageCommand[] = [];
     private _messageIndex: number = 0;
-    private _lastActorResponce: REResponse = REResponse.Pass;
-    private _lastReactorResponce: REResponse = REResponse.Pass;
+    private _lastActorResponce: SCommandResponse = SCommandResponse.Pass;
+    private _lastReactorResponce: SCommandResponse = SCommandResponse.Pass;
     private _commandChainRunning: boolean = false;
 
     constructor(sequelContext: SSequelContext) {
@@ -118,8 +118,8 @@ export class SCommandContext
         this._recodingCommandList = [];
         this._runningCommandList = [];
         this._messageIndex = 0;
-        this._lastActorResponce = REResponse.Pass;
-        this._lastReactorResponce = REResponse.Pass;
+        this._lastActorResponce = SCommandResponse.Pass;
+        this._lastReactorResponce = SCommandResponse.Pass;
         this._commandChainRunning = false;
     }
 
@@ -142,7 +142,7 @@ export class SCommandContext
             this.attemptConsumeActionToken(entity);
             
 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("ConsumeActionToken", m1));
         Log.postCommand("ConsumeActionToken");
@@ -172,7 +172,7 @@ export class SCommandContext
             }
 
             const r = activity.subject()._sendActivity(this, activity);
-            if (r != REResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
+            if (r != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
                 if (activity.hasObject()) {
                     this.postCall(() => {
                         activity.object()._sendActivityReaction(this, activity);
@@ -229,7 +229,7 @@ export class SCommandContext
     
     }
 
-    callSymbol<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym): REResponse {
+    callSymbol<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym): SCommandResponse {
         const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
             const func = (behavior as any)[symbol];
             if (func) {
@@ -238,7 +238,7 @@ export class SCommandContext
                 return r1;
             }
             else {
-                return REResponse.Pass;
+                return SCommandResponse.Pass;
             }
         });
         return response;
@@ -250,7 +250,7 @@ export class SCommandContext
     post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): RECCMessageCommand {
         const m1 = () => {
             const response = this.callSymbol(target, sender, subject, args, symbol);
-            if (response != REResponse.Canceled) {
+            if (response != SCommandResponse.Canceled) {
                 // コマンドが処理されなかった
                 if (result) {
                     result();
@@ -269,7 +269,7 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Call");
             func();
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Call", m1));
         Log.postCommand("Call");
@@ -297,7 +297,7 @@ export class SCommandContext
                 RESystem.dialogContext.open(dialogModel);
             }
 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
 
         if (afterChain)
@@ -314,7 +314,7 @@ export class SCommandContext
             Log.doCommand("Sequel");
             this._sequelContext.addSequel(s);
             this._visualAnimationWaiting = true;
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Sequel", m1));
         Log.postCommand("Sequel");
@@ -329,7 +329,7 @@ export class SCommandContext
             Log.doCommand("Animation");
             this._sequelContext.addSequel(new SAnumationSequel(entity, animationId, wait));
             this._visualAnimationWaiting = true;
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Animation", m1));
         Log.postCommand("Animation");
@@ -342,7 +342,7 @@ export class SCommandContext
             Log.doCommand("Balloon");
             this._sequelContext.addSequel(new SBalloonSequel(entity, balloonId, wait));
             this._visualAnimationWaiting = true;
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Balloon", m1));
         Log.postCommand("Balloon");
@@ -356,7 +356,7 @@ export class SCommandContext
             Log.doCommand("WaitSequel");
             this._sequelContext.flushSequelSet();
             this._visualAnimationWaiting = true;
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("WaitSequel", m1));
         Log.postCommand("WaitSequel");
@@ -367,7 +367,7 @@ export class SCommandContext
             Log.doCommand("Wait");
             this._sequelContext.addSequel(new SWaitSequel(entity, waitCount));
             this._visualAnimationWaiting = true;
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Wait", m1));
         Log.postCommand("Wait");
@@ -381,7 +381,7 @@ export class SCommandContext
                     return r;
                 }
             }
-            return REResponse.Pass;
+            return SCommandResponse.Pass;
         };
         this._recodingCommandList.push(new RECCMessageCommand("ApplyEffect", m1));
         Log.postCommand("ApplyEffect");
@@ -396,7 +396,7 @@ export class SCommandContext
             this._sequelContext.flushSequelSet();
             
             entity.destroy();
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Destroy", m1));
         Log.postCommand("Destroy");
@@ -408,7 +408,7 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Message");
             REGame.messageHistory.add(text);
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Message", m1));
         Log.postCommand("Message");
@@ -426,7 +426,7 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("TransferFloor");
             REGame.world._transferEntity(entity, floorId, x, y);
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("TransferFloor", m1));
         Log.postCommand("TransferFloor");
@@ -453,7 +453,7 @@ export class SCommandContext
             
             entity.clearActionTokenCount();
 
-            return REResponse.Succeeded;
+            return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("SkipPart", m1));
         Log.postCommand("SkipPart");
