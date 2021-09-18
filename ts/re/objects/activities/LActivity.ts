@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
-import { DSkillDataId } from "ts/re/data/DSkill";
+import { DSkillId } from "ts/re/data/DCommon";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LBlock } from "../LBlock";
@@ -21,7 +21,7 @@ export interface LActivityData {
     subject: LEntityIdData;
     object: LEntityIdData;
     objects2: LEntityIdData[];
-    skillId: DSkillDataId,
+    skillId: DSkillId,
     direction: number;
     entityDirection: number;
     consumeAction: boolean;
@@ -44,7 +44,7 @@ export class LActivity {
     private _subject: LEntityId;    // Command 送信対象 (主語)
     private _object: LEntityId;     // (目的語)
     private _objects2: LEntityId[];
-    private _skillId: DSkillDataId;
+    private _skillId: DSkillId;
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
     private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
     private _consumeAction: boolean;
@@ -98,7 +98,7 @@ export class LActivity {
         this._objects2 = objects.map(x => x.entityId());
     }
 
-    public skillId(): DSkillDataId {
+    public skillId(): DSkillId {
         return this._skillId;
     }
 
@@ -236,7 +236,7 @@ export class LActivity {
         return a;
     }
 
-    public static makePerformSkill(subject: LEntity, skillId: DSkillDataId, dirToFace?: number): LActivity {
+    public static makePerformSkill(subject: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
         assert(skillId > 0);
         const a = (new LActivity()).setup(DBasics.actions.performSkill, subject);
         if (dirToFace !== undefined) a._direction = dirToFace;

@@ -15,7 +15,7 @@ import { UMovement } from "../usecases/UMovement";
 import { assert } from "ts/re/Common";
 import { DParameterId } from "ts/re/data/DParameter";
 import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
-import { DSkillDataId } from "../data/DSkill";
+import { DSkillId } from "../data/DCommon";
 import { SEffectorFact } from "./SEffectApplyer";
 import { DEffectCause, DEmittor } from "../data/DEmittor";
 import { USearch } from "../usecases/USearch";
@@ -27,7 +27,7 @@ export class SEmittorPerformer {
     private _performer: LEntity;
 
     /** スキルとして発動する場合のスキルID. スキルではない場合 0. */
-    private _skillId: DSkillDataId = 0;
+    private _skillId: DSkillId = 0;
 
     /** 発動する効果 */
     private _emittor: DEmittor | undefined;
@@ -45,7 +45,7 @@ export class SEmittorPerformer {
         this._performer = performer;
     }
 
-    public static makeWithSkill(performer: LEntity, skillId: DSkillDataId): SEmittorPerformer {
+    public static makeWithSkill(performer: LEntity, skillId: DSkillId): SEmittorPerformer {
         assert(skillId > 0);
         const i = new SEmittorPerformer(performer);
         i._skillId = skillId;
@@ -58,7 +58,7 @@ export class SEmittorPerformer {
         return i;
     }
 
-    public setSkillId(value: DSkillDataId): this {
+    public setSkillId(value: DSkillId): this {
         this._skillId = value;
         return this;
     }
@@ -105,7 +105,7 @@ export class SEmittorPerformer {
      * 
      * 単純にスキルを発動する。地形や相手の状態による成否はこの中で判断する。
      */
-    private performeSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId): void {
+    private performeSkill(context: SCommandContext, performer: LEntity, skillId: DSkillId): void {
 
         const skill = REData.skills[skillId];
         ///const effector = new SEffectorFact(entity, skill.effect);
@@ -201,7 +201,7 @@ export class SEmittorPerformer {
         }
     }
 
-    private raiseSkillEmitted(context: SCommandContext, performer: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
+    private raiseSkillEmitted(context: SCommandContext, performer: LEntity, targets: LEntity[], skillId: DSkillId): void {
         const args: SkillEmittedArgs = {
             performer: performer,
             targets: targets,
@@ -210,7 +210,7 @@ export class SEmittorPerformer {
         REGame.eventServer.publish(context, DBasics.events.skillEmitted, args)
     }
 
-    private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillDataId): void {
+    private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillId): void {
         for (const target of targets) {
             entity.iterateBehaviorsReverse(b => {
                 b.onSkillPerformed(context, entity, target, skillId);
@@ -234,7 +234,7 @@ export class SEmittorPerformer {
         effectDir: number,
         itemEntity: LEntity | undefined,
         selectedItems: LEntity[],
-        skillId: DSkillDataId): void {
+        skillId: DSkillId): void {
 
 
         // コストで発動可否判断

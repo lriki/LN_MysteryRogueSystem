@@ -52,6 +52,14 @@ export class SBehaviorFactory {
     ];
     
     
+    public static register<T extends LBehavior>(fullName: string, friendlyName: string , ctor: { new(...args: any[]): T }): void {
+        this._behaviorEntries.push({
+            fullName: fullName,
+            friendlyName: friendlyName,
+            create: () => new ctor(),
+        });
+    }
+    
     public static attachBehaviors(entity: LEntity, names: string[]): void {
         names.forEach(name => {
             const b = this.createBehavior(name);

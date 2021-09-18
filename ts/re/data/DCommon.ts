@@ -3,6 +3,7 @@ import { DEntityKindId } from "./DEntityKind";
 
 
 export type DAttackElementId = number;
+export type DSkillId = number;
 
 
 export interface DMatchConditions {

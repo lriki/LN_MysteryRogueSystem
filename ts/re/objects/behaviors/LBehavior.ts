@@ -42,7 +42,7 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DSkillDataId } from "ts/re/data/DSkill";
+import { DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 
 export enum DecisionPhase {
@@ -341,8 +341,11 @@ export abstract class LBehavior extends LObject {
     
     /**
      * onActivity が呼び出される前に呼び出されます。
+     * Pass 以外を返した場合、activity が onActivity() に通知されることはありません。
+     * これによって、特定の行動をキャンセルするような動作を実装できます。
+     * 行動トークンの消費は呼び出し側で処理されます。
      */
-     onPreActivity(context: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+    public onPreActivity(context: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
 
     /**
      * Activity の処理。
@@ -378,7 +381,7 @@ export abstract class LBehavior extends LObject {
      * self が発動したスキルの処理が終わった (成否は target の result を確認すること)
      * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。
      */
-    onSkillPerformed(context: SCommandContext, self: LEntity, target: LEntity, skillId: DSkillDataId): void {}
+    onSkillPerformed(context: SCommandContext, self: LEntity, target: LEntity, skillId: DSkillId): void {}
 
 
 

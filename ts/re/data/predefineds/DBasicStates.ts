@@ -1,4 +1,4 @@
-import { DSkillDataId } from "../DSkill";
+import { DSkillId } from "../DCommon";
 import { DStateId } from "../DState";
 
 /**

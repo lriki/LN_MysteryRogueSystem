@@ -1,13 +1,12 @@
+import { DSkillId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DParameterId } from "./DParameter";
 import { REData } from "./REData";
 
-export type DSkillDataId = number;
-
 export class DSkill {
     /** ID (0 is Invalid). */
-    id: DSkillDataId;
+    id: DSkillId;
 
     key: string;
     kind: string;
@@ -37,7 +36,7 @@ export class DSkill {
     // 指定する方が (絶対かはわからないけど) どちらかと言えば自然だろう。
     emittorId: DEmittorId;
 
-    constructor(id: DSkillDataId) {
+    constructor(id: DSkillId) {
 
         this.id = id,
         this.name = "null";

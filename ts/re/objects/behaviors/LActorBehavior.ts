@@ -4,7 +4,7 @@ import { RE_Data_Actor } from "ts/re/data/DActor";
 import { DBasics } from "ts/re/data/DBasics";
 import { DClass } from "ts/re/data/DClass";
 import { DParameterId } from "ts/re/data/DParameter";
-import { DSkillDataId } from "ts/re/data/DSkill";
+import { DSkillId } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
@@ -17,7 +17,7 @@ export class LActorBehavior extends LBattlerBehavior {
     _classId: number = 0;
     _level: number = 0;
     _exp: number[] = [];
-    _skills: DSkillDataId[] = [];
+    _skills: DSkillId[] = [];
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LActorBehavior);
@@ -195,7 +195,7 @@ export class LActorBehavior extends LBattlerBehavior {
     }
 
     // Game_Actor.prototype.learnSkill
-    private learnSkill(skillId: DSkillDataId): void {
+    private learnSkill(skillId: DSkillId): void {
         if (!this.isLearnedSkill(skillId)) {
             this._skills.push(skillId);
             this._skills.sort((a, b) => a - b);
@@ -203,7 +203,7 @@ export class LActorBehavior extends LBattlerBehavior {
     }
 
     // Game_Actor.prototype.isLearnedSkill
-    private isLearnedSkill(skillId: DSkillDataId): boolean {
+    private isLearnedSkill(skillId: DSkillId): boolean {
         return this._skills.includes(skillId);
     };
 

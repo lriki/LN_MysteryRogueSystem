@@ -1,5 +1,5 @@
 import { LEntity } from "ts/re/objects/LEntity";
-import { DSkillDataId } from "../DSkill";
+import { DSkillId } from "../DCommon";
 
 export type DEventId = number;
 
@@ -22,7 +22,7 @@ export interface PutEventArgs {
 export interface SkillEmittedArgs {
     performer: LEntity;
     targets: LEntity[];
-    skillId: DSkillDataId;  // Skill ではない場合は 0.
+    skillId: DSkillId;  // Skill ではない場合は 0.
 }
 
 

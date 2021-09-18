@@ -1,4 +1,4 @@
-import { DSkillDataId } from "ts/re/data/DSkill";
+import { DSkillId } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { SPhaseResult } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
@@ -14,7 +14,7 @@ import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
 
 interface SkillAction {
-    skillId: DSkillDataId;
+    skillId: DSkillId;
     target: LEntityId;
 };
 

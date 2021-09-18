@@ -1,7 +1,7 @@
-import { DSkillDataId } from "../DSkill";
+import { DSkillId } from "../DCommon";
 
 
 export interface BasicSkills {
-    move: DSkillDataId;
-    normalAttack: DSkillDataId;
+    move: DSkillId;
+    normalAttack: DSkillId;
 }
