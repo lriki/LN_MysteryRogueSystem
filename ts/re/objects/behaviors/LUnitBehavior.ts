@@ -19,7 +19,7 @@ import { REData } from "ts/re/data/REData";
 import { MovingMethod } from "../LMap";
 import { onGrounded, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
-import { DPrefabImage } from "ts/re/data/DPrefab";
+import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { UName } from "ts/re/usecases/UName";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { DStateRestriction } from "ts/re/data/DState";
@@ -100,7 +100,7 @@ export class LUnitBehavior extends LBehavior {
         this._requiredFeetProcess = false;
     }
 
-    queryCharacterFileName(): DPrefabImage | undefined {
+    queryCharacterFileName(): DPrefabActualImage | undefined {
         const self = this.ownerEntity();
         const e = self.data();
         const p = REData.prefabs[e.prefabId];

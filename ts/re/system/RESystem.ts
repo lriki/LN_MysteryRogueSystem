@@ -22,7 +22,6 @@ export class RESystem {
 
     static properties: EntityProperties = {
         itemId: 1,
-        idleSequel: 2,
         equipmentSlots: 3,
     };
 

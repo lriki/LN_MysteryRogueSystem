@@ -5,6 +5,7 @@ import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
 import { DItemEffect } from "./DItemEffect";
+import { DPrefab } from "./DPrefab";
 import { DSkill } from "./DSkill";
 import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
@@ -12,6 +13,22 @@ import { DTraits } from "./DTraits";
 import { REData } from "./REData";
 
 export class RESetup {
+
+    public static setupPrefab(data: DPrefab) {
+        
+        switch (data.key) {
+            case "pActor1":
+                data.downImage.characterName = "Damage1";
+                data.downImage.characterIndex = 0;
+                data.downImage.direction = 4;
+                data.downImage.pattern = 0;
+                data.downImage.directionFix = true;
+                data.downImage.stepAnime = false;
+                data.downImage.walkAnime = false;
+                console.log("prefab", data);
+                break;
+        }
+    }
     
     public static setupDirectly_State(data: DState) {
         switch (data.key) {

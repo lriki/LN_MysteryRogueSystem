@@ -16,6 +16,7 @@ import { LBlindAI } from "../ai/LBlindAI";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { DTraits } from "ts/re/data/DTraits";
 import { UName } from "ts/re/usecases/UName";
+import { DSequelId } from "ts/re/data/DSequel";
 
 
 
@@ -106,16 +107,11 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
     }
 
-    onQueryProperty(propertyId: number): any {
-        //console.log("LStateTrait_GenericRMMZState onQueryProperty");
-        //throw new Error("LStateTrait_Nap onQueryProperty");
-
-        if (propertyId == RESystem.properties.idleSequel)
-            return RESystem.sequels.asleep;
-        else
-            return super.onQueryProperty(propertyId);
+    onQueryIdleSequelId(): DSequelId | undefined {
+        return RESystem.sequels.down;
+        //return RESystem.sequels.asleep;
     }
-
+    
     /*
     onQueryIdealParameterPlus(parameterId: DParameterId): number {
         const data = this.stateData();

@@ -35,4 +35,6 @@ export interface BasicSequels {
     useItem: DSequelId;
 
     explosion: DSequelId;
+
+    down: DSequelId;
 }

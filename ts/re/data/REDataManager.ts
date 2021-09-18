@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { RESystem } from "ts/re/system/RESystem";
-import { assert } from "../Common";
+import { assert, RESerializable } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { DBasics } from "./DBasics";
 import { DState, DStateRestriction, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
@@ -228,6 +228,7 @@ export class REDataManager
             earthquake2: REData.addSequel("earthquake2"),
             useItem: REData.addSequel("useItem"),
             explosion: REData.addSequel("explosion"),
+            down: REData.addSequel("down"),
         };
         REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
         
@@ -856,6 +857,7 @@ export class REDataManager
                             const prefab = REData.prefabs.find(x => x.key == entity.entity.meta_prefabName);
                             if (prefab) {
                                 entity.prefabId = prefab.id;
+                                RESetup.setupPrefab(prefab);
                             }
                             else {
                                 throw new Error(`Unknown Prefab "${entity.entity.meta_prefabName}".`);
@@ -864,6 +866,8 @@ export class REDataManager
                         else {
                             throw new Error(`No prefab specified. "${entity.entity.key}"`);
                         }
+
+
                     }
                 }
             }

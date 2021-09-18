@@ -22,14 +22,6 @@ export interface EntityProperties {
      */
     itemId: number; // deprecated?: name
 
-
-    /**
-     * Visual としての Idle 状態での再生 Sequel.
-     * 
-     * 状態異常等で変わる。
-     */
-    idleSequel: number,
-
     /**
      * DEquipmentPartId[]
      */

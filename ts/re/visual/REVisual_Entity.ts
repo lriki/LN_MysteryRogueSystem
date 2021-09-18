@@ -11,7 +11,7 @@ import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { Game_REPrefabEvent } from "ts/re/rmmz/Game_REPrefabEvent";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
-import { DPrefabImage } from "ts/re/data/DPrefab";
+import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DTraits } from "ts/re/data/DTraits";
 
 /**
@@ -38,6 +38,11 @@ export class REVisual_Entity
     private _visibilityOpacityTarget: number = 1.0;
     private _visibilityFrame: number = 0;
     private _prevVisibility: boolean = true;
+
+    // update 中 (Sequel更新中) のみアクセスできる。
+    // update() の他、Sequel更新中にも参照したいので、キャッシングしているもの。
+    private _visibility: SEntityVisibility | undefined;
+    private _actualImage: DPrefabActualImage | undefined
 
     constructor(entity: LEntity, rmmzEventId: number) {
         this._entity = entity;
@@ -104,11 +109,21 @@ export class REVisual_Entity
     }
 
     getIdleSequelId(): DSequelId {
-        return this._entity.queryProperty(RESystem.properties.idleSequel);
+        return this._entity.queryIdleSequelId();
     }
 
     _setSpriteIndex(value: number) {
         this._rmmzSpriteIndex = value;
+    }
+
+    public visibility(): SEntityVisibility {
+        assert(this._visibility);
+        return this._visibility;
+    }
+
+    public actualImage(): DPrefabActualImage {
+        assert(this._actualImage);
+        return this._actualImage;
     }
 
     _update() {
@@ -122,22 +137,23 @@ export class REVisual_Entity
 
 
             
-            const visibility = SView.getEntityVisibility(entity);
+            this._visibility = SView.getEntityVisibility(entity);
 
 
-            const charactorImage = this.getCharacterImage(entity, visibility);
-            if (charactorImage) {
-                event.setImage(charactorImage.characterName, charactorImage.characterIndex);
+                
+            this._actualImage = this.getCharacterImage(entity, this._visibility);
+            if (this._actualImage) {
+                event.setImage(this._actualImage.characterName, this._actualImage.characterIndex);
 
-                if (event.isDirectionFixed() != charactorImage.directionFix) {
-                    event.setDirection(charactorImage.direction);
-                    event.setDirectionFix(charactorImage.directionFix);
+                if (event.isDirectionFixed() != this._actualImage.directionFix) {
+                    event.setDirection(this._actualImage.direction);
+                    event.setDirectionFix(this._actualImage.directionFix);
                 }
 
-                event.setStepAnime(charactorImage.stepAnime);
-                event.setWalkAnime(charactorImage.walkAnime);
-                if (!charactorImage.stepAnime && !charactorImage.walkAnime) {
-                    event.setPattern(charactorImage.pattern);
+                event.setStepAnime(this._actualImage.stepAnime);
+                event.setWalkAnime(this._actualImage.walkAnime);
+                if (!this._actualImage.stepAnime && !this._actualImage.walkAnime) {
+                    event.setPattern(this._actualImage.pattern);
                 }
             }
 
@@ -146,12 +162,12 @@ export class REVisual_Entity
                 event.refresh();
             }
 
+            event.setDirection(entity.dir);
 
 
 
-            event.setTransparent(!visibility.visible);
+            event.setTransparent(!this._visibility.visible);
 
-            event.setDirection(this._entity.dir);
 
 
             // Sequel の更新は、
@@ -165,7 +181,7 @@ export class REVisual_Entity
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
 
-            this.updateOpacity(entity, event, visibility);
+            this.updateOpacity(entity, event, this._visibility);
 
 
             
@@ -228,7 +244,7 @@ export class REVisual_Entity
         event.setOpacity(opacity);
     }
 
-    private getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabImage | undefined {
+    public getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabActualImage | undefined {
         if (visibility.image) {
             return visibility.image;
         }

@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
-import { DPrefabImage } from "ts/re/data/DPrefab";
+import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
@@ -89,7 +89,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return this.itemEntity().getDisplayName();
     }
     
-    queryCharacterFileName(): DPrefabImage | undefined {
+    queryCharacterFileName(): DPrefabActualImage | undefined {
         const e = this.itemEntity().data();
         const p = REData.prefabs[e.prefabId];
         return p.image;

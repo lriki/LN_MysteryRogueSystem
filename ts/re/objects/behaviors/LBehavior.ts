@@ -38,11 +38,12 @@ import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/re/data/DParameter";
 import { BlockLayerKind } from "../LBlockLayer";
 import { LEventResult } from "../LEventServer";
-import { DPrefabImage } from "ts/re/data/DPrefab";
+import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DSkillDataId } from "ts/re/data/DSkill";
+import { DSequelId } from "ts/re/data/DSequel";
 
 export enum DecisionPhase {
     Prepare,
@@ -269,7 +270,7 @@ export abstract class LBehavior extends LObject {
     public behaviorGroup(): LBehaviorGroup { return LBehaviorGroup.Underlying; }
 
     public queryDisplayName(): LNameView | undefined { return undefined; }
-    public queryCharacterFileName(): DPrefabImage | undefined { return undefined; }
+    public queryCharacterFileName(): DPrefabActualImage | undefined { return undefined; }
     
     public queryInnermostFactionId(): number | undefined { return undefined; }
     public queryOutwardFactionId(): number | undefined { return undefined; }
@@ -294,6 +295,8 @@ export abstract class LBehavior extends LObject {
 
     // results: index is DParameterId
     onQueryIdealParameterPlus(parameterId: DParameterId): number { return 0; }
+
+    public onQueryIdleSequelId(): DSequelId | undefined { return undefined; }
 
     /**
      * この Behavior が Attach されている Entity が送信できる Action を取得する。

@@ -30,7 +30,7 @@ export enum DSystemPrefabKind {
     ExitPoint,
 }
 
-export interface DPrefabImage {
+export interface DPrefabActualImage {
     characterName: string;
     direction: number;
     pattern: number;
@@ -39,6 +39,16 @@ export interface DPrefabImage {
     directionFix: boolean;
     stepAnime: boolean;
     walkAnime: boolean;
+}
+
+export interface DPrefabOverrideImage {
+    characterName?: string;
+    characterIndex?: number;
+    direction?: number;
+    pattern?: number;
+    directionFix?: boolean;
+    stepAnime?: boolean;
+    walkAnime?: boolean;
 }
 
 export interface DPrefabStateImage {
@@ -61,13 +71,31 @@ export interface DPrefabPageInfo {
  * そのため Prefab 側で kind を持つのはやめて、メソッドでラップする。
  */
 export class DPrefab {
+    /*
+    DPrefab
+    
+    [2021/4/19]
+    ----------
+    DPrefabKind といった enum で Enemy, Trap, Item などを分類していたのだが、厳しくなってきた。
+    基本として真に種類を表すのは DItem など別のデータ構造の Kind フィールドなので、こちら側で種類を持つとデータの多重管理になる。
+    また、たくさんある Item の種類をどのくらいの粒度で interface 分けするべきなのかも手探り状態。（Item と Trap は DItem にまとめるか？分けるか？）
+    そのため Prefab 側で kind を持つのはやめて、メソッドでラップする。
+    
+    [2021/9/18]
+    ----------
+    このデータは本来、Data-Layer と View-Layer ２つの情報に分けるべきかも。
+    */
+
     id: DPrefabId = 0;
     key: string = "";
     dataSource: DPrefabDataSource = DPrefabDataSource.Unknown;
     dataId: number = 0;
-    image: DPrefabImage;
+    image: DPrefabActualImage;
     subPages: DPrefabPageInfo[];
     stateImages: DPrefabStateImage[];
+
+    /** DownSequel のイメージ */
+    downImage: DPrefabOverrideImage;
 
     public constructor() {
         this.image = {
@@ -81,6 +109,7 @@ export class DPrefab {
         };
         this.subPages = [];
         this.stateImages = [];
+        this.downImage = {};
     }
 
     public isEnemyKind(): boolean {

@@ -1,6 +1,6 @@
 import { tr2 } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
-import { DPrefabImage } from "ts/re/data/DPrefab";
+import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DStateRestriction } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
 import { REGame } from "ts/re/objects/REGame";
@@ -18,7 +18,7 @@ export interface TilemapViewInfo {
 export interface SEntityVisibility {
     visible: boolean;
     translucent: boolean;
-    image?: DPrefabImage;
+    image?: DPrefabActualImage;
 }
 
 /**

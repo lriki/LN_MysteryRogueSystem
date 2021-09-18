@@ -23,7 +23,7 @@ import { SAbilityFactory } from "ts/re/system/SAbilityFactory";
 import { REData } from "ts/re/data/REData";
 import { BlockLayerKind } from "./LBlockLayer";
 import { DEntity, DEntityId, DEntityNamePlate, DIdentificationDifficulty } from "ts/re/data/DEntity";
-import { DPrefabImage } from "ts/re/data/DPrefab";
+import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DTraits } from "ts/re/data/DTraits";
@@ -31,6 +31,7 @@ import { LParamSet } from "./LParam";
 import { DEntityKind, DEntityKindId } from "ts/re/data/DEntityKind";
 import { UState } from "ts/re/usecases/UState";
 import { DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
+import { DSequelId } from "../data/DSequel";
 
 enum BlockLayer
 {
@@ -670,7 +671,7 @@ export class LEntity extends LObject
         return result;
     }
 
-    public getCharacterImage(): DPrefabImage | undefined {
+    public getCharacterImage(): DPrefabActualImage | undefined {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryCharacterFileName();
             if (v) return v;
@@ -1049,6 +1050,20 @@ export class LEntity extends LObject
             return result == undefined;
         });
         return result ?? RESystem.propertyData[propertyId].defaultValue;
+    }
+
+    /**
+     * Visual としての Idle 状態での再生 Sequel.
+     * 
+     * 状態異常等で変わる。
+     */
+    public queryIdleSequelId(): DSequelId {
+        let id: DSequelId | undefined = undefined;
+        this.iterateBehaviorsReverse(b => {
+            id = b.onQueryIdleSequelId();
+            return id === undefined;
+        });
+        return id ? id : RESystem.sequels.idle;
     }
 
     queryActions(): DActionId[] {

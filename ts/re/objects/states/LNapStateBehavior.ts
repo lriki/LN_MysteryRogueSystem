@@ -9,6 +9,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
+import { DSequelId } from "ts/re/data/DSequel";
 
 export class LNapStateBehavior extends LBehavior {
     private _hostileEnterd: boolean = false;
@@ -42,11 +43,8 @@ export class LNapStateBehavior extends LBehavior {
         return LEventResult.Pass;
     }
 
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.idleSequel)
-            return RESystem.sequels.asleep;
-        else
-            return super.onQueryProperty(propertyId);
+    queryIdleSequelId(): DSequelId | undefined {
+        return RESystem.sequels.asleep;
     }
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {
