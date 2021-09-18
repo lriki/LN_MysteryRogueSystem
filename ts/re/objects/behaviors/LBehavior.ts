@@ -44,6 +44,7 @@ import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
+import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 
 export enum DecisionPhase {
     Prepare,
@@ -371,6 +372,8 @@ export abstract class LBehavior extends LObject {
 
     /** 主に AI 行動決定用に、スキルの一覧を取得する */
     onCollectSkillActions(result: IDataAction[]): void {}
+
+    onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {}
 
 
     /** 1行動消費単位の終了時点 */

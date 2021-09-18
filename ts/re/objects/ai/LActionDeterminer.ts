@@ -4,7 +4,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
-import { CandidateSkillAction, UAction } from "ts/re/usecases/UAction";
+import { LCandidateSkillAction, UAction } from "ts/re/usecases/UAction";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -24,7 +24,7 @@ export class LActionDeterminer {
     // 最初のフェーズで決定したあと実査には Major フェーズで行動を起こすが、
     // そのときこの値でターゲットした対象が効果範囲を外れていた場合はもう一度 Minor と同じ試行処理を回す。
     //private _attackTargetEntityId: LEntityId = LEntityId.makeEmpty();
-    private _requiredSkillAction: CandidateSkillAction | undefined;
+    private _requiredSkillAction: LCandidateSkillAction | undefined;
 
     public clone(): LActionDeterminer {
         const i = new LActionDeterminer();
@@ -37,6 +37,14 @@ export class LActionDeterminer {
             };
         }
         return i;
+    }
+
+    protected setPrimaryTargetEntityId(entityId: LEntityId): void {
+        this._primaryTargetEntityId = entityId;
+    }
+
+    protected setRequiredSkillAction(action: LCandidateSkillAction | undefined): void {
+        this._requiredSkillAction = action;
     }
 
     public decide(context: SCommandContext, self: LEntity): void {
@@ -138,7 +146,7 @@ export class LActionDeterminer {
 
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
-                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], true, this._requiredSkillAction.targets)) {
+                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], true, this._requiredSkillAction.targets.map(e => REGame.world.entity(e)))) {
                     SEmittorPerformer.makeWithSkill(self, this._requiredSkillAction.action.skillId).performe(context);
                     context.postConsumeActionToken(self);
                     return true;

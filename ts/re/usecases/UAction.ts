@@ -17,9 +17,9 @@ import { SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
 import { UMovement } from "./UMovement";
 
-export interface CandidateSkillAction {
+export interface LCandidateSkillAction {
     action: IDataAction;
-    targets: LEntity[];     // ターゲット候補。TODO: id にする
+    targets: LEntityId[];     // ターゲット候補
 }
 
 export class UAction {
@@ -109,9 +109,9 @@ export class UAction {
         return this.searchTargetEntities(performer, effect.scope, skill.rmmzEffectScope, checkFaction);
     }
 
-    public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): CandidateSkillAction[] {
+    public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): LCandidateSkillAction[] {
         const actions = performer.collectSkillActions();
-        let result: CandidateSkillAction[] = [];
+        let result: LCandidateSkillAction[] = [];
         let hasAdjacentAction = false;
 
 
@@ -121,7 +121,7 @@ export class UAction {
         for (const action of actions) {
             const targets = this.getSkillEffectiveTargets(performer, REData.skills[action.skillId], true);
             if (targets.length > 0) {
-                result.push({ action: action, targets: targets });
+                result.push({ action: action, targets: targets.map(e => e.entityId()) });
                 maxRating = Math.max(maxRating, action.rating);
             }
         }
@@ -150,7 +150,12 @@ export class UAction {
             result.mutableRemove(x => x.action.skillId == RESystem.skills.move);
         }
 
-
+        {
+            performer.iterateBehaviorsReverse(b => {
+                b.onPostMakeSkillActions(result);
+                return true;
+            });
+        }
 
         return result;
     }

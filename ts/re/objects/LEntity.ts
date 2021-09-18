@@ -1061,7 +1061,7 @@ export class LEntity extends LObject
         let id: DSequelId | undefined = undefined;
         this.iterateBehaviorsReverse(b => {
             id = b.onQueryIdleSequelId();
-            return id === undefined;
+            return !id;
         });
         return id ? id : DBasics.sequels.idle;
     }
