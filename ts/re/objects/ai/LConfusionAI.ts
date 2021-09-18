@@ -11,12 +11,14 @@ import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
+import { RESerializable } from "ts/re/Common";
 
 interface SkillAction {
     skillId: DSkillDataId;
     target: LEntityId;
 };
 
+@RESerializable
 export class LConfusionAI extends LCharacterAI {
 
     /*

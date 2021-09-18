@@ -5,7 +5,7 @@ import { SCommandContext } from "../system/SCommandContext";
 import { LRoomId } from "./LBlock";
 import { RESystem } from "ts/re/system/RESystem";
 import { DState, DStateId } from "ts/re/data/DState";
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "./LObject";
 import { LState, LStateId } from "./states/LState";
@@ -96,6 +96,7 @@ enum BlockLayer
  * お店のセキュリティシステムなど、Map 上に存在する必要はないが Floor 内に存在し、影響を与える Entity でこの状態になることがある。
  * また、フロア移動 ～ Map 上へ配置までの間では、通常の Entity も一時的にこの状態になることがある。
  */
+@RESerializable
 export class LEntity extends LObject
 {
     private _entityDataId: DEntityId = 0;

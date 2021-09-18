@@ -3,10 +3,12 @@ import { DBasics } from "ts/re/data/DBasics";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
+import { RESerializable } from "ts/re/Common";
 
 /**
  * @deprecated see kItem_スピードドラッグ
  */
+@RESerializable
 export class LItemBehavior_Grass1 extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

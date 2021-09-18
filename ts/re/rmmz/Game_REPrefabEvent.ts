@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DHelpers, RmmzREEventMetadata } from "ts/re/data/DHelper";
 import { REGame } from "ts/re/objects/REGame";
 import { LState } from "ts/re/objects/states/LState";
@@ -13,6 +13,8 @@ const dummyMapEvent: IDataMapEvent = {
     y: 0,
 }
 
+
+@RESerializable
 export class Game_REPrefabEvent extends Game_Event {
     //private _databaseMapEventId: number;
     private _spritePrepared: boolean;

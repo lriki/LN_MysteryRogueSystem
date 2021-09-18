@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { Helpers } from "ts/re/system/Helpers";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -8,6 +8,7 @@ import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 
+@RESerializable
 export class LMoveDeterminer {
     
     // 移動ターゲットとなる座標。

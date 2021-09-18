@@ -1,4 +1,4 @@
-import { assert } from "../Common";
+import { assert, RESerializable } from "../Common";
 import { LRoomId, LBlock, TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
@@ -52,6 +52,7 @@ export interface RE_Game_Data
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
+@RESerializable
 export class LMap extends LObject
 {
     private _floorId: LFloorId = LFloorId.makeEmpty();

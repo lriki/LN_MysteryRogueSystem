@@ -1,4 +1,4 @@
-import { tr2 } from "ts/re/Common";
+import { RESerializable, tr2 } from "ts/re/Common";
 import { REResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
@@ -9,6 +9,7 @@ import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior
 /**
  * 
  */
+@RESerializable
 export class LClingFloorBehavior extends LBehavior {
 
     private _cling: boolean = false;

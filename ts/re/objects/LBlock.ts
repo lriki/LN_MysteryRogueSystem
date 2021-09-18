@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { LEntity } from "./LEntity";
 import { FBlockComponent } from "ts/re/floorgen/FMapData";
 import { REGame } from "./REGame";
@@ -138,6 +138,7 @@ export enum LBlockSystemDecoration {
  * elona みたいに固定マップの壊した壁が一定時間すると復活するようなものを実装するには必要になる。
  * 
  */
+ @RESerializable
 export class LBlock// extends LObject
 {
     // 固定マップ等で、決まった ID のタイルを表示した場合はここに値を持たせておく。

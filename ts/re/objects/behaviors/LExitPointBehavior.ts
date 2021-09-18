@@ -8,6 +8,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
+import { RESerializable } from "ts/re/Common";
 
 /**
  * [2021/8/14] 「戻る」の実装について
@@ -39,6 +40,7 @@ import { REGame } from "../REGame";
  * HC4 の時に実装したリアクションコマンド形式がいいかも。
  * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
+@RESerializable
 export class LExitPointBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

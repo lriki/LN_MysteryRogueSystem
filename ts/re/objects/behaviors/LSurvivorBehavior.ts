@@ -1,4 +1,4 @@
-import { tr2 } from "ts/re/Common";
+import { RESerializable, tr2 } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -9,6 +9,7 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
 /**
  * 
  */
+@RESerializable
 export class LSurvivorBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

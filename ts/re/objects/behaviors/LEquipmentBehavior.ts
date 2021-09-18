@@ -1,4 +1,4 @@
-import { assert, tr2 } from "ts/re/Common";
+import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { REResponse } from "ts/re/system/RECommand";
@@ -12,6 +12,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
+@RESerializable
 export class LEquipmentBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

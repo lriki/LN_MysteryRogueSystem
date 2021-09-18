@@ -1,7 +1,9 @@
 
 import { REData } from "ts/re/data/REData";
 import { DLand, DLandId } from "ts/re/data/DLand";
+import { RESerializable } from "../Common";
 
+@RESerializable
 export class LLand {
     private _landDataId: DLandId = 0;
 

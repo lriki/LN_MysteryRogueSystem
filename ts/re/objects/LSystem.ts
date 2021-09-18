@@ -2,10 +2,12 @@ import { LMap } from "./LMap";
 import { LEntity } from "./LEntity";
 import { LWorld } from "./LWorld";
 import { LEntityId } from "./LObject";
+import { RESerializable } from "../Common";
 
 /**
  * 未分類グローバル変数
  */
+@RESerializable
 export class LSystem
 {
     // experimental: "場所移動" 等の基準となる、メインプレイヤーの Entity.

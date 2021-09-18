@@ -9,6 +9,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LActivity } from "../activities/LActivity";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
+import { RESerializable } from "ts/re/Common";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -16,6 +17,7 @@ import { LCharacterAI_Normal } from "../ai/LStandardAI";
  * この Behavior は標準的な行動決定のみ行う。
  * 状態異常による行動制限(&経過ターンのデクリメント)・暴走は、状態異常の Behavior 側で onDecisionPhase() をフックして実装する。
  */
+@RESerializable
 export class LDecisionBehavior extends LBehavior {
     _characterAI: LCharacterAI = new LCharacterAI_Normal();
 

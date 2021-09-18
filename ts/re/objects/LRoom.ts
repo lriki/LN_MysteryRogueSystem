@@ -2,12 +2,14 @@ import { FRoom } from "ts/re/floorgen/FMapData";
 import { REGame } from "./REGame";
 import { LBlock, TileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
+import { RESerializable } from "../Common";
 
 export enum MonsterHouseState {
     Sleeping = 0,
     Activated = 1,
 }
 
+@RESerializable
 export class LRoom {
     private _roomId: number = 0;
     private _x1: number = -1;   // 有効範囲内左上座標

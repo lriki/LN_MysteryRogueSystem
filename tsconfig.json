@@ -18,7 +18,8 @@
           "imgui-js": [ "../build/imgui" ],
         },
 
-        "skipLibCheck": true    ,                             /* Skip type checking all .d.ts files. */
+        "skipLibCheck": true,                             /* Skip type checking all .d.ts files. */
+        "experimentalDecorators": true,
 
         "lib": [
             "es6",

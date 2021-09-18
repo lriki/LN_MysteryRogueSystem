@@ -10,7 +10,9 @@ import { MovingMethod } from "../LMap";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LSaunteringAIHelper } from "./LSaunteringAIHelper";
+import { RESerializable } from "ts/re/Common";
 
+@RESerializable
 export class LEscapeAI extends LCharacterAI {
     private _movingHelper: LSaunteringAIHelper;
     private _targetEntityId: LEntityId;

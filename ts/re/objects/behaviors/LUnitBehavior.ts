@@ -7,7 +7,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { Helpers } from "ts/re/system/Helpers";
 import { BlockLayerKind } from "../LBlockLayer";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { assert, tr, tr2 } from "ts/re/Common";
+import { assert, RESerializable, tr, tr2 } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { DActionId } from "ts/re/data/DAction";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -28,6 +28,7 @@ import { SView } from "ts/re/system/SView";
 /**
  * 
  */
+@RESerializable
 export class LUnitBehavior extends LBehavior {
     
     private _factionId: number = REData.system.factions.neutral;

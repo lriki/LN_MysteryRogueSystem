@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DParameterId } from "ts/re/data/DParameter";
 import { REData } from "ts/re/data/REData";
@@ -10,6 +10,7 @@ interface LParamBuff {
     turn: number;
 }
 
+@RESerializable
 export class LParam {
     private _dataId: DParameterId;
     private _actualParamDamge: number;       // ダメージ値
@@ -145,6 +146,7 @@ export class LParam {
     }
 }
 
+@RESerializable
 export class LParamSet {
     // 以下 param の index は ParameterDataId.
     // RMMZ の param index とは異なるが、mhp,mmp,atk,def,mat,mdf,agi,luk のインデックスとは一致する。

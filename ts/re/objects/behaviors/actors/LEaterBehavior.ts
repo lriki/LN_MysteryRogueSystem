@@ -6,10 +6,12 @@ import { REResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
+import { RESerializable } from "ts/re/Common";
 
 /**
  * @deprecated see kItem_スピードドラッグ
  */
+@RESerializable
 export class LEaterBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

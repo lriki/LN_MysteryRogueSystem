@@ -20,7 +20,7 @@ import { LEventResult } from "../LEventServer";
 export class LGrabFootBehavior extends LBehavior {
 
     /*
-    影縫い状態とは違うの？
+    影縫い状態とは違うの？「掴まれる側」のステートは無し？
     ----------
     SFCトルネコのマドハンドのように、掴まれている状態で移動しようとしたら
     相手にモーション取らせるようなケースでは、ステート扱いしないほうが良い。

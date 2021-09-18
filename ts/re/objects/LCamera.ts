@@ -1,7 +1,7 @@
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
 import { RESystem } from "ts/re/system/RESystem";
-import { Log } from "ts/re/Common";
+import { Log, RESerializable } from "ts/re/Common";
 import { LEntityId } from "./LObject";
 import { LFloorId } from "./LFloorId";
 
@@ -46,6 +46,7 @@ import { LFloorId } from "./LFloorId";
  * 3. 既定の Game_Map.setup() 後、performFloorTransfer() で現在の $gameMap や $dataMap を元にフロアを構築する。
  * 
  */
+@RESerializable
 export class LCamera {
     private _focusedEntityId: LEntityId = LEntityId.makeEmpty();
     private _transferingNewFloorId: LFloorId = LFloorId.makeEmpty();

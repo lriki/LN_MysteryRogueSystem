@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { DSkillDataId } from "ts/re/data/DSkill";
@@ -38,6 +38,7 @@ export interface LActivityData {
  * [向き変更] や 壺操作 [いれる] [だす] など Activity によっては追加の引数が必要となることがあるが、
  * それらは派生クラスで実装する。
  */
+@RESerializable
 export class LActivity {
     private _actionId: DActionId;
     private _subject: LEntityId;    // Command 送信対象 (主語)

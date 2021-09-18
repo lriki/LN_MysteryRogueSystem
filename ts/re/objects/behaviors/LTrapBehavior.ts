@@ -1,4 +1,4 @@
-import { assert, tr } from "ts/re/Common";
+import { assert, RESerializable, tr } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { REData } from "ts/re/data/REData";
@@ -31,6 +31,7 @@ import { DEffectCause } from "ts/re/data/DEmittor";
  * - 罠にかけたい勢力側に TrapMaster がいたら、その敵対勢力を罠にかけるようにする。
  * - 両方の勢力に TrapMaster がいたら、何もしない。
  */
+@RESerializable
 export class LTrapBehavior extends LBehavior {
     private _exposed: boolean = false;
 

@@ -1,4 +1,4 @@
-import { assert, tr2 } from "ts/re/Common";
+import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DMonsterHouseType, DMonsterHouseTypeId } from "ts/re/data/DMonsterHouse";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
@@ -9,6 +9,7 @@ import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 
+@RESerializable
 export class LMonsterHouseStructure extends LStructure {
     private _roomId: LRoomId = 0
     private _monsterHouseTypeId: DMonsterHouseTypeId = 0;

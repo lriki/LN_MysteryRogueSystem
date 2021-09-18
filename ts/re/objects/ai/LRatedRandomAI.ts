@@ -4,9 +4,9 @@ import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LCharacterAI_Normal } from "./LStandardAI";
 import { LConfusionAI } from "./LConfusionAI";
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 
-
+@RESerializable
 export class LRatedRandomAI extends LCharacterAI {
     private _randomRate: number;
     private _rundomTurn: boolean;

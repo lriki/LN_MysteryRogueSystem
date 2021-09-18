@@ -1,3 +1,4 @@
+import { RESerializable } from "../Common";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
@@ -24,6 +25,7 @@ export enum BlockLayerKind {
 // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
 // またシレン2のバグから推測することもできる。
 // http://shiren2.lsx3.com/?plugin=paraedit&parnum=17&page=%A5%D0%A5%B0&refer=%A5%D0%A5%B0
+@RESerializable
 export class REBlockLayer {
     private _entityIds: LEntityId[] = [];
 

@@ -1,3 +1,4 @@
+import { RESerializable } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { REResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -10,6 +11,7 @@ import { LEnemyBehavior } from "./LEnemyBehavior";
 /**
  * 
  */
+@RESerializable
 export class LSanctuaryBehavior extends LBehavior {
 
 

@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DFloorInfo, DLand, DLandId } from "ts/re/data/DLand";
 import { REData } from "ts/re/data/REData";
@@ -28,6 +28,7 @@ import { REDataManager } from "ts/re/data/REDataManager";
  * - LFloorId.rmmzMapId() で、ロードするべきマップを取得 (ランダムマップならLand定義マップID, 固定マップならそのマップID)
  * - その後、RMMZIntegration 経由で $gamePlayer.reserveTransfer に流して、実際にマップ移動する。
  */
+@RESerializable
 export class LFloorId {
     /** LandId==DHelpers.RmmzNormalMapLandId は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
     private readonly _landId: DLandId;

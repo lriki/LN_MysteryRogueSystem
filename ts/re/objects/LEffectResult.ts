@@ -1,4 +1,4 @@
-import { assert, tr2 } from "ts/re/Common";
+import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DState, DStateId } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/re/objects/LIdentifyer";
@@ -12,6 +12,7 @@ import { SSoundManager } from "ts/re/system/SSoundManager";
 import { UName } from "ts/re/usecases/UName";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
+@RESerializable
 export class LParamEffectResult {
     damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
     drain: boolean = false;
@@ -27,6 +28,7 @@ export class LParamEffectResult {
  * - 地雷を踏む→ダメージ
  * - 隣のタイルにあった地雷が誘爆する→ダメージ
  */
+@RESerializable
 export class LEffectResult {
 
     // 意味のある効果適用ができたかどうか。

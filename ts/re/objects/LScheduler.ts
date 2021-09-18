@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
@@ -127,6 +127,7 @@ export interface RunInfo
     steps: LTOStep[];
 };
 
+@RESerializable
 export class LScheduler {
     private _actorEntities: LEntityId[] = [];   // Round 中に行動する全 Entity
     private _units2: LTOUnit[] = [];    

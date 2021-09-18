@@ -1,3 +1,4 @@
+import { RESerializable } from "ts/re/Common";
 import { REData } from "ts/re/data/REData";
 import { RESystem } from "ts/re/system/RESystem";
 import { SAIHelper } from "ts/re/system/SAIHelper";
@@ -8,7 +9,7 @@ import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 
-
+@RESerializable
 export class LActionDeterminer {
     
     // 最初のフェーズで決定する、メインの行動対象 Entity.

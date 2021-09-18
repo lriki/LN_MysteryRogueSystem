@@ -45,3 +45,31 @@ export class Log
         }
     }
 }
+
+
+export class TypeStore {
+    static typeInfos: { fullName: string, friendlyName: string, function: Function }[] = [];
+
+    public static register(constructor: Function): void {
+        let friendlyName = constructor.name;
+        this.typeInfos.push({
+            fullName: constructor.name,
+            friendlyName: friendlyName,
+            function: constructor,
+        })
+    }
+    
+    public static createInstance(name: string): any {
+        const t = this.typeInfos.find(x => x.fullName == name || x.friendlyName == name);
+        if (!t) {
+            const message = tr2("%1が登録されていません。@RESerializable でクラスを装飾してください。").format(name);
+            console.error(message);
+            throw new Error(message);
+        }
+        return Object.create(t.function.prototype);
+    }
+}
+
+export function RESerializable(constructor: Function) {
+    TypeStore.register(constructor);
+}

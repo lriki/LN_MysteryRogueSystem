@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
@@ -28,6 +28,7 @@ import { SEffectorFact } from "ts/re/system/SEffectApplyer";
  * - 自然落下することができる。
  * - 壁に当たって落下することができる。
  */
+@RESerializable
 export class LProjectableBehavior extends LBehavior {
     
     blowDirection: number = 0;      // 吹き飛ばし方向
