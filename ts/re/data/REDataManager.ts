@@ -215,7 +215,7 @@ export class REDataManager
         
 
         // Sequels
-        RESystem.sequels = {
+        DBasics.sequels = {
             idle: REData.addSequel("idle"),
             MoveSequel: REData.addSequel("Move"),
             blowMoveSequel: REData.addSequel("BlowMove"),
@@ -230,7 +230,7 @@ export class REDataManager
             explosion: REData.addSequel("explosion"),
             down: REData.addSequel("down"),
         };
-        REData.sequels[RESystem.sequels.MoveSequel].parallel = true;
+        REData.sequels[DBasics.sequels.MoveSequel].parallel = true;
         
         RESystem.skills = {
             move: 3,

@@ -1,6 +1,7 @@
 import { DMatchConditions } from "./DCommon";
 import { DEffect } from "./DEffect";
 import { DParameterId } from "./DParameter";
+import { DSequelId } from "./DSequel";
 import { DStateGroupId } from "./DStateGroup";
 import { DTraitId } from "./DTraits";
 import { REData } from "./REData";
@@ -156,14 +157,16 @@ export class DState {
     stateGroupIds: DStateGroupId[];
 
 
-    //minBuffLevel: number;
-    //maxBuffLevel: number;
-    //parameterBuffFormulas: (string | undefined)[];    // Index is DParameterId.
+
+    
     // ツクールの TRAIT では定数加算することができない。割合変化のみ。そのため用意したもの
     autoAdditionCondition: string | undefined;
 
     effect: DStateEffect;
     submatchStates: DStateId[];
+
+    /** このステートが付加されているときの Idle Sequel。 */
+    idleSequel: DSequelId;
 
     public constructor(id: DStateId) {
         this.id = id;
@@ -187,6 +190,7 @@ export class DState {
         this.autoAdditionCondition = undefined;
         this.effect = new DStateEffect();
         this.submatchStates = [];
+        this.idleSequel = 0;
     }
 
     public import(data: IDataState): void {

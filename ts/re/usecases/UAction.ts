@@ -10,6 +10,7 @@ import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
+import { DBasics } from "../data/DBasics";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
 import { SCommandContext } from "../system/SCommandContext";
@@ -52,7 +53,7 @@ export class UAction {
             //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
             //context.postCall(() => {
                 UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
-                context.postSequel(entity, RESystem.sequels.dropSequel);
+                context.postSequel(entity, DBasics.sequels.dropSequel);
             //});
         }
         else {

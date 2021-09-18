@@ -280,7 +280,7 @@ export class SEmittorPerformer {
         else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
 
             // TODO: ユーザー側モーション
-            context.postSequel(performer, RESystem.sequels.attack);
+            context.postSequel(performer, DBasics.sequels.attack);
             
             // TODO: 正面3方向攻撃とかの場合はここをループする
             //for ()

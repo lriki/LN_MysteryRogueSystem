@@ -9,6 +9,7 @@ import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsMagicBullet } from "./LBehavior";
 import { MovingMethod } from "../LMap";
+import { DBasics } from "ts/re/data/DBasics";
 
 
 /**
@@ -78,7 +79,7 @@ export class LMagicBulletBehavior extends LBehavior {
         }
 
         if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
-            context.postSequel(self, RESystem.sequels.blowMoveSequel);
+            context.postSequel(self, DBasics.sequels.blowMoveSequel);
             
             // recall
             context.post(self, self, args.subject, undefined, onMoveAsMagicBullet);

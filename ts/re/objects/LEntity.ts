@@ -1063,7 +1063,7 @@ export class LEntity extends LObject
             id = b.onQueryIdleSequelId();
             return id === undefined;
         });
-        return id ? id : RESystem.sequels.idle;
+        return id ? id : DBasics.sequels.idle;
     }
 
     queryActions(): DActionId[] {

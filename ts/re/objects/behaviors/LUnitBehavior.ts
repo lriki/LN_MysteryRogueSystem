@@ -170,7 +170,7 @@ export class LUnitBehavior extends LBehavior {
 
             const layer = self.getHomeLayer();
             if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
-                context.postSequel(self, RESystem.sequels.MoveSequel);
+                context.postSequel(self, DBasics.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 self.immediatelyAfterAdjacentMoving = true;
@@ -363,7 +363,7 @@ export class LUnitBehavior extends LBehavior {
 
         }
         else if (activity.actionId() == DBasics.actions.WaveActionId) {
-            context.postSequel(self, RESystem.sequels.attack);
+            context.postSequel(self, DBasics.sequels.attack);
 
             const reactor = activity.object();
             if (reactor) {
@@ -374,12 +374,12 @@ export class LUnitBehavior extends LBehavior {
             return REResponse.Succeeded;
         }
         else if (activity.actionId() == DBasics.actions.EatActionId) {
-            context.postSequel(self, RESystem.sequels.useItem, activity.object());
+            context.postSequel(self, DBasics.sequels.useItem, activity.object());
             return REResponse.Succeeded;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == DBasics.actions.ReadActionId) {
-            context.postSequel(self, RESystem.sequels.useItem, activity.object());
+            context.postSequel(self, DBasics.sequels.useItem, activity.object());
             // 続いて onActivityReaction を実行する。
             return REResponse.Succeeded;
         }

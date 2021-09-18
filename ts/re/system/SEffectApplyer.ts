@@ -593,7 +593,7 @@ export class SEffectApplyer {
                 REGame.scheduler.resetEntity(targetEntity);
                 break;
             case "kSystemEffect_脱出":
-                commandContext.postSequel(targetEntity, RESystem.sequels.escape);
+                commandContext.postSequel(targetEntity, DBasics.sequels.escape);
                 UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
                 break;
             case "kSystemEffect_識別":

@@ -178,7 +178,7 @@ export class LBattlerBehavior extends LBehavior {
     onStepEnd(context: SCommandContext): REResponse {
         const entity = this.ownerEntity();
         if (this.isDeathStateAffected()) {
-            context.postSequel(entity, RESystem.sequels.CollapseSequel);
+            context.postSequel(entity, DBasics.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
                 if (entity == REGame.camera.focusedEntity()) {

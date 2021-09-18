@@ -6,6 +6,7 @@ import { DBasicItemShops } from "./predefineds/DBasicItemShops";
 import { DBasicMonsterHouses } from "./predefineds/DBasicMonsterHouses";
 import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DBasicParameters";
 import { DBasicPrefabs } from "./predefineds/DBasicPrefabs";
+import { BasicSequels } from "./predefineds/DBasicSequels";
 import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicStateTraits } from "./predefineds/DBasicTraits";
 import { DFactionId } from "./REData";
@@ -26,5 +27,6 @@ export class DBasics {
     static monsterHouses: DBasicMonsterHouses;
     static itemShops: DBasicItemShops;
     static prefabs: DBasicPrefabs;
+    static sequels: BasicSequels;
 }
 

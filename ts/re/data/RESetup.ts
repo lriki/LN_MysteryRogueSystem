@@ -25,7 +25,6 @@ export class RESetup {
                 data.downImage.directionFix = true;
                 data.downImage.stepAnime = false;
                 data.downImage.walkAnime = false;
-                console.log("prefab", data);
                 break;
         }
     }
@@ -44,6 +43,7 @@ export class RESetup {
             case "kState_仮眠2":
                 //data.behaviors.push("LDoze2Behavior");
                 data.effect.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
+                data.idleSequel = DBasics.sequels.asleep;
                 break;
             case "kState_UT魔法使い":
                 data.effect.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });

@@ -124,7 +124,7 @@ export class LProjectableBehavior extends LBehavior {
 
 
         if (UMovement.moveEntity(context, self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
-            context.postSequel(self, RESystem.sequels.blowMoveSequel);
+            context.postSequel(self, DBasics.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
 

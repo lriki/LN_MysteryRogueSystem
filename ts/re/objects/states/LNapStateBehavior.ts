@@ -43,8 +43,8 @@ export class LNapStateBehavior extends LBehavior {
         return LEventResult.Pass;
     }
 
-    queryIdleSequelId(): DSequelId | undefined {
-        return RESystem.sequels.asleep;
+    onQueryIdleSequelId(): DSequelId | undefined {
+        return DBasics.sequels.asleep;
     }
     
     onDecisionPhase(entity: LEntity, context: SCommandContext, phase: DecisionPhase): SPhaseResult {

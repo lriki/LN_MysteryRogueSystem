@@ -38,6 +38,7 @@ import { VDetailsDialog } from "./dialogs/VDetailsDialog";
 import { VUseItemSequel } from "./sequels/VUseItemSequel";
 import { VExplosionSequel } from "./sequels/VExplosionSequel";
 import { VDownSequel } from "./sequels/VDownSequel";
+import { DBasics } from "../data/DBasics";
 
 /**
  */
@@ -52,19 +53,19 @@ export class REVisual_Manager
         //this._dialogVisual = null;
 
 
-        this._visualSequelFactory[RESystem.sequels.idle] = () => new VIdleSequel();
-        this._visualSequelFactory[RESystem.sequels.MoveSequel] = () => new REVisualSequel_Move();
-        this._visualSequelFactory[RESystem.sequels.blowMoveSequel] = () => new VBlowMoveSequel();
-        this._visualSequelFactory[RESystem.sequels.dropSequel] = () => new VDropSequel();
-        this._visualSequelFactory[RESystem.sequels.attack] = () => new VAttackSequel();
-        this._visualSequelFactory[RESystem.sequels.CollapseSequel] = () => new VCollapseSequel();
-        this._visualSequelFactory[RESystem.sequels.commonStopped] = () => new VCommonStoppedSequel();
-        this._visualSequelFactory[RESystem.sequels.asleep] = () => new VAsleepSequel();
-        this._visualSequelFactory[RESystem.sequels.escape] = () => new VEscapeSequel();
-        this._visualSequelFactory[RESystem.sequels.earthquake2] = () => new VEarthquake2Sequel();
-        this._visualSequelFactory[RESystem.sequels.useItem] = () => new VUseItemSequel();
-        this._visualSequelFactory[RESystem.sequels.explosion] = () => new VExplosionSequel();
-        this._visualSequelFactory[RESystem.sequels.down] = () => new VDownSequel();
+        this._visualSequelFactory[DBasics.sequels.idle] = () => new VIdleSequel();
+        this._visualSequelFactory[DBasics.sequels.MoveSequel] = () => new REVisualSequel_Move();
+        this._visualSequelFactory[DBasics.sequels.blowMoveSequel] = () => new VBlowMoveSequel();
+        this._visualSequelFactory[DBasics.sequels.dropSequel] = () => new VDropSequel();
+        this._visualSequelFactory[DBasics.sequels.attack] = () => new VAttackSequel();
+        this._visualSequelFactory[DBasics.sequels.CollapseSequel] = () => new VCollapseSequel();
+        this._visualSequelFactory[DBasics.sequels.commonStopped] = () => new VCommonStoppedSequel();
+        this._visualSequelFactory[DBasics.sequels.asleep] = () => new VAsleepSequel();
+        this._visualSequelFactory[DBasics.sequels.escape] = () => new VEscapeSequel();
+        this._visualSequelFactory[DBasics.sequels.earthquake2] = () => new VEarthquake2Sequel();
+        this._visualSequelFactory[DBasics.sequels.useItem] = () => new VUseItemSequel();
+        this._visualSequelFactory[DBasics.sequels.explosion] = () => new VExplosionSequel();
+        this._visualSequelFactory[DBasics.sequels.down] = () => new VDownSequel();
 
         
     }

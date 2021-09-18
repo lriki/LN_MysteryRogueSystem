@@ -39,7 +39,6 @@ export class RESystem {
     static unittest: boolean = false;
 
     // Database
-    static sequels: BasicSequels;
     static skills: BasicSkills;
     static items: BasicItems;
     
