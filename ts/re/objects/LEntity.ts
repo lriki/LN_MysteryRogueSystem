@@ -489,6 +489,9 @@ export class LEntity extends LObject
             param.setActualDamgeParam(value);
             this.refreshConditions();
         }
+        else {
+            throw new Error(`LParam not registerd (paramId:${paramId})`);
+        }
     }
     
     public gainActualParam(paramId: DParameterId, value: number): void {
@@ -773,55 +776,6 @@ export class LEntity extends LObject
         this._needVisualRefresh = true;
         console.log("this", this);
         console.log("this._states", this._states);
-        /*
-        const states = this.states();
-        const index = states.findIndex(s => s.stateDataId() == stateId);
-        let state;
-        let newState = true;
-        if (index >= 0) {
-            state = states[index];
-            newState = false;
-        }
-        else {
-            state = SStateFactory.newState(stateId);
-        }
-
-        // Level 設定
-        switch (levelType) {
-            case LStateLevelType.AbsoluteValue:
-                state.setLevel(level);
-                break;
-            case LStateLevelType.RelativeValue:
-                state.setLevel(state.level() + level);
-                break;
-            default:
-                throw new Error("Unreachable.");
-        }
-
-        if (newState) {
-            assert(state.level() > 0);
-            state.setParent(this);
-            assert(state.hasId());
-            this._states.push(state.id());
-            state.onAttached();
-            this._effectResult.pushAddedState(stateId);
-            this._needVisualRefresh = true;
-        }
-        else {
-            if (state.level() == 0) {
-                this.removeState(stateId);
-            }
-            else {
-                states[index].recast();
-            }
-        }
-
-
-
-        if (refresh) {
-            
-        }
-        */
     }
 
     public states(): readonly LState[] {
@@ -838,18 +792,6 @@ export class LEntity extends LObject
         // 自動追加の更新を行う
         this._states = UState.resolveStates(this, [], []).map(s => s.id());
         this._needVisualRefresh = true;
-
-        /*
-        const states = this.states();
-        const index = states.findIndex(s => s.stateDataId() == stateId);
-        if (index >= 0) {
-            states[index].clearParent();
-            states[index].onDetached();
-            this._effectResult.pushRemovedState(stateId);
-            this._needVisualRefresh = true;
-            this._states.splice(index, 1);
-        }
-        */
     }
 
     removeState(stateId: DStateId) {
@@ -866,16 +808,20 @@ export class LEntity extends LObject
         this._needVisualRefresh = true;
     }
 
-    public hasState(stateId: DStateId): boolean {
-        let result = false;
+    public findState(stateId: DStateId): LState | undefined {
+        let result: LState | undefined = undefined;
         this.iterateStates((s) => {
             if (s.stateDataId() == stateId) {
-                result = true;
+                result = s;
                 return false;
             }
             return true;
         });
         return result;
+    }
+
+    public hasState(stateId: DStateId): boolean {
+        return !!this.findState(stateId);
     }
     
     public isBlessed(): boolean {

@@ -246,7 +246,6 @@ export class SEmittorPerformer {
 
         // 発動側アニメーション
         {
-            console.log("performeEffect!!", emittor);
             if (emittor.selfAnimationId > 0) {
                 context.postAnimation(performer, emittor.selfAnimationId, true);
             }
@@ -306,7 +305,7 @@ export class SEmittorPerformer {
                             .then(() => {
                                 if (skillId > 0) {
                                     this.raiseSkillEmitted(context, performer, [target], skillId);
-                                    this.callSkillPerformed(context, performer, [performer], skillId);
+                                    this.callSkillPerformed(context, performer, [target], skillId);
                                 }
                                 return true;
                             });
