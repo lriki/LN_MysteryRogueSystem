@@ -34,7 +34,7 @@ export class SEffect {
         this._hitType = effect.hitType;
         this._successRate = effect.successRate;
 
-        this._targetApplyer = new SEffectQualifyings(effect.targetQualifyings);
+        this._targetApplyer = new SEffectQualifyings(effect.qualifyings);
     }
 
     public fact(): SEffectorFact {
@@ -160,7 +160,7 @@ export class SEffectorFact {
         for (const e of effects.effects) {
             this._effects.push(new SEffect(this, e));
         }
-        this._selfApplyer = new SEffectQualifyings(effects.selfEffect.selfQualifyings);
+        this._selfApplyer = new SEffectQualifyings(effects.selfEffect.qualifyings);
         
         this._subject.iterateBehaviors2(b => {
             b.onCollectEffector(this._subject, this);

@@ -460,13 +460,13 @@ export class REDataManager
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
                 effect.rmmzAnimationId = x.animationId;
-                effect.targetQualifyings.specialEffectQualifyings = x.effects;
+                effect.qualifyings.specialEffectQualifyings = x.effects;
 
                 emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
                 emittor.costs.setParamCost(DSkillCostSource.Actor, DBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
 
                 if (x.damage.type > 0) {
-                    effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    effect.qualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 emittor.effectSet.effects.push(effect);
                 /*
@@ -504,10 +504,10 @@ export class REDataManager
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
                 effect.rmmzAnimationId = x.animationId;
-                effect.targetQualifyings.specialEffectQualifyings = x.effects;
+                effect.qualifyings.specialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
-                    effect.targetQualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    effect.qualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
                 emittor.effectSet.effects.push(effect);
@@ -572,7 +572,7 @@ export class REDataManager
                     variance: 20,
                     silent: false,
                 };
-                effect.targetQualifyings.parameterQualifyings.push(q);
+                effect.qualifyings.parameterQualifyings.push(q);
                 emittor.effectSet.effects.push(effect);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
             }

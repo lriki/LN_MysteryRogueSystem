@@ -215,9 +215,9 @@ export class DEffect {
     rmmzAnimationId: number;
 
 
-    targetQualifyings: DQualifyings;
+    qualifyings: DQualifyings;
 
-    selfQualifyings: DQualifyings;
+    //selfQualifyings: DQualifyings;
 
     constructor() {
         //this.id = id;
@@ -231,18 +231,18 @@ export class DEffect {
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
         this.rmmzAnimationId = 0;
-        this.targetQualifyings = {
+        this.qualifyings = {
             parameterQualifyings: [],
             otherEffectQualifyings: [],
             specialEffectQualifyings : [],
             buffQualifying: [],
         };
-        this.selfQualifyings = {
-            parameterQualifyings: [],
-            otherEffectQualifyings: [],
-            specialEffectQualifyings : [],
-            buffQualifying: [],
-        };
+        // this.selfQualifyings = {
+        //     parameterQualifyings: [],
+        //     otherEffectQualifyings: [],
+        //     specialEffectQualifyings : [],
+        //     buffQualifying: [],
+        // };
     }
 
     public copyFrom(src: DEffect): void {
@@ -252,18 +252,24 @@ export class DEffect {
         this.hitType = src.hitType;
         this.rmmzAnimationId = src.rmmzAnimationId;
         
-        this.targetQualifyings = {
-            parameterQualifyings: src.targetQualifyings.parameterQualifyings.slice(),
-            otherEffectQualifyings: src.targetQualifyings.otherEffectQualifyings.slice(),
-            specialEffectQualifyings :src.targetQualifyings.specialEffectQualifyings.slice(),
-            buffQualifying: src.targetQualifyings.buffQualifying.slice(),
+        this.qualifyings = {
+            parameterQualifyings: src.qualifyings.parameterQualifyings.slice(),
+            otherEffectQualifyings: src.qualifyings.otherEffectQualifyings.slice(),
+            specialEffectQualifyings :src.qualifyings.specialEffectQualifyings.slice(),
+            buffQualifying: src.qualifyings.buffQualifying.slice(),
         };
-        this.selfQualifyings = {
-            parameterQualifyings: src.selfQualifyings.parameterQualifyings.slice(),
-            otherEffectQualifyings: src.selfQualifyings.otherEffectQualifyings.slice(),
-            specialEffectQualifyings :src.selfQualifyings.specialEffectQualifyings.slice(),
-            buffQualifying: src.selfQualifyings.buffQualifying.slice(),
-        };
+        // this.selfQualifyings = {
+        //     parameterQualifyings: src.selfQualifyings.parameterQualifyings.slice(),
+        //     otherEffectQualifyings: src.selfQualifyings.otherEffectQualifyings.slice(),
+        //     specialEffectQualifyings :src.selfQualifyings.specialEffectQualifyings.slice(),
+        //     buffQualifying: src.selfQualifyings.buffQualifying.slice(),
+        // };
+    }
+    
+    public clone(): DEffect {
+        const i = new DEffect();
+        i.copyFrom(this);
+        return i;
     }
 }
 
@@ -328,9 +334,7 @@ export class DEffectSet {
         this.selfEffect.copyFrom(src.selfEffect);
         this.effects = [];
         for (const e of src.effects) {
-            const n = new DEffect;
-            n.copyFrom(e);
-            this.effects.push(n);
+            this.effects.push(e.clone());
         }
     }
 }

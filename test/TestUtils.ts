@@ -20,7 +20,7 @@ export class TestUtils {
         assert(!!emittors);
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!emittors.find(e => !!e.effectSet.effects[0].targetQualifyings.parameterQualifyings.find(x => x.parameterId == DBasics.params.fp && x.formula == "5")));
+        expect(!!emittors.find(e => !!e.effectSet.effects[0].qualifyings.parameterQualifyings.find(x => x.parameterId == DBasics.params.fp && x.formula == "5")));
 
         // おなかを減らしておく
         actor.setActualParam(DBasics.params.fp, 500);

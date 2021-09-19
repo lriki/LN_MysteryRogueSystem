@@ -502,6 +502,9 @@ export class LEntity extends LObject
             param.gainActualParam(value);
             this.refreshConditions();
         }
+        else {
+            throw new Error(`LParam not registerd (paramId:${paramId})`);
+        }
     }
 
     private resetInitialActualParam(): void {

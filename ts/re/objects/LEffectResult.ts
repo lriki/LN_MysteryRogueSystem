@@ -82,7 +82,6 @@ export class LEffectResult {
     }
 
     clear(): void {
-        console.log("clear");
         this.used = false;
         this.missed = false;
         this.evaded = false;

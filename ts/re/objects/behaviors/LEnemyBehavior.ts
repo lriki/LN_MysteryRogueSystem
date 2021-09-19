@@ -70,7 +70,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     
     onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse {
         const effectData = effect.data();
-        if (effectData.targetQualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
+        if (effectData.qualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
             self.addState(DBasics.states.dead);
             return SCommandResponse.Handled;
         }

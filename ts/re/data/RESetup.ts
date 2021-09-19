@@ -144,7 +144,7 @@ export class RESetup {
                 const emittor = REData.newEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 const effect = new DEffect();
-                effect.targetQualifyings.buffQualifying.push({
+                effect.qualifyings.buffQualifying.push({
                     paramId: DBasics.params.agi,
                     mode: DBuffMode.Strength,
                     level: 1,
@@ -246,13 +246,13 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_エスケープスクロール":
-                entity.emittorSet.mainEmittor().effectSet.effects[0].targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(DBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_識別の巻物":
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
-                entity.emittorSet.mainEmittor().effectSet.effects[0].targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
+                entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
                 entity.addReaction(DBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
@@ -275,10 +275,10 @@ export class RESetup {
                 data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
             case "kSkill_ふきとばし":
-                emittor.effectSet.effects[0].targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                emittor.effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 break;
             case "kSkill_変化":
-                emittor.effectSet.effects[0].targetQualifyings.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
+                emittor.effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_変化"});
                 break;
             case "kSkill_投げ当て_1ダメ":
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -290,12 +290,12 @@ export class RESetup {
                 break;
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.selfEffect.selfQualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
+                emittor.effectSet.selfEffect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
                 break;
             case "kSkill_大爆発":
                 emittor.scope.range = DEffectFieldScopeRange.Around;
                 emittor.scope.length = 1;
-                emittor.effectSet.effects[0].targetQualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
+                emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
                 emittor.selfAnimationId = 109;
                 break;
         }
@@ -316,7 +316,7 @@ export class RESetup {
         const emittor = REData.newEmittor();
         emittor.scope.range = DEffectFieldScopeRange.Performer;
         const effect = new DEffect();
-        effect.targetQualifyings.parameterQualifyings.push({
+        effect.qualifyings.parameterQualifyings.push({
             parameterId: DBasics.params.fp,
             elementId: 0,
             formula: "5",
