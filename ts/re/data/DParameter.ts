@@ -71,7 +71,7 @@ export class REData_Parameter
         return p;
     }
 
-    constructor(id: DParameterId, name: string) {
+    public constructor(id: DParameterId, name: string) {
         this.id = id;
         this.name = name;
         this.battlerParamId = -1;

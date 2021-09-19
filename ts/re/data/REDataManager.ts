@@ -118,6 +118,9 @@ export class REDataManager
         assert(REData.parameters[DBasics.params.mdf].battlerParamId === 5);
         assert(REData.parameters[DBasics.params.agi].battlerParamId === 6);
         assert(REData.parameters[DBasics.params.luk].battlerParamId === 7);
+
+        console.log("REData.parameters", REData.parameters);
+        console.log("DBasics.params", DBasics.params);
         
         DBasics.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
