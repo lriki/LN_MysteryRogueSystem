@@ -16,5 +16,4 @@ export class THSystemExtension extends RESystemExtension {
 }
 
 export class THVisualExtension extends REVisualExtension {
-
 }

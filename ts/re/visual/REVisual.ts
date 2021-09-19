@@ -48,6 +48,8 @@ export class REVisual
 
         this._messageWindowSet = new VMessageWindowSet(scene);
         this.guideGrid = new VMapGuideGrid();
+
+        this.ext.onMapVisualSetup();
     }
 
     static finalize() {
