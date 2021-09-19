@@ -22,6 +22,7 @@ import { DStateGroup } from './DStateGroup';
 import { RESetup } from './RESetup';
 import { DEffectCause } from './DEmittor';
 import { DAttackElement } from './DAttackElement';
+import { REData_Parameter } from './DParameter';
 
 
 declare global {  
@@ -62,21 +63,36 @@ export class REDataManager
 
         // Parameters
         REData.parameters = [
-            { id: 0, name: "null", battlerParamId: -1, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 1, name: "HP", battlerParamId: 0, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 2, name: "MP", battlerParamId: 1, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 3, name: "ATK", battlerParamId: 2, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 4, name: "DEF", battlerParamId: 3, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 5, name: "MAT", battlerParamId: 4, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 6, name: "MDF", battlerParamId: 5, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 7, name: "AGI", battlerParamId: 6, initialIdealValue: 0, minValue: -100, maxValue: 200, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0, minValue: 0, maxValue: Infinity , addBuffCoe: 100, mulBuffCore: 0.25,},
-            { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            REData_Parameter.makeBuiltin(0, "null", -1, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(1, "HP", 0, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(2, "MP", 1, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(3, "ATK", 2, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(4, "DEF", 3, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(5, "MAT", 4, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(6, "MDF", 5, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(7, "AGI", 6, -100, 200, Infinity),
+            REData_Parameter.makeBuiltin(8, "LUK", 7, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(9, "TP", 8, 0, 0, Infinity),
             //----------
-            { id: 10, name: "FP", battlerParamId: -1, initialIdealValue: 1000, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 11, name: "UpgradeValue", battlerParamId: -1, initialIdealValue: 99 , minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 12, name: "Remaining", battlerParamId: -1, initialIdealValue: 99, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
-            { id: 13, name: "Capacity", battlerParamId: -1, initialIdealValue: 8, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            REData_Parameter.makeBuiltin(10, "FP", -1, 1000, 0, Infinity),
+            REData_Parameter.makeBuiltin(11, "UpgradeValue", -1, 99, 0, Infinity),
+            REData_Parameter.makeBuiltin(12, "Remaining", -1, 99, 0, Infinity),
+            REData_Parameter.makeBuiltin(13, "Capacity", -1, 8, 0, Infinity),
+            // { id: 0, name: "null", battlerParamId: -1, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 1, name: "", battlerParamId: 0, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 2, name: "", battlerParamId: 1, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 3, name: "", battlerParamId: 2, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 4, name: "", battlerParamId: 3, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 5, name: "MAT", battlerParamId: 4, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 6, name: "MDF", battlerParamId: 5, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 7, name: "AGI", battlerParamId: 6, initialIdealValue: 0, minValue: -100, maxValue: 200, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 8, name: "LUK", battlerParamId: 7, initialIdealValue: 0, minValue: 0, maxValue: Infinity , addBuffCoe: 100, mulBuffCore: 0.25,},
+            // { id: 9, name: "TP", battlerParamId: 8, initialIdealValue: 0, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // //----------
+            // { id: 10, name: "", battlerParamId: -1, initialIdealValue: 1000, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 11, name: "", battlerParamId: -1, initialIdealValue: 99 , minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 12, name: "", battlerParamId: -1, initialIdealValue: 99, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
+            // { id: 13, name: "", battlerParamId: -1, initialIdealValue: 8, minValue: 0, maxValue: Infinity, addBuffCoe: 100, mulBuffCore: 0.25, },
         ];
         DBasics.params = {
             hp: REData.parameters.findIndex(x => x.name == "HP"),

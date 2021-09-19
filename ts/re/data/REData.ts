@@ -7,7 +7,7 @@ import { DClass, DClass_Default } from "./DClass";
 import { DItem, DItemDataId } from "./DItem";
 import { DLand } from "./DLand";
 import { DEntityKind } from "./DEntityKind";
-import { DSequel } from "./DSequel";
+import { DSequel, DSequelId } from "./DSequel";
 import { DEnemy, DEnemyId } from "./DEnemy";
 import { DAction } from "./DAction";
 import { DEquipmentPart } from "./DEquipmentPart";
@@ -17,7 +17,7 @@ import { DMonsterHouseType } from "./DMonsterHouse";
 import { DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
-import { REData_Parameter } from "./DParameter";
+import { DParameterId, REData_Parameter } from "./DParameter";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
@@ -298,7 +298,7 @@ export class REData
         return newId;
     }
     
-    static addSequel(name: string): number {
+    static addSequel(name: string): DSequelId {
         const newId = this.sequels.length;
         this.sequels.push({
             id: newId,
@@ -306,6 +306,13 @@ export class REData
             parallel: false,
         });
         return newId;
+    }
+
+    static addParams(name: string): REData_Parameter {
+        const newId = this.parameters.length;
+        const data = new REData_Parameter(newId, name);
+        this.parameters.push(data);
+        return data;
     }
 
     static newEntity(): DEntity {

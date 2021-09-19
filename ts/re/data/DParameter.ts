@@ -41,7 +41,7 @@ export type DSParamId = number;
  * 
  * 一応のアイデアとしては、パラメータが 0 になったら何かステートを付加して、ペナルティはそっちで付ける、とか。
  */
-export interface REData_Parameter
+export class REData_Parameter
 {
     /** ID (0 is Invalid). */
     id: number;
@@ -61,6 +61,28 @@ export interface REData_Parameter
 
     addBuffCoe: number;
     mulBuffCore: number;
+
+    public static makeBuiltin(id: DParameterId, name: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
+        const p = new REData_Parameter(id, name);
+        p.battlerParamId = battlerParamId;
+        p.initialIdealValue = initialIdealValue;
+        p.minValue = minValue;
+        p.maxValue = maxValue;
+        return p;
+    }
+
+    constructor(id: DParameterId, name: string) {
+        this.id = id;
+        this.name = name;
+        this.battlerParamId = -1;
+        this.initialIdealValue = 0;
+        this.minValue = 0;
+        this.maxValue = Infinity;
+        this.addBuffCoe = 100;
+        this.mulBuffCore = 0.25;
+    }
+
+
 
 }
 
