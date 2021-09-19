@@ -211,12 +211,10 @@ export class SEmittorPerformer {
     }
 
     private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillId): void {
-        for (const target of targets) {
-            entity.iterateBehaviorsReverse(b => {
-                b.onSkillPerformed(context, entity, target, skillId);
-                return true;
-            });
-        }
+        entity.iterateBehaviorsReverse(b => {
+            b.onSkillPerformed(context, entity, targets, skillId);
+            return true;
+        });
     }
 
     

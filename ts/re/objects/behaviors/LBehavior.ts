@@ -385,7 +385,7 @@ export abstract class LBehavior extends LObject {
      * self が発動したスキルの処理が終わった (成否は target の result を確認すること)
      * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。
      */
-    onSkillPerformed(context: SCommandContext, self: LEntity, target: LEntity, skillId: DSkillId): void {}
+    onSkillPerformed(context: SCommandContext, self: LEntity, targets: LEntity[], skillId: DSkillId): void {}
 
 
 
