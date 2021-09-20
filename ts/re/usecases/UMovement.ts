@@ -267,6 +267,15 @@ export class UMovement {
     }
 
     /**
+     * 2つの Entity が直接隣接しているかどうか (壁角を挟んだ斜めは隣接とみなさない)
+     */
+    public static checkDirectlyAdjacentEntity(e1: LEntity, e2: LEntity): boolean {
+        const d = this.getLookAtDir(e1, e2)
+        if (this.checkDiagonalWallCornerCrossing(e1, d)) return false;
+        return this.checkEntityAdjacent(e1, e2);
+    }
+
+    /**
      * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
      */
     public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {

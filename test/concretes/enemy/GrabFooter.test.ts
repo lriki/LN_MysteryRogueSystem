@@ -37,14 +37,14 @@ test("concretes.enemy.GrabFooter", () => {
     expect(actor1.x).toBe(11);      // 移動できている
     expect(hp2 < hp1).toBe(true);   // 攻撃を受けている
 
-    // 右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    // 下へ移動
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     const hp3 = actor1.actualParam(DBasics.params.hp);
-    expect(actor1.x).toBe(11);      // 移動できない (キャンセルされる)
+    expect(actor1.y).toBe(10);      // 移動できない (キャンセルされる)
     expect(hp3 < hp2).toBe(true);   // モンスターにターンが回り、攻撃を受けている
 
 });

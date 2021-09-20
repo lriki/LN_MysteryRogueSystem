@@ -37,6 +37,7 @@ import { LFloorId } from "ts/re/objects/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/re/objects/behaviors/LRatedRandomAIBehavior";
 import { RESystem } from "./RESystem";
 import { LSelfExplosionBehavior } from "../objects/behaviors/LSelfExplosionBehavior";
+import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -300,6 +301,9 @@ export class SEntityFactory {
                 break;
             case "kEnemy_ブラストミミック":
                 entity.addBehavior(LSelfExplosionBehavior);
+                break;
+            case "kEnemy_ミニゴーレム":
+                entity.addBehavior(LGrabFootBehavior);
                 break;
                 
         }

@@ -18,7 +18,7 @@ import { LEntryPointBehavior } from "ts/re/objects/behaviors/LEntryPointBehavior
 import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
 import { LItemImitatorBehavior } from "ts/re/objects/behaviors/LItemImitatorBehavior";
 import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehavior";
-import { LGrabFootBehavior } from "../objects/states/LGrabFootBehavior";
+import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
