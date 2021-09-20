@@ -47,6 +47,9 @@ export type DEmittorId = number;
     /** 発動側アニメーションID */
     selfAnimationId: number;
 
+    /** 発動側 Sequel ID */
+    selfSequelId: number;
+
     effectSet: DEffectSet;
     
     constructor(id: DEmittorId) {
@@ -60,6 +63,7 @@ export type DEmittorId = number;
         };
         //this.effects = [];// = new DEffect();
         this.selfAnimationId = 0;
+        this.selfSequelId = 0;
         this.effectSet = new DEffectSet();
     }
     

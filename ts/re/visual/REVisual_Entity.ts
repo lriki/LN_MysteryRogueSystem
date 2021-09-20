@@ -42,7 +42,9 @@ export class REVisual_Entity
     // update 中 (Sequel更新中) のみアクセスできる。
     // update() の他、Sequel更新中にも参照したいので、キャッシングしているもの。
     private _visibility: SEntityVisibility | undefined;
-    private _actualImage: DPrefabActualImage | undefined
+    private _actualImage: DPrefabActualImage | undefined;
+
+    private _sequelOpacity: number;
 
     constructor(entity: LEntity, rmmzEventId: number) {
         this._entity = entity;
@@ -50,6 +52,7 @@ export class REVisual_Entity
         this._rmmzSpriteIndex = -1;
         this._sequelContext = new REVisualSequelContext(this);
         this._position = new Vector2(entity.x, entity.y);
+        this._sequelOpacity = 1.0;
     }
 
     entity(): LEntity {
@@ -124,6 +127,11 @@ export class REVisual_Entity
     public actualImage(): DPrefabActualImage {
         assert(this._actualImage);
         return this._actualImage;
+    }
+
+    // 0~1
+    public setOpacity(value: number) {
+        this._sequelOpacity = value;
     }
 
     _update() {
@@ -241,7 +249,7 @@ export class REVisual_Entity
             opacity = this.getActualOpacity(entity, visibility);
         }
 
-        event.setOpacity(opacity);
+        event.setOpacity(opacity * this._sequelOpacity);
     }
 
     public getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabActualImage | undefined {

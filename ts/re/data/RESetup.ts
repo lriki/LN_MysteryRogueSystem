@@ -296,7 +296,8 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Around;
                 emittor.scope.length = 1;
                 emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
-                emittor.selfAnimationId = 109;
+                //emittor.selfAnimationId = 109;
+                emittor.selfSequelId = DBasics.sequels.explosion;
                 break;
         }
     }

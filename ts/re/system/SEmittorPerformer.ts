@@ -249,6 +249,9 @@ export class SEmittorPerformer {
             if (emittor.selfAnimationId > 0) {
                 context.postAnimation(performer, emittor.selfAnimationId, true);
             }
+            if (emittor.selfSequelId > 0) {
+                context.postSequel(performer, emittor.selfSequelId, true);
+            }
         }
 
 
