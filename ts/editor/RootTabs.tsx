@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import DataTypeList, { DataTypeListItem } from './DataTypeList';
-import DatabaseEditor from './DatabaseEditor';
+import DatabaseEditor from './data/DatabaseEditor';
 
 interface TabPanelProps {
     children?: React.ReactNode;

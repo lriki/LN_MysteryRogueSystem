@@ -10,7 +10,7 @@ import InboxIcon from '@mui/icons-material/Inbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 
 export interface DataTypeListItem {
-    id: string;
+    id: any;
     name: string;
 }
 
