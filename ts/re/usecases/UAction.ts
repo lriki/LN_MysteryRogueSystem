@@ -175,8 +175,10 @@ export class UAction {
     }
     
     private static searchTargetEntities(performer: LEntity, scope: DEffectFieldScope, rmmzEffectScope: DRmmzEffectScope, checkFaction: boolean): LEntity[] {
-        
-        if (scope.range == DEffectFieldScopeRange.Front1) {
+        if (scope.range == DEffectFieldScopeRange.Performer) {
+            return [performer];
+        }
+        else if (scope.range == DEffectFieldScopeRange.Front1) {
             // ターゲット候補を集める
             const candidates = UMovement.getAdjacentEntities(performer).filter(target => {
                 if (checkFaction) {

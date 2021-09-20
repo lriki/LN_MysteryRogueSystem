@@ -1,6 +1,8 @@
 ﻿node_modules/
 audio/
-effects/
+effects/Model
+effects/Texture
+effects/*.efkefc
 fonts/
 icon/
 dist/

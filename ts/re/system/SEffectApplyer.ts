@@ -378,7 +378,7 @@ export class SEffectApplyer {
 
         // Effect
         for (const effect of modifier.specialEffectQualifyings()) {
-            this.applyItemEffect(target, effect, result);
+            this.applyItemEffect(commandContext, target, effect, result);
         }
         for (const buff of modifier.buffQualifying()) {
             target.addBuff(buff);
@@ -532,7 +532,7 @@ export class SEffectApplyer {
     }
 
     // Game_Action.prototype.applyItemEffect
-    public applyItemEffect(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
+    public applyItemEffect(cctx: SCommandContext, target: LEntity, effect: IDataEffect, result: LEffectResult): void {
         switch (effect.code) {
             case DItemEffect.EFFECT_RECOVER_HP:
                 throw new Error("Not implemented.");
@@ -570,8 +570,7 @@ export class SEffectApplyer {
                 //this.itemEffectRemoveDebuff(target, effect);
                 break;
             case DItemEffect.EFFECT_SPECIAL:
-                throw new Error("Not implemented.");
-                //this.itemEffectSpecial(target, effect);
+                this.itemEffectSpecial(cctx, target, effect, result);
                 break;
             case DItemEffect.EFFECT_GROW:
                 throw new Error("Not implemented.");
@@ -640,6 +639,15 @@ export class SEffectApplyer {
 
         if (this._rand.nextIntWithMax(100) < (chance * 100)) {
             target.addState(effect.dataId);
+            result.makeSuccess();
+        }
+    }
+    
+    // Game_Action.prototype.itemEffectSpecial
+    private itemEffectSpecial(cctx: SCommandContext, target: LEntity, effect: IDataEffect, result: LEffectResult) {
+        if (effect.dataId === DItemEffect.SPECIAL_EFFECT_ESCAPE) {
+            cctx.postDestroy(target);
+            //target.escape();
             result.makeSuccess();
         }
     }

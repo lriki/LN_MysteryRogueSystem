@@ -75,7 +75,7 @@ export class REData_Parameter
         this.id = id;
         this.name = name;
         this.battlerParamId = -1;
-        this.initialIdealValue = 0;
+        this.initialIdealValue = 100;
         this.minValue = 0;
         this.maxValue = Infinity;
         this.addBuffCoe = 100;
