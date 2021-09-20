@@ -10,14 +10,14 @@ const METADATA = fs.readFileSync("./plugin-description.txt").toString();
 module.exports = {
     //mode: 'production',
     mode: 'development',
-    entry: './ts/main.ts',
+    entry: './ts/main2.tsx',
     target: 'node',
     output: {
         path: __dirname,
         filename: './js/plugins/LN_RoguelikeEngine.js'
     },
     resolve: {
-        extensions: ['.ts', '.js'],
+        extensions: ['.ts', '.js', ".tsx"],
         
         plugins: [new TsconfigPathsPlugin( { configFile: 'tsconfig.json' } )]
         //roots: [ path.resolve(__dirname, '.') ]
@@ -28,7 +28,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /\.tsx?$/,
                 loader: 'ts-loader'
             },
             {

@@ -21,6 +21,9 @@
         "skipLibCheck": true,                             /* Skip type checking all .d.ts files. */
         "experimentalDecorators": true,
 
+        "jsx": "react",
+        "moduleResolution": "node",
+
         "lib": [
             "es6",
             "es5",
