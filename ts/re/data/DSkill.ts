@@ -1,4 +1,4 @@
-import { DSkillId } from "./DCommon";
+import { DEffectBehaviorId as DEffectBehaviorId, DSkillId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DParameterId } from "./DParameter";
@@ -58,3 +58,12 @@ export class DSkill {
     }
 }
 
+export class DEffectBehavior {
+    id: DEffectBehaviorId;
+    key: string;
+
+    public constructor(id: DEffectBehaviorId, key: string) {
+        this.id = id;
+        this.key = key;
+    }
+}

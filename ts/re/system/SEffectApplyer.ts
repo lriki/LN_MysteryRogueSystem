@@ -1,8 +1,10 @@
 import { DBasics } from "../data/DBasics";
+import { DEffectBehaviorId } from "../data/DCommon";
 import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterEffectApplyType, DParameterQualifying, DQualifyings } from "../data/DEffect";
 import { DEntityKindId } from "../data/DEntityKind";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
+import { DEffectBehavior } from "../data/DSkill";
 import { DTraits } from "../data/DTraits";
 import { LandExitResult, REData } from "../data/REData";
 import { LProjectableBehavior } from "../objects/behaviors/activities/LProjectableBehavior";
@@ -24,7 +26,7 @@ import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectCo
 export class SEffect {
     private _fact: SEffectorFact;
     private _data: DEffect;
-    private _targetApplyer: SEffectQualifyings;
+    private _targetModifier: SEffectModifier;
     private _hitType: DEffectHitType;
     private _successRate: number;       // 0~100
 
@@ -34,7 +36,7 @@ export class SEffect {
         this._hitType = effect.hitType;
         this._successRate = effect.successRate;
 
-        this._targetApplyer = new SEffectQualifyings(effect.qualifyings);
+        this._targetModifier = new SEffectModifier(effect.qualifyings);
     }
 
     public fact(): SEffectorFact {
@@ -49,8 +51,8 @@ export class SEffect {
         return this._data;
     }
     
-    public targetApplyer(): SEffectQualifyings {
-        return this._targetApplyer;
+    public targetModifier(): SEffectModifier {
+        return this._targetModifier;
     }
 
     
@@ -140,7 +142,7 @@ export class SEffectorFact {
     // 以下、Behavior 持ち回りで編集される要素
     //private _subjectActualParams: number[];
     private _effects: SEffect[] = [];
-    private _selfApplyer: SEffectQualifyings;
+    private _selfModifier: SEffectModifier;
     private _incidentType: SEffectIncidentType;
     private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
 
@@ -160,7 +162,7 @@ export class SEffectorFact {
         for (const e of effects.effects) {
             this._effects.push(new SEffect(this, e));
         }
-        this._selfApplyer = new SEffectQualifyings(effects.selfEffect.qualifyings);
+        this._selfModifier = new SEffectModifier(effects.selfEffect.qualifyings);
         
         this._subject.iterateBehaviors2(b => {
             b.onCollectEffector(this._subject, this);
@@ -202,8 +204,8 @@ export class SEffectorFact {
         return this._direction;
     }
 
-    public selfApplyer(): SEffectQualifyings {
-        return this._selfApplyer;
+    public selfModifier(): SEffectModifier {
+        return this._selfModifier;
     }
 
     //--------------------
@@ -299,7 +301,7 @@ export class SParameterEffect {
 
 
 
-export class SEffectQualifyings {
+export class SEffectModifier {
     private _data: DQualifyings;
     private _parameterEffects: (SParameterEffect | undefined)[];  // Index of DParameterDataId
 
@@ -336,6 +338,10 @@ export class SEffectQualifyings {
     public otherEffectQualifyings(): DOtherEffectQualifying[] {
         return this._data.otherEffectQualifyings;
     }
+
+    public effectBehaviors(): DEffectBehaviorId[] {
+        return this._data.effectBehaviors;
+    }
  
      public specialEffectQualifyings(): IDataEffect[] {
          return this._data.specialEffectQualifyings;
@@ -358,12 +364,12 @@ export class SEffectApplyer {
         this._rand = rand;
     }
 
-    public apply(commandContext: SCommandContext, qualifyings: SEffectQualifyings, target: LEntity): void {
+    public apply(commandContext: SCommandContext, modifier: SEffectModifier, target: LEntity): void {
         const result =  target._effectResult;
         
         // Damage
         for (let i = 0; i < REData.parameters.length; i++) {
-            const pe = qualifyings.parameterEffect(i);
+            const pe = modifier.parameterEffect(i);
             if (pe && pe.applyType != SParameterEffectApplyType.None) {
                 const value = this.makeDamageValue(pe, target, result.critical);
                 this.executeDamage(pe, target, value, result);
@@ -371,14 +377,17 @@ export class SEffectApplyer {
         }
 
         // Effect
-        for (const effect of qualifyings.specialEffectQualifyings()) {
+        for (const effect of modifier.specialEffectQualifyings()) {
             this.applyItemEffect(target, effect, result);
         }
-        for (const buff of qualifyings.buffQualifying()) {
+        for (const buff of modifier.buffQualifying()) {
             target.addBuff(buff);
         }
-        for (const effect of qualifyings.otherEffectQualifyings()) {
+        for (const effect of modifier.otherEffectQualifyings()) {
             this.applyOtherEffect(commandContext, target, effect, result);
+        }
+        for (const id of modifier.effectBehaviors()) {
+            throw new Error("Not implemented.");
         }
         this.applyItemUserEffect(target);
     }

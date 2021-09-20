@@ -2,7 +2,7 @@ import { LBehavior } from "ts/re/objects/behaviors/LBehavior";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
-import { DSkill } from "./DSkill";
+import { DEffectBehavior, DSkill } from "./DSkill";
 import { DClass, DClass_Default } from "./DClass";
 import { DItem, DItemDataId } from "./DItem";
 import { DLand } from "./DLand";
@@ -179,6 +179,7 @@ export class REData
     static parameters: REData_Parameter[] = [];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
+    static effectBehaviors: DEffectBehavior[] = [];
     static skills: DSkill[] = [];
     static items: DEntityId[] = [];
     static traits: DTrait[] = [];
@@ -220,8 +221,8 @@ export class REData
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
 
+        this.effectBehaviors = [new DEffectBehavior(0, "null")];
         this.skills = [];
-
         this.items = [];
 
         this.states = [];
@@ -401,6 +402,14 @@ export class REData
     }
 
     //--------------------
+    static newEffectBehavior(key: string): DEffectBehavior {
+        const data = new DEffectBehavior(this.effectBehaviors.length, key);
+        this.effectBehaviors.push(data);
+        return data;
+    }
+
+    //--------------------
+    
     static newItem(): [DEntity, DItem] {
         const entity = REData.newEntity();
         const data = new DItem(REData.items.length, entity.id);

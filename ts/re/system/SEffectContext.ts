@@ -13,7 +13,7 @@ import { DTraits } from "ts/re/data/DTraits";
 import { LRandom } from "ts/re/objects/LRandom";
 import { DEntityKindId } from "ts/re/data/DEntityKind";
 import { DStateId } from "ts/re/data/DState";
-import { SEffect, SEffectApplyer, SEffectorFact, SEffectQualifyings } from "./SEffectApplyer";
+import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
 import { onEffectResult } from "../objects/internal";
 import { SCommandResponse } from "./RECommand";
 
@@ -168,7 +168,7 @@ export class SEffectContext {
         // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
         {
             const removeStates: DStateId[] = [];
-            for (const p of effect.targetApplyer().parameterEffects()) {
+            for (const p of effect.targetModifier().parameterEffects()) {
                 if (p && !p.isRecover()) {
                     target.iterateStates(s => {
                         if (s.checkRemoveAtDamageTesting(p.paramId)) {
@@ -258,14 +258,14 @@ export class SEffectContext {
             if (result != SCommandResponse.Pass) return; 
         }
 
-        if (effect.targetApplyer().hasParamDamage()) {
+        if (effect.targetModifier().hasParamDamage()) {
             const criRate = effect.criRate(target) * 100;
             result.critical = (this._rand.nextIntWithMax(100) < criRate);
         }
         
         const applyer = new SEffectApplyer(effect, this._rand);
-        applyer.apply(commandContext, effect.targetApplyer(), target);
-        applyer.apply(commandContext, this._effectorFact.selfApplyer(), this._effectorFact.subject());
+        applyer.apply(commandContext, effect.targetModifier(), target);
+        applyer.apply(commandContext, this._effectorFact.selfModifier(), this._effectorFact.subject());
     }
 
 

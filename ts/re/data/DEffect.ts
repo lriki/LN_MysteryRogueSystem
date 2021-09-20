@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
-import { DMatchConditions } from "./DCommon";
+import { DMatchConditions, DEffectBehaviorId } from "./DCommon";
 import { DParameterId } from "./DParameter";
-import { DSkill } from "./DSkill";
+import { DEffectBehavior, DSkill } from "./DSkill";
 
 
 
@@ -162,27 +162,31 @@ export interface DQualifyings {
       * IDataSkill.damage
       * IDataItem.damage
       */
-     parameterQualifyings: DParameterQualifying[];
+    parameterQualifyings: DParameterQualifying[];
 
      /**
        * パラメータ変化以外のすべてのエフェクト。
        * これらを実現するにはコードで頑張る必要がある。
        * ほとんどの特殊効果はこれを持つ必要があるはず。
        * コアスクリプトだと EFFECT_XXXX に相当する。
+       * 
+       * @deprecated see effectBehaviors
        */
      otherEffectQualifyings: DOtherEffectQualifying[];
+
+    effectBehaviors: DEffectBehaviorId[];
  
      /**
        * IDataSkill.effects
        * IDataItem.effects
        */
-     specialEffectQualifyings: IDataEffect[];
+    specialEffectQualifyings: IDataEffect[];
  
      /**
       * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
       * こちらはレベルと共に指定できる。
       */
-     buffQualifying: DParamBuff[];
+    buffQualifying: DParamBuff[];
      
 }
 
@@ -234,6 +238,7 @@ export class DEffect {
         this.qualifyings = {
             parameterQualifyings: [],
             otherEffectQualifyings: [],
+            effectBehaviors: [],
             specialEffectQualifyings : [],
             buffQualifying: [],
         };
@@ -255,6 +260,7 @@ export class DEffect {
         this.qualifyings = {
             parameterQualifyings: src.qualifyings.parameterQualifyings.slice(),
             otherEffectQualifyings: src.qualifyings.otherEffectQualifyings.slice(),
+            effectBehaviors: src.qualifyings.effectBehaviors.slice(),
             specialEffectQualifyings :src.qualifyings.specialEffectQualifyings.slice(),
             buffQualifying: src.qualifyings.buffQualifying.slice(),
         };
