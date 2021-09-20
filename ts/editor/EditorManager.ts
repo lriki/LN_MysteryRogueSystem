@@ -28,8 +28,11 @@ export class EditorManager {
         this._gameCanvas = document.querySelector('#gameCanvas') as HTMLCanvasElement;
         if (this._gameCanvas) {
             this._gameCanvas.style.margin = "0px";
+        }
 
-            
+        const gameVideo = document.querySelector('#gameVideo') as HTMLCanvasElement;
+        if (gameVideo) {
+            gameVideo.style.margin = "0px";
         }
 
         this._editorRoot = document.querySelector('#editorRoot') as HTMLDivElement;
