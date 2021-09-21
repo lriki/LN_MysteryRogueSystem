@@ -11,6 +11,7 @@ import { SMapManager } from "./SMapManager";
 import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { RESystemExtension } from "./RESystemExtension";
+import { STurnContext } from "./STurnContext";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -30,6 +31,7 @@ export class RESystem {
     static sequelContext: SSequelContext;
     static commandContext: SCommandContext;
     static dialogContext: SDialogContext;
+    static turnContext: STurnContext;
     static integration: SIntegration;
     static scheduler: SScheduler;
     static minimapData: SMinimapData;

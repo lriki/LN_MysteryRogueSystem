@@ -97,6 +97,13 @@ export class RMMZIntegration extends SIntegration {
         //builder.build(map);
     }
 
+    onFlushEffectResult(entity: LEntity): void {
+        const visual = REVisual.entityVisualSet?.findEntityVisualByEntity(entity);
+        if (visual) {
+            visual.showEffectResult();
+        }
+    }
+
     onFlushSequelSet(sequelSet: SSequelSet): void {
     }
     

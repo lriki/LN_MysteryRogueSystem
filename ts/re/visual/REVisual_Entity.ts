@@ -13,6 +13,7 @@ import { Game_REPrefabEvent } from "ts/re/rmmz/Game_REPrefabEvent";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DTraits } from "ts/re/data/DTraits";
+import { DBasics } from "../data/DBasics";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -177,6 +178,11 @@ export class REVisual_Entity
             event.setTransparent(!this._visibility.visible);
 
 
+            // if (Input.isTriggered("ok")) {
+            //     console.log("ok");
+            //     event.popupDamage_RE(100, 0);
+            // }
+
 
             // Sequel の更新は、
             // - 表示プロパティの後で行う必要がある。こうしないと、Sequel 更新内での不透明度の調整が効かなくなる。
@@ -277,6 +283,18 @@ export class REVisual_Entity
             return 255;
         }
         */
+    }
+
+    public showEffectResult(): void {
+        const result = this.entity()._effectResult;
+
+        if (this._rmmzEventId >= 0) {
+            const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
+            const hp = result.paramEffects[DBasics.params.hp];
+            if (hp) {
+                event.popupDamage_RE(hp.damage, 0);
+            }
+        }
     }
 
 /*

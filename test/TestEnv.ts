@@ -234,6 +234,10 @@ export class TestEnvIntegration extends SIntegration {
         // Visual 表示は伴わない
     }
 
+    onFlushEffectResult(entity: LEntity): void {
+        // Visual 表示は伴わない
+    }
+
     onFlushSequelSet(sequelSet: SSequelSet): void {
         // 実行結果確認用に保持するだけ
         TestEnv.activeSequelSet = sequelSet;

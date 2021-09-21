@@ -30,6 +30,7 @@ import { SGroundRules } from "./SGroundRules";
 import { LBlock } from "ts/re/objects/LBlock";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LObjectType } from "ts/re/objects/LObject";
+import { STurnContext } from "./STurnContext";
 
 /**
  */
@@ -38,6 +39,7 @@ export class SGameManager {
         RESystem.sequelContext = new SSequelContext();
         RESystem.commandContext = new SCommandContext(RESystem.sequelContext);
         RESystem.dialogContext = new SDialogContext(RESystem.commandContext);
+        RESystem.turnContext = new STurnContext();
         RESystem.scheduler = new SScheduler();
         RESystem.minimapData = new SMinimapData();
         RESystem.mapManager = new SMapManager();

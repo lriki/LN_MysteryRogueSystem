@@ -6,6 +6,8 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { LMap } from "ts/re/objects/LMap";
 import { REGame } from "ts/re/objects/REGame";
 import { SSequelSet } from "ts/re/system/SSequel";
+import { LObjectType } from "../objects/LObject";
+import { RESystem } from "./RESystem";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 
@@ -31,6 +33,8 @@ export abstract class SIntegration {
 
 
     protected abstract onRefreshGameMap(map: LMap): void;
+
+    protected abstract onFlushEffectResult(entity: LEntity): void;
 
     protected abstract onFlushSequelSet(sequelSet: SSequelSet): void;
 
@@ -61,6 +65,23 @@ export abstract class SIntegration {
     public refreshGameMap(map: LMap): void {
         if (!REGame.recorder.isSilentPlayback()) {
             this.onRefreshGameMap(map);
+        }
+    }
+
+    public flushEffectResultOneEntity(entity: LEntity): void {
+        if (entity._effectResult.hasResult()) {
+            this.onFlushEffectResult(entity);
+            entity._effectResult.showResultMessages(RESystem.commandContext, entity);
+            //entity._effectResult.clear();
+        }
+    }
+
+    public flushEffectResult(): void {
+        for (const obj of REGame.world.objects()) {
+            if (obj && obj.objectType() == LObjectType.Entity) {
+                const entity = obj as LEntity;
+                this.flushEffectResultOneEntity(entity);
+            }
         }
     }
 

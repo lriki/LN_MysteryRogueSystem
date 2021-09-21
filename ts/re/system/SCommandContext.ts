@@ -219,7 +219,8 @@ export class SCommandContext
                     //
                     entity._effectResult.clear();   // TODO: 仮
                     entity.params().updateBuffs(entity);
-                    entity._effectResult.showResultMessages(RESystem.commandContext, entity);   // TODO: 仮
+                    //entity._effectResult.showResultMessages(RESystem.commandContext, entity);   // TODO: 仮
+                    RESystem.integration.flushEffectResultOneEntity(entity);
 
                     entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
 

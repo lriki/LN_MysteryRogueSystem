@@ -3,6 +3,7 @@ import { REVisual_Entity } from "ts/re/visual/REVisual_Entity";
 import { VCharacterSpriteSet } from "ts/re/visual/VCharacterSpriteSet";
 import { VHelper } from "ts/re/visual/VHelper";
 import { assert } from "../Common";
+import { Sprite_CharacterDamage_RE } from "./Sprite_CharacterDamage_RE";
 
 declare global {
     interface Sprite_Character {
@@ -23,6 +24,14 @@ declare global {
         endAllEffect(): void;
         removeREPrefabEventSprite(index: number): void;
         findVisual(): REVisual_Entity | undefined;
+
+        _damageSprites_RE: Sprite_CharacterDamage_RE[];
+        updateDamagePopup_RE(): void;
+        attemtSetupDamagePopup_RE(): void;
+        setupDamagePopupFlash_RE(): void;
+        damageOffsetX_RE(): number;
+        damageOffsetY_RE(): number;
+        getPopupParent_RE(): PIXI.Container;
     }
 }
 
@@ -114,6 +123,7 @@ Sprite_Character.prototype.update = function() {
         this._stateIconSprite.visible = false;
     }
 
+    this.updateDamagePopup_RE();
 }
 
 //Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
@@ -136,4 +146,58 @@ Sprite_Character.prototype.findVisual = function(): REVisual_Entity | undefined 
     else {
         return undefined;
     }
+}
+
+Sprite_Character.prototype.updateDamagePopup_RE = function() {
+    this.attemtSetupDamagePopup_RE();
+    if (this._damageSprites_RE && this._damageSprites_RE.length > 0) {
+        for (var i = 0; i < this._damageSprites_RE.length; i++) {
+            this._damageSprites_RE[i].update();
+        }
+        if (!this._damageSprites_RE[0].isPlaying()) {
+            this.getPopupParent_RE().removeChild(this._damageSprites_RE[0] as any);
+            this._damageSprites_RE.shift();
+        }
+    }
+    // if (this._popupFlash) {
+    //     this.updateDamagePopupFlash();
+    // }
+}
+
+Sprite_Character.prototype.attemtSetupDamagePopup_RE = function(): void {
+    
+    if (!this._character.isDamagePopupRequested_RE()) return;
+    var sprite = new Sprite_CharacterDamage_RE();
+    sprite.x   = this.x + this.damageOffsetX_RE();
+    sprite.y   = this.y + this.damageOffsetY_RE();
+    if (!sprite.z) sprite.z = 9;
+    sprite.setupCharacter(this._character);
+    if (!this._damageSprites_RE) this._damageSprites_RE = [];
+    this._damageSprites_RE.push(sprite);
+    this.getPopupParent_RE().addChild(sprite as any);
+    //this._character.clearDamagePopup();
+    // if (!sprite.isMiss() && !sprite.isRecover()) {
+    //     this.setupDamagePopupFlash();
+    // }
+}
+
+// Sprite_Character.prototype.setupDamagePopupFlash_RE = function() {
+//     var flashColor = $gameSystem.getPopupDamageFlash();
+//     if (!flashColor) return;
+//     this._popupFlash      = flashColor.clone();
+//     this._popupFlashSpeed = Math.floor(this._popupFlash[3] / 30);
+//     this.updateDamagePopupFlash();
+// }
+
+Sprite_Character.prototype.damageOffsetX_RE = function(): number {
+    return 0;
+}
+
+Sprite_Character.prototype.damageOffsetY_RE = function(): number {
+    return 0;
+}
+
+Sprite_Character.prototype.getPopupParent_RE = function(): PIXI.Container {
+    return this.parent;
+    //return paramOnTop ? this.parent.parent.parent : this.parent;
 }

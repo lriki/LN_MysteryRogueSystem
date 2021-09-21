@@ -428,9 +428,8 @@ export class SScheduler
         }
     }
 
-    // 1行動トークンの消費を終えたタイミング。
-    // 手番が終了し、次の人へ手番が移る直前。
-    // 攻撃など、コマンドを発行し、それがすべて処理されたときに呼ばれる
+    // onProcess ひとつから発行されるコマンドチェーンを実行し終えたタイミング。
+    // Manual, Minor, Major 等フェーズのたびに発生する。
     private onStepEnd(step: LTOStep): void {
 
         REGame.scheduler.actorEntities().forEach(entity => {

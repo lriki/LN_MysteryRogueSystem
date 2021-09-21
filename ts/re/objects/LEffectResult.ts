@@ -21,12 +21,6 @@ export class LParamEffectResult {
 /**
  * 一度の Effect の適用結果。Visual で表示したいコンテンツのソースデータとなる。
  * メッセージに限らず、ポップアップやイメージ表情差分表示など、様々な Visual 表現に必要なすべてのデータを含む。
- * 
- * 効果を受ける側についての情報であり、1ターン内では1つの Entity に対して複数の EffectResult のインスタンスが作られることがある。
- * コアスクリプトでは Game_Battler と Game_ActionResult が 1:1 だが、こちらは 1:n なので注意。
- * 例えば、
- * - 地雷を踏む→ダメージ
- * - 隣のタイルにあった地雷が誘爆する→ダメージ
  */
 @RESerializable
 export class LEffectResult {
@@ -100,6 +94,10 @@ export class LEffectResult {
         this.gainedExp = 0;
     }
 
+    public hasResult(): boolean {
+        return true;
+    }
+
     // Game_ActionResult.prototype.isStateAdded
     isStateAdded(stateId: DStateId): boolean {
         return this.addedStates.includes(stateId);
@@ -138,7 +136,6 @@ export class LEffectResult {
 
     // Game_ActionResult.prototype.isDebuffAdded 
     public isDebuffAdded(paramId: DParameterId): boolean {
-        console.log("isDebuffAdded", paramId);
         return this.addedDebuffs.includes(paramId);
     }
     
@@ -248,6 +245,8 @@ export class LEffectResult {
     // ターン終了時に表示するべき結果メッセージ。
     // 特に複数の敵を倒したときの取得経験値は合計したものを1度で出したい。
     public showResultMessagesDeferred(context: SCommandContext, entity: LEntity): void {
+        this.showResultMessages(context, entity);
+
         const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
 
         if (this.gainedExp > 0) {

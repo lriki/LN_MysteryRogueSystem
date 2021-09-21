@@ -239,4 +239,37 @@ export class Sprite_Character extends Sprite {
 }
 
 
+/**
+ * -----------------------------------------------------------------------------
+ * Sprite_Damage
+ * 
+ * The sprite for displaying a popup damage.
+ */
+ export class Sprite_Damage extends Sprite {
+    constructor();
+    initialize(): void;
+    destroy(options : any): void;
+    setup(target : any): void;
+    setupCriticalEffect(): void;
+    fontFace(): string;
+    fontSize(): void;
+    damageColor(): string;
+    outlineColor(): string;
+    outlineWidth(): number;
+    createMiss(): void;
+    createDigits(value : any): void;
+    createChildSprite(width : number, height : any): Sprite_Damage.prototype.CreateChildSpriteRet;
+    createBitmap(width : number, height : any): Bitmap;
+    update(): void;
+    updateChild(sprite : Sprite_Damage.prototype.UpdateChild0): void;
+    updateFlash(): void;
+    updateOpacity(): void;
+    isPlaying(): boolean;
+
+    _duration: number;
+    _flashColor: number[];
+    _flashDuration: number;
+    _colorType: number;
+}
+
 }

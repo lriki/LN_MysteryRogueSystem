@@ -16,6 +16,7 @@ import { DStateId } from "ts/re/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
 import { onEffectResult } from "../objects/internal";
 import { SCommandResponse } from "./RECommand";
+import { RESystem } from "./RESystem";
 
 
 export enum SEffectIncidentType {
@@ -108,7 +109,7 @@ export class SEffectContext {
             const effect = this._effectorFact.selectEffect(target);
             const result = this.applyWithHitTest(commandContext, effect, target);
             
-            result.showResultMessages(commandContext, target);
+            RESystem.integration.flushEffectResultOneEntity(target);
 
             const battler = target.findEntityBehavior(LBattlerBehavior);
             if (battler) {  // apply() で changeInstance() することがあるので、getBehavior ではなく findBehavior でチェック
