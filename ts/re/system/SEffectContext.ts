@@ -109,7 +109,16 @@ export class SEffectContext {
             const effect = this._effectorFact.selectEffect(target);
             const result = this.applyWithHitTest(commandContext, effect, target);
             
-            RESystem.integration.flushEffectResultOneEntity(target);
+            // ここで Flush している理由は次の通り。
+            // 1. ダメージを個々に表示したい
+            // 2. 表示の順序関係を守りたい
+            //
+            // 1については、連撃等何らかの理由で複数回受けたときに個別に表示する。
+            // 経験値の場合はまとめて表示したいのでこことは異なる箇所で表示するが、これはそうではないケース。
+            // 例えば「Aは合計でXXXのダメージを受けた」といったように後でまとめて表示する場合はこの処理はいらない。
+            //
+            // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
+            commandContext.postEffectResult(target);
 
             const battler = target.findEntityBehavior(LBattlerBehavior);
             if (battler) {  // apply() で changeInstance() することがあるので、getBehavior ではなく findBehavior でチェック

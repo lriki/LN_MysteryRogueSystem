@@ -415,6 +415,17 @@ export class SCommandContext
         Log.postCommand("Message");
     }
 
+    public postEffectResult(entity?: LEntity | undefined): void {
+        const m1 = () => {
+            if (entity)
+                RESystem.integration.flushEffectResultOneEntity(entity);
+            else
+                RESystem.integration.flushEffectResult();
+            return SCommandResponse.Handled;
+        };
+        this._recodingCommandList.push(new RECCMessageCommand("EffectResult", m1));
+    }
+
     /**
      * フロア移動
      * @param entity 
