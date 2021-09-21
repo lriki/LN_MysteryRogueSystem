@@ -72,7 +72,7 @@ export abstract class SIntegration {
         if (entity._effectResult.hasResult()) {
             this.onFlushEffectResult(entity);
             entity._effectResult.showResultMessages(RESystem.commandContext, entity);
-            //entity._effectResult.clear();
+            entity._effectResult.clear();
         }
     }
 

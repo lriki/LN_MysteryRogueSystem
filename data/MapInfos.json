@@ -58,7 +58,7 @@ null,
 {"id":56,"expanded":true,"name":"Sandbox-店","order":23,"parentId":27,"scrollX":832,"scrollY":506.5},
 {"id":57,"expanded":true,"name":"Sandbox-ステート","order":24,"parentId":27,"scrollX":811,"scrollY":453.5},
 {"id":58,"expanded":false,"name":"UnitTestFlatMap50x50","order":31,"parentId":51,"scrollX":811,"scrollY":461.5},
-{"id":59,"expanded":true,"name":"Sandbox-杖","order":25,"parentId":27,"scrollX":832,"scrollY":507},
-{"id":60,"expanded":true,"name":"Sandbox-マドハンド","order":26,"parentId":27,"scrollX":812,"scrollY":462},
-{"id":61,"expanded":true,"name":"Sandbox-自爆屋","order":27,"parentId":27,"scrollX":811,"scrollY":454}
+{"id":59,"expanded":true,"name":"Sandbox-杖","order":25,"parentId":27,"scrollX":832,"scrollY":499},
+{"id":60,"expanded":true,"name":"Sandbox-マドハンド","order":26,"parentId":27,"scrollX":812,"scrollY":462.5},
+{"id":61,"expanded":true,"name":"Sandbox-自爆屋","order":27,"parentId":27,"scrollX":811,"scrollY":454.5}
 ]
