@@ -240,31 +240,27 @@ export class LEffectResult {
         //    context.postMessage(m.format(targetName));
         //}
 
-    }
+        // 経験値
+        {
+            const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
 
-    // ターン終了時に表示するべき結果メッセージ。
-    // 特に複数の敵を倒したときの取得経験値は合計したものを1度で出したい。
-    public showResultMessagesDeferred(context: SCommandContext, entity: LEntity): void {
-        this.showResultMessages(context, entity);
-
-        const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
-
-        if (this.gainedExp > 0) {
-            const text = STextManager.obtainExp.format(this.gainedExp, STextManager.exp);
-            context.postMessage(text);
-        }
-        
-
-        // Game_Actor.prototype.displayLevelUp
-        if (this.levelup) {
-            const battler = entity.getEntityBehavior(LBattlerBehavior);
-            if (battler instanceof LActorBehavior) {
-                const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level);
+            if (this.gainedExp > 0) {
+                const text = STextManager.obtainExp.format(this.gainedExp, STextManager.exp);
                 context.postMessage(text);
-                SSoundManager.playLevelUp();
             }
-            else {
-                throw new Error("NotImplemented.");
+            
+
+            // Game_Actor.prototype.displayLevelUp
+            if (this.levelup) {
+                const battler = entity.getEntityBehavior(LBattlerBehavior);
+                if (battler instanceof LActorBehavior) {
+                    const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level);
+                    context.postMessage(text);
+                    SSoundManager.playLevelUp();
+                }
+                else {
+                    throw new Error("NotImplemented.");
+                }
             }
         }
     }

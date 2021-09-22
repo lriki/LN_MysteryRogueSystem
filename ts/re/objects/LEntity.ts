@@ -32,6 +32,7 @@ import { DEntityKind, DEntityKindId } from "ts/re/data/DEntityKind";
 import { UState } from "ts/re/usecases/UState";
 import { DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
+import { LReward } from "./LReward";
 
 enum BlockLayer
 {
@@ -251,6 +252,7 @@ export class LEntity extends LObject
     // EffectContext に持たせて持ちまわってもよいのだが、ステート変更やパラメータ増減など様々なタイミングで参照されるため
     // それらすべての関数で EffectContext を持ちまわるのはかなり煩雑なコードになってしまう。
     _effectResult: LEffectResult = new LEffectResult();
+    _reward: LReward = new LReward();
 
 
     _located: boolean = false;

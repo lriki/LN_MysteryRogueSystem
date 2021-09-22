@@ -104,7 +104,6 @@ export class SEffectContext {
 
     public applyWithWorth(commandContext: SCommandContext, targets: LEntity[]): void {
         let deadCount = 0;
-        let totalExp = 0;
         for (const target of targets) {
             const effect = this._effectorFact.selectEffect(target);
             const result = this.applyWithHitTest(commandContext, effect, target);
@@ -125,16 +124,9 @@ export class SEffectContext {
                 if (battler.isDead()) {
                     deadCount++;
                     if (battler instanceof LEnemyBehavior) {
-                        totalExp += battler.exp();
+                        this._effectorFact.subject()._reward.addExp(battler.exp());
                     }
                 }
-            }
-        }
-        
-        if (deadCount > 0) {
-            const awarder = this._effectorFact.subjectBehavior();
-            if (awarder) {
-                awarder.gainExp(totalExp)
             }
         }
     }

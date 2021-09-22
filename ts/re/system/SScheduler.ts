@@ -443,7 +443,8 @@ export class SScheduler
 
             //entity._effectResult.showResultMessages(RESystem.commandContext, entity);
 
-            entity._effectResult.showResultMessagesDeferred(RESystem.commandContext, entity);
+            entity._reward.apply(entity);
+            entity._effectResult.showResultMessages(RESystem.commandContext, entity);
             entity._effectResult.clear();
         }
 
