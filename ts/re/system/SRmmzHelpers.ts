@@ -9,6 +9,8 @@ import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionI
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/re/data/DEntity";
 import { RmmzEventPrefabMetadata } from "../data/DHelper";
+import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
+import { LEntity } from "../objects/LEntity";
 
 
 
@@ -58,11 +60,24 @@ export class SRmmzHelpers {
         });
     }
 
-    public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): void {
+    public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): LEntity {
         const entity = SEntityFactory.newEntity(data, REGame.map.floorId());
+
+        
+        if (data.override) {
+            entity.inhabitsCurrentFloor = true;
+            entity.rmmzEventId = eventId;
+        }
+
+        // if (eventId == 19) {
+        //     const unit = entity.getEntityBehavior(LUnitBehavior);
+        //     unit.setFactionId(REData.system.factions.player);
+        //     console.log("FACTION!!");
+        // }
         //entity.rmmzEventId = eventId;
         //entity.inhabitsCurrentFloor = true;
         REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
+        return entity;
     }
 
     public static getPrefabEventDataId(prefabName: string): number {

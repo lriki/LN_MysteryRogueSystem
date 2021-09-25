@@ -58,11 +58,17 @@ export interface RmmzEventPrefabSubPageMetadata {
 }
 
 interface RMMZEventRawMetadata {
-    //prefab: string;
     data: string;
     states?: string[];
     troop?: string;
     stack?: number;
+
+    // true を指定すると、このイベントにより生成された Entity は
+    // 動的イベントを生成するのではなく、生成元のイベントを参照するようになる。
+    // この機能は主に街の人との会話イベントを、普通にツクールを使うのと同じように作れるようにするためのもの。
+    // 本来であれば街の人を Unique にして Prefab も作っておき、Prefab 側で会話イベント実行内容を書くべき。
+    // でも看板など基本的に他マップに持ち出せないような Entity もあり、そういったものに対しても Prefab 側で色々設定するのは面倒。
+    override?: boolean;
 }
 
 
@@ -75,6 +81,8 @@ export interface RMMZEventEntityMetadata {
     troopId: DTroopId;
 
     stackCount: number;
+
+    override: boolean;
 }
 
 interface RmmzREEventRawMetadata {
@@ -338,6 +346,7 @@ export class DHelpers {
                         states: rawData.states ?? [],
                         troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
                         stackCount: rawData.stack ?? 1,
+                        override: rawData.override ?? false,
                     };
                 }
                 else {

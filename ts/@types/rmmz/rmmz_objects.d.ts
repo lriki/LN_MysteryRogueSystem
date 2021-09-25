@@ -579,6 +579,8 @@ export class Game_Event extends Game_Character {
      * 
      */
     _locked: boolean;
+
+    _mapId: number;
 }
 
 

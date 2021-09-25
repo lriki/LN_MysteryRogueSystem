@@ -1,6 +1,18 @@
 import { DHelpers, RmmzREEventMetadata } from "ts/re/data/DHelper";
 import { REGame } from "ts/re/objects/REGame";
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
+import { REDataManager } from "../data/REDataManager";
+
+
+const dummyMapEvent: IDataMapEvent = {
+    id: 0,
+    name: "",
+    note: "",
+    pages: [],
+    x: 0,
+    y: 0,
+}
+
 
 declare global {
     interface Game_Event {
@@ -8,8 +20,18 @@ declare global {
         _isREEntity: boolean;
         _reEventData: RmmzREEventMetadata | undefined;
 
+        
+        _spritePrepared_RE: boolean;
+        _prefabEventDataId_RE: number;   // Database マップ上の Prefab イベントId.
+        _eventData_RE: IDataMapEvent | undefined;
+        _pageData_RE: (RmmzREEventMetadata | undefined)[];
+
+        setupPrefab(prefabEventDataId: number, eventData: IDataMapEvent): void;
         isREEntity(): boolean;
         isREEvent(): boolean;
+        isREExtinct(): boolean;
+        isRESpritePrepared(): boolean;
+        setSpritePrepared(value: boolean): void;
     }
 }
 
@@ -28,7 +50,27 @@ Game_Event.prototype.initialize = function(mapId: number, eventId: number) {
 
 var _Game_Event_initMembers = Game_Event.prototype.initMembers;
 Game_Event.prototype.initMembers = function() {
+    // RE-Event の場合、mapId は "RE-Database" のマップのイベントとして扱う。
+    // セルフスイッチをコントロールするときに参照される。
+    // REシステムとしてはセルフスイッチは使用しないため実際のところなんでもよい。
+
     _Game_Event_initMembers.call(this);
+    this._prefabEventDataId_RE = 0;
+    this._spritePrepared_RE = false;
+    this._pageData_RE = [];
+}
+
+var _Game_Event_event = Game_Event.prototype.event;
+Game_Event.prototype.event = function(): IDataMapEvent {
+    if (this.isREEvent() || this._mapId == REDataManager.databaseMapId) {
+        // Game_Event のコンストラクタは event() を呼び出し、初期座標を決めようとする。
+        // その時点では this._eventData をセットすることは TypeScript の仕様上不可能なので、ダミーを参照させる。
+        // 実際のところ Entity と Event の座標同期は update で常に行われるため、初期座標が (0,0) でも問題はない。
+        return (this._eventData_RE) ? this._eventData_RE : dummyMapEvent;
+    }
+    else {
+        return _Game_Event_event.call(this);
+    }
 }
 
 var _Game_Event_isTriggerIn = Game_Event.prototype.isTriggerIn;
@@ -47,14 +89,6 @@ Game_Event.prototype.setupPageSettings = function() {
     this._reEventData = (this._pageIndex >= 0) ? DHelpers.readREEventMetadataFromPage(this.page()) : undefined;
 }
 
-Game_Event.prototype.isREEntity = function(): boolean {
-    return this._isREEntity;
-}
-
-Game_Event.prototype.isREEvent = function() {
-    return true;
-}
-
 const _Game_Event_update = Game_Event.prototype.update;
 Game_Event.prototype.update = function() {
     if (REGame.map.floorId().isEntitySystemMap()) {
@@ -63,4 +97,38 @@ Game_Event.prototype.update = function() {
     else {
         _Game_Event_update.call(this);
     }
+}
+
+Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, eventData: IDataMapEvent): void {
+    this._prefabEventDataId_RE = prefabEventDataId;
+    this._eventData_RE = eventData;
+    this._pageData_RE = [];
+    for (let i = 0; i < this._eventData_RE.pages.length; i++) {
+        const data = DHelpers.readREEventMetadataFromPage(this._eventData_RE.pages[i]);
+        if (data) {
+            this._pageData_RE[i] = data;
+            console.log("_pageData", i, data);
+        }
+    }
+    this.refresh();
+}
+
+Game_Event.prototype.isREEntity = function(): boolean {
+    return this._isREEntity;
+}
+
+Game_Event.prototype.isREEvent = function() {
+    return this._prefabEventDataId_RE > 0;
+}
+
+Game_Event.prototype.isREExtinct = function(): boolean {
+    return this._erased;
+}
+
+Game_Event.prototype.isRESpritePrepared = function(): boolean {
+    return this._spritePrepared_RE;
+}
+
+Game_Event.prototype.setSpritePrepared = function(value: boolean) {
+    this._spritePrepared_RE = true;
 }

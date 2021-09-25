@@ -48,24 +48,25 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onLoadFixedMapEvents(): void {
-        
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
             const data = SRmmzHelpers.readEntityMetadata(e);
             if (e && data) {
                 if (data.troopId > 0) {
-                    SEntityFactory.spawnTroopAndMembers( REData.troops[data.troopId], e.x, e.y,data.stateIds);
+                    SEntityFactory.spawnTroopAndMembers(REData.troops[data.troopId], e.x, e.y,data.stateIds);
                     e.setTransparent(true);
-                    // TODO: troop に限らず、固定マップに配置されているイベントは一律非表示にして、
-                    // Entity 情報から 動的イベントを生成する流れに統一したほうがいいかも。
                 }
                 else {
-                    SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
-                    e.setTransparent(true);
+                    const entity = SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
+                    if (entity.inhabitsCurrentFloor) {
+                        entity.rmmzEventId = e.eventId();
+                    }
+                    else {
+                        e.setTransparent(true);
+                    }
                 }
             }
         });
-        //RESystem.minimapData.refresh();
     }
 
     onUpdateBlock(block: LBlock): void {
@@ -146,6 +147,7 @@ export class RMMZIntegration extends SIntegration {
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
             // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
+            assert(entity.rmmzEventId > 0);
         }
         else {
             // Prefab 検索

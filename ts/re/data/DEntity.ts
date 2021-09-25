@@ -170,6 +170,7 @@ export class DEntityCreateInfo {
     public stateIds: DStateId[];
     public debugName: string;
     public stackCount: number;
+    public override: boolean;
 
     public constructor() {
         //this.troopId = 0;
@@ -177,6 +178,7 @@ export class DEntityCreateInfo {
         this.stateIds = [];
         this.debugName = "";
         this.stackCount = 1;
+        this.override = false;
     }
 
     public static makeSingle(entityId: DEntityId, stateIds?: DStateId[], debugName?: string): DEntityCreateInfo {
@@ -238,6 +240,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.troopId = entityMetadata.troopId;
         entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.data);
         entity.stackCount = entityMetadata.stackCount;
+        entity.override = entityMetadata.override;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);
