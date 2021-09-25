@@ -29,7 +29,7 @@ declare global {
         _eventData_RE: IDataMapEvent | undefined;
         _pageData_RE: (RmmzREEventMetadata | undefined)[];
 
-        setupPrefab(prefabEventDataId: number, eventData: IDataMapEvent): void;
+        setupPrefab(prefabEventDataId: number, mapId: number, eventData: IDataMapEvent): void;
         isREEntity(): boolean;
         isREEvent(): boolean;
         isREExtinct(): boolean;
@@ -133,9 +133,8 @@ Game_Event.prototype.update = function() {
     }
 }
 
-Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, eventData: IDataMapEvent): void {
-    console.log("setupPrefab", this);
-
+Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, mapId: number,eventData: IDataMapEvent): void {
+    this._mapId = mapId;
     this._prefabEventDataId_RE = prefabEventDataId;
     this._eventData_RE = eventData;
     this._pageData_RE = [];

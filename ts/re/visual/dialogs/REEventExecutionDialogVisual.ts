@@ -13,6 +13,9 @@ export class REEventExecutionDialogVisual extends VDialog {
 
     onCreate() {
         const event = $gameMap.event(this._model.rmmzEventId());
+        console.log("REEventExecutionDialogVisual", event);
+        console.log("event.page()", event.page());
+        
         event.start();
     }
 

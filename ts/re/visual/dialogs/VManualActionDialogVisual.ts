@@ -14,6 +14,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { UName } from "ts/re/usecases/UName";
+import { Helpers } from "ts/re/system/Helpers";
 
 enum UpdateMode {
     Normal,
@@ -344,6 +345,16 @@ export class VManualActionDialogVisual extends VDialog {
 
     private attemptFrontAction(context: SDialogContext, entity: LEntity): boolean {
         // TODO: NPC 話かけ
+
+        // 正面に、少なくとも敵対していない Entity がいれば、話しかけてみる
+        const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
+        if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
+            if (frontTarget.queryReactions().includes(DBasics.actions.talk)) {
+                context.postActivity(LActivity.makeTalk(entity).withConsumeAction());
+                this._model.submit();
+                return true;
+            }
+        }
         
         // [通常攻撃] スキル発動
         context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction());

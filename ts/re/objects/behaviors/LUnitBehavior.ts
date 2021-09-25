@@ -15,7 +15,7 @@ import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/re/system/SSoundManager";
-import { REData } from "ts/re/data/REData";
+import { DFactionId, REData } from "ts/re/data/REData";
 import { MovingMethod } from "../LMap";
 import { onGrounded, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
@@ -24,6 +24,8 @@ import { UName } from "ts/re/usecases/UName";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { DStateRestriction } from "ts/re/data/DState";
 import { SView } from "ts/re/system/SView";
+import { UAction } from "ts/re/usecases/UAction";
+import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
 
 /**
  * 
@@ -31,7 +33,7 @@ import { SView } from "ts/re/system/SView";
 @RESerializable
 export class LUnitBehavior extends LBehavior {
     
-    private _factionId: number = REData.system.factions.neutral;
+    private _factionId: DFactionId = REData.system.factions.neutral;
     _speedLevel: number = 0;     // ユニットテスト用。 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
@@ -56,7 +58,7 @@ export class LUnitBehavior extends LBehavior {
     
 
     //factionId(): number { return this._factionId; }
-    setFactionId(value: number): LUnitBehavior { this._factionId = value; return this; }
+    setFactionId(value: DFactionId): LUnitBehavior { this._factionId = value; return this; }
 
     //speedLevel(): number { return this._speedLevel; }
     setSpeedLevel(value: number): LUnitBehavior { this._speedLevel = value; return this; }
@@ -80,11 +82,11 @@ export class LUnitBehavior extends LBehavior {
 
 
     
-    public queryInnermostFactionId(): number | undefined {
+    public queryInnermostFactionId(): DFactionId | undefined {
         return this._factionId;
     }
 
-    public queryOutwardFactionId(): number | undefined {
+    public queryOutwardFactionId(): DFactionId | undefined {
         return this._factionId;
     }
 
@@ -395,6 +397,16 @@ export class LUnitBehavior extends LBehavior {
                 context.postMessage(tr("{0} を入れた。", UName.makeNameAsItem(item)));
             }
         }
+        else if (activity.actionId() == DBasics.actions.talk) {
+            const target = UAction.findTalkableFront(self);
+            if (target) {
+                context.postCall(() => {
+                    target.iterateBehaviorsReverse(b => {
+                        return b.onTalk(context, target, self) == SCommandResponse.Pass;
+                    });
+                });
+            }
+        }
         
         return SCommandResponse.Pass;
     }
@@ -441,4 +453,10 @@ export class LUnitBehavior extends LBehavior {
     [onWalkedOnTopAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         return SCommandResponse.Pass;
     }
+    
+    onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
+        context.openDialog(self, new SEventExecutionDialog(self.rmmzEventId), false);
+        return SCommandResponse.Pass;
+    }
+
 }

@@ -236,6 +236,11 @@ export class LActivity {
         return a;
     }
 
+    public static makeTalk(subject: LEntity): LActivity {
+        const a = (new LActivity()).setup(DBasics.actions.talk, subject);
+        return a;
+    }
+
     public static makePerformSkill(subject: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
         assert(skillId > 0);
         const a = (new LActivity()).setup(DBasics.actions.performSkill, subject);

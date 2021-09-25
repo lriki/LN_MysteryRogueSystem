@@ -63,9 +63,6 @@ export class UAction {
         }
     }
 
-    
-
-
 
 
 
@@ -327,4 +324,19 @@ export class UAction {
                 .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
     }
+
+    /**
+     * 正面に話しかけられる Entity がいれば返す。
+     */
+    public static findTalkableFront(entity: LEntity): LEntity | undefined {
+        const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
+        if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
+            if (frontTarget.queryReactions().includes(DBasics.actions.talk)) {
+                return frontTarget;
+            }
+        }
+        return undefined;
+    }
+
+
 }

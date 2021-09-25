@@ -240,6 +240,7 @@ export class REDataManager
             PutInActionId: REData.addAction("PickIn",""),
             PickOutActionId: REData.addAction("PickOut", ""),
             IdentifyActionId: REData.addAction("Identify", ""),
+            talk: REData.addAction("talk", ""),
             //passItem: REData.addAction("PassItem"),
             performSkill: REData.addAction("PerformSkill", ""),
             AttackActionId: REData.addAction("Attack", ""),

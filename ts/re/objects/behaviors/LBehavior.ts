@@ -381,6 +381,8 @@ export abstract class LBehavior extends LObject {
 
     onPertyChanged(self: LEntity): void { }
 
+    onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }
+
     /**
      * self が発動したスキルの処理が終わった (成否は target の result を確認すること)
      * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。

@@ -306,6 +306,10 @@ export class SEntityFactory {
                 entity.addBehavior(LGrabFootBehavior);
                 break;
                 
+            case "kEnemy_NPC汎用":
+                const b = entity.getEntityBehavior(LUnitBehavior);
+                b.setFactionId(REData.system.factions.neutral);
+                break;
         }
         RESystem.ext.onNewEntity(entity, entityData);
     }

@@ -38,10 +38,12 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
 
     // override 指定がある場合は既存イベントを再 setup する
     if (resetEventId) {
+        const data = $dataMap.events[resetEventId];
+        assert(data);
         const event = this._events[resetEventId] as Game_Event;
         event.initMembers();
         event.increaseRERevision();
-        event.setupPrefab(prefabEventDataId, eventData);
+        event.setupPrefab(prefabEventDataId, $gameMap.mapId(), data);
         return event;
     }
 
@@ -52,7 +54,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         eventId = this._events.length;
         
         const event = new Game_Event(REDataManager.databaseMapId, eventId);
-        event.setupPrefab(prefabEventDataId, eventData);
+        event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
         this._events[eventId] = event;
         return event;
     }
@@ -63,7 +65,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         // 再構築
         event.initMembers();
         event.increaseRERevision();
-        event.setupPrefab(prefabEventDataId, eventData);
+        event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
         return event;
     }
 }

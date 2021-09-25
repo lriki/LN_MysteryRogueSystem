@@ -1,4 +1,4 @@
-import { DActionId } from "../DAction";
+import { DAction, DActionId } from "../DAction";
 
 
 export interface DBasicActions {
@@ -185,6 +185,9 @@ export interface DBasicActions {
      * アイテムを渡す
      */
     //passItem: DActionId;
+
+    // 話す
+    talk: DActionId;
 
     //----------------------------------------
     // Combat Actions.

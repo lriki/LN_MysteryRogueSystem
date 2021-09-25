@@ -10,6 +10,7 @@ import { DBasics } from "ts/re/data/DBasics";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LParamSet } from "../LParam";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
+import { DActionId } from "ts/re/data/DAction";
 
 export class LBattlerBehavior extends LBehavior {
 
@@ -38,6 +39,12 @@ export class LBattlerBehavior extends LBehavior {
         params.acquireParam(DBasics.params.tp);
         params.acquireParam(DBasics.params.fp);
     }
+    
+    onQueryReactions(actions: DActionId[]): void {
+        // 敵味方を問わず、話しかけることは可能。
+        actions.push(DBasics.actions.talk);
+    }
+    
 
     /**
      * すべての状態をリセットする。
