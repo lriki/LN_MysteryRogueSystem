@@ -5,7 +5,6 @@ import { SSequelSet } from "ts/re/system/SSequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { assert } from "ts/re/Common";
-import { Game_REPrefabEvent } from "ts/re/rmmz/Game_REPrefabEvent";
 
 
 /**
@@ -172,7 +171,7 @@ export class REEntityVisualSet {
             throw new Error();
         }
 
-        assert(event instanceof Game_REPrefabEvent);
+        assert(event.isREEvent());
 
 
         const visual = new REVisual_Entity(entity, event.eventId());

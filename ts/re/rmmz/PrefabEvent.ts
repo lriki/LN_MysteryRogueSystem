@@ -15,11 +15,6 @@ import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REVisual } from "../visual/REVisual";
-import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
-
-
-
-
 
 //==============================================================================
 // Game_Map
@@ -27,12 +22,12 @@ import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(prefabEventDataId: number): Game_REPrefabEvent;
+        spawnREEvent(prefabEventDataId: number): Game_Event;
         //spawnREEventFromCurrentMapEvent(eventId: number): Game_REPrefabEvent;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPrefabEvent {
+Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_Event {
     if (!$dataMap.events) {
         throw new Error();
     }
@@ -42,19 +37,19 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_REPr
     const eventData = SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
 
     // フリー状態の REEvent を探してみる
-    let eventId = this._events.findIndex(e => (e instanceof Game_REPrefabEvent) && e.isREExtinct());
+    let eventId = this._events.findIndex(e =>e && e.isREEvent() && e.isREExtinct());
     if (eventId < 0) {
         // 見つからなければ新しく作る
         eventId = this._events.length;
         
-        const event = new Game_REPrefabEvent(REDataManager.databaseMapId, eventId);
+        const event = new Game_Event(REDataManager.databaseMapId, eventId);
         event.setupPrefab(prefabEventDataId, eventData);
         this._events[eventId] = event;
         return event;
     }
     else {
-        const event = this._events[eventId] as Game_REPrefabEvent;
-        assert(event instanceof Game_REPrefabEvent);
+        const event = this._events[eventId] as Game_Event;
+        assert(event.isREEvent());
 
         // 再構築
         event.initMembers();
@@ -87,7 +82,7 @@ declare global {
         _prefabSpriteIdRE: number;
 
         updateREPrefabEvent(): void;
-        makeREPrefabEventSprite(event: Game_REPrefabEvent): void;
+        makeREPrefabEventSprite(event: Game_Event): void;
         //removeREPrefabEventSprite(index: number): void;
     }
 }
@@ -104,7 +99,7 @@ Spriteset_Map.prototype.createCharacters = function() {
             // 固定マップで初期配置されているイベント用
             sprite._spriteIndex = i;
 
-            if (sprite._character instanceof Game_REPrefabEvent) {
+            if (sprite._character.isREEvent()) {
                 sprite._character.setSpritePrepared(true);
             }
         }
@@ -120,7 +115,7 @@ Spriteset_Map.prototype.update = function() {
 Spriteset_Map.prototype.updateREPrefabEvent = function() {
     $gameMap.getREPrefabEvents().forEach((event: Game_CharacterBase) => {
         if (!event.isRESpritePrepared()) {
-            this.makeREPrefabEventSprite(event as unknown as Game_REPrefabEvent);
+            this.makeREPrefabEventSprite(event as Game_Event);
         }
     });
     
@@ -161,10 +156,8 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
     }
 };
 
-Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabEvent) {
+Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_Event) {
     assert(REVisual.manager);
-    
-    console.log("makeREPrefabEventSprite", event);
 
     event.setSpritePrepared(true);
     var sprite = new Sprite_Character(event as unknown as Game_Character);
@@ -175,19 +168,7 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_REPrefabE
 
     const t: any = this._tilemap;
     t.addChild(sprite);
-
-    /*
-    // Visual と Sprite を関連付ける
-    if (REVisual.entityVisualSet) {
-        const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
-        if (visual) {
-            assert(visual.rmmzSpriteIndex() == -1);
-            visual?._setSpriteIndex(spriteIndex);
-        }
-
-    }
-    */
-};
+}
 
 /*
 Spriteset_Map.prototype.removeREPrefabEventSprite = function(index: number) {

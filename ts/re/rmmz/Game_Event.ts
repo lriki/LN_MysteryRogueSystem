@@ -1,7 +1,10 @@
 import { DHelpers, RmmzREEventMetadata } from "ts/re/data/DHelper";
 import { REGame } from "ts/re/objects/REGame";
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
+import { assert } from "../Common";
 import { REDataManager } from "../data/REDataManager";
+import { LState } from "../objects/states/LState";
+import { REVisual } from "../visual/REVisual";
 
 
 const dummyMapEvent: IDataMapEvent = {
@@ -87,6 +90,37 @@ Game_Event.prototype.setupPageSettings = function() {
 
     this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this);
     this._reEventData = (this._pageIndex >= 0) ? DHelpers.readREEventMetadataFromPage(this.page()) : undefined;
+}
+
+var _Game_Event_meetsConditions = Game_Event.prototype.meetsConditions;
+Game_Event.prototype.meetsConditions = function(page: IDataMapEventPage): boolean {
+    if (!_Game_Event_meetsConditions.call(this, page)) {
+        return false;
+    }
+
+    const index = this.event().pages.findIndex(x => x == page);
+    assert(index >= 0);
+    const additionalData = this._pageData_RE[index];
+    if (additionalData && additionalData.condition_state) {
+        console.log("additionalData.condition_state", additionalData.condition_state);
+        if (REVisual.entityVisualSet) {
+            const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(this.eventId());
+            if (visual) {
+                const statekey = additionalData.condition_state;
+                const state = visual.entity()._states.find(x => (REGame.world.object(x) as LState).stateData().key == statekey);
+                if (!state) {
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+    return true;
 }
 
 const _Game_Event_update = Game_Event.prototype.update;

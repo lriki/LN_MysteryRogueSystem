@@ -9,7 +9,6 @@ import { LEntity } from "../objects/LEntity";
 import { REVisual } from "./REVisual";
 import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
-import { Game_REPrefabEvent } from "ts/re/rmmz/Game_REPrefabEvent";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DTraits } from "ts/re/data/DTraits";
@@ -141,7 +140,7 @@ export class REVisual_Entity
         
         if (this._rmmzEventId >= 0) {
             //const tileSize = REVisual.manager.tileSize();
-            const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
+            const event = $gameMap.event(this._rmmzEventId);
             const entity = this.entity();
 
 
@@ -211,7 +210,7 @@ export class REVisual_Entity
         }
     }
 
-    private updateOpacity(entity: LEntity, event: Game_REPrefabEvent, visibility: SEntityVisibility): void {
+    private updateOpacity(entity: LEntity, event: Game_Event, visibility: SEntityVisibility): void {
 
         // 初回更新時に、現在の表示状態を覚えておく。フェードインを正しく開始できるようにするため。
         if (this._initialUpdate) {
@@ -289,7 +288,7 @@ export class REVisual_Entity
         const result = this.entity()._effectResult;
 
         if (this._rmmzEventId >= 0) {
-            const event = $gameMap.event(this._rmmzEventId) as Game_REPrefabEvent;
+            const event = $gameMap.event(this._rmmzEventId);
             const hp = result.paramEffects[DBasics.params.hp];
             if (hp) {
                 event.popupDamage_RE(hp.damage, 0);

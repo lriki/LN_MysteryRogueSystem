@@ -3,7 +3,6 @@ import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
 import { REData, REFloorMapKind } from "../data/REData";
 import { assert } from "../Common";
-import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 
 /*
  [2020/11/2] マップ読み込みメモ

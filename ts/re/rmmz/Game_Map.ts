@@ -4,7 +4,6 @@ import { Log } from "../Common";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
-import { Game_REPrefabEvent } from "./Game_REPrefabEvent";
 
 declare global {
     interface Game_Map {
@@ -16,7 +15,7 @@ declare global {
 
 Game_Map.prototype.unlinkREEvents = function(): void {
     for (const event of this.events()) {
-        if (event instanceof Game_REPrefabEvent) {
+        if (event.isREEvent()) {
             $dataMap.events[event.eventId()] = null;
         }
     }
