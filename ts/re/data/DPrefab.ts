@@ -62,6 +62,11 @@ export interface DPrefabPageInfo {
     rmmzEventPageIndex: number,
 }
 
+export enum DPrefabMoveType {
+    Fix,
+    Random,
+}
+
 /**
  * DPrefab
  * 
@@ -97,6 +102,8 @@ export class DPrefab {
     /** DownSequel のイメージ */
     downImage: DPrefabOverrideImage;
 
+    moveType: DPrefabMoveType;
+
     public constructor() {
         this.image = {
             characterName: "",
@@ -110,6 +117,7 @@ export class DPrefab {
         this.subPages = [];
         this.stateImages = [];
         this.downImage = {};
+        this.moveType = DPrefabMoveType.Random;
     }
 
     public isEnemyKind(): boolean {

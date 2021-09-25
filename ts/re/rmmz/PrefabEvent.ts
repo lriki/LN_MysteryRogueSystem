@@ -22,12 +22,12 @@ import { REVisual } from "../visual/REVisual";
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(prefabEventDataId: number): Game_Event;
+        spawnREEvent(prefabEventDataId: number, resetEventId?: number): Game_Event;
         //spawnREEventFromCurrentMapEvent(eventId: number): Game_REPrefabEvent;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_Event {
+Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEventId?: number): Game_Event {
     if (!$dataMap.events) {
         throw new Error();
     }
@@ -35,6 +35,15 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number): Game_Even
     assert(prefabEventDataId > 0);
 
     const eventData = SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
+
+    // override 指定がある場合は既存イベントを再 setup する
+    if (resetEventId) {
+        const event = this._events[resetEventId] as Game_Event;
+        event.initMembers();
+        event.increaseRERevision();
+        event.setupPrefab(prefabEventDataId, eventData);
+        return event;
+    }
 
     // フリー状態の REEvent を探してみる
     let eventId = this._events.findIndex(e =>e && e.isREEvent() && e.isREExtinct());

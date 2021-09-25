@@ -5,6 +5,7 @@ import { LCharacterAI } from "./LCharacterAI";
 import { LActionDeterminer } from "./LActionDeterminer";
 import { LMoveDeterminer } from "./LMoveDeterminer";
 import { RESerializable } from "ts/re/Common";
+import { DPrefabMoveType } from "ts/re/data/DPrefab";
 
 /**
  * https://yttm-work.jp/game_ai/game_ai_0001.html
@@ -50,8 +51,10 @@ export class LCharacterAI_Normal extends LCharacterAI {
         
 
         // 移動メイン
-        if (this._moveDeterminer.perform(context, self)) {
-            return SPhaseResult.Handled;
+        if (self.data().prefab().moveType == DPrefabMoveType.Random) {
+            if (this._moveDeterminer.perform(context, self)) {
+                return SPhaseResult.Handled;
+            }
         }
 
         // ここまで来たら、攻撃対象も無いうえに移動ができなかったということ。

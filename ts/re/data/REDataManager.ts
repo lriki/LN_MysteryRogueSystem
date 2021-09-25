@@ -10,7 +10,7 @@ import { parseMetaToEntityProperties } from "./DEntityProperties";
 import { DFloorMonsterHouse, DLand } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
-import { DPrefab, DPrefabDataSource, DSystemPrefabKind } from "./DPrefab";
+import { DPrefab, DPrefabDataSource, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTraits } from './DTraits';
@@ -837,6 +837,9 @@ export class REDataManager
                 prefab.image.walkAnime = event.pages[0].walkAnime;
                 if (data.stateImages) {
                     prefab.stateImages = data.stateImages.map(x => { return { stateId: REData.getStateFuzzy(x[0]).id, characterName: x[1], characterIndex: x[2]}; });
+                }
+                if (event.pages[0].moveType == 3) { // TODO: 仮
+                    prefab.moveType = DPrefabMoveType.Fix;
                 }
 
                 REData.prefabs.push(prefab);

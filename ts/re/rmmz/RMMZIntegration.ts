@@ -144,18 +144,18 @@ export class RMMZIntegration extends SIntegration {
         assert(databaseMap);
         assert(databaseMap.events);
 
+        // Prefab 検索
+        const prefabId = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
+
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
             // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
             assert(entity.rmmzEventId > 0);
+            $gameMap.spawnREEvent(prefabId, entity.rmmzEventId);
         }
         else {
-            // Prefab 検索
-            //const eventData = SRmmzHelpers.getPrefabEventData(entity.prefabKey);
-            const id = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
-
             //  entity に対応する動的イベントを新たに生成する
-            const event = $gameMap.spawnREEvent(id);
+            const event = $gameMap.spawnREEvent(prefabId);
             entity.rmmzEventId = event.eventId();
         }
 

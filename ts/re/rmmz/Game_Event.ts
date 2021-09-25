@@ -134,6 +134,8 @@ Game_Event.prototype.update = function() {
 }
 
 Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, eventData: IDataMapEvent): void {
+    console.log("setupPrefab", this);
+
     this._prefabEventDataId_RE = prefabEventDataId;
     this._eventData_RE = eventData;
     this._pageData_RE = [];
@@ -141,7 +143,6 @@ Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, eventData
         const data = DHelpers.readREEventMetadataFromPage(this._eventData_RE.pages[i]);
         if (data) {
             this._pageData_RE[i] = data;
-            console.log("_pageData", i, data);
         }
     }
     this.refresh();

@@ -171,6 +171,8 @@ export class REEntityVisualSet {
             throw new Error();
         }
 
+        console.log("event", event);
+        console.log("event.isREEvent()", event.isREEvent());
         assert(event.isREEvent());
 
 
