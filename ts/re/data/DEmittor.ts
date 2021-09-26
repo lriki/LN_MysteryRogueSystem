@@ -55,13 +55,7 @@ export type DEmittorId = number;
     constructor(id: DEmittorId) {
         this.id = id;
         this.costs = new DEmittorCost();
-        this.scope = {
-            area: DEffectFieldScopeArea.Room,
-            range: DEffectFieldScopeRange.Front1,
-            length: -1,
-            projectilePrefabKey: ""
-        };
-        //this.effects = [];// = new DEffect();
+        this.scope = new DEffectFieldScope();
         this.selfAnimationId = 0;
         this.selfSequelId = 0;
         this.effectSet = new DEffectSet();

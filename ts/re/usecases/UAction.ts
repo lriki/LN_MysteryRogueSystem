@@ -1,21 +1,25 @@
-import { tr2 } from "ts/re/Common";
+import { tr, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/re/data/DEffect";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
 import { DTraits } from "ts/re/data/DTraits";
 import { REData } from "ts/re/data/REData";
-import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/re/objects/internal";
+import { onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
 import { DBasics } from "../data/DBasics";
 import { DBlockLayerKind } from "../data/DCommon";
+import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
+import { DescriptionHighlightLevel, LEntityDescription } from "../objects/LIdentifyer";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
-import { SCommandContext } from "../system/SCommandContext";
+import { RECCMessageCommand, SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
+import { SSoundManager } from "../system/SSoundManager";
 import { UMovement } from "./UMovement";
+import { UName } from "./UName";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -41,6 +45,21 @@ export class UAction {
             context.post(entity, reactor, new SEffectSubject(entity), undefined, onWalkedOnTopAction);
             context.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
         }
+    }
+
+    public static postPickItem(context: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): RECCMessageCommand {
+        return context.post(
+            self, itemEntity, new SEffectSubject(self), undefined, testPutInItem,
+            () => {
+                REGame.map._removeEntity(itemEntity);
+                inventory.addEntityWithStacking(itemEntity);
+                
+                const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
+                context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
+                SSoundManager.playPickItem();
+
+                return true;
+            });
     }
     
     /**
@@ -152,16 +171,29 @@ export class UAction {
             });
         }
 
+        // 状況に応じた候補追加
+        performer.iterateBehaviorsReverse(b => {
+            b.onPostMakeSkillActions(result);
+            return true;
+        });
+
         // 攻撃対象が隣接していれば、"移動" を外す
         if (primaryTargetId.hasAny() && UMovement.checkEntityAdjacent(performer, REGame.world.entity(primaryTargetId))) {
             result.mutableRemove(x => x.action.skillId == RESystem.skills.move);
         }
-
-        {
-            performer.iterateBehaviorsReverse(b => {
-                b.onPostMakeSkillActions(result);
-                return true;
-            });
+        else {
+            let found = false;
+            for (const c of result) {
+                for (const id of c.targets) {
+                    const target = REGame.world.entity(id);
+                    if (UMovement.checkEntityAdjacent(performer, target)) {
+                        result.mutableRemove(x => x.action.skillId == RESystem.skills.move);
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) break;
+            }
         }
 
         return result;

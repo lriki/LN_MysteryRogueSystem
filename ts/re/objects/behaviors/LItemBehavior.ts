@@ -7,13 +7,13 @@ import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SEffectSubject } from "ts/re/system/SEffectContext";
+import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onEatReaction } from "./LBehavior";
+import { CollideActionArgs, CommandArgs, LBehavior, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
 
 
 /**
@@ -145,6 +145,21 @@ export class LItemBehavior extends LBehavior {
                     .performe(context);
             });
         }
+    }
+
+    
+    // TODO: すごく仮。今は盗みスキルの効果を受け取るためだけにある
+    [onAttackReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+        const self = args.self;
+        const effectContext: SEffectContext = args.args.effectContext;
+        if (effectContext) {
+            const targets = [self];
+            effectContext.applyWithWorth(context, targets);
+
+            return SCommandResponse.Handled;
+        }
+        
+        return SCommandResponse.Pass;
     }
 
 }

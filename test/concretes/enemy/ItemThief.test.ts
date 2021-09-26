@@ -62,3 +62,45 @@ test("concretes.enemy.ItemThief.Basic", () => {
     expect(item1.x).toBe(12);
     expect(item1.y).toBe(10);
 });
+
+
+test("concretes.enemy.ItemThief.GroundItem", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
+    actor1.addState(TestEnv.StateId_CertainDirectAttack);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃー").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
+
+    // Item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item1"));
+    REGame.world._transferEntity(item1, floorId, 14, 10);
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // Enemy1 はアイテムに向かって移動している
+    expect(enemy1.x == 13).toBe(true);
+    expect(enemy1.y == 10).toBe(true);
+
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    enemy1.dir = 6; // TODO: 今はAIにバグがあるので
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // 盗まれている
+    expect(inventory2.entities().length).toBe(1);
+    expect(inventory2.contains(item1)).toBe(true);
+});

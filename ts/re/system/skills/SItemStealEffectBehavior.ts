@@ -1,8 +1,11 @@
 import { tr2 } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
+import { LItemThiefBehavior } from "ts/re/objects/behaviors/LItemThiefBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LRandom } from "ts/re/objects/LRandom";
+import { UAction } from "ts/re/usecases/UAction";
 import { UName } from "ts/re/usecases/UName";
 import { USearch } from "ts/re/usecases/USearch";
 import { Context } from "typedoc/dist/lib/converter";
@@ -14,27 +17,27 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
 
     public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
 
-        const item = this.pickItem(target, cctx.random());
-        if (!item) {
-            cctx.postMessage(tr2("なにも盗めなかった。"));
-            return;
-        }
-
-        const inventory = performer.getEntityBehavior(LInventoryBehavior);
-        inventory.addEntity(item);
-
-
-        
-        cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), UName.makeNameAsItem(item)));
-
-        cctx.postSequel(performer, DBasics.sequels.warp);
-
-        const block = USearch.selectUnitSpawnableBlock(cctx.random());
-        if (block) {
-            cctx.postTransferFloor(performer, performer.floorId, block.x(), block.y());
+        // TODO: これだとアイテム化けに対応できない
+        if (target.findEntityBehavior(LItemBehavior)) {
+            const inventory = performer.getEntityBehavior(LInventoryBehavior);
+            UAction.postPickItem(cctx, performer, inventory, target)
+                .then(() => {
+                    this.postWarp(cctx, performer, target);
+                    return true;
+                });
         }
         else {
-            throw new Error("Not implemented.");
+            const item = this.pickItem(target, cctx.random());
+            if (!item) {
+                cctx.postMessage(tr2("なにも盗めなかった。"));
+                return;
+            }
+    
+            const inventory = performer.getEntityBehavior(LInventoryBehavior);
+            inventory.addEntity(item);
+    
+    
+            this.postWarp(cctx, performer, item);
         }
     }
 
@@ -48,5 +51,19 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
         const item = rand.select(items);
         inventory.removeEntity(item);
         return item;
+    }
+
+    private postWarp(cctx: SCommandContext, performer: LEntity, item: LEntity): void {
+
+        cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), UName.makeNameAsItem(item)));
+        cctx.postSequel(performer, DBasics.sequels.warp);
+
+        const block = USearch.selectUnitSpawnableBlock(cctx.random());
+        if (block) {
+            cctx.postTransferFloor(performer, performer.floorId, block.x(), block.y());
+        }
+        else {
+            throw new Error("Not implemented.");
+        }
     }
 }

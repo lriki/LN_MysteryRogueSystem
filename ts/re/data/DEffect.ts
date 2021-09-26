@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DMatchConditions, DEffectBehaviorId } from "./DCommon";
+import { DMatchConditions, DEffectBehaviorId, DBlockLayerKind, DBlockLayerScope } from "./DCommon";
 import { DParameterId } from "./DParameter";
 import { DEffectBehavior, DSkill } from "./DSkill";
 
@@ -128,11 +128,33 @@ export enum DEffectFieldScopeArea {
     Floor,
 }
 
-export interface DEffectFieldScope {
-    area: DEffectFieldScopeArea,
-    range: DEffectFieldScopeRange,
-    length: number,
-    projectilePrefabKey: string,
+
+export enum DEffectScopeTargetFactionFlags {
+    Friend = 0x01,
+    Nature = 0x02,
+    Hostile = 0x04,
+    All = Friend | Nature | Hostile,
+}
+
+
+export class DEffectFieldScope {
+    area: DEffectFieldScopeArea;
+    range: DEffectFieldScopeRange;
+    length: number;
+    projectilePrefabKey: string;
+    layers: DBlockLayerKind[];
+    layerScope: DBlockLayerScope;
+    factions: DEffectScopeTargetFactionFlags;
+
+    public constructor() {
+        this.area = DEffectFieldScopeArea.Room,
+        this.range = DEffectFieldScopeRange.Front1,
+        this.length = -1,
+        this.projectilePrefabKey = "";
+        this.layers = [DBlockLayerKind.Unit];
+        this.layerScope = DBlockLayerScope.TopOnly;
+        this.factions = DEffectScopeTargetFactionFlags.All;
+    }
 }
 
 

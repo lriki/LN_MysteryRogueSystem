@@ -54,4 +54,13 @@ export enum DBlockLayerKind {
     
     /** お店のセキュリティシステムなど、非表示だが Entity として存在するもの。 */
     System = 4,
+
+
+    // Iteration
+    Top = System,
+}
+
+export enum DBlockLayerScope {
+    TopOnly,
+    All,
 }

@@ -1,5 +1,5 @@
 import { DBasics } from "./DBasics";
-import { DSpecialEffectCodes } from "./DCommon";
+import { DBlockLayerKind, DSpecialEffectCodes } from "./DCommon";
 import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
@@ -301,6 +301,7 @@ export class RESetup {
                 break;
             case "kSkill_アイテム盗み":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.scope.layers.push(DBlockLayerKind.Ground);
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(DBasics.effectBehaviors.itemSteal);
                 break;
         }

@@ -1,5 +1,6 @@
 import { assert } from "../Common";
 import { DBlockLayerKind } from "../data/DCommon";
+import { DEffectFieldScope } from "../data/DEffect";
 import { LBlock } from "../objects/LBlock";
 import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
@@ -110,4 +111,12 @@ export class USearch {
         }
     }
     */
+
+
+    /**
+     * 指定した Entity が、scope 範囲内に含まれているかを確認する
+     */
+    // public static checkEntityInEffectorScope(entity: LEntity, scope: DEffectFieldScope): boolean {
+
+    // }
 }

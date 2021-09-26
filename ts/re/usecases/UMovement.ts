@@ -86,6 +86,27 @@ export class UMovement {
     }
 
     /**
+     * base が target を向く時の方向を計算する
+     */
+     public static getLookAtDirFromPos(baseX: number, baseY: number, targetX: number, targetY: number): number {
+        return Helpers.offsetToDir(targetX - baseX, targetY - baseY);
+    }
+
+    /**
+     * 
+     * @param entities 重心を取得する
+     */
+    public static getCenter(entities: LEntity[]): SPoint {
+        let x = 0;
+        let y = 0;
+        for (const e of entities) {
+            x += e.x;
+            y += e.y;
+        }
+        return {x: Math.floor(x / entities.length), y: Math.floor(y / entities.length)};
+    }
+
+    /**
      * 方向 d から時計回りに、次の方向を求める
      */
     public static getNextDirCW(d: number): number {

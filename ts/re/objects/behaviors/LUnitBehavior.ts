@@ -195,33 +195,14 @@ export class LUnitBehavior extends LBehavior {
 
         }
         else if (activity.actionId() == DBasics.actions.PickActionId) {
-
             const inventory = self.findEntityBehavior(LInventoryBehavior);
             if (inventory) {
-            
                 const block = REGame.map.block(self.x, self.y);
                 const layer = block.layer(DBlockLayerKind.Ground);
                 const targetEntities = layer.entities();
-
                 if (targetEntities.length >= 1) {
-                    const itemEntity = targetEntities[0];
-    
-                    context.post(
-                        self, itemEntity, subject, undefined, testPutInItem,
-                        //itemEntity, self, subject, undefined, testPickOutItem,
-                        () => {
-                            REGame.map._removeEntity(itemEntity);
-                            inventory.addEntityWithStacking(itemEntity);
-                            
-                            const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
-                            context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
-                            SSoundManager.playPickItem();
-
-                            return true;
-                        });
-    
+                    UAction.postPickItem(context, self, inventory, targetEntities[0]);
                 }
-
             }
         }
         else if (activity.actionId() == DBasics.actions.PutActionId) {

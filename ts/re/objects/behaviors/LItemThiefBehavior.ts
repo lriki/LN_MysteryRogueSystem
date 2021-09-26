@@ -40,6 +40,7 @@ export class LItemThiefBehavior extends LBehavior {
             const item = block.getFirstEntity(DBlockLayerKind.Ground);
             if (item && item.findEntityBehavior(LItemBehavior)) {
                 // 隣接するアイテムを見つけた
+                console.log("隣接するアイテムを見つけた");
                 candidates.push({
                     action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
                     targets: [item.entityId()],
@@ -68,10 +69,12 @@ export class LItemThiefBehavior extends LBehavior {
 
     onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.AIMinor) {
-            return this.activeAI(self).thinkMoving(context, self);
+            this.activeAI(self).thinkMoving(context, self);
+            return SPhaseResult.Handled;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            return this.activeAI(self).thinkAction(context, self);
+            this.activeAI(self).thinkAction(context, self);
+            return SPhaseResult.Handled;
         }
         return SPhaseResult.Pass;
     }

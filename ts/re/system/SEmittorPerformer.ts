@@ -1,5 +1,5 @@
 import { DBasics } from "ts/re/data/DBasics";
-import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost } from "ts/re/data/DEffect";
+import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
@@ -15,10 +15,11 @@ import { UMovement } from "../usecases/UMovement";
 import { assert } from "ts/re/Common";
 import { DParameterId } from "ts/re/data/DParameter";
 import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
-import { DSkillId } from "../data/DCommon";
+import { DBlockLayerKind, DBlockLayerScope, DSkillId } from "../data/DCommon";
 import { SEffectorFact } from "./SEffectApplyer";
 import { DEffectCause, DEmittor } from "../data/DEmittor";
 import { USearch } from "../usecases/USearch";
+import { LBlock } from "../objects/LBlock";
 
 
 export class SEmittorPerformer {
@@ -286,8 +287,11 @@ export class SEmittorPerformer {
             //for ()
             {
                 // 攻撃対象決定
-                const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
-                if (target) {
+                //const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
+                const targets = this.getTargetInBlock(UMovement.getFrontBlock(performer), emittor.scope);
+                for (const target of targets)  {
+                    console.log("performeEffect", target);
+
                     const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
                     if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                     const effectContext = new SEffectContext(effectSubject, context.random());
@@ -314,10 +318,9 @@ export class SEmittorPerformer {
                             });
                     }
                 }
-                else {
-                    // target が無くても、スキル発動したことは伝える
-                    if (skillId > 0) this.raiseSkillEmitted(context, performer, [], skillId);
-                }
+                
+                // target が無くても、スキル発動したことは伝える
+                if (skillId > 0) this.raiseSkillEmitted(context, performer, [], skillId);
             }
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
@@ -377,6 +380,26 @@ export class SEmittorPerformer {
         }
         else {
             throw new Error("Not implemented.");
+        }
+    }
+
+    public getTargetInBlock(block: LBlock, scope: DEffectFieldScope): LEntity[] {
+        if (scope.layerScope == DBlockLayerScope.TopOnly) {
+            for (let i = DBlockLayerKind.Top; i >= 0; i--) {
+                if (scope.layers.includes(i)) {
+                    const entity = block.layer(i).firstEntity();
+                    if (entity) {
+                        return [entity];
+                    }
+                }
+            }
+            return [];
+        }
+        else if (scope.layerScope == DBlockLayerScope.All) {
+            throw new Error("Not implemented.");
+        }
+        else {
+            throw new Error("Unreachable.");
         }
     }
 }

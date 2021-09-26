@@ -5,6 +5,7 @@ import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LCandidateSkillAction, UAction } from "ts/re/usecases/UAction";
+import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -146,7 +147,15 @@ export class LActionDeterminer {
 
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
-                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], true, this._requiredSkillAction.targets.map(e => REGame.world.entity(e)))) {
+                const targetEntites = this._requiredSkillAction.targets.map(e => REGame.world.entity(e));
+                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], false, targetEntites)) {
+                    
+                    // AI は移動後に PrimaryTarget の方向を向くようになっているため、
+                    // このままスキルを発動しようとすると空振りしてしまう。
+                    // ここで向きを Target の方向に向けておく。
+                    const pos = UMovement.getCenter(targetEntites);
+                    self.dir = UMovement.getLookAtDirFromPos(self.x, self.y, pos.x, pos.y);
+                    
                     SEmittorPerformer.makeWithSkill(self, this._requiredSkillAction.action.skillId).performe(context);
                     context.postConsumeActionToken(self);
                     return true;
