@@ -387,7 +387,8 @@ export class SEffectApplyer {
             this.applyOtherEffect(commandContext, target, effect, result);
         }
         for (const id of modifier.effectBehaviors()) {
-            throw new Error("Not implemented.");
+            const b = RESystem.effectBehaviorManager.get(id);
+            b.onApplyTargetEffect(commandContext, modifier, target);
         }
         this.applyItemUserEffect(target);
     }

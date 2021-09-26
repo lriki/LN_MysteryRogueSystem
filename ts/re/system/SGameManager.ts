@@ -31,6 +31,7 @@ import { LBlock } from "ts/re/objects/LBlock";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LObjectType } from "ts/re/objects/LObject";
 import { STurnContext } from "./STurnContext";
+import { SEffectBehaviorManager } from "./skills/SEffectBehaviorManager";
 
 /**
  */
@@ -44,6 +45,7 @@ export class SGameManager {
         RESystem.minimapData = new SMinimapData();
         RESystem.mapManager = new SMapManager();
         RESystem.groundRules = new SGroundRules();
+        RESystem.effectBehaviorManager = new SEffectBehaviorManager();
         RESystem.requestedPlayback = false;
     }
 

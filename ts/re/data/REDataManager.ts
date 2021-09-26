@@ -289,6 +289,10 @@ export class REDataManager
             fixed: 1,
             normal: 2,
         };
+
+        DBasics.effectBehaviors = {
+            itemSteal: REData.newEffectBehavior("ItemSteal").id,
+        };
     }
 
     static loadData(testMode: boolean): void

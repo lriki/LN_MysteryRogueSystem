@@ -12,6 +12,7 @@ import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { RESystemExtension } from "./RESystemExtension";
 import { STurnContext } from "./STurnContext";
+import { SEffectBehaviorManager } from "./skills/SEffectBehaviorManager";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -37,6 +38,7 @@ export class RESystem {
     static minimapData: SMinimapData;
     static mapManager: SMapManager;
     static groundRules: SGroundRules;
+    static effectBehaviorManager: SEffectBehaviorManager;
     static requestedPlayback: boolean = false;
     static unittest: boolean = false;
 

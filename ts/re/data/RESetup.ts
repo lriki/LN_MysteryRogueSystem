@@ -299,6 +299,10 @@ export class RESetup {
                 //emittor.selfAnimationId = 109;
                 emittor.selfSequelId = DBasics.sequels.explosion;
                 break;
+            case "kSkill_アイテム盗み":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(DBasics.effectBehaviors.itemSteal);
+                break;
         }
     }
 
