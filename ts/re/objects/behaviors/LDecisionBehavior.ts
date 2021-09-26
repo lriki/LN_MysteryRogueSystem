@@ -55,7 +55,6 @@ export class LDecisionBehavior extends LBehavior {
             return this._characterAI.thinkMoving(context, self);
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
-
             // 後続をブロックする理由はない
             return SPhaseResult.Pass;
         }
