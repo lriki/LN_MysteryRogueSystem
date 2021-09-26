@@ -110,8 +110,9 @@ export class LInventoryBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LInventoryBehavior);
-        throw new Error("Not implemented.");    // TODO: Item 自体もコピーしないとだめかも
-        b._entities = this._entities.slice();
+        // Item のディープコピーはやめてみる。
+        // 盗み能力を持つ敵にわざとアイテムを盗ませて分裂の杖を振ればアイテム増殖ができてしまうことになる。
+        b._entities = [];
         b._gold = this._gold;
         return b
     }
@@ -122,6 +123,10 @@ export class LInventoryBehavior extends LBehavior {
 
     public contains(entity: LEntity): boolean {
         return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
+    }
+
+    public hasAnyItem(): boolean {
+        return this._entities.length > 0;
     }
 
     public addEntity(entity: LEntity) {

@@ -23,7 +23,8 @@ import { LItemBehavior } from "./LItemBehavior";
  */
 @RESerializable
 export class LItemThiefBehavior extends LBehavior {
-    private characterAI: LCharacterAI = new LCharacterAI_Normal();//new LEscapeAI();
+    private standardAI: LCharacterAI = new LCharacterAI_Normal();//new LEscapeAI();
+    private escapeAI: LCharacterAI = new LEscapeAI();
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemThiefBehavior);
@@ -61,20 +62,26 @@ export class LItemThiefBehavior extends LBehavior {
                 return;
             }
         }
-
-
-
-        
     }
 
     onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.AIMinor) {
-            return this.characterAI.thinkMoving(context, self);
+            return this.activeAI(self).thinkMoving(context, self);
         }
         else if (phase == DecisionPhase.AIMajor) {
-            return this.characterAI.thinkAction(context, self);
+            return this.activeAI(self).thinkAction(context, self);
         }
         return SPhaseResult.Pass;
+    }
+
+    private activeAI(self: LEntity): LCharacterAI {
+        const inventory = self.getEntityBehavior(LInventoryBehavior);
+        if (inventory.hasAnyItem()) {
+            return this.escapeAI;
+        }
+        else {
+            return this.standardAI;
+        }
     }
 }
 

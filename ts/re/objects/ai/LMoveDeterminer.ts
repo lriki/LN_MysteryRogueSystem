@@ -6,7 +6,18 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
+import { LRandom } from "../LRandom";
 import { REGame } from "../REGame";
+
+export enum LMovingMethod {
+    ToTarget,
+    LHRule,
+}
+
+export interface LUpdateMovingTargetResult {
+    method: LMovingMethod;
+    passageway?: LBlock;
+}
 
 @RESerializable
 export class LMoveDeterminer {
@@ -39,17 +50,14 @@ export class LMoveDeterminer {
         return false;
     }
 
-    // 
-    private performInternal(context: SCommandContext, self: LEntity): boolean {
-        let moveToLHRule = false;
-        let moveToPassageWay: LBlock | undefined;
+    protected updateTargetPosition(self: LEntity, rand: LRandom): LUpdateMovingTargetResult {
         const block = REGame.map.block(self.x, self.y);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
                 // 目的地なし, 現在位置が通路・迷路
                 // => 左折の法則による移動
-                moveToLHRule = true;
+                return { method: LMovingMethod.LHRule };
             }
             else {
                 const room = REGame.map.room(block._roomId);
@@ -60,31 +68,32 @@ export class LMoveDeterminer {
 
                     const candidates = room.doorwayBlocks();
                     if (candidates.length > 0) {
-                        const block = candidates[context.random().nextIntWithMax(candidates.length)];
+                        const block = candidates[rand.nextIntWithMax(candidates.length)];
                         this._targetPositionX = block.x();
                         this._targetPositionY = block.y();
+                        return { method: LMovingMethod.ToTarget };
                     }
                     else {
                         // 入り口のない部屋。左折の法則による移動を継続する。
-                        moveToLHRule = true;
+                        return { method: LMovingMethod.LHRule };
                     }
                 }
                 else {
                     // 目的地なし, 現在位置が部屋の入口
                     // => 現在位置以外のランダムな入口を目的地に設定し、左折の法則による移動
                     // => 他に入口がなければ逆方向を向き、左折の法則による移動
-                    moveToLHRule = true;
-                    
     
                     const candidates = room.doorwayBlocks().filter(b => b.x() != self.x && b.y() != self.y);    // 足元フィルタ
                     if (candidates.length > 0) {
-                        const block = candidates[context.random().nextIntWithMax(candidates.length)];
+                        const block = candidates[rand.nextIntWithMax(candidates.length)];
                         this._targetPositionX = block.x();
                         this._targetPositionY = block.y();
                     }
                     else {
                         self.dir = UMovement.reverseDir(self.dir);
                     }
+
+                    return { method: LMovingMethod.LHRule };
                 }
             } 
         }
@@ -99,16 +108,22 @@ export class LMoveDeterminer {
             // 対策として、このときは隣接している通路ブロックへの移動を優先する。
             const blocks = UMovement.getMovableAdjacentTiles(self).filter(b => b.isPassageway());
             if (blocks.length > 0) {
-                moveToPassageWay = blocks[context.random().nextIntWithMax(blocks.length)];
+                return { method: LMovingMethod.ToTarget, passageway: blocks[rand.nextIntWithMax(blocks.length)] };
             }
             else {
-                moveToLHRule = true;
+                return { method: LMovingMethod.LHRule };
             }
         }
         else {
             // 目的地あり 目的地が現在位置でない
             // => 目的地に向かう移動 (moveToTarget() で移動)
+            return { method: LMovingMethod.ToTarget };
         }
+    }
+
+    // 
+    private performInternal(context: SCommandContext, self: LEntity): boolean {
+        const updateResult = this.updateTargetPosition(self, context.random());
 
         // 目的地設定がなされてるのであればそこへ向かって移動する
         if (this.canModeToTarget(self)) {
@@ -117,17 +132,17 @@ export class LMoveDeterminer {
             }
             else {
                 // 壁際を斜め移動しようとした等、移動できなかった
-                moveToLHRule = true;
+                updateResult.method = LMovingMethod.LHRule;
             }
         }
 
-        if (moveToPassageWay) {
-            this.postMoveToAdjacent(self, moveToPassageWay, context);
+        if (updateResult.passageway) {
+            this.postMoveToAdjacent(self, updateResult.passageway, context);
             return true;
         }
 
         // 左折の法則による移動
-        if (moveToLHRule) {
+        if (updateResult.method == LMovingMethod.LHRule) {
             const block = UMovement.getMovingCandidateBlockAsLHRule(self, self.dir);
             if (block) {
                 this.postMoveToAdjacent(self, block, context);
@@ -183,7 +198,7 @@ export class LMoveDeterminer {
     }
 
     // 目的地あり？
-    private hasDestination(): boolean {
+    public hasDestination(): boolean {
         return this._targetPositionX >= 0 && this._targetPositionY >= 0;
     }
 
