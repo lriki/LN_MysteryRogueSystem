@@ -72,6 +72,7 @@ export class SEntityFactory {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
+        e.addBehavior(LInventoryBehavior);
         e.addBehavior(LEnemyBehavior);
         this.setupDirectly_Enemy(e, enemyEntityData);
     }
@@ -256,7 +257,7 @@ export class SEntityFactory {
             party.addMember(entity);
             result.push(entity);
 
-            const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer());
+            const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer(), entity);
             if (block) {
                 REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
             }

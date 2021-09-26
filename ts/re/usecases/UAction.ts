@@ -42,17 +42,27 @@ export class UAction {
             context.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
         }
     }
+    
+    /**
+     * entity を現在マップの指定位置へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
+     */
+    public static dropOrDestroy(context: SCommandContext, entity: LEntity, mx: number, my: number): void {
+        REGame.world._transferEntity(entity, REGame.map.floorId(), mx, my);
+        this.postDropOrDestroyOnCurrentPos(context, entity, entity.getHomeLayer());
+    }
 
     /**
      * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      * 
      */
-    public static postDropOrDestroy(context: SCommandContext, entity: LEntity, targetLayer: BlockLayerKind, blowDirection: number): void {
-        const block = UMovement.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer);
+    public static postDropOrDestroyOnCurrentPos(context: SCommandContext, entity: LEntity, targetLayer: BlockLayerKind): void {
+        const block = UMovement.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer, entity);
+        console.log("postDropOrDestroyOnCurrentPos", block);
         if (block) {
             //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
             //context.postCall(() => {
                 UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
+                //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
                 context.postSequel(entity, DBasics.sequels.dropSequel);
             //});
         }

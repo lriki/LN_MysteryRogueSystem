@@ -422,7 +422,7 @@ export class SScheduler
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {
-                    UAction.postDropOrDestroy(RESystem.commandContext, entity, homeLayer, 0);
+                    UAction.postDropOrDestroyOnCurrentPos(RESystem.commandContext, entity, homeLayer);
                 }
             }
         }

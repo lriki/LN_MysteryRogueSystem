@@ -1,6 +1,32 @@
 
 /**
  * 
+ * [2021/9/26] モンスターのアイテムドロップ
+ * ----------
+ * 
+ * - 倒されたときのランダムアイテムドロップ
+ * - 転ばされたときのランダムアイテムドロップ
+ * - 倒されたときの固有アイテムドロップ (Mr.ブーン系など)
+ * - ケンゴウ系能力によってはじかれた装備品
+ * - マゼルン系おとす合成後アイテム
+ * 
+ * モンスターから出てくるアイテムはこれらのいずれか。
+ * 例えば Mr.ブーン はケンゴウ系能力で装備品をはじかれた後は、倒されても草を落とさない。
+ * 
+ * ### 実装方針
+ * 
+ * まずインベントリと、アイテムドロップフラグというものを作っておく。
+ * 
+ * 倒されたとき…
+ * - インベントリにアイテムがある場合、アイテムドロップフラグは考慮せずに、そのアイテムを落とす。
+ * - 転んだ・弾かれたなどで UnitEntity が何かアイテムを生成した場合、アイテムドロップフラグをON.
+ * - アイテムドロップフラグがONの場合、倒されてもアイテムを落とさない。
+ * - 倒されたときにアイテムドロップフラグが OFF の場合、アイテムドロップ処理を開始する。
+ *   - 固有アイテムがあれば落とす。
+ *   - なければ、フロアの「てきがおとすもの」テーブルに従いドロップする。
+ * 
+ * 
+ * 
  * [2020/11/29] Note:
  * ----------
  * Inventory の定義をどこまでにするのかによるけど、
@@ -43,18 +69,6 @@
  * Inventory の内容を表示する画面、という考えて作っておくと再利用いろいろできそう。
  * 
  * 
- * [2020/11/29] モンスターのアイテムドロップ
- * ----------
- * 
- * - 倒されたときのランダムアイテムドロップ
- * - 転ばされたときのランダムアイテムドロップ
- * - 倒されたときの固有アイテムドロップ (Mr.ブーン系など)
- * - ケンゴウ系能力によってはじかれた装備品
- * - マゼルン系おとす合成後アイテム
- * 
- * モンスターから出てくるアイテムはこれらのいずれか。
- * 例えば Mr.ブーン はケンゴウ系能力で装備品をはじかれた後は、倒されても草を落とさない。
- * 
  * 
  * [2021/7/8] アイテムのスタック
  * ----------
@@ -87,6 +101,8 @@ import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior"
+import { SCommandContext } from "ts/re/system/SCommandContext";
+import { UAction } from "ts/re/usecases/UAction";
 
 export class LInventoryBehavior extends LBehavior {
     private _entities: LEntityId[] = [];
@@ -149,6 +165,13 @@ export class LInventoryBehavior extends LBehavior {
         }
     }
 
+    onPermanentDeath(context: SCommandContext, self: LEntity): void {
+        for (const entity of this.entities()) {
+            this.removeEntity(entity);
+            UAction.dropOrDestroy(context, entity, self.x, self.y);
+        }
+    }
+    
     /*
     onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));

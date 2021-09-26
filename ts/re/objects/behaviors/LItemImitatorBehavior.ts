@@ -122,7 +122,7 @@ export class LItemImitatorBehavior extends LBehavior {
             
             self.removeFromParent();
             REGame.map.appearEntity(self, actor.x, actor.y);
-            UAction.postDropOrDestroy(RESystem.commandContext, self, self.getHomeLayer(), 0);
+            UAction.postDropOrDestroyOnCurrentPos(RESystem.commandContext, self, self.getHomeLayer());
 
             return SCommandResponse.Canceled;
         }

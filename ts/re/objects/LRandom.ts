@@ -57,12 +57,12 @@ export class LRandom {
         return this.nextIntWithMinMax(median - width, median + width);
     }
 
-    public select<T>(ary: Array<T>): T {
+    public select<T>(ary: ReadonlyArray<T>): T {
         assert(ary.length > 0);
         return ary[this.nextIntWithMax(ary.length)];
     }
 
-    public selectOrUndefined<T>(ary: Array<T>): T | undefined {
+    public selectOrUndefined<T>(ary: ReadonlyArray<T>): T | undefined {
         if (ary.length > 0)
             return ary[this.nextIntWithMax(ary.length)];
         else

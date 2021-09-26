@@ -236,11 +236,22 @@ export class UMovement {
     private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
 
     /** entity を配置できる直近の Block を選択する。 */
-    public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layer: BlockLayerKind): LBlock | undefined {
+    public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layerKind: BlockLayerKind, entity: LEntity): LBlock | undefined {
+        console.log("selectNearbyLocatableBlock", mx, my, layerKind);
+
         const maxDistance = 3;
         for (let distance = 0; distance <= maxDistance; distance++) {
             const candidates = REGame.map.getEdgeBlocks(mx, my, distance)
-                .filter(b => !b.layer(layer).isContainsAnyEntity());
+                .filter(b => {
+                    const layer = b.layer(layerKind);
+                    if (layer.isContainsAnyEntity())   // 既に何か Entity がいる？
+                        if (layer.entityIds().length == 1 && layer.entityIds()[0].equals(entity.entityId()))
+                            return true;    // それが自分自身であれば配置はできることにする。再Drop とかで使いたい。
+                        else
+                            return false;
+                    else
+                        return true;
+                });
             if (candidates.length > 0) {
                 return rand.select(candidates);
             }

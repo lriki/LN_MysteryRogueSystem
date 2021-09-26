@@ -18,6 +18,7 @@ import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseSt
 import { LRandom } from "ts/re/objects/LRandom";
 import { LItemShopStructure } from "ts/re/objects/structures/LItemShopStructure";
 import { SItemShopBuilder } from "./map/SItemShopBuilder";
+import { USearch } from "../usecases/USearch";
 
 
 /**
@@ -278,23 +279,12 @@ export class SMapManager {
     }
 
     private spawnRandomEnemy(): void {
-
-        // 空いている Block をランダムに選択して配置する
-        const spawnableBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Unit);
-        assert(spawnableBlocks.length > 0);
-
-        const player = REGame.camera.focusedEntity();
-        assert(player);
-        const px = player.x;
-        const py = player.y;
-
-        const candidateBlocks = spawnableBlocks.filter(b => Math.abs(b.x() - px) > paramEnemySpawnInvalidArea && Math.abs(b.y() - py) > paramEnemySpawnInvalidArea);
-        if (candidateBlocks.length > 0) {
-            const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
+        const block = USearch.selectUnitSpawnableBlock(this.rand());
+        if (block) {
             this.spawnEnemy(block.x(), block.y());
         }
         else {
-            // 非常に小さい単一の部屋しかなかったようなケース
+            throw new Error("Not implemented.");
         }
     }
 

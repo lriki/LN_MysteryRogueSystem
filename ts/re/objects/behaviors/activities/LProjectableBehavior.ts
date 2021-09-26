@@ -209,7 +209,7 @@ export class LProjectableBehavior extends LBehavior {
         // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
 
         context.postCall(() => {
-            UAction.postDropOrDestroy(context, self, self.getHomeLayer(), this.blowDirection);
+            UAction.postDropOrDestroyOnCurrentPos(context, self, self.getHomeLayer());
         });
 
         // HomeLayer へ移動

@@ -379,6 +379,9 @@ export abstract class LBehavior extends LObject {
     /** 1行動消費単位の終了時点 */
     onStepEnd(context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
+    /** 完全な死亡状態となった。復活草などの発動判定が行われた後、救いようが無くゲームオーバーとなった状態。 */
+    onPermanentDeath(context: SCommandContext, self: LEntity): void {}
+
     onPertyChanged(self: LEntity): void { }
 
     onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }

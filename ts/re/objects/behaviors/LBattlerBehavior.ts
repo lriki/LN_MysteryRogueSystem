@@ -191,6 +191,14 @@ export class LBattlerBehavior extends LBehavior {
                 if (entity == REGame.camera.focusedEntity()) {
                     context.postWait(entity, 100);
                     context.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
+                    
+                    context.postCall(() => {
+                        entity.iterateBehaviorsReverse(b => {
+                            b.onPermanentDeath(context, entity);
+                            return true;
+                        });
+                    })
+
                     UTransfer.exitLand(context, entity, LandExitResult.Gameover);
                 }
                 else {
@@ -199,7 +207,12 @@ export class LBattlerBehavior extends LBehavior {
                 }
             }
             else {
-    
+                context.postCall(() => {
+                    entity.iterateBehaviorsReverse(b => {
+                        b.onPermanentDeath(context, entity);
+                        return true;
+                    });
+                })
                 context.postDestroy(entity);
             }
         }
