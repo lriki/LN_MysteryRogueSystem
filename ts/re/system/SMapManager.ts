@@ -291,6 +291,7 @@ export class SMapManager {
     public spawnEnemy(mx: number, my: number): LEntity[] {
         const floorId = this._map.floorId();
         const table = this._map.land2().landData().appearanceTable;
+        console.log("table", table);
         if (table.enemies.length == 0) return [];    // 出現テーブルが空
         const list = table.enemies[floorId.floorNumber()];
         if (list.length == 0) return [];    // 出現テーブルが空

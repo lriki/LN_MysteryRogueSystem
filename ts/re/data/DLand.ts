@@ -187,7 +187,7 @@ export class DLand {
     public import(mapData: IDataMap): void {
         
         this.floorInfos = DLand.buildFloorTable(mapData);
-        this.appearanceTable = DLand.buildAppearanceTable(mapData, this.rmmzMapId);
+        this.appearanceTable = DLand.buildAppearanceTable(mapData, this.rmmzMapId, this.floorInfos.length);
 
         for (const event of mapData.events) {
             if (!event) continue;
@@ -271,7 +271,7 @@ export class DLand {
         return floors;
     }
         
-    public static buildAppearanceTable(mapData: IDataMap, mapId: number): DAppearanceTable {
+    public static buildAppearanceTable(mapData: IDataMap, mapId: number, maxFloors: number): DAppearanceTable {
         
         const table: DAppearanceTable = { 
             entities: [],
@@ -325,12 +325,13 @@ export class DLand {
             }
         }
 
-        table.system = new Array(table.maxFloors);
-        table.enemies = new Array(table.maxFloors);
-        table.traps = new Array(table.maxFloors);
-        table.items = new Array(table.maxFloors);
-        table.events = new Array(table.maxFloors);
-        for (let i = 0; i < table.maxFloors; i++) {
+        const floorCount = Math.max(table.maxFloors, maxFloors);
+        table.system = new Array(floorCount);
+        table.enemies = new Array(floorCount);
+        table.traps = new Array(floorCount);
+        table.items = new Array(floorCount);
+        table.events = new Array(floorCount);
+        for (let i = 0; i < floorCount; i++) {
             table.system[i] = [];
             table.enemies[i] = [];
             table.traps[i] = [];
