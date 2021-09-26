@@ -388,7 +388,7 @@ export class SEffectApplyer {
         }
         for (const id of modifier.effectBehaviors()) {
             const b = RESystem.effectBehaviorManager.get(id);
-            b.onApplyTargetEffect(commandContext, modifier, target);
+            b.onApplyTargetEffect(commandContext, this._effect.fact().subject(), modifier, target);
         }
         this.applyItemUserEffect(target);
     }

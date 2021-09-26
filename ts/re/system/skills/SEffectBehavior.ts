@@ -20,7 +20,7 @@ export abstract class SEffectBehavior {
     }
 
     */
-    public onApplyTargetEffect(cctx: SCommandContext, modifier: SEffectModifier, target: LEntity) {
+    public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity) {
         
     }
 }

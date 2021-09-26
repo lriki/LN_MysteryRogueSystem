@@ -262,6 +262,7 @@ export class REDataManager
             useItem: REData.addSequel("useItem"),
             explosion: REData.addSequel("explosion"),
             down: REData.addSequel("down"),
+            warp: REData.addSequel("warp"),
         };
         REData.sequels[DBasics.sequels.MoveSequel].parallel = true;
         

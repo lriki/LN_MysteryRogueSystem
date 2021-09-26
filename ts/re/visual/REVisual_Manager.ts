@@ -39,6 +39,7 @@ import { VUseItemSequel } from "./sequels/VUseItemSequel";
 import { VExplosionSequel } from "./sequels/VExplosionSequel";
 import { VDownSequel } from "./sequels/VDownSequel";
 import { DBasics } from "../data/DBasics";
+import { VWarpSequel } from "./sequels/VWarpSequel";
 
 /**
  */
@@ -66,7 +67,9 @@ export class REVisual_Manager
         this._visualSequelFactory[DBasics.sequels.useItem] = () => new VUseItemSequel();
         this._visualSequelFactory[DBasics.sequels.explosion] = () => new VExplosionSequel();
         this._visualSequelFactory[DBasics.sequels.down] = () => new VDownSequel();
+        this._visualSequelFactory[DBasics.sequels.warp] = () => new VWarpSequel();
 
+        
         
     }
 

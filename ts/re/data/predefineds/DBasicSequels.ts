@@ -37,4 +37,6 @@ export interface BasicSequels {
     explosion: DSequelId;
 
     down: DSequelId;
+
+    warp: DSequelId;
 }
