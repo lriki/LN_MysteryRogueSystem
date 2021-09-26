@@ -18,7 +18,7 @@ export class VWarpSequel extends REVisualSequel {
 
         
         if (frameCount > 60) {
-            visual.resetPosition();
+            //visual.resetPosition();
             context.end();
         }
     }

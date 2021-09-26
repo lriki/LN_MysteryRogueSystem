@@ -62,7 +62,7 @@ export class REVisualSequelManager {
     postUpdate() {
         if (this._activeSequelSet) {
             const runs = this._activeSequelSet.runs();
-            if (this._currentSequelRun >= runs.length && this.isLogicalCompleted()) {
+            if (this._currentSequelRun >= (runs.length - 1) && this.isLogicalCompleted()) {
                 // すべてのアニメーションが終了した
                 this.onFinishedAllSequels();
             }
