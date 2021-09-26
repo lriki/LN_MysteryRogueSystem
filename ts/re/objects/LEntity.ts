@@ -21,7 +21,6 @@ import { isThisTypeNode, LanguageServiceMode } from "typescript";
 import { DParameterId, DSParamId, DXParamId } from "ts/re/data/DParameter";
 import { SAbilityFactory } from "ts/re/system/SAbilityFactory";
 import { REData } from "ts/re/data/REData";
-import { BlockLayerKind } from "./LBlockLayer";
 import { DEntity, DEntityId, DEntityNamePlate, DIdentificationDifficulty } from "ts/re/data/DEntity";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
@@ -33,6 +32,7 @@ import { UState } from "ts/re/usecases/UState";
 import { DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
+import { DBlockLayerKind } from "../data/DCommon";
 
 enum BlockLayer
 {
@@ -703,12 +703,12 @@ export class LEntity extends LObject
         return REData.system.factions.neutral;
     }
 
-    public getHomeLayer(): BlockLayerKind {
+    public getHomeLayer(): DBlockLayerKind {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryHomeLayer();
             if (v) return v;
         }
-        return BlockLayerKind.Ground;
+        return DBlockLayerKind.Ground;
     }
 
     public getIdealParamBase(paramId: DParameterId): number {
@@ -1272,7 +1272,7 @@ export class LEntity extends LObject
     isOnGround(): boolean {
         if (this.floorId.hasAny()) {
             const block = REGame.map.block(this.x, this.y);
-            return block.findEntityLayerKind(this) == BlockLayerKind.Ground;
+            return block.findEntityLayerKind(this) == DBlockLayerKind.Ground;
         }
         else {
             return false;
@@ -1296,7 +1296,7 @@ export class LEntity extends LObject
         return this.roomId() <= 0;
     }
 
-    public layer(): BlockLayerKind {
+    public layer(): DBlockLayerKind {
         const r = REGame.map.block(this.x, this.y).findEntityLayerKind(this);
         assert(r);
         return r;

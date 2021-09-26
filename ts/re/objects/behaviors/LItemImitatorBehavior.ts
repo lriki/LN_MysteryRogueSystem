@@ -10,13 +10,13 @@ import { RESystem } from "ts/re/system/RESystem";
 import { UAction } from "ts/re/usecases/UAction";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
 import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LState } from "../states/LState";
 import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } from "./LBehavior";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 
 /**
@@ -95,8 +95,8 @@ export class LItemImitatorBehavior extends LBehavior {
         return p.image;
     }
 
-    queryHomeLayer(): BlockLayerKind | undefined {
-        return BlockLayerKind.Ground;
+    queryHomeLayer(): DBlockLayerKind | undefined {
+        return DBlockLayerKind.Ground;
     }
     
     onQueryReactions(actions: DActionId[]): DActionId[] {

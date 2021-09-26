@@ -1,6 +1,6 @@
 import { assert } from "../Common";
+import { DBlockLayerKind } from "../data/DCommon";
 import { LBlock } from "../objects/LBlock";
-import { BlockLayerKind } from "../objects/LBlockLayer";
 import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
 import { LRoom } from "../objects/LRoom";
@@ -77,7 +77,7 @@ export class USearch {
      */
     public static selectUnitSpawnableBlock(rand: LRandom): LBlock | null {
         // 空いている Block をランダムに選択して配置する
-        const spawnableBlocks = REGame.map.getSpawnableBlocks(BlockLayerKind.Unit);
+        const spawnableBlocks = REGame.map.getSpawnableBlocks(DBlockLayerKind.Unit);
         if (spawnableBlocks.length == 0) return null;
 
         const player = REGame.camera.focusedEntity();

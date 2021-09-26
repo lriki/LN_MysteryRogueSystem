@@ -2,21 +2,20 @@ import { assert, RESerializable } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { Helpers } from "ts/re/system/Helpers";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "ts/re/system/SEffectContext";
-import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/re/objects/LMap";
 import { UAction } from "ts/re/usecases/UAction";
-import { DEffect, DEffectSet } from "ts/re/data/DEffect";
 import { REData } from "ts/re/data/REData";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
+import { DEffectSet } from "ts/re/data/DEffect";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -97,7 +96,7 @@ export class LProjectableBehavior extends LBehavior {
 
         const self = args.self;
 
-        REGame.map.appearEntity(self, self.x, self.y, BlockLayerKind.Projectile);
+        REGame.map.appearEntity(self, self.x, self.y, DBlockLayerKind.Projectile);
 
 
         LProjectableBehavior.startMoveAsProjectile(context, self, args.subject, args.sender.dir, 5);
@@ -123,7 +122,7 @@ export class LProjectableBehavior extends LBehavior {
         self.dir = this.blowDirection;
 
 
-        if (UMovement.moveEntity(context, self, tx, ty, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
+        if (UMovement.moveEntity(context, self, tx, ty, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
             context.postSequel(self, DBasics.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
@@ -132,7 +131,7 @@ export class LProjectableBehavior extends LBehavior {
             
 
             // 他 Unit との衝突判定
-            const hitTarget = REGame.map.block(tx, ty).aliveEntity(BlockLayerKind.Unit);
+            const hitTarget = REGame.map.block(tx, ty).aliveEntity(DBlockLayerKind.Unit);
             if (hitTarget) {
                 context.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,

@@ -3,9 +3,7 @@ import { SCommandContext } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
-import { RESystem } from "ts/re/system/RESystem";
 import { Helpers } from "ts/re/system/Helpers";
-import { BlockLayerKind } from "../LBlockLayer";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, RESerializable, tr, tr2 } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
@@ -26,6 +24,7 @@ import { DStateRestriction } from "ts/re/data/DState";
 import { SView } from "ts/re/system/SView";
 import { UAction } from "ts/re/usecases/UAction";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 /**
  * 
@@ -123,8 +122,8 @@ export class LUnitBehavior extends LBehavior {
         return image;
     }
 
-    queryHomeLayer(): BlockLayerKind | undefined {
-        return BlockLayerKind.Unit;
+    queryHomeLayer(): DBlockLayerKind | undefined {
+        return DBlockLayerKind.Unit;
     }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
@@ -201,7 +200,7 @@ export class LUnitBehavior extends LBehavior {
             if (inventory) {
             
                 const block = REGame.map.block(self.x, self.y);
-                const layer = block.layer(BlockLayerKind.Ground);
+                const layer = block.layer(DBlockLayerKind.Ground);
                 const targetEntities = layer.entities();
 
                 if (targetEntities.length >= 1) {
@@ -237,7 +236,7 @@ export class LUnitBehavior extends LBehavior {
             assert(inventory);
             
             const block = REGame.map.block(self.x, self.y);
-            const layer = block.layer(BlockLayerKind.Ground);
+            const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
                 context.post(itemEntity, self, subject, undefined, testPickOutItem)
@@ -345,7 +344,7 @@ export class LUnitBehavior extends LBehavior {
             const inventory = self.getEntityBehavior(LInventoryBehavior);
             const item1 = activity.object();
             const block = REGame.map.block(self.x, self.y);
-            const layer = block.layer(BlockLayerKind.Ground);
+            const layer = block.layer(DBlockLayerKind.Ground);
             const item2 = layer.firstEntity();
             if (item2) {
                 // TODO: 呪いの処理など、アイテムを今いる場所から取り外せるかチェック入れる

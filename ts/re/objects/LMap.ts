@@ -16,8 +16,8 @@ import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { FMap } from "ts/re/floorgen/FMapData";
-import { BlockLayerKind } from "./LBlockLayer";
 import { LItemShopStructure } from "./structures/LItemShopStructure";
+import { DBlockLayerKind } from "../data/DCommon";
 
 export enum MovingMethod {
     Walk,
@@ -318,7 +318,7 @@ export class LMap extends LObject
      * - 既に Unit が存在している Block は対象外。
      * - 地続きではない Block も取得する。(堀内部や埋蔵金部屋)
      */
-    public getSpawnableBlocks(layer: BlockLayerKind): LBlock[] {
+    public getSpawnableBlocks(layer: DBlockLayerKind): LBlock[] {
         return this.roomFloorBlocks().filter(b => !b.layer(layer).isContainsAnyEntity());
     }
 
@@ -387,7 +387,7 @@ export class LMap extends LObject
      * @param y 
      * 既に現在の Floor 上に登場済みの Entity に対してこのメソッドを呼び出すと失敗する。
      */
-    appearEntity(entity: LEntity, x: number, y: number, layer?: BlockLayerKind): void {
+    appearEntity(entity: LEntity, x: number, y: number, layer?: DBlockLayerKind): void {
         assert(entity.floorId.isEmpty());
         entity.floorId = this.floorId();
         UMovement.locateEntity(entity, x, y, layer);
@@ -454,7 +454,7 @@ export class LMap extends LObject
     /**
      * 指定した Block へ Entity が、"歩行" で侵入できるか。
      */
-    public canWalkEntering(block: LBlock, entity: LEntity, method: MovingMethod, layer: BlockLayerKind): boolean {
+    public canWalkEntering(block: LBlock, entity: LEntity, method: MovingMethod, layer: DBlockLayerKind): boolean {
         if (method == MovingMethod.Walk) {
             if (block.checkPurifier(entity)) return false;  // 聖域の巻物とかがある
         }
@@ -473,7 +473,7 @@ export class LMap extends LObject
     // シレン5石像の洞窟の石像は、Entity扱いだが斜め移動禁止。
     // ちなみに、丸太の罠等では斜めすり抜けできる。
     // deprecated: use SMomementCommon
-    checkPassage(entity: LEntity, dir: number, method: MovingMethod, toLayer?: BlockLayerKind): boolean {
+    checkPassage(entity: LEntity, dir: number, method: MovingMethod, toLayer?: DBlockLayerKind): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const oldBlock = this.block(entity.x, entity.y);
         const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
@@ -512,7 +512,7 @@ export class LMap extends LObject
     /** 足元の Entity を取得する */
     public firstFeetEntity(entity: LEntity): LEntity | undefined {
         const block = REGame.map.block(entity.x, entity.y);
-        const layer = block.layer(BlockLayerKind.Ground);
+        const layer = block.layer(DBlockLayerKind.Ground);
         return layer.firstEntity();
     }
 }

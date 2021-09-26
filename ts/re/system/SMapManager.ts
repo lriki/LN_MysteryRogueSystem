@@ -6,19 +6,18 @@ import { RESystem } from "./RESystem";
 import { LMap } from "ts/re/objects/LMap";
 import { SEntityFactory } from "./internal";
 import { assert, Log } from "ts/re/Common";
-import { paramEnemySpawnInvalidArea } from "ts/re/PluginParameters";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { REData } from "ts/re/data/REData";
 import { LObjectType } from "ts/re/objects/LObject";
 import { LBlock } from "ts/re/objects/LBlock";
 import { UMovement } from "../usecases/UMovement";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { SMonsterHouseBuilder } from "./map/SMonsterHouseBuilder";
 import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseStructure";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LItemShopStructure } from "ts/re/objects/structures/LItemShopStructure";
 import { SItemShopBuilder } from "./map/SItemShopBuilder";
 import { USearch } from "../usecases/USearch";
+import { DBlockLayerKind } from "../data/DCommon";
 
 
 /**
@@ -116,7 +115,7 @@ export class SMapManager {
         // Enemy 初期生成
         const enemyCount = 5;
         for (let i = 0; i < enemyCount; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Unit);
+            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Unit);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
                 this.spawnEnemy(block.x(), block.y());
@@ -126,7 +125,7 @@ export class SMapManager {
         // Item 初期生成
         const itemCount = 5;
         for (let i = 0; i < itemCount; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Ground);
+            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
                 this.spawnItem(block.x(), block.y());
@@ -136,7 +135,7 @@ export class SMapManager {
         // Trap 初期生成
         const trapCount = 5;
         for (let i = 0; i < trapCount; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(BlockLayerKind.Ground);
+            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
                 const entity = this.spawnTrap(block.x(), block.y());
@@ -265,7 +264,7 @@ export class SMapManager {
         return result;
     }
 
-    private findSpawnableBlockRandom(layer: BlockLayerKind): LBlock | undefined {
+    private findSpawnableBlockRandom(layer: DBlockLayerKind): LBlock | undefined {
         
 
         // 

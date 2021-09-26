@@ -38,3 +38,20 @@ export enum DColorIndex {
     Default,
     
 }
+
+export enum DBlockLayerKind {
+	/** 地形情報。壁・水路など。 */
+	Terrain = 0,
+
+	/** 地表に落ちているもの。アイテム・ワナ・階段など。 */
+	Ground = 1,
+
+	/** ユニット。PC・仲間・モンスター・土偶など。 */
+	Unit = 2,
+
+	/** 発射物。矢、魔法弾、吹き飛ばされたUnitなど。 */
+    Projectile = 3,
+    
+    /** お店のセキュリティシステムなど、非表示だが Entity として存在するもの。 */
+    System = 4,
+}

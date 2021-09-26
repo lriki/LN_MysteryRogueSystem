@@ -4,23 +4,6 @@ import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
 
 
-export enum BlockLayerKind {
-	/** 地形情報。壁・水路など。 */
-	Terrain = 0,
-
-	/** 地表に落ちているもの。アイテム・ワナ・階段など。 */
-	Ground = 1,
-
-	/** ユニット。PC・仲間・モンスター・土偶など。 */
-	Unit = 2,
-
-	/** 発射物。矢、魔法弾、吹き飛ばされたUnitなど。 */
-    Projectile = 3,
-    
-    /** お店のセキュリティシステムなど、非表示だが Entity として存在するもの。 */
-    System = 4,
-}
-
 // 同一レイヤーに、同時に複数の Entity は存在可能。
 // 例えばシレン2のかまいたちの矢は、発射直後の状態ではすべて同一タイル内に存在する。
 // またシレン2のバグから推測することもできる。

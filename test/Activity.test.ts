@@ -7,9 +7,9 @@ import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -81,7 +81,7 @@ test("Activity.Throw", () => {
 
     // とりあえず、Actor 位置より右に落ちること。
     expect(item1.x > 10).toBe(true);
-    expect(item1.layer()).toBe(BlockLayerKind.Ground);
+    expect(item1.layer()).toBe(DBlockLayerKind.Ground);
 
     // 下を向く
     actor1.dir = 2;
@@ -100,7 +100,7 @@ test("Activity.Throw", () => {
     // 壁の手前に落ちていること
     expect(item2.x).toBe(actor1.x);
     expect(item2.y).toBe(actor1.y + 1);
-    expect(item2.layer()).toBe(BlockLayerKind.Ground);
+    expect(item2.layer()).toBe(DBlockLayerKind.Ground);
 });
 
 

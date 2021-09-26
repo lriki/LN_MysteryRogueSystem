@@ -6,7 +6,6 @@ import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "../behaviors/LBehavior";
 import { UMovement } from "ts/re/usecases/UMovement";
-import { BlockLayerKind } from "../LBlockLayer";
 import { LEntityId } from "../LObject";
 import { DBasics } from "ts/re/data/DBasics";
 import { DEventId, RoomEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";

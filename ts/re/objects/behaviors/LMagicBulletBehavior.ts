@@ -1,15 +1,14 @@
 import { Helpers } from "ts/re/system/Helpers";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { RESystem } from "ts/re/system/RESystem";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsMagicBullet } from "./LBehavior";
 import { MovingMethod } from "../LMap";
 import { DBasics } from "ts/re/data/DBasics";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 
 /**
@@ -28,8 +27,8 @@ export class LMagicBulletBehavior extends LBehavior {
         this._ownerItemEntityId = ownerItem.entityId();
     }
 
-    queryHomeLayer(): BlockLayerKind | undefined {
-        return BlockLayerKind.Projectile;
+    queryHomeLayer(): DBlockLayerKind | undefined {
+        return DBlockLayerKind.Projectile;
     }
     
     // 射程無限・壁反射を伴うため、通常の MoveAsProjectile とは異なる処理が必要となる。
@@ -43,7 +42,7 @@ export class LMagicBulletBehavior extends LBehavior {
         const block = REGame.map.tryGetBlock(self.x + offset.x, self.y + offset.y);
         if (block) {
             // Unit との衝突
-            const entity1 = block.aliveEntity(BlockLayerKind.Unit);
+            const entity1 = block.aliveEntity(DBlockLayerKind.Unit);
             if (entity1) {
                 context.postAnimation(self, 1, false);
                 context.postDestroy(self);
@@ -69,7 +68,7 @@ export class LMagicBulletBehavior extends LBehavior {
 
             // TODO: ふきとばしの杖など一部の魔法弾は床に落ちているものとも衝突する
             if (0) {
-                const entity2 = block.aliveEntity(BlockLayerKind.Ground);
+                const entity2 = block.aliveEntity(DBlockLayerKind.Ground);
                 if (entity2) {
                     self.destroy();
                     return SCommandResponse.Handled;
@@ -78,7 +77,7 @@ export class LMagicBulletBehavior extends LBehavior {
             }
         }
 
-        if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, BlockLayerKind.Projectile)) {
+        if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
             context.postSequel(self, DBasics.sequels.blowMoveSequel);
             
             // recall

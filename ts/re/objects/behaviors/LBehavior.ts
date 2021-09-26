@@ -36,13 +36,12 @@ import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/re/data/DParameter";
-import { BlockLayerKind } from "../LBlockLayer";
 import { LEventResult } from "../LEventServer";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DSkillId } from "ts/re/data/DCommon";
+import { DBlockLayerKind, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 
@@ -281,7 +280,7 @@ export abstract class LBehavior extends LObject {
     //       - やりすごし状態は、自身をアイテム化する状態異常として表現する。（やり過ごしを投げ当てる他、技によってもやり過ごし状態になる）
     //       - アイテム擬態モンスターは正体を現しているかによってレイヤーが変わる。
     //       - 土偶は落とすとアイテム、立てるとUnitのようにふるまう
-    public queryHomeLayer(): BlockLayerKind | undefined { return undefined; }
+    public queryHomeLayer(): DBlockLayerKind | undefined { return undefined; }
 
 
     public onGetIdealParamBase(paramId: DParameterId): number | undefined {

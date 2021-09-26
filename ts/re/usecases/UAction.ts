@@ -6,11 +6,11 @@ import { DSkill } from "ts/re/data/DSkill";
 import { DTraits } from "ts/re/data/DTraits";
 import { REData } from "ts/re/data/REData";
 import { onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/re/objects/internal";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
 import { DBasics } from "../data/DBasics";
+import { DBlockLayerKind } from "../data/DCommon";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
 import { SCommandContext } from "../system/SCommandContext";
@@ -35,7 +35,7 @@ export class UAction {
 
     public static postStepOnGround(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
-        const layer = block.layer(BlockLayerKind.Ground);
+        const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
             context.post(entity, reactor, new SEffectSubject(entity), undefined, onWalkedOnTopAction);
@@ -55,7 +55,7 @@ export class UAction {
      * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      * 
      */
-    public static postDropOrDestroyOnCurrentPos(context: SCommandContext, entity: LEntity, targetLayer: BlockLayerKind): void {
+    public static postDropOrDestroyOnCurrentPos(context: SCommandContext, entity: LEntity, targetLayer: DBlockLayerKind): void {
         const block = UMovement.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer, entity);
         console.log("postDropOrDestroyOnCurrentPos", block);
         if (block) {

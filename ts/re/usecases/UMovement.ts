@@ -7,10 +7,10 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { LMap, MovingMethod } from "ts/re/objects/LMap";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { LRandom } from "ts/re/objects/LRandom";
 import { UBlock } from "ts/re/usecases/UBlock";
 import { SCommandContext } from "../system/SCommandContext";
+import { DBlockLayerKind } from "../data/DCommon";
 
 export interface SPoint {
     x: number;
@@ -147,7 +147,7 @@ export class UMovement {
      * 足元は取得しない。
      * 単純に列挙するだけで、通行判定や攻撃可能判定は行わない。
      */
-    public static getAdjacentEntities(entity: LEntity, layerKind?: BlockLayerKind): LEntity[] {
+    public static getAdjacentEntities(entity: LEntity, layerKind?: DBlockLayerKind): LEntity[] {
         const result: LEntity[] = [];
         for (const block of this.getAdjacentBlocks(entity)) {
             for (const entity of block.getEntities()) {
@@ -167,7 +167,7 @@ export class UMovement {
             const offset = Helpers.dirToTileOffset(d);
             const mx = entity.x + offset.x;
             const my = entity.y + offset.y;
-            const e = map.block(mx, my).aliveEntity(BlockLayerKind.Unit);
+            const e = map.block(mx, my).aliveEntity(DBlockLayerKind.Unit);
             if (e) {
                 return d;
             }
@@ -236,7 +236,7 @@ export class UMovement {
     private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
 
     /** entity を配置できる直近の Block を選択する。 */
-    public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layerKind: BlockLayerKind, entity: LEntity): LBlock | undefined {
+    public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layerKind: DBlockLayerKind, entity: LEntity): LBlock | undefined {
         console.log("selectNearbyLocatableBlock", mx, my, layerKind);
 
         const maxDistance = 3;
@@ -339,7 +339,7 @@ export class UMovement {
      * 移動可否は entity や Block の性質を考慮する。
      * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
      */
-    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: BlockLayerKind): boolean {
+    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: DBlockLayerKind): boolean {
         const map = REGame.map;
         const actualLayer = layer || entity.getHomeLayer();
 
@@ -499,10 +499,10 @@ export class UMovement {
         const block = map.block(x, y);
         const frontBlock = map.block(x + front.x, y + front.y);
         if (!this.checkPassageBlockToBlock(entity, block, frontBlock, MovingMethod.Walk)) return false;    // そもそも Block 間の移動ができない
-        if (block.layer(BlockLayerKind.Ground).isContainsAnyEntity()) return false;     // 足元に何かしらある場合はダッシュ停止
+        if (block.layer(DBlockLayerKind.Ground).isContainsAnyEntity()) return false;     // 足元に何かしらある場合はダッシュ停止
         if (block._roomId != frontBlock._roomId) return false;                          // 部屋と部屋や、部屋と通路の境界
 
-        if (UBlock.adjacentBlocks8XY(map, x, y).find(b => b.layer(BlockLayerKind.Unit).isContainsAnyEntity() || b.layer(BlockLayerKind.Ground).isContainsAnyEntity())) return false;
+        if (UBlock.adjacentBlocks8XY(map, x, y).find(b => b.layer(DBlockLayerKind.Unit).isContainsAnyEntity() || b.layer(DBlockLayerKind.Ground).isContainsAnyEntity())) return false;
 
         if (block.isPassageway()) {
             const back = Helpers.dirToTileOffset(this.reverseDir(entity.dir));
@@ -517,7 +517,7 @@ export class UMovement {
         return true;
     }
 
-    public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: BlockLayerKind): boolean {
+    public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: DBlockLayerKind): boolean {
         const map = REGame.map;
 
         assert(entity.floorId.equals(map.floorId()));
@@ -549,7 +549,7 @@ export class UMovement {
      * - マップ生成時の Entity 配置や、ワープ移動などで使用する。
      * - 侵入判定を伴う。
      */
-    public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: BlockLayerKind): void {
+    public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: DBlockLayerKind): void {
         const map = REGame.map;
         assert(entity.floorId.equals(map.floorId()));
 

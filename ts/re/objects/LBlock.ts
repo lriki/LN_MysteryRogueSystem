@@ -4,9 +4,10 @@ import { FBlockComponent } from "ts/re/floorgen/FMapData";
 import { REGame } from "./REGame";
 import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
 import { LSanctuaryBehavior } from "./behaviors/LSanctuaryBehavior";
-import { BlockLayerKind, REBlockLayer } from "./LBlockLayer";
+import { REBlockLayer } from "./LBlockLayer";
 import { LRoom } from "./LRoom";
 import { RESystem } from "ts/re/system/RESystem";
+import { DBlockLayerKind } from "../data/DCommon";
 
 export type LRoomId = number;
 
@@ -260,16 +261,16 @@ export class LBlock// extends LObject
         return this._layers;
     }
 
-    layer(kind: BlockLayerKind): REBlockLayer {
+    layer(kind: DBlockLayerKind): REBlockLayer {
         return this._layers[kind];
     }
 
-    addEntity(layerKind: BlockLayerKind, entity: LEntity) {
+    addEntity(layerKind: DBlockLayerKind, entity: LEntity) {
         const layer = this._layers[layerKind];
         assert(!layer.isContains(entity));  // 複数追加禁止
         //assert(!layer.isOccupied());        // 既に占有されている時は追加禁止
 
-        if (layerKind == BlockLayerKind.Terrain) {
+        if (layerKind == DBlockLayerKind.Terrain) {
             // Tile Layer への複数追加は禁止
             assert(this._layers[layerKind].entities().length == 0);
         }
@@ -292,13 +293,13 @@ export class LBlock// extends LObject
         }
     }
 
-    aliveEntity(layer: BlockLayerKind): LEntity | undefined {
+    aliveEntity(layer: DBlockLayerKind): LEntity | undefined {
         const l = this._layers[layer];
         return l.entities().find(x => x.isAlive());
     }
 
     /** Block に含まれている Entity を取得する。 layerKind を指定した場合は、 */
-    public getEntities(layerKind?: BlockLayerKind): LEntity[] {
+    public getEntities(layerKind?: DBlockLayerKind): LEntity[] {
         const result: LEntity[] = [];
         if (layerKind) {
             const layer = this._layers[layerKind];
@@ -316,13 +317,13 @@ export class LBlock// extends LObject
         return result;
     }
 
-    public getFirstEntity(layerKind?: BlockLayerKind): LEntity | undefined {
+    public getFirstEntity(layerKind?: DBlockLayerKind): LEntity | undefined {
         const entities = this.getEntities(layerKind);
         return entities.length > 0 ? entities[0] : undefined;
     }
 
     /** Entity が含まれている Layer を検索する */
-    public findEntityLayerKind(entity: LEntity): BlockLayerKind | undefined {
+    public findEntityLayerKind(entity: LEntity): DBlockLayerKind | undefined {
         const index = this._layers.findIndex(x => x.isContains(entity));
         if (index >= 0)
             return index;

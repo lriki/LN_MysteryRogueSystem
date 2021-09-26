@@ -2,13 +2,13 @@
 import { DActionId } from "ts/re/data/DAction";
 import { DBasics } from "ts/re/data/DBasics";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/re/objects/behaviors/LBehavior";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 /**
  * [2021/8/14] 「戻る」の実装について
@@ -48,8 +48,8 @@ export class LExitPointBehavior extends LBehavior {
         return b;
     }
 
-    queryHomeLayer(): BlockLayerKind | undefined {
-        return BlockLayerKind.Ground;
+    queryHomeLayer(): DBlockLayerKind | undefined {
+        return DBlockLayerKind.Ground;
     }
 
     onQueryReactions(actions: DActionId[]): void {

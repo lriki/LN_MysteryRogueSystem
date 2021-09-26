@@ -1,4 +1,5 @@
 import { RESerializable } from "ts/re/Common";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
 import { SPhaseResult } from "ts/re/system/RECommand";
@@ -8,7 +9,6 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
-import { BlockLayerKind } from "../LBlockLayer";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { DecisionPhase, LBehavior } from "./LBehavior";
@@ -32,26 +32,28 @@ export class LItemThiefBehavior extends LBehavior {
     }
 
     onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {
-        console.log("onPostMakeSkillActions");
 
         const self = this.ownerEntity();
         const blocks = UMovement.getAdjacentBlocks(self);
         for (const block of blocks) {
 
-            const item = block.getFirstEntity(BlockLayerKind.Ground);
+            const item = block.getFirstEntity(DBlockLayerKind.Ground);
             if (item && item.findEntityBehavior(LItemBehavior)) {
                 // 隣接するアイテムを見つけた
+                candidates.push({
+                    action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
+                    targets: [item.entityId()],
+                });
                 return;
             }
 
             
-            const target = block.getFirstEntity(BlockLayerKind.Unit);
+            const target = block.getFirstEntity(DBlockLayerKind.Unit);
             if (target && Helpers.isHostile(self, target)) {
                 const inventory = target.findEntityBehavior(LInventoryBehavior);
                 if (inventory) {
                     if (inventory.entities().length > 0) {
-                        console.log("アイテム盗み!!!");
-                        candidates.splice(0);
+                        //candidates.splice(0);
                         candidates.push({
                             action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
                             targets: [target.entityId()],

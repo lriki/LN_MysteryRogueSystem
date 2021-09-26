@@ -1,13 +1,13 @@
 import { assert } from "ts/re/Common";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
-import { BlockLayerKind } from "ts/re/objects/LBlockLayer";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -51,7 +51,7 @@ test("PickAndPut", () => {
 
     // item1 は Map 上から外れている
     const block = REGame.map.block(6, 5);
-    expect(block.layer(BlockLayerKind.Ground).isContains(item1)).toBe(false);
+    expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている
     expect(inventory.entities().length).toBe(1);
@@ -64,7 +64,7 @@ test("PickAndPut", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // item1 は Map 上に追加されている
-    expect(block.layer(BlockLayerKind.Ground).isContains(item1)).toBe(true);
+    expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(true);
 
     // item1 はインベントリから外れている
     expect(inventory.entities.length).toBe(0);

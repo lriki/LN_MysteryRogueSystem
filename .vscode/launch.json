@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.effect.Escape"
+                "-t", "concretes.enemy.ItemThief.Basic"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
