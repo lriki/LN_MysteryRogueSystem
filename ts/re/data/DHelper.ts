@@ -423,11 +423,35 @@ export class DHelpers {
         return (x2 - 1) - x;
     }
 
-    static makeRmmzMapDebugName(mapId: number) {
+    private static extractMetadataRegex = /<([^<>:]+)(:?)([^>]*)>/g;
+
+    public static extractMetadata(data: any): void {
+        data.meta = {};
+        for (;;) {
+            var match = this.extractMetadataRegex.exec(data.note);
+            if (match) {
+                var value = (match[2] === ':') ? match[3] : true;
+                if (data.meta[match[1]]) {
+                    if (data.meta[match[1]].constructor === Array) {
+                        data.meta[match[1]].push(value);
+                    } else {
+                        var _value = data.meta[match[1]];
+                        data.meta[match[1]] = [_value, value];
+                    }
+                } else {
+                    data.meta[match[1]] = value;
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
+    public static makeRmmzMapDebugName(mapId: number) {
         return `${mapId}:${$dataMapInfos[mapId]?.name}`;
     }
     
-    static isNode(): boolean {
+    public static isNode(): boolean {
         return (process.title !== 'browser');
     }
 }

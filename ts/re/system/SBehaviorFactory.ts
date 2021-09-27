@@ -19,6 +19,7 @@ import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStat
 import { LItemImitatorBehavior } from "ts/re/objects/behaviors/LItemImitatorBehavior";
 import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehavior";
 import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
+import { DBehaviorInstantiation } from "../data/DEntityProperties";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -60,13 +61,13 @@ export class SBehaviorFactory {
         });
     }
     
-    public static attachBehaviors(entity: LEntity, names: string[]): void {
-        names.forEach(name => {
-            const b = this.createBehavior(name);
+    public static attachBehaviors(entity: LEntity, behaviors: DBehaviorInstantiation[]): void {
+        behaviors.forEach(info => {
+            const b = this.createBehavior(info.name);
             if (b)
                 entity._addBehavior(b);
             else
-                throw new Error(`Behavior "${name}" that you tried to add to the entity "${entity._name}" is invalid.`);
+                throw new Error(`Behavior "${info.name}" that you tried to add to the entity "${entity._name}" is invalid.`);
         });
     }
     

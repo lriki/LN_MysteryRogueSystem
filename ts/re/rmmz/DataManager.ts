@@ -3,6 +3,7 @@ import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
 import { REData, REFloorMapKind } from "../data/REData";
 import { assert } from "../Common";
+import { DHelpers } from "../data/DHelper";
 
 /*
  [2020/11/2] マップ読み込みメモ
@@ -177,26 +178,7 @@ DataManager.extractSaveContents = function(contents) {
 // https://makonet.sakura.ne.jp/rpg_tkool/Old/contents/MetaDataEx.js
 //const _DataManager_extractMetadata = DataManager.extractMetadata;
 DataManager.extractMetadata = function(data: any): void {
-    var re = /<([^<>:]+)(:?)([^>]*)>/g;
-    data.meta = {};
-    for (;;) {
-        var match = re.exec(data.note);
-        if (match) {
-            var value = (match[2] === ':') ? match[3] : true;
-            if (data.meta[match[1]]) {
-                if (data.meta[match[1]].constructor === Array) {
-                    data.meta[match[1]].push(value);
-                } else {
-                    var _value = data.meta[match[1]];
-                    data.meta[match[1]] = [_value, value];
-                }
-            } else {
-                data.meta[match[1]] = value;
-            }
-        } else {
-            break;
-        }
-    }
+    DHelpers.extractMetadata(data);
 }
 
 const _DataManager_saveGame = DataManager.saveGame;

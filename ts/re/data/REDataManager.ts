@@ -23,6 +23,7 @@ import { RESetup } from './RESetup';
 import { DEffectCause } from './DEmittor';
 import { DAttackElement } from './DAttackElement';
 import { REData_Parameter } from './DParameter';
+import { DDataImporter } from './DDataImporter';
 
 
 declare global {  
@@ -672,6 +673,7 @@ export class REDataManager
                     }
                 }
                 
+                /*
                 if (info.name?.includes("RE-EventTable")) {
                     const land = this.findLand(i)
                     if (land) land.eventTableMapId = i;
@@ -688,6 +690,7 @@ export class REDataManager
                     const land = this.findLand(i)
                     if (land) land.trapTableMapId = i;
                 }
+                */
             }
 
         }
@@ -765,6 +768,11 @@ export class REDataManager
                         if (info.name?.includes("RE-ExitMap")) {
                             mapData.exitMap = true;
                         }
+
+
+                        DDataImporter.importMapData(
+                            info, parentInfo,
+                            parentInfo.parentId > 0 ? $dataMapInfos[parentInfo.parentId] : undefined);
                     }
                 }
 
@@ -920,7 +928,7 @@ export class REDataManager
             
             // Load Land database
             for (const land of REData.lands) {
-                this.beginLoadLandDatabase(land);
+                DDataImporter.beginLoadLandDatabase(land);
             }
         });
     }
@@ -929,14 +937,8 @@ export class REDataManager
         if (templateMap.mapId > 0) this.beginLoadMapData(templateMap.mapId, (obj: any) => { buildTemplateMapData(obj, templateMap); });
     }
 
-    private static beginLoadLandDatabase(land: DLand): void {
-        if (land.rmmzMapId > 0) this.beginLoadMapData(land.rmmzMapId, (obj: any) => {
-            land.import(obj);
-        });
-        //if (land.enemyTableMapId > 0) this.beginLoadMapData(land.enemyTableMapId, (obj: any) => { land.appearanceTable = buildAppearanceTable(obj); });
-    }
     
-    private static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
+    public static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
         const filename = `Map${this.padZero(rmmzMapId, 3)}.json`;
         this.loadDataFile(filename, onLoad);
     }

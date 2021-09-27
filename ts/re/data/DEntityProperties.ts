@@ -19,7 +19,7 @@ export interface DEntityProperties {
     key: string;
 
     kindId: DEntityKindId;
-    behaviorNames: string[];
+    behaviors: DBehaviorInstantiation[];
     commandNames: string[];
     reactionNames: string[];
     abilityNames: string[];
@@ -38,11 +38,16 @@ export interface DEntityProperties {
     meta_prefabName: string;
 }
 
+export interface DBehaviorInstantiation {
+    name: string;
+    args: any[];
+}
+
 export function DEntityProperties_Default(): DEntityProperties {
     return {
         key: "",
         kindId: 0,
-        behaviorNames: [],
+        behaviors: [],
         commandNames: [],
         reactionNames: [],
         abilityNames: [],
@@ -63,7 +68,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         const data: DEntityProperties = {
             key: meta["RE-Key"] ?? "",
             kindId: kind ? kind.id : 0,
-            behaviorNames: [],
+            behaviors: [],
             commandNames: [],
             reactionNames: [],
             abilityNames: [],
@@ -79,9 +84,9 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         const behaviors = meta["RE-Behavior"];
         if (behaviors) {
             if (typeof(behaviors) == "string")
-                data.behaviorNames = (behaviors as string).split(";");
+                data.behaviors = parseMetadata_Behavior([behaviors]);
             else
-                data.behaviorNames = behaviors;
+                data.behaviors = parseMetadata_Behavior(behaviors);
         }
 
         const commands = meta["RE-Command"];
@@ -121,3 +126,25 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         return DEntityProperties_Default();
     }
 }
+
+export function parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[] {
+    const result: DBehaviorInstantiation[] = [];
+    for (const data of meta) {
+        // "Item(1, 2)" を、 { name: "Item", args: [1, 2] } にする。
+        const lp = data.indexOf("(");
+        const rp = data.lastIndexOf(")");
+
+        if (lp >= 0 && rp >= 0) {
+            const expr = "[" + data.substr(lp + 1, rp - lp - 1) + "]";
+            const args = eval(expr);
+            result.push({ name: data.substr(0, lp), args: args });
+        }
+        else {
+            // 引数省略されている
+            result.push({ name: data, args: [] });
+        }
+
+    }
+    return result;
+}
+

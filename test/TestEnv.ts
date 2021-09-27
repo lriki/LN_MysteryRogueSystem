@@ -172,20 +172,7 @@ export class TestEnv {
     };
 
     private static extractMetadata(data: any) {
-        const regExp = /<([^<>:]+)(:?)([^>]*)>/g;
-        data.meta = {};
-        for (;;) {
-            const match = regExp.exec(data.note);
-            if (match) {
-                if (match[2] === ":") {
-                    data.meta[match[1]] = match[3];
-                } else {
-                    data.meta[match[1]] = true;
-                }
-            } else {
-                break;
-            }
-        }
+        DHelpers.extractMetadata(data);
     }
 }
 

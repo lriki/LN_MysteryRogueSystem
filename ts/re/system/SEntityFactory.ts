@@ -97,7 +97,7 @@ export class SEntityFactory {
             e.addBehavior(LEquipmentBehavior);
         }
 
-        SBehaviorFactory.attachBehaviors(e, entityData.entity.behaviorNames);
+        SBehaviorFactory.attachBehaviors(e, entityData.entity.behaviors);
 
         for (const name of entityData.entity.abilityNames) {
             const data = REData.abilities.find(x => x.key == name);
