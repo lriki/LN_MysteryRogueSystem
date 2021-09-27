@@ -504,6 +504,8 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
+                entity.sellingPrice = x.price;
+                entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
 
                 const emittor = REData.newEmittor();
                 const effect = new DEffect();
@@ -550,6 +552,8 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
+                entity.sellingPrice = x.price;
+                entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentParts = [x.etypeId];
                 entity.equipment.parameters[DBasics.params.hp] = x.params[0];
@@ -590,6 +594,8 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
+                entity.sellingPrice = x.price;
+                entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentParts = [x.etypeId]
                 entity.equipment.parameters[DBasics.params.hp] = x.params[0];

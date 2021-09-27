@@ -70,6 +70,13 @@ export class DEntity {
     identificationDifficulty: DIdentificationDifficulty;
     identifiedTiming: DIdentifiedTiming;
 
+
+    /** 買い値（販売価格） */
+    buyingPrice: number;
+
+    /** 売り値 */
+    sellingPrice: number;
+
     /** 祝福・呪い・封印状態になるか。 */
     canModifierState: boolean;
 
@@ -114,6 +121,8 @@ export class DEntity {
         this.description = "";
         this.identificationDifficulty = DIdentificationDifficulty.Clear;
         this.identifiedTiming = DIdentifiedTiming.None;
+        this.buyingPrice = 0;
+        this.sellingPrice = 0;
         this.canModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;

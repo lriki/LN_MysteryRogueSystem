@@ -119,6 +119,20 @@ export class VItemListWindow extends Window_Selectable {
                     this.drawIcon(12, nameX, iconY);
                 }
             }
+
+            // 値札
+            if (0) {
+                const data = item.data();
+                const text = data.sellingPrice.toString();
+                const tw = this.textWidth(text) + 8;
+                const size = this.textSizeEx(text);
+                const th = size.height - 4;
+                const ty = y + (this.lineHeight() - th) / 2;
+                const tx = width - tw + 4;
+                this.changeTextColor(ColorManager.textColor(29));
+                this.drawRect(tx, ty, tw, th);
+                this.drawTextEx(text, width - tw, ty, tw);
+            }
         }
     }
 

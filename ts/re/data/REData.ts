@@ -40,35 +40,6 @@ export enum REFloorMapKind
     RandomMap,
 }
 
-/**
- * [2020/9/6] 種別によるクラス分類はしない
- * ----------
- * ツクールのように、Data_Item,Data_Weapon,Data_Armer といったクラス分けは行わない。
- * これは、
- * 1. 本システムとしてアイテムの効果はすべて Feature によって決まるものであるため。
- *    コンポーネント思考と同じ考え方で、Feature をアタッチすることで Item を作り上げていく。
- * 2. タイトルによっては種類の拡張があり得る。城の材料など。
- * 
- * ただし、武器、防具 あたりはツクールのデータベースからインポートしてくるため、
- * これらに対応する Item はデフォルトで 武器、防具の Feature を持つことになる。
- */
-export interface RE_Data_Entity
-{
-    /** ID (0 is Invalid). */
-    id : number;
-
-    /** Name. */
-    name: string;
-
-    /** 買い値（販売価格） */
-    buyingPrice: number;
-
-    /** 売り値 */
-    sellingPrice: number;
-
-    /** Index of  */
-    kindId: number;
-}
 
 
 // NOTE: これをもとに Behavior を作る仕組みが必要そう。

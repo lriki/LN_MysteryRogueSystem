@@ -1,7 +1,10 @@
 import { LBlockSystemDecoration } from "ts/re/objects/LBlock";
 import { LRandom } from "ts/re/objects/LRandom";
+import { REGame } from "ts/re/objects/REGame";
 import { LItemShopStructure } from "ts/re/objects/structures/LItemShopStructure";
+import { UMovement } from "ts/re/usecases/UMovement";
 import { USpawner } from "ts/re/usecases/USpawner";
+import { SEntityFactory } from "../SEntityFactory";
 import { SMapManager } from "../SMapManager";
 
 export class SItemShopBuilder {
@@ -11,7 +14,7 @@ export class SItemShopBuilder {
         
         room.forEachBlocks(block => {
             block.setSystemDecoration(LBlockSystemDecoration.ItemShop);
-            USpawner.spawnSingleEntity("kEnemy_店主", block.x(), block.y());
+            //USpawner.spawnSingleEntity("kEnemy_店主", block.x(), block.y());
 
             /*
             // Enemy
@@ -35,7 +38,23 @@ export class SItemShopBuilder {
             }
             */
         });
+
+        const floorId = manager.map().floorId();
+        const items = manager.map().land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => e.spawiInfo.isItemKind());
+        if (items.length > 0) {
+            const center = UMovement.getCenterOfRoom(room);
+            for (let my = center.y - 1; my <= center.y + 1; my++) {
+                for (let mx = center.x - 1; mx <= center.x + 1; mx++) {
+                    if (room.contains(mx, my)) {
+                        const data = manager.rand().select(items);
+                        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
+                        REGame.world._transferEntity(entity, floorId, mx, my);
+                    }
+                }
+            }
+        }
     }
+
 
     /*
     private getShopkeeperHomeBlock(doorway: LBlock): LBlock {

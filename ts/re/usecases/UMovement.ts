@@ -11,6 +11,7 @@ import { LRandom } from "ts/re/objects/LRandom";
 import { UBlock } from "ts/re/usecases/UBlock";
 import { SCommandContext } from "../system/SCommandContext";
 import { DBlockLayerKind } from "../data/DCommon";
+import { LRoom } from "../objects/LRoom";
 
 export interface SPoint {
     x: number;
@@ -93,8 +94,7 @@ export class UMovement {
     }
 
     /**
-     * 
-     * @param entities 重心を取得する
+     * 重心を取得する
      */
     public static getCenter(entities: LEntity[]): SPoint {
         let x = 0;
@@ -104,6 +104,15 @@ export class UMovement {
             y += e.y;
         }
         return {x: Math.floor(x / entities.length), y: Math.floor(y / entities.length)};
+    }
+
+    /**
+     * 重心を取得する
+     */
+    public static getCenterOfRoom(room: LRoom): SPoint {
+        const x = (room.x1() + room.x2()) / 2;
+        const y = (room.y1() + room.y2()) / 2;
+        return {x: Math.floor(x), y: Math.floor(y )};
     }
 
     /**
