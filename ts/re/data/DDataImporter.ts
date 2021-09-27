@@ -14,31 +14,31 @@ export class DDataImporter {
         if (parent1.name.includes("[Tables]")) {
             const land = this.findLand(parent2);
             if (land) {
-                if (data.name.includes("EventTable")) {
+                if (data.name == "Event") {
                     land.eventTableMapId = data.id;
                 }
-                if (data.name.includes("EnemyTable")) {
+                if (data.name == "Enemy") {
                     land.enemyTableMapId = data.id;
                 }
-                else if (data.name.includes("ItemTable")) {
+                else if (data.name == "Item") {
                     land.itemTableMapId = data.id;
                 }
-                else if (data.name.includes("TrapTable")) {
+                else if (data.name == "Trap") {
                     land.trapTableMapId = data.id;
                 }
-                else if (data.name.includes("ShopTable(Default)")) { // 店売りアイテム
+                else if (data.name == "Shop") { // 店売りアイテム
+                    land.shopTableMapId = data.id;
+                }
+                else if (data.name.includes("Shop(Peddler)")) { // 行商人アイテム
                     throw new Error("Not implemented.");
                 }
-                else if (data.name.includes("ShopTable(Peddler)")) { // 行商人アイテム
+                else if (data.name.includes("Shop(Weapon)")) { // 専門店アイテム (武器)
                     throw new Error("Not implemented.");
                 }
-                else if (data.name.includes("ShopTable(Weapon)")) { // 専門店アイテム (武器)
+                else if (data.name.includes("Shop(Luxury)")) { // 高級店アイテム
                     throw new Error("Not implemented.");
                 }
-                else if (data.name.includes("ShopTable(Luxury)")) { // 高級店アイテム
-                    throw new Error("Not implemented.");
-                }
-                else if (data.name.includes("RandomPotTable")) {    // 変化の壺
+                else if (data.name.includes("RandomPot")) {    // 変化の壺
                     throw new Error("Not implemented.");
                 }
             }
@@ -46,8 +46,22 @@ export class DDataImporter {
     }
 
     public static beginLoadLandDatabase(land: DLand): void {
-        if (land.rmmzMapId > 0) REDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { land.import(data); });
-        //if (land.enemyTableMapId > 0) REDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => { land.appearanceTable = DLand.buildAppearanceTable(data, land.enemyTableMapId, land.floorInfos.length); });
+        if (land.rmmzMapId > 0) REDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { 
+            land.import(data);
+            
+            if (land.enemyTableMapId > 0) REDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => {
+                DLand.buildSubAppearanceTable(data, land.enemyTableMapId, land.appearanceTable, land.appearanceTable.enemies);
+            });
+            if (land.itemTableMapId > 0) REDataManager.beginLoadMapData(land.itemTableMapId, (data: any) => {
+                DLand.buildSubAppearanceTable(data, land.itemTableMapId, land.appearanceTable, land.appearanceTable.items);
+            });
+            if (land.trapTableMapId > 0) REDataManager.beginLoadMapData(land.trapTableMapId, (data: any) => {
+                DLand.buildSubAppearanceTable(data, land.trapTableMapId, land.appearanceTable, land.appearanceTable.traps);
+            });
+            if (land.shopTableMapId > 0) REDataManager.beginLoadMapData(land.shopTableMapId, (data: any) => {
+                DLand.buildSubAppearanceTable(data, land.shopTableMapId, land.appearanceTable, land.appearanceTable.shop);
+            });
+        });
     }
 
     private static findLand(data: IDataMapInfo | undefined): DLand | undefined {

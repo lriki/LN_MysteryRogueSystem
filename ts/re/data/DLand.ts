@@ -1,4 +1,5 @@
 
+import { assert } from "../Common";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers, RmmzMonsterHouseMetadata } from "./DHelper";
@@ -28,26 +29,29 @@ export interface DAppearanceTableEvent {
     rmmzEventId: number;
 }
 
-export interface DAppearanceTable {
+export interface DAppearanceTableSet {
     /** すべての Entity と出現範囲 */
     entities: DAppearanceTableEntity[];
 
     maxFloors: number;
 
-    /** 階段など、RESystem によって特別扱いされるもの。 [フロア番号][] */
-    system: DAppearanceTableEntity[][];
-
-    /** Enemy のテーブル。初期配置の他、ターン経過によって出現する。 [フロア番号][]  */
-    enemies: DAppearanceTableEntity[][];
-
-    /** Trap のテーブル。Item とは出現率が別管理なので、分けておく。 [フロア番号][]  */
-    traps: DAppearanceTableEntity[][];
-
-    /** Item のテーブル。Trap とは出現率が別管理なので、分けておく。 [フロア番号][] */
-    items: DAppearanceTableEntity[][];
-
     /** Event のテーブル。 [フロア番号][] */
     events: DAppearanceTableEvent[][];
+
+    /** 階段など、RESystem によって特別扱いされるもの。 [フロア番号0~][] */
+    system: DAppearanceTableEntity[][];
+
+    /** Enemy のテーブル。初期配置の他、ターン経過によって出現する。 [フロア番号0~][]  */
+    enemies: DAppearanceTableEntity[][];
+
+    /** Trap のテーブル。Item とは出現率が別管理なので、分けておく。 [フロア番号0~][]  */
+    traps: DAppearanceTableEntity[][];
+
+    /** Item のテーブル。Trap とは出現率が別管理なので、分けておく。 [フロア番号0~][] */
+    items: DAppearanceTableEntity[][];
+
+    /** Shop のテーブル。Item と、店主が含まれている。 [フロア番号0~][] */
+    shop: DAppearanceTableEntity[][];
 }
 
 export class DFloorStructures {
@@ -133,7 +137,9 @@ export class DLand {
     /** TrapTable MapId. */
     trapTableMapId: number;
 
-    appearanceTable: DAppearanceTable;
+    shopTableMapId: number;
+
+    appearanceTable: DAppearanceTableSet;
     //eventTable: DAppearanceTable;
     //itemTable: DAppearanceTable;
     //enemyTable: DAppearanceTable;
@@ -161,9 +167,10 @@ export class DLand {
         this.name = "null";
         this.rmmzMapId = 0;
         this.eventTableMapId = 0;
-        this. itemTableMapId = 0;
+        this.itemTableMapId = 0;
         this.enemyTableMapId = 0;
         this.trapTableMapId = 0;
+        this.shopTableMapId = 0;
         this.appearanceTable = {
             entities: [],
             maxFloors: 0,
@@ -172,6 +179,7 @@ export class DLand {
             traps: [],
             items: [],
             events: [],
+            shop: [],
         },
         //eventTable = { entities = [] },
         //itemTable = { entities = [] },
@@ -187,7 +195,7 @@ export class DLand {
     public import(mapData: IDataMap): void {
         
         this.floorInfos = DLand.buildFloorTable(mapData);
-        this.appearanceTable = DLand.buildAppearanceTable(mapData, this.rmmzMapId, this.floorInfos.length);
+        this.appearanceTable = DLand.buildAppearanceTableSet(mapData, this.rmmzMapId, this.floorInfos.length);
 
         for (const event of mapData.events) {
             if (!event) continue;
@@ -271,9 +279,9 @@ export class DLand {
         return floors;
     }
         
-    public static buildAppearanceTable(mapData: IDataMap, mapId: number, maxFloors: number): DAppearanceTable {
+    public static buildAppearanceTableSet(mapData: IDataMap, mapId: number, maxFloors: number): DAppearanceTableSet {
         
-        const table: DAppearanceTable = { 
+        const table: DAppearanceTableSet = { 
             entities: [],
             maxFloors: 0,
             system: [],
@@ -281,10 +289,12 @@ export class DLand {
             traps: [],
             items: [],
             events: [],
+            shop: [],
         };
         const eventList: DAppearanceTableEvent[] = [];
+        table.maxFloors = mapData.width;
 
-        // まずは Entity, Event を集計し、maxFloors を調べる
+        // まずは Entity, Event を集計
         for (const event of mapData.events) {
             if (!event) continue;
             const x = event.x;
@@ -293,11 +303,6 @@ export class DLand {
             // @RE-Entity
             const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0], event.id);
             if (entityMetadata) {
-
-                //const entityData = REData.findEntity(entityMetadata.data);
-                //if (!entityData) {
-                //    throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
-                //}
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {
                     throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
@@ -309,7 +314,7 @@ export class DLand {
                     lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
                 };
                 table.entities.push(tableItem);
-                table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
+                //table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
             }
             
             // @RE-Event
@@ -321,7 +326,7 @@ export class DLand {
                     lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
                 };
                 eventList.push(tableItem);
-                table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
+                //table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
             }
         }
 
@@ -331,12 +336,14 @@ export class DLand {
         table.traps = new Array(floorCount);
         table.items = new Array(floorCount);
         table.events = new Array(floorCount);
+        table.shop = new Array(floorCount);
         for (let i = 0; i < floorCount; i++) {
             table.system[i] = [];
             table.enemies[i] = [];
             table.traps[i] = [];
             table.items[i] = [];
             table.events[i] = [];
+            table.shop[i] = [];
         }
 
         for (const entity of table.entities) {
@@ -367,6 +374,46 @@ export class DLand {
         }
 
         return table;
+    }
+    
+    public static buildSubAppearanceTable(mapData: IDataMap, mapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void {
+        assert(mapData.width == table.length);
+        assert(tableSet.maxFloors == table.length);
+
+        // まずは Entity を集計
+        const entities = [];
+        for (const event of mapData.events) {
+            if (!event) continue;
+            const x = event.x;
+            const y = event.y;
+
+            // @RE-Entity
+            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0], event.id);
+            if (entityMetadata) {
+                const spawnInfo = DEntitySpawner2.makeFromEventData(event);
+                if (!spawnInfo) {
+                    throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+                }
+
+                const tableItem: DAppearanceTableEntity = {
+                    spawiInfo: spawnInfo,
+                    startFloorNumber: x,
+                    lastFloorNumber: x + DHelpers.countSomeTilesRight_E(mapData, x, y),
+                };
+                entities.push(tableItem);
+            }
+        }
+
+        for (let i = 0; i < tableSet.maxFloors; i++) {
+            if (!table[i]) table[i] = [];
+        }
+
+        for (const entity of entities) {
+            tableSet.entities.push(entity);
+            for (let i = entity.startFloorNumber; i <= entity.lastFloorNumber; i++) {
+                table[i].push(entity);
+            }
+        }
     }
 }
 
