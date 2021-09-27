@@ -41,6 +41,7 @@ test("concretes.states.からぶり", () => {
     expect(enemy1.actualParam(DBasics.params.hp)).toBe(enemyHP1);
 
     // 攻撃自体は互いに行われている
+    const a = TestEnv.integration.skillEmittedCount;
     expect(TestEnv.integration.skillEmittedCount).toBe(20);
 });
 

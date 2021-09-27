@@ -311,7 +311,7 @@ export class SEmittorPerformer {
                         context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
                             .then(() => {
                                 if (skillId > 0) {
-                                    this.raiseSkillEmitted(context, performer, [target], skillId);
+                                    //this.raiseSkillEmitted(context, performer, [target], skillId);
                                     this.callSkillPerformed(context, performer, [target], skillId);
                                 }
                                 return true;
@@ -320,7 +320,7 @@ export class SEmittorPerformer {
                 }
                 
                 // target が無くても、スキル発動したことは伝える
-                if (skillId > 0) this.raiseSkillEmitted(context, performer, [], skillId);
+                if (skillId > 0) this.raiseSkillEmitted(context, performer, targets, skillId);
             }
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
