@@ -15,7 +15,17 @@ export class SAIHelper {
         /* 9 */ [9, 8, 6, 7, 3],
     ];
 
+    private static axisToDirIndices = [8, 7, 4, 1, 2, 3, 6, 9];
+
     public static axisToDir(dx: number, dy: number): number {
+        // Y-Down なので、イメージ的には ↓方向が 0(=1=Math.PI*2). 反時計回りが+
+        let r = Math.atan2(dx, dy);
+        r = (r + Math.PI) / (Math.PI*2.0);  // 1週を 0~1 にする。+PIしているので、↑が 0 になる。
+        r += 1.0 / 16.0;
+        let index = 0;
+        if (0.0 < r && r < 1.0) index = Math.floor(r * 8);
+        return this.axisToDirIndices[index];
+        /*
         if (dx < 0) {   // Left
             if (dy < 0) { // Up
                 return 7;
@@ -49,6 +59,7 @@ export class SAIHelper {
                 return 0;
             }
         }
+        */
     }
 
     public static distanceToDir(startX: number, startY: number, goalX: number, goalY: number): number {

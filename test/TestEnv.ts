@@ -103,6 +103,7 @@ export class TestEnv {
 
     public static setupPlayer(floorId: LFloorId, mx: number, my: number): LEntity {
         const player = REGame.world.entity(REGame.system.mainPlayerEntityId);
+        player._name = "Player";
         REGame.world._transferEntity(player, floorId, mx, my);
         TestEnv.performFloorTransfer();
         return player;

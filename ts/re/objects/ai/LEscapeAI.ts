@@ -28,6 +28,8 @@ export class LEscapeAI extends LCharacterAI {
         return i;
     }
 
+    // (mx, my) は subject から見て、hostileEntity の背面(向こう側)にあるかを判断する。
+    // そっちの方向には行きたくない判断に使う。
     private checkDeadInArea(subject: LEntity, hostileEntity: LEntity, mx: number, my: number): boolean {
         const sx = subject.x;
         const sy = subject.y;
@@ -38,12 +40,12 @@ export class LEscapeAI extends LCharacterAI {
 
         const checkH = () => {
             if (sx < ex) {          // 自分が敵の左側
-                if (ex < mx) {      // 敵の右側はすべて Dead
+                if (ex <= mx) {      // 相手の立っている位置とその右側はすべて Dead
                     return true;
                 }
             }
             else if (ex < sx) {     // 自分が敵の右側
-                if (mx < ex) {      // 敵の左側はすべて Dead
+                if (mx <= ex) {      // 相手の立っている位置とその左側はすべて Dead
                     return true;
                 }
             }
@@ -54,12 +56,12 @@ export class LEscapeAI extends LCharacterAI {
 
         const checkV = () => {
             if (sy < ey) {          // 自分が敵の上側
-                if (ey < my) {      // 敵の下側はすべて Dead
+                if (ey <= my) {      // 相手の立っている位置とその下側はすべて Dead
                     return true;
                 }
             }
             else if (ey < sy) {     // 自分が敵の下側
-                if (my < ey) {      // 敵の上側はすべて Dead
+                if (my <= ey) {      // 相手の立っている位置とその上側はすべて Dead
                     return true;
                 }
             }
@@ -96,9 +98,14 @@ export class LEscapeAI extends LCharacterAI {
 
             const block = REGame.map.block(self.x, self.y);
             const room = REGame.map.room(block._roomId);
+
+            // 
             const doorway = room.doorwayBlocks()
-                .filter(b => !this.checkDeadInArea(self, target, b.x(), b.y()))
+                .filter(b =>
+                    !this.checkDeadInArea(self, target, b.x(), b.y()) &&    // block は敵対の向こう側にあるのでそっちは除外
+                    (b.x() != self.x || b.y() != self.y))                   // 足元は除外
                 .selectMin((a, b) => UMovement.distanceSq(a.x(), a.y(), b.x(), b.y()));
+                
             if (doorway) {
                 // 相手に対して、背面等に通路がある。そこへ逃げ込む。
                 this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
@@ -139,7 +146,7 @@ export class LEscapeAI extends LCharacterAI {
                     if (block2) {
                         context.postActivity(
                             LActivity.makeMoveToAdjacentBlock(self, block2)
-                            .withEntityDirection(rdir)
+                            .withEntityDirection(dir)
                             .withConsumeAction());
                         return SPhaseResult.Handled;
                     }

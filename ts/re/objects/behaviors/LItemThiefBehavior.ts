@@ -32,29 +32,17 @@ export class LItemThiefBehavior extends LBehavior {
     }
 
     onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {
-
         const self = this.ownerEntity();
         const blocks = UMovement.getAdjacentBlocks(self);
+
+        // まずは隣接している Unit をチェック。アイテムが同時に隣接していても、こちらを優先したい。
         for (const block of blocks) {
-
-            const item = block.getFirstEntity(DBlockLayerKind.Ground);
-            if (item && item.findEntityBehavior(LItemBehavior)) {
-                // 隣接するアイテムを見つけた
-                console.log("隣接するアイテムを見つけた");
-                candidates.push({
-                    action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
-                    targets: [item.entityId()],
-                });
-                return;
-            }
-
-            
             const target = block.getFirstEntity(DBlockLayerKind.Unit);
             if (target && Helpers.isHostile(self, target)) {
                 const inventory = target.findEntityBehavior(LInventoryBehavior);
                 if (inventory) {
                     if (inventory.entities().length > 0) {
-                        //candidates.splice(0);
+                        //candidates.splice(0);   // 通常攻撃などを選択肢から外す
                         candidates.push({
                             action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
                             targets: [target.entityId()],
@@ -62,6 +50,20 @@ export class LItemThiefBehavior extends LBehavior {
                     }
                 }
                 // 隣接する敵対者を見つけた
+                return;
+            }
+        }
+
+        // 次にアイテムをチェック
+        for (const block of blocks) {
+
+            const item = block.getFirstEntity(DBlockLayerKind.Ground);
+            if (item && item.findEntityBehavior(LItemBehavior)) {
+                // 隣接するアイテムを見つけた
+                candidates.push({
+                    action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
+                    targets: [item.entityId()],
+                });
                 return;
             }
         }

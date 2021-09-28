@@ -34,6 +34,20 @@ export class LSaunteringAIHelper {
     }
 
     public thinkMoving(self: LEntity, context: SCommandContext): boolean {
+        const result = this.thinkMovingCore(self, context);
+        if (result) {
+            
+            // 移動後、向きを target へ向けておく
+            if (this.hasDestination()) {
+                // 移動後、向きを target へ向けておく
+                const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+                context.postActivity(LActivity.makeDirectionChange(self, dir));
+            }
+        }
+        return result;
+    }
+
+    public thinkMovingCore(self: LEntity, context: SCommandContext): boolean {
         let moveToLHRule = false;
         let moveToPassageWay: LBlock | undefined;
         const block = REGame.map.block(self.x, self.y);
@@ -121,14 +135,11 @@ export class LSaunteringAIHelper {
 
         // 左折の法則による移動
         if (moveToLHRule) {
-            const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+            const dir = this.hasDestination() ? SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY) : self.dir;
             const block = UMovement.getMovingCandidateBlockAsLHRule(self, dir);
             if (block) {
                 this.postMoveToAdjacent(self, block, context);
 
-                // 移動後、向きを target へ向けておく
-                //const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
-                context.postActivity(LActivity.makeDirectionChange(self, dir));
 
                 return true;
             }

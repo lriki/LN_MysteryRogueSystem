@@ -86,8 +86,12 @@ export class USearch {
         const px = player.x;
         const py = player.y;
 
+        //const room = REGame.map.room(player.roomId());
+
         // まず操作キャラのすぐ近くは避けて検索してみる
-        const candidateBlocks = spawnableBlocks.filter(b => Math.abs(b.x() - px) > paramEnemySpawnInvalidArea && Math.abs(b.y() - py) > paramEnemySpawnInvalidArea);
+        const candidateBlocks = spawnableBlocks.filter(b =>
+            b._roomId != player.roomId() &&
+            Math.abs(b.x() - px) > paramEnemySpawnInvalidArea && Math.abs(b.y() - py) > paramEnemySpawnInvalidArea);
         if (candidateBlocks.length > 0) {
             return candidateBlocks[rand.nextIntWithMax(candidateBlocks.length)];
         }
@@ -95,6 +99,8 @@ export class USearch {
         // 操作キャラの近くしかなかった場合はやむなし
         return rand.select(spawnableBlocks);
     }
+
+
 
     /*
     private static getRondomWarpRoom(rand: LRandom): LRoom {

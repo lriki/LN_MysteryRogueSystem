@@ -143,18 +143,12 @@ export class UAction {
 
 
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
-        let maxRating = 0;
         for (const action of actions) {
             const targets = this.getSkillEffectiveTargets(performer, REData.skills[action.skillId], true);
             if (targets.length > 0) {
                 result.push({ action: action, targets: targets.map(e => e.entityId()) });
-                maxRating = Math.max(maxRating, action.rating);
             }
         }
-
-        // 最大 Rating からの差が 10 以内を有効とする
-        result = result.filter(x => x.action.rating >= maxRating - 10);
-
 
 
         // "移動" は特別扱い。まずは常に使用できるものとして追加しておく
@@ -176,6 +170,13 @@ export class UAction {
             b.onPostMakeSkillActions(result);
             return true;
         });
+
+        let maxRating = 0;
+        result.forEach(r => maxRating = Math.max(r.action.rating, maxRating));
+
+        // 最大 Rating からの差が 10 以内を有効とする
+        result = result.filter(x => x.action.rating >= maxRating - 10);
+
 
         // 攻撃対象が隣接していれば、"移動" を外す
         if (primaryTargetId.hasAny() && UMovement.checkEntityAdjacent(performer, REGame.world.entity(primaryTargetId))) {
