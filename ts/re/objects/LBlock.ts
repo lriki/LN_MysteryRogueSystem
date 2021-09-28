@@ -157,6 +157,7 @@ export class LBlock// extends LObject
     _blockComponent: FBlockComponent = FBlockComponent.None;
     _continuation: boolean = false;
     _doorway: boolean = false;
+    _shopkeeperLine: boolean = false;   // 店入口３マス
 
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     

@@ -39,6 +39,7 @@ import { RESystem } from "./RESystem";
 import { LSelfExplosionBehavior } from "../objects/behaviors/LSelfExplosionBehavior";
 import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
 import { LItemThiefBehavior } from "../objects/behaviors/LItemThiefBehavior";
+import { LShopkeeperBehavior } from "../objects/behaviors/LShopkeeperBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -314,6 +315,9 @@ export class SEntityFactory {
                 break;
             case "kEnemy_プレゼンにゃー":
                 entity.addBehavior(LItemThiefBehavior);
+                break;
+            case "kEnemy_店主":
+                entity.addBehavior(LShopkeeperBehavior);
                 break;
         }
         RESystem.ext.onNewEntity(entity, entityData);

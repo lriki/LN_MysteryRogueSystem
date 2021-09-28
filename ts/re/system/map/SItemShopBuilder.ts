@@ -1,5 +1,7 @@
-import { LBlockSystemDecoration } from "ts/re/objects/LBlock";
+import { assert } from "ts/re/Common";
+import { LBlock, LBlockSystemDecoration } from "ts/re/objects/LBlock";
 import { LRandom } from "ts/re/objects/LRandom";
+import { LRoom } from "ts/re/objects/LRoom";
 import { REGame } from "ts/re/objects/REGame";
 import { LItemShopStructure } from "ts/re/objects/structures/LItemShopStructure";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -39,6 +41,13 @@ export class SItemShopBuilder {
             */
         });
 
+        // 店主配置
+        const homeBlocks = this.setupEntranceBlocks(room);
+        for (const homeBlock of homeBlocks) {
+            const entity = USpawner.spawnSingleEntity("kEnemy_店主", homeBlock.x(), homeBlock.y());
+        }
+
+        // アイテム配置
         const floorId = manager.map().floorId();
         const items = manager.map().land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => e.spawiInfo.isItemKind());
         if (items.length > 0) {
@@ -53,6 +62,48 @@ export class SItemShopBuilder {
                 }
             }
         }
+    }
+
+    private setupEntranceBlocks(room: LRoom): LBlock[] {
+        const homeBlocks: LBlock[] = [];
+        for (const block of room.doorwayBlocks()) {
+            let block1: LBlock | undefined = undefined;
+            let block2: LBlock | undefined = undefined;
+
+            if (block.x() == room.x1()) {   // 部屋の左側
+                block1 = this.getInRoomFloorBlock(room, block.x(), block.y() - 1);
+                block2 = this.getInRoomFloorBlock(room, block.x(), block.y() + 1);
+            }
+            else if (block.x() == room.x2()) {   // 部屋の右側
+                block1 = this.getInRoomFloorBlock(room, block.x(), block.y() - 1);
+                block2 = this.getInRoomFloorBlock(room, block.x(), block.y() + 1);
+            }
+            else if (block.y() == room.y1()) {   // 部屋の上側
+                block1 = this.getInRoomFloorBlock(room, block.x() - 1, block.y());
+                block2 = this.getInRoomFloorBlock(room, block.x() + 1, block.y());
+            }
+            else if (block.y() == room.y2()) {   // 部屋の下側
+                block1 = this.getInRoomFloorBlock(room, block.x() - 1, block.y());
+                block2 = this.getInRoomFloorBlock(room, block.x() + 1, block.y());
+            }
+            
+            assert(block1 || block2);
+            block._shopkeeperLine = true;
+            if (block1) block1._shopkeeperLine = true;
+            if (block2) block2._shopkeeperLine = true;
+            const home = block1 ?? block2;
+            assert(home);
+            homeBlocks.push(home);
+        }
+        return homeBlocks;
+    }
+
+    private getInRoomFloorBlock(room: LRoom, mx: number, my: number): LBlock | undefined {
+        if (!room.contains(mx, my)) return undefined;
+        const block = REGame.map.tryGetBlock(mx, my);
+        if (!block) return undefined;
+        if (!block.isFloorLikeShape()) return undefined;
+        return block;
     }
 
 
