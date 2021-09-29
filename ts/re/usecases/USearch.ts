@@ -1,6 +1,7 @@
 import { assert } from "../Common";
 import { DBlockLayerKind } from "../data/DCommon";
 import { DEffectFieldScope } from "../data/DEffect";
+import { LItemBehavior } from "../objects/behaviors/LItemBehavior";
 import { LBlock } from "../objects/LBlock";
 import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
@@ -125,4 +126,24 @@ export class USearch {
     // public static checkEntityInEffectorScope(entity: LEntity, scope: DEffectFieldScope): boolean {
 
     // }
+
+    /**
+     * entity の視界内にある最も後に出現したアイテムを探す
+     */
+    public static findLatestItemInVisibilityBlocks(entity: LEntity): LEntity | undefined {
+
+        const roomId = entity.roomId();
+
+        const items = REGame.map.entities().filter(e => {
+            if (e.roomId() != roomId) return false;
+            if (!e.findEntityBehavior(LItemBehavior)) return false;
+            return true;
+        });
+
+        if (items.length > 0) {
+            return items[items.length - 1];
+        }
+
+        return undefined;
+    }
 }

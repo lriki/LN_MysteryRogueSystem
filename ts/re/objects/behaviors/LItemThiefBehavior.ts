@@ -6,6 +6,7 @@ import { SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { UMovement } from "ts/re/usecases/UMovement";
+import { USearch } from "ts/re/usecases/USearch";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
@@ -60,10 +61,12 @@ export class LItemThiefBehavior extends LBehavior {
             const item = block.getFirstEntity(DBlockLayerKind.Ground);
             if (item && item.findEntityBehavior(LItemBehavior)) {
                 // 隣接するアイテムを見つけた
-                candidates.push({
-                    action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
-                    targets: [item.entityId()],
-                });
+                if (item == USearch.findLatestItemInVisibilityBlocks(self)) {   // それは視界内の最も新しいアイテム？
+                    candidates.push({
+                        action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
+                        targets: [item.entityId()],
+                    });
+                }
                 return;
             }
         }

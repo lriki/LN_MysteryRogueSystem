@@ -1,3 +1,4 @@
+import { USearch } from "ts/re/usecases/USearch";
 import { ElementFlags } from "typescript";
 import { LItemBehavior } from "../behaviors/LItemBehavior";
 import { LEntity } from "../LEntity";
@@ -30,20 +31,14 @@ export class LMovingTargetFinder {
 export class LMovingTargetFinder_Item {
     public decide(self: LEntity): (number[] | undefined) {
 
-        const roomId = self.roomId();
-
-        const items = REGame.map.entities().filter(e => {
-            if (e.roomId() != roomId) return false;
-            if (!e.findEntityBehavior(LItemBehavior)) return false;
-            return true;
-        });
-
-        if (items.length > 0) {
-            const item = items[items.length - 1];
+        const item = USearch.findLatestItemInVisibilityBlocks(self);
+        if (item) {
             return [item.x, item.y];
         }
 
         return undefined;
     }
+
+    
 }
 

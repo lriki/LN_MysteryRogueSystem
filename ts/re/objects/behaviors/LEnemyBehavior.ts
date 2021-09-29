@@ -30,12 +30,6 @@ export class LEnemyBehavior extends LBattlerBehavior {
         this.recoverAll();
     }
 
-    public enemyId(): DEnemyId {
-        const entity = this.ownerEntity().data();
-        assert(entity.enemy);
-        return entity.enemy.id;
-    }
-
     public enemyData(): DEnemy {
         const entity = this.ownerEntity().data();
         assert(entity.enemy);
