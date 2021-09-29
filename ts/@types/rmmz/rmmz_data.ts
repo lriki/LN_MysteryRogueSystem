@@ -305,7 +305,7 @@ declare interface IDataSystem
     battlerName?: string;
     battleSystem?: number;
     boat?: IVehicle;
-    currencyUnit?: string;
+    currencyUnit: string;
     defeatMe?: IDataSound;
     editMapId?: number;
     elements: string[];

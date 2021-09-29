@@ -69,10 +69,12 @@ interface RMMZEventRawMetadata {
     // 本来であれば街の人を Unique にして Prefab も作っておき、Prefab 側で会話イベント実行内容を書くべき。
     // でも看板など基本的に他マップに持ち出せないような Entity もあり、そういったものに対しても Prefab 側で色々設定するのは面倒。
     override?: boolean;
+    
+    gold?: number;
 }
 
 
-export interface RMMZEventEntityMetadata {
+export interface RmmzEventEntityMetadata {
     
     data: string;
 
@@ -83,6 +85,8 @@ export interface RMMZEventEntityMetadata {
     stackCount: number;
 
     override: boolean;
+
+    gold: number;
 }
 
 interface RmmzREEventRawMetadata {
@@ -278,7 +282,7 @@ export class DHelpers {
         return rawData;
     }
 
-    public static readEntityMetadataFromPage(page: IDataMapEventPage): RMMZEventEntityMetadata | undefined {
+    public static readEntityMetadataFromPage(page: IDataMapEventPage): RmmzEventEntityMetadata | undefined {
         const block = this.findFirstAnnotationFromPage("@RE-Entity", page);
         if (!block) return undefined;
         let rawData: RMMZEventRawMetadata | undefined;
@@ -291,6 +295,7 @@ export class DHelpers {
             troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
             stackCount: rawData.stack ?? 1,
             override: rawData.override ?? false,
+            gold: rawData.gold ?? 0,
         };
     }
 

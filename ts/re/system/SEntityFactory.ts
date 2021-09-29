@@ -168,8 +168,8 @@ export class SEntityFactory {
         e.addBehavior(LProjectableBehavior);
     }
 
-    public static newEntity(data: DEntityCreateInfo, floorId?: LFloorId): LEntity {
-        const entityData = REData.entities[data.entityId];
+    public static newEntity(createInfo: DEntityCreateInfo, floorId?: LFloorId): LEntity {
+        const entityData = REData.entities[createInfo.entityId];
         const prefab = REData.prefabs[entityData.prefabId];
         let entity: LEntity;
 
@@ -193,24 +193,32 @@ export class SEntityFactory {
             entity = this.newExitPoint();
         }
         else if (prefab.dataSource = DPrefabDataSource.Ornament) {
-            entity = this.newOrnament(data.entityId, prefab);
+            entity = this.newOrnament(createInfo.entityId, prefab);
         }
         else {
             throw new Error("Not implemented.");
         }
 
         // ステート追加
-        for (const stateId of data.stateIds) {
+        for (const stateId of createInfo.stateIds) {
             entity.addState(stateId);
         }
 
-        entity._name = data.debugName;
-        entity._stackCount = data.stackCount;
+        entity._name = createInfo.debugName;
+        entity._stackCount = createInfo.stackCount;
 
         // 個体識別済みチェック
         if (floorId) {
             if (floorId.landData().checkIdentifiedEntity(entity.kindData())) {
                 entity.setIndividualIdentified(true);
+            }
+        }
+
+        
+        {
+            const goldBehavior = entity.findEntityBehavior(LGoldBehavior);
+            if (goldBehavior) {
+                goldBehavior.setGold(createInfo.gold);
             }
         }
 

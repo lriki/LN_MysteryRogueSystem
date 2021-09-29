@@ -4,6 +4,7 @@ import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
 import { SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
+import { STextManager } from "ts/re/system/STextManager";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
@@ -11,7 +12,7 @@ import { LEscapeAI } from "../ai/LEscapeAI";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { DecisionPhase, LBehavior } from "./LBehavior";
+import { DecisionPhase, LBehavior, LNameView } from "./LBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
@@ -44,6 +45,15 @@ export class LGoldBehavior extends LBehavior {
         this._gold = 0;
     }
 
+    queryDisplayName(): LNameView | undefined {
+        const data = this.ownerEntity().data();
+        return {
+            name: this._gold.toString() + STextManager.currencyUnit,//data.makeDisplayName(0),
+            iconIndex: data.display.iconIndex,
+            upgrades: 0,
+        }
+    }
+    
     public gold(): number {
         return this._gold;
     }

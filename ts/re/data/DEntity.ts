@@ -180,6 +180,7 @@ export class DEntityCreateInfo {
     public debugName: string;
     public stackCount: number;
     public override: boolean;
+    public gold: number;
 
     public constructor() {
         //this.troopId = 0;
@@ -188,6 +189,7 @@ export class DEntityCreateInfo {
         this.debugName = "";
         this.stackCount = 1;
         this.override = false;
+        this.gold = 0;
     }
 
     public static makeSingle(entityId: DEntityId, stateIds?: DStateId[], debugName?: string): DEntityCreateInfo {
@@ -242,7 +244,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     }
 
     public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner2 | undefined {
-        const entityMetadata = DHelpers.readEntityMetadataFromPage(page/*, eventId*/);
+        const entityMetadata = DHelpers.readEntityMetadataFromPage(page);
         if (!entityMetadata) return undefined;
         
         const entity = new DEntitySpawner2();
@@ -250,6 +252,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.data);
         entity.stackCount = entityMetadata.stackCount;
         entity.override = entityMetadata.override;
+        entity.gold = entityMetadata.gold;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);
