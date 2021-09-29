@@ -9,6 +9,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { USearch } from "ts/re/usecases/USearch";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
+import { LMovingTargetFinder_Item } from "../ai/LMovingTargetFinder";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -24,8 +25,15 @@ import { LItemBehavior } from "./LItemBehavior";
  */
 @RESerializable
 export class LItemThiefBehavior extends LBehavior {
-    private standardAI: LCharacterAI = new LCharacterAI_Normal();//new LEscapeAI();
-    private escapeAI: LCharacterAI = new LEscapeAI();
+    private _standardAI: LCharacterAI_Normal;
+    private _escapeAI: LEscapeAI;
+
+    public constructor() {
+        super();
+        this._standardAI = new LCharacterAI_Normal();
+        this._escapeAI = new LEscapeAI();
+        this._standardAI.setMovingTargetFinder(new LMovingTargetFinder_Item());
+    }
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemThiefBehavior);
@@ -43,7 +51,6 @@ export class LItemThiefBehavior extends LBehavior {
                 const inventory = target.findEntityBehavior(LInventoryBehavior);
                 if (inventory) {
                     if (inventory.entities().length > 0) {
-                        //candidates.splice(0);   // 通常攻撃などを選択肢から外す
                         candidates.push({
                             action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
                             targets: [target.entityId()],
@@ -87,10 +94,10 @@ export class LItemThiefBehavior extends LBehavior {
     private activeAI(self: LEntity): LCharacterAI {
         const inventory = self.getEntityBehavior(LInventoryBehavior);
         if (inventory.hasAnyItem()) {
-            return this.escapeAI;
+            return this._escapeAI;
         }
         else {
-            return this.standardAI;
+            return this._standardAI;
         }
     }
 }

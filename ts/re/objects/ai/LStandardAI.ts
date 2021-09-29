@@ -18,13 +18,17 @@ export class LCharacterAI_Normal extends LCharacterAI {
 
     private _moveDeterminer = new LMoveDeterminer();
     private _actionDeterminer = new LActionDeterminer();
-    private _movingTargetFinder = new LMovingTargetFinder_Item();
+    private _movingTargetFinder: (LMovingTargetFinder | undefined);
 
     public clone(): LCharacterAI {
         const i = new LCharacterAI_Normal();
         i._moveDeterminer = this._moveDeterminer.clone();
         i._actionDeterminer = this._actionDeterminer.clone();
         return i;
+    }
+
+    public setMovingTargetFinder(value: LMovingTargetFinder | undefined): void {
+        this._movingTargetFinder = value;
     }
 
     public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {

@@ -134,7 +134,6 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     // □□□□□
     // 人□敵□草
     // □□□□□
-
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
