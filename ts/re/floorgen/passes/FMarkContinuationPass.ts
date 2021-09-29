@@ -120,7 +120,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
             // 固定マップの場合、EntryPoint を基準とする
             const entryPointEvent = map.rmmzFixedMapData().events.find(e => {
                 if (!e) return false;
-                const metadata = DHelpers.readEntityMetadataFromPage(e.pages[0], e.id);
+                const metadata = DHelpers.readEntityMetadataFromPage(e.pages[0]/*, e.id*/);
                 if (!metadata) return false;
                 const entity = REData.findEntity(metadata.data);
                 if (!entity) return false;

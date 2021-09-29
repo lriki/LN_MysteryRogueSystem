@@ -23,6 +23,8 @@ import { LItemBehavior } from "./LItemBehavior";
  */
 @RESerializable
 export class LGoldThiefBehavior extends LBehavior {
+
+
     private standardAI: LCharacterAI = new LCharacterAI_Normal();
     private escapeAI: LCharacterAI = new LEscapeAI();
 

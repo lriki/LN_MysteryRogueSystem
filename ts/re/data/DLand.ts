@@ -301,7 +301,7 @@ export class DLand {
             const y = event.y;
 
             // @RE-Entity
-            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0], event.id);
+            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0]/*, event.id*/);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {
@@ -388,7 +388,7 @@ export class DLand {
             const y = event.y;
 
             // @RE-Entity
-            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0], event.id);
+            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0]/*, event.id*/);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {

@@ -23,6 +23,15 @@ import { LItemBehavior } from "./LItemBehavior";
  */
 @RESerializable
 export class LGoldBehavior extends LBehavior {
+    /*
+    [2021/9/29] 金額の持ち方
+    -----------
+    upgradeValue や capacity と共有してみる？
+    ↓
+    しないほうがよさそう。
+    それぞれ値の範囲が決まっている。 (-ベース~+99 など)
+    */
+
     public _gold: number;
 
     public clone(newOwner: LEntity): LBehavior {

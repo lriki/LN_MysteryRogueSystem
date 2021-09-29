@@ -242,7 +242,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     }
 
     public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner2 | undefined {
-        const entityMetadata = DHelpers.readEntityMetadataFromPage(page, eventId);
+        const entityMetadata = DHelpers.readEntityMetadataFromPage(page/*, eventId*/);
         if (!entityMetadata) return undefined;
         
         const entity = new DEntitySpawner2();
