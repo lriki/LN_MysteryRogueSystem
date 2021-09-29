@@ -206,10 +206,6 @@ export class SCommandContext
     /**
      * onActivity の中から呼び出すこと。
      */
-    // [2021/9/29] もうちょっと事例集めてからにしてみる。
-    // 元々は「拾う」動作で使いたかったが、
-    // - 「拾えるかどうか」を判断する関数は PreReaction ではない方法でほしい。(床落ち聖域の巻物は盗めない、などAI側から事前判断するときに使いたい)
-    /*
     public postHandleActivity(activity: LActivity, objectum: LEntity): HandleActivityCommand {
         const command = new HandleActivityCommand();
         const m1 = () => {
@@ -261,7 +257,6 @@ export class SCommandContext
         this._recodingCommandList.push(new RECCMessageCommand("HandleActivity", m1));
         return command;
     }
-    */
 
     private attemptConsumeActionToken(entity: LEntity): void {
 

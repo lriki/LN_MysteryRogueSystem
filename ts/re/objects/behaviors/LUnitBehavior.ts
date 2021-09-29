@@ -1,5 +1,5 @@
 import { SCommandResponse } from "../../system/RECommand";
-import { SCommandContext } from "../../system/SCommandContext";
+import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -199,9 +199,18 @@ export class LUnitBehavior extends LBehavior {
             if (inventory) {
                 const block = REGame.map.block(self.x, self.y);
                 const layer = block.layer(DBlockLayerKind.Ground);
-                const targetEntities = layer.entities();
-                if (targetEntities.length >= 1) {
-                    UAction.postPickItem(context, self, inventory, targetEntities[0]);
+                const itemEntity = layer.firstEntity();
+                if (itemEntity) {
+                    context.postHandleActivity(activity, itemEntity)
+                    .then(() => {
+                        REGame.map._removeEntity(itemEntity);
+                        inventory.addEntityWithStacking(itemEntity);
+                        
+                        const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
+                        context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
+                        SSoundManager.playPickItem();
+                        return SHandleCommandResult.Resolved;
+                    });
                 }
             }
         }

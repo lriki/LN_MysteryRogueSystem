@@ -47,6 +47,7 @@ export class UAction {
         }
     }
 
+    /** @deprecated */
     public static postPickItem(context: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): RECCMessageCommand {
         return context.post(
             self, itemEntity, new SEffectSubject(self), undefined, testPutInItem,
