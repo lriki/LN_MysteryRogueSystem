@@ -7,6 +7,27 @@ export type DSkillId = number;
 export type DEffectBehaviorId = number;
 
 
+// /**
+//  * システムに基づいた根本的な分類。
+//  * 
+//  * EntityKind とは異なりユーザーが安易に増やすべきではない。そのため DB では扱わず、enum とする。
+//  * これによってデフォルトで追加される Behavior が変わる。
+//  * 
+//  * 例えば「壺」や「札」といったアイテムの種類はタイトルごとに変わるが、
+//  * 「アイテム」「罠」といった種類はローグライクRPGとしては共通の要素となる。
+//  */
+// export enum DEntityClass {
+//     Unit,
+
+//     /**
+//      * 主に Unit のインベントリによって所有され、 Unit の行動選択肢を増やすために利用できる Entity。
+//      */
+//     Item,
+    
+//     Trap,
+// }
+
+
 export interface DMatchConditions {
     kindId: DEntityKindId;
 }

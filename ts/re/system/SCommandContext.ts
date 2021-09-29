@@ -90,6 +90,23 @@ export class RECCMessageCommand {
     }
 }
 
+export enum SHandleCommandResult {
+    Resolved,
+    Rejected,
+}
+
+export class HandleActivityCommand {
+    _thenFunc: (() => SHandleCommandResult) | undefined;
+    _catchFunc: (() => void) | undefined;
+
+    public then(func: () => SHandleCommandResult): void {
+        this._thenFunc = func;
+    }
+
+    public catch(func: () => void): void {
+        this._catchFunc = func;
+    }
+}
 
 /**
  * 
@@ -185,6 +202,66 @@ export class SCommandContext
 
         Log.postCommand("Activity");
     }
+
+    /**
+     * onActivity の中から呼び出すこと。
+     */
+    // [2021/9/29] もうちょっと事例集めてからにしてみる。
+    // 元々は「拾う」動作で使いたかったが、
+    // - 「拾えるかどうか」を判断する関数は PreReaction ではない方法でほしい。(床落ち聖域の巻物は盗めない、などAI側から事前判断するときに使いたい)
+    /*
+    public postHandleActivity(activity: LActivity, objectum: LEntity): HandleActivityCommand {
+        const command = new HandleActivityCommand();
+        const m1 = () => {
+
+            // 相手側前処理
+            //   ここで any を使っているのは、TS2367 の対策のため。2021/9/29次点では Open の問題で、今のところ逃げ道がないみたい。
+            //   https://github.com/microsoft/TypeScript/issues/9998
+            let result1: any = SCommandResponse.Pass;
+            objectum.iterateBehaviorsReverse(b => {
+                result1 = b.onActivityPreReaction(this, objectum, activity);
+                if (result1 != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+
+            // 相手側で reject されてなければ本処理
+            if (result1 != SCommandResponse.Canceled) {
+                const then = command._thenFunc;
+                if (then) {
+                    const m2 = () => {
+                        const result2 = then();
+                        if (result2 == SHandleCommandResult.Resolved) {
+                            // 本処理も成功したので相手側の後処理を行う
+                            objectum.iterateBehaviorsReverse(b => {
+                                b.onActivityReaction(objectum, this, activity);
+                                return true;
+                            });
+                        }
+                        else {
+                            // 本処理失敗
+                        }
+                        return SCommandResponse.Pass;
+                    };
+                    this._recodingCommandList.push(new RECCMessageCommand("HandleActivity.2", m2));
+                }
+            }
+            else {
+                // 相手側の前処理ではじかれた
+                if (command._catchFunc) {
+                    command._catchFunc();
+                }
+            }
+
+            return SCommandResponse.Pass;
+        };
+        this._recodingCommandList.push(new RECCMessageCommand("HandleActivity", m1));
+        return command;
+    }
+    */
 
     private attemptConsumeActionToken(entity: LEntity): void {
 

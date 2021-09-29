@@ -357,6 +357,7 @@ export abstract class LBehavior extends LObject {
      * Activity を受ける側の処理。
      * [飲まれた] [振られた] [読まれた] など。
      */
+    onActivityPreReaction(context: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
 
     onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }

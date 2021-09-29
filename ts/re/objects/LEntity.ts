@@ -671,7 +671,6 @@ export class LEntity extends LObject
         // TODO: test
         const remaining = this._params.param(DBasics.params.remaining);
         if (remaining) {
-            //name += `[${}]`;
             result.capacity = this.actualParam(DBasics.params.remaining);
             result.initialCapacity = remaining.initialActualValue();
         }
