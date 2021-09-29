@@ -119,13 +119,11 @@ export class SEffectContext {
             // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
             commandContext.postEffectResult(target);
 
-            const battler = target.findEntityBehavior(LBattlerBehavior);
-            if (battler) {  // apply() で changeInstance() することがあるので、getBehavior ではなく findBehavior でチェック
-                if (battler.isDead()) {
-                    deadCount++;
-                    if (battler instanceof LEnemyBehavior) {
-                        this._effectorFact.subject()._reward.addExp(battler.exp());
-                    }
+            if (target.isDeathStateAffected()) {
+                deadCount++;
+                const battler = target.findEntityBehavior(LBattlerBehavior);
+                if (battler instanceof LEnemyBehavior) {
+                    this._effectorFact.subject()._reward.addExp(battler.exp());
                 }
             }
         }

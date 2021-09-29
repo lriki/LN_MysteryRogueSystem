@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "../behaviors/LBehavior";
+import { CommandArgs, LBehavior } from "../behaviors/LBehavior";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntityId } from "../LObject";
 import { DBasics } from "ts/re/data/DBasics";

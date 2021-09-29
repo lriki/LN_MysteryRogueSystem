@@ -148,7 +148,7 @@ export class LItemBehavior extends LBehavior {
     }
 
     
-    // TODO: すごく仮。今は盗みスキルの効果を受け取るためだけにある
+    // TODO: すごく仮。今はアイテムが盗みスキルの効果を受け取るためだけにある
     [onAttackReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const self = args.self;
         const effectContext: SEffectContext = args.args.effectContext;

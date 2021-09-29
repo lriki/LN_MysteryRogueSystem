@@ -62,66 +62,10 @@ export class LBattlerBehavior extends LBehavior {
         this.ownerEntity().removeAllStates();
     }
 
-
     // Game_BattlerBase.prototype.isGuard 
     public isGuard(): boolean {
         return false;
     };
-
-
-    // Game_BattlerBase.prototype.isStateAffected
-    isStateAffected(stateId: DStateId): boolean {
-        const entity = this.ownerEntity();
-        return entity.isStateAffected(stateId);
-    }
-    
-    // Game_BattlerBase.prototype.isDeathStateAffected
-    isDeathStateAffected(): boolean {
-        return this.isStateAffected(DBasics.states.dead);
-    }
-
-    // Game_BattlerBase.prototype.states
-    public states(): DState[] {
-        return this.ownerEntity().states().map(s => REData.states[s.stateDataId()]);
-    }
-
-    // Game_BattlerBase.prototype.refresh
-    // Game_Battler.prototype.refresh
-    refresh() {
-
-
-
-        //for (const stateId of this.stateResistSet()) {
-        //    this.eraseState(stateId);
-        //}
-
-        //const hp = this.actualParam(RESystem.parameters.hp);
-
-        //console.log("refresh--------");
-        /*
-        for (const param of REData.parameters) {
-            const max = this.idealParam(param.id);
-            //console.log("max", max);
-
-            this._actualParamDamges[param.id] = this._actualParamDamges[param.id].clamp(0, max);//this.actualParam(param.id).clamp(0, max);
-        }
-        */
-
-        // TODO: 全パラメータ
-        //const mhp = this.idealParam(RESystem.parameters.hp);
-        //const mmp = this.idealParam(RESystem.parameters.mp);
-        //const mtp = this.idealParam(RESystem.parameters.tp);
-        //this._actualParams[RESystem.parameters.hp] = this.actualParam(RESystem.parameters.hp).clamp(0, mhp);
-        //this._actualParams[RESystem.parameters.mp] = this.actualParam(RESystem.parameters.mp).clamp(0, mmp);
-        //this._actualParams[RESystem.parameters.tp] = this.actualParam(RESystem.parameters.tp).clamp(0, mtp);
-
-    
-        
-
-        //context.postSequel(entity, RESystem.sequels.CollapseSequel);
-
-        //context.postDestroy(entity);
-    }
     
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
@@ -131,33 +75,7 @@ export class LBattlerBehavior extends LBehavior {
 
         //    this._actualParamDamges[paramId] = 0;
         //}
-        
-        this.refresh();
     };
-
-    // Game_BattlerBase.prototype.isDead
-    public isDead(): boolean {
-        return this.isDeathStateAffected();
-    }
-    
-    // Game_BattlerBase.prototype.isAlive
-    public isAlive(): boolean {
-        return !this.isDeathStateAffected();
-    }
-
-
-
-    // Game_BattlerBase.prototype.restriction
-    // 各種 restriction を集計し、制約が最も強いものを返す。
-    //public restriction(): DStateRestriction {
-   //     const restrictions = this.states().map(state => state.restriction);
-   //     return Math.max(0, ...restrictions);
-   // }
-    
-    // Game_BattlerBase.prototype.restriction
-    //public isRestricted(): boolean {
-    //    return this.restriction() > 0;
-    //}
 
     // Game_Actor.prototype.attackAnimationId1
     public attackAnimationId(): number {
@@ -178,13 +96,9 @@ export class LBattlerBehavior extends LBehavior {
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }
     
-    onRefreshConditions(): void {
-        this.refresh();
-    }
-    
     onStepEnd(context: SCommandContext): SCommandResponse {
         const entity = this.ownerEntity();
-        if (this.isDeathStateAffected()) {
+        if (entity.isDeathStateAffected()) {
             context.postSequel(entity, DBasics.sequels.CollapseSequel);
             
             if (entity.isUnique()) {

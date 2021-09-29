@@ -147,7 +147,6 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.changeExp
     private changeExp(exp: number): void {
-        console.log("changeExp", exp);
 
         this._exp[this._classId] = Math.max(exp, 0);
         const lastLevel = this._level;
@@ -158,15 +157,10 @@ export class LActorBehavior extends LBattlerBehavior {
         while (this.currentExp() < this.currentLevelExp()) {
             this.levelDown();
         }
-        //if (show && this._level > lastLevel) {
-        //    this.displayLevelUp(this.findNewSkills(lastSkills));
-        //}
-        this.refresh();
     }
 
     // Game_Actor.prototype.levelUp
     private levelUp(): void {
-        console.log("levelUp");
         this._level++;
         this.ownerEntity()._effectResult.levelup = true;
         //for (const learning of this.currentClass().learnings) {
