@@ -7,6 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
+import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -21,11 +22,13 @@ test("concretes.item.Gold", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     
     // gold1
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ゴールド").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, [], "gold1"));
+    gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     REGame.world._transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
-    // gold1
-    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ゴールド").id, [], "gold2"));
+    // gold2
+    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, [], "gold2"));
+    gold2.getEntityBehavior(LGoldBehavior).setGold(2000);
     REGame.world._transferEntity(gold2, TestEnv.FloorId_UnitTestFlatMap50x50, 11, 10);
 
     // Enemy1
@@ -40,20 +43,9 @@ test("concretes.item.Gold", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    inventory1.gold()
-    */
-
-    // // まどわし状態になる
-    // expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UTまどわし").id)).toBe(true);
-
-    // // [投げる]
-    // RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction());
-    // RESystem.dialogContext.activeDialog().submit();
-
-    // RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
-
-    // // まどわし状態になる
-    // expect(!!enemy1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UTまどわし").id)).toBe(true);
+    expect(gold1.isDestroyed()).toBe(true);
+    expect(inventory1.gold()).toBe(1000);
     
+*/
 });
 

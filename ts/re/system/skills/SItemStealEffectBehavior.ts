@@ -20,6 +20,7 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
         // TODO: これだとアイテム化けに対応できない
         if (target.findEntityBehavior(LItemBehavior)) {
             const inventory = performer.getEntityBehavior(LInventoryBehavior);
+            // TODO: 取得可否判定は行うが、通常の「拾う」とは違う。メッセージは表示したくないし、ゴールドを盗んだ時はアイテムとしてインベントリに入れたい。
             UAction.postPickItem(cctx, performer, inventory, target)
                 .then(() => {
                     this.postWarp(cctx, performer, target);

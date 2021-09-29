@@ -25,6 +25,7 @@ import { SView } from "ts/re/system/SView";
 import { UAction } from "ts/re/usecases/UAction";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { LGoldBehavior } from "./LGoldBehavior";
 
 /**
  * 
@@ -204,7 +205,15 @@ export class LUnitBehavior extends LBehavior {
                     context.postHandleActivity(activity, itemEntity)
                     .then(() => {
                         REGame.map._removeEntity(itemEntity);
-                        inventory.addEntityWithStacking(itemEntity);
+
+                        const gold = itemEntity.findEntityBehavior(LGoldBehavior);
+                        if (gold) {
+                            inventory.gainGold(gold.gold());
+                            context.postDestroy(itemEntity);
+                        }
+                        else {
+                            inventory.addEntityWithStacking(itemEntity);
+                        }
                         
                         const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
                         context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));

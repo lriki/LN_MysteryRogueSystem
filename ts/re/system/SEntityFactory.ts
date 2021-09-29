@@ -40,6 +40,7 @@ import { LSelfExplosionBehavior } from "../objects/behaviors/LSelfExplosionBehav
 import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
 import { LItemThiefBehavior } from "../objects/behaviors/LItemThiefBehavior";
 import { LShopkeeperBehavior } from "../objects/behaviors/LShopkeeperBehavior";
+import { LGoldBehavior } from "../objects/behaviors/LGoldBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -286,6 +287,9 @@ export class SEntityFactory {
             case "kItem_保存の壺":
                 entity.addBehavior(LInventoryBehavior);
                 entity.addBehavior(LStorageBehavior);
+                break;
+            case "kItem_Gold":
+                entity.addBehavior(LGoldBehavior);
                 break;
         }
         RESystem.ext.onNewEntity(entity, entityData);

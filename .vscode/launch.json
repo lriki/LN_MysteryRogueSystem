@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "PickAndPut"
+                "-t", "concretes.item.Gold"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
