@@ -53,6 +53,10 @@ export class LGoldBehavior extends LBehavior {
             upgrades: 0,
         }
     }
+
+    onCheckLooksLikeGold(): boolean {
+        return true;
+    }
     
     public gold(): number {
         return this._gold;

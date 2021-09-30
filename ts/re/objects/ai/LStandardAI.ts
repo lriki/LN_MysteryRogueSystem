@@ -40,16 +40,6 @@ export class LCharacterAI_Normal extends LCharacterAI {
 
         this.applyTargetPosition(self, hasPrimaryTarget);
 
-        
-        /*
-        // 目的地を失っているなら、特殊な検索を試してみる
-        if (!this._moveDeterminer.hasDestination() && this._movingTargetFinder) {
-            const pos = this._movingTargetFinder.decide(self);
-            if (pos) {
-                this._moveDeterminer.setTargetPosition(pos[0], pos[1]);
-            }
-        }
-        */
 
         // 攻撃対象が設定されていれば、このフェーズでは何もしない
         if (this._actionDeterminer.isMajorActionRequested()) {
@@ -72,35 +62,6 @@ export class LCharacterAI_Normal extends LCharacterAI {
         // ここで消費しておく。
         context.postConsumeActionToken(self);
         return SPhaseResult.Handled;
-    
-        /*
-        // 右へ移動するだけ
-        //let dir = 6;
-
-        // 左へ移動するだけ
-        let dir = 4;
-
-        // ランダム移動
-        //const table = [1,2,3,4,6,7,8,9];
-        //const dir = table[REGame.world.random().nextIntWithMax(8)];
-
-        const front = Helpers.makeFrontPosition(entity.x, entity.y, dir, 1);
-        const e = REGame.map.block(front).aliveEntity(BlockLayerKind.Unit);
-        if (e) {
-            context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
-
-            // 通常攻撃
-            context.postPerformSkill(entity, RESystem.skills.normalAttack);
-            context.postConsumeActionToken(entity);
-            return REResponse.Succeeded;
-        }
-
-        if (dir != 0 && REGame.map.checkPassage(entity, dir)) {
-            context.postActionTwoWay(DBasics.actions.DirectionChangeActionId, entity, undefined, { direction: dir });
-            context.postActionTwoWay(DBasics.actions.MoveToAdjacentActionId, entity, undefined, { direction: dir });
-        }
-        context.postConsumeActionToken(entity);
-        */
     }
 
     private applyTargetPosition(self: LEntity, prevHasPrimaryTarget: boolean): void {

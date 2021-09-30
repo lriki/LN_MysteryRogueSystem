@@ -14,6 +14,7 @@ import { DFactionId } from "./REData";
 
 export interface DBasicEffectBehaviors {
     itemSteal: DEffectBehaviorId,
+    goldSteal: DEffectBehaviorId,
 }
 
 /**

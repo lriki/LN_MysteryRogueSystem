@@ -263,6 +263,7 @@ export class REDataManager
 
         DBasics.effectBehaviors = {
             itemSteal: REData.newEffectBehavior("ItemSteal").id,
+            goldSteal: REData.newEffectBehavior("GoldSteal").id,
         };
     }
 

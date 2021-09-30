@@ -304,6 +304,11 @@ export class RESetup {
                 emittor.scope.layers.push(DBlockLayerKind.Ground);
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(DBasics.effectBehaviors.itemSteal);
                 break;
+            case "kSkill_ゴールド盗み":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                //emittor.scope.layers.push(DBlockLayerKind.Ground);
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(DBasics.effectBehaviors.goldSteal);
+                break;
         }
     }
 

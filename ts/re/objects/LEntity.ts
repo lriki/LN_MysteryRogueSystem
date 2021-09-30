@@ -1315,13 +1315,29 @@ export class LEntity extends LObject
 
     
     //----------------------------------------
-    // 
+    // 未分類。何かしらシステム化したほうがよさそうなもの
 
     public sendPartyEvent(eventId: DEventId, args: any): boolean {
         if (this._partyId > 0) {
             return REGame.world.party(this._partyId).send(eventId, args);
         }
         return true;
+    }
+
+    public checkLooksLikeItem(): boolean {
+        for (const b of this.collectBehaviors().reverse()) {
+            const v = b.onCheckLooksLikeItem();
+            if (v) return v;
+        }
+        return false;
+    }
+
+    public checkLooksLikeGold(): boolean {
+        for (const b of this.collectBehaviors().reverse()) {
+            const v = b.onCheckLooksLikeGold();
+            if (v) return v;
+        }
+        return false;
     }
     
 

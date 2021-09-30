@@ -81,7 +81,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     REGame.world._transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
-    // 人□敵□草
+    // Ｐ□敵□草
     // □□□□□
 
     
@@ -132,7 +132,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     REGame.world._transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
-    // 人□敵□草
+    // Ｐ□敵□草
     // □□□□□
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

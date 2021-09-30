@@ -404,5 +404,10 @@ export abstract class LBehavior extends LObject {
 
     //--------------------
 
+    
+    public onCheckLooksLikeItem(): boolean { return false; }
+    
+    public onCheckLooksLikeGold(): boolean { return false; }
+
     //this.parentAs(LState)?.removeThisState();
 }

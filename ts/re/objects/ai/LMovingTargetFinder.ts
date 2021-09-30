@@ -42,3 +42,19 @@ export class LMovingTargetFinder_Item {
     
 }
 
+
+
+export class LMovingTargetFinder_Gold {
+    public decide(self: LEntity): (number[] | undefined) {
+
+        const item = USearch.findLatestItemInVisibilityBlocks(self);
+        if (item && item.checkLooksLikeGold()) {
+            return [item.x, item.y];
+        }
+
+        return undefined;
+    }
+
+    
+}
+
