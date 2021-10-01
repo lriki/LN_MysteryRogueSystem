@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.enemy.GoldThief.Basic"
+                "-t", "concretes.item.Gold"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

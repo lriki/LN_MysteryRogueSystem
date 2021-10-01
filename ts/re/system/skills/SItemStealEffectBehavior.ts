@@ -23,7 +23,7 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
             // TODO: 取得可否判定は行うが、通常の「拾う」とは違う。メッセージは表示したくないし、ゴールドを盗んだ時はアイテムとしてインベントリに入れたい。
             UAction.postPickItem(cctx, performer, inventory, target)
                 .then(() => {
-                    this.postWarp(cctx, performer, target);
+                    SItemStealSkillBehavior.postWarpBySteal(cctx, performer, UName.makeNameAsItem(target));
                     return true;
                 });
         }
@@ -38,11 +38,11 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
             inventory.addEntity(item);
     
     
-            this.postWarp(cctx, performer, item);
+            SItemStealSkillBehavior.postWarpBySteal(cctx, performer, UName.makeNameAsItem(item));
         }
     }
 
-    public pickItem(target: LEntity, rand: LRandom): LEntity | undefined {
+    private pickItem(target: LEntity, rand: LRandom): LEntity | undefined {
         const inventory = target.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return undefined;
         
@@ -54,9 +54,9 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
         return item;
     }
 
-    private postWarp(cctx: SCommandContext, performer: LEntity, item: LEntity): void {
+    public static postWarpBySteal(cctx: SCommandContext, performer: LEntity, itemName: string): void {
 
-        cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), UName.makeNameAsItem(item)));
+        cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), itemName));
         cctx.postSequel(performer, DBasics.sequels.warp);
 
         const block = USearch.selectUnitSpawnableBlock(cctx.random());

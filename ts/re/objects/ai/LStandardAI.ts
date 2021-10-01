@@ -40,6 +40,19 @@ export class LCharacterAI_Normal extends LCharacterAI {
 
         this.applyTargetPosition(self, hasPrimaryTarget);
 
+        this._moveDeterminer.decide(context, self);
+
+        // moveDeterminer.decide によって決定された標準的な移動目標のオーバーライド
+        {
+            // 今回の decide() ではスキル使用が行われず移動が要求されている場合、
+            // まずは特殊な移動先検索を実施してみる。
+            if (this._actionDeterminer.isMoveRequested() && this._movingTargetFinder) {
+                const pos = this._movingTargetFinder.decide(self);
+                if (pos) {
+                    this._moveDeterminer.setTargetPosition(pos[0], pos[1]);
+                }
+            }
+        }
 
         // 攻撃対象が設定されていれば、このフェーズでは何もしない
         if (this._actionDeterminer.isMajorActionRequested()) {
@@ -66,15 +79,6 @@ export class LCharacterAI_Normal extends LCharacterAI {
 
     private applyTargetPosition(self: LEntity, prevHasPrimaryTarget: boolean): void {
 
-        // 今回の decide() ではスキル使用が行われず移動が要求されている場合、
-        // まずは特殊な移動先検索を実施してみる。
-        if (this._actionDeterminer.isMoveRequested() && this._movingTargetFinder) {
-            const pos = this._movingTargetFinder.decide(self);
-            if (pos) {
-                this._moveDeterminer.setTargetPosition(pos[0], pos[1]);
-                return;
-            }
-        }
 
         if (this._actionDeterminer.hasPrimaryTarget()) {
             // 攻撃対象が設定されていれば、常に目標座標を更新し続ける

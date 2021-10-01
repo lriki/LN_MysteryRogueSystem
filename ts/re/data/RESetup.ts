@@ -256,6 +256,8 @@ export class RESetup {
                 entity.addReaction(DBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
+            case "kItem_Gold":
+                break;
                 
         }
     }

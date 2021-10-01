@@ -21,6 +21,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
+    inventory1.gainGold(10000);
 
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);

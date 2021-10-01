@@ -50,7 +50,7 @@ export class LGoldThiefBehavior extends LBehavior {
             if (target && Helpers.isHostile(self, target)) {
                 const inventory = target.findEntityBehavior(LInventoryBehavior);
                 if (inventory) {
-                    if (inventory.entities().length > 0) {
+                    if (inventory.gold() > 0) {
                         candidates.push({
                             action: { rating: 100, skillId: REData.getSkill("kSkill_ゴールド盗み").id },
                             targets: [target.entityId()],

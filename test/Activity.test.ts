@@ -69,8 +69,7 @@ test("Activity.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [投げる] Post
-    const activity = LActivity.makeThrow(actor1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity);
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     // [投げる] 実行 (自然落下)
