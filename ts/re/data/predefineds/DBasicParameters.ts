@@ -50,6 +50,7 @@ export interface DBasicParameters {
     upgradeValue: DParameterId; // 装備の修正値
     remaining: DParameterId; // 装備の修正値
     capacity: DParameterId; // (壺の)容量
+    gold: DParameterId; // 金額 (所持金ではない。拾った時にGoldアイテムだけが持つパラメータ)
 }
 
 

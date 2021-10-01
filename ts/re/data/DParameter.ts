@@ -47,7 +47,9 @@ export class REData_Parameter
     id: number;
 
     /** Name */
-    name: string;
+    code: string;
+
+    displayName: string;
 
     /** RMMZ 標準パラメータであるか。敵味方にかかわらず、すべての Battler はこのパラメータインスタンスを持つ。0 は HP. -1 が無効値。 */
     battlerParamId: number;
@@ -62,8 +64,9 @@ export class REData_Parameter
     addBuffCoe: number;
     mulBuffCore: number;
 
-    public static makeBuiltin(id: DParameterId, name: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
-        const p = new REData_Parameter(id, name);
+    public static makeBuiltin(id: DParameterId, code: string, displayName: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
+        const p = new REData_Parameter(id, code);
+        p.displayName = displayName;
         p.battlerParamId = battlerParamId;
         p.initialIdealValue = initialIdealValue;
         p.minValue = minValue;
@@ -71,9 +74,10 @@ export class REData_Parameter
         return p;
     }
 
-    public constructor(id: DParameterId, name: string) {
+    public constructor(id: DParameterId, code: string) {
         this.id = id;
-        this.name = name;
+        this.code = code;
+        this.displayName = code;
         this.battlerParamId = -1;
         this.initialIdealValue = 100;
         this.minValue = 0;

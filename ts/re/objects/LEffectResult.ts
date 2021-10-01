@@ -276,13 +276,13 @@ export class LEffectResult {
         let fmt;
         if (damage > 0 && paramResult.drain) {
             fmt = isActor ? STextManager.actorDrain : STextManager.enemyDrain;
-            return fmt.format(targetName, paramData.name, damage);
+            return fmt.format(targetName, paramData.code, damage);
         } else if (damage > 0) {
             fmt = isActor ? STextManager.actorDamage : STextManager.enemyDamage;
             return fmt.format(targetName, damage);
         } else if (damage < 0) {
             fmt = isActor ? STextManager.actorRecovery : STextManager.enemyRecovery;
-            return fmt.format(targetName, paramData.name, -damage);
+            return fmt.format(targetName, paramData.code, -damage);
         } else {
             fmt = isActor ? STextManager.actorNoDamage : STextManager.enemyNoDamage;
             return fmt.format(targetName);

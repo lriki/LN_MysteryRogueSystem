@@ -111,7 +111,7 @@ export class LBattlerBehavior extends LBehavior {
                             b.onPermanentDeath(context, entity);
                             return true;
                         });
-                    })
+                    });
 
                     UTransfer.exitLand(context, entity, LandExitResult.Gameover);
                 }

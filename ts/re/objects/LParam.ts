@@ -3,6 +3,8 @@ import { DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DParameterId } from "ts/re/data/DParameter";
 import { REData } from "ts/re/data/REData";
 import { LEntity } from "./LEntity";
+import { LEntityId } from "./LObject";
+import { REGame } from "./REGame";
 
 interface LParamBuff {
     //mode: DBuffMode,
@@ -148,6 +150,8 @@ export class LParam {
 
 @RESerializable
 export class LParamSet {
+    //_ownerId: LEntityId | undefined;
+
     // 以下 param の index は ParameterDataId.
     // RMMZ の param index とは異なるが、mhp,mmp,atk,def,mat,mdf,agi,luk のインデックスとは一致する。
     //
@@ -166,6 +170,11 @@ export class LParamSet {
     public copyTo(other: LParamSet): void {
         other._params = this._params.map(x => x ? x.clone() : undefined);
     }
+
+    // public self(): LEntity {
+    //     assert(this._ownerId && this._ownerId.hasAny());
+    //     return REGame.world.entity(this._ownerId);
+    // }
 
     public clear(): void {
         this._params = [];

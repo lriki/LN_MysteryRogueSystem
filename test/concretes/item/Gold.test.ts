@@ -9,6 +9,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
 import { DBasics } from "ts/re/data/DBasics";
+import { SFormulaOperand } from "ts/re/system/SFormulaOperand";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -47,6 +48,10 @@ test("concretes.item.Gold", () => {
     // GoldItem は消え、所持金が増えている
     expect(gold1.isDestroyed()).toBe(true);
     expect(inventory1.gold()).toBe(1000);
+
+    const a = new SFormulaOperand();
+    a.wrap(actor1);
+    const ev = eval("a.HP");
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withConsumeAction());

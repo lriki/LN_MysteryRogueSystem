@@ -1,4 +1,5 @@
 import { RESerializable } from "ts/re/Common";
+import { DBasics } from "ts/re/data/DBasics";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
@@ -41,8 +42,6 @@ export class LGoldBehavior extends LBehavior {
     - 出現テーブルでエンティティのパラメータとして金額氏を指定できる。特定のダンジョンやフロアでは落ちているお金の金額が大きい、といった表現ができる。
     */
 
-    public _gold: number;
-
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LGoldBehavior);
         return b;
@@ -50,13 +49,17 @@ export class LGoldBehavior extends LBehavior {
 
     public constructor() {
         super();
-        this._gold = 0;
+    }
+
+    onAttached(self: LEntity): void {
+        const params = self.params();
+        params.acquireParam(DBasics.params.gold);
     }
 
     queryDisplayName(): LNameView | undefined {
         const data = this.ownerEntity().data();
         return {
-            name: this._gold.toString() + STextManager.currencyUnit,//data.makeDisplayName(0),
+            name: this.gold().toString() + STextManager.currencyUnit,
             iconIndex: data.display.iconIndex,
             upgrades: 0,
         }
@@ -67,16 +70,11 @@ export class LGoldBehavior extends LBehavior {
     }
     
     public gold(): number {
-        return this._gold;
+        return this.ownerEntity().actualParam(DBasics.params.gold);
     }
 
     public setGold(value: number) {
-        this._gold = value;
+        this.ownerEntity().setActualParam(DBasics.params.gold, value);
     }
-
-    
-
-
-
 }
 

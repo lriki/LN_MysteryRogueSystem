@@ -7,7 +7,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { DState, DStateId } from "ts/re/data/DState";
 import { assert, RESerializable } from "ts/re/Common";
 import { DBasics } from "ts/re/data/DBasics";
-import { LBehaviorId, LEntityId, LObject, LObjectType } from "./LObject";
+import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "./LObject";
 import { LState, LStateId } from "./states/LState";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { DActionId } from "ts/re/data/DAction";
@@ -183,7 +183,10 @@ export class LEntity extends LObject
         return super.isGCReady();
     }
 
-
+    // public _setObjectId(id: LObjectId): void  {
+    //     super._setObjectId(id);
+    //     this._params._ownerId = id.clone();
+    // }
 
     
 
