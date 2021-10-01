@@ -33,7 +33,7 @@ export class SFormulaOperand {
         return this._entity;
     }
 
-    public wrap(entity: LEntity) {
+    public wrap(entity: LEntity | undefined) {
         this._entity = entity;
     }
 

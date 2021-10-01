@@ -256,12 +256,15 @@ export class SEmittorPerformer {
         }
 
 
-        const subject = performer.getEntityBehavior(LBattlerBehavior);
+        //const subject = performer.getEntityBehavior(LBattlerBehavior);
 
         
         if (emittor.scope.range == DEffectFieldScopeRange.Performer) {
             const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
-            if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+            if (itemEntity) {
+                effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+                effectSubject.withItem(itemEntity);
+            }
             const effectContext = new SEffectContext(effectSubject, context.random());
     
             // if (emittor.effect.rmmzAnimationId) {
@@ -293,7 +296,10 @@ export class SEmittorPerformer {
                     console.log("performeEffect", target);
 
                     const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
-                    if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+                    if (itemEntity) {
+                        effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+                        effectSubject.withItem(itemEntity);
+                    }
                     const effectContext = new SEffectContext(effectSubject, context.random());
                     //effectContext.addEffector(effector);
 
@@ -353,7 +359,10 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
             const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
-            if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+            if (itemEntity) {
+                effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+                effectSubject.withItem(itemEntity);
+            }
             const effectContext = new SEffectContext(effectSubject, context.random());
 
 
@@ -366,7 +375,10 @@ export class SEmittorPerformer {
             });
 
             const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
-            if (itemEntity) effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+            if (itemEntity) {
+                effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+                effectSubject.withItem(itemEntity);
+            }
             const effectContext = new SEffectContext(effectSubject, context.random());
             
             context.postCall(() => {

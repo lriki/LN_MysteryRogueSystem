@@ -50,11 +50,14 @@ test("concretes.item.Gold", () => {
     expect(inventory1.gold()).toBe(1000);
 
     const a = new SFormulaOperand();
-    a.wrap(actor1);
-    const ev = eval("a.HP");
+    a.wrap(gold2);
+    const ev = eval("a.gold");
+    const bbb = (a as any).gold;
+
+    const aaaa = gold2.actualParam(DBasics.params.gold);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

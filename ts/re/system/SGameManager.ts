@@ -32,6 +32,7 @@ import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LObjectType } from "ts/re/objects/LObject";
 import { STurnContext } from "./STurnContext";
 import { SEffectBehaviorManager } from "./skills/SEffectBehaviorManager";
+import { SFormulaOperand } from "./SFormulaOperand";
 
 /**
  */
@@ -47,6 +48,9 @@ export class SGameManager {
         RESystem.groundRules = new SGroundRules();
         RESystem.effectBehaviorManager = new SEffectBehaviorManager();
         RESystem.requestedPlayback = false;
+        RESystem.formulaOperandA = new SFormulaOperand();
+        RESystem.formulaOperandB = new SFormulaOperand();
+        RESystem.formulaOperandC = new SFormulaOperand();
     }
 
     // DataManager.createGameObjects に従って呼び出される。

@@ -257,6 +257,7 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_Gold":
+                entity.emittorSet.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.emittorSet.mainEmittor()));
                 break;
                 
         }

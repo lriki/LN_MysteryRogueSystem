@@ -145,6 +145,7 @@ export class SEffectorFact {
     private _selfModifier: SEffectModifier;
     private _incidentType: SEffectIncidentType;
     private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
+    private _item: LEntity | undefined;
 
     private _direction: number;
 
@@ -184,6 +185,11 @@ export class SEffectorFact {
         return this;
     }
 
+    public withItem(item: LEntity): this {
+        this._item = item;
+        return this;
+    }
+
     public subject(): LEntity {
         return this._subject;
     }
@@ -198,6 +204,10 @@ export class SEffectorFact {
 
     public incidentEntityKind(): DEntityKindId {
         return this._incidentEntityKind;
+    }
+
+    public item(): LEntity | undefined {
+        return this._item;
     }
 
     public direction(): number {
@@ -420,8 +430,18 @@ export class SEffectApplyer {
     // Game_Action.prototype.evalDamageFormula
     private evalDamageFormula(paramEffect: SParameterEffect, target: LEntity): number {
         try {
-            const a = this._effect.subject(); // eslint-disable-line no-unused-vars
-            const b = target; // eslint-disable-line no-unused-vars
+            // const a = this._effect.subject(); // eslint-disable-line no-unused-vars
+            // const b = target; // eslint-disable-line no-unused-vars
+            // const c = this._effect.fact().item(); // eslint-disable-line no-unused-vars
+
+            const a = RESystem.formulaOperandA;
+            const b = RESystem.formulaOperandB;
+            const c = RESystem.formulaOperandC;
+            a.wrap(this._effect.subject());
+            b.wrap(target);
+            c.wrap(this._effect.fact().item());
+
+
             // UnitTest から実行される場合に備えて undefined チェック
             const v = (typeof $gameVariables == "undefined") ? undefined : $gameVariables._data; // eslint-disable-line no-unused-vars
             const sign = paramEffect.isRecover() ? -1 : 1;

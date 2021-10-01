@@ -13,6 +13,7 @@ import { SGroundRules } from "./SGroundRules";
 import { RESystemExtension } from "./RESystemExtension";
 import { STurnContext } from "./STurnContext";
 import { SEffectBehaviorManager } from "./skills/SEffectBehaviorManager";
+import { SFormulaOperand } from "./SFormulaOperand";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -46,7 +47,9 @@ export class RESystem {
     static skills: BasicSkills;
     static items: BasicItems;
     
-    
+    static formulaOperandA: SFormulaOperand;
+    static formulaOperandB: SFormulaOperand;
+    static formulaOperandC: SFormulaOperand;
 
     //static skillBehaviors: LSkillBehavior[];
 }
