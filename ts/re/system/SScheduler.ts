@@ -84,8 +84,6 @@ export class SScheduler
         const dialogContext = RESystem.dialogContext;
         const commandContext = RESystem.commandContext;
 
-        //console.log("---------stepSimulation");
-
         while (true) {
             // フレーム待ち
             //if (REGame.scheduler.updateWaiting()) {
@@ -400,7 +398,14 @@ export class SScheduler
             // RoundStart からここまで、一度もシミュレーションループから抜けなかった場合は一度制御を返すようにする。
             // こうしておかないとゲームがハングする。
             // マップにいるすべての Entity が状態異常等で行動不能な場合にこのケースが発生する。
-            this._brace = true;
+
+            // マップ侵入後、方向キーを押しっぱなしにしておくと、Player の Move モーションが再生されず進行方向にワープしたように見えてしまう問題の対策。
+            // 普通であれば ManualDialog が表示されている間はシミュレーションループは回らないので stepSimulation() から制御が返るが、
+            // 押しっぱなしの場合 Dialog 表示→ キー入力判定 → 移動処理 → postSequel() が一気に行われる。
+            // そのため RoundStarting → RoundEnding まで一度も制御を返さず来てしまうため、brace = true となり、1フレームだけ Idle Sequel を再生する猶予ができてしまった。
+            if (RESystem.sequelContext.isEmptySequelSet()) {
+                this._brace = true;
+            }
         }
         else {
             // ターン終了時に Sequel が残っていればすべて掃き出す

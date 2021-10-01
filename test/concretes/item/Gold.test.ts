@@ -49,13 +49,6 @@ test("concretes.item.Gold", () => {
     expect(gold1.isDestroyed()).toBe(true);
     expect(inventory1.gold()).toBe(1000);
 
-    const a = new SFormulaOperand();
-    a.wrap(gold2);
-    const ev = eval("a.gold");
-    const bbb = (a as any).gold;
-
-    const aaaa = gold2.actualParam(DBasics.params.gold);
-
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
