@@ -51,6 +51,7 @@ export class SItemShopBuilder {
         const floorId = manager.map().floorId();
         const items = manager.map().land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => e.spawiInfo.isItemKind());
         if (items.length > 0) {
+            const spawnedItems = [];
             const center = UMovement.getCenterOfRoom(room);
             for (let my = center.y - 1; my <= center.y + 1; my++) {
                 for (let mx = center.x - 1; mx <= center.x + 1; mx++) {
@@ -58,9 +59,11 @@ export class SItemShopBuilder {
                         const data = manager.rand().select(items);
                         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
                         REGame.world._transferEntity(entity, floorId, mx, my);
+                        spawnedItems.push(entity);
                     }
                 }
             }
+            info.setInitialItems(spawnedItems);
         }
     }
 

@@ -4,10 +4,13 @@ import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { DItemShopTypeId } from "ts/re/data/DItemShop";
+import { LItemBehavior } from "../behaviors/LItemBehavior";
+import { assert } from "ts/re/Common";
 
 export class LItemShopStructure extends LStructure {
     private _roomId: LRoomId = 0;
     private _itemShopTypeId: DItemShopTypeId = 0;
+    private _initialSumOfPrices: number = 0;
     //private _monsterHouseState: MonsterHouseState = MonsterHouseState.Sleeping;
 
     public setup(roomId: LRoomId, itemShopTypeId: DItemShopTypeId): void {
@@ -23,6 +26,22 @@ export class LItemShopStructure extends LStructure {
         return this._itemShopTypeId;
     }
 
+    // どんなアイテムをいくつアイテムを生成するかは地形等の情報により変わるため、
+    // このクラスの中ではなく MapBuilder 側で決める。その決まった情報をこの関数にセットする。
+    public setInitialItems(items: LEntity[]): void {
+        this._initialSumOfPrices = 0;
+        for (const item of items) {
+            this._initialSumOfPrices += item.data().buyingPrice;
+            const b = item.getEntityBehavior(LItemBehavior);
+            assert(b.shopStructureId() == 0);
+            b.setShopStructureId(this.id());
+        }
+    }
+
+    public updateSecuritySystemState(): void {
+
+    }
+
     onEntityLocated(context: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
@@ -31,6 +50,65 @@ export class LItemShopStructure extends LStructure {
 }
 
 /*
+
+[2021/10/2] 請求状態の条件 - パラメータ変化の検知
+----------
+
+杖の使用回数や壺の残容量は値段に影響する。
+
+気になるのが壺。
+杖の使用回数は Param の仕組みとして現在値を減算するだけでよいが、
+壺は中に入っているアイテムの数で算出するべき。
+つまり、Param の "現在値" は変化させない方がよい。
+というか、変化させるとアイテムの数と多重管理になるので不具合の温床になる。
+
+それが意味するのは、壺についてはパラメータ変化のイベントを発行するなどで通知を行うことができない、ということ。
+より拡張を考えるなら、例えば腕輪にヒビが入っていたら値段を下げるとかも考えられそう。
+
+店側が知りたいのは、お店初期状態との差。x
+- 初期の値札付きアイテムとの値段の差。
+- その減算が発生した原因の人(Entity)
+
+…とはいえ、本当に「誰がどれだけ店に損失を与えたか」を覚えておくべきなのだろうか？
+
+基本的には Player 勢力しか買い物はしない。
+AI に買い物をさせるのは単純に実装が大変というのもあるが、そもそもそんなNPCを作る意味があるのか、作って面白いシステムになるのか疑問。
+たとえば Player 妨害を目的として、店売りアイテムを買いあさるようになNPCやモンスターは考えられるが、
+そういった買い手に通常の売買の処理が必要とは限らない。
+オープンワールドでNPC同士が売買するようなシステムを考えるならNPCごとに所持金を持たせるのはアリだが、
+ダンジョンではフロアをまたいだら基本的にNPCは消える。
+
+他勢力に Player 同様の買い物処理が必要なケースは、PvP だろう。
+ただ複数の仲間を動かすシステムを見ているとわかるが、操作ストレスがものすごい。
+斬新ではあるけど、PvPシステムの実装はおそらく無いだろう。
+
+そうすると店は「Player勢力にだけアイテムを売る」を前提としてよい。
+また「Player以外は店売りアイテムに触らない」を徹底すれば、パラメータ減少の原因は Player と考えてよい。
+
+店側は
+- 減算の原因を知る必要がある
+が、
+- 減算の原因を覚えておく必要はない
+となる。
+
+前者は地雷等の事故による商品消失の処理に必要。
+このときは店が覚えている「初期アイテム状態」自体を減らす必要がある。
+
+- 事故でないのに、店の価値が元よりも下がったら、それは Player の責任。
+
+という考えにできるだろう。
+
+この考えを元にすると、価値のチェックは床上アイテムを総なめして値段を計算するだけでよくなる。
+「事故」をなんとか検出すればよい。
+
+### 風来のブーンの実装
+
+アイテムの使用回数は見ていないようだった。
+
+Shop クラスは @store で、商品アイテムをキー、支払い責任者を値とする Map で管理していた。
+Item は owner の Shop を参照しており、自分が削除された時の処理 (Item.on_die) から、引数で受け取った原因 actor とともにこの Map に登録する。
+
+
 [2021/9/30] 請求状態の条件
 ----------
 爆発で商品が消滅しても、請求されない。

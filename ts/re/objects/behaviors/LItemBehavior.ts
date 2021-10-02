@@ -11,6 +11,7 @@ import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { LActivity } from "../activities/LActivity";
+import { LStructureId } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CollideActionArgs, CommandArgs, LBehavior, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
@@ -20,6 +21,8 @@ import { CollideActionArgs, CommandArgs, LBehavior, onAttackReaction, onCollideA
  * Item として表現する Entity の共通 Behavior
  */
 export class LItemBehavior extends LBehavior {
+    private _shopStructureId: LStructureId = 0;
+
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemBehavior);
         return b;
@@ -39,6 +42,14 @@ export class LItemBehavior extends LBehavior {
         const entity = this.ownerEntity().data();
         assert(entity.itemData);
         return entity.itemData;
+    }
+
+    public shopStructureId(): LStructureId {
+        return this._shopStructureId;
+    }
+
+    public setShopStructureId(value: LStructureId): void {
+        this._shopStructureId = value;
     }
 
     onQueryProperty(propertyId: number): any {

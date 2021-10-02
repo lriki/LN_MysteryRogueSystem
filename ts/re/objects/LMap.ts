@@ -151,21 +151,22 @@ export class LMap extends LObject
             });
 
             // Create Structures
-            this._structures = data.structures().map(x => {
+            this._structures = [new LStructure(0)]; // dummy
+            for (const x of data.structures()) {
                 if (x instanceof FMonsterHouseStructure) {
-                    const s = new LMonsterHouseStructure();
+                    const s = new LMonsterHouseStructure(this._structures.length);
                     s.setup(x.roomId(), x.monsterHouseTypeId());
-                    return s;
+                    this._structures.push(s);
                 }
                 else if (x instanceof FItemShopStructure) {
-                    const s = new LItemShopStructure();
+                    const s = new LItemShopStructure(this._structures.length);
                     s.setup(x.roomId(), x.itemShopTypeId());
-                    return s;
+                    this._structures.push(s);
                 }
                 else {
                     throw new Error("Invalid Structure type.");
                 }
-            });
+            }
         }
 
     }

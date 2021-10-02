@@ -4,6 +4,7 @@ import { SScheduler } from "./SScheduler";
 import { RESystem } from "./RESystem";
 import { UAction } from "../usecases/UAction";
 import { LTOUnit } from "ts/re/objects/LScheduler";
+import { LItemShopStructure } from "../objects/structures/LItemShopStructure";
 
 
 
@@ -46,6 +47,14 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
 
 // モンスターの移動・攻撃対象決定
 export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
+    onStart(scheduler: SScheduler): void {
+        for (const s of REGame.map.structures()) {
+            if (s instanceof LItemShopStructure) {
+                
+            }
+        }
+    }
+    
 
     onProcess(scheduler: SScheduler, unit: LTOUnit): void {
         const entity = REGame.world.findEntity(unit.entityId());
