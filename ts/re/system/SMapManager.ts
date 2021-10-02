@@ -176,7 +176,10 @@ export class SMapManager {
         console.log("this._map.structures()", this._map.structures());
         // モンスターハウス
         for (const s of this._map.structures()) {
-            if (s instanceof LMonsterHouseStructure) {
+            if (s.id() == 0) {
+                // dummy
+            }
+            else if (s instanceof LMonsterHouseStructure) {
                 const builder = new SMonsterHouseBuilder();
                 builder.build(this, s, this.rand());
             }

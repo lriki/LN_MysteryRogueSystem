@@ -6,11 +6,56 @@ import { LStructure } from "./LStructure";
 import { DItemShopTypeId } from "ts/re/data/DItemShop";
 import { LItemBehavior } from "../behaviors/LItemBehavior";
 import { assert } from "ts/re/Common";
+import { UMovement } from "ts/re/usecases/UMovement";
+import { LEntityId } from "../LObject";
+
+// 店の入り口情報
+export class LShopEntrance {
+    private _index;
+    private _homeX = 0;
+    private _homeY = 0;
+    private _gateX = 0;
+    private _gateY = 0;
+
+    public constructor(index: number) {
+        this._index = index;
+    }
+
+    public setup(homeX: number, homeY: number, gateX: number, gateY: number): void {
+        assert(UMovement.blockDistance(homeX, homeY, gateX, gateY) == 1);
+        this._homeX = homeX;
+        this._homeY = homeY;
+        this._gateX = gateX;
+        this._gateY = gateY;
+    }
+
+    public index(): number {
+        return this._index;
+    }
+
+    public homeX(): number {
+        return this._homeX;
+    }
+
+    public homeY(): number {
+        return this._homeY;
+    }
+
+    public gateX(): number {
+        return this._gateX;
+    }
+
+    public gateY(): number {
+        return this._gateY;
+    }
+}
 
 export class LItemShopStructure extends LStructure {
     private _roomId: LRoomId = 0;
     private _itemShopTypeId: DItemShopTypeId = 0;
+    private _sellngItems: LEntityId[] = [];
     private _initialSumOfPrices: number = 0;
+    private _gates: LShopEntrance[] = [];
     //private _monsterHouseState: MonsterHouseState = MonsterHouseState.Sleeping;
 
     public setup(roomId: LRoomId, itemShopTypeId: DItemShopTypeId): void {
@@ -26,6 +71,35 @@ export class LItemShopStructure extends LStructure {
         return this._itemShopTypeId;
     }
 
+    public addShopEntrance(homeX: number, homeY: number, gateX: number, gateY: number): LShopEntrance {
+        const entrance = new LShopEntrance(this._gates.length);
+        entrance.setup(homeX, homeY, gateX, gateY);
+        this._gates.push(entrance);
+        return entrance;
+    }
+
+    public shopEntrance(shopkeeperIndex: number): LShopEntrance {
+        return this._gates[shopkeeperIndex];
+    }
+
+    // 対価を得ずに所有(床置き)を失っている商品
+    public getLossItems(): LEntity[] {
+        const result: LEntity[] = [];
+        const room = REGame.map.room(this._roomId);
+        for (const id of this._sellngItems) {
+            const item = REGame.world.entity(id);
+            if (item.floorId.equals(REGame.map.floorId()) && room.contains(item.x, item.y)) {
+                const block = REGame.map.block(item.x, item.y);
+                assert(block.containsEntity(item)); // 一応、本当に Block に含まれているかチェックする
+                // 所有
+            }
+            else {
+                result.push(item);
+            }
+        }
+        return result;
+    }
+
     // どんなアイテムをいくつアイテムを生成するかは地形等の情報により変わるため、
     // このクラスの中ではなく MapBuilder 側で決める。その決まった情報をこの関数にセットする。
     public setInitialItems(items: LEntity[]): void {
@@ -35,7 +109,14 @@ export class LItemShopStructure extends LStructure {
             const b = item.getEntityBehavior(LItemBehavior);
             assert(b.shopStructureId() == 0);
             b.setShopStructureId(this.id());
+            this._sellngItems.push(item.entityId());
         }
+    }
+
+    // actor に対して請求状態であるかを判断する
+    // ※現状では請求対象は Player 勢力のみであるため、商品が失われた原因までは考慮していない
+    public checkBilling(actor: LEntity): boolean {
+        return this.getLossItems().length > 0;
     }
 
     public updateSecuritySystemState(): void {

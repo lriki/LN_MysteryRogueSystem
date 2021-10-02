@@ -1,5 +1,6 @@
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
 
@@ -121,7 +122,8 @@ export class VItemListWindow extends Window_Selectable {
             }
 
             // 値札
-            if (0) {
+            const itemBehavior = item.findEntityBehavior(LItemBehavior);
+            if (itemBehavior && itemBehavior.shopStructureId() > 0) {
                 const data = item.data();
                 const text = data.sellingPrice.toString();
                 const tw = this.textWidth(text) + 8;

@@ -1,4 +1,5 @@
 import { assert } from "ts/re/Common";
+import { LShopkeeperBehavior } from "ts/re/objects/behaviors/LShopkeeperBehavior";
 import { LBlock, LBlockSystemDecoration } from "ts/re/objects/LBlock";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LRoom } from "ts/re/objects/LRoom";
@@ -8,6 +9,11 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { USpawner } from "ts/re/usecases/USpawner";
 import { SEntityFactory } from "../SEntityFactory";
 import { SMapManager } from "../SMapManager";
+
+interface Entrance {
+    home: LBlock;
+    gate: LBlock;
+}
 
 export class SItemShopBuilder {
     public build(manager: SMapManager, info: LItemShopStructure, rand: LRandom): void {
@@ -42,9 +48,12 @@ export class SItemShopBuilder {
         });
 
         // 店主配置
-        const homeBlocks = this.setupEntranceBlocks(room);
-        for (const homeBlock of homeBlocks) {
-            const entity = USpawner.spawnSingleEntity("kEnemy_店主", homeBlock.x(), homeBlock.y());
+        const entrances = this.setupEntranceBlocks(room);
+        for (const entrance of entrances) {
+            const e = info.addShopEntrance(entrance.home.x(), entrance.home.y(), entrance.gate.x(), entrance.gate.y());
+            const entity = USpawner.spawnSingleEntity("kEnemy_店主", entrance.home.x(), entrance.home.y());
+            const behavior = entity.getEntityBehavior(LShopkeeperBehavior);
+            behavior.setup( info.id(), e.index());
         }
 
         // アイテム配置
@@ -67,8 +76,8 @@ export class SItemShopBuilder {
         }
     }
 
-    private setupEntranceBlocks(room: LRoom): LBlock[] {
-        const homeBlocks: LBlock[] = [];
+    private setupEntranceBlocks(room: LRoom): Entrance[] {
+        const result: Entrance[] = [];
         for (const block of room.doorwayBlocks()) {
             let block1: LBlock | undefined = undefined;
             let block2: LBlock | undefined = undefined;
@@ -96,9 +105,12 @@ export class SItemShopBuilder {
             if (block2) block2._shopkeeperLine = true;
             const home = block1 ?? block2;
             assert(home);
-            homeBlocks.push(home);
+            result.push({
+                home: home,
+                gate: block,
+            });
         }
-        return homeBlocks;
+        return result;
     }
 
     private getInRoomFloorBlock(room: LRoom, mx: number, my: number): LBlock | undefined {

@@ -19,12 +19,16 @@ import { RESerializable } from "ts/re/Common";
  */
 @RESerializable
 export class LDecisionBehavior extends LBehavior {
-    _characterAI: LCharacterAI = new LCharacterAI_Normal();
+    _characterAI: LCharacterAI_Normal = new LCharacterAI_Normal();
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LDecisionBehavior);
-        b._characterAI = this._characterAI.clone();
+        b._characterAI = this._characterAI.clone() as LCharacterAI_Normal;
         return b;
+    }
+
+    public characterAI(): LCharacterAI_Normal {
+        return this._characterAI;
     }
 
     onQueryCharacterAI(characterAIs: LCharacterAI[]): void {
