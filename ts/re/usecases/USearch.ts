@@ -87,12 +87,13 @@ export class USearch {
         const px = player.x;
         const py = player.y;
 
-        //const room = REGame.map.room(player.roomId());
-
         // まず操作キャラのすぐ近くは避けて検索してみる
-        const candidateBlocks = spawnableBlocks.filter(b =>
-            b._roomId != player.roomId() &&
-            Math.abs(b.x() - px) > paramEnemySpawnInvalidArea && Math.abs(b.y() - py) > paramEnemySpawnInvalidArea);
+        const candidateBlocks = spawnableBlocks.filter(b => {
+            if (b._roomId == player.roomId()) return false;
+            const dx = Math.abs(b.x() - px);
+            const dy = Math.abs(b.y() - py);
+            return dx > paramEnemySpawnInvalidArea || dy > paramEnemySpawnInvalidArea;
+        });
         if (candidateBlocks.length > 0) {
             return candidateBlocks[rand.nextIntWithMax(candidateBlocks.length)];
         }

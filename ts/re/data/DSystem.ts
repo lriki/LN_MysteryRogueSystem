@@ -37,6 +37,10 @@ export class DSystem {
     /** 出現テーブルが何もないときに Enemy の Spawn が要求されたときに生成する Entity */
     public fallbackEnemyEntityId: DEntityId;
 
+    /** 出現テーブルが何もないときに Item の Spawn が要求されたときに生成する Entity */
+    public fallbackItemEntityId: DEntityId;
+
+
     constructor() {
         //this.elements = $dataSystem.elements ?? [];
         this.factions = {
@@ -51,6 +55,7 @@ export class DSystem {
             seal: 0,
         }
         this.fallbackEnemyEntityId = 0;
+        this.fallbackItemEntityId = 0;
     }
 
     public link(testMode: boolean): void {
@@ -68,5 +73,6 @@ export class DSystem {
         this.states.seal = seal.id;
 
         this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム").entityId;
+        this.fallbackItemEntityId = REData.getItemFuzzy("kItem_雑草").id;
     }
 }
