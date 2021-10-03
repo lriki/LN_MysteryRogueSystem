@@ -64,7 +64,5 @@ test("concretes.enemy.GoldThief.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // Enemy1 はワープしている
-    expect(enemy1.x).not.toBe(13);
-    expect(enemy1.y).not.toBe(10);
-    
+    expect(enemy1.x != 13 && enemy1.y != 10).toBe(true);
 });

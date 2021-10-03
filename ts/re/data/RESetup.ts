@@ -322,7 +322,7 @@ export class RESetup {
                 //entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
                 break;
             case "kEnemy_ウルフ":
-                //entity.majorActionDeclines = 1;
+                entity.majorActionDeclines = 1;
                 break;
         }
     }
