@@ -708,11 +708,12 @@ export class LEntity extends LObject
     }
 
     public getIdealParamBase(paramId: DParameterId): number {
-        for (const b of this.collectBehaviors().reverse()) {
-            const v = b.onGetIdealParamBase(paramId);
-            if (v) return v;
-        }
-        return 0;
+        let value = 0;
+        this.iterateBehaviorsReverse(b => {
+            value = b.onQueryIdealParamBase(paramId, value);
+            return true;
+        });
+        return value;
     }
     
 
@@ -1189,6 +1190,7 @@ export class LEntity extends LObject
         return true;
     }
 
+    /** @deprecated iterateBehaviorsReverse */
     public collectBehaviors(): LBehavior[] {
         const result: LBehavior[] = [];
         this.iterateBehaviors2(b => {

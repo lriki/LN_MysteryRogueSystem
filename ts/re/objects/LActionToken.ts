@@ -59,7 +59,7 @@ export class LActionToken {
     }
 
     public consume(tokenType: LActionTokenType): void {
-        this.verify();
+        this.verify(tokenType);
         if (tokenType == LActionTokenType.Minor) {
             this._minorActionTokenCount = Math.max(this._minorActionTokenCount - 1, 0);
         }
@@ -69,11 +69,14 @@ export class LActionToken {
         }
     }
 
-    public verify(): void {
-        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
-        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
-        assert(this._minorActionTokenCount > 0);
-        assert(this._majorActionTokenCount > 0);
+    public verify(tokenType: LActionTokenType): void {
+        if (tokenType == LActionTokenType.Minor) {
+            assert(this._minorActionTokenCount > 0);
+        }
+        else {
+            assert(this._minorActionTokenCount > 0);
+            assert(this._majorActionTokenCount > 0);
+        }
     }
 
 }

@@ -42,6 +42,7 @@ import { LItemThiefBehavior } from "../objects/behaviors/LItemThiefBehavior";
 import { LShopkeeperBehavior } from "../objects/behaviors/LShopkeeperBehavior";
 import { LGoldBehavior } from "../objects/behaviors/LGoldBehavior";
 import { LGoldThiefBehavior } from "../objects/behaviors/LGoldThiefBehavior";
+import { LParamBehavior } from "../objects/behaviors/LParamBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -308,6 +309,9 @@ export class SEntityFactory {
         switch (entityData.entity.key) {
             case "kEnemy_バット":
                 entity.addBehavior(LRatedRandomAIBehavior);
+                break;
+            case "kEnemy_ウルフ":
+                entity.addBehavior(LParamBehavior).setParamBase(DBasics.params.agi, 100);
                 break;
             case "kEnemy_スピリットスライム":
                 entity.addBehavior(LEntityDivisionBehavior);

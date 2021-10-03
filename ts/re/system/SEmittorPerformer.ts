@@ -293,7 +293,6 @@ export class SEmittorPerformer {
                 //const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
                 const targets = this.getTargetInBlock(UMovement.getFrontBlock(performer), emittor.scope);
                 for (const target of targets)  {
-                    console.log("performeEffect", target);
 
                     const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
                     if (itemEntity) {

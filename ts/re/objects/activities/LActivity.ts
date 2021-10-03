@@ -149,6 +149,11 @@ export class LActivity {
         return this._consumeActionType;
     }
 
+    public getConsumeActionTokenType(): LActionTokenType {
+        assert(this._consumeActionType !== undefined);
+        return this._consumeActionType;
+    }
+
     public withFastForward(): this {
         this._fastForward = true;
         return this;

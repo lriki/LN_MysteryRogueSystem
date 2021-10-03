@@ -149,7 +149,7 @@ export class SCommandContext
     postConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
         const behavior = entity.findEntityBehavior(LUnitBehavior);
         assert(behavior);
-        entity._actionToken.verify();
+        entity._actionToken.verify(tokenType);
 
         const m1 = () => {
             Log.doCommand("ConsumeActionToken");
@@ -173,7 +173,7 @@ export class SCommandContext
         }
 
         if (activity.isConsumeAction()) {
-            activity.subject()._actionToken.verify();
+            activity.subject()._actionToken.verify(activity.getConsumeActionTokenType());
         }
 
         const m1 = () => {
@@ -181,9 +181,7 @@ export class SCommandContext
 
             if (activity.isConsumeAction()) {
                 const entity = activity.subject();
-                const type = activity.consumeActionTokenType();
-                assert(type !== undefined);
-                this.attemptConsumeActionToken(entity, type);
+                this.attemptConsumeActionToken(entity, activity.getConsumeActionTokenType());
             }
 
             const r = activity.subject()._sendActivity(this, activity);
@@ -257,8 +255,6 @@ export class SCommandContext
     }
 
     private attemptConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
-        entity._actionToken.verify();
-
         entity._actionToken.consume(tokenType);
         
             // ターンエンド

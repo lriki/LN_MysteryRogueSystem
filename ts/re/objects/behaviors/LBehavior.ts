@@ -283,8 +283,8 @@ export abstract class LBehavior extends LObject {
     public queryHomeLayer(): DBlockLayerKind | undefined { return undefined; }
 
 
-    public onGetIdealParamBase(paramId: DParameterId): number | undefined {
-        return 0;
+    public onQueryIdealParamBase(paramId: DParameterId, base: number): number {
+        return base;
     }
     
 
