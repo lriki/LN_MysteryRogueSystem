@@ -33,6 +33,7 @@ import { DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind } from "../data/DCommon";
+import { LActionToken } from "./LActionToken";
 
 enum BlockLayer
 {
@@ -260,14 +261,7 @@ export class LEntity extends LObject
 
     _located: boolean = false;
 
-
-    // 変化によるインスタンス再構築でも行動回数を維持したい。（モンスターは変化の杖の効果を受けたターンは行動できる）
-    _actionTokenCount: number = 0;
-    
-    actionTokenCount(): number { return this._actionTokenCount; }
-    setActionTokenCount(value: number): void { this._actionTokenCount = value; }
-    clearActionTokenCount(): void { this._actionTokenCount = 0; }
-
+    _actionToken: LActionToken = new LActionToken();
 
 
     /**
@@ -289,7 +283,7 @@ export class LEntity extends LObject
         entity.x = 0;
         entity.y = 0;
         entity.dir = this.dir;
-        entity._actionTokenCount = 0;   // 新しく作られた Entity は Scheduler には入っていないので、ActionToken を持っているのは不自然
+        entity._actionToken = this._actionToken.clone();   
         entity._stackCount = this._stackCount;  // "分裂" という意味ではスタック数もコピーしてもよさそう。TODO: タイトル要求と大きくかかわるのでオプションにした方がいいかも。
         //entity.blockOccupied = this.blockOccupied;
         //entity.immediatelyAfterAdjacentMoving = this.immediatelyAfterAdjacentMoving;

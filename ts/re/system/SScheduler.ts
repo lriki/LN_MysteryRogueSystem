@@ -237,9 +237,9 @@ export class SScheduler
 
             // 行動トークンを更新
             if (behavior.waitTurnCount() == 0) {
-                // 行動トークンを、速度の分だけ配る。鈍足状態でも 1 つ配る。
+                // 行動トークンを、速度の分だけ配る。
                 // リセットではなく追加である点に注意。借金している場合に備える。
-                entity.setActionTokenCount(entity.actionTokenCount() + Math.max(1, speedLevel));
+                entity._actionToken.charge(Math.max(1, speedLevel));
             }
             else {
                 // 鈍足状態。このターンは行動トークンをもらえない。
@@ -265,8 +265,8 @@ export class SScheduler
             run.steps.forEach(step => {
                 if (step.isValid()) {
                     step.unit().behavior()._targetingEntityId = 0;
-                    const entity = step.unit().entity();
-                    step.startingActionTokenCount = entity.actionTokenCount();
+                    // const entity = step.unit().entity();
+                    // step.startingActionTokenCount = entity.actionTokenCount();
                 }
             });
         });
@@ -292,9 +292,9 @@ export class SScheduler
             
             if (step.unit().isValid()) {
                 const entity = step.unit().entity();
-                if (step.startingActionTokenCount > entity.actionTokenCount()) {
-                    step.actedCount++;
-                }
+                // if (step.startingActionTokenCount > entity.actionTokenCount()) {
+                //     step.actedCount++;
+                // }
             }
 
             // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認

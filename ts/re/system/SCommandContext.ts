@@ -148,10 +148,7 @@ export class SCommandContext
     postConsumeActionToken(entity: LEntity): void {
         const behavior = entity.findEntityBehavior(LUnitBehavior);
         assert(behavior);
-
-        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
-        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
-        assert(entity.actionTokenCount() > 0);
+        entity._actionToken.verify();
 
         const m1 = () => {
             Log.doCommand("ConsumeActionToken");
@@ -174,10 +171,8 @@ export class SCommandContext
             }
         }
 
-        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
-        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
         if (activity.isConsumeAction()) {
-            assert(activity.subject().actionTokenCount() > 0);
+            activity.subject()._actionToken.verify();
         }
 
         const m1 = () => {
@@ -259,12 +254,9 @@ export class SCommandContext
     }
 
     private attemptConsumeActionToken(entity: LEntity): void {
+        entity._actionToken.verify();
 
-        // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
-        // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
-        assert(entity.actionTokenCount() > 0);
-
-        entity.setActionTokenCount(entity.actionTokenCount() - 1);  // ここで借金することもあり得る
+        entity._actionToken.consume();
         
             // ターンエンド
             {
@@ -535,7 +527,7 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("SkipPart");
             
-            entity.clearActionTokenCount();
+            entity._actionToken.clearActionTokenCount();
 
             return SCommandResponse.Handled;
         };

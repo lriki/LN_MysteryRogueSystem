@@ -70,15 +70,15 @@ export class LTOStep {
     private _iterationCountMax: number;    // 何回連続行動できるか。Run のマージなどで 0 になることもある。
     iterationCount2: number;
 
-    startingActionTokenCount: number;   // Run 開始時の Entity の ActionTokenCount.
-    actedCount: number;         // 行動したか
+    // startingActionTokenCount: number;   // Run 開始時の Entity の ActionTokenCount.
+    // actedCount: number;         // 行動したか
 
     public constructor(unit: LTOUnit) {
         this._unitId = unit.id();
         this._iterationCountMax = 1;
         this.iterationCount2 = 0;
-        this.startingActionTokenCount = 0;
-        this.actedCount = 0;
+        // this.startingActionTokenCount = 0;
+        // this.actedCount = 0;
     }
 
     public unitId(): number {
@@ -389,20 +389,20 @@ export class LScheduler {
             if (unit.isValid()) {
                 const entity = unit.entity();
                 unit.speedLevel2 = this.getSpeedLevel(entity);
+                const diff = unit.speedLevel2 - unit.speedLevel;
                 if (unit.speedLevel2 > unit.speedLevel) {
                     // 速度アップ
                     changesUnits.push(unit);
-                    const diff = unit.speedLevel2 - unit.speedLevel;
                     maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
                     unit.speedLevel = unit.speedLevel2;
                     
                     // 速度の増減分だけ、行動トークンも調整する。
                     // 例えば速度が増えた時は次の Run で追加の行動が発生するので、動けるようになる。
-                    entity.setActionTokenCount(entity.actionTokenCount() + diff);
+                    entity._actionToken.charge(diff);
                 }
                 if (unit.speedLevel2 < unit.speedLevel) {
                     // 速度ダウン
-                    entity.setActionTokenCount(entity.actionTokenCount() - 1);
+                    entity._actionToken.charge(diff);
                     unit.speedLevel = unit.speedLevel2;
                 }
             }
