@@ -8,6 +8,7 @@ import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { UName } from "ts/re/usecases/UName";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -35,7 +36,7 @@ test("generally.草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

@@ -11,6 +11,7 @@ import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
+import { LActionTokenType } from "../LActionToken";
 
 interface SkillAction {
     skillId: DSkillId;
@@ -38,7 +39,7 @@ export class LBlindAI extends LCharacterAI {
         if (UMovement.checkPassageToDir(self, frontDir)) {
             context.postActivity(
                 LActivity.makeMoveToAdjacent(self, frontDir)
-                .withConsumeAction());
+                .withConsumeAction(LActionTokenType.Minor));
             return SPhaseResult.Handled;
         }
 
@@ -59,14 +60,14 @@ export class LBlindAI extends LCharacterAI {
             context.postActivity(
                 LActivity.makeMoveToAdjacent(self, newDir)
                 .withEntityDirection(newDir)
-                .withConsumeAction());
+                .withConsumeAction(LActionTokenType.Minor));
             return SPhaseResult.Handled;
         }
         
         // ここまで来てしまったら向きだけ変えて待機。
         context.postActivity(
             LActivity.makeDirectionChange(self, newDir)
-            .withConsumeAction());
+            .withConsumeAction(LActionTokenType.Major));
         return SPhaseResult.Handled;
     }
     
@@ -86,7 +87,7 @@ export class LBlindAI extends LCharacterAI {
         }
         
         // 攻撃の成否に関わらず行動を消費する。
-        context.postConsumeActionToken(self);
+        context.postConsumeActionToken(self, LActionTokenType.Major);
         return SPhaseResult.Handled;
     }
 }

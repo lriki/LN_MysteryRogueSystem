@@ -113,6 +113,8 @@ export class DEntity {
      */
     autoAdditionStates: DEntityAutoAdditionState[];
 
+    majorActionDeclines: number;
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;
@@ -130,6 +132,7 @@ export class DEntity {
         this.reactions = [];
         this.emittorSet = new DEmittorSet();
         this.autoAdditionStates = [];
+        this.majorActionDeclines = 0;
     }
 
     public prefab(): DPrefab {

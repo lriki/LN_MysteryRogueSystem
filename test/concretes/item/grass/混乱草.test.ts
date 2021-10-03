@@ -6,6 +6,7 @@ import { TestEnv } from "../../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -30,7 +31,7 @@ test("concretes.item.grass.混乱草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -39,7 +40,7 @@ test("concretes.item.grass.混乱草", () => {
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT混乱").id)).toBe(true);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

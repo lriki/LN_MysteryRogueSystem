@@ -5,6 +5,7 @@ import { SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { MovingMethod } from "../LMap";
 import { LActivity } from "../activities/LActivity";
+import { LActionTokenType } from "../LActionToken";
 
 export class LDebugMoveRightState extends LBehavior {
 
@@ -28,7 +29,7 @@ export class LDebugMoveRightState extends LBehavior {
                 context.postActivity(LActivity.makeDirectionChange(self, dir));
                 context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }
-            context.postConsumeActionToken(self);
+            context.postConsumeActionToken(self, LActionTokenType.Minor);
             return SPhaseResult.Handled;
         }
 

@@ -7,6 +7,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
 import { DBasics } from "ts/re/data/DBasics";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -27,7 +28,7 @@ test("concretes.effect.Escape", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

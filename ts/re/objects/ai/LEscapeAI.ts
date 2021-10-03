@@ -11,6 +11,7 @@ import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LSaunteringAIHelper } from "./LSaunteringAIHelper";
 import { RESerializable } from "ts/re/Common";
+import { LActionTokenType } from "../LActionToken";
 
 @RESerializable
 export class LEscapeAI extends LCharacterAI {
@@ -125,7 +126,7 @@ export class LEscapeAI extends LCharacterAI {
                         context.postActivity(
                             LActivity.make(self)
                             .withEntityDirection(dir)
-                            .withConsumeAction());
+                            .withConsumeAction(LActionTokenType.Major));
                         return SPhaseResult.Handled;
                     }
                     else {
@@ -147,7 +148,7 @@ export class LEscapeAI extends LCharacterAI {
                         context.postActivity(
                             LActivity.makeMoveToAdjacentBlock(self, block2)
                             .withEntityDirection(dir)
-                            .withConsumeAction());
+                            .withConsumeAction(LActionTokenType.Minor));
                         return SPhaseResult.Handled;
                     }
                     else {
@@ -180,13 +181,13 @@ export class LEscapeAI extends LCharacterAI {
         // ここまで来てしまったら待機。
         context.postActivity(
             LActivity.make(self)
-            .withConsumeAction());
+            .withConsumeAction(LActionTokenType.Major));
         return SPhaseResult.Handled;
     }
     
     public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
         // 攻撃の成否に関わらず行動を消費する。
-        context.postConsumeActionToken(self);
+        context.postConsumeActionToken(self, LActionTokenType.Major);
         return SPhaseResult.Handled;
     }
 }

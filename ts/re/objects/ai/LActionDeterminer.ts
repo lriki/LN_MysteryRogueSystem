@@ -6,6 +6,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LCandidateSkillAction, UAction } from "ts/re/usecases/UAction";
 import { UMovement } from "ts/re/usecases/UMovement";
+import { LActionTokenType } from "../LActionToken";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -157,7 +158,7 @@ export class LActionDeterminer {
                     self.dir = UMovement.getLookAtDirFromPos(self.x, self.y, pos.x, pos.y);
                     
                     SEmittorPerformer.makeWithSkill(self, this._requiredSkillAction.action.skillId).performe(context);
-                    context.postConsumeActionToken(self);
+                    context.postConsumeActionToken(self, LActionTokenType.Major);
                     return true;
                 }
                 else {

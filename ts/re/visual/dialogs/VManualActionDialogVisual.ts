@@ -15,6 +15,7 @@ import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { UName } from "ts/re/usecases/UName";
 import { Helpers } from "ts/re/system/Helpers";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 enum UpdateMode {
     Normal,
@@ -79,7 +80,7 @@ export class VManualActionDialogVisual extends VDialog {
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
             entity.getEntityBehavior(LUnitBehavior)._fastforwarding = true;
-            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
             this._model.submit();
             return;
         }
@@ -224,7 +225,7 @@ export class VManualActionDialogVisual extends VDialog {
             SoundManager.playOk();
             this.openSubDialog(new SMainMenuDialog(entity), d => {
                 if (d.isSubmitted()) {
-                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
                     this._model.submit();
                 }
             });
@@ -262,7 +263,7 @@ export class VManualActionDialogVisual extends VDialog {
             this.endDirectionSelecting();
             this.openSubDialog(new SMainMenuDialog(entity), d => {
                 if (d.isSubmitted()) {
-                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction());
+                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
                     this._model.submit();
                 }
             });
@@ -320,7 +321,7 @@ export class VManualActionDialogVisual extends VDialog {
         if (this.isMoveButtonPressed() &&
             UMovement.checkPassageToDir(entity, dir)) {
 
-            const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction();
+            const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction(LActionTokenType.Minor);
             
             if (this.isDashButtonPressed()) {
                 //const behavior = entity.findBehavior(LUnitBehavior);
@@ -350,14 +351,14 @@ export class VManualActionDialogVisual extends VDialog {
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
             if (frontTarget.queryReactions().includes(DBasics.actions.talk)) {
-                context.postActivity(LActivity.makeTalk(entity).withConsumeAction());
+                context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenType.Major));
                 this._model.submit();
                 return true;
             }
         }
         
         // [通常攻撃] スキル発動
-        context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction());
+        context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction(LActionTokenType.Major));
         this._model.submit();
         
         return true;

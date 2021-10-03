@@ -4,6 +4,7 @@ import { DBasics } from "ts/re/data/DBasics";
 import { DSkillId } from "ts/re/data/DCommon";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { UMovement } from "ts/re/usecases/UMovement";
+import { LActionTokenType } from "../LActionToken";
 import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
@@ -24,7 +25,7 @@ export interface LActivityData {
     skillId: DSkillId,
     direction: number;
     entityDirection: number;
-    consumeAction: boolean;
+    consumeActionType: LActionTokenType | undefined;
     fastForward: boolean;
 }
 
@@ -47,7 +48,7 @@ export class LActivity {
     private _skillId: DSkillId;
     private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
     private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
-    private _consumeAction: boolean;
+    private _consumeActionType: (LActionTokenType | undefined);
     private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
 
     public constructor() {
@@ -58,7 +59,7 @@ export class LActivity {
         this._skillId = 0;
         this._direction = 0;
         this._entityDirection = 0;
-        this._consumeAction = false;
+        this._consumeActionType = undefined;
         this._fastForward = false;
     }
 
@@ -69,7 +70,7 @@ export class LActivity {
         this._objects2 = [];
         this._direction = dir ?? 0;
         this._entityDirection = 0;
-        this._consumeAction = false;
+        this._consumeActionType = undefined;
         this._fastForward = false;
         return this;
     }
@@ -124,13 +125,28 @@ export class LActivity {
         return this;
     }
 
-    public withConsumeAction(): this {
-        this._consumeAction = true;
+    public withConsumeAction(tokenType?: LActionTokenType | undefined): this {
+        if (tokenType) {
+            this._consumeActionType = tokenType;
+        }
+        else {
+            if (this._actionId == DBasics.actions.MoveToAdjacentActionId) {
+                this._consumeActionType = LActionTokenType.Minor;
+            }
+            else {
+                this._consumeActionType = LActionTokenType.Major;
+                //throw new Error("Not implemented.");
+            }
+        }
         return this;
     }
 
     public isConsumeAction(): boolean {
-        return this._consumeAction;
+        return this._consumeActionType != undefined;
+    }
+
+    public consumeActionTokenType(): LActionTokenType | undefined {
+        return this._consumeActionType;
     }
 
     public withFastForward(): this {
@@ -151,7 +167,7 @@ export class LActivity {
             skillId: this._skillId,
             direction: this._direction,
             entityDirection: this._entityDirection,
-            consumeAction: this._consumeAction,
+            consumeActionType: this._consumeActionType,
             fastForward: this._fastForward,
         }
     }
@@ -165,7 +181,7 @@ export class LActivity {
         i._skillId = data.skillId;
         i._direction = data.direction;
         i._entityDirection = data.entityDirection;
-        i._consumeAction = data.consumeAction;
+        i._consumeActionType = data.consumeActionType;
         i._fastForward = data.fastForward;
         return i;
     }

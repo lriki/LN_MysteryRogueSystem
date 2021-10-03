@@ -238,8 +238,7 @@ export class SScheduler
             // 行動トークンを更新
             if (behavior.waitTurnCount() == 0) {
                 // 行動トークンを、速度の分だけ配る。
-                // リセットではなく追加である点に注意。借金している場合に備える。
-                entity._actionToken.charge(Math.max(1, speedLevel));
+                entity._actionToken.reset(entity, Math.max(1, speedLevel));
             }
             else {
                 // 鈍足状態。このターンは行動トークンをもらえない。

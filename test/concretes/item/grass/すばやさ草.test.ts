@@ -8,6 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { DBasics } from "ts/re/data/DBasics";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -38,7 +39,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる] 1個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -49,7 +50,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     expect(enemy1.x).toBe(10);  // まだ enemy にターンは回らないので移動していない
 
     // [食べる] 2個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item2).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item2).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -58,7 +59,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
 
     // [食べる] 3個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item3).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item3).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -87,7 +88,7 @@ test("concretes.item.grass.すばやさ草.throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

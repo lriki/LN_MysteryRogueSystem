@@ -5,6 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -23,7 +24,7 @@ test("concretes.states.RatedRandom", () => {
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
         RESystem.dialogContext.activeDialog().submit();
 
         RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

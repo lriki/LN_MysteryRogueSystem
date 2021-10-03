@@ -4,6 +4,7 @@ import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
+import { LActionTokenType } from "../LActionToken";
 import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LRandom } from "../LRandom";
@@ -191,7 +192,7 @@ export class LMoveDeterminer {
             context.postActivity(LActivity.makeDirectionChange(self, dir));
             context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             //this.moveToAdjacent(self, block, context);
-            context.postConsumeActionToken(self);
+            context.postConsumeActionToken(self, LActionTokenType.Minor);
             return true;
         }
         else {
@@ -203,7 +204,7 @@ export class LMoveDeterminer {
         const dir = Helpers.offsetToDir(block.x() - self.x, block.y() - self.y);
         context.postActivity(LActivity.makeDirectionChange(self, dir));
         context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-        context.postConsumeActionToken(self);
+        context.postConsumeActionToken(self, LActionTokenType.Minor);
     }
 
     // 目的地あり？

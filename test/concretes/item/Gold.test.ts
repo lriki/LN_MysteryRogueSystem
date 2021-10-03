@@ -10,6 +10,7 @@ import { TestUtils } from "test/TestUtils";
 import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
 import { DBasics } from "ts/re/data/DBasics";
 import { SFormulaOperand } from "ts/re/system/SFormulaOperand";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -40,7 +41,7 @@ test("concretes.item.Gold", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [拾う]
-    RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -50,7 +51,7 @@ test("concretes.item.Gold", () => {
     expect(inventory1.gold()).toBe(1000);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

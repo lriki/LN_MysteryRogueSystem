@@ -10,6 +10,7 @@ import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
 import { DSequelId } from "ts/re/data/DSequel";
+import { LActionTokenType } from "../LActionToken";
 
 export class LNapStateBehavior extends LBehavior {
     private _hostileEnterd: boolean = false;
@@ -62,7 +63,7 @@ export class LNapStateBehavior extends LBehavior {
         }
         else {
             // Skip action
-            context.postConsumeActionToken(self);
+            context.postConsumeActionToken(self, LActionTokenType.Major);
             return SPhaseResult.Handled;
         }
     }

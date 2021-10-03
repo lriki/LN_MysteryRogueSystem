@@ -1,5 +1,11 @@
 import { assert } from "../Common";
+import { LEntity } from "./LEntity";
+import { LEntityId } from "./LObject";
 
+export enum LActionTokenType {
+    Minor,
+    Major,
+}
 
 export class LActionToken {
     /*
@@ -14,40 +20,60 @@ export class LActionToken {
     つまり、操られると同時に「次ターン休み」状態を付加し、ラウンド開始時にトークンを配らない。
     */
 
+    private _minorActionTokenCount: number = 0;
+
     // 変化によるインスタンス再構築でも行動回数を維持したい。（モンスターは変化の杖の効果を受けたターンは行動できる）
-    _actionTokenCount: number = 0;
+    private _majorActionTokenCount: number = 0;
 
     public clone(): LActionToken {
         const i = new LActionToken();
-        i._actionTokenCount = 0;   // 新しく作られた Entity は Scheduler には入っていないので、ActionToken を持っているのは不自然
+        i._minorActionTokenCount = 0;   
+        i._majorActionTokenCount = 0;   // 新しく作られた Entity は Scheduler には入っていないので、ActionToken を持っているのは不自然
         return i;
     }
     
-    actionTokenCount(): number { return this._actionTokenCount; }
-    setActionTokenCount(value: number): void { this._actionTokenCount = value; }
-    clearActionTokenCount(): void { this._actionTokenCount = 0; }
+    //actionTokenCount(): number { return this._majorActionTokenCount; }
+    //setActionTokenCount(value: number): void { this._majorActionTokenCount = value; }
+
+    clearActionTokenCount(): void {
+        this._minorActionTokenCount = 0;
+        this._majorActionTokenCount = 0;
+    }
 
     public canMinorAction(): boolean {
-        return this._actionTokenCount > 0;
+        return this._minorActionTokenCount > 0;
     }
 
     public canMajorAction(): boolean {
-        return this._actionTokenCount > 0;
+        return this._minorActionTokenCount > 0 && this._majorActionTokenCount > 0;
+    }
+
+    public reset(entity: LEntity, count: number): void {
+        this._minorActionTokenCount = count;
+        this._majorActionTokenCount = Math.max(count - entity.data().majorActionDeclines, 0);
     }
 
     public charge(count: number): void {
-        this._actionTokenCount += count;
+        this._minorActionTokenCount += count;
+        this._majorActionTokenCount += count;
     }
 
-    public consume(): void {
+    public consume(tokenType: LActionTokenType): void {
         this.verify();
-        this._actionTokenCount -= 1;
+        if (tokenType == LActionTokenType.Minor) {
+            this._minorActionTokenCount = Math.max(this._minorActionTokenCount - 1, 0);
+        }
+        else {
+            this._minorActionTokenCount = Math.max(this._minorActionTokenCount - 1, 0);
+            this._majorActionTokenCount = Math.max(this._majorActionTokenCount - 1, 0);
+        }
     }
 
     public verify(): void {
         // TODO: 今のところ借金する仕組みは無いので、そのように検証してみる。
         // あやつり系のモンスター特技を作るときには、別に借金を許可する consumeActionToken を作ったほうがいいかも。
-        assert(this._actionTokenCount > 0);
+        assert(this._minorActionTokenCount > 0);
+        assert(this._majorActionTokenCount > 0);
     }
 
 }

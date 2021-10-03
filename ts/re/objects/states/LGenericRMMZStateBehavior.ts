@@ -17,6 +17,7 @@ import { LCharacterAI } from "../ai/LCharacterAI";
 import { DTraits } from "ts/re/data/DTraits";
 import { UName } from "ts/re/usecases/UName";
 import { DSequelId } from "ts/re/data/DSequel";
+import { LActionTokenType } from "../LActionToken";
 
 
 
@@ -161,7 +162,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             }
             else if (effect.restriction == DStateRestriction.NotAction) {
 
-                context.postConsumeActionToken(self);
+                context.postConsumeActionToken(self, LActionTokenType.Major);
 
                 // 行動スキップ
                 return SPhaseResult.Handled;

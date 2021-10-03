@@ -8,6 +8,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
 import { DBasics } from "ts/re/data/DBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -34,7 +35,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // Enemy の目の前へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction(LActionTokenType.Minor));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -51,7 +52,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     // Enemy を攻撃して倒す
     enemy1.setActualParam(DBasics.params.hp, 1);
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -88,7 +89,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -98,7 +99,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     expect(enemy1.y == 10).toBe(true);
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     enemy1.dir = 6; // TODO: 今はAIにバグがあるので
@@ -138,7 +139,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -148,7 +149,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     expect(enemy1.y == 10).toBe(true);
 
     // 置く
-    RESystem.dialogContext.postActivity(LActivity.makePut(actor1, item2).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePut(actor1, item2).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

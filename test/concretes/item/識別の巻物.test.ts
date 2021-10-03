@@ -8,6 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { UName } from "ts/re/usecases/UName";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -39,7 +40,7 @@ test("concretes.item.識別の巻物", () => {
 
     {
         // [読む]
-        const activity = LActivity.makeRead(actor1, item1, [item2]).withConsumeAction();
+        const activity = LActivity.makeRead(actor1, item1, [item2]).withConsumeAction(LActionTokenType.Major);
         RESystem.dialogContext.postActivity(activity);
         RESystem.dialogContext.activeDialog().submit();
         

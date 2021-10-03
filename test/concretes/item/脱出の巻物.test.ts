@@ -7,6 +7,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -44,7 +45,7 @@ test("concretes.item.脱出の巻物", () => {
         actor1.dir = 6;
 
         // [投げる]
-        const activity = LActivity.makeThrow(actor1, item2).withConsumeAction();
+        const activity = LActivity.makeThrow(actor1, item2).withConsumeAction(LActionTokenType.Major);
         RESystem.dialogContext.postActivity(activity);
         RESystem.dialogContext.activeDialog().submit();
         
@@ -56,7 +57,7 @@ test("concretes.item.脱出の巻物", () => {
 
     {
         // [読む]
-        const activity = LActivity.makeRead(actor1, item1).withConsumeAction();
+        const activity = LActivity.makeRead(actor1, item1).withConsumeAction(LActionTokenType.Major);
         RESystem.dialogContext.postActivity(activity);
         RESystem.dialogContext.activeDialog().submit();
         
