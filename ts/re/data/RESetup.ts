@@ -324,6 +324,9 @@ export class RESetup {
             case "kEnemy_ウルフ":
                 entity.majorActionDeclines = 1;
                 break;
+            case "kEnemy_プレゼンにゃー":
+                data.traits.push({ code: DTraits.RandomItemDropRate, dataId: 0, value: 1.0 });
+                break;
         }
     }
     

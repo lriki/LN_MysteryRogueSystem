@@ -32,6 +32,7 @@ declare global {
         setupPrefab(prefabEventDataId: number, mapId: number, eventData: IDataMapEvent): void;
         isREEntity(): boolean;
         isREEvent(): boolean;
+        isREPrefab(): boolean;
         isREExtinct(): boolean;
         isRESpritePrepared(): boolean;
         setSpritePrepared(value: boolean): void;
@@ -152,6 +153,10 @@ Game_Event.prototype.isREEntity = function(): boolean {
 }
 
 Game_Event.prototype.isREEvent = function() {
+    return this._prefabEventDataId_RE > 0;
+}
+
+Game_Event.prototype.isREPrefab = function() {
     return this._prefabEventDataId_RE > 0;
 }
 

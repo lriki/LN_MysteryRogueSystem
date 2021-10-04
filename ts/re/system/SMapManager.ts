@@ -18,6 +18,7 @@ import { LItemShopStructure } from "ts/re/objects/structures/LItemShopStructure"
 import { SItemShopBuilder } from "./map/SItemShopBuilder";
 import { USearch } from "../usecases/USearch";
 import { DBlockLayerKind } from "../data/DCommon";
+import { USpawner } from "../usecases/USpawner";
 
 
 /**
@@ -312,15 +313,10 @@ export class SMapManager {
     /** 出現テーブルからランダムに選択して Item を作る */
     public spawnItem(mx: number, my: number): LEntity | undefined {
         const floorId = this._map.floorId();
-        const table = this._map.land2().landData().appearanceTable;
-        if (table.items.length == 0) return undefined;    // 出現テーブルが空
-        const list = table.items[floorId.floorNumber()];
-        if (list.length == 0) return undefined;    // 出現テーブルが空
-
-        const data = list[this.rand().nextIntWithMax(list.length)];
-        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-        REGame.world._transferEntity(entity, floorId, mx, my);
-
+        const entity = USpawner.createItemFromSpawnTable(floorId, this.rand());
+        if (entity) {
+            REGame.world._transferEntity(entity, floorId, mx, my);
+        }
         return entity;
     }
 

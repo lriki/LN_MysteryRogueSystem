@@ -97,6 +97,8 @@ export enum DTraits {
 
     Invisible,
 
+    RandomItemDropRate,
+
     // 壁抜けゴースト系モンスターの "フロア全体視界"
 
 }

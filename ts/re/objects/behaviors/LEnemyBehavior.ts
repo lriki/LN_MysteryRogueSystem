@@ -4,10 +4,12 @@ import { DBasics } from "ts/re/data/DBasics";
 import { DSpecialEffectCodes } from "ts/re/data/DCommon";
 import { DEnemyId, DEnemy } from "ts/re/data/DEnemy";
 import { DParameterId } from "ts/re/data/DParameter";
+import { DTraits } from "ts/re/data/DTraits";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffect } from "ts/re/system/SEffectApplyer";
-import { LBehavior } from "../internal";
+import { USpawner } from "ts/re/usecases/USpawner";
+import { LBehavior, LGenerateDropItemCause } from "../internal";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
@@ -69,6 +71,16 @@ export class LEnemyBehavior extends LBattlerBehavior {
             return SCommandResponse.Handled;
         }
         return SCommandResponse.Pass;
+    }
+    
+    onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void {
+        
+        const rate = self.traitsSumOrDefault(DTraits.RandomItemDropRate, 0, 0.05);
+        const rand = REGame.world.random();
+        if (rand.nextIntWithMax(100) < rate * 100) {
+            const item = USpawner.createItemFromSpawnTableOrDefault(self.floorId, rand);
+            result.push(item);
+        }
     }
 }
 

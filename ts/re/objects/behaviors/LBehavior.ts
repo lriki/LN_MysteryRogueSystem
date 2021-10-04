@@ -59,6 +59,11 @@ export enum LBehaviorGroup {
     SpecialAbility = 1,
 }
 
+export enum LGenerateDropItemCause {
+    Dead,       
+    FallDown,   // 転んだ
+}
+
 export interface LNameView {
     name: string;
     iconIndex: number;
@@ -393,6 +398,7 @@ export abstract class LBehavior extends LObject {
      */
     onSkillPerformed(context: SCommandContext, self: LEntity, targets: LEntity[], skillId: DSkillId): void {}
 
+    onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 
 
     

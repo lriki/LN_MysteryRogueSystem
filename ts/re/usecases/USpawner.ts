@@ -4,6 +4,7 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { LRandom } from "../objects/LRandom";
 
 
 export class USpawner {
@@ -42,6 +43,27 @@ export class USpawner {
         }
         
         return Array.from(result.values()).map(x => REData.entities[x]);
+    }
+
+    /**
+     * 指定したフロアの出現テーブルから、アイテムを作成する。
+     * 作成したアイテムはマップ上に出現していない。
+     */
+    public static createItemFromSpawnTable(floorId: LFloorId, rand: LRandom): LEntity | undefined {
+        const table = floorId.landData().appearanceTable;
+        if (table.items.length == 0) return undefined;    // 出現テーブルが空
+        const list = table.items[floorId.floorNumber()];
+        if (list.length == 0) return undefined;    // 出現テーブルが空
+
+        const data = list[rand.nextIntWithMax(list.length)];
+        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
+        return entity;
+    }
+
+    public static createItemFromSpawnTableOrDefault(floorId: LFloorId, rand: LRandom): LEntity {
+        const entity = this.createItemFromSpawnTable(floorId, rand);
+        if (entity) return entity;
+        return SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.system.fallbackItemEntityId), floorId);
     }
 
 }

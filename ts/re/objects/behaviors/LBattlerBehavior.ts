@@ -1,7 +1,7 @@
 import { DState, DStateId, DStateRestriction } from "ts/re/data/DState";
 import { LandExitResult, REData } from "ts/re/data/REData";
 import { REGame } from "../REGame";
-import { LBehavior } from "ts/re/objects/behaviors/LBehavior";
+import { LBehavior, LGenerateDropItemCause } from "ts/re/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -11,6 +11,7 @@ import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LParamSet } from "../LParam";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DActionId } from "ts/re/data/DAction";
+import { UAction } from "ts/re/usecases/UAction";
 
 export class LBattlerBehavior extends LBehavior {
 
@@ -106,6 +107,7 @@ export class LBattlerBehavior extends LBehavior {
                     context.postWait(entity, 100);
                     context.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
                     
+                    UAction.postDropItems(context, entity, LGenerateDropItemCause.Dead);
                     context.postCall(() => {
                         entity.iterateBehaviorsReverse(b => {
                             b.onPermanentDeath(context, entity);
@@ -121,6 +123,7 @@ export class LBattlerBehavior extends LBehavior {
                 }
             }
             else {
+                UAction.postDropItems(context, entity, LGenerateDropItemCause.Dead);
                 context.postCall(() => {
                     entity.iterateBehaviorsReverse(b => {
                         b.onPermanentDeath(context, entity);

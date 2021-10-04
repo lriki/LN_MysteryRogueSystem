@@ -1,4 +1,4 @@
-import { DecisionPhase, LBehavior, LBehaviorGroup, LNameView } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, SCommandResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -595,12 +595,12 @@ export class LEntity extends LObject
     }
 
     // Game_BattlerBase.prototype.traitsSum
-    private traitsSum(code: number, id: number): number {
+    public traitsSum(code: number, id: number): number {
         const traits = this.traitsWithId(code, id);
         return traits.reduce((r, trait) => r + trait.value, 0);
     }
 
-    private traitsSumOrDefault(code: number, id: number, defaultValue: number): number {
+    public traitsSumOrDefault(code: number, id: number, defaultValue: number): number {
         const traits = this.traitsWithId(code, id);
         return (traits.length == 0) ? defaultValue : traits.reduce((r, trait) => r + trait.value, 0);
     }
@@ -1310,6 +1310,17 @@ export class LEntity extends LObject
         if (!REGame.map.isValidPosition(this.x, this.y)) return false;
         const block = REGame.map.block(this.x, this.y);
         return block.containsEntity(this);
+    }
+
+    //----------------------------------------
+    
+    public generateDropItems(cause: LGenerateDropItemCause): LEntity[] {
+        const result: LEntity[] = [];
+        this.iterateBehaviorsReverse(b => {
+            b.onGenerateDropItems(this, cause, result);
+            return true;
+        });
+        return result;
     }
 
     

@@ -1,11 +1,11 @@
-import { tr, tr2 } from "ts/re/Common";
+import { assert, tr, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/re/data/DEffect";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
 import { DTraits } from "ts/re/data/DTraits";
 import { REData } from "ts/re/data/REData";
-import { onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
+import { LGenerateDropItemCause, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
@@ -382,5 +382,13 @@ export class UAction {
         return undefined;
     }
 
+    public static postDropItems(cctx: SCommandContext, entity: LEntity, cause: LGenerateDropItemCause): void {
+        const map = REGame.map;
+        assert(map.checkAppearing(entity));
+        const items = entity.generateDropItems(cause);
+        for (const item of items) {
+            this.dropOrDestroy(cctx, item, entity.x, entity.y);
+        }
+    }
 
 }

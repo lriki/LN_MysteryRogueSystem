@@ -80,8 +80,6 @@ export class REEntityVisualSet {
 
             this._sequelManager.removeVisual(visual);
             
-            // Game_Event の削除フラグを立てる。
-            // 次の Spriteset_Map で、実際に動的 Sprite が削除される。
             $gameMap.event(visual.rmmzEventId()).erase();
             
             // NOTE: このメソッドはマップ遷移時の全開放時もよばれるが、
