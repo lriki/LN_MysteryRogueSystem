@@ -103,7 +103,6 @@ Game_Event.prototype.meetsConditions = function(page: IDataMapEventPage): boolea
     assert(index >= 0);
     const additionalData = this._pageData_RE[index];
     if (additionalData && additionalData.condition_state) {
-        console.log("additionalData.condition_state", additionalData.condition_state);
         if (REVisual.entityVisualSet) {
             const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(this.eventId());
             if (visual) {

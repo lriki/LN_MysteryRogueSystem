@@ -56,7 +56,6 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         const event = new Game_Event(REDataManager.databaseMapId, eventId);
         event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
         this._events[eventId] = event;
-        console.log("新規作成", event);
         return event;
     }
     else {
@@ -64,9 +63,11 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         assert(event.isREEvent());
 
         // 再構築
+        const spritePrepared_RE = event.isRESpritePrepared();
         event.initMembers();
         event.increaseRERevision();
         event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
+        event.setSpritePrepared(spritePrepared_RE);
         return event;
     }
 }
@@ -125,9 +126,7 @@ Spriteset_Map.prototype.update = function() {
 };
 
 Spriteset_Map.prototype.updateREPrefabEvent = function() {
-    console.log("updateREPrefabEvent ======");
     $gameMap.getREPrefabEvents().forEach((event: Game_CharacterBase) => {
-        console.log("isRESpritePrepared", event);
         if (!event.isRESpritePrepared()) {
             this.makeREPrefabEventSprite(event as Game_Event);
         }
