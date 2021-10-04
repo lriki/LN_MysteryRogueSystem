@@ -5,7 +5,6 @@ import { DStateRestriction } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
 import { REGame } from "ts/re/objects/REGame";
 import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehavior";
-import { DTraits } from "../data/DTraits";
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
 import { LNameView } from "../objects/internal";
 import { LEntity } from "../objects/LEntity";
@@ -82,7 +81,7 @@ export class SView {
             }
             
             // 透明状態
-            if (entity.traits(DTraits.Invisible).length > 0) {
+            if (entity.traits(DBasics.traits.Invisible).length > 0) {
                 return { visible: false, translucent: false };
             }
 
@@ -99,7 +98,7 @@ export class SView {
             // entity は操作中キャラ
 
             // 透明状態
-            if (entity.traits(DTraits.Invisible).length > 0) {
+            if (entity.traits(DBasics.traits.Invisible).length > 0) {
                 return { visible: true, translucent: true };
             }
         }

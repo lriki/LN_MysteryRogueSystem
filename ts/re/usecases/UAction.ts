@@ -3,7 +3,6 @@ import { DActionId } from "ts/re/data/DAction";
 import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/re/data/DEffect";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
-import { DTraits } from "ts/re/data/DTraits";
 import { REData } from "ts/re/data/REData";
 import { LGenerateDropItemCause, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -18,6 +17,7 @@ import { RESystem } from "../system/RESystem";
 import { RECCMessageCommand, SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
 import { SSoundManager } from "../system/SSoundManager";
+import { UBlock } from "./UBlock";
 import { UMovement } from "./UMovement";
 import { UName } from "./UName";
 
@@ -229,7 +229,7 @@ export class UAction {
                 if (!this.checkAdjacentDirectlyAttack(performer, target)) return false; // 壁の角など、隣接攻撃できなければダメ
 
                 const targetBlock = REGame.map.block(target.x, target.y);
-                if (!targetBlock || targetBlock.checkPurifier(performer)) return false; // target の場所に聖域効果があるならダメ
+                if (!targetBlock || UBlock.checkPurifier(targetBlock, performer)) return false; // target の場所に聖域効果があるならダメ
 
                 return true;
             });
@@ -356,7 +356,7 @@ export class UAction {
     */
 
     public static chekcVisible(subject: LEntity, target: LEntity): boolean {
-        return (target.traits(DTraits.Invisible).length == 0);
+        return (target.traits(DBasics.traits.Invisible).length == 0);
     }
    
     /**

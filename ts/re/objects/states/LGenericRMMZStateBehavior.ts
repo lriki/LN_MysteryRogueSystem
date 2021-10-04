@@ -14,7 +14,6 @@ import { DBasics } from "ts/re/data/DBasics";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LBlindAI } from "../ai/LBlindAI";
 import { LCharacterAI } from "../ai/LCharacterAI";
-import { DTraits } from "ts/re/data/DTraits";
 import { UName } from "ts/re/usecases/UName";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LActionTokenType } from "../LActionToken";
@@ -179,7 +178,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
-        if (self.traitsWithId(DTraits.SealActivity, activity.actionId()).length > 0) {
+        if (self.traitsWithId(DBasics.traits.SealActivity, activity.actionId()).length > 0) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
             context.postMessage(data.message3.format(targetName));

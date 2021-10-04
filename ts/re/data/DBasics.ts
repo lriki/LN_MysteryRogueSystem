@@ -9,7 +9,7 @@ import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DB
 import { DBasicPrefabs } from "./predefineds/DBasicPrefabs";
 import { BasicSequels } from "./predefineds/DBasicSequels";
 import { DBasicStates } from "./predefineds/DBasicStates";
-import { DBasicStateTraits } from "./predefineds/DBasicTraits";
+import { DBasicStateTraits, DBasicTraits } from "./predefineds/DBasicTraits";
 import { DFactionId } from "./REData";
 
 export interface DBasicEffectBehaviors {
@@ -34,5 +34,6 @@ export class DBasics {
     static prefabs: DBasicPrefabs;
     static sequels: BasicSequels;
     static effectBehaviors: DBasicEffectBehaviors;
+    static traits: DBasicTraits;
 }
 

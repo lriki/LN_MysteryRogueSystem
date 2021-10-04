@@ -13,7 +13,7 @@ import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabDataSource, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DEquipment } from './DItem';
-import { DTraits } from './DTraits';
+import { DTrait } from './DTraits';
 import { DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
@@ -106,6 +106,8 @@ export class REDataManager
         assert(REData.parameters[DBasics.params.mdf].battlerParamId === 5);
         assert(REData.parameters[DBasics.params.agi].battlerParamId === 6);
         assert(REData.parameters[DBasics.params.luk].battlerParamId === 7);
+
+        
         
         DBasics.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
@@ -156,17 +158,83 @@ export class REDataManager
 
         // StateTraits
         {
-            REData.traits = [
-                { id: 0, name: "null" },
-                { id: 1, name: "RE.StateTrait.Nap" },
-            ];
+            REData.traits = [];
+            DBasics.traits = {} as any;
+            REData.traits[11] = new DTrait(11, "TRAIT_ELEMENT_RATE");
+            DBasics.traits.TRAIT_ELEMENT_RATE = 11;
+            REData.traits[12] = new DTrait(12, "TRAIT_DEBUFF_RATE");
+            DBasics.traits.TRAIT_DEBUFF_RATE = 12;
+            REData.traits[13] = new DTrait(13, "TRAIT_STATE_RATE");
+            DBasics.traits.TRAIT_STATE_RATE = 13;
+            REData.traits[14] = new DTrait(14, "TRAIT_STATE_RESIST");
+            DBasics.traits.TRAIT_STATE_RESIST = 14;
+            REData.traits[21] = new DTrait(21, "TRAIT_PARAM");
+            DBasics.traits.TRAIT_PARAM = 21;
+            REData.traits[22] = new DTrait(22, "TRAIT_XPARAM");
+            DBasics.traits.TRAIT_XPARAM = 22;
+            REData.traits[23] = new DTrait(23, "TRAIT_SPARAM");
+            DBasics.traits.TRAIT_SPARAM = 23;
+            REData.traits[31] = new DTrait(31, "TRAIT_ATTACK_ELEMENT");
+            DBasics.traits.TRAIT_ATTACK_ELEMENT = 31;
+            REData.traits[32] = new DTrait(32, "TRAIT_ATTACK_STATE");
+            DBasics.traits.TRAIT_ATTACK_STATE = 32;
+            REData.traits[33] = new DTrait(33, "TRAIT_ATTACK_SPEED");
+            DBasics.traits.TRAIT_ATTACK_SPEED = 33;
+            REData.traits[34] = new DTrait(34, "TRAIT_ATTACK_TIMES");
+            DBasics.traits.TRAIT_ATTACK_TIMES = 34;
+            REData.traits[35] = new DTrait(35, "TRAIT_ATTACK_SKILL");
+            DBasics.traits.TRAIT_ATTACK_SKILL = 35;
+            REData.traits[41] = new DTrait(41, "TRAIT_STYPE_ADD");
+            DBasics.traits.TRAIT_STYPE_ADD = 41;
+            REData.traits[42] = new DTrait(42, "TRAIT_STYPE_SEAL");
+            DBasics.traits.TRAIT_STYPE_SEAL = 42;
+            REData.traits[43] = new DTrait(43, "TRAIT_SKILL_ADD");
+            DBasics.traits.TRAIT_SKILL_ADD = 43;
+            REData.traits[44] = new DTrait(44, "TRAIT_SKILL_SEAL");
+            DBasics.traits.TRAIT_SKILL_SEAL = 44;
+            REData.traits[51] = new DTrait(51, "TRAIT_EQUIP_WTYPE");
+            DBasics.traits.TRAIT_EQUIP_WTYPE = 51;
+            REData.traits[52] = new DTrait(52, "TRAIT_EQUIP_ATYPE");
+            DBasics.traits.TRAIT_EQUIP_ATYPE = 52;
+            REData.traits[53] = new DTrait(53, "TRAIT_EQUIP_LOCK");
+            DBasics.traits.TRAIT_EQUIP_LOCK = 53;
+            REData.traits[54] = new DTrait(54, "TRAIT_EQUIP_SEAL");
+            DBasics.traits.TRAIT_EQUIP_SEAL = 54;
+            REData.traits[55] = new DTrait(55, "TRAIT_SLOT_TYPE");
+            DBasics.traits.TRAIT_SLOT_TYPE = 55;
+            REData.traits[61] = new DTrait(61, "TRAIT_ACTION_PLUS");
+            DBasics.traits.TRAIT_ACTION_PLUS = 61;
+            REData.traits[62] = new DTrait(62, "TRAIT_SPECIAL_FLAG");
+            DBasics.traits.TRAIT_SPECIAL_FLAG = 62;
+            REData.traits[63] = new DTrait(63, "TRAIT_COLLAPSE_TYPE");
+            DBasics.traits.TRAIT_COLLAPSE_TYPE = 63;
+            REData.traits[64] = new DTrait(64, "TRAIT_PARTY_ABILITY");
+            DBasics.traits.TRAIT_PARTY_ABILITY = 64;
+
+            DBasics.traits._separator = REData.newTrait("_separator").id;
+            DBasics.traits.CertainDirectAttack = REData.newTrait("CertainDirectAttack").id;
+            DBasics.traits.UnitVisitor = REData.newTrait("UnitVisitor").id;
+            DBasics.traits.StateRemoveByEffect = REData.newTrait("StateRemoveByEffect").id;
+            DBasics.traits.Stackable = REData.newTrait("Stackable").id;
+            DBasics.traits.EffectProficiency = REData.newTrait("EffectProficiency").id;
+            DBasics.traits.EquipmentProficiency = REData.newTrait("EquipmentProficiency").id;
+            DBasics.traits.SealActivity = REData.newTrait("SealActivity").id;
+            DBasics.traits.SealSpecialAbility = REData.newTrait("SealSpecialAbility").id;
+            DBasics.traits.Invisible = REData.newTrait("Invisible").id;
+            DBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
+
+
+            // REData.traits = [
+            //     { id: 0, name: "null" },
+            //     { id: 1, name: "RE.StateTrait.Nap" },
+            // ];
 
             DBasics.stateTraits = {
                 nap: 1,
             };
 
 
-            REData.traits[DTraits.CertainDirectAttack] = { id: DTraits.CertainDirectAttack, name: "CertainDirectAttack" };
+            //REData.traits[DTraits.CertainDirectAttack] = { id: DTraits.CertainDirectAttack, key: "CertainDirectAttack" };
         }
 
         // Factions

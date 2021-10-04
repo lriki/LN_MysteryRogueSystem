@@ -430,6 +430,14 @@ export class REData
     }
 
     //--------------------
+    
+    public static newTrait(key: string): DTrait {
+        const data = new DTrait(this.traits.length, key);
+        REData.traits.push(data);
+        return data;
+    }
+
+    //--------------------
 
     static newEnemy(): [DEntity, DEnemy] {
         const entity = REData.newEntity();

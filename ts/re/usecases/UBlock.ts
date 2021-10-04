@@ -1,5 +1,8 @@
 import { LBlock } from "ts/re/objects/LBlock";
 import { LMap } from "ts/re/objects/LMap";
+import { LEnemyBehavior } from "../objects/behaviors/LEnemyBehavior";
+import { LSanctuaryBehavior } from "../objects/behaviors/LSanctuaryBehavior";
+import { LEntity } from "../objects/LEntity";
 
 /**
  * 様々な条件で Block を取得する方法を提供する。
@@ -61,4 +64,19 @@ export class UBlock {
         }
     }
     */
+
+    
+
+    /** 指定した Entity にとって、この Block が浄化属性 (聖域の巻物) となるか */
+    public static checkPurifier(block: LBlock, entity: LEntity): boolean {
+        // FIXME: とりあえず決め打ちで、Enemy に対する SanctuaryBehavior のみチェックする
+        if (entity.findEntityBehavior(LEnemyBehavior)) {
+            const sanctuary = block.findEntity(e => !!e.findEntityBehavior(LSanctuaryBehavior));
+            if (sanctuary) {
+                // TODO: 張り付き？
+                return true;
+            }
+        }
+        return false;
+    }
 }

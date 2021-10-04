@@ -25,7 +25,6 @@ import { DEntity, DEntityId, DEntityNamePlate, DIdentificationDifficulty } from 
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { DTraits } from "ts/re/data/DTraits";
 import { LParamSet } from "./LParam";
 import { DEntityKind, DEntityKindId } from "ts/re/data/DEntityKind";
 import { UState } from "ts/re/usecases/UState";
@@ -435,7 +434,7 @@ export class LEntity extends LObject
     
     // Game_BattlerBase.prototype.paramRate
     public idealParamRate(paramId: DParameterId): number {
-        return this.traitsPi(DTraits.TRAIT_PARAM, paramId);
+        return this.traitsPi(DBasics.traits.TRAIT_PARAM, paramId);
     }
 
     // Game_BattlerBase.prototype.paramBuffRate
@@ -618,32 +617,32 @@ export class LEntity extends LObject
 
     // Game_BattlerBase.prototype.xparam
     public xparam(xparamId: DXParamId): number {
-        return this.traitsSum(DTraits.TRAIT_XPARAM, xparamId);
+        return this.traitsSum(DBasics.traits.TRAIT_XPARAM, xparamId);
     }
 
     public xparamOrDefault(xparamId: DXParamId, defaultValue: number): number {
-        return this.traitsSumOrDefault(DTraits.TRAIT_XPARAM, xparamId, defaultValue);
+        return this.traitsSumOrDefault(DBasics.traits.TRAIT_XPARAM, xparamId, defaultValue);
     }
     
     // Game_BattlerBase.prototype.sparam
     public sparam(sparamId: DSParamId): number  {
-        return this.traitsPi(DTraits.TRAIT_SPARAM, sparamId);
+        return this.traitsPi(DBasics.traits.TRAIT_SPARAM, sparamId);
     }
 
     // Game_BattlerBase.prototype.elementRate
     public elementRate(elementId: number): number {
-        return this.traitsPi(DTraits.TRAIT_ELEMENT_RATE, elementId);
+        return this.traitsPi(DBasics.traits.TRAIT_ELEMENT_RATE, elementId);
     }
 
     // ステート有効度
     // Game_BattlerBase.prototype.stateRate
     public stateRate(stateId: DStateId): number {
-        return this.traitsPi(DTraits.TRAIT_STATE_RATE, stateId);
+        return this.traitsPi(DBasics.traits.TRAIT_STATE_RATE, stateId);
     };
     
     // Game_BattlerBase.prototype.attackElements
     public attackElements(): number[] {
-        return this.traitsSet(DTraits.TRAIT_ATTACK_ELEMENT);
+        return this.traitsSet(DBasics.traits.TRAIT_ATTACK_ELEMENT);
     }
 
 
@@ -1149,7 +1148,7 @@ export class LEntity extends LObject
     }
 
     public iterateBehaviors2(func: (b: LBehavior) => boolean): boolean {
-        const sealedSpecialAbility = this.traits(DTraits.SealSpecialAbility).length > 0;
+        const sealedSpecialAbility = this.traits(DBasics.traits.SealSpecialAbility).length > 0;
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
@@ -1180,7 +1179,7 @@ export class LEntity extends LObject
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
 
-        const sealedSpecialAbility = this.traits(DTraits.SealSpecialAbility).length > 0;
+        const sealedSpecialAbility = this.traits(DBasics.traits.SealSpecialAbility).length > 0;
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
@@ -1357,12 +1356,12 @@ export class LEntity extends LObject
     _stackCount: number = 1;
 
     public canStack(): boolean {
-        return !!this.collectTraits().find(x => x.code == DTraits.Stackable);
+        return !!this.collectTraits().find(x => x.code == DBasics.traits.Stackable);
     }
 
     public checkStackable(other: LEntity): boolean {
-        if (!this.collectTraits().find(x => x.code == DTraits.Stackable)) return false;
-        if (!other.collectTraits().find(x => x.code == DTraits.Stackable)) return false;
+        if (!this.collectTraits().find(x => x.code == DBasics.traits.Stackable)) return false;
+        if (!other.collectTraits().find(x => x.code == DBasics.traits.Stackable)) return false;
 
         // TODO: 今は矢だけなのでこれでよいが、アタッチされているAbilityなども見るべき
         return this.dataId() == other.dataId();

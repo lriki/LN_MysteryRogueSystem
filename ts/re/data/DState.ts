@@ -229,7 +229,7 @@ export function makeStateTraitsFromMeta(meta: any): IDataTrait[] {
 
     const traits: IDataTrait[] = [];
     for (const data of list) {
-        const index = REData.traits.findIndex(x => x.name == data);
+        const index = REData.traits.findIndex(x => x.key == data);
         if (index) {
             traits.push({ code: index, dataId: 0, value: 0 });
         }

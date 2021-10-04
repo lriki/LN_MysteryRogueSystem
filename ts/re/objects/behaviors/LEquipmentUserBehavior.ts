@@ -20,7 +20,6 @@ import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
-import { DTraits } from "ts/re/data/DTraits";
 import { UName } from "ts/re/usecases/UName";
 
 interface SlotPart {
@@ -96,7 +95,7 @@ NOTE:
         const self = this.ownerEntity();
         const a = this.equippedItemEntities().reduce((r, e) => {
             const data = e.data();
-            const rate = self.traitsPi(DTraits.EquipmentProficiency, e.kindDataId());
+            const rate = self.traitsPi(DBasics.traits.EquipmentProficiency, e.kindDataId());
             const equipment = data.equipment;
             return equipment ? r + ((equipment.parameters[parameterId] ?? 0) * rate) : 0;
         }, 0);

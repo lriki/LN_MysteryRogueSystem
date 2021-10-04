@@ -11,7 +11,6 @@ import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
-import { DTraits } from "ts/re/data/DTraits";
 import { DBasics } from "../data/DBasics";
 
 /**

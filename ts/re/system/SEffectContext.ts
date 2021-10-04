@@ -9,7 +9,6 @@ import { DParameterId } from "ts/re/data/DParameter";
 import { LEnemyBehavior } from "ts/re/objects/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
-import { DTraits } from "ts/re/data/DTraits";
 import { LRandom } from "ts/re/objects/LRandom";
 import { DEntityKindId } from "ts/re/data/DEntityKind";
 import { DStateId } from "ts/re/data/DState";
@@ -204,7 +203,7 @@ export class SEffectContext {
 
         if (subject) {
             if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
-                if (subject.traits(DTraits.CertainDirectAttack).length > 0) {
+                if (subject.traits(DBasics.traits.CertainDirectAttack).length > 0) {
                     // 直接攻撃必中
                     result.missed = false;
                     result.evaded = false;

@@ -19,87 +19,17 @@ export type DTraitId = number;
  * そういったものモノある点に注意。
  * それでもまぁ、例えば "勢力の資質" とか "パーティの資質" とかで考えるといいかも。
  */
-export interface DTrait {
+export class DTrait {
     /** ID (0 is Invalid). */
     id: DTraitId;
 
-    /** Name */
-    name: string;
-}
-
-
-
-/**
- */
-export enum DTraits {
-    TRAIT_ELEMENT_RATE = 11,
-    TRAIT_STATE_RATE = 13,
-
-    /**
-     * Game_BattlerBase.TRAIT_PARAM
-     * dataId: RMMZ ParameterId
-     * value:  
-     */
-    TRAIT_PARAM = 21,
-    TRAIT_XPARAM = 22,
-    TRAIT_SPARAM = 23,
-
-    TRAIT_ATTACK_ELEMENT = 31,
-
-
-    // ↑ ここまでは RMMZ の Game_BattlerBase.TRAIT_xxxx と同一
-    //----------
+    /** Key */
+    key: string;
     
-    _separator = 127,
-
-    /**
-     * 直接攻撃を必中にする。
-     */
-    CertainDirectAttack,
-
-    /** 地獄耳 */
-    UnitVisitor,
-
-    /** 何らかのアクションを受けたらステート解除。(仮眠や金縛りの解除で使う) */
-    StateRemoveByEffect,
-
-    Stackable,
-
-    /**
-     * アイテム種別ごとの "使うとき" の練度。
-     * 食べる・投げる・読む等。攻撃でも有効。
-     * 
-     * dataId: DEntityKindId
-     * value: 練度。1.0 で等倍
-     */
-    EffectProficiency,
-
-    /**
-     * アイテム種別ごとの "装備したとき" の練度。
-     * 
-     * 
-     * dataId: DEntityKindId
-     * value: 練度。1.0 で等倍
-     */
-    EquipmentProficiency,
-
-    /**
-     * Activity を禁止する。
-     * 
-     * dataId: DActionId
-     */
-    SealActivity,
-
-    /**
-     * 特殊能力封印
-     */
-    SealSpecialAbility,
-
-    Invisible,
-
-    RandomItemDropRate,
-
-    // 壁抜けゴースト系モンスターの "フロア全体視界"
-
+    public constructor(id: DTraitId, key: string) {
+        this.id = id;
+        this.key = key;
+    }
 }
+
 

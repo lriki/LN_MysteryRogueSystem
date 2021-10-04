@@ -2,8 +2,6 @@ import { assert, RESerializable } from "ts/re/Common";
 import { LEntity } from "./LEntity";
 import { FBlockComponent } from "ts/re/floorgen/FMapData";
 import { REGame } from "./REGame";
-import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
-import { LSanctuaryBehavior } from "./behaviors/LSanctuaryBehavior";
 import { REBlockLayer } from "./LBlockLayer";
 import { LRoom } from "./LRoom";
 import { RESystem } from "ts/re/system/RESystem";
@@ -346,18 +344,5 @@ export class LBlock// extends LObject
     /** 指定した Entity がこの Block に含まれているか */
     public containsEntity(entity: LEntity): boolean {
         return this.findEntityLayerKind(entity) != undefined;
-    }
-
-    /** 指定した Entity にとって、この Block が浄化属性 (聖域の巻物) となるか */
-    public checkPurifier(entity: LEntity): boolean {
-        // FIXME: とりあえず決め打ちで、Enemy に対する SanctuaryBehavior のみチェックする
-        if (entity.findEntityBehavior(LEnemyBehavior)) {
-            const sanctuary = this.findEntity(e => !!e.findEntityBehavior(LSanctuaryBehavior));
-            if (sanctuary) {
-                // TODO: 張り付き？
-                return true;
-            }
-        }
-        return false;
     }
 }

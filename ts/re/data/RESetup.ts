@@ -9,7 +9,6 @@ import { DPrefab } from "./DPrefab";
 import { DSkill } from "./DSkill";
 import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
-import { DTraits } from "./DTraits";
 import { REData } from "./REData";
 
 export class RESetup {
@@ -32,23 +31,23 @@ export class RESetup {
     public static setupDirectly_State(data: DState) {
         switch (data.key) {
             case "kState_UT気配察知":
-                data.effect.traits.push({ code: DTraits.UnitVisitor, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.UnitVisitor, dataId: 0, value: 0 });
                 break;
             case "kState_UnitTest_攻撃必中":
-                data.effect.traits.push({ code: DTraits.CertainDirectAttack, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
                 break;
             case "kState_UTアイテム擬態":
                 data.effect.behaviors.push("LItemImitatorBehavior");
                 break;
             case "kState_仮眠2":
                 //data.behaviors.push("LDoze2Behavior");
-                data.effect.traits.push({ code: DTraits.StateRemoveByEffect, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
                 data.idleSequel = DBasics.sequels.asleep;
                 break;
             case "kState_UT魔法使い":
-                data.effect.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
-                data.effect.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
-                data.effect.traits.push({ code: DTraits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                data.effect.traits.push({ code: DBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
+                data.effect.traits.push({ code: DBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
+                data.effect.traits.push({ code: DBasics.traits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
                 break;
                 /*
             case "kState_UT速度バフ":
@@ -73,8 +72,8 @@ export class RESetup {
                 data.effect.behaviors.push("LIllusionStateBehavior");
                 break;
             case "kState_UTくちなし":
-                data.effect.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.EatActionId, value: 0 });
-                data.effect.traits.push({ code: DTraits.SealActivity, dataId: DBasics.actions.ReadActionId, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.SealActivity, dataId: DBasics.actions.EatActionId, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.SealActivity, dataId: DBasics.actions.ReadActionId, value: 0 });
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.FloorTransfer });
                 break;
             case "kState_UTかなしばり":
@@ -82,14 +81,14 @@ export class RESetup {
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 3" });
                 break;
             case "kState_UT封印":
-                data.effect.traits.push({ code: DTraits.SealSpecialAbility, dataId: DBasics.actions.EatActionId, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.SealSpecialAbility, dataId: DBasics.actions.EatActionId, value: 0 });
                 break;
             case "kState_UT透明":
-                data.effect.traits.push({ code: DTraits.Invisible, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.Invisible, dataId: 0, value: 0 });
                 data.submatchStates.push(REData.getStateFuzzy("kState_UT透明_モンスター").id);
                 break;
             case "kState_UT透明_モンスター":
-                data.effect.traits.push({ code: DTraits.Invisible, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: DBasics.traits.Invisible, dataId: 0, value: 0 });
                 data.effect.matchConditions.kindId = DBasics.entityKinds.MonsterKindId;
                 break;
             case "kState_UT足つかみ":
@@ -132,7 +131,7 @@ export class RESetup {
                 break;
             case "kウッドアロー":
                 entity.display.stackedName = "%1本の" + entity.display.name;
-                data.traits.push({code: DTraits.Stackable, dataId: 0, value: 0});
+                data.traits.push({code: DBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(DBasics.actions.ShootingActionId, 0);
                 break;
             case "kItem_スピードドラッグ":
@@ -325,7 +324,7 @@ export class RESetup {
                 entity.majorActionDeclines = 1;
                 break;
             case "kEnemy_プレゼンにゃー":
-                data.traits.push({ code: DTraits.RandomItemDropRate, dataId: 0, value: 1.0 });
+                data.traits.push({ code: DBasics.traits.ItemDropRate, dataId: 0, value: 1.0 });
                 break;
         }
     }

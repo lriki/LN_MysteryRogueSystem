@@ -5,7 +5,6 @@ import { DEntityKindId } from "../data/DEntityKind";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DEffectBehavior } from "../data/DSkill";
-import { DTraits } from "../data/DTraits";
 import { LandExitResult, REData } from "../data/REData";
 import { LProjectableBehavior } from "../objects/behaviors/activities/LProjectableBehavior";
 import { LBattlerBehavior } from "../objects/behaviors/LBattlerBehavior";
@@ -176,7 +175,7 @@ export class SEffectorFact {
 
         // この種類を扱うのは得意？
         if (this._incidentEntityKind > 0) {
-            this._genericEffectRate = this._subject.traitsPi(DTraits.EffectProficiency, this._incidentEntityKind);
+            this._genericEffectRate = this._subject.traitsPi(DBasics.traits.EffectProficiency, this._incidentEntityKind);
         }
         else {
             this._incidentEntityKind = 1.0;

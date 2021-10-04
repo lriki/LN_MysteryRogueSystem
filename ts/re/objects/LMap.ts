@@ -18,6 +18,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { LItemShopStructure } from "./structures/LItemShopStructure";
 import { DBlockLayerKind } from "../data/DCommon";
+import { UBlock } from "../usecases/UBlock";
 
 export enum MovingMethod {
     Walk,
@@ -457,7 +458,7 @@ export class LMap extends LObject
      */
     public canWalkEntering(block: LBlock, entity: LEntity, method: MovingMethod, layer: DBlockLayerKind): boolean {
         if (method == MovingMethod.Walk) {
-            if (block.checkPurifier(entity)) return false;  // 聖域の巻物とかがある
+            if (UBlock.checkPurifier(block, entity)) return false;  // 聖域の巻物とかがある
         }
 
         // TODO: 壁抜けや浮遊状態で変わる
