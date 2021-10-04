@@ -171,10 +171,6 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     onPermanentDeath(context: SCommandContext, self: LEntity): void {
-        for (const entity of this.entities()) {
-            this.removeEntity(entity);
-            UAction.dropOrDestroy(context, entity, self.x, self.y);
-        }
     }
     
     /*

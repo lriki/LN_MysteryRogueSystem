@@ -67,7 +67,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         event.initMembers();
         event.increaseRERevision();
         event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
-        event.setSpritePrepared(spritePrepared_RE);
+        event.setSpritePrepared(spritePrepared_RE); // initMembers でリセットされるが、スプライト割り当て済みフラグは維持する
         return event;
     }
 }

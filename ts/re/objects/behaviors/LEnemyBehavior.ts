@@ -8,11 +8,13 @@ import { DTraits } from "ts/re/data/DTraits";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffect } from "ts/re/system/SEffectApplyer";
+import { UAction } from "ts/re/usecases/UAction";
 import { USpawner } from "ts/re/usecases/USpawner";
 import { LBehavior, LGenerateDropItemCause } from "../internal";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
+import { LInventoryBehavior } from "./LInventoryBehavior";
 
 
 /**
@@ -74,6 +76,15 @@ export class LEnemyBehavior extends LBattlerBehavior {
     }
     
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void {
+        const inventory = self.findEntityBehavior(LInventoryBehavior);
+        if (inventory) {
+            for (const item of inventory.entities()) {
+                inventory.removeEntity(item);
+                result.push(item);
+                //UAction.dropOrDestroy(context, entity, self.x, self.y);
+            }
+            return;
+        }
         
         const rate = self.traitsSumOrDefault(DTraits.RandomItemDropRate, 0, 0.05);
         const rand = REGame.world.random();
