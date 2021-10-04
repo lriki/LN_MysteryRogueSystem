@@ -4,6 +4,10 @@ import { DMapId } from "./DLand";
 import { DTroopId } from "./DTroop";
 import { REData } from "./REData";
 
+export interface DConstructionExpr {
+    name: string;
+    args: any[];
+}
 
 export interface RmmzLandMetadata {
     identifications?: string[];
@@ -425,5 +429,22 @@ export class DHelpers {
     
     public static isNode(): boolean {
         return (process.title !== 'browser');
+    }
+
+    public static parseConstructionExpr(expr: string): DConstructionExpr {
+
+        // "Item(1, 2)" を、 { name: "Item", args: [1, 2] } にする。
+        const lp = expr.indexOf("(");
+        const rp = expr.lastIndexOf(")");
+
+        if (lp >= 0 && rp >= 0) {
+            const expr2 = "[" + expr.substr(lp + 1, rp - lp - 1) + "]";
+            const args = eval(expr2);
+            return { name: expr.substr(0, lp).trim(), args: args };
+        }
+        else {
+            // 引数省略されている
+            return { name: expr, args: [] };
+        }
     }
 }

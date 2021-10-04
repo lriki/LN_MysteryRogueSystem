@@ -1,4 +1,5 @@
 import { DEntityKindId } from "./DEntityKind";
+import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
 
@@ -130,20 +131,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
 export function parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[] {
     const result: DBehaviorInstantiation[] = [];
     for (const data of meta) {
-        // "Item(1, 2)" を、 { name: "Item", args: [1, 2] } にする。
-        const lp = data.indexOf("(");
-        const rp = data.lastIndexOf(")");
-
-        if (lp >= 0 && rp >= 0) {
-            const expr = "[" + data.substr(lp + 1, rp - lp - 1) + "]";
-            const args = eval(expr);
-            result.push({ name: data.substr(0, lp), args: args });
-        }
-        else {
-            // 引数省略されている
-            result.push({ name: data, args: [] });
-        }
-
+        result.push(DHelpers.parseConstructionExpr(data));
     }
     return result;
 }

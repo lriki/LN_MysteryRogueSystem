@@ -1,3 +1,5 @@
+import { DHelpers } from "./DHelper";
+import { REData } from "./REData";
 
 export type DTraitId = number;
 
@@ -29,6 +31,23 @@ export class DTrait {
     public constructor(id: DTraitId, key: string) {
         this.id = id;
         this.key = key;
+    }
+
+    public static parseTraitMetadata(meta: any): IDataTrait[] {
+        const raws = meta["RE-Trait"];
+        if (!raws) return [];
+        const list = (raws instanceof Array) ? raws : [raws];
+        
+        const result: IDataTrait[] = [];
+        for (const data of list) {
+            const c = DHelpers.parseConstructionExpr(data);
+            result.push({
+                code: REData.getTrait(c.name).id,
+                dataId: Number(c.args[0]),
+                value: Number(c.args[1]),
+            });
+        }
+        return result;
     }
 }
 

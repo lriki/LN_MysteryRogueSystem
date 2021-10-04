@@ -26,6 +26,7 @@ import { DItemShopType } from "./DItemShop";
 import { REDataExtension } from "./REDataExtension";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
+import { assert } from "../Common";
 
 
 export enum REFloorMapKind
@@ -435,6 +436,12 @@ export class REData
         const data = new DTrait(this.traits.length, key);
         REData.traits.push(data);
         return data;
+    }
+
+    public static getTrait(pattern: string): DTrait {
+        const data = REData.traits.find(x => x && x.key == pattern);
+        if (data) return data;
+        throw new Error(`Trait "${pattern}" not found.`);
     }
 
     //--------------------

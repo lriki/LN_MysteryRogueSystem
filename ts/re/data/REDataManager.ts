@@ -684,6 +684,8 @@ export class REDataManager
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.entity.kindId = DBasics.entityKinds.MonsterKindId;
 
+                enemy.traits = enemy.traits.concat(DTrait.parseTraitMetadata(x.meta));
+
                 RESetup.setupEnemy(entity);
             }
         });
