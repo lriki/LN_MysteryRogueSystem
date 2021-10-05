@@ -1313,6 +1313,8 @@ export class LEntity extends LObject
 
     //----------------------------------------
     
+    _dropItemGenerated = false;
+
     public generateDropItems(cause: LGenerateDropItemCause): LEntity[] {
         const result: LEntity[] = [];
         this.iterateBehaviorsReverse(b => {

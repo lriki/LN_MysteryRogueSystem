@@ -44,7 +44,7 @@ export class SGoldStealEffectBehavior extends SEffectBehavior {
         const damage = 1000;    // TODO:
         const steal = Math.min(damage, gold);
 
-        const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, []));
+        const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.system.fallbackGoldEntityId, []));
         entity.setActualParam(DBasics.params.gold, steal);
 
         inventory.gainGold(-steal);

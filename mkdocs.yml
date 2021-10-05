@@ -16,7 +16,10 @@ theme:
     #favicon: favicon.png
     
 nav:
-    - Manual: index.md
+    - Home: index.md
+    - Manual:
+        - index: manual/index.md
+        - ドロップアイテム: manual/DropItem.md
     - 拡張:
         - index: dev/index.md
     - 内部的なこと:

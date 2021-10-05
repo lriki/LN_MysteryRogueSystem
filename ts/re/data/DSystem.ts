@@ -40,6 +40,8 @@ export class DSystem {
     /** 出現テーブルが何もないときに Item の Spawn が要求されたときに生成する Entity */
     public fallbackItemEntityId: DEntityId;
 
+    public fallbackGoldEntityId: DEntityId;
+
 
     constructor() {
         //this.elements = $dataSystem.elements ?? [];
@@ -56,6 +58,7 @@ export class DSystem {
         }
         this.fallbackEnemyEntityId = 0;
         this.fallbackItemEntityId = 0;
+        this.fallbackGoldEntityId = 0;
     }
 
     public link(testMode: boolean): void {
@@ -74,5 +77,15 @@ export class DSystem {
 
         this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム").entityId;
         this.fallbackItemEntityId = REData.getItemFuzzy("kItem_雑草").id;
+        this.fallbackGoldEntityId = REData.getItemFuzzy("kItem_Gold").id;
+
+        for (let i = 1; i < REData.enemies.length; i++) {
+            const data = REData.enemyData(i);
+            for (const item of data.dropItems) {
+                if (item.gold > 0 && item.entityId == 0) {
+                    item.entityId = this.fallbackGoldEntityId;
+                }
+            }
+        }
     }
 }

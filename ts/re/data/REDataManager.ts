@@ -24,6 +24,7 @@ import { DEffectCause } from './DEmittor';
 import { DAttackElement } from './DAttackElement';
 import { REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
+import { DDropItem } from './DEnemy';
 
 
 declare global {  
@@ -681,6 +682,7 @@ export class REDataManager
                 }
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
+                enemy.dropItems = DDropItem.makeFromRmmzDropItemList(x.dropItems, x.gold);
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.entity.kindId = DBasics.entityKinds.MonsterKindId;
 

@@ -55,6 +55,8 @@ cloc ts --include-lang=TypeScript
 ```
 
 ```
+pip install mkdocs
+pip install mkdocs-material
 mkdocs build
 mkdocs serve
 ```

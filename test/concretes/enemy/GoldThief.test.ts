@@ -9,6 +9,8 @@ import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
 import { DBasics } from "ts/re/data/DBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
+import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
+import { assert } from "ts/re/Common";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -83,3 +85,32 @@ test("concretes.enemy.GoldThief.Basic", () => {
     expect(item1.x).toBe(12);
     expect(item1.y).toBe(11);
 });
+
+test("concretes.enemy.GoldThief.DropItem", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
+    actor1.addState(TestEnv.StateId_CertainDirectAttack);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃー").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // Enemy を攻撃して倒す
+    enemy1.setActualParam(DBasics.params.hp, 1);
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    // Enemy は倒れ、足元に item が落ちている。ドロップ率 100%
+    expect(enemy1.isDestroyed()).toBe(true);
+    const item = REGame.map.block(11, 10).getFirstEntity();
+    assert(item);
+    expect(!!item.findEntityBehavior(LGoldBehavior)).toBe(true);
+});
+

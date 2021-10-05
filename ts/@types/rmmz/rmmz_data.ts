@@ -151,9 +151,9 @@ declare interface IDataAction
 
 declare interface IDataDropItem
 {
-    kind?: number;
-    dataId?: number;
-    denominator?: number;
+    kind: number;
+    dataId: number;
+    denominator: number;
 }
 
 declare interface IDataEnemy
