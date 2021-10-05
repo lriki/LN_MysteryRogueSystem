@@ -139,7 +139,7 @@ export class SScheduler
                     this.onCommandChainConsumed();
                 }
 
-                RESystem.sequelContext.attemptFlush();
+                RESystem.sequelContext.attemptFlush(false);
                 continue;
             }
             

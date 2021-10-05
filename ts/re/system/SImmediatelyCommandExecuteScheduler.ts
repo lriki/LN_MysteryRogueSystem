@@ -33,8 +33,7 @@ export class SImmediatelyCommandExecuteScheduler {
             
             if (RESystem.commandContext.isRunning()) {
                 RESystem.commandContext._processCommand();
-                console.log("attemptFlush 2");
-                RESystem.sequelContext.attemptFlush();
+                RESystem.sequelContext.attemptFlush(false);
             }
             else {
                 // 実行予約が溜まっているなら submit して実行開始する。

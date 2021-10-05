@@ -350,7 +350,6 @@ export class SEmittorPerformer {
                 actualEmittor = emittorEffects[0];
             }
 
-            
             LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, emittor.scope.length, actualEmittor.effectSet);
             //throw new Error("Not implemented.");
 

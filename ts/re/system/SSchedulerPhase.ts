@@ -100,7 +100,7 @@ export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         //RESystem.sequelContext.flushSequelSet();
-        RESystem.sequelContext.attemptFlush();
+        RESystem.sequelContext.attemptFlush(true);
     }
     
     onProcess(scheduler: SScheduler, unit: LTOUnit): void {

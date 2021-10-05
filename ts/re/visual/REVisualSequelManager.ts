@@ -14,6 +14,8 @@ export class REVisualSequelManager {
     }
 
     setup(sequelSet: SSequelSet) {
+        console.log("sequelSet", sequelSet);
+
         this._activeSequelSet = sequelSet;
         this._currentSequelRun = -1;
         this._runningVisuals.splice(0);

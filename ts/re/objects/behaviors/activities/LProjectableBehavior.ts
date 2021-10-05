@@ -70,6 +70,7 @@ export class LProjectableBehavior extends LBehavior {
         entity.addState(REData.getStateFuzzy("kSystemState_Projectile").id, false);
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
+        console.log("発射");
     }
 
 
@@ -118,6 +119,8 @@ export class LProjectableBehavior extends LBehavior {
         const offset = Helpers.dirToTileOffset(this.blowDirection);
         const tx = self.x + offset.x;
         const ty = self.y + offset.y;
+
+        console.log("移動 ", self.x);
 
         self.dir = this.blowDirection;
 

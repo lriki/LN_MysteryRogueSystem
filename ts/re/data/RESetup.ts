@@ -290,6 +290,11 @@ export class RESetup {
                 //emittor.scope.length = Infinity;
                 //emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
                 break;
+            case "kSkill_射撃_矢":
+                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                emittor.scope.length = Infinity;
+                emittor.scope.projectilePrefabKey = "kウッドアロー";
+                break;
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 emittor.effectSet.selfEffect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});

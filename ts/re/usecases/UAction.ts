@@ -66,9 +66,11 @@ export class UAction {
     /**
      * entity を現在マップの指定位置へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      */
-    public static dropOrDestroy(context: SCommandContext, entity: LEntity, mx: number, my: number): void {
-        REGame.world._transferEntity(entity, REGame.map.floorId(), mx, my);
-        this.postDropOrDestroyOnCurrentPos(context, entity, entity.getHomeLayer());
+    public static postDropOrDestroy(context: SCommandContext, entity: LEntity, mx: number, my: number): void {
+        context.postCall(() => {
+            REGame.world._transferEntity(entity, REGame.map.floorId(), mx, my);
+            this.postDropOrDestroyOnCurrentPos(context, entity, entity.getHomeLayer());
+        });
     }
 
     /**
@@ -77,7 +79,6 @@ export class UAction {
      */
     public static postDropOrDestroyOnCurrentPos(context: SCommandContext, entity: LEntity, targetLayer: DBlockLayerKind): void {
         const block = UMovement.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer, entity);
-        console.log("postDropOrDestroyOnCurrentPos", block);
         if (block) {
             //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
             //context.postCall(() => {
@@ -139,7 +140,6 @@ export class UAction {
     public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): LCandidateSkillAction[] {
         const actions = performer.collectSkillActions();
         let result: LCandidateSkillAction[] = [];
-        let hasAdjacentAction = false;
 
 
 
@@ -159,7 +159,7 @@ export class UAction {
                     conditionParam1: undefined,
                     conditionParam2: undefined,
                     conditionType: undefined,
-                    rating: 5,
+                    rating: 3,
                     skillId: RESystem.skills.move,
                 },
                 targets: []
@@ -175,8 +175,8 @@ export class UAction {
         let maxRating = 0;
         result.forEach(r => maxRating = Math.max(r.action.rating, maxRating));
 
-        // 最大 Rating からの差が 10 以内を有効とする
-        result = result.filter(x => x.action.rating >= maxRating - 10);
+        // 最大 Rating からの差が 5 以内を有効とする
+        result = result.filter(x => x.action.rating >= maxRating - 5);
 
 
         // 攻撃対象が隣接していれば、"移動" を外す
@@ -387,7 +387,7 @@ export class UAction {
         assert(map.checkAppearing(entity));
         const items = entity.generateDropItems(cause);
         for (const item of items) {
-            this.dropOrDestroy(cctx, item, entity.x, entity.y);
+            this.postDropOrDestroy(cctx, item, entity.x, entity.y);
         }
     }
 

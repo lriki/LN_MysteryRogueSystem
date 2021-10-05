@@ -14,10 +14,10 @@ export class SSequelContext {
         return this._sequelSet.isEmpty();
     }
 
-    public attemptFlush(): void {
+    public attemptFlush(force: boolean): void {
         // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
         // もし歩行など並列のみであればあとでまとめて実行したので不要。
-        if (!this._sequelSet.isAllParallel()) {
+        if (!this._sequelSet.isAllParallel() || force) {
             this.flushSequelSet();
         }
     }
