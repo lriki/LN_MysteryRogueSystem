@@ -1,7 +1,7 @@
 import { assert, tr2 } from "ts/re/Common";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { SManualActionDialog } from "ts/re/system/dialogs/SManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -102,7 +102,7 @@ export class VManualActionDialogVisual extends VDialog {
             if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
                 const actions = targetEntity.queryReactions();
                 if (actions.length > 0) {
-                    if (actions.includes(DBasics.actions.PickActionId)) {
+                    if (actions.includes(REBasics.actions.PickActionId)) {
     
                         if (this._model.dashingEntry) {
                             context.commandContext().postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
@@ -350,7 +350,7 @@ export class VManualActionDialogVisual extends VDialog {
         // 正面に、少なくとも敵対していない Entity がいれば、話しかけてみる
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
-            if (frontTarget.queryReactions().includes(DBasics.actions.talk)) {
+            if (frontTarget.queryReactions().includes(REBasics.actions.talk)) {
                 context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenType.Major));
                 this._model.submit();
                 return true;

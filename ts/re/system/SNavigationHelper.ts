@@ -1,7 +1,7 @@
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
-import { DBasics } from "../data/DBasics";
+import { REBasics } from "../data/REBasics";
 import { Helpers } from "./Helpers";
 
 // いわゆる ナビゲーションAI 関係のサポート
@@ -49,7 +49,7 @@ export class SNavigationHelper {
 
         if (Helpers.isHostile(subject, target)) {
 
-            if (subject.collectTraits().find(t => t.code == DBasics.traits.UnitVisitor)) {
+            if (subject.collectTraits().find(t => t.code == REBasics.traits.UnitVisitor)) {
                 return true;
             }
 

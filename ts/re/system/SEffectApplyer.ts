@@ -1,4 +1,4 @@
-import { DBasics } from "../data/DBasics";
+import { REBasics } from "../data/REBasics";
 import { DEffectBehaviorId } from "../data/DCommon";
 import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterEffectApplyType, DParameterQualifying, DQualifyings } from "../data/DEffect";
 import { DEntityKindId } from "../data/DEntityKind";
@@ -75,7 +75,7 @@ export class SEffect {
         const successRate = this._successRate;
         if (this.isPhysical()) {
             const subject = this.subject();
-            const hit = (subject) ? subject.xparamOrDefault(DBasics.xparams.hit, 1.0) : 1.0;
+            const hit = (subject) ? subject.xparamOrDefault(REBasics.xparams.hit, 1.0) : 1.0;
             return successRate * 0.01 * hit;
         } else {
             return successRate * 0.01;
@@ -85,9 +85,9 @@ export class SEffect {
     // Game_Action.prototype.itemEva
     public evaRate(target: LEntity): number {
         if (this.isPhysical()) {
-            return target.xparam(DBasics.xparams.eva);
+            return target.xparam(REBasics.xparams.eva);
         } else if (this.isMagical()) {
-            return target.xparam(DBasics.xparams.mev);
+            return target.xparam(REBasics.xparams.mev);
         } else {
             return 0;
         }
@@ -96,18 +96,18 @@ export class SEffect {
     // Game_Action.prototype.itemCri
     public criRate(target: LEntity): number {
         const subject = this.subject();
-        const cri = (subject) ? subject.xparam(DBasics.xparams.cri) : 1.0;
+        const cri = (subject) ? subject.xparam(REBasics.xparams.cri) : 1.0;
 
         return this._data.critical
-            ? cri * (1 - target.xparam(DBasics.xparams.cev))
+            ? cri * (1 - target.xparam(REBasics.xparams.cev))
             : 0;
     }
 
     // Game_Action.prototype.lukEffectRate
     public lukEffectRate(target: LEntity): number {
         const subject = this.subject();
-        const subject_luk = subject ? subject.actualParam(DBasics.params.luk) : 0.0;
-        const target_luk = target.actualParam(DBasics.params.luk);
+        const subject_luk = subject ? subject.actualParam(REBasics.params.luk) : 0.0;
+        const target_luk = target.actualParam(REBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     }
 
@@ -175,7 +175,7 @@ export class SEffectorFact {
 
         // この種類を扱うのは得意？
         if (this._incidentEntityKind > 0) {
-            this._genericEffectRate = this._subject.traitsPi(DBasics.traits.EffectProficiency, this._incidentEntityKind);
+            this._genericEffectRate = this._subject.traitsPi(REBasics.traits.EffectProficiency, this._incidentEntityKind);
         }
         else {
             this._incidentEntityKind = 1.0;
@@ -408,13 +408,13 @@ export class SEffectApplyer {
         const baseValue = this.evalDamageFormula(paramEffect, target);
         let value = baseValue * this.calcElementRate(paramEffect, target);
         if (this._effect.isPhysical()) {
-            value *= target.sparam(DBasics.sparams.pdr);
+            value *= target.sparam(REBasics.sparams.pdr);
         }
         if (this._effect.isMagical()) {
-            value *= target.sparam(DBasics.sparams.mdr);
+            value *= target.sparam(REBasics.sparams.mdr);
         }
         if (baseValue < 0) {
-            value *= target.sparam(DBasics.sparams.rec);
+            value *= target.sparam(REBasics.sparams.rec);
         }
         if (critical) {
             value = this.applyCritical(value);
@@ -490,7 +490,7 @@ export class SEffectApplyer {
         const isGuard = false;//(targetBehavior) ? targetBehavior.isGuard() : false;
         // TODO: guard
 
-        return damage / (damage > 0 && isGuard ? 2 * target.sparam(DBasics.sparams.grd) : 1);
+        return damage / (damage > 0 && isGuard ? 2 * target.sparam(REBasics.sparams.grd) : 1);
     }
 
     private applyProficiency(damage: number): number {
@@ -532,7 +532,7 @@ export class SEffectApplyer {
         this.gainDrainedParam(paramEffect, value);
 
         //console.log("damage", paramEffect.paramId, value);
-        if (paramEffect.paramId == DBasics.params.hp) {
+        if (paramEffect.paramId == REBasics.params.hp) {
             result.hpAffected = true;
         }
     }
@@ -621,7 +621,7 @@ export class SEffectApplyer {
                 REGame.scheduler.resetEntity(targetEntity);
                 break;
             case "kSystemEffect_脱出":
-                commandContext.postSequel(targetEntity, DBasics.sequels.escape);
+                commandContext.postSequel(targetEntity, REBasics.sequels.escape);
                 UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
                 break;
             case "kSystemEffect_識別":

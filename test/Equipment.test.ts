@@ -8,7 +8,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { UName } from "ts/re/usecases/UName";
 
 beforeAll(() => {
@@ -201,7 +201,7 @@ test("Equipment.UpgradeValue", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kゴブリンのこん棒").id, [], "item1"));
 
     // 修正値+2
-    item1.setActualParam(DBasics.params.upgradeValue, 2);
+    item1.setActualParam(REBasics.params.upgradeValue, 2);
 
     // 識別前は表示名に +2 が含まれない
     const name1 = UName.makeNameAsItem(item1);

@@ -1,6 +1,6 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
@@ -81,7 +81,7 @@ export class LProjectableBehavior extends LBehavior {
 
     
     onQueryReactions(actions: DActionId[]): void {
-        actions.push(DBasics.actions.ThrowActionId);
+        actions.push(REBasics.actions.ThrowActionId);
     }
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
@@ -123,7 +123,7 @@ export class LProjectableBehavior extends LBehavior {
 
 
         if (UMovement.moveEntity(context, self, tx, ty, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
-            context.postSequel(self, DBasics.sequels.blowMoveSequel);
+            context.postSequel(self, REBasics.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
 

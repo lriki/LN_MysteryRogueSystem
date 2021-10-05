@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseStructure";
 import { SMapManager } from "../SMapManager";
@@ -14,7 +14,7 @@ export class SMonsterHouseBuilder {
             if (rand.nextIntWithMax(100) < 50) {
                 const entities = manager.spawnEnemy(block.x(), block.y());
                 for (const entity of entities) {
-                    entity.addState(DBasics.states.nap);
+                    entity.addState(REBasics.states.nap);
                 }
             }
 

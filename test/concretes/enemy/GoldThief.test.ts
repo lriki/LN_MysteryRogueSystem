@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
@@ -72,7 +72,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     const item1 = inventory2.entities()[0];
     
     // Enemy を攻撃して倒す
-    enemy1.setActualParam(DBasics.params.hp, 1);
+    enemy1.setActualParam(REBasics.params.hp, 1);
     REGame.world._transferEntity(enemy1, floorId, 12, 11);  // 強制移動
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
@@ -101,7 +101,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy を攻撃して倒す
-    enemy1.setActualParam(DBasics.params.hp, 1);
+    enemy1.setActualParam(REBasics.params.hp, 1);
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 

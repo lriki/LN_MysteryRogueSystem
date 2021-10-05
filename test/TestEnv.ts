@@ -22,7 +22,7 @@ import { SDialog } from "ts/re/system/SDialog";
 import { DEntityId } from "ts/re/data/DEntity";
 import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 
 declare global {
     interface Number {
@@ -181,7 +181,7 @@ export class TestEnvIntegration extends SIntegration {
     public skillEmittedCount: number = 0;
 
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
-        if (eventId == DBasics.events.skillEmitted) {
+        if (eventId == REBasics.events.skillEmitted) {
             this.skillEmittedCount++;
         }
     }

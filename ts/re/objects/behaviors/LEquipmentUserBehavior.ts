@@ -1,6 +1,6 @@
 import { assert, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DEquipmentPartId } from "ts/re/data/DEquipmentPart";
 import { DItem } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
@@ -95,7 +95,7 @@ NOTE:
         const self = this.ownerEntity();
         const a = this.equippedItemEntities().reduce((r, e) => {
             const data = e.data();
-            const rate = self.traitsPi(DBasics.traits.EquipmentProficiency, e.kindDataId());
+            const rate = self.traitsPi(REBasics.traits.EquipmentProficiency, e.kindDataId());
             const equipment = data.equipment;
             return equipment ? r + ((equipment.parameters[parameterId] ?? 0) * rate) : 0;
         }, 0);
@@ -104,8 +104,8 @@ NOTE:
     }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
-        actions.push(DBasics.actions.EquipActionId);
-        actions.push(DBasics.actions.EquipOffActionId);
+        actions.push(REBasics.actions.EquipActionId);
+        actions.push(REBasics.actions.EquipOffActionId);
         return actions;
     }
 
@@ -124,7 +124,7 @@ NOTE:
 
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
-        if (activity.actionId() == DBasics.actions.EquipActionId) {
+        if (activity.actionId() == REBasics.actions.EquipActionId) {
             this.refreshSlots();
 
             const itemEntity = activity.object();
@@ -169,7 +169,7 @@ NOTE:
             
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.EquipOffActionId) {
+        else if (activity.actionId() == REBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
             this.equipOff(context, self, itemEntity);
 

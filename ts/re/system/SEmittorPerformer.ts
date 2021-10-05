@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
@@ -208,7 +208,7 @@ export class SEmittorPerformer {
             targets: targets,
             skillId: skillId,
         };
-        REGame.eventServer.publish(context, DBasics.events.skillEmitted, args)
+        REGame.eventServer.publish(context, REBasics.events.skillEmitted, args)
     }
 
     private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillId): void {
@@ -284,7 +284,7 @@ export class SEmittorPerformer {
         else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
 
             // TODO: ユーザー側モーション
-            context.postSequel(performer, DBasics.sequels.attack);
+            context.postSequel(performer, REBasics.sequels.attack);
             
             // TODO: 正面3方向攻撃とかの場合はここをループする
             //for ()

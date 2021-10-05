@@ -1,4 +1,4 @@
-import { DBasics } from "./DBasics";
+import { REBasics } from "./REBasics";
 import { DStateId } from "./DState";
 import { REData } from "./REData";
 
@@ -129,7 +129,7 @@ export class DPrefab {
     }
 
     public isTrapKind(): boolean {
-        return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kindId == DBasics.entityKinds.TrapKindId;
+        return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kindId == REBasics.entityKinds.TrapKindId;
     }
 
     public isEntryPoint(): boolean {

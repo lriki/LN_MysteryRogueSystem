@@ -1,5 +1,5 @@
 import { tr2 } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
 import { LItemThiefBehavior } from "ts/re/objects/behaviors/LItemThiefBehavior";
@@ -57,7 +57,7 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
     public static postWarpBySteal(cctx: SCommandContext, performer: LEntity, itemName: string): void {
 
         cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), itemName));
-        cctx.postSequel(performer, DBasics.sequels.warp);
+        cctx.postSequel(performer, REBasics.sequels.warp);
 
         const block = USearch.selectUnitSpawnableBlock(cctx.random());
         if (block) {

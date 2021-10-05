@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
@@ -19,7 +19,7 @@ test("concretes.effect.Escape", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
-    const hp1 = actor1.actualParam(DBasics.params.hp);
+    const hp1 = actor1.actualParam(REBasics.params.hp);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_撤退テスト").id, [], "enemy1"));

@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { UName } from "ts/re/usecases/UName";
 import { LTOStep } from "ts/re/objects/LScheduler";
-import { DBasics } from "../data/DBasics";
+import { REBasics } from "../data/REBasics";
 
 
 
@@ -379,7 +379,7 @@ export class SScheduler
                     if (entity) {
                         RESystem.commandContext.postMessage(tr2("地震だ！\\|"));
                         RESystem.commandContext.postMessage(tr2("%1は地割れに飲み込まれた！").format(UName.makeUnitName(entity)));
-                        RESystem.commandContext.postSequel(entity, DBasics.sequels.earthquake2);
+                        RESystem.commandContext.postSequel(entity, REBasics.sequels.earthquake2);
                         RESystem.commandContext.postWait(entity, 60);
                         RESystem.commandContext.postCall(() => { UTransfer.proceedFloorForward(); });
                     }

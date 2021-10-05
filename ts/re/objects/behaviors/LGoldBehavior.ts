@@ -1,5 +1,5 @@
 import { RESerializable } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
@@ -53,7 +53,7 @@ export class LGoldBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         const params = self.params();
-        params.acquireParam(DBasics.params.gold);
+        params.acquireParam(REBasics.params.gold);
     }
 
     queryDisplayName(): LNameView | undefined {
@@ -70,11 +70,11 @@ export class LGoldBehavior extends LBehavior {
     }
     
     public gold(): number {
-        return this.ownerEntity().actualParam(DBasics.params.gold);
+        return this.ownerEntity().actualParam(REBasics.params.gold);
     }
 
     public setGold(value: number) {
-        this.ownerEntity().setActualParam(DBasics.params.gold, value);
+        this.ownerEntity().setActualParam(REBasics.params.gold, value);
     }
 }
 

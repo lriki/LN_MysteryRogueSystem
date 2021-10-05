@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DEventId, RoomEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { Helpers } from "ts/re/system/Helpers";
 import { SPhaseResult } from "ts/re/system/RECommand";
@@ -22,16 +22,16 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     onAttached(self: LEntity): void {
-        REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
+        REGame.eventServer.subscribe(REBasics.events.roomEnterd, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(DBasics.events.roomEnterd, this);
+        REGame.eventServer.unsubscribe(REBasics.events.roomEnterd, this);
     }
 
     onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
         // handleRoomEnterd
-        if (eventId == DBasics.events.roomEnterd) {
+        if (eventId == REBasics.events.roomEnterd) {
             const e = (args as RoomEventArgs);
             const entity = this.ownerEntity();
             const block = REGame.map.block(entity.x, entity.y);
@@ -45,7 +45,7 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     onQueryIdleSequelId(): DSequelId | undefined {
-        return DBasics.sequels.asleep;
+        return REBasics.sequels.asleep;
     }
     
     onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {

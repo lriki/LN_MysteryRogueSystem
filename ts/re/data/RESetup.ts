@@ -1,4 +1,4 @@
-import { DBasics } from "./DBasics";
+import { REBasics } from "./REBasics";
 import { DBlockLayerKind, DSpecialEffectCodes } from "./DCommon";
 import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
@@ -31,23 +31,23 @@ export class RESetup {
     public static setupDirectly_State(data: DState) {
         switch (data.key) {
             case "kState_UT気配察知":
-                data.effect.traits.push({ code: DBasics.traits.UnitVisitor, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.UnitVisitor, dataId: 0, value: 0 });
                 break;
             case "kState_UnitTest_攻撃必中":
-                data.effect.traits.push({ code: DBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
                 break;
             case "kState_UTアイテム擬態":
                 data.effect.behaviors.push("LItemImitatorBehavior");
                 break;
             case "kState_仮眠2":
                 //data.behaviors.push("LDoze2Behavior");
-                data.effect.traits.push({ code: DBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
-                data.idleSequel = DBasics.sequels.asleep;
+                data.effect.traits.push({ code: REBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
+                data.idleSequel = REBasics.sequels.asleep;
                 break;
             case "kState_UT魔法使い":
-                data.effect.traits.push({ code: DBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
-                data.effect.traits.push({ code: DBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
-                data.effect.traits.push({ code: DBasics.traits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                data.effect.traits.push({ code: REBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
+                data.effect.traits.push({ code: REBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
+                data.effect.traits.push({ code: REBasics.traits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
                 break;
                 /*
             case "kState_UT速度バフ":
@@ -72,24 +72,24 @@ export class RESetup {
                 data.effect.behaviors.push("LIllusionStateBehavior");
                 break;
             case "kState_UTくちなし":
-                data.effect.traits.push({ code: DBasics.traits.SealActivity, dataId: DBasics.actions.EatActionId, value: 0 });
-                data.effect.traits.push({ code: DBasics.traits.SealActivity, dataId: DBasics.actions.ReadActionId, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.EatActionId, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.ReadActionId, value: 0 });
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.FloorTransfer });
                 break;
             case "kState_UTかなしばり":
-                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: DBasics.params.hp });
+                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: REBasics.params.hp });
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 3" });
                 break;
             case "kState_UT封印":
-                data.effect.traits.push({ code: DBasics.traits.SealSpecialAbility, dataId: DBasics.actions.EatActionId, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.SealSpecialAbility, dataId: REBasics.actions.EatActionId, value: 0 });
                 break;
             case "kState_UT透明":
-                data.effect.traits.push({ code: DBasics.traits.Invisible, dataId: 0, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
                 data.submatchStates.push(REData.getStateFuzzy("kState_UT透明_モンスター").id);
                 break;
             case "kState_UT透明_モンスター":
-                data.effect.traits.push({ code: DBasics.traits.Invisible, dataId: 0, value: 0 });
-                data.effect.matchConditions.kindId = DBasics.entityKinds.MonsterKindId;
+                data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
+                data.effect.matchConditions.kindId = REBasics.entityKinds.MonsterKindId;
                 break;
             case "kState_UT足つかみ":
                 data.effect.behaviors.push("LGrabFootBehavior");
@@ -115,28 +115,28 @@ export class RESetup {
         const data = entity.item();
         switch (entity.entity.key) {
             case "kゴブリンのこん棒":
-                entity.idealParams[DBasics.params.upgradeValue] = 0;
+                entity.idealParams[REBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kシルバーソード":
-                entity.idealParams[DBasics.params.upgradeValue] = -1;
+                entity.idealParams[REBasics.params.upgradeValue] = -1;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kレザーシールド":
-                entity.idealParams[DBasics.params.upgradeValue] = -1;
+                entity.idealParams[REBasics.params.upgradeValue] = -1;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kウッドアロー":
                 entity.display.stackedName = "%1本の" + entity.display.name;
-                data.traits.push({code: DBasics.traits.Stackable, dataId: 0, value: 0});
-                entity.addReaction(DBasics.actions.ShootingActionId, 0);
+                data.traits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
+                entity.addReaction(REBasics.actions.ShootingActionId, 0);
                 break;
             case "kItem_スピードドラッグ":
                 this.setupGrassCommon(entity);
-                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
 
@@ -144,7 +144,7 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 const effect = new DEffect();
                 effect.qualifyings.buffQualifying.push({
-                    paramId: DBasics.params.agi,
+                    paramId: REBasics.params.agi,
                     mode: DBuffMode.Strength,
                     level: 1,
                     levelType: LStateLevelType.RelativeValue,
@@ -158,18 +158,18 @@ export class RESetup {
                 break;
             case "kブラインドドラッグ":
                 this.setupGrassCommon(entity);
-                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 break;
             case "kパニックドラッグ":
-                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 break;
             case "kマッドドラッグ":
                 this.setupGrassCommon(entity);
-                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 break;
@@ -191,31 +191,31 @@ export class RESetup {
                 break;
             case "kItem_しびれ草":
                 this.setupGrassCommon(entity);
-                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 break;
             case "kItem_きえさり草":
                 this.setupGrassCommon(entity);
-                entity.addReaction(DBasics.actions.EatActionId, 0);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 break;
             case "kふきとばしの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());
-                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
-                entity.idealParams[DBasics.params.remaining] = 5;
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 break;
             case "kItem_シールの杖":
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
-                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
-                entity.idealParams[DBasics.params.remaining] = 5;
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
                 break;
             case "kItem_チェンジの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
-                entity.addReaction(DBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
-                entity.idealParams[DBasics.params.remaining] = 3;
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 3;
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 /*
                     杖のメモ (2021/7/5時点のこうしたい)
@@ -236,23 +236,23 @@ export class RESetup {
             case "k眠りガス":
                 break;
             case "kItem_保存の壺":
-                entity.addReaction(DBasics.actions.PutInActionId, 0);
-                entity.addReaction(DBasics.actions.PickOutActionId, 0);
+                entity.addReaction(REBasics.actions.PutInActionId, 0);
+                entity.addReaction(REBasics.actions.PickOutActionId, 0);
                 break;
             case "kItem_ノーマウススクロール":
                 //entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
-                entity.addReaction(DBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
+                entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_エスケープスクロール":
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
-                entity.addReaction(DBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
+                entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_識別の巻物":
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
-                entity.addReaction(DBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
+                entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_Gold":
@@ -274,7 +274,7 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
-                data.emittor().costs.setParamCost(DSkillCostSource.Item, DBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
+                data.emittor().costs.setParamCost(DSkillCostSource.Item, REBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
             case "kSkill_ふきとばし":
                 emittor.effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
@@ -299,17 +299,17 @@ export class RESetup {
                 emittor.scope.length = 1;
                 emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
                 //emittor.selfAnimationId = 109;
-                emittor.selfSequelId = DBasics.sequels.explosion;
+                emittor.selfSequelId = REBasics.sequels.explosion;
                 break;
             case "kSkill_アイテム盗み":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 emittor.scope.layers.push(DBlockLayerKind.Ground);
-                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(DBasics.effectBehaviors.itemSteal);
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.itemSteal);
                 break;
             case "kSkill_ゴールド盗み":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 //emittor.scope.layers.push(DBlockLayerKind.Ground);
-                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(DBasics.effectBehaviors.goldSteal);
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.goldSteal);
                 break;
         }
     }
@@ -336,7 +336,7 @@ export class RESetup {
         emittor.scope.range = DEffectFieldScopeRange.Performer;
         const effect = new DEffect();
         effect.qualifyings.parameterQualifyings.push({
-            parameterId: DBasics.params.fp,
+            parameterId: REBasics.params.fp,
             elementId: 0,
             formula: "5",
             applyType: DParameterEffectApplyType.Recover,

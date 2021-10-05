@@ -1,5 +1,5 @@
 import { tr2 } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DStateRestriction } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
@@ -81,16 +81,16 @@ export class SView {
             }
             
             // 透明状態
-            if (entity.traits(DBasics.traits.Invisible).length > 0) {
+            if (entity.traits(REBasics.traits.Invisible).length > 0) {
                 return { visible: false, translucent: false };
             }
 
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
                 if (entity.findEntityBehavior(LUnitBehavior)) {
-                    return { visible: true, translucent: false, image: REData.prefabs[DBasics.prefabs.illusionActor].image };
+                    return { visible: true, translucent: false, image: REData.prefabs[REBasics.prefabs.illusionActor].image };
                 }
                 else {
-                    return { visible: true, translucent: false, image: REData.prefabs[DBasics.prefabs.illusionItem].image };
+                    return { visible: true, translucent: false, image: REData.prefabs[REBasics.prefabs.illusionItem].image };
                 }
             }
         }
@@ -98,7 +98,7 @@ export class SView {
             // entity は操作中キャラ
 
             // 透明状態
-            if (entity.traits(DBasics.traits.Invisible).length > 0) {
+            if (entity.traits(REBasics.traits.Invisible).length > 0) {
                 return { visible: true, translucent: true };
             }
         }

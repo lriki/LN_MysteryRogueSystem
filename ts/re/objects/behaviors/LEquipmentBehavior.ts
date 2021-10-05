@@ -1,6 +1,6 @@
 import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
@@ -25,8 +25,8 @@ export class LEquipmentBehavior extends LBehavior {
     }
     
     onQueryReactions(actions: DActionId[]): void {
-        actions.push(DBasics.actions.EquipActionId);
-        actions.push(DBasics.actions.EquipOffActionId);
+        actions.push(REBasics.actions.EquipActionId);
+        actions.push(REBasics.actions.EquipOffActionId);
     }
     
     onOwnerRemoveFromParent(owner: LObject): void {

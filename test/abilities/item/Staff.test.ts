@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -37,7 +37,7 @@ test("Items.Staff.Knockback", () => {
     expect(dn.capacity).toBe(5);
 
     // 残り使用回数を [1] にしておく
-    item1.setActualParam(DBasics.params.remaining, 1);
+    item1.setActualParam(REBasics.params.remaining, 1);
     
     // enemy1
     const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
@@ -56,7 +56,7 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
         expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
-        expect(item1.actualParam(DBasics.params.remaining)).toBe(0);    // 使用回数が減っている
+        expect(item1.actualParam(REBasics.params.remaining)).toBe(0);    // 使用回数が減っている
     }
 
     // 振ってみる (使用回数切れ)
@@ -69,7 +69,7 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
         expect(enemy1.x).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
-        expect(item1.actualParam(DBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
+        expect(item1.actualParam(REBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
     }
 
     // 投げてみる

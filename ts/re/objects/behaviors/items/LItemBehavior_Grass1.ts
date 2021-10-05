@@ -1,5 +1,5 @@
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
@@ -17,7 +17,7 @@ export class LItemBehavior_Grass1 extends LBehavior {
     }
 
     onQueryReactions(actions: DActionId[]): void {
-        actions.push(DBasics.actions.EatActionId);
+        actions.push(REBasics.actions.EatActionId);
     }
     
 

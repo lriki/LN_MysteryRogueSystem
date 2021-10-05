@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DEffectBehaviorId, DSkillId } from "ts/re/data/DCommon";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../SCommandContext";

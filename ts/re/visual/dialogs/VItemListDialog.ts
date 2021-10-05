@@ -1,5 +1,5 @@
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { SItemListDialog, SItemListMode } from "ts/re/system/dialogs/SItemListDialog";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -198,25 +198,25 @@ export class VItemListDialog extends VDialog {
                 {
                     const equipments = actorEntity.getEntityBehavior(LEquipmentUserBehavior);
                     if (equipments.isEquipped(itemEntity))
-                        actualActions.mutableRemove(x => x == DBasics.actions.EquipActionId);   // [装備] を除く
+                        actualActions.mutableRemove(x => x == REBasics.actions.EquipActionId);   // [装備] を除く
                     else
-                        actualActions.mutableRemove(x => x == DBasics.actions.EquipOffActionId);  // [はずす] を除く
+                        actualActions.mutableRemove(x => x == REBasics.actions.EquipOffActionId);  // [はずす] を除く
                 }
     
                 // 足元に何かあれば [置く] を [交換] にする
                 {
                     const feetEntity = REGame.map.firstFeetEntity(actorEntity);
                     if (feetEntity) {
-                        if (actualActions.mutableRemove(x => x == DBasics.actions.PutActionId)) {
-                            actualActions.push(DBasics.actions.ExchangeActionId);
+                        if (actualActions.mutableRemove(x => x == REBasics.actions.PutActionId)) {
+                            actualActions.push(REBasics.actions.ExchangeActionId);
                         }
                     }
                 }
     
                 // [撃つ] があれば [投げる] を除く
                 {
-                    if (actualActions.includes(DBasics.actions.ShootingActionId)) {
-                        actualActions.mutableRemove(x => x == DBasics.actions.ThrowActionId);
+                    if (actualActions.includes(REBasics.actions.ShootingActionId)) {
+                        actualActions.mutableRemove(x => x == REBasics.actions.ThrowActionId);
                     }
                 }
 

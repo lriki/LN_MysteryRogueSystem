@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { REData } from "ts/re/data/REData";
@@ -74,14 +74,14 @@ export class LItemImitatorBehavior extends LBehavior {
         item.setParent(this);
         this._itemEntityId = item.entityId();
 
-        REGame.eventServer.subscribe(DBasics.events.preWalk, this);
-        REGame.eventServer.subscribe(DBasics.events.prePut, this);
+        REGame.eventServer.subscribe(REBasics.events.preWalk, this);
+        REGame.eventServer.subscribe(REBasics.events.prePut, this);
     }
     
     onDetached(self: LEntity): void {
         assert(this._itemEntityId.hasAny());
-        REGame.eventServer.unsubscribe(DBasics.events.preWalk, this);
-        REGame.eventServer.unsubscribe(DBasics.events.prePut, this);
+        REGame.eventServer.unsubscribe(REBasics.events.preWalk, this);
+        REGame.eventServer.unsubscribe(REBasics.events.prePut, this);
         this.itemEntity().clearParent();
     }
 
@@ -132,7 +132,7 @@ export class LItemImitatorBehavior extends LBehavior {
     onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
-        if (eventId == DBasics.events.preWalk) {
+        if (eventId == REBasics.events.preWalk) {
             const e = args as WalkEventArgs;
 
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
@@ -143,7 +143,7 @@ export class LItemImitatorBehavior extends LBehavior {
             }
             
         }
-        else if (eventId == DBasics.events.prePut) {
+        else if (eventId == REBasics.events.prePut) {
             /*
             const e = args as PutEventArgs;
             if (Helpers.isHostileFactionId(e.actor.getOutwardFactionId(), self.getInnermostFactionId())) {

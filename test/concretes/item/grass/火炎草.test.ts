@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -24,9 +24,9 @@ test("concretes.item.grass.火炎草.test", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 11, 10);
 
-    enemy1.params().param(DBasics.params.hp)?.setIdealParamPlus(500);
-    enemy1.setActualParam(DBasics.params.hp, 500);
-    const hp1 = enemy1.actualParam(DBasics.params.hp);
+    enemy1.params().param(REBasics.params.hp)?.setIdealParamPlus(500);
+    enemy1.setActualParam(REBasics.params.hp, 500);
+    const hp1 = enemy1.actualParam(REBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1"));
@@ -45,11 +45,11 @@ test("concretes.item.grass.火炎草.test", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy はダメージを受ける
-    const hp2 = enemy1.actualParam(DBasics.params.hp);
+    const hp2 = enemy1.actualParam(REBasics.params.hp);
     expect(hp2 < hp1).toBe(true);
     
     // Enemy の HP をリセット
-    enemy1.setActualParam(DBasics.params.hp, 500);
+    enemy1.setActualParam(REBasics.params.hp, 500);
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
@@ -58,7 +58,7 @@ test("concretes.item.grass.火炎草.test", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy はダメージを受ける。ただし、投げ当てた時のダメージ量は飲んだ時よりも少ない。
-    const hp3 = enemy1.actualParam(DBasics.params.hp);
+    const hp3 = enemy1.actualParam(REBasics.params.hp);
     expect(hp3 < hp1).toBe(true);
     expect((hp1 - hp3) < (hp1 - hp2)).toBe(true);
     

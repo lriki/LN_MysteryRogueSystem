@@ -6,7 +6,7 @@ import { LEntity } from "../LEntity";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LParamSet } from "../LParam";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
@@ -29,21 +29,21 @@ export class LBattlerBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         const params = this.paramSet();
-        params.acquireParam(DBasics.params.hp);
-        params.acquireParam(DBasics.params.mp);
-        params.acquireParam(DBasics.params.atk);
-        params.acquireParam(DBasics.params.def);
-        params.acquireParam(DBasics.params.mat);
-        params.acquireParam(DBasics.params.mdf);
-        params.acquireParam(DBasics.params.agi);
-        params.acquireParam(DBasics.params.luk);
-        params.acquireParam(DBasics.params.tp);
-        params.acquireParam(DBasics.params.fp);
+        params.acquireParam(REBasics.params.hp);
+        params.acquireParam(REBasics.params.mp);
+        params.acquireParam(REBasics.params.atk);
+        params.acquireParam(REBasics.params.def);
+        params.acquireParam(REBasics.params.mat);
+        params.acquireParam(REBasics.params.mdf);
+        params.acquireParam(REBasics.params.agi);
+        params.acquireParam(REBasics.params.luk);
+        params.acquireParam(REBasics.params.tp);
+        params.acquireParam(REBasics.params.fp);
     }
     
     onQueryReactions(actions: DActionId[]): void {
         // 敵味方を問わず、話しかけることは可能。
-        actions.push(DBasics.actions.talk);
+        actions.push(REBasics.actions.talk);
     }
     
 
@@ -100,7 +100,7 @@ export class LBattlerBehavior extends LBehavior {
     onStepEnd(context: SCommandContext): SCommandResponse {
         const entity = this.ownerEntity();
         if (entity.isDeathStateAffected()) {
-            context.postSequel(entity, DBasics.sequels.CollapseSequel);
+            context.postSequel(entity, REBasics.sequels.CollapseSequel);
             
             if (entity.isUnique()) {
                 if (entity == REGame.camera.focusedEntity()) {

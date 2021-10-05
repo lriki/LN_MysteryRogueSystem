@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -35,10 +35,10 @@ export class VHudWindow extends Window_Base {
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return;
 
-        const hp = entity.actualParam(DBasics.params.hp);
-        const mhp = entity.idealParam(DBasics.params.hp);
-        const fp = entity.actualParam(DBasics.params.fp);
-        const mfp = entity.idealParam(DBasics.params.fp);
+        const hp = entity.actualParam(REBasics.params.hp);
+        const mhp = entity.idealParam(REBasics.params.hp);
+        const fp = entity.actualParam(REBasics.params.fp);
+        const mfp = entity.idealParam(REBasics.params.fp);
 
         this.drawFloorNumber(0, 0, REGame.map.floorId());
         this.drawLevel(150, 0, battler.level, battler.currentExp() / battler.nextLevelExp());

@@ -1,5 +1,5 @@
 import { RESerializable } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
@@ -30,7 +30,7 @@ export class LSanctuaryBehavior extends LBehavior {
 
         // 戦闘不能ステート 付加
         if (target.findEntityBehavior(LEnemyBehavior)) {
-            target.addState(DBasics.states.dead);
+            target.addState(REBasics.states.dead);
         }
         
         return SCommandResponse.Pass;

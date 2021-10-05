@@ -10,7 +10,7 @@ import { REGame } from "../REGame";
 import { LConfusionAI } from "../ai/LConfusionAI";
 import { LActivity } from "../activities/LActivity";
 import { LUnitBehavior } from "../behaviors/LUnitBehavior";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LBlindAI } from "../ai/LBlindAI";
 import { LCharacterAI } from "../ai/LCharacterAI";
@@ -178,7 +178,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
-        if (self.traitsWithId(DBasics.traits.SealActivity, activity.actionId()).length > 0) {
+        if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
             context.postMessage(data.message3.format(targetName));
@@ -194,7 +194,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             if (unit && unit.manualMovement()) {    // Player?
 
                 // 歩行移動であれば、方向をランダムにする
-                if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
+                if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
                     const dir = context.random().select(UMovement.directions);
                     activity
                         .withDirection(dir)
@@ -203,7 +203,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
                 }
 
                 // 通常攻撃であれば、方向をランダムにする
-                if (activity.actionId() == DBasics.actions.performSkill && activity.skillId() == RESystem.skills.normalAttack) {
+                if (activity.actionId() == REBasics.actions.performSkill && activity.skillId() == RESystem.skills.normalAttack) {
                     const dir = context.random().select(UMovement.directions);
                     activity.withEntityDirection(dir);
                     return activity;

@@ -1,5 +1,5 @@
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandResponse } from "ts/re/system/RECommand";
@@ -20,7 +20,7 @@ export class LEaterBehavior extends LBehavior {
     }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
-        actions.push(DBasics.actions.EatActionId);
+        actions.push(REBasics.actions.EatActionId);
         return actions;
     }
 

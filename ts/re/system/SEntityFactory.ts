@@ -32,7 +32,7 @@ import { UMovement } from "../usecases/UMovement";
 import { LFlockBehavior } from "ts/re/objects/behaviors/LFlockBehavior";
 import { assert } from "ts/re/Common";
 import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/re/objects/behaviors/LRatedRandomAIBehavior";
 import { RESystem } from "./RESystem";
@@ -96,8 +96,8 @@ export class SEntityFactory {
 
         const entityData = REData.entities[item.entityId]
 
-        if (entityData.entity.kindId == DBasics.entityKinds.WeaponKindId ||
-            entityData.entity.kindId == DBasics.entityKinds.ShieldKindId) {
+        if (entityData.entity.kindId == REBasics.entityKinds.WeaponKindId ||
+            entityData.entity.kindId == REBasics.entityKinds.ShieldKindId) {
             e.addBehavior(LEquipmentBehavior);
         }
 
@@ -311,7 +311,7 @@ export class SEntityFactory {
                 entity.addBehavior(LRatedRandomAIBehavior);
                 break;
             case "kEnemy_ウルフ":
-                entity.addBehavior(LParamBehavior).setParamBase(DBasics.params.agi, 100);
+                entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
                 break;
             case "kEnemy_スピリットスライム":
                 entity.addBehavior(LEntityDivisionBehavior);

@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { TileShape } from "ts/re/objects/LBlock";
@@ -133,7 +133,7 @@ test("Activity.ThrowAndHit", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(true);     // item は削除されている
-    expect(enemy1.actualParam(DBasics.params.hp) > 1).toBe(true); // HP が回復していること。
+    expect(enemy1.actualParam(REBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });
 
 // [交換]

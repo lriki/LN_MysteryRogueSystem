@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DItemEffect } from "ts/re/data/DItemEffect";
 import { LandExitResult, REData } from "ts/re/data/REData";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
@@ -203,7 +203,7 @@ export class SEffectContext {
 
         if (subject) {
             if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
-                if (subject.traits(DBasics.traits.CertainDirectAttack).length > 0) {
+                if (subject.traits(REBasics.traits.CertainDirectAttack).length > 0) {
                     // 直接攻撃必中
                     result.missed = false;
                     result.evaded = false;

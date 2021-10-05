@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { SEffectBehavior } from "./SEffectBehavior";
 import { SGoldStealEffectBehavior } from "./SGoldStealEffectBehavior";
@@ -27,8 +27,8 @@ export class SEffectBehaviorManager {
     }
 
     private setupBuiltins(): void {
-        this.register(DBasics.effectBehaviors.itemSteal, new SItemStealSkillBehavior());
-        this.register(DBasics.effectBehaviors.goldSteal, new SGoldStealEffectBehavior());
+        this.register(REBasics.effectBehaviors.itemSteal, new SItemStealSkillBehavior());
+        this.register(REBasics.effectBehaviors.goldSteal, new SGoldStealEffectBehavior());
     }
 }
 

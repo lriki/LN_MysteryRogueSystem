@@ -1,6 +1,6 @@
 
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/re/objects/behaviors/LBehavior";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
@@ -24,7 +24,7 @@ export class LEntryPointBehavior extends LBehavior {
 
     onQueryReactions(actions: DActionId[]): void {
         actions.splice(0);
-        actions.push(DBasics.actions.BackwardFloorActionId);
+        actions.push(REBasics.actions.BackwardFloorActionId);
     }
     
     [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {

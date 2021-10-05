@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onEffectResult } from "./LBehavior";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "../activities/LActivity";
 import { REData } from "ts/re/data/REData";
 
@@ -67,8 +67,8 @@ export class LSelfExplosionBehavior extends LBehavior {
         const self = args.self;
 
 
-        const mhp = self.idealParam(DBasics.params.hp);
-        const hp = self.actualParam(DBasics.params.hp);
+        const mhp = self.idealParam(REBasics.params.hp);
+        const hp = self.actualParam(REBasics.params.hp);
         //if (hp < 100) {
         if (hp < 50) {
             const skill = REData.getSkill("kSkill_大爆発");

@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -149,7 +149,7 @@ test("concretes.states.混乱.throw", () => {
     RESystem.scheduler.stepSimulation();
     for (let i = 0; i < 5; i++) {
         // HP1 にする
-        enemy1.setActualParam(DBasics.params.hp, 1);
+        enemy1.setActualParam(REBasics.params.hp, 1);
 
         // 投げる
         RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
@@ -157,6 +157,6 @@ test("concretes.states.混乱.throw", () => {
         RESystem.scheduler.stepSimulation();
 
         // 混乱は投げには影響しないので、命中してHP回復しているはず
-        expect(enemy1.actualParam(DBasics.params.hp) > 5).toBe(true);
+        expect(enemy1.actualParam(REBasics.params.hp) > 5).toBe(true);
     }
 });

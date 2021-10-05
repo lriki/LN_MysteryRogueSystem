@@ -1,6 +1,6 @@
 
 import { assert } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DSpecialEffectCodes } from "ts/re/data/DCommon";
 import { DEnemyId, DEnemy, DDropItem } from "ts/re/data/DEnemy";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
@@ -71,7 +71,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse {
         const effectData = effect.data();
         if (effectData.qualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
-            self.addState(DBasics.states.dead);
+            self.addState(REBasics.states.dead);
             return SCommandResponse.Handled;
         }
         return SCommandResponse.Pass;
@@ -89,7 +89,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
         if (!self._dropItemGenerated) {
             self._dropItemGenerated = true;
-            const rate = self.traitsSumOrDefault(DBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
+            const rate = self.traitsSumOrDefault(REBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
             const rand = REGame.world.random();
             if (rand.nextIntWithMax(100) < rate * 100) {
 

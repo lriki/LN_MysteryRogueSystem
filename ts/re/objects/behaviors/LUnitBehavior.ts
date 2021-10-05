@@ -6,7 +6,7 @@ import { LEntity } from "../LEntity";
 import { Helpers } from "ts/re/system/Helpers";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { assert, RESerializable, tr, tr2 } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DActionId } from "ts/re/data/DAction";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
@@ -129,16 +129,16 @@ export class LUnitBehavior extends LBehavior {
     
     onQueryActions(actions: DActionId[]): DActionId[] {
         return actions.concat([
-            DBasics.actions.PickActionId,
-            DBasics.actions.PutActionId,
+            REBasics.actions.PickActionId,
+            REBasics.actions.PutActionId,
             //DBasics.actions.ExchangeActionId,
-            DBasics.actions.ThrowActionId,
-            DBasics.actions.ReadActionId,
+            REBasics.actions.ThrowActionId,
+            REBasics.actions.ReadActionId,
         ]);
     }
 
     onQueryReactions(actions: DActionId[]): void {
-        actions.push(DBasics.actions.AttackActionId);
+        actions.push(REBasics.actions.AttackActionId);
     }
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
@@ -154,17 +154,17 @@ export class LUnitBehavior extends LBehavior {
             self.dir = activity.entityDirection();
         }
 
-        if (activity.actionId() == DBasics.actions.DirectionChangeActionId) {
+        if (activity.actionId() == REBasics.actions.DirectionChangeActionId) {
             //self.dir = activity.direction();
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.MoveToAdjacentActionId) {
+        else if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
 
             const offset = Helpers.dirToTileOffset(activity.direction());
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
-            if (!REGame.eventServer.publish(context, DBasics.events.preWalk, args)) return SCommandResponse.Canceled;
+            if (!REGame.eventServer.publish(context, REBasics.events.preWalk, args)) return SCommandResponse.Canceled;
 
             if (activity.isFastForward()) {
                 this._straightDashing = true;
@@ -172,7 +172,7 @@ export class LUnitBehavior extends LBehavior {
 
             const layer = self.getHomeLayer();
             if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
-                context.postSequel(self, DBasics.sequels.MoveSequel);
+                context.postSequel(self, REBasics.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 self.immediatelyAfterAdjacentMoving = true;
@@ -181,13 +181,13 @@ export class LUnitBehavior extends LBehavior {
                 return SCommandResponse.Handled;
             }
         }
-        else if (activity.actionId() == DBasics.actions.performSkill) {
+        else if (activity.actionId() == REBasics.actions.performSkill) {
             if (activity.hasDirection()) self.dir = activity.direction();
             SEmittorPerformer.makeWithSkill(self, activity.skillId()).performe(context);
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.ForwardFloorActionId ||
-            activity.actionId() == DBasics.actions.BackwardFloorActionId) {
+        else if (activity.actionId() == REBasics.actions.ForwardFloorActionId ||
+            activity.actionId() == REBasics.actions.BackwardFloorActionId) {
 
             const reactor = activity.object();
             if (reactor) {
@@ -195,7 +195,7 @@ export class LUnitBehavior extends LBehavior {
             }
 
         }
-        else if (activity.actionId() == DBasics.actions.PickActionId) {
+        else if (activity.actionId() == REBasics.actions.PickActionId) {
             const inventory = self.findEntityBehavior(LInventoryBehavior);
             if (inventory) {
                 const block = REGame.map.block(self.x, self.y);
@@ -223,11 +223,11 @@ export class LUnitBehavior extends LBehavior {
                 }
             }
         }
-        else if (activity.actionId() == DBasics.actions.PutActionId) {
+        else if (activity.actionId() == REBasics.actions.PutActionId) {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
-            if (!REGame.eventServer.publish(context, DBasics.events.prePut, args)) return SCommandResponse.Canceled;
+            if (!REGame.eventServer.publish(context, REBasics.events.prePut, args)) return SCommandResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findEntityBehavior(LInventoryBehavior);
@@ -255,7 +255,7 @@ export class LUnitBehavior extends LBehavior {
             }
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.ThrowActionId) {
+        else if (activity.actionId() == REBasics.actions.ThrowActionId) {
             // FIXME: [撃つ] とかなり似ているので、長くなるようならまとめたほうがいいかも
 
             // [投げる] は便利コマンドのようなもの。
@@ -303,7 +303,7 @@ export class LUnitBehavior extends LBehavior {
                 });
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.ShootingActionId) {
+        else if (activity.actionId() == REBasics.actions.ShootingActionId) {
             // FIXME: [投げる] とかなり似ているので、長くなるようならまとめたほうがいいかも
             const itemEntity = activity.object();
             assert(itemEntity);
@@ -338,7 +338,7 @@ export class LUnitBehavior extends LBehavior {
                 });
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.ExchangeActionId) {
+        else if (activity.actionId() == REBasics.actions.ExchangeActionId) {
             
             const inventory = self.getEntityBehavior(LInventoryBehavior);
             const item1 = activity.object();
@@ -362,8 +362,8 @@ export class LUnitBehavior extends LBehavior {
             }
 
         }
-        else if (activity.actionId() == DBasics.actions.WaveActionId) {
-            context.postSequel(self, DBasics.sequels.attack);
+        else if (activity.actionId() == REBasics.actions.WaveActionId) {
+            context.postSequel(self, REBasics.sequels.attack);
 
             const reactor = activity.object();
             if (reactor) {
@@ -373,17 +373,17 @@ export class LUnitBehavior extends LBehavior {
             
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.EatActionId) {
-            context.postSequel(self, DBasics.sequels.useItem, activity.object());
+        else if (activity.actionId() == REBasics.actions.EatActionId) {
+            context.postSequel(self, REBasics.sequels.useItem, activity.object());
             return SCommandResponse.Handled;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
-        else if (activity.actionId() == DBasics.actions.ReadActionId) {
-            context.postSequel(self, DBasics.sequels.useItem, activity.object());
+        else if (activity.actionId() == REBasics.actions.ReadActionId) {
+            context.postSequel(self, REBasics.sequels.useItem, activity.object());
             // 続いて onActivityReaction を実行する。
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == DBasics.actions.PutInActionId) {
+        else if (activity.actionId() == REBasics.actions.PutInActionId) {
             const selfInventory = self.getEntityBehavior(LInventoryBehavior);
             const storage = activity.object();
             const storageInventory = storage.getEntityBehavior(LInventoryBehavior);
@@ -395,7 +395,7 @@ export class LUnitBehavior extends LBehavior {
                 context.postMessage(tr("{0} を入れた。", UName.makeNameAsItem(item)));
             }
         }
-        else if (activity.actionId() == DBasics.actions.talk) {
+        else if (activity.actionId() == REBasics.actions.talk) {
             const target = UAction.findTalkableFront(self);
             if (target) {
                 context.postCall(() => {
@@ -438,7 +438,7 @@ export class LUnitBehavior extends LBehavior {
             
 
             context.postCall(() => {
-                self.sendPartyEvent(DBasics.events.effectReacted, undefined);
+                self.sendPartyEvent(REBasics.events.effectReacted, undefined);
             });
 
             return SCommandResponse.Handled;

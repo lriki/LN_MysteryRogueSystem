@@ -1,14 +1,14 @@
 import { LEntity } from "ts/re/objects/LEntity";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 
 export class SDebugHelpers {
     public static setHP(entity: LEntity, value: number): void {
-        const mhp = entity.idealParam(DBasics.params.hp);
-        entity.setActualDamgeParam(DBasics.params.hp, mhp - value);
+        const mhp = entity.idealParam(REBasics.params.hp);
+        entity.setActualDamgeParam(REBasics.params.hp, mhp - value);
     }
     
     public static setFP(entity: LEntity, value: number): void {
-        const max = entity.idealParam(DBasics.params.fp);
-        entity.setActualDamgeParam(DBasics.params.fp, max - value);
+        const max = entity.idealParam(REBasics.params.fp);
+        entity.setActualDamgeParam(REBasics.params.fp, max - value);
     }
 }

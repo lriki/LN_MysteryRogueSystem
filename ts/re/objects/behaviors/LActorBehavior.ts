@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { RE_Data_Actor } from "ts/re/data/DActor";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DClass } from "ts/re/data/DClass";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DSkillId } from "ts/re/data/DCommon";
@@ -209,9 +209,9 @@ export class LActorBehavior extends LBattlerBehavior {
 
     
     onQueryActions(actions: DActionId[]): DActionId[] {
-        actions.push(DBasics.actions.ShootingActionId);
-        actions.push(DBasics.actions.EatActionId);
-        actions.push(DBasics.actions.WaveActionId);
+        actions.push(REBasics.actions.ShootingActionId);
+        actions.push(REBasics.actions.EatActionId);
+        actions.push(REBasics.actions.WaveActionId);
         return actions;
     }
 

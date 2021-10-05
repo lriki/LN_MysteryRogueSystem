@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { TileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
@@ -89,7 +89,7 @@ test("Trap.Attack", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
-    const hp1 = enemy1.actualParam(DBasics.params.hp);
+    const hp1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -100,7 +100,7 @@ test("Trap.Attack", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy がダメージを受けていることを確認
-    const hp2 = enemy1.actualParam(DBasics.params.hp);
+    const hp2 = enemy1.actualParam(REBasics.params.hp);
     expect(hp2 < hp1).toBe(true);
 
     // 敵に効果がある状態では、罠は露出しない

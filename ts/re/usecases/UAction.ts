@@ -8,7 +8,7 @@ import { LGenerateDropItemCause, onWalkedOnTopAction, onWalkedOnTopReaction, tes
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
-import { DBasics } from "../data/DBasics";
+import { REBasics } from "../data/REBasics";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DescriptionHighlightLevel, LEntityDescription } from "../objects/LIdentifyer";
@@ -83,7 +83,7 @@ export class UAction {
             //context.postCall(() => {
                 UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
                 //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
-                context.postSequel(entity, DBasics.sequels.dropSequel);
+                context.postSequel(entity, REBasics.sequels.dropSequel);
             //});
         }
         else {
@@ -356,7 +356,7 @@ export class UAction {
     */
 
     public static chekcVisible(subject: LEntity, target: LEntity): boolean {
-        return (target.traits(DBasics.traits.Invisible).length == 0);
+        return (target.traits(REBasics.traits.Invisible).length == 0);
     }
    
     /**
@@ -375,7 +375,7 @@ export class UAction {
     public static findTalkableFront(entity: LEntity): LEntity | undefined {
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
-            if (frontTarget.queryReactions().includes(DBasics.actions.talk)) {
+            if (frontTarget.queryReactions().includes(REBasics.actions.talk)) {
                 return frontTarget;
             }
         }

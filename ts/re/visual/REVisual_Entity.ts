@@ -11,7 +11,7 @@ import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
-import { DBasics } from "../data/DBasics";
+import { REBasics } from "../data/REBasics";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -288,7 +288,7 @@ export class REVisual_Entity
 
         if (this._rmmzEventId >= 0) {
             const event = $gameMap.event(this._rmmzEventId);
-            const hp = result.paramEffects[DBasics.params.hp];
+            const hp = result.paramEffects[REBasics.params.hp];
             if (hp) {
                 event.popupDamage_RE(hp.damage, 0);
             }

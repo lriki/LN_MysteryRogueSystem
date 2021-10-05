@@ -1,6 +1,6 @@
 import { assert, RESerializable, tr } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -55,20 +55,20 @@ export class LTrapBehavior extends LBehavior {
 
     
     onQueryReactions(actions: DActionId[]): void {
-        actions.mutableRemove(x => x == DBasics.actions.PickActionId);
+        actions.mutableRemove(x => x == REBasics.actions.PickActionId);
     }
 
     onAttached(self: LEntity): void {
         assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
-        REGame.eventServer.subscribe(DBasics.events.skillEmitted, this);
+        REGame.eventServer.subscribe(REBasics.events.skillEmitted, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(DBasics.events.skillEmitted, this);
+        REGame.eventServer.unsubscribe(REBasics.events.skillEmitted, this);
     }
 
     onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
-        if (eventId == DBasics.events.skillEmitted) {
+        if (eventId == REBasics.events.skillEmitted) {
             const entity = this.ownerEntity();
             const e = args as SkillEmittedArgs;
             if (this.checkValidTarget(e.performer) &&           // 攻撃者はこの罠にかかることができる？

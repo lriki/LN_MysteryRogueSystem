@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { DEffectCause } from "ts/re/data/DEmittor";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
@@ -69,9 +69,9 @@ export class LItemBehavior extends LBehavior {
 
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
-        if (activity.actionId() == DBasics.actions.WaveActionId) {
+        if (activity.actionId() == REBasics.actions.WaveActionId) {
             const subject = activity.subject();
-            const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.WaveActionId);
+            const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.WaveActionId);
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
@@ -79,9 +79,9 @@ export class LItemBehavior extends LBehavior {
             }
         }
         // [読まれた]
-        else if (activity.actionId() == DBasics.actions.ReadActionId) {
+        else if (activity.actionId() == REBasics.actions.ReadActionId) {
             const subject = activity.subject();
-            const reactions = self.data().reactions.filter(x => x.actionId == DBasics.actions.ReadActionId);
+            const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.ReadActionId);
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
@@ -91,7 +91,7 @@ export class LItemBehavior extends LBehavior {
             }
         }
         // [食べられた]
-        else if (activity.actionId() == DBasics.actions.EatActionId) {
+        else if (activity.actionId() == REBasics.actions.EatActionId) {
             const subject = activity.subject();
             const reactor = activity.object();
             if (reactor) {

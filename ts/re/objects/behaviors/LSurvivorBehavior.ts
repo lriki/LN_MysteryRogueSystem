@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
@@ -27,10 +27,10 @@ export class LSurvivorBehavior extends LBehavior {
         if (phase == DecisionPhase.UpdateState) {
 
             // FP 減少
-            self.gainActualParam(DBasics.params.fp, -1);
+            self.gainActualParam(REBasics.params.fp, -1);
 
 
-            switch (self.actualParam(DBasics.params.fp)) {
+            switch (self.actualParam(REBasics.params.fp)) {
                 case 3:
                     //context.postBalloon(entity, 6, false);
                     context.postMessage(tr2("だめだ！ もう倒れそうだ！"));
@@ -48,9 +48,9 @@ export class LSurvivorBehavior extends LBehavior {
 
 
 
-            if (self.actualParam(DBasics.params.fp) <= 0) {
+            if (self.actualParam(REBasics.params.fp) <= 0) {
                 // 満腹度 0 による HP 減少
-                self.gainActualParam(DBasics.params.hp, -1);
+                self.gainActualParam(REBasics.params.hp, -1);
 
                 if (self.isDeathStateAffected()) {
                     context.postMessage(tr2("おなかがすいて倒れた・・・"));
@@ -58,7 +58,7 @@ export class LSurvivorBehavior extends LBehavior {
             }
             else {
                 // HP自動回復
-                self.gainActualParam(DBasics.params.hp, 1);
+                self.gainActualParam(REBasics.params.hp, 1);
             }
 
 

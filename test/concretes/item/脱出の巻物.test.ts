@@ -1,4 +1,4 @@
-import { DBasics } from "ts/re/data/DBasics";
+import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -37,7 +37,7 @@ test("concretes.item.脱出の巻物", () => {
     const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
-    const initialHP = enemy1.actualParam(DBasics.params.hp);
+    const initialHP = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -51,7 +51,7 @@ test("concretes.item.脱出の巻物", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
-        expect(initialHP - enemy1.actualParam(DBasics.params.hp)).toBe(1);  // 1ダメージを受けているはず
+        expect(initialHP - enemy1.actualParam(REBasics.params.hp)).toBe(1);  // 1ダメージを受けているはず
         expect(item2.isDestroyed()).toBe(true); // item2 は消える
     }
 
