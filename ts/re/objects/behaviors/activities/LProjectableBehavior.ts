@@ -237,24 +237,29 @@ export class LProjectableBehavior extends LBehavior {
     private endMoving(context: SCommandContext, self: LEntity): void {
         this.clearKnockback();
 
+        if (this._effectSet) {
+            context.postDestroy(self);
+        }
+        else {
+            self.removeState(REData.getStateFuzzy("kSystemState_Projectile").id);
+    
+            UAction.postStepOnGround(context, self);
+    
+            // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
+            // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
+    
+            context.postCall(() => {
+                UAction.postDropOrDestroyOnCurrentPos(context, self, self.getHomeLayer());
+            });
+    
+            // HomeLayer へ移動
+            //SMovementCommon.locateEntity(self, self.x, self.y);
+            //context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
+            //this.clearKnockback();
+            // TODO: 落下
+            //SActionCommon.postStepOnGround(context, self);
+        }
         
-        self.removeState(REData.getStateFuzzy("kSystemState_Projectile").id);
-
-        UAction.postStepOnGround(context, self);
-
-        // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
-        // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
-
-        context.postCall(() => {
-            UAction.postDropOrDestroyOnCurrentPos(context, self, self.getHomeLayer());
-        });
-
-        // HomeLayer へ移動
-        //SMovementCommon.locateEntity(self, self.x, self.y);
-        //context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
-        //this.clearKnockback();
-        // TODO: 落下
-        //SActionCommon.postStepOnGround(context, self);
     }
 }
 

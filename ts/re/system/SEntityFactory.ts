@@ -19,7 +19,6 @@ import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { LEaterBehavior } from "ts/re/objects/behaviors/actors/LEaterBehavior";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
-import { LItemBehavior_Grass1 } from "ts/re/objects/behaviors/items/LItemBehavior_Grass1";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
 import { LSurvivorBehavior } from "ts/re/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
@@ -286,10 +285,6 @@ export class SEntityFactory {
     // そのためここで直定義して一通り作ってみた後、再検討する。
     static setupDirectly_Item(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
-            case "kキュアリーフ":
-            case "k火炎草70_50":
-                entity.addBehavior(LItemBehavior_Grass1);
-                break;
             case "kItem_サンクチュアリスクロール":
                 entity.addBehavior(LSanctuaryBehavior);
                 entity.addBehavior(LClingFloorBehavior);

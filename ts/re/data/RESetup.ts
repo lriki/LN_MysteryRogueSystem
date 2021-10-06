@@ -181,10 +181,12 @@ export class RESetup {
                 break;
             case "kキュアリーフ":
                 this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 break;
             case "k火炎草70_50":
                 this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_火炎草ブレス").emittor());
 
                 //const emittor = entity.effectSet.emittor(DEffectCause.Eat);
@@ -194,6 +196,12 @@ export class RESetup {
                 //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
                 //entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                break;
+            case "kItem_ドラゴン草":
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                //entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+                entity.emittorSet.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").emittor());
                 break;
             case "kItem_しびれ草":
                 this.setupGrassCommon(entity);
