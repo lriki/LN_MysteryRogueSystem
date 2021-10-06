@@ -48,9 +48,13 @@ export interface DBasicTraits {
     _separator: DTraitId;// = 127,
 
     /**
-     * 直接攻撃を必中にする。
+     * 直接攻撃を必中にする。（命中率・回避率にかかわらず）
      */
     CertainDirectAttack: DTraitId;//,
+
+    /** 物理的な関節攻撃を完全回避する。 */
+    CartailDodgePhysicalAttack: DTraitId;
+
 
     /** 地獄耳 */
     UnitVisitor: DTraitId;//,

@@ -214,6 +214,7 @@ export class REDataManager
 
             REBasics.traits._separator = REData.newTrait("_separator").id;
             REBasics.traits.CertainDirectAttack = REData.newTrait("CertainDirectAttack").id;
+            REBasics.traits.CartailDodgePhysicalAttack = REData.newTrait("CartailDodgePhysicalAttack").id;
             REBasics.traits.UnitVisitor = REData.newTrait("UnitVisitor").id;
             REBasics.traits.StateRemoveByEffect = REData.newTrait("StateRemoveByEffect").id;
             REBasics.traits.Stackable = REData.newTrait("Stackable").id;

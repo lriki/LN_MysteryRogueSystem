@@ -210,6 +210,14 @@ export class SEffectContext {
                     return;
                 }
             }
+            else if (this._effectorFact.incidentType() == SEffectIncidentType.IndirectAttack) {
+                if (target.traits(REBasics.traits.CartailDodgePhysicalAttack).length > 0) {
+                    // 間接攻撃回避
+                    result.missed = true;
+                    result.evaded = true;
+                    return;
+                }
+            }
         }
         else {
             // 罠Entityなど。

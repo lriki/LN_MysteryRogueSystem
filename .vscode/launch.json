@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.enemy.ItemThief.DropItem"
+                "-t", "concretes.enemies.ArrowShooter"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
