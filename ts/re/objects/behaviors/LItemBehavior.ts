@@ -15,6 +15,7 @@ import { LStructureId } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CollideActionArgs, CommandArgs, LBehavior, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
+import { UAction } from "ts/re/usecases/UAction";
 
 
 /**
@@ -72,12 +73,16 @@ export class LItemBehavior extends LBehavior {
     
             
             const target = activity.objects2()[0];
-            const subject = new SEffectSubject(activity.subject());   // TODO: EmittorのScopeRange.Performerに対応するため
+            const subject = new SEffectSubject(activity.subject());
             context.postHandleActivity(activity, target)
             .then(() => {
-                context.postDestroy(self);
                 this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
-                    if (!targets.find(x => !x._effectResult.missed)) {
+                    if (targets.find(x => !x._effectResult.missed)) {
+                        context.postDestroy(self);
+                        console.log("Hit");
+                    }
+                    else {
+                        UAction.postDropOrDestroy(context, self, self.x, self.y);
                         console.log("MISS");
                     }
                 });
@@ -95,20 +100,20 @@ export class LItemBehavior extends LBehavior {
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
         if (activity.actionId() == REBasics.actions.WaveActionId) {
-            const subject = activity.actor();
+            const actor = activity.actor();
             const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.WaveActionId);
             for (const reaction of reactions) {
-                SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
+                SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
                     .performe(context);
             }
         }
         // [読まれた]
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
-            const subject = activity.actor();
+            const actor = activity.actor();
             const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.ReadActionId);
             for (const reaction of reactions) {
-                SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
+                SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
                     .setSelectedTargetItems(activity.objects2())
                     .performe(context);
@@ -166,7 +171,7 @@ export class LItemBehavior extends LBehavior {
             context.postCall(() => {
                 for (const emittor of emittors) {
                     //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
-                    SEmittorPerformer.makeWithEmitor(target, emittor)
+                    SEmittorPerformer.makeWithEmitor(subject.entity(), target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
                         .performe(context, onPerformedFunc);

@@ -163,7 +163,9 @@ export class LProjectableBehavior extends LBehavior {
             // 他 Unit との衝突判定
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(DBlockLayerKind.Unit);
             if (hitTarget) {
-                context.postActivity(LActivity.makeCollide(self, hitTarget).withEffectDirection(common.blowDirection));
+                context.postActivity(LActivity.makeCollide(self, hitTarget)
+                    .withOtherSubject(args.subject.entity())
+                    .withEffectDirection(common.blowDirection));
                 /*
                 context.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,

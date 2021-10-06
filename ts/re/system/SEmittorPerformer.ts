@@ -25,6 +25,16 @@ export type SOnPerformedFunc = (targets: LEntity[]) => void;
 
 export class SEmittorPerformer {
 
+    /*
+    発動者(performer) と主題(subject) について
+    ----------
+    アイテムを投げ当てた時の処理は少しイメージしづらいかも。
+    例えば薬草(ScopeはPerformer)を投げ当てた時、performer と target は当てられた相手になる。投げた自分ではない。
+    感覚的には、当てられた側は「このアイテムを使いなさい！と言われたので使う。ただし効果は Cause=Hit で検索する」となる。
+    */
+
+    private _subject: LEntity;
+
     /** 発動者 */
     private _performer: LEntity;
 
@@ -45,20 +55,21 @@ export class SEmittorPerformer {
 
     private _onPerformed: SOnPerformedFunc | undefined;
 
-    private constructor(performer: LEntity) {
+    private constructor(subject: LEntity, performer: LEntity) {
+        this._subject = subject;
         this._performer = performer;
         this._onPerformed = undefined;
     }
 
-    public static makeWithSkill(performer: LEntity, skillId: DSkillId): SEmittorPerformer {
+    public static makeWithSkill(subject: LEntity, performer: LEntity, skillId: DSkillId): SEmittorPerformer {
         assert(skillId > 0);
-        const i = new SEmittorPerformer(performer);
+        const i = new SEmittorPerformer(subject, performer);
         i._skillId = skillId;
         return i;
     }
 
-    public static makeWithEmitor(performer: LEntity, emittor: DEmittor): SEmittorPerformer {
-        const i = new SEmittorPerformer(performer);
+    public static makeWithEmitor(subject: LEntity, performer: LEntity, emittor: DEmittor): SEmittorPerformer {
+        const i = new SEmittorPerformer(subject, performer);
         i._emittor = emittor;
         return i;
     }
@@ -272,7 +283,7 @@ export class SEmittorPerformer {
 
         
         if (emittor.scope.range == DEffectFieldScopeRange.Performer) {
-            const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+            const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             if (itemEntity) {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
@@ -308,7 +319,7 @@ export class SEmittorPerformer {
                 const targets = this.getTargetInBlock(UMovement.getFrontBlock(performer), emittor.scope);
                 for (const target of targets)  {
 
-                    const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
+                    const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
                     if (itemEntity) {
                         effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                         effectSubject.withItem(itemEntity);
@@ -372,7 +383,7 @@ export class SEmittorPerformer {
 
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
-            const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+            const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             if (itemEntity) {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
@@ -389,7 +400,7 @@ export class SEmittorPerformer {
                 targets.push(entity);
             });
 
-            const effectSubject = new SEffectorFact(performer, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
+            const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
             if (itemEntity) {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
