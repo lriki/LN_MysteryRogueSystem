@@ -139,7 +139,8 @@ export class LItemBehavior extends LBehavior {
         if (emittors.length > 0) {
             context.postCall(() => {
                 for (const emittor of emittors) {
-                    SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
+                    //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
+                    SEmittorPerformer.makeWithEmitor(target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
                         .performe(context);
