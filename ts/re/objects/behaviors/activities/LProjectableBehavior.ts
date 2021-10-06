@@ -43,6 +43,7 @@ export class LProjectableBehavior extends LBehavior {
         return b
     }
 
+    // こちらはアイテムが投げられたとき。
     public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
         const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
@@ -59,6 +60,7 @@ export class LProjectableBehavior extends LBehavior {
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
     
+    // こちらは飛び道具効果のあるスキル（ブレスや魔法弾）
     public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEffectSet): void {
         const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
@@ -70,7 +72,6 @@ export class LProjectableBehavior extends LBehavior {
         entity.addState(REData.getStateFuzzy("kSystemState_Projectile").id, false);
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
-        console.log("発射");
     }
 
 
@@ -87,6 +88,36 @@ export class LProjectableBehavior extends LBehavior {
 
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         
+        if (activity.actionId() == REBasics.actions.collide) {
+            
+            /*
+            if (this._effectSet) {
+                const target = args.sender;
+                const subject = args.subject;
+
+                context.postDestroy(self);
+                //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+                
+                const animationId = 1;  // TODO:
+
+                const effectSubject = new SEffectorFact(subject.entity(), this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
+                const effectContext = new SEffectContext(effectSubject, context.random());
+        
+                context.postAnimation(target, animationId, true);
+        
+                // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
+                context.postCall(() => {
+                    effectContext.applyWithWorth(context, [target]);
+                });
+                
+                return SCommandResponse.Handled;
+            }
+            else {
+
+                return SCommandResponse.Pass;
+            }
+            */
+        }
 
         return SCommandResponse.Pass;
     }
@@ -174,6 +205,8 @@ export class LProjectableBehavior extends LBehavior {
     }
     
     [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+        throw new Error("deprecated.");
+        /*
         if (this._effectSet) {
             const self = args.self;
             const target = args.sender;
@@ -200,6 +233,7 @@ export class LProjectableBehavior extends LBehavior {
 
             return SCommandResponse.Pass;
         }
+        */
     }
 
     private endMoving(context: SCommandContext, self: LEntity): void {

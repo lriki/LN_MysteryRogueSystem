@@ -342,6 +342,7 @@ export class SEmittorPerformer {
             // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
             // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
             const emittorEffects = itemEntity?.data().emittorSet.emittors(DEffectCause.Hit);
+            // ↑今は杖用。杖を投げ当てた時と同じ効果を取り出す。
 
             //const actualEmittor = emittorEffects ?? emittor;
             let actualEmittor = emittor;
