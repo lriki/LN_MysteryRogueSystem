@@ -20,6 +20,7 @@ export interface LEntityIdData {
 export interface LActivityData {
     actionId: DActionId;
     actor: LEntityIdData;
+    subject: LEntityIdData;
     object: LEntityIdData;
     objects2: LEntityIdData[];
     skillId: DSkillId,
@@ -179,6 +180,7 @@ export class LActivity {
         return {
             actionId: this._actionId,
             actor: { index: this._actor.index2(), key: this._actor.key2() },
+            subject: { index: this._subject.index2(), key: this._subject.key2() },
             object: { index: this._object.index2(), key: this._object.key2() },
             objects2: this._objects2.map(x => { return { index: x.index2(), key: x.key2() }; }),
             skillId: this._skillId,
@@ -193,6 +195,7 @@ export class LActivity {
         const i = new LActivity();
         i._actionId = data.actionId;
         i._actor = new LEntityId(data.actor.index, data.actor.key);
+        i._subject = new LEntityId(data.subject.index, data.subject.key);
         i._object = new LEntityId(data.object.index, data.object.key);
         i._objects2 = data.objects2.map(x => new LEntityId(x.index, x.key));
         i._skillId = data.skillId;

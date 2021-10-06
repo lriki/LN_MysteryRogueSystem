@@ -90,17 +90,18 @@ export class LProjectableBehavior extends LBehavior {
         
         if (activity.actionId() == REBasics.actions.collide) {
             
-            /*
             if (this._effectSet) {
-                const target = args.sender;
-                const subject = args.subject;
+                // スキルや魔法弾
+
+                const target = activity.objects2()[0];
+                const subject = activity.subject();
 
                 context.postDestroy(self);
                 //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
                 
                 const animationId = 1;  // TODO:
 
-                const effectSubject = new SEffectorFact(subject.entity(), this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
+                const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
                 const effectContext = new SEffectContext(effectSubject, context.random());
         
                 context.postAnimation(target, animationId, true);
@@ -112,11 +113,7 @@ export class LProjectableBehavior extends LBehavior {
                 
                 return SCommandResponse.Handled;
             }
-            else {
-
-                return SCommandResponse.Pass;
-            }
-            */
+            
         }
 
         return SCommandResponse.Pass;
@@ -151,7 +148,6 @@ export class LProjectableBehavior extends LBehavior {
         const tx = self.x + offset.x;
         const ty = self.y + offset.y;
 
-        console.log("移動 ", self.x);
 
         self.dir = this.blowDirection;
 
@@ -167,7 +163,7 @@ export class LProjectableBehavior extends LBehavior {
             // 他 Unit との衝突判定
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(DBlockLayerKind.Unit);
             if (hitTarget) {
-                context.postActivity(LActivity.makeCollide(self, hitTarget));
+                context.postActivity(LActivity.makeCollide(self, hitTarget).withEffectDirection(common.blowDirection));
                 /*
                 context.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,

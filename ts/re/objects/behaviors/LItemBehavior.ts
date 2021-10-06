@@ -72,15 +72,16 @@ export class LItemBehavior extends LBehavior {
     
             
             const target = activity.objects2()[0];
-            const subject = new SEffectSubject(target);   // TODO: EmittorのScopeRange.Performerに対応するため
+            const subject = new SEffectSubject(activity.subject());   // TODO: EmittorのScopeRange.Performerに対応するため
             context.postHandleActivity(activity, target)
             .then(() => {
                 context.postDestroy(self);
-                this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.direction());
+                this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.effectDirection());
                 return SHandleCommandResult.Resolved;
             })
             .catch(() => {
                 console.log("catch");
+                throw new Error("Not implemented.");
             });
         }
 
