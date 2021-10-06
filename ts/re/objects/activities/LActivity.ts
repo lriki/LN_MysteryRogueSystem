@@ -19,7 +19,7 @@ export interface LEntityIdData {
 // UnitTest では JsonEx が使えなかったり、JsonEx 使うと型情報を含むため Save/Load の時間が気になったりするので用意したもの。
 export interface LActivityData {
     actionId: DActionId;
-    subject: LEntityIdData;
+    actor: LEntityIdData;
     object: LEntityIdData;
     objects2: LEntityIdData[];
     skillId: DSkillId,
@@ -42,33 +42,36 @@ export interface LActivityData {
 @RESerializable
 export class LActivity {
     private _actionId: DActionId;
-    private _subject: LEntityId;    // Command 送信対象 (主語)
+    private _actor: LEntityId;      // Command 送信対象
+    private _subject: LEntityId;    // Activity の主題。経験値等はここに流れる。
     private _object: LEntityId;     // (目的語)
     private _objects2: LEntityId[];
     private _skillId: DSkillId;
-    private _direction: number;     // 行動に伴う向き。0 の場合は未指定。
+    private _effectDirection: number;     // 行動に伴う向き。0 の場合は未指定。
     private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
     private _consumeActionType: (LActionTokenType | undefined);
     private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
 
     public constructor() {
         this._actionId = 0;
+        this._actor = LEntityId.makeEmpty();
         this._subject = LEntityId.makeEmpty();
         this._object = LEntityId.makeEmpty();
         this._objects2 = [];
         this._skillId = 0;
-        this._direction = 0;
+        this._effectDirection = 0;
         this._entityDirection = 0;
         this._consumeActionType = undefined;
         this._fastForward = false;
     }
 
-    public setup(actionId: DActionId, subject: LEntity, object?: LEntity, dir?: number): this {
+    public setup(actionId: DActionId, actor: LEntity, object?: LEntity, dir?: number): this {
         this._actionId = actionId;
-        this._subject = subject.entityId();
+        this._actor = actor.entityId().clone();
+        this._subject = actor.entityId().clone();
         this._object = object ? object.entityId() : LEntityId.makeEmpty();
         this._objects2 = [];
-        this._direction = dir ?? 0;
+        this._effectDirection = dir ?? 0;
         this._entityDirection = 0;
         this._consumeActionType = undefined;
         this._fastForward = false;
@@ -77,6 +80,10 @@ export class LActivity {
 
     public actionId(): DActionId {
         return this._actionId;
+    }
+
+    public actor(): LEntity {
+        return REGame.world.entity(this._actor);
     }
 
     public subject(): LEntity {
@@ -103,17 +110,22 @@ export class LActivity {
         return this._skillId;
     }
 
-    public withDirection(d: number): this {
-        this._direction = d;
+    public withOtherSubject(subject: LEntity): this {
+        this._subject = subject.entityId().clone();
         return this;
     }
 
-    public direction(): number {
-        return this._direction;
+    public withEffectDirection(d: number): this {
+        this._effectDirection = d;
+        return this;
     }
 
-    public hasDirection(): boolean {
-        return this._direction != 0;
+    public effectDirection(): number {
+        return this._effectDirection;
+    }
+
+    public hasEffectDirection(): boolean {
+        return this._effectDirection != 0;
     }
     
     public entityDirection(): number {
@@ -166,11 +178,11 @@ export class LActivity {
     public toData(): LActivityData {
         return {
             actionId: this._actionId,
-            subject: { index: this._subject.index2(), key: this._subject.key2() },
+            actor: { index: this._actor.index2(), key: this._actor.key2() },
             object: { index: this._object.index2(), key: this._object.key2() },
             objects2: this._objects2.map(x => { return { index: x.index2(), key: x.key2() }; }),
             skillId: this._skillId,
-            direction: this._direction,
+            direction: this._effectDirection,
             entityDirection: this._entityDirection,
             consumeActionType: this._consumeActionType,
             fastForward: this._fastForward,
@@ -180,11 +192,11 @@ export class LActivity {
     public static makeFromData(data: LActivityData): LActivity {
         const i = new LActivity();
         i._actionId = data.actionId;
-        i._subject = new LEntityId(data.subject.index, data.subject.key);
+        i._actor = new LEntityId(data.actor.index, data.actor.key);
         i._object = new LEntityId(data.object.index, data.object.key);
         i._objects2 = data.objects2.map(x => new LEntityId(x.index, x.key));
         i._skillId = data.skillId;
-        i._direction = data.direction;
+        i._effectDirection = data.direction;
         i._entityDirection = data.entityDirection;
         i._consumeActionType = data.consumeActionType;
         i._fastForward = data.fastForward;
@@ -194,78 +206,78 @@ export class LActivity {
     //--------------------
     // Utils
 
-    public static make(subject: LEntity): LActivity {
-        return (new LActivity()).setup(0, subject);
+    public static make(actor: LEntity): LActivity {
+        return (new LActivity()).setup(0, actor);
     }
 
-    public static makeDirectionChange(subject: LEntity, dir: number): LActivity {
-        return (new LActivity()).setup(REBasics.actions.DirectionChangeActionId, subject, undefined, dir).withEntityDirection(dir);
+    public static makeDirectionChange(actor: LEntity, dir: number): LActivity {
+        return (new LActivity()).setup(REBasics.actions.DirectionChangeActionId, actor, undefined, dir).withEntityDirection(dir);
     }
 
-    public static makeMoveToAdjacent(subject: LEntity, dir: number): LActivity {
-        return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
+    public static makeMoveToAdjacent(actor: LEntity, dir: number): LActivity {
+        return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
     }
 
-    public static makeMoveToAdjacentBlock(subject: LEntity, block: LBlock): LActivity {
-        //assert(UMovement.blockDistance(subject.x, subject.y, block.x(), block.y()) <= 1);    // 隣接ブロックであること
-        assert(UMovement.checkAdjacent(subject.x, subject.y, block.x(), block.y()));    // 隣接ブロックであること
-        const dir = SAIHelper.distanceToDir(subject.x, subject.y, block.x(), block.y());
-        return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, subject, undefined, dir);
+    public static makeMoveToAdjacentBlock(actor: LEntity, block: LBlock): LActivity {
+        //assert(UMovement.blockDistance(actor.x, actor.y, block.x(), block.y()) <= 1);    // 隣接ブロックであること
+        assert(UMovement.checkAdjacent(actor.x, actor.y, block.x(), block.y()));    // 隣接ブロックであること
+        const dir = SAIHelper.distanceToDir(actor.x, actor.y, block.x(), block.y());
+        return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
     }
 
-    public static makePick(subject: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.PickActionId, subject);
+    public static makePick(actor: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.PickActionId, actor);
     }
 
-    public static makePut(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.PutActionId, subject, object);
+    public static makePut(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.PutActionId, actor, object);
     }
 
-    public static makeThrow(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.ThrowActionId, subject, object);
+    public static makeThrow(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.ThrowActionId, actor, object);
     }
 
-    public static makeExchange(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.ExchangeActionId, subject, object);
+    public static makeExchange(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.ExchangeActionId, actor, object);
     }
 
-    public static makeEquip(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.EquipActionId, subject, object);
+    public static makeEquip(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.EquipActionId, actor, object);
     }
 
-    public static makeEquipOff(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.EquipOffActionId, subject, object);
+    public static makeEquipOff(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.EquipOffActionId, actor, object);
     }
     
-    public static makeEat(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.EatActionId, subject, object);
+    public static makeEat(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.EatActionId, actor, object);
     }
 
-    public static makeWave(subject: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.WaveActionId, subject, object);
+    public static makeWave(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.WaveActionId, actor, object);
     }
 
-    public static makeRead(subject: LEntity, object: LEntity, targets?: LEntity[]): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.ReadActionId, subject, object);
+    public static makeRead(actor: LEntity, object: LEntity, targets?: LEntity[]): LActivity {
+        const a = (new LActivity()).setup(REBasics.actions.ReadActionId, actor, object);
         if (targets) a.setObjects2(targets);
         return a;
     }
 
-    public static makePutIn(subject: LEntity, storage: LEntity, item: LEntity): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.PutInActionId, subject, storage);
+    public static makePutIn(actor: LEntity, storage: LEntity, item: LEntity): LActivity {
+        const a = (new LActivity()).setup(REBasics.actions.PutInActionId, actor, storage);
         a._objects2 = [item.entityId()];
         return a;
     }
 
-    public static makeTalk(subject: LEntity): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.talk, subject);
+    public static makeTalk(actor: LEntity): LActivity {
+        const a = (new LActivity()).setup(REBasics.actions.talk, actor);
         return a;
     }
 
-    public static makePerformSkill(subject: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
+    public static makePerformSkill(actor: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
         assert(skillId > 0);
-        const a = (new LActivity()).setup(REBasics.actions.performSkill, subject);
-        if (dirToFace !== undefined) a._direction = dirToFace;
+        const a = (new LActivity()).setup(REBasics.actions.performSkill, actor);
+        if (dirToFace !== undefined) a._effectDirection = dirToFace;
         a._skillId = skillId;
         return a;
     }

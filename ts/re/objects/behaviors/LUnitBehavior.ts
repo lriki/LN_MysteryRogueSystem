@@ -160,7 +160,7 @@ export class LUnitBehavior extends LBehavior {
         }
         else if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
 
-            const offset = Helpers.dirToTileOffset(activity.direction());
+            const offset = Helpers.dirToTileOffset(activity.effectDirection());
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
@@ -182,7 +182,7 @@ export class LUnitBehavior extends LBehavior {
             }
         }
         else if (activity.actionId() == REBasics.actions.performSkill) {
-            if (activity.hasDirection()) self.dir = activity.direction();
+            if (activity.hasEffectDirection()) self.dir = activity.effectDirection();
             SEmittorPerformer.makeWithSkill(self, activity.skillId()).performe(context);
             return SCommandResponse.Handled;
         }

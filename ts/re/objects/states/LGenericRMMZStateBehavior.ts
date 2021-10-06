@@ -190,14 +190,14 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {
         const effect = this.stateEffect();
         if (effect.restriction == DStateRestriction.AttackToOther) {
-            const unit = activity.subject().findEntityBehavior(LUnitBehavior);
+            const unit = activity.actor().findEntityBehavior(LUnitBehavior);
             if (unit && unit.manualMovement()) {    // Player?
 
                 // 歩行移動であれば、方向をランダムにする
                 if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
                     const dir = context.random().select(UMovement.directions);
                     activity
-                        .withDirection(dir)
+                        .withEffectDirection(dir)
                         .withEntityDirection(dir);
                     return activity;
                 }

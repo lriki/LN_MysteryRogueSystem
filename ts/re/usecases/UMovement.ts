@@ -267,8 +267,6 @@ export class UMovement {
 
     /** entity を配置できる直近の Block を選択する。 */
     public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layerKind: DBlockLayerKind, entity: LEntity): LBlock | undefined {
-        console.log("selectNearbyLocatableBlock", mx, my, layerKind);
-
         const maxDistance = 3;
         for (let distance = 0; distance <= maxDistance; distance++) {
             const candidates = REGame.map.getEdgeBlocks(mx, my, distance)

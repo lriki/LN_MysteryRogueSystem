@@ -70,7 +70,7 @@ export class LItemBehavior extends LBehavior {
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
         if (activity.actionId() == REBasics.actions.WaveActionId) {
-            const subject = activity.subject();
+            const subject = activity.actor();
             const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.WaveActionId);
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
@@ -80,7 +80,7 @@ export class LItemBehavior extends LBehavior {
         }
         // [読まれた]
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
-            const subject = activity.subject();
+            const subject = activity.actor();
             const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.ReadActionId);
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(subject, REData.getEmittorById(reaction.emittingEffect))
@@ -92,7 +92,7 @@ export class LItemBehavior extends LBehavior {
         }
         // [食べられた]
         else if (activity.actionId() == REBasics.actions.EatActionId) {
-            const subject = activity.subject();
+            const subject = activity.actor();
             const reactor = activity.object();
             if (reactor) {
                 UIdentify.identifyByTiming(context, subject, reactor, DIdentifiedTiming.Eat);

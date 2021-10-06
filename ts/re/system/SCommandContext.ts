@@ -167,24 +167,24 @@ export class SCommandContext
 
         let activity = srcActivity;
         if (withPreprocess) {
-            for (const b of srcActivity.subject().collectBehaviors().reverse()) {
+            for (const b of srcActivity.actor().collectBehaviors().reverse()) {
                 activity = b.onPreprocessActivity(this, activity);
             }
         }
 
         if (activity.isConsumeAction()) {
-            activity.subject()._actionToken.verify(activity.getConsumeActionTokenType());
+            activity.actor()._actionToken.verify(activity.getConsumeActionTokenType());
         }
 
         const m1 = () => {
             Log.doCommand("Activity");
 
             if (activity.isConsumeAction()) {
-                const entity = activity.subject();
+                const entity = activity.actor();
                 this.attemptConsumeActionToken(entity, activity.getConsumeActionTokenType());
             }
 
-            const r = activity.subject()._sendActivity(this, activity);
+            const r = activity.actor()._sendActivity(this, activity);
             if (r != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
                 if (activity.hasObject()) {
                     this.postCall(() => {

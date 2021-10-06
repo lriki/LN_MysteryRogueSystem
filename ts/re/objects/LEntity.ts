@@ -775,8 +775,6 @@ export class LEntity extends LObject
         // 自動追加の更新を行う
         this._states = UState.resolveStates(this, [], []).map(s => s.id());
         this._needVisualRefresh = true;
-        console.log("this", this);
-        console.log("this._states", this._states);
     }
 
     public states(): readonly LState[] {

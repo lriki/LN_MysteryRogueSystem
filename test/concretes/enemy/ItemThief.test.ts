@@ -48,8 +48,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     expect(inventory2.contains(item1)).toBe(true);
 
     // Enemy1 はワープしている
-    expect(enemy1.x != 12).toBe(true);
-    expect(enemy1.y != 10).toBe(true);
+    expect(enemy1.x != 12 && enemy1.y != 10).toBe(true);
 
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
