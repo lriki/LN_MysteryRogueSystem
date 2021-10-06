@@ -8,7 +8,7 @@ import { SCommandResponse } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext, SHandleCommandResult } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
-import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
+import { SEmittorPerformer, SOnPerformedFunc } from "ts/re/system/SEmittorPerformer";
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LStructureId } from "../LCommon";
@@ -76,7 +76,11 @@ export class LItemBehavior extends LBehavior {
             context.postHandleActivity(activity, target)
             .then(() => {
                 context.postDestroy(self);
-                this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.effectDirection());
+                this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
+                    if (!targets.find(x => !x._effectResult.missed)) {
+                        console.log("MISS");
+                    }
+                });
                 return SHandleCommandResult.Resolved;
             })
             .catch(() => {
@@ -155,7 +159,7 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Handled;
     }
     
-    private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number): void {
+    private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();
         const emittors = entityData.emittorSet.emittors(cause);
         if (emittors.length > 0) {
@@ -165,20 +169,20 @@ export class LItemBehavior extends LBehavior {
                     SEmittorPerformer.makeWithEmitor(target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
-                        .performe(context);
+                        .performe(context, onPerformedFunc);
                 }
             });
         }
         
-        const skill = entityData.emittorSet.skill(cause);
-        if (skill) {
-            context.postCall(() => {
-                SEmittorPerformer.makeWithSkill(subject.entity(), skill.id)
-                    .setItemEntity(self)
-                    .setDffectDirection(effectDir)
-                    .performe(context);
-            });
-        }
+        // const skill = entityData.emittorSet.skill(cause);
+        // if (skill) {
+        //     context.postCall(() => {
+        //         SEmittorPerformer.makeWithSkill(subject.entity(), skill.id)
+        //             .setItemEntity(self)
+        //             .setDffectDirection(effectDir)
+        //             .performe(context);
+        //     });
+        // }
     }
 
     

@@ -118,10 +118,11 @@ test("projectiles.Item.AwfulThrowing", () => {
     
     RESystem.scheduler.stepSimulation();
 
-    // const item = REGame.map.block(12, 10).layer(DBlockLayerKind.Ground).firstEntity();
-    // expect(item).toBe(item1);
-    // expect(item1.x).toBe(12);
-    // expect(item1.y).toBe(10);
-    // expect(item1.isDestroyed()).toBe(false);
+    // 下手投げ状態なので当たらず、落下している
+    const item = REGame.map.block(12, 10).layer(DBlockLayerKind.Ground).firstEntity();
+    expect(item).toBe(item1);
+    expect(item1.x).toBe(12);
+    expect(item1.y).toBe(10);
+    expect(item1.isDestroyed()).toBe(false);
 });
 

@@ -86,7 +86,7 @@ export class DEmittorSet {
     private _emittors: (DEmittor[] | undefined)[] = [];
     //private _mainEmittor: DEmittor | undefined;
 
-    private _skills: (DSkill | undefined)[] = [];
+    // private _skills: (DSkill | undefined)[] = [];
 
     public setMainEmittor(emittor: DEmittor): void {
         this._emittors[DEffectCause.Affect] = [emittor];
@@ -97,9 +97,9 @@ export class DEmittorSet {
         list.push(emittor);
     }
 
-    public setSkill(cause: DEffectCause, value: DSkill): void {
-        this._skills[cause] = value;
-    }
+    // public setSkill(cause: DEffectCause, value: DSkill): void {
+    //     this._skills[cause] = value;
+    // }
 
     public mainEmittor(): DEmittor {
         const list = this._emittors[DEffectCause.Affect];
@@ -112,9 +112,9 @@ export class DEmittorSet {
         return list ? list : [];
     }
 
-    public skill(cause: DEffectCause): DSkill | undefined {
-        return this._skills[cause];
-    }
+    // public skill(cause: DEffectCause): DSkill | undefined {
+    //     return this._skills[cause];
+    // }
 
     /*
     public aquireEmittor(cause: DEffectCause): DEmittor {
