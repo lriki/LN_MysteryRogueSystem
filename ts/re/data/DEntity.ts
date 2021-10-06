@@ -28,6 +28,32 @@ export interface DEntityNamePlate {
 }
 
 export interface DReaction {
+/*
+    [2021/10/6] Cause と Reaction 見直ししたいメモ
+    ----------
+    現時点では、
+    - 巻物は ReadAction で、Activityと効果発動のキーが紐づいている。
+    - 草は Cause.Hit で効果発動のキーとする。Activity とは直接は紐づいていない。
+    という統一性の無い状態。
+
+    本質的？には「衝突する」というのは Activity ではない。Projectile が衝突した時に発生する特殊なイベント。
+    なので Cause と Activity は別物がよさそうであると考えていた。
+
+    巻物では「効果対象を選択する」という必要性が出てきたため、Activity(Read) とそれにより発動される効果が DB 的に紐づいている必要が出てきた。
+
+    完全に汎用を目指す必要はないかもしれないが、しかし少なくとも現状はかなりコードが複雑になっているので、できれば統一したい。
+
+    
+    ### ぜんぶ Activity にしてしまう？
+
+    内部的には問題なさそう。コマンドチェーンの内側からの Activity 発行は、すでに AI がやっている。
+    「衝突する」という行動ができるようになる、と考える。
+
+
+
+
+*/
+
     actionId: DActionId;
     emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
 }

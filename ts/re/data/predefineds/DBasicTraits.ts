@@ -55,6 +55,9 @@ export interface DBasicTraits {
     /** 物理的な関節攻撃を完全回避する。 */
     CartailDodgePhysicalAttack: DTraitId;
 
+    /** 物理的な間接攻撃が全く当たらなくなる。 */
+    AwfulPhysicalIndirectAttack: DTraitId;
+
 
     /** 地獄耳 */
     UnitVisitor: DTraitId;//,

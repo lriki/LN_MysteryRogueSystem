@@ -217,6 +217,12 @@ export class SEffectContext {
                     result.evaded = true;
                     return;
                 }
+                if (subject.traits(REBasics.traits.AwfulPhysicalIndirectAttack).length > 0) {
+                    // 間接攻撃命中なし
+                    result.missed = true;
+                    result.evaded = true;
+                    return;
+                }
             }
         }
         else {
