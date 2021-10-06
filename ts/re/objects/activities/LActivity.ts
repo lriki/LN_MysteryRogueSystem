@@ -273,6 +273,11 @@ export class LActivity {
         const a = (new LActivity()).setup(REBasics.actions.talk, actor);
         return a;
     }
+    public static makeCollide(subject: LEntity, target: LEntity): LActivity {
+        const a = (new LActivity()).setup(REBasics.actions.collide, subject);
+        a.setObjects2([target]);
+        return a;
+    }
 
     public static makePerformSkill(actor: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
         assert(skillId > 0);

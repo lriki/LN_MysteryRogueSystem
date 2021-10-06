@@ -68,7 +68,7 @@ export interface DBasicActions {
      * 例えば投げ与えられた装備品を装備する仲間キャラなどは、この Command をハンドリングする。
      * はね返しの盾なども同様。
      */
-    CollideActionId: DActionId;
+    //CollideActionId: DActionId;
 
     /** 
      * 効果を与えようとしている・効果を与えられようとしている・効果を与える・効果を与えられた
@@ -188,6 +188,8 @@ export interface DBasicActions {
 
     // 話す
     talk: DActionId;
+
+    collide: DActionId;
 
     //----------------------------------------
     // Combat Actions.

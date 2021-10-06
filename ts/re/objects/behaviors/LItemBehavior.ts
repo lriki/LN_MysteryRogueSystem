@@ -6,7 +6,7 @@ import { DItem, DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
-import { SCommandContext } from "ts/re/system/SCommandContext";
+import { SCommandContext, SHandleCommandResult } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { UIdentify } from "ts/re/usecases/UIdentify";
@@ -67,6 +67,26 @@ export class LItemBehavior extends LBehavior {
         }
     }
 
+    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+        if (activity.actionId() == REBasics.actions.collide) {
+    
+            
+            const target = activity.objects2()[0];
+            const subject = new SEffectSubject(target);   // TODO: EmittorのScopeRange.Performerに対応するため
+            context.postHandleActivity(activity, target)
+            .then(() => {
+                context.postDestroy(self);
+                this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.direction());
+                return SHandleCommandResult.Resolved;
+            })
+            .catch(() => {
+                console.log("catch");
+            });
+        }
+
+        return SCommandResponse.Pass;
+    }
+
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
         if (activity.actionId() == REBasics.actions.WaveActionId) {
@@ -118,6 +138,7 @@ export class LItemBehavior extends LBehavior {
     }
 
     [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+        throw new Error("deprecated");
         const self = args.self;
         
         context.postDestroy(self);

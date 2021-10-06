@@ -100,12 +100,14 @@ export class HandleActivityCommand {
     _thenFunc: (() => SHandleCommandResult) | undefined;
     _catchFunc: (() => void) | undefined;
 
-    public then(func: () => SHandleCommandResult): void {
+    public then(func: () => SHandleCommandResult): this {
         this._thenFunc = func;
+        return this;
     }
 
-    public catch(func: () => void): void {
+    public catch(func: () => void): this {
         this._catchFunc = func;
+        return this;
     }
 }
 
