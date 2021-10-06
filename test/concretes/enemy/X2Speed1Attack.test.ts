@@ -43,7 +43,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     expect(TestEnv.integration.skillEmittedCount).toBe(1);
 
     // 封印
-    enemy1.addState(REData.getStateFuzzy("kState_UT封印").id);
+    enemy1.addState(REData.getState("kState_UT封印").id);
     
     // [←]
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());

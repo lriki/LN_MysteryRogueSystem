@@ -138,7 +138,7 @@ test("Equipment.Curse", () => {
     inventory.addEntity(weapon2);
 
     // 武器 入手 (呪い付き)
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getStateFuzzy("UT呪い").id]));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getState("UT呪い").id]));
     REGame.world._transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

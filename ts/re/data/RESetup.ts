@@ -85,7 +85,7 @@ export class RESetup {
                 break;
             case "kState_UT透明":
                 data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
-                data.submatchStates.push(REData.getStateFuzzy("kState_UT透明_モンスター").id);
+                data.submatchStates.push(REData.getState("kState_UT透明_モンスター").id);
                 break;
             case "kState_UT透明_モンスター":
                 data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
@@ -311,7 +311,7 @@ export class RESetup {
                 break;
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.selfEffect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getStateFuzzy("kState_UT足つかみ").id, value1: 100, value2: 0});
+                emittor.effectSet.selfEffect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT足つかみ").id, value1: 100, value2: 0});
                 break;
             case "kSkill_大爆発":
                 emittor.scope.range = DEffectFieldScopeRange.Around;

@@ -97,7 +97,7 @@ test("projectiles.Item.AwfulThrowing", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getStateFuzzy("kState_UT下手投げ").id);
+    actor1.addState(REData.getState("kState_UT下手投げ").id);
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1"));

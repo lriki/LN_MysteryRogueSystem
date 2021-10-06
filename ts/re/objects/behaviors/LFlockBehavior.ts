@@ -30,7 +30,7 @@ export class LFlockBehavior extends LBehavior {
     
     onPartyEvent(eventId: DEventId, args: any): LEventResult {
         if (eventId == REBasics.events.effectReacted) {
-            this.ownerEntity().removeState(REData.getStateFuzzy("kState_仮眠2").id);
+            this.ownerEntity().removeState(REData.getState("kState_仮眠2").id);
         }
         return LEventResult.Pass;
     }

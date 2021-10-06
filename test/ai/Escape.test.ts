@@ -15,7 +15,7 @@ beforeAll(() => {
 test("ai.Escape.1", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
-    const stateId = REData.getStateFuzzy("kState_UTまどわし").id;
+    const stateId = REData.getState("kState_UTまどわし").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(floorId, 10, 4);
@@ -89,7 +89,7 @@ test("ai.Escape.1", () => {
 test("ai.Escape.2", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
-    const stateId = REData.getStateFuzzy("kState_UTまどわし").id;
+    const stateId = REData.getState("kState_UTまどわし").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(floorId, 14, 4); // 部屋入り口の通路へ配置

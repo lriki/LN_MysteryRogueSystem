@@ -398,11 +398,7 @@ export class REData
         return this.itemEntity(id).item();
     }
     
-/*     static findItem(re_key: string): DItem | undefined {
-        return this.items.find(x => x.entity.key == re_key);
-    }
- */
-    static findItemFuzzy(pattern: string): DItem | undefined {
+    static findItem(pattern: string): DItem | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
             return this.entities[this.items[id]].item();
@@ -418,30 +414,10 @@ export class REData
         }
     }
 
-/*     static getItem(re_key: string): DItem {
-        const d = this.findItem(re_key);
-        if (d) return d;
-        throw new Error(`Item "${re_key}" not found.`);
-    }
- */
-    static getItemFuzzy(pattern: string): DEntity {
-        const d = this.findItemFuzzy(pattern);
+    static getItem(pattern: string): DEntity {
+        const d = this.findItem(pattern);
         if (d) return this.entities[d.entityId];
         throw new Error(`Item "${pattern}" not found.`);
-    }
-
-    //--------------------
-    
-    public static newTrait(key: string): DTrait {
-        const data = new DTrait(this.traits.length, key);
-        REData.traits.push(data);
-        return data;
-    }
-
-    public static getTrait(pattern: string): DTrait {
-        const data = REData.traits.find(x => x && x.key == pattern);
-        if (data) return data;
-        throw new Error(`Trait "${pattern}" not found.`);
     }
 
     //--------------------
@@ -485,19 +461,35 @@ export class REData
     }
 
     //--------------------
+    
+    public static newTrait(key: string): DTrait {
+        const data = new DTrait(this.traits.length, key);
+        REData.traits.push(data);
+        return data;
+    }
 
-    static findPrefabFuzzy(pattern: string): DPrefab | undefined {
+    public static getTrait(pattern: string): DTrait {
+        const data = REData.traits.find(x => x && x.key == pattern);
+        if (data) return data;
+        throw new Error(`Trait "${pattern}" not found.`);
+    }
+
+    //--------------------
+
+    static findPrefab(pattern: string): DPrefab | undefined {
         // TODO: id
         return this.prefabs.find(p => p.key == pattern);
     }
 
     static getPrefab(pattern: string): DPrefab {
-        const d = this.findPrefabFuzzy(pattern);
+        const d = this.findPrefab(pattern);
         if (d) return d;
         throw new Error(`Prefab "${pattern}" not found.`);
     }
 
-    static findStateFuzzy(pattern: string): DState | undefined {
+    //--------------------
+
+    static findState(pattern: string): DState | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
             return this.states[id];
@@ -505,12 +497,14 @@ export class REData
             return this.states.find(x => x.displayName == pattern || (x.key != "" && x.key == pattern));
     }
 
-    static getStateFuzzy(pattern: string): DState {
-        const d = this.findStateFuzzy(pattern);
+    static getState(pattern: string): DState {
+        const d = this.findState(pattern);
         if (d) return d;
         throw new Error(`State "${pattern}" not found.`);
     }
     
+
+    //-------------------
 
     static findSkill(pattern: string): DSkill | undefined {
         const id = parseInt(pattern);

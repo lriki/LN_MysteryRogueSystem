@@ -50,32 +50,32 @@ test("concretes.states.速度変化", () => {
     assert(param);
     expect(param.getAddBuff().level).toBe(1);
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(2);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT鈍足").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT倍速").id)).toBe(true);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT3倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(true);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);
 
     // 3倍速化
     actor1.addBuff(buff1);
     expect(param.getAddBuff().level).toBe(2);
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT鈍足").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT倍速").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT3倍速").id)).toBe(true);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(true);
     
     // 鈍足化
     actor1.addBuff(buff2);
     expect(param.getAddBuff().level).toBe(-1);
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(-1);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT鈍足").id)).toBe(true);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT倍速").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT3倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(true);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);
 
     // 解除
     actor1.removeBuff(REBasics.params.agi);
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(1);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT鈍足").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT倍速").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT3倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);
 
     RESystem.scheduler.stepSimulation();
 });

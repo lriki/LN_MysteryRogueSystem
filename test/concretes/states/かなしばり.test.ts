@@ -13,7 +13,7 @@ beforeAll(() => {
 // 空腹による解除チェック
 test("concretes.states.かなしばり.FP", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UTかなしばり").id;
+    const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -39,7 +39,7 @@ test("concretes.states.かなしばり.FP", () => {
 // 攻撃による解除チェック
 test("concretes.states.かなしばり.Attack", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UTかなしばり").id;
+    const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);

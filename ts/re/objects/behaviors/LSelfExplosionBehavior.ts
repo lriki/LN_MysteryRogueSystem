@@ -78,7 +78,7 @@ export class LSelfExplosionBehavior extends LBehavior {
         }
         //if (hp < mhp * 0.3) {
         if (hp < 80) {
-            const stateId = REData.getStateFuzzy("kState_UT自爆着火").id;
+            const stateId = REData.getState("kState_UT自爆着火").id;
             if (!self.hasState(stateId)) {
                 self.addState(stateId);
             }

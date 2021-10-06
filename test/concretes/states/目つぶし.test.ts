@@ -13,7 +13,7 @@ beforeAll(() => {
 
 test("concretes.states.目つぶし", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UT目つぶし").id;
+    const stateId = REData.getState("kState_UT目つぶし").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);

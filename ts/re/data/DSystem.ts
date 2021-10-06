@@ -63,9 +63,9 @@ export class DSystem {
 
     public link(testMode: boolean): void {
 
-        const bless = REData.getStateFuzzy("kState_UT祝福");
-        const curse = REData.getStateFuzzy("kState_UT呪い")
-        const seal = REData.getStateFuzzy("kState_UT封印");
+        const bless = REData.getState("kState_UT祝福");
+        const curse = REData.getState("kState_UT呪い")
+        const seal = REData.getState("kState_UT封印");
 
         bless.displayNameIcon = true;
         curse.displayNameIcon = true;
@@ -76,8 +76,8 @@ export class DSystem {
         this.states.seal = seal.id;
 
         this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム").entityId;
-        this.fallbackItemEntityId = REData.getItemFuzzy("kItem_雑草").id;
-        this.fallbackGoldEntityId = REData.getItemFuzzy("kItem_Gold").id;
+        this.fallbackItemEntityId = REData.getItem("kItem_雑草").id;
+        this.fallbackGoldEntityId = REData.getItem("kItem_Gold").id;
 
         for (let i = 1; i < REData.enemies.length; i++) {
             const data = REData.enemyData(i);

@@ -15,7 +15,7 @@ beforeAll(() => {
 
 test("concretes.states.混乱.move", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UT混乱").id;
+    const stateId = REData.getState("kState_UT混乱").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -50,19 +50,19 @@ test("concretes.states.混乱.attack", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT混乱").id, REData.getStateFuzzy("kState_UTからぶり").id], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT混乱").id, REData.getState("kState_UTからぶり").id], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 周りを移動できない Enemy で囲ってみる
     const enemies = [
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getStateFuzzy("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
     ];
     REGame.world._transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
     REGame.world._transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
@@ -90,7 +90,7 @@ test("concretes.states.混乱.movePlayer", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getStateFuzzy("kState_UT混乱").id);
+    actor1.addState(REData.getState("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();
@@ -111,7 +111,7 @@ test("concretes.states.混乱.attackPlayer", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getStateFuzzy("kState_UT混乱").id);
+    actor1.addState(REData.getState("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();

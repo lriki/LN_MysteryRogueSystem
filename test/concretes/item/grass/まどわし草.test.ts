@@ -40,7 +40,7 @@ test("concretes.item.grass.まどわし草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // まどわし状態になる
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UTまどわし").id)).toBe(true);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UTまどわし").id)).toBe(true);
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
@@ -49,7 +49,7 @@ test("concretes.item.grass.まどわし草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // まどわし状態になる
-    expect(!!enemy1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UTまどわし").id)).toBe(true);
+    expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UTまどわし").id)).toBe(true);
     
     TestUtils.testCommonGrassEnd(actor1, item1);
 });

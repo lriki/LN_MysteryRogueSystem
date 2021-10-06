@@ -70,7 +70,7 @@ export class LItemImitatorBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         assert(this._itemEntityId.isEmpty());
-        const item = SEntityFactory.newItem(REData.getItemFuzzy("kキュアリーフ").item().id);
+        const item = SEntityFactory.newItem(REData.getItem("kキュアリーフ").item().id);
         item.setParent(this);
         this._itemEntityId = item.entityId();
 

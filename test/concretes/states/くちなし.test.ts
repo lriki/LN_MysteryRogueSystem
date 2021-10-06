@@ -14,7 +14,7 @@ beforeAll(() => {
 
 test("concretes.states.くちなし.Basic", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UTくちなし").id;
+    const stateId = REData.getState("kState_UTくちなし").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -49,7 +49,7 @@ test("concretes.states.くちなし.Basic", () => {
 
 test("concretes.states.くちなし.AutoRemove", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UTくちなし").id;
+    const stateId = REData.getState("kState_UTくちなし").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);

@@ -14,7 +14,7 @@ beforeAll(() => {
 
 test("concretes.states.透明.Player", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UT透明").id;
+    const stateId = REData.getState("kState_UT透明").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 11, 3);
@@ -26,7 +26,7 @@ test("concretes.states.透明.Player", () => {
 
 test("concretes.states.透明.EnemyMove", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UT透明").id;
+    const stateId = REData.getState("kState_UT透明").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -54,7 +54,7 @@ test("concretes.states.透明.EnemyMove", () => {
 
 test("concretes.states.透明.Enemy", () => {
     TestEnv.newGame();
-    const stateId = REData.getStateFuzzy("kState_UT透明").id;
+    const stateId = REData.getState("kState_UT透明").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 11, 3);

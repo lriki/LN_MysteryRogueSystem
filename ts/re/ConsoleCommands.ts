@@ -43,7 +43,7 @@ function setVariable(id: number, value: number) {
  */
 function addState(entityId: number, pattern: string) {
     const e = REGame.world.entityByIndex(entityId);
-    e.addState(REData.getStateFuzzy(pattern).id);
+    e.addState(REData.getState(pattern).id);
 }
 
 function visitAll() {

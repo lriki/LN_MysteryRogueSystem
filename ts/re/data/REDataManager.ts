@@ -903,7 +903,7 @@ export class REDataManager
                 prefab.image.stepAnime = event.pages[0].stepAnime;
                 prefab.image.walkAnime = event.pages[0].walkAnime;
                 if (data.stateImages) {
-                    prefab.stateImages = data.stateImages.map(x => { return { stateId: REData.getStateFuzzy(x[0]).id, characterName: x[1], characterIndex: x[2]}; });
+                    prefab.stateImages = data.stateImages.map(x => { return { stateId: REData.getState(x[0]).id, characterName: x[1], characterIndex: x[2]}; });
                 }
                 if (event.pages[0].moveType == 3) { // TODO: 仮
                     prefab.moveType = DPrefabMoveType.Fix;
@@ -918,7 +918,7 @@ export class REDataManager
                     }
                 }
                 else if (data.item) {
-                    const item = REData.getItemFuzzy(data.item);
+                    const item = REData.getItem(data.item);
                     prefab.dataSource = DPrefabDataSource.Item;
                     prefab.dataId = item.item().id;
                     item.entity.prefabId = prefab.id;   // 相互リンク
@@ -946,7 +946,7 @@ export class REDataManager
                     const pageData = DHelpers.readPrefabSubPageMetadata(event.pages[i]);
                     if (pageData) {
                         if (pageData.state === undefined) throw new Error(`@RE-PrefabSubPage requires state field.`);
-                        prefab.subPages.push({ stateId: REData.getStateFuzzy(pageData.state).id, rmmzEventPageIndex: i });
+                        prefab.subPages.push({ stateId: REData.getState(pageData.state).id, rmmzEventPageIndex: i });
                     }
                 }
             }

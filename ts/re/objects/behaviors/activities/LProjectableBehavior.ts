@@ -55,7 +55,7 @@ export class LProjectableBehavior extends LBehavior {
         
         //entity.dir = args.sender.dir;
 
-        entity.addState(REData.getStateFuzzy("kSystemState_Projectile").id, false);
+        entity.addState(REData.getState("kSystemState_Projectile").id, false);
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -69,7 +69,7 @@ export class LProjectableBehavior extends LBehavior {
         common.blowDirection = dir;
         common.blowMoveCount = length;
         
-        entity.addState(REData.getStateFuzzy("kSystemState_Projectile").id, false);
+        entity.addState(REData.getState("kSystemState_Projectile").id, false);
         
         context.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -241,7 +241,7 @@ export class LProjectableBehavior extends LBehavior {
             context.postDestroy(self);
         }
         else {
-            self.removeState(REData.getStateFuzzy("kSystemState_Projectile").id);
+            self.removeState(REData.getState("kSystemState_Projectile").id);
     
             UAction.postStepOnGround(context, self);
     

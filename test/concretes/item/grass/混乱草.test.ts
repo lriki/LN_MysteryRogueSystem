@@ -37,7 +37,7 @@ test("concretes.item.grass.混乱草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 混乱状態になる
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT混乱").id)).toBe(true);
+    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT混乱").id)).toBe(true);
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
@@ -46,6 +46,6 @@ test("concretes.item.grass.混乱草", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 混乱状態になる
-    expect(!!enemy1.states().find(x => x.stateDataId() == REData.getStateFuzzy("kState_UT混乱").id)).toBe(true);
+    expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UT混乱").id)).toBe(true);
 });
 
