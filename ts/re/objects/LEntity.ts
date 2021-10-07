@@ -33,6 +33,8 @@ import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
+import { LStructureId } from "./LCommon";
+import { LShopArticle } from "./LShopArticle";
 
 enum BlockLayer
 {
@@ -291,6 +293,7 @@ export class LEntity extends LObject
         //entity._located = this._located;
         entity._params.copyTo(this._params);
         entity._needVisualRefresh = true;   // とりあえず
+        entity._dropItemGenerated = false;  // 新しく現れた Entity は drop の可能性がある
 
 
 
@@ -1321,6 +1324,12 @@ export class LEntity extends LObject
         });
         return result;
     }
+
+    
+    //----------------------------------------
+
+    _shopArticle: LShopArticle = new LShopArticle();
+
 
     
     //----------------------------------------

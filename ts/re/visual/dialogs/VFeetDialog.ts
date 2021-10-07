@@ -5,6 +5,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { VDialog } from "./VDialog";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
+import { VEntityCaptionWindow } from "../windows/VEntityCaptionWindow";
 
 /**
  * [足元]
@@ -12,8 +13,8 @@ import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 export class VFeetDialog extends VDialog {
     //_targetEntity: LEntity;
    // _actions: DActionId[];
-   _model: LFeetDialog;
-    _entityNameWindow: Window_Help | undefined;
+    _model: LFeetDialog;
+    _entityNameWindow: VEntityCaptionWindow | undefined;
     _commandWindow: VFlexCommandWindow | undefined;
 
     constructor(model: LFeetDialog) {
@@ -25,8 +26,8 @@ export class VFeetDialog extends VDialog {
         const y = 100;
         const cw = 200;
 
-        this._entityNameWindow = new Window_Help(new Rectangle(0, y, Graphics.boxWidth - cw, 100));
-        this._entityNameWindow.setText("階段");
+        this._entityNameWindow = new VEntityCaptionWindow(this._model.targetEntity());//new Rectangle(0, y, Graphics.boxWidth - cw, 100)
+        //this._entityNameWindow.setText("階段");
         this.addWindow(this._entityNameWindow);
 
         this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));

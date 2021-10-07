@@ -12,8 +12,6 @@ export class LFeetDialog extends SDialog {
         super();
         this._targetEntityId = targetEntity.entityId();
         this._actions = targetEntity.queryReactions();
-
-        console.log("LFeetDialog", targetEntity, this._actions);
     }
 
     public targetEntity(): LEntity {

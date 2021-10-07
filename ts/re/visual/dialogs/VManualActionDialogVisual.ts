@@ -102,7 +102,9 @@ export class VManualActionDialogVisual extends VDialog {
             if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
                 const actions = targetEntity.queryReactions();
                 if (actions.length > 0) {
-                    if (actions.includes(REBasics.actions.PickActionId)) {
+
+                    if (actions.includes(REBasics.actions.PickActionId) &&
+                        !targetEntity._shopArticle.isSalling()) {
     
                         if (this._model.dashingEntry) {
                             context.commandContext().postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));

@@ -69,6 +69,9 @@ export class SItemShopBuilder {
                         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
                         REGame.world._transferEntity(entity, floorId, mx, my);
                         spawnedItems.push(entity);
+
+                        // 値札をつける
+                        //entity._shopArticle._ownerShopStructureId = info.id();
                     }
                 }
             }
