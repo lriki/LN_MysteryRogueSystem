@@ -1,5 +1,6 @@
 import { assert } from "ts/re/Common";
-import { DEntityKind, DEntityKindId } from "./DEntityKind";
+import { DEntityKindId } from "./DCommon";
+import { DEntityKind } from "./DEntityKind";
 import { REData } from "./REData";
 
 interface NameEntry

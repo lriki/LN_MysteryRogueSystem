@@ -1,7 +1,6 @@
 import { REBasics } from "../data/REBasics";
-import { DEffectBehaviorId } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterEffectApplyType, DParameterQualifying, DQualifyings } from "../data/DEffect";
-import { DEntityKindId } from "../data/DEntityKind";
+import { DEffectBehaviorId, DEntityKindId } from "../data/DCommon";
+import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSubEffectTargetKey } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DEffectBehavior } from "../data/DSkill";
@@ -125,6 +124,11 @@ export class SEffect {
     */
 }
 
+export interface SSubEffect {
+    subTargetKey: DSubEffectTargetKey;
+    effect: SEffect;
+}
+
 // 攻撃側
 export class SEffectorFact {
     private _subject: LEntity;
@@ -141,6 +145,7 @@ export class SEffectorFact {
     // 以下、Behavior 持ち回りで編集される要素
     //private _subjectActualParams: number[];
     private _effects: SEffect[] = [];
+    private _subEffects: SSubEffect[] = [];
     private _selfModifier: SEffectModifier;
     private _incidentType: SEffectIncidentType;
     private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
@@ -159,8 +164,15 @@ export class SEffectorFact {
         this._direction = dir;
         this._genericEffectRate = 1.0;
 
-        for (const e of effects.effects) {
-            this._effects.push(new SEffect(this, e));
+        for (const i of effects.effects) {
+            this._effects.push(new SEffect(this, i));
+        }
+        for (const i of effects.subEffects) {
+            const e = new SEffect(this, i.effect);
+            this._subEffects.push({
+                subTargetKey: i.key,
+                effect: e,
+            });
         }
         this._selfModifier = new SEffectModifier(effects.selfEffect.qualifyings);
         
@@ -195,6 +207,10 @@ export class SEffectorFact {
 
     public subjectBehavior(): LBattlerBehavior | undefined {
         return this._subjectBattlerBehavior;
+    }
+
+    public subEffects(): SSubEffect[] {
+        return this._subEffects;
     }
 
     public incidentType(): SEffectIncidentType {

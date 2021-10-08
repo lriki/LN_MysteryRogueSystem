@@ -12,10 +12,11 @@ import { SEmittorPerformer, SOnPerformedFunc } from "ts/re/system/SEmittorPerfor
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LStructureId } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity, LParamMinMax } from "../LEntity";
 import { REGame } from "../REGame";
-import { CollideActionArgs, CommandArgs, LBehavior, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
+import { CollideActionArgs, CommandArgs, LBehavior, LParamMinMaxInfo, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
 import { UAction } from "ts/re/usecases/UAction";
+import { DParameterId } from "ts/re/data/DParameter";
 
 
 /**
@@ -52,6 +53,15 @@ export class LItemBehavior extends LBehavior {
     public setShopStructureId(value: LStructureId): void {
         this._shopStructureId = value;
     }
+
+    // public onQueryParamMinMax(paramId: DParameterId, result: LParamMinMaxInfo): void {
+    //     const self = this.ownerEntity();
+    //     if (self.params().param(paramId) !== undefined) {
+    //         if (paramId == REBasics.params.upgradeValue) {
+                
+    //         }
+    //     }
+    // }
 
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.itemId)

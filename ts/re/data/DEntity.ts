@@ -141,6 +141,13 @@ export class DEntity {
 
     majorActionDeclines: number;
 
+    /** 
+     * 強化下限・上限。これらは DParam の情報ではなく Entity データごとに固有のもの。
+     * 原作では +値がそのまま攻撃力等に反映されるが、タイトルによっては +値*10 とか、マイナス方向にも有効とかいろいろ考えられる。
+     */
+    upgradeMin: number = 0;
+    upgradeMax: number = 0;
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;

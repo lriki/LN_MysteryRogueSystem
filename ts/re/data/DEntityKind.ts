@@ -1,5 +1,4 @@
-
-export type DEntityKindId = number;
+import { DEntityKindId } from "./DCommon";
 
 /**
  * Entity の種別

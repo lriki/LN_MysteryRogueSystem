@@ -1,4 +1,4 @@
-import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView, LParamMinMaxInfo } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, SCommandResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -26,15 +26,15 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LParamSet } from "./LParam";
-import { DEntityKind, DEntityKindId } from "ts/re/data/DEntityKind";
 import { UState } from "ts/re/usecases/UState";
-import { DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
+import { DParamBuff, DSubEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
-import { DBlockLayerKind } from "../data/DCommon";
+import { DBlockLayerKind, DEntityKindId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
 import { LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
+import { DEntityKind } from "../data/DEntityKind";
 
 enum BlockLayer
 {
@@ -49,6 +49,11 @@ enum BlockLayer
 
     /** 発射物。矢、魔法弾、吹き飛ばされたUnitなど。 */
     Projectile,
+}
+
+export interface LParamMinMax {
+    min: number;
+    max: number;
 }
 
 /**
@@ -717,7 +722,35 @@ export class LEntity extends LObject
         });
         return value;
     }
-    
+
+    public querySubEntities(key: DSubEffectTargetKey): LEntity[] {
+        const result: LEntity[] = [];
+        this.iterateBehaviorsReverse(b => {
+            b.onQuerySubEntities(key, result);
+            return true;
+        });
+        return result;
+    }
+
+    public queryParamMinMax(paramId: DParameterId): LParamMinMax {
+        const param = REData.parameters[paramId];
+        const result: LParamMinMax = { min: param.minValue, max: param.maxValue };
+        if (paramId == REBasics.params.upgradeValue) {
+            const data = this.data();
+            result.min = data.upgradeMin;
+            result.max = data.upgradeMax;
+        }
+        /*
+        this.iterateBehaviorsReverse(b => {
+            const r: LParamMinMaxInfo = {};
+            b.onQueryParamMinMax(paramId, r);
+            if (r.min) result.min = r.min;
+            if (r.max) result.max = r.max;
+            return true;
+        });
+        */
+        return result;
+    }
 
     //----------------------------------------
     // Behavior

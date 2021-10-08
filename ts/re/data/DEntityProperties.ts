@@ -1,4 +1,4 @@
-import { DEntityKindId } from "./DEntityKind";
+import { DEntityKindId } from "./DCommon";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";

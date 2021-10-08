@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "projectiles.Breath"
+                "-t", "concretes.enemy.Rust"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

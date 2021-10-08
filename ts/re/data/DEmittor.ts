@@ -1,4 +1,5 @@
 import { assert } from "../Common";
+import { DEntityKindId } from "./DCommon";
 import { DEffect, DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DEffectSet, DEmittorCost } from "./DEffect";
 import { DSkill } from "./DSkill";
 

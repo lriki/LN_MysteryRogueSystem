@@ -44,6 +44,7 @@ import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DBlockLayerKind, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
+import { DSubEffectTargetKey } from "ts/re/data/DEffect";
 
 export enum DecisionPhase {
     Prepare,
@@ -70,6 +71,11 @@ export interface LNameView {
     upgrades: number;
     capacity?: number;
     initialCapacity?: number;
+}
+
+export interface LParamMinMaxInfo {
+    min?: number;
+    max?: number;
 }
 
 export interface CommandArgs {
@@ -291,6 +297,9 @@ export abstract class LBehavior extends LObject {
     public onQueryIdealParamBase(paramId: DParameterId, base: number): number {
         return base;
     }
+
+    public onQuerySubEntities(key: DSubEffectTargetKey, result: LEntity[]): void { }
+    //public onQueryParamMinMax(paramId: DParameterId, result: LParamMinMaxInfo): void { }
     
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。

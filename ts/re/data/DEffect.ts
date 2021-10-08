@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DMatchConditions, DEffectBehaviorId, DBlockLayerKind, DBlockLayerScope } from "./DCommon";
+import { DMatchConditions, DEffectBehaviorId, DBlockLayerKind, DBlockLayerScope, DEntityKindId } from "./DCommon";
 import { DParameterId } from "./DParameter";
 import { DEffectBehavior, DSkill } from "./DSkill";
 
@@ -345,6 +345,48 @@ export class DEmittorCost {
     
 }
 
+export class DSubEffectTargetKey {
+    path: string;
+    kindId: DEntityKindId;
+    tags: string[];
+
+    public constructor() {
+        this.path = "";
+        this.kindId = 0;
+        this.tags = [];
+    }
+
+    public static make(path: string, kindId?: DEntityKindId | undefined, tags?: string[] | undefined): DSubEffectTargetKey {
+        const i =  new DSubEffectTargetKey();
+        i.path = path;
+        if (kindId) i.kindId = kindId;
+        if (tags) i.tags = tags;
+        return i;
+    }
+
+    public clone(): DSubEffectTargetKey {
+        const i = new DSubEffectTargetKey();
+        i.path = this.path;
+        i.kindId = this.kindId;
+        i.tags = this.tags.slice();
+        return i;
+    }
+}
+
+export class DSubEffect {
+    key: DSubEffectTargetKey;
+    effect: DEffect;
+    
+    public constructor(key: DSubEffectTargetKey, effect: DEffect) {
+        this.key = key;
+        this.effect = effect;
+    }
+
+    public clone(): DSubEffect {
+        return new DSubEffect(this.key.clone(), this.effect.clone());
+    }
+}
+
 export class DEffectSet {
 
     /** 使用者に対して与える効果 */
@@ -353,9 +395,12 @@ export class DEffectSet {
     /** matchConditions を判定して、最終的に適用する Effect を決める */
     effects: DEffect[];
 
+    subEffects: DSubEffect[];
+
     public constructor() {
         this.selfEffect = new DEffect();
         this.effects = [];
+        this.subEffects = [];
     }
     
     public copyFrom(src: DEffectSet): void {
@@ -363,6 +408,10 @@ export class DEffectSet {
         this.effects = [];
         for (const e of src.effects) {
             this.effects.push(e.clone());
+        }
+        this.subEffects = [];
+        for (const e of src.subEffects) {
+            this.subEffects.push(e.clone());
         }
     }
 }

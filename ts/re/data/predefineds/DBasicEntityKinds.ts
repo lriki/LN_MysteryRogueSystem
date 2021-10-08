@@ -1,4 +1,4 @@
-import { DEntityKindId } from "../DEntityKind";
+import { DEntityKindId } from "../DCommon";
 
 
 export interface BasicEntityKinds {

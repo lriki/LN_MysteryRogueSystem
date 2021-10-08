@@ -21,6 +21,7 @@ import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { UName } from "ts/re/usecases/UName";
+import { DSubEffectTargetKey } from "ts/re/data/DEffect";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -77,6 +78,22 @@ NOTE:
 
     public revisitonNumber(): number {
         return this._revisitonNumber;
+    }
+    
+    public onQuerySubEntities(key: DSubEffectTargetKey, result: LEntity[]): void {
+        if (key.path == "Equipped") {
+            for (const item of this.equippedItemEntities()) {
+
+                if (key.kindId) {
+                    if (key.kindId == item.kindDataId()) {
+                        result.push(item);
+                    }
+                }
+                else {
+                    result.push(item);
+                }
+            }
+        }
     }
     
     onQueryProperty(propertyId: number): any {

@@ -10,7 +10,6 @@ import { LEnemyBehavior } from "ts/re/objects/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
 import { LRandom } from "ts/re/objects/LRandom";
-import { DEntityKindId } from "ts/re/data/DEntityKind";
 import { DStateId } from "ts/re/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
 import { onEffectResult } from "../objects/internal";
@@ -102,28 +101,39 @@ export class SEffectContext {
     }
 
     public applyWithWorth(commandContext: SCommandContext, targets: LEntity[]): void {
-        let deadCount = 0;
+        //let deadCount = 0;
         for (const target of targets) {
             const effect = this._effectorFact.selectEffect(target);
-            const result = this.applyWithHitTest(commandContext, effect, target);
-            
-            // ここで Flush している理由は次の通り。
-            // 1. ダメージを個々に表示したい
-            // 2. 表示の順序関係を守りたい
-            //
-            // 1については、連撃等何らかの理由で複数回受けたときに個別に表示する。
-            // 経験値の場合はまとめて表示したいのでこことは異なる箇所で表示するが、これはそうではないケース。
-            // 例えば「Aは合計でXXXのダメージを受けた」といったように後でまとめて表示する場合はこの処理はいらない。
-            //
-            // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
-            commandContext.postEffectResult(target);
+            this.applyEffectToTarget(commandContext, effect, target);
 
-            if (target.isDeathStateAffected()) {
-                deadCount++;
-                const battler = target.findEntityBehavior(LBattlerBehavior);
-                if (battler instanceof LEnemyBehavior) {
-                    this._effectorFact.subject()._reward.addExp(battler.exp());
+            
+            for (const subEffect of this._effectorFact.subEffects()) {
+                for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
+                    this.applyEffectToTarget(commandContext, subEffect.effect, subTarget);
                 }
+            }
+        }
+    }
+
+    private applyEffectToTarget(commandContext: SCommandContext, effect: SEffect, target: LEntity): void {
+        const result = this.applyWithHitTest(commandContext, effect, target);
+        
+        // ここで Flush している理由は次の通り。
+        // 1. ダメージを個々に表示したい
+        // 2. 表示の順序関係を守りたい
+        //
+        // 1については、連撃等何らかの理由で複数回受けたときに個別に表示する。
+        // 経験値の場合はまとめて表示したいのでこことは異なる箇所で表示するが、これはそうではないケース。
+        // 例えば「Aは合計でXXXのダメージを受けた」といったように後でまとめて表示する場合はこの処理はいらない。
+        //
+        // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
+        commandContext.postEffectResult(target);
+
+        if (target.isDeathStateAffected()) {
+            //deadCount++;
+            const battler = target.findEntityBehavior(LBattlerBehavior);
+            if (battler instanceof LEnemyBehavior) {
+                this._effectorFact.subject()._reward.addExp(battler.exp());
             }
         }
     }

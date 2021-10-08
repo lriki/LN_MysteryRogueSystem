@@ -1,5 +1,4 @@
 import { DEffectBehaviorId } from "./DCommon";
-import { DEntityKindId } from "./DEntityKind";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";

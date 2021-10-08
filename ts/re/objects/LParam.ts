@@ -229,9 +229,9 @@ export class LParamSet {
                 const ideal = owner.idealParam(param.parameterId());
                 let actual = (ideal - param.actualParamDamge());
 
-                const min = REData.parameters[param.parameterId()].minValue;
-                if (actual < min) {
-                    actual = min;
+                const minmax = owner.queryParamMinMax(param.parameterId());
+                if (actual < minmax.min) {
+                    actual = minmax.min;
                 }
                 if (actual > ideal) {
                     actual = ideal;

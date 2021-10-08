@@ -29,13 +29,15 @@ test("concretes.enemy.SelfExplosion", () => {
 
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();
+
+    //----------------------------------------------------------------------------------------------------
 
     // [攻撃]
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();
 
     expect(enemy2.isDestroyed()).toBe(true);
 });

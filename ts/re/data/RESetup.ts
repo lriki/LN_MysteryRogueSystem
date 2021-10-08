@@ -1,6 +1,6 @@
 import { REBasics } from "./REBasics";
 import { DBlockLayerKind, DSpecialEffectCodes } from "./DCommon";
-import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, LStateLevelType } from "./DEffect";
+import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, DSubEffect, DSubEffectTargetKey, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
@@ -121,17 +121,23 @@ export class RESetup {
         const data = entity.item();
         switch (entity.entity.key) {
             case "kゴブリンのこん棒":
+                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
+                entity.upgradeMax = 99;
                 entity.idealParams[REBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kシルバーソード":
-                entity.idealParams[REBasics.params.upgradeValue] = -1;
+                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
+                entity.upgradeMax = 99;
+                entity.idealParams[REBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kレザーシールド":
-                entity.idealParams[REBasics.params.upgradeValue] = -1;
+                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
+                entity.upgradeMax = 99;
+                entity.idealParams[REBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
@@ -329,6 +335,31 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 //emittor.scope.layers.push(DBlockLayerKind.Ground);
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.goldSteal);
+                break;
+            case "kSkill_装備サビ":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                break;
+            case "kSkill_装備サビ_武器":
+            case "kSkill_装備サビ_盾":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.effectSet.effects[0].qualifyings.parameterQualifyings.push({
+                    parameterId: REBasics.params.upgradeValue,
+                    elementId: 0,
+                    formula: "1",
+                    applyType: DParameterEffectApplyType.Damage,
+                    variance: 0,
+                    silent: true,
+                });
+                break;
+        }
+    }
+    
+    static linkSkill(data: DSkill) {
+        const emittor = data.emittor();
+        switch (data.key) {
+            case "kSkill_装備サビ":
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
                 break;
         }
     }

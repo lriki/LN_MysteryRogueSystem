@@ -534,11 +534,11 @@ export class REDataManager
                 //if (DHelpers.isSingle(skill.rmmzEffectScope)) {
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
                 }
-
-                RESetup.setupDirectly_Skill(skill);
             }
         });
-
+        REData.skills.forEach(x => RESetup.setupDirectly_Skill(x));
+        REData.skills.forEach(x => RESetup.linkSkill(x));
+        
         // Import Item
         REData.items = [];
         REData.itemDataIdOffset = REData.items.length;
