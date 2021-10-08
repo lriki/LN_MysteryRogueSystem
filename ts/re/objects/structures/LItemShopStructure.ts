@@ -8,6 +8,9 @@ import { LItemBehavior } from "../behaviors/LItemBehavior";
 import { assert } from "ts/re/Common";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntityId } from "../LObject";
+import { DFactionId, REData } from "ts/re/data/REData";
+import { REBasics } from "ts/re/data/REBasics";
+import { RESystem } from "ts/re/system/RESystem";
 
 // 店の入り口情報
 export class LShopEntrance {
@@ -71,6 +74,10 @@ export class LItemShopStructure extends LStructure {
         return this._itemShopTypeId;
     }
 
+    public clientFaction(): DFactionId {
+        return REData.system.factions.player;
+    }
+
     public addShopEntrance(homeX: number, homeY: number, gateX: number, gateY: number): LShopEntrance {
         const entrance = new LShopEntrance(this._gates.length);
         entrance.setup(homeX, homeY, gateX, gateY);
@@ -115,7 +122,7 @@ export class LItemShopStructure extends LStructure {
 
     // actor に対して請求状態であるかを判断する
     // ※現状では請求対象は Player 勢力のみであるため、商品が失われた原因までは考慮していない
-    public checkBilling(actor: LEntity): boolean {
+    public checkBilling(/*actor: LEntity*/): boolean {
         return this.getLossItems().length > 0;
     }
 

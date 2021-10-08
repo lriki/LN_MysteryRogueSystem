@@ -85,14 +85,16 @@ test("State.Proficiency", () => {
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
     inventory.addEntity(shield1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();
+
+    //----------------------------------------------------------------------------------------------------
 
     // [装備]
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();
     
     const atk1 = actor1.atk;
     const def1 = actor1.def;

@@ -165,6 +165,15 @@ export class LMoveDeterminer {
             }
         }
 
+
+        if (this.hasDestination() &&
+            self.x == this._targetPositionX &&
+            self.y == this._targetPositionY) {
+            // 目標座標が指定されているが既に到達済みの場合は、ランダム移動を行わない。
+            // 店主など、明示的に移動させない Entity が該当する。
+            return true;
+        }
+
         this._noActionTurnCount++;
         if (this._noActionTurnCount >= 6) {
             // 6連続で移動できなかったときはランダム移動

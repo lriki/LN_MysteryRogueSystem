@@ -75,20 +75,30 @@ export class LShopkeeperBehavior extends LBehavior {
 }
 
 export class LMovingTargetFinder_Shopkeeper {
-    private _shopkeeperId: LBehaviorId;
+    private _ownerShopkeeperId: LBehaviorId;
 
     public constructor(shopkeeper: LShopkeeperBehavior) {
-        this._shopkeeperId = shopkeeper.id();
+        this._ownerShopkeeperId = shopkeeper.id();
     }
 
     public decide(self: LEntity): (number[] | undefined) {
-        const shopkeeper = REGame.world.behavior(this._shopkeeperId) as LShopkeeperBehavior;
-        console.log("shopkeeper", shopkeeper);
-        console.log("shop", shopkeeper.shop());
-        const entrance = shopkeeper.shopEntrance();
-        return [entrance.homeX(), entrance.homeY()];
+        const shopkeeper = REGame.world.behavior(this._ownerShopkeeperId) as LShopkeeperBehavior;
+        const shop = shopkeeper.shop();
 
-        return undefined;
+        // const room = REGame.map.room(shop.roomId());
+        // room.
+
+        // shop.clientFaction()
+
+        
+        const entrance = shopkeeper.shopEntrance();
+
+        if (shop.checkBilling()) {
+            return [entrance.gateX(), entrance.gateY()];
+        }
+        else {
+            return [entrance.homeX(), entrance.homeY()];
+        }
     }
 
     
