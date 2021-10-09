@@ -308,7 +308,7 @@ export class SEntityFactory {
             case "kEnemy_走り屋A":
                 entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
                 break;
-            case "kEnemy_スライム屋様":
+            case "kEnemy_分裂屋":
                 entity.addBehavior(LEntityDivisionBehavior);
                 break;
             case "kEnemy_群集屋":
