@@ -1,3 +1,4 @@
+import { assert } from "../Common";
 
 
 
@@ -10,6 +11,10 @@ declare global {
         distinct(): Array<T>;
         immutableSort(compareFn?: (a: T, b: T) => number): Array<T>;
         selectMin(fn: (a: T, b: T) => number): T | undefined;
+
+        isEmpty(): boolean;
+        front(): T;
+        back(): T;
     }
 }
 
@@ -70,6 +75,20 @@ Array.prototype.selectMin = function<T>(fn: (a: T, b: T) => number): T | undefin
         }
     }
     return m;
+}
+
+Array.prototype.isEmpty = function(): boolean {
+    return this.length == 0;
+}
+
+Array.prototype.front = function<T>(): T {
+    assert(this.length > 0);
+    return this[0];
+}
+
+Array.prototype.back = function<T>(): T {
+    assert(this.length > 0);
+    return this[this.length - 1];
 }
 
 export {}

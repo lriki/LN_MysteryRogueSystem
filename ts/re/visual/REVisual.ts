@@ -1,4 +1,5 @@
 import { VMapEditor } from "ts/re/rmmz/VMapEditor";
+import { VAnimation } from "./animation/VAnimation";
 import { REEntityVisualSet } from "./REEntityVisualSet";
 import { REVisualExtension } from "./REVisualExtension";
 import { REVisual_Manager } from "./REVisual_Manager";
@@ -63,6 +64,7 @@ export class REVisual
         this.entityVisualSet?.update();
         this.guideGrid?.update();
         this._messageWindowSet?.update();
+        VAnimation.update();
     }
     
     static postUpdate() {

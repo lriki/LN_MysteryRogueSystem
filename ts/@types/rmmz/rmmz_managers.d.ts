@@ -1148,7 +1148,7 @@ declare namespace ImageManager{
 	 * @param filename 
 	 * @return  
 	 */
-	function loadBitmap(folder : string, filename : string): /* !this._emptyBitmap */ any;
+	function loadBitmap(folder : string, filename : string): Bitmap;
 		
 	/**
 	 * 

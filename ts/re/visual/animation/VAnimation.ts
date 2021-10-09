@@ -101,12 +101,213 @@ export class VEasingAnimationCurve extends VAnimationCurve {
     }
 }
 
+export enum VKeyFrameTangentMode {
+	/** 線形補間 */
+	Linear,
+
+	/** 接線 (速度) を使用した補間 (エルミートスプライン) */
+	Tangent,
+
+	/** キーフレームの値を通過するなめらかな補間 (Catmull-Rom) */
+	Auto,
+
+	/** 補間なし */
+	Constant,
+}
+
+export interface VKeyFrame {
+	/** 時間 */
+	time: number;
+
+	/** 値 */
+	value: number;
+
+	/** 前のキーフレームとの補間方法 */
+	leftTangentMode: VKeyFrameTangentMode;
+
+	/** 前のキーフレームからこのキーフレームに近づくときの接線 */
+	leftTangent: number;
+
+	/** 次のキーフレームとの補間方法 */
+	rightTangentMode: VKeyFrameTangentMode;
+
+	/** このキーフレームから次のキーフレームに向かうときの接線 */
+	rightTangent: number;
+}
+
+export class VKeyFrameAnimationCurve extends VAnimationCurve {
+    private _keyFrames: VKeyFrame[];
+    private _defaultValue: number;
+
+    public constructor() {
+        super();
+        this._keyFrames = [];
+        this._defaultValue = 0.0;
+    }
+
+	public addKeyFrame(keyFrame: VKeyFrame): void {
+        // そのまま追加できる
+        if (this._keyFrames.isEmpty() || this._keyFrames.back().time <= keyFrame.time) {
+            this._keyFrames.push(keyFrame);
+        }
+        // 追加後のソートが必要
+        else {
+            throw new Error("Not implemetend.");
+        }
+    }
+
+    public addFrame(time: number, value: number, rightTangentMode = VKeyFrameTangentMode.Linear, tangent: number = 0.0) {
+
+        const k: VKeyFrame  = {
+            time: time,
+            value: value,
+            leftTangentMode: VKeyFrameTangentMode.Constant,
+            leftTangent: 0.0,
+            rightTangentMode: rightTangentMode,
+            rightTangent: tangent,
+        };
+    
+        if (!this._keyFrames.isEmpty() && this._keyFrames.front().time <= time) {
+            const ikey0 = this.findKeyFrameIndex(time);
+            assert(ikey0 >= 0);
+            const key0 = this._keyFrames[ikey0];
+            k.leftTangentMode = key0.rightTangentMode;
+            k.leftTangent = -key0.rightTangent;
+        }
+        else {
+            k.leftTangentMode = VKeyFrameTangentMode.Constant;
+            k.leftTangent = 0.0;
+        }
+    
+        this.addKeyFrame(k);
+    }
+    
+
+	onEvaluate(time: number): number {
+        if (this._keyFrames.length == 0) {
+            return this._defaultValue;
+        }
+        // time が最初のフレーム位置より前の場合は Clamp
+        if (time < this._keyFrames.front().time) {
+            return this._keyFrames.front().value;
+        }
+        // キーがひとつだけの場合はそのキーの値
+        else if (this._keyFrames.length == 1) {
+            return this._keyFrames.front().value;
+        }
+        // time が終端以降の場合は終端の値
+        else if (time >= this._keyFrames.back().time) {
+            return this._keyFrames.back().value;
+        }
+        // 以上以外の場合は補間する
+        else
+        {
+            const ikey0 = this.findKeyFrameIndex(time);
+            const key0 = this._keyFrames[ikey0];
+            const key1 = this._keyFrames[ikey0 + 1];
+    
+            const p0 = key0.value;
+            const p1 = key1.value;
+            const t0 = (key0.time);
+            const t1 = (key1.time);
+            const t = (time - t0) / (t1 - t0);
+    
+            // まず2種類のモードで保管する。最後にそれらを t で線形補間することで、異なる TangentMode を補間する
+            const modes = [key0.rightTangentMode, key1.leftTangentMode];
+            const values = [0, 0];
+            for (let i = 0; i < 2; i++)
+            {
+                switch (modes[i])
+                {
+                // 補間無し
+                case VKeyFrameTangentMode.Constant:
+                {
+                    values[i] = p0;
+                    break;
+                }
+                // 線形
+                case VKeyFrameTangentMode.Linear:
+                {
+                    values[i] = p0 + (p1 - p0) * t;
+                    break;
+                }
+                // 三次補間
+                case VKeyFrameTangentMode.Tangent:
+                {
+                    values[i] = this.hermite(
+                        p0, key0.rightTangent,
+                        p1, key1.leftTangent,
+                        t);
+                    break;
+                }
+                // Catmull-Rom
+                case VKeyFrameTangentMode.Auto:
+                {
+                    // ループ再生で time が終端を超えている場合、
+                    // この時点でkey の値は ループ開始位置のひとつ前のキーを指している
+    
+                    const begin = this._keyFrames.front();
+                    const end = this._keyFrames.back();
+    
+                    // この補間には、begin のひとつ前と end のひとつ後の値が必要。
+                    // それぞれが始点、終点の場合はループするように補間する
+                    values[i] = this.catmullRom(
+                        ((key0.time == begin.time) ? end.value : this._keyFrames[ikey0 - 1].value),
+                        p0,
+                        p1,
+                        ((key1.time == end.time) ? begin.value : this._keyFrames[ikey0 + 2].value),
+                        t);
+                    break;
+                }
+                }
+            }
+    
+            return values[0] + (values[1] - values[0]) * t;
+        }
+    }
+
+	onGetLastFrameTime(): number {
+        if (this._keyFrames.length == 0) return 0.0;
+        return this._keyFrames[this._keyFrames.length - 1].time;
+    }
+
+    private findKeyFrameIndex(time: number): number {
+        // TODO: 二分探索
+        for (let i = this._keyFrames.length - 1; i >= 0; i--) {
+            if (this._keyFrames[i].time <= time) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    private hermite(v1: number, a1: number, v2: number, a2: number, t: number): number {
+        const a = 2.0 * (v1 - v2) + (a1 + a2);
+        const b = 3.0 * (v2 - v1) - (2.0 * a1) - a2;
+        let r = a;
+        r *= t;
+        r += b;
+        r *= t;
+        r += a1;
+        r *= t;
+        return r + v1;
+    }
+
+    private catmullRom(v1: number, v2: number, v3: number, v4: number, t: number): number {
+        const d1 = (v3 - v1) * 0.5;
+        const d2 = (v4 - v2) * 0.5;
+        return (2.0 * v2 - 2.0 * v3 + d1 + d2) * t * t * t + (-3.0 * v2 + 3.0 * v3 - 2.0 * d1 - d2) * t * t + d1 * t + v2;
+    }
+
+}
+
 export class VAnimationInstance {
     //container: PIXI.Container;
     key: string;
     curve: VAnimationCurve;
     setter: (v: number) => void;
     time: number;
+    timeOffset: number;
 
     constructor(/*container: PIXI.Container,*/ key: string, curve: VAnimationCurve, setter: (v: number) => void) {
         //this.container = container;
@@ -114,11 +315,12 @@ export class VAnimationInstance {
         this.curve = curve;
         this.setter = setter;
         this.time = 0;
+        this.timeOffset = 0;
     }
 
     public update(elapsedTime: number): void {
         this.time += elapsedTime;
-        const value = this.curve.evaluate(this.time);
+        const value = this.curve.evaluate(this.timeOffset + this.time);
         this.setter(value);
     }
 
@@ -136,14 +338,15 @@ export class VAnimation {
     //private static _animations: VAnimationInstance[] = [];
     private static _containers: PIXI.Container[] = []; 
 
-    public static start(container: PIXI.Container, key: string, curve: VAnimationCurve, setter: (v: number) => void): void {
+    public static start(container: PIXI.Container, key: string, curve: VAnimationCurve, setter: (v: number) => void, timeOffset: number = 0.0): void {
         const instance = new VAnimationInstance(/*container,*/ key, curve, setter);
+        instance.timeOffset = timeOffset;
         this.add(container, key, instance);
     }
 
     public static add(container_: PIXI.Container, key: string, instance: VAnimationInstance): void {
         const container = container_ as any;
-        if (container._animations_RE) {
+        if (!container._animations_RE) {
             container._animations_RE = [];
         }
         const animations = container._animations_RE;
@@ -159,6 +362,10 @@ export class VAnimation {
 
         // 無ければ新しく追加
         animations.push(instance);
+        
+        if (!this._containers.includes(container)) {
+            this._containers.push(container);
+        }
     }
 
     public static stop(container_: PIXI.Container, key: string): void {
@@ -177,6 +384,7 @@ export class VAnimation {
         const container = container_ as any;
         if (container._animations_RE) {
             container._animations_RE = [];
+            this._containers.mutableRemoveAll(x => x == container);
         }
     }
 
