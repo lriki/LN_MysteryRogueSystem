@@ -47,7 +47,7 @@ test("concretes.states.かなしばり.Attack", () => {
     const hp1 = actor1.actualParam(REBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

@@ -22,7 +22,7 @@ test("ai.Escape.1", () => {
     actor1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [stateId], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 4);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -96,7 +96,7 @@ test("ai.Escape.2", () => {
     actor1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [stateId], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

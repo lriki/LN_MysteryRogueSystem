@@ -75,7 +75,7 @@ export class DSystem {
         this.states.curse = curse.id;
         this.states.seal = seal.id;
 
-        this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム").entityId;
+        this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライム屋").entityId;
         this.fallbackItemEntityId = REData.getItem("kItem_雑草").id;
         this.fallbackGoldEntityId = REData.getItem("kItem_Gold").id;
 

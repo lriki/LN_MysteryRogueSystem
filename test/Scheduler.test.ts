@@ -21,7 +21,7 @@ test("Scheduler.ChangeSpeed1", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(REBasics.states.debug_MoveRight);
 
@@ -55,7 +55,7 @@ test("Scheduler.ChangeSpeed2", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(REBasics.states.debug_MoveRight);
 
@@ -92,7 +92,7 @@ test("Scheduler.ChangeSpeed3", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(REBasics.states.debug_MoveRight);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
@@ -118,7 +118,7 @@ test("Scheduler.ChangeSpeed4", () => {
     actor1.getEntityBehavior(LUnitBehavior).setSpeedLevel(3);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(REBasics.states.debug_MoveRight);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2);
@@ -141,7 +141,7 @@ test("Scheduler.ChangeSpeed5", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(REBasics.states.debug_MoveRight);
 

@@ -24,7 +24,7 @@ test("concretes.enemy.SelfExplosion", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy2
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム").id, [], "enemy2"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [], "enemy2"));
     REGame.world._transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
