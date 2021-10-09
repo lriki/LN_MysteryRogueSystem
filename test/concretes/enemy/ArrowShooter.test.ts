@@ -26,7 +26,7 @@ test("concretes.enemies.ArrowShooter", () => {
     const hp1 = actor1.actualParam(REBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプ").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_弓屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
 
     RESystem.scheduler.stepSimulation();

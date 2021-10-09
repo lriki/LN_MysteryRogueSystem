@@ -30,7 +30,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     inventory1.addEntity(item1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃー").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アイテム盗み屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
@@ -74,7 +74,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃー").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アイテム盗み屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
@@ -125,7 +125,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     inventory1.addEntity(item2);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃー").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アイテム盗み屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
@@ -169,7 +169,7 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃー").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アイテム盗み屋").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

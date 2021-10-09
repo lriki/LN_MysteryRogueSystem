@@ -302,22 +302,22 @@ export class SEntityFactory {
 
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
-            case "kEnemy_バット":
+            case "kEnemy_ふらふら屋A":
                 entity.addBehavior(LRatedRandomAIBehavior);
                 break;
-            case "kEnemy_ウルフ":
+            case "kEnemy_走り屋A":
                 entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
                 break;
-            case "kEnemy_スピリットスライム":
+            case "kEnemy_スライム屋様":
                 entity.addBehavior(LEntityDivisionBehavior);
                 break;
-            case "kEnemy_フロックウルフ":
+            case "kEnemy_群集屋":
                 entity.addBehavior(LFlockBehavior);
                 break;
-            case "kEnemy_ブラストミミック":
+            case "kEnemy_自爆屋":
                 entity.addBehavior(LSelfExplosionBehavior);
                 break;
-            case "kEnemy_ミニゴーレム":
+            case "kEnemy_足止め屋":
                 entity.addBehavior(LGrabFootBehavior);
                 break;
                 
@@ -325,10 +325,10 @@ export class SEntityFactory {
                 const b = entity.getEntityBehavior(LUnitBehavior);
                 b.setFactionId(REData.system.factions.neutral);
                 break;
-            case "kEnemy_プレゼンにゃー":
+            case "kEnemy_アイテム盗み屋":
                 entity.addBehavior(LItemThiefBehavior);
                 break;
-            case "kEnemy_ゴールドにゃー":
+            case "kEnemy_ゴールド盗み屋":
                 entity.addBehavior(LGoldThiefBehavior);
                 break;
             case "kEnemy_店主":

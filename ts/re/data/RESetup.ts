@@ -367,13 +367,13 @@ export class RESetup {
     public static setupEnemy(entity: DEntity): void {
         const data = entity.enemyData();
         switch (entity.entity.key) {
-            case "kEnemy_ブラストミミック":
+            case "kEnemy_自爆屋":
                 //entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
                 break;
-            case "kEnemy_ウルフ":
+            case "kEnemy_走り屋A":
                 entity.majorActionDeclines = 1;
                 break;
-            case "kEnemy_プレゼンにゃー":
+            case "kEnemy_アイテム盗み屋":
                 //data.traits.push({ code: DBasics.traits.ItemDropRate, dataId: 0, value: 1.0 });
                 break;
         }
