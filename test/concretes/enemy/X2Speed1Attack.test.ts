@@ -21,38 +21,54 @@ test("concretes.enemy.X2Speed1Attack", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_走り屋A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 14, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // [待機]
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 倍速で近づいて来る
     expect(enemy1.x).toBe(12);
 
+    //----------------------------------------------------------------------------------------------------
+
     // [待機]
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Minor で接近し、Major で攻撃が発生している
     expect(enemy1.x).toBe(11);
     expect(TestEnv.integration.skillEmittedCount).toBe(1);
 
-    // 封印
+    //----------------------------------------------------------------------------------------------------
+
+    // Enemy を封印
     enemy1.addState(REData.getState("kState_UT封印").id);
     
     // [←]
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 封印されているので等速
     expect(enemy1.x).toBe(10);
     expect(TestEnv.integration.skillEmittedCount).toBe(1);
+    
+    //----------------------------------------------------------------------------------------------------
 
+    // [待機]
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // 1回攻撃が来る
+    expect(TestEnv.integration.skillEmittedCount).toBe(2);
 });

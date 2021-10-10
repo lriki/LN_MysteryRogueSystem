@@ -49,8 +49,9 @@ export class LActionToken {
     }
 
     public reset(entity: LEntity, count: number): void {
+        const data = entity.data();
         this._minorActionTokenCount = count;
-        this._majorActionTokenCount = Math.max(count - entity.data().majorActionDeclines, 0);
+        this._majorActionTokenCount = Math.max(count - data.majorActionDeclines, 1);
     }
 
     public charge(count: number): void {
