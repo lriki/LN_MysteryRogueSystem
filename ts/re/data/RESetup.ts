@@ -351,6 +351,9 @@ export class RESetup {
                     silent: true,
                 });
                 break;
+            case "kSkill_混乱魔法_部屋内":
+                emittor.scope.range = DEffectFieldScopeRange.Room;
+                break;
         }
     }
     

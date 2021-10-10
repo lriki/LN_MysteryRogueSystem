@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Shop.Basic"
+                "-t", "concretes.enemy.PanicToRoom"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

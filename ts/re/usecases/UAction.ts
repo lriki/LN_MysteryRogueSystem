@@ -201,7 +201,7 @@ export class UAction {
         return result;
     }
 
-    private static testFactionMatch(performer: LEntity, target: LEntity, scope: DRmmzEffectScope): boolean {
+    public static testFactionMatch(performer: LEntity, target: LEntity, scope: DRmmzEffectScope): boolean {
         if (DHelpers.isForFriend(scope)) {
             if (Helpers.isFriend(performer, target)) return true;
         }
@@ -318,6 +318,15 @@ export class UAction {
 
             return candidates;
             //return { action: action, targets: targets };
+        }
+        else if (scope.range == DEffectFieldScopeRange.Room) {
+            const candidates: LEntity[] = [];
+            REGame.map.room(performer.roomId()).forEachEntities(entity => {
+                if (this.testFactionMatch(performer, entity, rmmzEffectScope)) {
+                    candidates.push(entity);
+                };
+            });
+            return candidates;
         }
         else {
             throw new Error("Unreachable.");

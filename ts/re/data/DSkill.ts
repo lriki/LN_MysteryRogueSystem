@@ -35,9 +35,11 @@ export class DSkill {
     // こういった「どの範囲に効果を出すか？Projectileとして効果を放出するか？」は Scope の一環として
     // 指定する方が (絶対かはわからないけど) どちらかと言えば自然だろう。
     emittorId: DEmittorId;
+    
+    message1: string;
+    message2: string;
 
     constructor(id: DSkillId) {
-
         this.id = id,
         this.name = "null";
         this.key = "";
@@ -45,6 +47,8 @@ export class DSkill {
         this.rmmzEffectScope = DRmmzEffectScope.None;
         //effectSet: new DEffectSet(),
         this.emittorId = 0;
+        this.message1 = "";
+        this.message2 = "";
     }
 
     public parseMetadata(meta: any | undefined): void {

@@ -1,5 +1,5 @@
 import { REBasics } from "ts/re/data/REBasics";
-import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope } from "ts/re/data/DEffect";
+import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
@@ -12,7 +12,7 @@ import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { SEntityFactory } from "./SEntityFactory";
 import { UMovement } from "../usecases/UMovement";
-import { assert } from "ts/re/Common";
+import { assert, tr2 } from "ts/re/Common";
 import { DParameterId } from "ts/re/data/DParameter";
 import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DBlockLayerKind, DBlockLayerScope, DSkillId } from "../data/DCommon";
@@ -20,6 +20,8 @@ import { SEffectorFact } from "./SEffectApplyer";
 import { DEffectCause, DEmittor } from "../data/DEmittor";
 import { USearch } from "../usecases/USearch";
 import { LBlock } from "../objects/LBlock";
+import { UAction } from "../usecases/UAction";
+import { UName } from "../usecases/UName";
 
 export type SOnPerformedFunc = (targets: LEntity[]) => void;
 
@@ -132,6 +134,12 @@ export class SEmittorPerformer {
         // もともと UntBehavior.onAction() で AttackActionId をフックして処理していたが、こちらに持ってきた。
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
+        if (skill.message1.length > 0) {
+            context.postMessage(tr2(skill.message1).format(UName.makeUnitName(performer), skill.name));
+        }
+        if (skill.message2.length > 0) {
+            context.postMessage(tr2(skill.message2).format(UName.makeUnitName(performer), skill.name));
+        }
 
         const effect = skill.emittor();
         if (effect) {
@@ -400,26 +408,39 @@ export class SEmittorPerformer {
                 targets.push(entity);
             });
 
-            const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
-            if (itemEntity) {
-                effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
-                effectSubject.withItem(itemEntity);
-            }
-            const effectContext = new SEffectContext(effectSubject, context.random());
-            
-            context.postCall(() => {
-                effectContext.applyWithWorth(context, targets);
-                this.onPerformed(targets);
-                if (skillId > 0) {
-                    this.raiseSkillEmitted(context, performer, targets, skillId);
-                    this.callSkillPerformed(context, performer, targets, skillId);
-                }
+            this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
+        }
+        else if (emittor.scope.range == DEffectFieldScopeRange.Room) {
+            const targets: LEntity[] = [];
+            REGame.map.room(performer.roomId()).forEachEntities(entity => {
+                if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Opponent_All)) {
+                    targets.push(entity);
+                };
             });
-
+            this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
         }
         else {
             throw new Error("Not implemented.");
         }
+    }
+
+    private applyEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, targets: LEntity[], skillId: DSkillId, itemEntity: LEntity | undefined) {
+        
+        const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
+        if (itemEntity) {
+            effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
+            effectSubject.withItem(itemEntity);
+        }
+        const effectContext = new SEffectContext(effectSubject, context.random());
+        
+        context.postCall(() => {
+            effectContext.applyWithWorth(context, targets);
+            this.onPerformed(targets);
+            if (skillId > 0) {
+                this.raiseSkillEmitted(context, performer, targets, skillId);
+                this.callSkillPerformed(context, performer, targets, skillId);
+            }
+        });
     }
 
     public getTargetInBlock(block: LBlock, scope: DEffectFieldScope): LEntity[] {

@@ -63,7 +63,6 @@ export class UTransfer {
             actualFloorNumber = land.floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
             actualX = newX;
             actualY = newY;
-
             if (actualFloorNumber < 0) {
                 throw new Error(tr2("Landフロアテーブルに設定が無い固定マップへ移動しようとしました。\nland:%1, map:%2").format(land.name, mapInfo.name));
             }

@@ -502,9 +502,6 @@ export class REDataManager
             const skill = new DSkill(REData.skills.length);
             REData.skills.push(skill);
             if (x) {
-                //const id = REData.addSkill(x.name ?? "null");
-                //const skill = REData.skills[id];
-
                 const emittor = REData.newEmittor();
                 const effect = new DEffect();
                 effect.critical = false;
@@ -520,14 +517,12 @@ export class REDataManager
                     effect.qualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 emittor.effectSet.effects.push(effect);
-                /*
-                skill.effectSet.setEffect(DEffectCause.Affect, effect);
-                // TODO:
-                skill.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
-                skill.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
-                */
+
+                skill.name = x.name;
                 skill.emittorId = emittor.id;
                 skill.rmmzEffectScope = x.scope ?? DRmmzEffectScope.None;
+                skill.message1 = x.message1;
+                skill.message2 = x.message2;
                 skill.parseMetadata(x.meta);
 
                 if (DHelpers.isForFriend(skill.rmmzEffectScope)) {
