@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, tr2 } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
 import { LandExitResult, REData } from "ts/re/data/REData";
 import { REDataManager } from "ts/re/data/REDataManager";
@@ -58,10 +58,15 @@ export class UTransfer {
             const mapInfo = $dataMapInfos[newMapId];
             assert(mapInfo);
             const fixedMapName = mapInfo.name;
+            const land = REData.lands[landId];
             //actualMapId = newMapId;
-            actualFloorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+            actualFloorNumber = land.floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
             actualX = newX;
             actualY = newY;
+
+            if (actualFloorNumber < 0) {
+                throw new Error(tr2("Landフロアテーブルに設定が無い固定マップへ移動しようとしました。\nland:%1, map:%2").format(land.name, mapInfo.name));
+            }
         }
         else {
             throw new Error("Unreachable.");
