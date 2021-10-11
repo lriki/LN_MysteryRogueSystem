@@ -177,7 +177,7 @@ export class SEffectContext {
         // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
         {
             const removeStates: DStateId[] = [];
-            for (const p of effect.targetModifier().parameterEffects()) {
+            for (const p of effect.targetModifier().parameterEffects2()) {
                 if (p && !p.isRecover()) {
                     target.iterateStates(s => {
                         if (s.checkRemoveAtDamageTesting(p.paramId)) {

@@ -44,6 +44,12 @@ export class SFormulaOperand {
                 },
                 configurable: true
             };
+            prop["max_" + param.code] = {
+                get: () => {
+                    return this.entity().idealParam(param.id);
+                },
+                configurable: true
+            };
         };
         Object.defineProperties(this, prop);
     }

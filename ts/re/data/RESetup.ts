@@ -1,6 +1,6 @@
 import { REBasics } from "./REBasics";
 import { DBlockLayerKind, DSpecialEffectCodes } from "./DCommon";
-import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterEffectApplyType, DSkillCostSource, DSubEffect, DSubEffectTargetKey, LStateLevelType } from "./DEffect";
+import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DSkillCostSource, DSubEffect, DSubEffectTargetKey, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
@@ -179,11 +179,23 @@ export class RESetup {
                     const effect = new DEffect();
                     effect.qualifyings.parameterQualifyings.push({
                         parameterId: REBasics.params.pow,
+                        applyTarget: DParameterApplyTarget.Current,
                         elementId: 0,
                         formula: "1",
                         applyType: DParameterEffectApplyType.Recover,
                         variance: 0,
-                        silent: true,
+                        silent: false,
+                        conditionFormula: "a.pow < a.max_pow",
+                    });
+                    effect.qualifyings.parameterQualifyings.push({
+                        parameterId: REBasics.params.pow,
+                        applyTarget: DParameterApplyTarget.Maximum,
+                        elementId: 0,
+                        formula: "1",
+                        applyType: DParameterEffectApplyType.Recover,
+                        variance: 0,
+                        silent: false,
+                        conditionFormula: "a.pow >= a.max_pow",
                     });
                     emittor.effectSet.effects.push(effect);
                     //entity.emittorSet.addEmittor(DEffectCause.Eat, emittor);
@@ -366,6 +378,7 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 emittor.effectSet.effects[0].qualifyings.parameterQualifyings.push({
                     parameterId: REBasics.params.upgradeValue,
+                    applyTarget: DParameterApplyTarget.Current,
                     elementId: 0,
                     formula: "1",
                     applyType: DParameterEffectApplyType.Damage,
@@ -412,6 +425,7 @@ export class RESetup {
         const effect = new DEffect();
         effect.qualifyings.parameterQualifyings.push({
             parameterId: REBasics.params.fp,
+            applyTarget: DParameterApplyTarget.Current,
             elementId: 0,
             formula: "5",
             applyType: DParameterEffectApplyType.Recover,

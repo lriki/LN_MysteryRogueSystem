@@ -19,8 +19,16 @@ export enum DParameterEffectApplyType {
     Drain,
 }
 
+export enum DParameterApplyTarget {
+    Current,
+    Minimum,
+    Maximum,
+}
+
 export interface DParameterQualifying {
     parameterId: DParameterId;
+    applyTarget: DParameterApplyTarget;
+
 
     elementId: number;  // (Index of DSystem.elements)
 
@@ -29,11 +37,14 @@ export interface DParameterQualifying {
     /** IDataSkill.damage.type  */
     applyType: DParameterEffectApplyType;
 
+
     /** 分散度 (%) */
     variance: number;
 
     /** メッセージを出さないようにする。 */
     silent: boolean;
+
+    conditionFormula?: string | undefined;
 }
 
 //export interface DRmmzItemEffectQualifying {

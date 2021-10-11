@@ -14,7 +14,7 @@ import { DPrefab, DPrefabDataSource, DPrefabMoveType, DSystemPrefabKind } from "
 import { RE_Data_Actor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTrait } from './DTraits';
-import { DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect } from './DEffect';
+import { DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect, DParameterApplyTarget } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
@@ -77,11 +77,11 @@ export class REDataManager
             REData_Parameter.makeBuiltin(9, "tp", "TP", 8, 0, 0, Infinity),
             //----------
             REData_Parameter.makeBuiltin(10, "fp", "FP", -1, 1000, 0, Infinity),
-            REData_Parameter.makeBuiltin(10, "pow", "Power", -1, 8, 0, Infinity),
-            REData_Parameter.makeBuiltin(11, "up", "UpgradeValue", -1, 99, 0, Infinity),
-            REData_Parameter.makeBuiltin(12, "rem", "Remaining", -1, 99, 0, Infinity),
-            REData_Parameter.makeBuiltin(13, "cap", "Capacity", -1, 8, 0, Infinity),
-            REData_Parameter.makeBuiltin(14, "gold", "Gold", -1, 999999, 10, Infinity),
+            REData_Parameter.makeBuiltin(11, "pow", "Power", -1, 8, 0, Infinity),
+            REData_Parameter.makeBuiltin(12, "up", "UpgradeValue", -1, 99, 0, Infinity),
+            REData_Parameter.makeBuiltin(13, "rem", "Remaining", -1, 99, 0, Infinity),
+            REData_Parameter.makeBuiltin(14, "cap", "Capacity", -1, 8, 0, Infinity),
+            REData_Parameter.makeBuiltin(15, "gold", "Gold", -1, 999999, 10, Infinity),
         ];
         REBasics.params = {
             hp: REData.parameters.findIndex(x => x.code == "hp"),
@@ -618,6 +618,7 @@ export class REDataManager
                 effect.hitType = DEffectHitType.Physical;
                 const q: DParameterQualifying = {
                     parameterId: REBasics.params.hp,
+                    applyTarget: DParameterApplyTarget.Current,
                     elementId: 0,
                     formula: "10",
                     applyType: DParameterEffectApplyType.Damage,
@@ -1047,6 +1048,7 @@ export class REDataManager
         }
         return {
                 parameterId: parameterId,
+                applyTarget: DParameterApplyTarget.Current,
                 elementId: damage.elementId ?? 0,
                 formula: damage.formula ?? "0",
                 applyType: applyType,

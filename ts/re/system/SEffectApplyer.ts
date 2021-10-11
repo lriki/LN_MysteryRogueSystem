@@ -1,6 +1,6 @@
 import { REBasics } from "../data/REBasics";
 import { DEffectBehaviorId, DEntityKindId } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSubEffectTargetKey } from "../data/DEffect";
+import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSubEffectTargetKey } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DEffectBehavior } from "../data/DSkill";
@@ -295,6 +295,8 @@ export class SParameterEffect {
     /** 分散度 */
     variance: number;
 
+    private _valid: boolean;
+
     public constructor(data: DParameterQualifying) {
         this.qualifying = data;
         switch (data.applyType) {
@@ -317,10 +319,39 @@ export class SParameterEffect {
         this.elementId = data.elementId;
         this.formula = data.formula;
         this.variance = data.variance;
+        this._valid = true;
     }
 
     isRecover(): boolean {
         return this.applyType == SParameterEffectApplyType.Recover;
+    }
+
+    public isValid(): boolean {
+        return this._valid;
+    }
+
+    public evalConditions(entity: LEntity): void {
+        this._valid = this.meetsConditions(entity);
+    }
+
+    public meetsConditions(entity: LEntity): boolean {
+        if (this.qualifying.conditionFormula) {
+            const a = RESystem.formulaOperandA as any;
+            a.wrap(entity);
+            const pp1 = a.pow;
+            const pp2 = a.max_pow;
+            try {
+                const r = eval(this.qualifying.conditionFormula);
+                return r;
+            }
+            catch (e) {
+                console.error(e);
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
     }
 }
 
@@ -328,7 +359,7 @@ export class SParameterEffect {
 
 export class SEffectModifier {
     private _data: DQualifyings;
-    private _parameterEffects: (SParameterEffect | undefined)[];  // Index of DParameterDataId
+    private _parameterEffects2: SParameterEffect[];
 
     public constructor(q: DQualifyings) {
         this._data = q;
@@ -336,28 +367,33 @@ export class SEffectModifier {
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
         //this._subjectActualParams = [];
-        this._parameterEffects = [];
-        for (let i = 0; i < REData.parameters.length; i++) {
-            //this._subjectActualParams[i] = this._subjectBattlerBehavior ? this._subjectBattlerBehavior.actualParam(i) : 0;
-            this._parameterEffects[i] = undefined;
+        this._parameterEffects2 = [];
+        for (const p of q.parameterQualifyings) {
+            this._parameterEffects2.push(new SParameterEffect(p));
         }
 
-        // Effect 展開
-        q.parameterQualifyings.forEach(x => {
-            this._parameterEffects[x.parameterId] = new SParameterEffect(x);
-        });
+        // for (let i = 0; i < REData.parameters.length; i++) {
+        //     //this._subjectActualParams[i] = this._subjectBattlerBehavior ? this._subjectBattlerBehavior.actualParam(i) : 0;
+        //     this._parameterEffects[i] = undefined;
+        // }
+
+        // // Effect 展開
+        // q.parameterQualifyings.forEach(x => {
+        //     this._parameterEffects[x.parameterId] = new SParameterEffect(x);
+        // });
     }
     
-    public parameterEffect(paramId: DParameterId): SParameterEffect | undefined {
-        return this._parameterEffects[paramId];
-    }
+    // public parameterEffect(paramId: DParameterId): SParameterEffect | undefined {
+    //     return this._parameterEffects[paramId];
+    // }
     
     public hasParamDamage(): boolean {
-        return this._parameterEffects.findIndex(x => x && x.applyType != SParameterEffectApplyType.None) >= 0;
+        //return this._parameterEffects.findIndex(x => x && x.applyType != SParameterEffectApplyType.None) >= 0;
+        return this._parameterEffects2.findIndex(x => x && x.applyType != SParameterEffectApplyType.None) >= 0;
     }
 
-    public parameterEffects(): readonly (SParameterEffect | undefined)[] {
-        return this._parameterEffects;
+    public parameterEffects2(): readonly SParameterEffect[] {
+        return this._parameterEffects2;
     }
     
     public otherEffectQualifyings(): DOtherEffectQualifying[] {
@@ -392,14 +428,21 @@ export class SEffectApplyer {
     public apply(commandContext: SCommandContext, modifier: SEffectModifier, target: LEntity): void {
         const result =  target._effectResult;
         
-        // Damage
-        for (let i = 0; i < REData.parameters.length; i++) {
-            const pe = modifier.parameterEffect(i);
-            if (pe && pe.applyType != SParameterEffectApplyType.None) {
-                const value = this.makeDamageValue(pe, target, result.critical);
-                this.executeDamage(pe, target, value, result);
-            }
+        for (const paramEffect of modifier.parameterEffects2()) {
+            paramEffect.evalConditions(target);
         }
+    
+        // Damage
+        //for (let i = 0; i < REData.parameters.length; i++) {
+            //const pe = modifier.parameterEffect(i);
+        for (const pe of modifier.parameterEffects2())
+            if (pe && pe.applyType != SParameterEffectApplyType.None) {
+                if (pe.isValid()) {
+                    const value = this.makeDamageValue(pe, target, result.critical);
+                    this.executeDamage(pe, target, value, result);
+                }
+            }
+       // }
 
         // Effect
         for (const effect of modifier.specialEffectQualifyings()) {
@@ -540,12 +583,22 @@ export class SEffectApplyer {
             result.paramEffects[paramEffect.paramId] = paramResult;
         }
 
-        target.gainActualParam(paramEffect.paramId, -value);
-        if (value > 0) {
-            // TODO:
-            //target.onDamage(value);
+        if (paramEffect.qualifying.applyTarget == DParameterApplyTarget.Current) {
+
+            target.gainActualParam(paramEffect.paramId, -value);
+            if (value > 0) {
+                // TODO:
+                //target.onDamage(value);
+            }
+            this.gainDrainedParam(paramEffect, value);
         }
-        this.gainDrainedParam(paramEffect, value);
+        else if (paramEffect.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
+            target.params().params()[paramEffect.paramId]?.gainIdealParamPlus(-value);
+        }
+        else {
+            throw new Error("Not implemented.");
+        }
+
 
         //console.log("damage", paramEffect.paramId, value);
         if (paramEffect.paramId == REBasics.params.hp) {

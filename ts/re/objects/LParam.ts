@@ -78,6 +78,10 @@ export class LParam {
         this._idealParamPlus = value;
     }
 
+    public gainIdealParamPlus(value: number): void {
+        this._idealParamPlus += value;
+    }
+
     public buff(): number {
         return this._buff;
     }
