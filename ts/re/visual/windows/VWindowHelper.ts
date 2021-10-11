@@ -65,12 +65,20 @@ export class VWindowHelper {
 
 
 export class VLayout {
+
+    public static makeGridRect(gx: number, gy: number, gw: number, gh: number) {
+        return new Rectangle(this.calcGridX(gx), this.calcGridY(gy), this.calcGridWidth(gw), this.calcGridHeight(gh));
+    }
     
     public static calcGridWidth(xs: number): number {
         return xs * (Graphics.boxWidth / 12);
     }
     public static calcGridHeight(xs: number): number {
         return xs * (Graphics.boxHeight / 12);
+    }
+
+    public static calcGridX(xs: number): number {
+        return xs * (Graphics.boxWidth / 12);
     }
 
     public static calcGridY(xs: number): number {

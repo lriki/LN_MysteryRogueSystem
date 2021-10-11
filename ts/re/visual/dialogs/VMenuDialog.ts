@@ -7,14 +7,19 @@ import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";
 import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { tr2 } from "ts/re/Common";
+import { VMainStatusWindow } from "../windows/VMainStatusWindow";
+import { VLayout } from "../windows/VWindowHelper";
 
 export class VMainMenuDialog extends VDialog {
     _model: SMainMenuDialog;
     _commandWindow: VMenuCommandWindow | undefined;
+    _statusWindow: VMainStatusWindow;
 
     constructor(model: SMainMenuDialog) {
         super(model);
         this._model = model;
+        this._statusWindow = new VMainStatusWindow(VLayout.makeGridRect(0, 8, 12, 4));
+        this.addWindow(this._statusWindow);
     }
     
     onCreate() {
