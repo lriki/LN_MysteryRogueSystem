@@ -39,6 +39,7 @@ export class LBattlerBehavior extends LBehavior {
         params.acquireParam(REBasics.params.luk);
         params.acquireParam(REBasics.params.tp);
         params.acquireParam(REBasics.params.fp);
+        params.acquireParam(REBasics.params.pow);
     }
     
     onQueryReactions(actions: DActionId[]): void {

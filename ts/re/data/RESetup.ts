@@ -168,6 +168,28 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
 
                 break;
+            case "kパワードラッグ":
+
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                
+                {
+                    const emittor = entity.emittorSet.emittors(DEffectCause.Eat)[0]; //entity.emittorSet.mainEmittor();
+                    emittor.scope.range = DEffectFieldScopeRange.Performer;
+                    const effect = new DEffect();
+                    effect.qualifyings.parameterQualifyings.push({
+                        parameterId: REBasics.params.pow,
+                        elementId: 0,
+                        formula: "1",
+                        applyType: DParameterEffectApplyType.Recover,
+                        variance: 0,
+                        silent: true,
+                    });
+                    emittor.effectSet.effects.push(effect);
+                    //entity.emittorSet.addEmittor(DEffectCause.Eat, emittor);
+                }
+                
+                break;
             case "kブラインドドラッグ":
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);

@@ -2,6 +2,7 @@ import { assert } from "../Common";
 import { REBasics } from "../data/REBasics";
 import { REData } from "../data/REData";
 import { LEntity } from "../objects/LEntity";
+import { paramPowerToAtk } from "../PluginParameters";
 
 /**
  * [ダメージ計算式] の a や b といった項を表すクラス。
@@ -20,7 +21,26 @@ export class SFormulaOperand {
         for (const param of REData.parameters) {
             prop[param.code] = {
                 get: () => {
-                    return this.entity().actualParam(param.id);
+
+                    if (paramPowerToAtk && param.id == REBasics.params.atk) {
+                        const entity = this.entity();
+                        const atk = entity.actualParam(REBasics.params.atk);
+                        const pow = entity.actualParam(REBasics.params.pow);
+                        const eatk =  entity.queryIdealParameterPlus(REBasics.params.atk);  // Equipments ATK
+                        const baseAtk = Math.max(atk - eatk, 1);
+
+                        // http://twist.jpn.org/sfcsiren/index.php?%E3%83%80%E3%83%A1%E3%83%BC%E3%82%B8%E8%A8%88%E7%AE%97%E5%BC%8F
+                        // 基本攻撃力+{基本攻撃力×(剣の強さ+ちから-8)/16の小数点以下を四捨五入した値}
+                        // 基本攻撃力×(剣の強さ+ちから+8)/16
+                        //return atk + Math.round(atk * (eatk + pow - 8) / 16);
+                        return baseAtk + Math.round(eatk * (pow / 8.0));
+
+                        // ※原作のダメージはおおよそ 1~200 で計算されることが多いのに対し、RMMZ は 100~ の大きい値を扱う。
+                        // エディタもそのように使うことを前提としているため、原作の計算式をそのまま使うことは難しい。。ちからを大きくしても、武器に定数加算しかされない。(8増やしても最終ダメージに+8しかされない)
+                    }
+                    else {
+                        return this.entity().actualParam(param.id);
+                    }
                 },
                 configurable: true
             };

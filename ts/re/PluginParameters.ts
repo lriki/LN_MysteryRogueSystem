@@ -25,6 +25,8 @@ export var paramEnemySpawnInvalidArea  = 12;
 // 
 export var paramLandExitResultVariableId  = 1;
 
+export var paramPowerToAtk = true;
+
 /*
 // 
 export var paramMapSkillEffectsMapId = Number(PluginManager.parameters(pluginName)['MapSkillEffectsMapId']);

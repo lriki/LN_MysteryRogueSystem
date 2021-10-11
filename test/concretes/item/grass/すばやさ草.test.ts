@@ -36,33 +36,39 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     // "草" の共通テスト
     TestUtils.testCommonGrassBegin(actor1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // [食べる] 1個め
     RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 倍速になる
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(2);
     
     expect(enemy1.x).toBe(10);  // まだ enemy にターンは回らないので移動していない
 
+    //----------------------------------------------------------------------------------------------------
+
     // [食べる] 2個め
     RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item2).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 3倍速になる
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
+
+    //----------------------------------------------------------------------------------------------------
 
     // [食べる] 3個め
     RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item3).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 3倍速以上には増えない
     expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
@@ -85,13 +91,15 @@ test("concretes.item.grass.すばやさ草.throw", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item3"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
+    //----------------------------------------------------------------------------------------------------
+
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 倍速状態になる
     expect(REGame.scheduler.getSpeedLevel(enemy1)).toBe(2);

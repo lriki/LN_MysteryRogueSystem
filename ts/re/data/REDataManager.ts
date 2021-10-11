@@ -77,6 +77,7 @@ export class REDataManager
             REData_Parameter.makeBuiltin(9, "tp", "TP", 8, 0, 0, Infinity),
             //----------
             REData_Parameter.makeBuiltin(10, "fp", "FP", -1, 1000, 0, Infinity),
+            REData_Parameter.makeBuiltin(10, "pow", "Power", -1, 8, 0, Infinity),
             REData_Parameter.makeBuiltin(11, "up", "UpgradeValue", -1, 99, 0, Infinity),
             REData_Parameter.makeBuiltin(12, "rem", "Remaining", -1, 99, 0, Infinity),
             REData_Parameter.makeBuiltin(13, "cap", "Capacity", -1, 8, 0, Infinity),
@@ -93,6 +94,7 @@ export class REDataManager
             luk: REData.parameters.findIndex(x => x.code == "luk"),
             tp: REData.parameters.findIndex(x => x.code == "tp"),
             fp: REData.parameters.findIndex(x => x.code == "fp"),
+            pow: REData.parameters.findIndex(x => x.code == "pow"),
             upgradeValue: REData.parameters.findIndex(x => x.code == "up"),
             remaining: REData.parameters.findIndex(x => x.code == "rem"),
             capacity: REData.parameters.findIndex(x => x.code == "cap"),

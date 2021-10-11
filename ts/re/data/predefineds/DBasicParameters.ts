@@ -47,6 +47,7 @@ export interface DBasicParameters {
     */
 
     fp: DParameterId;    // 満腹度
+    pow: DParameterId;  // ちから
     upgradeValue: DParameterId; // 装備の修正値
     remaining: DParameterId; // 装備の修正値
     capacity: DParameterId; // (壺の)容量
