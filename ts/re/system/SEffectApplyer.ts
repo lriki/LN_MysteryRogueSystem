@@ -338,8 +338,6 @@ export class SParameterEffect {
         if (this.qualifying.conditionFormula) {
             const a = RESystem.formulaOperandA as any;
             a.wrap(entity);
-            const pp1 = a.pow;
-            const pp2 = a.max_pow;
             try {
                 const r = eval(this.qualifying.conditionFormula);
                 return r;

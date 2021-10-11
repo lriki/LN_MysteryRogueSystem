@@ -19,6 +19,7 @@ export class VMainMenuDialog extends VDialog {
         super(model);
         this._model = model;
         this._statusWindow = new VMainStatusWindow(VLayout.makeGridRect(0, 8, 12, 4));
+        this._statusWindow.setEntity(this._model.entity());
         this.addWindow(this._statusWindow);
     }
     
