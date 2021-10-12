@@ -1,6 +1,10 @@
 import { DTextManager } from "ts/re/data/DTextManager";
+import { REBasics } from "ts/re/data/REBasics";
 import { LEntity } from "ts/re/objects/LEntity";
+import { STextManager } from "ts/re/system/STextManager";
 import { UName } from "ts/re/usecases/UName";
+import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
+import { easing } from "../animation/VEasing";
 import { VUIGridLayout, VUITextElement } from "./VWindowHelper";
 
 export class VMainStatusWindow extends Window_Base {
@@ -9,27 +13,136 @@ export class VMainStatusWindow extends Window_Base {
 
     private _layout: VUIGridLayout;
 
-    constructor(rect: Rectangle, ) {
+    private _curve2 = new VEasingAnimationCurve(50, 0, 0.4, easing.outExpo);
+    private _curve1 = new VEasingAnimationCurve(0, 20, 0.4, easing.outExpo);
+
+    private _initialY = 0;
+    
+    private _weaponText: VUITextElement;
+    private _weaponValue: VUITextElement;
+    private _shieldText: VUITextElement;
+    private _shieldValue: VUITextElement;
+    private _fpText: VUITextElement;
+    private _fpValue: VUITextElement;
+    private _powText: VUITextElement;
+    private _powValue: VUITextElement;
+    private _expText: VUITextElement;
+    private _expValue: VUITextElement;
+    private _nextexpText: VUITextElement;
+    private _nextexpValue: VUITextElement;
+
+    private _invalidateLayout: boolean = true;
+    private _invalidateDraw: boolean = true;
+
+    constructor(rect: Rectangle) {
         super(rect);
+        this._initialY = rect.y;
         //this.openness = 0;  // 初期状態では非表示
         this._layout = new VUIGridLayout().margin(10);
 
-        this._layout.addChild(new VUITextElement("AAA").setGrid(0, 0));
-        this._layout.addChild(new VUITextElement("1").setGrid(0, 1));
-        this._layout.addChild(new VUITextElement("BBB").setGrid(1, 0));
-        this._layout.addChild(new VUITextElement("2").setGrid(1, 1));
-        this._layout.addChild(new VUITextElement("CCC").setGrid(2, 0));
-        this._layout.addChild(new VUITextElement("3").setGrid(2, 1));
+        this._weaponText = new VUITextElement(STextManager.weaponStrength())
+            .setGrid(0, 0)
+            .setColor(this.systemColor())
+            .addTo(this._layout);
+        this._weaponValue = new VUITextElement("-")
+            .setGrid(1, 0)
+            .addTo(this._layout);
+
+        this._shieldText = new VUITextElement(STextManager.shieldStrength())
+            .setGrid(2, 0)
+            .setColor(this.systemColor())
+            .addTo(this._layout);
+        this._shieldValue = new VUITextElement("-")
+            .setGrid(3, 0)
+            .addTo(this._layout);
+
+        this._fpText = new VUITextElement(STextManager.param(REBasics.params.fp))
+            .setGrid(0, 1)
+            .setColor(this.systemColor())
+            .addTo(this._layout);
+
+        this._fpValue = new VUITextElement("1/1")
+            .setGrid(1, 1)
+            .addTo(this._layout);
+
+        this._powText = new VUITextElement(STextManager.param(REBasics.params.pow))
+            .setGrid(2, 1)
+            .setColor(this.systemColor())
+            .addTo(this._layout);
+        this._powValue = new VUITextElement("1/1")
+            .setGrid(3, 1)
+            .addTo(this._layout);
+
+        const expTotal = TextManager.expTotal.format(TextManager.exp);
+        this._expText = new VUITextElement(expTotal)
+            .setGrid(0, 2)
+            .setColor(this.systemColor())
+            .addTo(this._layout);
+        this._expValue = new VUITextElement("100")
+            .setGrid(1, 2)
+            .addTo(this._layout);
 
         // 次のレベルまで
         const expNext = TextManager.expNext.format(TextManager.level);
-        this._layout.addChild(new VUITextElement(expNext).color(this.systemColor()).setGrid(2, 2));
-        this._layout.addChild(new VUITextElement("100").setGrid(2, 3));
+        this._nextexpText = new VUITextElement(expNext)
+            .setGrid(2, 2)
+            .setColor(this.systemColor())
+            .addTo(this._layout);
+        this._nextexpValue = new VUITextElement("100")
+            .setGrid(3, 2)
+            .addTo(this._layout);
+
+
+
+            
+        VAnimation.start(this, "window.opa", this._curve1, v => {
+            this.opacity = (v / 20) * 255;
+        }, 0.0);
+        VAnimation.start(this, "window.y", this._curve2, v => {
+            this.y = this._initialY + v;
+
+        }, 0.0)
+        .then(() => {
+            
+            VAnimation.start(this, "weapon.x", this._curve1, v => {
+                this._weaponText.x = this._weaponValue.x =v;
+                this.invalidate();
+            }, 0.0);
+            VAnimation.start(this, "shield.x", this._curve1, v => {
+                this._shieldText.x = this._shieldValue.x = v;
+                this.invalidate();
+            }, -0.01);
+            VAnimation.start(this, "fp.x", this._curve1, v => {
+                this._fpText.x = this._fpValue.x = v;
+                this.invalidate();
+            }, -0.02);
+            VAnimation.start(this, "pow.x", this._curve1, v => {
+                this._powText.x = this._powValue.x = v;
+                this.invalidate();
+            }, -0.03);
+            VAnimation.start(this, "exp.x", this._curve1, v => {
+                this._expText.x = this._expValue.x = v;
+                this.invalidate();
+            }, -0.04);
+            VAnimation.start(this, "nextexp.x", this._curve1, v => {
+                this._nextexpText.x = this._nextexpValue.x = v;
+                this.invalidate();
+            }, -0.05);
+        });
+
+
+
+        this.invalidate();
     }
 
     public setEntity(entity: LEntity): void {
         this._entity = entity;
         this.refresh();
+    }
+
+    private invalidate(): void {
+        this._invalidateLayout = true;
+        this._invalidateDraw = true;
     }
     
     update(): void {
@@ -38,6 +151,16 @@ export class VMainStatusWindow extends Window_Base {
         // if (this.isTriggered()) {
         //     this.close();
         // }
+
+        if (this._invalidateLayout) {
+            this.layout();
+            this._invalidateLayout = false;
+        }
+
+        if (this._invalidateDraw) {
+            this.draw();
+            this._invalidateDraw = false;
+        }
     }
 
     close(): void {
@@ -45,6 +168,11 @@ export class VMainStatusWindow extends Window_Base {
         if (this.onClose) {
             this.onClose();
         }
+    }
+
+    layout(): void {
+        this._layout.measure(this);
+        this._layout.arrange({ x: 0, y: 0, width: this.contents.width, height: this.contents.height });
     }
         
     refresh(): void {
@@ -59,17 +187,14 @@ export class VMainStatusWindow extends Window_Base {
         const lineHeight = this.lineHeight();
         let y = 0;
         
-        this.drawTextEx(summary, 0, y, 300);
-        y += lineHeight * 2;
+        // this.drawTextEx(summary, 0, y, 300);
+        // y += lineHeight * 2;
 
-        this.drawTextEx(this._entity.data().description, 0, y, 300);
-        y += lineHeight;
+        // this.drawTextEx(this._entity.data().description, 0, y, 300);
+        // y += lineHeight;
 
 
         
-        this._layout.measure(this);
-        this._layout.arrange({ x: 0, y: 0, width: this.contents.width, height: this.contents.height });
-        this._layout.draw(this);
         /*
         const lh = this.itemHeight();
         const cw = 200;
@@ -89,6 +214,12 @@ export class VMainStatusWindow extends Window_Base {
         this._drawItem("皮の盾", 129, 0, lh * 8);
         */
     }
+
+    private draw(): void {
+        this.contents.clear();
+        this._layout.draw(this);
+    }
+
 
     private drawActorNameAndLevel(x: number, y: number, w: number) {
         const name = "LRIKI";

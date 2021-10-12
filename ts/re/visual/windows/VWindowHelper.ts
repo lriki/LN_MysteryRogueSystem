@@ -159,6 +159,9 @@ export class VUIElement {
     rowSpan: number;
     colSpan: number;
 
+    x: number;
+    y: number;
+
     public constructor() {
         this._margin = {
             top: 0,
@@ -186,6 +189,8 @@ export class VUIElement {
         this.col = 0;
         this.rowSpan = 1;
         this.colSpan = 1;
+        this.x = 0;
+        this.y = 0;
     }
 
     protected calcContentOuter(): VUIThickness {
@@ -222,11 +227,16 @@ export class VUIElement {
         return this._padding;
     }
 
-    public setGrid(row: number, col: number, rowSpan: number = 1, colSpan: number = 1): this {
+    public setGrid(col: number, row: number, colSpan: number = 1, rowSpan: number = 1): this {
         this.row = row;
         this.col = col;
         this.rowSpan = rowSpan;
         this.colSpan = colSpan;
+        return this;
+    }
+
+    public addTo(container: VUIContainer): this {
+        container.addChild(this);
         return this;
     }
 
@@ -253,6 +263,8 @@ export class VUIElement {
 
     protected setActualRect(rect: VUIRect): void {
         this._actualRect = {...rect};
+        this._actualRect.x += this.x;
+        this._actualRect.y += this.y;
     }
 
     public actualRect(): VUIRect{
@@ -281,7 +293,7 @@ export class VUITextElement extends VUIElement {
         this._text = text;
     }
 
-    public color(value: string): this {
+    public setColor(value: string): this {
         this._color = value;
         return this;
     }
@@ -294,12 +306,14 @@ export class VUITextElement extends VUIElement {
 
     public draw(context: Window_Base): void {
         const rect = this.actualRect();
+        console.log("rect", rect);
         if (this._color) {
             context.changeTextColor(this._color);
         }
         else {
             context.resetTextColor();
         }
+        //context.contents.paintOpacity = 100;
         context.drawText(this._text, rect.x, rect.y, rect.width, "left");
         //context.drawTextEx(this._text, rect.x, rect.y, rect.width);
     }
@@ -314,8 +328,9 @@ export class VUIContainer extends VUIElement {
         this._children = [];
     }
 
-    public addChild(element: VUIElement): void {
+    public addChild(element: VUIElement): VUIElement {
         this._children.push(element);
+        return element;
     }
 
     public children(): readonly VUIElement[] {
@@ -487,7 +502,6 @@ export class VUIGridLayout extends VUIContainer {
         finalArea.y += margin.top;
         finalArea.width -= margin.left + margin.right;
         finalArea.height -= margin.top + margin.bottom;
-        console.log("margin", margin);
 
         const padding = this.padding();
         const childrenBoundSize: VUISize = {width: finalArea.width - (padding.left + padding.right), height: finalArea.height - (padding.top + padding.bottom)};

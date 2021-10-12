@@ -1,3 +1,5 @@
+import { tr2 } from "../Common";
+import { REData } from "../data/REData";
 
 
 export class STextManager {
@@ -7,7 +9,13 @@ export class STextManager {
     }
     
     public static param(paramId: number): string {
-        return $dataSystem.terms.params[paramId] || "";
+        if ($dataSystem.terms.params[paramId]) {
+            return $dataSystem.terms.params[paramId];
+        }
+        else {
+            const param = REData.parameters[paramId];
+            return param ? param.displayName : "";
+        }
     }
     
     public static command(commandId: number): string {
@@ -33,4 +41,10 @@ export class STextManager {
     public static get debuffAdd(): string { return this.message("debuffAdd"); }
     public static get buffRemove(): string { return this.message("buffRemove"); }
     public static get currencyUnit(): string { return $dataSystem.currencyUnit; }
+
+    //----------
+
+    
+    public static weaponStrength(): string { return tr2("武器の強さ"); }
+    public static shieldStrength(): string { return tr2("盾の強さ"); }
 }

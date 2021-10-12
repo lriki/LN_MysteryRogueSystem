@@ -301,13 +301,15 @@ export class VKeyFrameAnimationCurve extends VAnimationCurve {
 
 }
 
+
 export class VAnimationInstance {
     //container: PIXI.Container;
     key: string;
     curve: VAnimationCurve;
     setter: (v: number) => void;
     time: number;
-    timeOffset: number;
+    //timeOffset: number;
+    _then: (() => void) | undefined;
 
     constructor(/*container: PIXI.Container,*/ key: string, curve: VAnimationCurve, setter: (v: number) => void) {
         //this.container = container;
@@ -315,13 +317,21 @@ export class VAnimationInstance {
         this.curve = curve;
         this.setter = setter;
         this.time = 0;
-        this.timeOffset = 0;
+        //this.timeOffset = 0;
     }
 
     public update(elapsedTime: number): void {
+        const oldFinished = this.isFinished();
         this.time += elapsedTime;
-        const value = this.curve.evaluate(this.timeOffset + this.time);
+        const value = this.curve.evaluate(/*this.timeOffset + */this.time);
         this.setter(value);
+
+        if (this._then) {
+            const afterFinished = this.isFinished();
+            if (afterFinished && oldFinished != afterFinished) {
+                this._then();
+            }
+        }
     }
 
     public isFinished(): boolean {
@@ -332,16 +342,22 @@ export class VAnimationInstance {
             return false;
         }
     }
+
+    public then(func: () => void): void {
+        this._then = func;
+    }
 }
 
 export class VAnimation {
     //private static _animations: VAnimationInstance[] = [];
     private static _containers: PIXI.Container[] = []; 
 
-    public static start(container: PIXI.Container, key: string, curve: VAnimationCurve, setter: (v: number) => void, timeOffset: number = 0.0): void {
+    public static start(container: PIXI.Container, key: string, curve: VAnimationCurve, setter: (v: number) => void, timeOffset: number = 0.0): VAnimationInstance {
         const instance = new VAnimationInstance(/*container,*/ key, curve, setter);
-        instance.timeOffset = timeOffset;
+        //instance.timeOffset = timeOffset;
+        instance.time += timeOffset;
         this.add(container, key, instance);
+        return instance;
     }
 
     public static add(container_: PIXI.Container, key: string, instance: VAnimationInstance): void {
