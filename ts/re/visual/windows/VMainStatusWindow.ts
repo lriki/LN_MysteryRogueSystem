@@ -1,14 +1,30 @@
 import { DTextManager } from "ts/re/data/DTextManager";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
+import { VUIGridLayout, VUITextElement } from "./VWindowHelper";
 
 export class VMainStatusWindow extends Window_Base {
     private _entity: LEntity | undefined;
     onClose: (() => void) | undefined;
 
+    private _layout: VUIGridLayout;
+
     constructor(rect: Rectangle, ) {
         super(rect);
         //this.openness = 0;  // 初期状態では非表示
+        this._layout = new VUIGridLayout().margin(10);
+
+        this._layout.addChild(new VUITextElement("AAA").setGrid(0, 0));
+        this._layout.addChild(new VUITextElement("1").setGrid(0, 1));
+        this._layout.addChild(new VUITextElement("BBB").setGrid(1, 0));
+        this._layout.addChild(new VUITextElement("2").setGrid(1, 1));
+        this._layout.addChild(new VUITextElement("CCC").setGrid(2, 0));
+        this._layout.addChild(new VUITextElement("3").setGrid(2, 1));
+
+        // 次のレベルまで
+        const expNext = TextManager.expNext.format(TextManager.level);
+        this._layout.addChild(new VUITextElement(expNext).color(this.systemColor()).setGrid(2, 2));
+        this._layout.addChild(new VUITextElement("100").setGrid(2, 3));
     }
 
     public setEntity(entity: LEntity): void {
@@ -49,6 +65,11 @@ export class VMainStatusWindow extends Window_Base {
         this.drawTextEx(this._entity.data().description, 0, y, 300);
         y += lineHeight;
 
+
+        
+        this._layout.measure(this);
+        this._layout.arrange({ x: 0, y: 0, width: this.contents.width, height: this.contents.height });
+        this._layout.draw(this);
         /*
         const lh = this.itemHeight();
         const cw = 200;
