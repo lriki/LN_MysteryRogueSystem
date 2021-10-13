@@ -360,6 +360,17 @@ export class VAnimation {
         return instance;
     }
 
+    /**
+     * start に対してこちらは現在値を始点とした相対的なアニメーションを表現するのに使用する。
+     */
+    public static startAt(container: PIXI.Container, key: string, start: number, target: number, duration: number, curve: TEasing, setter: (v: number) => void, timeOffset: number = 0.0): VAnimationInstance {
+        const instance = new VAnimationInstance(/*container,*/ key, new VEasingAnimationCurve(start, target, duration, curve), setter);
+        //instance.timeOffset = timeOffset;
+        instance.time += timeOffset;
+        this.add(container, key, instance);
+        return instance;
+    }
+
     public static add(container_: PIXI.Container, key: string, instance: VAnimationInstance): void {
         const container = container_ as any;
         if (!container._animations_RE) {
@@ -372,10 +383,11 @@ export class VAnimation {
         for (let i = 0; i < animations.length; i++) {
             if (animations[i].key == key) {
                 animations[i] = instance;
+                console.log("key add");
                 return;
             }
         }
-
+        console.log("add");
         // 無ければ新しく追加
         animations.push(instance);
         
@@ -425,12 +437,21 @@ export class VAnimation {
             let allFin = true;
             const animations = (this._containers[i] as any)._animations_RE;
             if (animations) {
-                for (const instance of animations) {
-                    if (!instance.isFinished()) {
+                // for (const instance of animations) {
+                //     if (!instance.isFinished()) {
+                //         allFin = false;
+                //         break;
+                //     }
+                // }
+                for (let iInst = animations.length - 1; iInst >= 0; iInst--) {
+                    if (animations[iInst].isFinished()) {
+                        animations.splice(iInst, 1);
+                    }
+                    else {
                         allFin = false;
-                        break;
                     }
                 }
+                
             }
 
             // 更新対象から取り除く

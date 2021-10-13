@@ -16,7 +16,7 @@ export class VMainStatusWindow extends Window_Base {
     private _layout: VUIGridLayout;
 
     private _curve2 = new VEasingAnimationCurve(50, 0, 0.2, easing.outQuad);
-    private _curve1 = new VEasingAnimationCurve(0, 20, 0.4, easing.outExpo);
+    private _curve1 = new VEasingAnimationCurve(0, 20, 0.5, easing.outExpo);
     private _opacityCurve = new VEasingAnimationCurve(0, 1.0, 0.2, easing.linear);
 
     private _initialY = 0;
@@ -106,19 +106,25 @@ export class VMainStatusWindow extends Window_Base {
 
 
             
-        VAnimation.start(this, "window.opa", this._curve1, v => {
-            this.opacity = (v / 20) * 255;
+        // VAnimation.start(this, "window.opa", this._curve1, v => {
+        //     this.opacity = (v / 20) * 255;
+        // }, 0.0);
+        // VAnimation.start(this, "window.y", this._curve2, v => {
+        //     this.y = this._initialY + v;
+        // }, 0.0)
+        
+        VAnimation.startAt(this, "window.o", 0, 255, 0.3, easing.outQuad, v => {
+            this.opacity = v;
         }, 0.0);
-        VAnimation.start(this, "window.y", this._curve2, v => {
-            this.y = this._initialY + v;
-
+        VAnimation.startAt(this, "window.y", this.y + 50, this.y, 0.3, easing.outQuad, v => {
+            this.y = v;
         }, 0.0)
         .then(() => {
             VAnimation.start(this, "opacity", this._opacityCurve, v => {
                 this._layout.children().forEach(e => e.opacity = v);
             }, 0.0);
             
-            
+            const offset = -0.01;
             VAnimation.start(this, "weapon.x", this._curve1, v => {
                 this._weaponText.x = this._weaponValue.x =v;
                 this.invalidate();
@@ -126,24 +132,25 @@ export class VMainStatusWindow extends Window_Base {
             VAnimation.start(this, "shield.x", this._curve1, v => {
                 this._shieldText.x = this._shieldValue.x = v;
                 this.invalidate();
-            }, -0.01);
+            }, offset * 1);
             VAnimation.start(this, "fp.x", this._curve1, v => {
                 this._fpText.x = this._fpValue.x = v;
                 this.invalidate();
-            }, -0.02);
+            }, offset * 2);
             VAnimation.start(this, "pow.x", this._curve1, v => {
                 this._powText.x = this._powValue.x = v;
                 this.invalidate();
-            }, -0.03);
+            }, offset * 3);
             VAnimation.start(this, "exp.x", this._curve1, v => {
                 this._expText.x = this._expValue.x = v;
                 this.invalidate();
-            }, -0.04);
+            }, offset * 4);
             VAnimation.start(this, "nextexp.x", this._curve1, v => {
                 this._nextexpText.x = this._nextexpValue.x = v;
                 this.invalidate();
-            }, -0.05);
+            }, offset * 5);
         });
+        
 
 
 
@@ -159,8 +166,23 @@ export class VMainStatusWindow extends Window_Base {
         this._invalidateLayout = true;
         this._invalidateDraw = true;
     }
+
+    destroy(): void {
+        
+        VAnimation.startAt(this, "window.o", this.opacity, 0, 0.3, easing.outQuad, v => {
+            this.opacity = v;
+            this._clientArea.opacity = v;
+        });
+        VAnimation.startAt(this, "window.y", this.y, this.y + 50, 0.3, easing.outQuad, v => {
+            this.y = v;
+        }, 0.0)
+        .then(() => {
+            super.destroy();
+        });
+    }
     
     update(): void {
+        //console.log("update");
         super.update();
 
         // if (this.isTriggered()) {
@@ -193,21 +215,8 @@ export class VMainStatusWindow extends Window_Base {
     refresh(): void {
         if (!this._entity) return;
 
-        const rect = this.baseTextRect();
         this.contents.clear();
 
-        const summary = UName.makeNameAsItem(this._entity);
-
-
-        const lineHeight = this.lineHeight();
-        let y = 0;
-        
-        // this.drawTextEx(summary, 0, y, 300);
-        // y += lineHeight * 2;
-
-        // this.drawTextEx(this._entity.data().description, 0, y, 300);
-        // y += lineHeight;
-        
         const equipmentUser = this._entity.findEntityBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
             let atk = 0;
@@ -228,8 +237,8 @@ export class VMainStatusWindow extends Window_Base {
         }
         
         // 満腹度
-        const cfp = this._entity.actualParam(REBasics.params.fp) / 10;
-        const mfp = this._entity.idealParam(REBasics.params.fp) / 10;
+        const cfp = Math.ceil(this._entity.actualParam(REBasics.params.fp) / 10);
+        const mfp = Math.ceil(this._entity.idealParam(REBasics.params.fp) / 10);
         this._fpValue.setText(`${cfp}/${mfp}`);
 
         // ちから
@@ -247,92 +256,10 @@ export class VMainStatusWindow extends Window_Base {
             this._expValue.setText("-");
             this._nextexpValue.setText("-");
         }
-
-        /*
-        const lh = this.itemHeight();
-        const cw = 200;
-        const m = 32;
-
-        this.drawActorNameAndLevel(cw * 0, lh * 0, cw);
-        this.drawScore(cw * 1 + m, lh * 0, cw);
-        this.drawPlaytime(1000, cw * 1 + m, lh * 1, cw);
-        this.drawResultSummary(cw * 0, lh * 2 + lh / 2, cw * 2);
-
-        this.drawParam(TextManager.hp, "87", cw * 0, lh * 4, cw);
-        this.drawParam("満腹度", "54%", cw * 1 + m, lh * 4, cw);
-        this.drawParam(TextManager.attack, "8/8", cw * 0, lh * 5, cw);
-        this.drawParam(TextManager.exp, "3225", cw * 1 + m, lh * 5, cw);
-        
-        this._drawItem("カタナ+3", 96, 0, lh * 7);
-        this._drawItem("皮の盾", 129, 0, lh * 8);
-        */
     }
 
     private draw(): void {
         this.contents.clear();
         this._layout.draw(this);
-    }
-
-
-    private drawActorNameAndLevel(x: number, y: number, w: number) {
-        const name = "LRIKI";
-        const level = 15;
-
-        this.drawText(name, x, y, w, "left");
-        //this.changeTextColor(ColorManager.systemColor());
-        this.drawText(`${TextManager.levelA} ${level}`, x, y, w, "right");
-        //this.resetTextColor();
-        //this.drawText(level, x, y, w, "right");
-    }
-    
-    private drawScore(x: number, y: number, w: number) {
-        const score = 99999;    // TODO:
-        const width = 100;
-        
-
-
-        this.changeTextColor(ColorManager.systemColor());
-        this.drawText(DTextManager.score, x, y, w, "left");
-        this.resetTextColor();
-        this.drawText(score, x, y, w, "right");
-    }
-    
-    private drawPlaytime(frameCount: number, x: number, y: number, w: number) {
-        this.drawText(this.playtimeText(frameCount), x, y, w, "right");
-    }
-
-    private drawResultSummary(x: number, y: number, w: number) {
-        const text = "\\c[2]緑燐の丘 \\c[0]を無事にクリアした！"
-        //const text = "\\c[2]モンスター \\c[0]にぺしゃんこにされた。"
-        this.drawTextEx(text, x, y, w);
-    }
-    
-    private drawParam(name: string, value: string, x: number, y: number, w: number) {
-        //const value = 87;
-        this.changeTextColor(ColorManager.systemColor());
-        this.drawText(name, x, y, w, "left");
-        this.resetTextColor();
-        this.drawText(value, x, y, w, "right");
-    }
-
-    private _drawItem(name: string, icon: number, x: number, y: number) {
-        this.drawIcon(icon, x, y)
-        this.drawText(name, x + 34, y, 200, "left");
-    }
-
-    // Game_System.prototype.playtimeText
-    private playtimeText(frameCount: number) {
-        const hour = Math.floor(frameCount / 60 / 60);
-        const min = Math.floor(frameCount / 60) % 60;
-        const sec = frameCount % 60;
-        return hour.padZero(2) + ":" + min.padZero(2) + ":" + sec.padZero(2);
-    }
-
-    private isTriggered(): boolean {
-        return (
-            Input.isRepeated("ok") ||
-            Input.isRepeated("cancel") ||
-            TouchInput.isRepeated()
-        );
     }
 }
