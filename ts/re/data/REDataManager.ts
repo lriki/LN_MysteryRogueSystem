@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { RESystem } from "ts/re/system/RESystem";
-import { assert, RESerializable } from "../Common";
+import { assert, RESerializable, tr2 } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { REBasics } from "./REBasics";
 import { DState, DStateRestriction, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
@@ -76,8 +76,8 @@ export class REDataManager
             REData_Parameter.makeBuiltin(8, "luk", "LUK", 7, 0, 0, Infinity),
             REData_Parameter.makeBuiltin(9, "tp", "TP", 8, 0, 0, Infinity),
             //----------
-            REData_Parameter.makeBuiltin(10, "fp", "FP", -1, 1000, 0, Infinity),
-            REData_Parameter.makeBuiltin(11, "pow", "Power", -1, 8, 0, Infinity),
+            REData_Parameter.makeBuiltin(10, "fp", tr2("満腹度"), -1, 1000, 0, Infinity),    // FP
+            REData_Parameter.makeBuiltin(11, "pow", tr2("ちから"), -1, 8, 0, Infinity),   // Power
             REData_Parameter.makeBuiltin(12, "up", "UpgradeValue", -1, 99, 0, Infinity),
             REData_Parameter.makeBuiltin(13, "rem", "Remaining", -1, 99, 0, Infinity),
             REData_Parameter.makeBuiltin(14, "cap", "Capacity", -1, 8, 0, Infinity),

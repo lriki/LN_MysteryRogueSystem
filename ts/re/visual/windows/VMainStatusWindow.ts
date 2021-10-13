@@ -1,5 +1,7 @@
 import { DTextManager } from "ts/re/data/DTextManager";
 import { REBasics } from "ts/re/data/REBasics";
+import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
+import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { STextManager } from "ts/re/system/STextManager";
 import { UName } from "ts/re/usecases/UName";
@@ -46,6 +48,7 @@ export class VMainStatusWindow extends Window_Base {
             .addTo(this._layout);
         this._weaponValue = new VUITextElement("-")
             .setGrid(1, 0)
+            .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
         this._shieldText = new VUITextElement(STextManager.shieldStrength())
@@ -54,6 +57,7 @@ export class VMainStatusWindow extends Window_Base {
             .addTo(this._layout);
         this._shieldValue = new VUITextElement("-")
             .setGrid(3, 0)
+            .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
         this._fpText = new VUITextElement(STextManager.param(REBasics.params.fp))
@@ -63,6 +67,7 @@ export class VMainStatusWindow extends Window_Base {
 
         this._fpValue = new VUITextElement("1/1")
             .setGrid(1, 1)
+            .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
         this._powText = new VUITextElement(STextManager.param(REBasics.params.pow))
@@ -71,6 +76,7 @@ export class VMainStatusWindow extends Window_Base {
             .addTo(this._layout);
         this._powValue = new VUITextElement("1/1")
             .setGrid(3, 1)
+            .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
         const expTotal = TextManager.expTotal.format(TextManager.exp);
@@ -80,6 +86,7 @@ export class VMainStatusWindow extends Window_Base {
             .addTo(this._layout);
         this._expValue = new VUITextElement("100")
             .setGrid(1, 2)
+            .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
         // 次のレベルまで
@@ -90,6 +97,7 @@ export class VMainStatusWindow extends Window_Base {
             .addTo(this._layout);
         this._nextexpValue = new VUITextElement("100")
             .setGrid(3, 2)
+            .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
 
@@ -192,9 +200,47 @@ export class VMainStatusWindow extends Window_Base {
 
         // this.drawTextEx(this._entity.data().description, 0, y, 300);
         // y += lineHeight;
-
-
         
+        const equipmentUser = this._entity.findEntityBehavior(LEquipmentUserBehavior);
+        if (equipmentUser) {
+            let atk = 0;
+            let def = 0;
+            for (const item of equipmentUser.equippedItemEntities()) {
+                item.iterateBehaviorsReverse(b => {
+                    atk = b.onQueryIdealParamBase(REBasics.params.atk, atk);
+                    def = b.onQueryIdealParamBase(REBasics.params.def, def);
+                    return true;
+                });
+            }
+            this._weaponValue.setText(atk.toString());
+            this._shieldValue.setText(def.toString());
+        }
+        else {
+            this._weaponValue.setText("-");
+            this._shieldValue.setText("-");
+        }
+        
+        // 満腹度
+        const cfp = this._entity.actualParam(REBasics.params.fp) / 10;
+        const mfp = this._entity.idealParam(REBasics.params.fp) / 10;
+        this._fpValue.setText(`${cfp}/${mfp}`);
+
+        // ちから
+        const c = this._entity.actualParam(REBasics.params.pow);
+        const m = this._entity.idealParam(REBasics.params.pow);
+        this._powValue.setText(`${c}/${m}`);
+        
+        // 経験値
+        const actor = this._entity.findEntityBehavior(LActorBehavior);
+        if (actor) {
+            this._expValue.setText(actor.currentExp().toString());
+            this._nextexpValue.setText(actor.nextLevelExp().toString());
+        }
+        else {
+            this._expValue.setText("-");
+            this._nextexpValue.setText("-");
+        }
+
         /*
         const lh = this.itemHeight();
         const cw = 200;

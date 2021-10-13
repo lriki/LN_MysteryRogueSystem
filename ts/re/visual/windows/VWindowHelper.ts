@@ -293,6 +293,11 @@ export class VUITextElement extends VUIElement {
         this._text = text;
     }
 
+    public setText(value: string): this {
+        this._text = value;
+        return this;
+    }
+
     public setColor(value: string): this {
         this._color = value;
         return this;
@@ -306,7 +311,6 @@ export class VUITextElement extends VUIElement {
 
     public draw(context: Window_Base): void {
         const rect = this.actualRect();
-        console.log("rect", rect);
         if (this._color) {
             context.changeTextColor(this._color);
         }
