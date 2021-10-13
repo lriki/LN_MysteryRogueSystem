@@ -1,7 +1,8 @@
 import { DTextManager } from "ts/re/data/DTextManager";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
-import { VLayout, VWindowHelper } from "./VWindowHelper";
+import { VLayout } from "../ui/VUIElement";
+import { VWindowHelper } from "./VWindowHelper";
 
 export class VEntityCaptionWindow extends Window_Base {
     private _entity: LEntity;

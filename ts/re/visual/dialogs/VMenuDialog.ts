@@ -8,7 +8,7 @@ import { VDialog } from "./VDialog";
 import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { tr2 } from "ts/re/Common";
 import { VMainStatusWindow } from "../windows/VMainStatusWindow";
-import { VLayout } from "../windows/VWindowHelper";
+import { VLayout } from "../ui/VUIElement";
 
 export class VMainMenuDialog extends VDialog {
     _model: SMainMenuDialog;

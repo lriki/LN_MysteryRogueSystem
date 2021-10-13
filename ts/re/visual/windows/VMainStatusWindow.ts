@@ -7,7 +7,7 @@ import { STextManager } from "ts/re/system/STextManager";
 import { UName } from "ts/re/usecases/UName";
 import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
 import { easing } from "../animation/VEasing";
-import { VUIGridLayout, VUITextElement } from "./VWindowHelper";
+import { VUIGridLayout, VUITextElement } from "../ui/VUIElement";
 
 export class VMainStatusWindow extends Window_Base {
     private _entity: LEntity | undefined;
@@ -15,8 +15,9 @@ export class VMainStatusWindow extends Window_Base {
 
     private _layout: VUIGridLayout;
 
-    private _curve2 = new VEasingAnimationCurve(50, 0, 0.4, easing.outExpo);
+    private _curve2 = new VEasingAnimationCurve(50, 0, 0.2, easing.outQuad);
     private _curve1 = new VEasingAnimationCurve(0, 20, 0.4, easing.outExpo);
+    private _opacityCurve = new VEasingAnimationCurve(0, 1.0, 0.2, easing.linear);
 
     private _initialY = 0;
     
@@ -100,6 +101,8 @@ export class VMainStatusWindow extends Window_Base {
             .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
+        this._layout.children().forEach(e => e.opacity = 0.0);
+
 
 
             
@@ -111,6 +114,10 @@ export class VMainStatusWindow extends Window_Base {
 
         }, 0.0)
         .then(() => {
+            VAnimation.start(this, "opacity", this._opacityCurve, v => {
+                this._layout.children().forEach(e => e.opacity = v);
+            }, 0.0);
+            
             
             VAnimation.start(this, "weapon.x", this._curve1, v => {
                 this._weaponText.x = this._weaponValue.x =v;
