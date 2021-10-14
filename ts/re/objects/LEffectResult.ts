@@ -5,11 +5,11 @@ import { DescriptionHighlightLevel, LEntityDescription } from "ts/re/objects/LId
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
 import { DParameterId } from "ts/re/data/DParameter";
-import { STextManager } from "ts/re/system/STextManager";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LActorBehavior } from "./behaviors/LActorBehavior";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { UName } from "ts/re/usecases/UName";
+import { DTextManager } from "../data/DTextManager";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @RESerializable
@@ -221,15 +221,15 @@ export class LEffectResult {
         // Window_BattleLog.prototype.displayChangedBuffs
         {
             for (const paramId of this.addedBuffs) {
-                const text = STextManager.buffAdd.format(targetName, STextManager.param(REData.parameters[paramId].battlerParamId));
+                const text = DTextManager.buffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
                 context.postMessage(text);
             }
             for (const paramId of this.addedDebuffs) {
-                const text = STextManager.debuffAdd.format(targetName, STextManager.param(REData.parameters[paramId].battlerParamId));
+                const text = DTextManager.debuffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
                 context.postMessage(text);
             }
             for (const paramId of this.removedBuffs) {
-                const text = STextManager.buffRemove.format(targetName, STextManager.param(REData.parameters[paramId].battlerParamId));
+                const text = DTextManager.buffRemove.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
                 context.postMessage(text);
             }
         }
@@ -245,7 +245,7 @@ export class LEffectResult {
             const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
 
             if (this.gainedExp > 0) {
-                const text = STextManager.obtainExp.format(this.gainedExp, STextManager.exp);
+                const text = DTextManager.obtainExp.format(this.gainedExp, DTextManager.exp);
                 context.postMessage(text);
             }
             
@@ -275,16 +275,28 @@ export class LEffectResult {
         const isActor = this.focusedFriendly;
         let fmt;
         if (damage > 0 && paramResult.drain) {
-            fmt = isActor ? STextManager.actorDrain : STextManager.enemyDrain;
-            return fmt.format(targetName, paramData.code, damage);
+            fmt = isActor ? DTextManager.actorDrain : DTextManager.enemyDrain;
+            return fmt.format(targetName, paramData.displayName, damage);
         } else if (damage > 0) {
-            fmt = isActor ? STextManager.actorDamage : STextManager.enemyDamage;
-            return fmt.format(targetName, damage);
+            fmt = isActor ? paramData.selfLossMessage : paramData.targetLossMessage;
+            if (fmt) {
+                return fmt.format(targetName, paramData.displayName, damage);
+            }
+            else {
+                fmt = isActor ? DTextManager.actorDamage : DTextManager.enemyDamage;
+                return fmt.format(targetName, damage);
+            }
         } else if (damage < 0) {
-            fmt = isActor ? STextManager.actorRecovery : STextManager.enemyRecovery;
-            return fmt.format(targetName, paramData.code, -damage);
+            fmt = isActor ? paramData.selfLossMessage : paramData.targetLossMessage;
+            if (fmt) {
+                return fmt.format(targetName, paramData.displayName, -damage);
+            }
+            else {
+                fmt = isActor ? DTextManager.actorRecovery : DTextManager.enemyRecovery;
+                return fmt.format(targetName, paramData.displayName, -damage);
+            }
         } else {
-            fmt = isActor ? STextManager.actorNoDamage : STextManager.enemyNoDamage;
+            fmt = isActor ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
             return fmt.format(targetName);
         }
     }

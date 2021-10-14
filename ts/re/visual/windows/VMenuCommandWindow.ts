@@ -1,5 +1,5 @@
+import { DTextManager } from "ts/re/data/DTextManager";
 import { REGame } from "ts/re/objects/REGame";
-import { STextManager } from "ts/re/system/STextManager";
 
 
 
@@ -17,7 +17,7 @@ export class VMenuCommandWindow extends Window_Command {
         this.addCommand("その他", "other", true, undefined);
 
         if (REGame.map.floorId().isSafety()) {
-            this.addCommand(STextManager.save, "save", true, undefined);
+            this.addCommand(DTextManager.save, "save", true, undefined);
         }
         else {
             this.addCommand("中断", "suspend", true, undefined);

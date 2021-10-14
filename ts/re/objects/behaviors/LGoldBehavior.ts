@@ -1,21 +1,9 @@
 import { RESerializable } from "ts/re/Common";
+import { DTextManager } from "ts/re/data/DTextManager";
 import { REBasics } from "ts/re/data/REBasics";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
-import { Helpers } from "ts/re/system/Helpers";
-import { SPhaseResult } from "ts/re/system/RECommand";
-import { SCommandContext } from "ts/re/system/SCommandContext";
-import { STextManager } from "ts/re/system/STextManager";
-import { LCandidateSkillAction } from "ts/re/usecases/UAction";
-import { UMovement } from "ts/re/usecases/UMovement";
-import { LCharacterAI } from "../ai/LCharacterAI";
-import { LEscapeAI } from "../ai/LEscapeAI";
-import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { DecisionPhase, LBehavior, LNameView } from "./LBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
-import { LItemBehavior } from "./LItemBehavior";
+import { LBehavior, LNameView } from "./LBehavior";
 
 
 
@@ -59,7 +47,7 @@ export class LGoldBehavior extends LBehavior {
     queryDisplayName(): LNameView | undefined {
         const data = this.ownerEntity().data();
         return {
-            name: this.gold().toString() + STextManager.currencyUnit,
+            name: this.gold().toString() + DTextManager.currencyUnit,
             iconIndex: data.display.iconIndex,
             upgrades: 0,
         }

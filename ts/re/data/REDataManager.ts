@@ -25,6 +25,7 @@ import { DAttackElement } from './DAttackElement';
 import { REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
+import { DTextManager } from './DTextManager';
 
 
 declare global {  
@@ -109,6 +110,11 @@ export class REDataManager
         assert(REData.parameters[REBasics.params.mdf].battlerParamId === 5);
         assert(REData.parameters[REBasics.params.agi].battlerParamId === 6);
         assert(REData.parameters[REBasics.params.luk].battlerParamId === 7);
+
+        REData.parameters[REBasics.params.pow].selfGainMessage = DTextManager.actorGain;
+        REData.parameters[REBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
+        REData.parameters[REBasics.params.pow].targetGainMessage = DTextManager.actorGain;
+        REData.parameters[REBasics.params.pow].targetLossMessage = DTextManager.enemyLoss;
 
         
         

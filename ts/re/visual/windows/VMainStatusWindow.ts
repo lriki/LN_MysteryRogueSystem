@@ -3,7 +3,6 @@ import { REBasics } from "ts/re/data/REBasics";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
-import { STextManager } from "ts/re/system/STextManager";
 import { UName } from "ts/re/usecases/UName";
 import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
 import { easing } from "../animation/VEasing";
@@ -43,7 +42,7 @@ export class VMainStatusWindow extends Window_Base {
         //this.openness = 0;  // 初期状態では非表示
         this._layout = new VUIGridLayout().margin(10);
 
-        this._weaponText = new VUITextElement(STextManager.weaponStrength())
+        this._weaponText = new VUITextElement(DTextManager.weaponStrength())
             .setGrid(0, 0)
             .setColor(this.systemColor())
             .addTo(this._layout);
@@ -52,7 +51,7 @@ export class VMainStatusWindow extends Window_Base {
             .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
-        this._shieldText = new VUITextElement(STextManager.shieldStrength())
+        this._shieldText = new VUITextElement(DTextManager.shieldStrength())
             .setGrid(2, 0)
             .setColor(this.systemColor())
             .addTo(this._layout);
@@ -61,7 +60,7 @@ export class VMainStatusWindow extends Window_Base {
             .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
-        this._fpText = new VUITextElement(STextManager.param(REBasics.params.fp))
+        this._fpText = new VUITextElement(DTextManager.param(REBasics.params.fp))
             .setGrid(0, 1)
             .setColor(this.systemColor())
             .addTo(this._layout);
@@ -71,7 +70,7 @@ export class VMainStatusWindow extends Window_Base {
             .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
-        this._powText = new VUITextElement(STextManager.param(REBasics.params.pow))
+        this._powText = new VUITextElement(DTextManager.param(REBasics.params.pow))
             .setGrid(2, 1)
             .setColor(this.systemColor())
             .addTo(this._layout);

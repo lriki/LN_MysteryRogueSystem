@@ -3,18 +3,12 @@ import { REBasics } from "ts/re/data/REBasics";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
-import { LItemThiefBehavior } from "ts/re/objects/behaviors/LItemThiefBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LRandom } from "ts/re/objects/LRandom";
-import { UAction } from "ts/re/usecases/UAction";
 import { UName } from "ts/re/usecases/UName";
-import { USearch } from "ts/re/usecases/USearch";
-import { Context } from "typedoc/dist/lib/converter";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SEntityFactory } from "../SEntityFactory";
-import { STextManager } from "../STextManager";
 import { SEffectBehavior } from "./SEffectBehavior";
 import { SItemStealSkillBehavior } from "./SItemStealEffectBehavior";
 

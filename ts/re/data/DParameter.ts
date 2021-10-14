@@ -1,3 +1,4 @@
+import { DTextManager } from "./DTextManager";
 
 export type DParameterId = number;
 export type DXParamId = number;
@@ -64,6 +65,16 @@ export class REData_Parameter
     addBuffCoe: number;
     mulBuffCore: number;
 
+    // selfDamageMessage: string;      // "ダメージを受けた"
+    // targetDamageMessage: string;    // "ダメージを与えた"
+    // selfDamageRecovery: string;      // "%1の%2が %3 回復した！"
+    // targetDamageRecovery: string;    // "ダメージを与えた"
+    selfGainMessage: string | undefined;
+    selfLossMessage: string | undefined;
+    targetGainMessage: string | undefined;
+    targetLossMessage: string | undefined;
+    
+
     public static makeBuiltin(id: DParameterId, code: string, displayName: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
         const p = new REData_Parameter(id, code);
         p.displayName = displayName;
@@ -84,6 +95,10 @@ export class REData_Parameter
         this.maxValue = Infinity;
         this.addBuffCoe = 100;
         this.mulBuffCore = 0.25;
+        // this.selfDamageMessage = DTextManager.actorDamage;
+        // this.targetDamageMessage = DTextManager.enemyDamage;
+        // this.selfDamageRecovery = DTextManager.actorRecovery;
+        // this.targetDamageRecovery = DTextManager.enemyRecovery;
     }
 
 
