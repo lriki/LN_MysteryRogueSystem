@@ -389,6 +389,32 @@ export class RESetup {
             case "kSkill_混乱魔法_部屋内":
                 emittor.scope.range = DEffectFieldScopeRange.Room;
                 break;
+            case "kSkill_毒攻撃":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.effectSet.effects[0].qualifyings.parameterQualifyings.push({
+                    parameterId: REBasics.params.pow,
+                    applyTarget: DParameterApplyTarget.Current,
+                    elementId: 0,
+                    formula: "1",
+                    applyType: DParameterEffectApplyType.Damage,
+                    variance: 0,
+                    silent: false,
+                });
+                break;
+            case "kSkill_毒攻撃_強":
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.effectSet.effects[0].qualifyings.parameterQualifyings.push({
+                    parameterId: REBasics.params.pow,
+                    applyTarget: DParameterApplyTarget.Current,
+                    elementId: 0,
+                    formula: "3",
+                    applyType: DParameterEffectApplyType.Damage,
+                    variance: 0,
+                    silent: false,
+                });
+                break;
+
+                
         }
     }
     

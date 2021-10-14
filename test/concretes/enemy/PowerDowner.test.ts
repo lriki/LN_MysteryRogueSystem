@@ -14,17 +14,17 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.enemies.ArrowShooter", () => {
+test("concretes.enemies.PowerDowner", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
     const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const hp1 = actor1.actualParam(REBasics.params.hp);
+    const pow1 = actor1.actualParam(REBasics.params.pow);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_弓屋").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビ屋").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();
 
@@ -34,22 +34,12 @@ test("concretes.enemies.ArrowShooter", () => {
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
-
-    // 離れていれば 100% 矢を撃ってくる
-    const hp2 = actor1.actualParam(REBasics.params.hp);
-    expect(hp2 < hp1).toBe(true);
-
-    //----------------------------------------------------------------------------------------------------
-    
-    // 右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    REGame.world.random().resetSeed(5);     // 乱数調整
 
     RESystem.scheduler.stepSimulation();
 
-    // 隣接していても 100% 矢を撃ってくる
-    const hp3 = actor1.actualParam(REBasics.params.hp);
-    expect(hp3 < hp2).toBe(true);
+    // ちからが減っている
+    const pow2 = actor1.actualParam(REBasics.params.pow);
+    expect(pow2).toBe(pow1 - 1);
 });
 
