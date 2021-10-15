@@ -9,6 +9,7 @@ import "./re/rmmz/Game_Map";
 import "./re/rmmz/Game_Interpreter";
 import "./re/rmmz/Game_Message";
 import "./re/rmmz/PrefabEvent";
+import "./re/visual/ui/Window_Base";
 
 import "./re/data/REData";
 import "./re/data/REDataManager";

@@ -6,7 +6,8 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
 import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
 import { easing } from "../animation/VEasing";
-import { VUIGridLayout, VUITextElement } from "../ui/VUIElement";
+import { VUITextElement } from "../ui/VUIElement";
+import { VUIGridLayout } from "../ui/VUIGridLayout";
 
 export class VMainStatusWindow extends Window_Base {
     private _entity: LEntity | undefined;
