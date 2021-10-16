@@ -28,7 +28,7 @@ test("concretes.enemy.Rust", () => {
     const weapon1_UP1 = weapon1.actualParam(REBasics.params.upgradeValue);
 
     // 盾 入手
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [], "weapon1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [], "shield1"));
     inventory2.addEntity(shield1);
     const shield1_UP1 = shield1.actualParam(REBasics.params.upgradeValue);
 

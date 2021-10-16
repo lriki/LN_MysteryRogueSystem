@@ -10,6 +10,7 @@ import { DSkill } from "./DSkill";
 import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { REData } from "./REData";
+import { tr2 } from "../Common";
 
 export class RESetup {
 
@@ -383,7 +384,11 @@ export class RESetup {
                     formula: "1",
                     applyType: DParameterEffectApplyType.Damage,
                     variance: 0,
-                    silent: true,
+                    silent: false,
+                    alliesSideGainMessage: tr2("%1はサビてしまった。"),
+                    alliesSideLossMessage: tr2("%1はサビてしまった。"),
+                    opponentGainMessage: tr2("%1はサビてしまった。"),
+                    opponentLossMessage: tr2("%1はサビてしまった。"),
                 });
                 break;
             case "kSkill_混乱魔法_部屋内":

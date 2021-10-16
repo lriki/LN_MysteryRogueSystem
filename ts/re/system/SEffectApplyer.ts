@@ -578,6 +578,7 @@ export class SEffectApplyer {
             const paramResult = new LParamEffectResult();
             paramResult.damage = value;
             paramResult.drain = paramEffect.isDrain;
+            paramResult.priorotyMessage = paramEffect.qualifying;
             result.paramEffects[paramEffect.paramId] = paramResult;
         }
 

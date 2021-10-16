@@ -45,6 +45,11 @@ export interface DParameterQualifying {
     silent: boolean;
 
     conditionFormula?: string | undefined;
+
+    alliesSideGainMessage?: string | undefined;
+    alliesSideLossMessage?: string | undefined;
+    opponentGainMessage?: string | undefined;
+    opponentLossMessage?: string | undefined;
 }
 
 //export interface DRmmzItemEffectQualifying {

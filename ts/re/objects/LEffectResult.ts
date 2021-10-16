@@ -4,18 +4,20 @@ import { REData } from "ts/re/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/re/objects/LIdentifyer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
-import { DParameterId } from "ts/re/data/DParameter";
+import { DParameterId, REData_Parameter } from "ts/re/data/DParameter";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LActorBehavior } from "./behaviors/LActorBehavior";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { UName } from "ts/re/usecases/UName";
 import { DTextManager } from "../data/DTextManager";
+import { DParameterQualifying } from "../data/DEffect";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @RESerializable
 export class LParamEffectResult {
     damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
     drain: boolean = false;
+    priorotyMessage: DParameterQualifying | undefined;
 }
 
 /**
@@ -266,7 +268,7 @@ export class LEffectResult {
     }
 
     // Window_BattleLog.prototype.makeHpDamageText
-    private makeParamDamageText(targetName: string, paramId: DParameterId): string {
+    private makeParamDamageText(entityName: string, paramId: DParameterId): string {
         const paramResult = this.paramEffects[paramId];
         assert(paramResult);
 
@@ -276,28 +278,66 @@ export class LEffectResult {
         let fmt;
         if (damage > 0 && paramResult.drain) {
             fmt = isActor ? DTextManager.actorDrain : DTextManager.enemyDrain;
-            return fmt.format(targetName, paramData.displayName, damage);
+            return fmt.format(entityName, paramData.displayName, damage);
         } else if (damage > 0) {
-            fmt = isActor ? paramData.selfLossMessage : paramData.targetLossMessage;
-            if (fmt) {
-                return fmt.format(targetName, paramData.displayName, damage);
-            }
-            else {
-                fmt = isActor ? DTextManager.actorDamage : DTextManager.enemyDamage;
-                return fmt.format(targetName, damage);
-            }
+            return this.makeDamageOrLossMessage(paramResult, entityName, paramData, isActor);
         } else if (damage < 0) {
-            fmt = isActor ? paramData.selfLossMessage : paramData.targetLossMessage;
-            if (fmt) {
-                return fmt.format(targetName, paramData.displayName, -damage);
-            }
-            else {
-                fmt = isActor ? DTextManager.actorRecovery : DTextManager.enemyRecovery;
-                return fmt.format(targetName, paramData.displayName, -damage);
-            }
+            return this.makeRecoveryOrGainMessage(paramResult, entityName, paramData, isActor);
         } else {
             fmt = isActor ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
-            return fmt.format(targetName);
+            return fmt.format(entityName);
+        }
+    }
+
+    private makeDamageOrLossMessage(paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
+        const damage = paramResult.damage;
+        if (isSubjectivity) {
+            if (paramResult.priorotyMessage && paramResult.priorotyMessage.alliesSideLossMessage) {
+                return paramResult.priorotyMessage.alliesSideLossMessage.format(entityName, param.displayName, -damage);
+            }
+            else if (param.selfLossMessage) {
+                return param.selfLossMessage.format(entityName, param.displayName, -damage);
+            }
+            else {
+                return DTextManager.actorDamage.format(entityName, param.displayName, -damage);
+            }
+        }
+        else {
+            if (paramResult.priorotyMessage && paramResult.priorotyMessage.opponentLossMessage) {
+                return paramResult.priorotyMessage.opponentLossMessage.format(entityName, param.displayName, -damage);
+            }
+            else if (param.targetLossMessage) {
+                return param.targetLossMessage.format(entityName, param.displayName, -damage);
+            }
+            else {
+                return DTextManager.enemyDamage.format(entityName, param.displayName, -damage);
+            }
+        }
+    }
+
+    private makeRecoveryOrGainMessage(paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
+        const damage = paramResult.damage;
+        if (isSubjectivity) {
+            if (paramResult.priorotyMessage && paramResult.priorotyMessage.alliesSideGainMessage) {
+                return paramResult.priorotyMessage.alliesSideGainMessage.format(entityName, param.displayName, -damage);
+            }
+            else if (param.selfGainMessage) {
+                return param.selfGainMessage.format(entityName, param.displayName, -damage);
+            }
+            else {
+                return DTextManager.actorRecovery.format(entityName, param.displayName, -damage);
+            }
+        }
+        else {
+            if (paramResult.priorotyMessage && paramResult.priorotyMessage.opponentGainMessage) {
+                return paramResult.priorotyMessage.opponentGainMessage.format(entityName, param.displayName, -damage);
+            }
+            else if (param.targetGainMessage) {
+                return param.targetGainMessage.format(entityName, param.displayName, -damage);
+            }
+            else {
+                return DTextManager.enemyRecovery.format(entityName, param.displayName, -damage);
+            }
         }
     }
 }
