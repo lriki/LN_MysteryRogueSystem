@@ -5,6 +5,7 @@ import { REGame } from "../REGame";
 
 
 /**
+ * パラメータの定数加算
  */
 export class LParamBehavior extends LBehavior {
     private _values: (number | undefined)[];   // Index of DParamId

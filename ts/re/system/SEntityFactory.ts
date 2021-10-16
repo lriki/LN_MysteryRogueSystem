@@ -42,6 +42,8 @@ import { LShopkeeperBehavior } from "../objects/behaviors/LShopkeeperBehavior";
 import { LGoldBehavior } from "../objects/behaviors/LGoldBehavior";
 import { LGoldThiefBehavior } from "../objects/behaviors/LGoldThiefBehavior";
 import { LParamBehavior } from "../objects/behaviors/LParamBehavior";
+import { LEscapeAI } from "../objects/ai/LEscapeAI";
+import { LEscapeBehavior } from "../objects/behaviors/LEscapeBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -330,6 +332,10 @@ export class SEntityFactory {
                 break;
             case "kEnemy_ゴールド盗み屋":
                 entity.addBehavior(LGoldThiefBehavior);
+                break;
+            case "kEnemy_逃走屋":
+                entity.addBehavior(LEscapeBehavior);
+                entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
                 break;
             case "kEnemy_店主":
                 entity.addBehavior(LShopkeeperBehavior);
