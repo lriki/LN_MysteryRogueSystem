@@ -69,6 +69,7 @@ export class LEffectResult {
     focusedFriendly: boolean = true;
 
     levelup: boolean = false;
+    leveldown: boolean = false;
 
     gainedExp: number = 0;
 
@@ -93,6 +94,7 @@ export class LEffectResult {
         this.removedBuffs = [];
         this.focusedFriendly = true;
         this.levelup = false;
+        this.leveldown = false;
         this.gainedExp = 0;
     }
 
@@ -253,12 +255,19 @@ export class LEffectResult {
             
 
             // Game_Actor.prototype.displayLevelUp
-            if (this.levelup) {
+            if (this.levelup || this.leveldown) {
                 const battler = entity.getEntityBehavior(LBattlerBehavior);
                 if (battler instanceof LActorBehavior) {
-                    const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level);
-                    context.postMessage(text);
-                    SSoundManager.playLevelUp();
+                    if (this.levelup) {
+                        const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level());
+                        context.postMessage(text);
+                        SSoundManager.playLevelUp();
+                    }
+                    if (this.leveldown) {
+                        const text = tr2("%1は%2が下がった！").format(targetName, TextManager.level);
+                        context.postMessage(text);
+                        SSoundManager.playLevelUp();
+                    }
                 }
                 else {
                     throw new Error("NotImplemented.");
@@ -293,24 +302,24 @@ export class LEffectResult {
         const damage = paramResult.damage;
         if (isSubjectivity) {
             if (paramResult.priorotyMessage && paramResult.priorotyMessage.alliesSideLossMessage) {
-                return paramResult.priorotyMessage.alliesSideLossMessage.format(entityName, param.displayName, -damage);
+                return paramResult.priorotyMessage.alliesSideLossMessage.format(entityName, param.displayName, damage);
             }
             else if (param.selfLossMessage) {
-                return param.selfLossMessage.format(entityName, param.displayName, -damage);
+                return param.selfLossMessage.format(entityName, param.displayName, damage);
             }
             else {
-                return DTextManager.actorDamage.format(entityName, param.displayName, -damage);
+                return DTextManager.actorDamage.format(entityName, damage);
             }
         }
         else {
             if (paramResult.priorotyMessage && paramResult.priorotyMessage.opponentLossMessage) {
-                return paramResult.priorotyMessage.opponentLossMessage.format(entityName, param.displayName, -damage);
+                return paramResult.priorotyMessage.opponentLossMessage.format(entityName, param.displayName, damage);
             }
             else if (param.targetLossMessage) {
-                return param.targetLossMessage.format(entityName, param.displayName, -damage);
+                return param.targetLossMessage.format(entityName, param.displayName, damage);
             }
             else {
-                return DTextManager.enemyDamage.format(entityName, param.displayName, -damage);
+                return DTextManager.enemyDamage.format(entityName, damage);
             }
         }
     }

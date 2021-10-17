@@ -41,7 +41,7 @@ export class VHudWindow extends Window_Base {
         const mfp = entity.idealParam(REBasics.params.fp);
 
         this.drawFloorNumber(0, 0, REGame.map.floorId());
-        this.drawLevel(150, 0, battler.level, battler.currentExp() / battler.nextLevelExp());
+        this.drawLevel(150, 0, battler.level(), battler.currentExp() / battler.nextLevelExp());
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
         this.drawGold(inventory.gold());
     }

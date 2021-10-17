@@ -1,3 +1,4 @@
+import { assert } from "ts/re/Common";
 import { DTextManager } from "ts/re/data/DTextManager";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
@@ -222,11 +223,18 @@ export class VMainStatusWindow extends Window_Base {
             let atk = 0;
             let def = 0;
             for (const item of equipmentUser.equippedItemEntities()) {
-                item.iterateBehaviorsReverse(b => {
-                    atk = b.onQueryIdealParamBase(REBasics.params.atk, atk);
-                    def = b.onQueryIdealParamBase(REBasics.params.def, def);
-                    return true;
-                });
+                const data = item.data();
+                assert(data.equipment);
+                atk += data.equipment.parameters[REBasics.params.atk];
+                def += data.equipment.parameters[REBasics.params.def];
+
+
+                // item.iterateBehaviorsReverse(b => {
+                //     atk += b.onQueryIdealParamBase(REBasics.params.atk, atk);
+                //     def += b.onQueryIdealParamBase(REBasics.params.def, def);
+                //     console.log("ssss", atk, def, b);
+                //     return true;
+                // });
             }
             this._weaponValue.setText(atk.toString());
             this._shieldValue.setText(def.toString());

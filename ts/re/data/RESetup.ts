@@ -418,8 +418,9 @@ export class RESetup {
                     silent: false,
                 });
                 break;
-
-                
+            case "kSkill_レベルダウン":
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.levelDown);
+                break;
         }
     }
     

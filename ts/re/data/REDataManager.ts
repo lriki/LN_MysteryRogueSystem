@@ -346,6 +346,7 @@ export class REDataManager
         REBasics.effectBehaviors = {
             itemSteal: REData.newEffectBehavior("ItemSteal").id,
             goldSteal: REData.newEffectBehavior("GoldSteal").id,
+            levelDown: REData.newEffectBehavior("LevelDown").id,
         };
     }
 

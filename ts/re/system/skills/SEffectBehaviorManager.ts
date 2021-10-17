@@ -4,6 +4,7 @@ import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { SEffectBehavior } from "./SEffectBehavior";
 import { SGoldStealEffectBehavior } from "./SGoldStealEffectBehavior";
 import { SItemStealSkillBehavior } from "./SItemStealEffectBehavior";
+import { SLevelDownEffectBehavior } from "./SLevelDownEffectBehavior";
 
 export class SEffectBehaviorManager {
     private behaviors: (SEffectBehavior | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -29,6 +30,9 @@ export class SEffectBehaviorManager {
     private setupBuiltins(): void {
         this.register(REBasics.effectBehaviors.itemSteal, new SItemStealSkillBehavior());
         this.register(REBasics.effectBehaviors.goldSteal, new SGoldStealEffectBehavior());
+        this.register(REBasics.effectBehaviors.levelDown, new SLevelDownEffectBehavior());
+
+        
     }
 }
 

@@ -14,6 +14,28 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 /**
  */
 export class LActorBehavior extends LBattlerBehavior {
+
+    /*
+    レベルの扱いや増減について
+    ----------
+    
+    ### レベルをパラメータとするべきか？
+    Actor の場合は経験値と密接な関係がある。仲間モンスターが経験値を得るようなシステムの場合も同様。
+    - 経験値の増減によるレベルアップ
+    - 敵スキルによるレベルダウン及び経験値ダウン
+    - アイテムによるレベルの増減 (しあわせ草, 不幸の草)
+    - アイテムによる経験値の増減 (しあわせの杖)
+    - イベントによるレベルの増減
+
+    必ずしも経験値とレベルが結びつかないこともある点に注意。
+    敵モンスターは経験値の計算は行わず、経験値を得るような効果が発生したら、即レベルを上げる。
+
+    ### 経験値をパラメータとするべきか？
+    これもしないほうがいいかも。
+
+
+    */
+
     _classId: number = 0;
     _level: number = 0;
     _exp: number[] = [];
@@ -35,11 +57,10 @@ export class LActorBehavior extends LBattlerBehavior {
     public resetLevel(): void {
         this._level = this.actor().initialLevel;
     }
-
     
-    public get level(): number {
-        return this._level;
-    }
+    // public get level(): number {
+    //     return this._level;
+    // }
 
 
 
@@ -147,16 +168,8 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.changeExp
     private changeExp(exp: number): void {
-
         this._exp[this._classId] = Math.max(exp, 0);
-        const lastLevel = this._level;
-        //const lastSkills = this.skills();
-        while (!this.isMaxLevel() && this.currentExp() >= this.nextLevelExp()) {
-            this.levelUp();
-        }
-        while (this.currentExp() < this.currentLevelExp()) {
-            this.levelDown();
-        }
+        this.refreshLevel();
     }
 
     // Game_Actor.prototype.levelUp
@@ -173,9 +186,41 @@ export class LActorBehavior extends LBattlerBehavior {
     // Game_Actor.prototype.levelDown
     private levelDown(): void {
         this._level--;
+        this.ownerEntity()._effectResult.leveldown = true;
+    }
+
+    // 現在 Exp に Level をあわせる
+    private refreshLevel(): void {
+
+        const lastLevel = this._level;
+        //const lastSkills = this.skills();
+
+        while (!this.isMaxLevel() && this.currentExp() >= this.nextLevelExp()) {
+            this.levelUp();
+        }
+        while (this.currentExp() < this.currentLevelExp()) {
+            this.levelDown();
+        }
     }
     
-    // Game_Actor.prototype.gainExp
+    changeLevel(value: number, keepExpWhenDown: boolean): void {
+        if (value > this._level) {          // LevelUp
+            this.changeExp(this.expForLevel(value));
+        }
+        else if (value < this._level) {     // LevelDown
+            if (keepExpWhenDown) {
+                this.changeExp(this.expForLevel(value + 1) - 1);
+            }
+            else {
+                this.changeExp(this.expForLevel(value));
+            }
+        }
+    }
+
+    level(): number {
+        return this._level;
+    }
+
     gainExp(exp: number): void {
         const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
         this.changeExp(newExp);
