@@ -126,3 +126,44 @@ test("ai.Escape.2", () => {
     }
 });
 
+
+test("ai.Escape.3", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REData.getState("kState_UTまどわし").id;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
+    actor1.addState(stateId);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // 通路内へ逃げる
+    expect(enemy1.x).toBe(14);
+    expect(enemy1.y).toBe(4);
+    
+    //----------------------------------------------------------------------------------------------------
+
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // 部屋の内側へ向かって逃げる
+    expect(enemy1.x).toBe(15);
+    expect(enemy1.y).toBe(4);
+});
+
