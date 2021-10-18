@@ -66,13 +66,6 @@ export class Helpers {
         const y = entity1.y - entity2.y;
         return Math.sqrt((x * x) + (y * y));
     }
-
-    // 2 つの Entity が隣接しているか確認する
-    public static checkAdjacent(entity1: LEntity, entity2: LEntity): boolean {
-        const dx = entity1.x - entity2.x;
-        const dy = entity1.y - entity2.y;
-        return (-1 <= dx && dx <= 1 && -1 <= dy && dy <= 1);
-    }
     
 
     // 敵対勢力であるかを確認
@@ -95,9 +88,9 @@ export class Helpers {
         return (REData.factions[subject].friendBits & (1 << target)) != 0;
     }
 
-    public static isAdjacent(entity1: LEntity, entity2: LEntity): boolean {
-        return (Math.abs(entity1.x - entity2.x) <= 1 && Math.abs(entity1.y - entity2.y) <= 1);
-    }
+    // public static isAdjacent(entity1: LEntity, entity2: LEntity): boolean {
+    //     return (Math.abs(entity1.x - entity2.x) <= 1 && Math.abs(entity1.y - entity2.y) <= 1);
+    // }
 
 
     public static lerp(v1: number, v2: number, t: number): number {

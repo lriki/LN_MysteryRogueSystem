@@ -2,6 +2,7 @@ import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "../data/REBasics";
+import { UMovement } from "../usecases/UMovement";
 import { Helpers } from "./Helpers";
 
 // いわゆる ナビゲーションAI 関係のサポート
@@ -38,7 +39,7 @@ export class SNavigationHelper {
         }
 
         // 隣接していれば Faction を問わず見える
-        if (Helpers.isAdjacent(subject, target)) {
+        if (UMovement.checkAdjacentEntities(subject, target)) {
             return true;
         }
 

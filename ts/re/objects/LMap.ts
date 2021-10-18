@@ -352,7 +352,7 @@ export class LMap extends LObject
             return this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
         }
         else {
-            return this.entities().filter(entity => Helpers.isAdjacent(entity, subject) && entity != subject);
+            return this.entities().filter(entity => UMovement.checkAdjacentEntities(entity, subject) && entity != subject);
         }
     }
 

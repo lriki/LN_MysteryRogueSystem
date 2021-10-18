@@ -37,6 +37,9 @@ export class RESetup {
             case "kState_UnitTest_攻撃必中":
                 data.effect.traits.push({ code: REBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
                 break;
+            case "kState_UnitTest_投擲必中":
+                data.effect.traits.push({ code: REBasics.traits.CertainIndirectAttack, dataId: 0, value: 0 });
+                break;
             case "kState_UTアイテム擬態":
                 data.effect.behaviors.push("LItemImitatorBehavior");
                 break;

@@ -223,7 +223,7 @@ export class LActivity {
 
     public static makeMoveToAdjacentBlock(actor: LEntity, block: LBlock): LActivity {
         //assert(UMovement.blockDistance(actor.x, actor.y, block.x(), block.y()) <= 1);    // 隣接ブロックであること
-        assert(UMovement.checkAdjacent(actor.x, actor.y, block.x(), block.y()));    // 隣接ブロックであること
+        assert(UMovement.checkAdjacentPositions(actor.x, actor.y, block.x(), block.y()));    // 隣接ブロックであること
         const dir = SAIHelper.distanceToDir(actor.x, actor.y, block.x(), block.y());
         return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
     }

@@ -77,6 +77,126 @@ export class UMovement {
         return (d % 2) != 0;
     }
 
+
+    /**
+     * 2 つの Entity が隣接しているか確認する
+     */
+    public static checkAdjacentEntities(entity1: LEntity, entity2: LEntity): boolean {
+        return (Math.abs(entity1.x - entity2.x) <= 1 && Math.abs(entity1.y - entity2.y) <= 1);
+    }
+    
+
+    /**
+     * 2つの 座標 が隣接しているかどうか
+     */
+     public static checkAdjacentPositions(x1: number, y1: number, x2: number, y2: number): boolean {
+        const dx = x1 - x2;
+        const dy = y1 - y2;
+        return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
+    }
+
+    /**
+     * 2つの Entity が隣接しているかどうか
+     */
+    public static checkEntityAdjacent(e1: LEntity, e2: LEntity): boolean {
+        const dx = e1.x - e2.x;
+        const dy = e1.y - e2.y;
+        return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
+    }
+
+    /**
+     * 2つの Entity が直接隣接しているかどうか (壁角を挟んだ斜めは隣接とみなさない)
+     */
+    public static checkDirectlyAdjacentEntity(e1: LEntity, e2: LEntity): boolean {
+        const d = this.getLookAtDir(e1, e2)
+        if (this.checkDiagonalWallCornerCrossing(e1, d)) return false;
+        return this.checkEntityAdjacent(e1, e2);
+    }
+
+    /**
+     * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
+     */
+    public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
+        const map = REGame.map;
+        if (UMovement.isDiagonalMoving(d)) {
+            // 斜め場合
+            const fl = UMovement.rotatePositionByDir(7, d);  // 左前
+            const fr = UMovement.rotatePositionByDir(9, d);  // 右前
+            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
+            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+            if (flBlock.isWallLikeShape()) return true;
+            if (frBlock.isWallLikeShape()) return true;
+            return false;
+        }
+        else {
+            // 平行の場合
+            return false;
+        }
+    }
+
+    /**
+     * entity が指定した方向に歩行移動できるかを確認する。
+     */
+    public static checkPassageToDir(entity: LEntity, dir: number): boolean {
+        const offset = Helpers.dirToTileOffset(dir);
+        const map = REGame.map;
+        const oldBlock = map.block(entity.x, entity.y);
+        const newBlock = map.block(entity.x + offset.x, entity.y + offset.y);
+        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
+    }
+    
+    /**
+     * entity が指定した隣接位置へ移動できるかを確認する。
+     */
+    /*
+    public static checkPassageToAdjacent(entity: LEntity, mx: number, my: number): boolean {
+        const map = REGame.map;
+        const oldBlock = map.block(entity.x, entity.y);
+        const newBlock = map.block(mx, my);
+        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
+    }
+    */
+    
+    /**
+     * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
+     * 
+     * 地形および Block 性質を判断材料とする点に注意。 (Block 種類及び Block 性質と、Entity 性質の確認)
+     * 状態異常などによる移動制限は Behavior など他で行う。
+     * 
+     * 移動可否は entity や Block の性質を考慮する。
+     * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
+     */
+    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: DBlockLayerKind): boolean {
+        const map = REGame.map;
+        const actualLayer = layer || entity.getHomeLayer();
+
+        const dx = newBlock.x() - oldBlock.x();
+        const dy = newBlock.y() - oldBlock.y();
+
+        if (Math.abs(dx) > 1) return false; // 隣接 Block への移動ではない
+        if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
+
+        if (!map.canLeaving(oldBlock, entity)) return false;
+        if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
+
+        const d = Helpers.offsetToDir(dx, dy);
+        if (this.isDiagonalMoving(d)) {
+            // 斜め移動の場合
+            const fl = this.rotatePositionByDir(7, d);  // 左前
+            const fr = this.rotatePositionByDir(9, d);  // 右前
+            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
+            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+            if (flBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+            if (frBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+        }
+        else {
+            // 平行移動の場合
+        }
+
+        return true;
+    }
+
+
     /**
      * base が target を向く時の方向を計算する
      */
@@ -286,117 +406,6 @@ export class UMovement {
         }
         return undefined;
     }
-
-    /**
-     * 2つの 座標 が隣接しているかどうか
-     */
-     public static checkAdjacent(x1: number, y1: number, x2: number, y2: number): boolean {
-        const dx = x1 - x2;
-        const dy = y1 - y2;
-        return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
-    }
-
-    /**
-     * 2つの Entity が隣接しているかどうか
-     */
-    public static checkEntityAdjacent(e1: LEntity, e2: LEntity): boolean {
-        const dx = e1.x - e2.x;
-        const dy = e1.y - e2.y;
-        return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
-    }
-
-    /**
-     * 2つの Entity が直接隣接しているかどうか (壁角を挟んだ斜めは隣接とみなさない)
-     */
-    public static checkDirectlyAdjacentEntity(e1: LEntity, e2: LEntity): boolean {
-        const d = this.getLookAtDir(e1, e2)
-        if (this.checkDiagonalWallCornerCrossing(e1, d)) return false;
-        return this.checkEntityAdjacent(e1, e2);
-    }
-
-    /**
-     * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
-     */
-    public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
-        const map = REGame.map;
-        if (UMovement.isDiagonalMoving(d)) {
-            // 斜め場合
-            const fl = UMovement.rotatePositionByDir(7, d);  // 左前
-            const fr = UMovement.rotatePositionByDir(9, d);  // 右前
-            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
-            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
-            if (flBlock.isWallLikeShape()) return true;
-            if (frBlock.isWallLikeShape()) return true;
-            return false;
-        }
-        else {
-            // 平行の場合
-            return false;
-        }
-    }
-
-    /**
-     * entity が指定した方向に歩行移動できるかを確認する。
-     */
-    public static checkPassageToDir(entity: LEntity, dir: number): boolean {
-        const offset = Helpers.dirToTileOffset(dir);
-        const map = REGame.map;
-        const oldBlock = map.block(entity.x, entity.y);
-        const newBlock = map.block(entity.x + offset.x, entity.y + offset.y);
-        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
-    }
-    
-    /**
-     * entity が指定した隣接位置へ移動できるかを確認する。
-     */
-    /*
-    public static checkPassageToAdjacent(entity: LEntity, mx: number, my: number): boolean {
-        const map = REGame.map;
-        const oldBlock = map.block(entity.x, entity.y);
-        const newBlock = map.block(mx, my);
-        return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
-    }
-    */
-    
-    /**
-     * entity が oldBlock から newBlock へ "歩行" 移動できるか判定する。
-     * 
-     * 地形および Block 性質を判断材料とする点に注意。 (Block 種類及び Block 性質と、Entity 性質の確認)
-     * 状態異常などによる移動制限は Behavior など他で行う。
-     * 
-     * 移動可否は entity や Block の性質を考慮する。
-     * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
-     */
-    public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: DBlockLayerKind): boolean {
-        const map = REGame.map;
-        const actualLayer = layer || entity.getHomeLayer();
-
-        const dx = newBlock.x() - oldBlock.x();
-        const dy = newBlock.y() - oldBlock.y();
-
-        if (Math.abs(dx) > 1) return false; // 隣接 Block への移動ではない
-        if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
-
-        if (!map.canLeaving(oldBlock, entity)) return false;
-        if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
-
-        const d = Helpers.offsetToDir(dx, dy);
-        if (this.isDiagonalMoving(d)) {
-            // 斜め移動の場合
-            const fl = this.rotatePositionByDir(7, d);  // 左前
-            const fr = this.rotatePositionByDir(9, d);  // 右前
-            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
-            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
-            if (flBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
-            if (frBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
-        }
-        else {
-            // 平行移動の場合
-        }
-
-        return true;
-    }
-
 
 
     // 2点間の距離 (到達に必要な移動ブロック数) を求める。

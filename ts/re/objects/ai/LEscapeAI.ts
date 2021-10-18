@@ -121,7 +121,7 @@ export class LEscapeAI extends LCharacterAI {
                 const blocks = UMovement.getWay3FrontBlocks(self, rdir);
                 if (!blocks.find(b => UMovement.checkPassageBlockToBlock(self, block, b, MovingMethod.Walk))) {
 
-                    if (!UMovement.checkAdjacent(self.x, self.y, target.x, target.y)) {
+                    if (!UMovement.checkAdjacentPositions(self.x, self.y, target.x, target.y)) {
                         // 隣接していなければ相手を向いて待機
                         context.postActivity(
                             LActivity.make(self)

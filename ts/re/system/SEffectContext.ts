@@ -212,27 +212,8 @@ export class SEffectContext {
         const subject = this._effectorFact.subject();
 
         if (subject) {
-            if (this._effectorFact.incidentType() == SEffectIncidentType.DirectAttack) {
-                if (subject.traits(REBasics.traits.CertainDirectAttack).length > 0) {
-                    // 直接攻撃必中
-                    result.missed = false;
-                    result.evaded = false;
-                    return;
-                }
-            }
-            else if (this._effectorFact.incidentType() == SEffectIncidentType.IndirectAttack) {
-                if (target.traits(REBasics.traits.CartailDodgePhysicalAttack).length > 0) {
-                    // 間接攻撃回避
-                    result.missed = true;
-                    result.evaded = true;
-                    return;
-                }
-                if (subject.traits(REBasics.traits.AwfulPhysicalIndirectAttack).length > 0) {
-                    // 間接攻撃命中なし
-                    result.missed = true;
-                    result.evaded = true;
-                    return;
-                }
+            if (SEffectContext.judgeCertainHits(subject, effect, this._effectorFact.incidentType(), target, result)) {
+                return;
             }
         }
         else {
@@ -244,6 +225,47 @@ export class SEffectContext {
 
         result.missed = result.used && this._rand.nextIntWithMax(100) >= hitRate;
         result.evaded = !result.missed && this._rand.nextIntWithMax(100) < evaRate;
+    }
+
+    private static judgeCertainHits(subject: LEntity, effect: SEffect, type: SEffectIncidentType, target: LEntity, result: LEffectResult): boolean {
+
+        if (type == SEffectIncidentType.DirectAttack) {
+            if (subject.traits(REBasics.traits.CertainDirectAttack).length > 0) {
+                // 直接攻撃必中
+                result.missed = false;
+                result.evaded = false;
+                return true;
+            }
+        }
+        else if (type == SEffectIncidentType.IndirectAttack) {
+            const awful = (subject.traits(REBasics.traits.AwfulPhysicalIndirectAttack).length > 0);
+            const hit = (subject.traits(REBasics.traits.CertainIndirectAttack).length > 0);
+            const avoid = (target.traits(REBasics.traits.CartailDodgePhysicalAttack).length > 0);
+            if (hit && avoid) {
+                // 絶対命中と絶対回避がコンフリクトしている場合は通常の判定を行う
+                return false;
+            }
+            else if (avoid) {
+                // 間接攻撃回避
+                result.missed = true;
+                result.evaded = true;
+                return true;
+            }
+            else if (hit) {
+                // 間接攻撃 - 絶対命中 (へた投げより優先)
+                result.missed = false;
+                result.evaded = false;
+                return true;
+            }
+            else if (awful) {
+                // 間接攻撃命中なし(へた投げ)
+                result.missed = true;
+                result.evaded = true;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     
