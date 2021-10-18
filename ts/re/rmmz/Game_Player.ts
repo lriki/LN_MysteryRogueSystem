@@ -29,16 +29,16 @@ Game_Player.prototype.canMove = function(): boolean {
     return _Game_Player_canMove.call(this);
 }
 
-const _Game_Player_performTransfer = Game_Player.prototype.performTransfer;
-Game_Player.prototype.performTransfer = function() {
-    const oldIsTransferring = this.isTransferring();
+// const _Game_Player_performTransfer = Game_Player.prototype.performTransfer;
+// Game_Player.prototype.performTransfer = function() {
+//     const oldIsTransferring = this.isTransferring();
 
     
-    console.log("_Game_Player_performTransfer", this.newMapId());
+//     console.log("_Game_Player_performTransfer", this.newMapId());
 
-    // $gameMap.setup() などはオリジナルの処理の中で行われる
-    _Game_Player_performTransfer.call(this);
-}
+//     // $gameMap.setup() などはオリジナルの処理の中で行われる
+//     _Game_Player_performTransfer.call(this);
+// }
 
 const _Game_Player_refresh = Game_Player.prototype.refresh;
 Game_Player.prototype.refresh = function() {

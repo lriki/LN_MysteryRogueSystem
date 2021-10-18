@@ -34,6 +34,7 @@ export class REVisual
     static guideGrid: VMapGuideGrid | undefined;
 
     static _syncCamera: boolean =true;
+    static _playerPosRefreshNeed = false;
 
     static initialize() {
         this.finalize();

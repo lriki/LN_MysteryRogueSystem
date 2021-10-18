@@ -55,9 +55,7 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
     }
 
     public static postWarpBySteal(cctx: SCommandContext, performer: LEntity, itemName: string): void {
-
         cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), itemName));
-        cctx.postSequel(performer, REBasics.sequels.warp);
         UAction.postWarp(cctx, performer);
     }
 }

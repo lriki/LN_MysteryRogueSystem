@@ -191,6 +191,9 @@ export class TestEnvIntegration extends SIntegration {
         // Test では Camera の transfar 情報を使うため設定不要。マップデータも、TestEnv.performFloorTransfer() でロードする。
     }
 
+    onEntityLocated(entity: LEntity): void {
+    }
+
     onLocateRmmzEvent(eventId: number, x: number, y: number): void {
     }
 

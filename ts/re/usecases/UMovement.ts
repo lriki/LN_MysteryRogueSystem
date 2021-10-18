@@ -584,6 +584,7 @@ export class UMovement {
      * 
      * - moveEntity() と異なり、移動可能判定を行わずに強制移動する。
      * - マップ生成時の Entity 配置や、ワープ移動などで使用する。
+     * - Visual に対して位置合わせを通知するため、歩行などアニメーションを伴う移動での使用は禁止。
      * - 侵入判定を伴う。
      */
     public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: DBlockLayerKind): void {
@@ -600,6 +601,9 @@ export class UMovement {
         entity.y = y;
         newBlock.addEntity(layer, entity);
         this._postLocate(entity, oldBlock, newBlock, map, undefined);
+
+        // Located 通知。これはアニメを伴う移動時は通知したくないのでここで行う。
+        RESystem.integration.onEntityLocated(entity);
     }
     
     private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap, context: SCommandContext | undefined) {

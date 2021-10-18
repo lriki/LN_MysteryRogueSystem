@@ -80,10 +80,21 @@ export class RMMZHelper {
     }
 
     public static syncCameraPositionToGamePlayer(): void {
+        if ($gamePlayer.isTransferring()) return;
+
+
         const entity = REGame.camera.focusedEntity();
         if (entity && REVisual.entityVisualSet) {
             const visual = REVisual.entityVisualSet.findEntityVisualByEntity(entity);
             if (visual) {
+                    
+                if (REVisual._playerPosRefreshNeed) {
+                    $gamePlayer.locate(entity.x, entity.y);
+                    $gamePlayer.refresh();
+                    REVisual._playerPosRefreshNeed = false;
+                    return;
+                }
+            
                 const pos = visual.position();
                 //console.log("this._realX", this._realX - pos.x);
                 
@@ -97,6 +108,10 @@ export class RMMZHelper {
                 //console.log("lastScrolledX", pos.x, pos.y, lastScrolledX, lastScrolledY);
                 //console.log("$gameMap", $gameMap);
                 $gamePlayer.updateScroll(lastScrolledX, lastScrolledY);
+
+                
+                console.log("■syncCameraPositionToGamePlayer", $gamePlayer._x, $gamePlayer._y);
+
 
                 //$gamePlayer.center($gamePlayer._x, $gamePlayer._y);
             }

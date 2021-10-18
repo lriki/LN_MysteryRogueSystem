@@ -96,9 +96,12 @@ export class UAction {
     }
 
     public static postWarp(cctx: SCommandContext, entity: LEntity): void {
+
         const block = USearch.selectUnitSpawnableBlock(cctx.random());
         if (block) {
-            cctx.postTransferFloor(entity, entity.floorId, block.x(), block.y());
+            REGame.world._transferEntity(entity, entity.floorId, block.x(), block.y());
+            //cctx.postTransferFloor(entity, entity.floorId, block.x(), block.y());
+            cctx.postSequel(entity, REBasics.sequels.warp);
         }
         else {
             throw new Error("Not implemented.");

@@ -15,6 +15,7 @@ import { paramLandExitResultVariableId } from "ts/re/PluginParameters";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
+import { REGame } from "../objects/REGame";
 
 export class RMMZIntegration extends SIntegration {
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
@@ -22,6 +23,8 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onReserveTransferMap(mapId: number, x: number, y: number, d: number): void {
+        //console.log("reload");
+
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
 
         // マップ遷移後、同一マップへの遷移でも Game_Map.setup が実行されるようにする。Scene_Load の処理と同じ。
@@ -36,6 +39,16 @@ export class RMMZIntegration extends SIntegration {
         // この後のコアスクリプト側の流れ
         // - Scene_Map.prototype.updateTransferPlayer() にて、新しい Scene_Map が作成され Scene 遷移する。
         // 
+    }
+
+    onEntityLocated(entity: LEntity): void {
+        if (entity.entityId().equals(REGame.camera.focusedEntityId())) {
+            //console.log("★★★★★");
+            //$gamePlayer.reserveTransfer($gameMap.mapId(), entity.x, entity.y, $gamePlayer.direction(), 2);
+            //$gamePlayer.locate(entity.x, entity.y);
+            //$gamePlayer.refresh();
+            REVisual._playerPosRefreshNeed = true;
+        }
     }
 
     onLocateRmmzEvent(eventId: number, x: number, y: number): void {

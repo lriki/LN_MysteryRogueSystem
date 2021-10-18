@@ -21,6 +21,11 @@ export abstract class SIntegration {
      */
     abstract onReserveTransferMap(mapId: number, x: number, y: number, d: number): void;
 
+    /**
+     * 
+     */
+    abstract onEntityLocated(entity: LEntity): void;
+
     abstract onLocateRmmzEvent(eventId: number, x: number, y: number): void;
 
     abstract onLoadFixedMapData(map: FMap): void;

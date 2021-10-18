@@ -1,15 +1,16 @@
 {
     "name": "rmmz-game",
     "main": "index.html",
-    "chromium-args": "--force-color-profile=srgb --in-process-gpu",
+    "chromium-args": "--force-color-profile=srgb",
+    "_chromium-args": "--force-color-profile=srgb --in-process-gpu",
     "window": {
         "title": " ",
         "width": 816,
         "height": 624,
         "position": "center",
         "icon": "icon/icon.png",
-        "toolbar": false,
-        "frame": false
+        "_toolbar": false,
+        "_frame": false
     },
     "dependencies": {
         "@emotion/react": "^11.4.1",

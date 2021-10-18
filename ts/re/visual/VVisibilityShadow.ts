@@ -38,7 +38,7 @@ export class VVisibilityShadow {
         if (REVisual.entityVisualSet && focusedEntity) {
             const visual = REVisual.entityVisualSet.findEntityVisualByEntity(focusedEntity);
             if (visual) {
-                const event = visual.rmmzEvent();
+                const unit = $gamePlayer;//visual.rmmzEvent();
                 const sprite = visual.rmmzSprite();
                 if (sprite) {
                     // Tile の中央点
@@ -52,10 +52,10 @@ export class VVisibilityShadow {
                     //let ty1 = event.screenY() - VisibilityShadowTileSize;         // タイル上辺
                     //let ty2 = event.screenY();         // タイル下辺
     
-                    let tx1 = (sprite.x - htw);// - VisibilityShadowTileSize;  // タイル左辺
-                    let tx2 = (sprite.x - htw) + VisibilityShadowTileSize;  // タイル右辺
-                    let ty1 = sprite.y - VisibilityShadowTileSize;         // タイル上辺
-                    let ty2 = sprite.y;         // タイル下辺
+                    let tx1 = (unit._realX - htw);// - VisibilityShadowTileSize;  // タイル左辺
+                    let tx2 = (unit._realX - htw) + VisibilityShadowTileSize;  // タイル右辺
+                    let ty1 = unit._realY - VisibilityShadowTileSize;         // タイル上辺
+                    let ty2 = unit._realY;         // タイル下辺
     
                     // test
                     tx1 -= VisibilityShadowTileSize / 2.0;
@@ -63,10 +63,12 @@ export class VVisibilityShadow {
                     ty1 -= VisibilityShadowTileSize / 2.0;
                     ty2 += VisibilityShadowTileSize / 2.0;
     
-                    const roomId = focusedEntity.roomId();
-                    if (roomId > 0) {
+                    const room = REGame.map.rooms().find(room => room.contains(unit._x, unit._y));
+                    //const roomId = focusedEntity.roomId();
+                    //if (roomId > 0) {
+                    if (room) {
                         const tw = $gameMap.tileWidth();
-                        const room = REGame.map.rooms()[roomId];
+                        //const room = REGame.map.rooms()[roomId];
                         tx1 = $gameMap.adjustX(room.x1()) * tw;
                         tx2 = $gameMap.adjustX(room.x2()) * tw + tw;
                         ty1 = $gameMap.adjustY(room.y1()) * tw;

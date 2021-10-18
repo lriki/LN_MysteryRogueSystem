@@ -17,8 +17,9 @@ export class REVisualSequel_Move extends REVisualSequel {
             context.end();
         }
         else {
-
+            // $gamePlayer と常時同期
             context.unlockCamera();
+
             VSequelHelper.updateStepAnimPattern(visual);
     
             // 移動は直線距離ではなく X Y 個別に計算する。

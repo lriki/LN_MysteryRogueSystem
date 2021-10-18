@@ -192,7 +192,7 @@ export class REVisual_Entity
             event._y = this._position.y;
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
-
+            
             this.updateOpacity(entity, event, this._visibility);
 
 

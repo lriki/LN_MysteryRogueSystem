@@ -90,7 +90,6 @@ export class LCamera {
         this._transferingNewX = x;
         this._transferingNewY = y;
         RESystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
-        Log.d("ReserveFloorTransfer");
     }
 
     clearFloorTransfering() {
