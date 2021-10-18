@@ -120,7 +120,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
             // 相手のいる方向を向く
             const target = UAction.findInSightNearlyHostileEntity(self);
             if (target) {
-                const dir = SAIHelper.entityDistanceToDir(target, self);
+                const dir = SAIHelper.entityDistanceToDir(self, target);
                 self.dir = dir;
             }
 
