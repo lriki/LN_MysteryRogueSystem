@@ -501,10 +501,12 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
+                entity.factionId = REData.system.factions.neutral;
                 actor.setup(x);
                 this.setupDirectly_Actor(actor);
             }
         });
+        REData.entities[REData.actors[1]].factionId = REData.system.factions.player;    // #1 はデフォルトで Player
 
         // Import Skills
         REData.skills = [];
@@ -694,6 +696,7 @@ export class REDataManager
                 enemy.dropItems = DDropItem.makeFromRmmzDropItemList(x.dropItems, x.gold);
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.entity.kindId = REBasics.entityKinds.MonsterKindId;
+                entity.factionId = REData.system.factions.enemy;
 
                 enemy.traits = enemy.traits.concat(DTrait.parseTraitMetadata(x.meta));
 

@@ -3,7 +3,7 @@ import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
-import { REData } from "ts/re/data/REData";
+import { DFactionId, REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
 import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
 import { RESystem } from "ts/re/system/RESystem";
@@ -110,7 +110,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return REGame.world.entity(this._itemEntityId);
     }
 
-    queryOutwardFactionId(): number | undefined {
+    queryOutwardFactionId(): DFactionId | undefined {
         return REData.system.factions.neutral;
     }
 

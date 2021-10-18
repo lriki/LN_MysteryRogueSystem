@@ -455,6 +455,9 @@ export class RESetup {
             case "kEnemy_逃走屋":
                 entity.majorActionDeclines = 1;
                 break;
+            case "kEnemy_店主":
+                entity.factionId = REData.system.factions.neutral;
+                break;
         }
     }
     

@@ -76,7 +76,7 @@ export class SEntityFactory {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LDecisionBehavior);
-        e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.enemy);
+        e.addBehavior(LUnitBehavior).setFactionId(enemyEntityData.factionId);
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LEnemyBehavior);
         this.setupDirectly_Enemy(e, enemyEntityData);

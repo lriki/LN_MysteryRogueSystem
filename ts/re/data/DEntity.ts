@@ -10,7 +10,7 @@ import { DEquipment, DItem } from "./DItem";
 import { DPrefab, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroopId } from "./DTroop";
-import { REData } from "./REData";
+import { DFactionId, REData } from "./REData";
 
 export type DEntityId = number;
 
@@ -114,6 +114,9 @@ export class DEntity {
 
     enemy: DEnemy | undefined;
 
+    /** デフォルトの勢力。 */
+    factionId: DFactionId;
+
     
     /** 
      * 各基本パラメータ。Enemy のパラメータや、Item の使用回数など。
@@ -161,6 +164,7 @@ export class DEntity {
         this.canModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;
+        this.factionId = 0;//REData.system.factions.neutral;
         this.idealParams = [];
         this.reactions = [];
         this.emittorSet = new DEmittorSet();

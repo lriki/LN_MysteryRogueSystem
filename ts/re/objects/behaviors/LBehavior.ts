@@ -45,6 +45,7 @@ import { DBlockLayerKind, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DSubEffectTargetKey } from "ts/re/data/DEffect";
+import { DFactionId } from "ts/re/data/REData";
 
 export enum DecisionPhase {
     Prepare,
@@ -283,8 +284,8 @@ export abstract class LBehavior extends LObject {
     public queryDisplayName(): LNameView | undefined { return undefined; }
     public queryCharacterFileName(): DPrefabActualImage | undefined { return undefined; }
     
-    public queryInnermostFactionId(): number | undefined { return undefined; }
-    public queryOutwardFactionId(): number | undefined { return undefined; }
+    public queryInnermostFactionId(): DFactionId | undefined { return undefined; }
+    public queryOutwardFactionId(): DFactionId | undefined { return undefined; }
     
     // Entity が Map に配置されるとき、どのレイヤーを基本とするか。
     // NOTE: Entity の種別等で決定できないので、フィールドで持たせている。

@@ -20,7 +20,7 @@ import { LParty, LPartyId } from "./LParty";
 import { isThisTypeNode, LanguageServiceMode } from "typescript";
 import { DParameterId, DSParamId, DXParamId } from "ts/re/data/DParameter";
 import { SAbilityFactory } from "ts/re/system/SAbilityFactory";
-import { REData } from "ts/re/data/REData";
+import { DFactionId, REData } from "ts/re/data/REData";
 import { DEntity, DEntityId, DEntityNamePlate, DIdentificationDifficulty } from "ts/re/data/DEntity";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
@@ -690,7 +690,8 @@ export class LEntity extends LObject
         return undefined;
     }
     
-    public getInnermostFactionId(): number {
+    // this が真に属する Faction。通常、getOutwardFactionId() を使うべき。
+    public getInnermostFactionId(): DFactionId {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryInnermostFactionId();
             if (v) return v;
@@ -698,7 +699,8 @@ export class LEntity extends LObject
         return REData.system.factions.neutral;
     }
 
-    public getOutwardFactionId(): number {
+    // 対外的な Faction。モンスターがアイテムに化けているといった場合、InnermostFactionId とは異なる値を返す。
+    public getOutwardFactionId(): DFactionId {
         for (const b of this.collectBehaviors().reverse()) {
             const v = b.queryOutwardFactionId();
             if (v) return v;
