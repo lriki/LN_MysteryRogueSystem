@@ -74,9 +74,10 @@ test("Items.Staff.Knockback", () => {
 
     // 投げてみる
     {
+        // Enemy を Player の右側に配置
         REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        //RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
         // [投げる]
         const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();

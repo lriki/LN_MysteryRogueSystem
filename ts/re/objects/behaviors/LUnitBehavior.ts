@@ -1,4 +1,4 @@
-import { SCommandResponse } from "../../system/RECommand";
+import { SCommandResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
@@ -15,7 +15,7 @@ import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { MovingMethod } from "../LMap";
-import { onGrounded, testPutInItem } from "../internal";
+import { DecisionPhase, onGrounded, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { UName } from "ts/re/usecases/UName";
@@ -26,6 +26,7 @@ import { UAction } from "ts/re/usecases/UAction";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { LGoldBehavior } from "./LGoldBehavior";
+import { SAIHelper } from "ts/re/system/SAIHelper";
 
 /**
  * 
@@ -456,5 +457,4 @@ export class LUnitBehavior extends LBehavior {
         context.openDialog(self, new SEventExecutionDialog(self.rmmzEventId), false);
         return SCommandResponse.Pass;
     }
-
 }

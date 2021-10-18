@@ -5,6 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -27,6 +28,7 @@ test("Abilities.Enemy.Division", () => {
     enemy1._name = "enemy1";
     enemy1.addBehavior(LEntityDivisionBehavior);
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    const a = enemy1.actualParam(REBasics.params.hp);
 
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

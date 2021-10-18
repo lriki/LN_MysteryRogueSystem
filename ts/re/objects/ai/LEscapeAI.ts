@@ -147,7 +147,7 @@ export class LEscapeAI extends LCharacterAI {
                     if (block2) {
                         context.postActivity(
                             LActivity.makeMoveToAdjacentBlock(self, block2)
-                            .withEntityDirection(dir)
+                            .withEntityDirection(rdir)
                             .withConsumeAction(LActionTokenType.Minor));
                         return SPhaseResult.Handled;
                     }
