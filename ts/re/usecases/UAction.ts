@@ -20,6 +20,7 @@ import { SSoundManager } from "../system/SSoundManager";
 import { UBlock } from "./UBlock";
 import { UMovement } from "./UMovement";
 import { UName } from "./UName";
+import { USearch } from "./USearch";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -93,6 +94,17 @@ export class UAction {
             context.postDestroy(entity);
         }
     }
+
+    public static postWarp(cctx: SCommandContext, entity: LEntity): void {
+        const block = USearch.selectUnitSpawnableBlock(cctx.random());
+        if (block) {
+            cctx.postTransferFloor(entity, entity.floorId, block.x(), block.y());
+        }
+        else {
+            throw new Error("Not implemented.");
+        }
+    }
+
 
 
 

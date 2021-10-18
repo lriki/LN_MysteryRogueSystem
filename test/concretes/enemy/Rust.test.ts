@@ -47,7 +47,7 @@ test("concretes.enemy.Rust", () => {
     RESystem.dialogContext.activeDialog().submit();
 
     REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const weapon1_UP2 = weapon1.actualParam(REBasics.params.upgradeValue);
     const shield1_UP2 = shield1.actualParam(REBasics.params.upgradeValue);

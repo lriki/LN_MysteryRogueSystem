@@ -58,13 +58,6 @@ export class SItemStealSkillBehavior extends SEffectBehavior {
 
         cctx.postMessage(tr2("%1は%2を盗んだ！").format(UName.makeUnitName(performer), itemName));
         cctx.postSequel(performer, REBasics.sequels.warp);
-
-        const block = USearch.selectUnitSpawnableBlock(cctx.random());
-        if (block) {
-            cctx.postTransferFloor(performer, performer.floorId, block.x(), block.y());
-        }
-        else {
-            throw new Error("Not implemented.");
-        }
+        UAction.postWarp(cctx, performer);
     }
 }

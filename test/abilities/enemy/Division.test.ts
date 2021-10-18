@@ -11,9 +11,6 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-afterAll(() => {
-});
-
 test("Abilities.Enemy.Division", () => {
     TestEnv.newGame();
 
@@ -30,17 +27,19 @@ test("Abilities.Enemy.Division", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const a = enemy1.actualParam(REBasics.params.hp);
 
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
-    
+    //----------------------------------------------------------------------------------------------------
+
     // 右を向いて攻撃
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     const entityCount = REGame.map.entities().length;
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 分裂でエンティティが増えていること
+    expect(enemy1.isDeathStateAffected()).toBe(false);  // 倒しちゃってない？
     expect(REGame.map.entities().length).toBe(entityCount + 1);
 });

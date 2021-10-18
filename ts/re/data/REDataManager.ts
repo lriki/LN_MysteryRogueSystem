@@ -347,6 +347,7 @@ export class REDataManager
             itemSteal: REData.newEffectBehavior("ItemSteal").id,
             goldSteal: REData.newEffectBehavior("GoldSteal").id,
             levelDown: REData.newEffectBehavior("LevelDown").id,
+            warp: REData.newEffectBehavior("Warp").id,
         };
     }
 

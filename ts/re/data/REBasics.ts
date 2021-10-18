@@ -15,6 +15,7 @@ export interface DBasicEffectBehaviors {
     itemSteal: DEffectBehaviorId,
     goldSteal: DEffectBehaviorId,
     levelDown: DEffectBehaviorId,
+    warp: DEffectBehaviorId,
 }
 
 /**

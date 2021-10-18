@@ -421,6 +421,9 @@ export class RESetup {
             case "kSkill_レベルダウン":
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.levelDown);
                 break;
+            case "kSkill_ワープ魔法":
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.warp);
+                break;
         }
     }
     
