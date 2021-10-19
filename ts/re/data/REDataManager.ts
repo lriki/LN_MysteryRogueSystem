@@ -607,14 +607,14 @@ export class REDataManager
                 entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentParts = [x.etypeId];
-                entity.equipment.parameters[REBasics.params.hp] = x.params[0];
-                entity.equipment.parameters[REBasics.params.mp] = x.params[1];
-                entity.equipment.parameters[REBasics.params.atk] = x.params[2];
-                entity.equipment.parameters[REBasics.params.def] = x.params[3];
-                entity.equipment.parameters[REBasics.params.mat] = x.params[4];
-                entity.equipment.parameters[REBasics.params.mdf] = x.params[5];
-                entity.equipment.parameters[REBasics.params.agi] = x.params[6];
-                entity.equipment.parameters[REBasics.params.luk] = x.params[7];
+                entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.atk] = { value: x.params[2], upgradeRate: 1.0 };
+                entity.equipment.parameters[REBasics.params.def] = { value: x.params[3], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.mat] = { value: x.params[4], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
                 entity.equipment.traits = x.traits;
                 entity.entity = parseMetaToEntityProperties(x.meta);
 
@@ -650,14 +650,14 @@ export class REDataManager
                 entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentParts = [x.etypeId]
-                entity.equipment.parameters[REBasics.params.hp] = x.params[0];
-                entity.equipment.parameters[REBasics.params.mp] = x.params[1];
-                entity.equipment.parameters[REBasics.params.atk] = x.params[2];
-                entity.equipment.parameters[REBasics.params.def] = x.params[3];
-                entity.equipment.parameters[REBasics.params.mat] = x.params[4];
-                entity.equipment.parameters[REBasics.params.mdf] = x.params[5];
-                entity.equipment.parameters[REBasics.params.agi] = x.params[6];
-                entity.equipment.parameters[REBasics.params.luk] = x.params[7];
+                entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.atk] = { value: x.params[2], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.def] = { value: x.params[3], upgradeRate: 1.0 };
+                entity.equipment.parameters[REBasics.params.mat] = { value: x.params[4], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
+                entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
                 entity.equipment.traits = x.traits;
                 entity.entity = parseMetaToEntityProperties(x.meta);
             }

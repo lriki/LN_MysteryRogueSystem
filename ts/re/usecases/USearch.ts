@@ -1,6 +1,8 @@
 import { assert } from "../Common";
 import { DBlockLayerKind } from "../data/DCommon";
 import { DEffectFieldScope } from "../data/DEffect";
+import { DStateRestriction } from "../data/DState";
+import { REBasics } from "../data/REBasics";
 import { LItemBehavior } from "../objects/behaviors/LItemBehavior";
 import { LBlock } from "../objects/LBlock";
 import { LEntity } from "../objects/LEntity";
@@ -14,6 +16,20 @@ import { paramEnemySpawnInvalidArea } from "../PluginParameters";
  * 攻撃対象範囲などの検索ヘルパー
  */
 export class USearch {
+
+    /**
+     * 失明状態であるか (self は他を視認できないか)
+     */
+    public static hasBlindness(self: LEntity, ): boolean {
+        return self.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind) !== undefined;
+    }
+
+    /**
+     * 可視であるか
+     */
+     public static checkVisible(target: LEntity): boolean {
+         return !target.hasTrait(REBasics.traits.Invisible);
+    }
 
     /**
      * mx, my を中心として、length タイル分離れた位置を列挙する。

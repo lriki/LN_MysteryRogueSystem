@@ -379,16 +379,20 @@ export class UAction {
     }
     */
 
-    public static chekcVisible(subject: LEntity, target: LEntity): boolean {
-        return (target.traits(REBasics.traits.Invisible).length == 0);
-    }
+    // public static chekcVisible(subject: LEntity, target: LEntity): boolean {
+    //     if (subject.hasTrait(REBasics.traits.bli))
+
+    //     return (target.traits(REBasics.traits.Invisible).length == 0);
+    // }
    
     /**
      * self の視界内にいる敵対 Entity のうち、一番近いものを検索する。
      */
     public static findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
+        if (USearch.hasBlindness(self)) return undefined;   // 盲目
+
         return REGame.map.getInsightEntities(self)
-                .filter(e => Helpers.isHostile(self, e) && this.chekcVisible(self, e))
+                .filter(e => Helpers.isHostile(self, e) && USearch.checkVisible(e))
                 .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
     }

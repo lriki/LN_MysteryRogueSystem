@@ -95,6 +95,27 @@ NOTE:
             }
         }
     }
+
+    // item が持つ paramId の増減量を計算する。
+    // ステータスウィンドウの表示でも使うので、ここでは熟練度は考慮しない。
+    public static calcEquipmentParam(item: LEntity, paramId: DParameterId): number {
+        const data = item.data();
+        const equipmentData = data.equipment;
+        if (equipmentData) {
+            const upgrade = item.actualParam(REBasics.params.upgradeValue);
+            const ep = equipmentData.parameters[paramId];
+            if (ep) {
+                return (ep.value + (upgrade * ep.upgradeRate));
+            }
+            else {
+                // 最大TPなど、RMMZ 標準では存在しないパラメータに対して要求が来ることもあるので、その場合はなにもしない
+                return 0;
+            }
+        }
+        else {
+            return 0;
+        }
+    }
     
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.equipmentSlots) {
@@ -108,13 +129,11 @@ NOTE:
     }
 
     // Game_Actor.prototype.paramPlus
-    onQueryIdealParameterPlus(parameterId: DParameterId): number {
+    onQueryIdealParameterPlus(paramId: DParameterId): number {
         const self = this.ownerEntity();
         const a = this.equippedItemEntities().reduce((r, e) => {
-            const data = e.data();
-            const rate = self.traitsPi(REBasics.traits.EquipmentProficiency, e.kindDataId());
-            const equipment = data.equipment;
-            return equipment ? r + ((equipment.parameters[parameterId] ?? 0) * rate) : 0;
+            const proficiency = self.traitsPi(REBasics.traits.EquipmentProficiency, e.kindDataId());
+            return r + LEquipmentUserBehavior.calcEquipmentParam(e, paramId) * proficiency;
         }, 0);
 
         return a;

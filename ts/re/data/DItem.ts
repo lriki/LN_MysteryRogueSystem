@@ -99,13 +99,18 @@ export class DItem {
     }
 }
 
+export interface DEquipmentParam {
+    value: number;
+    upgradeRate: number; // 1.0=100%    0はこのParamに強化値が影響しないことを示す
+}
+
 export class DEquipment {
     
     /** このアイテム(装備品) を装備できる部位 */
     equipmentParts: DEquipmentPartId[];
 
-    /** 装備したときに適用する parameters */
-    parameters: number[];
+    /** 装備したときに適用する parameters. (Index is DParameterId) */
+    parameters: (DEquipmentParam | undefined)[];
 
     /** 装備したときに、装備者に対して適用する Trait */
     traits: IDataTrait[];

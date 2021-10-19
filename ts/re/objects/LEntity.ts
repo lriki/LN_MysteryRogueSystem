@@ -35,6 +35,7 @@ import { LActionToken } from "./LActionToken";
 import { LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
+import { DTraitId } from "../data/DTraits";
 
 enum BlockLayer
 {
@@ -589,6 +590,10 @@ export class LEntity extends LObject
         return this.allTraits().filter(trait => trait.code === code);
     }
 
+    public hasTrait(code: DTraitId): boolean {
+        return this.allTraits().find(t => t.code == code) !== undefined;
+    }
+
     // Game_BattlerBase.prototype.traitsWithId
     public traitsWithId(code: number, id: number): IDataTrait[] {
         return this.allTraits().filter(
@@ -1108,8 +1113,8 @@ export class LEntity extends LObject
         return result;
     }
 
-    public queryIdealParameterPlus(parameterId: DParameterId): number {
-        return this.collectBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(parameterId), 0);
+    public queryIdealParameterPlus(paramId: DParameterId): number {
+        return this.collectBehaviors().reduce((r, b) => r + b.onQueryIdealParameterPlus(paramId), 0);
     }
 
     /** @deprecated  use collectBehaviors*/

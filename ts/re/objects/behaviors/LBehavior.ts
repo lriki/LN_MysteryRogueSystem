@@ -309,7 +309,7 @@ export abstract class LBehavior extends LObject {
     onQueryProperty(propertyId: number): any { return undefined; }
 
     // results: index is DParameterId
-    onQueryIdealParameterPlus(parameterId: DParameterId): number { return 0; }
+    onQueryIdealParameterPlus(paramId: DParameterId): number { return 0; }
 
     public onQueryIdleSequelId(): DSequelId | undefined { return undefined; }
 

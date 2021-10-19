@@ -15,9 +15,6 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-afterAll(() => {
-});
-
 test("Equipment.EquipOnOff", () => {
     // New Game
     TestEnv.newGame();
@@ -27,7 +24,7 @@ test("Equipment.EquipOnOff", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
@@ -35,7 +32,7 @@ test("Equipment.EquipOnOff", () => {
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();    // 行動確定
     
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
@@ -53,7 +50,7 @@ test("Equipment.EquipOnOff", () => {
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     // 装備されていること。
     const equipmens = actor1.getEntityBehavior(LEquipmentUserBehavior);
@@ -73,7 +70,7 @@ test("Equipment.EquipOnOff", () => {
     RESystem.dialogContext.postActivity(LActivity.makeEquipOff(actor1, shield1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     // 外れていること。
     expect(equipmens.isEquipped(weapon1)).toBe(false);
@@ -99,7 +96,7 @@ test("Equipment.Put_Throw", () => {
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
     inventory.addEntity(shield1);
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -108,13 +105,13 @@ test("Equipment.Put_Throw", () => {
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     // [置く]
     RESystem.dialogContext.postActivity(LActivity.makePut(actor1, weapon1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(false);  // 装備からは外れていること。
     expect(weapon1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
@@ -125,7 +122,7 @@ test("Equipment.Put_Throw", () => {
     RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, shield1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(shield1)).toBe(false);  // 装備からは外れていること。
     expect(shield1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
@@ -149,7 +146,7 @@ test("Equipment.Curse", () => {
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getState("UT呪い").id]));
     REGame.world._transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -157,7 +154,7 @@ test("Equipment.Curse", () => {
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(inventory.contains(weapon1)).toBe(true);   // アイテムを拾えていること
     
@@ -167,7 +164,7 @@ test("Equipment.Curse", () => {
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 装備できていること。
 
@@ -177,7 +174,7 @@ test("Equipment.Curse", () => {
     RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 呪われた武器は外せない
     expect(equipmens.isEquipped(weapon2)).toBe(false);
@@ -188,7 +185,7 @@ test("Equipment.Curse", () => {
     RESystem.dialogContext.postActivity(LActivity.makeEquipOff(actor1, weapon1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 外れないこと。
     
@@ -198,22 +195,70 @@ test("Equipment.Curse", () => {
     RESystem.dialogContext.postActivity(LActivity.makePut(actor1, weapon1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 外れないこと。
     expect(weapon1.isOnGround()).toBe(false);           // 地面に置かれたりしていないこと。
 });
 
+
 test("Equipment.UpgradeValue", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
-    TestEnv.performFloorTransfer();
+    const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+
+    // 装備 入手
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
+    inventory.addEntity(weapon1);
+    inventory.addEntity(shield1);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [装備]
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const atk1 = player1.actualParam(REBasics.params.atk);
+    const def1 = player1.actualParam(REBasics.params.def);
+    
+    //----------------------------------------------------------------------------------------------------
+
+    // 武器修正値+1
+    weapon1.setActualParam(REBasics.params.upgradeValue, 1);
+
+    const atk2 = player1.actualParam(REBasics.params.atk);
+    const def2 = player1.actualParam(REBasics.params.def);
+
+    expect(atk2 > atk1).toBe(true);
+    expect(def2 == def1).toBe(true);    // def には影響していないはず
+
+    // 盾修正値+1
+    shield1.setActualParam(REBasics.params.upgradeValue, 1);
+
+    const atk3 = player1.actualParam(REBasics.params.atk);
+    const def3 = player1.actualParam(REBasics.params.def);
+
+    expect(atk3 == atk2).toBe(true);    // atk には影響していないはず
+    expect(def3 > def2).toBe(true); 
+});
+
+test("Equipment.IdentifyUpgradeValue", () => {
+    TestEnv.newGame();
+
+    // Player
+    const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kゴブリンのこん棒").id, [], "item1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
 
     // 修正値+2
     item1.setActualParam(REBasics.params.upgradeValue, 2);

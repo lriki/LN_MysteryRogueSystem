@@ -27,6 +27,7 @@ import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { LGoldBehavior } from "./LGoldBehavior";
 import { SAIHelper } from "ts/re/system/SAIHelper";
+import { USearch } from "ts/re/usecases/USearch";
 
 /**
  * 
@@ -420,7 +421,7 @@ export class LUnitBehavior extends LBehavior {
 
 
             
-            if (!self.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
+            if (!USearch.hasBlindness(self)) {
                 // 相手が可視であれば、その方向を向く
                 const subject = effectContext.effectorFact().subject();
                 if (SView.getEntityVisibility(subject).visible) {
