@@ -144,6 +144,20 @@ export class SEffectContext {
         const result = target._effectResult;
         result.clear();
 
+        
+        // Animation
+        // ワープなど、特殊効果の中から Motion が発動することもあるため、apply の前に post しておく。
+        {
+            const effectData = effect.data();
+            const behavior = this._effectorFact.subjectBehavior();
+            const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
+            const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
+            if (rmmzAnimationId > 0) {
+                commandContext.postAnimation(target, rmmzAnimationId, true);
+             }
+        }
+
+
         if (targetBattlerBehavior) {
 
             result.used = this.testApply(targetBattlerBehavior);
@@ -188,17 +202,6 @@ export class SEffectContext {
                 }
             }
             target.removeStates(removeStates);
-        }
-
-        // Animation
-        {
-            const effectData = effect.data();
-            const behavior = this._effectorFact.subjectBehavior();
-            const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
-            const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
-            if (rmmzAnimationId > 0) {
-                commandContext.postAnimation(target, rmmzAnimationId, true);
-             }
         }
 
         {

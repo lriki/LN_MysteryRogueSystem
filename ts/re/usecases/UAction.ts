@@ -99,8 +99,7 @@ export class UAction {
 
         const block = USearch.selectUnitSpawnableBlock(cctx.random());
         if (block) {
-            REGame.world._transferEntity(entity, entity.floorId, block.x(), block.y());
-            //cctx.postTransferFloor(entity, entity.floorId, block.x(), block.y());
+            cctx.postTransferFloor(entity, entity.floorId, block.x(), block.y());   // SpecialEffect として実行される場合は事前にpostされる発動側Animationを待ちたいので post.
             cctx.postSequel(entity, REBasics.sequels.warp);
         }
         else {

@@ -54,6 +54,11 @@ export class REVisual
         this.ext.onMapVisualSetup();
     }
 
+    static isSyncCoreToVisual(): boolean {
+        // TODO: 今は対応したい条件が _syncCamera と一致するのでこれでカバーしている。
+        return this._syncCamera;
+    }
+
     static finalize() {
         if (this.manager) {
             this.manager._finalize();
