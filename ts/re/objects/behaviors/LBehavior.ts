@@ -46,6 +46,7 @@ import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DSubEffectTargetKey } from "ts/re/data/DEffect";
 import { DFactionId } from "ts/re/data/REData";
+import { LPriceInfo } from "../LCommon";
 
 export enum DecisionPhase {
     Prepare,
@@ -302,6 +303,8 @@ export abstract class LBehavior extends LObject {
     public onQuerySubEntities(key: DSubEffectTargetKey, result: LEntity[]): void { }
     //public onQueryParamMinMax(paramId: DParameterId, result: LParamMinMaxInfo): void { }
     
+    
+    public onQueryPrice(result: LPriceInfo): void {}
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
     // propertyId: see EntityProperties

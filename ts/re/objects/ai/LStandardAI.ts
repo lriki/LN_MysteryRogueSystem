@@ -3,7 +3,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "./../LEntity";
 import { LCharacterAI } from "./LCharacterAI";
 import { LActionDeterminer } from "./LActionDeterminer";
-import { LMoveDeterminer } from "./LMoveDeterminer";
+import { LMoveDeterminer, LMovingMethod } from "./LMoveDeterminer";
 import { RESerializable } from "ts/re/Common";
 import { DPrefabMoveType } from "ts/re/data/DPrefab";
 import { LMovingTargetFinder, LMovingTargetFinder_Item } from "./LMovingTargetFinder";
@@ -51,6 +51,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
                 const pos = this._movingTargetFinder.decide(self);
                 if (pos) {
                     this._moveDeterminer.setTargetPosition(pos[0], pos[1]);
+                    this._moveDeterminer._decired = { method: LMovingMethod.ToTarget };
                 }
             }
         }

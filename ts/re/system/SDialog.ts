@@ -1,7 +1,20 @@
 import { LFloorId } from "ts/re/objects/LFloorId";
+import { LEntity } from "../objects/LEntity";
 import { RESystem } from "./RESystem";
 import { SDialogContext } from "./SDialogContext";
 
+
+export enum SDialogAction {
+    Submit,
+    Cancel,
+}
+
+export interface SDialogResult {
+    action: SDialogAction,
+    selectedItems: LEntity[],
+}
+
+export type SDialogResultCallback = (dialog: SDialog) => void;
 
 export type LDialogResultCallback = (result: any) => void;
 
@@ -29,44 +42,66 @@ export type LDialogResultCallback = (result: any) => void;
  * ただそうすると想定外の領域にもどんどん保存の必要性が出てくるので、ここは制限付きにしておくのがベターかも。
  */
 export class SDialog {
-    _resultCallback: LDialogResultCallback | undefined;
-    _dialogResult: boolean = false;
+    _resultCallback: SDialogResultCallback | undefined;
+    _resultCallbackVisual: LDialogResultCallback | undefined;
+    _dialogResult: SDialogResult;
 
     // この Dialog を開いたフロア。
     // 複数のフロアにまたがって実行されるとき、Close を Recorder に記録しないように制御するために使う。
     _openedFloorId: LFloorId = LFloorId.makeEmpty();
     
+    public constructor() {
+        this._dialogResult = {
+            action: SDialogAction.Cancel,
+            selectedItems: [],
+        };
+    }
+
     onUpdate(context: SDialogContext): void { }
 
     public isVisualIntegration(): boolean {
         return true;
     }
 
+    public then(func: SDialogResultCallback): void {
+        this._resultCallback = func;
+    }
+
     public submit(): void {
-        this._dialogResult = true;
+        this._dialogResult.action = SDialogAction.Submit;
 
         RESystem.dialogContext._closeDialog();
         
+        if (this._resultCallbackVisual) {
+            this._resultCallbackVisual(this);
+        }
         if (this._resultCallback) {
             this._resultCallback(this);
         }
     }
 
     public cancel(): void {
-        this._dialogResult = false;
+        this._dialogResult.action = SDialogAction.Cancel;
 
         RESystem.dialogContext._closeDialog();
         
+        if (this._resultCallbackVisual) {
+            this._resultCallbackVisual(this);
+        }
         if (this._resultCallback) {
             this._resultCallback(this);
         }
     }
 
-    public isSubmitted(): boolean {
+    public result(): SDialogResult {
         return this._dialogResult;
     }
 
+    public isSubmitted(): boolean {
+        return this._dialogResult.action == SDialogAction.Submit;
+    }
+
     public isCanceled(): boolean {
-        return !this._dialogResult;
+        return this._dialogResult.action == SDialogAction.Cancel;
     }
 }

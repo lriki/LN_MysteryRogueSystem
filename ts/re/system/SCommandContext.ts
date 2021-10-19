@@ -350,7 +350,7 @@ export class SCommandContext
         return undefined;
     }
 
-    openDialog(causeEntity: LEntity, dialogModel: SDialog, afterChain: boolean): void {
+    openDialog(causeEntity: LEntity, dialogModel: SDialog, afterChain: boolean): SDialog {
         const m1 = () => {
             Log.doCommand("OpenDialog");
             
@@ -371,6 +371,7 @@ export class SCommandContext
         else
             this._recodingCommandList.push(new RECCMessageCommand("openDialog", m1));
         Log.postCommand("openDialog");
+        return dialogModel;
     }
 
     postSequel(entity: LEntity, sequelId: number, args?: any): SMotionSequel {

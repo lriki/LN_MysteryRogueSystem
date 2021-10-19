@@ -1,6 +1,6 @@
 
 import { assert } from "ts/re/Common";
-import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
 import { VDialog } from "./VDialog";
 
 export class REEventExecutionDialogVisual extends VDialog {

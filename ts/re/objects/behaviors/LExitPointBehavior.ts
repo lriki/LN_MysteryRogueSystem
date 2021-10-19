@@ -4,7 +4,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/re/objects/behaviors/LBehavior";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
@@ -60,7 +60,7 @@ export class LExitPointBehavior extends LBehavior {
     [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
         const entity = args.self;
 
-        context.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId), false);
+        context.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity), false);
 
         return SCommandResponse.Handled;
     }

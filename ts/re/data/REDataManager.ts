@@ -293,6 +293,7 @@ export class REDataManager
             IdentifyActionId: REData.addAction("Identify", ""),
             talk: REData.addAction("talk", ""),
             collide: REData.addAction("collide", ""),
+            dialogResult: REData.addAction("dialogResult", ""),
             //passItem: REData.addAction("PassItem"),
             performSkill: REData.addAction("PerformSkill", ""),
             AttackActionId: REData.addAction("Attack", ""),
@@ -555,8 +556,8 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
-                entity.sellingPrice = x.price;
-                entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
+                entity.cellingPrice2 = x.price;
+                entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
 
                 const emittor = REData.newEmittor();
                 const effect = new DEffect();
@@ -603,8 +604,8 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
-                entity.sellingPrice = x.price;
-                entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
+                entity.cellingPrice2 = x.price;
+                entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentParts = [x.etypeId];
                 entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
@@ -646,8 +647,8 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
-                entity.sellingPrice = x.price;
-                entity.buyingPrice = Math.max(entity.sellingPrice / 2, 1);
+                entity.cellingPrice2 = x.price;
+                entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentParts = [x.etypeId]
                 entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };

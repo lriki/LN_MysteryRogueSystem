@@ -191,6 +191,8 @@ export interface DBasicActions {
 
     collide: DActionId;
 
+    dialogResult: DActionId;
+
     //----------------------------------------
     // Combat Actions.
 

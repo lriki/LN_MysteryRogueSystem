@@ -17,7 +17,7 @@ import { VIdleSequel } from "./sequels/VIdleSequel";
 import { REData } from "ts/re/data/REData";
 import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
-import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
 import { VDropSequel } from "./sequels/VDropSequel";
 import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
 import { VMainMenuDialog } from "./dialogs/VMenuDialog";

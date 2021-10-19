@@ -30,7 +30,7 @@ export class LMoveDeterminer {
 
     private _noActionTurnCount: number = 0;
 
-    private _decired: LUpdateMovingTargetResult = { method: LMovingMethod.LHRule };
+    /*private*/ _decired: LUpdateMovingTargetResult = { method: LMovingMethod.LHRule };
     
     public clone(): LMoveDeterminer {
         const i = new LMoveDeterminer();

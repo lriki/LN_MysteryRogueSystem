@@ -98,10 +98,10 @@ export class DEntity {
 
 
     /** 買い値（販売価格） */
-    buyingPrice: number;
+    cellingPrice2: number;
 
-    /** 売り値 */
-    sellingPrice: number;
+    /** 売り値 (買取価格) */
+    purchasePrice: number;
 
     /** 祝福・呪い・封印状態になるか。 */
     canModifierState: boolean;
@@ -159,8 +159,8 @@ export class DEntity {
         this.description = "";
         this.identificationDifficulty = DIdentificationDifficulty.Clear;
         this.identifiedTiming = DIdentifiedTiming.None;
-        this.buyingPrice = 0;
-        this.sellingPrice = 0;
+        this.cellingPrice2 = 0;
+        this.purchasePrice = 0;
         this.canModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;

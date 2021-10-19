@@ -28,6 +28,7 @@ export interface LActivityData {
     entityDirection: number;
     consumeActionType: LActionTokenType | undefined;
     fastForward: boolean;
+    selectedAction: string;
 }
 
 /**
@@ -43,8 +44,8 @@ export interface LActivityData {
 @RESerializable
 export class LActivity {
     private _actionId: DActionId;
-    private _actor: LEntityId;      // Command 送信対象
-    private _subject: LEntityId;    // Activity の主題。経験値等はここに流れる。
+    private _actor: LEntityId;      // Command 送信対象。明示されない場合は subject と等しい。
+    private _subject: LEntityId;    // Activity の主題。経験値等はここに流れる。例えば飛び道具の衝突 Activity の場合、飛んでいる矢は actor, 撃った人は subject。
     private _object: LEntityId;     // (目的語)
     private _objects2: LEntityId[];
     private _skillId: DSkillId;
@@ -52,6 +53,8 @@ export class LActivity {
     private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
     private _consumeActionType: (LActionTokenType | undefined);
     private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
+    private _selectedAction: string;    // yes, no などの DialogResult
+    //private _selectedItems: LEntityId[];
 
     public constructor() {
         this._actionId = 0;
@@ -64,6 +67,7 @@ export class LActivity {
         this._entityDirection = 0;
         this._consumeActionType = undefined;
         this._fastForward = false;
+        this._selectedAction = "";
     }
 
     public setup(actionId: DActionId, actor: LEntity, object?: LEntity, dir?: number): this {
@@ -76,6 +80,7 @@ export class LActivity {
         this._entityDirection = 0;
         this._consumeActionType = undefined;
         this._fastForward = false;
+        this._selectedAction = "";
         return this;
     }
 
@@ -176,6 +181,10 @@ export class LActivity {
         return this._fastForward;
     }
 
+    public selectedAction(): string {
+        return this._selectedAction;
+    }
+
     public toData(): LActivityData {
         return {
             actionId: this._actionId,
@@ -188,6 +197,7 @@ export class LActivity {
             entityDirection: this._entityDirection,
             consumeActionType: this._consumeActionType,
             fastForward: this._fastForward,
+            selectedAction: this._selectedAction,
         }
     }
 
@@ -203,6 +213,7 @@ export class LActivity {
         i._entityDirection = data.entityDirection;
         i._consumeActionType = data.consumeActionType;
         i._fastForward = data.fastForward;
+        i._selectedAction = data.selectedAction;
         return i;
     }
 
@@ -276,6 +287,7 @@ export class LActivity {
         const a = (new LActivity()).setup(REBasics.actions.talk, actor);
         return a;
     }
+
     public static makeCollide(subject: LEntity, target: LEntity): LActivity {
         const a = (new LActivity()).setup(REBasics.actions.collide, subject);
         a.setObjects2([target]);
@@ -287,6 +299,12 @@ export class LActivity {
         const a = (new LActivity()).setup(REBasics.actions.performSkill, actor);
         if (dirToFace !== undefined) a._effectDirection = dirToFace;
         a._skillId = skillId;
+        return a;
+    }
+
+    public static makeDialogResult(actor: LEntity, target: LEntity, selectedAction: string): LActivity {
+        const a = (new LActivity()).setup(REBasics.actions.dialogResult, actor, target);
+        a._selectedAction = selectedAction;
         return a;
     }
 }

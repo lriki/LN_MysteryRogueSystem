@@ -3,12 +3,17 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
 import { LStructureId } from "../LCommon";
 import { LEnemyBehavior } from "./LEnemyBehavior";
 import { LDecisionBehavior } from "./LDecisionBehavior";
 import { LBehaviorId } from "../LObject";
 import { LItemShopStructure, LShopEntrance } from "../structures/LItemShopStructure";
+import { LMovingTargetFinder } from "../ai/LMovingTargetFinder";
+import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
+import { REBasics } from "ts/re/data/REBasics";
+import { LActivity } from "../activities/LActivity";
+import { LInventoryBehavior } from "./LInventoryBehavior";
 
 
 /**
@@ -72,12 +77,47 @@ export class LShopkeeperBehavior extends LBehavior {
 
         return SPhaseResult.Pass;
     }
+    
+    onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
+
+        const dialog = new SEventExecutionDialog(self.rmmzEventId, self);
+        dialog.billingPrice = this.shop().getBillingPrice();
+        dialog.depositPrice = this.shop().getDepositPriece();
+
+        context.openDialog(self, dialog, false);
+        // .then(dialog => {
+        //     console.log("dialog", dialog);
+        // });
+        return SCommandResponse.Handled;
+    }
+    
+    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+        // [振られた]
+        if (activity.actionId() == REBasics.actions.dialogResult) {
+            if (activity.selectedAction() == "yes") {
+                const billingPrice = this.shop().getBillingPrice();
+                const subject = activity.subject();
+                const inventory = subject.getEntityBehavior(LInventoryBehavior);
+                if (inventory.gold() >= billingPrice) {
+                    inventory.loseGold(billingPrice);
+                    this.shop().commitBilling();
+                }
+                else {
+                    throw new Error("Not implemented.");
+                }
+            }
+            return SCommandResponse.Handled;
+        }
+
+        return SCommandResponse.Pass;
+    }
 }
 
-export class LMovingTargetFinder_Shopkeeper {
+export class LMovingTargetFinder_Shopkeeper extends LMovingTargetFinder {
     private _ownerShopkeeperId: LBehaviorId;
 
     public constructor(shopkeeper: LShopkeeperBehavior) {
+        super();
         this._ownerShopkeeperId = shopkeeper.id();
     }
 

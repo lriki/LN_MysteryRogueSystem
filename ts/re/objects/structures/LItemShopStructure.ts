@@ -57,7 +57,7 @@ export class LItemShopStructure extends LStructure {
     private _roomId: LRoomId = 0;
     private _itemShopTypeId: DItemShopTypeId = 0;
     private _sellngItems: LEntityId[] = [];
-    private _initialSumOfPrices: number = 0;
+    //private _initialSumOfPrices: number = 0;
     private _gates: LShopEntrance[] = [];
     //private _monsterHouseState: MonsterHouseState = MonsterHouseState.Sleeping;
 
@@ -110,9 +110,9 @@ export class LItemShopStructure extends LStructure {
     // どんなアイテムをいくつアイテムを生成するかは地形等の情報により変わるため、
     // このクラスの中ではなく MapBuilder 側で決める。その決まった情報をこの関数にセットする。
     public setInitialItems(items: LEntity[]): void {
-        this._initialSumOfPrices = 0;
+        //this._initialSumOfPrices = 0;
         for (const item of items) {
-            this._initialSumOfPrices += item.data().buyingPrice;
+            //this._initialSumOfPrices += item.data().buyingPrice;
             const b = item.getEntityBehavior(LItemBehavior);
             assert(b.shopStructureId() == 0);
             b.setShopStructureId(this.id());
@@ -120,6 +120,27 @@ export class LItemShopStructure extends LStructure {
         }
     }
 
+    // 請求額
+    public getBillingPrice(): number {
+        const items = this.getLossItems();
+        return items.reduce((r, i) => r + i.queryPrice().cellingPrice, 0);
+    }
+
+    // 買取中の未精算額
+    public getDepositPriece(): number {
+        return 0;
+    }
+
+
+    public commitBilling(): void {
+        const items = this.getLossItems();
+        for (const item of items) {
+            this._sellngItems.mutableRemove(id => id.equals(item.entityId()));
+            item.getEntityBehavior(LItemBehavior).setShopStructureId(0);
+        }
+    }
+
+    
     // actor に対して請求状態であるかを判断する
     // ※現状では請求対象は Player 勢力のみであるため、商品が失われた原因までは考慮していない
     public checkBilling(/*actor: LEntity*/): boolean {

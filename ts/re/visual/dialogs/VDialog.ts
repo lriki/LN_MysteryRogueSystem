@@ -29,7 +29,7 @@ export class VDialog {
     // NOTE: maindialog
     //protected openSubDialog(dialog: REDialog, result: LDialogResultCallback) {
     protected openSubDialog<T extends SDialog>(dialog: T, result: (model: T) => void) {
-        dialog._resultCallback = result;
+        dialog._resultCallbackVisual = result;
         RESystem.dialogContext.open(dialog);
     }
     

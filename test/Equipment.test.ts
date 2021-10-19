@@ -16,7 +16,6 @@ beforeAll(() => {
 });
 
 test("Equipment.EquipOnOff", () => {
-    // New Game
     TestEnv.newGame();
 
     // player1 配置

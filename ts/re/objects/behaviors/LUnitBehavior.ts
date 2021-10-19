@@ -23,7 +23,7 @@ import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { DStateRestriction } from "ts/re/data/DState";
 import { SView } from "ts/re/system/SView";
 import { UAction } from "ts/re/usecases/UAction";
-import { SEventExecutionDialog } from "ts/re/system/dialogs/EventExecutionDialog";
+import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { LGoldBehavior } from "./LGoldBehavior";
 import { SAIHelper } from "ts/re/system/SAIHelper";
@@ -407,6 +407,9 @@ export class LUnitBehavior extends LBehavior {
                 });
             }
         }
+        else if (activity.actionId() == REBasics.actions.dialogResult) {
+            return SCommandResponse.Handled;    // 続いて onActivityReaction を実行する。
+        }
         
         return SCommandResponse.Pass;
     }
@@ -455,7 +458,7 @@ export class LUnitBehavior extends LBehavior {
     }
     
     onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
-        context.openDialog(self, new SEventExecutionDialog(self.rmmzEventId), false);
+        context.openDialog(self, new SEventExecutionDialog(self.rmmzEventId, self), false);
         return SCommandResponse.Pass;
     }
 }

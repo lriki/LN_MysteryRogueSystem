@@ -32,7 +32,7 @@ import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DEntityKindId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
-import { LStructureId } from "./LCommon";
+import { LPriceInfo, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
@@ -756,6 +756,16 @@ export class LEntity extends LObject
             return true;
         });
         */
+        return result;
+    }
+
+    public queryPrice(): LPriceInfo {
+        const data = this.data();
+        const result: LPriceInfo = { cellingPrice: data.cellingPrice2, purchasePrice: data.purchasePrice };
+        this.iterateBehaviorsReverse(b => {
+            b.onQueryPrice(result);
+            return true;
+        });
         return result;
     }
 
