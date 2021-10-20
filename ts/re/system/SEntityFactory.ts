@@ -305,6 +305,7 @@ export class SEntityFactory {
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
             case "kEnemy_バットA":
+            case "kEnemy_インビジブルバットA":
                 entity.addBehavior(LRatedRandomAIBehavior);
                 break;
             case "kEnemy_ウルフA":

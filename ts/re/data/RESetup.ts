@@ -455,6 +455,9 @@ export class RESetup {
             case "kEnemy_キングプレゼンにゃーA":
                 entity.majorActionDeclines = 1;
                 break;
+            case "kEnemy_インビジブルバットA":
+                data.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
+                break;
             case "kEnemy_店主A":
                 entity.factionId = REData.system.factions.neutral;
                 break;
