@@ -294,6 +294,7 @@ export class REDataManager
             talk: REData.addAction("talk", ""),
             collide: REData.addAction("collide", ""),
             dialogResult: REData.addAction("dialogResult", ""),
+            //stumble: REData.addAction("stumble", ""),
             //passItem: REData.addAction("PassItem"),
             performSkill: REData.addAction("PerformSkill", ""),
             AttackActionId: REData.addAction("Attack", ""),

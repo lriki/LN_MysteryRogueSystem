@@ -103,6 +103,7 @@ import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior"
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UAction } from "ts/re/usecases/UAction";
+import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 
 export class LInventoryBehavior extends LBehavior {
     private _entities: LEntityId[] = [];
@@ -162,6 +163,17 @@ export class LInventoryBehavior extends LBehavior {
         this._entities.splice(index, 1);
         
         entity.clearParent();
+    }
+
+    public getDefenselessItems(): LEntity[] {
+        const self = this.ownerEntity();
+        const equipmentUser = self.findEntityBehavior(LEquipmentUserBehavior);
+        if (equipmentUser) {
+            return this.entities().filter(x => !equipmentUser.isEquipped(x));
+        }
+        else {
+            return this.entities();
+        }
     }
 
     onRemoveChild(entity: LEntity): void {
