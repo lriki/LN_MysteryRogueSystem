@@ -20,7 +20,7 @@ test("concretes.states.目つぶし", () => {
     actor1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
     enemy1.dir = 6; // 右へ
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 

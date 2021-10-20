@@ -304,40 +304,40 @@ export class SEntityFactory {
 
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
-            case "kEnemy_ふらふら屋A":
+            case "kEnemy_バットA":
                 entity.addBehavior(LRatedRandomAIBehavior);
                 break;
-            case "kEnemy_走り屋A":
+            case "kEnemy_ウルフA":
                 entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
                 break;
-            case "kEnemy_分裂屋":
+            case "kEnemy_スピリットスライムA":
                 entity.addBehavior(LEntityDivisionBehavior);
                 break;
-            case "kEnemy_群集屋":
+            case "kEnemy_フロックウルフA":
                 entity.addBehavior(LFlockBehavior);
                 break;
-            case "kEnemy_自爆屋":
+            case "kEnemy_ブラストミミックA":
                 entity.addBehavior(LSelfExplosionBehavior);
                 break;
-            case "kEnemy_足止め屋":
+            case "kEnemy_ミニゴーレムA":
                 entity.addBehavior(LGrabFootBehavior);
                 break;
                 
-            case "kEnemy_NPC汎用":
+            case "kEnemy_NPC汎用A":
                 const b = entity.getEntityBehavior(LUnitBehavior);
                 b.setFactionId(REData.system.factions.neutral);
                 break;
-            case "kEnemy_アイテム盗み屋":
+            case "kEnemy_プレゼンにゃーA":
                 entity.addBehavior(LItemThiefBehavior);
                 break;
-            case "kEnemy_ゴールド盗み屋":
+            case "kEnemy_ゴールドにゃーA":
                 entity.addBehavior(LGoldThiefBehavior);
                 break;
-            case "kEnemy_逃走屋":
+            case "kEnemy_キングプレゼンにゃーA":
                 entity.addBehavior(LEscapeBehavior);
                 entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
                 break;
-            case "kEnemy_店主":
+            case "kEnemy_店主A":
                 entity.addBehavior(LShopkeeperBehavior);
                 break;
         }

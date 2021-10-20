@@ -22,7 +22,7 @@ export class SItemShopBuilder {
         
         room.forEachBlocks(block => {
             block.setSystemDecoration(LBlockSystemDecoration.ItemShop);
-            //USpawner.spawnSingleEntity("kEnemy_店主", block.x(), block.y());
+            //USpawner.spawnSingleEntity("kEnemy_店主A", block.x(), block.y());
 
             /*
             // Enemy
@@ -51,7 +51,7 @@ export class SItemShopBuilder {
         const entrances = this.setupEntranceBlocks(room);
         for (const entrance of entrances) {
             const e = info.addShopEntrance(entrance.home.x(), entrance.home.y(), entrance.gate.x(), entrance.gate.y());
-            const entity = USpawner.spawnSingleEntity("kEnemy_店主", entrance.home.x(), entrance.home.y());
+            const entity = USpawner.spawnSingleEntity("kEnemy_店主A", entrance.home.x(), entrance.home.y());
             const behavior = entity.getEntityBehavior(LShopkeeperBehavior);
             behavior.setup( info.id(), e.index());
         }

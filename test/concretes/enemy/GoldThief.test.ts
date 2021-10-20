@@ -29,7 +29,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     REGame.world._transferEntity(gold1, floorId, 13, 10);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールド盗み屋").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
@@ -95,7 +95,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールド盗み屋").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

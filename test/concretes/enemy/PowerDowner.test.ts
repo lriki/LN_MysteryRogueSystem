@@ -23,7 +23,7 @@ test("concretes.enemies.PowerDowner", () => {
     const pow1 = actor1.actualParam(REBasics.params.pow);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビ屋").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();

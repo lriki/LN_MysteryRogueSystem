@@ -24,7 +24,7 @@ test("Abilities.Enemy.ItemImitator", () => {
     const initialHP = actor1.actualParam(REBasics.params.hp);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライム屋").id, [REData.getState("kState_UTアイテム擬態").id]));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [REData.getState("kState_UTアイテム擬態").id]));
     enemy1._name = "enemy1";
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);

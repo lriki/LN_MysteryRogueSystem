@@ -38,7 +38,7 @@ test("Items.Arrow", () => {
     REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
     
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(REData.getEnemy("kEnemy_スライム屋さん").entity());
+    const enemy1 = SEntityFactory.newMonster(REData.getEnemy("kEnemy_レッドスライムA").entity());
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const initialHP = enemy1.actualParam(REBasics.params.hp);
