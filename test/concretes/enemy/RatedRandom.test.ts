@@ -31,5 +31,5 @@ test("concretes.states.RatedRandom", () => {
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
-    expect(enemy1.x > 11).toBe(true);
+    expect(enemy1.x != 11 && enemy1.y != 10).toBe(true);
 });

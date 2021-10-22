@@ -222,23 +222,23 @@ export class DState {
     }
 }
 
-export function makeStateTraitsFromMeta(meta: any): IDataTrait[] {
-    const raws = meta["RE-Trait"];
-    if (!raws) return [];
-    const list = (raws instanceof Array) ? raws : [raws];
+// export function makeStateTraitsFromMeta(meta: any): IDataTrait[] {
+//     const raws = meta["RE-Trait"];
+//     if (!raws) return [];
+//     const list = (raws instanceof Array) ? raws : [raws];
 
-    const traits: IDataTrait[] = [];
-    for (const data of list) {
-        const index = REData.traits.findIndex(x => x.key == data);
-        if (index) {
-            traits.push({ code: index, dataId: 0, value: 0 });
-        }
-        else {
-            throw new Error(`Trait "${data}" is invalid.`);
-        }
-    }
-    return traits;
-}
+//     const traits: IDataTrait[] = [];
+//     for (const data of list) {
+//         const index = REData.traits.findIndex(x => x.key == data);
+//         if (index) {
+//             traits.push({ code: index, dataId: 0, value: 0 });
+//         }
+//         else {
+//             throw new Error(`Trait "${data}" is invalid.`);
+//         }
+//     }
+//     return traits;
+// }
 
 export function makeStateBehaviorsFromMeta(meta: any): string[] {
     const b = meta["RE-Behavior"];

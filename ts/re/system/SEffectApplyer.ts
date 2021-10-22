@@ -26,7 +26,7 @@ export class SEffect {
     private _data: DEffect;
     private _targetModifier: SEffectModifier;
     private _hitType: DEffectHitType;
-    private _successRate: number;       // 0~100
+    private _successRate: number;   // 0~100
 
     constructor(fact: SEffectorFact, effect: DEffect) {
         this._fact = fact;
@@ -34,7 +34,7 @@ export class SEffect {
         this._hitType = effect.hitType;
         this._successRate = effect.successRate;
 
-        this._targetModifier = new SEffectModifier(effect.qualifyings);
+        this._targetModifier = new SEffectModifier(fact.subject(), effect.qualifyings);
     }
 
     public fact(): SEffectorFact {
@@ -174,7 +174,7 @@ export class SEffectorFact {
                 effect: e,
             });
         }
-        this._selfModifier = new SEffectModifier(effects.selfEffect.qualifyings);
+        this._selfModifier = new SEffectModifier(subject, effects.selfEffect.qualifyings);
         
         this._subject.iterateBehaviors2(b => {
             b.onCollectEffector(this._subject, this);
@@ -295,6 +295,8 @@ export class SParameterEffect {
     /** 分散度 */
     variance: number;
 
+    fixedDamage: number | undefined;
+
     private _valid: boolean;
 
     public constructor(data: DParameterQualifying) {
@@ -359,15 +361,23 @@ export class SEffectModifier {
     private _data: DQualifyings;
     private _parameterEffects2: SParameterEffect[];
 
-    public constructor(q: DQualifyings) {
+    public constructor(subject: LEntity, q: DQualifyings) {
         this._data = q;
+
 
         // subject の現在値を初期パラメータとする。
         // 装備品 Behavior はここへ値を加算したりする。
         //this._subjectActualParams = [];
         this._parameterEffects2 = [];
         for (const p of q.parameterQualifyings) {
-            this._parameterEffects2.push(new SParameterEffect(p));
+            const paramEffect = new SParameterEffect(p);
+            this._parameterEffects2.push(paramEffect);
+
+            // Check fixed damage.
+            const trait = subject.traitsWithId(REBasics.traits.FixedDamage, p.parameterId).backOrUndefined();
+            if (trait) {
+                paramEffect.fixedDamage = trait.value;
+            }
         }
 
         // for (let i = 0; i < REData.parameters.length; i++) {
@@ -462,6 +472,12 @@ export class SEffectApplyer {
     
     // Game_Action.prototype.makeDamageValue
     private makeDamageValue(paramEffect: SParameterEffect, target: LEntity, critical: boolean): number {
+        // Check fixed damage
+        if (!paramEffect.isRecover() && paramEffect.fixedDamage) {
+            return paramEffect.fixedDamage;
+        }
+
+
         const baseValue = this.evalDamageFormula(paramEffect, target);
         let value = baseValue * this.calcElementRate(paramEffect, target);
         if (this._effect.isPhysical()) {
@@ -501,7 +517,17 @@ export class SEffectApplyer {
             // UnitTest から実行される場合に備えて undefined チェック
             const v = (typeof $gameVariables == "undefined") ? undefined : $gameVariables._data; // eslint-disable-line no-unused-vars
             const sign = paramEffect.isRecover() ? -1 : 1;
-            const value = Math.max(eval(paramEffect.formula), 0) * sign;
+            let value = Math.max(eval(paramEffect.formula), 0);// * sign;
+            value = Math.max(value, 1); // 最低1にしてみる
+            value *= sign;
+
+            // if (paramEffect.isRecover()) {
+
+            // }
+            // else {
+
+            // }
+
             return isNaN(value) ? 0 : value;
         } catch (e) {
             return 0;
@@ -735,7 +761,6 @@ export class SEffectApplyer {
     private itemEffectSpecial(cctx: SCommandContext, target: LEntity, effect: IDataEffect, result: LEffectResult) {
         if (effect.dataId === DItemEffect.SPECIAL_EFFECT_ESCAPE) {
             cctx.postDestroy(target);
-            //target.escape();
             result.makeSuccess();
         }
     }

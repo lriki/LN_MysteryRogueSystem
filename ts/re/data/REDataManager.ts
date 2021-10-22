@@ -3,7 +3,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { assert, RESerializable, tr2 } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { REBasics } from "./REBasics";
-import { DState, DStateRestriction, makeStateBehaviorsFromMeta, makeStateTraitsFromMeta } from "./DState";
+import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
@@ -233,6 +233,8 @@ export class REDataManager
             REBasics.traits.SealSpecialAbility = REData.newTrait("SealSpecialAbility").id;
             REBasics.traits.Invisible = REData.newTrait("Invisible").id;
             REBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
+            REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
+
 
 
             // REData.traits = [
@@ -439,7 +441,7 @@ export class REDataManager
                         state.message2 = x.message2 ?? "";
                         state.message3 = x.message3 ?? "";
                         state.message4 = x.message4 ?? "";
-                        state.effect.traits = x.traits.concat(x.meta ? makeStateTraitsFromMeta(x.meta) : []);
+                        state.effect.traits = x.traits.concat(DTrait.parseTraitMetadata(x.meta));
                         state.effect.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
                         state.import(x);
                     }

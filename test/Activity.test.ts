@@ -133,6 +133,7 @@ test("Activity.ThrowAndHit", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(true);     // item は削除されている
+    const a = enemy1.actualParam(REBasics.params.hp);
     expect(enemy1.actualParam(REBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });
 

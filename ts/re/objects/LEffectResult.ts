@@ -259,12 +259,12 @@ export class LEffectResult {
                 const battler = entity.getEntityBehavior(LBattlerBehavior);
                 if (battler instanceof LActorBehavior) {
                     if (this.levelup) {
-                        const text = TextManager.levelUp.format(targetName, TextManager.level, battler.level());
+                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, battler.level());
                         context.postMessage(text);
                         SSoundManager.playLevelUp();
                     }
                     if (this.leveldown) {
-                        const text = tr2("%1は%2が下がった！").format(targetName, TextManager.level);
+                        const text = tr2("%1は%2が下がった！").format(targetName, DTextManager.level);
                         context.postMessage(text);
                         SSoundManager.playLevelUp();
                     }

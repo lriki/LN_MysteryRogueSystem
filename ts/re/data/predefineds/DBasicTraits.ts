@@ -102,5 +102,12 @@ export interface DBasicTraits {
     Invisible: DTraitId;//,
 
     ItemDropRate: DTraitId;//,
+
+    /**
+     * Fixed damage.
+     * - dataId: DParamId
+     * - value: DamageValue
+     */
+    FixedDamage: DTraitId;
 }
 

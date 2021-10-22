@@ -4,11 +4,16 @@ site_dir: mksite
 
 markdown_extensions:
     - admonition
+    - pymdownx.highlight
+    - pymdownx.inlinehilite
+    - pymdownx.superfences
+    - pymdownx.snippets
 
 theme:
     name: material
     features:
         - navigation.tabs
+        - content.code.annotate 
     language: ja
     icon:
         logo: material/school
@@ -20,6 +25,8 @@ nav:
     - Manual:
         - index: manual/index.md
         - ドロップアイテム: manual/DropItem.md
+    - リファレンス:
+        - index: reference/Traits.md
     - 拡張:
         - index: dev/index.md
     - 内部的なこと:

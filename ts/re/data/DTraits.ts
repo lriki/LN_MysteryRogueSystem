@@ -1,3 +1,4 @@
+import { tr2 } from "../Common";
 import { DHelpers } from "./DHelper";
 import { REData } from "./REData";
 
@@ -43,11 +44,28 @@ export class DTrait {
             const c = DHelpers.parseConstructionExpr(data);
             result.push({
                 code: REData.getTrait(c.name).id,
-                dataId: Number(c.args[0]),
+                dataId: this.parseDataId(c.args[0]),
                 value: Number(c.args[1]),
             });
         }
         return result;
+    }
+
+    private static parseDataId(value: any): number {
+        if (typeof value == 'string') {
+            // 今のところ Param 名だけなのでそれを検索してみる
+            const code = value.toLowerCase();
+            const param = REData.parameters.find(x => x.code == code);
+            if (param) {
+                return param.id;
+            }
+            else {
+                throw new Error(tr2("Trait に指定されているパラメータ名 %1 は不正です。").format(value));
+            }
+        }
+        else {
+            return Number(value);
+        }
     }
 }
 

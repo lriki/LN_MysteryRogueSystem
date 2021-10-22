@@ -15,6 +15,7 @@ declare global {
         isEmpty(): boolean;
         front(): T;
         back(): T;
+        backOrUndefined(): T | undefined;
     }
 }
 
@@ -88,6 +89,11 @@ Array.prototype.front = function<T>(): T {
 
 Array.prototype.back = function<T>(): T {
     assert(this.length > 0);
+    return this[this.length - 1];
+}
+
+Array.prototype.backOrUndefined = function<T>(): T | undefined {
+    if (this.length <= 0) return undefined;
     return this[this.length - 1];
 }
 
