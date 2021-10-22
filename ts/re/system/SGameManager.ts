@@ -31,7 +31,7 @@ import { LBlock } from "ts/re/objects/LBlock";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LObjectType } from "ts/re/objects/LObject";
 import { STurnContext } from "./STurnContext";
-import { SEffectBehaviorManager } from "./skills/SEffectBehaviorManager";
+import { SEffectBehaviorManager } from "./effects/SEffectBehaviorManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 
 /**

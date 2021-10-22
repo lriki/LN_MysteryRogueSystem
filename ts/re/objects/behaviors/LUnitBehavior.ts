@@ -410,6 +410,10 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == REBasics.actions.dialogResult) {
             return SCommandResponse.Handled;    // 続いて onActivityReaction を実行する。
         }
+        else if (activity.actionId() == REBasics.actions.stumble) {
+            UAction.postStumble(context, self);
+            return SCommandResponse.Handled;
+        }
         
         return SCommandResponse.Pass;
     }

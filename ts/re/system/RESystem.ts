@@ -12,7 +12,7 @@ import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { RESystemExtension } from "./RESystemExtension";
 import { STurnContext } from "./STurnContext";
-import { SEffectBehaviorManager } from "./skills/SEffectBehaviorManager";
+import { SEffectBehaviorManager } from "./effects/SEffectBehaviorManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 
 export class RESystem {

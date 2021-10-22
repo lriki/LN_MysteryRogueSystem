@@ -107,7 +107,29 @@ export class UAction {
         }
     }
 
+    public static postStumble(cctx: SCommandContext, entity: LEntity): void {
+        
+        const items = entity.generateDropItems(LGenerateDropItemCause.Stumble);
+        
 
+        /*
+        
+        const inventory = entity.findEntityBehavior(LInventoryBehavior);
+        if (inventory) {
+            const item = inventory.getDefenselessItems()[0];
+
+            // TODO: 地形などを考慮して、本当に落とすアイテムを決める
+            const dropItems = [item];
+
+            for (const item of dropItems) {
+                inventory.removeEntity(item);
+
+                //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
+            }
+
+        }
+        */
+    }
 
 
 

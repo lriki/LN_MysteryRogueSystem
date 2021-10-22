@@ -64,7 +64,7 @@ export enum LBehaviorGroup {
 
 export enum LGenerateDropItemCause {
     Dead,       
-    FallDown,   // 転んだ
+    Stumble,   // 転んだ
 }
 
 export interface LNameView {
