@@ -22,6 +22,7 @@ test("concretes.states.RatedRandom", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 10 ターン分 シミュレーション実行
+    REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     for (let i = 0; i < 10; i++) {
         RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));

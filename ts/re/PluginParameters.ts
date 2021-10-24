@@ -1,5 +1,5 @@
 
-var pluginName = 'LN_RoguelikeEngine';
+var pluginName = 'LN_MysteryRogueSystem';
 
 // 固定マップで部屋をマークするためのリージョンID
 export var paramFixedMapRoomRegionId = 1;

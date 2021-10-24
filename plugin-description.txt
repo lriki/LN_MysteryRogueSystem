@@ -1,16 +1,16 @@
 //=============================================================================
-// LN_RogueWorldECS.js
+// LN_MysteryRogueSystem.js
 // ----------------------------------------------------------------------------
 // Copyright (c) 2021 lriki
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 // ----------------------------------------------------------------------------
-// [GitHub] : https://github.com/lriki/LN_RoguelikeEngine
+// [GitHub] : https://github.com/lriki/LN_MysteryRogueSystem
 // [Twitter]: https://twitter.com/lriki8
 //=============================================================================
 
 /*:ja
- * @plugindesc LN_RoguelikeEngine v0.3.0
+ * @plugindesc LN_MysteryRogueSystem v0.3.0
  * @author lriki
  *
  * @help test.

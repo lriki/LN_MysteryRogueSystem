@@ -23,7 +23,7 @@ test("Abilities.Enemy.Division", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スピリットスライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -33,7 +33,8 @@ test("Abilities.Enemy.Division", () => {
 
     const entityCount1 = REGame.map.entities().length;
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    REGame.world.random().resetSeed(9);     // 乱数調整
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(enemy1.isDeathStateAffected()).toBe(false);  // 倒しちゃってない？
     const entityCount2 = REGame.map.entities().length;

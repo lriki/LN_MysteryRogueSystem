@@ -1,4 +1,4 @@
-LN_RoguelikeEngine
+LN_MysteryRogueSystem
 ==========
 
 RPG ツクール MZ 用の、ターン性ローグライクシステムの開発リポジトリです。

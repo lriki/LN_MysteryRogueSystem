@@ -8,7 +8,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { REVisual } from "ts/re/visual/REVisual";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 
-const pluginName: string = "LN_RoguelikeEngine";
+const pluginName: string = "LN_MysteryRogueSystem";
 
 PluginManager.registerCommand(pluginName, "RE.ShowChallengeResult", (args: any) => {
     REGame.challengeResultShowing = true;
