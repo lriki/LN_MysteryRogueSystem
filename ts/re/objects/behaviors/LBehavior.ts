@@ -47,6 +47,7 @@ import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DSubEffectTargetKey } from "ts/re/data/DEffect";
 import { DFactionId } from "ts/re/data/REData";
 import { LPriceInfo } from "../LCommon";
+import { LMap } from "../LMap";
 
 export enum DecisionPhase {
     Prepare,
@@ -401,6 +402,8 @@ export abstract class LBehavior extends LObject {
     onPermanentDeath(context: SCommandContext, self: LEntity): void {}
 
     onPertyChanged(self: LEntity): void { }
+
+    onEnteredMap(self: LEntity, map: LMap): void { }
 
     onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }
 

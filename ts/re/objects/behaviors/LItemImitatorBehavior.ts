@@ -17,6 +17,8 @@ import { REGame } from "../REGame";
 import { LState } from "../states/LState";
 import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } from "./LBehavior";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { LMap } from "../LMap";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
 
 
 /**
@@ -70,9 +72,6 @@ export class LItemImitatorBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         assert(this._itemEntityId.isEmpty());
-        const item = SEntityFactory.newItem(REData.getItem("kキュアリーフ").item().id);
-        item.setParent(this);
-        this._itemEntityId = item.entityId();
 
         REGame.eventServer.subscribe(REBasics.events.preWalk, this);
         REGame.eventServer.subscribe(REBasics.events.prePut, this);
@@ -83,6 +82,25 @@ export class LItemImitatorBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(REBasics.events.preWalk, this);
         REGame.eventServer.unsubscribe(REBasics.events.prePut, this);
         this.itemEntity().clearParent();
+    }
+
+    onEnteredMap(self: LEntity, map: LMap): void {
+        if (this._itemEntityId.isEmpty()) {
+            const rand = REGame.world.random();
+            const floorId = map.floorId();
+            const list = map.land2().landData().appearanceTable.items[floorId.floorNumber()];
+            const data = rand.selectOrUndefined(list);
+
+            const item = (data) ?
+                SEntityFactory.newEntity(data.spawiInfo, floorId) :
+                SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.system.fallbackItemEntityId));
+                //SEntityFactory.newItem(REData.getItem("kキュアリーフ").item().id);
+
+            
+
+            item.setParent(this);
+            this._itemEntityId = item.entityId();
+        }
     }
 
     queryDisplayName(): LNameView | undefined {

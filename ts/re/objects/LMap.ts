@@ -379,6 +379,10 @@ export class LMap extends LObject
         this._entityIds.push(entity.entityId());
         entity.setParent(this);
 
+        entity.iterateBehaviorsReverse(b => {
+            b.onEnteredMap(entity, this);
+            return true;
+         });
         RESystem.integration.entityEnteredMap(entity);
     }
 
