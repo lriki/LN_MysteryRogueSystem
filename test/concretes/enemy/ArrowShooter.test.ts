@@ -37,6 +37,8 @@ test("concretes.enemies.ArrowShooter", () => {
 
     RESystem.scheduler.stepSimulation();
 
+    const a = TestEnv.integration.skillEmittedCount;
+
     // 離れていれば 100% 矢を撃ってくる
     const hp2 = actor1.actualParam(REBasics.params.hp);
     expect(hp2 < hp1).toBe(true);

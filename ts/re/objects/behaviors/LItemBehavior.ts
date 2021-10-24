@@ -102,6 +102,8 @@ export class LItemBehavior extends LBehavior {
                 console.log("catch");
                 throw new Error("Not implemented.");
             });
+            
+            return SCommandResponse.Handled;
         }
 
         return SCommandResponse.Pass;
