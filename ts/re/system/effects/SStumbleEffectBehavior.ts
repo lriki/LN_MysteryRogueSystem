@@ -11,20 +11,20 @@ import { SEffectBehavior } from "./SEffectBehavior";
 export class SStumbleEffectBehavior extends SEffectBehavior {
 
     public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
-        const inventory = target.findEntityBehavior(LInventoryBehavior);
-        if (inventory) {
-            const item = inventory.getDefenselessItems()[0];
+        // const inventory = target.findEntityBehavior(LInventoryBehavior);
+        // if (inventory) {
+        //     const item = inventory.getDefenselessItems()[0];
 
-            // TODO: 地形などを考慮して、本当に落とすアイテムを決める
-            const dropItems = [item];
+        //     // TODO: 地形などを考慮して、本当に落とすアイテムを決める
+        //     const dropItems = [item];
 
-            for (const item of dropItems) {
-                inventory.removeEntity(item);
+        //     for (const item of dropItems) {
+        //         inventory.removeEntity(item);
 
-                //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
-            }
+        //         //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
+        //     }
 
-        }
+        // }
     }
 
 }

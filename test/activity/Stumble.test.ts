@@ -14,7 +14,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.activity.Stumble.basic", () => {
+test("concretes.activity.Stumble.player", () => {
     TestEnv.newGame();
 
     // Player
@@ -25,11 +25,9 @@ test("concretes.activity.Stumble.basic", () => {
     
     // アイテム 入手
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [], "shield1"));
     inventory2.addEntity(weapon1);
-    inventory2.addEntity(shield1);
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 

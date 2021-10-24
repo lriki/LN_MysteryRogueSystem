@@ -98,15 +98,17 @@ export class LEquipmentBehavior extends LBehavior {
     }
     
     onOwnerRemoveFromParent(owner: LObject): void {
+        if (!(owner instanceof LEntity)) return;
+
         const inventory = owner.parentObject();
         if (inventory instanceof LInventoryBehavior) {
             const unit = inventory.ownerEntity();
 
             const behavior = unit.getEntityBehavior(LEquipmentUserBehavior);
-            const removed = behavior.removeEquitment(this.ownerEntity());
-            assert(removed);
-
-            // TODO: ↑ちょっとあまりにも場当たり的なので再設計したいところ…
+            if (behavior.isEquipped(owner)) {
+                const removed = behavior.removeEquitment(this.ownerEntity());
+                assert(removed);
+            }
         }
         else {
             throw new Error("Not Implemented.");

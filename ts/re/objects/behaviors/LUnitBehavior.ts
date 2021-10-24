@@ -411,7 +411,7 @@ export class LUnitBehavior extends LBehavior {
             return SCommandResponse.Handled;    // 続いて onActivityReaction を実行する。
         }
         else if (activity.actionId() == REBasics.actions.stumble) {
-            UAction.postStumble(context, self);
+            UAction.postStumbleForPlayer(context, self, self.dir);
             return SCommandResponse.Handled;
         }
         

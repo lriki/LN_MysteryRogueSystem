@@ -165,18 +165,6 @@ export class LInventoryBehavior extends LBehavior {
         entity.clearParent();
     }
 
-    public getDefenselessItems(): LEntity[] {
-        throw new Error("Not implemented.");
-        // const self = this.ownerEntity();
-        // const equipmentUser = self.findEntityBehavior(LEquipmentUserBehavior);
-        // if (equipmentUser) {
-        //     return this.entities().filter(x => !equipmentUser.isEquipped(x));
-        // }
-        // else {
-        //     return this.entities();
-        // }
-    }
-
     onRemoveChild(entity: LEntity): void {
         if (this._entities.mutableRemove(x => x.equals(entity.entityId()))) {
             entity.clearParent();

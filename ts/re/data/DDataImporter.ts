@@ -1,4 +1,4 @@
-import { assert } from "../Common";
+import { assert, tr2 } from "../Common";
 import { DLand } from "./DLand";
 import { REData } from "./REData";
 import { REDataManager } from "./REDataManager";
@@ -17,7 +17,7 @@ export class DDataImporter {
                 if (data.name == "Event") {
                     land.eventTableMapId = data.id;
                 }
-                if (data.name == "Enemy") {
+                else if (data.name == "Enemy") {
                     land.enemyTableMapId = data.id;
                 }
                 else if (data.name == "Item") {
@@ -50,16 +50,16 @@ export class DDataImporter {
             land.import(data);
             
             if (land.enemyTableMapId > 0) REDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(data, land.enemyTableMapId, land.appearanceTable, land.appearanceTable.enemies);
+                DLand.buildSubAppearanceTable(land, data, land.enemyTableMapId, land.appearanceTable, land.appearanceTable.enemies);
             });
             if (land.itemTableMapId > 0) REDataManager.beginLoadMapData(land.itemTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(data, land.itemTableMapId, land.appearanceTable, land.appearanceTable.items);
+                DLand.buildSubAppearanceTable(land, data, land.itemTableMapId, land.appearanceTable, land.appearanceTable.items);
             });
             if (land.trapTableMapId > 0) REDataManager.beginLoadMapData(land.trapTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(data, land.trapTableMapId, land.appearanceTable, land.appearanceTable.traps);
+                DLand.buildSubAppearanceTable(land, data, land.trapTableMapId, land.appearanceTable, land.appearanceTable.traps);
             });
             if (land.shopTableMapId > 0) REDataManager.beginLoadMapData(land.shopTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(data, land.shopTableMapId, land.appearanceTable, land.appearanceTable.shop);
+                DLand.buildSubAppearanceTable(land, data, land.shopTableMapId, land.appearanceTable, land.appearanceTable.shop);
             });
         });
     }

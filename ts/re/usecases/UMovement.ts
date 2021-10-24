@@ -12,11 +12,8 @@ import { UBlock } from "ts/re/usecases/UBlock";
 import { SCommandContext } from "../system/SCommandContext";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LRoom } from "../objects/LRoom";
+import { SPoint } from "./UCommon";
 
-export interface SPoint {
-    x: number;
-    y: number;
-}
 
 interface Edge {
     x: number;      // 始点X

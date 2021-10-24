@@ -1,5 +1,5 @@
 
-import { assert } from "../Common";
+import { assert, tr2 } from "../Common";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers, RmmzMonsterHouseMetadata } from "./DHelper";
@@ -376,8 +376,11 @@ export class DLand {
         return table;
     }
     
-    public static buildSubAppearanceTable(mapData: IDataMap, mapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void {
-        assert(mapData.width == table.length);
+    public static buildSubAppearanceTable(land: DLand, mapData: IDataMap, mapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void {
+        if (mapData.width != table.length) {
+            throw new Error(tr2("%1に含まれる%2テーブルのマップサイズが一致していません。").format(land.name, $dataMapInfos[mapId]?.name));
+        }
+
         assert(tableSet.maxFloors == table.length);
 
         // まずは Entity を集計

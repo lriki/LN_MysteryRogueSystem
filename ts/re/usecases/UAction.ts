@@ -21,6 +21,8 @@ import { UBlock } from "./UBlock";
 import { UMovement } from "./UMovement";
 import { UName } from "./UName";
 import { USearch } from "./USearch";
+import { SPoint } from "./UCommon";
+import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -28,6 +30,60 @@ export interface LCandidateSkillAction {
 }
 
 export class UAction {
+    
+    /*  ⑦⑤④
+        ②①⑥
+        Ｐ③⑧
+    */
+    private static StumbleTable: SPoint[][] = [
+        [],
+        
+        // ⑧③Ｐ
+        // ⑥①②
+        // ④⑤⑦
+        [{ x: -1, y: 1 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: -2, y: 2 }, { x: -1, y: 2 }, { x: -2, y: 1 }, { x: 0 , y: 2 }, { x: 2 , y: 0 }],
+
+        //     Ｐ
+        //   ③①②
+        // ⑧⑥④⑤⑦
+        [{ x: 0, y: 1 }, { x: 1, y: 1}, { x: -1, y: 1 }, { x: 0, y: 2 }, { x: 1, y: 2 }, { x: -1, y: 2 }, { x: 2, y: 2 }, { x: -2, y: 2 }],
+        
+        // Ｐ②⑦
+        // ③①⑤
+        // ⑧⑥④
+        [{ x: 1, y: 1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 2, y: 2 }, { x: 2, y: 1 }, { x: 1, y: 2 }, { x: 2, y: 0 }, { x: 0, y: 2 }],
+
+        // ⑧
+        // ⑥③
+        // ④①Ｐ
+        // ⑤②
+        // ⑦
+        [{ x: -1, y: 0 }, { x: -1, y: 1 }, { x: -1, y: -1 }, { x: -2, y: 0 }, { x: -2, y: 1 }, { x: -2, y: -1 }, { x: -2, y: -2 }, { x: -2, y: 2 }],
+
+        [],
+
+        //     ⑦
+        //   ②⑤
+        // Ｐ①④
+        //   ③⑥
+        //     ⑧
+        [{ x: 1, y: 0 }, { x: 1, y: -1 }, { x: 1, y: 1 }, { x: 2, y: 0 }, { x: 1, y: -1 }, { x: 2, y: 1 }, { x: 2, y: -2 }, { x: 2, y: 2 }],
+
+        // ④⑥⑧
+        // ⑤①③
+        // ⑦②Ｐ
+        [{ x: -1, y: -1 }, { x: -1, y: 0 }, { x: 0, y: -1 }, { x: -2, y: -2 }, { x: -2, y: -1 }, { x: -1, y: -2 }, { x: -2, y: 0 }, { x: 0, y: -2 }],
+
+        // ⑦⑤④⑥⑧
+        //   ②①③
+        //     Ｐ
+        [{ x: 0, y: -1 }, { x: -1, y: -1 }, { x: 1, y: -1 }, { x: 0, y: -2 }, { x: -1, y: -2 }, { x: 1, y: -2 }, { x: -2, y: -2 }, { x: 2, y: -2 }],
+
+        // ⑦⑤④
+        // ②①⑥
+        // Ｐ③⑧
+        [{ x: 1, y: -1 }, { x: 0, y: -1 }, { x: 1, y: 0 }, { x: 2, y: -2 }, { x: 1, y: -2 }, { x: 2, y: -1 }, { x: 0, y: -2 }, { x: 2, y: 0 }],
+    ];
 
     /*
     // TODO: Activity 経由で設定したい。.withConsumeAction()と一緒に使いたいので。
@@ -107,10 +163,28 @@ export class UAction {
         }
     }
 
-    public static postStumble(cctx: SCommandContext, entity: LEntity): void {
+    /** 操作中 Unit 用の転倒時アイテムバラまき。インベントリからランダムに選択されたアイテムを、足元ではなく前方にバラまく。 */
+    public static postStumbleForPlayer(cctx: SCommandContext, entity: LEntity, dir: number): void {
         
-        const items = entity.generateDropItems(LGenerateDropItemCause.Stumble);
-        
+        const inventory = entity.findEntityBehavior(LInventoryBehavior);
+        if (inventory) {
+            const items = this.getDefenselessInventoryItems(entity);
+
+            
+            const positions = this.StumbleTable[dir];
+            assert(positions.length > 0);
+            const loops = Math.min(items.length, positions.length);
+            for (let i = 0; i < loops; i++) {
+                const mx = entity.x + positions[i].x;
+                const my = entity.y + positions[i].y;
+                const item = items[i];
+
+                // TODO: 地形などを考慮して、本当に落とすアイテムを決める
+
+                item.removeFromParent();
+                REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
+            }
+        }
 
         /*
         
@@ -129,6 +203,19 @@ export class UAction {
 
         }
         */
+    }
+
+    public static getDefenselessInventoryItems(entity: LEntity): readonly LEntity[] {
+        const inventory = entity.findEntityBehavior(LInventoryBehavior);
+        const equipmentUser = entity.findEntityBehavior(LEquipmentUserBehavior);
+        if (!inventory) return [];
+        
+        if (equipmentUser) {
+            return inventory.entities().filter(x => !equipmentUser.isEquipped(x));
+        }
+        else {
+            return inventory.entities();
+        }
     }
 
 
