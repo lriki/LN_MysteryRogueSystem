@@ -94,9 +94,6 @@ export class LItemImitatorBehavior extends LBehavior {
             const item = (data) ?
                 SEntityFactory.newEntity(data.spawiInfo, floorId) :
                 SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.system.fallbackItemEntityId));
-                //SEntityFactory.newItem(REData.getItem("kキュアリーフ").item().id);
-
-            
 
             item.setParent(this);
             this._itemEntityId = item.entityId();

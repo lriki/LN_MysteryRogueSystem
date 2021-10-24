@@ -396,6 +396,7 @@ export class RESetup {
                 break;
             case "kSkill_混乱魔法_部屋内":
                 emittor.scope.range = DEffectFieldScopeRange.Room;
+                emittor.selfAnimationId = 97;
                 break;
             case "kSkill_毒攻撃":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
