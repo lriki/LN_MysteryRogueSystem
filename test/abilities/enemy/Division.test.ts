@@ -6,6 +6,7 @@ import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivision
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REBasics } from "ts/re/data/REBasics";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -15,31 +16,26 @@ test("Abilities.Enemy.Division", () => {
     TestEnv.newGame();
 
     // actor1
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(REData.enemyEntity(1));
-    enemy1._name = "enemy1";
-    enemy1.addBehavior(LEntityDivisionBehavior);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スピリットスライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    const a = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 右を向いて攻撃
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    const entityCount = REGame.map.entities().length;
+    const entityCount1 = REGame.map.entities().length;
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // 分裂でエンティティが増えていること
     expect(enemy1.isDeathStateAffected()).toBe(false);  // 倒しちゃってない？
-    expect(REGame.map.entities().length).toBe(entityCount + 1);
+    const entityCount2 = REGame.map.entities().length;
+    expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });
