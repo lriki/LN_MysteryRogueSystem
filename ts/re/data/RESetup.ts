@@ -292,6 +292,7 @@ export class RESetup {
                 */
                 break;
             case "k眠りガス":
+                entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 break;
             case "kItem_地雷": {
                 const emittor = entity.emittorSet.mainEmittor();
@@ -315,6 +316,7 @@ export class RESetup {
                 break;
             }
             case "kItem_転び石":
+                entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.stumble);
                 break;
             case "kItem_保存の壺":

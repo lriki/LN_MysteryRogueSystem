@@ -138,6 +138,7 @@ export enum DEffectFieldScopeRange {
     Selection,   // 対象となるアイテムを選択する。識別の巻物など、対象となる持ち物を選んで効果を発動するももの。
     Around, // 周囲
     AroundAndCenter,   // 周囲+中心。発動者自身も target に含まれ、効果が適用される。
+    Center, // 中心。主に罠が、かかった entity に対して効果を発動するときに使う。
     Room,   // 発動者と同じ部屋
 }
 

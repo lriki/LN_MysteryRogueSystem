@@ -412,6 +412,16 @@ export class SEmittorPerformer {
 
             this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
         }
+        else if (emittor.scope.range == DEffectFieldScopeRange.Center) {
+            const targets: LEntity[] = [];
+            const block = REGame.map.tryGetBlock(performer.x, performer.y);
+            if (block) {
+                for (const entity of block.getEntities()) {
+                    targets.push(entity);
+                }
+            }
+            this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
+        }
         else if (emittor.scope.range == DEffectFieldScopeRange.Room) {
             const targets: LEntity[] = [];
             REGame.map.room(performer.roomId()).forEachEntities(entity => {

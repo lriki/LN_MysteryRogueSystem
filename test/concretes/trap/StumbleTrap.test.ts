@@ -26,7 +26,7 @@ test("concretes.trap.StumbleTrap", () => {
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_転び石").id, [], "trap1"));
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ test("concretes.trap.StumbleTrap", () => {
     RESystem.dialogContext.activeDialog().submit();
     
     REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // アイテムが目の前に落ちる
     const item1 = REGame.map.block(12, 10).getFirstEntity();
