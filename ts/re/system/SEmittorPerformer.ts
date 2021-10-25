@@ -402,9 +402,11 @@ export class SEmittorPerformer {
             effectContext.applyWithWorth(context, selectedItems);
             this.onPerformed(selectedItems);
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Around) {
+        else if (emittor.scope.range == DEffectFieldScopeRange.Around || emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter) {
+            const withCenter = (emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter);
+
             const targets: LEntity[] = [];
-            USearch.iterateAroundEntities(performer.x, performer.y, emittor.scope.length, (entity) => {
+            USearch.iterateAroundEntities(performer.x, performer.y, emittor.scope.length, withCenter, (entity) => {
                 targets.push(entity);
             });
 

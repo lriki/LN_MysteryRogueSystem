@@ -293,6 +293,27 @@ export class RESetup {
                 break;
             case "k眠りガス":
                 break;
+            case "kItem_地雷": {
+                const emittor = entity.emittorSet.mainEmittor();
+                const effect = emittor.effectSet.effects[0];
+                
+                emittor.scope.range = DEffectFieldScopeRange.AroundAndCenter;
+                emittor.scope.length = 1;
+                //emittor.selfAnimationId = 109;
+                emittor.selfSequelId = REBasics.sequels.explosion;
+                effect.qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
+
+                effect.qualifyings.parameterQualifyings.push({
+                    parameterId: REBasics.params.hp,
+                    applyTarget: DParameterApplyTarget.Current,
+                    elementId: 0,
+                    formula: "b.hp / 2",
+                    applyType: DParameterEffectApplyType.Damage,
+                    variance: 0,
+                    silent: false,
+                });
+                break;
+            }
             case "kItem_転び石":
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.stumble);
                 break;

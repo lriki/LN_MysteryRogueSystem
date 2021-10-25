@@ -212,6 +212,10 @@ export class LParamSet {
     public param(paramId: DParameterId): LParam | undefined {
         return this._params[paramId];
     }
+
+    public hasParam(paramId: DParameterId): boolean {
+        return this._params[paramId] !== undefined;
+    }
     
     public getParam(paramId: DParameterId): LParam {
         const param = this._params[paramId];

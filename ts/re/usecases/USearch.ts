@@ -62,7 +62,14 @@ export class USearch {
     /**
      * iterateAroundPositions() を使用して、有効 Block を列挙する。
      */
-    public static iterateAroundBlocks(mx: number, my: number, length: number, func: (block: LBlock) => void): void {
+    public static iterateAroundBlocks(mx: number, my: number, length: number, withCenter: boolean, func: (block: LBlock) => void): void {
+        assert(length >= 1);
+
+        if (withCenter) {
+            const block = REGame.map.tryGetBlock(mx, my);
+            if (block) func(block);
+        }
+
         this.iterateAroundPositions(mx, my, length, (mx, my) => {
             const block = REGame.map.tryGetBlock(mx, my);
             if (block) func(block);
@@ -72,8 +79,8 @@ export class USearch {
     /**
      * iterateAroundPositions() を使用して、範囲に含まれている全ての Entity を列挙する。
      */
-    public static iterateAroundEntities(mx: number, my: number, length: number, func: (entity: LEntity) => void): void {
-        this.iterateAroundBlocks(mx, my, length, (block) => {
+    public static iterateAroundEntities(mx: number, my: number, length: number, withCenter: boolean,func: (entity: LEntity) => void): void {
+        this.iterateAroundBlocks(mx, my, length, withCenter, (block) => {
             for (const entity of block.getEntities()) {
                 func(entity);
             }

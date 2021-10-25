@@ -332,14 +332,19 @@ export class SParameterEffect {
         return this._valid;
     }
 
-    public evalConditions(entity: LEntity): void {
-        this._valid = this.meetsConditions(entity);
+    public evalConditions(target: LEntity): void {
+        if (target.params().hasParam(this.paramId)) {
+            this._valid = this.meetsConditions(target);
+        }
+        else {
+            this._valid = false;
+        }
     }
 
-    public meetsConditions(entity: LEntity): boolean {
+    public meetsConditions(target: LEntity): boolean {
         if (this.qualifying.conditionFormula) {
             const a = RESystem.formulaOperandA as any;
-            a.wrap(entity);
+            a.wrap(target);
             try {
                 const r = eval(this.qualifying.conditionFormula);
                 return r;

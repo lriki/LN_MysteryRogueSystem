@@ -15,6 +15,7 @@ import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEffectCause } from "ts/re/data/DEmittor";
+import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 
 
 /**
@@ -33,6 +34,14 @@ import { DEffectCause } from "ts/re/data/DEmittor";
  */
 @RESerializable
 export class LTrapBehavior extends LBehavior {
+    /*
+    効果は Trap を performer とした Emittor として発動する
+    ----------
+    踏んだ人が必ず Trap の上にいるとは限らない。
+    代表的なものだと、ワナ作動の巻物。
+    */
+
+
     private _exposed: boolean = false;
 
     constructor() {
@@ -108,20 +117,32 @@ export class LTrapBehavior extends LBehavior {
         const emittor = emittors[0];
 
         if (emittor) {
-            const subject = new SEffectorFact(e.self, emittor.effectSet, SEffectIncidentType.IndirectAttack, target.dir);
-            const effectContext = new SEffectContext(subject, context.random());
 
-            //console.log(result);
+            if (1) {
+
+                SEmittorPerformer.makeWithEmitor(self, self, emittor)
+                .performe(context);
+    
+            }
+            else {
 
 
-            context.postAnimation(e.sender, 35, true);
 
-            // TODO: ここでラムダ式も post して apply したい。
-
-            context.postCall(() => {
-                effectContext.applyWithWorth(context, [target]);
-            });
-
+                const subject = new SEffectorFact(e.self, emittor.effectSet, SEffectIncidentType.IndirectAttack, target.dir);
+                const effectContext = new SEffectContext(subject, context.random());
+    
+                //console.log(result);
+    
+    
+                context.postAnimation(e.sender, 35, true);
+    
+                // TODO: ここでラムダ式も post して apply したい。
+    
+                context.postCall(() => {
+                    effectContext.applyWithWorth(context, [target]);
+                });
+    
+            }
 
 
             //context.postMessage(tr("しかし ワナには かからなかった。"));
