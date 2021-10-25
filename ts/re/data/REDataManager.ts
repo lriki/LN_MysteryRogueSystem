@@ -352,7 +352,12 @@ export class REDataManager
             goldSteal: REData.newEffectBehavior("GoldSteal").id,
             levelDown: REData.newEffectBehavior("LevelDown").id,
             warp: REData.newEffectBehavior("Warp").id,
+            stumble: REData.newEffectBehavior("Stumble").id,
         };
+
+        // REBasics.presets = {
+        //     trap: REData.newPreset("Trap").id,
+        // }
     }
 
     static loadData(testMode: boolean): void

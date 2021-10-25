@@ -1,3 +1,5 @@
+import { REBasics } from "ts/re/data/REBasics";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -11,6 +13,10 @@ import { SEffectBehavior } from "./SEffectBehavior";
 export class SStumbleEffectBehavior extends SEffectBehavior {
 
     public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+      
+        const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
+        cctx.postActivity(activity);
+
         // const inventory = target.findEntityBehavior(LInventoryBehavior);
         // if (inventory) {
         //     const item = inventory.getDefenselessItems()[0];

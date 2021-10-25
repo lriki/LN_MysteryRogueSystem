@@ -27,6 +27,7 @@ import { REDataExtension } from "./REDataExtension";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
+// import { DPreset } from "./DPreset";
 
 
 export enum REFloorMapKind
@@ -152,6 +153,7 @@ export class REData
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static effectBehaviors: DEffectBehavior[] = [];
+    // static presets: DPreset[] = [];
     static skills: DSkill[] = [];
     static items: DEntityId[] = [];
     static traits: DTrait[] = [];
@@ -194,6 +196,7 @@ export class REData
         this.behaviors = [{id: 0, name: 'null'}];
 
         this.effectBehaviors = [new DEffectBehavior(0, "null")];
+        // this.presets = [new DPreset(0, "null")];
         this.skills = [];
         this.items = [];
 
@@ -374,11 +377,20 @@ export class REData
     }
 
     //--------------------
+
     static newEffectBehavior(key: string): DEffectBehavior {
         const data = new DEffectBehavior(this.effectBehaviors.length, key);
         this.effectBehaviors.push(data);
         return data;
     }
+
+    //--------------------
+
+    // static newPreset(key: string): DPreset {
+    //     const data = new DPreset(this.presets.length, key);
+    //     this.presets.push(data);
+    //     return data;
+    // }
 
     //--------------------
     

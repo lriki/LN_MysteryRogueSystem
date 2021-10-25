@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Abilities.Enemy.Division"
+                "-t", "concretes.trap.StumbleTrap"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

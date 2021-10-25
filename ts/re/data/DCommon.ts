@@ -1,4 +1,5 @@
 
+// export type DPresetId = number;
 export type DEntityKindId = number;
 export type DAttackElementId = number;
 export type DSkillId = number;

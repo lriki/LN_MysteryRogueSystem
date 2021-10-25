@@ -114,12 +114,12 @@ export class SEntityFactory {
         this.setupDirectly_Item(e, entityData);
     }
 
-    public static newTrap(itemId: DItemDataId): LEntity {
-        const item = REData.itemData(itemId);
-        const e = REGame.world.spawnEntity(item.entityId);
-        this.buildTrap(e, itemId);
-        return e;
-    }
+    // public static newTrap(itemId: DItemDataId): LEntity {
+    //     const item = REData.itemData(itemId);
+    //     const e = REGame.world.spawnEntity(item.entityId);
+    //     this.buildTrap(e, itemId);
+    //     return e;
+    // }
     
     public static buildTrap(e: LEntity, itemId: DItemDataId): void {
         const item = REData.itemData(itemId);
@@ -183,8 +183,9 @@ export class SEntityFactory {
             else
                 throw new Error("Invalid enemy key: " + prefab.key);
         }
-        else if (prefab.isTrapKind()) {
-            entity = this.newTrap(prefab.dataId);
+        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {//prefab.isTrapKind()) {
+            entity = REGame.world.spawnEntity(createInfo.entityId);
+            this.buildTrap(entity, entityData.item().id);
         }
         else if (prefab.isItemKind()) {
             entity = this.newItem(prefab.dataId);

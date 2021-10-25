@@ -16,7 +16,12 @@ export interface DBasicEffectBehaviors {
     goldSteal: DEffectBehaviorId,
     levelDown: DEffectBehaviorId,
     warp: DEffectBehaviorId,
+    stumble: DEffectBehaviorId,
 }
+
+// export interface DBasicPresets {
+//     trap: DPresetId,
+// }
 
 /**
  * ゲームシステムとして重要な定義済みデータを保持する
@@ -36,5 +41,6 @@ export class REBasics {
     static sequels: BasicSequels;
     static effectBehaviors: DBasicEffectBehaviors;
     static traits: DBasicTraits;
+    // static presets: DBasicPresets;
 }
 
