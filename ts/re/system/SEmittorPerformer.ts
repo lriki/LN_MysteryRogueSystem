@@ -55,7 +55,7 @@ export class SEmittorPerformer {
     /** 対象に効果を適用する際の基準となる向き。ノックバック方向等に使用する。0 の場合、performer の向きを採用する。 */
     private _effectDirection = 0;
 
-    private _priorityEffectSet: DEffectSet | undefined;
+    private _projectilePriorityEffectSet: DEffectSet | undefined;
 
     private _onPerformed: SOnPerformedFunc | undefined;
 
@@ -103,8 +103,8 @@ export class SEmittorPerformer {
         return this;
     }
 
-    public setPriorityEffectSet(value: DEffectSet): this {
-        this._priorityEffectSet = value;
+    public setProjectilePriorityEffectSet(value: DEffectSet): this {
+        this._projectilePriorityEffectSet = value;
         return this;
     }
 
@@ -448,8 +448,8 @@ export class SEmittorPerformer {
         }
 
         let actualEffectSet = actualEmittor.effectSet;
-        if (this._priorityEffectSet) {
-            actualEffectSet = this._priorityEffectSet;
+        if (this._projectilePriorityEffectSet) {
+            actualEffectSet = this._projectilePriorityEffectSet;
         }
 
         LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), dir, emittor.scope.length, actualEffectSet);
