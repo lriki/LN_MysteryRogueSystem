@@ -173,22 +173,30 @@ export class UMovement {
         if (Math.abs(dx) > 1) return false; // 隣接 Block への移動ではない
         if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
 
-        if (!map.canLeaving(oldBlock, entity)) return false;
-        if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
-
-        const d = Helpers.offsetToDir(dx, dy);
-        if (this.isDiagonalMoving(d)) {
-            // 斜め移動の場合
-            const fl = this.rotatePositionByDir(7, d);  // 左前
-            const fr = this.rotatePositionByDir(9, d);  // 右前
-            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
-            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
-            if (flBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
-            if (frBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+        if (layer == DBlockLayerKind.Projectile) {  
+            // 矢の罠など、壁Blockを移動開始地点とする場合に備える。
+            // この場合は移動先への侵入判定のみ行い、斜め移動のエッジ判定は不要。
+            if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
         }
         else {
-            // 平行移動の場合
+            if (!map.canLeaving(oldBlock, entity)) return false;
+            if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
+
+            const d = Helpers.offsetToDir(dx, dy);
+            if (this.isDiagonalMoving(d)) {
+                // 斜め移動の場合
+                const fl = this.rotatePositionByDir(7, d);  // 左前
+                const fr = this.rotatePositionByDir(9, d);  // 右前
+                const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
+                const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+                if (flBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+                if (frBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
+            }
+            else {
+                // 平行移動の場合
+            }
         }
+
 
         return true;
     }

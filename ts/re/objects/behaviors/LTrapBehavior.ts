@@ -121,6 +121,8 @@ export class LTrapBehavior extends LBehavior {
             if (1) {
 
                 SEmittorPerformer.makeWithEmitor(self, self, emittor)
+                .setDffectDirection(target.dir)
+                .setPriorityEffectSet(emittor.effectSet)
                 .performe(context);
     
             }

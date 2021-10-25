@@ -3,6 +3,7 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { DEffectFieldScope } from "../data/DEffect";
 import { DStateRestriction } from "../data/DState";
 import { REBasics } from "../data/REBasics";
+import { FBlockComponent } from "../floorgen/FMapData";
 import { LItemBehavior } from "../objects/behaviors/LItemBehavior";
 import { LBlock } from "../objects/LBlock";
 import { LEntity } from "../objects/LEntity";
@@ -10,6 +11,7 @@ import { LRandom } from "../objects/LRandom";
 import { LRoom } from "../objects/LRoom";
 import { REGame } from "../objects/REGame";
 import { paramEnemySpawnInvalidArea } from "../PluginParameters";
+import { Helpers } from "../system/Helpers";
 
 
 /**
@@ -169,5 +171,28 @@ export class USearch {
         }
 
         return undefined;
+    }
+
+    /**
+     * 指定した向きへまっすぐ向かったとき、最初にぶつかる壁を取得する。
+     * (mx,my) は含まない。
+     */
+    public static findFirstWallInDirection(mx: number, my: number, dir: number): LBlock {
+        const map = REGame.map;
+        let i = 1;
+        while (true) {
+            const offset = Helpers._dirToTileOffsetTable[dir];
+            const x = mx + offset.x * i;
+            const y = my + offset.y * i;
+            if (!map.isValidPosition(x, y)) break;
+
+            const block = map.tryGetBlock(x, y);
+            if (block && block.isWallLikeShape()) {
+                return block;
+            }
+            i++;
+        }
+
+        throw new Error("Unreachable.");
     }
 }

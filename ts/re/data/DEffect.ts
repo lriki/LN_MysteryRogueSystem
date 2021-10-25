@@ -134,6 +134,7 @@ export enum DEffectFieldScopeRange {
     Performer,  // 発動者自身
     Front1,
     StraightProjectile,
+    ReceiveProjectile,  // 草受けの杖や矢の罠
     PointProjectile,        // 投石やスカイドラゴンの炎
     Selection,   // 対象となるアイテムを選択する。識別の巻物など、対象となる持ち物を選んで効果を発動するももの。
     Around, // 周囲
@@ -160,7 +161,7 @@ export class DEffectFieldScope {
     area: DEffectFieldScopeArea;
     range: DEffectFieldScopeRange;
     length: number;
-    projectilePrefabKey: string;
+    projectilePrefabKey: string;    // range が XXProjectile の時に使う projectile
     layers: DBlockLayerKind[];
     layerScope: DBlockLayerScope;
     factions: DEffectScopeTargetFactionFlags;

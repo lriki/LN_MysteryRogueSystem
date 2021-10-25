@@ -1,6 +1,6 @@
 import { REBasics } from "./REBasics";
 import { DBlockLayerKind, DSpecialEffectCodes } from "./DCommon";
-import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DSkillCostSource, DSubEffect, DSubEffectTargetKey, LStateLevelType } from "./DEffect";
+import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, DSubEffect, DSubEffectTargetKey, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
@@ -146,6 +146,7 @@ export class RESetup {
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kウッドアロー":
+                this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 data.traits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, 0);
@@ -319,6 +320,14 @@ export class RESetup {
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.stumble);
                 break;
+                
+            case "kItem_木の矢の罠": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
+                emittor.scope.length = Infinity;
+                emittor.scope.projectilePrefabKey = "kウッドアロー";
+                break;
+            }
             case "kItem_保存の壺":
                 entity.addReaction(REBasics.actions.PutInActionId, 0);
                 entity.addReaction(REBasics.actions.PickOutActionId, 0);
@@ -515,6 +524,28 @@ export class RESetup {
         entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
         entity.identifiedTiming = DIdentifiedTiming.Eat;
         entity.canModifierState = false;
+    }
+
+    private static setupArrowCommon(entity: DEntity): void {
+        const emittor = REData.newEmittor();
+        emittor.scope.range = DEffectFieldScopeRange.Performer;
+        const effect = new DEffect();
+        effect.critical = false;
+        effect.successRate = 100;
+        effect.hitType = DEffectHitType.Physical;
+        const q: DParameterQualifying = {
+            parameterId: REBasics.params.hp,
+            applyTarget: DParameterApplyTarget.Current,
+            elementId: 0,
+            formula: "a.atk * 4 - b.def * 2",
+            applyType: DParameterEffectApplyType.Damage,
+            variance: 20,
+            silent: false,
+        };
+        effect.qualifyings.parameterQualifyings.push(q);
+        emittor.effectSet.effects.push(effect);
+        entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
+
     }
 }
 

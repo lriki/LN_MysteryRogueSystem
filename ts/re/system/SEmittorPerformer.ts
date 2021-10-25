@@ -1,5 +1,5 @@
 import { REBasics } from "ts/re/data/REBasics";
-import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope } from "ts/re/data/DEffect";
+import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope, DEffectSet } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
@@ -55,6 +55,8 @@ export class SEmittorPerformer {
     /** 対象に効果を適用する際の基準となる向き。ノックバック方向等に使用する。0 の場合、performer の向きを採用する。 */
     private _effectDirection = 0;
 
+    private _priorityEffectSet: DEffectSet | undefined;
+
     private _onPerformed: SOnPerformedFunc | undefined;
 
     private constructor(subject: LEntity, performer: LEntity) {
@@ -98,6 +100,11 @@ export class SEmittorPerformer {
 
     public setDffectDirection(value: number): this {
         this._effectDirection = value;
+        return this;
+    }
+
+    public setPriorityEffectSet(value: DEffectSet): this {
+        this._priorityEffectSet = value;
         return this;
     }
 
@@ -363,32 +370,12 @@ export class SEmittorPerformer {
             }
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
-
-            // Projectile を発射する Emittor.
-            
-            const bullet = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(emittor.scope.projectilePrefabKey).id));
-            REGame.map.appearEntity(bullet, performer.x, performer.y);
-            bullet.dir = performer.dir;
-
-            //context.post(magicBullet, magicBullet, args.subject, undefined, onMoveAsMagicBullet);
-
-
-            // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
-            // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
-            const emittorEffects = itemEntity?.data().emittorSet.emittors(DEffectCause.Hit);
-            // ↑今は杖用。杖を投げ当てた時と同じ効果を取り出す。
-
-            //const actualEmittor = emittorEffects ?? emittor;
-            let actualEmittor = emittor;
-            if (emittorEffects) {
-                assert(emittorEffects.length == 1); // TODO: 今は一つだけ
-                actualEmittor = emittorEffects[0];
-            }
-
-            LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), performer.dir, emittor.scope.length, actualEmittor.effectSet);
-            //throw new Error("Not implemented.");
-
-
+            this.performeEffect_StraightProjectile(context, performer, emittor, itemEntity, performer.x, performer.y, performer.dir);
+        }
+        else if (emittor.scope.range == DEffectFieldScopeRange.ReceiveProjectile) {
+            const dir = this._effectDirection != 0 ? this._effectDirection : performer.dir;
+            const block = USearch.findFirstWallInDirection(performer.x, performer.y, dir);
+            this.performeEffect_StraightProjectile(context, performer, emittor, itemEntity, block.x(), block.y(), UMovement.reverseDir(dir));
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
             const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
@@ -434,6 +421,38 @@ export class SEmittorPerformer {
         else {
             throw new Error("Not implemented.");
         }
+    }
+    private performeEffect_StraightProjectile(
+        context: SCommandContext,
+        performer: LEntity,
+        emittor: DEmittor,
+        itemEntity: LEntity | undefined,
+        startX: number,
+        startY: number,
+        dir: number)
+    {
+        const bullet = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(emittor.scope.projectilePrefabKey).id));
+        REGame.map.appearEntity(bullet, startX, startY);
+        bullet.dir = dir;
+
+        // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
+        // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
+        const emittorEffects = itemEntity?.data().emittorSet.emittors(DEffectCause.Hit);
+        // ↑今は杖用。杖を投げ当てた時と同じ効果を取り出す。
+
+        //const actualEmittor = emittorEffects ?? emittor;
+        let actualEmittor = emittor;
+        if (emittorEffects) {
+            assert(emittorEffects.length == 1); // TODO: 今は一つだけ
+            actualEmittor = emittorEffects[0];
+        }
+
+        let actualEffectSet = actualEmittor.effectSet;
+        if (this._priorityEffectSet) {
+            actualEffectSet = this._priorityEffectSet;
+        }
+
+        LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), dir, emittor.scope.length, actualEffectSet);
     }
 
     private applyEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, targets: LEntity[], skillId: DSkillId, itemEntity: LEntity | undefined) {

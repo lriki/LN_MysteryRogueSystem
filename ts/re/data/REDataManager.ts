@@ -629,24 +629,24 @@ export class REDataManager
 
                 // 投げ当て Effect
                 // TODO: ここでいいの？
-                const emittor = REData.newEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
-                const effect = new DEffect();
-                effect.critical = false;
-                effect.successRate = 100;
-                effect.hitType = DEffectHitType.Physical;
-                const q: DParameterQualifying = {
-                    parameterId: REBasics.params.hp,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "10",
-                    applyType: DParameterEffectApplyType.Damage,
-                    variance: 20,
-                    silent: false,
-                };
-                effect.qualifyings.parameterQualifyings.push(q);
-                emittor.effectSet.effects.push(effect);
-                entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
+                // const emittor = REData.newEmittor();
+                // emittor.scope.range = DEffectFieldScopeRange.Performer;
+                // const effect = new DEffect();
+                // effect.critical = false;
+                // effect.successRate = 100;
+                // effect.hitType = DEffectHitType.Physical;
+                // const q: DParameterQualifying = {
+                //     parameterId: REBasics.params.hp,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "89",
+                //     applyType: DParameterEffectApplyType.Damage,
+                //     variance: 20,
+                //     silent: false,
+                // };
+                // effect.qualifyings.parameterQualifyings.push(q);
+                // emittor.effectSet.effects.push(effect);
+                // entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
             }
         });
         REData.armorDataIdOffset = REData.items.length;

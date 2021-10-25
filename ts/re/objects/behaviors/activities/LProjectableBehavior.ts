@@ -86,38 +86,38 @@ export class LProjectableBehavior extends LBehavior {
         actions.push(REBasics.actions.ThrowActionId);
     }
 
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    // onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         
-        if (activity.actionId() == REBasics.actions.collide) {
+    //     if (activity.actionId() == REBasics.actions.collide) {
             
-            if (this._effectSet) {
-                // スキルや魔法弾
+    //         if (this._effectSet) {
+    //             // スキルや魔法弾
 
-                const target = activity.objects2()[0];
-                const subject = activity.subject();
+    //             const target = activity.objects2()[0];
+    //             const subject = activity.subject();
 
-                context.postDestroy(self);
-                //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+    //             context.postDestroy(self);
+    //             //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
                 
-                const animationId = 1;  // TODO:
+    //             const animationId = 1;  // TODO:
 
-                const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
-                const effectContext = new SEffectContext(effectSubject, context.random());
+    //             const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
+    //             const effectContext = new SEffectContext(effectSubject, context.random());
         
-                context.postAnimation(target, animationId, true);
+    //             context.postAnimation(target, animationId, true);
         
-                // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-                context.postCall(() => {
-                    effectContext.applyWithWorth(context, [target]);
-                });
+    //             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
+    //             context.postCall(() => {
+    //                 effectContext.applyWithWorth(context, [target]);
+    //             });
                 
-                return SCommandResponse.Handled;
-            }
+    //             return SCommandResponse.Handled;
+    //         }
             
-        }
+    //     }
 
-        return SCommandResponse.Pass;
-    }
+    //     return SCommandResponse.Pass;
+    // }
 
     
     // 投げられた
@@ -163,9 +163,40 @@ export class LProjectableBehavior extends LBehavior {
             // 他 Unit との衝突判定
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(DBlockLayerKind.Unit);
             if (hitTarget) {
-                context.postActivity(LActivity.makeCollide(self, hitTarget)
-                    .withOtherSubject(args.subject.entity())
-                    .withEffectDirection(common.blowDirection));
+
+                
+                if (this._effectSet) {
+                    // スキルや魔法弾
+                    // v0.4.0 時点ではこの if の else 側から投げられる CollideActivity を LProjectableBehavior(self) の onActivity で受けて処理をしていた。
+                    // しかしワナを実装するにあたり、Projectile が ItemBehavior も兼ねるケースが出てきた。
+                    // そのままだと ItemBehavior.onActivity の Collide ハンドラに流れてしまい優先 Effect が適用できないので、
+                    // 優先 Effect を持っている場合はここで直に処理してしまう。
+
+                    const target = hitTarget;//activity.objects2()[0];
+                    const subject = args.subject.entity();//activity.subject();
+
+                    context.postDestroy(self);
+                    //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+                    
+                    const animationId = 1;  // TODO:
+
+                    const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
+                    const effectContext = new SEffectContext(effectSubject, context.random());
+            
+                    context.postAnimation(target, animationId, true);
+            
+                    // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
+                    context.postCall(() => {
+                        effectContext.applyWithWorth(context, [target]);
+                    });
+                    
+                    return SCommandResponse.Handled;
+                }
+                else {
+                    context.postActivity(LActivity.makeCollide(self, hitTarget)
+                        .withOtherSubject(args.subject.entity())
+                        .withEffectDirection(common.blowDirection));
+                }
                 /*
                 context.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,
