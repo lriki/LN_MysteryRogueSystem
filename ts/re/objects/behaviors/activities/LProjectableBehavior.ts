@@ -167,10 +167,16 @@ export class LProjectableBehavior extends LBehavior {
                 
                 if (this._effectSet) {
                     // スキルや魔法弾
+                    //
                     // v0.4.0 時点ではこの if の else 側から投げられる CollideActivity を LProjectableBehavior(self) の onActivity で受けて処理をしていた。
                     // しかしワナを実装するにあたり、Projectile が ItemBehavior も兼ねるケースが出てきた。
                     // そのままだと ItemBehavior.onActivity の Collide ハンドラに流れてしまい優先 Effect が適用できないので、
                     // 優先 Effect を持っている場合はここで直に処理してしまう。
+                    //
+                    // ちなみに矢の罠が出す Projectile を、木の矢アイテムではなくワナ専用の Entity を使う案もあったが、
+                    // 次のような理由で木の矢アイテムを直接飛ばしている。
+                    // - 外れて落下するときに新たに Entity を生成するのが若干煩雑だった
+                    // - 矢弾をキャッチしてインベントリに加える(マゼルン系)実装で都合が悪い
 
                     const target = hitTarget;//activity.objects2()[0];
                     const subject = args.subject.entity();//activity.subject();
