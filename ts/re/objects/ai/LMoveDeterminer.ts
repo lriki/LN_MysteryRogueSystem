@@ -158,7 +158,9 @@ export class LMoveDeterminer {
                 this.postMoveToAdjacent(self, block, context);
 
                 // 移動後、向きを target へ向けておく
-                const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+                const dir = (this.hasDestination()) ?
+                    SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY) :
+                    self.dir;
                 context.postActivity(LActivity.makeDirectionChange(self, dir));
 
                 return true;

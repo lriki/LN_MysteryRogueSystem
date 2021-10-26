@@ -38,6 +38,7 @@ export class VJumpSequel extends REVisualSequel {
             this.jump(entity.x - context.startPosition().x, entity.y - context.startPosition().y);
             this._realX = context.startPosition().x;
             this._realY = context.startPosition().y;
+            AudioManager.playSe({name: "Damage3", volume: 90, pitch: 100, pan: 0});
         }
 
         this._jumpCount--;
