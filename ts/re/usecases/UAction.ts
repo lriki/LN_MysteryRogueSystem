@@ -163,14 +163,17 @@ export class UAction {
         }
     }
 
+    /**
+     * 転倒し、アイテムをばらまく。
+     * ダメージは入らないので注意。
+     * 罠や杖による転倒は微ダメージだが、モンスターのスキルで転倒したときはより大きいダメージが発生するケースもあるため、ここではダメージ処理は行わない。
+     */
     public static postStumble(cctx: SCommandContext, entity: LEntity, dir: number): void {
-
         if (entity.isPlayer())
             this.postStumbleForPlayer(cctx, entity, dir);
         else
             this.postStumbleForNPC(cctx, entity);
         cctx.postSequel(entity, REBasics.sequels.stumble);
-
     }
 
     /** 操作中 Unit 用の転倒時アイテムバラまき。インベントリからランダムに選択されたアイテムを、足元ではなく前方にバラまく。 */
@@ -184,38 +187,23 @@ export class UAction {
             const positions = this.StumbleTable[dir];
             assert(positions.length > 0);
             const loops = Math.min(items.length, positions.length);
-            for (let i = 0; i < loops; i++) {
+            let iItem = 0;
+            for (let i = 0; i < positions.length && iItem < items.length; i++) {
                 const mx = entity.x + positions[i].x;
                 const my = entity.y + positions[i].y;
-                const item = items[i];
 
-                // TODO: 地形などを考慮して、本当に落とすアイテムを決める
-
-                item.removeFromParent();
-                //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
-                REGame.world._transferEntity(item, REGame.map.floorId(), entity.x, entity.y);
-                cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
-                cctx.postSequel(item, REBasics.sequels.jump);
+                // 地形などを考慮して、本当に落とすアイテムを決める
+                const block = REGame.map.tryGetBlock(mx, my);
+                if (block && block.isFloorLikeShape() && !block.layer(DBlockLayerKind.Ground).isContainsAnyEntity()) {
+                    const item = items[iItem];
+                    item.removeFromParent();
+                    REGame.world._transferEntity(item, REGame.map.floorId(), entity.x, entity.y);
+                    cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
+                    cctx.postSequel(item, REBasics.sequels.jump);
+                    iItem++;
+                }
             }
         }
-
-        /*
-        
-        const inventory = entity.findEntityBehavior(LInventoryBehavior);
-        if (inventory) {
-            const item = inventory.getDefenselessItems()[0];
-
-            // TODO: 地形などを考慮して、本当に落とすアイテムを決める
-            const dropItems = [item];
-
-            for (const item of dropItems) {
-                inventory.removeEntity(item);
-
-                //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
-            }
-
-        }
-        */
     }
 
     private static postStumbleForNPC(cctx: SCommandContext, entity: LEntity): void {

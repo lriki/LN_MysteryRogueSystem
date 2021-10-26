@@ -38,7 +38,6 @@ export class VJumpSequel extends REVisualSequel {
             this.jump(entity.x - context.startPosition().x, entity.y - context.startPosition().y);
             this._realX = context.startPosition().x;
             this._realY = context.startPosition().y;
-            AudioManager.playSe({name: "Damage3", volume: 90, pitch: 100, pan: 0});
         }
 
         this._jumpCount--;
@@ -48,8 +47,6 @@ export class VJumpSequel extends REVisualSequel {
 
         visual.setX(this._realX);
         visual.setY(this._realY - this.jumpHeight() / 40);
-
-        console.log(this._realX, this._realY, this.jumpHeight());
         
         if (this._jumpCount <= 0) {
             // end したフレームは、最後に $gamePlayer へ座標を同期する。
@@ -63,7 +60,6 @@ export class VJumpSequel extends REVisualSequel {
     }
 
     private jump(xPlus: number, yPlus: number): void {
-        console.log("xPlus", xPlus, yPlus);
         // if (Math.abs(xPlus) > Math.abs(yPlus)) {
         //     if (xPlus !== 0) {
         //         this.setDirection(xPlus < 0 ? 4 : 6);

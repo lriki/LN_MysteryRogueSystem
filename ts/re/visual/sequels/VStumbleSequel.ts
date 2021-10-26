@@ -24,6 +24,9 @@ export class VStumbleSequel extends REVisualSequel {
         const sprite = visual.rmmzSprite();
         if (!sprite) return;
 
+        if (frameCount == 0) {
+            AudioManager.playSe({name: "Damage3", volume: 90, pitch: 100, pan: 0});
+        }
 
         sprite.rotation = this._curve.evaluate(frameCount) * VStumbleSequel.RotationSignTable[visual.entity().dir];
 
