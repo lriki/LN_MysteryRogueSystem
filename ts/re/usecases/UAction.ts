@@ -164,10 +164,13 @@ export class UAction {
     }
 
     public static postStumble(cctx: SCommandContext, entity: LEntity, dir: number): void {
+
         if (entity.isPlayer())
             this.postStumbleForPlayer(cctx, entity, dir);
         else
             this.postStumbleForNPC(cctx, entity);
+        cctx.postSequel(entity, REBasics.sequels.stumble);
+
     }
 
     /** 操作中 Unit 用の転倒時アイテムバラまき。インベントリからランダムに選択されたアイテムを、足元ではなく前方にバラまく。 */
@@ -189,7 +192,10 @@ export class UAction {
                 // TODO: 地形などを考慮して、本当に落とすアイテムを決める
 
                 item.removeFromParent();
-                REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
+                //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
+                REGame.world._transferEntity(item, REGame.map.floorId(), entity.x, entity.y);
+                cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
+                cctx.postSequel(item, REBasics.sequels.MoveSequel);
             }
         }
 

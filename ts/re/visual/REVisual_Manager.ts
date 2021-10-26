@@ -40,6 +40,7 @@ import { VExplosionSequel } from "./sequels/VExplosionSequel";
 import { VDownSequel } from "./sequels/VDownSequel";
 import { REBasics } from "../data/REBasics";
 import { VWarpSequel } from "./sequels/VWarpSequel";
+import { VStumbleSequel } from "./sequels/VStumbleSequel";
 
 /**
  */
@@ -68,9 +69,8 @@ export class REVisual_Manager
         this._visualSequelFactory[REBasics.sequels.explosion] = () => new VExplosionSequel();
         this._visualSequelFactory[REBasics.sequels.down] = () => new VDownSequel();
         this._visualSequelFactory[REBasics.sequels.warp] = () => new VWarpSequel();
+        this._visualSequelFactory[REBasics.sequels.stumble] = () => new VStumbleSequel();
 
-        
-        
     }
 
     tileSize(): Vector2 {

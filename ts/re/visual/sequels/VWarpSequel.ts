@@ -20,7 +20,6 @@ Motionの引数として移動後の位置を渡す必要が出てきて、ち�
 */
 
 export class VWarpSequel extends REVisualSequel {
-
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
 
         const frameCount = context.frameCount();

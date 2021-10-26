@@ -39,4 +39,6 @@ export interface BasicSequels {
     down: DSequelId;
 
     warp: DSequelId;
+
+    stumble: DSequelId;
 }

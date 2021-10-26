@@ -156,7 +156,7 @@ export class VKeyFrameAnimationCurve extends VAnimationCurve {
         }
     }
 
-    public addFrame(time: number, value: number, rightTangentMode = VKeyFrameTangentMode.Linear, tangent: number = 0.0) {
+    public addFrame(time: number, value: number, rightTangentMode = VKeyFrameTangentMode.Linear, tangent: number = 0.0): this {
 
         const k: VKeyFrame  = {
             time: time,
@@ -180,6 +180,7 @@ export class VKeyFrameAnimationCurve extends VAnimationCurve {
         }
     
         this.addKeyFrame(k);
+        return this;
     }
     
 
