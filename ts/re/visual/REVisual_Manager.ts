@@ -41,6 +41,7 @@ import { VDownSequel } from "./sequels/VDownSequel";
 import { REBasics } from "../data/REBasics";
 import { VWarpSequel } from "./sequels/VWarpSequel";
 import { VStumbleSequel } from "./sequels/VStumbleSequel";
+import { VJumpSequel } from "./sequels/VJumpSequel";
 
 /**
  */
@@ -70,6 +71,7 @@ export class REVisual_Manager
         this._visualSequelFactory[REBasics.sequels.down] = () => new VDownSequel();
         this._visualSequelFactory[REBasics.sequels.warp] = () => new VWarpSequel();
         this._visualSequelFactory[REBasics.sequels.stumble] = () => new VStumbleSequel();
+        this._visualSequelFactory[REBasics.sequels.jump] = () => new VJumpSequel();
 
     }
 

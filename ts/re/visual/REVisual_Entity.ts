@@ -89,6 +89,14 @@ export class REVisual_Entity
         return this._position;
     }
 
+    x(): number {
+        return this._position.x;
+    }
+
+    y(): number {
+        return this._position.y;
+    }
+
     setX(value: number): void {
         this._position.x = value;
     }

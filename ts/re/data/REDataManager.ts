@@ -320,9 +320,11 @@ export class REDataManager
             down: REData.addSequel("down"),
             warp: REData.addSequel("warp"),
             stumble: REData.addSequel("stumble"),
+            jump: REData.addSequel("stumble"),
         };
         REData.sequels[REBasics.sequels.MoveSequel].parallel = true;
         REData.sequels[REBasics.sequels.stumble].parallel = true;
+        REData.sequels[REBasics.sequels.jump].parallel = true;
         
         RESystem.skills = {
             move: 3,

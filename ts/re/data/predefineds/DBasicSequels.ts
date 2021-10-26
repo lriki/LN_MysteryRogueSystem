@@ -41,4 +41,5 @@ export interface BasicSequels {
     warp: DSequelId;
 
     stumble: DSequelId;
+    jump: DSequelId;
 }

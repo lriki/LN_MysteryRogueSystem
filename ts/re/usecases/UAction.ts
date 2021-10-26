@@ -41,7 +41,7 @@ export class UAction {
         // ⑧③Ｐ
         // ⑥①②
         // ④⑤⑦
-        [{ x: -1, y: 1 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: -2, y: 2 }, { x: -1, y: 2 }, { x: -2, y: 1 }, { x: 0 , y: 2 }, { x: 2 , y: 0 }],
+        [{ x: -1, y: 1 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: -2, y: 2 }, { x: -1, y: 2 }, { x: -2, y: 1 }, { x: 0 , y: 2 }, { x: -2 , y: 0 }],
 
         //     Ｐ
         //   ③①②
@@ -67,7 +67,7 @@ export class UAction {
         // Ｐ①④
         //   ③⑥
         //     ⑧
-        [{ x: 1, y: 0 }, { x: 1, y: -1 }, { x: 1, y: 1 }, { x: 2, y: 0 }, { x: 1, y: -1 }, { x: 2, y: 1 }, { x: 2, y: -2 }, { x: 2, y: 2 }],
+        [{ x: 1, y: 0 }, { x: 1, y: -1 }, { x: 1, y: 1 }, { x: 2, y: 0 }, { x: 2, y: -1 }, { x: 2, y: 1 }, { x: 2, y: -2 }, { x: 2, y: 2 }],
 
         // ④⑥⑧
         // ⑤①③
@@ -195,7 +195,7 @@ export class UAction {
                 //REGame.world._transferEntity(item, REGame.map.floorId(), mx, my);
                 REGame.world._transferEntity(item, REGame.map.floorId(), entity.x, entity.y);
                 cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
-                cctx.postSequel(item, REBasics.sequels.MoveSequel);
+                cctx.postSequel(item, REBasics.sequels.jump);
             }
         }
 
