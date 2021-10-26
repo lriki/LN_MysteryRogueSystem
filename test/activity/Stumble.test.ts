@@ -5,8 +5,6 @@ import { TestEnv } from "../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REBasics } from "ts/re/data/REBasics";
 
@@ -20,7 +18,6 @@ test("concretes.activity.Stumble.player", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.dir = 6;
-    //player1.addState(TestEnv.StateId_CertainDirectAttack);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
@@ -38,6 +35,7 @@ test("concretes.activity.Stumble.player", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    // 持ち物が前方に落ちる
     const item1 = REGame.map.block(11, 10).getFirstEntity();
     expect(item1).toBe(weapon1);
 });

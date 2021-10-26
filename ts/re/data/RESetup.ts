@@ -292,6 +292,13 @@ export class RESetup {
                     そうでなければ、魔法弾は「自分を射出したEntity(杖) の Cause.Hit の効果を発動する」とか。
                 */
                 break;
+
+            case "kItem_リープの杖":
+                entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.stumble);
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                break;
             case "k眠りガス":
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 break;
