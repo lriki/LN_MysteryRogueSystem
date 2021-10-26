@@ -163,8 +163,15 @@ export class UAction {
         }
     }
 
+    public static postStumble(cctx: SCommandContext, entity: LEntity, dir: number): void {
+        if (entity.isPlayer())
+            this.postStumbleForPlayer(cctx, entity, dir);
+        else
+            this.postStumbleForNPC(cctx, entity);
+    }
+
     /** 操作中 Unit 用の転倒時アイテムバラまき。インベントリからランダムに選択されたアイテムを、足元ではなく前方にバラまく。 */
-    public static postStumbleForPlayer(cctx: SCommandContext, entity: LEntity, dir: number): void {
+    private static postStumbleForPlayer(cctx: SCommandContext, entity: LEntity, dir: number): void {
         
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (inventory) {
@@ -203,6 +210,10 @@ export class UAction {
 
         }
         */
+    }
+
+    private static postStumbleForNPC(cctx: SCommandContext, entity: LEntity): void {
+        this.postDropItems(cctx, entity, LGenerateDropItemCause.Stumble);
     }
 
     public static getDefenselessInventoryItems(entity: LEntity): readonly LEntity[] {

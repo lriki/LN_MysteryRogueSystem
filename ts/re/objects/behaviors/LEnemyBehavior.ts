@@ -90,29 +90,44 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
         if (!self._dropItemGenerated) {
             self._dropItemGenerated = true;
-            const rate = self.traitsSumOrDefault(REBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
             const rand = REGame.world.random();
-            if (rand.nextIntWithMax(100) < rate * 100) {
-
-                // Enemy 固有のドロップアイテム
-                const item1 = this.selectDropItem(REGame.world.random());
-                if (item1) {
-                    const info = DEntityCreateInfo.makeSingle(item1.entityId);
-                    info.gold = item1.gold;
-                    result.push(SEntityFactory.newEntity(info, self.floorId));
-                    return;
+            switch (cause) {
+                case LGenerateDropItemCause.Dead:
+                    const rate = self.traitsSumOrDefault(REBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
+                    if (rand.nextIntWithMax(100) < rate * 100) {
+        
+                        // Enemy 固有のドロップアイテム
+                        const item1 = this.selectDropItem(REGame.world.random());
+                        if (item1) {
+                            const info = DEntityCreateInfo.makeSingle(item1.entityId);
+                            info.gold = item1.gold;
+                            result.push(SEntityFactory.newEntity(info, self.floorId));
+                            return;
+                        }
+        
+                        // 出現テーブルからのドロップアイテム
+                        const item2 = USpawner.createItemFromSpawnTable(self.floorId, rand);
+                        if (item2) {
+                            result.push(item2);
+                            return;
+                        }
+                    }
+                    break;
+                case LGenerateDropItemCause.Stumble: {
+                    // 出現テーブルからのドロップアイテム
+                    const item2 = USpawner.createItemFromSpawnTable(self.floorId, rand);
+                    if (item2) {
+                        result.push(item2);
+                        return;
+                    }
+                    break;
                 }
-
-                // 出現テーブルからのドロップアイテム
-                const item2 = USpawner.createItemFromSpawnTable(self.floorId, rand);
-                if (item2) {
-                    result.push(item2);
-                    return;
-                }
+                default:
+                    throw new Error("Unreachable.");
             }
         }
-        
     }
+
 
     onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
