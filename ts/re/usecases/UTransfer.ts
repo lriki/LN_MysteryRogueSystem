@@ -91,7 +91,7 @@ export class UTransfer {
         context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
     }
 
-    public static proceedFloorForward(interpreter?: Game_Interpreter | undefined) {
+    public static proceedFloorForwardForPlayer(interpreter?: Game_Interpreter | undefined) {
         const entity = REGame.camera.focusedEntity();
         if (entity) {
             const floorId = entity.floorId;

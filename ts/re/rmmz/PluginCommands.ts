@@ -32,7 +32,7 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 
 
 PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
-    UTransfer.proceedFloorForward();
+    UTransfer.proceedFloorForwardForPlayer();
 });
 
 PluginManager.registerCommand(pluginName, "RE-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {

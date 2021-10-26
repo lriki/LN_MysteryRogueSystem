@@ -369,6 +369,10 @@ export class LEntity extends LObject
         }
     }
 
+    public isPlayer(): boolean {
+        return this.entityId().equals(REGame.camera.focusedEntityId());
+    }
+
     public partyId(): LPartyId {
         return this._partyId;
     }

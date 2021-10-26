@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.trap.ArrowTrap.basic"
+                "-t", "concretes.trap.FloorTransferTrap.basic"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

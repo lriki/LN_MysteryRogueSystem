@@ -381,7 +381,7 @@ export class SScheduler
                         RESystem.commandContext.postMessage(tr2("%1は地割れに飲み込まれた！").format(UName.makeUnitName(entity)));
                         RESystem.commandContext.postSequel(entity, REBasics.sequels.earthquake2);
                         RESystem.commandContext.postWait(entity, 60);
-                        RESystem.commandContext.postCall(() => { UTransfer.proceedFloorForward(); });
+                        RESystem.commandContext.postCall(() => { UTransfer.proceedFloorForwardForPlayer(); });
                     }
                 }
             }

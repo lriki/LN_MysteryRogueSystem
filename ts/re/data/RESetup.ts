@@ -320,7 +320,6 @@ export class RESetup {
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.stumble);
                 break;
-                
             case "kItem_木の矢の罠": {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
@@ -328,6 +327,10 @@ export class RESetup {
                 emittor.scope.projectilePrefabKey = "kウッドアロー";
                 break;
             }
+            case "kItem_突風の罠":
+                entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
+                entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.transferToNextFloor);
+                break;
             case "kItem_保存の壺":
                 entity.addReaction(REBasics.actions.PutInActionId, 0);
                 entity.addReaction(REBasics.actions.PickOutActionId, 0);

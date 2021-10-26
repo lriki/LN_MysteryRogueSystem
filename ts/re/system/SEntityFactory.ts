@@ -292,6 +292,8 @@ export class SEntityFactory {
                 entity.addBehavior(LSanctuaryBehavior);
                 entity.addBehavior(LClingFloorBehavior);
                 break;
+            // case "kItem_突風の罠":
+            //     break;
             case "kItem_保存の壺":
                 entity.addBehavior(LInventoryBehavior);
                 entity.addBehavior(LStorageBehavior);

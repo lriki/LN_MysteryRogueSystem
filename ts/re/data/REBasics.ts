@@ -17,6 +17,7 @@ export interface DBasicEffectBehaviors {
     levelDown: DEffectBehaviorId,
     warp: DEffectBehaviorId,
     stumble: DEffectBehaviorId,
+    transferToNextFloor: DEffectBehaviorId,
 }
 
 // export interface DBasicPresets {
