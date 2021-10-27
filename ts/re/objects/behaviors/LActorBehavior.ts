@@ -260,9 +260,9 @@ export class LActorBehavior extends LBattlerBehavior {
         return actions;
     }
 
-    onCollectTraits(result: IDataTrait[]): void {
-        super.onCollectTraits(result);
-        for (const t of this.actor().traits){
+    onCollectTraits(self: LEntity, result: IDataTrait[]): void {
+        super.onCollectTraits(self, result);
+        for (const t of self.data().selfTraits){
             result.push(t);
         }
         for (const t of this.currentClass().traits){

@@ -114,6 +114,9 @@ export class DEntity {
 
     enemy: DEnemy | undefined;
 
+    /** この Entity 自身に対する Trait */
+    selfTraits: IDataTrait[];
+
     /** デフォルトの勢力。 */
     factionId: DFactionId;
 
@@ -164,6 +167,7 @@ export class DEntity {
         this.canModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;
+        this.selfTraits = [];
         this.factionId = 0;//REData.system.factions.neutral;
         this.idealParams = [];
         this.reactions = [];

@@ -78,7 +78,8 @@ export class DItem {
 
     //animationId: number;
     
-    traits: IDataTrait[];
+    /** この Entity 自身に対する Trait */
+    //selfTraits: IDataTrait[];
 
     
     constructor(id: DItemDataId, entityId: DEntityId) {
@@ -91,7 +92,7 @@ export class DItem {
         //    parameterQualifyings: [],
         //    specialEffects: [],
         //},
-        this.traits = [];
+        //this.selfTraits = [];
     }
 
     public entityData(): DEntity {

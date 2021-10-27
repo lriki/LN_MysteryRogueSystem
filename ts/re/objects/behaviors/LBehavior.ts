@@ -387,7 +387,7 @@ export abstract class LBehavior extends LObject {
 
 
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {}
-    onCollectTraits(result: IDataTrait[]): void {}
+    onCollectTraits(self: LEntity, result: IDataTrait[]): void {}
 
     /** 主に AI 行動決定用に、スキルの一覧を取得する */
     onCollectSkillActions(result: IDataAction[]): void {}

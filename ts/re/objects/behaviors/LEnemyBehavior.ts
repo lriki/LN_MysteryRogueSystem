@@ -55,8 +55,8 @@ export class LEnemyBehavior extends LBattlerBehavior {
         return this.enemyData().exp;
     }
 
-    onCollectTraits(result: IDataTrait[]): void {
-        super.onCollectTraits(result);
+    onCollectTraits(self: LEntity, result: IDataTrait[]): void {
+        super.onCollectTraits(self, result);
         for (const t of this.enemyData().traits){
             result.push(t);
         }

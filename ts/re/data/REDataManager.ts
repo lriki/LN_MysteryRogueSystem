@@ -516,6 +516,7 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.factionId = REData.system.factions.neutral;
+                entity.selfTraits = x.traits;
                 actor.setup(x);
                 this.setupDirectly_Actor(actor);
             }

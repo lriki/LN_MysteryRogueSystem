@@ -28,7 +28,6 @@ export class RE_Data_Actor {
 
     maxLevel: number;
 
-    traits: IDataTrait[];
 
 
     actionCommands: DActorId[];
@@ -40,7 +39,6 @@ export class RE_Data_Actor {
         this.classId = 0;
         this.maxLevel = 0;
         this.initialLevel = 0;
-        this.traits = [];
         this.actionCommands = [];
     }
 
@@ -48,6 +46,5 @@ export class RE_Data_Actor {
         this.classId = data.classId;
         this.initialLevel = data.initialLevel;
         this.maxLevel = data.maxLevel;
-        this.traits = data.traits;
     }
 }

@@ -145,8 +145,8 @@ NOTE:
         return actions;
     }
 
-    onCollectTraits(result: IDataTrait[]): void {
-        super.onCollectTraits(result);
+    onCollectTraits(self: LEntity, result: IDataTrait[]): void {
+        super.onCollectTraits(self, result);
 
         for (const entity of this.equippedItemEntities()) {
             const equipment = entity.data().equipment;

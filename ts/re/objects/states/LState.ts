@@ -354,10 +354,10 @@ export class LState extends LObject {
         }
     }
 
-    public collectTraits(result: IDataTrait[]): void {
+    public collectTraits(self: LEntity, result: IDataTrait[]): void {
         this.stateEffect().traits.forEach(x => result.push(x));
         this.iterateBehaviors(x => {
-            x.onCollectTraits(result);
+            x.onCollectTraits(self, result);
             return true;
         });
     }

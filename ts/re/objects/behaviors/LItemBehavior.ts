@@ -70,10 +70,9 @@ export class LItemBehavior extends LBehavior {
             super.onQueryProperty(propertyId);
     }
 
-    onCollectTraits(result: IDataTrait[]): void {
-        super.onCollectTraits(result);
-        
-        for (const trait of this.itemData().traits){
+    onCollectTraits(self: LEntity, result: IDataTrait[]): void {
+        super.onCollectTraits(self, result);
+        for (const trait of self.data().selfTraits){
             result.push(trait);
         }
     }

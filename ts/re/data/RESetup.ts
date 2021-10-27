@@ -148,7 +148,7 @@ export class RESetup {
             case "kウッドアロー":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
-                data.traits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
+                entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, 0);
                 break;
             case "kItem_スピードドラッグ":

@@ -1111,10 +1111,10 @@ export class LEntity extends LObject
     public collectTraits(): IDataTrait[] {
         const result: IDataTrait[] = [];
         for (const i of this.basicBehaviors()) {
-            i.onCollectTraits(result);
+            i.onCollectTraits(this, result);
         }
         for (const i of this.states()) {
-            i.collectTraits(result);
+            i.collectTraits(this, result);
         }
         return result;
     }
