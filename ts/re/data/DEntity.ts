@@ -117,6 +117,12 @@ export class DEntity {
     /** この Entity 自身に対する Trait */
     selfTraits: IDataTrait[];
 
+    /** 装備したときに、装備者に対して適用する Trait */
+    affestTraits: IDataTrait[];
+
+    isTraitCharmItem: boolean;
+
+
     /** デフォルトの勢力。 */
     factionId: DFactionId;
 
@@ -168,6 +174,8 @@ export class DEntity {
         this.itemData = undefined;
         this.enemy = undefined;
         this.selfTraits = [];
+        this.affestTraits = [];
+        this.isTraitCharmItem = false;
         this.factionId = 0;//REData.system.factions.neutral;
         this.idealParams = [];
         this.reactions = [];
@@ -193,6 +201,14 @@ export class DEntity {
     public enemyData(): DEnemy {
         assert(this.enemy);
         return this.enemy;
+    }
+
+    public equippedTraits(): readonly IDataTrait[] {
+        return (!this.isTraitCharmItem) ? this.affestTraits : [];
+    }
+
+    public charmedTraits(): readonly IDataTrait[] {
+        return (this.isTraitCharmItem) ? this.affestTraits : [];
     }
 
     public addReaction(actionId: DActionId, emittorId: DEmittorId): void {

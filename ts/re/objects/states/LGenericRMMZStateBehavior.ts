@@ -178,7 +178,12 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
     
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
-        if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
+        const state = this.state();
+        const traits: IDataTrait[] = [];
+        state.collectTraits(self, traits);
+
+        //if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
+        if (traits.find(t => t.code == REBasics.traits.SealActivity && t.dataId == activity.actionId())) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
             context.postMessage(data.message3.format(targetName));

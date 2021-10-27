@@ -113,13 +113,9 @@ export class DEquipment {
     /** 装備したときに適用する parameters. (Index is DParameterId) */
     parameters: (DEquipmentParam | undefined)[];
 
-    /** 装備したときに、装備者に対して適用する Trait */
-    traits: IDataTrait[];
-
     constructor() {
         this.equipmentParts = [];
         this.parameters = [];
-        this.traits = [];
     }
 }
 

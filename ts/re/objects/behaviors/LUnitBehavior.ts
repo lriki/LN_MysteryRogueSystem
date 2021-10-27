@@ -146,10 +146,10 @@ export class LUnitBehavior extends LBehavior {
     onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
         const subject = new SEffectSubject(self);
 
-        //if (self.traitsWithId(DTraits.SealActivity, activity.actionId()).length > 0) {
-            //context.postMessage(tr2("行動できなかった！"));
-            //return REResponse.Succeeded;
-        //}
+        if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
+            context.postMessage(tr2("しかしなにもおこらなかった。"));
+            return SCommandResponse.Canceled;
+        }
 
 
         if (activity.entityDirection() > 0) {

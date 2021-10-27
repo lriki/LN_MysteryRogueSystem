@@ -122,6 +122,13 @@ export class LInventoryBehavior extends LBehavior {
         return this._entities.map(x => REGame.world.entity(x));
     }
 
+    public iterateItems(func : ((item: LEntity) => void) | ((item: LEntity) => boolean)): void {
+        for (const id of this._entities) {
+            const r = func(REGame.world.entity(id));
+            if (r === false) break;
+        }
+    } 
+
     public contains(entity: LEntity): boolean {
         return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
     }
@@ -174,6 +181,14 @@ export class LInventoryBehavior extends LBehavior {
     onPermanentDeath(context: SCommandContext, self: LEntity): void {
     }
     
+    onCollectTraits(self: LEntity, result: IDataTrait[]): void {
+        super.onCollectTraits(self, result);
+        this.iterateItems(item => {
+            result.pushArray(item.data().charmedTraits());
+        });
+        console.log("aaa");
+    }
+
     /*
     onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));

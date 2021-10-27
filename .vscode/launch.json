@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.activity.Stumble.player"
+                "-t", "concretes.activity.Stumble.prevention"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

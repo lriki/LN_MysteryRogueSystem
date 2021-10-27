@@ -516,7 +516,7 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.factionId = REData.system.factions.neutral;
-                entity.selfTraits = x.traits;
+                entity.selfTraits = x.traits.slice();
                 actor.setup(x);
                 this.setupDirectly_Actor(actor);
             }
@@ -630,7 +630,7 @@ export class REDataManager
                 entity.equipment.parameters[REBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
-                entity.equipment.traits = x.traits;
+                entity.affestTraits = x.traits.slice();
                 entity.entity = parseMetaToEntityProperties(x.meta);
 
                 // 投げ当て Effect
@@ -673,7 +673,7 @@ export class REDataManager
                 entity.equipment.parameters[REBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
-                entity.equipment.traits = x.traits;
+                entity.affestTraits = x.traits.slice();
                 entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });

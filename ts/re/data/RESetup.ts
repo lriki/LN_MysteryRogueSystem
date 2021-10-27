@@ -298,7 +298,9 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 entity.idealParams[REBasics.params.remaining] = 5;
-                //data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.EatActionId, value: 0 });
+
+                entity.isTraitCharmItem = true;
+                entity.affestTraits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.stumble, value: 0 });
                 break;
             case "k眠りガス":
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;

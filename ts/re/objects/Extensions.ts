@@ -4,6 +4,7 @@ import { assert } from "../Common";
 
 declare global {
     interface Array<T> {
+        pushArray(ary: readonly T[]): void;
         mutableResize(newSize: number, defaultValue: T): void;
         mutableRemove(predicate: (x: T) => boolean): boolean;
         mutableRemoveAll(predicate: (x: T) => boolean): boolean;
@@ -17,6 +18,10 @@ declare global {
         back(): T;
         backOrUndefined(): T | undefined;
     }
+}
+
+Array.prototype.pushArray = function<T>(ary: readonly T[]): void {
+    for (const i of ary) this.push(i);
 }
 
 Array.prototype.mutableResize = function<T>(newSize: number, defaultValue: T): void {

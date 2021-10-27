@@ -149,11 +149,8 @@ NOTE:
         super.onCollectTraits(self, result);
 
         for (const entity of this.equippedItemEntities()) {
-            const equipment = entity.data().equipment;
-            if (equipment) {
-                for (const trait of equipment.traits) {
-                    result.push(trait);
-                }
+            for (const trait of entity.data().equippedTraits()) {
+                result.push(trait);
             }
         }
     }
