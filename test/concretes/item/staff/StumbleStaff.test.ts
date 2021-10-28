@@ -55,19 +55,27 @@ test("concretes.activity.Stumble.prevention", () => {
     // アイテム 入手
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_リープの杖").id, [], "item1"));
     inventory.addEntity(item1);
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
+    inventory.addEntity(weapon1);
+    const rem1 = item1.actualParam(REBasics.params.remaining);
+
+    // trap1 生成&配置
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_転び石").id, [], "trap1"));
+    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
-
-    // [転ぶ]
-    const act = (new LActivity()).setup(REBasics.actions.stumble, player1);
-    RESystem.dialogContext.postActivity(act.withConsumeAction());
+    
+    // player を右 (罠上) へ移動
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
-
+    
+    REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    // 転倒は予防され、アイテムは落下していないこと
-    const item2 = REGame.map.block(11, 10).getFirstEntity();
-    expect(item2 === undefined).toBe(true);
+    // 転倒は予防され、アイテムは落下していないこと。また杖の使用回数が減っていること。
+    const rem2 = item1.actualParam(REBasics.params.remaining);
+    expect(inventory.contains(item1)).toBe(true);
+    expect(rem2).toBe(rem1 - 1);
 });

@@ -11,10 +11,11 @@ import { SEffectModifier } from "../SEffectApplyer";
 import { SEntityFactory } from "../SEntityFactory";
 import { SEffectBehavior } from "./SEffectBehavior";
 import { SItemStealSkillBehavior } from "./SItemStealEffectBehavior";
+import { DEffectBehaviorId } from "ts/re/data/DCommon";
 
 export class SGoldStealEffectBehavior extends SEffectBehavior {
 
-    public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
 
         const gold = this.pickGold(target, cctx.random());
         if (!gold) {

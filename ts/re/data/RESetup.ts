@@ -300,7 +300,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
 
                 entity.isTraitCharmItem = true;
-                entity.affestTraits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.stumble, value: 0 });
+                //entity.affestTraits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.stumble, value: 0 });
                 /*
                 Seal を利用するのはちょっと違う気がする。封印というより、リソースを消費して防御したい。
                 ある意味カウンターに該当するが、これは防御目的になり、ダメージや効果の減少を扱う。

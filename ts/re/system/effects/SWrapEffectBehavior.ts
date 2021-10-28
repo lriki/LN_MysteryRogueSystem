@@ -1,3 +1,4 @@
+import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UAction } from "ts/re/usecases/UAction";
@@ -7,7 +8,7 @@ import { SEffectBehavior } from "./SEffectBehavior";
 
 export class SWarpEffectBehavior extends SEffectBehavior {
 
-    public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
         UAction.postWarp(cctx, target);
     }
 

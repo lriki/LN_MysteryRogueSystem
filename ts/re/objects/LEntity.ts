@@ -30,7 +30,7 @@ import { UState } from "ts/re/usecases/UState";
 import { DParamBuff, DSubEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
-import { DBlockLayerKind, DEntityKindId } from "../data/DCommon";
+import { DBlockLayerKind, DEffectBehaviorId, DEntityKindId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
 import { LPriceInfo, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
@@ -182,6 +182,10 @@ export class LEntity extends LObject
     public entityId(): LEntityId {
         //return this._id;
         return this.__objectId();
+    }
+
+    public equals(other: LEntity): boolean {
+        return this.entityId().equals(other.entityId());
     }
 
     public isGCReady(): boolean {
@@ -1379,6 +1383,17 @@ export class LEntity extends LObject
         return result;
     }
 
+    //----------------------------------------
+
+    // true を返したら効果適用可能
+    public previewEffectBehaviorReaction(cctx: SCommandContext, id: DEffectBehaviorId): boolean {
+        let result: any = SCommandResponse.Pass;
+        this.iterateBehaviorsReverse(b => {
+            result = b.onPreviewEffectBehaviorReaction(cctx, this, id);
+            return result == SCommandResponse.Pass;
+        });
+        return result != SCommandResponse.Canceled;
+    }
     
     //----------------------------------------
 

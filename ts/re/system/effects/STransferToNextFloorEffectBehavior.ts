@@ -1,4 +1,5 @@
 import { tr2 } from "ts/re/Common";
+import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -11,7 +12,7 @@ import { SEffectBehavior } from "./SEffectBehavior";
 
 export class STransferToNextFloorEffectBehavior extends SEffectBehavior {
 
-    public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
         const land = REGame.map.land2();
         const currentFloorId = target.floorId;
         const newFloorNumber = currentFloorId.floorNumber() + 1;

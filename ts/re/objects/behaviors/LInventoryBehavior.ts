@@ -103,6 +103,8 @@ import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior"
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UAction } from "ts/re/usecases/UAction";
+import { DEffectBehaviorId } from "ts/re/data/DCommon";
+import { SCommandResponse } from "ts/re/system/RECommand";
 //import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 
 export class LInventoryBehavior extends LBehavior {
@@ -186,9 +188,24 @@ export class LInventoryBehavior extends LBehavior {
         this.iterateItems(item => {
             result.pushArray(item.data().charmedTraits());
         });
-        console.log("aaa");
     }
 
+    onPreviewEffectBehaviorReaction(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+        
+        let result = true;
+        this.iterateItems(item => {
+            if (item.data().isTraitCharmItem) {
+                if (!item.previewEffectBehaviorReaction(context, id)) {
+                    result = false;
+                    return false;
+                }
+            }
+            return true;
+        });
+        if (!result) return SCommandResponse.Canceled;
+        
+        return SCommandResponse.Pass;
+    }
     /*
     onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));

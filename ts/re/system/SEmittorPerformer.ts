@@ -394,7 +394,9 @@ export class SEmittorPerformer {
 
             const targets: LEntity[] = [];
             USearch.iterateAroundEntities(performer.x, performer.y, emittor.scope.length, withCenter, (entity) => {
-                targets.push(entity);
+                if (!entity.equals(performer)) {
+                    targets.push(entity);
+                }
             });
 
             this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
@@ -404,7 +406,9 @@ export class SEmittorPerformer {
             const block = REGame.map.tryGetBlock(performer.x, performer.y);
             if (block) {
                 for (const entity of block.getEntities()) {
-                    targets.push(entity);
+                    if (!entity.equals(performer)) {
+                        targets.push(entity);
+                    }
                 }
             }
             this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);

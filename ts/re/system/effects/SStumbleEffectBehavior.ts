@@ -1,3 +1,4 @@
+import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
@@ -12,10 +13,13 @@ import { SEffectBehavior } from "./SEffectBehavior";
 // 転ぶ (一般的な英語は fall だが、本システムとして fall はいろいろ使うので混乱を避けるため stumble にしてみる)
 export class SStumbleEffectBehavior extends SEffectBehavior {
 
-    public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+
+        if (target.previewEffectBehaviorReaction(cctx, id)) {
+            const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
+            cctx.postActivity(activity);
+        }
       
-        const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
-        cctx.postActivity(activity);
 
         // const inventory = target.findEntityBehavior(LInventoryBehavior);
         // if (inventory) {

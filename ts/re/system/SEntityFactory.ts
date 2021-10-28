@@ -44,6 +44,7 @@ import { LGoldThiefBehavior } from "../objects/behaviors/LGoldThiefBehavior";
 import { LParamBehavior } from "../objects/behaviors/LParamBehavior";
 import { LEscapeAI } from "../objects/ai/LEscapeAI";
 import { LEscapeBehavior } from "../objects/behaviors/LEscapeBehavior";
+import { LStumblePreventionBehavior } from "../objects/behaviors/LPreventionBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -301,6 +302,11 @@ export class SEntityFactory {
             case "kItem_Gold":
                 entity.addBehavior(LGoldBehavior);
                 break;
+            case "kItem_リープの杖":
+                entity.addBehavior(LStumblePreventionBehavior);
+                break;
+
+                
         }
         RESystem.ext.onNewEntity(entity, entityData);
     }

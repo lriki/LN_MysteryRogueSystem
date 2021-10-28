@@ -41,7 +41,7 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DBlockLayerKind, DSkillId } from "ts/re/data/DCommon";
+import { DBlockLayerKind, DEffectBehaviorId, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DSubEffectTargetKey } from "ts/re/data/DEffect";
@@ -416,6 +416,8 @@ export abstract class LBehavior extends LObject {
 
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 
+    /** EffectBehavior で狙われたとき。効果を防止するには Cancel を返す。 */
+    onPreviewEffectBehaviorReaction(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse { return SCommandResponse.Pass; }
 
     
     //public removeThisState(): void {

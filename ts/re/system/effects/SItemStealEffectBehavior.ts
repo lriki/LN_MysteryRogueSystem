@@ -1,4 +1,5 @@
 import { tr2 } from "ts/re/Common";
+import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
@@ -15,7 +16,7 @@ import { SEffectBehavior } from "./SEffectBehavior";
 
 export class SItemStealSkillBehavior extends SEffectBehavior {
 
-    public onApplyTargetEffect(cctx: SCommandContext, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
 
         // TODO: これだとアイテム化けに対応できない
         if (target.findEntityBehavior(LItemBehavior)) {
