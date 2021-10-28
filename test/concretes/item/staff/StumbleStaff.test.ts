@@ -51,6 +51,7 @@ test("concretes.activity.Stumble.prevention", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.dir = 6;
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    const hp1 = player1.actualParam(REBasics.params.hp);
     
     // アイテム 入手
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_リープの杖").id, [], "item1"));
@@ -75,7 +76,9 @@ test("concretes.activity.Stumble.prevention", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 転倒は予防され、アイテムは落下していないこと。また杖の使用回数が減っていること。
+    const hp2 = player1.actualParam(REBasics.params.hp);
     const rem2 = item1.actualParam(REBasics.params.remaining);
+    expect(hp2).toBe(hp1);
     expect(inventory.contains(item1)).toBe(true);
     expect(rem2).toBe(rem1 - 1);
 });
