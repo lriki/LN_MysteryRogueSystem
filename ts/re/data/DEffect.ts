@@ -198,6 +198,12 @@ export interface DParamBuff {
     //formula: string;
 }
 
+export enum DEffectRejectionLevel {
+    None = 0,   // 制約は無効 (「盗み防止」があっても絶対に盗み発動する)
+    Ones = 1,   // 制約を受けた効果だけ防止する (HPダメージと毒効果の2つがある場合、「毒防止」をもっていれば毒効果だけ無効化する)
+    All = 2,    // Effect 全体の発動自体を無効にする (転び石効果で「転倒防止」された場合、HPダメージも含めて無効化する)
+}
+
 export interface DQualifyings {
 
     /**
@@ -206,30 +212,31 @@ export interface DQualifyings {
       */
     parameterQualifyings: DParameterQualifying[];
 
-     /**
-       * パラメータ変化以外のすべてのエフェクト。
-       * これらを実現するにはコードで頑張る必要がある。
-       * ほとんどの特殊効果はこれを持つ必要があるはず。
-       * コアスクリプトだと EFFECT_XXXX に相当する。
-       * 
-       * @deprecated see effectBehaviors
-       */
-     otherEffectQualifyings: DOtherEffectQualifying[];
+    /**
+     * パラメータ変化以外のすべてのエフェクト。
+     * これらを実現するにはコードで頑張る必要がある。
+     * ほとんどの特殊効果はこれを持つ必要があるはず。
+     * コアスクリプトだと EFFECT_XXXX に相当する。
+     * 
+     * @deprecated see effectBehaviors
+     */
+    otherEffectQualifyings: DOtherEffectQualifying[];
 
     effectBehaviors: DEffectBehaviorId[];
  
-     /**
-       * IDataSkill.effects
-       * IDataItem.effects
-       */
+    /**
+     * IDataSkill.effects
+     * IDataItem.effects
+     */
     specialEffectQualifyings: IDataEffect[];
  
-     /**
-      * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
-      * こちらはレベルと共に指定できる。
-      */
+    /**
+     * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
+     * こちらはレベルと共に指定できる。
+     */
     buffQualifying: DParamBuff[];
-     
+    
+
 }
 
 export class DEffect {
@@ -263,7 +270,8 @@ export class DEffect {
 
     qualifyings: DQualifyings;
 
-    //selfQualifyings: DQualifyings;
+    rejectionLevel: DEffectRejectionLevel;
+    
 
     constructor() {
         //this.id = id;
@@ -284,12 +292,7 @@ export class DEffect {
             specialEffectQualifyings : [],
             buffQualifying: [],
         };
-        // this.selfQualifyings = {
-        //     parameterQualifyings: [],
-        //     otherEffectQualifyings: [],
-        //     specialEffectQualifyings : [],
-        //     buffQualifying: [],
-        // };
+        this.rejectionLevel = DEffectRejectionLevel.Ones;
     }
 
     public copyFrom(src: DEffect): void {
@@ -306,12 +309,7 @@ export class DEffect {
             specialEffectQualifyings :src.qualifyings.specialEffectQualifyings.slice(),
             buffQualifying: src.qualifyings.buffQualifying.slice(),
         };
-        // this.selfQualifyings = {
-        //     parameterQualifyings: src.selfQualifyings.parameterQualifyings.slice(),
-        //     otherEffectQualifyings: src.selfQualifyings.otherEffectQualifyings.slice(),
-        //     specialEffectQualifyings :src.selfQualifyings.specialEffectQualifyings.slice(),
-        //     buffQualifying: src.selfQualifyings.buffQualifying.slice(),
-        // };
+        this.rejectionLevel = src.rejectionLevel;
     }
     
     public clone(): DEffect {
