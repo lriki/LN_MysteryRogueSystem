@@ -204,7 +204,7 @@ export class REData
         //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab()];
         this.entities = [new DEntity(0)];
-        this.emittors = [new DEmittor(0)];
+        this.emittors = [new DEmittor(0, "null")];
     }
 
     static addEntityKind(displayName: string, name: string): number {
@@ -315,16 +315,16 @@ export class REData
 
     //--------------------
 
-    static newEmittor(): DEmittor {
+    static newEmittor(sourceKey: string): DEmittor {
         const newId = this.emittors.length;
-        const data = new DEmittor(newId);
+        const data = new DEmittor(newId, sourceKey);
         this.emittors.push(data);
         return data;
     }
 
     static cloneEmittor(src: DEmittor): DEmittor {
         const newId = this.emittors.length;
-        const data = new DEmittor(newId);
+        const data = new DEmittor(newId, src.effectSet.selfEffect.sourceKey);
         data.copyFrom(src);
         this.emittors.push(data);
         return data;

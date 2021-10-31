@@ -157,9 +157,9 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
 
-                const emittor = REData.newEmittor();
+                const emittor = REData.newEmittor(entity.entity.key);
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
-                const effect = new DEffect();
+                const effect = new DEffect(entity.entity.key);
                 effect.qualifyings.buffQualifying.push({
                     paramId: REBasics.params.agi,
                     mode: DBuffMode.Strength,
@@ -181,7 +181,7 @@ export class RESetup {
                 {
                     const emittor = entity.emittorSet.emittors(DEffectCause.Eat)[0]; //entity.emittorSet.mainEmittor();
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
-                    const effect = new DEffect();
+                    const effect = new DEffect(entity.entity.key);
                     effect.qualifyings.parameterQualifyings.push({
                         parameterId: REBasics.params.pow,
                         applyTarget: DParameterApplyTarget.Current,
@@ -391,6 +391,16 @@ export class RESetup {
                 - 転びであれば、付属する微ダメージは転びの表現の一部
                 - 毒攻撃であれば、HPダメージにあくまでオプションとして付く効果
                 …というように考えることもできる。
+                
+                [2021/10/31] Effect 側が RejectionLevel を持つのはやめたほうがいいかも
+                ----------
+                途中まで実装したけどやめてみる。
+                攻撃と一言にいっても、装備につく印やステートによって、ある Effect に追加の EffectBehavior や SpecialEffect が付くことがある。
+                Level.All(ひとつでも効果が無効なら、Effect全体を無効化)していると、そういった追加によって攻撃全体がキャンセルされる可能性がある。
+                例えば、転びの追加効果のある攻撃、など。
+                かなりコーナーケースではあるとおもうけど、拡張に対して回避の難しい問題が潜在することになるので、やめたいところ。
+
+                スキル、Effect, EffectBehavior, SpecialEffect などそれぞれでリジェクトするかを Behavior 側で判断できる仕組みにしてみる。
                 */
                 break;
             case "k眠りガス":
@@ -607,9 +617,9 @@ export class RESetup {
 
     private static setupGrassCommon(entity: DEntity): void {
         // FP 回復
-        const emittor = REData.newEmittor();
+        const emittor = REData.newEmittor(entity.entity.key);
         emittor.scope.range = DEffectFieldScopeRange.Performer;
-        const effect = new DEffect();
+        const effect = new DEffect(entity.entity.key);
         effect.qualifyings.parameterQualifyings.push({
             parameterId: REBasics.params.fp,
             applyTarget: DParameterApplyTarget.Current,
@@ -631,9 +641,9 @@ export class RESetup {
     }
 
     private static setupArrowCommon(entity: DEntity): void {
-        const emittor = REData.newEmittor();
+        const emittor = REData.newEmittor(entity.entity.key);
         emittor.scope.range = DEffectFieldScopeRange.Performer;
-        const effect = new DEffect();
+        const effect = new DEffect(entity.entity.key);
         effect.critical = false;
         effect.successRate = 100;
         effect.hitType = DEffectHitType.Physical;

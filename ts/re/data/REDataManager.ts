@@ -529,8 +529,10 @@ export class REDataManager
             const skill = new DSkill(REData.skills.length);
             REData.skills.push(skill);
             if (x) {
-                const emittor = REData.newEmittor();
-                const effect = new DEffect();
+                skill.parseMetadata(x.meta);
+
+                const emittor = REData.newEmittor(skill.key);
+                const effect = new DEffect(skill.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
@@ -550,7 +552,6 @@ export class REDataManager
                 skill.rmmzEffectScope = x.scope ?? DRmmzEffectScope.None;
                 skill.message1 = x.message1;
                 skill.message2 = x.message2;
-                skill.parseMetadata(x.meta);
 
                 if (DHelpers.isForFriend(skill.rmmzEffectScope)) {
                 //if (DHelpers.isSingle(skill.rmmzEffectScope)) {
@@ -567,14 +568,15 @@ export class REDataManager
         $dataItems.forEach(x => {
             const [entity, item] = REData.newItem();
             if (x) {
+                entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
                 entity.cellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
 
-                const emittor = REData.newEmittor();
-                const effect = new DEffect();
+                const emittor = REData.newEmittor(entity.entity.key);
+                const effect = new DEffect(entity.entity.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
@@ -603,7 +605,6 @@ export class REDataManager
                 */
 
                 item.rmmzScope = x.scope ?? DRmmzEffectScope.None;
-                entity.entity = parseMetaToEntityProperties(x.meta);
                 //item.animationId = x.animationId;
 
                 if (DHelpers.isForFriend(item.rmmzScope)) {

@@ -27,7 +27,7 @@ import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LParamSet } from "./LParam";
 import { UState } from "ts/re/usecases/UState";
-import { DParamBuff, DSubEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
+import { DEffect, DParamBuff, DSubEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DEffectBehaviorId, DEntityKindId } from "../data/DCommon";
@@ -1386,10 +1386,20 @@ export class LEntity extends LObject
     //----------------------------------------
 
     // true を返したら効果適用可能
+    public previewEffectBehaviorRejection(cctx: SCommandContext, effect: DEffect): boolean {
+        let result: any = SCommandResponse.Pass;
+        this.iterateBehaviorsReverse(b => {
+            result = b.onPreviewEffectRejection(cctx, this, effect);
+            return result == SCommandResponse.Pass;
+        });
+        return result != SCommandResponse.Canceled;
+    }
+
+    // true を返したら効果適用可能
     public previewEffectBehaviorReaction(cctx: SCommandContext, id: DEffectBehaviorId): boolean {
         let result: any = SCommandResponse.Pass;
         this.iterateBehaviorsReverse(b => {
-            result = b.onPreviewEffectBehaviorReaction(cctx, this, id);
+            result = b.onPreviewEffectBehaviorRejection(cctx, this, id);
             return result == SCommandResponse.Pass;
         });
         return result != SCommandResponse.Canceled;

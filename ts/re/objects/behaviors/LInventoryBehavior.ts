@@ -105,6 +105,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UAction } from "ts/re/usecases/UAction";
 import { DEffectBehaviorId } from "ts/re/data/DCommon";
 import { SCommandResponse } from "ts/re/system/RECommand";
+import { DEffect } from "ts/re/data/DEffect";
 //import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 
 export class LInventoryBehavior extends LBehavior {
@@ -190,7 +191,25 @@ export class LInventoryBehavior extends LBehavior {
         });
     }
 
-    onPreviewEffectBehaviorReaction(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+    
+    onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
+        
+        let result = true;
+        this.iterateItems(item => {
+            if (item.data().isTraitCharmItem) {
+                if (!item.previewEffectBehaviorRejection(context, effect)) {
+                    result = false;
+                    return false;
+                }
+            }
+            return true;
+        });
+        if (!result) return SCommandResponse.Canceled;
+        
+        return SCommandResponse.Pass;
+    }
+
+    onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
         
         let result = true;
         this.iterateItems(item => {

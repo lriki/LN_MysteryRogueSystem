@@ -104,14 +104,18 @@ export class SEffectContext {
         //let deadCount = 0;
         for (const target of targets) {
             const effect = this._effectorFact.selectEffect(target);
-            this.applyEffectToTarget(commandContext, effect, target);
 
-            
-            for (const subEffect of this._effectorFact.subEffects()) {
-                for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
-                    this.applyEffectToTarget(commandContext, subEffect.effect, subTarget);
+            if (target.previewEffectBehaviorRejection(commandContext, effect.data())) {
+                // Main Effect
+                this.applyEffectToTarget(commandContext, effect, target);
+                // Sub Effects
+                for (const subEffect of this._effectorFact.subEffects()) {
+                    for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
+                        this.applyEffectToTarget(commandContext, subEffect.effect, subTarget);
+                    }
                 }
             }
+
         }
     }
 

@@ -198,11 +198,11 @@ export interface DParamBuff {
     //formula: string;
 }
 
-export enum DEffectRejectionLevel {
-    None = 0,   // 制約は無効 (「盗み防止」があっても絶対に盗み発動する)
-    Ones = 1,   // 制約を受けた効果だけ防止する (HPダメージと毒効果の2つがある場合、「毒防止」をもっていれば毒効果だけ無効化する)
-    All = 2,    // Effect 全体の発動自体を無効にする (転び石効果で「転倒防止」された場合、HPダメージも含めて無効化する)
-}
+// export enum DEffectRejectionLevel {
+//     None = 0,   // 制約は無効 (「盗み防止」があっても絶対に盗み発動する)
+//     Ones = 1,   // 制約を受けた効果だけ防止する (HPダメージと毒効果の2つがある場合、「毒防止」をもっていれば毒効果だけ無効化する)
+//     All = 2,    // Effect 全体の発動自体を無効にする (転び石効果で「転倒防止」された場合、HPダメージも含めて無効化する)
+// }
 
 export interface DQualifyings {
 
@@ -240,6 +240,8 @@ export interface DQualifyings {
 }
 
 export class DEffect {
+    sourceKey: string;
+
     matchConditions: DMatchConditions;
     
     /**
@@ -270,10 +272,11 @@ export class DEffect {
 
     qualifyings: DQualifyings;
 
-    rejectionLevel: DEffectRejectionLevel;
+    //rejectionLevel: DEffectRejectionLevel;
     
 
-    constructor() {
+    constructor(sourceKey: string) {
+        this.sourceKey = sourceKey;
         //this.id = id;
         //this.scope = {
         //    area: DEffectFieldScopeArea.Room,
@@ -292,7 +295,7 @@ export class DEffect {
             specialEffectQualifyings : [],
             buffQualifying: [],
         };
-        this.rejectionLevel = DEffectRejectionLevel.Ones;
+        //this.rejectionLevel = DEffectRejectionLevel.Ones;
     }
 
     public copyFrom(src: DEffect): void {
@@ -309,11 +312,11 @@ export class DEffect {
             specialEffectQualifyings :src.qualifyings.specialEffectQualifyings.slice(),
             buffQualifying: src.qualifyings.buffQualifying.slice(),
         };
-        this.rejectionLevel = src.rejectionLevel;
+        //this.rejectionLevel = src.rejectionLevel;
     }
     
     public clone(): DEffect {
-        const i = new DEffect();
+        const i = new DEffect(this.sourceKey);
         i.copyFrom(this);
         return i;
     }
@@ -415,8 +418,8 @@ export class DEffectSet {
 
     subEffects: DSubEffect[];
 
-    public constructor() {
-        this.selfEffect = new DEffect();
+    public constructor(sourceKey: string) {
+        this.selfEffect = new DEffect(sourceKey);
         this.effects = [];
         this.subEffects = [];
     }

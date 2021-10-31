@@ -53,13 +53,13 @@ export type DEmittorId = number;
 
     effectSet: DEffectSet;
     
-    constructor(id: DEmittorId) {
+    constructor(id: DEmittorId, sourceKey: string) {
         this.id = id;
         this.costs = new DEmittorCost();
         this.scope = new DEffectFieldScope();
         this.selfAnimationId = 0;
         this.selfSequelId = 0;
-        this.effectSet = new DEffectSet();
+        this.effectSet = new DEffectSet(sourceKey);
     }
     
     public copyFrom(src: DEmittor): void {

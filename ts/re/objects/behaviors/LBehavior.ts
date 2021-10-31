@@ -44,7 +44,7 @@ import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DBlockLayerKind, DEffectBehaviorId, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
-import { DSubEffectTargetKey } from "ts/re/data/DEffect";
+import { DEffect, DSubEffectTargetKey } from "ts/re/data/DEffect";
 import { DFactionId } from "ts/re/data/REData";
 import { LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
@@ -417,7 +417,8 @@ export abstract class LBehavior extends LObject {
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 
     /** EffectBehavior で狙われたとき。効果を防止するには Cancel を返す。 */
-    onPreviewEffectBehaviorReaction(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse { return SCommandResponse.Pass; }
+    onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse { return SCommandResponse.Pass; }
+    onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse { return SCommandResponse.Pass; }
 
     
     //public removeThisState(): void {
