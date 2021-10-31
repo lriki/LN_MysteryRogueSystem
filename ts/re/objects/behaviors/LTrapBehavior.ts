@@ -169,7 +169,21 @@ export class LTrapBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
+    /*
+    [2021/10/31] カウンターアタックについて
+    ----------
+    特定の効果を受けたら、スキルorEffectを発動する仕組み。
+
+    通常の行動順ルーチンにおける「反撃」ではないため注意。
+
+    EffectContextの中から即時発動するのは避けたほうがいいかも？
+    例えば攻撃ヒット後、移動する効果（ヒットアンドアウェイスキルなど？）の拡張を考えると、
+    Target側はまず「予約」しておき、効果適用処理が一通り終わった後に発動するのがいいだろう。
+    （３方向同時攻撃などを考えると、本当に完全に終わった時が望ましい）
+
+    */
     onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
+        // TODO: test. カウンターとして実装したい
         this.performTrapEffect(self, cctx, 0);
         return SCommandResponse.Pass; 
     }
