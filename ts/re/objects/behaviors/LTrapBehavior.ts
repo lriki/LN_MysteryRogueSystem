@@ -14,7 +14,7 @@ import { DEventId, SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents"
 import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DEffectCause } from "ts/re/data/DEmittor";
+import { DEffectCause, DEmittor } from "ts/re/data/DEmittor";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 
 
@@ -43,6 +43,7 @@ export class LTrapBehavior extends LBehavior {
 
 
     private _exposed: boolean = false;
+    private _recharging: boolean = false;
 
     constructor() {
         super();
@@ -109,6 +110,14 @@ export class LTrapBehavior extends LBehavior {
         context.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
 
+        this.performTrapEffect(self, context, target.dir);
+        
+        return SCommandResponse.Pass;
+    }
+
+    private performTrapEffect(self: LEntity, context: SCommandContext, dir: number): void {
+        if (this._recharging) return;
+
         //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
         //const itemData = trapItem.itemData();
         const emittors = self.data().emittorSet.emittors(DEffectCause.Affect);
@@ -121,39 +130,48 @@ export class LTrapBehavior extends LBehavior {
             if (1) {
 
                 SEmittorPerformer.makeWithEmitor(self, self, emittor)
-                .setDffectDirection(target.dir)
+                .setDffectDirection(dir)
                 .setProjectilePriorityEffectSet(emittor.effectSet)
                 .performe(context);
     
             }
-            else {
+            // else {
 
 
 
-                const subject = new SEffectorFact(e.self, emittor.effectSet, SEffectIncidentType.IndirectAttack, target.dir);
-                const effectContext = new SEffectContext(subject, context.random());
+            //     const subject = new SEffectorFact(e.self, emittor.effectSet, SEffectIncidentType.IndirectAttack, target.dir);
+            //     const effectContext = new SEffectContext(subject, context.random());
     
-                //console.log(result);
+            //     //console.log(result);
     
     
-                context.postAnimation(e.sender, 35, true);
+            //     context.postAnimation(e.sender, 35, true);
     
-                // TODO: ここでラムダ式も post して apply したい。
+            //     // TODO: ここでラムダ式も post して apply したい。
     
-                context.postCall(() => {
-                    effectContext.applyWithWorth(context, [target]);
-                });
+            //     context.postCall(() => {
+            //         effectContext.applyWithWorth(context, [target]);
+            //     });
     
-            }
+            // }
 
 
             //context.postMessage(tr("しかし ワナには かからなかった。"));
         }
 
 
+        this._recharging = true;
 
-        
+    }
+    
+    onStepEnd(context: SCommandContext): SCommandResponse {
+        this._recharging = false;
         return SCommandResponse.Pass;
+    }
+
+    onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
+        this.performTrapEffect(self, cctx, 0);
+        return SCommandResponse.Pass; 
     }
 }
 

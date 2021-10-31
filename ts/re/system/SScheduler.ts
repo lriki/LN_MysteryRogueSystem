@@ -436,9 +436,13 @@ export class SScheduler
     // Manual, Minor, Major 等フェーズのたびに発生する。
     private onStepEnd(step: LTOStep): void {
 
-        REGame.scheduler.actorEntities().forEach(entity => {
+        // REGame.scheduler.actorEntities().forEach(entity => {
+        //     entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
+        // });
+        // Trap の状態リセットも行いたいので、マップ上の全 Entity に対して通知する
+        for (const entity of REGame.map.entities()) {
             entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
-        });
+        }
 
         
         const unit = step.unit();

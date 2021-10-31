@@ -22,6 +22,7 @@ import { USearch } from "../usecases/USearch";
 import { LBlock } from "../objects/LBlock";
 import { UAction } from "../usecases/UAction";
 import { UName } from "../usecases/UName";
+import { SCommandResponse } from "./RECommand";
 
 export type SOnPerformedFunc = (targets: LEntity[]) => void;
 
@@ -250,9 +251,18 @@ export class SEmittorPerformer {
         });
     }
 
-    private onPerformed(targets: LEntity[]): void {
+    private onPerformed(cctx: SCommandContext, targets: LEntity[]): void {
         if (this._onPerformed) {
             this._onPerformed(targets);
+        }
+
+        if (this._emittor) {
+            const emittor = this._emittor;
+            for (const target of targets) {
+                target.iterateBehaviorsReverse(b => {
+                    return b.onEffectPerformed(cctx, target, emittor) == SCommandResponse.Pass;
+                });
+            }
         }
     }
 
@@ -314,7 +324,7 @@ export class SEmittorPerformer {
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
             context.postCall(() => {
                 effectContext.applyWithWorth(context, targets);
-                this.onPerformed(targets);
+                this.onPerformed(context, targets);
                 if (skillId > 0) {
                     this.raiseSkillEmitted(context, performer, targets, skillId);
                     this.callSkillPerformed(context, performer, targets, skillId);
@@ -355,7 +365,7 @@ export class SEmittorPerformer {
                         // TODO: SEffectSubject はダミー
                         context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
                             .then(() => {
-                                this.onPerformed([target]);
+                                this.onPerformed(context, [target]);
                                 if (skillId > 0) {
                                     //this.raiseSkillEmitted(context, performer, [target], skillId);
                                     this.callSkillPerformed(context, performer, [target], skillId);
@@ -387,7 +397,7 @@ export class SEmittorPerformer {
 
 
             effectContext.applyWithWorth(context, selectedItems);
-            this.onPerformed(selectedItems);
+            this.onPerformed(context, selectedItems);
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Around || emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter) {
             const withCenter = (emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter);
@@ -470,7 +480,7 @@ export class SEmittorPerformer {
         
         context.postCall(() => {
             effectContext.applyWithWorth(context, targets);
-            this.onPerformed(targets);
+            this.onPerformed(context, targets);
             if (skillId > 0) {
                 this.raiseSkillEmitted(context, performer, targets, skillId);
                 this.callSkillPerformed(context, performer, targets, skillId);

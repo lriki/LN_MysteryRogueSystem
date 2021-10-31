@@ -48,6 +48,7 @@ import { DEffect, DSubEffectTargetKey } from "ts/re/data/DEffect";
 import { DFactionId } from "ts/re/data/REData";
 import { LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
+import { DEmittor } from "ts/re/data/DEmittor";
 
 export enum DecisionPhase {
     Prepare,
@@ -430,6 +431,7 @@ export abstract class LBehavior extends LObject {
     /** EffectBehavior で狙われたとき。効果を防止するには Cancel を返す。 */
     onPreviewRejection(context: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse { return SCommandResponse.Pass; }
 
+    onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse { return SCommandResponse.Pass; }
     
     //public removeThisState(): void {
     //    this.ownerAs(LState)?.removeThisState();
