@@ -105,7 +105,7 @@ export class SEffectContext {
         for (const target of targets) {
             const effect = this._effectorFact.selectEffect(target);
 
-            if (target.previewEffectBehaviorRejection(commandContext, effect.data())) {
+            if (target.previewRejection(commandContext, { kind: "Effect", effect: effect.data() })) {
                 // Main Effect
                 this.applyEffectToTarget(commandContext, effect, target);
                 // Sub Effects

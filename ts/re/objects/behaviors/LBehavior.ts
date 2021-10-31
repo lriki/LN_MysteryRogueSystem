@@ -180,6 +180,17 @@ export const onGrounded = Symbol("onGrounded");
 export interface CollideActionArgs {
     dir: number;    // 飛翔中の Entity の移動方向。必ずしも Entity の向きと一致するわけではないため、Args として渡す必要がある。
 }
+interface SEffectRejectionInfo {
+    kind: "Effect";
+    effect: DEffect;
+}
+
+interface SEffectBehaviorRejectionInfo {
+    kind: "EffectBehavior";
+    id: DEffectBehaviorId;
+}
+
+export type SRejectionInfo = SEffectRejectionInfo | SEffectBehaviorRejectionInfo;
 
 /*
     NOTE: test** について
@@ -417,8 +428,7 @@ export abstract class LBehavior extends LObject {
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 
     /** EffectBehavior で狙われたとき。効果を防止するには Cancel を返す。 */
-    onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse { return SCommandResponse.Pass; }
-    onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse { return SCommandResponse.Pass; }
+    onPreviewRejection(context: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse { return SCommandResponse.Pass; }
 
     
     //public removeThisState(): void {

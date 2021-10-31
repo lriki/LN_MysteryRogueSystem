@@ -1,4 +1,4 @@
-import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView, LParamMinMaxInfo } from "./behaviors/LBehavior";
+import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView, LParamMinMaxInfo, SRejectionInfo } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
 import { RECommand, SCommandResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -1386,24 +1386,34 @@ export class LEntity extends LObject
     //----------------------------------------
 
     // true を返したら効果適用可能
-    public previewEffectBehaviorRejection(cctx: SCommandContext, effect: DEffect): boolean {
+    public previewRejection(cctx: SCommandContext, rejection: SRejectionInfo): boolean {
         let result: any = SCommandResponse.Pass;
         this.iterateBehaviorsReverse(b => {
-            result = b.onPreviewEffectRejection(cctx, this, effect);
+            result = b.onPreviewRejection(cctx, this, rejection);
             return result == SCommandResponse.Pass;
         });
         return result != SCommandResponse.Canceled;
     }
 
-    // true を返したら効果適用可能
-    public previewEffectBehaviorReaction(cctx: SCommandContext, id: DEffectBehaviorId): boolean {
-        let result: any = SCommandResponse.Pass;
-        this.iterateBehaviorsReverse(b => {
-            result = b.onPreviewEffectBehaviorRejection(cctx, this, id);
-            return result == SCommandResponse.Pass;
-        });
-        return result != SCommandResponse.Canceled;
-    }
+    // // true を返したら効果適用可能
+    // public previewEffectBehaviorRejection(cctx: SCommandContext, effect: DEffect): boolean {
+    //     let result: any = SCommandResponse.Pass;
+    //     this.iterateBehaviorsReverse(b => {
+    //         result = b.onPreviewEffectRejection(cctx, this, effect);
+    //         return result == SCommandResponse.Pass;
+    //     });
+    //     return result != SCommandResponse.Canceled;
+    // }
+
+    // // true を返したら効果適用可能
+    // public previewEffectBehaviorReaction(cctx: SCommandContext, id: DEffectBehaviorId): boolean {
+    //     let result: any = SCommandResponse.Pass;
+    //     this.iterateBehaviorsReverse(b => {
+    //         result = b.onPreviewEffectBehaviorRejection(cctx, this, id);
+    //         return result == SCommandResponse.Pass;
+    //     });
+    //     return result != SCommandResponse.Canceled;
+    // }
     
     //----------------------------------------
 

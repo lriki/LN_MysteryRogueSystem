@@ -100,7 +100,7 @@ import { assert } from "ts/re/Common";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
-import { LBehavior } from "./LBehavior"
+import { LBehavior, SRejectionInfo } from "./LBehavior"
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UAction } from "ts/re/usecases/UAction";
 import { DEffectBehaviorId } from "ts/re/data/DCommon";
@@ -191,40 +191,55 @@ export class LInventoryBehavior extends LBehavior {
         });
     }
 
+    onPreviewRejection(context: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse {
+        let result = true;
+        this.iterateItems(item => {
+            if (item.data().isTraitCharmItem) {
+                if (!item.previewRejection(context, rejection)) {
+                    result = false;
+                    return false;
+                }
+            }
+            return true;
+        });
+        if (!result) return SCommandResponse.Canceled;
+        
+        return SCommandResponse.Pass;
+    }
     
-    onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
+    // onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
         
-        let result = true;
-        this.iterateItems(item => {
-            if (item.data().isTraitCharmItem) {
-                if (!item.previewEffectBehaviorRejection(context, effect)) {
-                    result = false;
-                    return false;
-                }
-            }
-            return true;
-        });
-        if (!result) return SCommandResponse.Canceled;
+    //     let result = true;
+    //     this.iterateItems(item => {
+    //         if (item.data().isTraitCharmItem) {
+    //             if (!item.previewEffectBehaviorRejection(context, effect)) {
+    //                 result = false;
+    //                 return false;
+    //             }
+    //         }
+    //         return true;
+    //     });
+    //     if (!result) return SCommandResponse.Canceled;
         
-        return SCommandResponse.Pass;
-    }
+    //     return SCommandResponse.Pass;
+    // }
 
-    onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+    // onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
         
-        let result = true;
-        this.iterateItems(item => {
-            if (item.data().isTraitCharmItem) {
-                if (!item.previewEffectBehaviorReaction(context, id)) {
-                    result = false;
-                    return false;
-                }
-            }
-            return true;
-        });
-        if (!result) return SCommandResponse.Canceled;
+    //     let result = true;
+    //     this.iterateItems(item => {
+    //         if (item.data().isTraitCharmItem) {
+    //             if (!item.previewEffectBehaviorReaction(context, id)) {
+    //                 result = false;
+    //                 return false;
+    //             }
+    //         }
+    //         return true;
+    //     });
+    //     if (!result) return SCommandResponse.Canceled;
         
-        return SCommandResponse.Pass;
-    }
+    //     return SCommandResponse.Pass;
+    // }
     /*
     onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));

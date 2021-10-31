@@ -7,7 +7,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
+import { CommandArgs, LBehavior, onGrounded, SRejectionInfo, testPickOutItem } from "./LBehavior";
 
 /**
  * 
@@ -20,31 +20,56 @@ export class LStumblePreventionBehavior extends LBehavior {
         return b
     }
 
-    onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
-
-        if (effect.sourceKey == "kItem_転び石") {
-            if (self.actualParam(REBasics.params.remaining) > 0) {
-                // 使用回数を減らして効果を防止する
-                self.gainActualParam(REBasics.params.remaining, -1);
-                return SCommandResponse.Canceled;
+    onPreviewRejection(cctx: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse {
+        if (rejection.kind == "Effect") {
+            if (rejection.effect.sourceKey == "kItem_転び石") {
+                return this.rejectStumble(cctx, self);
             }
         }
-
+        else if (rejection.kind == "EffectBehavior") {
+            if (rejection.id == REBasics.effectBehaviors.stumble) {
+                return this.rejectStumble(cctx, self);
+            }
+        }
         return SCommandResponse.Pass;
     }
 
-    onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+    private rejectStumble(cctx: SCommandContext, self: LEntity): SCommandResponse {
+        if (self.actualParam(REBasics.params.remaining) > 0) {
+            cctx.postMessage(tr2("%1の効果で転ばなかった。").format(UName.makeNameAsItem(self)));
 
-        if (id == REBasics.effectBehaviors.stumble) {
-            if (self.actualParam(REBasics.params.remaining) > 0) {
-                // 使用回数を減らして効果を防止する
-                self.gainActualParam(REBasics.params.remaining, -1);
-                return SCommandResponse.Canceled;
-            }
+            // 使用回数を減らして効果を防止する
+            self.gainActualParam(REBasics.params.remaining, -1);
+            return SCommandResponse.Canceled;
         }
-
         return SCommandResponse.Pass;
     }
+
+    // onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
+
+    //     if (effect.sourceKey == "kItem_転び石") {
+    //         if (self.actualParam(REBasics.params.remaining) > 0) {
+    //             // 使用回数を減らして効果を防止する
+    //             self.gainActualParam(REBasics.params.remaining, -1);
+    //             return SCommandResponse.Canceled;
+    //         }
+    //     }
+
+    //     return SCommandResponse.Pass;
+    // }
+
+    // onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+
+    //     if (id == REBasics.effectBehaviors.stumble) {
+    //         if (self.actualParam(REBasics.params.remaining) > 0) {
+    //             // 使用回数を減らして効果を防止する
+    //             self.gainActualParam(REBasics.params.remaining, -1);
+    //             return SCommandResponse.Canceled;
+    //         }
+    //     }
+
+    //     return SCommandResponse.Pass;
+    // }
 
 
     

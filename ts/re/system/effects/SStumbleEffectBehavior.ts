@@ -15,7 +15,7 @@ export class SStumbleEffectBehavior extends SEffectBehavior {
 
     public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
 
-        if (target.previewEffectBehaviorReaction(cctx, id)) {
+        if (target.previewRejection(cctx, { kind: "EffectBehavior", id: id })) {
             const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
             cctx.postActivity(activity);
         }
