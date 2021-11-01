@@ -22,6 +22,7 @@ import { UIdentify } from "ts/re/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { UName } from "ts/re/usecases/UName";
 import { DSubEffectTargetKey } from "ts/re/data/DEffect";
+import { SActivityContext } from "ts/re/system/SActivityContext";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -156,7 +157,8 @@ NOTE:
     }
 
     
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+        const activity = actx.activity();
         if (activity.actionId() == REBasics.actions.EquipActionId) {
             this.refreshSlots();
 

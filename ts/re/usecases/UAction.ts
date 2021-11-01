@@ -107,7 +107,10 @@ export class UAction {
 
     public static postFall(cctx: SCommandContext, entity: LEntity): void {
         
-        cctx.postActivity(LActivity.makeFall(entity));
+        cctx.postActivity(LActivity.makeFall(entity))
+        .then(() => {
+            this.postDropOrDestroyOnCurrentPos(cctx, entity, entity.getHomeLayer());
+        });
     }
 
     /** @deprecated */

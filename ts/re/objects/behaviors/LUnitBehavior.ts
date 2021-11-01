@@ -28,6 +28,7 @@ import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { LGoldBehavior } from "./LGoldBehavior";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { USearch } from "ts/re/usecases/USearch";
+import { SActivityContext } from "ts/re/system/SActivityContext";
 
 /**
  * 
@@ -143,8 +144,9 @@ export class LUnitBehavior extends LBehavior {
         actions.push(REBasics.actions.AttackActionId);
     }
 
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
         const subject = new SEffectSubject(self);
+        const activity = actx.activity();
 
         if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
             context.postMessage(tr2("しかしなにもおこらなかった。"));
@@ -204,7 +206,7 @@ export class LUnitBehavior extends LBehavior {
                 const layer = block.layer(DBlockLayerKind.Ground);
                 const itemEntity = layer.firstEntity();
                 if (itemEntity) {
-                    context.postHandleActivity(activity, itemEntity)
+                    actx.postHandleActivity(context, itemEntity)
                     .then(() => {
                         REGame.map._removeEntity(itemEntity);
 
@@ -373,18 +375,18 @@ export class LUnitBehavior extends LBehavior {
                 // TODO: onWaveReaction 使ってない。onActivityReaction に共通化した。
             }
             
-            context.postHandleActivity(activity, activity.object());
+            actx.postHandleActivity(context, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.EatActionId) {
             context.postSequel(self, REBasics.sequels.useItem, activity.object());
-            context.postHandleActivity(activity, activity.object());
+            actx.postHandleActivity(context, activity.object());
             return SCommandResponse.Handled;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
             context.postSequel(self, REBasics.sequels.useItem, activity.object());
-            context.postHandleActivity(activity, activity.object());
+            actx.postHandleActivity(context, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.PutInActionId) {
@@ -410,7 +412,7 @@ export class LUnitBehavior extends LBehavior {
             }
         }
         else if (activity.actionId() == REBasics.actions.dialogResult) {
-            context.postHandleActivity(activity, activity.object());
+            actx.postHandleActivity(context, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.stumble) {
@@ -422,7 +424,7 @@ export class LUnitBehavior extends LBehavior {
             if (block) {
                 const target = block.getFirstEntity(DBlockLayerKind.Ground);
                 if (target) {
-                    context.postHandleActivity(activity, target);
+                    actx.postHandleActivity(context, target);
                     // activity.setObject(target);
                     return SCommandResponse.Handled;
                 }

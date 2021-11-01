@@ -17,6 +17,7 @@ import { REGame } from "../REGame";
 import { CollideActionArgs, CommandArgs, LBehavior, LParamMinMaxInfo, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
 import { UAction } from "ts/re/usecases/UAction";
 import { DParameterId } from "ts/re/data/DParameter";
+import { SActivityContext } from "ts/re/system/SActivityContext";
 
 
 /**
@@ -77,13 +78,14 @@ export class LItemBehavior extends LBehavior {
         }
     }
 
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+        const activity = actx.activity();
         if (activity.actionId() == REBasics.actions.collide) {
     
             
             const target = activity.objects2()[0];
             const subject = new SEffectSubject(activity.subject());
-            context.postHandleActivity(activity, target)
+            actx.postHandleActivity(context, target)
             .then(() => {
                 this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {

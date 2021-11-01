@@ -36,6 +36,7 @@ import { LPriceInfo, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
+import { SActivityContext } from "../system/SActivityContext";
 
 enum BlockLayer
 {
@@ -1276,17 +1277,17 @@ export class LEntity extends LObject
         return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
     }
 
-    _sendActivity(context: SCommandContext, activity: LActivity): SCommandResponse {
+    _sendActivity(context: SCommandContext, actx: SActivityContext): SCommandResponse {
         let result = SCommandResponse.Pass;
         
         this.iterateBehaviorsReverse(b => {
-            result = b.onPreActivity(context, this, activity);
+            result = b.onPreActivity(context, this, actx);
             return result == SCommandResponse.Pass;
         });
         if (result != SCommandResponse.Pass) return result;
 
         this.iterateBehaviorsReverse(b => {
-            result = b.onActivity(this, context, activity);
+            result = b.onActivity(this, context, actx);
             return result == SCommandResponse.Pass;
         });
         return result;

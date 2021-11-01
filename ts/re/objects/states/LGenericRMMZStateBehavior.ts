@@ -17,6 +17,7 @@ import { LCharacterAI } from "../ai/LCharacterAI";
 import { UName } from "ts/re/usecases/UName";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LActionTokenType } from "../LActionToken";
+import { SActivityContext } from "ts/re/system/SActivityContext";
 
 
 
@@ -177,13 +178,13 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         }
     }
     
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
         const state = this.state();
         const traits: IDataTrait[] = [];
         state.collectTraits(self, traits);
 
         //if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
-        if (traits.find(t => t.code == REBasics.traits.SealActivity && t.dataId == activity.actionId())) {
+        if (traits.find(t => t.code == REBasics.traits.SealActivity && t.dataId == actx.activity().actionId())) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
             context.postMessage(data.message3.format(targetName));

@@ -49,6 +49,7 @@ import { DFactionId } from "ts/re/data/REData";
 import { LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
 import { DEmittor } from "ts/re/data/DEmittor";
+import { SActivityContext } from "ts/re/system/SActivityContext";
 
 export enum DecisionPhase {
     Prepare,
@@ -376,13 +377,13 @@ export abstract class LBehavior extends LObject {
      * これによって、特定の行動をキャンセルするような動作を実装できます。
      * 行動トークンの消費は呼び出し側で処理されます。
      */
-    public onPreActivity(context: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+    public onPreActivity(context: SCommandContext, self: LEntity, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
 
     /**
      * Activity の処理。
      * [飲む] [振る] [読む] など。
      */
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
     
     /**
      * Activity を受ける側の処理。

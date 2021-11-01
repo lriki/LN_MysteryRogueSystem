@@ -7,6 +7,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { RESerializable } from "ts/re/Common";
+import { SActivityContext } from "ts/re/system/SActivityContext";
 
 /**
  * @deprecated see kItem_スピードドラッグ
@@ -25,7 +26,7 @@ export class LEaterBehavior extends LBehavior {
     }
 
     
-    onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
         /*
         if (activity.actionId() == DBasics.actions.EatActionId) {
             const reactor = activity.object();
