@@ -92,7 +92,7 @@ export class LShopkeeperBehavior extends LBehavior {
     }
     
     onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
-        // [振られた]
+        
         if (activity.actionId() == REBasics.actions.dialogResult) {
             if (activity.selectedAction() == "yes") {
                 const billingPrice = this.shop().getBillingPrice();

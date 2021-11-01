@@ -187,13 +187,13 @@ export class SCommandContext
             }
 
             const r = activity.actor()._sendActivity(this, activity);
-            if (r != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
-                if (activity.hasObject()) {
-                    this.postCall(() => {
-                        activity.object()._sendActivityReaction(this, activity);
-                    });
-                }
-            }
+            // if (r != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
+            //     if (activity.hasObject()) {
+            //         this.postCall(() => {
+            //             activity.object()._sendActivityReaction(this, activity);
+            //         });
+            //     }
+            // }
             return r;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Activity", m1));
@@ -225,23 +225,23 @@ export class SCommandContext
             // 相手側で reject されてなければ本処理
             if (result1 != SCommandResponse.Canceled) {
                 const then = command._thenFunc;
-                if (then) {
-                    const m2 = () => {
-                        const result2 = then();
-                        if (result2 == SHandleCommandResult.Resolved) {
-                            // 本処理も成功したので相手側の後処理を行う
-                            objectum.iterateBehaviorsReverse(b => {
-                                b.onActivityReaction(objectum, this, activity);
-                                return true;
-                            });
-                        }
-                        else {
-                            // 本処理失敗
-                        }
-                        return SCommandResponse.Pass;
-                    };
-                    this._recodingCommandList.push(new RECCMessageCommand("HandleActivity.2", m2));
-                }
+                //if (then) {
+                const m2 = () => {
+                    const result2 = then ? then() : SHandleCommandResult.Resolved;
+                    if (result2 == SHandleCommandResult.Resolved) {
+                        // 本処理も成功したので相手側の後処理を行う
+                        objectum.iterateBehaviorsReverse(b => {
+                            b.onActivityReaction(objectum, this, activity);
+                            return true;
+                        });
+                    }
+                    else {
+                        // 本処理失敗
+                    }
+                    return SCommandResponse.Pass;
+                };
+                this._recodingCommandList.push(new RECCMessageCommand("HandleActivity.2", m2));
+                //}
             }
             else {
                 // 相手側の前処理ではじかれた

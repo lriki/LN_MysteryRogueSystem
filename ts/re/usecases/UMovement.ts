@@ -256,6 +256,13 @@ export class UMovement {
             default: return 2;
         }
     }
+
+    /**
+     * 方向 d に対する右手方向を求める
+     */
+    public static getRightDir(d: number): number {
+        return this.getNextDirCW(this.getNextDirCW(d));
+    }
     
     /**
      * Entity に隣接する指定した方向にある Block を取得する。

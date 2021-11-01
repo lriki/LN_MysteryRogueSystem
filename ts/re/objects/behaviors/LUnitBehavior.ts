@@ -373,16 +373,18 @@ export class LUnitBehavior extends LBehavior {
                 // TODO: onWaveReaction 使ってない。onActivityReaction に共通化した。
             }
             
+            context.postHandleActivity(activity, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.EatActionId) {
             context.postSequel(self, REBasics.sequels.useItem, activity.object());
+            context.postHandleActivity(activity, activity.object());
             return SCommandResponse.Handled;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
             context.postSequel(self, REBasics.sequels.useItem, activity.object());
-            // 続いて onActivityReaction を実行する。
+            context.postHandleActivity(activity, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.PutInActionId) {
@@ -408,11 +410,23 @@ export class LUnitBehavior extends LBehavior {
             }
         }
         else if (activity.actionId() == REBasics.actions.dialogResult) {
-            return SCommandResponse.Handled;    // 続いて onActivityReaction を実行する。
+            context.postHandleActivity(activity, activity.object());
+            return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.stumble) {
             UAction.postStumble(context, self, self.dir);
-            return SCommandResponse.Handled;
+            //return SCommandResponse.Handled;
+        }
+        else if (activity.actionId() == REBasics.actions.trample) {
+            const block = REGame.map.tryGetBlock(self.x, self.y);
+            if (block) {
+                const target = block.getFirstEntity(DBlockLayerKind.Ground);
+                if (target) {
+                    context.postHandleActivity(activity, target);
+                    // activity.setObject(target);
+                    return SCommandResponse.Handled;
+                }
+            }
         }
         
         return SCommandResponse.Pass;

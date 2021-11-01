@@ -276,7 +276,7 @@ export class REDataManager
             RollActionId: REData.addAction("Roll", "",),
             FallActionId: REData.addAction("Fall", ""),
             DropActionId: REData.addAction("Drop", ""),
-            StepOnActionId: REData.addAction("StepOn", ""),
+            trample: REData.addAction("trample", ""),
             TrashActionId: REData.addAction("Trash", ""),
             ForwardFloorActionId: REData.addAction("すすむ", "LForwardFloorActivity"),
             BackwardFloorActionId: REData.addAction("戻る", "LBackwardFloorActivity"),

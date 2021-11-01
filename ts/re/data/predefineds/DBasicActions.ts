@@ -117,7 +117,7 @@ export interface DBasicActions {
     DropActionId: DActionId;
 
     /** 踏む */
-    StepOnActionId: DActionId;
+    trample: DActionId;
 
     /** 捨てる */
     TrashActionId: DActionId;

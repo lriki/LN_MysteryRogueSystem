@@ -23,6 +23,7 @@ import { UName } from "./UName";
 import { USearch } from "./USearch";
 import { SPoint } from "./UCommon";
 import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
+import { LActivity } from "../objects/activities/LActivity";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -102,6 +103,11 @@ export class UAction {
             context.post(entity, reactor, new SEffectSubject(entity), undefined, onWalkedOnTopAction);
             context.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
         }
+    }
+
+    public static postFall(cctx: SCommandContext, entity: LEntity): void {
+        
+        cctx.postActivity(LActivity.makeFall(entity));
     }
 
     /** @deprecated */

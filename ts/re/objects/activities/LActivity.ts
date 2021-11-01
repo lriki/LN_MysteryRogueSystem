@@ -105,6 +105,10 @@ export class LActivity {
         return REGame.world.entity(this._object);
     }
 
+    public setObject(object: LEntity): void {
+        this._object = object.entityId();
+    }
+
     public objects2(): LEntity[] {
         return this._objects2.map(x => REGame.world.entity(x));
     }
@@ -250,6 +254,14 @@ export class LActivity {
 
     public static makeThrow(actor: LEntity, object: LEntity): LActivity {
         return (new LActivity()).setup(REBasics.actions.ThrowActionId, actor, object);
+    }
+    
+    public static makeFall(actor: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.ThrowActionId, actor);
+    }
+
+    public static makeTrample(actor: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.trample, actor);
     }
 
     public static makeExchange(actor: LEntity, object: LEntity): LActivity {

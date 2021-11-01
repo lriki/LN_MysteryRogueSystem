@@ -16,6 +16,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEffectCause, DEmittor } from "ts/re/data/DEmittor";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
+import { LActivity } from "../activities/LActivity";
 
 
 /**
@@ -115,7 +116,16 @@ export class LTrapBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    private performTrapEffect(self: LEntity, context: SCommandContext, dir: number): void {
+    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+        // [踏まれた]
+        if (activity.actionId() == REBasics.actions.trample) {
+            this.performTrapEffect(self, context, activity.actor().dir);
+        }
+        return SCommandResponse.Pass;
+    }
+
+
+    private performTrapEffect(self: LEntity, context: SCommandContext, actorDir: number): void {
         if (this._recharging) return;
 
         //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
@@ -127,10 +137,11 @@ export class LTrapBehavior extends LBehavior {
 
         if (emittor) {
 
+            
             if (1) {
 
                 SEmittorPerformer.makeWithEmitor(self, self, emittor)
-                .setDffectDirection(dir)
+                .setDffectDirection(UMovement.getRightDir(actorDir))
                 .setProjectilePriorityEffectSet(emittor.effectSet)
                 .performe(context);
     
