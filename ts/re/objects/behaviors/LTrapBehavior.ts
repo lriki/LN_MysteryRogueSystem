@@ -121,6 +121,9 @@ export class LTrapBehavior extends LBehavior {
         if (activity.actionId() == REBasics.actions.trample) {
             this.performTrapEffect(self, context, activity.actor().dir);
         }
+        else if (activity.actionId() == REBasics.actions.FallActionId) {
+            this.performTrapEffect(self, context, activity.actor().dir);
+        }
         return SCommandResponse.Pass;
     }
 

@@ -257,7 +257,7 @@ export class LActivity {
     }
     
     public static makeFall(actor: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.ThrowActionId, actor);
+        return (new LActivity()).setup(REBasics.actions.FallActionId, actor);
     }
 
     public static makeTrample(actor: LEntity): LActivity {

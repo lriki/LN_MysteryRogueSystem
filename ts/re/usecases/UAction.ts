@@ -110,6 +110,9 @@ export class UAction {
         cctx.postActivity(LActivity.makeFall(entity))
         .then(() => {
             this.postDropOrDestroyOnCurrentPos(cctx, entity, entity.getHomeLayer());
+        })
+        .catch(() => {
+            this.postDropOrDestroyOnCurrentPos(cctx, entity, entity.getHomeLayer());
         });
     }
 

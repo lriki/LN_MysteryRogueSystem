@@ -99,6 +99,15 @@ export class USearch {
     }
      */
 
+    public static getFirstUnderFootEntity(entity: LEntity): LEntity | undefined {
+        const block = REGame.map.tryGetBlock(entity.x, entity.y);
+        if (block) {
+            const target = block.getFirstEntity(DBlockLayerKind.Ground);
+            return target;
+        }
+        return undefined;
+    }
+
     /**
      * Unit が出現可能な Block を選択する。
      */

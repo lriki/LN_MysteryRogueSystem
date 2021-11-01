@@ -74,51 +74,47 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     expect(enemyhp2 < enemyhp1).toBe(true); // Enemyt はダメージを受けている
 });
 
-// test("concretes.trap.ArrowTrap.DropAsItem", () => {
-//     TestEnv.newGame();
+test("concretes.trap.ArrowTrap.DropAsItem", () => {
+    TestEnv.newGame();
 
-//     /*
-//     □□壁□
-//     Ｐ□罠壁
-//     □□□□
-//     */
+    /*
+    □□壁□
+    Ｐ□罠壁
+    □□□□
+    */
 
-//     // Player
-//     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-//     player1.dir = 6;
-//     const hp1 = player1.actualParam(REBasics.params.hp);
+    // Player
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.dir = 6;
+    const hp1 = player1.actualParam(REBasics.params.hp);
 
-//     // アイテム入手
-//     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kパワードラッグ").id, [], "item1"));
-//     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    // アイテム入手
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kパワードラッグ").id, [], "item1"));
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
-//     // trap 生成&配置
-//     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_木の矢の罠").id, [], "trap1"));
-//     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    // trap 生成&配置
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_木の矢の罠").id, [], "trap1"));
+    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
-//     // 右下に移動できないような壁を作る
-//     REGame.map.block(12, 9)._tileShape = TileShape.Wall;
-//     REGame.map.block(13, 10)._tileShape = TileShape.Wall;
+    // 右下に移動できないような壁を作る
+    REGame.map.block(12, 9)._tileShape = TileShape.Wall;
+    REGame.map.block(13, 10)._tileShape = TileShape.Wall;
 
-//     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-//     //----------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     
-//     // [投げる]
-//     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withConsumeAction());
-//     RESystem.dialogContext.activeDialog().submit();
+    // [投げる]
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
 
-//     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-//     // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
-//     const itemData2 = REData.getEntity("kウッドアロー");
+    // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
+    const itemData2 = REData.getEntity("kウッドアロー");
 
-//     for (const f of REGame.map.entities()) {
-//         console.log("iid", f.dataId());
-//     }
-
-//     const item2 = REGame.map.entities().find(e => e.dataId() == itemData2.id);
-//     assert(item2);
-//     //expect(item2 !== undefined).toBe(true);
-//     expect(UMovement.checkAdjacentEntities(item2, trap1)).toBe(true);
-// });
+    const item2 = REGame.map.entities().find(e => e.dataId() == itemData2.id);
+    assert(item2);
+    //expect(item2 !== undefined).toBe(true);
+    expect(UMovement.checkAdjacentEntities(item2, trap1)).toBe(true);
+});

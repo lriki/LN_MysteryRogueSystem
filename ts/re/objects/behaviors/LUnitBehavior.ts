@@ -420,14 +420,10 @@ export class LUnitBehavior extends LBehavior {
             //return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.trample) {
-            const block = REGame.map.tryGetBlock(self.x, self.y);
-            if (block) {
-                const target = block.getFirstEntity(DBlockLayerKind.Ground);
-                if (target) {
-                    actx.postHandleActivity(context, target);
-                    // activity.setObject(target);
-                    return SCommandResponse.Handled;
-                }
+            const target = USearch.getFirstUnderFootEntity(self);
+            if (target) {
+                actx.postHandleActivity(context, target);
+                return SCommandResponse.Handled;
             }
         }
         

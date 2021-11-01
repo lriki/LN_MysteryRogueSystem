@@ -160,6 +160,9 @@ export class DEntity {
     upgradeMin: number = 0;
     upgradeMax: number = 0;
 
+    /** 飛翔体としての移動を終了するとき、地面に落ちずに消滅するか */
+    volatilityProjectile: boolean;
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;
@@ -182,6 +185,7 @@ export class DEntity {
         this.emittorSet = new DEmittorSet();
         this.autoAdditionStates = [];
         this.majorActionDeclines = 0;
+        this.volatilityProjectile = false;
     }
 
     public prefab(): DPrefab {

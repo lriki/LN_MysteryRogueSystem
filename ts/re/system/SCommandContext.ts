@@ -197,6 +197,9 @@ export class SCommandContext
             //         });
             //     }
             // }
+            if (r == SCommandResponse.Pass) {
+                if (actx._catchFunc) actx._catchFunc();
+            }
             return r;
         };
         this._recodingCommandList.push(new RECCMessageCommand("Activity", m1));

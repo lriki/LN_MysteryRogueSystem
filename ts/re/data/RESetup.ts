@@ -258,6 +258,12 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 break;
+            case "kSystem_炎のブレス":
+                entity.volatilityProjectile = true;
+                break;
+            case "kSystem_MagicBullet":
+                entity.volatilityProjectile = true;
+                break;
             case "kふきとばしの杖":
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_ふきとばし").emittor());

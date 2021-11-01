@@ -274,12 +274,19 @@ export class LProjectableBehavior extends LBehavior {
     private endMoving(context: SCommandContext, self: LEntity): void {
         this.clearKnockback();
 
-        if (this._effectSet) {
+        const entityData = self.data();
+
+        if (entityData.volatilityProjectile/*this._effectSet*/) {
             context.postDestroy(self);
         }
         else {
+            // 表示変更用のステート解除
             self.removeState(REData.getState("kSystemState_Projectile").id);
+
+            UAction.postFall(context, self);
     
+            /*
+
             UAction.postStepOnGround(context, self);
     
             // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
@@ -295,6 +302,7 @@ export class LProjectableBehavior extends LBehavior {
             //this.clearKnockback();
             // TODO: 落下
             //SActionCommon.postStepOnGround(context, self);
+            */
         }
         
     }

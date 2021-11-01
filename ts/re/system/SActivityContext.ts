@@ -18,8 +18,8 @@ export class SActivityContext {
     */
 
     private _activity: LActivity;
-    private _thenFunc: (() => void) | undefined;
-    private _catchFunc: (() => void) | undefined;
+    _thenFunc: (() => void) | undefined;
+    _catchFunc: (() => void) | undefined;
 
     public constructor(activity: LActivity) {
         this._activity = activity;
@@ -35,7 +35,7 @@ export class SActivityContext {
         return this;
     }
 
-    /** リジェクトされたとき */
+    /** リジェクトされた/ハンドリングされなかったとき */
     public catch(func: () => void): this {
         this._catchFunc = func;
         return this;
