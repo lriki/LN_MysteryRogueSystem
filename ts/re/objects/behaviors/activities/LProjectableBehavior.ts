@@ -276,6 +276,17 @@ export class LProjectableBehavior extends LBehavior {
 
         const entityData = self.data();
 
+        /*
+        矢ワナは効果のオーバーライドがあるので startMoveAsEffectProjectile で開始する。
+        しかしこれで開始した場合、end 時に entity が消滅する。
+
+        揮発性かどうかを属性として持たせたいが、次のどちらにするべきか？
+        - Entity側に持たせる
+        - Effect側に持たせる
+
+        Entity側に持たせるのが無難かも。
+        指定し忘れで魔法弾が地面に落ちてしまうようなことも無いだろう。
+        */
         if (entityData.volatilityProjectile/*this._effectSet*/) {
             context.postDestroy(self);
         }
