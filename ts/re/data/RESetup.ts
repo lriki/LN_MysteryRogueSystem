@@ -29,6 +29,15 @@ export class RESetup {
         }
     }
     
+    public static setupActor(entity: DEntity) {
+        const actor = entity.actorData();
+        switch (actor.id) {
+            case 1:
+                entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RATE, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
+                break;
+        }
+    }
+
     public static setupDirectly_State(data: DState) {
         switch (data.key) {
             case "kState_UT気配察知":
@@ -103,6 +112,9 @@ export class RESetup {
                 break;
             case "kState_UT下手投げ":
                 data.effect.traits.push({ code: REBasics.traits.AwfulPhysicalIndirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_UT爆発四散":
+                data.deadState  = true;
                 break;
         }
     }
@@ -420,17 +432,24 @@ export class RESetup {
                 emittor.scope.length = 1;
                 //emittor.selfAnimationId = 109;
                 emittor.selfSequelId = REBasics.sequels.explosion;
-                effect.qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
+                //effect.qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
 
                 effect.qualifyings.parameterQualifyings.push({
                     parameterId: REBasics.params.hp,
                     applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
+                    elementId: REBasics.elements.explosion,
                     formula: "b.hp / 2",
                     applyType: DParameterEffectApplyType.Damage,
                     variance: 0,
                     silent: false,
                 });
+                effect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 100, value2: 0});
+
+                // 必中だと耐性を持っているはずの Player も即死してしまうので。
+                effect.hitType = DEffectHitType.Magical;
+
+                entity.counterActions.push({ conditionAttackType: REBasics.elements.explosion, emitSelf: true });
+
                 break;
             }
             case "kItem_転び石":
@@ -515,9 +534,12 @@ export class RESetup {
             case "kSkill_大爆発":
                 emittor.scope.range = DEffectFieldScopeRange.Around;
                 emittor.scope.length = 1;
-                emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
+                //emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
+                //emittor.effectSet.effects[0].qualifyings.parameterQualifyings;
+                emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 100, value2: 0});
                 //emittor.selfAnimationId = 109;
                 emittor.selfSequelId = REBasics.sequels.explosion;
+                emittor.effectSet.effects[0].hitType = DEffectHitType.Magical;
                 break;
             case "kSkill_アイテム盗み":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;

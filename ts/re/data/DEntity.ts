@@ -1,6 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
+import { DAttackElementId } from "./DCommon";
 import { DEmittorSet, DEmittorId } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
@@ -61,6 +62,11 @@ export interface DReaction {
 export interface DEntityAutoAdditionState {
     stateId: DStateId;
     condition: string;
+}
+
+export interface DCounterAction {
+    conditionAttackType: DAttackElementId | undefined;
+    emitSelf: boolean;
 }
 
 /**
@@ -163,6 +169,8 @@ export class DEntity {
     /** 飛翔体としての移動を終了するとき、地面に落ちずに消滅するか */
     volatilityProjectile: boolean;
 
+    counterActions: DCounterAction[];
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;
@@ -186,6 +194,7 @@ export class DEntity {
         this.autoAdditionStates = [];
         this.majorActionDeclines = 0;
         this.volatilityProjectile = false;
+        this.counterActions = [];
     }
 
     public prefab(): DPrefab {

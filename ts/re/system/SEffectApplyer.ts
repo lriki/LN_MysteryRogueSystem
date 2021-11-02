@@ -758,6 +758,7 @@ export class SEffectApplyer {
 
         if (this._rand.nextIntWithMax(100) < (chance * 100)) {
             target.addState(effect.dataId);
+            target.refreshConditions();
             result.makeSuccess();
         }
     }

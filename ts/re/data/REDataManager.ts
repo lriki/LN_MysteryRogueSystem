@@ -377,9 +377,12 @@ export class REDataManager
             const e = new DAttackElement(REData.attackElements.length);
             REData.attackElements.push(e);
             if (x) {
-                e.name = x;
+                e.parseNameAndKey(x);
             }
         }
+        REBasics.elements = {
+            explosion: REData.getAttackElement("kElement_Explosion").id,
+        };
         
         
         if ($dataSystem.equipTypes) {
@@ -522,6 +525,7 @@ export class REDataManager
             }
         });
         REData.entities[REData.actors[1]].factionId = REData.system.factions.player;    // #1 はデフォルトで Player
+        
 
         // Import Skills
         REData.skills = [];
@@ -880,6 +884,10 @@ export class REDataManager
 
         // Link
         {
+            for (const id of REData.actors) {
+                if (id > 0) RESetup.setupActor(REData.entities[id]);
+            }
+
             REData.system.link(testMode);
 
             for (const state of REData.states) {

@@ -535,7 +535,7 @@ export class LEntity extends LObject
         // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
         const hpParam = this._params.param(REBasics.params.hp);
         if (hpParam) {
-            const dead = this.isDeathStateAffected();
+            const dead = !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);//this.isDeathStateAffected();
             if (dead && this.actualParam(REBasics.params.hp) != 0) {
                 hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp));
                 this.removeAllStates();

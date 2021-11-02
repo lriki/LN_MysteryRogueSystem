@@ -51,7 +51,7 @@ Game_Action.SPECIAL_EFFECT_ESCAPE = 0;
 
 */
     /** 致命的な爆発 */
-    DeadlyExplosion = 101,
+    //DeadlyExplosion = 101,
 }
 
 export enum DColorIndex {

@@ -105,7 +105,6 @@ export class LTrapBehavior extends LBehavior {
         // この罠にかかることができる？
         if (!this.checkValidTarget(target)) return SCommandResponse.Pass;
 
-        this._exposed = true;
 
 
         context.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
@@ -175,6 +174,7 @@ export class LTrapBehavior extends LBehavior {
 
 
         this._recharging = true;
+        this._exposed = true;
 
     }
     
@@ -197,6 +197,12 @@ export class LTrapBehavior extends LBehavior {
 
     */
     onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
+
+
+        for (const param of self._effectResult.paramEffects) {
+            
+        }
+
         // TODO: test. カウンターとして実装したい
         this.performTrapEffect(self, cctx, 0);
         return SCommandResponse.Pass; 

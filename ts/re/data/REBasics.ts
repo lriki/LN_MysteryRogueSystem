@@ -1,4 +1,4 @@
-import { DEffectBehaviorId } from "./DCommon";
+import { DAttackElementId, DEffectBehaviorId } from "./DCommon";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
@@ -10,6 +10,10 @@ import { BasicSequels } from "./predefineds/DBasicSequels";
 import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicStateTraits, DBasicTraits } from "./predefineds/DBasicTraits";
 import { DFactionId } from "./REData";
+
+export interface DBasicElements {
+    explosion: DAttackElementId,
+}
 
 export interface DBasicEffectBehaviors {
     itemSteal: DEffectBehaviorId,
@@ -28,6 +32,7 @@ export interface DBasicEffectBehaviors {
  * ゲームシステムとして重要な定義済みデータを保持する
  */
 export class REBasics {
+    static elements: DBasicElements;
     static events: DBasicEvents;
     static actions: DBasicActions;
     static entityKinds: BasicEntityKinds;

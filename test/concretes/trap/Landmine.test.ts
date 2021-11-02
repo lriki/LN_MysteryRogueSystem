@@ -6,6 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REBasics } from "ts/re/data/REBasics";
+import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -18,6 +19,10 @@ test("concretes.trap.Landmine.basic", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const hp1 = 8;
     player1.setActualParam(REBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
+
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_地雷").id, [], "trap1"));
@@ -38,6 +43,7 @@ test("concretes.trap.Landmine.basic", () => {
     expect(hp2).toBe(hp1 / 2);  // HP半分になっている
     expect(player1.isDestroyed()).toBe(false);  // 消滅していないこと
     expect(trap1.isDestroyed()).toBe(false);    // 消滅していないこと
+    expect(enemy1.isDestroyed()).toBe(true);    // 寄ってきたモンスターは爆発に巻き込まれて即死
 });
 
 test("concretes.trap.Landmine.InducedExplosion", () => {
@@ -70,5 +76,6 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     expect(player1.isDestroyed()).toBe(false);  // 消滅していないこと
     expect(trap1.isDestroyed()).toBe(false);    // 消滅していないこと
     expect(trap2.isDestroyed()).toBe(false);    // 消滅していないこと
+    expect(trap2.getEntityBehavior(LTrapBehavior).exposed()).toBe(true);    // 露出していること
 });
 

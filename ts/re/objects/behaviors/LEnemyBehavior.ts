@@ -69,14 +69,14 @@ export class LEnemyBehavior extends LBattlerBehavior {
         }
     }
     
-    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse {
-        const effectData = effect.data();
-        if (effectData.qualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
-            self.addState(REBasics.states.dead);
-            return SCommandResponse.Handled;
-        }
-        return SCommandResponse.Pass;
-    }
+    // onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse {
+    //     const effectData = effect.data();
+    //     if (effectData.qualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
+    //         self.addState(REBasics.states.dead);
+    //         return SCommandResponse.Handled;
+    //     }
+    //     return SCommandResponse.Pass;
+    // }
     
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void {
         const inventory = self.findEntityBehavior(LInventoryBehavior);

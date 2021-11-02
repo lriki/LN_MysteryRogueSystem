@@ -157,7 +157,7 @@ export class DState {
     stateGroupIds: DStateGroupId[];
 
 
-
+    deadState: boolean;
     
     // ツクールの TRAIT では定数加算することができない。割合変化のみ。そのため用意したもの
     autoAdditionCondition: string | undefined;
@@ -184,6 +184,7 @@ export class DState {
         this.message4 = "";
         this.stateGroupKeys = [];
         this.stateGroupIds = [];
+        this.deadState = false;//(id == 1);
         //this.minBuffLevel = -2;
         //this.maxBuffLevel = 2;
         //this.parameterBuffFormulas = [];

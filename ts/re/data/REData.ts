@@ -207,6 +207,16 @@ export class REData
         this.emittors = [new DEmittor(0, "null")];
     }
 
+    //--------------------
+
+    static getAttackElement(pattern: string): DAttackElement {
+        const d = this.attackElements.find(e => (e.key != "" && e.key == pattern));
+        if (d) return d;
+        throw new Error(`AttackElement "${pattern}" not found.`);
+    }
+
+    //--------------------
+
     static addEntityKind(displayName: string, name: string): number {
         const newId = this.entityKinds.length;
         this.entityKinds.push({
