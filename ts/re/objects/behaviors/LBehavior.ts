@@ -50,6 +50,7 @@ import { LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
 import { DEmittor } from "ts/re/data/DEmittor";
 import { SActivityContext } from "ts/re/system/SActivityContext";
+import { SStepPhase } from "ts/re/system/SCommon";
 
 export enum DecisionPhase {
     Prepare,
@@ -408,6 +409,7 @@ export abstract class LBehavior extends LObject {
     onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {}
 
 
+    onAfterStep(self: LEntity, context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
     /** 1行動消費単位の終了時点 */
     onStepEnd(context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 

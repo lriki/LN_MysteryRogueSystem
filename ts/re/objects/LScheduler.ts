@@ -134,7 +134,7 @@ export class LScheduler {
     private _runs: RunInfo[] = [];
     private _currentRun: number = 0;
     public _currentStep: number = 0;
-    private _currentPhaseIndex: number = 0;
+    public _currentPhaseIndex: number = 0;
     //private _waitCount: number = 0;
 
     //_currentTurnEntityId: LEntityId = LEntityId.makeEmpty();

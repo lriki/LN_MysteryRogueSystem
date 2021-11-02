@@ -196,16 +196,27 @@ export class LTrapBehavior extends LBehavior {
     （３方向同時攻撃などを考えると、本当に完全に終わった時が望ましい）
 
     */
+   _required = false;
     onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
 
-
-        for (const param of self._effectResult.paramEffects) {
-            
+        if (!this._recharging) {
+            this._required = true;
+            for (const param of self._effectResult.paramEffects) {
+                
+            }
         }
 
-        // TODO: test. カウンターとして実装したい
-        this.performTrapEffect(self, cctx, 0);
         return SCommandResponse.Pass; 
+    }
+    
+    onAfterStep(self: LEntity, cctx: SCommandContext): SCommandResponse {
+
+        if (this._required) {
+            this._required = false;
+            this.performTrapEffect(self, cctx, 0);
+        }
+
+        return SCommandResponse.Pass;
     }
 }
 

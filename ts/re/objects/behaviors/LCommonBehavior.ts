@@ -26,9 +26,6 @@ export class LCommonBehavior extends LBehavior {
 
     onQueryActions(actions: DActionId[]): DActionId[] {
         return actions;
-        //.concat([
-        //    DBasics.actions.PickActionId,
-        //]);
     }
     
     onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {

@@ -12,6 +12,7 @@ import { LParamSet } from "../LParam";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DActionId } from "ts/re/data/DAction";
 import { UAction } from "ts/re/usecases/UAction";
+import { SStepPhase } from "ts/re/system/SCommon";
 
 export class LBattlerBehavior extends LBehavior {
 

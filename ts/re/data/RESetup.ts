@@ -443,7 +443,7 @@ export class RESetup {
                     variance: 0,
                     silent: false,
                 });
-                effect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 100, value2: 0});
+                effect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 1.0, value2: 0});
 
                 // 必中だと耐性を持っているはずの Player も即死してしまうので。
                 effect.hitType = DEffectHitType.Magical;

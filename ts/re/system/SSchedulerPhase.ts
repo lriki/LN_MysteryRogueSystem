@@ -11,7 +11,7 @@ import { LItemShopStructure } from "../objects/structures/LItemShopStructure";
 export abstract class SSchedulerPhase {
     //abstract nextPhase(): SchedulerPhase;
     
-    onStart(scheduler: SScheduler): void {}
+    onStart(): void {}
 
     // この処理の中で CommandContext にコマンドが積まれた場合、
     // Scheduler はその処理を始め、全てコマンドを実行し終えたら次の unit の処理に移る。
@@ -30,7 +30,7 @@ export class SSchedulerPhase_Prepare extends SSchedulerPhase {
 }
 
 export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
-    onStart(scheduler: SScheduler): void {
+    onStart(): void {
     }
 
     onProcess(scheduler: SScheduler, unit: LTOUnit): void {
@@ -47,7 +47,7 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
 
 // モンスターの移動・攻撃対象決定
 export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
-    onStart(scheduler: SScheduler): void {
+    onStart(): void {
         for (const s of REGame.map.structures()) {
             if (s instanceof LItemShopStructure) {
                 
@@ -81,7 +81,7 @@ export class SSchedulerPhase_UpdateState extends SSchedulerPhase {
 
 // 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
 export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPhase {
-    onStart(scheduler: SScheduler): void {
+    onStart(): void {
         REGame.map.updateLocatedResults(RESystem.commandContext);
     }
 
@@ -96,7 +96,7 @@ export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPh
 // 罠発動
 export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
     
-    onStart(scheduler: SScheduler): void {
+    onStart(): void {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         //RESystem.sequelContext.flushSequelSet();

@@ -8,6 +8,8 @@ import { UTransfer } from "ts/re/usecases/UTransfer";
 import { UName } from "ts/re/usecases/UName";
 import { LTOStep } from "ts/re/objects/LScheduler";
 import { REBasics } from "../data/REBasics";
+import { SStepPhase } from "./SCommon";
+import { SStepScheduler } from "./SStepScheduler";
 
 
 
@@ -40,7 +42,6 @@ enum SchedulerPhase
     RoundEnding,
 }
 
-
 /**
  * see Scheduler.md
  */
@@ -48,26 +49,13 @@ export class SScheduler
 {
     private _phase: SchedulerPhase = SchedulerPhase.RoundStarting;
 
-    private _phases: SSchedulerPhase[];
+    private _stepScheduler: SStepScheduler = new SStepScheduler(this);
     private _brace: boolean = false;
     private _occupy: boolean = false;
 
     
 
     constructor() {
-        this._phases = [
-            new SSchedulerPhase_Prepare(),
-            new SSchedulerPhase_ManualAction(),
-            new SSchedulerPhase_AIMinorAction(),
-            //new SSchedulerPhase_UpdateState(),
-            new SSchedulerPhase_ResolveAdjacentAndMovingTarget(),
-            new SSchedulerPhase_CheckFeetMoved(),
-            new SSchedulerPhase_AIMajorAction(),
-        ];
-    }
-
-    private currentPhaseIndex(): number {
-        return REGame.scheduler.currentPhaseIndex();
     }
 
     // マップ切り替え時など。
@@ -255,10 +243,8 @@ export class SScheduler
     private update_RunStarting(): void {
         Log.d("s update_RunStarting");
 
-        REGame.scheduler._currentStep = -1;
         this._phase = SchedulerPhase.Processing;
-        REGame.scheduler.resetPhaseIndex();
-        this._phases[this.currentPhaseIndex()].onStart(this);
+        this._stepScheduler.startRun();
 
         REGame.scheduler.runs().forEach(run => {
             run.steps.forEach(step => {
@@ -273,93 +259,10 @@ export class SScheduler
         Log.d("e update_RunStarting");
     }
 
-    private prepareActionPhase(): void {
-        assert(!RESystem.commandContext.isRunning());
-        const run = REGame.scheduler.currentRun();
-
-        if (REGame.scheduler._currentStep < 0) {
-            // 初回
-            REGame.scheduler._currentStep++;
-            
-            //const step = run.steps[REGame.scheduler._currentStep];
-            //step.unit().entity()._effectResult.clear();
-        }
-        else {
-            const step = run.steps[REGame.scheduler._currentStep];
-            const next = true;//step.unit.entityId.isEmpty() || REGame.world.entity(step.unit.entityId)._actionConsumed;
-
-            
-            if (step.unit().isValid()) {
-                const entity = step.unit().entity();
-                // if (step.startingActionTokenCount > entity.actionTokenCount()) {
-                //     step.actedCount++;
-                // }
-            }
-
-            // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上ののコマンドチェーンの結果を確認
-            if (next) {
-                // 行動トークンを消費する行動がとられた。または、無効化されている
-                step.increaseIterationCount();
-                this.onStepEnd(step);
-                if (step.isIterationClosed()) {
-                    REGame.scheduler._currentStep++;
-                    
-                    //step.unit().entity()._effectResult.clear();
-                }
-                else {
-                    // まだ iterationCount が残っているので、同じ Step を再び実行する
-                }
-
-            }
-            else {
-                // 向き変更のみなど、行動トークンは消費しなかった
-            }
-        }
-    }
 
     private update_ProcessPhase(): void {
-        // ひとつ前の callDecisionPhase() を基点に実行された 1 つ以上のコマンドチェーンの結果を処理
-        this.prepareActionPhase();
-
-        const phase = this._phases[this.currentPhaseIndex()];
-        const run = REGame.scheduler.currentRun();
-        while (true) {
-            if (REGame.scheduler._currentStep >= run.steps.length) {
-                REGame.scheduler._currentStep = -1;
-                REGame.scheduler.advancePhaseIndex();
-                if (this.currentPhaseIndex() >= this._phases.length) {
-                    this._phase = SchedulerPhase.RunEnding;
-                }
-                else {
-                    this._phases[this.currentPhaseIndex()].onStart(this);
-                }
-                return;
-            }
-            
-            const step = run.steps[REGame.scheduler._currentStep];
-            if (step.isValid()) {
-                const unit = step.unit();
-                const entity = unit.entity();
-                //const result = entity._effectResult;
-               // result.clear();
-
-                phase.onProcess(this, unit);
-
-                
-        
-               // result.showResultMessages(RESystem.commandContext, entity);
-            }
-
-
-            if (RESystem.commandContext.isRunning()) {
-                // onProcess で何かコマンドが積まれていたらそれを実行しに行く
-                return;
-            }
-            else {
-                //this.onTurnEnd(step);
-                // このフェーズでは実行できない step だった。次の step へ。
-                REGame.scheduler._currentStep++;
-            }
+        if (!this._stepScheduler.process()) {
+            this._phase = SchedulerPhase.RunEnding;
         }
     }
 
@@ -431,34 +334,6 @@ export class SScheduler
             }
         }
     }
-
-    // onProcess ひとつから発行されるコマンドチェーンを実行し終えたタイミング。
-    // Manual, Minor, Major 等フェーズのたびに発生する。
-    private onStepEnd(step: LTOStep): void {
-
-        // REGame.scheduler.actorEntities().forEach(entity => {
-        //     entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
-        // });
-        // Trap の状態リセットも行いたいので、マップ上の全 Entity に対して通知する
-        for (const entity of REGame.map.entities()) {
-            entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
-        }
-
-        
-        const unit = step.unit();
-        if (unit.isValid()) {
-            const entity = unit.entity();
-
-            //entity._effectResult.showResultMessages(RESystem.commandContext, entity);
-
-            entity._reward.apply(entity);
-            entity._effectResult.showResultMessages(RESystem.commandContext, entity);
-            entity._effectResult.clear();
-        }
-
-        REGame.scheduler.attemptRefreshTurnOrderTable();
-    }
-
 
 
     _foreachRunSteps(start: LTOStep, func: (step: LTOStep) => boolean) {

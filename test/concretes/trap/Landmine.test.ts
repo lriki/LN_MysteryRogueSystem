@@ -51,7 +51,7 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const hp1 = 8;
+    const hp1 = 16;
     player1.setActualParam(REBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
 
     // trap 生成&配置
