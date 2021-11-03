@@ -1,15 +1,17 @@
 
 export enum SStepPhase {
-    SequenceStarting,
-    PhaseStarting,
-    StepStarting,
-    MainProcess,
-    MainProcessClosing,
+    RunStarting,
+        PhaseStarting,
+            StepStarting,
 
-    AfterProcess,   // カウンター用
-    AfterProcessClosing,
+                MainProcess,
+                MainProcessClosing,
+                AfterProcess,   // カウンター用
+                AfterProcessClosing,
 
-    StepClosing,
+            StepClosing,
 
+        PhaseClosing,
+    RunClosing,
     Closed,
 }

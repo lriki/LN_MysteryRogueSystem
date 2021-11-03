@@ -18,7 +18,7 @@ import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecut
 import { LEventServer } from "ts/re/objects/LEventServer";
 import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/re/objects/LFloorDirector";
-import { LScheduler } from "ts/re/objects/LScheduler";
+import { LScheduler, LScheduler2 } from "ts/re/objects/LScheduler";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/re/PluginParameters";
@@ -62,7 +62,7 @@ export class SGameManager {
         REGame.world = new LWorld();
         REGame.map = new LMap();
         REGame.camera = new LCamera();
-        REGame.scheduler = new LScheduler();
+        REGame.scheduler = new LScheduler2();
         REGame.identifyer = new LIdentifyer();
         REGame.recorder = new SActivityRecorder();
         REGame.messageHistory = new LMessageHistory();
@@ -175,7 +175,7 @@ export class SGameManager {
             }
 
             RESystem.minimapData.clear();
-            RESystem.scheduler.clear();
+            RESystem.scheduler.reset();
             REGame.camera.clearFloorTransfering();
             Log.d("PerformFloorTransfer");
         }

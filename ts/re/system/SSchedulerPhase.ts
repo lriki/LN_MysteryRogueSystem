@@ -1,123 +1,31 @@
-import { DecisionPhase } from "ts/re/objects/behaviors/LBehavior";
-import { REGame } from "ts/re/objects/REGame";
-import { SScheduler } from "./SScheduler";
-import { RESystem } from "./RESystem";
-import { UAction } from "../usecases/UAction";
+import { SScheduler, SScheduler_old } from "./SScheduler";
 import { LTOUnit } from "ts/re/objects/LScheduler";
-import { LItemShopStructure } from "../objects/structures/LItemShopStructure";
-
-
+import { LEntity } from "../objects/LEntity";
+import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
 
 export abstract class SSchedulerPhase {
     //abstract nextPhase(): SchedulerPhase;
-    
+
+    // AIMinor で iteration (stepのマージ) を許可してしまうと、
+    // 倍速 Unit に対する罠の発動が、2回移動終了時になってしまう。
+    //
+    // ### MainProcess 終了時にワナ発動処理をすればよいのでは？
+    // 罠の発動は、他の Unit の歩行が全部終わってから処理したい。そのため iteration でまとめて移動してしまうと都合が悪い。
+    // ※ただし、AIMajorPhase での ワナ発動は、移動直後でも構わない、というかその方が自然に見えそう。
+    abstract isAllowIterationAtPrepare(): boolean;
+
     onStart(): void {}
+
+
+
+    abstract testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean;
 
     // この処理の中で CommandContext にコマンドが積まれた場合、
     // Scheduler はその処理を始め、全てコマンドを実行し終えたら次の unit の処理に移る。
     // コマンドが積まれなかった場合、即座に次の unit の処理に移る。
-    abstract onProcess(scheduler: SScheduler, unit: LTOUnit): void;
+    abstract onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void;
+
+    // Phase 終了時に1度呼ばれる
+    onEnd(scheduler: SScheduler): void {}
 
 }
-
-export class SSchedulerPhase_Prepare extends SSchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: LTOUnit): void {
-        const entity = REGame.world.findEntity(unit.entityId());
-        if (entity) {
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Prepare);
-        }
-    }
-}
-
-export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
-    onStart(): void {
-    }
-
-    onProcess(scheduler: SScheduler, unit: LTOUnit): void {
-        const entity = REGame.world.findEntity(unit.entityId());
-        if (entity && unit.behavior().manualMovement() && entity._actionToken.canMajorAction()) {
-
-            // 倍速対策。Pallarel 付きでも強制的に Flush.
-            RESystem.sequelContext.flushSequelSet();
-
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
-        }
-    }
-}
-
-// モンスターの移動・攻撃対象決定
-export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
-    onStart(): void {
-        for (const s of REGame.map.structures()) {
-            if (s instanceof LItemShopStructure) {
-                
-            }
-        }
-    }
-    
-
-    onProcess(scheduler: SScheduler, unit: LTOUnit): void {
-        const entity = REGame.world.findEntity(unit.entityId());
-        
-        if (entity && !unit.behavior().manualMovement() && entity._actionToken.canMinorAction() &&
-            unit.behavior()._targetingEntityId <= 0) {    // Minor では行動対象決定の判定も見る
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
-            //REGame.scheduler.setCurrentTurnEntity(entity);
-        }
-    }
-}
-
-// 状態異常の発動・解除、HPの自然回復・減少
-/*
-export class SSchedulerPhase_UpdateState extends SSchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: UnitInfo): void {
-        const entity = REGame.world.findEntity(unit.entityId);
-        if (entity) {
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
-        }
-    }
-}
-*/
-
-// 敵対勢力の入室・退室・隣接によるモンスターの浅い眠り状態解除・目的地設定
-export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPhase {
-    onStart(): void {
-        REGame.map.updateLocatedResults(RESystem.commandContext);
-    }
-
-    onProcess(scheduler: SScheduler, unit: LTOUnit): void {
-        const entity = REGame.world.findEntity(unit.entityId());
-        if (entity) {
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
-        }
-    }
-}
-
-// 罠発動
-export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
-    
-    onStart(): void {
-        // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
-        // 罠の上へ移動している動きにしたいのでここで Flush.
-        //RESystem.sequelContext.flushSequelSet();
-        RESystem.sequelContext.attemptFlush(true);
-    }
-    
-    onProcess(scheduler: SScheduler, unit: LTOUnit): void {
-        const entity = REGame.world.findEntity(unit.entityId());
-        if (entity && unit.behavior().requiredFeetProcess()) {
-            UAction.postStepOnGround(RESystem.commandContext, entity);
-            unit.behavior().clearFeetProcess();
-        }
-    }
-}
-
-export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
-    onProcess(scheduler: SScheduler, unit: LTOUnit): void {
-        const entity = REGame.world.findEntity(unit.entityId());
-        if (entity && !unit.behavior().manualMovement() && entity._actionToken.canMajorAction()) {
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
-        }
-    }
-}
-

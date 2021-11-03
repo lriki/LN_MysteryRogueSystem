@@ -53,7 +53,7 @@ import { SActivityContext } from "ts/re/system/SActivityContext";
 import { SStepPhase } from "ts/re/system/SCommon";
 
 export enum DecisionPhase {
-    Prepare,
+    //Prepare,
     Manual,
     AIMinor,
     UpdateState,

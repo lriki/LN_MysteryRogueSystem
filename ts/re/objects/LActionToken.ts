@@ -48,6 +48,10 @@ export class LActionToken {
         return this._minorActionTokenCount > 0 && this._majorActionTokenCount > 0;
     }
 
+    public actionCount(): number {
+        return Math.max(this._minorActionTokenCount, this._majorActionTokenCount);
+    }
+
     public reset(entity: LEntity, count: number): void {
         const data = entity.data();
         this._minorActionTokenCount = count;

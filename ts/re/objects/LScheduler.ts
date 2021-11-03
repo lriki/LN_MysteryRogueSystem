@@ -1,6 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { DFactionId, REData } from "ts/re/data/REData";
+import { SSchedulerPhase } from "../system/SSchedulerPhase";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";
@@ -87,7 +88,7 @@ export class LTOStep {
 
     public unit(): LTOUnit {
         assert(this._unitId >= 0);
-        return REGame.scheduler.units2()[this._unitId];
+        return REGame.scheduler_old.units2()[this._unitId];
     }
 
     public iterationCountMax(): number {
@@ -126,6 +127,7 @@ export interface RunInfo
 {
     steps: LTOStep[];
 };
+
 
 @RESerializable
 export class LScheduler {
@@ -420,27 +422,27 @@ export class LScheduler {
 
             // 次の Run を取り出す。
             // 無ければ終端に新たな Run を作る。
-            let newRun: RunInfo;
+            let nextRun: RunInfo;
             if (this._currentRun >= this._runs.length - 1) {
-                newRun = {
+                nextRun = {
                     steps: [],
                 };
-                this._runs.push(newRun);
+                this._runs.push(nextRun);
             }
             else {
-                newRun = this._runs[this._currentRun + 1];
+                nextRun = this._runs[this._currentRun + 1];
             }
 
             // 次の Run に、増速した Unit の Step を増やす。
             // もし既に Step がある場合は、iteration を増やす。
             for (const unit of changesUnits) {
-                const step = newRun.steps.find(s =>  unit.entityId().equals(s.unit().entityId()));
+                const step = nextRun.steps.find(s =>  unit.entityId().equals(s.unit().entityId()));
                 if (step) {
                     step.setIterationCountMax(step.iterationCountMax() + 1);
                 }
                 else {
                     // Step 新規作成
-                    newRun.steps.unshift(new LTOStep(unit));
+                    nextRun.steps.unshift(new LTOStep(unit));
                 }
             }
 
@@ -450,10 +452,10 @@ export class LScheduler {
                 if (step2.isIterationClosed()) continue;
                 if (!!changesUnits.find(x => x.id() == step2.unitId())) continue;   // 今回増速した人は対象外
 
-                let newStep = newRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
+                let newStep = nextRun.steps.find(s =>  step2.unit().entityId().equals(s.unit().entityId()));
                 if (!newStep) {
                     newStep = new LTOStep(step2.unit());
-                    newRun.steps.unshift(newStep);
+                    nextRun.steps.unshift(newStep);
                 }
 
                 if (step2.remainIterationCount() == 1) {
@@ -514,3 +516,362 @@ export class LScheduler {
     }
 }
 
+
+
+
+export enum LSchedulerPhase
+{
+    RoundStarting,
+
+    Processing,
+
+    RoundEnding,
+}
+
+export class LSchedulingUnit {
+    private _index: number;
+    private _entityId: LEntityId;
+    private _unitBehaviorId: LBehaviorId;
+    private _factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
+    private _iterationCountMax: number;    // 何回連続行動できるか
+    private _iterationCount: number;
+    actionCount: number;    // 行動順リストを作った時の行動回数。等速の場合は1,倍速の場合は2.
+    speedLevel: number;     // 最新の Table を作った時の SpeedLevel. Entity のものと変化がある場合は Table を変更する必要がある。
+    speedLevel2: number;    // Refresh 時の一時変数
+
+    public constructor(index: number, entity: LEntity, unitBehavior: LUnitBehavior) {
+        this._index = index;
+        this._entityId = entity.entityId();
+        this._unitBehaviorId = unitBehavior.id();
+        this._factionId = entity.getOutwardFactionId();
+        assert(this._factionId > 0);
+        this._iterationCountMax = 0;
+        this._iterationCount = 0;
+        this.actionCount = 0;
+        this.speedLevel = 0;
+        this.speedLevel2 = 0;
+    }
+
+    public index(): number {
+        return this._index;
+    }
+
+    public entityId(): LEntityId {
+        return this._entityId;
+    }
+
+    public entity(): LEntity {
+        return REGame.world.entity(this._entityId);
+    }
+
+    public factionId(): number {
+        return this._factionId;
+    }
+
+    public unitBehavior(): LUnitBehavior {
+        return REGame.world.behavior(this._unitBehaviorId) as LUnitBehavior;
+    }
+
+    public isManual(): boolean {
+        return this.unitBehavior().manualMovement();
+    }
+    
+    public isActionCompleted(): boolean {
+        const actionToken = this.entity()._actionToken;
+        return !actionToken.canMinorAction() && !actionToken.canMajorAction();
+    }
+
+    public isValid(): boolean {
+        return this._entityId.hasAny();
+    }
+
+    public invalidate(): void {
+        this._entityId = LEntityId.makeEmpty();
+    }
+
+    public resetEntity(entity: LEntity): void {
+        this._entityId = entity.entityId();
+        this._unitBehaviorId = entity.getEntityBehavior(LUnitBehavior).id();
+        this._factionId = entity.getOutwardFactionId();
+        assert(this._factionId > 0);
+    }
+
+    public resetIterationCount(): void {
+        this._iterationCount = 0;
+    }
+    
+    public iterationCountMax(): number {
+        return this._iterationCountMax;
+    }
+
+    public setIterationCountMax(value: number): void {
+        this._iterationCountMax = value;
+    }
+
+    public remainIterationCount(): number {
+        return (this._iterationCountMax - this._iterationCount).clamp(0, this._iterationCountMax);
+    }
+
+    public isIterationClosed(): boolean {
+        return this._iterationCount >= this._iterationCountMax;
+    }
+
+    public increaseIterationCount(): void {
+        this._iterationCount++;
+    }
+}
+
+// - Round 中に新たに発生した Unit は、今回 round では行動しない
+@RESerializable
+export class LScheduler2 {
+    /*
+    [2021/11/3] 行動順テーブル廃止
+    ----------
+    行動速度の変化によってテーブルの再編成が必要になるが、その処理がかなり複雑になってきたため。
+    行動候補となるタイミングで都度 IterationCount などを判断する仕組みの方が、処理負荷は上がるが多少シンプルで柔軟に対応できる。
+    */
+    public chedulerPhase: LSchedulerPhase = LSchedulerPhase.RoundStarting;
+
+    // ターン実行中の Entity 発生・削除に備え、Map の Entities を直接参照せず、
+    // Round 開始時に取り出しておく。そのためこの配列内の Entity が destroy されたときは
+    // 要素に対して invalidaate しておく必要がある。
+    public _schedulingUnits: LSchedulingUnit[] = [];
+
+    nextSearchIndex = 0;
+    _currentPhaseIndex = 0;
+
+    // buildSchedulingUnits() 時点の最大行動回数。
+    // あくまで参考値。Step 実行中の行動回数減少などは反映しない。
+    private _maxActionCount = 0;
+
+    public buildSchedulingUnits(): void {
+        this._maxActionCount = 0;
+        // 行動できるすべての entity を集める
+        for (const entity of REGame.map.entities()) {
+            const behavior = entity.findEntityBehavior(LUnitBehavior);
+            if (behavior) {
+                const unit = this.newUnit(entity, behavior);
+
+                const speedLevel = this.getSpeedLevel(entity);
+                unit.actionCount = speedLevel
+                unit.speedLevel = speedLevel;
+                unit.speedLevel2 = speedLevel;
+                if (unit.actionCount < 0) {
+                    // 鈍足状態。行動回数としては 1 として扱う。
+                    // 実際に手番が回ることになるが、行動トークンを持っていないので行動できないことになる。
+                    unit.actionCount = 1;
+                }
+
+                this._maxActionCount = Math.max(this._maxActionCount, unit.actionCount);
+            }
+        }
+        
+        // 勢力順にソートしておく。
+        // これによって Player を優先的に検索できるようになる。
+        const sortedUnits = this._schedulingUnits.immutableSort((a, b) => { return REData.factions[a.factionId()].schedulingOrder - REData.factions[b.factionId()].schedulingOrder; });
+    }
+
+    public schedulingUnits(): readonly LSchedulingUnit[] {
+        return this._schedulingUnits;
+    }
+
+    public currentPhaseIndex(): number {
+        return this._currentPhaseIndex;
+    }
+
+    private newUnit(entity: LEntity, behavior: LUnitBehavior): LSchedulingUnit {
+        const unit = new LSchedulingUnit(this._schedulingUnits.length, entity, behavior);
+        this._schedulingUnits.push(unit);
+        return unit;
+    }
+
+    public getSpeedLevel(entity: LEntity): number {
+        // TODO: ユニットテスト用。後で消す
+        const b = entity.findEntityBehavior(LUnitBehavior);
+        if (b && b._speedLevel != 0) return b._speedLevel;
+
+        const agi = entity.actualParam(REBasics.params.agi);
+        const v = (agi >= 0) ? (Math.floor(agi / 100) + 1) : Math.floor(agi / 100);
+        return v;
+    }
+
+    // schedulingUnits に行動トークンを配る。
+    // 鈍足状態の Unit に対してはウェイトカウントの更新も行う。
+    public dealActionTokens(): void {
+
+        // ターン開始時の各 unit の設定更新
+        for (const unit of this._schedulingUnits) {
+            const behavior = unit.unitBehavior();
+            const entity = unit.entity();
+
+            const speedLevel = this.getSpeedLevel(entity);
+
+            // 鈍足状態の対応。待ちターン数を更新
+            if (speedLevel < 0) {
+                if (behavior.waitTurnCount() == 0) {
+                    behavior.setWaitTurnCount(1);
+                }
+                else {
+                    behavior.setWaitTurnCount(behavior.waitTurnCount() - 1);
+                }
+            }
+
+            // 行動トークンを更新
+            if (behavior.waitTurnCount() == 0) {
+                // 行動トークンを、速度の分だけ配る。
+                entity._actionToken.reset(entity, Math.max(1, speedLevel));
+            }
+            else {
+                // 鈍足状態。このターンは行動トークンをもらえない。
+            }
+        }
+    }
+
+    public resetSeek(): void {
+        this.nextSearchIndex = 0;
+    }
+
+    public nextUnit(phase: SSchedulerPhase): boolean {
+        if (!this.isSeeking()) {
+            return false;   // iteration end.
+        }
+
+        while (true) {
+            const unit = this._schedulingUnits[this.nextSearchIndex];
+            this.nextSearchIndex++;
+            if (this.pick(phase, unit)) {
+                unit.resetIterationCount();
+                return true;
+            }
+            
+            if (this.nextSearchIndex >= this._schedulingUnits.length) {
+                return false;   // iteration end.
+            }
+        }
+    }
+    
+    public currentUnit(): LSchedulingUnit {
+        const index = this.nextSearchIndex - 1;
+        assert(0 <= index && index < this._schedulingUnits.length);
+        return this._schedulingUnits[index];
+    }
+
+    public isSeeking(): boolean {
+        return this.nextSearchIndex < this._schedulingUnits.length;
+    }
+
+    // https://1drv.ms/x/s!Ano7WuQbt_eBgcZLyMaObhXjKW0uig?e=nkrHye
+    private pick(phase: SSchedulerPhase, unit: LSchedulingUnit): boolean {
+        if (!phase.testProcessable(unit.entity(), unit.unitBehavior())) return false;
+
+
+
+        // Player に関しては、IterationCount は常に1である。マージは行わない。
+        // 3 倍速 Player が 2 人いる場合は常に交互に操作することになる。
+        if (unit.isManual()) {
+            unit.setIterationCountMax(1);
+            return true;
+        }
+
+        // 行動回数 1 の NPC の場合、他に行動回数が 2 以上 (倍速 Entity) が要る場合は行動しない。
+        // つまり、行動優先度をさげ、速度が速い人に先をゆずる。
+        if (unit.actionCount == 1) {
+            let otherActionMax = 0;
+            for (let i = 0; i < this._schedulingUnits.length; i++) {
+                const unit2 = this._schedulingUnits[i];
+                if (unit2.index() != unit.index() && !unit2.isActionCompleted()) {
+                    otherActionMax = Math.max(otherActionMax, unit2.actionCount);
+                }
+            }
+            if (otherActionMax >= 2) {
+                return false;
+            }
+            else {
+                // このっているのは行動回数 1 のものだけなので、動いてよい
+                unit.setIterationCountMax(1);
+                return true;
+            }
+        }
+
+        // 倍速以上の NPCは、他に Manual で操作する Entity がいる場合交互に動くので、IterationCount は 1.
+        // NPC しか残っていないときは、残行動数分まとめて動ける。
+        if (unit.actionCount >= 2) {
+            let manualActionMax = 0;
+            for (const unit of this._schedulingUnits) {
+                if (unit.isManual() && !unit.isActionCompleted()) {
+                    manualActionMax = Math.max(manualActionMax, unit.actionCount);
+                }
+            }
+            if (phase.isAllowIterationAtPrepare()) {
+                if (manualActionMax > 0) {
+                    unit.setIterationCountMax(1);
+                    return true;
+                }
+                else {
+                    unit.setIterationCountMax(unit.entity()._actionToken.actionCount());
+                    return true;
+                }
+            }
+            else {
+                unit.setIterationCountMax(1);
+                return true;
+            }
+        }
+
+        throw new Error("Unreachable.");
+    }
+
+    
+    public invalidateEntity(entity: LEntity) {
+        const index = this._schedulingUnits.findIndex(x => x.entityId().equals(entity.entityId()));
+        if (index >= 0) {
+            this._schedulingUnits[index].invalidate();
+        }
+    }
+    
+    public resetEntity(entity: LEntity) {
+        const index = this._schedulingUnits.findIndex(x => x.entityId().equals(entity.entityId()));
+        if (index >= 0) {
+            this._schedulingUnits[index].resetEntity(entity);
+        }
+    }
+
+    public hasReadyEntity(): boolean {
+        for (const unit of this._schedulingUnits) {
+            const actionToken = unit.entity()._actionToken;
+            if (!unit.isActionCompleted()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public attemptRefreshSpeedLevel(): void {
+        // 各 Entity の最新の SpeedLevel を取得しながら、Refresh が必要かチェックする
+        const changesUnits: LSchedulingUnit[] = [];
+        let maxSpeed = 0;
+        for (const unit of this._schedulingUnits) {
+            if (unit.isValid()) {
+                const entity = unit.entity();
+                unit.speedLevel2 = this.getSpeedLevel(entity);
+                const diff = unit.speedLevel2 - unit.speedLevel;
+                if (unit.speedLevel2 > unit.speedLevel) {
+                    // 速度アップ
+                    changesUnits.push(unit);
+                    maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
+                    unit.speedLevel = unit.speedLevel2;
+                    
+                    // 速度の増減分だけ、行動トークンも調整する。
+                    // 例えば速度が増えた時は次の Run で追加の行動が発生するので、動けるようになる。
+                    entity._actionToken.charge(diff);
+                    unit.setIterationCountMax(unit.iterationCountMax() + diff);
+                }
+                if (unit.speedLevel2 < unit.speedLevel) {
+                    // 速度ダウン
+                    entity._actionToken.charge(diff);
+                    unit.speedLevel = unit.speedLevel2;
+                }
+            }
+        }
+    }
+}
