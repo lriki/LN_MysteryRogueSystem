@@ -106,7 +106,7 @@ export class LBattlerBehavior extends LBehavior {
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }
     
-    onStepEnd(context: SCommandContext): SCommandResponse {
+    onStabilizeSituation(self: LEntity, context: SCommandContext): SCommandResponse {
         const entity = this.ownerEntity();
         if (entity.isDeathStateAffected()) {
             context.postSequel(entity, REBasics.sequels.CollapseSequel);

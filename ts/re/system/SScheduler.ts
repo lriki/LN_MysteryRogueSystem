@@ -173,7 +173,7 @@ export class SScheduler {
     
     private update_ProcessPhase(): void {
         if (!this._stepScheduler.process()) {
-            this._data.chedulerPhase = LSchedulerPhase.RoundEnding
+            this._data.chedulerPhase = LSchedulerPhase.RoundEnding;
         }
     }
 
@@ -204,8 +204,12 @@ export class SScheduler {
     // 遅延予約済みのコマンドすべて実行し終え、次のフェーズに進もうとしている状態。
     // ここで新たにコマンドを post すると、フェーズは進まず新たなコマンドチェーンを開始できる。
     private onCommandChainConsumed(): void {
-        // stabilEntities
-        // 本来あるべき状態と齟齬がある Entity を、定常状態へ矯正する。
+        this.stabilizeSituation();
+    }
+
+    // 本来あるべき状態と齟齬がある Entity を、定常状態へ矯正する。
+    private stabilizeSituation(): void {
+
         {
             for (const entity of REGame.map.entities()) {
                 const block = REGame.map.block(entity.x, entity.y);
@@ -216,6 +220,13 @@ export class SScheduler {
                     UAction.postDropOrDestroyOnCurrentPos(RESystem.commandContext, entity, homeLayer);
                 }
             }
+        }
+        
+        for (const entity of REGame.map.entities()) {
+            entity.iterateBehaviorsReverse(b => {
+                b.onStabilizeSituation(entity, RESystem.commandContext);
+                return true;
+            });
         }
     }
 }

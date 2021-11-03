@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.enemy.X2Speed1Attack"
+                "-t", "concretes.trap.Landmine.InducedExplosion"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
