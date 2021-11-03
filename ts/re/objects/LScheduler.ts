@@ -535,7 +535,7 @@ export class LSchedulingUnit {
     private _factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
     private _iterationCountMax: number;    // 何回連続行動できるか
     private _iterationCount: number;
-    actionCount: number;    // 行動順リストを作った時の行動回数。等速の場合は1,倍速の場合は2.
+    //actionCount: number;    // 行動順リストを作った時の行動回数。等速の場合は1,倍速の場合は2.
     speedLevel: number;     // 最新の Table を作った時の SpeedLevel. Entity のものと変化がある場合は Table を変更する必要がある。
     speedLevel2: number;    // Refresh 時の一時変数
 
@@ -547,7 +547,7 @@ export class LSchedulingUnit {
         assert(this._factionId > 0);
         this._iterationCountMax = 0;
         this._iterationCount = 0;
-        this.actionCount = 0;
+        //this.actionCount = 0;
         this.speedLevel = 0;
         this.speedLevel2 = 0;
     }
@@ -560,6 +560,10 @@ export class LSchedulingUnit {
         return this._entityId;
     }
 
+    public get entity2(): LEntity {
+        return this.entity();
+    }
+
     public entity(): LEntity {
         return REGame.world.entity(this._entityId);
     }
@@ -570,6 +574,18 @@ export class LSchedulingUnit {
 
     public unitBehavior(): LUnitBehavior {
         return REGame.world.behavior(this._unitBehaviorId) as LUnitBehavior;
+    }
+
+    public calcActionCount(): number {
+        const speedLevel = LScheduler2.getSpeedLevel(this.entity());
+        if (speedLevel <= 0) {
+            // 鈍足状態。行動回数としては 1 として扱う。
+            // 実際に手番が回ることになるが、行動トークンを持っていないので行動できないことになる。
+            return 1;
+        }
+        else {
+            return speedLevel;
+        }
     }
 
     public isManual(): boolean {
@@ -640,32 +656,39 @@ export class LScheduler2 {
     nextSearchIndex = 0;
     _currentPhaseIndex = 0;
 
+    maxRunCount = 0;
+    currentRunIndex = 0;
+
     // buildSchedulingUnits() 時点の最大行動回数。
     // あくまで参考値。Step 実行中の行動回数減少などは反映しない。
     private _maxActionCount = 0;
 
     public buildSchedulingUnits(): void {
+        this._schedulingUnits = [];
         this._maxActionCount = 0;
+        this.currentRunIndex = 0;
+
         // 行動できるすべての entity を集める
         for (const entity of REGame.map.entities()) {
             const behavior = entity.findEntityBehavior(LUnitBehavior);
             if (behavior) {
                 const unit = this.newUnit(entity, behavior);
 
-                const speedLevel = this.getSpeedLevel(entity);
-                unit.actionCount = speedLevel
-                unit.speedLevel = speedLevel;
-                unit.speedLevel2 = speedLevel;
-                if (unit.actionCount < 0) {
-                    // 鈍足状態。行動回数としては 1 として扱う。
-                    // 実際に手番が回ることになるが、行動トークンを持っていないので行動できないことになる。
-                    unit.actionCount = 1;
-                }
+                //const speedLevel = this.getSpeedLevel(entity);
+                const actionCount = unit.calcActionCount();
+                //unit.actionCount = speedLevel;
+                unit.speedLevel = unit.speedLevel2 = LScheduler2.getSpeedLevel(entity);
+                 
+                // if (unit.actionCount < 0) {
+                //     unit.actionCount = 1;
+                // }
 
-                this._maxActionCount = Math.max(this._maxActionCount, unit.actionCount);
+                this._maxActionCount = Math.max(this._maxActionCount, actionCount);
             }
         }
         
+        this.maxRunCount = this._maxActionCount;
+
         // 勢力順にソートしておく。
         // これによって Player を優先的に検索できるようになる。
         const sortedUnits = this._schedulingUnits.immutableSort((a, b) => { return REData.factions[a.factionId()].schedulingOrder - REData.factions[b.factionId()].schedulingOrder; });
@@ -685,7 +708,7 @@ export class LScheduler2 {
         return unit;
     }
 
-    public getSpeedLevel(entity: LEntity): number {
+    public static getSpeedLevel(entity: LEntity): number {
         // TODO: ユニットテスト用。後で消す
         const b = entity.findEntityBehavior(LUnitBehavior);
         if (b && b._speedLevel != 0) return b._speedLevel;
@@ -704,7 +727,7 @@ export class LScheduler2 {
             const behavior = unit.unitBehavior();
             const entity = unit.entity();
 
-            const speedLevel = this.getSpeedLevel(entity);
+            const speedLevel = LScheduler2.getSpeedLevel(entity);
 
             // 鈍足状態の対応。待ちターン数を更新
             if (speedLevel < 0) {
@@ -762,6 +785,7 @@ export class LScheduler2 {
 
     // https://1drv.ms/x/s!Ano7WuQbt_eBgcZLyMaObhXjKW0uig?e=nkrHye
     private pick(phase: SSchedulerPhase, unit: LSchedulingUnit): boolean {
+        if (!unit.isValid()) return false;
         if (!phase.testProcessable(unit.entity(), unit.unitBehavior())) return false;
 
 
@@ -773,9 +797,19 @@ export class LScheduler2 {
             return true;
         }
 
+        const actionCount = unit.calcActionCount();
+
         // 行動回数 1 の NPC の場合、他に行動回数が 2 以上 (倍速 Entity) が要る場合は行動しない。
         // つまり、行動優先度をさげ、速度が速い人に先をゆずる。
-        if (unit.actionCount == 1) {
+        if (actionCount == 1) {
+            if (this.currentRunIndex >= this.maxRunCount - 1) {
+                unit.setIterationCountMax(actionCount);
+                return true;
+            }
+            else {
+                return false;
+            }
+            /*
             let otherActionMax = 0;
             for (let i = 0; i < this._schedulingUnits.length; i++) {
                 const unit2 = this._schedulingUnits[i];
@@ -791,15 +825,16 @@ export class LScheduler2 {
                 unit.setIterationCountMax(1);
                 return true;
             }
+            */
         }
 
         // 倍速以上の NPCは、他に Manual で操作する Entity がいる場合交互に動くので、IterationCount は 1.
         // NPC しか残っていないときは、残行動数分まとめて動ける。
-        if (unit.actionCount >= 2) {
+        if (actionCount >= 2) {
             let manualActionMax = 0;
             for (const unit of this._schedulingUnits) {
                 if (unit.isManual() && !unit.isActionCompleted()) {
-                    manualActionMax = Math.max(manualActionMax, unit.actionCount);
+                    manualActionMax = Math.max(manualActionMax, actionCount);
                 }
             }
             if (phase.isAllowIterationAtPrepare()) {
@@ -808,7 +843,7 @@ export class LScheduler2 {
                     return true;
                 }
                 else {
-                    unit.setIterationCountMax(unit.entity()._actionToken.actionCount());
+                    unit.setIterationCountMax(actionCount);
                     return true;
                 }
             }
@@ -853,18 +888,29 @@ export class LScheduler2 {
         for (const unit of this._schedulingUnits) {
             if (unit.isValid()) {
                 const entity = unit.entity();
-                unit.speedLevel2 = this.getSpeedLevel(entity);
+                unit.speedLevel2 = LScheduler2.getSpeedLevel(entity);
                 const diff = unit.speedLevel2 - unit.speedLevel;
                 if (unit.speedLevel2 > unit.speedLevel) {
                     // 速度アップ
                     changesUnits.push(unit);
                     maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
                     unit.speedLevel = unit.speedLevel2;
+
+                    this.maxRunCount = Math.max(this.maxRunCount, unit.speedLevel);
                     
                     // 速度の増減分だけ、行動トークンも調整する。
                     // 例えば速度が増えた時は次の Run で追加の行動が発生するので、動けるようになる。
                     entity._actionToken.charge(diff);
-                    unit.setIterationCountMax(unit.iterationCountMax() + diff);
+
+                    if (this.existsHighSpeedReadyEntity(unit)) {
+                        // 他に倍速 Entity がいる場合は iterationCount を増やしたくない。
+                        // 
+                        // 例えば、素早さ草をのんだら直ちに Player にターンが回るが、
+                        // 倍速Enemyがいるときに Player が素早さ草を飲んでも Player にターンを回したくない。
+                    }
+                    else {
+                        unit.setIterationCountMax(unit.iterationCountMax() + diff);
+                    }
                 }
                 if (unit.speedLevel2 < unit.speedLevel) {
                     // 速度ダウン
@@ -873,5 +919,17 @@ export class LScheduler2 {
                 }
             }
         }
+    }
+
+    // subject 以外に、倍速かつまだ行動する可能性がある Unit が存在しているか？
+    public existsHighSpeedReadyEntity(subject: LSchedulingUnit): boolean {
+        for (const unit of this._schedulingUnits) {
+            if (unit.isValid() && unit.index() != subject.index()) {
+                if (unit.speedLevel > 1 && !unit.isActionCompleted()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

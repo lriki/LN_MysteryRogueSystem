@@ -49,7 +49,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     expect(enemy1.x).toBe(13);
     expect(enemy1.y).toBe(10);
 
-    // 右へ移動
+    // 右へ移動。まだ隣接しない
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 

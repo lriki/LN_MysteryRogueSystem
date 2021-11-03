@@ -11,6 +11,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
+import { LScheduler2 } from "ts/re/objects/LScheduler";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -42,14 +43,14 @@ test("concretes.states.速度変化", () => {
     TestEnv.performFloorTransfer();
 
     // デフォルトの行動回数は 1 (等速)
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(1);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(1);
 
     // 倍速化
     actor1.addBuff(buff1);
     const param = actor1.params().param(REBasics.params.agi);
     assert(param);
     expect(param.getAddBuff().level).toBe(1);
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(2);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(2);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(true);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);
@@ -57,7 +58,7 @@ test("concretes.states.速度変化", () => {
     // 3倍速化
     actor1.addBuff(buff1);
     expect(param.getAddBuff().level).toBe(2);
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(3);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(true);
@@ -65,14 +66,14 @@ test("concretes.states.速度変化", () => {
     // 鈍足化
     actor1.addBuff(buff2);
     expect(param.getAddBuff().level).toBe(-1);
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(-1);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(-1);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(true);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);
 
     // 解除
     actor1.removeBuff(REBasics.params.agi);
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(1);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(1);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);

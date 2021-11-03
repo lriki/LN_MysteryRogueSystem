@@ -9,6 +9,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
+import { LScheduler2 } from "ts/re/objects/LScheduler";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -47,7 +48,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 倍速になる
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(2);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(2);
     
     expect(enemy1.x).toBe(10);  // まだ enemy にターンは回らないので移動していない
 
@@ -60,7 +61,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 3倍速になる
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(3);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 3倍速以上には増えない
-    expect(REGame.scheduler.getSpeedLevel(actor1)).toBe(3);
+    expect(LScheduler2.getSpeedLevel(actor1)).toBe(3);
     
     // "草" の共通テスト
     TestUtils.testCommonGrassEnd(actor1, item1);
@@ -102,6 +103,6 @@ test("concretes.item.grass.すばやさ草.throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 倍速状態になる
-    expect(REGame.scheduler.getSpeedLevel(enemy1)).toBe(2);
+    expect(LScheduler2.getSpeedLevel(enemy1)).toBe(2);
 });
 

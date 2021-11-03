@@ -81,10 +81,12 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
 
         // 罠の処理
         for (const unit of scheduler.data()._schedulingUnits) {
-            const unitBehavior = unit.unitBehavior();
-            if (unitBehavior.requiredFeetProcess()) {
-                UAction.postStepOnGround(RESystem.commandContext, unit.entity());
-                unitBehavior.clearFeetProcess();
+            if (unit.isValid()) {
+                const unitBehavior = unit.unitBehavior();
+                if (unitBehavior.requiredFeetProcess()) {
+                    UAction.postStepOnGround(RESystem.commandContext, unit.entity());
+                    unitBehavior.clearFeetProcess();
+                }
             }
         }
     }
@@ -158,8 +160,10 @@ export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
     }
 
     onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void {
-        assert(this.testProcessable(entity, unitBehavior));
-        entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
+        //assert(this.testProcessable(entity, unitBehavior));
+        if (this.testProcessable(entity, unitBehavior)) {
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
+        }
     }
 }
 

@@ -150,7 +150,7 @@ export class SStepScheduler2 {
         }
         else {
             // currentPhase で実行の必要があるものはすべて終えた
-            this._stepPhase = SStepPhase.PhaseStarting;
+            this._stepPhase = SStepPhase.PhaseClosing;
         }
     }
 
@@ -205,16 +205,21 @@ export class SStepScheduler2 {
     }
     
     private process_PhaseClosing(): void {
+        this.currentPhase().onEnd(this._scheduler);
         this._stepPhase = SStepPhase.PhaseStarting;
     }
 
     private process_RunClosing(): void {
-        if (this._data.hasReadyEntity()) {
+        //if (this._data.hasReadyEntity()) {
+            //console.log("まだ行動できる Entity が残っている");
             // まだ行動できる Entity が残っている場合は Run を続ける
-            this._stepPhase = SStepPhase.RunStarting;
+
+        this._data.currentRunIndex++;
+        if (this._data.currentRunIndex >= this._data.maxRunCount) {
+            this._stepPhase = SStepPhase.Closed;
         }
         else {
-            this._stepPhase = SStepPhase.Closed;
+            this._stepPhase = SStepPhase.RunStarting;
         }
     }
 
