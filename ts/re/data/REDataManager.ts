@@ -888,6 +888,9 @@ export class REDataManager
                 if (id > 0) RESetup.setupActor(REData.entities[id]);
             }
 
+            for (const id of REData.items) {
+                RESetup.linkItem(REData.entities[id]);
+            }
             REData.system.link(testMode);
 
             for (const state of REData.states) {

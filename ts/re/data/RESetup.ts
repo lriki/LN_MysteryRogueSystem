@@ -11,6 +11,7 @@ import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { REData } from "./REData";
 import { tr2 } from "../Common";
+import { DItem } from "./DItem";
 
 export class RESetup {
 
@@ -430,8 +431,8 @@ export class RESetup {
                 
                 emittor.scope.range = DEffectFieldScopeRange.AroundAndCenter;
                 emittor.scope.length = 1;
-                //emittor.selfAnimationId = 109;
-                emittor.selfSequelId = REBasics.sequels.explosion;
+                emittor.selfAnimationId = 109;
+                //emittor.selfSequelId = REBasics.sequels.explosion;
                 //effect.qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
 
                 effect.qualifyings.parameterQualifyings.push({
@@ -463,10 +464,15 @@ export class RESetup {
                 emittor.scope.projectilePrefabKey = "kウッドアロー";
                 break;
             }
-            case "kItem_突風の罠":
-                entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
-                entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.transferToNextFloor);
+            case "kItem_錆ワナ":
                 break;
+            case "kItem_突風の罠": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Center;
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.transferToNextFloor);
+                emittor.selfAnimationId = 94;
+                break;
+            }
             case "kItem_保存の壺":
                 entity.addReaction(REBasics.actions.PutInActionId, 0);
                 entity.addReaction(REBasics.actions.PickOutActionId, 0);
@@ -615,6 +621,20 @@ export class RESetup {
                 emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
                 emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
                 break;
+        }
+    }
+
+    static linkItem(entity: DEntity) {
+        const data = entity.item();
+        switch (entity.entity.key) {
+            case "kItem_錆ワナ": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
+                emittor.scope.range = DEffectFieldScopeRange.Center;
+                emittor.selfAnimationId = 59;
+                break;
+            }
         }
     }
 
