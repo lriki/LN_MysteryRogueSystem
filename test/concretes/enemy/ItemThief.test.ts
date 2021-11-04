@@ -34,13 +34,15 @@ test("concretes.enemy.ItemThief.Basic", () => {
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // Enemy の目の前へ移動
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction(LActionTokenType.Minor));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Player のインベントリにあったアイテムが盗まれ、Enemy のインベントリに移動している
     expect(inventory1.entities().length).toBe(0);
@@ -50,13 +52,15 @@ test("concretes.enemy.ItemThief.Basic", () => {
     // Enemy1 はワープしている
     expect(enemy1.x != 12 && enemy1.y != 10).toBe(true);
 
+    //----------------------------------------------------------------------------------------------------
+
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy は倒れ、足元に item が落ちている
     expect(enemy1.isDestroyed()).toBe(true);
@@ -87,24 +91,28 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     // □□□□□
 
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // 待機
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy1 はアイテムに向かって移動している
     expect(enemy1.x == 13).toBe(true);
     expect(enemy1.y == 10).toBe(true);
+
+    //----------------------------------------------------------------------------------------------------
 
     // 待機
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     enemy1.dir = 6; // TODO: 今はAIにバグがあるので
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 盗まれている
     expect(inventory2.entities().length).toBe(1);
@@ -137,23 +145,27 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     // Ｐ□敵□草
     // □□□□□
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // 待機
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy1 はアイテムに向かって移動している
     expect(enemy1.x == 13).toBe(true);
     expect(enemy1.y == 10).toBe(true);
 
+    //----------------------------------------------------------------------------------------------------
+
     // 置く
     RESystem.dialogContext.postActivity(LActivity.makePut(actor1, item2).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy1 は新しいアイテムに向かって移動している
     expect(enemy1.x == 12).toBe(true);
@@ -172,14 +184,16 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
+    //----------------------------------------------------------------------------------------------------
+    
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy は倒れ、足元に item が落ちている。ドロップ率 100%
     expect(enemy1.isDestroyed()).toBe(true);

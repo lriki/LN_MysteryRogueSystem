@@ -606,11 +606,11 @@ export class SEffectApplyer {
         result.makeSuccess();
 
         if (!paramEffect.qualifying.silent) {
-            const paramResult = new LParamEffectResult();
+            const paramResult = new LParamEffectResult(paramEffect.paramId);
             paramResult.damage = value;
             paramResult.drain = paramEffect.isDrain;
             paramResult.priorotyMessage = paramEffect.qualifying;
-            result.paramEffects[paramEffect.paramId] = paramResult;
+            result.paramEffects2.push(paramResult);
         }
 
         if (paramEffect.qualifying.applyTarget == DParameterApplyTarget.Current) {

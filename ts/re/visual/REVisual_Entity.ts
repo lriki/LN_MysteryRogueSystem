@@ -298,9 +298,12 @@ export class REVisual_Entity
 
         if (this._rmmzEventId >= 0) {
             const event = $gameMap.event(this._rmmzEventId);
-            const hp = result.paramEffects[REBasics.params.hp];
-            if (hp) {
-                event.popupDamage_RE(hp.damage, 0);
+
+
+            const hpParams = result.paramEffects2.filter(i => i.paramId == REBasics.params.hp);
+            if (hpParams.length > 0) {
+                const hpDamage = hpParams.reduce((r, i) => r + i.damage, 0);
+                event.popupDamage_RE(hpDamage, 0);
             }
         }
     }

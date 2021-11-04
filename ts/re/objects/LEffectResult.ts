@@ -15,9 +15,14 @@ import { DParameterQualifying } from "../data/DEffect";
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @RESerializable
 export class LParamEffectResult {
+    paramId: DParameterId;
     damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
     drain: boolean = false;
     priorotyMessage: DParameterQualifying | undefined;
+
+    public constructor(paramId: DParameterId) {
+        this.paramId = paramId;
+    }
 }
 
 /**
@@ -55,7 +60,7 @@ export class LEffectResult {
     // HP に関係する効果であったか。文字の色を変えたりする
     hpAffected = false;  // TODO: NotImplemented
 
-    paramEffects: (LParamEffectResult | undefined)[] = [];
+    paramEffects2: LParamEffectResult[] = [];
     //parameterDamags: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
 
     addedStates: DStateId[] = [];
@@ -86,7 +91,7 @@ export class LEffectResult {
         this.critical = false;
         this.success = false;
         this.hpAffected = false;
-        this.paramEffects = [];
+        this.paramEffects2 = [];
         this.addedStates = [];
         this.removedStates = [];
         this.addedBuffs = [];
@@ -181,25 +186,10 @@ export class LEffectResult {
             context.postMessage(tr2("TEST: 外れた。"));
         }
         else {
-            for (let i = 0; i < this.paramEffects.length; i++) {
-                if (this.paramEffects[i]) {
-                    context.postMessage(this.makeParamDamageText(targetName, i));
-                }
+            for (const param of this.paramEffects2) {
+                context.postMessage(this.makeParamDamageText(targetName, param));
             }
         }
-        /*
-        else if (this.hpAffected && hpDamage >= 0) {
-            
-
-            {
-                const damageText = LEntityDescription.makeDisplayText(hpDamage.toString(), DescriptionHighlightLevel.Number);
-                context.postMessage(tr2("%1に%2のダメージを与えた！").format(name, damageText));
-            }
-        }
-        else {
-
-        }
-        */
 
         const isActor = this.focusedFriendly;
 
@@ -277,11 +267,8 @@ export class LEffectResult {
     }
 
     // Window_BattleLog.prototype.makeHpDamageText
-    private makeParamDamageText(entityName: string, paramId: DParameterId): string {
-        const paramResult = this.paramEffects[paramId];
-        assert(paramResult);
-
-        const paramData = REData.parameters[paramId];
+    private makeParamDamageText(entityName: string, paramResult: LParamEffectResult): string {
+        const paramData = REData.parameters[paramResult.paramId];
         const damage = paramResult.damage;
         const isActor = this.focusedFriendly;
         let fmt;

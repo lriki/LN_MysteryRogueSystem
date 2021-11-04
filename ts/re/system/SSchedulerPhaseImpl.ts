@@ -79,7 +79,9 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         //RESystem.sequelContext.flushSequelSet();
         RESystem.sequelContext.attemptFlush(true);
 
-        // 罠の処理
+        // 罠の処理は Phase 終了時に行う必要がある。
+        // 罠の発動タイミングは Minor と Major で異なる点に注意。
+        // Minor では、Phase終了時、つまり全 Unit の1回分(≒1Block分)の移動が終わった時に行う必要がある。
         for (const unit of scheduler.data()._schedulingUnits) {
             if (unit.isValid()) {
                 const unitBehavior = unit.unitBehavior();

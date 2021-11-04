@@ -201,16 +201,18 @@ export class LTrapBehavior extends LBehavior {
 
         if (!this._recharging) {
             this._required = true;
-            for (const param of self._effectResult.paramEffects) {
+            // for (const param of self._effectResult.paramEffects) {
                 
-            }
+            // }
         }
 
         return SCommandResponse.Pass; 
     }
     
-    onAfterStep(self: LEntity, cctx: SCommandContext): SCommandResponse {
+    onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
 
+        // 反撃相当の処理は Scheduler の特定のタイミングではなく、コマンドチェーンが完了した時に行う。
+        // こうしないと、例えば地雷が連続で誘爆していくとき、1ステップ内で繰り返し performTrapEffect() を呼び出せない。
         if (this._required) {
             this._required = false;
             this.performTrapEffect(self, cctx, 0);
@@ -218,5 +220,15 @@ export class LTrapBehavior extends LBehavior {
 
         return SCommandResponse.Pass;
     }
+
+    // onAfterStep(self: LEntity, cctx: SCommandContext): SCommandResponse {
+
+    //     if (this._required) {
+    //         this._required = false;
+    //         this.performTrapEffect(self, cctx, 0);
+    //     }
+
+    //     return SCommandResponse.Pass;
+    // }
 }
 
