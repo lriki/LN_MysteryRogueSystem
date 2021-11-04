@@ -632,7 +632,7 @@ export class RESetup {
                 emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
                 emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
                 emittor.scope.range = DEffectFieldScopeRange.Center;
-                emittor.selfAnimationId = 59;
+                emittor.selfAnimationId = 82;
                 break;
             }
         }

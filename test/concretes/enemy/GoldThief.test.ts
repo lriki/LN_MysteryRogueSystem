@@ -63,6 +63,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
+    REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // Enemy1 はワープしている
