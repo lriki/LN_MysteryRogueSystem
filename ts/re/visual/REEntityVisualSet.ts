@@ -18,10 +18,12 @@ import { assert } from "ts/re/Common";
 export class REEntityVisualSet {
     private _visualEntities: REVisual_Entity[];
     private _sequelManager: REVisualSequelManager;
+    //private _reservedDeleteVisuals: REVisual_Entity[];
 
     constructor() {
         this._visualEntities = [];
         this._sequelManager = new REVisualSequelManager(this);
+        //this._reservedDeleteVisuals = [];
         REGame.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
         // init 時点の map 上にいる Entity から Visual を作る
@@ -49,6 +51,7 @@ export class REEntityVisualSet {
         //this._sequelManager.update();
         this._sequelManager.postUpdate();
 
+        this.deleteVisuals();
     }
 
     public sequelManager(): REVisualSequelManager {
@@ -73,21 +76,34 @@ export class REEntityVisualSet {
         return this._sequelManager.isRunning();
     }
 
-    deleteVisual(entity: LEntity) {
+    public reserveDeleteVisual(entity: LEntity): void {
         const index = this._visualEntities.findIndex(x => x.entity() == entity);
         if (index >= 0) {
-            const visual = this._visualEntities[index];
+            console.log("reserveDeleteVisual!!!!!!!!!!");
+            this._visualEntities[index].reservedDestroy = true;
+            //this._reservedDeleteVisuals.push(this._visualEntities[index]);
+        }
+    }
 
-            this._sequelManager.removeVisual(visual);
+    private deleteVisuals() {
+        if (this._sequelManager.isRunning()) return;
+
+        //console.log("delete!!!!!!!!!!");
+
+        for (let i = this._visualEntities.length - 1; i >= 0; i--) {
+            const visual = this._visualEntities[i];
+            if (visual.reservedDestroy) {
+                this._sequelManager.removeVisual(visual);
             
-            $gameMap.event(visual.rmmzEventId()).erase();
-            
-            // NOTE: このメソッドはマップ遷移時の全開放時もよばれるが、
-            // そのときはマップ遷移後に Spriteset_Map が新しいインスタンスで new されるため、
-            // ↑の erase() の意味もあまりないが、影響はないため現状とする。
+                $gameMap.event(visual.rmmzEventId()).erase();
 
-            this._visualEntities.splice(index, 1);
-
+                
+                // NOTE: このメソッドはマップ遷移時の全開放時もよばれるが、
+                // そのときはマップ遷移後に Spriteset_Map が新しいインスタンスで new されるため、
+                // ↑の erase() の意味もあまりないが、影響はないため現状とする。
+        
+                this._visualEntities.splice(i, 1);
+            }
         }
     }
 

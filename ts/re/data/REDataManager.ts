@@ -323,6 +323,7 @@ export class REDataManager
             jump: REData.addSequel("stumble"),
         };
         REData.sequels[REBasics.sequels.MoveSequel].parallel = true;
+        REData.sequels[REBasics.sequels.CollapseSequel].parallel = true;
         REData.sequels[REBasics.sequels.stumble].parallel = true;
         REData.sequels[REBasics.sequels.jump].parallel = true;
         

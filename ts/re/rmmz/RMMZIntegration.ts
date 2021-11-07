@@ -176,9 +176,9 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onEntityLeavedMap(entity: LEntity): void {
-        REVisual.entityVisualSet?.deleteVisual(entity);
+        REVisual.entityVisualSet?.reserveDeleteVisual(entity);
 
-        // RMMZ Event との関連付けを解除
+        // Entity と RMMZ-Event の関連付けを解除
         entity.inhabitsCurrentFloor = false;
         entity.rmmzEventId = 0;
     }

@@ -45,6 +45,8 @@ export class REVisual_Entity
 
     private _sequelOpacity: number;
 
+    reservedDestroy = false;
+
     constructor(entity: LEntity, rmmzEventId: number) {
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;

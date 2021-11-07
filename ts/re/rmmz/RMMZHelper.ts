@@ -108,11 +108,6 @@ export class RMMZHelper {
                 //console.log("lastScrolledX", pos.x, pos.y, lastScrolledX, lastScrolledY);
                 //console.log("$gameMap", $gameMap);
                 $gamePlayer.updateScroll(lastScrolledX, lastScrolledY);
-
-                
-                console.log("■syncCameraPositionToGamePlayer", $gamePlayer._x, $gamePlayer._y);
-
-
                 //$gamePlayer.center($gamePlayer._x, $gamePlayer._y);
             }
         }
