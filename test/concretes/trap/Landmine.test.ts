@@ -20,9 +20,13 @@ test("concretes.trap.Landmine.basic", () => {
     const hp1 = 8;
     player1.setActualParam(REBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
 
-    // enemy1
+    // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+
+    // item
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 9);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_地雷").id, [], "trap1"));
@@ -44,6 +48,7 @@ test("concretes.trap.Landmine.basic", () => {
     expect(player1.isDestroyed()).toBe(false);  // 消滅していないこと
     expect(trap1.isDestroyed()).toBe(false);    // 消滅していないこと
     expect(enemy1.isDestroyed()).toBe(true);    // 寄ってきたモンスターは爆発に巻き込まれて即死
+    expect(item1.isDestroyed()).toBe(true);     // アイテムは消滅
 });
 
 test("concretes.trap.Landmine.InducedExplosion", () => {

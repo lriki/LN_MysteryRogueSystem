@@ -10,7 +10,7 @@ import { LActorBehavior } from "./behaviors/LActorBehavior";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { UName } from "ts/re/usecases/UName";
 import { DTextManager } from "../data/DTextManager";
-import { DParameterQualifying } from "../data/DEffect";
+import { DEffect, DParameterQualifying } from "../data/DEffect";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @RESerializable
@@ -18,10 +18,12 @@ export class LParamEffectResult {
     paramId: DParameterId;
     damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
     drain: boolean = false;
-    priorotyMessage: DParameterQualifying | undefined;
+    qualifying: DParameterQualifying;
+    //priorotyMessage: DParameterQualifying | undefined;
 
-    public constructor(paramId: DParameterId) {
+    public constructor(paramId: DParameterId, qualifying: DParameterQualifying) {
         this.paramId = paramId;
+        this.qualifying = qualifying;
     }
 }
 
@@ -31,6 +33,7 @@ export class LParamEffectResult {
  */
 @RESerializable
 export class LEffectResult {
+    sourceEffect: DEffect | undefined;  // TODO: ID 使った方がいいだろう
 
     // 意味のある効果適用ができたかどうか。
     // 確率計算の前に、現状知りえる情報内で明らかに適用できるかどうかを判定する。
@@ -288,8 +291,8 @@ export class LEffectResult {
     private makeDamageOrLossMessage(paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
         const damage = paramResult.damage;
         if (isSubjectivity) {
-            if (paramResult.priorotyMessage && paramResult.priorotyMessage.alliesSideLossMessage) {
-                return paramResult.priorotyMessage.alliesSideLossMessage.format(entityName, param.displayName, damage);
+            if (paramResult.qualifying && paramResult.qualifying.alliesSideLossMessage) {
+                return paramResult.qualifying.alliesSideLossMessage.format(entityName, param.displayName, damage);
             }
             else if (param.selfLossMessage) {
                 return param.selfLossMessage.format(entityName, param.displayName, damage);
@@ -299,8 +302,8 @@ export class LEffectResult {
             }
         }
         else {
-            if (paramResult.priorotyMessage && paramResult.priorotyMessage.opponentLossMessage) {
-                return paramResult.priorotyMessage.opponentLossMessage.format(entityName, param.displayName, damage);
+            if (paramResult.qualifying && paramResult.qualifying.opponentLossMessage) {
+                return paramResult.qualifying.opponentLossMessage.format(entityName, param.displayName, damage);
             }
             else if (param.targetLossMessage) {
                 return param.targetLossMessage.format(entityName, param.displayName, damage);
@@ -314,8 +317,8 @@ export class LEffectResult {
     private makeRecoveryOrGainMessage(paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
         const damage = paramResult.damage;
         if (isSubjectivity) {
-            if (paramResult.priorotyMessage && paramResult.priorotyMessage.alliesSideGainMessage) {
-                return paramResult.priorotyMessage.alliesSideGainMessage.format(entityName, param.displayName, -damage);
+            if (paramResult.qualifying && paramResult.qualifying.alliesSideGainMessage) {
+                return paramResult.qualifying.alliesSideGainMessage.format(entityName, param.displayName, -damage);
             }
             else if (param.selfGainMessage) {
                 return param.selfGainMessage.format(entityName, param.displayName, -damage);
@@ -325,8 +328,8 @@ export class LEffectResult {
             }
         }
         else {
-            if (paramResult.priorotyMessage && paramResult.priorotyMessage.opponentGainMessage) {
-                return paramResult.priorotyMessage.opponentGainMessage.format(entityName, param.displayName, -damage);
+            if (paramResult.qualifying && paramResult.qualifying.opponentGainMessage) {
+                return paramResult.qualifying.opponentGainMessage.format(entityName, param.displayName, -damage);
             }
             else if (param.targetGainMessage) {
                 return param.targetGainMessage.format(entityName, param.displayName, -damage);

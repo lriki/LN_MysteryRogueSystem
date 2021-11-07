@@ -34,7 +34,8 @@ export class RESetup {
         const actor = entity.actorData();
         switch (actor.id) {
             case 1:
-                entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RATE, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
+                //entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RATE, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
+                entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RESIST, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
                 break;
         }
     }
@@ -450,6 +451,8 @@ export class RESetup {
                 effect.hitType = DEffectHitType.Magical;
 
                 entity.counterActions.push({ conditionAttackType: REBasics.elements.explosion, emitSelf: true });
+
+                entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RESIST, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
 
                 break;
             }

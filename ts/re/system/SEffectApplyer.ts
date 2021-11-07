@@ -109,19 +109,6 @@ export class SEffect {
         const target_luk = target.actualParam(REBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     }
-
-    /*
-    public hasAnyValidParameterEffects(): boolean {
-        let count = 0;
-        for (let i = 0; i < REData.parameters.length; i++) {
-            const e = this._parameterEffects[i];
-            if (e.applyType != SParameterEffectApplyType.None) {
-
-            }
-        }
-
-    }
-    */
 }
 
 export interface SSubEffect {
@@ -243,15 +230,9 @@ export class SEffectorFact {
     //--------------------
     // apply から使うもの
 
-   // public actualParams(paramId: DParameterId): number {
-    //    return this._subjectActualParams[paramId];
-    //}
-
-
     public genericEffectRate(): number {
         return this._genericEffectRate;
     }
-
 
     public selectEffect(entity: LEntity): SEffect {
         for (let i = this._effects.length - 1; i >= 0; i--) {
@@ -266,15 +247,11 @@ export class SEffectorFact {
 
 
 
-
-
-
 export enum SParameterEffectApplyType {
     None,
     Damage,
     Recover,
 }
-
 
 // DParameterEffect とよく似ているが、こちらは動的なデータとして扱うものの集合。
 // 例えば通常の武器は isDrain=falseでも、回復印が付いていたら isDrain=true にするなど、
@@ -606,10 +583,9 @@ export class SEffectApplyer {
         result.makeSuccess();
 
         if (!paramEffect.qualifying.silent) {
-            const paramResult = new LParamEffectResult(paramEffect.paramId);
+            const paramResult = new LParamEffectResult(paramEffect.paramId, paramEffect.qualifying);
             paramResult.damage = value;
             paramResult.drain = paramEffect.isDrain;
-            paramResult.priorotyMessage = paramEffect.qualifying;
             result.paramEffects2.push(paramResult);
         }
 

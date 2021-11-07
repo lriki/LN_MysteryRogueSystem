@@ -38,7 +38,7 @@ import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/re/data/DParameter";
 import { LEventResult } from "../LEventServer";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
-import { DEntityNamePlate } from "ts/re/data/DEntity";
+import { DCounterAction, DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DBlockLayerKind, DEffectBehaviorId, DSkillId } from "ts/re/data/DCommon";
@@ -437,6 +437,7 @@ export abstract class LBehavior extends LObject {
     onPreviewRejection(context: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse { return SCommandResponse.Pass; }
 
     onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse { return SCommandResponse.Pass; }
+    onCounterAction(self: LEntity, cctx: SCommandContext, data: DCounterAction): SCommandResponse { return SCommandResponse.Pass; }
     
     //public removeThisState(): void {
     //    this.ownerAs(LState)?.removeThisState();

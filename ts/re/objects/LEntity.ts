@@ -558,12 +558,7 @@ export class LEntity extends LObject
         // ステートの Refresh
         this._states = UState.resolveStates(this, [], []).map(s => s.id());
     }
-
-    // Game_BattlerBase.prototype.isDeathStateAffected
-    isDeathStateAffected(): boolean {
-        return this.isStateAffected(REBasics.states.dead);
-    }
-
+    
     //--------------------------------------------------------------------------------
     // Buff
 
@@ -632,9 +627,15 @@ export class LEntity extends LObject
     }
     
     // Game_BattlerBase.prototype.traitsSet
+    // 指定した code の Trait の dataId のリストを返す
     private traitsSet(code: number): number[] {
-        const emptyNumbers: number[] = [];
-        return this.traits(code).reduce((r, trait) => r.concat(trait.dataId), emptyNumbers);
+        //const emptyNumbers: number[] = [];
+        //return this.traits(code).reduce((r, trait) => r.concat(trait.dataId), emptyNumbers);
+        const result = [];
+        for (const trait of this.traits(code)) {
+            result.push(trait.dataId);
+        }
+        return result;
     }
 
     // Game_BattlerBase.prototype.xparam
@@ -897,6 +898,32 @@ export class LEntity extends LObject
         return this.isStateAffected(REData.system.states.seal);
     }
 
+
+    // Game_BattlerBase.prototype.isDeathStateAffected
+    isDeathStateAffected(): boolean {
+        return !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);
+        //return this.isStateAffected(REBasics.states.dead);
+    }
+
+    // Game_Battler.prototype.isStateAddable
+    public isStateAddable(stateId: DStateId): boolean {
+        return !this.isStateResist(stateId);
+        // return (
+        //     this.isAlive() &&
+        //     $dataStates[stateId] &&
+        //     !this.isStateResist(stateId) &&
+        //     !this.isStateRestrict(stateId)
+        // );
+    }
+
+    // Game_BattlerBase.prototype.stateResistSet
+    public stateResistSet(): DStateId[] {
+        return this.traitsSet(REBasics.traits.TRAIT_STATE_RESIST);
+    }
+    
+    public isStateResist(stateId: DStateId): boolean {
+        return this.stateResistSet().includes(stateId);
+    }
 
     //--------------------------------------------------------------------------------
     // LAbility

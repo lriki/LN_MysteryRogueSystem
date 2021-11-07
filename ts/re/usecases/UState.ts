@@ -54,6 +54,11 @@ export class UState {
         for (const newState of newStates) {
             let state = currentStates.find(s => s.data.id == newState.stateId);
             if (state) {
+                // 既に追加済み
+            }
+            else if (!entity.isStateAddable(newState.stateId)) {
+                // 耐性がある等、追加できない
+                continue;
             }
             else {
                 state = {

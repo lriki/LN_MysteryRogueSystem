@@ -17,6 +17,7 @@ import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEffectCause, DEmittor } from "ts/re/data/DEmittor";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
+import { DCounterAction } from "ts/re/data/DEntity";
 
 
 /**
@@ -196,30 +197,36 @@ export class LTrapBehavior extends LBehavior {
     （３方向同時攻撃などを考えると、本当に完全に終わった時が望ましい）
 
     */
-   _required = false;
+   //_required = false;
     onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
 
-        if (!this._recharging) {
-            this._required = true;
-            // for (const param of self._effectResult.paramEffects) {
+        // if (!this._recharging) {
+        //     this._required = true;
+        //     // for (const param of self._effectResult.paramEffects) {
                 
-            // }
-        }
+        //     // }
+        // }
 
         return SCommandResponse.Pass; 
     }
     
-    onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
-
-        // 反撃相当の処理は Scheduler の特定のタイミングではなく、コマンドチェーンが完了した時に行う。
-        // こうしないと、例えば地雷が連続で誘爆していくとき、1ステップ内で繰り返し performTrapEffect() を呼び出せない。
-        if (this._required) {
-            this._required = false;
+    onCounterAction(self: LEntity, cctx: SCommandContext, data: DCounterAction): SCommandResponse {
+        if (!this._recharging) {
             this.performTrapEffect(self, cctx, 0);
         }
-
-        return SCommandResponse.Pass;
+        return SCommandResponse.Handled;
     }
+
+    // onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
+
+    //     // 反撃相当の処理は Scheduler の特定のタイミングではなく、コマンドチェーンが完了した時に行う。
+    //     // こうしないと、例えば地雷が連続で誘爆していくとき、1ステップ内で繰り返し performTrapEffect() を呼び出せない。
+    //     if (this._required) {
+    //         this._required = false;
+    //     }
+
+    //     return SCommandResponse.Pass;
+    // }
 
     // onAfterStep(self: LEntity, cctx: SCommandContext): SCommandResponse {
 

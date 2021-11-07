@@ -141,6 +141,7 @@ export class LBattlerBehavior extends LBehavior {
                 })
                 context.postDestroy(entity);
             }
+            return SCommandResponse.Handled;
         }
         
         return SCommandResponse.Pass;
