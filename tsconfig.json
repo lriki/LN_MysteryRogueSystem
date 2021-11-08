@@ -31,6 +31,8 @@
             "dom",
             "es2015.promise",
             "es2015"
+            //"scripthost",
+            //"es2016.array.include"
         ]
     },
     //"files": [

@@ -79,7 +79,7 @@ export class REDataManager
             //----------
             REData_Parameter.makeBuiltin(10, "fp", tr2("満腹度"), -1, 1000, 0, Infinity),    // FP
             REData_Parameter.makeBuiltin(11, "pow", tr2("ちから"), -1, 8, 0, Infinity),   // Power
-            REData_Parameter.makeBuiltin(12, "up", "UpgradeValue", -1, 99, 0, Infinity),
+            REData_Parameter.makeBuiltin(12, "up", "UpgradeValue", -1, 99, -Infinity, Infinity),
             REData_Parameter.makeBuiltin(13, "rem", "Remaining", -1, 99, 0, Infinity),
             REData_Parameter.makeBuiltin(14, "cap", "Capacity", -1, 8, 0, Infinity),
             REData_Parameter.makeBuiltin(15, "gold", "Gold", -1, 999999, 10, Infinity),

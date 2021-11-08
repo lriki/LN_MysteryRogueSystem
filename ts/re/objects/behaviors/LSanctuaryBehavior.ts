@@ -24,15 +24,18 @@ export class LSanctuaryBehavior extends LBehavior {
         return b;
     }
 
-    
-    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): SCommandResponse {
-        const target = e.sender;
-
-        // 戦闘不能ステート 付加
-        if (target.findEntityBehavior(LEnemyBehavior)) {
-            target.addState(REBasics.states.dead);
+    // v0.1.0 では歩行侵入時に処理していたが、それ以外にも Block への侵入は様々にあるので、
+    // カバーしきれるように onStabilizeSituation() を使う。
+    onStabilizeSituation(self: LEntity, context: SCommandContext): SCommandResponse {
+        const block = REGame.map.tryGetBlock(self.x, self.y);
+        if (block) {
+            for (const entity of block.getEntities()) {
+                // 戦闘不能ステート 付加
+                if (entity.findEntityBehavior(LEnemyBehavior)) {
+                    entity.addState(REBasics.states.dead);
+                }
+            }
         }
-        
         return SCommandResponse.Pass;
     }
 
