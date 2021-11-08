@@ -181,7 +181,7 @@ export class LInventoryBehavior extends LBehavior {
         }
     }
 
-    onPermanentDeath(cctx: SCommandContext, self: LEntity): void {
+    onPermanentDeath(self: LEntity, cctx: SCommandContext): void {
     }
     
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {

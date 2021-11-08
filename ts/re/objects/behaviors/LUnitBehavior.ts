@@ -406,7 +406,7 @@ export class LUnitBehavior extends LBehavior {
             if (target) {
                 cctx.postCall(() => {
                     target.iterateBehaviorsReverse(b => {
-                        return b.onTalk(cctx, target, self) == SCommandResponse.Pass;
+                        return b.onTalk(target, cctx, self) == SCommandResponse.Pass;
                     });
                 });
             }
@@ -473,7 +473,7 @@ export class LUnitBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    onTalk(cctx: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
+    onTalk(self: LEntity, cctx: SCommandContext, person: LEntity): SCommandResponse {
         cctx.openDialog(self, new SEventExecutionDialog(self.rmmzEventId, self), false);
         return SCommandResponse.Pass;
     }

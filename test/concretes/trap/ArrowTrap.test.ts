@@ -71,7 +71,7 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     const hp2 = player1.actualParam(REBasics.params.hp);
     const enemyhp2 = enemy1.actualParam(REBasics.params.hp);
     expect(hp2 == hp1).toBe(true);          // Player はダメージを受けていない
-    expect(enemyhp2 < enemyhp1).toBe(true); // Enemyt はダメージを受けている
+    expect(enemyhp2 < enemyhp1).toBe(true); // Enemy はダメージを受けている
 });
 
 test("concretes.trap.ArrowTrap.DropAsItem", () => {

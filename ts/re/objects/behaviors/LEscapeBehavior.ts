@@ -26,7 +26,7 @@ export class LEscapeBehavior extends LBehavior {
         return LBehaviorGroup.SpecialAbility;
     }
     
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.AIMinor) {
             this._escapeAI.thinkMoving(cctx, self);
             return SPhaseResult.Handled;

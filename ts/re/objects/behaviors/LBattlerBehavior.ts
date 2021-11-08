@@ -119,7 +119,7 @@ export class LBattlerBehavior extends LBehavior {
                     UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
                     cctx.postCall(() => {
                         entity.iterateBehaviorsReverse(b => {
-                            b.onPermanentDeath(cctx, entity);
+                            b.onPermanentDeath(entity, cctx);
                             return true;
                         });
                     });
@@ -135,7 +135,7 @@ export class LBattlerBehavior extends LBehavior {
                 UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
                 cctx.postCall(() => {
                     entity.iterateBehaviorsReverse(b => {
-                        b.onPermanentDeath(cctx, entity);
+                        b.onPermanentDeath(entity, cctx);
                         return true;
                     });
                 })

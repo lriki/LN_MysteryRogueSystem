@@ -48,7 +48,7 @@ export class LNapStateBehavior extends LBehavior {
         return REBasics.sequels.asleep;
     }
     
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.UpdateState) {
             return SPhaseResult.Pass;
         }

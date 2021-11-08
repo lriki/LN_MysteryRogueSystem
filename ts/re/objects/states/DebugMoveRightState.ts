@@ -14,7 +14,7 @@ export class LDebugMoveRightState extends LBehavior {
         return b
     }
 
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase( self: LEntity, cctx: SCommandContext,phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
@@ -33,6 +33,6 @@ export class LDebugMoveRightState extends LBehavior {
             return SPhaseResult.Handled;
         }
 
-        return super.onDecisionPhase(cctx, self, phase);
+        return super.onDecisionPhase(self, cctx, phase);
     }
 }

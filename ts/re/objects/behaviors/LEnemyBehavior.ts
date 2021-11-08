@@ -69,7 +69,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
         }
     }
     
-    // onPreApplyEffect(cctx: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse {
+    // onPreApplyEffect(self: LEntity, cctx: SCommandContext, effect: SEffect): SCommandResponse {
     //     const effectData = effect.data();
     //     if (effectData.qualifyings.specialEffectQualifyings.find(x => x.code == DSpecialEffectCodes.DeadlyExplosion)) {
     //         self.addState(REBasics.states.dead);
@@ -129,7 +129,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     }
 
 
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
 
             // 相手のいる方向を向く

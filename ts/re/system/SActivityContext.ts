@@ -53,7 +53,7 @@ export class SActivityContext {
             //   https://github.com/microsoft/TypeScript/issues/9998
             let result1: any = SCommandResponse.Pass;
             objectum.iterateBehaviorsReverse(b => {
-                result1 = b.onActivityPreReaction(cctx, objectum, this._activity);
+                result1 = b.onActivityPreReaction(objectum, cctx, this._activity);
                 if (result1 != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
                     return false;
                 }

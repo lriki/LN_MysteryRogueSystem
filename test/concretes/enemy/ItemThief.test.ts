@@ -41,7 +41,8 @@ test("concretes.enemy.ItemThief.Basic", () => {
     // Enemy の目の前へ移動
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction(LActionTokenType.Minor));
     RESystem.dialogContext.activeDialog().submit();
-
+    
+    REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Player のインベントリにあったアイテムが盗まれ、Enemy のインベントリに移動している

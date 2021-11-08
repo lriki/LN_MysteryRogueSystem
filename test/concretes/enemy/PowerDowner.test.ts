@@ -19,8 +19,8 @@ test("concretes.enemies.PowerDowner", () => {
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const pow1 = actor1.actualParam(REBasics.params.pow);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const pow1 = player1.actualParam(REBasics.params.pow);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
@@ -31,7 +31,7 @@ test("concretes.enemies.PowerDowner", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     REGame.world.random().resetSeed(5);     // 乱数調整
@@ -39,7 +39,7 @@ test("concretes.enemies.PowerDowner", () => {
     RESystem.scheduler.stepSimulation();
 
     // ちからが減っている
-    const pow2 = actor1.actualParam(REBasics.params.pow);
+    const pow2 = player1.actualParam(REBasics.params.pow);
     expect(pow2).toBe(pow1 - 1);
 });
 

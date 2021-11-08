@@ -30,7 +30,7 @@ import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
-import { RECommand, SCommandResponse, SPhaseResult } from "../../system/RECommand";
+import { SCommandResponse, SPhaseResult } from "../../system/RECommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
@@ -225,8 +225,6 @@ export type SRejectionInfo = SEffectRejectionInfo | SEffectBehaviorRejectionInfo
  * たとえば "ハラヘリ" という Behavior は "ハラヘリ状態異常" や "ハラヘリの腕輪" で共有できるようにしておくことで、カスタマイズ性を確保しておきたい。
  */
 export abstract class LBehavior extends LObject {
-    //private _id: LBehaviorId = { index: 0, key: 0 };
-    //private _ownerObjectId: LObjectId = { index: 0, key: 0 };
     
     public constructor() {
         super(LObjectType.Behavior);
@@ -240,18 +238,6 @@ export abstract class LBehavior extends LObject {
         return this.__objectId();
     }
 
-    //public _setOwnerObjectId(id: LObjectId): void {
-    //    assert(this._ownerObjectId.index == 0); // 初回設定のみ許可
-    //    this._ownerObjectId = id;
-    //}
-
-    //public ownerObjectId(): LObjectId {
-    //    return this._ownerObjectId;
-    //}
-
-    //public ownerObject(): LObject {
-    //    return REGame.world.object(this._ownerObjectId);
-    //}
 
     public ownerEntity(): LEntity {
         const owner = this.parentObject();
@@ -366,11 +352,9 @@ export abstract class LBehavior extends LObject {
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
     public onPreprocessActivity(cctx: SCommandContext, activity: LActivity): LActivity { return activity; }
-
-    onAction(entity: LEntity, cctx: SCommandContext, cmd: RECommand): SCommandResponse { return SCommandResponse.Pass; }
     
     /**
      * onActivity が呼び出される前に呼び出されます。
@@ -378,7 +362,7 @@ export abstract class LBehavior extends LObject {
      * これによって、特定の行動をキャンセルするような動作を実装できます。
      * 行動トークンの消費は呼び出し側で処理されます。
      */
-    public onPreActivity(cctx: SCommandContext, self: LEntity, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
+    public onPreActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
 
     /**
      * Activity の処理。
@@ -390,10 +374,13 @@ export abstract class LBehavior extends LObject {
      * Activity を受ける側の処理。
      * [飲まれた] [振られた] [読まれた] など。
      */
-    onActivityPreReaction(cctx: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+    onActivityPreReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
 
-    onPreApplyEffect(cctx: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }
+    /**
+     * @deprecated 地雷の即死効果で使用していた。今は使っていないので、折を見て削除する予定。
+     */
+    onPreApplyEffect(self: LEntity, cctx: SCommandContext, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }
 
     onApplyEffect(self: LEntity, cctx: SCommandContext, effect: SEffectContext): SCommandResponse { return SCommandResponse.Pass; }
 
@@ -416,20 +403,13 @@ export abstract class LBehavior extends LObject {
     onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
     /** 完全な死亡状態となった。復活草などの発動判定が行われた後、救いようが無くゲームオーバーとなった状態。 */
-    onPermanentDeath(cctx: SCommandContext, self: LEntity): void {}
+    onPermanentDeath(self: LEntity, cctx: SCommandContext): void {}
 
     onPertyChanged(self: LEntity): void { }
 
     onEnteredMap(self: LEntity, map: LMap): void { }
 
-    onTalk(cctx: SCommandContext, self: LEntity, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }
-
-    /**
-     * self が発動したスキルの処理が終わった (成否は target の result を確認すること)
-     * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。
-     * @deprecated see SSkillBehavior
-     */
-    onSkillPerformed(cctx: SCommandContext, self: LEntity, targets: LEntity[], skillId: DSkillId): void {}
+    onTalk(self: LEntity, cctx: SCommandContext, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }
 
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 

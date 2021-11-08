@@ -22,7 +22,7 @@ export class LSurvivorBehavior extends LBehavior {
         //battler.setupExParam(DBasics.params.fp);
     }
 
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
 

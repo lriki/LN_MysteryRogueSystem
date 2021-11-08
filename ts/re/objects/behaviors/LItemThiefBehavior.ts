@@ -126,7 +126,7 @@ export class LItemThiefBehavior extends LBehavior {
         }
     }
 
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.AIMinor) {
             this.activeAI(self).thinkMoving(cctx, self);
             return SPhaseResult.Handled;

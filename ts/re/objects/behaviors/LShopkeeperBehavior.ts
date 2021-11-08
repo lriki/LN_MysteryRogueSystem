@@ -54,7 +54,7 @@ export class LShopkeeperBehavior extends LBehavior {
         decision.characterAI().setMovingTargetFinder(new LMovingTargetFinder_Shopkeeper(this));
     }
 
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         /*
         if (phase == DecisionPhase.AIMinor) {
@@ -78,7 +78,7 @@ export class LShopkeeperBehavior extends LBehavior {
         return SPhaseResult.Pass;
     }
     
-    onTalk(cctx: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
+    onTalk(self: LEntity, cctx: SCommandContext, person: LEntity): SCommandResponse {
 
         const dialog = new SEventExecutionDialog(self.rmmzEventId, self);
         dialog.billingPrice = this.shop().getBillingPrice();

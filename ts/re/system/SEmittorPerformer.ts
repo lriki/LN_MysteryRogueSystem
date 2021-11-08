@@ -244,13 +244,6 @@ export class SEmittorPerformer {
         REGame.eventServer.publish(cctx, REBasics.events.skillEmitted, args)
     }
 
-    private callSkillPerformed(cctx: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillId): void {
-        entity.iterateBehaviorsReverse(b => {
-            b.onSkillPerformed(cctx, entity, targets, skillId);
-            return true;
-        });
-    }
-
     private onPerformed(cctx: SCommandContext, targets: LEntity[]): void {
         if (this._onPerformed) {
             this._onPerformed(targets);
@@ -327,7 +320,6 @@ export class SEmittorPerformer {
                 this.onPerformed(cctx, targets);
                 if (skillId > 0) {
                     this.raiseSkillEmitted(cctx, performer, targets, skillId);
-                    this.callSkillPerformed(cctx, performer, targets, skillId);
                 }
             });
         }
@@ -368,7 +360,6 @@ export class SEmittorPerformer {
                                 this.onPerformed(cctx, [target]);
                                 if (skillId > 0) {
                                     //this.raiseSkillEmitted(cctx, performer, [target], skillId);
-                                    this.callSkillPerformed(cctx, performer, [target], skillId);
                                 }
                                 return true;
                             });
@@ -483,7 +474,6 @@ export class SEmittorPerformer {
             this.onPerformed(cctx, targets);
             if (skillId > 0) {
                 this.raiseSkillEmitted(cctx, performer, targets, skillId);
-                this.callSkillPerformed(cctx, performer, targets, skillId);
             }
         });
     }

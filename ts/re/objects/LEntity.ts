@@ -1,6 +1,6 @@
 import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView, LParamMinMaxInfo, SRejectionInfo } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
-import { RECommand, SCommandResponse, SPhaseResult } from "../system/RECommand";
+import { SCommandResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { LRoomId } from "./LBlock";
 import { RESystem } from "ts/re/system/RESystem";
@@ -1292,28 +1292,19 @@ export class LEntity extends LObject
     }
 
     _callDecisionPhase(cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
-        for (const b of this.collectBehaviors().reverse()) {
-            const result = b.onDecisionPhase(cctx, this, phase);
-            if (result != SPhaseResult.Pass) return result;
-        }
-        return SPhaseResult.Pass;
-
-        //let r = LEntity._iterationHelper_ProcessPhase<LState>(this.states(), b => b.onDecisionPhase(this, cctx, phase));
-       // if (r) return r;
-        //r = LEntity._iterateBehavior<SPhaseResult>(this._basicBehaviors, b => b.onDecisionPhase(this, cctx, phase), r => r == SPhaseResult.Pass);
-        ///if (r) return r;
-        //return SPhaseResult.Pass;
-    }
-
-    _sendAction(cctx: SCommandContext, cmd: RECommand): SCommandResponse {
-        return this._callBehaviorIterationHelper(x => x.onAction(this, cctx, cmd));
+        let result = SPhaseResult.Pass;
+        this.iterateBehaviorsReverse(b => {
+            result = b.onDecisionPhase(this, cctx, phase);
+            return result == SPhaseResult.Pass;
+        });
+        return result;
     }
 
     _sendActivity(cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         let result = SCommandResponse.Pass;
         
         this.iterateBehaviorsReverse(b => {
-            result = b.onPreActivity(cctx, this, actx);
+            result = b.onPreActivity(this, cctx, actx);
             return result == SCommandResponse.Pass;
         });
         if (result != SCommandResponse.Pass) return result;

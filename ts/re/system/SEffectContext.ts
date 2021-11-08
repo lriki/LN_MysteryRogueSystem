@@ -307,7 +307,7 @@ export class SEffectContext {
         {
             let result = SCommandResponse.Pass;
             target.iterateBehaviorsReverse(b => {
-                result = b.onPreApplyEffect(cctx, target, effect);
+                result = b.onPreApplyEffect(target, cctx, effect);
                 return result == SCommandResponse.Pass;
             });
             if (result != SCommandResponse.Pass) return; 

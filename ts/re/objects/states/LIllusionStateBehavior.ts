@@ -20,7 +20,7 @@ export class LIllusionStateBehavior extends LBehavior {
         return b
     }
     
-    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         if (this._characterAI) {
             if (phase == DecisionPhase.AIMinor) {
                 return this._characterAI.thinkMoving(cctx, self);
