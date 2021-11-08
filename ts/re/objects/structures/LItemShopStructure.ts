@@ -151,7 +151,7 @@ export class LItemShopStructure extends LStructure {
 
     }
 
-    onEntityLocated(context: SCommandContext, entity: LEntity): void {
+    onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
         }

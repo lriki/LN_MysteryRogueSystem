@@ -284,7 +284,7 @@ export abstract class LBehavior extends LObject {
 
     onAttached(self: LEntity): void {}
     onDetached(self: LEntity): void {}
-    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
+    onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
     onPartyEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
 
 
@@ -293,7 +293,7 @@ export abstract class LBehavior extends LObject {
     //_ownerEntityId: LEntityId = { index: 0, key: 0 };
     
 
-    //onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
+    //onRemoveEntityFromWhereabouts(cctx: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
     public behaviorGroup(): LBehaviorGroup { return LBehaviorGroup.Underlying; }
 
@@ -366,11 +366,11 @@ export abstract class LBehavior extends LObject {
     // 行動決定に関係する通知は Scheduler から同期的に送られるが、
     // できればこれを RECommandContext.sendCommand みたいに公開したくないので個別定義にしている。
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
-    public onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity { return activity; }
+    public onPreprocessActivity(cctx: SCommandContext, activity: LActivity): LActivity { return activity; }
 
-    onAction(entity: LEntity, context: SCommandContext, cmd: RECommand): SCommandResponse { return SCommandResponse.Pass; }
+    onAction(entity: LEntity, cctx: SCommandContext, cmd: RECommand): SCommandResponse { return SCommandResponse.Pass; }
     
     /**
      * onActivity が呼び出される前に呼び出されます。
@@ -378,24 +378,24 @@ export abstract class LBehavior extends LObject {
      * これによって、特定の行動をキャンセルするような動作を実装できます。
      * 行動トークンの消費は呼び出し側で処理されます。
      */
-    public onPreActivity(context: SCommandContext, self: LEntity, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
+    public onPreActivity(cctx: SCommandContext, self: LEntity, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
 
     /**
      * Activity の処理。
      * [飲む] [振る] [読む] など。
      */
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse { return SCommandResponse.Pass; }
     
     /**
      * Activity を受ける側の処理。
      * [飲まれた] [振られた] [読まれた] など。
      */
-    onActivityPreReaction(context: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
-    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+    onActivityPreReaction(cctx: SCommandContext, self: LEntity, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
+    onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse { return SCommandResponse.Pass; }
 
-    onPreApplyEffect(context: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }
+    onPreApplyEffect(cctx: SCommandContext, self: LEntity, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }
 
-    onApplyEffect(self: LEntity, context: SCommandContext, effect: SEffectContext): SCommandResponse { return SCommandResponse.Pass; }
+    onApplyEffect(self: LEntity, cctx: SCommandContext, effect: SEffectContext): SCommandResponse { return SCommandResponse.Pass; }
 
 
 
@@ -409,27 +409,27 @@ export abstract class LBehavior extends LObject {
     onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {}
 
 
-    onAfterStep(self: LEntity, context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
+    onAfterStep(self: LEntity, cctx: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
     /** 1行動消費単位の終了時点 */
-    onStepEnd(context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
+    onStepEnd(cctx: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
-    onStabilizeSituation(self: LEntity, context: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
+    onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
     /** 完全な死亡状態となった。復活草などの発動判定が行われた後、救いようが無くゲームオーバーとなった状態。 */
-    onPermanentDeath(context: SCommandContext, self: LEntity): void {}
+    onPermanentDeath(cctx: SCommandContext, self: LEntity): void {}
 
     onPertyChanged(self: LEntity): void { }
 
     onEnteredMap(self: LEntity, map: LMap): void { }
 
-    onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }
+    onTalk(cctx: SCommandContext, self: LEntity, person: LEntity): SCommandResponse { return SCommandResponse.Pass; }
 
     /**
      * self が発動したスキルの処理が終わった (成否は target の result を確認すること)
      * Skill の効果として、特定 Behavior の状態を変えたりするのに使う。
      * @deprecated see SSkillBehavior
      */
-    onSkillPerformed(context: SCommandContext, self: LEntity, targets: LEntity[], skillId: DSkillId): void {}
+    onSkillPerformed(cctx: SCommandContext, self: LEntity, targets: LEntity[], skillId: DSkillId): void {}
 
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 

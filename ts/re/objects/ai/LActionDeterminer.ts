@@ -49,7 +49,7 @@ export class LActionDeterminer {
         this._requiredSkillAction = action;
     }
 
-    public decide(context: SCommandContext, self: LEntity): void {
+    public decide(cctx: SCommandContext, self: LEntity): void {
         
         // http://twist.jpn.org/sfcsiren/index.php?%E3%82%BF%E3%83%BC%E3%83%B3%E3%81%AE%E9%A0%86%E7%95%AA
         // の移動目標位置決定はもう少し後の Phase なのだが、敵対 Entity への移動目標位置決定はこの Phase で行う。
@@ -97,7 +97,7 @@ export class LActionDeterminer {
         
         this._requiredSkillAction = undefined;
         const candidates = UAction.makeCandidateSkillActions(self, this._primaryTargetEntityId);
-        const skillAction = context.random().selectOrUndefined(candidates);
+        const skillAction = cctx.random().selectOrUndefined(candidates);
         if (skillAction) {
             if (skillAction.action.skillId == RESystem.skills.move) {
                 // 移動
@@ -132,7 +132,7 @@ export class LActionDeterminer {
         return REGame.world.entity(this._primaryTargetEntityId);
     }
 
-    public perform(context: SCommandContext, self: LEntity): boolean {
+    public perform(cctx: SCommandContext, self: LEntity): boolean {
 
         //if (this._attackTargetEntityId.hasAny()) {
         if (this._requiredSkillAction) {
@@ -157,8 +157,8 @@ export class LActionDeterminer {
                     const pos = UMovement.getCenter(targetEntites);
                     self.dir = UMovement.getLookAtDirFromPos(self.x, self.y, pos.x, pos.y);
                     
-                    SEmittorPerformer.makeWithSkill(self, self, this._requiredSkillAction.action.skillId).performe(context);
-                    context.postConsumeActionToken(self, LActionTokenType.Major);
+                    SEmittorPerformer.makeWithSkill(self, self, this._requiredSkillAction.action.skillId).performe(cctx);
+                    cctx.postConsumeActionToken(self, LActionTokenType.Major);
                     return true;
                 }
                 else {

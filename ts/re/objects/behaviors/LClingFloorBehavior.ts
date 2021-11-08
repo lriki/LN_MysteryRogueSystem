@@ -21,10 +21,10 @@ export class LClingFloorBehavior extends LBehavior {
     }
 
     
-    [testPickOutItem](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         if (this._cling) {
-            context.postMessage(tr2("%1 地面にはりついている。").format(UName.makeNameAsItem(self)));
+            cctx.postMessage(tr2("%1 地面にはりついている。").format(UName.makeNameAsItem(self)));
             return SCommandResponse.Canceled;
         }
         else {
@@ -32,7 +32,7 @@ export class LClingFloorBehavior extends LBehavior {
         }
     }
 
-    [onGrounded](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onGrounded](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         this._cling = true;
         return SCommandResponse.Pass;
     }

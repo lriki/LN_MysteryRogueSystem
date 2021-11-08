@@ -44,7 +44,7 @@ export class LProjectableBehavior extends LBehavior {
     }
 
     // こちらはアイテムが投げられたとき。
-    public static startMoveAsProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
+    public static startMoveAsProjectile(cctx: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
         const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
 
@@ -57,11 +57,11 @@ export class LProjectableBehavior extends LBehavior {
 
         entity.addState(REData.getState("kSystemState_Projectile").id, false);
         
-        context.post(entity, entity, subject, undefined, onMoveAsProjectile);
+        cctx.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
     
     // こちらは飛び道具効果のあるスキル（ブレスや魔法弾）
-    public static startMoveAsEffectProjectile(context: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEffectSet): void {
+    public static startMoveAsEffectProjectile(cctx: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEffectSet): void {
         const common = entity.findEntityBehavior(LProjectableBehavior);
         assert(common);
 
@@ -71,7 +71,7 @@ export class LProjectableBehavior extends LBehavior {
         
         entity.addState(REData.getState("kSystemState_Projectile").id, false);
         
-        context.post(entity, entity, subject, undefined, onMoveAsProjectile);
+        cctx.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
 
 
@@ -86,7 +86,7 @@ export class LProjectableBehavior extends LBehavior {
         actions.push(REBasics.actions.ThrowActionId);
     }
 
-    // onActivity(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    // onActivity(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         
     //     if (activity.actionId() == REBasics.actions.collide) {
             
@@ -96,19 +96,19 @@ export class LProjectableBehavior extends LBehavior {
     //             const target = activity.objects2()[0];
     //             const subject = activity.subject();
 
-    //             context.postDestroy(self);
-    //             //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+    //             cctx.postDestroy(self);
+    //             //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
                 
     //             const animationId = 1;  // TODO:
 
     //             const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
-    //             const effectContext = new SEffectContext(effectSubject, context.random());
+    //             const effectContext = new SEffectContext(effectSubject, cctx.random());
         
-    //             context.postAnimation(target, animationId, true);
+    //             cctx.postAnimation(target, animationId, true);
         
     //             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-    //             context.postCall(() => {
-    //                 effectContext.applyWithWorth(context, [target]);
+    //             cctx.postCall(() => {
+    //                 effectContext.applyWithWorth(cctx, [target]);
     //             });
                 
     //             return SCommandResponse.Handled;
@@ -121,21 +121,21 @@ export class LProjectableBehavior extends LBehavior {
 
     
     // 投げられた
-    [onThrowReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onThrowReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
 
         const self = args.self;
 
         REGame.map.appearEntity(self, self.x, self.y, DBlockLayerKind.Projectile);
 
 
-        LProjectableBehavior.startMoveAsProjectile(context, self, args.subject, args.sender.dir, 5);
+        LProjectableBehavior.startMoveAsProjectile(cctx, self, args.subject, args.sender.dir, 5);
 
         
         return SCommandResponse.Pass;
     }
     
     // Projectile として移動
-    [onMoveAsProjectile](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onMoveAsProjectile](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         
         const common = self.findEntityBehavior(LProjectableBehavior);
@@ -152,8 +152,8 @@ export class LProjectableBehavior extends LBehavior {
         self.dir = this.blowDirection;
 
 
-        if (UMovement.moveEntity(context, self, tx, ty, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
-            context.postSequel(self, REBasics.sequels.blowMoveSequel);
+        if (UMovement.moveEntity(cctx, self, tx, ty, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
+            cctx.postSequel(self, REBasics.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
 
@@ -181,36 +181,36 @@ export class LProjectableBehavior extends LBehavior {
                     const target = hitTarget;//activity.objects2()[0];
                     const subject = args.subject.entity();//activity.subject();
 
-                    context.postDestroy(self);
-                    //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+                    cctx.postDestroy(self);
+                    //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
                     
                     const animationId = 1;  // TODO:
 
                     const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
-                    const effectContext = new SEffectContext(effectSubject, context.random());
+                    const effectContext = new SEffectContext(effectSubject, cctx.random());
             
-                    context.postAnimation(target, animationId, true);
+                    cctx.postAnimation(target, animationId, true);
             
                     // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-                    context.postCall(() => {
-                        effectContext.applyWithWorth(context, [target]);
+                    cctx.postCall(() => {
+                        effectContext.applyWithWorth(cctx, [target]);
                     });
                     
                     return SCommandResponse.Handled;
                 }
                 else {
-                    context.postActivity(LActivity.makeCollide(self, hitTarget)
+                    cctx.postActivity(LActivity.makeCollide(self, hitTarget)
                         .withOtherSubject(args.subject.entity())
                         .withEffectDirection(common.blowDirection));
                 }
                 /*
-                context.post(
+                cctx.post(
                     hitTarget, self, args.subject, undefined, onCollidePreReaction,
                     () => {
                         const args2: CollideActionArgs = {
                             dir: common.blowDirection,
                         };
-                        context.post(self, hitTarget, args.subject, args2, onCollideAction, () => {
+                        cctx.post(self, hitTarget, args.subject, args2, onCollideAction, () => {
                             return true;
                         });
                         return true;
@@ -224,22 +224,22 @@ export class LProjectableBehavior extends LBehavior {
 
         
             if (common.blowMoveCount <= 0) {
-                this.endMoving(context ,self);
+                this.endMoving(cctx ,self);
             }
             else {
-                context.post(self, self, args.subject, undefined, onMoveAsProjectile);
+                cctx.post(self, self, args.subject, undefined, onMoveAsProjectile);
             }
                 
             return SCommandResponse.Handled;
         }
         else {
-            this.endMoving(context ,self);
+            this.endMoving(cctx ,self);
         }
 
         return SCommandResponse.Pass;
     }
     
-    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         throw new Error("deprecated.");
         /*
         if (this._effectSet) {
@@ -247,19 +247,19 @@ export class LProjectableBehavior extends LBehavior {
             const target = args.sender;
             const subject = args.subject;
 
-            context.postDestroy(self);
-            //this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Affect);
+            cctx.postDestroy(self);
+            //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
             
             const animationId = 1;  // TODO:
 
             const effectSubject = new SEffectorFact(subject.entity(), this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
-            const effectContext = new SEffectContext(effectSubject, context.random());
+            const effectContext = new SEffectContext(effectSubject, cctx.random());
     
-            context.postAnimation(target, animationId, true);
+            cctx.postAnimation(target, animationId, true);
     
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-            context.postCall(() => {
-                effectContext.applyWithWorth(context, [target]);
+            cctx.postCall(() => {
+                effectContext.applyWithWorth(cctx, [target]);
             });
             
             return SCommandResponse.Handled;
@@ -271,7 +271,7 @@ export class LProjectableBehavior extends LBehavior {
         */
     }
 
-    private endMoving(context: SCommandContext, self: LEntity): void {
+    private endMoving(cctx: SCommandContext, self: LEntity): void {
         this.clearKnockback();
 
         const entityData = self.data();
@@ -288,31 +288,31 @@ export class LProjectableBehavior extends LBehavior {
         指定し忘れで魔法弾が地面に落ちてしまうようなことも無いだろう。
         */
         if (entityData.volatilityProjectile/*this._effectSet*/) {
-            context.postDestroy(self);
+            cctx.postDestroy(self);
         }
         else {
             // 表示変更用のステート解除
             self.removeState(REData.getState("kSystemState_Projectile").id);
 
-            UAction.postFall(context, self);
+            UAction.postFall(cctx, self);
     
             /*
 
-            UAction.postStepOnGround(context, self);
+            UAction.postStepOnGround(cctx, self);
     
             // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
             // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
     
-            context.postCall(() => {
-                UAction.postDropOrDestroyOnCurrentPos(context, self, self.getHomeLayer());
+            cctx.postCall(() => {
+                UAction.postDropOrDestroyOnCurrentPos(cctx, self, self.getHomeLayer());
             });
     
             // HomeLayer へ移動
             //SMovementCommon.locateEntity(self, self.x, self.y);
-            //context.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
+            //cctx.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
             //this.clearKnockback();
             // TODO: 落下
-            //SActionCommon.postStepOnGround(context, self);
+            //SActionCommon.postStepOnGround(cctx, self);
             */
         }
         

@@ -89,7 +89,7 @@ export class LEscapeAI extends LCharacterAI {
         return false;
     }
     
-    public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult {
 
         
         const target = UAction.findInSightNearlyHostileEntity(self);
@@ -123,7 +123,7 @@ export class LEscapeAI extends LCharacterAI {
 
                     if (!UMovement.checkAdjacentPositions(self.x, self.y, target.x, target.y)) {
                         // 隣接していなければ相手を向いて待機
-                        context.postActivity(
+                        cctx.postActivity(
                             LActivity.make(self)
                             .withEntityDirection(dir)
                             .withConsumeAction(LActionTokenType.Major));
@@ -131,7 +131,7 @@ export class LEscapeAI extends LCharacterAI {
                     }
                     else {
                         // 観念して通常の移動を行う
-                        const doorway = context.random().selectOrUndefined(room.doorwayBlocks());
+                        const doorway = cctx.random().selectOrUndefined(room.doorwayBlocks());
                         if (doorway) {
                             // 出口を目的地設定して移動
                             this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
@@ -145,7 +145,7 @@ export class LEscapeAI extends LCharacterAI {
                     // 左折の法則で逆方向に逃げる
                     const block2 = UMovement.getMovingCandidateBlockAsLHRule(self, rdir);
                     if (block2) {
-                        context.postActivity(
+                        cctx.postActivity(
                             LActivity.makeMoveToAdjacentBlock(self, block2)
                             .withEntityDirection(rdir)
                             .withConsumeAction(LActionTokenType.Minor));
@@ -160,7 +160,7 @@ export class LEscapeAI extends LCharacterAI {
                 /*
                 const dir = SAIHelper.entityDistanceToDir(target, self);
                 if (UMovement.checkPassageToDir(self, dir)) {
-                    context.postActivity(
+                    cctx.postActivity(
                         LActivity.makeMoveToAdjacent(self, dir)
                         .withEntityDirection(dir)
                         .withConsumeAction());
@@ -173,21 +173,21 @@ export class LEscapeAI extends LCharacterAI {
 
         }
 
-        if (this._movingHelper.thinkMoving(self, context)) {
+        if (this._movingHelper.thinkMoving(self, cctx)) {
             return SPhaseResult.Handled;
         }
 
         
         // ここまで来てしまったら待機。
-        context.postActivity(
+        cctx.postActivity(
             LActivity.make(self)
             .withConsumeAction(LActionTokenType.Major));
         return SPhaseResult.Handled;
     }
     
-    public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult {
         // 攻撃の成否に関わらず行動を消費する。
-        context.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenType.Major);
         return SPhaseResult.Handled;
     }
 }

@@ -81,13 +81,13 @@ export class LGoldThiefBehavior extends LBehavior {
         */
     }
 
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.AIMinor) {
-            this.activeAI(self).thinkMoving(context, self);
+            this.activeAI(self).thinkMoving(cctx, self);
             return SPhaseResult.Handled;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            this.activeAI(self).thinkAction(context, self);
+            this.activeAI(self).thinkAction(cctx, self);
             return SPhaseResult.Handled;
         }
         return SPhaseResult.Pass;

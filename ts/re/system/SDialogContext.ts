@@ -17,8 +17,8 @@ export class SDialogContext
     //_visual: REDialogVisual | undefined;
     private _dialogs: SDialog[];
 
-    constructor(commandContext: SCommandContext) {
-        this._commandContext = commandContext;
+    constructor(cctx: SCommandContext) {
+        this._commandContext = cctx;
         this._dialogs = [];
     }
 

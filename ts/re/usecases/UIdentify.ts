@@ -6,16 +6,16 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "./UName";
 
 export class UIdentify {
-    public static identifyByTiming(context: SCommandContext, actor: LEntity , target: LEntity, timing: DIdentifiedTiming, withMessage: boolean = true): void {
+    public static identifyByTiming(cctx: SCommandContext, actor: LEntity , target: LEntity, timing: DIdentifiedTiming, withMessage: boolean = true): void {
         if (REGame.camera.focusedEntity() != actor) return;
 
         const data = target.data();
         if (data.identifiedTiming.includes(timing)) {
-            this.identify(context, target, withMessage);
+            this.identify(cctx, target, withMessage);
         }
     }
 
-    public static identify(context: SCommandContext, target: LEntity, withMessage: boolean): void {
+    public static identify(cctx: SCommandContext, target: LEntity, withMessage: boolean): void {
 
         if (REGame.identifyer.checkGlobalIdentified(target)) {
             // 既に名前識別済みであれば個体識別するだけでOK
@@ -28,7 +28,7 @@ export class UIdentify {
             REGame.identifyer.identifyGlobal(target.dataId());
             const name2 = UName.makeNameAsItem(target);
             if (withMessage) {
-                context.postMessage(tr2("%1は%2だった。").format(name1, name2));
+                cctx.postMessage(tr2("%1は%2だった。").format(name1, name2));
             }
         }
     } 

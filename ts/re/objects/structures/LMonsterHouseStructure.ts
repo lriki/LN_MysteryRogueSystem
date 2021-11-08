@@ -44,24 +44,24 @@ export class LMonsterHouseStructure extends LStructure {
         return this._monsterHouseState;
     }
 
-    public startMonsterHouse(context: SCommandContext): void {
+    public startMonsterHouse(cctx: SCommandContext): void {
         assert(this._monsterHouseTypeId > 0);
         assert(this._monsterHouseState == MonsterHouseState.Sleeping);
 
-        context.postWaitSequel();
-        context.postMessage(tr2("モンスターハウスだ！"));
+        cctx.postWaitSequel();
+        cctx.postMessage(tr2("モンスターハウスだ！"));
         AudioManager.playBgm(this.monsterHouseData().bgm, 0);
 
         this._monsterHouseState = MonsterHouseState.Activated;
     }
     
-    onEntityLocated(context: SCommandContext, entity: LEntity): void {
+    onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         if (block._roomId == this._roomId) {
             // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
             if (Helpers.isHostileFactionId(this.monsterHouseFactionId(), entity.getOutwardFactionId()) &&
                 this.monsterHouseState() == MonsterHouseState.Sleeping) {
-                this.startMonsterHouse(context);
+                this.startMonsterHouse(cctx);
             }
         }
     }

@@ -26,13 +26,13 @@ export class LEscapeBehavior extends LBehavior {
         return LBehaviorGroup.SpecialAbility;
     }
     
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.AIMinor) {
-            this._escapeAI.thinkMoving(context, self);
+            this._escapeAI.thinkMoving(cctx, self);
             return SPhaseResult.Handled;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            this._escapeAI.thinkAction(context, self);
+            this._escapeAI.thinkAction(cctx, self);
             return SPhaseResult.Handled;
         }
         return SPhaseResult.Pass;

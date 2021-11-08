@@ -88,20 +88,20 @@ export class UAction {
 
     /*
     // TODO: Activity 経由で設定したい。.withConsumeAction()と一緒に使いたいので。
-    public static postPerformSkill(context: SCommandContext, performer: LEntity, skillId: DSkillDataId): void {
+    public static postPerformSkill(cctx: SCommandContext, performer: LEntity, skillId: DSkillDataId): void {
         context.postCall(() => {
             SEmittorPerformer.makeWithSkill(performer, skillId).performe(context);
         });
     }
     */
 
-    public static postStepOnGround(context: SCommandContext, entity: LEntity): void {
+    public static postStepOnGround(cctx: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
-            context.post(entity, reactor, new SEffectSubject(entity), undefined, onWalkedOnTopAction);
-            context.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
+            cctx.post(entity, reactor, new SEffectSubject(entity), undefined, onWalkedOnTopAction);
+            cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
         }
     }
 
@@ -117,15 +117,15 @@ export class UAction {
     }
 
     /** @deprecated */
-    public static postPickItem(context: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): RECCMessageCommand {
-        return context.post(
+    public static postPickItem(cctx: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): RECCMessageCommand {
+        return cctx.post(
             self, itemEntity, new SEffectSubject(self), undefined, testPutInItem,
             () => {
                 REGame.map._removeEntity(itemEntity);
                 inventory.addEntityWithStacking(itemEntity);
                 
                 const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
-                context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
+                cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
                 SSoundManager.playPickItem();
 
                 return true;
@@ -135,10 +135,10 @@ export class UAction {
     /**
      * entity を現在マップの指定位置へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      */
-    public static postDropOrDestroy(context: SCommandContext, entity: LEntity, mx: number, my: number): void {
-        context.postCall(() => {
+    public static postDropOrDestroy(cctx: SCommandContext, entity: LEntity, mx: number, my: number): void {
+        cctx.postCall(() => {
             REGame.world._transferEntity(entity, REGame.map.floorId(), mx, my);
-            this.postDropOrDestroyOnCurrentPos(context, entity, entity.getHomeLayer());
+            this.postDropOrDestroyOnCurrentPos(cctx, entity, entity.getHomeLayer());
         });
     }
 
@@ -146,20 +146,20 @@ export class UAction {
      * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      * 
      */
-    public static postDropOrDestroyOnCurrentPos(context: SCommandContext, entity: LEntity, targetLayer: DBlockLayerKind): void {
-        const block = UMovement.selectNearbyLocatableBlock(context.random(), entity.x, entity.y, targetLayer, entity);
+    public static postDropOrDestroyOnCurrentPos(cctx: SCommandContext, entity: LEntity, targetLayer: DBlockLayerKind): void {
+        const block = UMovement.selectNearbyLocatableBlock(cctx.random(), entity.x, entity.y, targetLayer, entity);
         if (block) {
             //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
             //context.postCall(() => {
                 UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
                 //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
-                context.postSequel(entity, REBasics.sequels.dropSequel);
+                cctx.postSequel(entity, REBasics.sequels.dropSequel);
             //});
         }
         else {
             // 落下できるところが無ければ Entity 削除
-            context.postMessage(tr2("消えてしまった…。"));
-            context.postDestroy(entity);
+            cctx.postMessage(tr2("消えてしまった…。"));
+            cctx.postDestroy(entity);
         }
     }
 

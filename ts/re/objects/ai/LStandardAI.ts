@@ -32,16 +32,16 @@ export class LCharacterAI_Normal extends LCharacterAI {
         this._movingTargetFinder = value;
     }
 
-    public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult {
 
 
         const hasPrimaryTarget = this._actionDeterminer.hasPrimaryTarget();
         
-        this._actionDeterminer.decide(context, self);
+        this._actionDeterminer.decide(cctx, self);
 
         this.applyTargetPosition(self, hasPrimaryTarget);
 
-        this._moveDeterminer.decide(context, self);
+        this._moveDeterminer.decide(cctx, self);
 
         // moveDeterminer.decide によって決定された標準的な移動目標のオーバーライド
         {
@@ -64,7 +64,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
 
         // 移動メイン
         if (self.data().prefab().moveType == DPrefabMoveType.Random) {
-            if (this._moveDeterminer.perform(context, self)) {
+            if (this._moveDeterminer.perform(cctx, self)) {
                 return SPhaseResult.Handled;
             }
         }
@@ -75,7 +75,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
         // FIXME: ここでやるのが最善かわからないが、攻撃対象が決められていない場合は
         // Major Phase でも行動消費するアクションがとれないので、ハングアップしてしまう。
         // ここで消費しておく。
-        context.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenType.Major);
         return SPhaseResult.Handled;
     }
 
@@ -145,8 +145,8 @@ export class LCharacterAI_Normal extends LCharacterAI {
     }
     */
     
-    public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
-        if (this._actionDeterminer.perform(context, self)) {
+    public thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult {
+        if (this._actionDeterminer.perform(cctx, self)) {
             return SPhaseResult.Handled;
         }
         return SPhaseResult.Pass;

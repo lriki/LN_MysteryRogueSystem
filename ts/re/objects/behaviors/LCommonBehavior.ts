@@ -32,13 +32,13 @@ export class LCommonBehavior extends LBehavior {
         return actions;
     }
     
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
         
         if (activity.actionId() == REBasics.actions.FallActionId) {
             const target = USearch.getFirstUnderFootEntity(self);
             if (target) {
-                actx.postHandleActivity(context, target);
+                actx.postHandleActivity(cctx, target);
                 return SCommandResponse.Handled;
             }
         }

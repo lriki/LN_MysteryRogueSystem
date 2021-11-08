@@ -54,7 +54,7 @@ export class LShopkeeperBehavior extends LBehavior {
         decision.characterAI().setMovingTargetFinder(new LMovingTargetFinder_Shopkeeper(this));
     }
 
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         
         /*
         if (phase == DecisionPhase.AIMinor) {
@@ -67,10 +67,10 @@ export class LShopkeeperBehavior extends LBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(self, dir, MovingMethod.Walk)) {
-                context.postActivity(LActivity.makeDirectionChange(self, dir));
-                context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+                cctx.postActivity(LActivity.makeDirectionChange(self, dir));
+                cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }
-            context.postConsumeActionToken(self);
+            cctx.postConsumeActionToken(self);
             return SPhaseResult.Handled;
         }
         */
@@ -78,20 +78,20 @@ export class LShopkeeperBehavior extends LBehavior {
         return SPhaseResult.Pass;
     }
     
-    onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
+    onTalk(cctx: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
 
         const dialog = new SEventExecutionDialog(self.rmmzEventId, self);
         dialog.billingPrice = this.shop().getBillingPrice();
         dialog.depositPrice = this.shop().getDepositPriece();
 
-        context.openDialog(self, dialog, false);
+        cctx.openDialog(self, dialog, false);
         // .then(dialog => {
         //     console.log("dialog", dialog);
         // });
         return SCommandResponse.Handled;
     }
     
-    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         
         if (activity.actionId() == REBasics.actions.dialogResult) {
             if (activity.selectedAction() == "yes") {

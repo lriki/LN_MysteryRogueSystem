@@ -29,7 +29,7 @@ export class LNapStateBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(REBasics.events.roomEnterd, this);
     }
 
-    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
+    onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         // handleRoomEnterd
         if (eventId == REBasics.events.roomEnterd) {
             const e = (args as RoomEventArgs);
@@ -48,7 +48,7 @@ export class LNapStateBehavior extends LBehavior {
         return REBasics.sequels.asleep;
     }
     
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (phase == DecisionPhase.UpdateState) {
             return SPhaseResult.Pass;
         }
@@ -63,7 +63,7 @@ export class LNapStateBehavior extends LBehavior {
         }
         else {
             // Skip action
-            context.postConsumeActionToken(self, LActionTokenType.Major);
+            cctx.postConsumeActionToken(self, LActionTokenType.Major);
             return SPhaseResult.Handled;
         }
     }

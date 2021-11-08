@@ -67,11 +67,11 @@ export class LEventServer {
         }
     }
 
-    public publish(context: SCommandContext, eventId: DEventId, args: any): boolean {
+    public publish(cctx: SCommandContext, eventId: DEventId, args: any): boolean {
         for (const e of this._entries) {
             if (e.eventId == eventId) {
                 const b = REGame.world.behavior(e.behaviorId);
-                const r = b.onEvent(context, eventId, args);
+                const r = b.onEvent(cctx, eventId, args);
                 if (r != LEventResult.Pass) {
                     RESystem.integration.onEventPublished(eventId, args, true);
                     return false;

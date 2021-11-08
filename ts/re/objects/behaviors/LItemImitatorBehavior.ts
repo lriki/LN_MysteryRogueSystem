@@ -129,7 +129,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return REData.system.factions.neutral;
     }
 
-    [testPickOutItem](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const actor = args.sender;
         const self = args.self;
         if (Helpers.isHostileFactionId(actor.getOutwardFactionId(), self.getInnermostFactionId())) {
@@ -144,7 +144,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
+    onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
         if (eventId == REBasics.events.preWalk) {

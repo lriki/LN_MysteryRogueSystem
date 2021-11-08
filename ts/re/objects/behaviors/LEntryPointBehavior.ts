@@ -27,10 +27,10 @@ export class LEntryPointBehavior extends LBehavior {
         actions.push(REBasics.actions.BackwardFloorActionId);
     }
     
-    [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onProceedFloorReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const entity = args.self;
 
-        context.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity), false);
+        cctx.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity), false);
 
         return SCommandResponse.Handled;
     }

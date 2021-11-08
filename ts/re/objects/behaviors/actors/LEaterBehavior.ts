@@ -26,7 +26,7 @@ export class LEaterBehavior extends LBehavior {
     }
 
     
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         /*
         if (activity.actionId() == DBasics.actions.EatActionId) {
             const reactor = activity.object();

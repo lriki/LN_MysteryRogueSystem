@@ -144,12 +144,12 @@ export class LUnitBehavior extends LBehavior {
         actions.push(REBasics.actions.AttackActionId);
     }
 
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const subject = new SEffectSubject(self);
         const activity = actx.activity();
 
         if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
-            context.postMessage(tr2("しかしなにもおこらなかった。"));
+            cctx.postMessage(tr2("しかしなにもおこらなかった。"));
             return SCommandResponse.Canceled;
         }
 
@@ -168,15 +168,15 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
-            if (!REGame.eventServer.publish(context, REBasics.events.preWalk, args)) return SCommandResponse.Canceled;
+            if (!REGame.eventServer.publish(cctx, REBasics.events.preWalk, args)) return SCommandResponse.Canceled;
 
             if (activity.isFastForward()) {
                 this._straightDashing = true;
             }
 
             const layer = self.getHomeLayer();
-            if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
-                context.postSequel(self, REBasics.sequels.MoveSequel);
+            if (UMovement.moveEntity(cctx, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
+                cctx.postSequel(self, REBasics.sequels.MoveSequel);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 self.immediatelyAfterAdjacentMoving = true;
@@ -187,7 +187,7 @@ export class LUnitBehavior extends LBehavior {
         }
         else if (activity.actionId() == REBasics.actions.performSkill) {
             if (activity.hasEffectDirection()) self.dir = activity.effectDirection();
-            SEmittorPerformer.makeWithSkill(self, self, activity.skillId()).performe(context);
+            SEmittorPerformer.makeWithSkill(self, self, activity.skillId()).performe(cctx);
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.ForwardFloorActionId ||
@@ -195,7 +195,7 @@ export class LUnitBehavior extends LBehavior {
 
             const reactor = activity.object();
             if (reactor) {
-                context.post(reactor, self, subject, undefined, onProceedFloorReaction);
+                cctx.post(reactor, self, subject, undefined, onProceedFloorReaction);
             }
 
         }
@@ -206,21 +206,21 @@ export class LUnitBehavior extends LBehavior {
                 const layer = block.layer(DBlockLayerKind.Ground);
                 const itemEntity = layer.firstEntity();
                 if (itemEntity) {
-                    actx.postHandleActivity(context, itemEntity)
+                    actx.postHandleActivity(cctx, itemEntity)
                     .then(() => {
                         REGame.map._removeEntity(itemEntity);
 
                         const gold = itemEntity.findEntityBehavior(LGoldBehavior);
                         if (gold) {
                             inventory.gainGold(gold.gold());
-                            context.postDestroy(itemEntity);
+                            cctx.postDestroy(itemEntity);
                         }
                         else {
                             inventory.addEntityWithStacking(itemEntity);
                         }
                         
                         const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
-                        context.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
+                        cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
                         SSoundManager.playPickItem();
                         return SHandleCommandResult.Resolved;
                     });
@@ -231,7 +231,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
-            if (!REGame.eventServer.publish(context, REBasics.events.prePut, args)) return SCommandResponse.Canceled;
+            if (!REGame.eventServer.publish(cctx, REBasics.events.prePut, args)) return SCommandResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findEntityBehavior(LInventoryBehavior);
@@ -242,20 +242,20 @@ export class LUnitBehavior extends LBehavior {
             const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
-                context.post(itemEntity, self, subject, undefined, testPickOutItem)
+                cctx.post(itemEntity, self, subject, undefined, testPickOutItem)
                     .then(() => {
                         itemEntity.removeFromParent();
-                        //context.remo
+                        //cctx.remo
                         //inventory.removeEntity(itemEntity);
                         REGame.map.appearEntity(itemEntity, self.x, self.y);
 
-                        context.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
-                        context.post(itemEntity, self, subject, undefined, onGrounded);
+                        cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
+                        cctx.post(itemEntity, self, subject, undefined, onGrounded);
                         return true;
                     });
             }
             else {
-                context.postMessage(tr("置けなかった。"));
+                cctx.postMessage(tr("置けなかった。"));
             }
             return SCommandResponse.Handled;
         }
@@ -270,9 +270,9 @@ export class LUnitBehavior extends LBehavior {
             assert(itemEntity);
             //assert(inventory);
 
-            context.post(itemEntity, self, subject, undefined, onPreThrowReaction)
+            cctx.post(itemEntity, self, subject, undefined, onPreThrowReaction)
                 .then(() => {
-                    //itemEntity.callRemoveFromWhereabouts(context);
+                    //itemEntity.callRemoveFromWhereabouts(cctx);
 
                     itemEntity.removeFromParent();
                     itemEntity.x = self.x;
@@ -297,9 +297,9 @@ export class LUnitBehavior extends LBehavior {
                     */
 
 
-                    context.post(itemEntity, self, subject, undefined, onThrowReaction)
+                    cctx.post(itemEntity, self, subject, undefined, onThrowReaction)
                         .then(() => {
-                            context.postMessage(tr("{0} を投げた。", UName.makeNameAsItem(itemEntity)));
+                            cctx.postMessage(tr("{0} を投げた。", UName.makeNameAsItem(itemEntity)));
                             return true;
                         });
 
@@ -312,7 +312,7 @@ export class LUnitBehavior extends LBehavior {
             const itemEntity = activity.object();
             assert(itemEntity);
 
-            context.post(itemEntity, self, subject, undefined, onPreThrowReaction)
+            cctx.post(itemEntity, self, subject, undefined, onPreThrowReaction)
                 .then(() => {
                     let actual: LEntity;
                     if (itemEntity.isStacked()) {
@@ -331,10 +331,10 @@ export class LUnitBehavior extends LBehavior {
                     actual.y = self.y;
 
 
-                    context.post(actual, self, subject, undefined, onThrowReaction)
+                    cctx.post(actual, self, subject, undefined, onThrowReaction)
                         .then(() => {
                             console.log("...", UName.makeNameAsItem(actual));
-                            context.postMessage(tr("{0} を撃った", UName.makeNameAsItem(actual)));
+                            cctx.postMessage(tr("{0} を撃った", UName.makeNameAsItem(actual)));
                             return true;
                         });
 
@@ -358,35 +358,35 @@ export class LUnitBehavior extends LBehavior {
                 REGame.map.appearEntity(item1, self.x, self.y);
                 inventory.addEntity(item2);
 
-                context.postMessage(tr("{0} と {1} を交換した。", UName.makeNameAsItem(item1), UName.makeNameAsItem(item2)));
+                cctx.postMessage(tr("{0} と {1} を交換した。", UName.makeNameAsItem(item1), UName.makeNameAsItem(item2)));
                 SSoundManager.playPickItem();
             }
             else {
-                context.postMessage(tr2("足元には何もない。"));
+                cctx.postMessage(tr2("足元には何もない。"));
             }
 
         }
         else if (activity.actionId() == REBasics.actions.WaveActionId) {
-            context.postSequel(self, REBasics.sequels.attack);
+            cctx.postSequel(self, REBasics.sequels.attack);
 
             const reactor = activity.object();
             if (reactor) {
-                context.post(reactor, self, subject, undefined, onWaveReaction);
+                cctx.post(reactor, self, subject, undefined, onWaveReaction);
                 // TODO: onWaveReaction 使ってない。onActivityReaction に共通化した。
             }
             
-            actx.postHandleActivity(context, activity.object());
+            actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.EatActionId) {
-            context.postSequel(self, REBasics.sequels.useItem, activity.object());
-            actx.postHandleActivity(context, activity.object());
+            cctx.postSequel(self, REBasics.sequels.useItem, activity.object());
+            actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
-            context.postSequel(self, REBasics.sequels.useItem, activity.object());
-            actx.postHandleActivity(context, activity.object());
+            cctx.postSequel(self, REBasics.sequels.useItem, activity.object());
+            actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.PutInActionId) {
@@ -398,31 +398,31 @@ export class LUnitBehavior extends LBehavior {
             for (const item of items) {
                 item.removeFromParent();
                 storageInventory.addEntity(item);
-                context.postMessage(tr("{0} を入れた。", UName.makeNameAsItem(item)));
+                cctx.postMessage(tr("{0} を入れた。", UName.makeNameAsItem(item)));
             }
         }
         else if (activity.actionId() == REBasics.actions.talk) {
             const target = UAction.findTalkableFront(self);
             if (target) {
-                context.postCall(() => {
+                cctx.postCall(() => {
                     target.iterateBehaviorsReverse(b => {
-                        return b.onTalk(context, target, self) == SCommandResponse.Pass;
+                        return b.onTalk(cctx, target, self) == SCommandResponse.Pass;
                     });
                 });
             }
         }
         else if (activity.actionId() == REBasics.actions.dialogResult) {
-            actx.postHandleActivity(context, activity.object());
+            actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.stumble) {
-            UAction.postStumble(context, self, self.dir);
+            UAction.postStumble(cctx, self, self.dir);
             //return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.trample) {
             const target = USearch.getFirstUnderFootEntity(self);
             if (target) {
-                actx.postHandleActivity(context, target);
+                actx.postHandleActivity(cctx, target);
                 return SCommandResponse.Handled;
             }
         }
@@ -430,13 +430,13 @@ export class LUnitBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    [onAttackReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onAttackReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         //const effectContext = cmd.effectContext();
         const effectContext: SEffectContext = args.args.effectContext;
         if (effectContext) {
             const targets = [self];
-            effectContext.applyWithWorth(context, targets);
+            effectContext.applyWithWorth(cctx, targets);
 
 
             
@@ -450,7 +450,7 @@ export class LUnitBehavior extends LBehavior {
 
             for (const target of targets) {
                 if (target._effectResult.isHit()) {
-                    context.post(target, self, new SEffectSubject(effectContext.effectorFact().subject()), undefined, onDirectAttackDamaged);
+                    cctx.post(target, self, new SEffectSubject(effectContext.effectorFact().subject()), undefined, onDirectAttackDamaged);
 
                     
                 }
@@ -458,7 +458,7 @@ export class LUnitBehavior extends LBehavior {
 
             
 
-            context.postCall(() => {
+            cctx.postCall(() => {
                 self.sendPartyEvent(REBasics.events.effectReacted, undefined);
             });
 
@@ -469,12 +469,12 @@ export class LUnitBehavior extends LBehavior {
     }
 
 
-    [onWalkedOnTopAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onWalkedOnTopAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         return SCommandResponse.Pass;
     }
     
-    onTalk(context: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
-        context.openDialog(self, new SEventExecutionDialog(self.rmmzEventId, self), false);
+    onTalk(cctx: SCommandContext, self: LEntity, person: LEntity): SCommandResponse {
+        cctx.openDialog(self, new SEventExecutionDialog(self.rmmzEventId, self), false);
         return SCommandResponse.Pass;
     }
 }

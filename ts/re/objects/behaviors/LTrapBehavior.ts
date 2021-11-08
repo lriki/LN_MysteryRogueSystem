@@ -79,7 +79,7 @@ export class LTrapBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(REBasics.events.skillEmitted, this);
     }
 
-    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
+    onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         if (eventId == REBasics.events.skillEmitted) {
             const entity = this.ownerEntity();
             const e = args as SkillEmittedArgs;
@@ -99,7 +99,7 @@ export class LTrapBehavior extends LBehavior {
         return entity.getOutwardFactionId() === REData.system.trapTargetFactionId;
     }
     
-    [onWalkedOnTopReaction](e: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onWalkedOnTopReaction](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
         const target = e.sender;
 
@@ -108,27 +108,27 @@ export class LTrapBehavior extends LBehavior {
 
 
 
-        context.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
+        cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
 
-        this.performTrapEffect(self, context, target.dir);
+        this.performTrapEffect(self, cctx, target.dir);
         
         return SCommandResponse.Pass;
     }
 
-    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         // [踏まれた]
         if (activity.actionId() == REBasics.actions.trample) {
-            this.performTrapEffect(self, context, activity.actor().dir);
+            this.performTrapEffect(self, cctx, activity.actor().dir);
         }
         else if (activity.actionId() == REBasics.actions.FallActionId) {
-            this.performTrapEffect(self, context, activity.actor().dir);
+            this.performTrapEffect(self, cctx, activity.actor().dir);
         }
         return SCommandResponse.Pass;
     }
 
 
-    private performTrapEffect(self: LEntity, context: SCommandContext, actorDir: number): void {
+    private performTrapEffect(self: LEntity, cctx: SCommandContext, actorDir: number): void {
         if (this._recharging) return;
 
         //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
@@ -146,7 +146,7 @@ export class LTrapBehavior extends LBehavior {
                 SEmittorPerformer.makeWithEmitor(self, self, emittor)
                 .setDffectDirection(UMovement.getRightDir(actorDir))
                 .setProjectilePriorityEffectSet(emittor.effectSet)
-                .performe(context);
+                .performe(cctx);
     
             }
             // else {
@@ -154,23 +154,23 @@ export class LTrapBehavior extends LBehavior {
 
 
             //     const subject = new SEffectorFact(e.self, emittor.effectSet, SEffectIncidentType.IndirectAttack, target.dir);
-            //     const effectContext = new SEffectContext(subject, context.random());
+            //     const effectContext = new SEffectContext(subject, cctx.random());
     
             //     //console.log(result);
     
     
-            //     context.postAnimation(e.sender, 35, true);
+            //     cctx.postAnimation(e.sender, 35, true);
     
             //     // TODO: ここでラムダ式も post して apply したい。
     
-            //     context.postCall(() => {
-            //         effectContext.applyWithWorth(context, [target]);
+            //     cctx.postCall(() => {
+            //         effectContext.applyWithWorth(cctx, [target]);
             //     });
     
             // }
 
 
-            //context.postMessage(tr("しかし ワナには かからなかった。"));
+            //cctx.postMessage(tr("しかし ワナには かからなかった。"));
         }
 
 
@@ -179,7 +179,7 @@ export class LTrapBehavior extends LBehavior {
 
     }
     
-    onStepEnd(context: SCommandContext): SCommandResponse {
+    onStepEnd(cctx: SCommandContext): SCommandResponse {
         this._recharging = false;
         return SCommandResponse.Pass;
     }

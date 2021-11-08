@@ -63,7 +63,7 @@ export class LSelfExplosionBehavior extends LBehavior {
     }
     
 
-    [onEffectResult](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onEffectResult](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
 
 
@@ -72,8 +72,8 @@ export class LSelfExplosionBehavior extends LBehavior {
         //if (hp < 100) {
         if (hp < 50) {
             const skill = REData.getSkill("kSkill_大爆発");
-            context.postActivity(LActivity.makePerformSkill(self, skill.id));
-            context.postCall(() => context.postDestroy(self));
+            cctx.postActivity(LActivity.makePerformSkill(self, skill.id));
+            cctx.postCall(() => cctx.postDestroy(self));
             return SCommandResponse.Handled;
         }
         //if (hp < mhp * 0.3) {

@@ -63,7 +63,7 @@ export class RECCMessageCommand {
         //return this._rejected;
     }
 
-    public call(context: SCommandContext): void {
+    public call(cctx: SCommandContext): void {
         
         if (this._entryFunc) {
             this._result = this._entryFunc() != SCommandResponse.Canceled;
@@ -78,13 +78,13 @@ export class RECCMessageCommand {
         if (this._entryFunc || this._chainFunc) {
             if (this._result) {
                 if (this._then) {
-                    this._then.call(context);
+                    this._then.call(cctx);
                     //context._recodingCommandList.push(this._then);
                 }
             }
             else {
                 if (this._rejected) {
-                    this._rejected.call(context);
+                    this._rejected.call(cctx);
                     //context._recodingCommandList.push(this._then);
                 }
             }
@@ -393,7 +393,7 @@ export class SCommandContext
         Log.postCommand("Wait");
     }
 
-    public postApplyEffect(target: LEntity, context: SCommandContext, effect: SEffectContext): void {
+    public postApplyEffect(target: LEntity, cctx: SCommandContext, effect: SEffectContext): void {
         const m1 = () => {
             for (const b of target.collectBehaviors()) {
                 const r = b.onApplyEffect(target, this, effect);

@@ -17,7 +17,7 @@ export class LEntityDivisionBehavior extends LBehavior {
         return b
     }
 
-    [onDirectAttackDamaged](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onDirectAttackDamaged](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         const battler = self.getEntityBehavior(LBattlerBehavior);
         if (self.isDeathStateAffected()) return SCommandResponse.Pass;
@@ -27,12 +27,12 @@ export class LEntityDivisionBehavior extends LBehavior {
         // 有効な隣接 Block があり、その方向へ移動可能かを調べる
         const candidates = UMovement.getAdjacentBlocks(self).filter(b => UMovement.checkPassageBlockToBlock(self, selfBlock, b, MovingMethod.Walk));
         if (candidates.length > 1) {
-            const newBlock = candidates[context.random().nextIntWithMax(candidates.length)];
+            const newBlock = candidates[cctx.random().nextIntWithMax(candidates.length)];
             const newEntity = self.clone();
             REGame.world._transferEntity(newEntity, self.floorId, newBlock.x(), newBlock.y());
 
-            context.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(self.x, self.y);
-            context.postWaitSequel();
+            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(self.x, self.y);
+            cctx.postWaitSequel();
         }
         else {
             // 周囲に空きが無いため分裂できない

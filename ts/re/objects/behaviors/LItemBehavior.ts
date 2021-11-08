@@ -78,22 +78,22 @@ export class LItemBehavior extends LBehavior {
         }
     }
 
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
         if (activity.actionId() == REBasics.actions.collide) {
     
             
             const target = activity.objects2()[0];
             const subject = new SEffectSubject(activity.subject());
-            actx.postHandleActivity(context, target)
+            actx.postHandleActivity(cctx, target)
             .then(() => {
-                this.applyEffect(context, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
+                this.applyEffect(cctx, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {
-                        context.postDestroy(self);
+                        cctx.postDestroy(self);
                         console.log("Hit");
                     }
                     else {
-                        UAction.postDropOrDestroy(context, self, self.x, self.y);
+                        UAction.postDropOrDestroy(cctx, self, self.x, self.y);
                         console.log("MISS");
                     }
                 });
@@ -110,7 +110,7 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    onActivityReaction(self: LEntity, context: SCommandContext, activity: LActivity): SCommandResponse {
+    onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
         if (activity.actionId() == REBasics.actions.WaveActionId) {
             const actor = activity.actor();
@@ -118,7 +118,7 @@ export class LItemBehavior extends LBehavior {
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
-                    .performe(context);
+                    .performe(cctx);
             }
         }
         // [読まれた]
@@ -129,8 +129,8 @@ export class LItemBehavior extends LBehavior {
                 SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
                     .setSelectedTargetItems(activity.objects2())
-                    .performe(context);
-                context.postDestroy(self);
+                    .performe(cctx);
+                cctx.postDestroy(self);
             }
         }
         // [食べられた]
@@ -138,8 +138,8 @@ export class LItemBehavior extends LBehavior {
             const subject = activity.actor();
             const reactor = activity.object();
             if (reactor) {
-                UIdentify.identifyByTiming(context, subject, reactor, DIdentifiedTiming.Eat);
-                context.post(reactor, subject, new SEffectSubject(subject), undefined, onEatReaction);
+                UIdentify.identifyByTiming(cctx, subject, reactor, DIdentifiedTiming.Eat);
+                cctx.post(reactor, subject, new SEffectSubject(subject), undefined, onEatReaction);
             }
             
             return SCommandResponse.Handled;
@@ -148,9 +148,9 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    [onEatReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onEatReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
-        this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Eat, self.dir);
+        this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Eat, self.dir);
 
         // 食べられたので削除。
         // [かじる] も [食べる] の一部として考えるような場合は Entity が削除されることは無いので、
@@ -160,57 +160,57 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Handled;
     }
 
-    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         throw new Error("deprecated");
         const self = args.self;
         
-        context.postDestroy(self);
+        cctx.postDestroy(self);
 
         const a = args.args as CollideActionArgs;
-        this.applyEffect(context, self, args.sender, args.subject, DEffectCause.Hit, a.dir);
+        this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Hit, a.dir);
         
         //
 
-        //LProjectableBehavior.startMoveAsProjectile(context, args.sender, a.dir, 5);
+        //LProjectableBehavior.startMoveAsProjectile(cctx, args.sender, a.dir, 5);
         
 
         return SCommandResponse.Handled;
     }
     
-    private applyEffect(context: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
+    private applyEffect(cctx: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();
         const emittors = entityData.emittorSet.emittors(cause);
         if (emittors.length > 0) {
-            context.postCall(() => {
+            cctx.postCall(() => {
                 for (const emittor of emittors) {
                     //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
                     SEmittorPerformer.makeWithEmitor(subject.entity(), target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
-                        .performe(context, onPerformedFunc);
+                        .performe(cctx, onPerformedFunc);
                 }
             });
         }
         
         // const skill = entityData.emittorSet.skill(cause);
         // if (skill) {
-        //     context.postCall(() => {
+        //     cctx.postCall(() => {
         //         SEmittorPerformer.makeWithSkill(subject.entity(), skill.id)
         //             .setItemEntity(self)
         //             .setDffectDirection(effectDir)
-        //             .performe(context);
+        //             .performe(cctx);
         //     });
         // }
     }
 
     
     // TODO: すごく仮。今はアイテムが盗みスキルの効果を受け取るためだけにある
-    [onAttackReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onAttackReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         const effectContext: SEffectContext = args.args.effectContext;
         if (effectContext) {
             const targets = [self];
-            effectContext.applyWithWorth(context, targets);
+            effectContext.applyWithWorth(cctx, targets);
 
             return SCommandResponse.Handled;
         }
@@ -218,10 +218,10 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    onStabilizeSituation(self: LEntity, context: SCommandContext): SCommandResponse {
+    onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
         if (self.isDeathStateAffected()) {
-            context.postSequel(self, REBasics.sequels.CollapseSequel);
-            context.postDestroy(self);
+            cctx.postSequel(self, REBasics.sequels.CollapseSequel);
+            cctx.postDestroy(self);
             return SCommandResponse.Handled;
         }
         

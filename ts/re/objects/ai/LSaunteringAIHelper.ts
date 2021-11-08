@@ -34,21 +34,21 @@ export class LSaunteringAIHelper {
         this._targetPositionY = my;
     }
 
-    public thinkMoving(self: LEntity, context: SCommandContext): boolean {
-        const result = this.thinkMovingCore(self, context);
+    public thinkMoving(self: LEntity, cctx: SCommandContext): boolean {
+        const result = this.thinkMovingCore(self, cctx);
         if (result) {
             
             // 移動後、向きを target へ向けておく
             if (this.hasDestination()) {
                 // 移動後、向きを target へ向けておく
                 const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
-                context.postActivity(LActivity.makeDirectionChange(self, dir));
+                cctx.postActivity(LActivity.makeDirectionChange(self, dir));
             }
         }
         return result;
     }
 
-    public thinkMovingCore(self: LEntity, context: SCommandContext): boolean {
+    public thinkMovingCore(self: LEntity, cctx: SCommandContext): boolean {
         let moveToLHRule = false;
         let moveToPassageWay: LBlock | undefined;
         const block = REGame.map.block(self.x, self.y);
@@ -68,7 +68,7 @@ export class LSaunteringAIHelper {
 
                     const candidates = room.doorwayBlocks();
                     if (candidates.length > 0) {
-                        const block = candidates[context.random().nextIntWithMax(candidates.length)];
+                        const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
                         this._targetPositionX = block.x();
                         this._targetPositionY = block.y();
                     }
@@ -86,7 +86,7 @@ export class LSaunteringAIHelper {
     
                     const candidates = room.doorwayBlocks().filter(b => b.x() != self.x && b.y() != self.y);    // 足元フィルタ
                     if (candidates.length > 0) {
-                        const block = candidates[context.random().nextIntWithMax(candidates.length)];
+                        const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
                         this._targetPositionX = block.x();
                         this._targetPositionY = block.y();
                     }
@@ -107,7 +107,7 @@ export class LSaunteringAIHelper {
             // 対策として、このときは隣接している通路ブロックへの移動を優先する。
             const blocks = UMovement.getMovableAdjacentTiles(self).filter(b => b.isPassageway());
             if (blocks.length > 0) {
-                moveToPassageWay = blocks[context.random().nextIntWithMax(blocks.length)];
+                moveToPassageWay = blocks[cctx.random().nextIntWithMax(blocks.length)];
             }
             else {
                 moveToLHRule = true;
@@ -120,7 +120,7 @@ export class LSaunteringAIHelper {
 
         // 目的地設定がなされてるのであればそこへ向かって移動する
         if (this.canModeToTarget(self)) {
-            if (this.moveToTarget(self, context)) {
+            if (this.moveToTarget(self, cctx)) {
                 return true;
             }
             else {
@@ -130,7 +130,7 @@ export class LSaunteringAIHelper {
         }
 
         if (moveToPassageWay) {
-            this.postMoveToAdjacent(self, moveToPassageWay, context);
+            this.postMoveToAdjacent(self, moveToPassageWay, cctx);
             return true;
         }
 
@@ -139,7 +139,7 @@ export class LSaunteringAIHelper {
             const dir = this.hasDestination() ? SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY) : self.dir;
             const block = UMovement.getMovingCandidateBlockAsLHRule(self, dir);
             if (block) {
-                this.postMoveToAdjacent(self, block, context);
+                this.postMoveToAdjacent(self, block, cctx);
 
 
                 return true;
@@ -151,8 +151,8 @@ export class LSaunteringAIHelper {
             // 6連続で移動できなかったときはランダム移動
             const candidates = UMovement.getMovableAdjacentTiles(self);
             if (candidates.length > 0) {
-                const block = candidates[context.random().nextIntWithMax(candidates.length)];
-                this.postMoveToAdjacent(self, block, context);
+                const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
+                this.postMoveToAdjacent(self, block, cctx);
                 this._noActionTurnCount = 0;
                 return true;
             }
@@ -170,16 +170,16 @@ export class LSaunteringAIHelper {
         return this.hasDestination() && (self.x != this._targetPositionX || self.y != this._targetPositionY);
     }
 
-    private moveToTarget(self: LEntity, context: SCommandContext): boolean {
+    private moveToTarget(self: LEntity, cctx: SCommandContext): boolean {
         // 目的地設定済みで、未到達であること
         assert(this.canModeToTarget(self));
 
         const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
         if (dir != 0 && UMovement.checkPassageToDir(self, dir)) {
-            context.postActivity(LActivity.makeDirectionChange(self, dir));
-            context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-            //this.moveToAdjacent(self, block, context);
-            context.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postActivity(LActivity.makeDirectionChange(self, dir));
+            cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+            //this.moveToAdjacent(self, block, cctx);
+            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
             return true;
         }
         else {
@@ -187,10 +187,10 @@ export class LSaunteringAIHelper {
         }
     }
     
-    private postMoveToAdjacent(self: LEntity, block: LBlock, context: SCommandContext): void {
+    private postMoveToAdjacent(self: LEntity, block: LBlock, cctx: SCommandContext): void {
         const dir = Helpers.offsetToDir(block.x() - self.x, block.y() - self.y);
-        context.postActivity(LActivity.makeDirectionChange(self, dir));
-        context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-        context.postConsumeActionToken(self,LActionTokenType.Minor);
+        cctx.postActivity(LActivity.makeDirectionChange(self, dir));
+        cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+        cctx.postConsumeActionToken(self,LActionTokenType.Minor);
     }
 }

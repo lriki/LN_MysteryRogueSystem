@@ -36,7 +36,7 @@ export class LDecisionBehavior extends LBehavior {
         characterAIs.push(this._characterAI);
     }
 
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
 
@@ -44,27 +44,27 @@ export class LDecisionBehavior extends LBehavior {
             behavior._fastforwarding = false;
 
             if (behavior._straightDashing && UMovement.checkDashStopBlock(self)) {
-                context.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction(LActionTokenType.Minor));
+                cctx.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction(LActionTokenType.Minor));
                 return SPhaseResult.Handled;
             }
             else {
                 const dialog = new SManualActionDialog();
                 dialog.dashingEntry = behavior._straightDashing;
-                context.openDialog(self, dialog, false);
+                cctx.openDialog(self, dialog, false);
                 behavior._straightDashing = false;
                 return SPhaseResult.Handled;
             }
 
         }
         else if (phase == DecisionPhase.AIMinor) {
-            return this._characterAI.thinkMoving(context, self);
+            return this._characterAI.thinkMoving(cctx, self);
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             // 後続をブロックする理由はない
             return SPhaseResult.Pass;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            return this._characterAI.thinkAction(context, self);
+            return this._characterAI.thinkAction(cctx, self);
             
         }
 

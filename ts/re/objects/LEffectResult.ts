@@ -181,16 +181,16 @@ export class LEffectResult {
     }
 
     // Window_BattleLog.prototype.displayActionResults
-    public showResultMessages(context: SCommandContext, entity: LEntity): void {
+    public showResultMessages(cctx: SCommandContext, entity: LEntity): void {
 
         const targetName = UName.makeUnitName(entity);
         
         if (this.missed) {
-            context.postMessage(tr2("TEST: 外れた。"));
+            cctx.postMessage(tr2("TEST: 外れた。"));
         }
         else {
             for (const param of this.paramEffects2) {
-                context.postMessage(this.makeParamDamageText(targetName, param));
+                cctx.postMessage(this.makeParamDamageText(targetName, param));
             }
         }
 
@@ -202,7 +202,7 @@ export class LEffectResult {
                 const state = REData.states[stateId];
                 const stateText = isActor ? state.message1 : state.message2;
                 if (stateText) {
-                    context.postMessage(stateText.format(targetName));
+                    cctx.postMessage(stateText.format(targetName));
                 }
             }
         }
@@ -211,7 +211,7 @@ export class LEffectResult {
             for (const stateId of this.removedStates) {
                 const state = REData.states[stateId];
                 if (state.message4) {
-                    context.postMessage(state.message4.format(targetName));
+                    cctx.postMessage(state.message4.format(targetName));
                 }
             }
         }
@@ -219,22 +219,22 @@ export class LEffectResult {
         {
             for (const paramId of this.addedBuffs) {
                 const text = DTextManager.buffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
-                context.postMessage(text);
+                cctx.postMessage(text);
             }
             for (const paramId of this.addedDebuffs) {
                 const text = DTextManager.debuffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
-                context.postMessage(text);
+                cctx.postMessage(text);
             }
             for (const paramId of this.removedBuffs) {
                 const text = DTextManager.buffRemove.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
-                context.postMessage(text);
+                cctx.postMessage(text);
             }
         }
 
         
         //if (!this.success) {
         //    const m = "%1には効かなかった！";
-        //    context.postMessage(m.format(targetName));
+        //    cctx.postMessage(m.format(targetName));
         //}
 
         // 経験値
@@ -243,7 +243,7 @@ export class LEffectResult {
 
             if (this.gainedExp > 0) {
                 const text = DTextManager.obtainExp.format(this.gainedExp, DTextManager.exp);
-                context.postMessage(text);
+                cctx.postMessage(text);
             }
             
 
@@ -253,12 +253,12 @@ export class LEffectResult {
                 if (battler instanceof LActorBehavior) {
                     if (this.levelup) {
                         const text = DTextManager.levelUp.format(targetName, DTextManager.level, battler.level());
-                        context.postMessage(text);
+                        cctx.postMessage(text);
                         SSoundManager.playLevelUp();
                     }
                     if (this.leveldown) {
                         const text = tr2("%1は%2が下がった！").format(targetName, DTextManager.level);
-                        context.postMessage(text);
+                        cctx.postMessage(text);
                         SSoundManager.playLevelUp();
                     }
                 }

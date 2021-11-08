@@ -84,11 +84,11 @@ export class UTransfer {
     /**
      * entity を今いる Land から抜けさせ、ExitMap へ移動させる。
      */
-    public static exitLand(context: SCommandContext, entity: LEntity, result: LandExitResult): void {
+    public static exitLand(cctx: SCommandContext, entity: LEntity, result: LandExitResult): void {
         assert(entity == REGame.camera.focusedEntity());    // Player であるはず
 
         RESystem.integration.onSetLandExitResult(result);
-        context.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
+        cctx.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
     }
 
     public static proceedFloorForwardForPlayer(interpreter?: Game_Interpreter | undefined) {

@@ -976,11 +976,11 @@ export class LEntity extends LObject
      * 除外された UniqueEntity 以外の Entity は、そのターンの間にいずれかから参照を得ない場合 GC によって削除される。
      */
     /*
-    callRemoveFromWhereabouts(context: SCommandContext): REResponse {
+    callRemoveFromWhereabouts(cctx: SCommandContext): REResponse {
         const parent = this.parentEntity();
         if (parent) {
             const response = parent._callBehaviorIterationHelper((behavior: LBehavior) => {
-                return behavior.onRemoveEntityFromWhereabouts(context, this);
+                return behavior.onRemoveEntityFromWhereabouts(cctx, this);
             });
             assert(this.parentObjectId().index2() == 0);    // 何らか削除されているはず
             return response;
@@ -1291,42 +1291,42 @@ export class LEntity extends LObject
         return result;
     }
 
-    _callDecisionPhase(context: SCommandContext, phase: DecisionPhase): SPhaseResult {
+    _callDecisionPhase(cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         for (const b of this.collectBehaviors().reverse()) {
-            const result = b.onDecisionPhase(context, this, phase);
+            const result = b.onDecisionPhase(cctx, this, phase);
             if (result != SPhaseResult.Pass) return result;
         }
         return SPhaseResult.Pass;
 
-        //let r = LEntity._iterationHelper_ProcessPhase<LState>(this.states(), b => b.onDecisionPhase(this, context, phase));
+        //let r = LEntity._iterationHelper_ProcessPhase<LState>(this.states(), b => b.onDecisionPhase(this, cctx, phase));
        // if (r) return r;
-        //r = LEntity._iterateBehavior<SPhaseResult>(this._basicBehaviors, b => b.onDecisionPhase(this, context, phase), r => r == SPhaseResult.Pass);
+        //r = LEntity._iterateBehavior<SPhaseResult>(this._basicBehaviors, b => b.onDecisionPhase(this, cctx, phase), r => r == SPhaseResult.Pass);
         ///if (r) return r;
         //return SPhaseResult.Pass;
     }
 
-    _sendAction(context: SCommandContext, cmd: RECommand): SCommandResponse {
-        return this._callBehaviorIterationHelper(x => x.onAction(this, context, cmd));
+    _sendAction(cctx: SCommandContext, cmd: RECommand): SCommandResponse {
+        return this._callBehaviorIterationHelper(x => x.onAction(this, cctx, cmd));
     }
 
-    _sendActivity(context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    _sendActivity(cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         let result = SCommandResponse.Pass;
         
         this.iterateBehaviorsReverse(b => {
-            result = b.onPreActivity(context, this, actx);
+            result = b.onPreActivity(cctx, this, actx);
             return result == SCommandResponse.Pass;
         });
         if (result != SCommandResponse.Pass) return result;
 
         this.iterateBehaviorsReverse(b => {
-            result = b.onActivity(this, context, actx);
+            result = b.onActivity(this, cctx, actx);
             return result == SCommandResponse.Pass;
         });
         return result;
     }
 
-    _sendActivityReaction(context: SCommandContext, activity: LActivity): SCommandResponse {
-        return this._callBehaviorIterationHelper(x => x.onActivityReaction(this, context, activity));
+    _sendActivityReaction(cctx: SCommandContext, activity: LActivity): SCommandResponse {
+        return this._callBehaviorIterationHelper(x => x.onActivityReaction(this, cctx, activity));
     }
     
 

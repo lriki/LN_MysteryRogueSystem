@@ -499,12 +499,12 @@ export class LMap extends LObject
     }
 
 
-    public updateLocatedResults(context: SCommandContext): void {
+    public updateLocatedResults(cctx: SCommandContext): void {
         for (const entity of this.entities()) {
             if (entity._located) {
 
                 for (const s of this._structures) {
-                    s.onEntityLocated(context, entity);
+                    s.onEntityLocated(cctx, entity);
                 }
 
                 entity._located = false;

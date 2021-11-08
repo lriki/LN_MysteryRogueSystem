@@ -566,7 +566,7 @@ export class UMovement {
         return true;
     }
 
-    public static moveEntity(context: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: DBlockLayerKind): boolean {
+    public static moveEntity(cctx: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: DBlockLayerKind): boolean {
         const map = REGame.map;
 
         assert(entity.floorId.equals(map.floorId()));
@@ -583,7 +583,7 @@ export class UMovement {
             entity.x = x;
             entity.y = y;
             newBlock.addEntity(toLayer, entity);
-            this._postLocate(entity, oldBlock, newBlock, map, context);
+            this._postLocate(entity, oldBlock, newBlock, map, cctx);
             return true;
         }
         else {
@@ -618,12 +618,12 @@ export class UMovement {
         RESystem.integration.onEntityLocated(entity);
     }
     
-    private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap, context: SCommandContext | undefined) {
+    private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
 
-        if (context) {
+        if (cctx) {
             if (oldBlock._roomId != newBlock._roomId) {
                 const args: RoomEventArgs = {
                     entity: entity,
@@ -631,8 +631,8 @@ export class UMovement {
                     oldRoomId: oldBlock._roomId,
                 };
             
-                REGame.eventServer.publish(context, REBasics.events.roomEnterd, args);
-                REGame.eventServer.publish(context, REBasics.events.roomLeaved, args);
+                REGame.eventServer.publish(cctx, REBasics.events.roomEnterd, args);
+                REGame.eventServer.publish(cctx, REBasics.events.roomLeaved, args);
             }
         }
 

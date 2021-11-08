@@ -115,10 +115,10 @@ export class LEquipmentBehavior extends LBehavior {
         }
     }
 
-    [testPickOutItem](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         if (self.isCursed()) {
-            context.postMessage(tr2("呪われている！"));
+            cctx.postMessage(tr2("呪われている！"));
             return SCommandResponse.Canceled;
         }
         else {

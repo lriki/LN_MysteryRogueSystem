@@ -415,7 +415,7 @@ export class SEffectApplyer {
         this._rand = rand;
     }
 
-    public apply(commandContext: SCommandContext, modifier: SEffectModifier, target: LEntity): void {
+    public apply(cctx: SCommandContext, modifier: SEffectModifier, target: LEntity): void {
         const result =  target._effectResult;
         
         for (const paramEffect of modifier.parameterEffects2()) {
@@ -436,17 +436,17 @@ export class SEffectApplyer {
 
         // Effect
         for (const effect of modifier.specialEffectQualifyings()) {
-            this.applyItemEffect(commandContext, target, effect, result);
+            this.applyItemEffect(cctx, target, effect, result);
         }
         for (const buff of modifier.buffQualifying()) {
             target.addBuff(buff);
         }
         for (const effect of modifier.otherEffectQualifyings()) {
-            this.applyOtherEffect(commandContext, target, effect, result);
+            this.applyOtherEffect(cctx, target, effect, result);
         }
         for (const id of modifier.effectBehaviors()) {
             const b = RESystem.effectBehaviorManager.get(id);
-            b.onApplyTargetEffect(commandContext, id, this._effect.fact().subject(), modifier, target);
+            b.onApplyTargetEffect(cctx, id, this._effect.fact().subject(), modifier, target);
         }
         this.applyItemUserEffect(target);
     }
@@ -683,24 +683,24 @@ export class SEffectApplyer {
     }
     
     // Game_Action.prototype.applyItemEffect
-    public applyOtherEffect(commandContext: SCommandContext, targetEntity: LEntity, effect: DOtherEffectQualifying, result: LEffectResult): void {
+    public applyOtherEffect(cctx: SCommandContext, targetEntity: LEntity, effect: DOtherEffectQualifying, result: LEffectResult): void {
         switch (effect.key) {
             case "kSystemEffect_ふきとばし":
                 const subject = this._effect.subject();
-                LProjectableBehavior.startMoveAsProjectile(commandContext, targetEntity, new SEffectSubject(subject), this._effect.fact().direction(), 10);
+                LProjectableBehavior.startMoveAsProjectile(cctx, targetEntity, new SEffectSubject(subject), this._effect.fact().direction(), 10);
                 break;
             case "kSystemEffect_変化":
-                const entityData = commandContext.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
+                const entityData = cctx.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
                 //const entityData = REData.getEntity("kキュアリーフ");
                 targetEntity.setupInstance(entityData.id);
                 REGame.scheduler.resetEntity(targetEntity);
                 break;
             case "kSystemEffect_脱出":
-                commandContext.postSequel(targetEntity, REBasics.sequels.escape);
-                UTransfer.exitLand(commandContext, targetEntity, LandExitResult.Escape);
+                cctx.postSequel(targetEntity, REBasics.sequels.escape);
+                UTransfer.exitLand(cctx, targetEntity, LandExitResult.Escape);
                 break;
             case "kSystemEffect_識別":
-                UIdentify.identify(commandContext, targetEntity, true);
+                UIdentify.identify(cctx, targetEntity, true);
                 break;
             default:
                 throw new Error("Not implemented.");

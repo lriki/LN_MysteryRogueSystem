@@ -32,7 +32,7 @@ export class LMagicBulletBehavior extends LBehavior {
     }
     
     // 射程無限・壁反射を伴うため、通常の MoveAsProjectile とは異なる処理が必要となる。
-    [onMoveAsMagicBullet](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onMoveAsMagicBullet](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         this.ownerEntity().blockOccupied = false;   // TODO: これは onQueryProperty にしたい
 
         const self = args.self;
@@ -44,18 +44,18 @@ export class LMagicBulletBehavior extends LBehavior {
             // Unit との衝突
             const entity1 = block.aliveEntity(DBlockLayerKind.Unit);
             if (entity1) {
-                context.postAnimation(self, 1, false);
-                context.postDestroy(self);
+                cctx.postAnimation(self, 1, false);
+                cctx.postDestroy(self);
                 //self.destroy();
 
-                context.post(
+                cctx.post(
                     entity1, self, args.subject, undefined, onCollidePreReaction,
                     () => {
                         // reactor 側ではじかれていなかったので CollideAction を呼び出す
                         const args2: CollideActionArgs = {
                             dir: dir,
                         };
-                        context.post(self, entity1, args.subject, args2, onCollideAction, () => {
+                        cctx.post(self, entity1, args.subject, args2, onCollideAction, () => {
                             return true;
                         });
 
@@ -77,11 +77,11 @@ export class LMagicBulletBehavior extends LBehavior {
             }
         }
 
-        if (UMovement.moveEntity(context, self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
-            context.postSequel(self, REBasics.sequels.blowMoveSequel);
+        if (UMovement.moveEntity(cctx, self, self.x + offset.x, self.y + offset.y, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
+            cctx.postSequel(self, REBasics.sequels.blowMoveSequel);
             
             // recall
-            context.post(self, self, args.subject, undefined, onMoveAsMagicBullet);
+            cctx.post(self, self, args.subject, undefined, onMoveAsMagicBullet);
 
             return SCommandResponse.Handled;
         }
@@ -93,12 +93,12 @@ export class LMagicBulletBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const ownerItem = REGame.world.entity(this._ownerItemEntityId);
         const target = args.sender;
 
         // ownerItem の onCollideAction へ中継する
-        context.post(ownerItem, target, args.subject, args.args, onCollideAction);
+        cctx.post(ownerItem, target, args.subject, args.args, onCollideAction);
 
         return SCommandResponse.Handled;
     }

@@ -157,7 +157,7 @@ NOTE:
     }
 
     
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
         if (activity.actionId() == REBasics.actions.EquipActionId) {
             this.refreshSlots();
@@ -180,7 +180,7 @@ NOTE:
 
             if (slot) {
                 // 空きがあればそのまま装備
-                this.equipOn(context, self, slot, itemEntity);
+                this.equipOn(cctx, self, slot, itemEntity);
             }
             else {
                 // 空きが無ければ交換対象を探す
@@ -189,16 +189,16 @@ NOTE:
                     const localSlot = slot;
 
                     // まずは外す
-                    this.equipOff(context, self, REGame.world.entity(localSlot.itemEntityId))
+                    this.equipOff(cctx, self, REGame.world.entity(localSlot.itemEntityId))
                         .then(() => {
                             // 外せたら装備する
-                            this.equipOn(context, self, localSlot, itemEntity);
+                            this.equipOn(cctx, self, localSlot, itemEntity);
                             return true;
                         });
                 }
                 else {
                     // ここまでで slot が見つからなければ装備不可能
-                    context.postMessage(tr2("%1 は装備できない。").format(UName.makeNameAsItem(itemEntity)));
+                    cctx.postMessage(tr2("%1 は装備できない。").format(UName.makeNameAsItem(itemEntity)));
                 }
             }
             
@@ -206,40 +206,40 @@ NOTE:
         }
         else if (activity.actionId() == REBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
-            this.equipOff(context, self, itemEntity);
+            this.equipOff(cctx, self, itemEntity);
 
             return SCommandResponse.Handled;
         }
         return SCommandResponse.Pass;
     }
 
-    private equipOn(context: SCommandContext, self: LEntity, slot: SlotPart2, itemEntity: LEntity): void {
+    private equipOn(cctx: SCommandContext, self: LEntity, slot: SlotPart2, itemEntity: LEntity): void {
         slot.itemEntityId = itemEntity.entityId();
 
         this.ownerEntity().refreshConditions();
 
-        UIdentify.identifyByTiming(context, self, itemEntity, DIdentifiedTiming.Equip, false);
+        UIdentify.identifyByTiming(cctx, self, itemEntity, DIdentifiedTiming.Equip, false);
 
         SSoundManager.playEquip();
-        context.postMessage(tr2("%1 を装備した。").format(UName.makeNameAsItem(itemEntity)));
+        cctx.postMessage(tr2("%1 を装備した。").format(UName.makeNameAsItem(itemEntity)));
 
         if (itemEntity.isCursed()) {
-            context.postMessage(tr2("呪われていた！"));
+            cctx.postMessage(tr2("呪われていた！"));
         }
     }
 
-    private equipOff(context: SCommandContext, self: LEntity, itemEntity: LEntity): RECCMessageCommand {
-        return context.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
+    private equipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): RECCMessageCommand {
+        return cctx.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
             .then(() => {
                 const removed = this.removeEquitment(itemEntity);
                 this._revisitonNumber++;
                 
                 if (removed) {
                     SSoundManager.playEquip();
-                    context.postMessage(tr2("%1 をはずした。").format(UName.makeNameAsItem(itemEntity)));
+                    cctx.postMessage(tr2("%1 をはずした。").format(UName.makeNameAsItem(itemEntity)));
                 }
                 else {
-                    context.postMessage(tr2("何も起こらなかった。"));
+                    cctx.postMessage(tr2("何も起こらなかった。"));
                 }
                 return true;
             });

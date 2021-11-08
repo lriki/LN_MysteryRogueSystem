@@ -45,7 +45,7 @@ export class LStumblePreventionBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    // onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
+    // onPreviewEffectRejection(cctx: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
 
     //     if (effect.sourceKey == "kItem_転び石") {
     //         if (self.actualParam(REBasics.params.remaining) > 0) {
@@ -58,7 +58,7 @@ export class LStumblePreventionBehavior extends LBehavior {
     //     return SCommandResponse.Pass;
     // }
 
-    // onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+    // onPreviewEffectBehaviorRejection(cctx: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
 
     //     if (id == REBasics.effectBehaviors.stumble) {
     //         if (self.actualParam(REBasics.params.remaining) > 0) {

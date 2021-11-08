@@ -57,10 +57,10 @@ export class LExitPointBehavior extends LBehavior {
         actions.push(REBasics.actions.ForwardFloorActionId);
     }
     
-    [onProceedFloorReaction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onProceedFloorReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const entity = args.self;
 
-        context.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity), false);
+        cctx.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity), false);
 
         return SCommandResponse.Handled;
     }

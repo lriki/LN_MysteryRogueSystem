@@ -45,8 +45,8 @@ export class LMoveDeterminer {
         this._targetPositionY = y;
     }
 
-    public decide(context: SCommandContext, self: LEntity): void {
-        const rand = context.random();
+    public decide(cctx: SCommandContext, self: LEntity): void {
+        const rand = cctx.random();
         const block = REGame.map.block(self.x, self.y);
 
         if (!this.hasDestination()) {
@@ -124,8 +124,8 @@ export class LMoveDeterminer {
         }
     }
     
-    public perform(context: SCommandContext, self: LEntity): boolean {
-        if (this.performInternal(context, self)) {
+    public perform(cctx: SCommandContext, self: LEntity): boolean {
+        if (this.performInternal(cctx, self)) {
             this._noActionTurnCount  = 0;
             return true;
         }
@@ -133,11 +133,11 @@ export class LMoveDeterminer {
     }
 
     // 
-    private performInternal(context: SCommandContext, self: LEntity): boolean {
+    private performInternal(cctx: SCommandContext, self: LEntity): boolean {
 
         // 目的地設定がなされてるのであればそこへ向かって移動する
         if (this.canModeToTarget(self)) {
-            if (this.moveToTarget(self, context)) {
+            if (this.moveToTarget(self, cctx)) {
                 return true;
             }
             else {
@@ -147,7 +147,7 @@ export class LMoveDeterminer {
         }
 
         if (this._decired.passageway) {
-            this.postMoveToAdjacent(self, this._decired.passageway, context);
+            this.postMoveToAdjacent(self, this._decired.passageway, cctx);
             return true;
         }
 
@@ -155,13 +155,13 @@ export class LMoveDeterminer {
         if (this._decired.method == LMovingMethod.LHRule) {
             const block = UMovement.getMovingCandidateBlockAsLHRule(self, self.dir);
             if (block) {
-                this.postMoveToAdjacent(self, block, context);
+                this.postMoveToAdjacent(self, block, cctx);
 
                 // 移動後、向きを target へ向けておく
                 const dir = (this.hasDestination()) ?
                     SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY) :
                     self.dir;
-                context.postActivity(LActivity.makeDirectionChange(self, dir));
+                cctx.postActivity(LActivity.makeDirectionChange(self, dir));
 
                 return true;
             }
@@ -181,8 +181,8 @@ export class LMoveDeterminer {
             // 6連続で移動できなかったときはランダム移動
             const candidates = UMovement.getMovableAdjacentTiles(self);
             if (candidates.length > 0) {
-                const block = candidates[context.random().nextIntWithMax(candidates.length)];
-                this.postMoveToAdjacent(self, block, context);
+                const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
+                this.postMoveToAdjacent(self, block, cctx);
                 return true;
             }
         }
@@ -194,16 +194,16 @@ export class LMoveDeterminer {
         return this.hasDestination() && (self.x != this._targetPositionX || self.y != this._targetPositionY);
     }
 
-    private moveToTarget(self: LEntity, context: SCommandContext): boolean {
+    private moveToTarget(self: LEntity, cctx: SCommandContext): boolean {
         // 目的地設定済みで、未到達であること
         assert(this.canModeToTarget(self));
 
         const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
         if (dir != 0 && UMovement.checkPassageToDir(self, dir)) {
-            context.postActivity(LActivity.makeDirectionChange(self, dir));
-            context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-            //this.moveToAdjacent(self, block, context);
-            context.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postActivity(LActivity.makeDirectionChange(self, dir));
+            cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+            //this.moveToAdjacent(self, block, cctx);
+            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
             return true;
         }
         else {
@@ -211,11 +211,11 @@ export class LMoveDeterminer {
         }
     }
     
-    private postMoveToAdjacent(self: LEntity, block: LBlock, context: SCommandContext): void {
+    private postMoveToAdjacent(self: LEntity, block: LBlock, cctx: SCommandContext): void {
         const dir = Helpers.offsetToDir(block.x() - self.x, block.y() - self.y);
-        context.postActivity(LActivity.makeDirectionChange(self, dir));
-        context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-        context.postConsumeActionToken(self, LActionTokenType.Minor);
+        cctx.postActivity(LActivity.makeDirectionChange(self, dir));
+        cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+        cctx.postConsumeActionToken(self, LActionTokenType.Minor);
     }
 
     // 目的地あり？

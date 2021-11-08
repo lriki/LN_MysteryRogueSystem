@@ -13,11 +13,11 @@ export class LKnockbackBehavior extends LBehavior {
         return b
     }
 
-    [onCollideAction](args: CommandArgs, context: SCommandContext): SCommandResponse {
+    [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         
         const a = args.args as CollideActionArgs;
 
-        LProjectableBehavior.startMoveAsProjectile(context, args.sender, args.subject, a.dir, 10);
+        LProjectableBehavior.startMoveAsProjectile(cctx, args.sender, args.subject, a.dir, 10);
         
         return SCommandResponse.Pass;
     }

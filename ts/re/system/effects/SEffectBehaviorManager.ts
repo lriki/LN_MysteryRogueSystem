@@ -42,11 +42,11 @@ export class SEffectBehaviorManager {
 
 /*
 export abstract class LSkillBehavior {
-    abstract onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void;
+    abstract onPerforme(skillId: DSkillDataId, entity: LEntity, cctx: SCommandContext): void;
 }
 
 export class LNormalAttackSkillBehavior extends LSkillBehavior {
-    onPerforme(skillId: DSkillDataId, entity: LEntity, context: SCommandContext): void {
+    onPerforme(skillId: DSkillDataId, entity: LEntity, cctx: SCommandContext): void {
 
         const skill = REData.skills[skillId];
         const subject = entity.getBehavior(LBattlerBehavior);

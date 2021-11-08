@@ -44,17 +44,17 @@ export class LConfusionAI extends LCharacterAI {
         return i;
     }
     
-    public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult {
         // 方向決定
-        const dir = context.random().select(UMovement.directions);
+        const dir = cctx.random().select(UMovement.directions);
 
         // どのような理由があれ、向きは変更する
-        context.postActivity(LActivity.makeDirectionChange(self, dir));
+        cctx.postActivity(LActivity.makeDirectionChange(self, dir));
 
         // 移動してみる。移動出来たら行動を消費する。
         if (UMovement.checkPassageToDir(self, dir)) {
-            context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-            context.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
             return SPhaseResult.Handled;
         }
 
@@ -69,11 +69,11 @@ export class LConfusionAI extends LCharacterAI {
         }
         
         // ここまで来てしまったら何もせず待機行動。
-        context.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenType.Major);
         return SPhaseResult.Handled;
     }
     
-    public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult {
 
         if (this._candidateSkillActions.length > 0) {
             const action = this._candidateSkillActions[0];
@@ -81,15 +81,15 @@ export class LConfusionAI extends LCharacterAI {
             
             // 攻撃候補が有効なまま存在していれば、相手の方を向いて攻撃
             if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[action.skillId], false, [target])) {
-                context.postActivity(LActivity.makeDirectionChange(self,  UMovement.getLookAtDir(self, target)));
-                context.postActivity(LActivity.makePerformSkill(self, RESystem.skills.normalAttack));
+                cctx.postActivity(LActivity.makeDirectionChange(self,  UMovement.getLookAtDir(self, target)));
+                cctx.postActivity(LActivity.makePerformSkill(self, RESystem.skills.normalAttack));
             }
             
             this._candidateSkillActions.shift();
         }
         
         // 攻撃の成否に関わらず行動を消費する。
-        context.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenType.Major);
         return SPhaseResult.Handled;
     }
 }

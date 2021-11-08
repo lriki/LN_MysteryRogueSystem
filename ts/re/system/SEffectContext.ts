@@ -101,18 +101,18 @@ export class SEffectContext {
         return this._effectorFact;
     }
 
-    public applyWithWorth(commandContext: SCommandContext, targets: LEntity[]): void {
+    public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): void {
         //let deadCount = 0;
         for (const target of targets) {
             const effect = this._effectorFact.selectEffect(target);
 
-            if (target.previewRejection(commandContext, { kind: "Effect", effect: effect.data() })) {
+            if (target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
                 // Main Effect
-                this.applyEffectToTarget(commandContext, effect, target);
+                this.applyEffectToTarget(cctx, effect, target);
                 // Sub Effects
                 for (const subEffect of this._effectorFact.subEffects()) {
                     for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
-                        this.applyEffectToTarget(commandContext, subEffect.effect, subTarget);
+                        this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
                     }
                 }
             }
@@ -120,9 +120,9 @@ export class SEffectContext {
         }
     }
 
-    private applyEffectToTarget(commandContext: SCommandContext, effect: SEffect, target: LEntity): void {
+    private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity): void {
 
-        const result = this.applyWithHitTest(commandContext, effect, target);
+        const result = this.applyWithHitTest(cctx, effect, target);
         
         // ここで Flush している理由は次の通り。
         // 1. ダメージを個々に表示したい
@@ -133,7 +133,7 @@ export class SEffectContext {
         // 例えば「Aは合計でXXXのダメージを受けた」といったように後でまとめて表示する場合はこの処理はいらない。
         //
         // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
-        commandContext.postEffectResult(target);
+        cctx.postEffectResult(target);
 
         if (target.isDeathStateAffected()) {
             //deadCount++;
@@ -145,7 +145,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private applyWithHitTest(commandContext: SCommandContext, effect: SEffect, target: LEntity): LEffectResult {
+    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -160,7 +160,7 @@ export class SEffectContext {
             const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
             const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
             if (rmmzAnimationId > 0) {
-                commandContext.postAnimation(target, rmmzAnimationId, true);
+                cctx.postAnimation(target, rmmzAnimationId, true);
              }
         }
 
@@ -176,12 +176,12 @@ export class SEffectContext {
             result.physical = effect.isPhysical();
 
             if (result.isHit()) {
-                this.applyCore(commandContext, effect, target, result);
+                this.applyCore(cctx, effect, target, result);
             }
             //this.updateLastTarget(target);
         }
         else {
-            this.applyCore(commandContext, effect, target, result);
+            this.applyCore(cctx, effect, target, result);
         }
 
 
@@ -212,7 +212,7 @@ export class SEffectContext {
         }
 
         {
-            commandContext.post(target, effect.subject(), new SEffectSubject(this._effectorFact.subject()), undefined, onEffectResult);
+            cctx.post(target, effect.subject(), new SEffectSubject(this._effectorFact.subject()), undefined, onEffectResult);
         }
 
         return result;
@@ -301,13 +301,13 @@ export class SEffectContext {
         return true;
     }
 
-    private applyCore(commandContext: SCommandContext, effect: SEffect, target: LEntity, result: LEffectResult): void {
+    private applyCore(cctx: SCommandContext, effect: SEffect, target: LEntity, result: LEffectResult): void {
 
         // Override?
         {
             let result = SCommandResponse.Pass;
             target.iterateBehaviorsReverse(b => {
-                result = b.onPreApplyEffect(commandContext, target, effect);
+                result = b.onPreApplyEffect(cctx, target, effect);
                 return result == SCommandResponse.Pass;
             });
             if (result != SCommandResponse.Pass) return; 
@@ -319,8 +319,8 @@ export class SEffectContext {
         }
         
         const applyer = new SEffectApplyer(effect, this._rand);
-        applyer.apply(commandContext, effect.targetModifier(), target);
-        applyer.apply(commandContext, this._effectorFact.selfModifier(), this._effectorFact.subject());
+        applyer.apply(cctx, effect.targetModifier(), target);
+        applyer.apply(cctx, this._effectorFact.selfModifier(), this._effectorFact.subject());
     }
 
 

@@ -58,7 +58,7 @@ export class LGrabFootBehavior extends LBehavior {
         REGame.eventServer.unsubscribe(REBasics.events.preWalk, this);
     }
 
-    onEvent(context: SCommandContext, eventId: DEventId, args: any): LEventResult {
+    onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
         if (eventId == REBasics.events.preWalk) {
@@ -80,8 +80,8 @@ export class LGrabFootBehavior extends LBehavior {
 
             if (e.walker.entityId().equals(this._targetId)) {
                 self.dir = UMovement.getLookAtDir(self, e.walker);
-                context.postSequel(self, REBasics.sequels.attack);
-                context.postMessage(tr2("%1は身動きが取れない！").format(UName.makeUnitName(e.walker)));
+                cctx.postSequel(self, REBasics.sequels.attack);
+                cctx.postMessage(tr2("%1は身動きが取れない！").format(UName.makeUnitName(e.walker)));
                 return LEventResult.Handled;
             }
         }

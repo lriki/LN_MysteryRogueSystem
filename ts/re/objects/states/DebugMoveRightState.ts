@@ -14,7 +14,7 @@ export class LDebugMoveRightState extends LBehavior {
         return b
     }
 
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
@@ -26,13 +26,13 @@ export class LDebugMoveRightState extends LBehavior {
 
 
             if (dir != 0 && REGame.map.checkPassage(self, dir, MovingMethod.Walk)) {
-                context.postActivity(LActivity.makeDirectionChange(self, dir));
-                context.postActivity(LActivity.makeMoveToAdjacent(self, dir));
+                cctx.postActivity(LActivity.makeDirectionChange(self, dir));
+                cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }
-            context.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
             return SPhaseResult.Handled;
         }
 
-        return super.onDecisionPhase(context, self, phase);
+        return super.onDecisionPhase(cctx, self, phase);
     }
 }

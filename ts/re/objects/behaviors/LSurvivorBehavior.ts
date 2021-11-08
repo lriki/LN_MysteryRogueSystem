@@ -22,7 +22,7 @@ export class LSurvivorBehavior extends LBehavior {
         //battler.setupExParam(DBasics.params.fp);
     }
 
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
 
@@ -32,17 +32,17 @@ export class LSurvivorBehavior extends LBehavior {
 
             switch (self.actualParam(REBasics.params.fp)) {
                 case 3:
-                    //context.postBalloon(entity, 6, false);
-                    context.postMessage(tr2("だめだ！ もう倒れそうだ！"));
-                    //context.postWait(entity, 10);
+                    //cctx.postBalloon(entity, 6, false);
+                    cctx.postMessage(tr2("だめだ！ もう倒れそうだ！"));
+                    //cctx.postWait(entity, 10);
                     break;
                 case 2:
-                    context.postMessage(tr2("早く・・・なにか食べないと・・・"))
-                    //context.postWait(entity, 10);
+                    cctx.postMessage(tr2("早く・・・なにか食べないと・・・"))
+                    //cctx.postWait(entity, 10);
                     break;
                 case 1:
-                    context.postMessage(tr2("飢え死にしてしまう！"));
-                    //context.postWait(entity, 10);
+                    cctx.postMessage(tr2("飢え死にしてしまう！"));
+                    //cctx.postWait(entity, 10);
                     break;
             } 
 
@@ -53,7 +53,7 @@ export class LSurvivorBehavior extends LBehavior {
                 self.gainActualParam(REBasics.params.hp, -1);
 
                 if (self.isDeathStateAffected()) {
-                    context.postMessage(tr2("おなかがすいて倒れた・・・"));
+                    cctx.postMessage(tr2("おなかがすいて倒れた・・・"));
                 }
             }
             else {

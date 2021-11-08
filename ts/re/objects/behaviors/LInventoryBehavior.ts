@@ -181,7 +181,7 @@ export class LInventoryBehavior extends LBehavior {
         }
     }
 
-    onPermanentDeath(context: SCommandContext, self: LEntity): void {
+    onPermanentDeath(cctx: SCommandContext, self: LEntity): void {
     }
     
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
@@ -207,7 +207,7 @@ export class LInventoryBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    // onPreviewEffectRejection(context: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
+    // onPreviewEffectRejection(cctx: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
         
     //     let result = true;
     //     this.iterateItems(item => {
@@ -224,7 +224,7 @@ export class LInventoryBehavior extends LBehavior {
     //     return SCommandResponse.Pass;
     // }
 
-    // onPreviewEffectBehaviorRejection(context: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
+    // onPreviewEffectBehaviorRejection(cctx: SCommandContext, self: LEntity, id: DEffectBehaviorId): SCommandResponse {
         
     //     let result = true;
     //     this.iterateItems(item => {
@@ -241,7 +241,7 @@ export class LInventoryBehavior extends LBehavior {
     //     return SCommandResponse.Pass;
     // }
     /*
-    onRemoveEntityFromWhereabouts(context: SCommandContext, entity: LEntity): REResponse {
+    onRemoveEntityFromWhereabouts(cctx: SCommandContext, entity: LEntity): REResponse {
         const index = this._entities.findIndex(x => x.equals(entity.entityId()));
         if (index >= 0) {
             assert(entity.parentEntity() == this.ownerEntity());

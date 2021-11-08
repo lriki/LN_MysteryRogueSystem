@@ -67,8 +67,8 @@ import { LEntity } from "../LEntity";
 export abstract class LCharacterAI {
     public abstract clone(): LCharacterAI;
 
-    public abstract thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult;
+    public abstract thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult;
     
-    public abstract thinkAction(context: SCommandContext, self: LEntity): SPhaseResult;
+    public abstract thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult;
 
 }

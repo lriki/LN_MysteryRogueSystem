@@ -16,7 +16,7 @@ export class LStructure {
         return this._id;
     }
 
-    onEntityLocated(context: SCommandContext, entity: LEntity): void {
+    onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
 
     }
 }

@@ -28,22 +28,22 @@ export class LRatedRandomAI extends LCharacterAI {
         return i;
     }
     
-    public thinkMoving(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult {
 
         // ターンの最初に、今回はランダム移動なのか普通の行動かのか決める
-        this._rundomTurn = (context.random().nextIntWithMax(100) < this._randomRate);
+        this._rundomTurn = (cctx.random().nextIntWithMax(100) < this._randomRate);
 
         if (this._rundomTurn) {
-            return this._randomAI.thinkMoving(context, self);
+            return this._randomAI.thinkMoving(cctx, self);
         }
         else {
-            return this._standardAI.thinkMoving(context, self);
+            return this._standardAI.thinkMoving(cctx, self);
         }
     }
     
-    public thinkAction(context: SCommandContext, self: LEntity): SPhaseResult {
+    public thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult {
         assert(!this._rundomTurn);
-        return this._standardAI.thinkMoving(context, self);
+        return this._standardAI.thinkMoving(cctx, self);
     }
 }
 

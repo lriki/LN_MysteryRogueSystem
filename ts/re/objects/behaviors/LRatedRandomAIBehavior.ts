@@ -37,19 +37,19 @@ export class LRatedRandomAIBehavior extends LBehavior {
         characterAIs.push(this._characterAI);
     }
 
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
 
         if (phase == DecisionPhase.Manual) {
             throw new Error("Not implemented.");
         }
         else if (phase == DecisionPhase.AIMinor) {
-            return this._characterAI.thinkMoving(context, self);
+            return this._characterAI.thinkMoving(cctx, self);
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             return SPhaseResult.Pass;
         }
         else if (phase == DecisionPhase.AIMajor) {
-            return this._characterAI.thinkAction(context, self);
+            return this._characterAI.thinkAction(cctx, self);
         }
 
         return SPhaseResult.Pass;

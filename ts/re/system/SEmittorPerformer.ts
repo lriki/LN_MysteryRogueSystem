@@ -109,14 +109,14 @@ export class SEmittorPerformer {
         return this;
     }
 
-    public performe(context: SCommandContext, onPerformed?: SOnPerformedFunc | undefined): void {
+    public performe(cctx: SCommandContext, onPerformed?: SOnPerformedFunc | undefined): void {
         this._onPerformed = onPerformed;
 
         if (this._skillId > 0) {
-            this.performeSkill(context, this._performer, this._skillId);
+            this.performeSkill(cctx, this._performer, this._skillId);
         }
         else if (this._emittor) {
-            this.performeEffect(context, this._performer, this._emittor, (this._effectDirection > 0) ? this._effectDirection : this._performer.dir, this._itemEntity,  this._selectedTargetItems, 0);
+            this.performeEffect(cctx, this._performer, this._emittor, (this._effectDirection > 0) ? this._effectDirection : this._performer.dir, this._itemEntity,  this._selectedTargetItems, 0);
         }
         else {
             throw new Error("Unreachable.");
@@ -133,7 +133,7 @@ export class SEmittorPerformer {
      * 
      * 単純にスキルを発動する。地形や相手の状態による成否はこの中で判断する。
      */
-    private performeSkill(context: SCommandContext, performer: LEntity, skillId: DSkillId): void {
+    private performeSkill(cctx: SCommandContext, performer: LEntity, skillId: DSkillId): void {
 
         const skill = REData.skills[skillId];
         ///const effector = new SEffectorFact(entity, skill.effect);
@@ -143,15 +143,15 @@ export class SEmittorPerformer {
         // Attack という Action よりは、「スキル発動」という Action を実行する方が自然かも。
 
         if (skill.message1.length > 0) {
-            context.postMessage(tr2(skill.message1).format(UName.makeUnitName(performer), skill.name));
+            cctx.postMessage(tr2(skill.message1).format(UName.makeUnitName(performer), skill.name));
         }
         if (skill.message2.length > 0) {
-            context.postMessage(tr2(skill.message2).format(UName.makeUnitName(performer), skill.name));
+            cctx.postMessage(tr2(skill.message2).format(UName.makeUnitName(performer), skill.name));
         }
 
         const effect = skill.emittor();
         if (effect) {
-            this.performeEffect(context, performer, effect, performer.dir, undefined, [], skillId);
+            this.performeEffect(cctx, performer, effect, performer.dir, undefined, [], skillId);
         }
     }
 
@@ -235,18 +235,18 @@ export class SEmittorPerformer {
         }
     }
 
-    private raiseSkillEmitted(context: SCommandContext, performer: LEntity, targets: LEntity[], skillId: DSkillId): void {
+    private raiseSkillEmitted(cctx: SCommandContext, performer: LEntity, targets: LEntity[], skillId: DSkillId): void {
         const args: SkillEmittedArgs = {
             performer: performer,
             targets: targets,
             skillId: skillId,
         };
-        REGame.eventServer.publish(context, REBasics.events.skillEmitted, args)
+        REGame.eventServer.publish(cctx, REBasics.events.skillEmitted, args)
     }
 
-    private callSkillPerformed(context: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillId): void {
+    private callSkillPerformed(cctx: SCommandContext, entity: LEntity, targets: LEntity[], skillId: DSkillId): void {
         entity.iterateBehaviorsReverse(b => {
-            b.onSkillPerformed(context, entity, targets, skillId);
+            b.onSkillPerformed(cctx, entity, targets, skillId);
             return true;
         });
     }
@@ -269,13 +269,13 @@ export class SEmittorPerformer {
     
     /**
      * 
-     * @param context 
+     * @param cctx 
      * @param performer 
      * @param emittor 
      * @param itemData 杖など
      */
     private performeEffect(
-        context: SCommandContext,
+        cctx: SCommandContext,
         performer: LEntity,
         emittor: DEmittor,
         effectDir: number,
@@ -296,10 +296,10 @@ export class SEmittorPerformer {
         // 発動側アニメーション
         {
             if (emittor.selfAnimationId > 0) {
-                context.postAnimation(performer, emittor.selfAnimationId, true);
+                cctx.postAnimation(performer, emittor.selfAnimationId, true);
             }
             if (emittor.selfSequelId > 0) {
-                context.postSequel(performer, emittor.selfSequelId, true);
+                cctx.postSequel(performer, emittor.selfSequelId, true);
             }
         }
 
@@ -313,34 +313,34 @@ export class SEmittorPerformer {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
             }
-            const effectContext = new SEffectContext(effectSubject, context.random());
+            const effectContext = new SEffectContext(effectSubject, cctx.random());
     
             // if (emittor.effect.rmmzAnimationId) {
-            //    context.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
+            //    cctx.postAnimation(performer, emittor.effect.rmmzAnimationId, true);
             // }
 
             const targets = [performer];
     
             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-            context.postCall(() => {
-                effectContext.applyWithWorth(context, targets);
-                this.onPerformed(context, targets);
+            cctx.postCall(() => {
+                effectContext.applyWithWorth(cctx, targets);
+                this.onPerformed(cctx, targets);
                 if (skillId > 0) {
-                    this.raiseSkillEmitted(context, performer, targets, skillId);
-                    this.callSkillPerformed(context, performer, targets, skillId);
+                    this.raiseSkillEmitted(cctx, performer, targets, skillId);
+                    this.callSkillPerformed(cctx, performer, targets, skillId);
                 }
             });
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
 
             // TODO: ユーザー側モーション
-            context.postSequel(performer, REBasics.sequels.attack);
+            cctx.postSequel(performer, REBasics.sequels.attack);
             
             // TODO: 正面3方向攻撃とかの場合はここをループする
             //for ()
             {
                 // 攻撃対象決定
-                //const target = context.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
+                //const target = cctx.findReactorEntityInBlock(UMovement.getFrontBlock(performer), DBasics.actions.AttackActionId);
                 const targets = this.getTargetInBlock(UMovement.getFrontBlock(performer), emittor.scope);
                 for (const target of targets)  {
 
@@ -349,7 +349,7 @@ export class SEmittorPerformer {
                         effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                         effectSubject.withItem(itemEntity);
                     }
-                    const effectContext = new SEffectContext(effectSubject, context.random());
+                    const effectContext = new SEffectContext(effectSubject, cctx.random());
                     //effectContext.addEffector(effector);
 
 
@@ -359,16 +359,16 @@ export class SEmittorPerformer {
                     else {
                         // const rmmzAnimationId = (emittor.effect.rmmzAnimationId < 0) ? subject.attackAnimationId() : emittor.effect.rmmzAnimationId;
                         // if (rmmzAnimationId > 0) {
-                        //    context.postAnimation(target, rmmzAnimationId, true);
+                        //    cctx.postAnimation(target, rmmzAnimationId, true);
                         // }
                         
                         // TODO: SEffectSubject はダミー
-                        context.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
+                        cctx.post(target, performer, new SEffectSubject(performer), {effectContext: effectContext}, onAttackReaction)
                             .then(() => {
-                                this.onPerformed(context, [target]);
+                                this.onPerformed(cctx, [target]);
                                 if (skillId > 0) {
-                                    //this.raiseSkillEmitted(context, performer, [target], skillId);
-                                    this.callSkillPerformed(context, performer, [target], skillId);
+                                    //this.raiseSkillEmitted(cctx, performer, [target], skillId);
+                                    this.callSkillPerformed(cctx, performer, [target], skillId);
                                 }
                                 return true;
                             });
@@ -376,16 +376,16 @@ export class SEmittorPerformer {
                 }
                 
                 // target が無くても、スキル発動したことは伝える
-                if (skillId > 0) this.raiseSkillEmitted(context, performer, targets, skillId);
+                if (skillId > 0) this.raiseSkillEmitted(cctx, performer, targets, skillId);
             }
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
-            this.performeEffect_StraightProjectile(context, performer, emittor, itemEntity, performer.x, performer.y, performer.dir);
+            this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, performer.x, performer.y, performer.dir);
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.ReceiveProjectile) {
             const dir = this._effectDirection != 0 ? this._effectDirection : performer.dir;
             const block = USearch.findFirstWallInDirection(performer.x, performer.y, dir);
-            this.performeEffect_StraightProjectile(context, performer, emittor, itemEntity, block.x(), block.y(), UMovement.reverseDir(dir));
+            this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, block.x(), block.y(), UMovement.reverseDir(dir));
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
             const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
@@ -393,11 +393,11 @@ export class SEmittorPerformer {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
             }
-            const effectContext = new SEffectContext(effectSubject, context.random());
+            const effectContext = new SEffectContext(effectSubject, cctx.random());
 
 
-            effectContext.applyWithWorth(context, selectedItems);
-            this.onPerformed(context, selectedItems);
+            effectContext.applyWithWorth(cctx, selectedItems);
+            this.onPerformed(cctx, selectedItems);
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Around || emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter) {
             const withCenter = (emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter);
@@ -409,7 +409,7 @@ export class SEmittorPerformer {
                 }
             });
 
-            this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
+            this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Center) {
             const targets: LEntity[] = [];
@@ -421,7 +421,7 @@ export class SEmittorPerformer {
                     }
                 }
             }
-            this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
+            this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Room) {
             const targets: LEntity[] = [];
@@ -430,14 +430,14 @@ export class SEmittorPerformer {
                     targets.push(entity);
                 };
             });
-            this.applyEffect(context, performer, emittor, targets, skillId, itemEntity);
+            this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
         else {
             throw new Error("Not implemented.");
         }
     }
     private performeEffect_StraightProjectile(
-        context: SCommandContext,
+        cctx: SCommandContext,
         performer: LEntity,
         emittor: DEmittor,
         itemEntity: LEntity | undefined,
@@ -466,24 +466,24 @@ export class SEmittorPerformer {
             actualEffectSet = this._projectilePriorityEffectSet;
         }
 
-        LProjectableBehavior.startMoveAsEffectProjectile(context, bullet, new SEffectSubject(performer), dir, emittor.scope.length, actualEffectSet);
+        LProjectableBehavior.startMoveAsEffectProjectile(cctx, bullet, new SEffectSubject(performer), dir, emittor.scope.length, actualEffectSet);
     }
 
-    private applyEffect(context: SCommandContext, performer: LEntity, emittor: DEmittor, targets: LEntity[], skillId: DSkillId, itemEntity: LEntity | undefined) {
+    private applyEffect(cctx: SCommandContext, performer: LEntity, emittor: DEmittor, targets: LEntity[], skillId: DSkillId, itemEntity: LEntity | undefined) {
         
         const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
         if (itemEntity) {
             effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
             effectSubject.withItem(itemEntity);
         }
-        const effectContext = new SEffectContext(effectSubject, context.random());
+        const effectContext = new SEffectContext(effectSubject, cctx.random());
         
-        context.postCall(() => {
-            effectContext.applyWithWorth(context, targets);
-            this.onPerformed(context, targets);
+        cctx.postCall(() => {
+            effectContext.applyWithWorth(cctx, targets);
+            this.onPerformed(cctx, targets);
             if (skillId > 0) {
-                this.raiseSkillEmitted(context, performer, targets, skillId);
-                this.callSkillPerformed(context, performer, targets, skillId);
+                this.raiseSkillEmitted(cctx, performer, targets, skillId);
+                this.callSkillPerformed(cctx, performer, targets, skillId);
             }
         });
     }

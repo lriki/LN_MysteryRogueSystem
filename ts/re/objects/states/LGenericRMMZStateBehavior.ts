@@ -133,13 +133,13 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
     */
     
-    onDecisionPhase(context: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
+    onDecisionPhase(cctx: SCommandContext, self: LEntity, phase: DecisionPhase): SPhaseResult {
         if (this._characterAI) {
             if (phase == DecisionPhase.AIMinor) {
-                return this._characterAI.thinkMoving(context, self);
+                return this._characterAI.thinkMoving(cctx, self);
             }
             else if (phase == DecisionPhase.AIMajor) {
-                return this._characterAI.thinkAction(context, self);
+                return this._characterAI.thinkAction(cctx, self);
             }
         }
 
@@ -162,7 +162,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             }
             else if (effect.restriction == DStateRestriction.NotAction) {
 
-                context.postConsumeActionToken(self, LActionTokenType.Major);
+                cctx.postConsumeActionToken(self, LActionTokenType.Major);
 
                 // 行動スキップ
                 return SPhaseResult.Handled;
@@ -178,7 +178,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         }
     }
     
-    onActivity(self: LEntity, context: SCommandContext, actx: SActivityContext): SCommandResponse {
+    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const state = this.state();
         const traits: IDataTrait[] = [];
         state.collectTraits(self, traits);
@@ -187,13 +187,13 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         if (traits.find(t => t.code == REBasics.traits.SealActivity && t.dataId == actx.activity().actionId())) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
-            context.postMessage(data.message3.format(targetName));
+            cctx.postMessage(data.message3.format(targetName));
             return SCommandResponse.Canceled;
         }
         return SCommandResponse.Pass;
     }
 
-    onPreprocessActivity(context: SCommandContext, activity: LActivity): LActivity {
+    onPreprocessActivity(cctx: SCommandContext, activity: LActivity): LActivity {
         const effect = this.stateEffect();
         if (effect.restriction == DStateRestriction.AttackToOther) {
             const unit = activity.actor().findEntityBehavior(LUnitBehavior);
@@ -201,7 +201,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
                 // 歩行移動であれば、方向をランダムにする
                 if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
-                    const dir = context.random().select(UMovement.directions);
+                    const dir = cctx.random().select(UMovement.directions);
                     activity
                         .withEffectDirection(dir)
                         .withEntityDirection(dir);
@@ -210,7 +210,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
                 // 通常攻撃であれば、方向をランダムにする
                 if (activity.actionId() == REBasics.actions.performSkill && activity.skillId() == RESystem.skills.normalAttack) {
-                    const dir = context.random().select(UMovement.directions);
+                    const dir = cctx.random().select(UMovement.directions);
                     activity.withEntityDirection(dir);
                     return activity;
                 }
