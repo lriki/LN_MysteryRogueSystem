@@ -13,6 +13,6 @@ null,
 {"id":11,"animationId":2,"description":"ウッドアロー","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":102,"name":"木の矢","note":"<RE-Key:kウッドアロー>\n<RE-Prefab:pウッドアロー>\n<RE-Kind:Arrow>","params":[0,0,2,0,0,0,0,0],"price":0,"wtypeId":0},
 {"id":12,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":102,"name":"アイアンアロー","note":"<RE-Key:kアイアンアロー>\n<RE-Prefab:pアイアンアロー>\n<RE-Kind:Arrow>","params":[0,0,10,0,0,0,0,0],"price":0,"wtypeId":0},
 {"id":13,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":102,"name":"シルバーアロー","note":"<RE-Key:kシルバーアロー>\n<RE-Prefab:pシルバーアロー>\n<RE-Kind:Arrow>","params":[0,0,2,0,0,0,0,0],"price":0,"wtypeId":0},
-{"id":14,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
+{"id":14,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"毒矢","note":"<RE-Key:kItem_毒矢>\n<RE-Prefab:kPrefab_毒矢>\n<RE-Kind:Arrow>","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0},
 {"id":15,"animationId":0,"description":"","etypeId":1,"traits":[{"code":31,"dataId":1,"value":0},{"code":22,"dataId":0,"value":0}],"iconIndex":0,"name":"","note":"","params":[0,0,0,0,0,0,0,0],"price":0,"wtypeId":0}
 ]
