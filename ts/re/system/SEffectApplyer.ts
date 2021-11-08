@@ -449,6 +449,8 @@ export class SEffectApplyer {
             b.onApplyTargetEffect(cctx, id, this._effect.fact().subject(), modifier, target);
         }
         this.applyItemUserEffect(target);
+        
+        target.refreshConditions();
     }
 
     
@@ -734,7 +736,6 @@ export class SEffectApplyer {
 
         if (this._rand.nextIntWithMax(100) < (chance * 100)) {
             target.addState(effect.dataId);
-            target.refreshConditions();
             result.makeSuccess();
 
             if (target.isStateAddable(effect.dataId) && REData.states[effect.dataId].deadState) {
