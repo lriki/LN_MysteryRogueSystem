@@ -8,6 +8,7 @@ markdown_extensions:
     - pymdownx.inlinehilite
     - pymdownx.superfences
     - pymdownx.snippets
+    - attr_list
 
 theme:
     name: material
@@ -22,6 +23,11 @@ theme:
     
 nav:
     - Home: index.md
+    - 入門:
+        - index: tutorial/index.md
+        - 1: tutorial/2-Tutorial.md
+        - test:
+            - index: tutorial/index.md
     - Manual:
         - index: manual/index.md
         - ドロップアイテム: manual/DropItem.md
