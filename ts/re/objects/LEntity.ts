@@ -1422,7 +1422,7 @@ export class LEntity extends LObject
     public previewRejection(cctx: SCommandContext, rejection: SRejectionInfo): boolean {
         let result: any = SCommandResponse.Pass;
         this.iterateBehaviorsReverse(b => {
-            result = b.onPreviewRejection(cctx, this, rejection);
+            result = b.onPreviewRejection(this, cctx, rejection);
             return result == SCommandResponse.Pass;
         });
         return result != SCommandResponse.Canceled;

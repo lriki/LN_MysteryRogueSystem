@@ -260,7 +260,7 @@ export class SEmittorPerformer {
             const emittor = this._emittor;
             for (const target of targets) {
                 target.iterateBehaviorsReverse(b => {
-                    return b.onEffectPerformed(cctx, target, emittor) == SCommandResponse.Pass;
+                    return b.onEffectPerformed(target, cctx, emittor) == SCommandResponse.Pass;
                 });
             }
         }

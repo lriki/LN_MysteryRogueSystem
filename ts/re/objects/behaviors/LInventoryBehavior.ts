@@ -191,11 +191,11 @@ export class LInventoryBehavior extends LBehavior {
         });
     }
 
-    onPreviewRejection(context: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse {
+    onPreviewRejection(self: LEntity, cctx: SCommandContext, rejection: SRejectionInfo): SCommandResponse {
         let result = true;
         this.iterateItems(item => {
             if (item.data().isTraitCharmItem) {
-                if (!item.previewRejection(context, rejection)) {
+                if (!item.previewRejection(cctx, rejection)) {
                     result = false;
                     return false;
                 }

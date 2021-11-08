@@ -20,7 +20,7 @@ export class LStumblePreventionBehavior extends LBehavior {
         return b
     }
 
-    onPreviewRejection(cctx: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse {
+    onPreviewRejection(self: LEntity, cctx: SCommandContext, rejection: SRejectionInfo): SCommandResponse {
         if (rejection.kind == "Effect") {
             if (rejection.effect.sourceKey == "kItem_転び石") {
                 return this.rejectStumble(cctx, self);

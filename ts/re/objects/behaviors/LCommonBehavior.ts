@@ -45,7 +45,7 @@ export class LCommonBehavior extends LBehavior {
         return SCommandResponse.Handled;
     }
     
-    onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
+    onEffectPerformed(self: LEntity, cctx: SCommandContext, emittor: DEmittor): SCommandResponse {
         const data = self.data();
 
         if (this.reservedCounterActionIndex < 0) {

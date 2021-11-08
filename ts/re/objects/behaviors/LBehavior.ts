@@ -434,9 +434,9 @@ export abstract class LBehavior extends LObject {
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void { }
 
     /** EffectBehavior で狙われたとき。効果を防止するには Cancel を返す。 */
-    onPreviewRejection(context: SCommandContext, self: LEntity, rejection: SRejectionInfo): SCommandResponse { return SCommandResponse.Pass; }
+    onPreviewRejection(self: LEntity, cctx: SCommandContext, rejection: SRejectionInfo): SCommandResponse { return SCommandResponse.Pass; }
 
-    onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse { return SCommandResponse.Pass; }
+    onEffectPerformed(self: LEntity, cctx: SCommandContext, emittor: DEmittor): SCommandResponse { return SCommandResponse.Pass; }
     onCounterAction(self: LEntity, cctx: SCommandContext, data: DCounterAction): SCommandResponse { return SCommandResponse.Pass; }
     
     //public removeThisState(): void {

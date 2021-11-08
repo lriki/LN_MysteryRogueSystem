@@ -198,7 +198,7 @@ export class LTrapBehavior extends LBehavior {
 
     */
    //_required = false;
-    onEffectPerformed(cctx: SCommandContext, self: LEntity, emittor: DEmittor): SCommandResponse {
+    onEffectPerformed(self: LEntity, cctx: SCommandContext, emittor: DEmittor): SCommandResponse {
 
         // if (!this._recharging) {
         //     this._required = true;
