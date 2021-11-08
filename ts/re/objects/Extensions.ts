@@ -18,6 +18,10 @@ declare global {
         back(): T;
         backOrUndefined(): T | undefined;
     }
+
+    // interface ReadonlyArray<T> {
+    //     countIf(pred: (a: T) => boolean): number;
+    // }
 }
 
 Array.prototype.pushArray = function<T>(ary: readonly T[]): void {
@@ -101,5 +105,13 @@ Array.prototype.backOrUndefined = function<T>(): T | undefined {
     if (this.length <= 0) return undefined;
     return this[this.length - 1];
 }
+
+// ReadonlyArray.prototype.countIf = function<T>(pred: (a: T) => boolean): number {
+//     let result = 0;
+//     for (const a of this) {
+//         if (pred(a)) result++;
+//     }
+//     return result;
+// }
 
 export {}

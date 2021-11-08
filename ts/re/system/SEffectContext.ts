@@ -15,6 +15,7 @@ import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffe
 import { onEffectResult } from "../objects/internal";
 import { SCommandResponse } from "./RECommand";
 import { RESystem } from "./RESystem";
+import { assert } from "../Common";
 
 
 export enum SEffectIncidentType {
@@ -120,6 +121,7 @@ export class SEffectContext {
     }
 
     private applyEffectToTarget(commandContext: SCommandContext, effect: SEffect, target: LEntity): void {
+
         const result = this.applyWithHitTest(commandContext, effect, target);
         
         // ここで Flush している理由は次の通り。

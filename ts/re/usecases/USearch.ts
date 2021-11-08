@@ -46,17 +46,24 @@ export class USearch {
         const y1 = my - length;
         const x2 = mx + length;
         const y2 = my + length;
+
+        /*
+            以下4つの for では次のように列挙を担当する。
+            112
+            4 2
+            433
+        */
         
-        for (let x = x1; x <= x2; x++) {
+        for (let x = x1; x < x2; x++) {
             func(x, y1);
         }
-        for (let y = y1; y <= y2; y++) {
+        for (let y = y1; y < y2; y++) {
             func(x2, y);
         }
-        for (let x = x2; x >= x1; x--) {
+        for (let x = x2; x > x1; x--) {
             func(x, y2);
         }
-        for (let y = y2; y >= y1; y--) {
+        for (let y = y2; y > y1; y--) {
             func(x1, y);
         }
     }

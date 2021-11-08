@@ -490,7 +490,11 @@ export class LEntity extends LObject
 
     public actualParam(paramId: DParameterId): number {
         const param = this._params.param(paramId);
-        return (param) ? this.idealParam(paramId) - param.actualParamDamge() : 0;
+        const value = (param) ? this.idealParam(paramId) - param.actualParamDamge() : 0;
+        
+        const maxValue = this.paramMax(paramId);
+        const minValue = this.paramMin(paramId);
+        return Math.round(value.clamp(minValue, maxValue));
     }
 
     /** 直接設定 */
@@ -536,7 +540,8 @@ export class LEntity extends LObject
         const hpParam = this._params.param(REBasics.params.hp);
         if (hpParam) {
             const dead = !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);//this.isDeathStateAffected();
-            if (dead && this.actualParam(REBasics.params.hp) != 0) {
+            const hp = this.actualParam(REBasics.params.hp);
+            if (dead && hp != 0) {
                 hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp));
                 this.removeAllStates();
             }
@@ -1025,13 +1030,13 @@ export class LEntity extends LObject
      * Entity が機能を果たせる状態にあるか（破棄準備状態であるか）
      * 
      * HP0 となっても直ちに破棄準備状態となるわけではなく、例えば復活草の効果を受けて回復することがある。
-     * その他、仮に不死の Entity がいる場合、HP が 0 になろうともマップにとどまる限りは false となるべき。
+     * その他、仮に不死の Entity がいる場合、HP が 0 になろうともマップにとどまる限りは true となるべき。
      * 
-     * そのためこの値が true の場合は、Entity が完全に機能を停止して World から取り除かれようとしていることを示す。
+     * そのためこの値が false の場合は、Entity が完全に機能を停止して World から取り除かれようとしていることを示す。
      * 各種処理で、こういった Entity を存在しないものとして扱うためにこのフラグを確認する。
      */
     isAlive(): boolean {
-        return !this.isDestroyed();
+        return !this.isDestroyed() || this.isDeathStateAffected();
     }
 
     /**
