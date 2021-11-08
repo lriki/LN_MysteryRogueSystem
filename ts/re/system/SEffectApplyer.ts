@@ -736,6 +736,10 @@ export class SEffectApplyer {
             target.addState(effect.dataId);
             target.refreshConditions();
             result.makeSuccess();
+
+            if (target.isStateAddable(effect.dataId) && REData.states[effect.dataId].deadState) {
+                result.paramEffects2 = [];
+            }
         }
     }
     

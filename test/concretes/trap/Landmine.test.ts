@@ -85,11 +85,8 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const m1 = REGame.message;
     const m2 = REGame.messageHistory;
 
-    enemy1.isAlive();
-    
     const hp2 = player1.actualParam(REBasics.params.hp);
     expect(hp2).toBe(hp1 / 4);  // HP半分を２回受けている
     expect(player1.isDestroyed()).toBe(false);  // 消滅していないこと
@@ -97,6 +94,7 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     expect(trap2.isDestroyed()).toBe(false);    // 消滅していないこと
     expect(trap2.getEntityBehavior(LTrapBehavior).exposed()).toBe(true);    // 露出していること
     expect(enemy1.isDestroyed()).toBe(true);    // 寄ってきたモンスターは爆発に巻き込まれて即死
+    expect(m2.texts().filter(x => x.includes("ダメージを受けた")).length).toBe(2);    // プレイヤーに対する2回のみダメージ表示がある。
     expect(m2.texts().filter(x => x.includes("倒れた")).length).toBe(1);    // モンスターに対して複数回 "倒れた" が表示されないこと。
 });
 
