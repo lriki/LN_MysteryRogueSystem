@@ -420,6 +420,16 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kItem_毒矢";
+                
+                emittor.effectSet.effects[0].qualifyings.parameterQualifyings.push({
+                    parameterId: REBasics.params.pow,
+                    applyTarget: DParameterApplyTarget.Current,
+                    elementId: 0,
+                    formula: "1",
+                    applyType: DParameterEffectApplyType.Damage,
+                    variance: 0,
+                    silent: false,
+                });
                 break;
             }
             case "kItem_錆ワナ":

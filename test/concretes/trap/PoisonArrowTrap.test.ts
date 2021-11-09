@@ -38,5 +38,5 @@ test("concretes.trap.PoisonArrowTrap.Basic", () => {
     const hp2 = player1.actualParam(REBasics.params.hp);
     const pow2 = player1.actualParam(REBasics.params.pow);
     expect(hp2 < hp1).toBe(true);  // ダメージを受けている
-    //expect(pow2).toBe(pow1 - 1);    // ちからが減っている
+    expect(pow2).toBe(pow1 - 1);    // ちからが減っている
 });
