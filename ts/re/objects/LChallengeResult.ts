@@ -2,9 +2,9 @@
 /**
  * 冒険の結果。番付データ。
  */
-export class LChallengeResult {
+// export class LChallengeResult {
     
-}
+// }
 
 /*
     死因リスト

@@ -39,98 +39,6 @@ export class RESetup {
                 break;
         }
     }
-
-    public static setupDirectly_State(data: DState) {
-        switch (data.key) {
-            case "kState_UT気配察知":
-                data.effect.traits.push({ code: REBasics.traits.UnitVisitor, dataId: 0, value: 0 });
-                break;
-            case "kState_UnitTest_攻撃必中":
-                data.effect.traits.push({ code: REBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
-                break;
-            case "kState_UnitTest_投擲必中":
-                data.effect.traits.push({ code: REBasics.traits.CertainIndirectAttack, dataId: 0, value: 0 });
-                break;
-            case "kState_UTアイテム擬態":
-                data.effect.behaviors.push("LItemImitatorBehavior");
-                break;
-            case "kState_仮眠2":
-                //data.behaviors.push("LDoze2Behavior");
-                data.effect.traits.push({ code: REBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
-                data.idleSequel = REBasics.sequels.asleep;
-                break;
-            case "kState_UT魔法使い":
-                data.effect.traits.push({ code: REBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
-                data.effect.traits.push({ code: REBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
-                data.effect.traits.push({ code: REBasics.traits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
-                break;
-                /*
-            case "kState_UT速度バフ":
-                data.minBuffLevel = -1;
-                data.maxBuffLevel = 2;
-                data.parameterBuffFormulas[DBasics.params.agi] = "100*slv";
-                break;
-                */
-            case "kState_UT鈍足":
-                data.autoAdditionCondition = "a.agi<0";
-                break;
-            case "kState_UT倍速":
-                data.autoAdditionCondition = "a.agi>=100";
-                break;
-            case "kState_UT3倍速":
-                data.autoAdditionCondition = "a.agi>=200";
-                break;
-            case "kState_UT目つぶし":
-                data.effect.restriction = DStateRestriction.Blind;
-                break;
-            case "kState_UTまどわし":
-                data.effect.behaviors.push("LIllusionStateBehavior");
-                break;
-            case "kState_UTくちなし":
-                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.EatActionId, value: 0 });
-                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.ReadActionId, value: 0 });
-                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.FloorTransfer });
-                break;
-            case "kState_UTかなしばり":
-                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: REBasics.params.hp });
-                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 3" });
-                break;
-            case "kState_UT封印":
-                data.effect.traits.push({ code: REBasics.traits.SealSpecialAbility, dataId: REBasics.actions.EatActionId, value: 0 });
-                break;
-            case "kState_UT透明":
-                data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
-                data.submatchStates.push(REData.getState("kState_UT透明_モンスター").id);
-                break;
-            case "kState_UT透明_モンスター":
-                data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
-                data.effect.matchConditions.kindId = REBasics.entityKinds.MonsterKindId;
-                break;
-            case "kState_UT足つかみ":
-                data.effect.behaviors.push("LGrabFootBehavior");
-                break;
-            case "kState_UT身かわし":
-                data.effect.traits.push({ code: REBasics.traits.CartailDodgePhysicalAttack, dataId: 0, value: 0 });
-                break;
-            case "kState_UT下手投げ":
-                data.effect.traits.push({ code: REBasics.traits.AwfulPhysicalIndirectAttack, dataId: 0, value: 0 });
-                break;
-            case "kState_UT爆発四散":
-                data.deadState  = true;
-                break;
-        }
-    }
-    
-    public static setupDirectly_StateGroup(data: DStateGroup) {
-        switch (data.key) {
-            case "kStateGroup_睡眠系":
-                data.exclusive = true;
-                break;
-            case "kStateGroup_SG速度変化":
-                data.exclusive = true;
-                break;
-        }
-    }
     
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
@@ -160,6 +68,12 @@ export class RESetup {
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kウッドアロー":
+                this.setupArrowCommon(entity);
+                entity.display.stackedName = "%1本の" + entity.display.name;
+                entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
+                entity.addReaction(REBasics.actions.ShootingActionId, 0);
+                break;
+            case "kItem_毒矢":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
@@ -476,6 +390,20 @@ export class RESetup {
                 */
                 break;
             }
+            case "kItem_トラバサミ": {
+                const emittor = entity.emittorSet.mainEmittor();
+                const effect = emittor.effectSet.effects[0];
+                emittor.scope.range = DEffectFieldScopeRange.Center;
+                effect.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UTトラバサミ").id, value1: 1.0, value2: 0});
+                break;
+            }
+            case "kItem_バネ": {
+                const emittor = entity.emittorSet.mainEmittor();
+                const effect = emittor.effectSet.effects[0];
+                emittor.scope.range = DEffectFieldScopeRange.Center;
+                effect.qualifyings.effectBehaviors.push(REBasics.effectBehaviors.warp);
+                break;
+            }
             case "kItem_転び石":
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.stumble);
@@ -485,6 +413,13 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kウッドアロー";
+                break;
+            }
+            case "kItem_毒矢の罠": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
+                emittor.scope.length = Infinity;
+                emittor.scope.projectilePrefabKey = "kItem_毒矢";
                 break;
             }
             case "kItem_錆ワナ":
@@ -685,6 +620,100 @@ export class RESetup {
         }
     }
     
+    public static setupDirectly_State(data: DState) {
+        switch (data.key) {
+            case "kState_UT気配察知":
+                data.effect.traits.push({ code: REBasics.traits.UnitVisitor, dataId: 0, value: 0 });
+                break;
+            case "kState_UnitTest_攻撃必中":
+                data.effect.traits.push({ code: REBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_UnitTest_投擲必中":
+                data.effect.traits.push({ code: REBasics.traits.CertainIndirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_UTアイテム擬態":
+                data.effect.behaviors.push("LItemImitatorBehavior");
+                break;
+            case "kState_仮眠2":
+                //data.behaviors.push("LDoze2Behavior");
+                data.effect.traits.push({ code: REBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
+                data.idleSequel = REBasics.sequels.asleep;
+                break;
+            case "kState_UT魔法使い":
+                data.effect.traits.push({ code: REBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Weapon").id, value: 0.5 });
+                data.effect.traits.push({ code: REBasics.traits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.5 });
+                data.effect.traits.push({ code: REBasics.traits.EffectProficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
+                break;
+                /*
+            case "kState_UT速度バフ":
+                data.minBuffLevel = -1;
+                data.maxBuffLevel = 2;
+                data.parameterBuffFormulas[DBasics.params.agi] = "100*slv";
+                break;
+                */
+            case "kState_UT鈍足":
+                data.autoAdditionCondition = "a.agi<0";
+                break;
+            case "kState_UT倍速":
+                data.autoAdditionCondition = "a.agi>=100";
+                break;
+            case "kState_UT3倍速":
+                data.autoAdditionCondition = "a.agi>=200";
+                break;
+            case "kState_UT目つぶし":
+                data.effect.restriction = DStateRestriction.Blind;
+                break;
+            case "kState_UTまどわし":
+                data.effect.behaviors.push("LIllusionStateBehavior");
+                break;
+            case "kState_UTくちなし":
+                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.EatActionId, value: 0 });
+                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.ReadActionId, value: 0 });
+                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.FloorTransfer });
+                break;
+            case "kState_UTかなしばり":
+                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: REBasics.params.hp });
+                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 3" });
+                break;
+            case "kState_UT封印":
+                data.effect.traits.push({ code: REBasics.traits.SealSpecialAbility, dataId: REBasics.actions.EatActionId, value: 0 });
+                break;
+            case "kState_UT透明":
+                data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
+                data.submatchStates.push(REData.getState("kState_UT透明_モンスター").id);
+                break;
+            case "kState_UT透明_モンスター":
+                data.effect.traits.push({ code: REBasics.traits.Invisible, dataId: 0, value: 0 });
+                data.effect.matchConditions.kindId = REBasics.entityKinds.MonsterKindId;
+                break;
+            case "kState_UT足つかみ":
+                data.effect.behaviors.push("LGrabFootBehavior");
+                break;
+            case "kState_UT身かわし":
+                data.effect.traits.push({ code: REBasics.traits.CartailDodgePhysicalAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_UT下手投げ":
+                data.effect.traits.push({ code: REBasics.traits.AwfulPhysicalIndirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_UT爆発四散":
+                data.deadState  = true;
+                break;
+            case "kState_UTトラバサミ":
+                data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.MoveToAdjacentActionId, value: 0 });
+                break;
+        }
+    }
+    
+    public static setupDirectly_StateGroup(data: DStateGroup) {
+        switch (data.key) {
+            case "kStateGroup_睡眠系":
+                data.exclusive = true;
+                break;
+            case "kStateGroup_SG速度変化":
+                data.exclusive = true;
+                break;
+        }
+    }
 
     private static setupGrassCommon(entity: DEntity): void {
         // FP 回復

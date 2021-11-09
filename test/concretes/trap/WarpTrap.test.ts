@@ -5,6 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { DBlockLayerKind } from "ts/re/data/DCommon";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
