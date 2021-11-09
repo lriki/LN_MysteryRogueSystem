@@ -41,6 +41,7 @@
     "scripts": {
         "build": "webpack",
         "test": "jest",
+         "test-cov": "jest --watchAll=false --no-cache",
         "doc": "typedoc --out tsdoc ts --exclude \"**/*.d.ts\""
     }
 }
