@@ -434,6 +434,12 @@ export class RESetup {
             }
             case "kItem_錆ワナ":
                 break;
+            case "kItem_落とし穴": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Center;
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.transferToLowerFloor);
+                break;
+            }
             case "kItem_突風の罠": {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Center;

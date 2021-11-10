@@ -8,6 +8,7 @@ import { SLevelDownEffectBehavior } from "./SLevelDownEffectBehavior";
 import { SWarpEffectBehavior } from "./SWrapEffectBehavior";
 import { SStumbleEffectBehavior } from "./SStumbleEffectBehavior";
 import { STransferToNextFloorEffectBehavior } from "./STransferToNextFloorEffectBehavior";
+import { STransferToLowerFloorEffectBehavior } from "./STransferToLowerFloorEffectBehavior";
 
 export class SEffectBehaviorManager {
     private behaviors: (SEffectBehavior | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -37,6 +38,7 @@ export class SEffectBehaviorManager {
         this.register(REBasics.effectBehaviors.warp, new SWarpEffectBehavior());
         this.register(REBasics.effectBehaviors.stumble, new SStumbleEffectBehavior());
         this.register(REBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorEffectBehavior());
+        this.register(REBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorEffectBehavior());
     }
 }
 

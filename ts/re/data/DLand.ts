@@ -113,6 +113,17 @@ export enum DLandIdentificationLevel {
     Entity,
 }
 
+export enum DLandForwardDirection {
+    /** フロア数が増えるごとに、上の階へ向かう */
+    Uphill,
+
+    /** フロア数が増えるごとに、下の階へ向かう */
+    Downhill,
+
+    /** 概念的な上下移動を伴わない */
+    Flat,
+}
+
 /**
  * ダンジョンや町ひとつ分。
  */
@@ -162,6 +173,8 @@ export class DLand {
     /** (index: DEntityKindId) */
     identifiedKinds: (DLandIdentificationLevel | undefined)[];
 
+    forwardDirection: DLandForwardDirection;
+
     public constructor(id: DLandId) {
         this.id = id;
         this.name = "null";
@@ -190,6 +203,7 @@ export class DLand {
         this.floorInfos = [];
         this.floorIds = [];
         this.identifiedKinds = [];
+        this.forwardDirection = DLandForwardDirection.Uphill;
     }
     
     public import(mapData: IDataMap): void {

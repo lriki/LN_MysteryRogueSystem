@@ -359,6 +359,7 @@ export class REDataManager
             warp: REData.newEffectBehavior("Warp").id,
             stumble: REData.newEffectBehavior("Stumble").id,
             transferToNextFloor: REData.newEffectBehavior("TransferToNextFloor").id,
+            transferToLowerFloor: REData.newEffectBehavior("TransferToLowerFloor").id,
         };
 
         // REBasics.presets = {

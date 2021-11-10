@@ -54,8 +54,7 @@ export interface RE_Game_Data
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
  */
 @RESerializable
-export class LMap extends LObject
-{
+export class LMap extends LObject {
     private _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;
     private _height: number = 0;
