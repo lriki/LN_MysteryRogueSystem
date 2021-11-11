@@ -8,7 +8,7 @@ import { DBasicParameters, DBasicSParams, DBasicXParams } from "./predefineds/DB
 import { DBasicPrefabs } from "./predefineds/DBasicPrefabs";
 import { BasicSequels } from "./predefineds/DBasicSequels";
 import { DBasicStates } from "./predefineds/DBasicStates";
-import { DBasicStateTraits, DBasicTraits } from "./predefineds/DBasicTraits";
+import { DBasicTraits } from "./predefineds/DBasicTraits";
 import { DFactionId } from "./REData";
 
 export interface DBasicElements {
@@ -37,7 +37,7 @@ export class REBasics {
     static events: DBasicEvents;
     static actions: DBasicActions;
     static entityKinds: BasicEntityKinds;
-    static stateTraits: DBasicStateTraits;
+    //static stateTraits: DBasicStateTraits;
     static states: DBasicStates;
     static params: DBasicParameters;
     static xparams: DBasicXParams;

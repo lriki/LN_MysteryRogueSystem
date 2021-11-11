@@ -17,7 +17,7 @@ test("concretes.item.grass.目つぶし草", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
@@ -26,24 +26,24 @@ test("concretes.item.grass.目つぶし草", () => {
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kブラインドドラッグ").id, [], "item1"));
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kブラインドドラッグ").id, [], "item2"));
-    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
-    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
-    TestUtils.testCommonGrassBegin(actor1, item1);
+    TestUtils.testCommonGrassBegin(player1, item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // めつぶし状態になる
-    expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT目つぶし").id)).toBe(true);
+    expect(!!player1.states().find(x => x.stateDataId() == REData.getState("kState_UT目つぶし").id)).toBe(true);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -51,6 +51,6 @@ test("concretes.item.grass.目つぶし草", () => {
     // めつぶし状態になる
     expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UT目つぶし").id)).toBe(true);
     
-    TestUtils.testCommonGrassEnd(actor1, item1);
+    TestUtils.testCommonGrassEnd(player1, item1);
 });
 

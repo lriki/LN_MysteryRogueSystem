@@ -242,9 +242,9 @@ export class REDataManager
             //     { id: 1, name: "RE.StateTrait.Nap" },
             // ];
 
-            REBasics.stateTraits = {
-                nap: 1,
-            };
+            // REBasics.stateTraits = {
+            //     nap: 1,
+            // };
 
 
             //REData.traits[DTraits.CertainDirectAttack] = { id: DTraits.CertainDirectAttack, key: "CertainDirectAttack" };

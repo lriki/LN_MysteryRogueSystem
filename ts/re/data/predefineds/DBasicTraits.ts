@@ -1,10 +1,10 @@
 import { DTraitId } from "../DTraits";
 
 
-export interface DBasicStateTraits {
-    /** 仮眠 */
-    nap: DTraitId;
-}
+// export interface DBasicStateTraits {
+//     /** 仮眠 */
+//     nap: DTraitId;
+// }
 
 export interface DBasicTraits {
     TRAIT_ELEMENT_RATE: DTraitId;// = 11,

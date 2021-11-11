@@ -11,7 +11,9 @@ import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LActionTokenType } from "../LActionToken";
+import { RESerializable } from "ts/re/Common";
 
+@RESerializable
 export class LNapStateBehavior extends LBehavior {
     private _hostileEnterd: boolean = false;
     

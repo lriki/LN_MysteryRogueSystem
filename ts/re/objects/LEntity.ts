@@ -556,7 +556,9 @@ export class LEntity extends LObject
             if (this.actualParam(REBasics.params.hp) === 0) {
                 this.addState(REBasics.states.dead, false);
             } else {
-                this.removeState(REBasics.states.dead);
+                if (this.isStateAffected(REBasics.states.dead)) {   // removeState() はけっこういろいろやるので、不要なら実行しない
+                    this.removeState(REBasics.states.dead);
+                }
             }
         }
 

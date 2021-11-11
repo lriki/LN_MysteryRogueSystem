@@ -117,7 +117,7 @@ export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPh
     }
 
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {
-        return false;
+        return true;
     }
 
     onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void {
