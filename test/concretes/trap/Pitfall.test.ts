@@ -36,7 +36,7 @@ test("concretes.trap.Pitfall.Uphill.OnFirstFloor", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     const floorId2 = player1.floorId;
-    expect(floorId2.floorNumber()).toBe(floorId.floorNumber());  // 次のフロアへ移動している
+    expect(floorId2.floorNumber()).toBe(floorId.floorNumber());
 });
 
 test("concretes.trap.Pitfall.Downhill", () => {
