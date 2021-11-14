@@ -13,7 +13,57 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-afterAll(() => {
+test("Trap.TriggerRate", () => {
+    TestEnv.newGame();
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const hp1 = player1.actualParam(REBasics.params.hp);
+
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_地雷").id, [], "trap1"));
+    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    // 隠れている状態のカウント
+
+    let triggerd1 = 0;
+    for (let i = 0; i < 100; i++) {
+        // 右へ移動
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+        const hp2 = player1.actualParam(REBasics.params.hp);
+        if (hp2 < hp1) triggerd1++;
+        REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        player1.setActualParam(REBasics.params.hp, hp1);
+        trapBehavior.setExposed(false);
+    }
+
+    //----------------------------------------------------------------------------------------------------
+    // 見えている状態のカウント
+    trapBehavior.setExposed(true);
+
+    let triggerd2 = 0;
+    for (let i = 0; i < 100; i++) {
+        // 右へ移動
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+        const hp2 = player1.actualParam(REBasics.params.hp);
+        if (hp2 < hp1) triggerd2++;
+        REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        player1.setActualParam(REBasics.params.hp, hp1);
+    }
+
+    // paramHiddenTrapTriggerRate, paramExposedTrapTriggerRate の関係から、振れ幅大きめに基準を作っておく
+    expect(50 <= triggerd1 && triggerd1 < 100).toBe(true);  // 100 回全部成功はしないだろう
+    expect(triggerd2 < triggerd1).toBe(true);
 });
 
 test("Trap.Basic", () => {
@@ -21,11 +71,11 @@ test("Trap.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(REData.getState("kState_UT罠必中").id);
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    // TODO: 罠state:必ず発動
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -36,8 +86,8 @@ test("Trap.Basic", () => {
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    expect(player1.states()[0].stateDataId()).toBe(TestEnv.StateId_Sleep);   // 睡眠状態
+    
+    expect(player1.isStateAffected(TestEnv.StateId_Sleep)).toBe(true);   // 睡眠状態
 });
 
 test("Trap.Enemy", () => {

@@ -234,6 +234,8 @@ export class REDataManager
             REBasics.traits.Invisible = REData.newTrait("Invisible").id;
             REBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
             REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
+            REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
+            
 
 
 

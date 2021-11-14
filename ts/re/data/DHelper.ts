@@ -444,7 +444,7 @@ export class DHelpers {
         }
         else {
             // 引数省略されている
-            return { name: expr, args: [] };
+            return { name: expr.trim(), args: [] };
         }
     }
 }

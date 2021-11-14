@@ -109,5 +109,8 @@ export interface DBasicTraits {
      * - value: DamageValue
      */
     FixedDamage: DTraitId;
+
+    /** 必ず罠にかかる */
+    DrawInTrap: DTraitId;
 }
 

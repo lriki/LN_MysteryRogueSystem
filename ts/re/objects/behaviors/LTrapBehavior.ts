@@ -18,6 +18,7 @@ import { DEffectCause, DEmittor } from "ts/re/data/DEmittor";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { DCounterAction } from "ts/re/data/DEntity";
+import { paramExposedTrapTriggerRate, paramHiddenTrapTriggerRate } from "ts/re/PluginParameters";
 
 
 /**
@@ -33,6 +34,14 @@ import { DCounterAction } from "ts/re/data/DEntity";
  * - Trap は罠にかけたい勢力を持っている (デフォルトは Player)
  * - 罠にかけたい勢力側に TrapMaster がいたら、その敵対勢力を罠にかけるようにする。
  * - 両方の勢力に TrapMaster がいたら、何もしない。
+ * 
+ * [2021/11/14] 罠の発動確率
+ * ----------
+ * 原作だと、見えない状態と見えている状態で踏んだ時で確率が変わる。
+ * またダンジョンによっても変わる。(逃げコンセプトダンジョンなど)
+ * 罠によっても変わる？
+ * 強化バネやワープポイント、ポイントスイッチは罠に見えるが罠ではない。どちらかというと階段に近いオブジェクト。
+ * 
  */
 @RESerializable
 export class LTrapBehavior extends LBehavior {
@@ -63,6 +72,10 @@ export class LTrapBehavior extends LBehavior {
      */
     public exposed(): boolean {
         return this._exposed;
+    }
+
+    public setExposed(value: boolean): void {
+        this._exposed = value;
     }
 
     
@@ -98,6 +111,13 @@ export class LTrapBehavior extends LBehavior {
     private checkValidTarget(entity: LEntity): boolean {
         return entity.getOutwardFactionId() === REData.system.trapTargetFactionId;
     }
+
+    private triggerRate(): number {
+        if (this.exposed())
+            return paramExposedTrapTriggerRate;
+        else
+            return paramHiddenTrapTriggerRate;
+    }
     
     [onWalkedOnTopReaction](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
@@ -106,14 +126,18 @@ export class LTrapBehavior extends LBehavior {
         // この罠にかかることができる？
         if (!this.checkValidTarget(target)) return SCommandResponse.Pass;
 
-
-
         cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
+        const hit = target.hasTrait(REBasics.traits.DrawInTrap) || cctx.random().nextIntWithMax(100) < this.triggerRate();
 
-        this.performTrapEffect(self, cctx, target.dir);
+        if (hit) {
+            this.performTrapEffect(self, cctx, target.dir);
+        }
+        else {
+            cctx.postMessage(tr("しかし罠にはかからなかった。"));
+        }
         
-        return SCommandResponse.Pass;
+        return SCommandResponse.Handled;
     }
 
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {

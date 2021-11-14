@@ -27,6 +27,13 @@ export var paramLandExitResultVariableId  = 1;
 
 export var paramPowerToAtk = true;
 
+// 見えない罠を踏んだ時の発動率 (%)
+export var paramHiddenTrapTriggerRate = 80;
+
+// 見えている罠を踏んだ時の発動率 (%)
+export var paramExposedTrapTriggerRate = 50;
+
+
 /*
 // 
 export var paramMapSkillEffectsMapId = Number(PluginManager.parameters(pluginName)['MapSkillEffectsMapId']);
