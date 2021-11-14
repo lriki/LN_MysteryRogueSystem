@@ -3,8 +3,6 @@ audio/
 effects/Model
 effects/Texture
 effects/*.efkefc
-fonts/
-icon/
 dist/
 mksite/
 coverage/

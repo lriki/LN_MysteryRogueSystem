@@ -49,6 +49,7 @@ test("concretes.activity.Stumble.prevention", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(REData.getState("kState_UT罠必中").id);
     player1.dir = 6;
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const hp1 = player1.actualParam(REBasics.params.hp);

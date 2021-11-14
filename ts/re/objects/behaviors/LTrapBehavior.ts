@@ -203,6 +203,7 @@ export class LTrapBehavior extends LBehavior {
 
         this._recharging = true;
         this._exposed = true;
+        self.addState(REData.getState("kState_UT罠発動済み").id);
 
     }
     
