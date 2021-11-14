@@ -126,6 +126,9 @@ export class LTrapBehavior extends LBehavior {
         // この罠にかかることができる？
         if (!this.checkValidTarget(target)) return SCommandResponse.Pass;
 
+        // 発動の成否にかかわらず、露出
+        this.setExposed(true);
+
         cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
         const hit = target.hasTrait(REBasics.traits.DrawInTrap) || cctx.random().nextIntWithMax(100) < this.triggerRate();

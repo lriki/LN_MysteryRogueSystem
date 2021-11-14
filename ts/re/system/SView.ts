@@ -8,6 +8,7 @@ import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehav
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
 import { LNameView } from "../objects/internal";
 import { LEntity } from "../objects/LEntity";
+import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
 
 export interface TilemapViewInfo {
     visible: boolean;
@@ -70,19 +71,27 @@ export class SView {
     }
     
     public static getEntityVisibility(entity: LEntity): SEntityVisibility {
-
         const subject = REGame.camera.focusedEntity();
+
         if (subject && !subject.entityId().equals(entity.entityId())) {
             // entity は操作中キャラ以外
             
-            // 目つぶし状態
+            // subject が目つぶし状態なら見えない
             if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
                 return { visible: false, translucent: false };
             }
             
-            // 透明状態
+            // entity が透明状態なら見えない
             if (entity.traits(REBasics.traits.Invisible).length > 0) {
                 return { visible: false, translucent: false };
+            }
+
+            // entity が露出していない罠なら見えない
+            const trap = entity.findEntityBehavior(LTrapBehavior);
+            if (trap) {
+                if (!trap.exposed()) {
+                    return { visible: false, translucent: false };
+                }
             }
 
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
