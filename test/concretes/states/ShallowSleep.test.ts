@@ -1,5 +1,4 @@
 import { REBasics } from "ts/re/data/REBasics";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
@@ -7,14 +6,12 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { TestUtils } from "test/TestUtils";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.states.ShallowSleep", () => {
+test("concretes.states.ShallowSleep.RoomIn", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
     const stateId = REBasics.states.nap;
@@ -35,7 +32,6 @@ test("concretes.states.ShallowSleep", () => {
         RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         
-        //REGame.world.random().resetSeed(9);     // 乱数調整
         RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
         if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
@@ -53,3 +49,103 @@ test("concretes.states.ShallowSleep", () => {
     expect(10 < affected && affected < 90).toBe(true);
 });
 
+test("concretes.states.ShallowSleep.AdjacentMove", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REBasics.states.nap;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 17, 4);
+
+    // Enemy1 (仮眠状態)
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    let affected = 0;
+    for (let i = 0; i < 100; i++) {
+        // 移動。enemy1 と隣接する。
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+        if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
+        
+        // 元に戻す
+        REGame.world._transferEntity(player1, floorId, 17, 4);
+        enemy1.addState(stateId);
+    }
+
+    // 起きたり起きてなかったり。
+    expect(10 < affected && affected < 90).toBe(true);
+});
+
+test("concretes.states.ShallowSleep.AwayMove", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REBasics.states.nap;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 17, 6);
+
+    // Enemy1 (仮眠状態)
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    let affected = 0;
+    for (let i = 0; i < 100; i++) {
+        // 移動。enemy1 と隣接する。
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+        if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
+
+        // 元に戻す
+        REGame.world._transferEntity(player1, floorId, 17, 6);
+        enemy1.addState(stateId);
+    }
+
+    // 起きない
+    expect(affected).toBe(100);
+});
+
+test("concretes.states.ShallowSleep.Skill", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REBasics.states.nap;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 17, 4);
+
+    // Enemy1 (仮眠状態)
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    let affected = 0;
+    for (let i = 0; i < 100; i++) {
+        // 攻撃
+        RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+        if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
+        
+        // 元に戻す
+        enemy1.addState(stateId);
+    }
+
+    // 起きたり起きてなかったり。
+    expect(10 < affected && affected < 90).toBe(true);
+});

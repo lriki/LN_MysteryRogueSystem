@@ -59,9 +59,10 @@ export class REDataManager
                 roomEnterd: 1,
                 roomLeaved: 2,
                 preWalk: 3,
-                prePut: 4,
-                effectReacted: 5,
-                skillEmitted: 6,
+                walked: 4,
+                prePut: 5,
+                effectReacted: 6,
+                skillEmitted: 7,
             }
         }
 

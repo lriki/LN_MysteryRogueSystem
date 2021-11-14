@@ -178,6 +178,9 @@ export class LUnitBehavior extends LBehavior {
             if (UMovement.moveEntity(cctx, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
                 cctx.postSequel(self, REBasics.sequels.MoveSequel);
 
+                // Projectile の移動では通知したくないので、UMovement.moveEntity() の中ではなく Unit の移動側で通知する。
+                REGame.eventServer.publish(cctx, REBasics.events.walked, args);
+
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 self.immediatelyAfterAdjacentMoving = true;
                 this._requiredFeetProcess = true;

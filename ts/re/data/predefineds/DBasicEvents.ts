@@ -33,6 +33,8 @@ export interface DBasicEvents {
     roomLeaved: DEventId, // RoomEventArgs
 
     preWalk: DEventId,
+    walked: DEventId,
+
     prePut: DEventId,
     
     effectReacted: DEventId,
