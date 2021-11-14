@@ -20,6 +20,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(REData.getState("kState_UT罠必中").id);
     const hp1 = player1.actualParam(REBasics.params.hp);
 
     // trap 生成&配置

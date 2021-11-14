@@ -17,6 +17,7 @@ test("concretes.trap.StumbleTrap", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    player1.addState(REData.getState("kState_UT罠必中").id);
 
     // アイテム 入手
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));

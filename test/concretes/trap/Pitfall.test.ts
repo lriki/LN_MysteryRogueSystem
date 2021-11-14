@@ -44,8 +44,8 @@ test("concretes.trap.Pitfall.Downhill", () => {
     const floorId = TestEnv.FloorId_FlatMap50x50;
     floorId.landData().forwardDirection = DLandForwardDirection.Downhill;
 
-    // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    player1.addState(REData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_落とし穴").id, [], "trap1"));

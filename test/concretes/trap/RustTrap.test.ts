@@ -18,6 +18,7 @@ test("concretes.trap.RustTrap", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    player1.addState(REData.getState("kState_UT罠必中").id);
 
     // アイテム 入手
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [], "shield1"));

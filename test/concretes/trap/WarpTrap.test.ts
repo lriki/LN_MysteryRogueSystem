@@ -15,8 +15,8 @@ test("concretes.trap.WarpTrap.Basic", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
-    // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    player1.addState(REData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_バネ").id, [], "trap1"));
