@@ -929,7 +929,7 @@ export class REDataManager
             const mapData: IDataMap = obj;
             for (const event of mapData.events) {
                 if (!event) continue;
-                const data = DAnnotationReader.readPrefabMetadata(event);
+                const data = DAnnotationReader.readPrefabMetadata(event, this.databaseMapId);
                 if (!data) continue;
 
                 const prefab = new DPrefab();

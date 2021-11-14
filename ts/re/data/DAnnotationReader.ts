@@ -1,4 +1,4 @@
-import { assert } from "../Common";
+import { assert, tr2 } from "../Common";
 import { DTroopId } from "./DTroop";
 import { REData } from "./REData";
 
@@ -114,25 +114,57 @@ export class DAnnotationReader {
         if (list) {
             // Collect comments.
             let comments = "";
+            let inAnno = false;
+            let found = false;
             for (let i = 0; i < list.length; i++) {
-                if (list[i].code == 108 || list[i].code == 408) {
-                    if (list[i].parameters) {
+                if (!inAnno) {
+                    if (list[i].code == 108) {
+                        const comment: string = list[i].parameters[0];
+                        if (comment.includes(annotation)) {
+                            inAnno = true;
+                            found = true;
+                        }
+                    }
+                }
+                else {
+                    if (list[i].code == 108) {
+                        inAnno = false;
+                    }
+                    else if (list[i].code == 408) {
                         comments += list[i].parameters;
                     }
                 }
             }
     
-            // Find annotation block.
-            let index = comments.indexOf(annotation);
-            if (index >= 0) {
-                let block = comments.substring(index + annotation.length);
-                block = block.substring(
-                    block.indexOf("{"),
-                    block.indexOf("}") + 1);
-                return block;
-            }
+            if (found) {
+                return `{${comments}}`;
+            } 
+
+            // // Find annotation block.
+            // let index = comments.indexOf(annotation);
+            // if (index >= 0) {
+            //     let block = comments.substring(index + annotation.length);
+            //     //block = block.substring(
+            //         //block.indexOf("{"),
+            //     //    block.indexOf("}") + 1);
+            //     return `{${block}}`;
+            // }
         }
         return undefined;
+    }
+    
+    public static tryGetAnnotationFromEvent(annotation: string, event: IDataMapEvent, rmmzMapId: number): any | undefined {
+        const block = this.findFirstAnnotationFromPage(annotation, event.pages[0]);
+        if (!block) return undefined;
+        let rawData: RmmzEventPrefabMetadata | undefined;
+        try {
+            eval(`rawData = ${block}`);
+            assert(rawData);
+        }
+        catch (e: any) {
+            throw new Error(tr2("%1の構文エラーです。").format(annotation) + `\nMap:${rmmzMapId},Event:${event.id},${event.name}` + "\n" + e.toString());
+        }
+        return rawData;
     }
 
     public static readLandMetadata(event: IDataMapEvent): RmmzLandMetadata | undefined {
@@ -162,11 +194,9 @@ export class DAnnotationReader {
         return rawData;
     }
     
-    public static readPrefabMetadata(event: IDataMapEvent): RmmzEventPrefabMetadata | undefined {
-        const block = this.findFirstAnnotationFromEvent("@REPrefab", event);
-        if (!block) return undefined;
-        let rawData: RmmzEventPrefabMetadata | undefined;
-        eval(`rawData = ${block}`);
+    public static readPrefabMetadata(event: IDataMapEvent, rmmzMapId: number): RmmzEventPrefabMetadata | undefined {
+        const rawData = this.tryGetAnnotationFromEvent("@REPrefab", event, rmmzMapId);
+        if (!rawData) return undefined;
         assert(rawData);
         return rawData;
     }

@@ -251,9 +251,9 @@ declare interface IDataTileset
 
 declare interface IDataList
 {
-    code?: number;
-    indent?: number;
-    parameters?: number[];
+    code: number;
+    indent: number;
+    parameters: any[];
 }
 
 declare interface IDataCommonEvent
