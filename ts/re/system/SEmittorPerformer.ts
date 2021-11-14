@@ -109,7 +109,7 @@ export class SEmittorPerformer {
         return this;
     }
 
-    public performe(cctx: SCommandContext, onPerformed?: SOnPerformedFunc | undefined): void {
+    public perform(cctx: SCommandContext, onPerformed?: SOnPerformedFunc | undefined): void {
         this._onPerformed = onPerformed;
 
         if (this._skillId > 0) {

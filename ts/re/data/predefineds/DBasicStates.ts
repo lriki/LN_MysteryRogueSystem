@@ -10,6 +10,8 @@ export interface DBasicStates {
     
     /** モンスター出現時に追加される仮眠ステータス */
     nap: DStateId;
+
+    trapPerformed: DStateId; // kState_System_TrapPerformed
     
     /*
     speedDown: DStateId,    // 鈍足
@@ -27,5 +29,4 @@ export interface DBasicStates {
     deception: DStateId,    // まどわし
     mouthClosed: DStateId,  // くちなし
     */
-    debug_MoveRight: DStateId,
 }

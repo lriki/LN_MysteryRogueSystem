@@ -187,7 +187,7 @@ export class LUnitBehavior extends LBehavior {
         }
         else if (activity.actionId() == REBasics.actions.performSkill) {
             if (activity.hasEffectDirection()) self.dir = activity.effectDirection();
-            SEmittorPerformer.makeWithSkill(self, self, activity.skillId()).performe(cctx);
+            SEmittorPerformer.makeWithSkill(self, self, activity.skillId()).perform(cctx);
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.ForwardFloorActionId ||

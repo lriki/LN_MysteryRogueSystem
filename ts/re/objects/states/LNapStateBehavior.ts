@@ -56,10 +56,13 @@ export class LNapStateBehavior extends LBehavior {
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             if (this._hostileEnterd) {
-                //this.removeThisState();
-                this.parentAs(LState)?.removeThisState();
+                const r = cctx.random().nextIntWithMax(100);
+                if (r < 50) {   // 50%
+                    //this.removeThisState();
+                    this.parentAs(LState)?.removeThisState();
+                }
+                this._hostileEnterd = false;
             }
-            this._hostileEnterd = false;
 
             return SPhaseResult.Pass;
         }

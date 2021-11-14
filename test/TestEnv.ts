@@ -43,6 +43,7 @@ export class TestEnv {
     public static FloorId_UnitTestFlatMap50x50: LFloorId = LFloorId.makeEmpty();
     public static FloorId_CharacterAI: LFloorId = LFloorId.makeEmpty();
     public static FloorId_RandomMapFloor: LFloorId = LFloorId.makeEmpty();
+    public static StateId_debug_MoveRight: DStateId;
     public static StateId_Sleep: DStateId;
     public static StateId_CertainDirectAttack: DStateId;
     public static EntityId_Herb: DEntityId;
@@ -89,6 +90,7 @@ export class TestEnv {
         this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
+        this.StateId_debug_MoveRight = REData.getState("kState_Test_MoveRight").id
         this.StateId_Sleep = REData.getState("UT睡眠").id;
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
         this.EntityId_Herb = REData.getEntity("kキュアリーフ").id;

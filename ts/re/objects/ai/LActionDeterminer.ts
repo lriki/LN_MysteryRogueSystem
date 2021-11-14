@@ -157,7 +157,7 @@ export class LActionDeterminer {
                     const pos = UMovement.getCenter(targetEntites);
                     self.dir = UMovement.getLookAtDirFromPos(self.x, self.y, pos.x, pos.y);
                     
-                    SEmittorPerformer.makeWithSkill(self, self, this._requiredSkillAction.action.skillId).performe(cctx);
+                    SEmittorPerformer.makeWithSkill(self, self, this._requiredSkillAction.action.skillId).perform(cctx);
                     cctx.postConsumeActionToken(self, LActionTokenType.Major);
                     return true;
                 }

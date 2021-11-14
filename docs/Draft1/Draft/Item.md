@@ -17,7 +17,7 @@ Item
 まずデータベースでアイテムを作る。メモは次のようにする。
 
 ```
-<RE-Key:kKnockbackStaff>          # オプション。これがあると、ID 以外で検索できるようになる
+<MR-Key:kKnockbackStaff>          # オプション。これがあると、ID 以外で検索できるようになる
 <RE-EntityKind:Staff>            # 必須。ソートに使う
 <RE-BasicStaff:kKnockbackMagicBallet>  # "振る" ことができる & その際 "Key:MagicBallet-Knockback" である魔法弾 Entity を飛ばす
 ```
@@ -25,7 +25,7 @@ Item
 魔法弾のアイテムを作る。
 
 ```
-<RE-Key:kKnockbackMagicBallet>
+<MR-Key:kKnockbackMagicBallet>
 <RE-EntityKind:MagicBallet>
 <RE-Effect:Knockback(10)>       # 引数は吹き飛ばす距離。ダメージは "ダメージ" 欄で設定する
 ```
@@ -33,7 +33,7 @@ Item
 ### ふきとばしの杖を作る場合2
 
 ```
-<RE-Key:kKnockbackStaff>
+<MR-Key:kKnockbackStaff>
 <RE-EntityKind:Staff>
 <RE-Ability:AKnockback(10)>        # 
 <RE-Effect:Wave=EShotMagicBallet>  # "振った"
@@ -45,24 +45,24 @@ Item
 ### 土塊の杖を作る場合 (魔法弾が出ない)
 
 ```
-<RE-Key:kFortStaff>
+<MR-Key:kFortStaff>
 <RE-EntityKind:Staff>
-<RE-Behavior:FortStaff>  # "LFortStaffBehavior" をアタッチする
+<MR-Behavior:FortStaff>  # "LFortStaffBehavior" をアタッチする
 ```
 
 ### 草受けの杖を作る場合 (アイテムで定義できない特殊な魔法弾を出す)
 
 ```
-<RE-Key:kGrassReceiver>
-<RE-Behavior:FortStaff>  # "LGrassReceiverStaffBehavior" をアタッチする
+<MR-Key:kGrassReceiver>
+<MR-Behavior:FortStaff>  # "LGrassReceiverStaffBehavior" をアタッチする
 ```
 
 ### 薬草を作る場合 (基本的な草)
 
 ```
-<RE-Key:kHerb>
+<MR-Key:kHerb>
 <RE-EntityKind:Grass>
-<RE-Behavior:CommonGrass>  # "飲む" ことができる & "当てた時" に相手に効果を発動する
+<MR-Behavior:CommonGrass>  # "飲む" ことができる & "当てた時" に相手に効果を発動する
 ```
 
 Effect は省略可能。BasicGrass の実装として、"飲んだ時" "当てた時" に通常のアイテム効果を適用する。
@@ -70,9 +70,9 @@ Effect は省略可能。BasicGrass の実装として、"飲んだ時" "当て�
 なお CommonGrass は以下をまとめるユーティリティ。
 
 ```
-<RE-Key:kHerb>
+<MR-Key:kHerb>
 <RE-EntityKind:Grass>
-<RE-Behavior:Command(Take)>    # "使う" ことができる。その際の Sequel 及びアクション名は "飲む"
+<MR-Behavior:Command(Take)>    # "使う" ことができる。その際の Sequel 及びアクション名は "飲む"
 <RE-UseEffect:self>    # "使った" ときに通常のアイテム効果を適用する。
 <RE-HitEffect:self>    # 投げ当てた時に通常のアイテム効果を適用する。 (これが無い場合、1ダメージを与える)
 ```
@@ -82,9 +82,9 @@ Effect は省略可能。BasicGrass の実装として、"飲んだ時" "当て�
 CommonGrass を自分で実装するイメージ。
 
 ```
-<RE-Key:kDragonGrass>
+<MR-Key:kDragonGrass>
 <RE-EntityKind:Grass>            # 必須
-<RE-Behavior:Command(Take)>    # "使う" ことができる。その際の Sequel 及びアクション名は "飲む"
+<MR-Behavior:Command(Take)>    # "使う" ことができる。その際の Sequel 及びアクション名は "飲む"
 <RE-UseEffect:kDragonBreathSkill>    # "使った" ときにスキルを発動する
 <RE-HitEffect:self>
 ```
@@ -93,7 +93,7 @@ CommonGrass を自分で実装するイメージ。
 ### いかすしの巻物を作る場合 (Use に相当するコマンドが複数ある)
 
 ```
-<RE-Key:kIkasushiScroll>
+<MR-Key:kIkasushiScroll>
 <RE-EntityKind:Grass>            # 必須
 <RE-Command:Read>    # "読む"   ショートカットなどで単に"使う"ときは先頭のコマンドを使う、とか
 <RE-Command:Eat>     # "食べる"
@@ -106,7 +106,7 @@ CommonGrass を自分で実装するイメージ。
 ### 最高の砂鉄を作る場合 (Use に相当するコマンドの名前だけ変えたい)
 
 ```
-<RE-Key:kFlawlessIronSand>
+<MR-Key:kFlawlessIronSand>
 <RE-EntityKind:Grass>
 <RE-Command:Use="ばらまく">
 <RE-Effect:Use=EFlawlessIronSand>
@@ -117,7 +117,7 @@ CommonGrass を自分で実装するイメージ。
 ### 最高の岩を作る場合 ("なげる" をオーバーライド)
 
 ```
-<RE-Key:kFlawlessRock>
+<MR-Key:kFlawlessRock>
 <RE-EntityKind:Grass>
 <RE-Command:Throw>      # 明示的な指定は不要
 <RE-Effect:Throw=FlawlessRock>
@@ -127,7 +127,7 @@ CommonGrass を自分で実装するイメージ。
 ### 妖刀かまいたちを作る場合
 
 ```
-<RE-Key:k>
+<MR-Key:k>
 <RE-EntityKind:Sowrd>
 <RE-Ability:妖刀かまいたち>      # 3方向攻撃となるため処理の実装が必要
 <RE-SynthesisAbility:三>      # 合成したときに付加する印
@@ -136,7 +136,7 @@ CommonGrass を自分で実装するイメージ。
 ### 皮の盾を作る場合 (複数の効果を持つが、合成印はひとつ)
 
 ```
-<RE-Key:k>
+<MR-Key:k>
 <RE-EntityKind:Shield>
 <RE-Ability:さびよけ>
 <RE-Ability:ハラモチ>

@@ -118,7 +118,7 @@ export class LItemBehavior extends LBehavior {
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
-                    .performe(cctx);
+                    .perform(cctx);
             }
         }
         // [読まれた]
@@ -129,7 +129,7 @@ export class LItemBehavior extends LBehavior {
                 SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
                     .setItemEntity(self)
                     .setSelectedTargetItems(activity.objects2())
-                    .performe(cctx);
+                    .perform(cctx);
                 cctx.postDestroy(self);
             }
         }
@@ -187,7 +187,7 @@ export class LItemBehavior extends LBehavior {
                     SEmittorPerformer.makeWithEmitor(subject.entity(), target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
-                        .performe(cctx, onPerformedFunc);
+                        .perform(cctx, onPerformedFunc);
                 }
             });
         }

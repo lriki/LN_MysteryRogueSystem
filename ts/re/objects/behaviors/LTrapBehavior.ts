@@ -173,7 +173,7 @@ export class LTrapBehavior extends LBehavior {
                 SEmittorPerformer.makeWithEmitor(self, self, emittor)
                 .setDffectDirection(UMovement.getRightDir(actorDir))
                 .setProjectilePriorityEffectSet(emittor.effectSet)
-                .performe(cctx);
+                .perform(cctx);
     
             }
             // else {
@@ -203,7 +203,7 @@ export class LTrapBehavior extends LBehavior {
 
         this._recharging = true;
         this._exposed = true;
-        self.addState(REData.getState("kState_UT罠発動済み").id);
+        self.addState(REBasics.states.trapPerformed);
 
     }
     

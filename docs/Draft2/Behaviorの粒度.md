@@ -47,7 +47,7 @@ Behaviorの粒度
 // - このとき "武器Behavior" と "アイテムBehavior" 両方を使ってしまうと、"投げ当て" の処理をどこに持たせるのか？ということになる。
 // - そうするとやっぱり ThrowableBehavior があった方が良いだろう。
 // - 命中率をコントロールしたいときは、どのソースデータを使うのか、を指定できるようにしておこう。
-// - <RE-Behavior:Throwable(self)> <RE-Behavior:Equipable> <RE-Behavior:Eatable> <RE-ApplyEffect:self> <RE-ApplyEffect:kEffect_FP30>
+// - <MR-Behavior:Throwable(self)> <MR-Behavior:Equipable> <MR-Behavior:Eatable> <RE-ApplyEffect:self> <RE-ApplyEffect:kEffect_FP30>
 // - 罠を投げ当てる時も同様。 TrapBehavior?ItemBehavior?
 ```
 

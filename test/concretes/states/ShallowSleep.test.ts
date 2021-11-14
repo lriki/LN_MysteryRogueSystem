@@ -29,16 +29,27 @@ test("concretes.states.ShallowSleep", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    // 移動。部屋に入る
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
-    
-    REGame.world.random().resetSeed(9);     // 乱数調整
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    let affected = 0;
+    for (let i = 0; i < 100; i++) {
+        // 移動。部屋に入る
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        //REGame.world.random().resetSeed(9);     // 乱数調整
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    // 目は覚ますが移動はしていない
-    expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(false);
-    expect(enemy1.x).toBe(19);
-    expect(enemy1.y).toBe(4);
+        if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
+
+        // 目は覚ましても移動はしていない
+        expect(enemy1.x).toBe(19);
+        expect(enemy1.y).toBe(4);
+        
+        // 元に戻す
+        REGame.world._transferEntity(player1, floorId, 16, 4);
+        enemy1.addState(stateId);
+    }
+
+    // 起きたり起きてなかったり。
+    expect(10 < affected && affected < 90).toBe(true);
 });
 

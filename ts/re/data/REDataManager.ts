@@ -469,11 +469,10 @@ export class REDataManager
                 RESetup.setupDirectly_State(state);
             }
 
-            // [メモ] 欄で "RE.BasicState:**" が指定されている RMMZ State から探す
             REBasics.states = {
-                dead: 1,//REData.addState("Dead", () => new LStateBehavior()),
-                nap: $dataStates.findIndex(x => x && x.meta && x.meta["RE-BasicState"] == "Nap"),
-                debug_MoveRight: $dataStates.findIndex(x => x && x.meta && x.meta["RE-BasicState"] == "DebugMoveRight"),
+                dead: 1,
+                nap: REData.getState("kState_System_kNap").id,
+                trapPerformed: REData.getState("kState_System_TrapPerformed").id,
             };
         }
         
