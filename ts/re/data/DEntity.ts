@@ -1,6 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
+import { DAnnotationReader } from "./DAnnotationReader";
 import { DAttackElementId } from "./DCommon";
 import { DEmittorSet, DEmittorId } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
@@ -317,7 +318,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     }
 
     public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner2 | undefined {
-        const entityMetadata = DHelpers.readEntityMetadataFromPage(page);
+        const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(page);
         if (!entityMetadata) return undefined;
         
         const entity = new DEntitySpawner2();

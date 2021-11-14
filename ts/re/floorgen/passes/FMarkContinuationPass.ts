@@ -3,6 +3,7 @@ import { FMapBuildPass } from "./FMapBuildPass";
 import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock, FSector } from "../FMapData";
 import { DHelpers } from "ts/re/data/DHelper";
 import { REData } from "ts/re/data/REData";
+import { DAnnotationReader } from "ts/re/data/DAnnotationReader";
 
 
 
@@ -120,7 +121,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
             // 固定マップの場合、EntryPoint を基準とする
             const entryPointEvent = map.rmmzFixedMapData().events.find(e => {
                 if (!e) return false;
-                const metadata = DHelpers.readEntityMetadataFromPage(e.pages[0]);
+                const metadata = DAnnotationReader.readEntityMetadataFromPage(e.pages[0]);
                 if (!metadata) return false;
                 const entity = REData.findEntity(metadata.data);
                 if (!entity) return false;

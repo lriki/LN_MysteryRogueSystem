@@ -8,9 +8,8 @@ import { TileShape } from "ts/re/objects/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/re/PluginParameters";
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/re/data/DEntity";
-import { RmmzEventPrefabMetadata } from "../data/DHelper";
-import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
 import { LEntity } from "../objects/LEntity";
+import { RmmzEventPrefabMetadata } from "../data/DAnnotationReader";
 
 
 

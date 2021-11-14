@@ -1,7 +1,7 @@
-import { DHelpers, RmmzREEventMetadata } from "ts/re/data/DHelper";
 import { REGame } from "ts/re/objects/REGame";
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
+import { DAnnotationReader, RmmzREEventMetadata } from "../data/DAnnotationReader";
 import { REDataManager } from "../data/REDataManager";
 import { LState } from "../objects/states/LState";
 import { REVisual } from "../visual/REVisual";
@@ -90,7 +90,7 @@ Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
     this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this);
-    this._reEventData = (this._pageIndex >= 0) ? DHelpers.readREEventMetadataFromPage(this.page()) : undefined;
+    this._reEventData = (this._pageIndex >= 0) ? DAnnotationReader.readREEventMetadataFromPage(this.page()) : undefined;
 }
 
 var _Game_Event_meetsConditions = Game_Event.prototype.meetsConditions;
@@ -139,7 +139,7 @@ Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, mapId: nu
     this._eventData_RE = eventData;
     this._pageData_RE = [];
     for (let i = 0; i < this._eventData_RE.pages.length; i++) {
-        const data = DHelpers.readREEventMetadataFromPage(this._eventData_RE.pages[i]);
+        const data = DAnnotationReader.readREEventMetadataFromPage(this._eventData_RE.pages[i]);
         if (data) {
             this._pageData_RE[i] = data;
         }

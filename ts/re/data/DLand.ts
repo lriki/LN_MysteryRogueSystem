@@ -1,8 +1,9 @@
 
 import { assert, tr2 } from "../Common";
+import { DAnnotationReader, RmmzMonsterHouseMetadata } from "./DAnnotationReader";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
-import { DHelpers, RmmzMonsterHouseMetadata } from "./DHelper";
+import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { REData } from "./REData";
 
@@ -213,7 +214,7 @@ export class DLand {
 
         for (const event of mapData.events) {
             if (!event) continue;
-            const data = DHelpers.readLandMetadata(event);
+            const data = DAnnotationReader.readLandMetadata(event);
             if (data) {
                 if (data.identifications) {
                     for (const pair of data.identifications) {
@@ -266,10 +267,10 @@ export class DLand {
         for (const event of mapData.events) {
             if (!event) continue;
             // @RE-Floor 設定を取り出す
-            const floorData = DHelpers.readFloorMetadataFromPage(event.pages[0], event.id);
+            const floorData = DAnnotationReader.readFloorMetadataFromPage(event.pages[0]);
             if (floorData) {
                 //const structures = DHelpers.readStructuresMetadata(event);
-                const monsterHouses = DHelpers.readMonsterHouseMetadata(event);
+                const monsterHouses = DAnnotationReader.readMonsterHouseMetadata(event);
 
                 const info: DFloorInfo = {
                     key: event.name,
@@ -315,7 +316,7 @@ export class DLand {
             const y = event.y;
 
             // @RE-Entity
-            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0]);
+            const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {
@@ -332,7 +333,7 @@ export class DLand {
             }
             
             // @RE-Event
-            const eventMetadata = DHelpers.readREEventMetadataFromPage(event.pages[0]);
+            const eventMetadata = DAnnotationReader.readREEventMetadataFromPage(event.pages[0]);
             if (eventMetadata) {
                 const tableItem: DAppearanceTableEvent = {
                     rmmzEventId: event.id,
@@ -405,7 +406,7 @@ export class DLand {
             const y = event.y;
 
             // @RE-Entity
-            const entityMetadata = DHelpers.readEntityMetadataFromPage(event.pages[0]);
+            const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {

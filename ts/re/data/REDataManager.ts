@@ -26,6 +26,7 @@ import { REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
+import { DAnnotationReader } from './DAnnotationReader';
 
 
 declare global {  
@@ -928,7 +929,7 @@ export class REDataManager
             const mapData: IDataMap = obj;
             for (const event of mapData.events) {
                 if (!event) continue;
-                const data = DHelpers.readPrefabMetadata(event);
+                const data = DAnnotationReader.readPrefabMetadata(event);
                 if (!data) continue;
 
                 const prefab = new DPrefab();
@@ -983,7 +984,7 @@ export class REDataManager
                 }
 
                 for (let i = 1; i < event.pages.length; i++) {
-                    const pageData = DHelpers.readPrefabSubPageMetadata(event.pages[i]);
+                    const pageData = DAnnotationReader.readPrefabSubPageMetadata(event.pages[i]);
                     if (pageData) {
                         if (pageData.state === undefined) throw new Error(`@RE-PrefabSubPage requires state field.`);
                         prefab.subPages.push({ stateId: REData.getState(pageData.state).id, rmmzEventPageIndex: i });
