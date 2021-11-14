@@ -165,7 +165,7 @@ export class DLand {
     exitRMMZMapId: number;
     //exitFloorId: DFloorId;
 
-    /** @RE-Floor から読み取った Floor 情報 */
+    /** @MR-Floor から読み取った Floor 情報 */
     floorInfos: DFloorInfo[];
 
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
@@ -266,7 +266,7 @@ export class DLand {
         const floors: DFloorInfo[] = [];
         for (const event of mapData.events) {
             if (!event) continue;
-            // @RE-Floor 設定を取り出す
+            // @MR-Floor 設定を取り出す
             const floorData = DAnnotationReader.readFloorMetadataFromPage(event.pages[0]);
             if (floorData) {
                 //const structures = DHelpers.readStructuresMetadata(event);
@@ -315,7 +315,7 @@ export class DLand {
             const x = event.x;
             const y = event.y;
 
-            // @RE-Entity
+            // @MR-Entity
             const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
@@ -332,7 +332,7 @@ export class DLand {
                 //table.maxFloors = Math.max(table.maxFloors, tableItem.lastFloorNumber + 1);
             }
             
-            // @RE-Event
+            // @MR-Event
             const eventMetadata = DAnnotationReader.readREEventMetadataFromPage(event.pages[0]);
             if (eventMetadata) {
                 const tableItem: DAppearanceTableEvent = {
@@ -405,7 +405,7 @@ export class DLand {
             const x = event.x;
             const y = event.y;
 
-            // @RE-Entity
+            // @MR-Entity
             const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);

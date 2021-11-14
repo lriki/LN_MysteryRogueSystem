@@ -25,7 +25,7 @@
     `自然発生アイテム出現テーブル` にお金が設定されている場合、そちらからランダムドロップできます。
 
 
-### <RE-Trait: ItemDropRate(0, rate)\>
+### <MR-Trait: ItemDropRate(0, rate)\>
 
 | Name | Type   | Description |
 |------|--------|-------------|

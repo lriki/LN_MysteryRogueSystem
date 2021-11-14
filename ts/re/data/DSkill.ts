@@ -53,7 +53,7 @@ export class DSkill {
 
     public parseMetadata(meta: any | undefined): void {
         if (!meta) return;
-        this.key = meta["RE-Key"];
+        this.key = meta["MR-Key"];
         this.kind = meta["RE-Kind"];
     }
 

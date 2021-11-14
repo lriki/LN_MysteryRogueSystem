@@ -35,7 +35,7 @@ export class DTrait {
     }
 
     public static parseTraitMetadata(meta: any): IDataTrait[] {
-        const raws = meta["RE-Trait"];
+        const raws = meta["MR-Trait"];
         if (!raws) return [];
         const list = (raws instanceof Array) ? raws : [raws];
         

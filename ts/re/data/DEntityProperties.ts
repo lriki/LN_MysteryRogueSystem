@@ -16,7 +16,7 @@ export interface DItemEquipmentImage {
 }
 
 export interface DEntityProperties {
-    /** RE-Key */
+    /** MR-Key */
     key: string;
 
     kindId: DEntityKindId;
@@ -67,7 +67,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         const kindName = meta["RE-Kind"];
         const kind = kindName ? REData.findEntityKind(kindName) : undefined;
         const data: DEntityProperties = {
-            key: meta["RE-Key"] ?? "",
+            key: meta["MR-Key"] ?? "",
             kindId: kind ? kind.id : 0,
             behaviors: [],
             commandNames: [],
@@ -79,10 +79,10 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
                 side: DItemEquipmentSide.Right,
             },
             prefabId: 0,
-            meta_prefabName: meta["RE-Prefab"]
+            meta_prefabName: meta["MR-Prefab"]
         };
 
-        const behaviors = meta["RE-Behavior"];
+        const behaviors = meta["MR-Behavior"];
         if (behaviors) {
             if (typeof(behaviors) == "string")
                 data.behaviors = parseMetadata_Behavior([behaviors]);

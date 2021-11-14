@@ -445,12 +445,12 @@ export class REDataManager
                     if (x.meta && x.meta["RE-Kind"] == "StateGroup") {
                         const stateGroup = new DStateGroup(REData.stateGroups.length);
                         stateGroup.name = x.name;
-                        stateGroup.key = x.meta["RE-Key"];
+                        stateGroup.key = x.meta["MR-Key"];
                         REData.stateGroups.push(stateGroup);
                         RESetup.setupDirectly_StateGroup(stateGroup);
                     }
                     else {
-                        state.key = x.meta ? x.meta["RE-Key"]: "";
+                        state.key = x.meta ? x.meta["MR-Key"]: "";
                         state.displayName = x.name;
                         state.effect.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
                         state.iconIndex = x.iconIndex ?? 0;
@@ -485,7 +485,7 @@ export class REDataManager
                     if (state) {
                         const ability: DAbility = {
                             id: index,
-                            key: state.meta["RE-Key"],
+                            key: state.meta["MR-Key"],
                             reactions: [],
                         };
                         Object.keys(state.meta).forEach(key => {
@@ -986,7 +986,7 @@ export class REDataManager
                 for (let i = 1; i < event.pages.length; i++) {
                     const pageData = DAnnotationReader.readPrefabSubPageMetadata(event.pages[i]);
                     if (pageData) {
-                        if (pageData.state === undefined) throw new Error(`@RE-PrefabSubPage requires state field.`);
+                        if (pageData.state === undefined) throw new Error(`@MR-PrefabSubPage requires state field.`);
                         prefab.subPages.push({ stateId: REData.getState(pageData.state).id, rmmzEventPageIndex: i });
                     }
                 }

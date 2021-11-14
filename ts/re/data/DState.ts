@@ -224,7 +224,7 @@ export class DState {
 }
 
 export function makeStateBehaviorsFromMeta(meta: any): string[] {
-    const b = meta["RE-Behavior"];
+    const b = meta["MR-Behavior"];
     if (b) {
         if (b instanceof Array) {
             return b;
