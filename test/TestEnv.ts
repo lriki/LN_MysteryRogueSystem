@@ -126,12 +126,20 @@ export class TestEnv {
             this.loadDataFile(databaseFile.name, databaseFile.src);
         }
     }
+
+    private static setGlobal(name: string, value: any): void {
+        if (DHelpers.isNode())
+            (global as any)[name] = value;
+        else
+            (window as any)[name] = value;
+    }
         
     // DataManager.loadDataFile
     private static loadDataFile(name: string, src: string) {
-        const dataDir = REData.testMode ? "../data/" : "data/";
-        (window as any)[name] = JSON.parse(fs.readFileSync(dataDir + src).toString());
-        this.onLoad((window as any)[name]);
+        const dataDir = "data/";    // REData.testMode ? "../data/" : 
+        const data = JSON.parse(fs.readFileSync(dataDir + src).toString());
+        this.setGlobal(name, data);
+        this.onLoad(data);
     }
     
     // DataManager.loadMapData

@@ -35,6 +35,12 @@
             //"es2016.array.include"
         ]
     },
+    // "include": [
+    //     "ts/*",
+    //     "ts/re/**/*",
+    //     "ts/extensions/**/*",
+    // ],
+    //"exclude": ["node_modules/**/*", "dist/**/*", "ts/viewer/**/*"],
     //"files": [
     //  "ts/main.ts"
     //]

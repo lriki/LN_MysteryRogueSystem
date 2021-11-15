@@ -1171,7 +1171,7 @@ export class REDataManager
     
     private static loadDataFile(src: string, onLoad: (obj: any) => void) {
         if (DHelpers.isNode()) {
-            const dataDir = REData.testMode ? "../data/" : "data/";
+            const dataDir = "data/";//REData.testMode ? "../data/" : "data/";
             const data = JSON.parse(fs.readFileSync(dataDir + src).toString());
             onLoad(data);
         }
