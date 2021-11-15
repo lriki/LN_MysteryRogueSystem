@@ -1149,12 +1149,9 @@ export class LEntity extends LObject
     
     public collectTraits(): IDataTrait[] {
         const result: IDataTrait[] = [];
-        for (const i of this.basicBehaviors()) {
-            i.onCollectTraits(this, result);
-        }
-        for (const i of this.states()) {
-            i.collectTraits(this, result);
-        }
+        this.iterateBehaviorsReverse(b => {
+            b.onCollectTraits(this, result);
+        }, true);
         return result;
     }
 
@@ -1262,7 +1259,7 @@ export class LEntity extends LObject
         return true;
     }
 
-    public iterateBehaviorsReverse(func: (b: LBehavior) => boolean): boolean {
+    public iterateBehaviorsReverse(func: ((b: LBehavior) => void) | ((b: LBehavior) => boolean), fromTraits: boolean = false): boolean {
         for (let i = this._states.length - 1; i >= 0; i--) {
             const j = REGame.world.object(this._states[i]) as LState;
             if (!j.iterateBehaviors(b => func(b))) return false;
@@ -1273,11 +1270,14 @@ export class LEntity extends LObject
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
 
-        const sealedSpecialAbility = this.traits(REBasics.traits.SealSpecialAbility).length > 0;
+        const sealedSpecialAbility = (!fromTraits) ?
+            this.traits(REBasics.traits.SealSpecialAbility).length > 0 :
+            false;
+
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
-            if (!func(j)) return false;
+            if (func(j) === false) return false;
         }
 
         return true;

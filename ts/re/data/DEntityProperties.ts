@@ -41,7 +41,7 @@ export interface DEntityProperties {
 
 export interface DBehaviorInstantiation {
     name: string;
-    args: any[];
+    args?: any[] | undefined;
 }
 
 export function DEntityProperties_Default(): DEntityProperties {
@@ -67,7 +67,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
         const kindName = meta["RE-Kind"];
         const kind = kindName ? REData.findEntityKind(kindName) : undefined;
         const data: DEntityProperties = {
-            key: meta["MR-Key"] ?? "",
+            key: (meta["MR-Key"] ?? "").trim(),
             kindId: kind ? kind.id : 0,
             behaviors: [],
             commandNames: [],
@@ -79,7 +79,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
                 side: DItemEquipmentSide.Right,
             },
             prefabId: 0,
-            meta_prefabName: meta["MR-Prefab"]
+            meta_prefabName: (meta["MR-Prefab"] ?? "").trim(),
         };
 
         const behaviors = meta["MR-Behavior"];

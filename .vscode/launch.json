@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceRoot}/rogue/node_modules/jest/bin/jest.js",
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
             "args": [
                 //"${file}",
                 // 現在のプロセスで逐次テストを実行していく設定.
@@ -26,9 +26,9 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.trap.WarpTrap.Basic"
+                "-t", "concretes.item.ring.AwakeRing"
             ],
-            "cwd": "${workspaceRoot}/rogue",
+            "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
             "sourceMaps": true,
         },

@@ -20,6 +20,7 @@ import { LItemImitatorBehavior } from "ts/re/objects/behaviors/LItemImitatorBeha
 import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehavior";
 import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
 import { DBehaviorInstantiation } from "../data/DEntityProperties";
+import { LEquipmentBehavior } from "../objects/behaviors/LEquipmentBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -34,6 +35,7 @@ export class SBehaviorFactory {
         { fullName: "REUnitBehavior", friendlyName: "_Unit", create: () => new LUnitBehavior() },
         { fullName: "LInventoryBehavior", friendlyName: "_Inventory", create: () => new LInventoryBehavior() },
         { fullName: "LItemUserBehavior", friendlyName: "_ItemUser", create: () => new LItemUserBehavior() },
+        { fullName: "LEquipmentBehavior", friendlyName: "Equipment", create: () => new LEquipmentBehavior() },
         { fullName: "LEquipmentUserBehavior", friendlyName: "_EquipmentUser", create: () => new LEquipmentUserBehavior() },
         { fullName: "LActorBehavior", friendlyName: "_Actor", create: () => new LActorBehavior() },
         { fullName: "REExitPointBehavior", friendlyName: "_ExitPoint", create: () => new LExitPointBehavior() },

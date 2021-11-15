@@ -88,8 +88,12 @@ export class LEquipmentBehavior extends LBehavior {
     }
     
     onAttached(self: LEntity): void {
-        assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
-        self.params().acquireParam(REBasics.params.upgradeValue);
+        assert(self.findEntityBehavior(LItemBehavior));
+        const data = self.data();
+
+        if (data.upgradeMax > 0) {
+            self.params().acquireParam(REBasics.params.upgradeValue);
+        }
     }
     
     onQueryReactions(actions: DActionId[]): void {

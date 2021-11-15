@@ -23,8 +23,3 @@ export interface DEquipmentPart {
     
 
 }
-
-export const DEquipmentPart_Default: DEquipmentPart = {
-    id: 0,
-    name: "null",
-};

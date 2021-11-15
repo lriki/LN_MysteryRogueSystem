@@ -362,9 +362,9 @@ export class LState extends LObject {
         });
     }
 
-    public iterateBehaviors(func: (b: LBehavior) => boolean): boolean {
+    public iterateBehaviors(func: ((b: LBehavior) => void) | ((b: LBehavior) => boolean)): boolean {
         for (const id of this._stateBehabiors) {
-            if (!func(REGame.world.behavior(id))) return false;
+            if (func(REGame.world.behavior(id)) === false) return false;
         }
         return true;
     }

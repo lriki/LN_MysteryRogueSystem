@@ -67,6 +67,9 @@ export class RESetup {
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
+            case "kアウェイクリング":
+                entity.entity.behaviors.push({name: "Equipment"});
+                break;
             case "kウッドアロー":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;

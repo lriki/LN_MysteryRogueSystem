@@ -169,9 +169,10 @@ NOTE:
             //const itemPart = itemBehavior.itemData().equipmentParts[0];
             const equipment = itemEntity.data().equipment;
             assert(equipment);
-            const itemPart = equipment.equipmentParts[0];
+            const itemPart = equipment.equipmentPart;
+            assert(itemPart > 0);
 
-            const inventory = self.getEntityBehavior(LInventoryBehavior);
+            //const inventory = self.getEntityBehavior(LInventoryBehavior);
             //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);
 
 

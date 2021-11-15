@@ -15,13 +15,18 @@ import { RESerializable } from "ts/re/Common";
 import { LEntityId } from "../LObject";
 import { UMovement } from "ts/re/usecases/UMovement";
 
+enum GetUpReserved {
+    None,
+    Random,
+    Certainly,
+}
 @RESerializable
 export class LNapStateBehavior extends LBehavior {
-    private _hostileEnterd: boolean = false;
+    private _getUpReserved: GetUpReserved = GetUpReserved.None;
     
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LNapStateBehavior);
-        b._hostileEnterd = this._hostileEnterd;
+        b._getUpReserved = this._getUpReserved;
         return b
     }
 
@@ -65,8 +70,15 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     private attemptReserveGetUp(self: LEntity, target: LEntity) {
+        if (this._getUpReserved == GetUpReserved.Certainly) return; // 起きるの確定済みなので判定不要
+
         if (Helpers.isHostile(target, self)) {
-            this._hostileEnterd = true;
+            if (target.hasTrait(REBasics.traits.Awake)) {
+                this._getUpReserved = GetUpReserved.Certainly;
+            }
+            else {
+                this._getUpReserved = GetUpReserved.Random;
+            }
         }
     }
 
@@ -75,25 +87,32 @@ export class LNapStateBehavior extends LBehavior {
     }
     
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
-        if (phase == DecisionPhase.UpdateState) {
-            return SPhaseResult.Pass;
-        }
-        else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
-            if (this._hostileEnterd) {
+        // if (phase == DecisionPhase.UpdateState) {
+        //     return SPhaseResult.Pass;
+        // }
+        // else
+        if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
+            if (this._getUpReserved == GetUpReserved.Certainly) {
+                this.parentAs(LState)?.removeThisState();
+            }
+            else if (this._getUpReserved == GetUpReserved.Random) {
                 const r = cctx.random().nextIntWithMax(100);
                 if (r < 50) {   // 50%
-                    //this.removeThisState();
                     this.parentAs(LState)?.removeThisState();
                 }
-                this._hostileEnterd = false;
             }
+            this._getUpReserved = GetUpReserved.None;
 
             return SPhaseResult.Pass;
         }
-        else {
-            // Skip action
-            cctx.postConsumeActionToken(self, LActionTokenType.Major);
-            return SPhaseResult.Handled;
-        }
+        // else if (phase == DecisionPhase.Manual ||
+        //     phase == DecisionPhase.AIMinor ||
+        //     phase == DecisionPhase.AIMajor) {
+        //     // Skip action
+        //     cctx.postConsumeActionToken(self, LActionTokenType.Major);
+        //     return SPhaseResult.Handled;
+        // }
+
+        return SPhaseResult.Pass;
     }
 }

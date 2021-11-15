@@ -108,13 +108,17 @@ export interface DEquipmentParam {
 export class DEquipment {
     
     /** このアイテム(装備品) を装備できる部位 */
-    equipmentParts: DEquipmentPartId[];
+    equipmentPart: DEquipmentPartId;
+
+    /** 他の占有部位。両手武器は、ここに Shield が入る。 */
+    equipmentOccupancyParts: DEquipmentPartId[];
 
     /** 装備したときに適用する parameters. (Index is DParameterId) */
     parameters: (DEquipmentParam | undefined)[];
 
     constructor() {
-        this.equipmentParts = [];
+        this.equipmentPart = 0;
+        this.equipmentOccupancyParts = [];
         this.parameters = [];
     }
 }

@@ -112,5 +112,8 @@ export interface DBasicTraits {
 
     /** 必ず罠にかかる */
     DrawInTrap: DTraitId;
+
+    /** 浅い眠りを必ず起こす。 */
+    Awake: DTraitId;
 }
 

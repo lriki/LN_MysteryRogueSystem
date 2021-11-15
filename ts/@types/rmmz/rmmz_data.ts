@@ -235,7 +235,7 @@ declare interface IDataState
     restriction: number;
     stepsToRemove: number;
     traits: IDataTrait[];
-    meta?: any;
+    meta: any;
 }
 
 declare interface IDataTileset

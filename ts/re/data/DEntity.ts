@@ -127,6 +127,7 @@ export class DEntity {
     /** 装備したときに、装備者に対して適用する Trait */
     affestTraits: IDataTrait[];
 
+    /** 持っているだけで affestTraits の効果があるか */
     isTraitCharmItem: boolean;
 
 

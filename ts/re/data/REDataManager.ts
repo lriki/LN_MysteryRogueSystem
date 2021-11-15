@@ -237,6 +237,7 @@ export class REDataManager
             REBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
             REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
             REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
+            REBasics.traits.Awake = REData.newTrait("Awake").id;
             
 
 
@@ -446,12 +447,12 @@ export class REDataManager
                     if (x.meta && x.meta["RE-Kind"] == "StateGroup") {
                         const stateGroup = new DStateGroup(REData.stateGroups.length);
                         stateGroup.name = x.name;
-                        stateGroup.key = x.meta["MR-Key"];
+                        stateGroup.key = x.meta["MR-Key"].trim();
                         REData.stateGroups.push(stateGroup);
                         RESetup.setupDirectly_StateGroup(stateGroup);
                     }
                     else {
-                        state.key = x.meta ? x.meta["MR-Key"]: "";
+                        state.key = (x.meta["MR-Key"] ?? "").trim();
                         state.displayName = x.name;
                         state.effect.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
                         state.iconIndex = x.iconIndex ?? 0;
@@ -485,7 +486,7 @@ export class REDataManager
                     if (state) {
                         const ability: DAbility = {
                             id: index,
-                            key: state.meta["MR-Key"],
+                            key: state.meta["MR-Key"].trim(),
                             reactions: [],
                         };
                         Object.keys(state.meta).forEach(key => {
@@ -631,7 +632,7 @@ export class REDataManager
                 entity.cellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
-                entity.equipment.equipmentParts = [x.etypeId];
+                entity.equipment.equipmentPart = x.etypeId;
                 entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.atk] = { value: x.params[2], upgradeRate: 1.0 };
@@ -641,6 +642,7 @@ export class REDataManager
                 entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
                 entity.affestTraits = x.traits.slice();
+                entity.affestTraits = entity.affestTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
 
                 // 投げ当て Effect
@@ -674,7 +676,7 @@ export class REDataManager
                 entity.cellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
-                entity.equipment.equipmentParts = [x.etypeId]
+                entity.equipment.equipmentPart = x.etypeId;
                 entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.atk] = { value: x.params[2], upgradeRate: 0 };
@@ -684,6 +686,7 @@ export class REDataManager
                 entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
                 entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
                 entity.affestTraits = x.traits.slice();
+                entity.affestTraits = entity.affestTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
