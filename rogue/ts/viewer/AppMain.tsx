@@ -6,6 +6,7 @@ import "./rmmz/Input"
 import "./rmmz/Graphics"
 import { Box, Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import RootTabs from './RootTabs';
+import { AppRoutes } from './Routes';
 //import {SubComponent} from './sub-component';
 
 const darkTheme = createTheme({
@@ -20,9 +21,7 @@ class App extends React.Component {
     return (
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
-          <Box>
-            <RootTabs />
-          </Box>
+          <AppRoutes />
         </ThemeProvider>
     );
   }

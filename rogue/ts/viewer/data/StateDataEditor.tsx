@@ -12,6 +12,8 @@ import DataTitleList, { DataTitleListItem } from './DataTitleList';
 import { REData } from 'ts/re/data/REData';
 import StateDataDetails from './StateDataDetails';
 import { DStateId } from 'ts/re/data/DState';
+import { AppNavigator } from '../AppNavigator';
+import { DatabaseNavigator } from './DatabaseNavigator';
 
 const drawerWidth = 200;
 
@@ -32,6 +34,7 @@ function getDataTitleList(): DataTitleListItem[] {
 export default function StateDataEditor() {
     const [selectedData, setSelectedData] = React.useState<DStateId>(0);
 
+
     React.useEffect(
         () => {
             console.log(selectedData);
@@ -44,17 +47,16 @@ export default function StateDataEditor() {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <DatabaseNavigator>
             <Box
                 component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-            >
+                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
                 <DataTitleList items={getDataTitleList()} onClick={handleDataTitleListItemClick} />
             </Box>
             
             <Box sx={{ flexGrow: 1 }}>
                 <StateDataDetails id={selectedData} />
             </Box>
-        </Box>
+        </DatabaseNavigator>
     );
 }
