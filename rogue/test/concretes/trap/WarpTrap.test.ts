@@ -33,5 +33,8 @@ test("concretes.trap.WarpTrap.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // ワープしている
+    if (player1.x != 11 && player1.y != 10) {
+        console.log("pos: ", player1.x, player1.y);
+    }
     expect(player1.x != 11 && player1.y != 10).toBe(true);
 });

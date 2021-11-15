@@ -71,6 +71,7 @@ export class TestEnv {
     static activeSequelSet: SSequelSet;
 
     static setupDatabase() {
+        REData.testMode = true;
         this.loadRmmzDatabase();
         REData.reset();
         REDataManager.loadData(true);
@@ -128,7 +129,8 @@ export class TestEnv {
         
     // DataManager.loadDataFile
     private static loadDataFile(name: string, src: string) {
-        (window as any)[name] = JSON.parse(fs.readFileSync("data/" + src).toString());
+        const dataDir = REData.testMode ? "../data/" : "data/";
+        (window as any)[name] = JSON.parse(fs.readFileSync(dataDir + src).toString());
         this.onLoad((window as any)[name]);
     }
     

@@ -128,6 +128,7 @@ export enum LandExitResult {
 export class REData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
+    static testMode = false;
 
     
     // Common defineds.

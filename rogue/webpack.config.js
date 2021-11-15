@@ -15,7 +15,7 @@ module.exports = {
     target: 'node',
     output: {
         path: __dirname,
-        filename: './js/plugins/LN_MysteryRogueSystem.js'
+        filename: '../js/plugins/LN_MysteryRogueSystem.js'
     },
     resolve: {
         extensions: ['.ts', '.js', ".tsx"],
