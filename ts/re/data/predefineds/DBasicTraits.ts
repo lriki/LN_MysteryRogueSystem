@@ -114,6 +114,6 @@ export interface DBasicTraits {
     DrawInTrap: DTraitId;
 
     /** 浅い眠りを必ず起こす。 */
-    Awake: DTraitId;
+    AwakeStep: DTraitId;
 }
 

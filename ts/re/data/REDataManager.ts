@@ -27,6 +27,7 @@ import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
 import { DAnnotationReader } from './DAnnotationReader';
+import { DMetadataParser } from './DMetadataParser';
 
 
 declare global {  
@@ -237,7 +238,7 @@ export class REDataManager
             REBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
             REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
             REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
-            REBasics.traits.Awake = REData.newTrait("Awake").id;
+            REBasics.traits.AwakeStep = REData.newTrait("AwakeStep").id;
             
 
 
@@ -444,15 +445,17 @@ export class REDataManager
                 const state = new DState(REData.states.length);
                 REData.states.push(state);
                 if (x) {
-                    if (x.meta && x.meta["RE-Kind"] == "StateGroup") {
+                    const meta = DMetadataParser.parse(x.meta);
+
+                    if (meta.kind == "StateGroup") {
                         const stateGroup = new DStateGroup(REData.stateGroups.length);
                         stateGroup.name = x.name;
-                        stateGroup.key = x.meta["MR-Key"].trim();
+                        stateGroup.key = meta.key;
                         REData.stateGroups.push(stateGroup);
                         RESetup.setupDirectly_StateGroup(stateGroup);
                     }
                     else {
-                        state.key = (x.meta["MR-Key"] ?? "").trim();
+                        state.key = meta.key;
                         state.displayName = x.name;
                         state.effect.restriction = DStateRestriction.fromRmmzRestriction(x.restriction);
                         state.iconIndex = x.iconIndex ?? 0;
@@ -461,8 +464,10 @@ export class REDataManager
                         state.message2 = x.message2 ?? "";
                         state.message3 = x.message3 ?? "";
                         state.message4 = x.message4 ?? "";
-                        state.effect.traits = x.traits.concat(DTrait.parseTraitMetadata(x.meta));
-                        state.effect.behaviors = x.meta ? makeStateBehaviorsFromMeta(x.meta) : [];
+                        state.effect.behaviors = meta.behaviors;
+                        state.effect.traits = x.traits.concat(meta.traits);
+                        //state.effect.traits = x.traits.concat(DTrait.parseTraitMetadata(x.meta));
+                        //state.effect.behaviors = makeStateBehaviorsFromMeta(x.meta);
                         state.import(x);
                     }
                 }

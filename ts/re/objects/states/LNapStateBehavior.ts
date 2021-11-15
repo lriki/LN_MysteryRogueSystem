@@ -73,7 +73,7 @@ export class LNapStateBehavior extends LBehavior {
         if (this._getUpReserved == GetUpReserved.Certainly) return; // 起きるの確定済みなので判定不要
 
         if (Helpers.isHostile(target, self)) {
-            if (target.hasTrait(REBasics.traits.Awake)) {
+            if (target.hasTrait(REBasics.traits.AwakeStep)) {
                 this._getUpReserved = GetUpReserved.Certainly;
             }
             else {

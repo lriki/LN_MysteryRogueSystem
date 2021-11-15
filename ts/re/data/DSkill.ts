@@ -53,8 +53,8 @@ export class DSkill {
 
     public parseMetadata(meta: any | undefined): void {
         if (!meta) return;
-        this.key = meta["MR-Key"];
-        this.kind = meta["RE-Kind"];
+        this.key = (meta["MR-Key"] ?? "").trim();
+        this.kind = (meta["RE-Kind"] ?? "").trim();
     }
 
     public emittor(): DEmittor {

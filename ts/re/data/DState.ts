@@ -1,5 +1,6 @@
 import { DMatchConditions } from "./DCommon";
 import { DEffect } from "./DEffect";
+import { DBehaviorInstantiation } from "./DEntityProperties";
 import { DParameterId } from "./DParameter";
 import { DSequelId } from "./DSequel";
 import { DStateGroupId } from "./DStateGroup";
@@ -115,7 +116,7 @@ export class DStateEffect {
 
     traits: IDataTrait[];
 
-    behaviors: string[];
+    behaviors: DBehaviorInstantiation[];
 
 
     /** 自動解除のタイミング */
@@ -223,14 +224,16 @@ export class DState {
     }
 }
 
-export function makeStateBehaviorsFromMeta(meta: any): string[] {
+// TODO: parseConstructionExpr 使った方がいいかも
+/** @deprecated */
+export function makeStateBehaviorsFromMeta(meta: any | undefined): string[] {
     const b = meta["MR-Behavior"];
     if (b) {
         if (b instanceof Array) {
-            return b;
+            return b.map(x => x.trim());
         }
         else {
-            return [b];
+            return [b.trim()];
         }
     }
     return [];

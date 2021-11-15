@@ -62,10 +62,11 @@ export function DEntityProperties_Default(): DEntityProperties {
     }
 }
 
+/** @deprecated DMetadataParser */
 export function parseMetaToEntityProperties(meta: any | undefined): DEntityProperties {
     if (meta) {
         const kindName = meta["RE-Kind"];
-        const kind = kindName ? REData.findEntityKind(kindName) : undefined;
+        const kind = kindName ? REData.findEntityKind(kindName.trim()) : undefined;
         const data: DEntityProperties = {
             key: (meta["MR-Key"] ?? "").trim(),
             kindId: kind ? kind.id : 0,

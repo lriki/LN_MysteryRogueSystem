@@ -34,6 +34,7 @@ export class DTrait {
         this.key = key;
     }
 
+    /** @deprecated DMetadataParser */
     public static parseTraitMetadata(meta: any): IDataTrait[] {
         const raws = meta["MR-Trait"];
         if (!raws) return [];

@@ -651,7 +651,7 @@ export class RESetup {
                 data.effect.traits.push({ code: REBasics.traits.CertainIndirectAttack, dataId: 0, value: 0 });
                 break;
             case "kState_UTアイテム擬態":
-                data.effect.behaviors.push("LItemImitatorBehavior");
+                data.effect.behaviors.push({ name: "LItemImitatorBehavior" });
                 break;
             case "kState_仮眠2":
                 //data.behaviors.push("LDoze2Behavior");
@@ -683,7 +683,7 @@ export class RESetup {
                 data.effect.restriction = DStateRestriction.Blind;
                 break;
             case "kState_UTまどわし":
-                data.effect.behaviors.push("LIllusionStateBehavior");
+                data.effect.behaviors.push({ name: "LIllusionStateBehavior" });
                 break;
             case "kState_UTからぶり":
                 break;
@@ -708,7 +708,7 @@ export class RESetup {
                 data.effect.matchConditions.kindId = REBasics.entityKinds.MonsterKindId;
                 break;
             case "kState_UT足つかみ":
-                data.effect.behaviors.push("LGrabFootBehavior");
+                data.effect.behaviors.push({ name: "LGrabFootBehavior" });
                 break;
             case "kState_UT身かわし":
                 data.effect.traits.push({ code: REBasics.traits.CartailDodgePhysicalAttack, dataId: 0, value: 0 });
