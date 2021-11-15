@@ -1152,6 +1152,12 @@ export class LEntity extends LObject
         this.iterateBehaviorsReverse(b => {
             b.onCollectTraits(this, result);
         }, true);
+        
+        // Behavior とは別に、State 自体が持っている Trait も含める
+        this.iterateStates(s => {
+            s.stateEffect().traits.forEach(x => result.push(x));
+        });
+
         return result;
     }
 
@@ -1232,9 +1238,9 @@ export class LEntity extends LObject
         }
     }
 
-    public iterateStates(func: (s: LState) => boolean): void {
+    public iterateStates(func: ((s: LState) => void) | ((s: LState) => boolean)): void {
         for (const id of this._states) {
-            if (!func(REGame.world.object(id) as LState)) return;
+            if (func(REGame.world.object(id) as LState) === false) return;
         }
     }
 

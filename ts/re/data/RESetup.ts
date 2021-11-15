@@ -685,6 +685,8 @@ export class RESetup {
             case "kState_UTまどわし":
                 data.effect.behaviors.push("LIllusionStateBehavior");
                 break;
+            case "kState_UTからぶり":
+                break;
             case "kState_UTくちなし":
                 data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.EatActionId, value: 0 });
                 data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.ReadActionId, value: 0 });
