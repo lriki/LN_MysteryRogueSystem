@@ -18,14 +18,10 @@ module.exports = {
     //testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     //moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 
-    "collectCoverage": true,
-    "collectCoverageFrom": [  
-      //"ts/re/objects/**/*.ts"//,
-      "ts/**/*.ts"//,
-      //"!ts/re/rmmz/**/*.ts",
-      //"!ts/re/visual/**/*.ts",
-      //"!**/*.d.ts"
-    ],
+    //"collectCoverage": true,
+    //"collectCoverageFrom": [  
+    //  "ts/**/*.ts"
+    //],
 
     "globals": {
         "ts-jest": {

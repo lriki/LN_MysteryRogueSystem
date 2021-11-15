@@ -1,3 +1,3 @@
 
 import "./main"
-import "./editor/main"
+import "./viewer/AppMain"

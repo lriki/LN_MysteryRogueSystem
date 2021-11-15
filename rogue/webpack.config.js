@@ -2,7 +2,7 @@
 const webpack = require('webpack');
 const fs = require('fs');
 const path = require('path');
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+//const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const METADATA = fs.readFileSync("./plugin-description.txt").toString();
@@ -10,8 +10,8 @@ const METADATA = fs.readFileSync("./plugin-description.txt").toString();
 module.exports = {
     //mode: 'production',
     mode: 'development',
-    //entry: './ts/main2.tsx',
-    entry: './ts/main.ts',
+    entry: './ts/main2.tsx',
+    //entry: './ts/main.ts',
     target: 'node',
     output: {
         path: __dirname,
@@ -40,18 +40,18 @@ module.exports = {
             }
         ]
     },
-    optimization: {
-        minimizer: [
-            new UglifyJsPlugin({
-                uglifyOptions: {
-                    output: {
-                        beautify: false,
-                        preamble: METADATA,
-                    },
-                },
-            }),
-        ],
-    },
+    // optimization: {
+    //     minimizer: [
+    //         new UglifyJsPlugin({
+    //             uglifyOptions: {
+    //                 output: {
+    //                     beautify: false,
+    //                     preamble: METADATA,
+    //                 },
+    //             },
+    //         }),
+    //     ],
+    // },
     plugins: [
         new webpack.BannerPlugin(
             {
