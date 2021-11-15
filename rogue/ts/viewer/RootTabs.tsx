@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import DataTypeList, { DataTypeListItem } from './DataTypeList';
 import DatabaseEditor from './data/DatabaseEditor';
 import { tr2 } from 'ts/re/Common';
+import { styled } from '@mui/material';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -40,6 +41,7 @@ function a11yProps(index: number) {
     };
 }
 
+const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
 export default function RootTabs() {
     const [value, setValue] = React.useState(0);

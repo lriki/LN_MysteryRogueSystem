@@ -13,7 +13,16 @@ interface Props {
 }
 
 export function AppNavigator(props: Props) {
+    const ref1 = React.useRef<HTMLDivElement>(null);
+    const [tabHeight, setTabHeight] = React.useState("100px");
     const history = useHistory();
+
+    React.useEffect( () => {
+        if(ref1.current){
+            setTabHeight(`calc(100% - ${ref1.current.offsetHeight}px)`);
+        }
+
+    }, [ref1]);
 
     function tabValue(): number | undefined {
         if (history.location.pathname.includes("/database")) return 0;
@@ -22,21 +31,18 @@ export function AppNavigator(props: Props) {
     }
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        //setValue(newValue);
-        console.log("push!!");
-        //history.push("/data");
         history.push("/database");
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{ height: "100vh", width: '100%' }}>
+            <Box ref={ref1} sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tabValue()} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label={tr2("Data")} />
                     <Tab label={tr2("Entities")} />
                 </Tabs>
             </Box>
-            <Box>
+            <Box sx={{ height: tabHeight, width: '100%' }}>
                 {props.children}
             </Box>
         </Box>

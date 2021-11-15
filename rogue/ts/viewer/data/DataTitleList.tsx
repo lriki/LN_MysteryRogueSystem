@@ -7,6 +7,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { Paper } from '@mui/material';
+import { theme } from '../Theme';
 
 export interface DataTitleListItem {
     id: any;
@@ -35,13 +36,14 @@ export default function DataTitleList(props: Props) {
         return (<>{props.items.map(item => renderItem(item))}</>);
     }
 
+    //console.log("tab", theme.components?.MuiTab);
+    
+
     return (
-        <Paper style={{maxHeight: "100%", overflow: 'auto'}}>
-            <nav aria-label="secondary mailbox folders">
-                <List>
-                    {renderItems()}
-                </List>
-            </nav>
-        </Paper>
+        <Box sx={{ height: "100%", overflow: "auto" }}>
+            <List sx={{ height: "100%" }}>
+                {renderItems()}
+            </List>
+        </Box>
     );
 }

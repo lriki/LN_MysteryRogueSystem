@@ -8,6 +8,8 @@ import { tr2 } from 'ts/re/Common';
 import { AppNavigator } from '../AppNavigator';
 import { DataTypeListItem } from '../DataTypeList';
 
+const dataTypeListWidth = 220;
+
 const dataTypeListItems: DataTypeListItem[] = [
     { id: "entities", name: "エンティティ" },
     { id: "skills", name: "スキル" },
@@ -52,13 +54,11 @@ export function DatabaseNavigator(props: Props) {
 
     return (
         <AppNavigator>
-            <Box sx={{ width: '100%', maxWidth: 360, display: 'flex'  }}>
-                <nav aria-label="secondary mailbox folders">
-                    <List>
-                        {renderItems()}
-                    </List>
-                </nav>
-                <Box>
+            <Box sx={{ width: '100%', display: 'flex', height: "100%" }}>
+                <List sx={{ height: "100%", minWidth: dataTypeListWidth }}>
+                    {renderItems()}
+                </List>
+                <Box sx={{ height: "100%", width: "100%" }}>
                     {props.children}
                 </Box>
             </Box>

@@ -7,19 +7,15 @@ import "./rmmz/Graphics"
 import { Box, Button, createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import RootTabs from './RootTabs';
 import { AppRoutes } from './Routes';
+import { theme } from './Theme';
 //import {SubComponent} from './sub-component';
 
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 class App extends React.Component {
   
   render() {
     return (
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
           <CssBaseline />
           <AppRoutes />
         </ThemeProvider>

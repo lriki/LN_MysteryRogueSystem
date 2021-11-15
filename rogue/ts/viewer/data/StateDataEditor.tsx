@@ -48,14 +48,13 @@ export default function StateDataEditor() {
 
     return (
         <DatabaseNavigator>
-            <Box
-                component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
-                <DataTitleList items={getDataTitleList()} onClick={handleDataTitleListItemClick} />
-            </Box>
-            
-            <Box sx={{ flexGrow: 1 }}>
-                <StateDataDetails id={selectedData} />
+            <Box sx={{ display: 'flex', height: "100%" }}>
+                <Box sx={{ width: { sm: drawerWidth }, height: "100%" }}>
+                    <DataTitleList items={getDataTitleList()} onClick={handleDataTitleListItemClick} />
+                </Box>
+                <Box sx={{ flexGrow: 1 }} >
+                    <StateDataDetails id={selectedData} />
+                </Box>
             </Box>
         </DatabaseNavigator>
     );
