@@ -8,13 +8,20 @@ import { tr2 } from 'ts/re/Common';
 import { AppNavigator } from '../AppNavigator';
 import { DataTypeListItem } from '../DataTypeList';
 
-const dataTypeListWidth = 220;
+const dataTypeListWidth = 160;
 
 const dataTypeListItems: DataTypeListItem[] = [
-    { id: "entities", name: "エンティティ" },
-    { id: "skills", name: "スキル" },
-    { id: "states", name: "ステート" },
+    { id: "entities", name: "Entities" },
+    { id: "skills", name: "Skills" },
+    { id: "states", name: "States" },
 ];
+
+function a11yProps(index: number) {
+    return {
+      id: `vertical-tab-${index}`,
+      'aria-controls': `vertical-tabpanel-${index}`,
+    };
+  }
 
 interface Props {
 	children?: React.ReactNode;
@@ -23,9 +30,10 @@ interface Props {
 export function DatabaseNavigator(props: Props) {
     const history = useHistory();
 
-    function selected(): number | undefined {
-        if (history.location.pathname.includes("/database")) return 0;
-        if (history.location.pathname.includes("/entities")) return 1;
+    function selectedIndex(): number | undefined {
+        if (history.location.pathname.includes("/entities")) return 0;
+        if (history.location.pathname.includes("/skills")) return 1;
+        if (history.location.pathname.includes("/states")) return 2;
         return undefined;
     }
 
@@ -51,13 +59,34 @@ export function DatabaseNavigator(props: Props) {
     const renderItems = () => {
         return (<>{dataTypeListItems.map(item => renderItem(item))}</>);
     }
+    
+    const handleChanged = (event: React.SyntheticEvent, newValue: number) => {
+        history.push("/database/states");
+    };
+
+    const renderTabItem = (item: DataTypeListItem, index: number) => {
+        return (
+            <Tab label={item.name} {...a11yProps(index)} />
+        );
+    }
+
+    const renderTabList = () => {
+        return (<Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={selectedIndex()}
+            onChange={handleChanged}
+            aria-label="Vertical tabs example"
+            sx={{ borderRight: 1, borderColor: 'divider', height: "100%", minWidth: dataTypeListWidth }}
+          >
+              {dataTypeListItems.map((item, i) => renderTabItem(item, i))}
+          </Tabs>);
+    }
 
     return (
         <AppNavigator>
             <Box sx={{ width: '100%', display: 'flex', height: "100%" }}>
-                <List sx={{ height: "100%", minWidth: dataTypeListWidth }}>
-                    {renderItems()}
-                </List>
+                {renderTabList()}
                 <Box sx={{ height: "100%", width: "100%" }}>
                     {props.children}
                 </Box>

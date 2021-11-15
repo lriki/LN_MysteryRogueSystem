@@ -11,6 +11,7 @@ import { Paper, Stack, styled, Toolbar, Typography } from '@mui/material';
 import DataTitleList, { DataTitleListItem } from './DataTitleList';
 import { REData } from 'ts/re/data/REData';
 import { DStateId } from 'ts/re/data/DState';
+import { PropertyGrid, Propery } from '../PropertyGrid';
 
 interface Props {
     id: DStateId,
@@ -28,14 +29,21 @@ export default function StateDataDetails(props: Props) {
 
     const data = REData.states[props.id];
 
+    const properies: Propery[] = [
+        { name: "displayName", value: data.displayName },
+        { name: "priority", value: data.priority },
+        { name: "deadState", value: data.deadState },
+    ];
+
     return (
-        <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={{ xs: 1, sm: 2, md: 4 }}
-            >
-            <Item>{data.displayName}</Item>
-            <Item>Item 2</Item>
-            <Item>Item 3</Item>
-        </Stack>
+        <PropertyGrid properies={properies} />
+        // <Stack
+        //     direction={{ xs: 'column', sm: 'row' }}
+        //     spacing={{ xs: 1, sm: 2, md: 4 }}
+        //     >
+        //     <Item>{data.displayName}</Item>
+        //     <Item>Item 2</Item>
+        //     <Item>Item 3</Item>
+        // </Stack>
     );
 }
