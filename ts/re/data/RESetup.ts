@@ -10,7 +10,7 @@ import { DSkill } from "./DSkill";
 import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { REData } from "./REData";
-import { tr2 } from "../Common";
+import { assert, tr2 } from "../Common";
 import { DItem } from "./DItem";
 
 export class RESetup {
@@ -69,6 +69,11 @@ export class RESetup {
                 break;
             case "kアウェイクリング":
                 entity.entity.behaviors.push({name: "Equipment"});
+                break;
+            case "kパワーリング":
+                entity.entity.behaviors.push({name: "Equipment"});
+                assert(entity.equipment);
+                entity.equipment.parameters[REBasics.params.pow] = { value: 3, upgradeRate: 0 };
                 break;
             case "kウッドアロー":
                 this.setupArrowCommon(entity);

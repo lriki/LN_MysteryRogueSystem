@@ -15,20 +15,16 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.ring.SilentStepRing", () => {
+test("concretes.item.ring.PowerRing", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
-    const stateId = REBasics.states.nap;
 
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
+    const power1 = player1.actualParam(REBasics.params.pow);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアウェイクガードリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパワーリング").id, [], "ring1"));
     inventory.addEntity(ring1);
-
-    // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
@@ -39,21 +35,7 @@ test("concretes.item.ring.SilentStepRing", () => {
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
-    
-    //----------------------------------------------------------------------------------------------------
 
-    for (let i = 0; i < 100; i++) {
-        // 移動。部屋に入る
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
-        
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-        // 絶対に起きない
-        expect(enemy1.isStateAffected(stateId)).toBe(true);
-        
-        // 元に戻す
-        REGame.world._transferEntity(player1, floorId, 16, 4);
-        enemy1.addState(stateId);
-    }
+    const power2 = player1.actualParam(REBasics.params.pow);
+    expect(power2).toBe(power1 + 3);
 });
