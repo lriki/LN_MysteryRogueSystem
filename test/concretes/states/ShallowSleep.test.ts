@@ -157,7 +157,7 @@ test("concretes.states.ShallowSleep.Issue1", () => {
     const stateId = REBasics.states.nap;
 
     // Player
-    const player1 = TestEnv.setupPlayer(floorId, 16, 4);
+    const player1 = TestEnv.setupPlayer(floorId, 15, 4);
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
@@ -181,11 +181,12 @@ test("concretes.states.ShallowSleep.Issue1", () => {
         expect(enemy1.y).toBe(4);
         
         // 元に戻す
-        REGame.world._transferEntity(player1, floorId, 16, 4);
+        REGame.world._transferEntity(player1, floorId, 15, 4);
         enemy1.addState(stateId);
     }
 
     // 起きたり起きてなかったり。
-    expect(10 < affected && affected < 90).toBe(true);
+    expect(affected).toBe(100);
 });
+
 

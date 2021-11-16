@@ -25,6 +25,8 @@ export abstract class SSchedulerPhase {
     // コマンドが積まれなかった場合、即座に次の unit の処理に移る。
     abstract onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void;
 
+    onAfterProcess(entity: LEntity): void {}
+
     // Phase 終了時に1度呼ばれる
     onEnd(scheduler: SScheduler): void {}
 

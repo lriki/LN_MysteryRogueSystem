@@ -37,6 +37,7 @@ import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
 import { SActivityContext } from "../system/SActivityContext";
+import { LSchedulingResult } from "./LSchedulingResult";
 
 enum BlockLayer
 {
@@ -268,6 +269,7 @@ export class LEntity extends LObject
     // EffectContext に持たせて持ちまわってもよいのだが、ステート変更やパラメータ増減など様々なタイミングで参照されるため
     // それらすべての関数で EffectContext を持ちまわるのはかなり煩雑なコードになってしまう。
     _effectResult: LEffectResult = new LEffectResult();
+    _schedulingResult: LSchedulingResult = new LSchedulingResult();
     _reward: LReward = new LReward();
 
 

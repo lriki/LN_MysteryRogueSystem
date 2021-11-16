@@ -1,5 +1,7 @@
 
 import { assert } from "../Common";
+import { DecisionPhase } from "../objects/internal";
+import { phaseCount } from "../objects/LCommon";
 import { LScheduler2, LSchedulingUnit, LTOStep, RunInfo } from "../objects/LScheduler";
 import { REGame } from "../objects/REGame";
 import { RESystem } from "./RESystem";
@@ -17,6 +19,21 @@ import { SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedule
 // - Run は複数の Phase から成る
 // - 1つの Phase では全 Entity に対して Process を実行する
 export class SStepScheduler2 {
+    /*
+        ステートの更新・解除判定はいつ行う？
+        ----------
+        Must としては、1移動、1行動の終了時。
+        もし倍速行動をまとめて行ってその後に解除判定を行うと、そのまとめて行動の間は
+        ステートの上限ターン数以上の行動ができるので、モンスターに有利となってしまう。
+        というかそもそもターン数があっていないので不具合。
+
+        移動フェーズではすべての Entity の "1回分の" 行動終了時に判定を行うが、
+        攻撃フェーズでは個々の Entity の1回分の行動終了時に判定を行う。
+
+        攻撃フェーズに関しては、こうしておかないと倍速モンスターが交互に攻撃してくるうるさい問題に対応できない。
+
+    */
+
     private _scheduler: SScheduler;
     private _data: LScheduler2;
     private _cctx: SCommandContext;
@@ -37,6 +54,7 @@ export class SStepScheduler2 {
             //new SSchedulerPhase_CheckFeetMoved(),
             new SSchedulerPhase_AIMajorAction(),
         ];
+        assert(this._phases.length == phaseCount);
     }
 
     public start(): void {
@@ -121,6 +139,12 @@ export class SStepScheduler2 {
     }
 
     private process_RunStarting(): void {
+        for (const unit of this._data.schedulingUnits()) {
+            if (unit.isValid()) {
+                unit.entity()._schedulingResult.clear();
+            }
+        }
+
         if (this._data.schedulingUnits().length <= 0) {
             // Unit がひとつもない。何もする必要はない。
             this._stepPhase = SStepPhase.RunClosing;

@@ -5,6 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REBasics } from "ts/re/data/REBasics";
+import { assert } from "ts/re/Common";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -17,7 +18,7 @@ test("concretes.states.かなしばり.FP", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.setActualParam(REBasics.params.fp, 20);
+    actor1.setActualParam(REBasics.params.fp, 4);
     actor1.addState(stateId);
 
     let count = 0;
@@ -29,11 +30,12 @@ test("concretes.states.かなしばり.FP", () => {
         }
 
         count++;
+        assert(count < 10); // 不具合でハングしないように
     }
    
     const fp = actor1.actualParam(REBasics.params.fp);
     expect(fp === 3).toBe(true);    // 空腹になっている
-    expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
+    //expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
 });
 
 // 攻撃による解除チェック

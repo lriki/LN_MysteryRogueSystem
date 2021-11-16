@@ -162,7 +162,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             }
             else if (effect.restriction == DStateRestriction.NotAction) {
 
-                cctx.postConsumeActionToken(self, LActionTokenType.Major);
+                //cctx.postConsumeActionToken(self, LActionTokenType.Major);
 
                 // 行動スキップ
                 return SPhaseResult.Handled;

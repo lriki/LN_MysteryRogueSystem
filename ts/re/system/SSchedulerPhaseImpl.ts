@@ -50,6 +50,9 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
 // モンスターの移動・攻撃対象決定
 export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
     isAllowIterationAtPrepare(): boolean {
+        // 移動フェーズでは、iteration を組んでまとめて移動は禁止。
+        // ステート更新は全 Entity の移動が終わった後に行いたいので、
+        // こうしておかないと倍速モンスターのステートターン数が余分に出てしまう。
         return false;
     }
 
@@ -71,13 +74,31 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         assert(this.testProcessable(entity, unitBehavior));
         entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
     }
-    
+
     onEnd(scheduler: SScheduler): void {
         
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         //RESystem.sequelContext.flushSequelSet();
         RESystem.sequelContext.attemptFlush(true);
+
+        // ステート更新は全 Entity の移動が終わった後に行いたい
+        for (const unit of scheduler.data()._schedulingUnits) {
+            if (unit.isValid()) {
+                const entity = unit.entity();
+                // - Manual の場合はここで必ずステート更新
+                // - NPC の場合は、移動が発生していたら更新
+                if (unit.isManual() ||
+                    entity._schedulingResult.consumedActionToken(scheduler.data().currentPhaseIndex()) !== undefined) {
+                    entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
+                }
+
+                // 現在 step 内で何らかのトークン消費があった場合は行動が発生したとみなし、それに関する処理を行う
+                //if () {
+                //}
+            }
+        }
+
 
         // 罠の処理は Phase 終了時に行う必要がある。
         // 罠の発動タイミングは Minor と Major で異なる点に注意。
@@ -165,6 +186,8 @@ export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
         //assert(this.testProcessable(entity, unitBehavior));
         if (this.testProcessable(entity, unitBehavior)) {
             entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
+            
+            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
         }
     }
 }

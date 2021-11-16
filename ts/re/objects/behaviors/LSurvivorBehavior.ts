@@ -47,8 +47,8 @@ export class LSurvivorBehavior extends LBehavior {
             } 
 
 
-
-            if (self.actualParam(REBasics.params.fp) <= 0) {
+            const fp = self.actualParam(REBasics.params.fp);
+            if (fp <= 0) {
                 // 満腹度 0 による HP 減少
                 self.gainActualParam(REBasics.params.hp, -1);
 

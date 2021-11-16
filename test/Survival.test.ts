@@ -56,7 +56,6 @@ test("Survival.FP", () => {
 
     expect(actor1.actualParam(REBasics.params.hp)).toBe(prevHP - 1);   // HP が減少していること
 
-    
     //--------------------
 
     // UT薬草をインベントリに入れる
@@ -70,8 +69,9 @@ test("Survival.FP", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(actor1.actualParam(REBasics.params.fp)).toBe(5);  // 草を食べた分だけ FP が回復していること
-
+    expect(actor1.actualParam(REBasics.params.fp)).toBe(4);  // 草を食べた分だけ FP が回復していること
+    // NOTE: 原作では、食料を食べた直後、9回移動すると満腹度が1減る。
+    // つまり、1ターン内で食べた直後に満腹度の減算が発生している。
 
     //--------------------
     // 投げ当てたときは FP は回復しない
@@ -92,5 +92,5 @@ test("Survival.FP", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(REGame.world.findEntity(item2.entityId())).toBe(undefined);  // UT薬草は Player と衝突したので消滅している
-    expect(actor1.actualParam(REBasics.params.fp)).toBe(4);            // 投げ当てたときの効果は発動するが、FP は回復しない
+    expect(actor1.actualParam(REBasics.params.fp)).toBe(3);            // 投げ当てたときの効果は発動するが、FP は回復しない
 });

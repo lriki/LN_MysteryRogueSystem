@@ -211,6 +211,7 @@ export class SCommandContext
 
     private attemptConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
         entity._actionToken.consume(tokenType);
+        entity._schedulingResult.setConsumedActionTokeInCurrentPhase(tokenType);
         
             // ターンエンド
             {
@@ -240,7 +241,7 @@ export class SCommandContext
                     //entity._effectResult.showResultMessages(RESystem.commandContext, entity);   // TODO: 仮
                     RESystem.integration.flushEffectResultOneEntity(entity);
 
-                    entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
+                    //entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
 
                 //    REGame.scheduler.clearCurrentTurnEntity();
                 //}

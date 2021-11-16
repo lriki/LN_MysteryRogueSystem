@@ -45,6 +45,15 @@ test("concretes.trap.LegHoldTrap.Basic", () => {
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
     
+    // ステート解除判定のタイミングの都合で、解除されるターンは移動がキャンセルされる
     expect(player1.isStateAffected(REData.getState("kState_UTトラバサミ").id)).toBe(false);
-    expect(player1.x).toBe(12);      // ステート解除。移動できる。
+    expect(player1.x).toBe(11);      // ステート解除。移動できる。
+    
+    // player を右 (罠上) へ移動
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    expect(player1.x).toBe(12);      // 移動できる。
 });

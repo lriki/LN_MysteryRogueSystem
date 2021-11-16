@@ -156,3 +156,4 @@ test("Scheduler.ChangeSpeed5", () => {
 
     expect(enemy1.x).toBe(10);  // 速度ダウンを検知したときに行動トークンが削られるので、Enemy に Turn はまわらない
 });
+
