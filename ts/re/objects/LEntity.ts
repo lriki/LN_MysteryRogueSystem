@@ -1238,10 +1238,11 @@ export class LEntity extends LObject
         }
     }
 
-    public iterateStates(func: ((s: LState) => void) | ((s: LState) => boolean)): void {
+    public iterateStates(func: ((s: LState) => void) | ((s: LState) => boolean)): boolean {
         for (const id of this._states) {
-            if (func(REGame.world.object(id) as LState) === false) return;
+            if (func(REGame.world.object(id) as LState) === false) return false;
         }
+        return true;
     }
 
     public iterateBehaviors2(func: (b: LBehavior) => boolean): boolean {

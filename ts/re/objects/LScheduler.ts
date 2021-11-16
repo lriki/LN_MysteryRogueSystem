@@ -1,6 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { DFactionId, REData } from "ts/re/data/REData";
+import { DStateRestriction } from "../data/DState";
 import { SSchedulerPhase } from "../system/SSchedulerPhase";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
@@ -672,18 +673,22 @@ export class LScheduler2 {
         for (const entity of REGame.map.entities()) {
             const behavior = entity.findEntityBehavior(LUnitBehavior);
             if (behavior) {
-                const unit = this.newUnit(entity, behavior);
+                //const canAct = entity.iterateStates(s => s.stateEffect().restriction != DStateRestriction.NotAction);
+                //if (canAct) {
 
-                //const speedLevel = this.getSpeedLevel(entity);
-                const actionCount = unit.calcActionCount();
-                //unit.actionCount = speedLevel;
-                unit.speedLevel = unit.speedLevel2 = LScheduler2.getSpeedLevel(entity);
-                 
-                // if (unit.actionCount < 0) {
-                //     unit.actionCount = 1;
-                // }
-
-                this._maxActionCount = Math.max(this._maxActionCount, actionCount);
+                    const unit = this.newUnit(entity, behavior);
+    
+                    //const speedLevel = this.getSpeedLevel(entity);
+                    const actionCount = unit.calcActionCount();
+                    //unit.actionCount = speedLevel;
+                    unit.speedLevel = unit.speedLevel2 = LScheduler2.getSpeedLevel(entity);
+                     
+                    // if (unit.actionCount < 0) {
+                    //     unit.actionCount = 1;
+                    // }
+    
+                    this._maxActionCount = Math.max(this._maxActionCount, actionCount);
+                //}
             }
         }
         

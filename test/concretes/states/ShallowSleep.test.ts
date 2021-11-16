@@ -24,7 +24,7 @@ test("concretes.states.ShallowSleep.RoomIn", () => {
     REGame.world._transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     let affected = 0;
     for (let i = 0; i < 100; i++) {
@@ -149,3 +149,43 @@ test("concretes.states.ShallowSleep.Skill", () => {
     // 起きたり起きてなかったり。
     expect(10 < affected && affected < 90).toBe(true);
 });
+
+// 倍速モンスターの仮眠状態で、トークン消費がうまく回らない問題の修正確認
+test("concretes.states.ShallowSleep.Issue1", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REBasics.states.nap;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 16, 4);
+
+    // Enemy1 (仮眠状態)
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    let affected = 0;
+    for (let i = 0; i < 100; i++) {
+        // 移動。部屋に入る
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+        if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
+
+        // 目は覚ましても移動はしていない
+        expect(enemy1.x).toBe(19);
+        expect(enemy1.y).toBe(4);
+        
+        // 元に戻す
+        REGame.world._transferEntity(player1, floorId, 16, 4);
+        enemy1.addState(stateId);
+    }
+
+    // 起きたり起きてなかったり。
+    expect(10 < affected && affected < 90).toBe(true);
+});
+

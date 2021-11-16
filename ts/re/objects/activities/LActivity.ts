@@ -158,7 +158,6 @@ export class LActivity {
             }
             else {
                 this._consumeActionType = LActionTokenType.Major;
-                //throw new Error("Not implemented.");
             }
         }
         return this;
