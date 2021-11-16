@@ -15,7 +15,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.ring.AwakeRing", () => {
+test("concretes.item.ring.AwakeStepRing", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
     const stateId = REBasics.states.nap;

@@ -115,5 +115,8 @@ export interface DBasicTraits {
 
     /** 浅い眠りを必ず起こす。 */
     AwakeStep: DTraitId;
+
+    /** 浅い眠りを起こさない。 */
+    SilentStep: DTraitId;
 }
 

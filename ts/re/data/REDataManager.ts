@@ -239,8 +239,9 @@ export class REDataManager
             REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
             REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
             REBasics.traits.AwakeStep = REData.newTrait("AwakeStep").id;
+            REBasics.traits.SilentStep = REData.newTrait("SilentStep").id;
             
-
+            
 
 
             // REData.traits = [

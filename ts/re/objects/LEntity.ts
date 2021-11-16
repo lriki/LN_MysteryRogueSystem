@@ -592,7 +592,7 @@ export class LEntity extends LObject
     // Traits
     
     // Game_BattlerBase.prototype.allTraits
-    private allTraits(): IDataTrait[] {
+    public allTraits(): IDataTrait[] {
         return this.collectTraits();
     }
 

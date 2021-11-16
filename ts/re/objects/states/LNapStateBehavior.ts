@@ -70,10 +70,15 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     private attemptReserveGetUp(self: LEntity, target: LEntity) {
-        if (this._getUpReserved == GetUpReserved.Certainly) return; // 起きるの確定済みなので判定不要
+        // 起きるの確定済みなので判定不要
+        if (this._getUpReserved == GetUpReserved.Certainly) return;
+
+        // 忍び足の場合は起きる判定を発生させない
+        const traits = target.allTraits();
+        if (traits.find(t => t.code == REBasics.traits.SilentStep)) return;
 
         if (Helpers.isHostile(target, self)) {
-            if (target.hasTrait(REBasics.traits.AwakeStep)) {
+            if (traits.find(t => t.code == REBasics.traits.AwakeStep)) {
                 this._getUpReserved = GetUpReserved.Certainly;
             }
             else {
