@@ -86,19 +86,10 @@ export class SEntityFactory {
         e.addBehavior(LEnemyBehavior);
         this.setupDirectly_Enemy(e, enemyEntityData);
     }
-
-    public static newItem(itemId: DItemDataId): LEntity {
-        const item = REData.itemData(itemId);
-        const e = REGame.world.spawnEntity(item.entityId);
-        this.buildItem(e, itemId);
-        return e;
-    }
     
-    public static buildItem(e: LEntity, itemId: DItemDataId): void {
-        const item = REData.itemData(itemId);
+    public static buildItem(e: LEntity): void {
         this.setupCommon(e);
-
-        const entityData = REData.entities[item.entityId]
+        const entityData = e.data();
 
         if (entityData.entity.kindId == REBasics.entityKinds.WeaponKindId ||
             entityData.entity.kindId == REBasics.entityKinds.ShieldKindId) {
@@ -189,7 +180,8 @@ export class SEntityFactory {
             this.buildTrap(entity, entityData.item().id);
         }
         else if (prefab.isItemKind()) {
-            entity = this.newItem(prefab.dataId);
+            entity = REGame.world.spawnEntity(entityData.id);
+            this.buildItem(entity);
         }
         else if (prefab.isEntryPoint()) {
             entity = this.newEntryPoint();
@@ -248,7 +240,7 @@ export class SEntityFactory {
             this.buildTrap(entity, prefab.dataId);
         }
         else if (prefab.isItemKind()) {
-            this.buildItem(entity, prefab.dataId);
+            this.buildItem(entity);
         }
         else if (prefab.isEntryPoint()) {
             this.buildEntryPoint(entity);

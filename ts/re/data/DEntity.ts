@@ -56,7 +56,13 @@ export interface DReaction {
 
 */
 
+    /**
+     * Entity が反応する Action.
+     * 例えば "Eat" があれば、その Entity は食べることができる。
+     */
     actionId: DActionId;
+
+
     emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
 }
 

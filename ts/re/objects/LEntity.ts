@@ -911,7 +911,11 @@ export class LEntity extends LObject
     // Game_BattlerBase.prototype.isDeathStateAffected
     isDeathStateAffected(): boolean {
         return !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);
-        //return this.isStateAffected(REBasics.states.dead);
+    }
+
+    public removeDeadStates(): void {
+        const stateIds = this.states().filter(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState).map(s => s.stateDataId());
+        this.removeStates(stateIds);
     }
 
     // Game_Battler.prototype.isStateAddable
