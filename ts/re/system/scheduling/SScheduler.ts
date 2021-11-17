@@ -35,6 +35,8 @@ export class SScheduler {
     public reset(): void {
         this._data = REGame.scheduler;
         this._data.chedulerPhase = LSchedulerPhase.RoundStarting;
+        this._stepScheduler.start();
+        this._chainAfterScheduler.reset();
         this._brace = false;
         this._occupy = false;
     }

@@ -2,6 +2,7 @@ import { RESerializable, tr2 } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/RECommand";
+import { RESystem } from "ts/re/system/RESystem";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
@@ -36,6 +37,9 @@ export class LActivityCharmBehavior extends LBehavior {
             SEmittorPerformer.makeWithEmitor(self, self, REData.getEmittorById(reaction.emittingEffect))
                 .setItemEntity(self)
                 .perform(cctx);
+
+                // TODO: test
+            RESystem.scheduler.reset();
 
             return SCommandResponse.Handled;
         }
