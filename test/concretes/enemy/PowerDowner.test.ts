@@ -35,7 +35,6 @@ test("concretes.enemies.PowerDowner", () => {
     RESystem.dialogContext.activeDialog().submit();
 
     REGame.world.random().resetSeed(5);     // 乱数調整
-
     RESystem.scheduler.stepSimulation();
 
     // ちからが減っている

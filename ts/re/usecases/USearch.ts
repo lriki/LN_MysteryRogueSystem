@@ -5,6 +5,8 @@ import { DStateRestriction } from "../data/DState";
 import { REBasics } from "../data/REBasics";
 import { FBlockComponent } from "../floorgen/FMapData";
 import { LItemBehavior } from "../objects/behaviors/LItemBehavior";
+import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
+import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
 import { LBlock } from "../objects/LBlock";
 import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
@@ -22,7 +24,7 @@ export class USearch {
     /**
      * 失明状態であるか (self は他を視認できないか)
      */
-    public static hasBlindness(self: LEntity, ): boolean {
+    public static hasBlindness(self: LEntity): boolean {
         return self.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind) !== undefined;
     }
 
@@ -31,6 +33,19 @@ export class USearch {
      */
      public static checkVisible(target: LEntity): boolean {
          return !target.hasTrait(REBasics.traits.Invisible);
+    }
+
+    /**
+     * 指定された entity が中立的なアイテムか(=普通に誰でも拾うことができるか)
+     */
+    public static isNeutralItem(entity: LEntity): boolean {
+        // Unit は何らかの勢力に属し、Unitレイヤー上で活動するもの。一般的にはアイテムとして拾うことはできない。
+        if (entity.findEntityBehavior(LUnitBehavior)) return false;
+
+        // Trap は対象勢力を持ち、その勢力は拾うことはできない。
+        if (entity.findEntityBehavior(LTrapBehavior)) return false;
+
+        return true;
     }
 
     /**
@@ -178,7 +193,7 @@ export class USearch {
 
         const items = REGame.map.entities().filter(e => {
             if (e.roomId() != roomId) return false;
-            if (!e.findEntityBehavior(LItemBehavior)) return false;
+            if (!this.isNeutralItem(e)) return false;
             return true;
         });
 

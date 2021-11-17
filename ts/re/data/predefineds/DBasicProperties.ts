@@ -10,18 +10,6 @@ export interface EntityProperty {
 // Entity の基本プロパティのうち、Behavior によってオーバーライドされることがあるもの。
 // 特に、他の状態に依存して変わる可能性がある状態を返すために使う。
 export interface EntityProperties {
-
-    /**
-     * Entity が Item であるときに返す ItemId.
-     * 
-     * プロパティにするべきか悩み中ではあるけど、少なくとも識別システムを運用するうえでは、
-     * Entity から何らかのひとつの ItemId を返してもらう必要がある。
-     * アイテム擬態モンスターの Entity も itemId を返すようになる。
-     * 
-     * デフォルトは 0 で、アイテムではないことを示す。
-     */
-    itemId: number; // deprecated?: name
-
     /**
      * DEquipmentPartId[]
      */

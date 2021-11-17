@@ -1191,6 +1191,7 @@ export class LEntity extends LObject
             let r = func(REGame.world.behavior((this._basicBehaviors[i])));
             if (r != SCommandResponse.Pass) {
                 response = r;
+                break;
             }
         }
         return response;

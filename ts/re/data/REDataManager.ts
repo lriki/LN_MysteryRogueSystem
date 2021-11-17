@@ -623,11 +623,10 @@ export class REDataManager
                 }
                 */
 
-                item.rmmzScope = x.scope ?? DRmmzEffectScope.None;
+                const rmmzScope = x.scope ?? DRmmzEffectScope.None;
                 //item.animationId = x.animationId;
 
-                if (DHelpers.isForFriend(item.rmmzScope)) {
-                //if (DHelpers.isSingle(item.rmmzScope)) {
+                if (DHelpers.isForFriend(rmmzScope)) {
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
                 }
             }

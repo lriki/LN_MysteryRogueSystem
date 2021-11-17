@@ -73,26 +73,10 @@ export class DItem {
 
     entityId: DEntityId;
 
-    rmmzScope: DRmmzEffectScope;
-
-
-    //animationId: number;
-    
-    /** この Entity 自身に対する Trait */
-    //selfTraits: IDataTrait[];
-
     
     constructor(id: DItemDataId, entityId: DEntityId) {
         this.id = id;
         this.entityId = entityId;
-        this.rmmzScope = 0;
-        //this.animationId = 0;
-        //this.effect = {
-        //    ...DEffect_Default,
-        //    parameterQualifyings: [],
-        //    specialEffects: [],
-        //},
-        //this.selfTraits = [];
     }
 
     public entityData(): DEntity {

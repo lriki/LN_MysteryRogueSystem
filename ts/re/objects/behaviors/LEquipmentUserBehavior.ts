@@ -72,10 +72,6 @@ NOTE:
         }
         return result;
     }
-    
-    public equippedItems(): DItem[] {
-        return this.equippedItemEntities().map(x => x.getEntityBehavior(LItemBehavior).itemData());
-    }
 
     public revisitonNumber(): number {
         return this._revisitonNumber;

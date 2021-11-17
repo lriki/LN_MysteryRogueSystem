@@ -35,17 +35,17 @@ export class LItemBehavior extends LBehavior {
         super();
     }
 
-    public itemDataId(): DItemDataId {
-        const entity = this.ownerEntity().data();
-        assert(entity.itemData);
-        return entity.itemData.id;
-    }
+    // public itemDataId(): DItemDataId {
+    //     const entity = this.ownerEntity().data();
+    //     assert(entity.itemData);
+    //     return entity.itemData.id;
+    // }
 
-    public itemData(): DItem {
-        const entity = this.ownerEntity().data();
-        assert(entity.itemData);
-        return entity.itemData;
-    }
+    // public itemData(): DItem {
+    //     const entity = this.ownerEntity().data();
+    //     assert(entity.itemData);
+    //     return entity.itemData;
+    // }
 
     public shopStructureId(): LStructureId {
         return this._shopStructureId;
@@ -64,12 +64,6 @@ export class LItemBehavior extends LBehavior {
     //     }
     // }
 
-    onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.itemId)
-            return this.itemDataId();
-        else
-            super.onQueryProperty(propertyId);
-    }
 
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
         super.onCollectTraits(self, result);

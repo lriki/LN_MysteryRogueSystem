@@ -2,6 +2,8 @@ import { DItemEquipmentSide } from "ts/re/data/DEntityProperties";
 import { DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
+import { DEntityId } from "../data/DEntity";
+import { LEntityIdData } from "../objects/activities/LActivity";
 
 const ZOFFSET_TABLE_RIGHT_HAND = [
     0,
@@ -20,7 +22,7 @@ const ZOFFSET_TABLE_LEFT_HAND = [
 interface SpriteData {
     imageName: string;
     sprite: Sprite | undefined;
-    itemId: DItemDataId;
+    itemEntityDataId: DEntityId;
 }
 
 /**
@@ -64,7 +66,7 @@ export class VCharacterSpriteSet {
 
         if (visual && equipments) {
             if (this._revisionNumber != equipments.revisitonNumber()) {
-                const items = equipments.equippedItems();
+                const items = equipments.equippedItemEntities();
 
                 // 装備中のアイテムリストとスプライト情報の配列サイズを揃えておく
                 while(this._sprites.length > items.length) {
@@ -75,7 +77,7 @@ export class VCharacterSpriteSet {
                     this._sprites.push({
                         imageName: "",
                         sprite: undefined,
-                        itemId: 0,
+                        itemEntityDataId: 0,
                     });
                  }
                 /*
@@ -93,13 +95,13 @@ export class VCharacterSpriteSet {
 
 
                 for (let i = 0; i < items.length; i++) {
-                    const itemEntityData = REData.entities[items[i].entityId];
+                    const itemEntityData = items[i].data();//REData.entities[items[i].entityId];
                     
                     const newImage = itemEntityData.entity.equipmentImage.name;
                     const current = (i < this._sprites.length) ? this._sprites[i].imageName : "";
 
                     const spriteData = this._sprites[i];
-                    spriteData.itemId = items[i].id;
+                    spriteData.itemEntityDataId = itemEntityData.id;
 
                     if (current != newImage) {
                         this._sprites[i].imageName = newImage;
@@ -139,7 +141,7 @@ export class VCharacterSpriteSet {
                     s.sprite.setFrame(sx, sy, pw, ph);
                     s.sprite.position = this._owner.position;
                     s.sprite.visible = true;
-                    if (REData.itemEntity(s.itemId).entity.equipmentImage.side == DItemEquipmentSide.Right) {
+                    if (REData.entities[s.itemEntityDataId].entity.equipmentImage.side == DItemEquipmentSide.Right) {
                         s.sprite.z = this._owner.z + ZOFFSET_TABLE_RIGHT_HAND[d];
                     }
                     else {

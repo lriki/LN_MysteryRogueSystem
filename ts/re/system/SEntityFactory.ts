@@ -53,10 +53,15 @@ export class SEntityFactory {
         return e;
     }
 
-    public static buildActor(e: LEntity): void {
-        assert(e.behaviorIds().length === 0);
+    private static setupCommon(e: LEntity): void {
         e.addBehavior(LCommonBehavior);
         e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LItemBehavior);
+    }
+
+    public static buildActor(e: LEntity): void {
+        assert(e.behaviorIds().length === 0);
+        this.setupCommon(e);
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.player);
         e.addBehavior(LInventoryBehavior);
@@ -74,8 +79,7 @@ export class SEntityFactory {
     }
     
     public static buildMonster(e: LEntity, enemyEntityData: DEntity): void {
-        e.addBehavior(LCommonBehavior);
-        e.addBehavior(LProjectableBehavior);
+        this.setupCommon(e);
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(enemyEntityData.factionId);
         e.addBehavior(LInventoryBehavior);
@@ -92,9 +96,7 @@ export class SEntityFactory {
     
     public static buildItem(e: LEntity, itemId: DItemDataId): void {
         const item = REData.itemData(itemId);
-        e.addBehavior(LCommonBehavior);
-        e.addBehavior(LProjectableBehavior);
-        e.addBehavior(LItemBehavior);
+        this.setupCommon(e);
 
         const entityData = REData.entities[item.entityId]
 
@@ -124,9 +126,7 @@ export class SEntityFactory {
     
     public static buildTrap(e: LEntity, itemId: DItemDataId): void {
         const item = REData.itemData(itemId);
-        e.addBehavior(LCommonBehavior);
-        e.addBehavior(LProjectableBehavior);
-        e.addBehavior(LItemBehavior);
+        this.setupCommon(e);
         e.addBehavior(LTrapBehavior);
     }
 
@@ -218,6 +218,7 @@ export class SEntityFactory {
                 entity.setIndividualIdentified(true);
             }
         }
+        
 
         
         {
