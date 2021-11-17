@@ -194,6 +194,7 @@ export class TestEnv {
 
 export class TestEnvIntegration extends SIntegration {
     public skillEmittedCount: number = 0;
+    public sequelFlushCount: number = 0;
 
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
         if (eventId == REBasics.events.skillEmitted) {
@@ -247,6 +248,7 @@ export class TestEnvIntegration extends SIntegration {
     onFlushSequelSet(sequelSet: SSequelSet): void {
         // 実行結果確認用に保持するだけ
         TestEnv.activeSequelSet = sequelSet;
+        this.sequelFlushCount++;
     }
     onCheckVisualSequelRunning(): boolean {
         // Visual 表示は伴わない

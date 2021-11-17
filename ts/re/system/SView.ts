@@ -73,6 +73,10 @@ export class SView {
     public static getEntityVisibility(entity: LEntity): SEntityVisibility {
         const subject = REGame.camera.focusedEntity();
 
+        // if (!entity.floorId.equals(REGame.map.floorId())) {
+        //     return { visible: false, translucent: false };
+        // }
+
         if (subject && !subject.entityId().equals(entity.entityId())) {
             // entity は操作中キャラ以外
             

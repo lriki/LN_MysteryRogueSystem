@@ -2,7 +2,7 @@ import { assert, RESerializable } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { DStateRestriction } from "../data/DState";
-import { SSchedulerPhase } from "../system/SSchedulerPhase";
+import { SSchedulerPhase } from "../system/scheduling/SSchedulerPhase";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";

@@ -171,10 +171,10 @@ export class SEmittorPerformer {
 
     private payParamCost(entity: LEntity, paramId: DParameterId, cost: DParamCost): void {
         if (cost.type == DParamCostType.Decrease) {
-            entity.gainActualParam(paramId, -cost.value);
+            entity.gainActualParam(paramId, -cost.value, true);
         }
         else if (cost.type == DParamCostType.Increase) {
-            entity.gainActualParam(paramId, cost.value);
+            entity.gainActualParam(paramId, cost.value, true);
         }
         else {
             throw new Error("Unreachable.");

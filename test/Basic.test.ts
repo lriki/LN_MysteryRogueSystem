@@ -253,6 +253,7 @@ test("Basic.TurnOrderTable", () => {
         // player を右へ移動
         dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
         dialogContext.activeDialog().submit();
+        const count1 = TestEnv.integration.sequelFlushCount;
     
         // AI行動決定
         RESystem.scheduler.stepSimulation();
@@ -267,6 +268,9 @@ test("Basic.TurnOrderTable", () => {
         expect(enemy6.x).toBe(4);
         expect(enemy7.x).toBe(1);   // 鈍足状態 (になった直後のターン) は行動しない
         expect(enemy8.x).toBe(1);   // 鈍足状態 (になった直後のターン) は行動しない
+
+        // Sequel はまとめて1度だけFlush
+        expect(TestEnv.integration.sequelFlushCount).toBe(count1 + 1);
     }
 
     //--------------------

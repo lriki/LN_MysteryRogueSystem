@@ -27,7 +27,7 @@ export class LSurvivorBehavior extends LBehavior {
         if (phase == DecisionPhase.UpdateState) {
 
             // FP 減少
-            self.gainActualParam(REBasics.params.fp, -1);
+            self.gainActualParam(REBasics.params.fp, -1, true);
 
 
             switch (self.actualParam(REBasics.params.fp)) {
@@ -50,7 +50,7 @@ export class LSurvivorBehavior extends LBehavior {
             const fp = self.actualParam(REBasics.params.fp);
             if (fp <= 0) {
                 // 満腹度 0 による HP 減少
-                self.gainActualParam(REBasics.params.hp, -1);
+                self.gainActualParam(REBasics.params.hp, -1, true);
 
                 if (self.isDeathStateAffected()) {
                     cctx.postMessage(tr2("おなかがすいて倒れた・・・"));
@@ -58,7 +58,7 @@ export class LSurvivorBehavior extends LBehavior {
             }
             else {
                 // HP自動回復
-                self.gainActualParam(REBasics.params.hp, 1);
+                self.gainActualParam(REBasics.params.hp, 1, true);
             }
 
 

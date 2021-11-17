@@ -45,6 +45,7 @@ import { LParamBehavior } from "../objects/behaviors/LParamBehavior";
 import { LEscapeAI } from "../objects/ai/LEscapeAI";
 import { LEscapeBehavior } from "../objects/behaviors/LEscapeBehavior";
 import { LStumblePreventionBehavior } from "../objects/behaviors/LPreventionBehavior";
+import { LActivityCharmBehavior } from "../objects/behaviors/LActivityCharmBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -297,6 +298,9 @@ export class SEntityFactory {
                 break;
             case "kItem_リープの杖":
                 entity.addBehavior(LStumblePreventionBehavior);
+                break;
+            case "kItem_RevivalGrass":
+                entity.addBehavior(LActivityCharmBehavior);
                 break;
 
                 

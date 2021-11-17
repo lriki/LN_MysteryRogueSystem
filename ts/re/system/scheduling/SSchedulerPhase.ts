@@ -1,7 +1,7 @@
 import { SScheduler, SScheduler_old } from "./SScheduler";
 import { LTOUnit } from "ts/re/objects/LScheduler";
-import { LEntity } from "../objects/LEntity";
-import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
+import { LEntity } from "../../objects/LEntity";
+import { LUnitBehavior } from "../../objects/behaviors/LUnitBehavior";
 
 export abstract class SSchedulerPhase {
     //abstract nextPhase(): SchedulerPhase;

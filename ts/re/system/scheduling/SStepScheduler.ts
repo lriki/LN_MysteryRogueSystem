@@ -1,12 +1,12 @@
 
-import { assert } from "../Common";
-import { DecisionPhase } from "../objects/internal";
-import { phaseCount } from "../objects/LCommon";
-import { LScheduler2, LSchedulingUnit, LTOStep, RunInfo } from "../objects/LScheduler";
-import { REGame } from "../objects/REGame";
-import { RESystem } from "./RESystem";
-import { SCommandContext } from "./SCommandContext";
-import { SStepPhase } from "./SCommon";
+import { assert } from "../../Common";
+import { DecisionPhase } from "../../objects/internal";
+import { phaseCount } from "../../objects/LCommon";
+import { LScheduler2, LSchedulingUnit, LTOStep, RunInfo } from "../../objects/LScheduler";
+import { REGame } from "../../objects/REGame";
+import { RESystem } from "../RESystem";
+import { SCommandContext } from "../SCommandContext";
+import { SStepPhase } from "../SCommon";
 import { SScheduler, SScheduler_old } from "./SScheduler";
 import { SSchedulerPhase } from "./SSchedulerPhase";
 import { SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_ResolveAdjacentAndMovingTarget } from "./SSchedulerPhaseImpl";

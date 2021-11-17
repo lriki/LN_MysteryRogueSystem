@@ -126,10 +126,6 @@ Sprite_Character.prototype.update = function() {
     this.updateDamagePopup_RE();
 }
 
-//Sprite_Character.prototype.isRECharacterExtinct = function(): boolean {
-//    return this._character.isREExtinct();
-//}
-
 
 Sprite_Character.prototype.endAllEffect = function() {
     // TODO: https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/EventReSpawn.js

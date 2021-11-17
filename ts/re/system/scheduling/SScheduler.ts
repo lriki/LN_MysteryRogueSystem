@@ -1,17 +1,18 @@
-import { assert, Log, tr2 } from "../Common";
-import { REGame } from "../objects/REGame";
-import { RESystem } from "./RESystem";
+import { assert, Log, tr2 } from "../../Common";
+import { REGame } from "../../objects/REGame";
+import { RESystem } from "../RESystem";
 import { SSchedulerPhase_AIMajorAction, SSchedulerPhase_AIMinorAction, SSchedulerPhase_CheckFeetMoved, SSchedulerPhase_ManualAction, SSchedulerPhase_ResolveAdjacentAndMovingTarget } from "./SSchedulerPhaseImpl";
-import { UAction } from "../usecases/UAction";
+import { UAction } from "../../usecases/UAction";
 import { REData } from "ts/re/data/REData";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { UName } from "ts/re/usecases/UName";
 import { LScheduler, LScheduler2, LSchedulerPhase, LTOStep } from "ts/re/objects/LScheduler";
-import { REBasics } from "../data/REBasics";
-import { SStepPhase } from "./SCommon";
+import { REBasics } from "../../data/REBasics";
+import { SStepPhase } from "../SCommon";
 import { SStepScheduler, SStepScheduler2 } from "./SStepScheduler";
-import { SCommandResponse } from "./RECommand";
-import { LGenerateDropItemCause } from "../objects/internal";
+import { SCommandResponse } from "../RECommand";
+import { LGenerateDropItemCause } from "../../objects/internal";
+import { SChainAfterScheduler } from "./SChainAfterScheduler";
 
 
 
@@ -19,12 +20,14 @@ import { LGenerateDropItemCause } from "../objects/internal";
 export class SScheduler {
     private _data: LScheduler2;
     private _stepScheduler: SStepScheduler2;
+    private _chainAfterScheduler: SChainAfterScheduler;
     private _brace: boolean;
     private _occupy: boolean;
 
     public constructor() {
         this._data = REGame.scheduler;
         this._stepScheduler = new SStepScheduler2(this);
+        this._chainAfterScheduler = new SChainAfterScheduler();
         this._brace = false;
         this._occupy = false;
     }
@@ -136,6 +139,8 @@ export class SScheduler {
                 //}
                 assert(commandContext.isRecordingListEmpty());
 
+                this._chainAfterScheduler.reset();
+
                 
                 REGame.world._removeDestroyedObjects();
     
@@ -206,62 +211,64 @@ export class SScheduler {
     // 遅延予約済みのコマンドすべて実行し終え、次のフェーズに進もうとしている状態。
     // ここで新たにコマンドを post すると、フェーズは進まず新たなコマンドチェーンを開始できる。
     private onCommandChainConsumed(): void {
-        this.stabilizeSituation();
+        if (!this._chainAfterScheduler.isEnd()) {
+            this._chainAfterScheduler.process(RESystem.commandContext);
+        }
     }
 
-    // 本来あるべき状態と齟齬がある Entity を、定常状態へ矯正する。
-    private stabilizeSituation(): void {
-        // NOTE: この中からは、必要な時だけ post してよい。
-        // 不要であるにもかかわらず毎回 post してしまうと、Phase の処理に回らなくなるので注意。
-        const cctx = RESystem.commandContext;
+    // // 本来あるべき状態と齟齬がある Entity を、定常状態へ矯正する。
+    // private stabilizeSituation(): void {
+    //     // NOTE: この中からは、必要な時だけ post してよい。
+    //     // 不要であるにもかかわらず毎回 post してしまうと、Phase の処理に回らなくなるので注意。
+    //     const cctx = RESystem.commandContext;
 
-        {
-            for (const entity of REGame.map.entities()) {
-                const block = REGame.map.block(entity.x, entity.y);
-                const currentLayer = block.findEntityLayerKind(entity);
-                assert(currentLayer);
-                const homeLayer = entity.getHomeLayer();
-                if (currentLayer != homeLayer) {
-                    UAction.postDropOrDestroyOnCurrentPos(cctx, entity, homeLayer);
-                }
-            }
-        }
+    //     {
+    //         for (const entity of REGame.map.entities()) {
+    //             const block = REGame.map.block(entity.x, entity.y);
+    //             const currentLayer = block.findEntityLayerKind(entity);
+    //             assert(currentLayer);
+    //             const homeLayer = entity.getHomeLayer();
+    //             if (currentLayer != homeLayer) {
+    //                 UAction.postDropOrDestroyOnCurrentPos(cctx, entity, homeLayer);
+    //             }
+    //         }
+    //     }
         
-        for (const entity of REGame.map.entities()) {
-            entity.iterateBehaviorsReverse(b => {
-                b.onStabilizeSituation(entity, cctx);
-                return true;
-            });
-        }
+    //     for (const entity of REGame.map.entities()) {
+    //         entity.iterateBehaviorsReverse(b => {
+    //             b.onStabilizeSituation(entity, cctx);
+    //             return true;
+    //         });
+    //     }
 
-        // 戦闘不能の確定処理
-        for (const entity of REGame.map.entities()) {
-            if (entity.isDeathStateAffected()) {
-                let result = SCommandResponse.Pass;
-                entity.iterateBehaviorsReverse(b => {
-                    result = b.onPermanentDeath(entity, RESystem.commandContext);
-                    return result == SCommandResponse.Pass;
-                });
+    //     // 戦闘不能の確定処理
+    //     for (const entity of REGame.map.entities()) {
+    //         if (entity.isDeathStateAffected()) {
+    //             let result = SCommandResponse.Pass;
+    //             entity.iterateBehaviorsReverse(b => {
+    //                 result = b.onPermanentDeath(entity, RESystem.commandContext);
+    //                 return result == SCommandResponse.Pass;
+    //             });
 
-                if (result == SCommandResponse.Pass) {
-                    cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
-                    UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
-                    cctx.postDestroy(entity);
-                }
-            }
-        }
+    //             if (result == SCommandResponse.Pass) {
+    //                 cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
+    //                 UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
+    //                 cctx.postDestroy(entity);
+    //             }
+    //         }
+    //     }
 
 
 
-        /*
-        爆発の腕輪・ワープの腕輪実装メモ
-        ----------
-        装備順序による効果発生順の依存は避けたいところだが…まずはそれで。
-        発動タイミングは stabilizeSituation… というよりは、UpdateState と同じタイミング。
-        足踏みでも発生するので、条件も同じ。
+    //     /*
+    //     爆発の腕輪・ワープの腕輪実装メモ
+    //     ----------
+    //     装備順序による効果発生順の依存は避けたいところだが…まずはそれで。
+    //     発動タイミングは stabilizeSituation… というよりは、UpdateState と同じタイミング。
+    //     足踏みでも発生するので、条件も同じ。
 
-        */
-    }
+    //     */
+    // }
 }
 
 

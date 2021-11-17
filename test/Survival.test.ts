@@ -14,9 +14,6 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-afterAll(() => {
-});
-
 test("Survival.FP", () => {
     TestEnv.newGame();
 

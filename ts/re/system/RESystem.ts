@@ -5,7 +5,7 @@ import { BasicItems } from "ts/re/data/predefineds/DBasicItems";
 import { EntityProperties, EntityProperty } from "ts/re/data/predefineds/DBasicProperties";
 import { SSequelContext } from "./SSequelContext";
 import { SCommandContext } from "./SCommandContext";
-import { SScheduler } from "./SScheduler";
+import { SScheduler } from "./scheduling/SScheduler";
 import { SMinimapData } from "./SMinimapData";
 import { SMapManager } from "./SMapManager";
 import { SDialogContext } from "./SDialogContext";

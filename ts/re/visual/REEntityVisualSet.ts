@@ -79,16 +79,15 @@ export class REEntityVisualSet {
     public reserveDeleteVisual(entity: LEntity): void {
         const index = this._visualEntities.findIndex(x => x.entity() == entity);
         if (index >= 0) {
-            console.log("reserveDeleteVisual!!!!!!!!!!");
-            this._visualEntities[index].reservedDestroy = true;
-            //this._reservedDeleteVisuals.push(this._visualEntities[index]);
+            const visual = this._visualEntities[index];
+            visual.reservedDestroy = true;
+            console.log("reserveDeleteVisual!!!!!!!!!!", visual.rmmzEventId());
         }
     }
 
     private deleteVisuals() {
         if (this._sequelManager.isRunning()) return;
 
-        //console.log("delete!!!!!!!!!!");
 
         for (let i = this._visualEntities.length - 1; i >= 0; i--) {
             const visual = this._visualEntities[i];
@@ -103,6 +102,7 @@ export class REEntityVisualSet {
                 // ↑の erase() の意味もあまりないが、影響はないため現状とする。
         
                 this._visualEntities.splice(i, 1);
+                console.log("delete!!!!!!!!!!");
             }
         }
     }

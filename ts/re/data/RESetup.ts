@@ -197,6 +197,7 @@ export class RESetup {
             case "kItem_RevivalGrass":
                 this.setupGrassCommon(entity);
                 entity.entity.behaviors.push({name: "RevivalItem"});
+                entity.addReaction(REBasics.actions.dead, entity.emittorSet.mainEmittor().id);
                 break;
             case "kSystem_炎のブレス":
                 entity.volatilityProjectile = true;

@@ -1,14 +1,14 @@
 import { DecisionPhase } from "ts/re/objects/behaviors/LBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SScheduler, SScheduler_old } from "./SScheduler";
-import { RESystem } from "./RESystem";
-import { UAction } from "../usecases/UAction";
+import { RESystem } from "../RESystem";
+import { UAction } from "../../usecases/UAction";
 import { LTOUnit } from "ts/re/objects/LScheduler";
-import { LItemShopStructure } from "../objects/structures/LItemShopStructure";
+import { LItemShopStructure } from "../../objects/structures/LItemShopStructure";
 import { SSchedulerPhase } from "./SSchedulerPhase";
-import { LEntity } from "../objects/LEntity";
-import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
-import { assert } from "../Common";
+import { LEntity } from "../../objects/LEntity";
+import { LUnitBehavior } from "../../objects/behaviors/LUnitBehavior";
+import { assert } from "../../Common";
 
 
 
@@ -80,7 +80,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         //RESystem.sequelContext.flushSequelSet();
-        RESystem.sequelContext.attemptFlush(true);
+        RESystem.sequelContext.attemptFlush(false);
 
         // ステート更新は全 Entity の移動が終わった後に行いたい
         for (const unit of scheduler.data()._schedulingUnits) {

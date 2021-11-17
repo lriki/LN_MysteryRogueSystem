@@ -4,7 +4,7 @@ import { LMap } from "../objects/LMap";
 import { LWorld } from "../objects/LWorld";
 import { LSystem } from "../objects/LSystem";
 import { REData } from "../data/REData";
-import { SScheduler } from "./SScheduler";
+import { SScheduler } from "./scheduling/SScheduler";
 import { LCamera } from "../objects/LCamera";
 import { RESystem } from "./RESystem";
 import { SActivityRecorder } from "./SActivityRecorder";

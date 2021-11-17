@@ -39,7 +39,7 @@ export class LStumblePreventionBehavior extends LBehavior {
             cctx.postMessage(tr2("%1の効果で転ばなかった。").format(UName.makeNameAsItem(self)));
 
             // 使用回数を減らして効果を防止する
-            self.gainActualParam(REBasics.params.remaining, -1);
+            self.gainActualParam(REBasics.params.remaining, -1, true);
             return SCommandResponse.Canceled;
         }
         return SCommandResponse.Pass;

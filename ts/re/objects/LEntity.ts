@@ -516,13 +516,15 @@ export class LEntity extends LObject
         }
     }
     
-    public gainActualParam(paramId: DParameterId, value: number): void {
+    public gainActualParam(paramId: DParameterId, value: number, refresh: boolean): void {
         if (value === 0) return;    // refresh とか発生させる意味なし
 
         const param = this._params.param(paramId);
         if (param) {
             param.gainActualParam(value);
-            this.refreshConditions();
+            if (refresh) {
+                this.refreshConditions();
+            }
         }
         else {
             throw new Error(`LParam not registerd (paramId:${paramId})`);

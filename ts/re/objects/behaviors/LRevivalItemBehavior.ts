@@ -25,10 +25,10 @@ export class LRevivalItemBehavior extends LBehavior {
 
     onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
 
-        if (self.isDeathStateAffected()) {
-            self.removeDeadStates();
-            assert(!self.isDeathStateAffected());
-        }
+        // if (self.isDeathStateAffected()) {
+        //     self.removeDeadStates();
+        //     assert(!self.isDeathStateAffected());
+        // }
 
         return SCommandResponse.Pass;
     }

@@ -307,6 +307,7 @@ export class REDataManager
             collide: REData.addAction("collide", ""),
             dialogResult: REData.addAction("dialogResult", ""),
             stumble: REData.addAction("stumble", ""),
+            dead: REData.addAction("dead", ""),
             //passItem: REData.addAction("PassItem"),
             performSkill: REData.addAction("PerformSkill", ""),
             AttackActionId: REData.addAction("Attack", ""),

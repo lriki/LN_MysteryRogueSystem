@@ -593,7 +593,7 @@ export class SEffectApplyer {
 
         if (paramEffect.qualifying.applyTarget == DParameterApplyTarget.Current) {
 
-            target.gainActualParam(paramEffect.paramId, -value);
+            target.gainActualParam(paramEffect.paramId, -value, false);
             if (value > 0) {
                 // TODO:
                 //target.onDamage(value);
@@ -623,7 +623,7 @@ export class SEffectApplyer {
             //    gainTarget = this._reflectionTarget;
             //}
             if (gainTarget) {
-                gainTarget.gainActualParam(paramEffect.paramId, value);
+                gainTarget.gainActualParam(paramEffect.paramId, value, false);
             }
         }
     }
@@ -647,8 +647,7 @@ export class SEffectApplyer {
                 this.itemEffectAddState(target, effect, result);
                 break;
             case DItemEffect.EFFECT_REMOVE_STATE:
-                throw new Error("Not implemented.");
-                //this.itemEffectRemoveState(target, effect);
+                this.itemEffectRemoveState(target, effect, result);
                 break;
             case DItemEffect.EFFECT_ADD_BUFF:
                 throw new Error("Not implemented.");
@@ -743,7 +742,16 @@ export class SEffectApplyer {
             }
         }
     }
-    
+
+    // Game_Action.prototype.itemEffectRemoveState 
+    private itemEffectRemoveState(target: LEntity, effect: IDataEffect, result: LEffectResult) {
+        let chance = effect.value1;
+        if (Math.random() < chance) {
+            target.removeState(effect.dataId);
+            result.makeSuccess();
+        }
+    };
+
     // Game_Action.prototype.itemEffectSpecial
     private itemEffectSpecial(cctx: SCommandContext, target: LEntity, effect: IDataEffect, result: LEffectResult) {
         if (effect.dataId === DItemEffect.SPECIAL_EFFECT_ESCAPE) {

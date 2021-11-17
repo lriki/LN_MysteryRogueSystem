@@ -196,6 +196,9 @@ export interface DBasicActions {
     // 転ぶ (一般的な英語は fall だが、本システムとして fall はいろいろ使うので混乱を避けるため stumble にしてみる)
     stumble: DActionId;
 
+    // 戦闘不能時 (コマンドチェーン終了時)
+    dead: DActionId;
+
     //----------------------------------------
     // Combat Actions.
 

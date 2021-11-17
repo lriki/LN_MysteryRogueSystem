@@ -74,7 +74,15 @@ export interface DReaction {
     Activity にしておけば、例えば罠の発動を一律封印するような部屋効果を表現することもできるだろう。
 
     復活の草について…
-    - 
+    Activity でも Cause でもかまわないが、例えば Activity でやるなら
+    - <RE-Action: Dead=Main>
+    - Player へ post された DeadActivity で、MainEmittor を発動する。
+    - CharmBehavior として、DeadActivity をハンドリングする。
+    このハンドリングは CommonBehavior とかに実装したいが、 Charm にすると他の様々な通知も CommonBehavior に流れてしまう。
+    でも Charm として Activity をハンドリングする専用の Behavior があってもいいかもしれない。
+    
+
+
 
 
 
