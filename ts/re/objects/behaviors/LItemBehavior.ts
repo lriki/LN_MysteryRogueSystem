@@ -218,14 +218,14 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
-        if (self.isDeathStateAffected()) {
-            cctx.postSequel(self, REBasics.sequels.CollapseSequel);
-            cctx.postDestroy(self);
-            return SCommandResponse.Handled;
-        }
+    // onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
+    //     if (self.isDeathStateAffected()) {
+    //         cctx.postSequel(self, REBasics.sequels.CollapseSequel);
+    //         cctx.postDestroy(self);
+    //         return SCommandResponse.Handled;
+    //     }
         
-        return SCommandResponse.Pass;
-    }
+    //     return SCommandResponse.Pass;
+    // }
 }
 

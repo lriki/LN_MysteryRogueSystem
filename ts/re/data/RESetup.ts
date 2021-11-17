@@ -194,6 +194,10 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 break;
+            case "kItem_RevivalGrass":
+                this.setupGrassCommon(entity);
+                entity.entity.behaviors.push({name: "RevivalItem"});
+                break;
             case "kSystem_炎のブレス":
                 entity.volatilityProjectile = true;
                 break;

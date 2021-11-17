@@ -1253,6 +1253,13 @@ export class LEntity extends LObject
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
             if (!func(j)) return false;
+            
+            // Sub behaviors
+            const behaviors: LBehavior[] = [];
+            j.onCollectCharmdBehaviors(this, behaviors);
+            for (let iCharmed = 0; iCharmed < behaviors.length; iCharmed++) {
+                if (func(behaviors[iCharmed]) === false) return false;
+            }
         }
 
         for (let i = 0; i < this._states.length; i++) {
@@ -1287,6 +1294,13 @@ export class LEntity extends LObject
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
             if (func(j) === false) return false;
+            
+            // Sub behaviors
+            const behaviors: LBehavior[] = [];
+            j.onCollectCharmdBehaviors(this, behaviors);
+            for (let iCharmed = behaviors.length - 1; iCharmed >= 0; iCharmed--) {
+                if (func(behaviors[iCharmed]) === false) return false;
+            }
         }
 
         return true;

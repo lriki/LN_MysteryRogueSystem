@@ -118,5 +118,12 @@ export interface DBasicTraits {
 
     /** 浅い眠りを起こさない。 */
     SilentStep: DTraitId;
+
+    /**
+     * 行動後に自動発動する効果
+     * dataId: DSkillId
+     * value:  発生率 (0.0~1.0)
+     */
+    AutoSkillEffect: DTraitId;
 }
 

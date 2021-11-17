@@ -106,40 +106,20 @@ export class LBattlerBehavior extends LBehavior {
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }
     
-    onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
+    onPermanentDeath(self: LEntity, cctx: SCommandContext): SCommandResponse {
         const entity = this.ownerEntity();
-        if (entity.isDeathStateAffected()) {
-            cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
-            
-            if (entity.isUnique()) {
-                if (entity == REGame.camera.focusedEntity()) {
-                    cctx.postWait(entity, 100);
-                    cctx.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
-                    
-                    UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
-                    cctx.postCall(() => {
-                        entity.iterateBehaviorsReverse(b => {
-                            b.onPermanentDeath(entity, cctx);
-                            return true;
-                        });
-                    });
-
-                    UTransfer.exitLand(cctx, entity, LandExitResult.Gameover);
-                }
-                else {
-                    // 仲間等
-                    throw new Error("Not implemented.");
-                }
+        if (entity.isUnique()) {
+            if (entity == REGame.camera.focusedEntity()) {
+                cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
+                cctx.postWait(entity, 100);
+                cctx.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
+                
+                UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
+                UTransfer.exitLand(cctx, entity, LandExitResult.Gameover);
             }
             else {
-                UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
-                cctx.postCall(() => {
-                    entity.iterateBehaviorsReverse(b => {
-                        b.onPermanentDeath(entity, cctx);
-                        return true;
-                    });
-                })
-                cctx.postDestroy(entity);
+                // 仲間等
+                throw new Error("Not implemented.");
             }
             return SCommandResponse.Handled;
         }

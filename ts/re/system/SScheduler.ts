@@ -10,6 +10,8 @@ import { LScheduler, LScheduler2, LSchedulerPhase, LTOStep } from "ts/re/objects
 import { REBasics } from "../data/REBasics";
 import { SStepPhase } from "./SCommon";
 import { SStepScheduler, SStepScheduler2 } from "./SStepScheduler";
+import { SCommandResponse } from "./RECommand";
+import { LGenerateDropItemCause } from "../objects/internal";
 
 
 
@@ -209,6 +211,9 @@ export class SScheduler {
 
     // 本来あるべき状態と齟齬がある Entity を、定常状態へ矯正する。
     private stabilizeSituation(): void {
+        // NOTE: この中からは、必要な時だけ post してよい。
+        // 不要であるにもかかわらず毎回 post してしまうと、Phase の処理に回らなくなるので注意。
+        const cctx = RESystem.commandContext;
 
         {
             for (const entity of REGame.map.entities()) {
@@ -217,17 +222,45 @@ export class SScheduler {
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
                 if (currentLayer != homeLayer) {
-                    UAction.postDropOrDestroyOnCurrentPos(RESystem.commandContext, entity, homeLayer);
+                    UAction.postDropOrDestroyOnCurrentPos(cctx, entity, homeLayer);
                 }
             }
         }
         
         for (const entity of REGame.map.entities()) {
             entity.iterateBehaviorsReverse(b => {
-                b.onStabilizeSituation(entity, RESystem.commandContext);
+                b.onStabilizeSituation(entity, cctx);
                 return true;
             });
         }
+
+        // 戦闘不能の確定処理
+        for (const entity of REGame.map.entities()) {
+            if (entity.isDeathStateAffected()) {
+                let result = SCommandResponse.Pass;
+                entity.iterateBehaviorsReverse(b => {
+                    result = b.onPermanentDeath(entity, RESystem.commandContext);
+                    return result == SCommandResponse.Pass;
+                });
+
+                if (result == SCommandResponse.Pass) {
+                    cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
+                    UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
+                    cctx.postDestroy(entity);
+                }
+            }
+        }
+
+
+
+        /*
+        爆発の腕輪・ワープの腕輪実装メモ
+        ----------
+        装備順序による効果発生順の依存は避けたいところだが…まずはそれで。
+        発動タイミングは stabilizeSituation… というよりは、UpdateState と同じタイミング。
+        足踏みでも発生するので、条件も同じ。
+
+        */
     }
 }
 

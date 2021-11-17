@@ -282,6 +282,7 @@ export abstract class LBehavior extends LObject {
     //onRemoveEntityFromWhereabouts(cctx: SCommandContext, entity: LEntity): REResponse { return REResponse.Pass; }
 
     public behaviorGroup(): LBehaviorGroup { return LBehaviorGroup.Underlying; }
+    public isCharmBehavior(): boolean { return false; }
 
     public queryDisplayName(): LNameView | undefined { return undefined; }
     public queryCharacterFileName(): DPrefabActualImage | undefined { return undefined; }
@@ -389,6 +390,7 @@ export abstract class LBehavior extends LObject {
 
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {}
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {}
+    onCollectCharmdBehaviors(self: LEntity, result: LBehavior[]): void {}
 
     /** 主に AI 行動決定用に、スキルの一覧を取得する */
     onCollectSkillActions(result: IDataAction[]): void {}
@@ -402,8 +404,12 @@ export abstract class LBehavior extends LObject {
 
     onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
-    /** 完全な死亡状態となった。復活草などの発動判定が行われた後、救いようが無くゲームオーバーとなった状態。 */
-    onPermanentDeath(self: LEntity, cctx: SCommandContext): void {}
+    /**
+     * 完全な死亡状態となった。
+     * 復活草などの発動判定が行われた後、救いようが無くゲームオーバーとなった状態で、このハンドラが呼ばれたら復活してはならない。
+     * 戦闘不能エフェクトやドロップアイテムの処理をオーバーライドできる。
+     */
+    onPermanentDeath(self: LEntity, cctx: SCommandContext): SCommandResponse { return SCommandResponse.Pass; }
 
     onPertyChanged(self: LEntity): void { }
 

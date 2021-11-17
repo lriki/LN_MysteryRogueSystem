@@ -181,13 +181,20 @@ export class LInventoryBehavior extends LBehavior {
         }
     }
 
-    onPermanentDeath(self: LEntity, cctx: SCommandContext): void {
-    }
-    
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
         super.onCollectTraits(self, result);
         this.iterateItems(item => {
             result.pushArray(item.data().charmedTraits());
+        });
+    }
+
+    onCollectCharmdBehaviors(self: LEntity, result: LBehavior[]): void {
+        this.iterateItems(item => {
+            item.iterateBehaviorsReverse(b => {
+                if (b.isCharmBehavior()) {
+                    result.push(b);
+                }
+            })
         });
     }
 
