@@ -34,7 +34,7 @@ test("concretes.states.かなしばり.FP", () => {
     }
    
     const fp = actor1.actualParam(REBasics.params.fp);
-    expect(fp === 3).toBe(true);    // 空腹になっている
+    expect(fp).toBe(3);    // 空腹になっている
     //expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
 });
 

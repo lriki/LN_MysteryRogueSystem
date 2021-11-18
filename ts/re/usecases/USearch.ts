@@ -31,8 +31,17 @@ export class USearch {
     /**
      * 可視であるか
      */
-     public static checkVisible(target: LEntity): boolean {
+    public static isVisible(target: LEntity): boolean {
          return !target.hasTrait(REBasics.traits.Invisible);
+    }
+
+    /**
+     * subject から見て target は可視であるか
+     */
+    public static isVisibleFromSubject(subject: LEntity, target: LEntity): boolean {
+        if (subject.hasTrait(REBasics.traits.ForceVisible)) return true;
+        if (target.hasTrait(REBasics.traits.Invisible)) return false;
+        return true;
     }
 
     /**

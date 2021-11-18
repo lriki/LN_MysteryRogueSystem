@@ -22,9 +22,11 @@ test("concretes.item.ring.SilentStepRing", () => {
 
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアウェイクガードリング").id, [], "ring1"));
     inventory.addEntity(ring1);
+    equipmentUser.equipOnUtil(ring1);
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
@@ -32,13 +34,13 @@ test("concretes.item.ring.SilentStepRing", () => {
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
-    //----------------------------------------------------------------------------------------------------
+    // //----------------------------------------------------------------------------------------------------
 
-    // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, ring1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    // // [装備]
+    // RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, ring1).withConsumeAction());
+    // RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    // RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 

@@ -101,6 +101,8 @@ export interface DBasicTraits {
 
     Invisible: DTraitId;//,
 
+    ForceVisible: DTraitId;//,  Invisible 無効化
+
     ItemDropRate: DTraitId;//,
 
     /**

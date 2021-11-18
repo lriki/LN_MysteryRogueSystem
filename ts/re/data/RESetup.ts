@@ -83,8 +83,8 @@ export class RESetup {
             case "kポイズンガードリング":
                 entity.affestTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.pow, value: 0.0 });
                 break;
-            case "kアウェイクリング":
-                entity.entity.behaviors.push({name: "Equipment"});
+            case "kビジブルリング":
+                entity.affestTraits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
                 break;
             case "kハングリーガードリング":
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });

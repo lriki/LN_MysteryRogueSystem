@@ -517,7 +517,7 @@ export class UAction {
         if (USearch.hasBlindness(self)) return undefined;   // 盲目
 
         return REGame.map.getInsightEntities(self)
-                .filter(e => Helpers.isHostile(self, e) && USearch.checkVisible(e))
+                .filter(e => Helpers.isHostile(self, e) && USearch.isVisibleFromSubject(self, e))
                 .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
     }

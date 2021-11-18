@@ -9,6 +9,7 @@ import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
 import { LNameView } from "../objects/internal";
 import { LEntity } from "../objects/LEntity";
 import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
+import { USearch } from "../usecases/USearch";
 
 export interface TilemapViewInfo {
     visible: boolean;
@@ -17,7 +18,7 @@ export interface TilemapViewInfo {
 
 export interface SEntityVisibility {
     visible: boolean;
-    translucent: boolean;
+    translucent: boolean;   // 操作中キャラが透明状態 = 半透明で表示するか
     image?: DPrefabActualImage;
 }
 
@@ -86,7 +87,8 @@ export class SView {
             }
             
             // entity が透明状態なら見えない
-            if (entity.traits(REBasics.traits.Invisible).length > 0) {
+            //if (entity.traits(REBasics.traits.Invisible).length > 0) {
+            if (!USearch.isVisibleFromSubject(subject, entity)) {
                 return { visible: false, translucent: false };
             }
 

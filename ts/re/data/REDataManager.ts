@@ -235,6 +235,7 @@ export class REDataManager
             REBasics.traits.SealActivity = REData.newTrait("SealActivity").id;
             REBasics.traits.SealSpecialAbility = REData.newTrait("SealSpecialAbility").id;
             REBasics.traits.Invisible = REData.newTrait("Invisible").id;
+            REBasics.traits.ForceVisible = REData.newTrait("ForceVisible").id;
             REBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
             REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
             REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
