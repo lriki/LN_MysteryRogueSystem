@@ -34,8 +34,9 @@ test("concretes.item.ring.HungryRing.test", () => {
 
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
+    
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     const fp2 = player1.actualParam(REBasics.params.fp);
-    expect(fp2).toBe(fp1 - 2);  // FP が減少していること
+    expect(fp2).toBe(fp1 - 20);  // FP が減少していること
 });

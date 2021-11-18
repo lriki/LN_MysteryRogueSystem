@@ -22,13 +22,13 @@ test("Survival.FP", () => {
     REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
-    expect(player1.actualParam(REBasics.params.fp)).toBe(1000); // 初期 FP は 1000
+    expect(player1.actualParam(REBasics.params.fp)).toBe(10000); // 初期 FP は 10000
     
     //----------------------------------------------------------------------------------------------------
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(player1.actualParam(REBasics.params.fp)).toBe(1000); // Dialog 開いた状態なので未行動。FP消費はされていない。
+    expect(player1.actualParam(REBasics.params.fp)).toBe(10000); // Dialog 開いた状態なので未行動。FP消費はされていない。
 
     const dialogContext = RESystem.dialogContext;
 
@@ -40,7 +40,7 @@ test("Survival.FP", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(player1.actualParam(REBasics.params.fp)).toBe(999);  // FP が減少していること
+    expect(player1.actualParam(REBasics.params.fp)).toBe(9990);  // FP が減少していること
 
     const prevHP = player1.actualParam(REBasics.params.hp);
 

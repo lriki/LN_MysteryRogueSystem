@@ -43,6 +43,8 @@ export class LSurvivorBehavior extends LBehavior {
     ある程度柔軟性を持ちつつわかりやすいかもしれない。
     */
 
+    private _basicLoss = 10;
+
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LSurvivorBehavior);
         return b
@@ -57,8 +59,7 @@ export class LSurvivorBehavior extends LBehavior {
         
         if (phase == DecisionPhase.UpdateState) {
 
-            var loss = 1;
-
+            var loss = this._basicLoss;
             loss *= self.traitsPi(REBasics.traits.SurvivalParamLossRate, REBasics.params.fp);
 
             // FP 減少

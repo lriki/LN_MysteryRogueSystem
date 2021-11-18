@@ -15,15 +15,16 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.ring.WarpRing", () => {
+test("concretes.item.ring.HungryGuardRing.test", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
+    const fp1 = player1.actualParam(REBasics.params.fp);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kワープリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kハングリーガードリング").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 
@@ -31,19 +32,11 @@ test("concretes.item.ring.WarpRing", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    let count = 0;
-    for (let i = 0; i < 500; i++) {
-        // 移動
-        REGame.world._transferEntity(player1, floorId, 10, 10);
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
-        
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
 
-        // ワープしている
-        if (player1.x != 11 || player1.y != 10) count++;
-    }
+    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    // 1回くらいはワープしているだろう
-    expect(count > 0).toBe(true);
+    const fp2 = player1.actualParam(REBasics.params.fp);
+    expect(fp2).toBe(fp1);  // FP は減少していない
 });

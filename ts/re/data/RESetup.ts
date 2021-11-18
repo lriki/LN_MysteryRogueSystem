@@ -81,6 +81,9 @@ export class RESetup {
             case "kアウェイクリング":
                 entity.entity.behaviors.push({name: "Equipment"});
                 break;
+            case "kハングリーガードリング":
+                entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
+                break;
             case "kウッドアロー":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
@@ -766,7 +769,7 @@ export class RESetup {
             parameterId: REBasics.params.fp,
             applyTarget: DParameterApplyTarget.Current,
             elementId: 0,
-            formula: "5",
+            formula: "500",
             applyType: DParameterEffectApplyType.Recover,
             variance: 0,
             silent: true,

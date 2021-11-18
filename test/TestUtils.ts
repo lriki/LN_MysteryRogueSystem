@@ -20,10 +20,10 @@ export class TestUtils {
         assert(!!emittors);
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!emittors.find(e => !!e.effectSet.effects[0].qualifyings.parameterQualifyings.find(x => x.parameterId == REBasics.params.fp && x.formula == "5")));
+        expect(!!emittors.find(e => !!e.effectSet.effects[0].qualifyings.parameterQualifyings.find(x => x.parameterId == REBasics.params.fp && x.formula == "500")));
 
         // おなかを減らしておく
-        actor.setActualParam(REBasics.params.fp, 500);
+        actor.setActualParam(REBasics.params.fp, 5000);
     }
     
     public static testCommonGrassEnd(actor: LEntity, item: LEntity) {
@@ -31,7 +31,7 @@ export class TestUtils {
         expect(item.isDestroyed()).toBe(true);
 
         // FP が回復しているはず
-        expect(actor.actualParam(REBasics.params.fp) > 500).toBe(true);
+        expect(actor.actualParam(REBasics.params.fp) > 5000).toBe(true);
 
         // 食べられたら識別済みになる
         const name = UName.makeNameAsItem(item);
