@@ -62,6 +62,14 @@ export class LActorBehavior extends LBattlerBehavior {
     //     return this._level;
     // }
 
+    public level(): number {
+        return this._level;
+    }
+
+    public setLevel(value: number): void {
+        this._level = value;
+        this.initExp();
+    }
 
 
     onAttached(self: LEntity): void {
@@ -217,9 +225,6 @@ export class LActorBehavior extends LBattlerBehavior {
         }
     }
 
-    level(): number {
-        return this._level;
-    }
 
     gainExp(exp: number): void {
         const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());

@@ -142,5 +142,12 @@ export interface DBasicTraits {
      * value:  率 (double)
      */
     ParamDamageRate: DTraitId;
+
+    
+    /**
+     * スキル自体の無効化
+     * dataId: SkillId
+     */
+    SkillGuard: DTraitId;
 }
 

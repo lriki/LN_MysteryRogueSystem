@@ -306,6 +306,10 @@ export class SEmittorPerformer {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
             }
+            if (skillId > 0) {
+                effectSubject.withSkill(skillId);
+            }
+
             const effectContext = new SEffectContext(effectSubject, cctx.random());
     
             // if (emittor.effect.rmmzAnimationId) {
@@ -340,6 +344,9 @@ export class SEmittorPerformer {
                     if (itemEntity) {
                         effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                         effectSubject.withItem(itemEntity);
+                    }
+                    if (skillId > 0) {
+                        effectSubject.withSkill(skillId);
                     }
                     const effectContext = new SEffectContext(effectSubject, cctx.random());
                     //effectContext.addEffector(effector);
@@ -383,6 +390,9 @@ export class SEmittorPerformer {
             if (itemEntity) {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
+            }
+            if (skillId > 0) {
+                effectSubject.withSkill(skillId);
             }
             const effectContext = new SEffectContext(effectSubject, cctx.random());
 
@@ -466,6 +476,9 @@ export class SEmittorPerformer {
         if (itemEntity) {
             effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
             effectSubject.withItem(itemEntity);
+        }
+        if (skillId > 0) {
+            effectSubject.withSkill(skillId);
         }
         const effectContext = new SEffectContext(effectSubject, cctx.random());
         

@@ -86,6 +86,10 @@ export class RESetup {
             case "kビジブルリング":
                 entity.affestTraits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
                 break;
+            case "kインプリング":
+                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_レベルダウン").id, value: 0 });
+                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_混乱魔法_部屋内").id, value: 0 });
+                break;
             case "kハングリーガードリング":
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
                 break;

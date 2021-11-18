@@ -1,9 +1,9 @@
 import { REBasics } from "../data/REBasics";
-import { DEffectBehaviorId, DEntityKindId } from "../data/DCommon";
+import { DEffectBehaviorId, DEntityKindId, DSkillId } from "../data/DCommon";
 import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSubEffectTargetKey } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
-import { DEffectBehavior } from "../data/DSkill";
+import { DEffectBehavior, DSkill } from "../data/DSkill";
 import { LandExitResult, REData } from "../data/REData";
 import { LProjectableBehavior } from "../objects/behaviors/activities/LProjectableBehavior";
 import { LBattlerBehavior } from "../objects/behaviors/LBattlerBehavior";
@@ -139,6 +139,8 @@ export class SEffectorFact {
     private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
     private _item: LEntity | undefined;
 
+    private _sourceSkill: DSkillId | undefined;
+
     private _direction: number;
 
     private _genericEffectRate: number;
@@ -189,6 +191,11 @@ export class SEffectorFact {
         return this;
     }
 
+    public withSkill(skill: DSkillId): this {
+        this._sourceSkill = skill;
+        return this;
+    }
+
     public subject(): LEntity {
         return this._subject;
     }
@@ -211,6 +218,10 @@ export class SEffectorFact {
 
     public item(): LEntity | undefined {
         return this._item;
+    }
+
+    public sourceSkill(): DSkillId | undefined {
+        return this._sourceSkill;
     }
 
     public direction(): number {
@@ -418,6 +429,13 @@ export class SEffectApplyer {
 
     public apply(cctx: SCommandContext, modifier: SEffectModifier, target: LEntity): void {
         const result =  target._effectResult;
+
+        const sourceSkillId = this._effect.fact().sourceSkill();
+        if (sourceSkillId) {
+            if (target.traitsWithId(REBasics.traits.SkillGuard, sourceSkillId).length > 0) {
+                return;
+            }
+        }
         
         for (const paramEffect of modifier.parameterEffects2()) {
             paramEffect.evalConditions(target);

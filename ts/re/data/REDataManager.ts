@@ -244,6 +244,7 @@ export class REDataManager
             REBasics.traits.SuddenSkillEffect = REData.newTrait("AutoSkillEffect").id;
             REBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
             REBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
+            REBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
             
             
             
