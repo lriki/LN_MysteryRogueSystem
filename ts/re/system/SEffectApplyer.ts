@@ -18,6 +18,7 @@ import { UTransfer } from "../usecases/UTransfer";
 import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
+import { paramExposedTrapTriggerRate } from "../PluginParameters";
 
 
 
@@ -479,6 +480,7 @@ export class SEffectApplyer {
         value = this.applyVariance(value, paramEffect.variance);
         value = this.applyGuard(value, target);
         value = this.applyProficiency(value);
+        value = this.applyDamageRate(value, paramEffect.paramId, target);
         value = Math.round(value);
         return value;
     }
@@ -564,6 +566,14 @@ export class SEffectApplyer {
         return damage * this._effect.fact().genericEffectRate();
     }
     
+    private applyDamageRate(damage: number, paramId: DParameterId, target: LEntity): number {
+        if (damage > 0) {
+            return damage * target.traitsPi(REBasics.traits.ParamDamageRate, paramId)
+        }
+        else {
+            return damage;
+        }
+    }
     
     // Game_Action.prototype.executeDamage
     // Game_Action.prototype.executeHpDamage

@@ -242,7 +242,8 @@ export class REDataManager
             REBasics.traits.SilentStep = REData.newTrait("SilentStep").id;
             REBasics.traits.SuddenSkillEffect = REData.newTrait("AutoSkillEffect").id;
             REBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
-
+            REBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
+            
             
             
             
