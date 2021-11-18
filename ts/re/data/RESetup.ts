@@ -68,29 +68,42 @@ export class RESetup {
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kアウェイクリング":
-                entity.entity.behaviors.push({name: "Equipment"});
+                this.setupRingCommon(entity);
                 break;
             case "kパワーリング":
-                entity.entity.behaviors.push({name: "Equipment"});
+                this.setupRingCommon(entity);
                 assert(entity.equipment);
                 entity.equipment.parameters[REBasics.params.pow] = { value: 3, upgradeRate: 0 };
                 break;
             case "kワープリング":
+                this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 0.1 });
+                break;
+            case "kスリープガードリング":
+                this.setupRingCommon(entity);
+                break;
             case "kハングリーリング":
+                this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 2.0 });
                 break;
             case "kポイズンガードリング":
+                this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.pow, value: 0.0 });
                 break;
             case "kビジブルリング":
+                this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
                 break;
             case "kインプリング":
+                this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_レベルダウン").id, value: 0 });
                 entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_混乱魔法_部屋内").id, value: 0 });
                 break;
+            case "kアウェイクガードリング":
+                this.setupRingCommon(entity);
+                break;
             case "kハングリーガードリング":
+                this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
                 break;
             case "kウッドアロー":
@@ -767,6 +780,10 @@ export class RESetup {
                 data.exclusive = true;
                 break;
         }
+    }
+
+    private static setupRingCommon(entity: DEntity): void {
+        entity.entity.behaviors.push({name: "Equipment"});
     }
 
     private static setupGrassCommon(entity: DEntity): void {
