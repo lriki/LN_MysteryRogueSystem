@@ -124,6 +124,8 @@ export interface DBasicTraits {
      * dataId: DSkillId
      * value:  発生率 (0.0~1.0)
      */
-    AutoSkillEffect: DTraitId;
+    SuddenSkillEffect: DTraitId;
+
+    
 }
 

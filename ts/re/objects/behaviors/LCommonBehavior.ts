@@ -1,15 +1,17 @@
 import { DActionId } from "ts/re/data/DAction";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
-import { LBehavior } from "./LBehavior";
+import { DecisionPhase, LBehavior } from "./LBehavior";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SActivityContext } from "ts/re/system/SActivityContext";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
 import { REBasics } from "ts/re/data/REBasics";
 import { USearch } from "ts/re/usecases/USearch";
 import { DEmittor } from "ts/re/data/DEmittor";
 import { DCounterAction } from "ts/re/data/DEntity";
 import { LEffectResult } from "../LEffectResult";
+import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
+import { REData } from "ts/re/data/REData";
 
 
 
@@ -45,6 +47,21 @@ export class LCommonBehavior extends LBehavior {
         return SCommandResponse.Handled;
     }
     
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        
+        if (phase == DecisionPhase.UpdateState) {
+            for (const trait of self.traits(REBasics.traits.SuddenSkillEffect)) {
+                const skill = REData.skills[trait.dataId];
+                SEmittorPerformer.makeWithEmitor(self, self, skill.emittor())
+                .perform(cctx);
+            }
+
+            return SPhaseResult.Pass;
+        }
+
+        return SPhaseResult.Pass;
+    }
+
     onEffectPerformed(self: LEntity, cctx: SCommandContext, emittor: DEmittor): SCommandResponse {
         const data = self.data();
 

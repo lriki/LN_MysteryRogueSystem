@@ -75,6 +75,9 @@ export class RESetup {
                 assert(entity.equipment);
                 entity.equipment.parameters[REBasics.params.pow] = { value: 3, upgradeRate: 0 };
                 break;
+            case "kワープリング":
+                entity.affestTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 0.1 });
+                break;
             case "kウッドアロー":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
@@ -598,6 +601,11 @@ export class RESetup {
             case "kSkill_ワープ魔法":
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.warp);
                 break;
+            case "kSkill_Warp":
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.warp);
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                break;
+
         }
     }
     

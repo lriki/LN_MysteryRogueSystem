@@ -210,6 +210,18 @@ NOTE:
         return SCommandResponse.Pass;
     }
 
+    // テスト用ユーティリティ
+    public equipOnUtil(itemEntity: LEntity): void {
+        this.refreshSlots();
+        const equipment = itemEntity.data().equipment;
+        assert(equipment);
+        const itemPart = equipment.equipmentPart;
+        let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
+        assert(slot);
+        slot.itemEntityId = itemEntity.entityId();
+        this.ownerEntity().refreshConditions();
+    }
+
     private equipOn(cctx: SCommandContext, self: LEntity, slot: SlotPart2, itemEntity: LEntity): void {
         slot.itemEntityId = itemEntity.entityId();
 

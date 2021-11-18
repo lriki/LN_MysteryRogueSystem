@@ -240,7 +240,7 @@ export class REDataManager
             REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
             REBasics.traits.AwakeStep = REData.newTrait("AwakeStep").id;
             REBasics.traits.SilentStep = REData.newTrait("SilentStep").id;
-            REBasics.traits.AutoSkillEffect = REData.newTrait("AutoSkillEffect").id;
+            REBasics.traits.SuddenSkillEffect = REData.newTrait("AutoSkillEffect").id;
 
             
             
