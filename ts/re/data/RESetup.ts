@@ -75,8 +75,11 @@ export class RESetup {
                 assert(entity.equipment);
                 entity.equipment.parameters[REBasics.params.pow] = { value: 3, upgradeRate: 0 };
                 break;
-            case "kワープリング":
-                entity.affestTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 0.1 });
+            case "kハングリーリング":
+                entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 2.0 });
+                break;
+            case "kアウェイクリング":
+                entity.entity.behaviors.push({name: "Equipment"});
                 break;
             case "kウッドアロー":
                 this.setupArrowCommon(entity);

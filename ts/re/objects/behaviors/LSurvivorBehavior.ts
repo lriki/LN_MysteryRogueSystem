@@ -57,8 +57,12 @@ export class LSurvivorBehavior extends LBehavior {
         
         if (phase == DecisionPhase.UpdateState) {
 
+            var loss = 1;
+
+            loss *= self.traitsPi(REBasics.traits.SurvivalParamLossRate, REBasics.params.fp);
+
             // FP 減少
-            self.gainActualParam(REBasics.params.fp, -1, true);
+            self.gainActualParam(REBasics.params.fp, -loss, true);
 
 
             switch (self.actualParam(REBasics.params.fp)) {

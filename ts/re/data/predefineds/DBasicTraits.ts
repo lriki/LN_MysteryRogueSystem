@@ -126,6 +126,13 @@ export interface DBasicTraits {
      */
     SuddenSkillEffect: DTraitId;
 
+    /**
+     * サバイバルパラメータ自動減少の率
+     * dataId: DParamId
+     * value:  率 (0.0~1.0)
+     */
+    SurvivalParamLossRate: DTraitId;
+
     
 }
 
