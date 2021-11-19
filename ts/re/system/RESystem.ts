@@ -12,7 +12,7 @@ import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { RESystemExtension } from "./RESystemExtension";
 import { STurnContext } from "./STurnContext";
-import { SEffectBehaviorManager } from "./effects/SEffectBehaviorManager";
+import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 
 export class RESystem {
@@ -38,7 +38,7 @@ export class RESystem {
     static minimapData: SMinimapData;
     static mapManager: SMapManager;
     static groundRules: SGroundRules;
-    static effectBehaviorManager: SEffectBehaviorManager;
+    static effectBehaviorManager: SSpecialEffectManager;
     static requestedPlayback: boolean = false;
     static unittest: boolean = false;
 

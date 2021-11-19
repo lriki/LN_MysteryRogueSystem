@@ -1,9 +1,9 @@
 import { REBasics } from "../data/REBasics";
-import { DEffectBehaviorId, DEntityKindId, DSkillId } from "../data/DCommon";
+import { DSpecificEffectId, DEntityKindId, DSkillId } from "../data/DCommon";
 import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSubEffectTargetKey } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
-import { DEffectBehavior, DSkill } from "../data/DSkill";
+import { DSpecialEffect, DSkill } from "../data/DSkill";
 import { LandExitResult, REData } from "../data/REData";
 import { LProjectableBehavior } from "../objects/behaviors/activities/LProjectableBehavior";
 import { LBattlerBehavior } from "../objects/behaviors/LBattlerBehavior";
@@ -402,7 +402,7 @@ export class SEffectModifier {
         return this._data.otherEffectQualifyings;
     }
 
-    public effectBehaviors(): DEffectBehaviorId[] {
+    public effectBehaviors(): DSpecificEffectId[] {
         return this._data.effectBehaviors;
     }
  

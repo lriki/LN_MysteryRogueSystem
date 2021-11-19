@@ -103,7 +103,7 @@ import { LEntity } from "../LEntity";
 import { LBehavior, SRejectionInfo } from "./LBehavior"
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UAction } from "ts/re/usecases/UAction";
-import { DEffectBehaviorId } from "ts/re/data/DCommon";
+import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { DEffect } from "ts/re/data/DEffect";
 //import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";

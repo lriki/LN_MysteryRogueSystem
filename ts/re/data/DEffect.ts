@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
-import { DMatchConditions, DEffectBehaviorId, DBlockLayerKind, DBlockLayerScope, DEntityKindId } from "./DCommon";
+import { DMatchConditions, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId } from "./DCommon";
 import { DParameterId } from "./DParameter";
-import { DEffectBehavior, DSkill } from "./DSkill";
+import { DSpecialEffect, DSkill } from "./DSkill";
 
 
 
@@ -222,7 +222,7 @@ export interface DQualifyings {
      */
     otherEffectQualifyings: DOtherEffectQualifying[];
 
-    effectBehaviors: DEffectBehaviorId[];
+    effectBehaviors: DSpecificEffectId[];
  
     /**
      * IDataSkill.effects

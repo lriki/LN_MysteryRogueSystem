@@ -9,13 +9,13 @@ import { UName } from "ts/re/usecases/UName";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SEntityFactory } from "../SEntityFactory";
-import { SEffectBehavior } from "./SEffectBehavior";
-import { SItemStealSkillBehavior } from "./SItemStealEffectBehavior";
-import { DEffectBehaviorId } from "ts/re/data/DCommon";
+import { SSpecialEffect } from "./SSpecialEffect";
+import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
+import { DSpecificEffectId } from "ts/re/data/DCommon";
 
-export class SGoldStealEffectBehavior extends SEffectBehavior {
+export class SGoldStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
 
         const gold = this.pickGold(target, cctx.random());
         if (!gold) {
@@ -26,7 +26,7 @@ export class SGoldStealEffectBehavior extends SEffectBehavior {
         const inventory = performer.getEntityBehavior(LInventoryBehavior);
         inventory.addEntity(gold);
 
-        SItemStealSkillBehavior.postWarpBySteal(cctx, performer, UName.makeNameAsItem(gold));
+        SItemStealSpecialEffect.postWarpBySteal(cctx, performer, UName.makeNameAsItem(gold));
     }
 
     private pickGold(target: LEntity, rand: LRandom): LEntity | undefined {

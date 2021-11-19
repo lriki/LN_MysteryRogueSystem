@@ -1,4 +1,4 @@
-import { DAttackElementId, DEffectBehaviorId } from "./DCommon";
+import { DAttackElementId, DSpecificEffectId } from "./DCommon";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
@@ -16,13 +16,13 @@ export interface DBasicElements {
 }
 
 export interface DBasicEffectBehaviors {
-    itemSteal: DEffectBehaviorId,
-    goldSteal: DEffectBehaviorId,
-    levelDown: DEffectBehaviorId,
-    warp: DEffectBehaviorId,
-    stumble: DEffectBehaviorId,
-    transferToNextFloor: DEffectBehaviorId,
-    transferToLowerFloor: DEffectBehaviorId,
+    itemSteal: DSpecificEffectId,
+    goldSteal: DSpecificEffectId,
+    levelDown: DSpecificEffectId,
+    warp: DSpecificEffectId,
+    stumble: DSpecificEffectId,
+    transferToNextFloor: DSpecificEffectId,
+    transferToLowerFloor: DSpecificEffectId,
 }
 
 // export interface DBasicPresets {

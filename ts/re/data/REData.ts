@@ -2,7 +2,7 @@ import { LBehavior } from "ts/re/objects/behaviors/LBehavior";
 import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
-import { DEffectBehavior, DSkill } from "./DSkill";
+import { DSpecialEffect, DSkill } from "./DSkill";
 import { DClass, DClass_Default } from "./DClass";
 import { DItem, DItemDataId } from "./DItem";
 import { DLand } from "./DLand";
@@ -153,7 +153,7 @@ export class REData
     static parameters: REData_Parameter[] = [];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
-    static effectBehaviors: DEffectBehavior[] = [];
+    static effectBehaviors: DSpecialEffect[] = [];
     // static presets: DPreset[] = [];
     static skills: DSkill[] = [];
     static items: DEntityId[] = [];
@@ -196,7 +196,7 @@ export class REData
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
 
-        this.effectBehaviors = [new DEffectBehavior(0, "null")];
+        this.effectBehaviors = [new DSpecialEffect(0, "null")];
         // this.presets = [new DPreset(0, "null")];
         this.skills = [];
         this.items = [];
@@ -389,8 +389,8 @@ export class REData
 
     //--------------------
 
-    static newEffectBehavior(key: string): DEffectBehavior {
-        const data = new DEffectBehavior(this.effectBehaviors.length, key);
+    static newEffectBehavior(key: string): DSpecialEffect {
+        const data = new DSpecialEffect(this.effectBehaviors.length, key);
         this.effectBehaviors.push(data);
         return data;
     }

@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { DEffectBehaviorId } from "ts/re/data/DCommon";
+import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DEffect } from "ts/re/data/DEffect";
 import { REBasics } from "ts/re/data/REBasics";
 import { SCommandResponse } from "ts/re/system/RECommand";

@@ -41,7 +41,7 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DCounterAction, DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DBlockLayerKind, DEffectBehaviorId, DSkillId } from "ts/re/data/DCommon";
+import { DBlockLayerKind, DSpecificEffectId, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DEffect, DSubEffectTargetKey } from "ts/re/data/DEffect";
@@ -190,7 +190,7 @@ interface SEffectRejectionInfo {
 
 interface SEffectBehaviorRejectionInfo {
     kind: "EffectBehavior";
-    id: DEffectBehaviorId;
+    id: DSpecificEffectId;
 }
 
 export type SRejectionInfo = SEffectRejectionInfo | SEffectBehaviorRejectionInfo;

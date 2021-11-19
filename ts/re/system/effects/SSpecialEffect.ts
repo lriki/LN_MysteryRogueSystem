@@ -1,14 +1,14 @@
 import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { DEffectBehaviorId, DSkillId } from "ts/re/data/DCommon";
+import { DSpecificEffectId, DSkillId } from "ts/re/data/DCommon";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 
 
-export abstract class SEffectBehavior {
+export abstract class SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DEffectBehaviorId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
         
     }
 

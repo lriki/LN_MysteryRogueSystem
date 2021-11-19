@@ -1,44 +1,44 @@
 import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { DEffectBehaviorId } from "ts/re/data/DCommon";
-import { SEffectBehavior } from "./SEffectBehavior";
-import { SGoldStealEffectBehavior } from "./SGoldStealEffectBehavior";
-import { SItemStealSkillBehavior } from "./SItemStealEffectBehavior";
-import { SLevelDownEffectBehavior } from "./SLevelDownEffectBehavior";
-import { SWarpEffectBehavior } from "./SWrapEffectBehavior";
-import { SStumbleEffectBehavior } from "./SStumbleEffectBehavior";
-import { STransferToNextFloorEffectBehavior } from "./STransferToNextFloorEffectBehavior";
-import { STransferToLowerFloorEffectBehavior } from "./STransferToLowerFloorEffectBehavior";
+import { DSpecificEffectId } from "ts/re/data/DCommon";
+import { SSpecialEffect } from "./SSpecialEffect";
+import { SGoldStealSpecialEffect } from "./SGoldStealSpecialEffect";
+import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
+import { SLevelDownSpecialEffect } from "./SLevelDownSpecialEffect";
+import { SWarpSpecialEffect } from "./SWrapSpecialEffect";
+import { SStumbleSpecialEffect } from "./SStumbleSpecialEffect";
+import { STransferToNextFloorSpecialEffect } from "./STransferToNextFloorSpecialEffect";
+import { STransferToLowerFloorSpecialEffect } from "./STransferToLowerFloorSpecialEffect";
 
-export class SEffectBehaviorManager {
-    private behaviors: (SEffectBehavior | undefined)[] = [];    // Index is DSkillBehaviorId
+export class SSpecialEffectManager {
+    private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
 
     public constructor() {
         this.setupBuiltins();
     }
 
-    public register(effectBehaviorId: DEffectBehaviorId, behavior: SEffectBehavior) {
-        this.behaviors[effectBehaviorId] = behavior;
+    public register(specialEffectId: DSpecificEffectId, behavior: SSpecialEffect) {
+        this.behaviors[specialEffectId] = behavior;
     }
 
-    public find(effectBehaviorId: DEffectBehaviorId): SEffectBehavior | undefined {
-        return this.behaviors[effectBehaviorId];
+    public find(specialEffectId: DSpecificEffectId): SSpecialEffect | undefined {
+        return this.behaviors[specialEffectId];
     }
 
-    public get(effectBehaviorId: DEffectBehaviorId): SEffectBehavior {
-        const b = this.find(effectBehaviorId);
+    public get(specialEffectId: DSpecificEffectId): SSpecialEffect {
+        const b = this.find(specialEffectId);
         assert(b);
         return b;
     }
 
     private setupBuiltins(): void {
-        this.register(REBasics.effectBehaviors.itemSteal, new SItemStealSkillBehavior());
-        this.register(REBasics.effectBehaviors.goldSteal, new SGoldStealEffectBehavior());
-        this.register(REBasics.effectBehaviors.levelDown, new SLevelDownEffectBehavior());
-        this.register(REBasics.effectBehaviors.warp, new SWarpEffectBehavior());
-        this.register(REBasics.effectBehaviors.stumble, new SStumbleEffectBehavior());
-        this.register(REBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorEffectBehavior());
-        this.register(REBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorEffectBehavior());
+        this.register(REBasics.effectBehaviors.itemSteal, new SItemStealSpecialEffect());
+        this.register(REBasics.effectBehaviors.goldSteal, new SGoldStealSpecialEffect());
+        this.register(REBasics.effectBehaviors.levelDown, new SLevelDownSpecialEffect());
+        this.register(REBasics.effectBehaviors.warp, new SWarpSpecialEffect());
+        this.register(REBasics.effectBehaviors.stumble, new SStumbleSpecialEffect());
+        this.register(REBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorSpecialEffect());
+        this.register(REBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorSpecialEffect());
     }
 }
 

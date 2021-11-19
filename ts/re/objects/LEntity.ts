@@ -30,7 +30,7 @@ import { UState } from "ts/re/usecases/UState";
 import { DEffect, DParamBuff, DSubEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
-import { DBlockLayerKind, DEffectBehaviorId, DEntityKindId } from "../data/DCommon";
+import { DBlockLayerKind, DSpecificEffectId, DEntityKindId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
 import { LPriceInfo, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
