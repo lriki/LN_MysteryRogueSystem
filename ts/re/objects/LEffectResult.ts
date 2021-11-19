@@ -11,6 +11,8 @@ import { SSoundManager } from "ts/re/system/SSoundManager";
 import { UName } from "ts/re/usecases/UName";
 import { DTextManager } from "../data/DTextManager";
 import { DEffect, DParameterQualifying } from "../data/DEffect";
+import { REGame } from "./REGame";
+import { REBasics } from "../data/REBasics";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @RESerializable
@@ -283,8 +285,13 @@ export class LEffectResult {
         } else if (damage < 0) {
             return this.makeRecoveryOrGainMessage(paramResult, entityName, paramData, isActor);
         } else {
-            fmt = isActor ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
-            return fmt.format(entityName);
+            if (paramResult.paramId == REBasics.params.hp) {
+                fmt = isActor ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
+                return fmt.format(entityName);
+            }
+            else {
+                return tr2("%1の%2は下がらなかった。").format(entityName, paramData.displayName);
+            }
         }
     }
 

@@ -46,4 +46,5 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
     
     const pow2 = player1.actualParam(REBasics.params.pow);
     expect(pow2).toBe(pow1);    // ちからは減っていない
+    expect(REGame.messageHistory.includesText("ちからは下がらなかった"));
 });
