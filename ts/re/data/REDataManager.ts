@@ -375,6 +375,7 @@ export class REDataManager
             stumble: REData.newEffectBehavior("Stumble").id,
             transferToNextFloor: REData.newEffectBehavior("TransferToNextFloor").id,
             transferToLowerFloor: REData.newEffectBehavior("TransferToLowerFloor").id,
+            trapProliferation: REData.newEffectBehavior("TrapProliferation").id,
         };
 
         // REBasics.presets = {

@@ -42,6 +42,8 @@ export class DSystem {
 
     public fallbackGoldEntityId: DEntityId;
 
+    //public fallbackTrapEntityId: DEntityId;
+
 
     constructor() {
         //this.elements = $dataSystem.elements ?? [];
@@ -59,6 +61,7 @@ export class DSystem {
         this.fallbackEnemyEntityId = 0;
         this.fallbackItemEntityId = 0;
         this.fallbackGoldEntityId = 0;
+        //this.fallbackTrapEntityId = 0;
     }
 
     public link(testMode: boolean): void {
@@ -78,6 +81,7 @@ export class DSystem {
         this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライムA").entityId;
         this.fallbackItemEntityId = REData.getItem("kItem_雑草").id;
         this.fallbackGoldEntityId = REData.getItem("kItem_Gold").id;
+        //this.fallbackTrapEntityId = REData.getItem("kItem_トラバサミ").id;
 
         for (let i = 1; i < REData.enemies.length; i++) {
             const data = REData.enemyData(i);

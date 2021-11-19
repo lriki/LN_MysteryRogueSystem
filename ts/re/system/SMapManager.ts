@@ -135,13 +135,7 @@ export class SMapManager {
 
         // Trap 初期生成
         const trapCount = 5;
-        for (let i = 0; i < trapCount; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
-            if (candidateBlocks.length > 0) {
-                const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
-                const entity = this.spawnTrap(block.x(), block.y());
-            }
-        }
+        this.spawnTraps(trapCount);
 
         // Event 配置
         const eventTable = this._map.land2().landData().appearanceTable.events[floorId.floorNumber()];
@@ -331,6 +325,26 @@ export class SMapManager {
         const data = list[this.rand().nextIntWithMax(list.length)];
         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
         REGame.world._transferEntity(entity, floorId, mx, my);
+    }
+
+    public spawnTraps(count: number): void {
+        const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
+        for (let i = 0; i < count; i++) {
+            if (candidateBlocks.length > 0) {
+                const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
+                const entity = this.spawnTrap(block.x(), block.y());
+                candidateBlocks.mutableRemove(x => x == block);
+            }
+        }
+        /*
+        for (let i = 0; i < count; i++) {
+            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
+            if (candidateBlocks.length > 0) {
+                const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
+                const entity = this.spawnTrap(block.x(), block.y());
+            }
+        }
+        */
     }
 }
 

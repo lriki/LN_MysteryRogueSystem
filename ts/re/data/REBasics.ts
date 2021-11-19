@@ -1,4 +1,4 @@
-import { DAttackElementId, DSpecificEffectId } from "./DCommon";
+import { DAttackElementId, DSpecificEffectId as DSpecialEffectId } from "./DCommon";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
@@ -15,14 +15,15 @@ export interface DBasicElements {
     explosion: DAttackElementId,
 }
 
-export interface DBasicEffectBehaviors {
-    itemSteal: DSpecificEffectId,
-    goldSteal: DSpecificEffectId,
-    levelDown: DSpecificEffectId,
-    warp: DSpecificEffectId,
-    stumble: DSpecificEffectId,
-    transferToNextFloor: DSpecificEffectId,
-    transferToLowerFloor: DSpecificEffectId,
+export interface DBasicSpecialEffects {
+    itemSteal: DSpecialEffectId,
+    goldSteal: DSpecialEffectId,
+    levelDown: DSpecialEffectId,
+    warp: DSpecialEffectId,
+    stumble: DSpecialEffectId,
+    transferToNextFloor: DSpecialEffectId,
+    transferToLowerFloor: DSpecialEffectId,
+    trapProliferation: DSpecialEffectId,
 }
 
 // export interface DBasicPresets {
@@ -46,7 +47,7 @@ export class REBasics {
     static itemShops: DBasicItemShops;
     static prefabs: DBasicPrefabs;
     static sequels: BasicSequels;
-    static effectBehaviors: DBasicEffectBehaviors;
+    static effectBehaviors: DBasicSpecialEffects;
     static traits: DBasicTraits;
     // static presets: DBasicPresets;
 }

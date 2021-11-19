@@ -500,6 +500,12 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
+            case "kItem_トラップスクロール": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.trapProliferation);
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_エスケープスクロール":
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
