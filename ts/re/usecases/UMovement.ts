@@ -605,6 +605,7 @@ export class UMovement {
 
         const oldBlock = map.block(entity.x, entity.y);
         const newBlock = map.block(x, y);
+        assert(newBlock);
         
         const layer = (toLayer) ? toLayer : entity.getHomeLayer();
 

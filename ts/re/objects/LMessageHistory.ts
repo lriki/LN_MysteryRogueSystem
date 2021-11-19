@@ -43,5 +43,10 @@ export class LMessageHistory {
     texts(): readonly string[] {
         return this._texts;
     }
+
+    // テスト用。全メッセージを対象に、に特定の文字が含まれているかを確認する。
+    public includesText(text: string): boolean {
+        return !!this._texts.find(x => x.includes(text));
+    }
 }
 

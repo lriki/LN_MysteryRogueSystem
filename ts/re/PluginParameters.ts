@@ -34,6 +34,13 @@ export var paramHiddenTrapTriggerRate = 80;
 export var paramExposedTrapTriggerRate = 50;
 
 
+
+export var paramMaxUnitsInMap = 50;
+export var paramMaxItemsInMap = 100;
+export var paramMaxTrapsInMap = 100;
+
+//Maximum number of items in the map
+
 /*
 // 
 export var paramMapSkillEffectsMapId = Number(PluginManager.parameters(pluginName)['MapSkillEffectsMapId']);

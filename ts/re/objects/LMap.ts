@@ -345,6 +345,14 @@ export class LMap extends LObject {
             .filter((e): e is LEntity => { return e != undefined; });
     }
 
+    public iterateEntities(func: ((b: LEntity) => void) | ((b: LEntity) => boolean), fromTraits: boolean = false): boolean {
+        for (const id of this._entityIds) {
+            const entity = REGame.world.entity(id);
+            if (func(entity) === false) return false;
+        }
+        return true;
+    }
+
     /** entity の視界内の Entity を取得する */
     public getInsightEntities(subject: LEntity): LEntity[] {
         if (subject.isOnRoom()) {

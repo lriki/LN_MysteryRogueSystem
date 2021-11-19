@@ -21,10 +21,8 @@ test("concretes.item.識別の巻物", () => {
     TestEnv.newGame();
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
-    TestEnv.performFloorTransfer();
-    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
+    const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_識別の巻物").id, [], "item1"));
@@ -36,18 +34,19 @@ test("concretes.item.識別の巻物", () => {
 
     const name1 = UName.makeNameAsItem(item2);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    {
-        // [読む]
-        const activity = LActivity.makeRead(actor1, item1, [item2]).withConsumeAction(LActionTokenType.Major);
-        RESystem.dialogContext.postActivity(activity);
-        RESystem.dialogContext.activeDialog().submit();
-        
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+
+    // [読む]
+    const activity = LActivity.makeRead(player1, item1, [item2]).withConsumeAction();
+    RESystem.dialogContext.postActivity(activity);
+    RESystem.dialogContext.activeDialog().submit();
     
-        const name2 = UName.makeNameAsItem(item2);
-        expect(name1).not.toBe(name2);  // 少なくとも、識別の前後で表示名が変わっていること
-    }
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    const name2 = UName.makeNameAsItem(item2);
+    expect(name1).not.toBe(name2);  // 少なくとも、識別の前後で表示名が変わっていること
+
 });
 

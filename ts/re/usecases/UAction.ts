@@ -24,6 +24,7 @@ import { USearch } from "./USearch";
 import { SPoint } from "./UCommon";
 import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 import { LActivity } from "../objects/activities/LActivity";
+import { ULimitations } from "./ULimitations";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -147,20 +148,28 @@ export class UAction {
      * 
      */
     public static postDropOrDestroyOnCurrentPos(cctx: SCommandContext, entity: LEntity, targetLayer: DBlockLayerKind): void {
-        const block = UMovement.selectNearbyLocatableBlock(cctx.random(), entity.x, entity.y, targetLayer, entity);
-        if (block) {
-            //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
-            //context.postCall(() => {
-                UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
-                //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
-                cctx.postSequel(entity, REBasics.sequels.dropSequel);
-            //});
+
+        if (ULimitations.isItemCountFullyInMap()) {
+
         }
         else {
-            // 落下できるところが無ければ Entity 削除
-            cctx.postMessage(tr2("消えてしまった…。"));
-            cctx.postDestroy(entity);
+            const block = UMovement.selectNearbyLocatableBlock(cctx.random(), entity.x, entity.y, targetLayer, entity);
+            if (block) {
+                //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
+                //context.postCall(() => {
+                    UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
+                    //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
+                    cctx.postSequel(entity, REBasics.sequels.dropSequel);
+                //});
+                return;
+            }
         }
+
+
+
+        // 落下できるところが無ければ Entity 削除
+        cctx.postMessage(tr2("%1は消えてしまった…。").format(UName.makeNameAsItem(entity)));
+        cctx.postDestroy(entity);
     }
 
     public static postWarp(cctx: SCommandContext, entity: LEntity): void {

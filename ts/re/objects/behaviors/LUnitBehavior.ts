@@ -29,6 +29,7 @@ import { LGoldBehavior } from "./LGoldBehavior";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { USearch } from "ts/re/usecases/USearch";
 import { SActivityContext } from "ts/re/system/SActivityContext";
+import { ULimitations } from "ts/re/usecases/ULimitations";
 
 /**
  * 
@@ -247,14 +248,20 @@ export class LUnitBehavior extends LBehavior {
                 // 足元に置けそうなら試行
                 cctx.post(itemEntity, self, subject, undefined, testPickOutItem)
                     .then(() => {
-                        itemEntity.removeFromParent();
-                        //cctx.remo
-                        //inventory.removeEntity(itemEntity);
-                        REGame.map.appearEntity(itemEntity, self.x, self.y);
-
-                        cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
-                        cctx.post(itemEntity, self, subject, undefined, onGrounded);
-                        return true;
+                        if (ULimitations.isItemCountFullyInMap()) {
+                            cctx.postMessage(tr2("不思議な力で行動できなかった。"));
+                            return true;
+                        }
+                        else {
+                            itemEntity.removeFromParent();
+                            //cctx.remo
+                            //inventory.removeEntity(itemEntity);
+                            REGame.map.appearEntity(itemEntity, self.x, self.y);
+    
+                            cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
+                            cctx.post(itemEntity, self, subject, undefined, onGrounded);
+                            return true;
+                        }
                     });
             }
             else {
