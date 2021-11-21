@@ -47,6 +47,7 @@ export class DTextManager {
     public static get buffAdd(): string { return this.message("buffAdd"); }
     public static get debuffAdd(): string { return this.message("debuffAdd"); }
     public static get buffRemove(): string { return this.message("buffRemove"); }
+    public static get actionFailure(): string { return this.message("actionFailure"); }
     public static get currencyUnit(): string { return $dataSystem.currencyUnit; }
 
     //----------

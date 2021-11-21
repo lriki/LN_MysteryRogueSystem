@@ -149,6 +149,7 @@ export class SEffectContext {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
+        result._revision++;
         result.sourceEffect = effect.data();
 
         

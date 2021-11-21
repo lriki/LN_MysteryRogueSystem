@@ -34,14 +34,6 @@ test("concretes.item.ring.SilentStepRing", () => {
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
-    // //----------------------------------------------------------------------------------------------------
-
-    // // [装備]
-    // RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, ring1).withConsumeAction());
-    // RESystem.dialogContext.activeDialog().submit();
-    
-    // RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
-    
     //----------------------------------------------------------------------------------------------------
 
     for (let i = 0; i < 100; i++) {
@@ -59,3 +51,34 @@ test("concretes.item.ring.SilentStepRing", () => {
         enemy1.addState(stateId);
     }
 });
+
+test("concretes.item.ring.SilentStepRing.Attack", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REBasics.states.nap;
+
+    const player1 = TestEnv.setupPlayer(floorId, 18, 4);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
+
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアウェイクガードリング").id, [], "ring1"));
+    inventory.addEntity(ring1);
+    equipmentUser.equipOnUtil(ring1);
+
+    // Enemy1 (仮眠状態)
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    
+    //----------------------------------------------------------------------------------------------------
+
+    // [攻撃]
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    expect(enemy1.isStateAffected(stateId)).toBe(false);
+});
+

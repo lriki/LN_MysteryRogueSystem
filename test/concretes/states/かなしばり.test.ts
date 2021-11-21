@@ -6,26 +6,27 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REBasics } from "ts/re/data/REBasics";
 import { assert } from "ts/re/Common";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
 // 空腹による解除チェック
-test("concretes.states.かなしばり.FP", () => {
+test("concretes.states.Paralysis.FP", () => {
     TestEnv.newGame();
     const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.setActualParam(REBasics.params.fp, 4);
-    actor1.addState(stateId);
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.setActualParam(REBasics.params.fp, 4);
+    player1.addState(stateId);
 
     let count = 0;
     while (true) {
-        RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-        if (!actor1.states().find(x => x.stateDataId() == stateId)) {
+        if (!player1.states().find(x => x.stateDataId() == stateId)) {
             break;
         }
 
@@ -33,28 +34,55 @@ test("concretes.states.かなしばり.FP", () => {
         assert(count < 10); // 不具合でハングしないように
     }
    
-    const fp = actor1.actualParam(REBasics.params.fp);
+    const fp = player1.actualParam(REBasics.params.fp);
     expect(fp).toBe(3);    // 空腹になっている
     //expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
 });
 
 // 攻撃による解除チェック
-test("concretes.states.かなしばり.Attack", () => {
+test("concretes.states.Paralysis.Attack", () => {
     TestEnv.newGame();
     const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(stateId);
-    const hp1 = actor1.actualParam(REBasics.params.hp);
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(stateId);
+    const hp1 = player1.actualParam(REBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 被ダメージにかかわらず、攻撃試行されればステートは解除されている
-    const hp2 = actor1.actualParam(REBasics.params.hp);
-    expect(!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+    const hp2 = player1.actualParam(REBasics.params.hp);
+    expect(!player1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+});
+
+test("concretes.states.Paralysis.Pos", () => {
+    TestEnv.newGame();
+    const stateId = REData.getState("kState_UTかなしばり").id;
+    
+    // Player
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    enemy1.dir = 2;
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 移動
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    expect(enemy1.x).toBe(15);
+    expect(enemy1.y).toBe(10);
+    expect(enemy1.dir).toBe(2);
 });

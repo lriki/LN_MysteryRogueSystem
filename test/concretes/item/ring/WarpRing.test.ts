@@ -45,5 +45,5 @@ test("concretes.item.ring.WarpRing", () => {
     }
 
     // 1回くらいはワープしているだろう
-    expect(count > 0).toBe(true);
+    expect(count > 0 && count < 200).toBe(true);
 });

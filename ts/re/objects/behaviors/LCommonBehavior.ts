@@ -51,9 +51,12 @@ export class LCommonBehavior extends LBehavior {
         
         if (phase == DecisionPhase.UpdateState) {
             for (const trait of self.traits(REBasics.traits.SuddenSkillEffect)) {
-                const skill = REData.skills[trait.dataId];
-                SEmittorPerformer.makeWithEmitor(self, self, skill.emittor())
-                .perform(cctx);
+                const chance = trait.value;
+                if (cctx.random().nextIntWithMax(100) < (chance * 100)) {
+                    const skill = REData.skills[trait.dataId];
+                    SEmittorPerformer.makeWithEmitor(self, self, skill.emittor())
+                    .perform(cctx);
+                }
             }
 
             return SPhaseResult.Pass;

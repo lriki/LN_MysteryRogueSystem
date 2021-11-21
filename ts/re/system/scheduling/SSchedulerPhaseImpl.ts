@@ -92,6 +92,10 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         // B. ワナ発動前に強制 Flush する。
         //
         // B の場合、AIMinor End のタイミングで強制 flush してしまうと、倍速 Entity の動きが1マスごとに Flush されてしまう。
+        // v0.3.0 では B のようにしていたが、そんな理由のため修正することになった。
+        //
+        // ということで A でやるしかない。
+        
 
         // ステート更新は全 Entity の移動が終わった後に行いたい
         // let feetRequired = false;

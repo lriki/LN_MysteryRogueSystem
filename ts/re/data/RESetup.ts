@@ -102,6 +102,9 @@ export class RESetup {
             case "kアウェイクガードリング":
                 this.setupRingCommon(entity);
                 break;
+            // case "kトラップガードリング":s
+            //     this.setupRingCommon(entity);
+            //     break;
             case "kハングリーガードリング":
                 this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
@@ -381,9 +384,12 @@ export class RESetup {
                 スキル、Effect, EffectBehavior, SpecialEffect などそれぞれでリジェクトするかを Behavior 側で判断できる仕組みにしてみる。
                 */
                 break;
-            case "k眠りガス":
-                entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
+            case "k眠りガス": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.selfAnimationId = 35;
+                emittor.scope.range = DEffectFieldScopeRange.Center;
                 break;
+            }
             case "kItem_地雷": {
                 const emittor = entity.emittorSet.mainEmittor();
                 const effect = emittor.effectSet.effects[0];
@@ -706,6 +712,9 @@ export class RESetup {
                 break;
             case "kState_UnitTest_投擲必中":
                 data.effect.traits.push({ code: REBasics.traits.CertainIndirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_System_kNap":
+                data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: REBasics.params.hp });
                 break;
             case "kState_UTアイテム擬態":
                 data.effect.behaviors.push({ name: "LItemImitatorBehavior" });

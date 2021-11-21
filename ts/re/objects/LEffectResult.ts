@@ -83,6 +83,20 @@ export class LEffectResult {
 
     gainedExp: number = 0;
 
+    /*
+    [2021/11/21]
+    ----------
+    まだ EffectResult 表示タイミングは体系化できているわけではないが、おおよそ見えてきた。
+    少なくとも CommandChain の終了時に、そのターンで起きたことをまとめて Flush したい。
+    経験値をまとめて表示するタイミングがこれに該当するが、これ以外の細かいメッセージも、もし出し忘れがあれば全部ここで出したい。
+    そうすると、ターン開始時に open、ターン終了(CommandChain の終了時)に close(flush) でいいだろう。
+    なおここでいう close はコマンドチェーンの Epilogue よりも後。本当に完全に終わった時なので注意。
+    ワナ師状態で地雷の連鎖爆発が発生して経験値を得たときに備える。
+    */
+    _revision: number = 0;
+    _commitedRevision: number = 0;
+    _dirty: boolean = false;
+
     // Game_ActionResult.prototype.isHit
     isHit(): boolean {
         return this.used && !this.missed && !this.evaded;
@@ -106,6 +120,7 @@ export class LEffectResult {
         this.levelup = false;
         this.leveldown = false;
         this.gainedExp = 0;
+        this._dirty = false;
     }
 
     public hasResult(): boolean {
@@ -121,6 +136,7 @@ export class LEffectResult {
     pushAddedState(stateId: DStateId): void {
         if (!this.isStateAdded(stateId)) {
             this.addedStates.push(stateId);
+            this._dirty = true;
         }
     }
 
@@ -134,6 +150,7 @@ export class LEffectResult {
         if (!this.isStateRemoved(stateId)) {
             this.removedStates.push(stateId);
         }
+        this._dirty = true;
     }
     
     // Game_ActionResult.prototype.isBuffAdded
@@ -145,6 +162,7 @@ export class LEffectResult {
     public pushAddedBuff(paramId: DParameterId): void{
         if (!this.isBuffAdded(paramId)) {
             this.addedBuffs.push(paramId);
+            this._dirty = true;
         }
     }
 
@@ -157,6 +175,7 @@ export class LEffectResult {
     public pushAddedDebuff(paramId: DParameterId): void {
         if (!this.isDebuffAdded(paramId)) {
             this.addedDebuffs.push(paramId);
+            this._dirty = true;
         }
     }
     
@@ -169,6 +188,7 @@ export class LEffectResult {
     public pushRemovedBuff(paramId: DParameterId): void {
         if (!this.isBuffRemoved(paramId)) {
             this.removedBuffs.push(paramId);
+            this._dirty = true;
         }
     }
 
@@ -180,92 +200,120 @@ export class LEffectResult {
     // Game_Action.prototype.makeSuccess
     public makeSuccess(): void {
         this.success = true;
+        this._dirty = true;
+    }
+
+    private shouldShowMessage(): boolean {
+        if (this._revision != this._commitedRevision) return true;
+        //if (this._dirty) return true;[
+        
+        return false;
+
+
+        //return (this._dirty || this._revision != this._commitedRevision);
+    }
+
+    private refreshRevision(): void {
+        this._commitedRevision = this._revision;
+        if (this._revision > 10000) {
+            this._revision = 0;
+            this._commitedRevision = 0;
+        }
+        this._dirty = false;
     }
 
     // Window_BattleLog.prototype.displayActionResults
     public showResultMessages(cctx: SCommandContext, entity: LEntity): void {
+        // if (this._revision != this._commitedRevision) {
+        // }
+        // else {
+        //     return;
+        // }
 
-        const targetName = UName.makeUnitName(entity);
-        
-        if (this.missed) {
-            cctx.postMessage(tr2("TEST: 外れた。"));
-        }
-        else {
-            for (const param of this.paramEffects2) {
-                cctx.postMessage(this.makeParamDamageText(targetName, param));
-            }
-        }
-
-        const isActor = this.focusedFriendly;
-
-        // Game_Actor.prototype.showAddedStates
-        {
-            for (const stateId of this.addedStates) {
-                const state = REData.states[stateId];
-                const stateText = isActor ? state.message1 : state.message2;
-                if (stateText) {
-                    cctx.postMessage(stateText.format(targetName));
-                }
-            }
-        }
-        // Game_Actor.prototype.showRemovedStates
-        {
-            for (const stateId of this.removedStates) {
-                const state = REData.states[stateId];
-                if (state.message4) {
-                    cctx.postMessage(state.message4.format(targetName));
-                }
-            }
-        }
-        // Window_BattleLog.prototype.displayChangedBuffs
-        {
-            for (const paramId of this.addedBuffs) {
-                const text = DTextManager.buffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
-                cctx.postMessage(text);
-            }
-            for (const paramId of this.addedDebuffs) {
-                const text = DTextManager.debuffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
-                cctx.postMessage(text);
-            }
-            for (const paramId of this.removedBuffs) {
-                const text = DTextManager.buffRemove.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
-                cctx.postMessage(text);
-            }
-        }
-
-        
-        //if (!this.success) {
-        //    const m = "%1には効かなかった！";
-        //    cctx.postMessage(m.format(targetName));
-        //}
-
-        // 経験値
-        {
-            const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
-
-            if (this.gainedExp > 0) {
-                const text = DTextManager.obtainExp.format(this.gainedExp, DTextManager.exp);
-                cctx.postMessage(text);
-            }
+        if (this.shouldShowMessage()) {
+            this.refreshRevision();
             
+            const targetName = UName.makeUnitName(entity);
+            
+            if (this.missed) {
+                cctx.postMessage(tr2("TEST: 外れた。"));
+            }
+            else {
+                for (const param of this.paramEffects2) {
+                    cctx.postMessage(this.makeParamDamageText(targetName, param));
+                }
+            }
 
-            // Game_Actor.prototype.displayLevelUp
-            if (this.levelup || this.leveldown) {
-                const battler = entity.getEntityBehavior(LBattlerBehavior);
-                if (battler instanceof LActorBehavior) {
-                    if (this.levelup) {
-                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, battler.level());
-                        cctx.postMessage(text);
-                        SSoundManager.playLevelUp();
-                    }
-                    if (this.leveldown) {
-                        const text = tr2("%1は%2が下がった！").format(targetName, DTextManager.level);
-                        cctx.postMessage(text);
-                        SSoundManager.playLevelUp();
+            const isActor = this.focusedFriendly;
+
+            // Game_Actor.prototype.showAddedStates
+            {
+                for (const stateId of this.addedStates) {
+                    const state = REData.states[stateId];
+                    const stateText = isActor ? state.message1 : state.message2;
+                    if (stateText) {
+                        cctx.postMessage(stateText.format(targetName));
                     }
                 }
-                else {
-                    throw new Error("NotImplemented.");
+            }
+            // Game_Actor.prototype.showRemovedStates
+            {
+                for (const stateId of this.removedStates) {
+                    const state = REData.states[stateId];
+                    if (state.message4) {
+                        cctx.postMessage(state.message4.format(targetName));
+                    }
+                }
+            }
+            // Window_BattleLog.prototype.displayChangedBuffs
+            {
+                for (const paramId of this.addedBuffs) {
+                    const text = DTextManager.buffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
+                    cctx.postMessage(text);
+                }
+                for (const paramId of this.addedDebuffs) {
+                    const text = DTextManager.debuffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
+                    cctx.postMessage(text);
+                }
+                for (const paramId of this.removedBuffs) {
+                    const text = DTextManager.buffRemove.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
+                    cctx.postMessage(text);
+                }
+            }
+
+            
+            if (!this.success) {
+                cctx.postMessage(DTextManager.actionFailure.format(targetName));
+            }
+
+            // 経験値
+            {
+                const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
+
+                if (this.gainedExp > 0) {
+                    const text = DTextManager.obtainExp.format(this.gainedExp, DTextManager.exp);
+                    cctx.postMessage(text);
+                }
+                
+
+                // Game_Actor.prototype.displayLevelUp
+                if (this.levelup || this.leveldown) {
+                    const battler = entity.getEntityBehavior(LBattlerBehavior);
+                    if (battler instanceof LActorBehavior) {
+                        if (this.levelup) {
+                            const text = DTextManager.levelUp.format(targetName, DTextManager.level, battler.level());
+                            cctx.postMessage(text);
+                            SSoundManager.playLevelUp();
+                        }
+                        if (this.leveldown) {
+                            const text = tr2("%1は%2が下がった！").format(targetName, DTextManager.level);
+                            cctx.postMessage(text);
+                            SSoundManager.playLevelUp();
+                        }
+                    }
+                    else {
+                        throw new Error("NotImplemented.");
+                    }
                 }
             }
         }
