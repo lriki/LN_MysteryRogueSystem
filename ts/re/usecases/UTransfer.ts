@@ -42,7 +42,6 @@ export class UTransfer {
                 actualFloorNumber = floorNumber;
                 actualX = -1;
                 actualY = -1;
-                console.log("rmmzFixedMapId", rmmzFixedMapId);
             }
             else {
                 // Land 定義マップ経由の、ランダムマップへの移動
@@ -50,7 +49,6 @@ export class UTransfer {
                 actualFloorNumber = floorNumber;
                 actualX = -1;
                 actualY = -1;
-                console.log("actualFloorNumber", actualFloorNumber);
             }
         }
         else if (REDataManager.isRESystemMap(newMapId)) {

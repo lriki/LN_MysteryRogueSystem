@@ -639,7 +639,12 @@ export class RESetup {
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.warp);
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 break;
+            case "kSkill_KnockbackAttack":
+                emittor.effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                break;
 
+                
         }
     }
     

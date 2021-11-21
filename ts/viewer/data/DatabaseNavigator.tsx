@@ -15,6 +15,7 @@ const dataTypeListItems: DataTypeListItem[] = [
     { id: "skills", path: "/database/skills", name: "Skills" },
     { id: "states", path: "/database/states", name: "States" },
     { id: "traits", path: "/database/traits", name: "Traits" },
+    { id: "lands", path: "/database/lands", name: "Lands" },
 ];
 
 function a11yProps(index: number) {

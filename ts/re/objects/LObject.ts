@@ -39,6 +39,10 @@ export class LEntityId {
     public static makeEmpty(): LEntityId {
         return new LEntityId(0, 0);
     }
+
+    get object(): LObject {
+        return REGame.world.object(this);
+    }
 }
 
 

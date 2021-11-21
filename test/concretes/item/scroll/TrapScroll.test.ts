@@ -17,10 +17,12 @@ beforeAll(() => {
 
 test("concretes.item.scroll.TrapScroll", () => {
     TestEnv.newGame();
-    const floorId = TestEnv.FloorId_FlatMap50x50;
+    const floorId = LFloorId.makeFromKeys("RE-Land:UnitTestDungeon1", "kFloor_ランダム罠テスト");
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
-    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    REGame.world._transferEntity(player1, floorId);
+    TestEnv.performFloorTransfer();
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1

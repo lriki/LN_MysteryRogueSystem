@@ -141,7 +141,6 @@ export class SScheduler {
                 //}
                 assert(commandContext.isRecordingListEmpty());
 
-                this._chainAfterScheduler.reset();
 
                 
                 REGame.world._removeDestroyedObjects();
@@ -215,6 +214,13 @@ export class SScheduler {
     private onCommandChainConsumed(): void {
         if (!this._chainAfterScheduler.isEnd()) {
             this._chainAfterScheduler.process(RESystem.commandContext);
+            
+            // SChainAfterScheduler 最後の Phase で詰まれたコマンドに対して繰り返し SChainAfterScheduler を回したいこともあるので、
+            // 一連の処理が終わったら直ちにリセットしておく。
+            // ※以前は process に入ってからリセットしていたが、それだと process に入る前に連続 post されたときに処理ができなくなる。
+            if (this._chainAfterScheduler.isEnd()) {
+                this._chainAfterScheduler.reset();
+            }
         }
     }
 
