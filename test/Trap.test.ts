@@ -23,7 +23,7 @@ test("Trap.TriggerRate", () => {
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
     
-    REGame.world.random().resetSeed(1);     // 乱数調整
+    REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
@@ -35,13 +35,13 @@ test("Trap.TriggerRate", () => {
         RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
 
+        trapBehavior.setExposed(false);
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         const hp2 = player1.actualParam(REBasics.params.hp);
         if (hp2 < hp1) triggerd1++;
         REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setActualParam(REBasics.params.hp, hp1);
-        trapBehavior.setExposed(false);
     }
 
     //----------------------------------------------------------------------------------------------------

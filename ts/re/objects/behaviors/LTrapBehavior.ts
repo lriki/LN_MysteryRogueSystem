@@ -134,12 +134,15 @@ export class LTrapBehavior extends LBehavior {
         // この罠にかかることができる？
         if (!this.checkValidTarget(target)) return SCommandResponse.Pass;
 
+        // Exposed を変更する前に発動判定
+        const trigger = this.testTrigger(target, cctx.random());
+
         // 発動の成否にかかわらず、露出
         this.setExposed(true);
 
         cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
-        if (this.testTrigger(target, cctx.random())) {
+        if (trigger) {
             this.performTrapEffect(self, cctx, target.dir);
         }
         else {

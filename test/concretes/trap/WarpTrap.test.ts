@@ -38,4 +38,5 @@ test("concretes.trap.WarpTrap.Basic", () => {
     }
     expect(player1.x == 11 && player1.y == 10).toBe(false);
     expect(TestEnv.integration.sequelFlushCount).toBe(1);   // sequel 通知は 1回でまとめて行われる
+    expect(REGame.messageHistory.includesText("効かなかった")).toBe(false); // 余計なメッセージが出ていなこと
 });

@@ -10,6 +10,7 @@ export class SWarpSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
         UAction.postWarp(cctx, target);
+        target._effectResult.makeSuccess();
     }
 
 }

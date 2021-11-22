@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "oncretes.trap.WarpTrap.Basic"
+                "-t", "Trap.TriggerRate"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
