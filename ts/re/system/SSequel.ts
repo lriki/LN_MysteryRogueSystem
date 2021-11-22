@@ -33,13 +33,34 @@ export class SSequelUnit {
 }
 
 export class SMotionSequel extends SSequelUnit {
+
+    /*
+    [2021/11/18]
+    ----------
+    移動→ワープの罠にかかったとき、ワープ後の座標へ歩行移動してから、その場でワープモーションを取る問題がある。
+    原因は、entity の座標が変わった後に 移動とワープSequel が同時に Flush されるため。
+    最初の移動Sequel時点ではすでに移動目標がワープ先になっている。
+
+    これを解決するには…
+    A. 移動Sequel自体に、移動先座標を渡す。(entityの座標を直接参照しない)
+    B. ワナ発動前に強制 Flush する。
+
+    B の場合、AIMinor End のタイミングで強制 flush してしまうと、倍速 Entity の動きが1マスごとに Flush されてしまう。
+    v0.3.0 では B のようにしていたが、そんな理由のため修正することになった。
+
+    ということで A でやるしかない。
+    */
     private _sequelId: DSequelId;
     private _startX: number | undefined;
     private _startY: number | undefined;
+    private _targetX: number;
+    private _targetY: number;
 
-    constructor(entity: LEntity, sequelId: DSequelId, args: any | undefined) {
+    constructor(entity: LEntity, sequelId: DSequelId, targetX: number, targetY: number, args: any | undefined) {
         super(entity, REData.sequels[sequelId].parallel, args);
         this._sequelId = sequelId;
+        this._targetX = targetX;
+        this._targetY = targetY;
     }
 
     sequelId(): DSequelId {
@@ -60,13 +81,21 @@ export class SMotionSequel extends SSequelUnit {
     }
 
     public startX(): number {
-        assert(this._startX);
+        assert(this._startX !== undefined);
         return this._startX;
     }
 
     public startY(): number {
-        assert(this._startY);
+        assert(this._startY !== undefined);
         return this._startY;
+    }
+    
+    public targetX(): number {
+        return this._targetX;
+    }
+
+    public targetY(): number {
+        return this._targetY;
     }
 }
 

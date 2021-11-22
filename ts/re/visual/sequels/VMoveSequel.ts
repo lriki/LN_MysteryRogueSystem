@@ -1,4 +1,6 @@
+import { assert } from "ts/re/Common";
 import { Vector2 } from "ts/re/math/Vector2";
+import { SMotionSequel } from "ts/re/system/SSequel";
 import { REVisualSequel } from "../REVisualSequel";
 import { REVisualSequelContext } from "../REVisualSequelContext";
 import { REVisual_Entity } from "../REVisual_Entity";
@@ -20,6 +22,10 @@ export class REVisualSequel_Move extends REVisualSequel {
             // $gamePlayer と常時同期
             context.unlockCamera();
 
+            const sequel = context.sequel() as SMotionSequel;
+            const targetX = sequel.targetX();//entity.x
+            const targetY = sequel.targetY();//entity.y
+
             VSequelHelper.updateStepAnimPattern(visual);
     
             // 移動は直線距離ではなく X Y 個別に計算する。
@@ -32,13 +38,14 @@ export class REVisualSequel_Move extends REVisualSequel {
             const speed = Math.pow(2, moveSpeed) / 256;
             //const frameCount = 1.0 / speed; // 水平1Tile移動に何Frame必要？
     
-            const velocity = Vector2.mul(Vector2.sub(new Vector2(entity.x, entity.y), context.startPosition()), speed);
+            const velocity = Vector2.mul(Vector2.sub(new Vector2(targetX, targetY), context.startPosition()), speed);
     
-            const d = Vector2.sub(new Vector2(entity.x, entity.y), visual.position());
+            const diff = Vector2.sub(new Vector2(targetX, targetY), visual.position());
     
-            if ((Math.abs(d.x) <= speed && Math.abs(d.y) <= speed) ||
+            if ((Math.abs(diff.x) <= speed && Math.abs(diff.y) <= speed) ||
                 context.frameCount() > 30) {    // 速度に何か異常があっても、時間経過で必ず終了させる
-                visual.resetPosition();
+                //visual.resetPosition();
+                visual.setPosition(new Vector2(targetX, targetY));
                 context.end();
             }
             else {

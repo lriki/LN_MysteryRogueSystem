@@ -19,6 +19,7 @@ import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { DCounterAction } from "ts/re/data/DEntity";
 import { paramExposedTrapTriggerRate, paramHiddenTrapTriggerRate } from "ts/re/PluginParameters";
+import { LRandom } from "../LRandom";
 
 
 /**
@@ -118,6 +119,13 @@ export class LTrapBehavior extends LBehavior {
         else
             return paramHiddenTrapTriggerRate;
     }
+
+    private testTrigger(target: LEntity, rand: LRandom): boolean {
+        if (target.hasTrait(REBasics.traits.DrawInTrap)) return true;
+        
+        const r = rand.nextIntWithMax(100);
+        return (r < this.triggerRate());
+    }
     
     [onWalkedOnTopReaction](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
@@ -131,9 +139,7 @@ export class LTrapBehavior extends LBehavior {
 
         cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
-        const hit = target.hasTrait(REBasics.traits.DrawInTrap) || cctx.random().nextIntWithMax(100) < this.triggerRate();
-
-        if (hit) {
+        if (this.testTrigger(target, cctx.random())) {
             this.performTrapEffect(self, cctx, target.dir);
         }
         else {

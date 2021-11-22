@@ -88,12 +88,15 @@ export class RMMZHelper {
             const visual = REVisual.entityVisualSet.findEntityVisualByEntity(entity);
             if (visual) {
                     
-                if (REVisual._playerPosRefreshNeed) {
-                    $gamePlayer.locate(entity.x, entity.y);
-                    $gamePlayer.refresh();
-                    REVisual._playerPosRefreshNeed = false;
-                    return;
-                }
+                // [2021/11/22] 移動→ワープのように、内部で locate を伴いつつ Sequel が連続で呼び出されたとき、
+                // この refresh が visual ではなく entity の座標を元に位置を再設定するため一瞬画面がズレる問題があった。
+                // 今は不要かと判断できるが、経過を見つつ削除する。
+                // if (REVisual._playerPosRefreshNeed) {
+                //     $gamePlayer.locate(entity.x, entity.y);
+                //     $gamePlayer.refresh();
+                //     REVisual._playerPosRefreshNeed = false;
+                //     return;
+                // }
             
                 const pos = visual.position();
                 //console.log("this._realX", this._realX - pos.x);
@@ -103,8 +106,8 @@ export class RMMZHelper {
 
                 $gamePlayer._realX = pos.x;
                 $gamePlayer._realY = pos.y;
-                $gamePlayer._x = entity.x;
-                $gamePlayer._y = entity.y;
+                $gamePlayer._x = Math.floor(pos.x);//entity.x;
+                $gamePlayer._y = Math.floor(pos.y);//entity.y;
                 //console.log("lastScrolledX", pos.x, pos.y, lastScrolledX, lastScrolledY);
                 //console.log("$gameMap", $gameMap);
                 $gamePlayer.updateScroll(lastScrolledX, lastScrolledY);

@@ -389,13 +389,13 @@ export class LUnitBehavior extends LBehavior {
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.EatActionId) {
-            cctx.postSequel(self, REBasics.sequels.useItem, activity.object());
+            cctx.postSequel(self, REBasics.sequels.useItem, undefined, undefined, activity.object());
             actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }
         // [読む] ※↑の[振る] や EaterBehavior とほぼ同じ実装になっている。共通化したいところ。
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
-            cctx.postSequel(self, REBasics.sequels.useItem, activity.object());
+            cctx.postSequel(self, REBasics.sequels.useItem, undefined, undefined, activity.object());
             actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }

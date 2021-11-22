@@ -328,9 +328,11 @@ export class SCommandContext
         return dialogModel;
     }
 
-    postSequel(entity: LEntity, sequelId: number, args?: any): SMotionSequel {
+    postSequel(entity: LEntity, sequelId: number, targetX?: number, targetY?: number, args?: any): SMotionSequel {
         assert(sequelId > 0);
-        const s = new SMotionSequel(entity, sequelId, args);
+        const tx = targetX ?? entity.x;
+        const ty = targetY ?? entity.y;
+        const s = new SMotionSequel(entity, sequelId, tx, ty, args);
         const m1 = () => {
             Log.doCommand("Sequel");
             this._sequelContext.addSequel(s);

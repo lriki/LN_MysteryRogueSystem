@@ -292,7 +292,7 @@ export class SEmittorPerformer {
                 cctx.postAnimation(performer, emittor.selfAnimationId, true);
             }
             if (emittor.selfSequelId > 0) {
-                cctx.postSequel(performer, emittor.selfSequelId, true);
+                cctx.postSequel(performer, emittor.selfSequelId, undefined, undefined, true);
             }
         }
 

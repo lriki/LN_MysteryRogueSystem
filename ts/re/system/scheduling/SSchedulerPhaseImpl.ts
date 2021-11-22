@@ -82,21 +82,6 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         //RESystem.sequelContext.flushSequelSet();
         RESystem.sequelContext.attemptFlush(false);
 
-        // BUG: [2021/11/18]
-        // 移動→ワープの罠にかかったとき、ワープ後の座標へ歩行移動してから、その場でワープモーションを取る問題がある。
-        // 原因は、entity の座標が変わった後に 移動とワープSequel が同時に Flush されるため。
-        // 最初の移動Sequel時点ではすでに移動目標がワープ先になっている。
-        //
-        // これを解決するには…
-        // A. 移動Sequel自体に、移動先座標を渡す。(entityの座標を直接参照しない)
-        // B. ワナ発動前に強制 Flush する。
-        //
-        // B の場合、AIMinor End のタイミングで強制 flush してしまうと、倍速 Entity の動きが1マスごとに Flush されてしまう。
-        // v0.3.0 では B のようにしていたが、そんな理由のため修正することになった。
-        //
-        // ということで A でやるしかない。
-        
-
         // ステート更新は全 Entity の移動が終わった後に行いたい
         // let feetRequired = false;
         for (const unit of scheduler.data()._schedulingUnits) {

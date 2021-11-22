@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.ring.WarpRing"
+                "-t", "oncretes.trap.WarpTrap.Basic"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

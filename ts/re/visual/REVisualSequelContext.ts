@@ -230,7 +230,8 @@ export class REVisualSequelContext {
             if (this._currentIdleSequelId != id) {
                 this._currentIdleSequelId = id;
                 if (this._currentIdleSequelId != 0) {
-                    this._startSequel(new SMotionSequel(this._entityVisual.entity(), id, undefined));
+                    const pos = this._entityVisual.position();
+                    this._startSequel(new SMotionSequel(this._entityVisual.entity(), id, pos.x, pos.y, undefined));
                 }
             }
         }
