@@ -121,6 +121,10 @@ export class LTrapBehavior extends LBehavior {
     }
 
     private testTrigger(target: LEntity, rand: LRandom): boolean {
+        // 罠回避の方がプラスステートなので優先してみる
+        if (target.hasTrait(REBasics.traits.DisableTrap)) return false;
+
+        // 罠必中はどちらかというとマイナスステート
         if (target.hasTrait(REBasics.traits.DrawInTrap)) return true;
         
         const r = rand.nextIntWithMax(100);

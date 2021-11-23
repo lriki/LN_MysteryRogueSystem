@@ -102,9 +102,10 @@ export class RESetup {
             case "kアウェイクガードリング":
                 this.setupRingCommon(entity);
                 break;
-            // case "kトラップガードリング":s
-            //     this.setupRingCommon(entity);
-            //     break;
+            case "kトラップガードリング":
+                this.setupRingCommon(entity);
+                entity.affestTraits.push({ code: REBasics.traits.DisableTrap, dataId: 0, value: 0 });
+                break;
             case "kハングリーガードリング":
                 this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });

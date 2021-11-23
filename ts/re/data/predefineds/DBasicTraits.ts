@@ -143,11 +143,15 @@ export interface DBasicTraits {
      */
     ParamDamageRate: DTraitId;
 
-    
     /**
      * スキル自体の無効化
      * dataId: SkillId
      */
     SkillGuard: DTraitId;
+
+    /**
+     * 罠にかからなくなる。浮遊とは意味が違うので注意。
+     */
+    DisableTrap: DTraitId;
 }
 
