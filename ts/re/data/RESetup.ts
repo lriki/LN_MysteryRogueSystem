@@ -110,6 +110,9 @@ export class RESetup {
                 this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
                 break;
+            case "kきれいな指輪":
+                this.setupRingCommon(entity);
+                break;
             case "kウッドアロー":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
