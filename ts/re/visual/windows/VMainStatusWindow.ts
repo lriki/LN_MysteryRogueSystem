@@ -245,8 +245,8 @@ export class VMainStatusWindow extends Window_Base {
         }
         
         // 満腹度
-        const cfp = Math.ceil(this._entity.actualParam(REBasics.params.fp) / 10);
-        const mfp = Math.ceil(this._entity.idealParam(REBasics.params.fp) / 10);
+        const cfp = Math.ceil(this._entity.actualParam(REBasics.params.fp) / 100);
+        const mfp = Math.ceil(this._entity.idealParam(REBasics.params.fp) / 100);
         this._fpValue.setText(`${cfp}/${mfp}`);
 
         // ちから

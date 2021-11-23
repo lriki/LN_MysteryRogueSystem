@@ -11,6 +11,10 @@ import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicTraits } from "./predefineds/DBasicTraits";
 import { DFactionId } from "./REData";
 
+export interface DBasicVariables {
+    result: number,
+}
+
 export interface DBasicElements {
     explosion: DAttackElementId,
 }
@@ -34,6 +38,7 @@ export interface DBasicSpecialEffects {
  * ゲームシステムとして重要な定義済みデータを保持する
  */
 export class REBasics {
+    static variables: DBasicVariables;
     static elements: DBasicElements;
     static events: DBasicEvents;
     static actions: DBasicActions;

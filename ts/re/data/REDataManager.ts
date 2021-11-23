@@ -245,23 +245,6 @@ export class REDataManager
             REBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
             REBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
             REBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
-            
-            
-            
-            
-
-
-            // REData.traits = [
-            //     { id: 0, name: "null" },
-            //     { id: 1, name: "RE.StateTrait.Nap" },
-            // ];
-
-            // REBasics.stateTraits = {
-            //     nap: 1,
-            // };
-
-
-            //REData.traits[DTraits.CertainDirectAttack] = { id: DTraits.CertainDirectAttack, key: "CertainDirectAttack" };
         }
 
         // Factions
@@ -398,6 +381,11 @@ export class REDataManager
                 e.parseNameAndKey(x);
             }
         }
+
+        REBasics.variables = {
+            result: $dataSystem.variables.findIndex(x => x == "MR-Result"),
+        };
+
         REBasics.elements = {
             explosion: REData.getAttackElement("kElement_Explosion").id,
         };

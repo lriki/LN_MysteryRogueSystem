@@ -38,6 +38,7 @@ import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
 import { SActivityContext } from "../system/SActivityContext";
 import { LSchedulingResult } from "./LSchedulingResult";
+import { LDeathResult } from "./LDeathResult";
 
 enum BlockLayer
 {
@@ -270,6 +271,7 @@ export class LEntity extends LObject
     // それらすべての関数で EffectContext を持ちまわるのはかなり煩雑なコードになってしまう。
     _effectResult: LEffectResult = new LEffectResult();
     _schedulingResult: LSchedulingResult = new LSchedulingResult();
+    _deathResult: LDeathResult = new LDeathResult();
     _reward: LReward = new LReward();
 
 
@@ -849,6 +851,10 @@ export class LEntity extends LObject
         // 自動追加の更新を行う
         this._states = UState.resolveStates(this, [], []).map(s => s.id());
         this._needVisualRefresh = true;
+
+        if (this.isDeathStateAffected()) {
+            this.makeDeathResultStates();
+        }
     }
 
     public states(): readonly LState[] {
@@ -1503,6 +1509,10 @@ export class LEntity extends LObject
         return false;
     }
     
+    public makeDeathResultStates(): void {
+        this._deathResult.clearStates();
+        this.iterateStates(s => this._deathResult.addState(s.stateDataId()));
+    }
 
     //----------------------------------------
     // Stack support

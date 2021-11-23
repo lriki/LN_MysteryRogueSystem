@@ -77,7 +77,7 @@ export class RESetup {
                 break;
             case "kワープリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 0.1 });
+                entity.affestTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 1.0 / 16.0 });
                 break;
             case "kスリープガードリング":
                 this.setupRingCommon(entity);

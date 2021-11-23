@@ -7,6 +7,9 @@ import { paramLandExitResultVariableId } from "ts/re/PluginParameters";
 import { RESystem } from "ts/re/system/RESystem";
 import { REVisual } from "ts/re/visual/REVisual";
 import { UTransfer } from "ts/re/usecases/UTransfer";
+import { REBasics } from "../data/REBasics";
+import { LEntityId } from "../objects/LObject";
+import { LEntity } from "../objects/LEntity";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -31,12 +34,12 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 });
 
 
-PluginManager.registerCommand(pluginName, "RE-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
+PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
     UTransfer.proceedFloorForwardForPlayer();
 });
 
-PluginManager.registerCommand(pluginName, "RE-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
-    console.log("RE-ProceedFloorBackword");
+PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
+    console.log("MR-ProceedFloorBackword");
     const entity = REGame.camera.focusedEntity();
     if (entity) {
         const floorId = entity.floorId;
@@ -65,3 +68,37 @@ PluginManager.registerCommand(pluginName, "RE-ProceedFloorBackword", function(th
     }
 });
 
+PluginManager.registerCommand(pluginName, "MR-DeathResult-GetIncludesState", function(this: Game_Interpreter, args: any) {
+    const actorKey = args["actorKey"];
+    const stateKey = args["stateKey"];
+
+    let actor: LEntity | undefined;
+    if (actorKey) {
+        const r = REGame.world.objects().find(x => {
+            if (x instanceof LEntity) {
+                if (x.data().entity.key == actorKey) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        if (r && r instanceof LEntity) {
+            actor = r;
+        }
+    }
+    else {
+        const r = REGame.camera.focusedEntity();
+        if (r) {
+            actor = r;
+        }
+    }
+
+    if (actor) {
+        const stateId = REData.getState(stateKey).id;
+        const has = actor._deathResult.states().includes(stateId);
+        $gameVariables.setValue(REBasics.variables.result, has ? 1 : 0);
+    }
+    else {
+        $gameVariables.setValue(REBasics.variables.result, -1);
+    }
+});

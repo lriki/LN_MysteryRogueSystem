@@ -408,7 +408,7 @@ declare interface IDataSystem
         offsetX?: number;
         offsetY?: number;
     }[];
-    variables?: string[];
+    variables: string[];
     versionId?: number;
     victoryMe?: IDataSound;
     weaponTypes?: string;
