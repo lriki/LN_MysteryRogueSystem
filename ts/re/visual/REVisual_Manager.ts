@@ -6,7 +6,7 @@ import { VManualActionDialogVisual } from "ts/re/visual/dialogs/VManualActionDia
 import { REVisualSequel } from "ts/re/visual/REVisualSequel";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { RESystem } from "ts/re/system/RESystem";
-import { VCollapseSequel } from "./sequels/CollapseSequel";
+import { VCollapseSequel } from "./sequels/VCollapseSequel";
 import { VAttackSequel } from "./sequels/AttackSequel";
 import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
 import { REVisualSequel_Move } from "./sequels/VMoveSequel";

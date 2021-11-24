@@ -6,6 +6,8 @@ import { REVisual_Entity } from "../REVisual_Entity";
 
 export class VCollapseSequel extends REVisualSequel {
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+        console.log("context.frameCount()", context.frameCount());
+
         const effectDuration = 24 - context.frameCount();
 
         
@@ -13,7 +15,7 @@ export class VCollapseSequel extends REVisualSequel {
         //console.log("VCollapseSequel", sprite);
         const event = visual.rmmzEvent();
         if (event) {
-            event.setOpacity(255.0 * (effectDuration / 24));
+            visual.setOpacity((effectDuration / 24.0));
             event.setBlendMode(PIXI.BLEND_MODES.ADD);
         }
         
