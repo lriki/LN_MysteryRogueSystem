@@ -10,7 +10,7 @@
 //=============================================================================
 
 /*:ja
- * @plugindesc LN_MysteryRogueSystem v0.4.0
+ * @plugindesc LN_MysteryRogueSystem v0.5.0
  * @author lriki
  *
  * @help test.

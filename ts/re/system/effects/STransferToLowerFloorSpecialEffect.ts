@@ -33,6 +33,7 @@ export class STransferToLowerFloorSpecialEffect extends SSpecialEffect {
                 const newFloorId = LFloorId.make(currentFloorId.landId(), newFloorNumber);
                 REGame.world._transferEntity(target, newFloorId);
             }
+            result.makeSuccess();
         }
         else {
             // 移動できない

@@ -97,7 +97,7 @@ export class RESetup {
             case "kインプリング":
                 this.setupRingCommon(entity);
                 entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_レベルダウン").id, value: 0 });
-                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_混乱魔法_部屋内").id, value: 0 });
+                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
                 break;
             case "kアウェイクガードリング":
                 this.setupRingCommon(entity);
