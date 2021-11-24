@@ -68,7 +68,7 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(th
     }
 });
 
-PluginManager.registerCommand(pluginName, "MR-DeathResult-GetIncludesState", function(this: Game_Interpreter, args: any) {
+PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", function(this: Game_Interpreter, args: any) {
     const actorKey = args["actorKey"];
     const stateKey = args["stateKey"];
 

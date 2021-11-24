@@ -36,8 +36,8 @@
  * @text ProceedFloorBackword
  * @desc 前のフロアへ
  *
- * @command MR-DeathResult-GetIncludesState
- * @text aaaf
+ * @command MR-LivingResult-GetIncludesState
+ * @text MR-LivingResult-GetIncludesState
  * @desc actorKey で指定された Entity の戦闘不能原因に、stateKey で指定されたステートが含まれているかを確認します。
  *       MR-Result: 1=含まれている, 0=含まれていない, -1=Entityが見つからなかった
  * @arg actorKey
