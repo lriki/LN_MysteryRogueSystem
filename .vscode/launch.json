@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "system.DeathResult.State"
+                "-t", "concretes.states.Paralysis.FP"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

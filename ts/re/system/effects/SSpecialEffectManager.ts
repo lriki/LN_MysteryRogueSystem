@@ -10,6 +10,7 @@ import { SStumbleSpecialEffect } from "./SStumbleSpecialEffect";
 import { STransferToNextFloorSpecialEffect } from "./STransferToNextFloorSpecialEffect";
 import { STransferToLowerFloorSpecialEffect } from "./STransferToLowerFloorSpecialEffect";
 import { STrapProliferationSpecialEffect } from "./STrapProliferationSpecialEffect";
+import { SDispelEquipmentsSpecialEffect } from "./SDispelEquipmentsSpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -41,6 +42,8 @@ export class SSpecialEffectManager {
         this.register(REBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorSpecialEffect());
         this.register(REBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorSpecialEffect());
         this.register(REBasics.effectBehaviors.trapProliferation, new STrapProliferationSpecialEffect());
+        this.register(REBasics.effectBehaviors.dispelEquipments, new SDispelEquipmentsSpecialEffect());
+        
     }
 }
 

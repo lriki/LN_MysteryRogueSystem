@@ -516,6 +516,12 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
+            case "kItem_ディスペルスクロール": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.dispelEquipments);
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_エスケープスクロール":
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
