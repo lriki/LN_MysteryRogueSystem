@@ -12,10 +12,11 @@ import { SEntityFactory } from "../SEntityFactory";
 import { SSpecialEffect } from "./SSpecialEffect";
 import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
+import { LEffectResult } from "ts/re/objects/LEffectResult";
 
 export class SGoldStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         const gold = this.pickGold(target, cctx.random());
         if (!gold) {

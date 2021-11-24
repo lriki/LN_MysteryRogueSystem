@@ -19,6 +19,8 @@ import { SItemShopBuilder } from "./map/SItemShopBuilder";
 import { USearch } from "../usecases/USearch";
 import { DBlockLayerKind } from "../data/DCommon";
 import { USpawner } from "../usecases/USpawner";
+import { ULimitations } from "../usecases/ULimitations";
+import { paramMaxTrapsInMap } from "../PluginParameters";
 
 
 /**
@@ -328,23 +330,16 @@ export class SMapManager {
     }
 
     public spawnTraps(count: number): void {
+        const remain = paramMaxTrapsInMap - ULimitations.getTrapCountInMap();
+        const actualCount = Math.min(count, remain);
         const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < actualCount; i++) {
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
                 const entity = this.spawnTrap(block.x(), block.y());
                 candidateBlocks.mutableRemove(x => x == block);
             }
         }
-        /*
-        for (let i = 0; i < count; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
-            if (candidateBlocks.length > 0) {
-                const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
-                const entity = this.spawnTrap(block.x(), block.y());
-            }
-        }
-        */
     }
 }
 

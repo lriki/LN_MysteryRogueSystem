@@ -4,6 +4,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
 import { LItemThiefBehavior } from "ts/re/objects/behaviors/LItemThiefBehavior";
+import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LRandom } from "ts/re/objects/LRandom";
 import { UAction } from "ts/re/usecases/UAction";
@@ -16,7 +17,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SItemStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         // TODO: これだとアイテム化けに対応できない
         //if (target.findEntityBehavior(LItemBehavior)) {

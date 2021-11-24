@@ -19,7 +19,7 @@ test("concretes.states.Paralysis.FP", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.setActualParam(REBasics.params.fp, 4);
+    player1.setActualParam(REBasics.params.fp, 40);
     player1.addState(stateId);
 
     let count = 0;
@@ -35,7 +35,7 @@ test("concretes.states.Paralysis.FP", () => {
     }
    
     const fp = player1.actualParam(REBasics.params.fp);
-    expect(fp).toBe(3);    // 空腹になっている
+    expect(fp).toBe(0);    // 空腹になっている
     //expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
 });
 

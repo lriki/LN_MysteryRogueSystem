@@ -1,6 +1,7 @@
 import { tr2 } from "ts/re/Common";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
+import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
@@ -12,7 +13,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 
 export class STransferToNextFloorSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         const land = REGame.map.land2();
         const currentFloorId = target.floorId;
         const newFloorNumber = currentFloorId.floorNumber() + 1;

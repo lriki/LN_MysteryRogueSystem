@@ -4,11 +4,12 @@ import { DSpecificEffectId, DSkillId } from "ts/re/data/DCommon";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
+import { LEffectResult } from "ts/re/objects/LEffectResult";
 
 
 export abstract class SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         
     }
 

@@ -10,6 +10,7 @@ import { LFloorId } from "ts/re/objects/LFloorId";
 import { UName } from "ts/re/usecases/UName";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { ULimitations } from "ts/re/usecases/ULimitations";
+import { paramMaxTrapsInMap } from "ts/re/PluginParameters";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -26,21 +27,29 @@ test("concretes.item.scroll.TrapScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_トラップスクロール").id, [], "item1"));
-    inventory.addEntity(item1);
+    let items = [];
+    for (let i = 0; i < 4; i++) {
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_トラップスクロール").id, [], `item${i}`));
+        inventory.addEntity(item);
+        items.push(item);
+    }
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    const count1 = ULimitations.getTrapCountInMap();
-
-    // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    // 設置数最大になるまで読んでみる
+    let lastCount = ULimitations.getTrapCountInMap();
+    for (const item of items) {
+        // [読む]
+        RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    expect(ULimitations.getTrapCountInMap()).toBe(count1 + 30);
+        const e = Math.min(lastCount + 30, paramMaxTrapsInMap);
+        expect(ULimitations.getTrapCountInMap()).toBe(e);
+        lastCount = ULimitations.getTrapCountInMap();
+    }
 });
 

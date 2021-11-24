@@ -58,6 +58,7 @@ export class LSurvivorBehavior extends LBehavior {
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
+            const prevFP = self.actualParam(REBasics.params.fp);
 
             var loss = this._basicLoss;
             loss *= self.traitsPi(REBasics.traits.SurvivalParamLossRate, REBasics.params.fp);
@@ -65,7 +66,15 @@ export class LSurvivorBehavior extends LBehavior {
             // FP 減少
             self.gainActualParam(REBasics.params.fp, -loss, true);
 
+            
+            const fp = self.actualParam(REBasics.params.fp);
 
+            if (prevFP > 0 && fp <= 0) {
+                // 今回の更新で FP が 0 になったのであれば、メッセージを表示する
+                cctx.postMessage(tr2("だめだ、もう倒れそうだ！ 早くなにか食べないと！"));
+            }
+
+            /*
             switch (self.actualParam(REBasics.params.fp)) {
                 case 3:
                     //cctx.postBalloon(entity, 6, false);
@@ -80,10 +89,10 @@ export class LSurvivorBehavior extends LBehavior {
                     cctx.postMessage(tr2("飢え死にしてしまう！"));
                     //cctx.postWait(entity, 10);
                     break;
-            } 
+            }
+            */
 
 
-            const fp = self.actualParam(REBasics.params.fp);
             if (fp <= 0) {
                 // 満腹度 0 による HP 減少
                 self.gainActualParam(REBasics.params.hp, -1, true);

@@ -3,6 +3,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { UAction } from "ts/re/usecases/UAction";
@@ -13,7 +14,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 // 転ぶ (一般的な英語は fall だが、本システムとして fall はいろいろ使うので混乱を避けるため stumble にしてみる)
 export class SStumbleSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity): void {
+    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         if (target.previewRejection(cctx, { kind: "EffectBehavior", id: id })) {
             const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
