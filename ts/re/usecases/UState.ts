@@ -268,4 +268,13 @@ export class UState {
         entity.removeStates(removes);
     }
     
+    
+    public static meetsApplyConditions(state: DState, target: LEntity): boolean {
+        if (state.applyConditions.kindIds.length > 0) {
+            if (!state.applyConditions.kindIds.find(x => x === target.kindDataId())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -118,6 +118,8 @@ export class LItemBehavior extends LBehavior {
         // [読まれた]
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
             const actor = activity.actor();
+            UIdentify.identifyByTiming(cctx, actor, self, DIdentifiedTiming.Read);
+
             const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.ReadActionId);
             for (const reaction of reactions) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))

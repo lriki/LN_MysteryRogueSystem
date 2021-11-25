@@ -38,5 +38,31 @@ export class TestUtils {
         const data = item.data();
         expect(name.includes(data.display.name)).toBe(true);
     }
+
+    public static testCommonScrollBegin(actor: LEntity, item: LEntity) {
+        const name = UName.makeNameAsItem(item);
+        const data = item.data();
+
+        // 未識別で仮名が付いている？
+        expect(name.includes(data.display.name)).toBe(false);
+        
+        // [読む] ができる？
+        expect(item.queryReactions().includes(REBasics.actions.ReadActionId)).toBe(true);
+
+        // [読む] に対応する Emittor がある？
+        const reaction = data.reactions.find(x => x.actionId == REBasics.actions.ReadActionId);
+        assert(reaction);
+        assert(!!reaction.emittingEffect);
+    }
+    
+    public static testCommonScrollEnd(actor: LEntity, item: LEntity) {
+        // 読まれたので消滅済み
+        expect(item.isDestroyed()).toBe(true);
+
+        // 読まれたら識別済みになる
+        const name = UName.makeNameAsItem(item);
+        const data = item.data();
+        expect(name.includes(data.display.name)).toBe(true);
+    }
 }
 

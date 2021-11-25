@@ -506,17 +506,20 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.PickOutActionId, 0);
                 break;
             case "kItem_ノーマウススクロール":
+                this.setupScrollCommon(entity);
                 //entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_トラップスクロール": {
+                this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.trapProliferation);
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
-            case "kItem_レデューススクロール": {
+            case "kItem_プレートスクロール": {
+                this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
                 emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
@@ -524,17 +527,20 @@ export class RESetup {
                 break;
             }
             case "kItem_ディスペルスクロール": {
+                this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.dispelEquipments);
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
             case "kItem_エスケープスクロール":
+                this.setupScrollCommon(entity);
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kItem_識別の巻物":
+                this.setupScrollCommon(entity);
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
                 entity.emittorSet.mainEmittor().effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.emittorSet.mainEmittor().id);
@@ -850,6 +856,11 @@ export class RESetup {
         entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
         entity.identifiedTiming = DIdentifiedTiming.Eat;
         entity.canModifierState = false;
+    }
+
+    private static setupScrollCommon(entity: DEntity): void {
+        entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+        entity.identifiedTiming = DIdentifiedTiming.Read;
     }
 
     private static setupArrowCommon(entity: DEntity): void {

@@ -19,6 +19,7 @@ import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { paramExposedTrapTriggerRate } from "../PluginParameters";
+import { UState } from "../usecases/UState";
 
 
 
@@ -755,11 +756,17 @@ export class SEffectApplyer {
 
     // Game_Action.prototype.itemEffectAddNormalState
     private itemEffectAddNormalState(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
+        const stateData = REData.states[effect.dataId];
+
         // そもそもステート無効化を持っている場合は追加自体行わない。
         // RMMZ標準では、一度追加した後の refresh で remove している。
         // ただこれだと makeSuccess() が動いてしまうので、いらないメッセージが出てしまう。
         const stateAddable = target.isStateAddable(effect.dataId);
         if (!stateAddable) return;
+
+        if (!UState.meetsApplyConditions(stateData, target)) {
+            return;
+        }
 
         let chance = effect.value1;
         if (!this._effect.isCertainHit()) {
@@ -771,7 +778,7 @@ export class SEffectApplyer {
             target.addState(effect.dataId);
             result.makeSuccess();
 
-            if (REData.states[effect.dataId].deadState) {
+            if (stateData.deadState) {
                 result.paramEffects2 = [];
             }
         }

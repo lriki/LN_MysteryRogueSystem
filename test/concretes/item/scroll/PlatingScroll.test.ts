@@ -1,17 +1,11 @@
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { UName } from "ts/re/usecases/UName";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { ULimitations } from "ts/re/usecases/ULimitations";
-import { paramMaxTrapsInMap } from "ts/re/PluginParameters";
-import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
+import { TestUtils } from "test/TestUtils";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -25,13 +19,12 @@ test("concretes.item.scroll.PlatingScroll", () => {
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レデューススクロール").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レデューススクロール").id, [], "item1"));
-    const item3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レデューススクロール").id, [], "item1"));
-    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レデューススクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_プレートスクロール").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_プレートスクロール").id, [], "item1"));
+    const item3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_プレートスクロール").id, [], "item1"));
+    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_プレートスクロール").id, [], "item1"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
     inventory.addEntity(item3);
@@ -46,6 +39,8 @@ test("concretes.item.scroll.PlatingScroll", () => {
     inventory.addEntity(shield1);
     inventory.addEntity(ring1);
     inventory.addEntity(grass1);
+
+    TestUtils.testCommonScrollBegin(player1, item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -64,5 +59,6 @@ test("concretes.item.scroll.PlatingScroll", () => {
     expect(shield1.isStateAffected(stateId)).toBe(true);
     expect(ring1.isStateAffected(stateId)).toBe(false);
     expect(grass1.isStateAffected(stateId)).toBe(false);
+    TestUtils.testCommonScrollEnd(player1, item1);
 });
 
