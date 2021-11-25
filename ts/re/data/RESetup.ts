@@ -516,6 +516,13 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
+            case "kItem_レデューススクロール": {
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Selection;
+                emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_ディスペルスクロール": {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.effectSet.effects[0].qualifyings.effectBehaviors.push(REBasics.effectBehaviors.dispelEquipments);
@@ -800,6 +807,7 @@ export class RESetup {
                 break;
             case "kState_System_Plating":
                 data.effect.traits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.upgradeValue, value: 0.0 });
+                data.applyConditions.kindIds = [REBasics.entityKinds.WeaponKindId, REBasics.entityKinds.ShieldKindId];
                 break;
         }
     }

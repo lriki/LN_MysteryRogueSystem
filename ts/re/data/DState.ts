@@ -1,4 +1,4 @@
-import { DMatchConditions } from "./DCommon";
+import { DEntityKindId, DMatchConditions } from "./DCommon";
 import { DEffect } from "./DEffect";
 import { DBehaviorInstantiation } from "./DEntityProperties";
 import { DParameterId } from "./DParameter";
@@ -133,6 +133,10 @@ export class DStateEffect {
     }
 }
 
+export interface DStateApplyConditions {
+    kindIds: DEntityKindId[],  // 適用対象の制限。空の場合は制限しない。
+}
+
 export class DState {
     /** ID (0 is Invalid). */
     id: DStateId;
@@ -169,6 +173,8 @@ export class DState {
     /** このステートが付加されているときの Idle Sequel。 */
     idleSequel: DSequelId;
 
+    applyConditions: DStateApplyConditions;
+
     public constructor(id: DStateId) {
         this.id = id;
         this.displayName = "";
@@ -193,6 +199,9 @@ export class DState {
         this.effect = new DStateEffect();
         this.submatchStates = [];
         this.idleSequel = 0;
+        this.applyConditions = {
+            kindIds: [],
+        };
     }
 
     public import(data: IDataState): void {
