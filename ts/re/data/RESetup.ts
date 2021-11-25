@@ -798,6 +798,9 @@ export class RESetup {
             case "kState_UTトラバサミ":
                 data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.MoveToAdjacentActionId, value: 0 });
                 break;
+            case "kState_System_Plating":
+                data.effect.traits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.upgradeValue, value: 0.0 });
+                break;
         }
     }
     

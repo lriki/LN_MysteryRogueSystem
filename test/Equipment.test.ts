@@ -194,7 +194,6 @@ test("Equipment.Curse", () => {
     expect(weapon1.isOnGround()).toBe(false);           // 地面に置かれたりしていないこと。
 });
 
-
 test("Equipment.UpgradeValue", () => {
     TestEnv.newGame();
 
