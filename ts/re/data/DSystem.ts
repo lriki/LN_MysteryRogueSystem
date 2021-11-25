@@ -20,6 +20,7 @@ export interface DSystemStates {
     bless: DStateId,
     curse: DStateId,
     seal: DStateId,
+    plating: DStateId,
 }
 
 export class DSystem {
@@ -57,6 +58,7 @@ export class DSystem {
             bless: 0,
             curse: 0,
             seal: 0,
+            plating: 0,
         }
         this.fallbackEnemyEntityId = 0;
         this.fallbackItemEntityId = 0;
@@ -77,6 +79,7 @@ export class DSystem {
         this.states.bless = bless.id;
         this.states.curse = curse.id;
         this.states.seal = seal.id;
+        this.states.plating = REData.getState("kState_System_Plating").id;
 
         this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライムA").entityId;
         this.fallbackItemEntityId = REData.getItem("kItem_雑草").id;
