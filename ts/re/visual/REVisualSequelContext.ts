@@ -12,7 +12,7 @@ import { REVisual_Entity } from "./REVisual_Entity";
 export class REVisualSequelContext {
     private _entityVisual: REVisual_Entity;
     private _clip: SSequelClip | undefined;
-    private _currentClip: number = 0;
+    private _currentClip: number = -1;
     private _frameCount: number = 0;
     private _timeScale: number = 0;
     private _cuurentFinished: boolean = false;
@@ -82,6 +82,16 @@ export class REVisualSequelContext {
 
     isFrameWaiting(): boolean {
         return this._waitFrameCount > 0;
+    }
+
+    public isLogicalCompleted2(): boolean {
+        //if (this._currentIdleSequelId > 0) return true;
+        if (this._currentClip < 0) return true;
+        
+        return this.isCancellationLocked() || this.isAnimationWaintng() || this.isFrameWaiting();
+    }
+    public isLogicalCompleted(): boolean {
+        return this.isCancellationLocked() || this.isAnimationWaintng() || this.isFrameWaiting();
     }
 
     public lockCamera() {
@@ -162,6 +172,7 @@ export class REVisualSequelContext {
         this._frameCount = 0;
         this._cancellationLocked = false;
         this._cuurentFinished = false;
+        this._currentIdleSequelId = 0;
         if (sequel.hasStartPosition()) {
             this._startPosition.x = sequel.startX();
             this._startPosition.y = sequel.startY();
@@ -228,10 +239,10 @@ export class REVisualSequelContext {
             const id = this._entityVisual.getIdleSequelId();
             
             if (this._currentIdleSequelId != id) {
-                this._currentIdleSequelId = id;
-                if (this._currentIdleSequelId != 0) {
+                if (id != 0) {
                     const pos = this._entityVisual.position();
                     this._startSequel(new SMotionSequel(this._entityVisual.entity(), id, pos.x, pos.y, undefined));
+                    this._currentIdleSequelId = id;
                 }
             }
         }

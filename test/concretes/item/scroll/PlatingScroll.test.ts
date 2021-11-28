@@ -6,6 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
+import { REGame } from "ts/re/objects/REGame";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -54,6 +55,8 @@ test("concretes.item.scroll.PlatingScroll", () => {
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    const ms = REGame.messageHistory;
 
     expect(weapon1.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(true);
