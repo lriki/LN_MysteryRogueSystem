@@ -40,6 +40,7 @@ export class SEffectSubject {
     }
 }
 
+
 /**
  * ダメージや状態異常、バフの適用など、パラメータ操作に関わる一連の処理を行う。
  * 
@@ -104,18 +105,63 @@ export class SEffectContext {
     public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): void {
         //let deadCount = 0;
         for (const target of targets) {
-            const effect = this._effectorFact.selectEffect(target);
+            const localTargets = new Map<LEntity, SEffect[]>();
 
-            if (target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
-                // Main Effect
-                this.applyEffectToTarget(cctx, effect, target);
-                // Sub Effects
-                for (const subEffect of this._effectorFact.subEffects()) {
-                    for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
-                        this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
+            // まず SubComponent を含めた適用対象を取り出す
+            for (const effect of this._effectorFact.effects()) {
+                // Find sub-components
+                const subComponentKey = effect.data().matchConditions.key;
+                if (subComponentKey) {
+                    for (const subTarget of target.querySubEntities(subComponentKey)) {
+                        const pair = localTargets.get(subTarget);
+                        if (pair) {
+                            pair.push(effect);
+                        }
+                        else {
+                            localTargets.set(subTarget, [effect]);
+                        }
+                    }
+                }
+                else {
+                    // Main Effect
+                    const pair = localTargets.get(target);
+                    if (pair) {
+                        pair.push(effect);
+                    }
+                    else {
+                        localTargets.set(target, [effect]);
                     }
                 }
             }
+
+            for (const [key, value] of localTargets.entries()) {
+                for (const effect of value) {
+                    if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+                        this.applyEffectToTarget(cctx, effect, key);
+                    }
+                }
+                //entries.push(`${key}:${value}`);
+            }
+
+            //this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
+
+
+            //const effect = this._effectorFact.selectEffect(target);
+
+
+            // if (target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+            //     const targets = new Map<LEntity, SEffect[]>();
+            //     targets.set(target, [effect]);
+
+            //     // Main Effect
+            //     this.applyEffectToTarget(cctx, effect, target);
+            //     // Sub Effects
+            //     for (const subEffect of this._effectorFact.subEffects()) {
+            //         for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
+            //             this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
+            //         }
+            //     }
+            // }
 
         }
     }

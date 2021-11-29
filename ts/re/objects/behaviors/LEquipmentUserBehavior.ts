@@ -21,8 +21,8 @@ import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/re/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { UName } from "ts/re/usecases/UName";
-import { DSubComponentEffectTargetKey } from "ts/re/data/DEffect";
 import { SActivityContext } from "ts/re/system/SActivityContext";
+import { DSubComponentEffectTargetKey } from "ts/re/data/DCommon";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];

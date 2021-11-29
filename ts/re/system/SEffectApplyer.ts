@@ -158,13 +158,13 @@ export class SEffectorFact {
         for (const i of effects.effects) {
             this._effects.push(new SEffect(this, i));
         }
-        for (const i of effects.subEffects) {
-            const e = new SEffect(this, i.effect);
-            this._subEffects.push({
-                subTargetKey: i.key,
-                effect: e,
-            });
-        }
+        // for (const i of effects.subEffects) {
+        //     const e = new SEffect(this, i.effect);
+        //     this._subEffects.push({
+        //         subTargetKey: i.key,
+        //         effect: e,
+        //     });
+        // }
         this._selfModifier = new SEffectModifier(subject, effects.selfEffect.qualifyings);
         
         this._subject.iterateBehaviors2(b => {
@@ -247,15 +247,19 @@ export class SEffectorFact {
         return this._genericEffectRate;
     }
 
-    public selectEffect(entity: LEntity): SEffect {
-        for (let i = this._effects.length - 1; i >= 0; i--) {
-            const data = this._effects[i].data();
-            if (UEffect.meetsCondition(entity, data)) {
-                return this._effects[i];
-            }
-        }
-        throw new Error("Unreachable.");
+    public effects(): readonly SEffect[] {
+        return this._effects;
     }
+
+    // public selectEffect(entity: LEntity): SEffect {
+    //     for (let i = this._effects.length - 1; i >= 0; i--) {
+    //         const data = this._effects[i].data();
+    //         if (UEffect.meetsCondition(entity, data)) {
+    //             return this._effects[i];
+    //         }
+    //     }
+    //     throw new Error("Unreachable.");
+    // }
 }
 
 

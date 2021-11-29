@@ -125,7 +125,7 @@ export class DStateEffect {
 
 
     public constructor() {
-        this.matchConditions = { kindId: 0 };
+        this.matchConditions = { kindId: 0, key: undefined };
         this.restriction = 0;
         this.traits = [];
         this.behaviors = [];

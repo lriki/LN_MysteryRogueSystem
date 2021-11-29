@@ -118,7 +118,10 @@ export class REDataManager
         REData.parameters[REBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
         REData.parameters[REBasics.params.pow].targetGainMessage = DTextManager.actorGain;
         REData.parameters[REBasics.params.pow].targetLossMessage = DTextManager.enemyLoss;
-
+        REData.parameters[REBasics.params.upgradeValue].selfGainMessage = DTextManager.actorGain;
+        REData.parameters[REBasics.params.upgradeValue].selfLossMessage = DTextManager.actorLoss;
+        REData.parameters[REBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
+        REData.parameters[REBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
         
         
         REBasics.entityKinds = {
@@ -697,10 +700,6 @@ export class REDataManager
         RESystem.items = {
             autoSupplyFood: 2,
         };
-
-        for (const item of REData.items) {
-            RESetup.setupDirectly_DItem(REData.entities[item]);
-        }
         
 
         // Import Enemies
@@ -896,6 +895,12 @@ export class REDataManager
 
         // Link
         {
+            REData.system.link(testMode);
+
+            for (const item of REData.items) {
+                RESetup.setupDirectly_DItem(REData.entities[item]);
+            }
+
             for (const id of REData.actors) {
                 if (id > 0) RESetup.setupActor(REData.entities[id]);
             }
@@ -903,7 +908,6 @@ export class REDataManager
             for (const id of REData.items) {
                 RESetup.linkItem(REData.entities[id]);
             }
-            REData.system.link(testMode);
 
             for (const state of REData.states) {
                 for (const key of state.stateGroupKeys) {

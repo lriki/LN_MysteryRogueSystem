@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.scroll.PlatingScroll"
+                "-t", "concretes.item.scroll.ReinforcementScroll"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

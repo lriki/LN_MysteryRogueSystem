@@ -6,11 +6,6 @@ import { TestEnv } from "../../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { UName } from "ts/re/usecases/UName";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { ULimitations } from "ts/re/usecases/ULimitations";
-import { paramMaxTrapsInMap } from "ts/re/PluginParameters";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { REBasics } from "ts/re/data/REBasics";
 
@@ -24,7 +19,7 @@ test("concretes.item.scroll.ReinforcementScroll", () => {
     const stateId = REData.system.states.curse;
 
     // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
@@ -52,5 +47,9 @@ test("concretes.item.scroll.ReinforcementScroll", () => {
 
     expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(1);
     expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(0);
+    expect(weapon1.isStateAffected(stateId)).toBe(false);
+    expect(shield1.isStateAffected(stateId)).toBe(true);
+    expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);
+    expect(REGame.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
 });
 
