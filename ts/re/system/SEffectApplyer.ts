@@ -1,6 +1,6 @@
 import { REBasics } from "../data/REBasics";
-import { DSpecificEffectId, DEntityKindId, DSkillId } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSubEffectTargetKey } from "../data/DEffect";
+import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey } from "../data/DCommon";
+import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DSpecialEffect, DSkill } from "../data/DSkill";
@@ -114,7 +114,7 @@ export class SEffect {
 }
 
 export interface SSubEffect {
-    subTargetKey: DSubEffectTargetKey;
+    subTargetKey: DSubComponentEffectTargetKey;
     effect: SEffect;
 }
 

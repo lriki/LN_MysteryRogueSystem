@@ -1,6 +1,6 @@
 import { REBasics } from "./REBasics";
-import { DBlockLayerKind, DSpecialEffectCodes } from "./DCommon";
-import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, DSubEffect, DSubEffectTargetKey, LStateLevelType } from "./DEffect";
+import { DBlockLayerKind, DSpecialEffectCodes, DSubComponentEffectTargetKey } from "./DCommon";
+import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
@@ -526,6 +526,15 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
+            case "kItem_レインフォーススクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                
+                // emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
+                // entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_ディスペルスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
@@ -629,6 +638,12 @@ export class RESetup {
                     opponentGainMessage: tr2("%1はサビてしまった。"),
                     opponentLossMessage: tr2("%1はサビてしまった。"),
                 });
+                if (data.key == "kSkill_装備サビ_武器") {
+                    emittor.effectSet.effects[0].matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
+                }
+                else {
+                    emittor.effectSet.effects[0].matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId);
+                }
                 break;
             case "kSkill_混乱魔法_部屋内":
                 emittor.scope.range = DEffectFieldScopeRange.Room;
@@ -672,7 +687,11 @@ export class RESetup {
                 emittor.effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 break;
-
+            // case "kSkill_武器強化": {
+            //     emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_武器強化_強").emittor().effectSet.effects[0].clone()));
+            //     break;
+            //}
+    
                 
         }
     }
@@ -681,9 +700,12 @@ export class RESetup {
         const emittor = data.emittor();
         switch (data.key) {
             case "kSkill_装備サビ":
-                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
-                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
                 break;
+            // case "kSkill_武器強化":
+            //     emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_武器強化_強").emittor().effectSet.effects[0].clone()));
+            //     break;
         }
     }
 
@@ -692,8 +714,8 @@ export class RESetup {
         switch (entity.entity.key) {
             case "kItem_錆ワナ": {
                 const emittor = entity.emittorSet.mainEmittor();
-                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
-                emittor.effectSet.subEffects.push(new DSubEffect(DSubEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone()));
+                emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId), REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone()));
                 emittor.scope.range = DEffectFieldScopeRange.Center;
                 emittor.selfAnimationId = 82;
                 break;

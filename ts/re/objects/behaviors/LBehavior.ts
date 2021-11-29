@@ -44,7 +44,7 @@ import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DBlockLayerKind, DSpecificEffectId, DSkillId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
-import { DEffect, DSubEffectTargetKey } from "ts/re/data/DEffect";
+import { DEffect, DSubComponentEffectTargetKey } from "ts/re/data/DEffect";
 import { DFactionId } from "ts/re/data/REData";
 import { LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
@@ -302,7 +302,7 @@ export abstract class LBehavior extends LObject {
         return base;
     }
 
-    public onQuerySubEntities(key: DSubEffectTargetKey, result: LEntity[]): void { }
+    public onQuerySubEntities(key: DSubComponentEffectTargetKey, result: LEntity[]): void { }
     //public onQueryParamMinMax(paramId: DParameterId, result: LParamMinMaxInfo): void { }
     
     

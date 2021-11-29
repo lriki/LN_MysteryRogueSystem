@@ -27,8 +27,39 @@ export type DSpecificEffectId = number;
 // }
 
 
+export class DSubComponentEffectTargetKey {
+    path: string;
+    kindId: DEntityKindId;
+    tags: string[];
+
+    public constructor() {
+        this.path = "";
+        this.kindId = 0;
+        this.tags = [];
+    }
+
+    public static make(path: string, kindId?: DEntityKindId | undefined, tags?: string[] | undefined): DSubComponentEffectTargetKey {
+        const i =  new DSubComponentEffectTargetKey();
+        i.path = path;
+        if (kindId) i.kindId = kindId;
+        if (tags) i.tags = tags;
+        return i;
+    }
+
+    public clone(): DSubComponentEffectTargetKey {
+        const i = new DSubComponentEffectTargetKey();
+        i.path = this.path;
+        i.kindId = this.kindId;
+        i.tags = this.tags.slice();
+        return i;
+    }
+}
+
+
 export interface DMatchConditions {
     kindId: DEntityKindId;
+    
+    key: DSubComponentEffectTargetKey | undefined;
 }
 
 

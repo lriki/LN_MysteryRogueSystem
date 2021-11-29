@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DMatchConditions, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId } from "./DCommon";
+import { DMatchConditions, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey } from "./DCommon";
 import { DParameterId } from "./DParameter";
 import { DSpecialEffect, DSkill } from "./DSkill";
 
@@ -283,7 +283,7 @@ export class DEffect {
         //    range: DEffectFieldScopeRange.Front1,
         //    length: -1,
         //    projectilePrefabKey: "" };
-        this.matchConditions = { kindId: 0 };
+        this.matchConditions = { kindId: 0, key: undefined };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
@@ -366,47 +366,18 @@ export class DEmittorCost {
     
 }
 
-export class DSubEffectTargetKey {
-    path: string;
-    kindId: DEntityKindId;
-    tags: string[];
-
-    public constructor() {
-        this.path = "";
-        this.kindId = 0;
-        this.tags = [];
-    }
-
-    public static make(path: string, kindId?: DEntityKindId | undefined, tags?: string[] | undefined): DSubEffectTargetKey {
-        const i =  new DSubEffectTargetKey();
-        i.path = path;
-        if (kindId) i.kindId = kindId;
-        if (tags) i.tags = tags;
-        return i;
-    }
-
-    public clone(): DSubEffectTargetKey {
-        const i = new DSubEffectTargetKey();
-        i.path = this.path;
-        i.kindId = this.kindId;
-        i.tags = this.tags.slice();
-        return i;
-    }
-}
-
-export class DSubEffect {
-    key: DSubEffectTargetKey;
-    effect: DEffect;
+// export class DSubEffect {
+//     effect: DEffect;
     
-    public constructor(key: DSubEffectTargetKey, effect: DEffect) {
-        this.key = key;
-        this.effect = effect;
-    }
+//     public constructor(key: DSubComponentEffectTargetKey, effect: DEffect) {
+//         this.key = key;
+//         this.effect = effect;
+//     }
 
-    public clone(): DSubEffect {
-        return new DSubEffect(this.key.clone(), this.effect.clone());
-    }
-}
+//     public clone(): DSubEffect {
+//         return new DSubEffect(this.key.clone(), this.effect.clone());
+//     }
+// }
 
 export class DEffectSet {
 
@@ -416,12 +387,18 @@ export class DEffectSet {
     /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
     effects: DEffect[];
 
-    subEffects: DSubEffect[];
+    /* NOTE:
+       もともと targetEffects は、対象自体に与えるものと、SubComponent に与えるものを分けて持っていた。
+       その方が確かに柔軟性がある (Effect の使いまわしがしやすい) が、メモ欄から設定するときに親 Skill や Item にたくさんの情報を書く必要がでてきてしまった。
+       エディタから条件を設定するときは子 Effect 側の情報として指定したほうがイメージがしやすいので、DEffect に統合することにした。
+    */
+
+    //subEffects: DSubEffect[];
 
     public constructor(sourceKey: string) {
         this.selfEffect = new DEffect(sourceKey);
         this.effects = [];
-        this.subEffects = [];
+        //this.subEffects = [];
     }
     
     public copyFrom(src: DEffectSet): void {
@@ -430,10 +407,10 @@ export class DEffectSet {
         for (const e of src.effects) {
             this.effects.push(e.clone());
         }
-        this.subEffects = [];
-        for (const e of src.subEffects) {
-            this.subEffects.push(e.clone());
-        }
+        // this.subEffects = [];
+        // for (const e of src.subEffects) {
+        //     this.subEffects.push(e.clone());
+        // }
     }
 }
 

@@ -27,7 +27,7 @@ import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LParamSet } from "./LParam";
 import { UState } from "ts/re/usecases/UState";
-import { DEffect, DParamBuff, DSubEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
+import { DEffect, DParamBuff, DSubComponentEffectTargetKey, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DSpecificEffectId, DEntityKindId } from "../data/DCommon";
@@ -753,7 +753,7 @@ export class LEntity extends LObject
         return value;
     }
 
-    public querySubEntities(key: DSubEffectTargetKey): LEntity[] {
+    public querySubEntities(key: DSubComponentEffectTargetKey): LEntity[] {
         const result: LEntity[] = [];
         this.iterateBehaviorsReverse(b => {
             b.onQuerySubEntities(key, result);
