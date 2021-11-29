@@ -8,12 +8,13 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { REBasics } from "ts/re/data/REBasics";
+import { SAnumationSequel } from "ts/re/system/SSequel";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.scroll.ReinforcementScroll", () => {
+test("concretes.item.scroll.ReinforcementScroll.basic", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
     const stateId = REData.system.states.curse;
@@ -51,5 +52,83 @@ test("concretes.item.scroll.ReinforcementScroll", () => {
     expect(shield1.isStateAffected(stateId)).toBe(true);
     expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);
     expect(REGame.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
+
+    const s = (TestEnv.activeSequelSet.runs()[0].clips()[0].sequels()[0] as SAnumationSequel);
+    expect(s.entity().equals(player1)).toBe(true);
+    expect(s.anumationlId()).toBe(51);
 });
 
+test("concretes.item.scroll.ReinforcementScroll.miss", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+
+    // item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レインフォーススクロール").id, [], "item1"));
+    inventory.addEntity(item1);
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [読む]
+    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // 効果が無ければ Animation は表示されない
+    expect((TestEnv.activeSequelSet.runs()[0].clips()[0].sequels()[0] instanceof SAnumationSequel)).toBe(false);
+});
+
+
+test("concretes.item.scroll.ReinforcementScroll.Up3", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+    const stateId = REData.system.states.curse;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
+
+    // item1
+    const count = 20;
+    const items = [];
+    for (let i = 0; i < count; i++) {
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レインフォーススクロール").id, [], "item1"));
+        inventory.addEntity(item);
+        items.push(item);
+    }
+    
+    // 装備
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [stateId], "weapon1"));
+    inventory.addEntity(weapon1);
+    equipmentUser.equipOnUtil(weapon1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    let last = weapon1.actualParam(REBasics.params.upgradeValue);
+    let total = 0;
+    let base = 0;
+    for (let i = 0; i < count; i++) {
+        const item = items[i];
+
+        // [読む]
+        RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+        const v = weapon1.actualParam(REBasics.params.upgradeValue);
+        total += v - last;
+        last = v;
+    }
+
+    expect(total > count).toBe(true);
+});

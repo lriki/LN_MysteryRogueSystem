@@ -548,6 +548,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 // emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
                 // entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                effect1.rmmzAnimationId = 51;
                 break;
             }
             case "kItem_ディスペルスクロール": {

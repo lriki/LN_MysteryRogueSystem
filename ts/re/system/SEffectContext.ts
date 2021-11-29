@@ -137,7 +137,7 @@ export class SEffectContext {
             for (const [key, value] of localTargets.entries()) {
                 for (const effect of value) {
                     if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
-                        this.applyEffectToTarget(cctx, effect, key);
+                        this.applyEffectToTarget(cctx, effect, key, target);
                     }
                 }
                 //entries.push(`${key}:${value}`);
@@ -166,9 +166,9 @@ export class SEffectContext {
         }
     }
 
-    private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity): void {
+    private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
 
-        const result = this.applyWithHitTest(cctx, effect, target);
+        const result = this.applyWithHitTest(cctx, effect, target, animationTarget);
         
         // ここで Flush している理由は次の通り。
         // 1. ダメージを個々に表示したい
@@ -191,7 +191,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity): LEffectResult {
+    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -207,7 +207,7 @@ export class SEffectContext {
             const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
             const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
             if (rmmzAnimationId > 0) {
-                cctx.postAnimation(target, rmmzAnimationId, true);
+                cctx.postAnimation(animationTarget, rmmzAnimationId, true);
              }
         }
 
