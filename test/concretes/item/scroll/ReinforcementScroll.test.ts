@@ -12,12 +12,13 @@ import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { ULimitations } from "ts/re/usecases/ULimitations";
 import { paramMaxTrapsInMap } from "ts/re/PluginParameters";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.scroll.DispelScroll", () => {
+test("concretes.item.scroll.ReinforcementScroll", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
     const stateId = REData.system.states.curse;
@@ -28,18 +29,14 @@ test("concretes.item.scroll.DispelScroll", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ディスペルスクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レインフォーススクロール").id, [], "item1"));
     inventory.addEntity(item1);
     
-    // 装備 (呪い付き)
+    // 装備
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [stateId], "weapon1"));
-    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [stateId], "weapon2"));
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [stateId], "shield1"));
-    const shield2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [stateId], "shield2"));
     inventory.addEntity(weapon1);
-    inventory.addEntity(weapon2);
     inventory.addEntity(shield1);
-    inventory.addEntity(shield2);
     equipmentUser.equipOnUtil(weapon1);
     equipmentUser.equipOnUtil(shield1);
 
@@ -53,9 +50,7 @@ test("concretes.item.scroll.DispelScroll", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(weapon1.isStateAffected(stateId)).toBe(false);
-    expect(weapon2.isStateAffected(stateId)).toBe(true);
-    expect(shield1.isStateAffected(stateId)).toBe(false);
-    expect(shield2.isStateAffected(stateId)).toBe(true);
+    expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(1);
+    expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(0);
 });
 

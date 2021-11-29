@@ -538,6 +538,7 @@ export class REDataManager
         
 
         // Import Skills
+        //   Item から Skill を参照することがある。逆は無いため、Item より先に Skill を構築する。
         REData.skills = [];
         $dataSkills.forEach(x => {
             const skill = new DSkill(REData.skills.length);

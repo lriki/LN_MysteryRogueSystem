@@ -413,7 +413,7 @@ export class DEffectSet {
     /** 使用者に対して与える効果 */
     selfEffect: DEffect;
     
-    /** matchConditions を判定して、最終的に適用する Effect を決める */
+    /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
     effects: DEffect[];
 
     subEffects: DSubEffect[];
