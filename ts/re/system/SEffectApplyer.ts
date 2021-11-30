@@ -791,7 +791,7 @@ export class SEffectApplyer {
     // Game_Action.prototype.itemEffectRemoveState 
     private itemEffectRemoveState(target: LEntity, effect: IDataEffect, result: LEffectResult) {
         let chance = effect.value1;
-        if (Math.random() < chance) {
+        if (this._rand.nextIntWithMax(100) < (chance * 100)) {
             target.removeState(effect.dataId);
             result.makeSuccess();
         }

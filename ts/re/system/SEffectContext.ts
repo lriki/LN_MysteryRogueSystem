@@ -170,7 +170,7 @@ export class SEffectContext {
     public selectEffects(effectList: SEffect[], rand: LRandom): SEffect[] {
         const ratingMax = Math.max(...effectList.map(a => a.data().applyRating ?? 0));
         if (ratingMax > 0) {
-            const effect = this.selectEffect(effectList, rand);
+            const effect = this.selectEffect(effectList.filter(x => !!x.data().applyRating), rand);
             return effect ? [effect] : [];
         }
         else {

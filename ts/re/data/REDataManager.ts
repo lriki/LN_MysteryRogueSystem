@@ -577,8 +577,6 @@ export class REDataManager
                 }
             }
         });
-        REData.skills.forEach(x => RESetup.setupDirectly_Skill(x));
-        REData.skills.forEach(x => RESetup.linkSkill(x));
         
         // Import Item
         REData.items = [];
@@ -897,6 +895,12 @@ export class REDataManager
         {
             REData.system.link(testMode);
 
+            // SystemState 等を参照したいので、System の Link の後で。
+            for (const skill of REData.skills) {
+                RESetup.setupDirectly_Skill(skill)
+            }
+            REData.skills.forEach(x => RESetup.linkSkill(x));
+
             for (const item of REData.items) {
                 RESetup.setupDirectly_DItem(REData.entities[item]);
             }
@@ -905,6 +909,7 @@ export class REDataManager
                 if (id > 0) RESetup.setupActor(REData.entities[id]);
             }
 
+            // Skill を参照するので、Skill の Link の後で。
             for (const id of REData.items) {
                 RESetup.linkItem(REData.entities[id]);
             }

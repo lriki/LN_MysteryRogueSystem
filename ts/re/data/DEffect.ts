@@ -302,6 +302,7 @@ export class DEffect {
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
         this.matchConditions = { ...src.matchConditions }
+        this.applyRating = src.applyRating;
         this.critical = src.critical;
         this.successRate = src.successRate;
         this.hitType = src.hitType;
