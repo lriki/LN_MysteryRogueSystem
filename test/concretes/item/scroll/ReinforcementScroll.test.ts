@@ -136,3 +136,45 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
     // 1回くらいは +3 されるだろう
     expect(total > count).toBe(true);
 });
+
+test("concretes.item.scroll.ReinforcementScroll.Shield.basic", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+    const stateId = REData.system.states.curse;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
+
+    // item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レデューススクロール").id, [], "item1"));
+    inventory.addEntity(item1);
+    
+    // 装備
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [stateId], "weapon1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [stateId], "shield1"));
+    inventory.addEntity(weapon1);
+    inventory.addEntity(shield1);
+    equipmentUser.equipOnUtil(weapon1);
+    equipmentUser.equipOnUtil(shield1);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [読む]
+    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    REGame.world.random().resetSeed(5);     // 乱数調整
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // 防具だけ +1 と解呪
+    expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(0);
+    expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(1);
+    expect(weapon1.isStateAffected(stateId)).toBe(true);
+    expect(shield1.isStateAffected(stateId)).toBe(false);
+    expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);
+    expect(REGame.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
+});

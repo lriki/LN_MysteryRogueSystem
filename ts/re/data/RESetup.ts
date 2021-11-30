@@ -539,12 +539,21 @@ export class RESetup {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
-
                 emittor.effectSet.effects = [];
                 for (const effect of REData.getSkill("kSkill_武器強化").emittor().effectSet.effects) {
                     emittor.effectSet.effects.push(effect);
                 }
-
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
+            case "kItem_レデューススクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.effectSet.effects = [];
+                for (const effect of REData.getSkill("kSkill_防具強化").emittor().effectSet.effects) {
+                    emittor.effectSet.effects.push(effect);
+                }
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -708,19 +717,9 @@ export class RESetup {
                 emittor.effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 break;
-                
             case "kSkill_武器強化": {
                 const effect1 = emittor.effectSet.effects[0];
                 effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
-                // effect1.parameterQualifyings.push({
-                //     parameterId: REBasics.params.upgradeValue,
-                //     applyTarget: DParameterApplyTarget.Current,
-                //     elementId: 0,
-                //     formula: "1",
-                //     applyType: DParameterEffectApplyType.Recover,
-                //     variance: 0,
-                //     silent: false,
-                // });
                 effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
                 effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
                 effect1.applyRating = 7;
@@ -730,17 +729,26 @@ export class RESetup {
             case "kSkill_武器強化_強": {
                 const effect1 = emittor.effectSet.effects[0];
                 effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
-                // effect1.parameterQualifyings.push({
-                //     parameterId: REBasics.params.upgradeValue,
-                //     applyTarget: DParameterApplyTarget.Current,
-                //     elementId: 0,
-                //     formula: "3",
-                //     applyType: DParameterEffectApplyType.Recover,
-                //     variance: 0,
-                //     silent: false,
-                // });
                 effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
                 effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
+                effect1.applyRating = 3;
+                effect1.rmmzAnimationId = 52;
+                break;
+            }
+            case "kSkill_防具強化": {
+                const effect1 = emittor.effectSet.effects[0];
+                effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
+                effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId);
+                effect1.applyRating = 7;
+                effect1.rmmzAnimationId = 51;
+                break;
+            }
+            case "kSkill_防具強化_強": {
+                const effect1 = emittor.effectSet.effects[0];
+                effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
+                effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId);
                 effect1.applyRating = 3;
                 effect1.rmmzAnimationId = 52;
                 break;
