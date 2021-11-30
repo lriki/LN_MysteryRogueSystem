@@ -544,6 +544,14 @@ export class RESetup {
                 effect1.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
                 effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
                 //emittor.effectSet.effects.push(effect1);
+                effect1.applyRating = 7;
+
+
+                const effect2 = REData.getSkill("kSkill_武器強化_強").emittor().effectSet.effects[0].clone();
+                emittor.effectSet.effects.push(effect2);
+                effect2.applyRating = 3;
+
+
                 
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 // emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
@@ -703,6 +711,23 @@ export class RESetup {
                 emittor.effectSet.effects[0].qualifyings.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 break;
+            case "kSkill_武器強化_強": {
+                const effect1 = emittor.effectSet.effects[0];
+                effect1.qualifyings.parameterQualifyings.push({
+                    parameterId: REBasics.params.upgradeValue,
+                    applyTarget: DParameterApplyTarget.Current,
+                    elementId: 0,
+                    formula: "3",
+                    applyType: DParameterEffectApplyType.Recover,
+                    variance: 0,
+                    silent: false,
+                });
+                effect1.qualifyings.specialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
+                effect1.rmmzAnimationId = 51;
+                break;
+            }
+
             // case "kSkill_武器強化": {
             //     emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_武器強化_強").emittor().effectSet.effects[0].clone()));
             //     break;

@@ -135,7 +135,8 @@ export class SEffectContext {
             }
 
             for (const [key, value] of localTargets.entries()) {
-                for (const effect of value) {
+                const effects = this.selectEffects(value, cctx.random());
+                for (const effect of effects) {
                     if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
                         this.applyEffectToTarget(cctx, effect, key, target);
                     }
@@ -163,6 +164,36 @@ export class SEffectContext {
             //     }
             // }
 
+        }
+    }
+
+    public selectEffects(effectList: SEffect[], rand: LRandom): SEffect[] {
+        const ratingMax = Math.max(...effectList.map(a => a.data().applyRating ?? 0));
+        if (ratingMax > 0) {
+            const effect = this.selectEffect(effectList, rand);
+            return effect ? [effect] : [];
+        }
+        else {
+            return effectList;
+        }
+    };
+
+    public selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined {
+        const ratingMax = Math.max(...effectList.map(a => a.data().applyRating ?? 0));
+        const ratingZero = ratingMax - 10;//- 3;
+        const sum = effectList.reduce((r, a) => r + (a.data().applyRating ?? 0) - ratingZero, 0);
+        if (sum > 0) {
+            let value = rand.nextIntWithMax(sum);
+            for (const action of effectList) {
+                if (!action.data().applyRating) continue;
+
+                value -= (action.data().applyRating ?? 0) - ratingZero;
+                if (value < 0) {
+                    return action;
+                }
+            }
+        } else {
+            return undefined;
         }
     }
 

@@ -14,7 +14,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.scroll.ReinforcementScroll.basic", () => {
+test("concretes.item.scroll.ReinforcementScroll.Weapon.basic", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
     const stateId = REData.system.states.curse;
@@ -36,7 +36,7 @@ test("concretes.item.scroll.ReinforcementScroll.basic", () => {
     equipmentUser.equipOnUtil(weapon1);
     equipmentUser.equipOnUtil(shield1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -44,7 +44,8 @@ test("concretes.item.scroll.ReinforcementScroll.basic", () => {
     RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    REGame.world.random().resetSeed(5);     // 乱数調整
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(1);
     expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(0);
@@ -70,7 +71,7 @@ test("concretes.item.scroll.ReinforcementScroll.miss", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レインフォーススクロール").id, [], "item1"));
     inventory.addEntity(item1);
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -78,14 +79,14 @@ test("concretes.item.scroll.ReinforcementScroll.miss", () => {
     RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 効果が無ければ Animation は表示されない
     expect((TestEnv.activeSequelSet.runs()[0].clips()[0].sequels()[0] instanceof SAnumationSequel)).toBe(false);
 });
 
 
-test("concretes.item.scroll.ReinforcementScroll.Up3", () => {
+test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
     const stateId = REData.system.states.curse;
@@ -109,13 +110,12 @@ test("concretes.item.scroll.ReinforcementScroll.Up3", () => {
     inventory.addEntity(weapon1);
     equipmentUser.equipOnUtil(weapon1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     let last = weapon1.actualParam(REBasics.params.upgradeValue);
     let total = 0;
-    let base = 0;
     for (let i = 0; i < count; i++) {
         const item = items[i];
 
@@ -126,9 +126,12 @@ test("concretes.item.scroll.ReinforcementScroll.Up3", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         const v = weapon1.actualParam(REBasics.params.upgradeValue);
-        total += v - last;
+        const d = v - last;
+        expect(d == 1 || d == 3).toBe(true);    // +1 または +3 で増加
+        total += d;
         last = v;
     }
 
+    // 1回くらいは +3 されるだろう
     expect(total > count).toBe(true);
 });
