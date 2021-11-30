@@ -56,8 +56,6 @@ test("concretes.item.scroll.PlatingScroll", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    const ms = REGame.messageHistory;
-
     expect(weapon1.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(true);
     expect(ring1.isStateAffected(stateId)).toBe(false);

@@ -16,6 +16,7 @@ import { onEffectResult } from "../objects/internal";
 import { SCommandResponse } from "./RECommand";
 import { RESystem } from "./RESystem";
 import { assert } from "../Common";
+import { LObject, LObjectType } from "../objects/LObject";
 
 
 export enum SEffectIncidentType {
@@ -220,26 +221,43 @@ export class SEffectContext {
             }
         }
     }
+
+    private findAnimationEntity(entity: LObject): LEntity | undefined {
+        if (!entity.hasParent()) return undefined;
+        const parent = entity.parentObject();
+        if (parent.objectType() == LObjectType.Map && entity.objectType() == LObjectType.Entity) return entity as LEntity;
+        return this.findAnimationEntity(parent);
+    }
     
     // Game_Action.prototype.apply
     private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): LEffectResult {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
-        result._revision++;
         result.sourceEffect = effect.data();
+
+        if (result.sourceEffect.hasAnyValidEffect()) {
+            result._revision++;
+        }
+        else {
+            // この Effect を適用しても、データ的な効果はない。
+            // そのようなときは "効かなかった" といったメッセージも表示しない。
+        }
 
         
         // Animation
         // ワープなど、特殊効果の中から Motion が発動することもあるため、apply の前に post しておく。
         {
-            const effectData = effect.data();
-            const behavior = this._effectorFact.subjectBehavior();
-            const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
-            const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
-            if (rmmzAnimationId > 0) {
-                cctx.postAnimation(animationTarget, rmmzAnimationId, true);
-             }
+            const animationTarget2 = this.findAnimationEntity(target);
+            if (animationTarget2) {
+                const effectData = effect.data();
+                const behavior = this._effectorFact.subjectBehavior();
+                const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
+                const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
+                if (rmmzAnimationId > 0) {
+                    cctx.postAnimation(animationTarget2, rmmzAnimationId, true);
+                }
+            }
         }
 
 

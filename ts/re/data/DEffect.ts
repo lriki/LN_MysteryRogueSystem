@@ -369,6 +369,15 @@ export class DEffect {
         i.copyFrom(this);
         return i;
     }
+
+    public hasAnyValidEffect(): boolean {
+        return  this.parameterQualifyings.length > 0 ||
+                this.otherEffectQualifyings.length > 0 ||
+                this.effectBehaviors.length > 0 ||
+                this.rmmzSpecialEffectQualifyings.length > 0 ||
+                this.buffQualifying.length > 0;
+        
+    }
 }
 
 export enum DSkillCostSource {

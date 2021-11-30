@@ -532,6 +532,7 @@ export class RESetup {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
                 emittor.effectSet.effects[0].rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
+                emittor.effectSet.effects[0].rmmzAnimationId = 12;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
