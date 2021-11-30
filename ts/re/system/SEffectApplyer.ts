@@ -311,7 +311,7 @@ export class SParameterEffect {
             default:
                 throw new Error();
         }
-        this.paramId = data.parameterId;
+        this.paramId = data._parameterId;
         this.elementId = data.elementId;
         this.formula = data.formula;
         this.variance = data.variance;
@@ -373,7 +373,7 @@ export class SEffectModifier {
             this._parameterEffects2.push(paramEffect);
 
             // Check fixed damage.
-            const trait = subject.traitsWithId(REBasics.traits.FixedDamage, p.parameterId).backOrUndefined();
+            const trait = subject.traitsWithId(REBasics.traits.FixedDamage, p._parameterId).backOrUndefined();
             if (trait) {
                 paramEffect.fixedDamage = trait.value;
             }

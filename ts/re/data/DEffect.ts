@@ -25,8 +25,9 @@ export enum DParameterApplyTarget {
     Maximum,
 }
 
-export interface DParameterQualifying {
-    parameterId: DParameterId;
+export class DParameterQualifying {
+    _parameterId: DParameterId;
+
     applyTarget: DParameterApplyTarget;
 
 
@@ -50,6 +51,41 @@ export interface DParameterQualifying {
     alliesSideLossMessage?: string | undefined;
     opponentGainMessage?: string | undefined;
     opponentLossMessage?: string | undefined;
+
+    public constructor(paramId: DParameterId, formula: string, applyType: DParameterEffectApplyType) {
+        this._parameterId = paramId;
+        this.applyTarget = DParameterApplyTarget.Current;
+        this.elementId = 0;
+        this.formula = formula;
+        this.applyType = applyType;
+        this.variance = 0;
+        this.silent = false;
+    }
+
+    public withApplyTarget(value: DParameterApplyTarget): this {
+        this.applyTarget = value;
+        return this;
+    }
+
+    public withElementId(value: number): this {
+        this.elementId = value;
+        return this;
+    }
+
+    public withVariance(value: number): this {
+        this.variance = value;
+        return this;
+    }
+
+    public withSilent(value: boolean = true): this {
+        this.silent = value;
+        return this;
+    }
+
+    public withConditionFormula(value: string): this {
+        this.conditionFormula = value;
+        return this;
+    }
 }
 
 //export interface DRmmzItemEffectQualifying {

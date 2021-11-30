@@ -148,7 +148,6 @@ export class RESetup {
 
                 break;
             case "kパワードラッグ":
-
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
                 
@@ -156,26 +155,33 @@ export class RESetup {
                     const emittor = entity.emittorSet.emittors(DEffectCause.Eat)[0]; //entity.emittorSet.mainEmittor();
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
                     const effect = new DEffect(entity.entity.key);
-                    effect.parameterQualifyings.push({
-                        parameterId: REBasics.params.pow,
-                        applyTarget: DParameterApplyTarget.Current,
-                        elementId: 0,
-                        formula: "1",
-                        applyType: DParameterEffectApplyType.Recover,
-                        variance: 0,
-                        silent: false,
-                        conditionFormula: "a.pow < a.max_pow",
-                    });
-                    effect.parameterQualifyings.push({
-                        parameterId: REBasics.params.pow,
-                        applyTarget: DParameterApplyTarget.Maximum,
-                        elementId: 0,
-                        formula: "1",
-                        applyType: DParameterEffectApplyType.Recover,
-                        variance: 0,
-                        silent: false,
-                        conditionFormula: "a.pow >= a.max_pow",
-                    });
+                    effect.parameterQualifyings.push(
+                        new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Recover)
+                        .withConditionFormula("a.pow < a.max_pow"));
+                    effect.parameterQualifyings.push(
+                        new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Recover)
+                        .withApplyTarget(DParameterApplyTarget.Maximum)
+                        .withConditionFormula("a.pow >= a.max_pow"));
+                    // effect.parameterQualifyings.push({
+                    //     parameterId: REBasics.params.pow,
+                    //     applyTarget: DParameterApplyTarget.Current,
+                    //     elementId: 0,
+                    //     formula: "1",
+                    //     applyType: DParameterEffectApplyType.Recover,
+                    //     variance: 0,
+                    //     silent: false,
+                    //     conditionFormula: ,
+                    // });
+                    // effect.parameterQualifyings.push({
+                    //     parameterId: REBasics.params.pow,
+                    //     applyTarget: DParameterApplyTarget.Maximum,
+                    //     elementId: 0,
+                    //     formula: "1",
+                    //     applyType: DParameterEffectApplyType.Recover,
+                    //     variance: 0,
+                    //     silent: false,
+                    //     conditionFormula: ,
+                    // });
                     emittor.effectSet.effects.push(effect);
                     //entity.emittorSet.addEmittor(DEffectCause.Eat, emittor);
                 }
@@ -403,16 +409,18 @@ export class RESetup {
                 emittor.selfAnimationId = 109;
                 //emittor.selfSequelId = REBasics.sequels.explosion;
                 //effect.qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
-
-                effect.parameterQualifyings.push({
-                    parameterId: REBasics.params.hp,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: REBasics.elements.explosion,
-                    formula: "b.hp / 2",
-                    applyType: DParameterEffectApplyType.Damage,
-                    variance: 0,
-                    silent: false,
-                });
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage)
+                    .withElementId(REBasics.elements.explosion));
+                // effect.parameterQualifyings.push({
+                //     parameterId: REBasics.params.hp,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: REBasics.elements.explosion,
+                //     formula: "b.hp / 2",
+                //     applyType: DParameterEffectApplyType.Damage,
+                //     variance: 0,
+                //     silent: false,
+                // });
                 effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 1.0, value2: 0});
 
                 // 必中だと耐性を持っているはずの Player も即死してしまうので。
@@ -474,16 +482,17 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kItem_毒矢";
-                
-                emittor.effectSet.effects[0].parameterQualifyings.push({
-                    parameterId: REBasics.params.pow,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "1",
-                    applyType: DParameterEffectApplyType.Damage,
-                    variance: 0,
-                    silent: false,
-                });
+                emittor.effectSet.effects[0].parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
+                // emittor.effectSet.effects[0].parameterQualifyings.push({
+                //     parameterId: REBasics.params.pow,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "1",
+                //     applyType: DParameterEffectApplyType.Damage,
+                //     variance: 0,
+                //     silent: false,
+                // });
                 break;
             }
             case "kItem_錆ワナ":
@@ -629,19 +638,25 @@ export class RESetup {
             case "kSkill_装備サビ_武器":
             case "kSkill_装備サビ_盾":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.effects[0].parameterQualifyings.push({
-                    parameterId: REBasics.params.upgradeValue,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "1",
-                    applyType: DParameterEffectApplyType.Damage,
-                    variance: 0,
-                    silent: false,
-                    alliesSideGainMessage: tr2("%1はサビてしまった。"),
-                    alliesSideLossMessage: tr2("%1はサビてしまった。"),
-                    opponentGainMessage: tr2("%1はサビてしまった。"),
-                    opponentLossMessage: tr2("%1はサビてしまった。"),
-                });
+                const p = new DParameterQualifying(REBasics.params.upgradeValue, "1", DParameterEffectApplyType.Damage);
+                p.alliesSideGainMessage = tr2("%1はサビてしまった。"),
+                p.alliesSideLossMessage = tr2("%1はサビてしまった。"),
+                p.opponentGainMessage = tr2("%1はサビてしまった。"),
+                p.opponentLossMessage = tr2("%1はサビてしまった。"),
+                emittor.effectSet.effects[0].parameterQualifyings.push(p);
+                // emittor.effectSet.effects[0].parameterQualifyings.push({
+                //     parameterId: REBasics.params.upgradeValue,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "1",
+                //     applyType: DParameterEffectApplyType.Damage,
+                //     variance: 0,
+                //     silent: false,
+                //     alliesSideGainMessage: tr2("%1はサビてしまった。"),
+                //     alliesSideLossMessage: tr2("%1はサビてしまった。"),
+                //     opponentGainMessage: tr2("%1はサビてしまった。"),
+                //     opponentLossMessage: tr2("%1はサビてしまった。"),
+                // });
                 if (data.key == "kSkill_装備サビ_武器") {
                     emittor.effectSet.effects[0].matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
                 }
@@ -655,27 +670,29 @@ export class RESetup {
                 break;
             case "kSkill_毒攻撃":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.effects[0].parameterQualifyings.push({
-                    parameterId: REBasics.params.pow,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "1",
-                    applyType: DParameterEffectApplyType.Damage,
-                    variance: 0,
-                    silent: false,
-                });
+                emittor.effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
+                // emittor.effectSet.effects[0].parameterQualifyings.push({
+                //     parameterId: REBasics.params.pow,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "1",
+                //     applyType: DParameterEffectApplyType.Damage,
+                //     variance: 0,
+                //     silent: false,
+                // });
                 break;
             case "kSkill_毒攻撃_強":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.effects[0].parameterQualifyings.push({
-                    parameterId: REBasics.params.pow,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "3",
-                    applyType: DParameterEffectApplyType.Damage,
-                    variance: 0,
-                    silent: false,
-                });
+                emittor.effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "3", DParameterEffectApplyType.Damage));
+                // emittor.effectSet.effects[0].parameterQualifyings.push({
+                //     parameterId: REBasics.params.pow,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "3",
+                //     applyType: DParameterEffectApplyType.Damage,
+                //     variance: 0,
+                //     silent: false,
+                // });
                 break;
             case "kSkill_レベルダウン":
                 emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.levelDown);
@@ -694,15 +711,16 @@ export class RESetup {
                 
             case "kSkill_武器強化": {
                 const effect1 = emittor.effectSet.effects[0];
-                effect1.parameterQualifyings.push({
-                    parameterId: REBasics.params.upgradeValue,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "1",
-                    applyType: DParameterEffectApplyType.Recover,
-                    variance: 0,
-                    silent: false,
-                });
+                effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
+                // effect1.parameterQualifyings.push({
+                //     parameterId: REBasics.params.upgradeValue,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "1",
+                //     applyType: DParameterEffectApplyType.Recover,
+                //     variance: 0,
+                //     silent: false,
+                // });
                 effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
                 effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
                 effect1.applyRating = 7;
@@ -711,28 +729,22 @@ export class RESetup {
             }
             case "kSkill_武器強化_強": {
                 const effect1 = emittor.effectSet.effects[0];
-                effect1.parameterQualifyings.push({
-                    parameterId: REBasics.params.upgradeValue,
-                    applyTarget: DParameterApplyTarget.Current,
-                    elementId: 0,
-                    formula: "3",
-                    applyType: DParameterEffectApplyType.Recover,
-                    variance: 0,
-                    silent: false,
-                });
+                effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
+                // effect1.parameterQualifyings.push({
+                //     parameterId: REBasics.params.upgradeValue,
+                //     applyTarget: DParameterApplyTarget.Current,
+                //     elementId: 0,
+                //     formula: "3",
+                //     applyType: DParameterEffectApplyType.Recover,
+                //     variance: 0,
+                //     silent: false,
+                // });
                 effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.system.states.curse, value1: 1.0, value2: 0});
                 effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
                 effect1.applyRating = 3;
                 effect1.rmmzAnimationId = 52;
                 break;
             }
-
-            // case "kSkill_武器強化": {
-            //     emittor.effectSet.subEffects.push(new DSubEffect(DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId), REData.getSkill("kSkill_武器強化_強").emittor().effectSet.effects[0].clone()));
-            //     break;
-            //}
-    
-                
         }
     }
     
@@ -750,6 +762,11 @@ export class RESetup {
             }
             case "kSkill_武器強化": {
                 const effect2 = REData.getSkill("kSkill_武器強化_強").emittor().effectSet.effects[0].clone();
+                emittor.effectSet.effects.push(effect2);
+                break;
+            }
+            case "kSkill_防具強化": {
+                const effect2 = REData.getSkill("kSkill_防具強化_強").emittor().effectSet.effects[0].clone();
                 emittor.effectSet.effects.push(effect2);
                 break;
             }
@@ -911,15 +928,18 @@ export class RESetup {
         const emittor = REData.newEmittor(entity.entity.key);
         emittor.scope.range = DEffectFieldScopeRange.Performer;
         const effect = new DEffect(entity.entity.key);
-        effect.parameterQualifyings.push({
-            parameterId: REBasics.params.fp,
-            applyTarget: DParameterApplyTarget.Current,
-            elementId: 0,
-            formula: "500",
-            applyType: DParameterEffectApplyType.Recover,
-            variance: 0,
-            silent: true,
-        });
+        effect.parameterQualifyings.push(
+            new DParameterQualifying(REBasics.params.fp, "500", DParameterEffectApplyType.Recover)
+            .withSilent());
+        // effect.parameterQualifyings.push({
+        //     parameterId: REBasics.params.fp,
+        //     applyTarget: DParameterApplyTarget.Current,
+        //     elementId: 0,
+        //     formula: "500",
+        //     applyType: DParameterEffectApplyType.Recover,
+        //     variance: 0,
+        //     silent: true,
+        // });
         emittor.effectSet.effects.push(effect);
         entity.emittorSet.addEmittor(DEffectCause.Eat, emittor);
 
@@ -943,15 +963,17 @@ export class RESetup {
         effect.critical = false;
         effect.successRate = 100;
         effect.hitType = DEffectHitType.Physical;
-        const q: DParameterQualifying = {
-            parameterId: REBasics.params.hp,
-            applyTarget: DParameterApplyTarget.Current,
-            elementId: 0,
-            formula: "a.atk * 4 - b.def * 2",
-            applyType: DParameterEffectApplyType.Damage,
-            variance: 20,
-            silent: false,
-        };
+        // const q: DParameterQualifying = {
+        //     parameterId: REBasics.params.hp,
+        //     applyTarget: DParameterApplyTarget.Current,
+        //     elementId: 0,
+        //     formula: "a.atk * 4 - b.def * 2",
+        //     applyType: DParameterEffectApplyType.Damage,
+        //     variance: 20,
+        //     silent: false,
+        // };
+        const q = new DParameterQualifying(REBasics.params.hp, "a.atk * 4 - b.def * 2", DParameterEffectApplyType.Damage)
+            .withVariance(20);
         effect.parameterQualifyings.push(q);
         emittor.effectSet.effects.push(effect);
         entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);

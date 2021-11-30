@@ -1105,15 +1105,19 @@ export class REDataManager
             default:
                 throw new Error();
         }
-        return {
-                parameterId: parameterId,
-                applyTarget: DParameterApplyTarget.Current,
-                elementId: damage.elementId ?? 0,
-                formula: damage.formula ?? "0",
-                applyType: applyType,
-                variance: damage.variance ?? 0,
-                silent: false,
-        };
+        const param = new DParameterQualifying(parameterId, damage.formula ?? "0", applyType);
+        param.elementId = damage.elementId ?? 0;
+        param.variance = damage.variance ?? 0;
+        return param;
+        // return {
+        //         parameterId: parameterId,
+        //         applyTarget: DParameterApplyTarget.Current,
+        //         elementId: damage.elementId ?? 0,
+        //         formula: damage.formula ?? "0",
+        //         applyType: applyType,
+        //         variance: damage.variance ?? 0,
+        //         silent: false,
+        // };
     }
 
     static floor(mapId: number): DMap {
