@@ -206,36 +206,6 @@ export interface DParamBuff {
 
 export interface DQualifyings {
 
-    /**
-      * IDataSkill.damage
-      * IDataItem.damage
-      */
-    parameterQualifyings: DParameterQualifying[];
-
-    /**
-     * パラメータ変化以外のすべてのエフェクト。
-     * これらを実現するにはコードで頑張る必要がある。
-     * ほとんどの特殊効果はこれを持つ必要があるはず。
-     * コアスクリプトだと EFFECT_XXXX に相当する。
-     * 
-     * @deprecated see effectBehaviors
-     */
-    otherEffectQualifyings: DOtherEffectQualifying[];
-
-    effectBehaviors: DSpecificEffectId[];
- 
-    /**
-     * IDataSkill.effects
-     * IDataItem.effects
-     */
-    specialEffectQualifyings: IDataEffect[];
- 
-    /**
-     * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
-     * こちらはレベルと共に指定できる。
-     */
-    buffQualifying: DParamBuff[];
-    
 
 }
 
@@ -271,7 +241,36 @@ export class DEffect {
     rmmzAnimationId: number;
 
 
-    qualifyings: DQualifyings;
+    /**
+      * IDataSkill.damage
+      * IDataItem.damage
+      */
+     parameterQualifyings: DParameterQualifying[];
+
+     /**
+      * パラメータ変化以外のすべてのエフェクト。
+      * これらを実現するにはコードで頑張る必要がある。
+      * ほとんどの特殊効果はこれを持つ必要があるはず。
+      * コアスクリプトだと EFFECT_XXXX に相当する。
+      * 
+      * @deprecated see effectBehaviors
+      */
+     otherEffectQualifyings: DOtherEffectQualifying[];
+ 
+     effectBehaviors: DSpecificEffectId[];
+  
+     /**
+      * IDataSkill.effects
+      * IDataItem.effects
+      */
+     rmmzSpecialEffectQualifyings: IDataEffect[];
+  
+     /**
+      * ステート追加。単に追加するだけなら specialEffectQualifyings から指定することも可能。
+      * こちらはレベルと共に指定できる。
+      */
+     buffQualifying: DParamBuff[];
+     
 
     //rejectionLevel: DEffectRejectionLevel;
     
@@ -289,13 +288,19 @@ export class DEffect {
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
         this.rmmzAnimationId = 0;
-        this.qualifyings = {
-            parameterQualifyings: [],
-            otherEffectQualifyings: [],
-            effectBehaviors: [],
-            specialEffectQualifyings : [],
-            buffQualifying: [],
-        };
+        
+        this.parameterQualifyings = [];
+        this.otherEffectQualifyings = [];
+        this.effectBehaviors = [];
+        this.rmmzSpecialEffectQualifyings = [];
+        this.buffQualifying = [];
+        // this.qualifyings = {
+        //     parameterQualifyings: [],
+        //     otherEffectQualifyings: [],
+        //     effectBehaviors: [],
+        //     rmmzSpecialEffectQualifyings : [],
+        //     buffQualifying: [],
+        // };
         //this.rejectionLevel = DEffectRejectionLevel.Ones;
     }
 
@@ -308,13 +313,18 @@ export class DEffect {
         this.hitType = src.hitType;
         this.rmmzAnimationId = src.rmmzAnimationId;
         
-        this.qualifyings = {
-            parameterQualifyings: src.qualifyings.parameterQualifyings.slice(),
-            otherEffectQualifyings: src.qualifyings.otherEffectQualifyings.slice(),
-            effectBehaviors: src.qualifyings.effectBehaviors.slice(),
-            specialEffectQualifyings :src.qualifyings.specialEffectQualifyings.slice(),
-            buffQualifying: src.qualifyings.buffQualifying.slice(),
-        };
+        this.parameterQualifyings = src.parameterQualifyings.slice();
+        this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
+        this.effectBehaviors = src.effectBehaviors.slice();
+        this.rmmzSpecialEffectQualifyings = src.rmmzSpecialEffectQualifyings.slice();
+        this.buffQualifying = src.buffQualifying.slice();
+        // this.qualifyings = {
+        //     parameterQualifyings: src.qualifyings.parameterQualifyings.slice(),
+        //     otherEffectQualifyings: src.qualifyings.otherEffectQualifyings.slice(),
+        //     effectBehaviors: src.qualifyings.effectBehaviors.slice(),
+        //     rmmzSpecialEffectQualifyings :src.qualifyings.rmmzSpecialEffectQualifyings.slice(),
+        //     buffQualifying: src.qualifyings.buffQualifying.slice(),
+        // };
         //this.rejectionLevel = src.rejectionLevel;
     }
     

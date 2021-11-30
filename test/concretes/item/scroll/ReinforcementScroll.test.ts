@@ -47,6 +47,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.basic", () => {
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    // 武器だけ +1 と解呪
     expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(1);
     expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(0);
     expect(weapon1.isStateAffected(stateId)).toBe(false);

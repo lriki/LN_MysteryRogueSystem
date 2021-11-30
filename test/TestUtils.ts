@@ -20,7 +20,7 @@ export class TestUtils {
         assert(!!emittors);
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!emittors.find(e => !!e.effectSet.effects[0].qualifyings.parameterQualifyings.find(x => x.parameterId == REBasics.params.fp && x.formula == "500")));
+        expect(!!emittors.find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x.parameterId == REBasics.params.fp && x.formula == "500")));
 
         // おなかを減らしておく
         actor.setActualParam(REBasics.params.fp, 5000);

@@ -555,13 +555,13 @@ export class REDataManager
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
                 effect.rmmzAnimationId = x.animationId;
-                effect.qualifyings.specialEffectQualifyings = x.effects;
+                effect.rmmzSpecialEffectQualifyings = x.effects;
 
                 emittor.costs.setParamCost(DSkillCostSource.Actor, REBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
                 emittor.costs.setParamCost(DSkillCostSource.Actor, REBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
 
                 if (x.damage.type > 0) {
-                    effect.qualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 emittor.effectSet.effects.push(effect);
 
@@ -597,10 +597,10 @@ export class REDataManager
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
                 effect.rmmzAnimationId = x.animationId;
-                effect.qualifyings.specialEffectQualifyings = x.effects;
+                effect.rmmzSpecialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
-                    effect.qualifyings.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
+                    effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
                 emittor.effectSet.effects.push(effect);

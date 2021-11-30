@@ -36,7 +36,7 @@ export class SEffect {
         this._hitType = effect.hitType;
         this._successRate = effect.successRate;
 
-        this._targetModifier = new SEffectModifier(fact.subject(), effect.qualifyings);
+        this._targetModifier = new SEffectModifier(fact.subject(), effect);
     }
 
     public fact(): SEffectorFact {
@@ -165,7 +165,7 @@ export class SEffectorFact {
         //         effect: e,
         //     });
         // }
-        this._selfModifier = new SEffectModifier(subject, effects.selfEffect.qualifyings);
+        this._selfModifier = new SEffectModifier(subject, effects.selfEffect);
         
         this._subject.iterateBehaviors2(b => {
             b.onCollectEffector(this._subject, this);
@@ -357,10 +357,10 @@ export class SParameterEffect {
 
 
 export class SEffectModifier {
-    private _data: DQualifyings;
+    private _data: DEffect;
     private _parameterEffects2: SParameterEffect[];
 
-    public constructor(subject: LEntity, q: DQualifyings) {
+    public constructor(subject: LEntity, q: DEffect) {
         this._data = q;
 
 
@@ -412,7 +412,7 @@ export class SEffectModifier {
     }
  
      public specialEffectQualifyings(): IDataEffect[] {
-         return this._data.specialEffectQualifyings;
+         return this._data.rmmzSpecialEffectQualifyings;
      }
 
      public buffQualifying(): DParamBuff[] {

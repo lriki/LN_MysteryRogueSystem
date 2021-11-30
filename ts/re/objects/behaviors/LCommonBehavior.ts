@@ -98,7 +98,7 @@ export class LCommonBehavior extends LBehavior {
     private meetsCounterActionConditions(data: DCounterAction, effectResult: LEffectResult): boolean {
         if (data.conditionAttackType) {
             if (effectResult.sourceEffect) {
-                if (effectResult.sourceEffect.qualifyings.parameterQualifyings.find(x => x.elementId == data.conditionAttackType)) {
+                if (effectResult.sourceEffect.parameterQualifyings.find(x => x.elementId == data.conditionAttackType)) {
                     return true;
                 }
                 
