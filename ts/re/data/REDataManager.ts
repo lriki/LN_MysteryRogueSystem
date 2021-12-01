@@ -363,6 +363,7 @@ export class REDataManager
             transferToLowerFloor: REData.newEffectBehavior("TransferToLowerFloor").id,
             trapProliferation: REData.newEffectBehavior("TrapProliferation").id,
             dispelEquipments: REData.newEffectBehavior("DispelEquipments").id,
+            changeInstance: REData.newEffectBehavior("ChangeInstance").id,
         };
 
         // REBasics.presets = {

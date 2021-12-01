@@ -565,6 +565,23 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
+            case "kItem_フランスパンスクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                //emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.dispelEquipments);
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
+            case "kItem_ストームスクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Room;
+                emittor.effectSet.effects[0].parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "35", DParameterEffectApplyType.Damage)
+                    .withVariance(20));
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_エスケープスクロール":
                 this.setupScrollCommon(entity);
                 entity.emittorSet.mainEmittor().effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
@@ -603,7 +620,7 @@ export class RESetup {
                 emittor.effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 break;
             case "kSkill_変化":
-                emittor.effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_変化"});
+                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.changeInstance);
                 break;
             case "kSkill_投げ当て_1ダメ":
                 emittor.scope.range = DEffectFieldScopeRange.Performer;

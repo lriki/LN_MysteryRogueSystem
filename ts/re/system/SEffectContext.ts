@@ -248,16 +248,17 @@ export class SEffectContext {
         // Animation
         // ワープなど、特殊効果の中から Motion が発動することもあるため、apply の前に post しておく。
         {
-            const animationTarget2 = this.findAnimationEntity(target);
-            if (animationTarget2) {
-                const effectData = effect.data();
-                const behavior = this._effectorFact.subjectBehavior();
-                const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
-                const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
-                if (rmmzAnimationId > 0) {
+            const effectData = effect.data();
+            const behavior = this._effectorFact.subjectBehavior();
+            const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
+            const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
+            if (rmmzAnimationId > 0) {
+                const animationTarget2 = this.findAnimationEntity(target);
+                if (animationTarget2) {
                     cctx.postAnimation(animationTarget2, rmmzAnimationId, true);
                 }
             }
+            
         }
 
 

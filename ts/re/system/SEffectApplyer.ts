@@ -723,12 +723,6 @@ export class SEffectApplyer {
                 const subject = this._effect.subject();
                 LProjectableBehavior.startMoveAsProjectile(cctx, targetEntity, new SEffectSubject(subject), this._effect.fact().direction(), 10);
                 break;
-            case "kSystemEffect_変化":
-                const entityData = cctx.random().select(USpawner.getEnemiesFromSpawnTable(targetEntity.floorId));
-                //const entityData = REData.getEntity("kキュアリーフ");
-                targetEntity.setupInstance(entityData.id);
-                REGame.scheduler.resetEntity(targetEntity);
-                break;
             case "kSystemEffect_脱出":
                 cctx.postSequel(targetEntity, REBasics.sequels.escape);
                 UTransfer.exitLand(cctx, targetEntity, LandExitResult.Escape);

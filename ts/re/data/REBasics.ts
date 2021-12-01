@@ -29,6 +29,7 @@ export interface DBasicSpecialEffects {
     transferToLowerFloor: DSpecialEffectId,
     trapProliferation: DSpecialEffectId,
     dispelEquipments: DSpecialEffectId,
+    changeInstance: DSpecialEffectId,
 }
 
 // export interface DBasicPresets {
