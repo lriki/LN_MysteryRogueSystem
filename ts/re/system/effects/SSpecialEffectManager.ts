@@ -12,6 +12,7 @@ import { STransferToLowerFloorSpecialEffect } from "./STransferToLowerFloorSpeci
 import { STrapProliferationSpecialEffect } from "./STrapProliferationSpecialEffect";
 import { SDispelEquipmentsSpecialEffect } from "./SDispelEquipmentsSpecialEffect";
 import { SChangeInstanceSpecialEffect } from "./SChangeInstanceSpecialEffect";
+import { SRestartFloorSpecialEffect } from "./SRestartFloorSpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -45,7 +46,7 @@ export class SSpecialEffectManager {
         this.register(REBasics.effectBehaviors.trapProliferation, new STrapProliferationSpecialEffect());
         this.register(REBasics.effectBehaviors.dispelEquipments, new SDispelEquipmentsSpecialEffect());
         this.register(REBasics.effectBehaviors.changeInstance, new SChangeInstanceSpecialEffect());
-        
+        this.register(REBasics.effectBehaviors.restartFloor, new SRestartFloorSpecialEffect());
     }
 }
 

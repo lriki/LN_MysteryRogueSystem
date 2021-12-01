@@ -364,6 +364,7 @@ export class REDataManager
             trapProliferation: REData.newEffectBehavior("TrapProliferation").id,
             dispelEquipments: REData.newEffectBehavior("DispelEquipments").id,
             changeInstance: REData.newEffectBehavior("ChangeInstance").id,
+            restartFloor: REData.newEffectBehavior("RestartFloor").id,
         };
 
         // REBasics.presets = {

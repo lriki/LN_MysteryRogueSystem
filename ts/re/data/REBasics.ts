@@ -20,16 +20,17 @@ export interface DBasicElements {
 }
 
 export interface DBasicSpecialEffects {
-    itemSteal: DSpecialEffectId,
-    goldSteal: DSpecialEffectId,
-    levelDown: DSpecialEffectId,
-    warp: DSpecialEffectId,
-    stumble: DSpecialEffectId,
-    transferToNextFloor: DSpecialEffectId,
-    transferToLowerFloor: DSpecialEffectId,
-    trapProliferation: DSpecialEffectId,
-    dispelEquipments: DSpecialEffectId,
-    changeInstance: DSpecialEffectId,
+    itemSteal: DSpecialEffectId;
+    goldSteal: DSpecialEffectId;
+    levelDown: DSpecialEffectId;
+    warp: DSpecialEffectId;
+    stumble: DSpecialEffectId;
+    transferToNextFloor: DSpecialEffectId;
+    transferToLowerFloor: DSpecialEffectId;
+    trapProliferation: DSpecialEffectId;
+    dispelEquipments: DSpecialEffectId;
+    changeInstance: DSpecialEffectId;
+    restartFloor: DSpecialEffectId;
 }
 
 // export interface DBasicPresets {

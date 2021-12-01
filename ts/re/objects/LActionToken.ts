@@ -1,4 +1,4 @@
-import { assert } from "../Common";
+import { assert, RESerializable } from "../Common";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 
@@ -7,6 +7,7 @@ export enum LActionTokenType {
     Major,
 }
 
+@RESerializable
 export class LActionToken {
     /*
     トークンの借金について

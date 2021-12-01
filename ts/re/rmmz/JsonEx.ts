@@ -25,17 +25,11 @@ import { TypeStore } from "../Common";
 
 
 function createInstance(name: string): any {
-    
     if (name.endsWith("Behavior")) {
         const i = SBehaviorFactory.createBehaviorInstance(name);
         if (i) return i;
     }
-    
-
     return TypeStore.createInstance(name);
-
-    //console.log(`Type not found. "${name}"`);
-    //throw new Error(`Type not found. "${name}"`);
 }
 
 

@@ -188,12 +188,10 @@ export class SGameManager {
         //contents.map = REGame.map;
         contents.camera = REGame.camera;
         contents.scheduler = REGame.scheduler;
-        console.log("contents", contents);
         return contents;
     }
 
     public static loadGame(contents: any) {
-        console.log("loadGame ---------------");
         this.createSystemObjects();
 
         REGame.system = contents.system;
