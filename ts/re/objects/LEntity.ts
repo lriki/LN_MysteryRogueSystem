@@ -39,6 +39,7 @@ import { DTraitId } from "../data/DTraits";
 import { SActivityContext } from "../system/SActivityContext";
 import { LSchedulingResult } from "./LSchedulingResult";
 import { LDeathResult } from "./LDeathResult";
+import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 
 enum BlockLayer
 {
@@ -380,6 +381,10 @@ export class LEntity extends LObject
 
     public isPlayer(): boolean {
         return this.entityId().equals(REGame.camera.focusedEntityId());
+    }
+
+    public isUnit(): boolean {
+        return !!this.findEntityBehavior(LUnitBehavior);
     }
 
     public partyId(): LPartyId {

@@ -1,5 +1,6 @@
 import { tr2 } from "ts/re/Common";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
+import { DSpecialEffectRef } from "ts/re/data/DEffect";
 import { DLandForwardDirection } from "ts/re/data/DLand";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
@@ -14,7 +15,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 
 export class STransferToLowerFloorSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         const land = REGame.map.land2();
         const landData = land.landData();
 

@@ -1,5 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DMatchConditions, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey } from "./DCommon";
+import { DEntityId } from "./DEntity";
 import { DParameterId } from "./DParameter";
 import { DSpecialEffect, DSkill } from "./DSkill";
 
@@ -245,6 +246,11 @@ export interface DQualifyings {
 
 }
 
+export interface DSpecialEffectRef {
+    specialEffectId: DSpecificEffectId;
+    entityId?: DEntityId;
+}
+
 export class DEffect {
     sourceKey: string;
 
@@ -293,7 +299,7 @@ export class DEffect {
       */
      otherEffectQualifyings: DOtherEffectQualifying[];
  
-     effectBehaviors: DSpecificEffectId[];
+     effectBehaviors: DSpecialEffectRef[];
   
      /**
       * IDataSkill.effects

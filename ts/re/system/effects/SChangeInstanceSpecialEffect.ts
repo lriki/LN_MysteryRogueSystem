@@ -1,4 +1,6 @@
 import { DSpecificEffectId } from "ts/re/data/DCommon";
+import { DSpecialEffectRef } from "ts/re/data/DEffect";
+import { REData } from "ts/re/data/REData";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -11,10 +13,21 @@ import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SChangeInstanceSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
-        const entityData = cctx.random().select(USpawner.getEnemiesFromSpawnTable(target.floorId));
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+        const entityData = (() => {
+            if (data.entityId)
+                return REData.entities[data.entityId];
+            else
+                return cctx.random().select(USpawner.getEnemiesFromSpawnTable(target.floorId));
+        })();
+
+        const prevIsUnit = target.isUnit();
+
         target.setupInstance(entityData.id);
-        REGame.scheduler.resetEntity(target);
+
+        if (prevIsUnit) {
+            REGame.scheduler.resetEntity(target);
+        }
     }
 
 }

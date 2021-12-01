@@ -285,7 +285,7 @@ export class RESetup {
                 break;
 
             case "kItem_リープの杖":
-                entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.stumble);
+                entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.stumble });
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
                 entity.idealParams[REBasics.params.remaining] = 5;
@@ -463,12 +463,12 @@ export class RESetup {
                 const emittor = entity.emittorSet.mainEmittor();
                 const effect = emittor.effectSet.effects[0];
                 emittor.scope.range = DEffectFieldScopeRange.Center;
-                effect.effectBehaviors.push(REBasics.effectBehaviors.warp);
+                effect.effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
                 break;
             }
             case "kItem_転び石":
                 entity.emittorSet.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
-                entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.stumble);
+                entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.stumble });
                 break;
             case "kItem_木の矢の罠": {
                 const emittor = entity.emittorSet.mainEmittor();
@@ -500,13 +500,13 @@ export class RESetup {
             case "kItem_落とし穴": {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Center;
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.transferToLowerFloor);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.transferToLowerFloor });
                 break;
             }
             case "kItem_突風の罠": {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Center;
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.transferToNextFloor);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.transferToNextFloor });
                 emittor.selfAnimationId = 94;
                 break;
             }
@@ -523,7 +523,7 @@ export class RESetup {
             case "kItem_トラップスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.trapProliferation);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.trapProliferation });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -561,14 +561,15 @@ export class RESetup {
             case "kItem_ディスペルスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.dispelEquipments);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.dispelEquipments });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
             case "kItem_フランスパンスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
-                //emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.dispelEquipments);
+                emittor.scope.range = DEffectFieldScopeRange.Selection;
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance, entityId: REData.getItem("kフランスパン").id });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -620,7 +621,7 @@ export class RESetup {
                 emittor.effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
                 break;
             case "kSkill_変化":
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.changeInstance);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance });
                 break;
             case "kSkill_投げ当て_1ダメ":
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -652,12 +653,12 @@ export class RESetup {
             case "kSkill_アイテム盗み":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 emittor.scope.layers.push(DBlockLayerKind.Ground);
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.itemSteal);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.itemSteal });
                 break;
             case "kSkill_ゴールド盗み":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 //emittor.scope.layers.push(DBlockLayerKind.Ground);
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.goldSteal);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.goldSteal });
                 break;
             case "kSkill_装備サビ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
@@ -722,13 +723,13 @@ export class RESetup {
                 // });
                 break;
             case "kSkill_レベルダウン":
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.levelDown);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.levelDown });
                 break;
             case "kSkill_ワープ魔法":
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.warp);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
                 break;
             case "kSkill_Warp":
-                emittor.effectSet.effects[0].effectBehaviors.push(REBasics.effectBehaviors.warp);
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 break;
             case "kSkill_KnockbackAttack":

@@ -5,11 +5,12 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
+import { DSpecialEffectRef } from "ts/re/data/DEffect";
 
 
 export abstract class SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         
     }
 

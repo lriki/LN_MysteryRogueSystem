@@ -13,10 +13,11 @@ import { SSpecialEffect } from "./SSpecialEffect";
 import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
+import { DSpecialEffectRef } from "ts/re/data/DEffect";
 
 export class SGoldStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, id: DSpecificEffectId, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         const gold = this.pickGold(target, cctx.random());
         if (!gold) {

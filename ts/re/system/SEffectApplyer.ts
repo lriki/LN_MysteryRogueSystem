@@ -1,6 +1,6 @@
 import { REBasics } from "../data/REBasics";
 import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings } from "../data/DEffect";
+import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSpecialEffectRef } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DSpecialEffect, DSkill } from "../data/DSkill";
@@ -407,7 +407,7 @@ export class SEffectModifier {
         return this._data.otherEffectQualifyings;
     }
 
-    public effectBehaviors(): DSpecificEffectId[] {
+    public effectBehaviors(): DSpecialEffectRef[] {
         return this._data.effectBehaviors;
     }
  
@@ -468,9 +468,9 @@ export class SEffectApplyer {
         for (const effect of modifier.otherEffectQualifyings()) {
             this.applyOtherEffect(cctx, target, effect, result);
         }
-        for (const id of modifier.effectBehaviors()) {
-            const b = RESystem.effectBehaviorManager.get(id);
-            b.onApplyTargetEffect(cctx, id, this._effect.fact().subject(), modifier, target, target._effectResult);
+        for (const effect of modifier.effectBehaviors()) {
+            const b = RESystem.effectBehaviorManager.get(effect.specialEffectId);
+            b.onApplyTargetEffect(cctx, effect, this._effect.fact().subject(), modifier, target, target._effectResult);
         }
         this.applyItemUserEffect(target);
         
