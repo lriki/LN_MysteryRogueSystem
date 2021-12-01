@@ -23,6 +23,18 @@ Game_Map.prototype.unlinkREEvents = function(): void {
 
 // Map 移動したときに呼ばれる。
 // セーブデータをロードしたときは呼ばれない。
+//
+// SceneManager.updateScene
+//   Scene_Map.prototype.isReady 
+//     Scene_Map.prototype.onMapLoaded 
+//       Game_Player.prototype.performTransfer
+//         Game_Map.prototype.setup
+//
+// SceneManager.updateScene (上記 isReady チェック後)
+//   Scene_Map.prototype.start
+//     Scene_Map.prototype.onTransferEnd
+//       Scene_Base.prototype.requestAutosave
+
 const _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
 
@@ -126,6 +138,8 @@ Game_Map.prototype.tileset = function() {
 const _Game_Map_update = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
+
+    SGameManager.attemptRestartFloor();
 
 }
 

@@ -5,6 +5,8 @@ import { SSequelSet } from "ts/re/system/SSequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { assert } from "ts/re/Common";
+import { SRmmzHelpers } from "../system/SRmmzHelpers";
+import { REData } from "../data/REData";
 
 
 /**
@@ -27,8 +29,18 @@ export class REEntityVisualSet {
         REGame.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
         // init 時点の map 上にいる Entity から Visual を作る
+        this.resetVisuals();
+    }
+
+    public resetVisuals(): void {
+        for (const visual of this._visualEntities) {
+            this.detachVisual(visual);
+        }
+        this._visualEntities = [];
+
         REGame.map.entities().forEach(x => {
-            this.createVisual(x);
+            //console.log(x.data().entity.key);
+            this.createVisual2(x);
         });
     }
 
@@ -85,16 +97,10 @@ export class REEntityVisualSet {
     }
 
     private deleteVisuals() {
-        //if (this._sequelManager.isRunning()) return;
-
-
         for (let i = this._visualEntities.length - 1; i >= 0; i--) {
             const visual = this._visualEntities[i];
             if (visual.reservedDestroy && visual.sequelContext().isLogicalCompleted2()) {
-                this._sequelManager.removeVisual(visual);
-            
-                $gameMap.event(visual.rmmzEventId()).erase();
-
+                this.detachVisual(visual);
                 
                 // NOTE: このメソッドはマップ遷移時の全開放時もよばれるが、
                 // そのときはマップ遷移後に Spriteset_Map が新しいインスタンスで new されるため、
@@ -105,10 +111,36 @@ export class REEntityVisualSet {
         }
     }
 
+    private detachVisual(visual: REVisual_Entity): void {
+        this._sequelManager.removeVisual(visual);
+        $gameMap.event(visual.rmmzEventId()).erase();
+    }
+
     private handleFlushSequelSet(sequelSet: SSequelSet) {
         this._sequelManager.setup(sequelSet);
     }
     
+
+    public createVisual2(entity: LEntity): void {
+        
+        // Prefab 検索
+        const prefabId = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
+
+        if (entity.inhabitsCurrentFloor) {
+            // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
+            // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
+            assert(entity.rmmzEventId > 0);
+            $gameMap.spawnREEvent(prefabId, entity.rmmzEventId);
+        }
+        else {
+            //  entity に対応する動的イベントを新たに生成する
+            const event = $gameMap.spawnREEvent(prefabId);
+            entity.rmmzEventId = event.eventId();
+        }
+
+        this.createVisual(entity);
+    }
+
     createVisual(entity: LEntity) {
         const databaseMap = REDataManager.databaseMap();
         if (!databaseMap || !databaseMap.events) {
@@ -183,8 +215,6 @@ export class REEntityVisualSet {
             throw new Error();
         }
 
-        console.log("event", event);
-        console.log("event.isREEvent()", event.isREEvent());
         assert(event.isREEvent());
 
 

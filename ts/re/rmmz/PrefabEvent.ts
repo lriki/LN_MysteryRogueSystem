@@ -50,6 +50,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
     // フリー状態の REEvent を探してみる
     let eventId = this._events.findIndex(e =>e && e.isREEvent() && e.isREExtinct());
     if (eventId < 0) {
+        console.log("見つからなければ新しく作る");
         // 見つからなければ新しく作る
         eventId = this._events.length;
         
@@ -59,6 +60,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         return event;
     }
     else {
+        console.log("再構築");
         const event = this._events[eventId] as Game_Event;
         assert(event.isREEvent());
 

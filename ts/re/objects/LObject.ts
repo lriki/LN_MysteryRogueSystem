@@ -4,8 +4,8 @@ import { REGame } from "./REGame";
 
 @RESerializable
 export class LEntityId {
-    private readonly _index: number;  // 0 is Invalid (dummy entity)
-    private readonly _key: number;
+    private _index: number;  // 0 is Invalid (dummy entity)
+    private _key: number;
 
     constructor(index: number, key: number) {
         this._index = index;
@@ -30,6 +30,11 @@ export class LEntityId {
 
     public equals(other: LEntityId): boolean {
         return this._index == other._index && this._key == other._key;
+    }
+
+    public clear(): void {
+        this._index = 0;
+        this._key = 0;
     }
 
     public clone(): LEntityId {

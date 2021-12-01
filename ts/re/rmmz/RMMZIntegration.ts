@@ -157,22 +157,15 @@ export class RMMZIntegration extends SIntegration {
         assert(databaseMap);
         assert(databaseMap.events);
 
-        // Prefab 検索
-        const prefabId = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
-
-        if (entity.inhabitsCurrentFloor) {
-            // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
-            // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
-            assert(entity.rmmzEventId > 0);
-            $gameMap.spawnREEvent(prefabId, entity.rmmzEventId);
+        if (REVisual.entityVisualSet) {
+            REVisual.entityVisualSet.createVisual(entity);
         }
         else {
-            //  entity に対応する動的イベントを新たに生成する
-            const event = $gameMap.spawnREEvent(prefabId);
-            entity.rmmzEventId = event.eventId();
+            // フロア遷移直後は、初期配置処理時点ではまだ Visual(SpriteSet) の準備ができていないことがある。
+            // この時点では Visual や Sprite は作られないが、VisualSet を new したときに、その時点の map 上の Entity を元に全部作られる。
+            // これは RMMZ の仕様。Game_Map や Scene_Map の処理はデフォルトでもかなり複雑なので、
+            // MRシステムの都合でさらに複雑にするのは避けたいところ。なので Visual 側から見ると少し歪かもしれないが、頑張って RMMZ に合わせる。
         }
-
-        REVisual.entityVisualSet?.createVisual(entity);
     }
 
     onEntityLeavedMap(entity: LEntity): void {

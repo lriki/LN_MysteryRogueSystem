@@ -36,7 +36,7 @@ test("Recorder.Basic1", async () => {
     const initialHP1 = enemy1.actualParam(REBasics.params.hp);
 
     // 初期状態を Save
-    const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContents());
+    const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContentsCore());
 
     {
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
