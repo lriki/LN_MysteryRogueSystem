@@ -10,7 +10,7 @@ import { SEffectModifier } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         const equipmentUser = target.findEntityBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
             const items = equipmentUser.equippedItemEntities();

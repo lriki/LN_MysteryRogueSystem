@@ -14,6 +14,7 @@ import { RESystemExtension } from "./RESystemExtension";
 import { STurnContext } from "./STurnContext";
 import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
+import { LEntityId } from "../objects/LObject";
 
 export class RESystem {
     static propertyData:EntityProperty[] = [
@@ -41,6 +42,9 @@ export class RESystem {
     static effectBehaviorManager: SSpecialEffectManager;
     static requestedPlayback: boolean = false;
     static unittest: boolean = false;
+
+    static requestedRestartFloorItem: LEntityId = LEntityId.makeEmpty();
+    static floorStartSaveContents: string | undefined;
 
     // Database
     static skills: BasicSkills;

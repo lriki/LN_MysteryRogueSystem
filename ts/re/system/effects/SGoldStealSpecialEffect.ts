@@ -17,7 +17,7 @@ import { DSpecialEffectRef } from "ts/re/data/DEffect";
 
 export class SGoldStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         const gold = this.pickGold(target, cctx.random());
         if (!gold) {

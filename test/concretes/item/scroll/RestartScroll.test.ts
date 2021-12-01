@@ -35,7 +35,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
 
 
     // 初期状態を Save
-    const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContents());
+    const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContentsCore());
     await REGame.recorder.startRecording();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -69,10 +69,12 @@ test("concretes.item.scroll.RestartScroll", async () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
+    expect(RESystem.requestedRestartFloorItem).toBeDefined();
+    SGameManager.loadGameObjects(TestJsonEx.parse(savedata1));
+
     //----------------------------------------------------------------------------------------------------
 
     // 初期状態を Load
-    //SGameManager.loadGame(TestJsonEx.parse(savedata1));
     
     const player1_2 = REGame.world.entity(player1.entityId());
     const inventory2 = player1_2.getEntityBehavior(LInventoryBehavior);

@@ -11,7 +11,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 
 export class STrapProliferationSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         RESystem.mapManager.spawnTraps(30);
         result.makeSuccess();
     }

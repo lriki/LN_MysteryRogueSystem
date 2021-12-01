@@ -470,7 +470,7 @@ export class SEffectApplyer {
         }
         for (const effect of modifier.effectBehaviors()) {
             const b = RESystem.effectBehaviorManager.get(effect.specialEffectId);
-            b.onApplyTargetEffect(cctx, effect, this._effect.fact().subject(), modifier, target, target._effectResult);
+            b.onApplyTargetEffect(cctx, effect, this._effect.fact().subject(),  this._effect.fact().item(), modifier, target, target._effectResult);
         }
         this.applyItemUserEffect(target);
         

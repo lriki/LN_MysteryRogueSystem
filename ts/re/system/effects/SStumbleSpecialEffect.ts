@@ -15,7 +15,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 // 転ぶ (一般的な英語は fall だが、本システムとして fall はいろいろ使うので混乱を避けるため stumble にしてみる)
 export class SStumbleSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         if (target.previewRejection(cctx, { kind: "EffectBehavior", id: data.specialEffectId })) {
             const activity = (new LActivity()).setup(REBasics.actions.stumble, target);

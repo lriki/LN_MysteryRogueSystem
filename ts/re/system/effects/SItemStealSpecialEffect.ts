@@ -18,7 +18,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SItemStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
         // TODO: これだとアイテム化けに対応できない
         //if (target.findEntityBehavior(LItemBehavior)) {
