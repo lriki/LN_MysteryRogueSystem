@@ -43,7 +43,7 @@ test("concretes.item.scroll.PlatingScroll", () => {
 
     TestUtils.testCommonScrollBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ test("concretes.item.scroll.PlatingScroll", () => {
     RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [grass1]).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(weapon1.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(true);

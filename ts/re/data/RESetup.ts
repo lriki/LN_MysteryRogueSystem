@@ -573,6 +573,14 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
+            case "kItem_マジックスクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Selection;
+                emittor.effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.remaining, "5", DParameterEffectApplyType.Recover));
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_ストームスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
