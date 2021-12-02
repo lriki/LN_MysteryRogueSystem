@@ -36,7 +36,7 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     // REGame.world._transferEntity(enemy2, floorId, 11, 11);  // Adjacent
     // REGame.world._transferEntity(enemy3, floorId, 12, 10);  // Not adjacent
 
-    TestUtils.testCommonScrollBegin(player1, item1);
+    //TestUtils.testCommonScrollBegin(player1, item1);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -52,6 +52,6 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     // expect(enemy1.isStateAffected(stateId)).toBeTruthy();
     // expect(enemy2.isStateAffected(stateId)).toBeTruthy();
     // expect(enemy3.isStateAffected(stateId)).toBeFalsy();
-    TestUtils.testCommonScrollEnd(player1, item1);
+   //TestUtils.testCommonScrollEnd(player1, item1);
 });
 

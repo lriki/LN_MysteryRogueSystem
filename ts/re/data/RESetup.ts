@@ -536,6 +536,24 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
+            case "kItem_モンスタースクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
+            case "kItem_アイテムスクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
+            case "kItem_マップスクロール": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.emittorSet.mainEmittor();
+                entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                break;
+            }
             case "kItem_レインフォーススクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
