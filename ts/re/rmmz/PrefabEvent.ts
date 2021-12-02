@@ -36,7 +36,8 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
 
     const eventData = SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
 
-    // override 指定がある場合は既存イベントを再 setup する
+    // override 指定がある場合は既存イベントを再 setup する。
+    // これによって固定マップのイベントではなく、Prefab マップのイベント内容として構築される。
     if (resetEventId) {
         const data = $dataMap.events[resetEventId];
         assert(data);
@@ -151,6 +152,10 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
         for (const visual of REVisual.entityVisualSet.entityVisuals()) {
             if (visual.rmmzSpriteIndex() < 0) {
                 const spriteIndex = this._characterSprites.findIndex(s => (s._character instanceof Game_Event) && s._character.eventId() == visual.rmmzEventId());
+                if (spriteIndex < 0) {
+                    console.log(this._characterSprites);
+                    console.log("visual", visual);
+                }
                 assert(spriteIndex >= 0);
                 visual._setSpriteIndex(spriteIndex);
             }
@@ -185,7 +190,7 @@ Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_Event) {
     t.addChild(sprite);
 
     
-    console.log("Sprite_Character 新規作成", event, spriteIndex);
+    //console.log("makeREPrefabEventSprite this._characterSprites", this._characterSprites.length);
 }
 
 /*

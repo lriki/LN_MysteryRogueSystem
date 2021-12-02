@@ -5,6 +5,7 @@ import { REVisual } from "../visual/REVisual";
 import { REGame } from "ts/re/objects/REGame";
 import { RMMZHelper } from "./RMMZHelper";
 import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
+import { SGameManager } from "../system/SGameManager";
 
 declare global {
     interface Scene_Map {
@@ -137,6 +138,8 @@ Scene_Map.prototype.update = function() {
     
     _Scene_Map_update.call(this);
 
+    
+    SGameManager.attemptRestartFloor2(this);
 }
 
 const _Scene_Map_callMenu = Scene_Map.prototype.isMenuCalled;

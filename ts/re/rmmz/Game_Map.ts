@@ -139,8 +139,7 @@ const _Game_Map_update = Game_Map.prototype.update;
 Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
 
-    SGameManager.attemptRestartFloor();
-
+    //SGameManager.attemptRestartFloor();
 }
 
 /*

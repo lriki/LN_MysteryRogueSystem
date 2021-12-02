@@ -230,6 +230,11 @@ export class SGameManager {
 
         this.loadGameObjects(contents);
 
+        if (RESystem.requestedRestartFloorItem.hasAny()) {
+            RESystem.requestedRestartFloorItem.clear();
+            return;
+        }
+
         // コアスクリプト側が例外を捨てているので、そのままだとこの辺りで発生したエラーの詳細がわからなくなる。
         // そのため独自に catch してエラーを出力している。
         try {
@@ -289,18 +294,33 @@ export class SGameManager {
         }
     }
 
-    onLoadSuccess() {
-        console.log("onLoadSuccess");
-        // SoundManager.playLoad();
-        // this.fadeOutAll();
-        // this.reloadMapIfUpdated();
-        // SceneManager.goto(Scene_Map);
-        // this._loadSuccess = true;
-    };
+    static loading = false;
+    public static attemptRestartFloor2(scene: Scene_Map): void {
+        
+        if (RESystem.requestedRestartFloorItem.hasAny() && !this.loading) {
+            this.loading = true;
+            const savefileId = 0;//$gameSystem.savefileId();
+            console.log("savefileId", savefileId);
+            DataManager.loadGame(savefileId)
+                .then(() => this.onLoadSuccess(scene))
+                .catch(() => this.onLoadFailure(scene));
+        }
+    }
     
-    onLoadFailure() {
-        // SoundManager.playBuzzer();
-        // this.activateListWindow();
+
+    public static onLoadSuccess(scene: Scene_Map) {
+        console.log("onLoadSuccess");
+        SoundManager.playLoad();
+        scene.fadeOutAll();
+        //scene.reloadMapIfUpdated();
+        SceneManager.goto(Scene_Map);
+        //scene._loadSuccess = true;
+    };
+
+    public static onLoadFailure(scene: Scene_Map) {
+        console.log("onLoadSuccess");
+        SoundManager.playBuzzer();
+       //scene.activateListWindow();
     };
 }
 
