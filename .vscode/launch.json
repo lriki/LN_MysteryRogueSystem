@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.scroll.MagicScroll"
+                "-t", "concretes.item.scroll.ParalysisScroll"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

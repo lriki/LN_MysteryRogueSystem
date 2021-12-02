@@ -13,20 +13,26 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.scroll.MagicScroll", () => {
+test("concretes.item.scroll.ParalysisScroll", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+    const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_マジックスクロール").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_リープの杖").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ストップスクロール").id, [], "item1"));
     inventory.addEntity(item1);
-    inventory.addEntity(item2);
-    const remaining1 = item2.actualParam(REBasics.params.remaining);
+
+    // enemy
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy2"));
+    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy3"));
+    REGame.world._transferEntity(enemy1, floorId, 11, 10);  // Adjacent
+    REGame.world._transferEntity(enemy2, floorId, 11, 11);  // Adjacent
+    REGame.world._transferEntity(enemy3, floorId, 12, 10);  // Not adjacent
 
     TestUtils.testCommonScrollBegin(player1, item1);
 
@@ -35,13 +41,15 @@ test("concretes.item.scroll.MagicScroll", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [item2]).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const remaining2 = item2.actualParam(REBasics.params.remaining);
-    expect(remaining2).toBe(remaining1 + 5);
+    expect(player1.isStateAffected(stateId)).toBeFalsy();
+    expect(enemy1.isStateAffected(stateId)).toBeTruthy();
+    expect(enemy2.isStateAffected(stateId)).toBeTruthy();
+    expect(enemy3.isStateAffected(stateId)).toBeFalsy();
     TestUtils.testCommonScrollEnd(player1, item1);
 });
 
