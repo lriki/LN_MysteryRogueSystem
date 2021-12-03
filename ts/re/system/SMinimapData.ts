@@ -151,9 +151,6 @@ export class SMinimapData {
                     if (entity.findEntityBehavior(LTrapBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
                     }
-                    else if (entity.findEntityBehavior(LItemBehavior)) {
-                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
-                    }
                     else if (entity.findEntityBehavior(LBattlerBehavior)) {
                         if (Helpers.isHostile(subject, entity)) {
                             // 敵対勢力
@@ -163,6 +160,9 @@ export class SMinimapData {
                             // 中立 or 味方
                             this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
                         }
+                    }
+                    else if (entity.findEntityBehavior(LItemBehavior)) {
+                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
                     }
                     else if (entity.findEntityBehavior(LExitPointBehavior)) {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);

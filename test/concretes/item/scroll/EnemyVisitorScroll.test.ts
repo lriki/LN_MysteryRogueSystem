@@ -8,6 +8,8 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "ts/re/data/REBasics";
+import { SView } from "ts/re/system/SView";
+import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -28,7 +30,10 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19,4);  
+    REGame.world._transferEntity(enemy1, floorId, 19,4);
+
+    const sv = SView.getEntityVisibility(enemy1);
+    const sn = SNavigationHelper.testVisibilityForMinimap(player1, enemy1);
 
     //TestUtils.testCommonScrollBegin(player1, item1);
 
