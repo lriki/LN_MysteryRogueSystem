@@ -49,6 +49,17 @@ export class REEntityVisualSet {
     }
 
     ternimate() {
+        // for (const visual of this._visualEntities) {
+        //     const entity = visual.entity();
+        //     if (entity.inhabitsCurrentFloor) {
+        //     }
+        //     else {
+        //         const event = $gameMap.event(entity.rmmzEventId);
+        //         assert(event);
+        //         event.erase();  // 再利用可能にする
+        //         entity.rmmzEventId = 0;
+        //     }
+        // }
         this._visualEntities = [];
     }
     
@@ -126,7 +137,6 @@ export class REEntityVisualSet {
         // Prefab 検索
         const prefabId = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
 
-        console.log("entity.inhabitsCurrentFloor", entity.inhabitsCurrentFloor);
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
             // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
@@ -134,9 +144,13 @@ export class REEntityVisualSet {
             $gameMap.spawnREEvent(prefabId, entity.rmmzEventId);
         }
         else {
+            //assert(entity.rmmzEventId == 0);
             if (entity.rmmzEventId > 0) {
-                //console.log("entity.rmmzEventId", entity.rmmzEventId);
-                //console.log("$gameMap.event(entity.rmmzEventId)", $gameMap.event(entity.rmmzEventId));
+                // セーブデータのロード後はここに来る。
+                // Visual 用に作った Event もセーブデータに含まれているため。
+                // ちょっと不自然な動作な気がするけど、対策するならまずオートセーブのタイミングを考え直さないとならない。
+                // ただオートセーブのタイミングは RMMZ の都合で決められているので、それを曲げるのはやめたほうがいいかも。
+                // 他プラグインとの競合も心配。
                 assert($gameMap.event(entity.rmmzEventId));
             }
             else {

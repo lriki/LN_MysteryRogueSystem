@@ -16,6 +16,7 @@ import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { REGame } from "../objects/REGame";
+import { FloorRestartSequence } from "./FloorRestartSequence";
 
 export class RMMZIntegration extends SIntegration {
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
@@ -122,6 +123,10 @@ export class RMMZIntegration extends SIntegration {
     }
     
     onCheckVisualSequelRunning(): boolean {
+        if (FloorRestartSequence.isProcessing()) {
+            return true;
+        }
+    
         if (SceneManager.isCurrentSceneBusy()) {
             // マップ遷移などのフェード中
             return true;

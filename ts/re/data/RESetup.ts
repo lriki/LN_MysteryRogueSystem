@@ -624,6 +624,7 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.restartFloor });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
+                emittor.selfAnimationId = 118;
                 break;
             }
             case "kItem_エスケープスクロール":

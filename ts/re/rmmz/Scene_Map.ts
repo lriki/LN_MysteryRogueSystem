@@ -6,6 +6,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RMMZHelper } from "./RMMZHelper";
 import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
 import { SGameManager } from "../system/SGameManager";
+import { FloorRestartSequence } from "./FloorRestartSequence";
 
 declare global {
     interface Scene_Map {
@@ -92,6 +93,8 @@ function isTransterEffectRunning(): boolean {
 const _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
 
+    FloorRestartSequence.update(this);
+
     if (!isTransterEffectRunning()) {
         if (REGame.map.floorId().isEntitySystemMap()) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
@@ -139,7 +142,7 @@ Scene_Map.prototype.update = function() {
     _Scene_Map_update.call(this);
 
     
-    SGameManager.attemptRestartFloor2(this);
+    //SGameManager.attemptRestartFloor2(this);
 }
 
 const _Scene_Map_callMenu = Scene_Map.prototype.isMenuCalled;
@@ -195,3 +198,22 @@ Scene_Base.prototype.isAutosaveEnabled = function() {
     }
 }
 
+const _Scene_Map_fadeOutForTransfer = Scene_Map.prototype.fadeOutForTransfer;
+Scene_Map.prototype.fadeOutForTransfer = function() {
+    if (FloorRestartSequence.isProcessing()) {
+        // Scene_Map.stop() で再びフェードアウトが開始してしまうのを避ける
+    }
+    else {
+        _Scene_Map_fadeOutForTransfer.call(this);
+    }
+}
+
+const _Scene_Map_needsFadeIn = Scene_Map.prototype.needsFadeIn;
+Scene_Map.prototype.needsFadeIn = function() {
+    if (FloorRestartSequence.isProcessing()) {
+        return true;
+    }
+    else {
+        return _Scene_Map_needsFadeIn.call(this);
+    }
+}
