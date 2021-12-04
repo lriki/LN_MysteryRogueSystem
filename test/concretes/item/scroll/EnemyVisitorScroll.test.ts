@@ -18,7 +18,6 @@ beforeAll(() => {
 test("concretes.item.scroll.EnemyVisitorScroll", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
-    //const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 11, 4);
@@ -32,10 +31,7 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 19,4);
 
-    const sv = SView.getEntityVisibility(enemy1);
-    const sn = SNavigationHelper.testVisibilityForMinimap(player1, enemy1);
-
-    //TestUtils.testCommonScrollBegin(player1, item1);
+    expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeFalsy();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -47,10 +43,6 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    // expect(player1.isStateAffected(stateId)).toBeFalsy();
-    // expect(enemy1.isStateAffected(stateId)).toBeTruthy();
-    // expect(enemy2.isStateAffected(stateId)).toBeTruthy();
-    // expect(enemy3.isStateAffected(stateId)).toBeFalsy();
-    //TestUtils.testCommonScrollEnd(player1, item1);
+    expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeTruthy();
 });
 

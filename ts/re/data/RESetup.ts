@@ -1,4 +1,4 @@
-import { REBasics } from "./REBasics";
+import { DClarificationType, REBasics } from "./REBasics";
 import { DBlockLayerKind, DSpecialEffectCodes, DSubComponentEffectTargetKey } from "./DCommon";
 import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEffectCause } from "./DEmittor";
@@ -539,18 +539,21 @@ export class RESetup {
             case "kItem_モンスタースクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Unit });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
             case "kItem_アイテムスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Item });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
             case "kItem_マップスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Terrain });
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }

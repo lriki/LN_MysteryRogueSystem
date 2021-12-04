@@ -16,7 +16,6 @@ beforeAll(() => {
 test("concretes.item.scroll.MapVisitorScroll", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
-    //const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 11, 4);
@@ -28,16 +27,6 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_マップスクロール").id, [], "item1"));
     inventory.addEntity(item1);
 
-    // // enemy
-    // const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    // const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy2"));
-    // const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy3"));
-    // REGame.world._transferEntity(enemy1, floorId, 11, 10);  // Adjacent
-    // REGame.world._transferEntity(enemy2, floorId, 11, 11);  // Adjacent
-    // REGame.world._transferEntity(enemy3, floorId, 12, 10);  // Not adjacent
-
-    //TestUtils.testCommonScrollBegin(player1, item1);
-
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
@@ -48,10 +37,6 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    // expect(player1.isStateAffected(stateId)).toBeFalsy();
-    // expect(enemy1.isStateAffected(stateId)).toBeTruthy();
-    // expect(enemy2.isStateAffected(stateId)).toBeTruthy();
-    // expect(enemy3.isStateAffected(stateId)).toBeFalsy();
-   //TestUtils.testCommonScrollEnd(player1, item1);
+    expect(REGame.map.block(19, 4)._passed).toBeTruthy();
 });
 

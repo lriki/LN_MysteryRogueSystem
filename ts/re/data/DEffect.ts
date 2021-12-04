@@ -249,6 +249,7 @@ export interface DQualifyings {
 export interface DSpecialEffectRef {
     specialEffectId: DSpecificEffectId;
     entityId?: DEntityId;
+    value?: any;
 }
 
 export class DEffect {

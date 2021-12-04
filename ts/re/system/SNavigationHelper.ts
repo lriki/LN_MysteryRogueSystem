@@ -27,6 +27,7 @@ export class SNavigationHelper {
      * ミニマップ表示に使う。AIでは想定していない
      */
     public static testVisibilityForMinimap(subject: LEntity, target: LEntity): boolean {
+        const map = REGame.map;
         const targetBlock = REGame.map.block(target.x, target.y);
 
         // Trap は未発見の場合、どのような勢力からであっても不可視
@@ -46,6 +47,18 @@ export class SNavigationHelper {
         // 同じ部屋にいれば Faction を問わず見える
         if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
             return true;
+        }
+
+        if (map.unitClarity) {
+            if (target.isUnit()) {
+                return true;
+            }
+        }
+
+        if (map.itemClarity) {
+            if (target.isItem()) {
+                return true;
+            }
         }
 
         if (Helpers.isHostile(subject, target)) {

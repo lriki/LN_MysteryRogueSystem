@@ -8,6 +8,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "ts/re/data/REBasics";
+import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -30,7 +31,7 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_アイテムスクロール").id, [], "item1"));
     REGame.world._transferEntity(item2, floorId, 19,4);  
 
-    //TestUtils.testCommonScrollBegin(player1, item1);
+    expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeFalsy();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -42,10 +43,6 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    // expect(player1.isStateAffected(stateId)).toBeFalsy();
-    // expect(enemy1.isStateAffected(stateId)).toBeTruthy();
-    // expect(enemy2.isStateAffected(stateId)).toBeTruthy();
-    // expect(enemy3.isStateAffected(stateId)).toBeFalsy();
-    //TestUtils.testCommonScrollEnd(player1, item1);
+    expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeTruthy();
 });
 

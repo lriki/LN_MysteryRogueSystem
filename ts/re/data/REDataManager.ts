@@ -365,6 +365,7 @@ export class REDataManager
             dispelEquipments: REData.newEffectBehavior("DispelEquipments").id,
             changeInstance: REData.newEffectBehavior("ChangeInstance").id,
             restartFloor: REData.newEffectBehavior("RestartFloor").id,
+            clarification: REData.newEffectBehavior("Clarification").id,
         };
 
         // REBasics.presets = {

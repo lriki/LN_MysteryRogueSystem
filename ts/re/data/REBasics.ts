@@ -31,6 +31,13 @@ export interface DBasicSpecialEffects {
     dispelEquipments: DSpecialEffectId;
     changeInstance: DSpecialEffectId;
     restartFloor: DSpecialEffectId;
+    clarification: DSpecialEffectId;
+}
+
+export enum DClarificationType {
+    Unit,
+    Item,
+    Terrain,
 }
 
 // export interface DBasicPresets {

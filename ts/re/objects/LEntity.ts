@@ -40,6 +40,7 @@ import { SActivityContext } from "../system/SActivityContext";
 import { LSchedulingResult } from "./LSchedulingResult";
 import { LDeathResult } from "./LDeathResult";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
+import { LItemBehavior } from "./behaviors/LItemBehavior";
 
 enum BlockLayer
 {
@@ -385,6 +386,10 @@ export class LEntity extends LObject
 
     public isUnit(): boolean {
         return !!this.findEntityBehavior(LUnitBehavior);
+    }
+
+    public isItem(): boolean {
+        return !!this.findEntityBehavior(LItemBehavior);
     }
 
     public partyId(): LPartyId {

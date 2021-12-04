@@ -65,6 +65,12 @@ export class LMap extends LObject {
     private _mapdataRevision: number = 1;
     private _roundCount: number = 0;
 
+    // 巻物による気配察知・道具感知効果。
+    // Trait とは別物。Trait は腕輪など装備品と共に使うが、こちらは巻物など一度効果を受けたらあとは永続するもの。
+    unitClarity = false;
+    itemClarity = false;
+
+
     constructor() {
         super(LObjectType.Map);
     }
@@ -76,6 +82,8 @@ export class LMap extends LObject {
     setup(floorId: LFloorId, mapData: FMap) {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
         this._floorId = floorId;
+        this.unitClarity = false;
+        this.itemClarity = false;
         this.build(mapData);
     }
 
