@@ -388,9 +388,9 @@ export class LEntity extends LObject
         return !!this.findEntityBehavior(LUnitBehavior);
     }
 
-    public isItem(): boolean {
-        return !!this.findEntityBehavior(LItemBehavior);
-    }
+    // public isItem(): boolean {
+    //     return !!this.data().itemData;
+    // }
 
     public partyId(): LPartyId {
         return this._partyId;

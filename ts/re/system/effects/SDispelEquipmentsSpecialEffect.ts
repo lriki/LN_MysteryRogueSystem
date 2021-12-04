@@ -18,6 +18,7 @@ export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
                 for (const item of items) {
                     if (item.isStateAffected(REData.system.states.curse)) {
                         item.removeState(REData.system.states.curse);
+                        result.makeSuccess();
                     }
                 }
             }

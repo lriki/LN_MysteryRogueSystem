@@ -2,6 +2,7 @@ import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "../data/REBasics";
+import { LExitPointBehavior } from "../objects/behaviors/LExitPointBehavior";
 import { UMovement } from "../usecases/UMovement";
 import { Helpers } from "./Helpers";
 
@@ -56,7 +57,7 @@ export class SNavigationHelper {
         }
 
         if (map.itemClarity) {
-            if (target.isItem()) {
+            if (this.isItem(target)) {
                 return true;
             }
         }
@@ -75,6 +76,15 @@ export class SNavigationHelper {
             }
         }
 
+        return false;
+    }
+
+    private static isItem(entity: LEntity): boolean {
+        if (!!entity.data().itemData) {
+            if (!entity.findEntityBehavior(LExitPointBehavior)) {
+                return true;
+            }
+        }
         return false;
     }
 }

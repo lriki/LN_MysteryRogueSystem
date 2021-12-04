@@ -539,21 +539,27 @@ export class RESetup {
             case "kItem_モンスタースクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Unit });
+                emittor.effectSet.effects[0].rmmzAnimationId = 44;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
             case "kItem_アイテムスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Item });
+                emittor.effectSet.effects[0].rmmzAnimationId = 44;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
             case "kItem_マップスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Terrain });
+                emittor.effectSet.effects[0].rmmzAnimationId = 44;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -582,7 +588,9 @@ export class RESetup {
             case "kItem_ディスペルスクロール": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.dispelEquipments });
+                emittor.effectSet.effects[0].rmmzAnimationId = 46;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -591,6 +599,7 @@ export class RESetup {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance, entityId: REData.getItem("kフランスパン").id });
+                emittor.effectSet.effects[0].rmmzAnimationId = 46;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -599,6 +608,7 @@ export class RESetup {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
                 emittor.effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.remaining, "5", DParameterEffectApplyType.Recover));
+                emittor.effectSet.effects[0].rmmzAnimationId = 46;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -608,6 +618,7 @@ export class RESetup {
                 emittor.scope.range = DEffectFieldScopeRange.Around;
                 emittor.scope.length = 1;
                 emittor.effectSet.effects[0].rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UTかなしばり").id, value1: 1.0, value2: 0});
+                emittor.effectSet.effects[0].rmmzAnimationId = 15;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -618,6 +629,7 @@ export class RESetup {
                 emittor.effectSet.effects[0].parameterQualifyings.push(
                     new DParameterQualifying(REBasics.params.hp, "35", DParameterEffectApplyType.Damage)
                     .withVariance(20));
+                emittor.selfAnimationId = 95;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
