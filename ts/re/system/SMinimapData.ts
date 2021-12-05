@@ -26,7 +26,7 @@ export class SMinimapData {
     private _height: number = 0;
     private _data: number[] = [];
     private _tilemapResetNeeded: boolean = true;
-    private _refreshNeeded: boolean = false;
+    private _refreshNeeded: boolean = true;
 
     public clear(): void {
         this._width = 0;
