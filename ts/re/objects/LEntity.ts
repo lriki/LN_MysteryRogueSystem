@@ -138,6 +138,7 @@ export class LEntity extends LObject
             // Change Instance
 
             this.clearInstance();
+            this._effectResult.instanceChangedFrom = this._entityDataId;
             this._entityDataId = entityDataId;
             SEntityFactory.buildEntity(this);
 

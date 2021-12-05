@@ -36,5 +36,4 @@ export class SClarificationSpecialEffect extends SSpecialEffect {
         });
         result.makeSuccess();
     }
-
 }

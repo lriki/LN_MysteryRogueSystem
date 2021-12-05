@@ -30,6 +30,9 @@ import { SAIHelper } from "ts/re/system/SAIHelper";
 import { USearch } from "ts/re/usecases/USearch";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { ULimitations } from "ts/re/usecases/ULimitations";
+import { LTrapBehavior } from "./LTrapBehavior";
+import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { RESystem } from "ts/re/system/RESystem";
 
 /**
  * 
@@ -480,6 +483,47 @@ export class LUnitBehavior extends LBehavior {
 
 
     [onWalkedOnTopAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
+
+        if (this._manualMovement) {
+            const self = this.ownerEntity();
+            if (self.immediatelyAfterAdjacentMoving) {
+                self.immediatelyAfterAdjacentMoving = false;
+    
+                const targetEntity = REGame.map.firstFeetEntity(self);
+                if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
+                    const actions = targetEntity.queryReactions();
+                    if (actions.length > 0) {
+    
+                        if (actions.includes(REBasics.actions.PickActionId) &&
+                            !targetEntity._shopArticle.isSalling()) {
+        
+                            if (this._straightDashing) {
+                                cctx.postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
+                            }
+                            else {
+                                // 歩行移動時に足元に拾えるものがあれば取得試行
+                                
+                                // 歩行による自動拾得から実行される場合、この時点では Sequel は Flush されていないことがある。
+                                // v0.5.0 時点では Pick のハンドリングでは REGame.map._removeEntity() を直接実行しているので、
+                                // その前に Flush しておかないと、移動前にいきなり Item が消えたように見えてしまう。
+                                RESystem.sequelContext.attemptFlush(true);
+
+                                cctx.postActivity(LActivity.makePick(self));
+                            }
+        
+        
+                            // コマンドチェーンを動かす
+                            //context.postReopen();
+                        }
+                        else {
+                            cctx.openDialog(self, new LFeetDialog(targetEntity), false);
+                        }
+                        //return SPhaseResult.Pass;
+                    }
+                }
+            }
+        }
+
         return SCommandResponse.Pass;
     }
     
@@ -487,4 +531,18 @@ export class LUnitBehavior extends LBehavior {
         cctx.openDialog(self, new SEventExecutionDialog(self.rmmzEventId, self), false);
         return SCommandResponse.Pass;
     }
+
+    
+    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
+        
+        if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
+            
+
+            return SPhaseResult.Pass;
+        }
+
+        return SPhaseResult.Pass;
+    }
+
+    
 }

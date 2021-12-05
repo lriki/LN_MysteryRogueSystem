@@ -192,9 +192,14 @@ export class TestEnv {
     }
 }
 
+export interface SIntegrationRecord {
+    type: string;
+}
+
 export class TestEnvIntegration extends SIntegration {
     public skillEmittedCount: number = 0;
     public sequelFlushCount: number = 0;
+    public records: SIntegrationRecord[] = [];
 
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
         if (eventId == REBasics.events.skillEmitted) {
@@ -249,6 +254,7 @@ export class TestEnvIntegration extends SIntegration {
         // 実行結果確認用に保持するだけ
         TestEnv.activeSequelSet = sequelSet;
         this.sequelFlushCount++;
+        this.records.push({ type: "onFlushSequelSet" });
     }
     onCheckVisualSequelRunning(): boolean {
         // Visual 表示は伴わない
@@ -272,6 +278,7 @@ export class TestEnvIntegration extends SIntegration {
     }
 
     onEntityLeavedMap(entity: LEntity): void {
+        this.records.push({ type: "onEntityLeavedMap" });
         // Visual 表示は伴わない
     }
     

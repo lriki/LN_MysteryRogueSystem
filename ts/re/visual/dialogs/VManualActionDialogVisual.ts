@@ -95,38 +95,38 @@ export class VManualActionDialogVisual extends VDialog {
 
 
         
-        if (entity.immediatelyAfterAdjacentMoving) {
-            entity.immediatelyAfterAdjacentMoving = false;
+        // if (entity.immediatelyAfterAdjacentMoving) {
+        //     entity.immediatelyAfterAdjacentMoving = false;
 
-            const targetEntity = REGame.map.firstFeetEntity(entity);
-            if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
-                const actions = targetEntity.queryReactions();
-                if (actions.length > 0) {
+        //     const targetEntity = REGame.map.firstFeetEntity(entity);
+        //     if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
+        //         const actions = targetEntity.queryReactions();
+        //         if (actions.length > 0) {
 
-                    if (actions.includes(REBasics.actions.PickActionId) &&
-                        !targetEntity._shopArticle.isSalling()) {
+        //             if (actions.includes(REBasics.actions.PickActionId) &&
+        //                 !targetEntity._shopArticle.isSalling()) {
     
-                        if (this._model.dashingEntry) {
-                            context.commandContext().postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
-                        }
-                        else {
-                            // 歩行移動時に足元に拾えるものがあれば取得試行
-                            context.postActivity(LActivity.makePick(entity));
-                        }
+        //                 if (this._model.dashingEntry) {
+        //                     context.commandContext().postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
+        //                 }
+        //                 else {
+        //                     // 歩行移動時に足元に拾えるものがあれば取得試行
+        //                     context.postActivity(LActivity.makePick(entity));
+        //                 }
     
     
-                        // コマンドチェーンを動かす
-                        //context.postReopen();
-                    }
-                    else {
-                        this.openSubDialog(new LFeetDialog(targetEntity), d => {
-                            if (d.isSubmitted()) this._model.submit();
-                        });
-                    }
-                    return;
-                }
-            }
-        }
+        //                 // コマンドチェーンを動かす
+        //                 //context.postReopen();
+        //             }
+        //             else {
+        //                 this.openSubDialog(new LFeetDialog(targetEntity), d => {
+        //                     if (d.isSubmitted()) this._model.submit();
+        //                 });
+        //             }
+        //             return;
+        //         }
+        //     }
+        // }
 
         switch (this._updateMode) {
             case UpdateMode.Normal:

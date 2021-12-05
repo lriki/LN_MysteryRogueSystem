@@ -53,6 +53,8 @@ test("concretes.item.scroll.DispelScroll", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
+    const m = REGame.messageHistory;
+
     expect(weapon1.isStateAffected(stateId)).toBe(false);
     expect(weapon2.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(false);

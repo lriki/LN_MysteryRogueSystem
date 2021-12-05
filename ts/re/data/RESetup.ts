@@ -589,8 +589,17 @@ export class RESetup {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.dispelEquipments });
+                //emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.dispelEquipments });
                 emittor.effectSet.effects[0].rmmzAnimationId = 46;
+
+                
+                const effect1 = REData.getSkill("kSkill_解呪").emittor().effectSet.effects[0].clone();
+                const effect2 = REData.getSkill("kSkill_解呪").emittor().effectSet.effects[0].clone();
+                effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.WeaponKindId);
+                effect2.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId);
+                emittor.effectSet.effects.push(effect1);
+                emittor.effectSet.effects.push(effect2);
+
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -599,7 +608,7 @@ export class RESetup {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance, entityId: REData.getItem("kフランスパン").id });
-                emittor.effectSet.effects[0].rmmzAnimationId = 46;
+                emittor.effectSet.effects[0].rmmzAnimationId = 2;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }

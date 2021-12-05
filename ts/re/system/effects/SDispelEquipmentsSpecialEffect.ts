@@ -9,6 +9,9 @@ import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
+/**
+ * @deprecated
+ */
 export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         const equipmentUser = target.findEntityBehavior(LEquipmentUserBehavior);
@@ -19,6 +22,7 @@ export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
                     if (item.isStateAffected(REData.system.states.curse)) {
                         item.removeState(REData.system.states.curse);
                         result.makeSuccess();
+                        item._effectResult._revision++;
                     }
                 }
             }

@@ -5,6 +5,7 @@ import { TestEnv } from "../../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { REGame } from "ts/re/objects/REGame";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -37,6 +38,7 @@ test("concretes.item.scroll.ChangeToFoodScroll", () => {
     const items = inventory.entities();
     expect(items.length).toBe(1);
     expect(items[0].data().entity.key).toBe("kフランスパン");
-    expect(item2.isDestroyed()).toBe(false);    // Entity が変異しただけなので、インスタンス自体は削除されていない
+    expect(item2.isDestroyed()).toBeFalsy();    // Entity が変異しただけなので、インスタンス自体は削除されていない
+    expect(REGame.messageHistory.includesText("変化した")).toBeTruthy();
 });
 

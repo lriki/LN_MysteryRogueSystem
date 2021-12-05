@@ -24,6 +24,7 @@ export class SChangeInstanceSpecialEffect extends SSpecialEffect {
         const prevIsUnit = target.isUnit();
 
         target.setupInstance(entityData.id);
+        result.makeSuccess();
 
         if (prevIsUnit) {
             REGame.scheduler.resetEntity(target);

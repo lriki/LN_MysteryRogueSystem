@@ -13,6 +13,7 @@ import { DTextManager } from "../data/DTextManager";
 import { DEffect, DParameterQualifying } from "../data/DEffect";
 import { REGame } from "./REGame";
 import { REBasics } from "../data/REBasics";
+import { DEntityId } from "../data/DEntity";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @RESerializable
@@ -83,6 +84,8 @@ export class LEffectResult {
 
     gainedExp: number = 0;
 
+    instanceChangedFrom: DEntityId | undefined;
+
     /*
     [2021/11/21]
     ----------
@@ -120,6 +123,7 @@ export class LEffectResult {
         this.levelup = false;
         this.leveldown = false;
         this.gainedExp = 0;
+        this.instanceChangedFrom = undefined;
         this._dirty = false;
     }
 
@@ -234,6 +238,10 @@ export class LEffectResult {
             this.refreshRevision();
             
             const targetName = UName.makeUnitName(entity);
+
+            if (this.instanceChangedFrom) {
+                cctx.postMessage(tr2("%1は%2に変化した。").format(REData.entities[this.instanceChangedFrom].makeDisplayName(0), targetName));
+            }
             
             if (this.missed) {
                 cctx.postMessage(tr2("TEST: 外れた。"));

@@ -28,7 +28,10 @@ export interface DBasicSpecialEffects {
     transferToNextFloor: DSpecialEffectId;
     transferToLowerFloor: DSpecialEffectId;
     trapProliferation: DSpecialEffectId;
+
+    /** @deprecated SubComponent の検索ができるようになったので、それで対応する。SpecialEffect 内で実装する場合、EffectResult を自分で表示するような使実装が必要になる。 */
     dispelEquipments: DSpecialEffectId;
+
     changeInstance: DSpecialEffectId;
     restartFloor: DSpecialEffectId;
     clarification: DSpecialEffectId;
