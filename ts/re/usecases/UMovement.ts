@@ -13,6 +13,7 @@ import { SCommandContext } from "../system/SCommandContext";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LRoom } from "../objects/LRoom";
 import { SPoint } from "./UCommon";
+import { LFloorId } from "../objects/LFloorId";
 
 
 interface Edge {
@@ -619,12 +620,18 @@ export class UMovement {
         RESystem.integration.onEntityLocated(entity);
     }
     
-    private static _postLocate(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
+    public static locateEntityAtFloorMoved(entity: LEntity, floorId: LFloorId, x: number, y: number): void {
+        entity.floorId = floorId.clone();
+        entity.x = x;
+        entity.y = y;
+    }
+
+    public static _postLocate(entity: LEntity, oldBlock: LBlock | undefined, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
 
-        if (cctx) {
+        if (oldBlock && cctx) {
             if (oldBlock._roomId != newBlock._roomId) {
                 const args: RoomEventArgs = {
                     entity: entity,

@@ -262,9 +262,7 @@ export class LWorld
 
         }
         else {
-            entity.floorId = floorId;
-            entity.x = x;
-            entity.y = y;
+            UMovement.locateEntityAtFloorMoved(entity, floorId, x, y);
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移

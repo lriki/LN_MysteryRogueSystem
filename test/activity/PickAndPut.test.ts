@@ -78,8 +78,7 @@ test("activity.PickAtMoved", () => {
     TestEnv.newGame();
 
     // actor1 配置
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // (5, 5) へ配置
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
@@ -92,12 +91,12 @@ test("activity.PickAtMoved", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // マップ移動
-    TestEnv.performFloorTransfer();
+    //TestEnv.performFloorTransfer();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
-    
+
     // player を右へ移動
     const dialogContext = RESystem.dialogContext;
     dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
