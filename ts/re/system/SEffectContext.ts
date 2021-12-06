@@ -418,15 +418,11 @@ export class SEffectContext {
         const applyer = new SEffectApplyer(effect, this._rand);
         applyer.apply(cctx, effect.targetModifier(), target);
         applyer.apply(cctx, this._effectorFact.selfModifier(), this._effectorFact.subject());
+        if (target._effectResult.success) {
+            const effect2 = this._effectorFact.succeededSelfModifier();
+            if (effect2) {
+                applyer.apply(cctx, effect2, this._effectorFact.subject());
+            }
+        }
     }
-
-
-
-
-
-
-
-
-    
-
 }

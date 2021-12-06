@@ -136,6 +136,7 @@ export class SEffectorFact {
     private _effects: SEffect[] = [];
     private _subEffects: SSubEffect[] = [];
     private _selfModifier: SEffectModifier;
+    private _succeededSelfModifier: SEffectModifier | undefined;
     private _incidentType: SEffectIncidentType;
     private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
     private _item: LEntity | undefined;
@@ -166,6 +167,9 @@ export class SEffectorFact {
         //     });
         // }
         this._selfModifier = new SEffectModifier(subject, effects.selfEffect);
+        if (effects.succeededSelfEffect) {
+            this._succeededSelfModifier = new SEffectModifier(subject, effects.succeededSelfEffect);
+        }
         
         this._subject.iterateBehaviors2(b => {
             b.onCollectEffector(this._subject, this);
@@ -233,6 +237,10 @@ export class SEffectorFact {
         return this._selfModifier;
     }
 
+    public succeededSelfModifier(): SEffectModifier | undefined {
+        return this._succeededSelfModifier;
+    }
+    
     //--------------------
     // onCollectEffector から使うもの
 

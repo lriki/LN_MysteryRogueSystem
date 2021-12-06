@@ -369,6 +369,18 @@ export class RESetup {
                 });
                 break;
             }
+            case "kItem_ダブルペインの杖": {
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                const emittor = entity.emittorSet.mainEmittor();
+                //emittor.scope.range = DEffectFieldScopeRange.Performer;
+                const effect1 = emittor.effectSet.effects[0];
+                const effect2 = REData.getItem("kItem_ダブルペインの杖_使用者側効果").emittorSet.mainEmittor().effectSet.effects[0];
+                emittor.effectSet.succeededSelfEffect = effect2;
+
+                break;
+            }
             case "kItem_リープの杖":
                 entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.stumble });
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());

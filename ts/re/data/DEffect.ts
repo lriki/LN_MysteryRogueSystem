@@ -448,6 +448,12 @@ export class DEffectSet {
 
     /** 使用者に対して与える効果 */
     selfEffect: DEffect;
+
+    /**
+     *  対象への効果が成功したときのみ、使用者に与える効果。
+     * v0.5.0時点ではもろはの杖しか使っていないが、他にもしあわせ草の武器印の効果等に使える。
+     */
+    succeededSelfEffect: DEffect | undefined;
     
     /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
     effects: DEffect[];

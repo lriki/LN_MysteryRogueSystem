@@ -1027,7 +1027,7 @@ export class REDataManager
                             }
                         }
                         else {
-                            throw new Error(`No prefab specified. "${entity.entity.key}"`);
+                            //throw new Error(`No prefab specified. "${entity.entity.key}"`);
                         }
 
 
