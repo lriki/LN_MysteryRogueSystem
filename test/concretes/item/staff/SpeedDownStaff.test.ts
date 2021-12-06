@@ -8,6 +8,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REBasics } from "ts/re/data/REBasics";
 import { assert } from "ts/re/Common";
+import { LScheduler2 } from "ts/re/objects/LScheduler";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -28,6 +29,9 @@ test("concretes.item.staff.SpeedDownStaff.basic", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    const enemy1AGI1 = enemy1.actualParam(REBasics.params.agi);
+
+    expect(LScheduler2.getSpeedLevel(enemy1)).toBe(1);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -39,5 +43,8 @@ test("concretes.item.staff.SpeedDownStaff.basic", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    assert(0);
+    const enemy1AGI2 = enemy1.actualParam(REBasics.params.agi);
+    const speed = LScheduler2.getSpeedLevel(enemy1);
+    expect(enemy1AGI2 < enemy1AGI1).toBeTruthy();
+    expect(speed).toBe(-1);
 });

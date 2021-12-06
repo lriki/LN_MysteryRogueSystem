@@ -27,10 +27,12 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
+    const entityCount1 = REGame.map.entities().length;
+
     //----------------------------------------------------------------------------------------------------
 
     // [振る]
@@ -39,5 +41,6 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    assert(0);
+    const entityCount2 = REGame.map.entities().length;
+    expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });

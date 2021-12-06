@@ -17,8 +17,7 @@ test("concretes.item.staff.DamageStaff.basic", () => {
     TestEnv.newGame();
 
     // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.dir = 6;
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手

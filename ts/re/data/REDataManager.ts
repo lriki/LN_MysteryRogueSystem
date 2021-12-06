@@ -366,6 +366,7 @@ export class REDataManager
             changeInstance: REData.newEffectBehavior("ChangeInstance").id,
             restartFloor: REData.newEffectBehavior("RestartFloor").id,
             clarification: REData.newEffectBehavior("Clarification").id,
+            division: REData.newEffectBehavior("Division").id,
         };
 
         // REBasics.presets = {

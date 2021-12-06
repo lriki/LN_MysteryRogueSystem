@@ -49,15 +49,11 @@ test("Items.ChangeEntityInstance.Wave", () => {
     expect(enemy1.x).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
 });
 
-
 test("Items.ChangeEntityInstance.Throw", () => {
     TestEnv.newGame();
 
     // actor1 配置
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.dir = 6;
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1

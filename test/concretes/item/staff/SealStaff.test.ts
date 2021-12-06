@@ -15,10 +15,10 @@ beforeAll(() => {
 
 test("concretes.item.staff.SealStaff.basic", () => {
     TestEnv.newGame();
+    const stateId = REData.getState("kState_UT封印").id;
 
     // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.dir = 6;
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
@@ -27,7 +27,7 @@ test("concretes.item.staff.SealStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -39,5 +39,5 @@ test("concretes.item.staff.SealStaff.basic", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    assert(0);
+    expect(enemy1.isStateAffected(stateId)).toBeTruthy();
 });

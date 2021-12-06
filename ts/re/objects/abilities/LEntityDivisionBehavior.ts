@@ -9,7 +9,7 @@ import { LEntity } from "../LEntity";
 import { MovingMethod } from "../LMap";
 import { REGame } from "../REGame";
 
-
+/** @deprecated TODO: カウンターアクションとして、"分裂" スキルを発動するようにしたい */
 export class LEntityDivisionBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

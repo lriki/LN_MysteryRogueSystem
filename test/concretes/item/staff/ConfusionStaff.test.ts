@@ -18,8 +18,7 @@ test("concretes.item.staff.ConfusionStaff.basic", () => {
     const stateId = REData.getState("kState_UT混乱").id;
 
     // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.dir = 6;
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手

@@ -36,7 +36,7 @@ test("concretes.trap.WarpTrap.Basic", () => {
     if (player1.x != 11 && player1.y != 10) {
         console.log("pos: ", player1.x, player1.y);
     }
-    expect(player1.x == 11 && player1.y == 10).toBe(false);
+    expect(player1.x == 11 && player1.y == 10).toBeFalsy();
     expect(TestEnv.integration.sequelFlushCount).toBe(1);   // sequel 通知は 1回でまとめて行われる
-    expect(REGame.messageHistory.includesText("効かなかった")).toBe(false); // 余計なメッセージが出ていなこと
+    expect(REGame.messageHistory.includesText("効かなかった")).toBeFalsy(); // 余計なメッセージが出ていなこと
 });

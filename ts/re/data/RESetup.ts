@@ -304,6 +304,22 @@ export class RESetup {
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
                 break;
             }
+            case "kItem_スピリットの杖": {
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
+                effect.effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.division });
+                break;
+            }
+            case "kItem_スリープの杖": {
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
+                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT睡眠").id, value1: 1.0, value2: 0 });
+                break;
+            }
             case "kItem_シールの杖":
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
@@ -331,7 +347,28 @@ export class RESetup {
                     そうでなければ、魔法弾は「自分を射出したEntity(杖) の Cause.Hit の効果を発動する」とか。
                 */
                 break;
-
+            case "kItem_ワープの杖": {
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
+                effect.effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
+                break;
+            }
+            case "kItem_スピードダウンの杖": {
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];effect.buffQualifying.push({
+                    paramId: REBasics.params.agi,
+                    mode: DBuffMode.Weakness,
+                    level: 1,
+                    levelType: LStateLevelType.RelativeValue,
+                    op: DBuffOp.Add,
+                    turn: 10,
+                });
+                break;
+            }
             case "kItem_リープの杖":
                 entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.stumble });
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());

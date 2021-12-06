@@ -1,5 +1,5 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
+import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DParameterId } from "ts/re/data/DParameter";
 import { REData } from "ts/re/data/REData";
 import { LEntity } from "./LEntity";
@@ -112,13 +112,14 @@ export class LParam {
 
     public addBuff(buff: DParamBuff): void {
         const b = (buff.op == DBuffOp.Add) ? this._addBuff : this._mulBuff;
+        const sign = (buff.mode == DBuffMode.Strength) ? 1.0 : -1.0;
 
         switch (buff.levelType) {
             case LStateLevelType.AbsoluteValue:
-                b.level = buff.level;
+                b.level = sign * buff.level;
                 break;
             case LStateLevelType.RelativeValue:
-                b.level += buff.level;
+                b.level += sign * buff.level;
                 break;
             default:
                 throw new Error("Unreachable.");

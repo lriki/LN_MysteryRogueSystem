@@ -14,6 +14,7 @@ import { SDispelEquipmentsSpecialEffect } from "./SDispelEquipmentsSpecialEffect
 import { SChangeInstanceSpecialEffect } from "./SChangeInstanceSpecialEffect";
 import { SRestartFloorSpecialEffect } from "./SRestartFloorSpecialEffect";
 import { SClarificationSpecialEffect } from "./SClarificationSpecialEffect";
+import { SDivisionSpecialEffect } from "./SDivisionSpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -49,6 +50,9 @@ export class SSpecialEffectManager {
         this.register(REBasics.effectBehaviors.changeInstance, new SChangeInstanceSpecialEffect());
         this.register(REBasics.effectBehaviors.restartFloor, new SRestartFloorSpecialEffect());
         this.register(REBasics.effectBehaviors.clarification, new SClarificationSpecialEffect());
+        this.register(REBasics.effectBehaviors.division, new SDivisionSpecialEffect());
+
+        
     }
 }
 

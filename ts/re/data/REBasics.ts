@@ -35,6 +35,7 @@ export interface DBasicSpecialEffects {
     changeInstance: DSpecialEffectId;
     restartFloor: DSpecialEffectId;
     clarification: DSpecialEffectId;
+    division: DSpecialEffectId;
 }
 
 export enum DClarificationType {
