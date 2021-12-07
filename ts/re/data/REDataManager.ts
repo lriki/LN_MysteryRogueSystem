@@ -367,6 +367,7 @@ export class REDataManager
             restartFloor: REData.newEffectBehavior("RestartFloor").id,
             clarification: REData.newEffectBehavior("Clarification").id,
             division: REData.newEffectBehavior("Division").id,
+            removeStatesByIntentions: REData.newEffectBehavior("RemoveStatesByIntentions").id,
         };
 
         // REBasics.presets = {

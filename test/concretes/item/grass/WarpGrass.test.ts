@@ -15,9 +15,7 @@ beforeAll(() => {
 
 test("concretes.item.grass.WarpGrass", () => {
     TestEnv.newGame();
-
-    assert(0);
-
+    
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
@@ -26,33 +24,37 @@ test("concretes.item.grass.WarpGrass", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kマッドドラッグ").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kマッドドラッグ").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kワープドラッグ").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kワープドラッグ").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction(LActionTokenType.Major));
-    RESystem.dialogContext.activeDialog().submit();
-    
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
-
-    // まどわし状態になる
-    expect(!!player1.states().find(x => x.stateDataId() == REData.getState("kState_UTまどわし").id)).toBe(true);
+    //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // まどわし状態になる
-    expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UTまどわし").id)).toBe(true);
+    // ワープしている
+    expect(enemy1.x == 15 && enemy1.y == 10).toBeFalsy();
+
+    //----------------------------------------------------------------------------------------------------
     
+    // [食べる]
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // ワープしている
+    expect(player1.x == 10 && player1.y == 10).toBeFalsy();
+
     TestUtils.testCommonGrassEnd(player1, item1);
 });
 

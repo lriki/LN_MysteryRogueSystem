@@ -7,7 +7,7 @@ import { DIdentifiedTiming } from "./DIdentifyer";
 import { DItemEffect } from "./DItemEffect";
 import { DPrefab } from "./DPrefab";
 import { DSkill } from "./DSkill";
-import { DAutoRemovalTiming, DState, DStateRestriction } from "./DState";
+import { DAutoRemovalTiming, DState, DStateIntentions, DStateRestriction } from "./DState";
 import { DStateGroup } from "./DStateGroup";
 import { REData } from "./REData";
 import { assert, tr2 } from "../Common";
@@ -187,6 +187,13 @@ export class RESetup {
                 }
                 
                 break;
+            case "kワープドラッグ":
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
+                entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                break;
             case "kブラインドドラッグ":
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
@@ -221,6 +228,14 @@ export class RESetup {
                 //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
                 //entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+                break;
+            case "kエリクシール":
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.emittorSet.mainEmittor().effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "999", DParameterEffectApplyType.Recover));
+                entity.emittorSet.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.removeStatesByIntentions, value: DStateIntentions.Negative });
                 break;
             case "kItem_ドラゴン草":
                 this.setupGrassCommon(entity);
@@ -1050,7 +1065,11 @@ export class RESetup {
             case "kState_UT3倍速":
                 data.autoAdditionCondition = "a.agi>=200";
                 break;
+            case "kState_UT混乱":
+                data.intentions = DStateIntentions.Negative;
+                break;
             case "kState_UT目つぶし":
+                data.intentions = DStateIntentions.Negative;
                 data.effect.restriction = DStateRestriction.Blind;
                 break;
             case "kState_UTまどわし":

@@ -36,6 +36,7 @@ export interface DBasicSpecialEffects {
     restartFloor: DSpecialEffectId;
     clarification: DSpecialEffectId;
     division: DSpecialEffectId;
+    removeStatesByIntentions: DSpecialEffectId;
 }
 
 export enum DClarificationType {

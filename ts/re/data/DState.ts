@@ -137,6 +137,12 @@ export interface DStateApplyConditions {
     kindIds: DEntityKindId[],  // 適用対象の制限。空の場合は制限しない。
 }
 
+export enum DStateIntentions {
+    None = 0x0000,
+    Positive = 0x0001,
+    Negative = 0x0002,
+}
+
 export class DState {
     /** ID (0 is Invalid). */
     id: DStateId;
@@ -150,6 +156,7 @@ export class DState {
 
     displayNameIcon: boolean;
 
+    intentions: DStateIntentions;
 
     priority: number;
 
@@ -184,6 +191,7 @@ export class DState {
         //this.autoRemovalTiming = DAutoRemovalTiming.None;
         //this.minTurns = 0;
         //this.maxTurns = 0;
+        this.intentions = DStateIntentions.None;
         this.priority = 0;
         this.message1 = "";
         this.message2 = "";
