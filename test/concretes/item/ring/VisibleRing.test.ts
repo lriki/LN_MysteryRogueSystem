@@ -29,7 +29,7 @@ test("concretes.item.ring.VisibleRing", () => {
     inventory.addEntity(ring1);
    //equipmentUser.equipOnUtil(ring1);
 
-    // Enemy1 (仮眠状態)
+    // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 13, 10);
 
@@ -38,7 +38,7 @@ test("concretes.item.ring.VisibleRing", () => {
     //----------------------------------------------------------------------------------------------------
 
     const visibility1 = SView.getEntityVisibility(enemy1);
-    expect(visibility1.visible).toBe(false);    // 一応確認
+    expect(visibility1.visible).toBeFalsy();    // 一応確認
 
     // [装備]
     RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, ring1).withConsumeAction());
@@ -47,7 +47,7 @@ test("concretes.item.ring.VisibleRing", () => {
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     const visibility2 = SView.getEntityVisibility(enemy1);
-    expect(visibility2.visible).toBe(true);
+    expect(visibility2.visible).toBeTruthy();
     
     //----------------------------------------------------------------------------------------------------
 

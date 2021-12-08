@@ -205,6 +205,12 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 break;
+            case "kビジブルドラッグ":
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                break;
             case "kマッドドラッグ":
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
@@ -1026,6 +1032,9 @@ export class RESetup {
         switch (data.key) {
             case "kState_UT気配察知":
                 data.effect.traits.push({ code: REBasics.traits.UnitVisitor, dataId: 0, value: 0 });
+                break;
+            case "kState_UTよくみえ":
+                data.effect.traits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
                 break;
             case "kState_UnitTest_攻撃必中":
                 data.effect.traits.push({ code: REBasics.traits.CertainDirectAttack, dataId: 0, value: 0 });
