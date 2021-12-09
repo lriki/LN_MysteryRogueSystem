@@ -8,6 +8,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "ts/re/data/REBasics";
+import { SView } from "ts/re/system/SView";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -27,6 +28,14 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_マップスクロール").id, [], "item1"));
     inventory.addEntity(item1);
 
+    // Enemy
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    
+    // trap1 
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
+    REGame.world._transferEntity(trap1, floorId, 20, 4);
+
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
@@ -38,5 +47,11 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(REGame.map.block(19, 4)._passed).toBeTruthy();
+    
+    const visibility2 = SView.getEntityVisibility(enemy1);
+    expect(visibility2.visible).toBeTruthy();
+
+    const trap1Visibility2 = SView.getEntityVisibility(trap1);
+    expect(trap1Visibility2.visible).toBeTruthy();
 });
 

@@ -75,6 +75,11 @@ export class LTrapBehavior extends LBehavior {
         return this._exposed;
     }
 
+    public isExposedFor(target: LEntity): boolean {
+        if (target.hasTrait(REBasics.traits.ForceVisible)) return true;
+        return this.exposed();
+    }
+
     public setExposed(value: boolean): void {
         this._exposed = value;
     }
@@ -113,8 +118,8 @@ export class LTrapBehavior extends LBehavior {
         return entity.getOutwardFactionId() === REData.system.trapTargetFactionId;
     }
 
-    private triggerRate(): number {
-        if (this.exposed())
+    private triggerRate(target: LEntity): number {
+        if (this.isExposedFor(target))
             return paramExposedTrapTriggerRate;
         else
             return paramHiddenTrapTriggerRate;
@@ -128,7 +133,7 @@ export class LTrapBehavior extends LBehavior {
         if (target.hasTrait(REBasics.traits.DrawInTrap)) return true;
         
         const r = rand.nextIntWithMax(100);
-        return (r < this.triggerRate());
+        return (r < this.triggerRate(target));
     }
     
     [onWalkedOnTopReaction](e: CommandArgs, cctx: SCommandContext): SCommandResponse {

@@ -95,7 +95,7 @@ export class SView {
             // entity が露出していない罠なら見えない
             const trap = entity.findEntityBehavior(LTrapBehavior);
             if (trap) {
-                if (!trap.exposed()) {
+                if (!trap.isExposedFor(subject)) {
                     return { visible: false, translucent: false };
                 }
             }

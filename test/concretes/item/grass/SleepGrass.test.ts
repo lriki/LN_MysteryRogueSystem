@@ -8,6 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
+import { assert } from "ts/re/Common";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
