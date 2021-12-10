@@ -42,7 +42,9 @@ export interface DBasicSpecialEffects {
 export enum DClarificationType {
     Unit,
     Item,
+    Trap,
     Terrain,
+    Sight,
 }
 
 // export interface DBasicPresets {

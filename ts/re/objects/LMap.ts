@@ -69,7 +69,8 @@ export class LMap extends LObject {
     // Trait とは別物。Trait は腕輪など装備品と共に使うが、こちらは巻物など一度効果を受けたらあとは永続するもの。
     unitClarity = false;
     itemClarity = false;
-    //hiddenClarity = false;  // マップ上の罠が見える: S2めぐすり草は、敵味方問わず罠が見えるようになる。
+    trapClarity = false;  // マップ上の罠が見える: 敵味方問わず罠が見えるようになる。
+    sightClarity = false;   // 視界明瞭？
 
     constructor() {
         super(LObjectType.Map);

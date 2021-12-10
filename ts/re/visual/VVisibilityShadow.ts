@@ -33,6 +33,17 @@ export class VVisibilityShadow {
     }
 
     _update() {
+        const spritesVisible = !REGame.map.sightClarity;
+        for (const s of this._visibilityShadowInnerSprites) {
+            if (s) s.visible = spritesVisible;
+        }
+        for (const s of this._visibilityShadowOuterSprites) {
+            if (s) s.visible = spritesVisible;
+        }
+
+        if (REGame.map.sightClarity) {
+            return;
+        }
 
         const focusedEntity = REGame.camera.focusedEntity();
         if (REVisual.entityVisualSet && focusedEntity) {

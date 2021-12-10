@@ -26,8 +26,16 @@ export class SClarificationSpecialEffect extends SSpecialEffect {
                     map.itemClarity = true;
                     RESystem.minimapData.setRefreshNeeded();
                     break;
+                case DClarificationType.Trap:
+                    map.trapClarity = true;
+                    RESystem.minimapData.setRefreshNeeded();
+                    break;
                 case DClarificationType.Terrain:
                     REGame.map.blocks().forEach(b => b._passed = true);
+                    RESystem.minimapData.setRefreshNeeded();
+                    break;
+                case DClarificationType.Sight:
+                    map.sightClarity = true;
                     RESystem.minimapData.setRefreshNeeded();
                     break;
                 default:

@@ -76,6 +76,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     public isExposedFor(target: LEntity): boolean {
+        if (REGame.map.trapClarity) return true;
         if (target.hasTrait(REBasics.traits.ForceVisible)) return true;
         return this.exposed();
     }
