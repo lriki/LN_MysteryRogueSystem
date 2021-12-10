@@ -29,7 +29,11 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19,4);
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy2"));
+    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミミックA").id, [REData.getState("kState_UTアイテム擬態").id], "enemy3"));
+    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world._transferEntity(enemy2, floorId, 20, 4);
+    REGame.world._transferEntity(enemy3, floorId, 20, 5);
 
     expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeFalsy();
 
@@ -44,5 +48,10 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeTruthy();
+
+    const enemy2Visibility1 = SView.getEntityVisibility(enemy2);
+    expect(enemy2Visibility1.visible).toBeTruthy();
+
+    expect(enemy3.isStateAffected(REData.getState("kState_UTアイテム擬態").id)).toBeFalsy();
 });
 
