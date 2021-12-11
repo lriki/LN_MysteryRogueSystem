@@ -433,6 +433,15 @@ export class SEmittorPerformer {
             });
             this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
+        else if (emittor.scope.range == DEffectFieldScopeRange.Map) {
+            const targets: LEntity[] = [];
+            REGame.map.entities().filter(entity => {
+                if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Everyone)) {
+                    targets.push(entity);
+                };
+            });
+            this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
+        }
         else {
             throw new Error("Not implemented.");
         }

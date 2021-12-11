@@ -39,6 +39,7 @@ export class USearch {
      * subject から見て target は可視であるか
      */
     public static isVisibleFromSubject(subject: LEntity, target: LEntity): boolean {
+        if (REGame.map.unitClarity) return true;
         if (subject.hasTrait(REBasics.traits.ForceVisible)) return true;
         if (target.hasTrait(REBasics.traits.Invisible)) return false;
         return true;

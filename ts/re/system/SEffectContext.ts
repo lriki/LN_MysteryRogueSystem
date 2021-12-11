@@ -200,7 +200,7 @@ export class SEffectContext {
 
     private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
 
-        const result = this.applyWithHitTest(cctx, effect, target, animationTarget);
+        this.applyWithHitTest(cctx, effect, target, animationTarget);
         
         // ここで Flush している理由は次の通り。
         // 1. ダメージを個々に表示したい
@@ -230,7 +230,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): LEffectResult {
+    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -261,58 +261,59 @@ export class SEffectContext {
             
         }
 
-
-        if (targetBattlerBehavior) {
-
-            result.used = this.testApply(targetBattlerBehavior);
+        cctx.postCall(() => {
 
 
-            // 命中判定
-            this.judgeHits(effect, target, result);
-            
-            result.physical = effect.isPhysical();
+            if (targetBattlerBehavior) {
 
-            if (result.isHit()) {
+                result.used = this.testApply(targetBattlerBehavior);
+    
+    
+                // 命中判定
+                this.judgeHits(effect, target, result);
+                
+                result.physical = effect.isPhysical();
+    
+                if (result.isHit()) {
+                    this.applyCore(cctx, effect, target, result);
+                }
+                //this.updateLastTarget(target);
+            }
+            else {
                 this.applyCore(cctx, effect, target, result);
             }
-            //this.updateLastTarget(target);
-        }
-        else {
-            this.applyCore(cctx, effect, target, result);
-        }
-
-
-        const focusedEntity = REGame.camera.focusedEntity();
-        const friendlySubject = focusedEntity ? Helpers.isFriend(effect.subject(), focusedEntity) : false;
-        if (friendlySubject) {  // subject は味方
-            result.focusedFriendly = Helpers.isFriend(effect.subject(), target);
-        }
-        else { // subject は味方以外 (敵・NPC)
-            result.focusedFriendly = true;  // 敵 vs 敵のときは、味方用のメッセージを表示したい ("ダメージを受けた！")
-        }
-
-        // ダメージ試行時のステート解除判定 (かなしばりなど)
-        // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
-        {
-            const removeStates: DStateId[] = [];
-            for (const p of effect.targetModifier().parameterEffects2()) {
-                if (p && !p.isRecover()) {
-                    target.iterateStates(s => {
-                        if (s.checkRemoveAtDamageTesting(p.paramId)) {
-                            removeStates.push(s.stateDataId());
-                        }
-                        return true;
-                    });
-                }
+    
+    
+            const focusedEntity = REGame.camera.focusedEntity();
+            const friendlySubject = focusedEntity ? Helpers.isFriend(effect.subject(), focusedEntity) : false;
+            if (friendlySubject) {  // subject は味方
+                result.focusedFriendly = Helpers.isFriend(effect.subject(), target);
             }
-            target.removeStates(removeStates);
-        }
-
-        {
-            cctx.post(target, effect.subject(), new SEffectSubject(this._effectorFact.subject()), undefined, onEffectResult);
-        }
-
-        return result;
+            else { // subject は味方以外 (敵・NPC)
+                result.focusedFriendly = true;  // 敵 vs 敵のときは、味方用のメッセージを表示したい ("ダメージを受けた！")
+            }
+    
+            // ダメージ試行時のステート解除判定 (かなしばりなど)
+            // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
+            {
+                const removeStates: DStateId[] = [];
+                for (const p of effect.targetModifier().parameterEffects2()) {
+                    if (p && !p.isRecover()) {
+                        target.iterateStates(s => {
+                            if (s.checkRemoveAtDamageTesting(p.paramId)) {
+                                removeStates.push(s.stateDataId());
+                            }
+                            return true;
+                        });
+                    }
+                }
+                target.removeStates(removeStates);
+            }
+    
+            {
+                cctx.post(target, effect.subject(), new SEffectSubject(this._effectorFact.subject()), undefined, onEffectResult);
+            }
+        });
     }
 
     private judgeHits(effect: SEffect, target: LEntity, result: LEffectResult): void {

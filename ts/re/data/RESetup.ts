@@ -659,6 +659,7 @@ export class RESetup {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.clarification, value: DClarificationType.Unit });
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.performeSkill, dataId: REData.getSkill("kSkill_アイテム擬態解除_全体").id });
                 emittor.effectSet.effects[0].rmmzAnimationId = 44;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
@@ -759,7 +760,7 @@ export class RESetup {
                 emittor.effectSet.effects[0].parameterQualifyings.push(
                     new DParameterQualifying(REBasics.params.hp, "35", DParameterEffectApplyType.Damage)
                     .withVariance(20));
-                emittor.selfAnimationId = 95;
+                emittor.selfAnimationId = 94;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }
@@ -959,6 +960,10 @@ export class RESetup {
                 effect1.matchConditions.key = DSubComponentEffectTargetKey.make("Equipped", REBasics.entityKinds.ShieldKindId);
                 effect1.applyRating = 3;
                 effect1.rmmzAnimationId = 52;
+                break;
+            }
+            case "kSkill_アイテム擬態解除_全体": {
+                emittor.scope.range = DEffectFieldScopeRange.Map;
                 break;
             }
         }

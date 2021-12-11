@@ -37,6 +37,7 @@ export interface DBasicSpecialEffects {
     clarification: DSpecialEffectId;
     division: DSpecialEffectId;
     removeStatesByIntentions: DSpecialEffectId;
+    performeSkill: DSpecialEffectId;
 }
 
 export enum DClarificationType {

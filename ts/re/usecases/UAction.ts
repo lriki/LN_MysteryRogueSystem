@@ -351,7 +351,10 @@ export class UAction {
     }
 
     public static testFactionMatch(performer: LEntity, target: LEntity, scope: DRmmzEffectScope): boolean {
-        if (DHelpers.isForFriend(scope)) {
+        if (scope == DRmmzEffectScope.Everyone) {
+            return true;
+        }
+        else if (DHelpers.isForFriend(scope)) {
             if (Helpers.isFriend(performer, target)) return true;
         }
         else if (DHelpers.isForOpponent(scope)) {

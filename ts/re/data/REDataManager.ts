@@ -368,6 +368,7 @@ export class REDataManager
             clarification: REData.newEffectBehavior("Clarification").id,
             division: REData.newEffectBehavior("Division").id,
             removeStatesByIntentions: REData.newEffectBehavior("RemoveStatesByIntentions").id,
+            performeSkill: REData.newEffectBehavior("PerformeSkill").id,
         };
 
         // REBasics.presets = {

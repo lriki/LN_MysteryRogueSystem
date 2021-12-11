@@ -93,8 +93,6 @@ export class DParameterQualifying {
 //    effect: IDataEffect,
 //}
 
-export interface DPerformeSkillQualifying {
-}
 
 export interface DOtherEffectQualifying {
     key: string,
@@ -178,6 +176,7 @@ export enum DEffectFieldScopeRange {
     AroundAndCenter,   // 周囲+中心。発動者自身も target に含まれ、効果が適用される。
     Center, // 中心。主に罠が、かかった entity に対して効果を発動するときに使う。
     Room,   // 発動者と同じ部屋
+    Map,
 }
 
 export enum DEffectFieldScopeArea {
@@ -249,6 +248,7 @@ export interface DQualifyings {
 export interface DSpecialEffectRef {
     specialEffectId: DSpecificEffectId;
     entityId?: DEntityId;
+    dataId?: number;
     value?: any;
 }
 

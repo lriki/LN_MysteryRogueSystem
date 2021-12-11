@@ -16,6 +16,7 @@ import { SRestartFloorSpecialEffect } from "./SRestartFloorSpecialEffect";
 import { SClarificationSpecialEffect } from "./SClarificationSpecialEffect";
 import { SDivisionSpecialEffect } from "./SDivisionSpecialEffect";
 import { SRemoveStatesByIntentionsSpecialEffect } from "./SRemoveStatesByIntentionsSpecialEffect";
+import { SPerformeSkillSpecialEffect } from "./SPerformeSkillSpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -53,6 +54,7 @@ export class SSpecialEffectManager {
         this.register(REBasics.effectBehaviors.clarification, new SClarificationSpecialEffect());
         this.register(REBasics.effectBehaviors.division, new SDivisionSpecialEffect());
         this.register(REBasics.effectBehaviors.removeStatesByIntentions, new SRemoveStatesByIntentionsSpecialEffect());
+        this.register(REBasics.effectBehaviors.performeSkill, new SPerformeSkillSpecialEffect());
     }
 }
 
