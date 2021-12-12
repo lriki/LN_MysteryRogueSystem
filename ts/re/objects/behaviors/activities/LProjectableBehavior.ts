@@ -184,12 +184,10 @@ export class LProjectableBehavior extends LBehavior {
                     cctx.postDestroy(self);
                     //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
                     
-                    const animationId = 1;  // TODO:
 
                     const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
                     const effectContext = new SEffectContext(effectSubject, cctx.random());
             
-                    cctx.postAnimation(target, animationId, true);
             
                     // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
                     cctx.postCall(() => {

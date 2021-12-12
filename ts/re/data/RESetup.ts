@@ -289,6 +289,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
                 effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage));
+                effect.rmmzAnimationId = 55;
                 break;
             }
             case "kItem_インヴィジブルの杖": {

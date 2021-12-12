@@ -83,18 +83,18 @@ export class LItemBehavior extends LBehavior {
             .then(() => {
                 this.applyEffect(cctx, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {
-                        cctx.postDestroy(self);
-                        console.log("Hit");
+                        // ここは postDestroy() ではなく普通の destroy().
+                        // 上記 applyEffect() の中から postAnimation() が実行されるが、
+                        // ここで postDestroy() してしまうと、アニメーション中ずっと表示され続けてしまう。
+                        self.destroy();
                     }
                     else {
                         UAction.postDropOrDestroy(cctx, self, self.x, self.y);
-                        console.log("MISS");
                     }
                 });
                 return SHandleCommandResult.Resolved;
             })
             .catch(() => {
-                console.log("catch");
                 throw new Error("Not implemented.");
             });
             
