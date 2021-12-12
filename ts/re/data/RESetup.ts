@@ -313,6 +313,7 @@ export class RESetup {
                     op: DBuffOp.Add,
                     turn: 10,
                 });
+                effect.rmmzAnimationId = 12;
                 break;
             }
             case "kItem_スパークの杖": {
@@ -323,6 +324,7 @@ export class RESetup {
                 effect.parameterQualifyings.push(
                     new DParameterQualifying(REBasics.params.hp, "35", DParameterEffectApplyType.Damage)
                     .withVariance(20));
+                effect.rmmzAnimationId = 77;
                 break;
             }
             case "kItem_パニックの杖": {
@@ -331,6 +333,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
+                effect.rmmzAnimationId = 63;
                 break;
             }
             case "kItem_スピリットの杖": {
@@ -339,6 +342,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
                 effect.effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.division });
+                effect.rmmzAnimationId = 106;
                 break;
             }
             case "kItem_スリープの杖": {
@@ -347,6 +351,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT睡眠").id, value1: 1.0, value2: 0 });
+                effect.rmmzAnimationId = 62;
                 break;
             }
             case "kItem_シールの杖":

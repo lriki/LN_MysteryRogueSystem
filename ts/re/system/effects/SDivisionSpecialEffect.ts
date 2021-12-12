@@ -17,6 +17,8 @@ export class SDivisionSpecialEffect extends SSpecialEffect {
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         const block = REGame.map.block(target.x, target.y);
 
+        result.makeSuccess();
+
         // 有効な隣接 Block があり、その方向へ移動可能かを調べる
         const candidates = UMovement.getAdjacentBlocks(target).filter(b => UMovement.checkPassageBlockToBlock(target, block, b, MovingMethod.Walk));
         if (candidates.length > 1) {

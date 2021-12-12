@@ -472,6 +472,7 @@ export class SEffectApplyer {
         }
         for (const buff of modifier.buffQualifying()) {
             target.addBuff(buff);
+            result.makeSuccess();
         }
         for (const effect of modifier.otherEffectQualifyings()) {
             this.applyOtherEffect(cctx, target, effect, result);
