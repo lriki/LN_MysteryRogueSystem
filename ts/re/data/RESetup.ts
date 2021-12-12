@@ -298,6 +298,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT透明").id, value1: 1.0, value2: 0 });
+                effect.rmmzAnimationId = 101;
                 break;
             }
             case "kItem_スピードアップの杖": {
