@@ -33,7 +33,10 @@ export class SNavigationHelper {
 
         // Trap は未発見の場合、どのような勢力からであっても不可視
         const trap = target.findEntityBehavior(LTrapBehavior);
-        if (trap && !trap.exposed()) return false;
+        if (trap) {
+            if (map.trapClarity) return true;
+            if (!trap.exposed()) return false;
+        }
 
         // 味方は常に視認可能
         if (Helpers.isFriend(subject, target)) {

@@ -9,6 +9,7 @@ import { TestUtils } from "test/TestUtils";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "ts/re/data/REBasics";
 import { SView } from "ts/re/system/SView";
+import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -53,5 +54,6 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
 
     const trap1Visibility2 = SView.getEntityVisibility(trap1);
     expect(trap1Visibility2.visible).toBeTruthy();
+    expect(SNavigationHelper.testVisibilityForMinimap(player1, trap1)).toBeTruthy();
 });
 

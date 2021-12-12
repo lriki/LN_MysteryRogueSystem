@@ -21,6 +21,8 @@ interface Point {
     y: number;
 }
 
+const ExitPointTileIdOffset = 14;
+
 export class SMinimapData {
     private _width: number = 0;
     private _height: number = 0;
@@ -165,7 +167,7 @@ export class SMinimapData {
                         this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
                     }
                     else if (entity.findEntityBehavior(LExitPointBehavior)) {
-                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 14);
+                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + ExitPointTileIdOffset);
                     }
                 }
             }

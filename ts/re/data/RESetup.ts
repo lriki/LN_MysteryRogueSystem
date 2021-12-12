@@ -642,6 +642,7 @@ export class RESetup {
                 this.setupScrollCommon(entity);
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.trapProliferation });
+                emittor.selfAnimationId = 54;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor.id);
                 break;
             }

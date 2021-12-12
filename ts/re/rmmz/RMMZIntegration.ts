@@ -161,9 +161,9 @@ export class RMMZIntegration extends SIntegration {
         const databaseMap = REDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
-
+        
         if (REVisual.entityVisualSet) {
-            REVisual.entityVisualSet.createVisual(entity);
+            REVisual.entityVisualSet.createVisual2(entity);
         }
         else {
             // フロア遷移直後は、初期配置処理時点ではまだ Visual(SpriteSet) の準備ができていないことがある。

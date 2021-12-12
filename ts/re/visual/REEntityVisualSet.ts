@@ -163,7 +163,7 @@ export class REEntityVisualSet {
         this.createVisual(entity);
     }
 
-    createVisual(entity: LEntity) {
+    private createVisual(entity: LEntity) {
         const databaseMap = REDataManager.databaseMap();
         if (!databaseMap || !databaseMap.events) {
             throw new Error();
