@@ -88,10 +88,11 @@ export class REVisualSequelContext {
         //if (this._currentIdleSequelId > 0) return true;
         if (this._currentClip < 0) return true;
         
-        return this.isCancellationLocked() || this.isAnimationWaintng() || this.isFrameWaiting();
+        return this.isLogicalCompleted();
     }
     public isLogicalCompleted(): boolean {
-        return this.isCancellationLocked() || this.isAnimationWaintng() || this.isFrameWaiting();
+        return !this.isCancellationLocked() && !this.isAnimationWaintng() && !this.isFrameWaiting();
+        //return this.isCancellationLocked() || this.isAnimationWaintng() || this.isFrameWaiting();
     }
 
     public lockCamera() {

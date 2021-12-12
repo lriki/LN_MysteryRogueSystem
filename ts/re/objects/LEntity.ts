@@ -1572,7 +1572,7 @@ export class LEntity extends LObject
     // Debug Utils
 
     public debugDisplayName(): string {
-        return `Entity:${this._name}(${this.entityId().index2()}:${this.entityId().key2()})`;
+        return `Entity:${this._name}(${this.entityId().index2()}:${this.entityId().key2()})-(${this.data().entity.key})`;
     }
 
     //----------------------------------------
