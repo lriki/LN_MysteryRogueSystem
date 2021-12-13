@@ -108,10 +108,8 @@ export class LGenericRMMZStateBehavior extends LBehavior {
 
     }
 
-    onQueryIdleSequelId(): DSequelId | undefined {
+    onQueryIdleSequelId(): DSequelId {
         return this.stateData().idleSequel;
-        //return RESystem.sequels.down;
-        //return RESystem.sequels.asleep;
     }
     
     /*

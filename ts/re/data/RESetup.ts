@@ -525,6 +525,14 @@ export class RESetup {
                 スキル、Effect, EffectBehavior, SpecialEffect などそれぞれでリジェクトするかを Behavior 側で判断できる仕組みにしてみる。
                 */
                 break;
+            case "kItem_デスの杖": {
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor().id);
+                entity.idealParams[REBasics.params.remaining] = 5;
+                const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
+                effect.rmmzAnimationId = 65;
+                break;
+            }
             case "k眠りガス": {
                 const emittor = entity.emittorSet.mainEmittor();
                 emittor.selfAnimationId = 35;
@@ -1052,6 +1060,9 @@ export class RESetup {
     
     public static setupDirectly_State(data: DState) {
         switch (data.key) {
+            case "kState_UT睡眠":
+                data.idleSequel = REBasics.sequels.asleep;
+                break;
             case "kState_UT気配察知":
                 data.effect.traits.push({ code: REBasics.traits.UnitVisitor, dataId: 0, value: 0 });
                 break;

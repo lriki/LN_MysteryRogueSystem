@@ -316,7 +316,7 @@ export abstract class LBehavior extends LObject {
     // results: index is DParameterId
     onQueryIdealParameterPlus(paramId: DParameterId): number { return 0; }
 
-    public onQueryIdleSequelId(): DSequelId | undefined { return undefined; }
+    public onQueryIdleSequelId(): DSequelId { return 0; }
 
     /**
      * この Behavior が Attach されている Entity が送信できる Action を取得する。

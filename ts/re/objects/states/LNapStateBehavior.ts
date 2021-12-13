@@ -87,7 +87,7 @@ export class LNapStateBehavior extends LBehavior {
         }
     }
 
-    onQueryIdleSequelId(): DSequelId | undefined {
+    onQueryIdleSequelId(): DSequelId {
         return REBasics.sequels.asleep;
     }
     

@@ -1124,7 +1124,7 @@ export class LEntity extends LObject
      * 状態異常等で変わる。
      */
     public queryIdleSequelId(): DSequelId {
-        let id: DSequelId | undefined = undefined;
+        let id: DSequelId = 0;
         this.iterateBehaviorsReverse(b => {
             id = b.onQueryIdleSequelId();
             return !id;

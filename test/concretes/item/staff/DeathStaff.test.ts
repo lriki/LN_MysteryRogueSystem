@@ -38,6 +38,6 @@ test("concretes.item.staff.DeathStaff.basic", () => {
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
-
-    assert(0);
+    
+    expect(enemy1.isDestroyed()).toBeTruthy();
 });

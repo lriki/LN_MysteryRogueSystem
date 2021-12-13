@@ -15,11 +15,6 @@ export class REVisualSequel_Move extends REVisualSequel {
     private _curveX: VKeyFrameAnimationCurve | undefined;
     private _curveY: VKeyFrameAnimationCurve | undefined;
 
-    constructor() {
-        super();
-        console.log("REVisualSequel_Move");
-    }
-
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
         if (context.isDashing()) {
             // ダッシュ中は座標をそろえて即終了

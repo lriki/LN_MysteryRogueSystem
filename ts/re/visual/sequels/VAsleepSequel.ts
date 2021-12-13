@@ -8,6 +8,7 @@ export class VAsleepSequel extends REVisualSequel {
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
 
 
+        console.log("VAsleepSequel");
         
         const event = visual.rmmzEvent();
         if (event) {
