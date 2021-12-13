@@ -199,6 +199,7 @@ export class SSequelClip {
                 const s = this._sequels.find(x => (x instanceof SMotionSequel) && x.sequelId() == sequel.sequelId());
                 if (s) {
                     (s as SMotionSequel).addRelatedSequels(sequel);
+                    return;
                 }
             }
         }

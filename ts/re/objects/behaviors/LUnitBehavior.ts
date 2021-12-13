@@ -169,6 +169,8 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
 
             const offset = Helpers.dirToTileOffset(activity.effectDirection());
+            const startX = self.x;
+            const startY = self.y;
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
@@ -179,8 +181,9 @@ export class LUnitBehavior extends LBehavior {
             }
 
             const layer = self.getHomeLayer();
+
             if (UMovement.moveEntity(cctx, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
-                cctx.postSequel(self, REBasics.sequels.MoveSequel);
+                cctx.postSequel(self, REBasics.sequels.MoveSequel).setStartPosition(startX, startY);
 
                 // Projectile の移動では通知したくないので、UMovement.moveEntity() の中ではなく Unit の移動側で通知する。
                 REGame.eventServer.publish(cctx, REBasics.events.walked, args);
