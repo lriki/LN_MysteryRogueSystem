@@ -23,4 +23,7 @@ export interface DSequel
     name: string;
 
     parallel: boolean;
+
+    /** 一度の Flush で複数あるとき、マージするか */
+    fluidSequence: boolean,
 }

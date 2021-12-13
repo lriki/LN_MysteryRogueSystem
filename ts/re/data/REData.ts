@@ -149,7 +149,7 @@ export class REData
     static templateMaps: DTemplateMap[] = [];
     static factions: REData_Faction[] = [];
     static actions: DAction[] = [];
-    static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false}];
+    static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
     static parameters: REData_Parameter[] = [];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
     static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
@@ -191,7 +191,7 @@ export class REData
         this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', typeName: "", priority: 0}];
-        this.sequels = [{id: 0, name: 'null', parallel: false}];
+        this.sequels = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
         this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
         this.behaviors = [{id: 0, name: 'null'}];
@@ -291,6 +291,7 @@ export class REData
             id: newId,
             name: name,
             parallel: false,
+            fluidSequence: false,
         });
         return newId;
     }

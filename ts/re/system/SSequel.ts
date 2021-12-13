@@ -55,12 +55,14 @@ export class SMotionSequel extends SSequelUnit {
     private _startY: number | undefined;
     private _targetX: number;
     private _targetY: number;
+    private _relatedSequels: SMotionSequel[];
 
     constructor(entity: LEntity, sequelId: DSequelId, targetX: number, targetY: number, args: any | undefined) {
         super(entity, REData.sequels[sequelId].parallel, args);
         this._sequelId = sequelId;
         this._targetX = targetX;
         this._targetY = targetY;
+        this._relatedSequels = [];
     }
 
     sequelId(): DSequelId {
@@ -97,6 +99,19 @@ export class SMotionSequel extends SSequelUnit {
     public targetY(): number {
         return this._targetY;
     }
+
+    public isFluidSequence(): boolean {
+        return this._relatedSequels.length > 0;
+    }
+
+    public relatedSequels(): readonly SMotionSequel[] {
+        return this._relatedSequels;
+    }
+
+    public addRelatedSequels(value: SMotionSequel): void {
+        this._relatedSequels.push(value);
+    }
+
 }
 
 export class SAnumationSequel extends SSequelUnit {
@@ -178,6 +193,16 @@ export class SSequelClip {
     }
 
     add(sequel: SSequelUnit) {
+        // Needs marge?
+        if (sequel instanceof SMotionSequel) {
+            if (sequel.data().fluidSequence) {
+                const s = this._sequels.find(x => (x instanceof SMotionSequel) && x.sequelId() == sequel.sequelId());
+                if (s) {
+                    (s as SMotionSequel).addRelatedSequels(sequel);
+                }
+            }
+        }
+
         this._sequels.push(sequel);
     }
 }
