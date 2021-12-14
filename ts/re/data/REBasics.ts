@@ -1,3 +1,4 @@
+import { DClassId } from "./DClass";
 import { DAttackElementId, DSpecificEffectId as DSpecialEffectId } from "./DCommon";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
@@ -73,5 +74,8 @@ export class REBasics {
     static effectBehaviors: DBasicSpecialEffects;
     static traits: DBasicTraits;
     // static presets: DBasicPresets;
+    
+
+    static defaultEnemyClass: DClassId;
 }
 

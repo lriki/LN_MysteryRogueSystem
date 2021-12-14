@@ -1,3 +1,4 @@
+import { DClassId } from "./DClass";
 import { DEntityId } from "./DEntity";
 import { DStateId } from "./DState";
 import { DFactionId, REData } from "./REData";
@@ -31,7 +32,6 @@ export class DSystem {
     public trapTargetFactionId: DFactionId;
 
     public states: DSystemStates;
-
 
     floorRoundLimit: number = 1000;
 

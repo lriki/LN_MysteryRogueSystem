@@ -2,6 +2,7 @@ import { assert } from "ts/re/Common";
 import { DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
 import { DAnnotationReader } from "./DAnnotationReader";
+import { DClassId } from "./DClass";
 import { DAttackElementId } from "./DCommon";
 import { DEmittorSet, DEmittorId } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
@@ -160,6 +161,8 @@ export class DEntity {
 
     enemy: DEnemy | undefined;
 
+    classId: DClassId;
+
     /** この Entity 自身に対する Trait */
     selfTraits: IDataTrait[];
 
@@ -225,6 +228,7 @@ export class DEntity {
         this.canModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;
+        this.classId = 0;
         this.selfTraits = [];
         this.affestTraits = [];
         this.isTraitCharmItem = false;

@@ -74,7 +74,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     onAttached(self: LEntity): void {
         super.onAttached(self);
-        this._classId = this.actor().classId;
+        this._classId = self.data().classId;
 
         //this._name = actor.name;
         //this._nickname = actor.nickname;

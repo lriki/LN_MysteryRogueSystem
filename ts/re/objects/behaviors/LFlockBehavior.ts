@@ -13,7 +13,7 @@ export class LFlockBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LFlockBehavior);
-        return b
+        return b;
     }
     
     onAttached(self: LEntity): void {

@@ -21,8 +21,6 @@ export class RE_Data_Actor {
     
     /** 初期配置 Y */
     initialY: number;
-
-    classId: DClassId;
     
     initialLevel: number;
 
@@ -36,14 +34,12 @@ export class RE_Data_Actor {
         this.id = id;
         this.initialX = 0;
         this.initialY = 0;
-        this.classId = 0;
         this.maxLevel = 0;
         this.initialLevel = 0;
         this.actionCommands = [];
     }
 
     public setup(data: IDataActor) {
-        this.classId = data.classId;
         this.initialLevel = data.initialLevel;
         this.maxLevel = data.maxLevel;
     }

@@ -564,7 +564,9 @@ export class LEntity extends LObject
             }
         }
 
+        // Min/Max clamp.
         this._params.refresh(this);
+        
         this.basicBehaviors().forEach(b => b.onRefreshConditions());
         
     

@@ -534,6 +534,7 @@ export class REDataManager
                 c.learnings = x.learnings;
             }
         });
+        REBasics.defaultEnemyClass = REData.classes[9].id;  // TODO:
 
         // Import Actors
         REData.actors = [];
@@ -544,6 +545,7 @@ export class REDataManager
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.factionId = REData.system.factions.neutral;
                 entity.selfTraits = x.traits.slice();
+                entity.classId = x.classId;
                 actor.setup(x);
                 this.setupDirectly_Actor(actor);
             }
@@ -737,6 +739,7 @@ export class REDataManager
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.entity.kindId = REBasics.entityKinds.MonsterKindId;
                 entity.factionId = REData.system.factions.enemy;
+                entity.classId =  REBasics.defaultEnemyClass;
 
                 enemy.traits = enemy.traits.concat(DTrait.parseTraitMetadata(x.meta));
 
