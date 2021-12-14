@@ -16,6 +16,23 @@ import { SStepPhase } from "ts/re/system/SCommon";
 
 export class LBattlerBehavior extends LBehavior {
 
+    /*
+    [2021/12/14] レベルと経験値はパラメータ扱いしたほうがよい？
+    ----------
+    パラメータ扱いしておくと、レベルダウンや経験値取得の効果をパラメータダメージとして指定できるようになる。
+    レベル吸収とかも。
+
+    バフああんまりつけたくないかも？
+    一時的にレベルアップ・レベルダウンといった効果は確かに原作でもあるが…。
+    でも本当にそれらを実装するとなったら、バフ扱いの方が都合がよい。
+
+    Enemy,Actor というくくりにするよりは、
+    "経験値でレベルアップするBehavior", "経験値関係なくレベルアップするBehavior" に分ける方が自然かも。
+    そう考えると、Levelのバフは欲しいかもだけどExpのバフはさすがにいらないかも？
+    いやでも経験値ダメージはありえるか…。
+
+    */
+
     constructor() {
         super();
     }
@@ -41,6 +58,8 @@ export class LBattlerBehavior extends LBehavior {
         params.acquireParam(REBasics.params.tp);
         params.acquireParam(REBasics.params.fp);
         params.acquireParam(REBasics.params.pow);
+        params.acquireParam(REBasics.params.level);
+        params.acquireParam(REBasics.params.exp);
     }
     
     onQueryReactions(actions: DActionId[]): void {

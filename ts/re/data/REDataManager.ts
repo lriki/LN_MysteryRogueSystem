@@ -86,6 +86,8 @@ export class REDataManager
             REData_Parameter.makeBuiltin(13, "rem", tr2("回数"), -1, 99, 0, Infinity),
             REData_Parameter.makeBuiltin(14, "cap", "Capacity", -1, 8, 0, Infinity),
             REData_Parameter.makeBuiltin(15, "gold", "Gold", -1, 999999, 10, Infinity),
+            REData_Parameter.makeBuiltin(16, "level", tr2("レベル"), -1, 99, 1, Infinity),
+            REData_Parameter.makeBuiltin(17, "exp", tr2("経験値"), -1, 999999, 0, Infinity),
         ];
         REBasics.params = {
             hp: REData.parameters.findIndex(x => x.code == "hp"),
@@ -103,6 +105,8 @@ export class REDataManager
             remaining: REData.parameters.findIndex(x => x.code == "rem"),
             capacity: REData.parameters.findIndex(x => x.code == "cap"),
             gold: REData.parameters.findIndex(x => x.code == "gold"),
+            level: REData.parameters.findIndex(x => x.code == "level"),
+            exp: REData.parameters.findIndex(x => x.code == "exp"),
         };
         // RMMZ のパラメータID との一致を検証
         assert(REData.parameters[REBasics.params.hp].battlerParamId === 0);
