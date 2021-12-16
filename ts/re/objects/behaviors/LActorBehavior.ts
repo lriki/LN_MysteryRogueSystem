@@ -52,27 +52,6 @@ export class LActorBehavior extends LBattlerBehavior {
         super();
     }
 
-    private resetLevel(self: LEntity): void {
-        self.setActualParam(REBasics.params.level, this.actor().initialLevel);
-    }
-    
-    public level(): number {
-        const self = this.ownerEntity();
-        return self.actualParam(REBasics.params.level);
-    }
-
-    // public level(): number {
-    //     return this._level;
-    // }
-
-    public setLevel(value: number): void {
-        const self = this.ownerEntity();
-        self.setActualParam(REBasics.params.level, value);
-        this.initExp();
-    }
-
-
-
     onAttached(self: LEntity): void {
         super.onAttached(self);
         this._classId = self.data().classId;
@@ -80,8 +59,6 @@ export class LActorBehavior extends LBattlerBehavior {
         //this._name = actor.name;
         //this._nickname = actor.nickname;
         //this._profile = actor.profile;
-        this.resetLevel(self);
-        this.initExp();
         this.initSkills();
         const a1= self.actualParam(REBasics.params.level);
         const b1= self.actualParam(REBasics.params.exp);
@@ -97,46 +74,6 @@ export class LActorBehavior extends LBattlerBehavior {
 
     }
 
-
-    // Game_Actor.prototype.initExp
-    initExp() {
-        this.setExp(this.ownerEntity(), this.currentLevelExp());
-    }
-    
-    private setExp(self: LEntity, value: number): void {
-        self.setActualParam(REBasics.params.exp, value);
-    }
-
-    // Game_Actor.prototype.currentExp
-    currentExp(): number {
-        const self = this.ownerEntity();
-        return self.actualParam(REBasics.params.exp);
-    }
-    
-    // Game_Actor.prototype.currentLevelExp
-    currentLevelExp(): number {
-        return this.expForLevel(this.level());
-    }
-    
-    // Game_Actor.prototype.expForLevel
-    expForLevel(level: number): number {
-        const c = this.currentClass();
-        const basis = c.expParams[0];
-        const extra = c.expParams[1];
-        const acc_a = c.expParams[2];
-        const acc_b = c.expParams[3];
-        return Math.round(
-            (basis * Math.pow(level - 1, 0.9 + acc_a / 250) * level * (level + 1)) /
-                (6 + Math.pow(level, 2) / 50 / acc_b) +
-                (level - 1) * extra
-        );
-    }
-
-    // Game_Actor.prototype.nextLevelExp
-    public nextLevelExp(): number {
-        return this.expForLevel(this.level() + 1);
-    };
-
     // Game_Actor.prototype.actor
     actor(): RE_Data_Actor {
         const entity = this.ownerEntity().data();
@@ -149,112 +86,16 @@ export class LActorBehavior extends LBattlerBehavior {
         return REData.classes[this._classId];
     }
 
-    // Game_Actor.prototype.maxLevel
-    private maxLevel() {
-        return this.actor().maxLevel;
-    };
-
-    // Game_Actor.prototype.isMaxLevel
-    private isMaxLevel() {
-        return this.level() >= this.maxLevel();
-    };
         
     // Game_Actor.prototype.initSkills
     initSkills(): void {
+        const level = this.ownerEntity().actualParam(REBasics.params.level);
         this._skills = [];
         for (const learning of this.currentClass().learnings) {
-            if (learning.level <= this.level()) {
+            if (learning.level <= level) {
                 this.learnSkill(learning.skillId);
             }
         }
-    }
-
-    // Game_Actor.prototype.initEquips
-    initEquips(equips: number[]): void {
-        throw new Error("Not implemented.");
-        /*
-        const slots = this.equipSlots();
-        const maxSlots = slots.length;
-        this._equips = [];
-        for (let i = 0; i < maxSlots; i++) {
-            this._equips[i] = new Game_Item();
-        }
-        for (let j = 0; j < equips.length; j++) {
-            if (j < maxSlots) {
-                this._equips[j].setEquip(slots[j] === 1, equips[j]);
-            }
-        }
-        this.releaseUnequippableItems(true);
-        this.refresh();
-        */
-    }
-
-    // Game_Actor.prototype.changeExp
-    private changeExp(exp: number): void {
-        const self = this.ownerEntity();
-        this.setExp(self, Math.max(exp, 0));
-        this.refreshLevel();
-    }
-
-    // Game_Actor.prototype.levelUp
-    private levelUp(): void {
-        this.setLevel(this.level() + 1);
-        this.ownerEntity()._effectResult.levelup = true;
-        //for (const learning of this.currentClass().learnings) {
-        //    if (learning.level === this._level) {
-        //        this.learnSkill(learning.skillId);
-        //    }
-        //}
-    }
-
-    // Game_Actor.prototype.levelDown
-    private levelDown(): void {
-        this.setLevel(this.level() - 1);
-        this.ownerEntity()._effectResult.leveldown = true;
-    }
-
-    // 現在 Exp に Level をあわせる
-    private refreshLevel(): void {
-
-        //const lastLevel = this._level;
-        //const lastSkills = this.skills();
-
-        while (!this.isMaxLevel() && this.currentExp() >= this.nextLevelExp()) {
-            this.levelUp();
-        }
-        while (this.currentExp() < this.currentLevelExp()) {
-            const a = this.currentExp();
-            const b = this.currentLevelExp();
-            this.levelDown();
-        }
-    }
-    
-    changeLevel(value: number, keepExpWhenDown: boolean): void {
-        const level = this.level();
-        if (value > level) {          // LevelUp
-            this.changeExp(this.expForLevel(value));
-        }
-        else if (value < level) {     // LevelDown
-            if (keepExpWhenDown) {
-                this.changeExp(this.expForLevel(value + 1) - 1);
-            }
-            else {
-                this.changeExp(this.expForLevel(value));
-            }
-        }
-    }
-
-
-    gainExp(exp: number): void {
-        const newExp = this.currentExp() + Math.round(exp * this.finalExpRate());
-        this.changeExp(newExp);
-        
-        this.ownerEntity()._effectResult.gainedExp += exp;
-    }
-
-    // Game_Actor.prototype.finalExpRate
-    private finalExpRate(): number {
-        return 1;
     }
 
     // Game_Actor.prototype.learnSkill
@@ -272,8 +113,9 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.paramBase 
     onQueryIdealParamBase(paramId: DParameterId, base: number): number {
+        const level = this.ownerEntity().actualParam(REBasics.params.level);
         const p = this.currentClass().params[REData.parameters[paramId].battlerParamId];
-        return base + (p ? p[this.level()] : 0);
+        return base + (p ? p[level] : 0);
     }
 
     

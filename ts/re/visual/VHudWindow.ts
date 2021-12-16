@@ -3,6 +3,7 @@ import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
+import { LExperiencedBehavior } from "../objects/behaviors/LExperiencedBehavior";
 
 
 const gaugeHeight = 6;
@@ -30,8 +31,8 @@ export class VHudWindow extends Window_Base {
 
         const entity = REGame.camera.focusedEntity();
         if (!entity) return;
-        const battler = entity.findEntityBehavior(LActorBehavior);
-        if (!battler) return;
+        const experience = entity.findEntityBehavior(LExperiencedBehavior);
+        if (!experience) return;
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return;
 
@@ -41,7 +42,7 @@ export class VHudWindow extends Window_Base {
         const mfp = entity.idealParam(REBasics.params.fp);
 
         this.drawFloorNumber(0, 0, REGame.map.floorId());
-        this.drawLevel(150, 0, battler.level(), battler.currentExp() / battler.nextLevelExp());
+        this.drawLevel(150, 0, experience.level(entity), experience.currentExp(entity) / experience.nextLevelExp(entity));
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
         this.drawGold(inventory.gold());
     }

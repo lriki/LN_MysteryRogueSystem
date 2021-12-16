@@ -123,8 +123,9 @@ export class LExperiencedBehavior extends LBehavior {
         const params = self.params();
         params.acquireParam(REBasics.params.level);
         params.acquireParam(REBasics.params.exp);
-        self.setActualParam(REBasics.params.level, 1);
-        self.setActualParam(REBasics.params.exp, 0);
+        this.resetLevel(self);
+        // self.setActualParam(REBasics.params.level, 1);
+        // self.setActualParam(REBasics.params.exp, 0);
     }
 
     onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
@@ -140,8 +141,27 @@ export class LExperiencedBehavior extends LBehavior {
         
     }
 
-    private level(self: LEntity): number {
+    private resetLevel(self: LEntity): void {
+        self.setActualParam(REBasics.params.level, this.actor(self).initialLevel);
+    }
+
+    public level(self: LEntity): number {
         return self.actualParam(REBasics.params.level);
+    }
+
+    // for test
+    public setLevel(self: LEntity, value: number): void {
+        self.setActualParam(REBasics.params.level, value);
+    }
+
+    // Game_Actor.prototype.currentExp
+    public currentExp(self: LEntity): number {
+        return self.actualParam(REBasics.params.exp);
+    }
+    
+    // Game_Actor.prototype.nextLevelExp
+    public nextLevelExp(self: LEntity): number {
+        return this.expForLevel(self, this.level(self) + 1);
     }
 
     // Game_Actor.prototype.actor
@@ -179,16 +199,6 @@ export class LExperiencedBehavior extends LBehavior {
                 (level - 1) * extra
         );
     }
-
-    // Game_Actor.prototype.currentExp
-    private currentExp(self: LEntity): number {
-        return self.actualParam(REBasics.params.exp);
-    }
-    
-    // Game_Actor.prototype.nextLevelExp
-    private nextLevelExp(self: LEntity): number {
-        return this.expForLevel(self, this.level(self) + 1);
-    };
 
     // Game_Actor.prototype.currentLevelExp
     private currentLevelExp(self: LEntity): number {

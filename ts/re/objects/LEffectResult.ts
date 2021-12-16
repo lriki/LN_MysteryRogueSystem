@@ -306,21 +306,15 @@ export class LEffectResult {
 
                 // Game_Actor.prototype.displayLevelUp
                 if (this.levelup || this.leveldown) {
-                    const battler = entity.getEntityBehavior(LBattlerBehavior);
-                    if (battler instanceof LActorBehavior) {
-                        if (this.levelup) {
-                            const text = DTextManager.levelUp.format(targetName, DTextManager.level, battler.level());
-                            cctx.postMessage(text);
-                            SSoundManager.playLevelUp();
-                        }
-                        if (this.leveldown) {
-                            const text = tr2("%1は%2が下がった！").format(targetName, DTextManager.level);
-                            cctx.postMessage(text);
-                            SSoundManager.playLevelUp();
-                        }
+                    if (this.levelup) {
+                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, entity.actualParam(REBasics.params.level));
+                        cctx.postMessage(text);
+                        SSoundManager.playLevelUp();
                     }
-                    else {
-                        throw new Error("NotImplemented.");
+                    if (this.leveldown) {
+                        const text = tr2("%1は%2が下がった！").format(targetName, DTextManager.level);
+                        cctx.postMessage(text);
+                        SSoundManager.playLevelUp();
                     }
                 }
             }

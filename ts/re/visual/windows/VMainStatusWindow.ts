@@ -3,6 +3,7 @@ import { DTextManager } from "ts/re/data/DTextManager";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
+import { LExperiencedBehavior } from "ts/re/objects/behaviors/LExperiencedBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
 import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
@@ -255,10 +256,10 @@ export class VMainStatusWindow extends Window_Base {
         this._powValue.setText(`${c}/${m}`);
         
         // 経験値
-        const actor = this._entity.findEntityBehavior(LActorBehavior);
-        if (actor) {
-            this._expValue.setText(actor.currentExp().toString());
-            this._nextexpValue.setText(actor.nextLevelExp().toString());
+        const experienced = this._entity.findEntityBehavior(LExperiencedBehavior);
+        if (experienced) {
+            this._expValue.setText(experienced.currentExp(this._entity).toString());
+            this._nextexpValue.setText(experienced.nextLevelExp(this._entity).toString());
         }
         else {
             this._expValue.setText("-");

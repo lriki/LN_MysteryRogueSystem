@@ -11,6 +11,7 @@ import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { assert } from "ts/re/Common";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { REBasics } from "ts/re/data/REBasics";
+import { LExperiencedBehavior } from "ts/re/objects/behaviors/LExperiencedBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -21,8 +22,8 @@ test("concretes.item.grass.LevelUpGrass", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    const actor1 = player1.getEntityBehavior(LActorBehavior);
-    const level1 = actor1.level();
+    const experience = player1.getEntityBehavior(LExperiencedBehavior);
+    const level1 = experience.level(player1);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kグロースドラッグ").id, [], "item1"));
@@ -41,7 +42,7 @@ test("concretes.item.grass.LevelUpGrass", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const a2 = player1.actualParam(REBasics.params.level);
-    const level2 = actor1.level();
+    const level2 = experience.level(player1);
     expect(level2).toBe(level1 + 1);
     
     TestUtils.testCommonGrassEnd(player1, item1);

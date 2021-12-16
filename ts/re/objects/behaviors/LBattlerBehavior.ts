@@ -109,17 +109,6 @@ export class LBattlerBehavior extends LBehavior {
 
     //------------------------------------------------------------
 
-    public changeLevel(value: number, keepExpWhenDown: boolean): void {
-        throw new Error("Unreachable.");
-    }
-
-    public level(): number {
-        throw new Error("Unreachable.");
-    }
-    
-    gainExp(exp: number): void {
-    }
-    
     onCollectEffector(owner: LEntity, data: SEffectorFact): void {
     }
     

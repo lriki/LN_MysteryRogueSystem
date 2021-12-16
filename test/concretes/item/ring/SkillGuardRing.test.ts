@@ -11,6 +11,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
+import { LExperiencedBehavior } from "ts/re/objects/behaviors/LExperiencedBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -24,8 +25,8 @@ test("concretes.item.ring.SkillGuardRing", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const actor = player1.getEntityBehavior(LActorBehavior);
-    actor.setLevel(99);
+    const experience = player1.getEntityBehavior(LExperiencedBehavior);
+    experience.setLevel(player1, 99);
     const hp1 = player1.actualParam(REBasics.params.hp);
 
     // Item
@@ -49,11 +50,11 @@ test("concretes.item.ring.SkillGuardRing", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     }
 
-    expect(actor.level() < 99).toBe(true);
+    expect(experience.level(player1) < 99).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
 
-    actor.setLevel(99);
+    experience.setLevel(player1, 99);
     equipmentUser.equipOnUtil(ring1);
 
     let count = 0;
@@ -61,11 +62,11 @@ test("concretes.item.ring.SkillGuardRing", () => {
         player1.setActualParam(REBasics.params.hp, hp1);
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
-        const level1 = actor.level();
+        const level1 = experience.level(player1);
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        if (actor.level() < level1) count++;
+        if (experience.level(player1) < level1) count++;
     }
 
     expect(count).toBe(0);

@@ -37,7 +37,7 @@ test("Abilities.Enemy.Division", () => {
     REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(enemy1.isDeathStateAffected()).toBe(false);  // 倒しちゃってない？
+    expect(enemy1.isDeathStateAffected()).toBeFalsy();  // 倒しちゃってない？
     const entityCount2 = REGame.map.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });
