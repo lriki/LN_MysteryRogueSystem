@@ -285,7 +285,7 @@ export class SCommandContext
         return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
 
-    postCall(func: () => void): void {
+    postCall(func: () => void): RECCMessageCommand {
         const m1 = () => {
             Log.doCommand("Call");
             func();
@@ -293,6 +293,7 @@ export class SCommandContext
         };
         this._recodingCommandList.push(new RECCMessageCommand("Call", m1));
         Log.postCommand("Call");
+        return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
 
     findReactorEntityInBlock(block: LBlock, actionId: number): LEntity | undefined {

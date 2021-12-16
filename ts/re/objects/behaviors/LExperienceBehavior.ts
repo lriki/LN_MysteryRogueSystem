@@ -16,9 +16,10 @@ import { SStepPhase } from "ts/re/system/SCommon";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DClass } from "ts/re/data/DClass";
 import { RE_Data_Actor } from "ts/re/data/DActor";
-import { assert } from "ts/re/Common";
+import { assert, RESerializable } from "ts/re/Common";
 
-export class LExperiencedBehavior extends LBehavior {
+@RESerializable
+export class LExperienceBehavior extends LBehavior {
 
     /*
     [2021/12/14] レベルと経験値はパラメータ扱いしたほうがよい？
@@ -115,7 +116,7 @@ export class LExperiencedBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LExperiencedBehavior);
+        const b = REGame.world.spawn(LExperienceBehavior);
         return b;
     }
 

@@ -2,7 +2,7 @@ import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
 import { REBasics } from "ts/re/data/REBasics";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
-import { LExperiencedBehavior } from "ts/re/objects/behaviors/LExperiencedBehavior";
+import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../SCommandContext";

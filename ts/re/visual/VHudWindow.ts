@@ -3,7 +3,7 @@ import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
-import { LExperiencedBehavior } from "../objects/behaviors/LExperiencedBehavior";
+import { LExperienceBehavior } from "../objects/behaviors/LExperienceBehavior";
 
 
 const gaugeHeight = 6;
@@ -31,7 +31,7 @@ export class VHudWindow extends Window_Base {
 
         const entity = REGame.camera.focusedEntity();
         if (!entity) return;
-        const experience = entity.findEntityBehavior(LExperiencedBehavior);
+        const experience = entity.findEntityBehavior(LExperienceBehavior);
         if (!experience) return;
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return;

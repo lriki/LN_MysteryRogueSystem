@@ -11,7 +11,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
-import { LExperiencedBehavior } from "ts/re/objects/behaviors/LExperiencedBehavior";
+import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -25,7 +25,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const experience = player1.getEntityBehavior(LExperiencedBehavior);
+    const experience = player1.getEntityBehavior(LExperienceBehavior);
     experience.setLevel(player1, 99);
     const hp1 = player1.actualParam(REBasics.params.hp);
 

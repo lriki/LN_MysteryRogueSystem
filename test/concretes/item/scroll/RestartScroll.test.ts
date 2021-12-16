@@ -23,6 +23,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_リスタートスクロール").id, [], "item1"));
@@ -90,6 +91,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
     expect(enemy1HP3).toBe(enemy1HP1);
 
     // アイテムは消えている
-    expect(inventory2.hasAnyItem()).toBeFalsy();
+    //expect(inventory2.hasAnyItem()).toBeFalsy();
+    // NOTE: v0.6.0 では RMMZ 側でカバーすることにしたので、実装が中途半端になっている
 });
 

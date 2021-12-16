@@ -452,31 +452,35 @@ export class LUnitBehavior extends LBehavior {
         const effectContext: SEffectContext = args.args.effectContext;
         if (effectContext) {
             const targets = [self];
-            effectContext.applyWithWorth(cctx, targets);
+            effectContext.applyWithWorth(cctx, targets)
+            .then(() => {
 
-
-            
-            if (!USearch.hasBlindness(self)) {
-                // 相手が可視であれば、その方向を向く
-                const subject = effectContext.effectorFact().subject();
-                if (SView.getEntityVisibility(subject).visible) {
-                    self.dir = UMovement.getLookAtDir(self, subject);
+                if (!USearch.hasBlindness(self)) {
+                    // 相手が可視であれば、その方向を向く
+                    const subject = effectContext.effectorFact().subject();
+                    if (SView.getEntityVisibility(subject).visible) {
+                        self.dir = UMovement.getLookAtDir(self, subject);
+                    }
                 }
-            }
-
-            for (const target of targets) {
-                if (target._effectResult.isHit()) {
-                    cctx.post(target, self, new SEffectSubject(effectContext.effectorFact().subject()), undefined, onDirectAttackDamaged);
-
-                    
+    
+                for (const target of targets) {
+                    if (target._effectResult.isHit()) {
+                        cctx.post(target, self, new SEffectSubject(effectContext.effectorFact().subject()), undefined, onDirectAttackDamaged);
+    
+                        
+                    }
                 }
-            }
+    
+                
+    
+                cctx.postCall(() => {
+                    self.sendPartyEvent(REBasics.events.effectReacted, undefined);
+                });
 
-            
-
-            cctx.postCall(() => {
-                self.sendPartyEvent(REBasics.events.effectReacted, undefined);
+                return true;
             });
+
+
 
             return SCommandResponse.Handled;
         }

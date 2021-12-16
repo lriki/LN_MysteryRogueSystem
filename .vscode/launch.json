@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.grass.VisibleGrass"
+                "-t", "concretes.item.staff.SealStaff.basic"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

@@ -7,7 +7,7 @@ import { Helpers } from "./Helpers";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { DParameterId } from "ts/re/data/DParameter";
 import { LEnemyBehavior } from "ts/re/objects/behaviors/LEnemyBehavior";
-import { SCommandContext } from "./SCommandContext";
+import { RECCMessageCommand, SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
 import { LRandom } from "ts/re/objects/LRandom";
 import { DStateId } from "ts/re/data/DState";
@@ -103,7 +103,7 @@ export class SEffectContext {
         return this._effectorFact;
     }
 
-    public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): void {
+    public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): RECCMessageCommand {
         //let deadCount = 0;
         for (const target of targets) {
             const localTargets = new Map<LEntity, SEffect[]>();
@@ -139,7 +139,7 @@ export class SEffectContext {
                 const effects = this.selectEffects(value, cctx.random());
                 for (const effect of effects) {
                     if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
-                        this.applyEffectToTarget(cctx, effect, key, target);
+                        this.applyWithHitTest(cctx, effect, key, target);
                     }
                 }
                 //entries.push(`${key}:${value}`);
@@ -166,6 +166,8 @@ export class SEffectContext {
             // }
 
         }
+
+        return cctx.postCall(() => {});
     }
 
     public selectEffects(effectList: SEffect[], rand: LRandom): SEffect[] {
@@ -198,29 +200,11 @@ export class SEffectContext {
         }
     }
 
-    private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
+    // private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
 
-        this.applyWithHitTest(cctx, effect, target, animationTarget);
+    //     this.applyWithHitTest(cctx, effect, target, animationTarget);
         
-        // ここで Flush している理由は次の通り。
-        // 1. ダメージを個々に表示したい
-        // 2. 表示の順序関係を守りたい
-        //
-        // 1については、連撃等何らかの理由で複数回受けたときに個別に表示する。
-        // 経験値の場合はまとめて表示したいのでこことは異なる箇所で表示するが、これはそうではないケース。
-        // 例えば「Aは合計でXXXのダメージを受けた」といったように後でまとめて表示する場合はこの処理はいらない。
-        //
-        // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
-        cctx.postEffectResult(target);
-
-        if (target.isDeathStateAffected()) {
-            //deadCount++;
-            const battler = target.findEntityBehavior(LBattlerBehavior);
-            if (battler instanceof LEnemyBehavior) {
-                this._effectorFact.subject()._reward.addExp(battler.exp());
-            }
-        }
-    }
+    // }
 
     private findAnimationEntity(entity: LObject): LEntity | undefined {
         if (!entity.hasParent()) return undefined;
@@ -230,7 +214,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
+    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): RECCMessageCommand {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();
@@ -261,7 +245,8 @@ export class SEffectContext {
             
         }
 
-        cctx.postCall(() => {
+        // 以下、アニメーションが終わった後に実行したい。
+        return cctx.postCall(() => {
 
 
             if (targetBattlerBehavior) {
@@ -312,6 +297,26 @@ export class SEffectContext {
     
             {
                 cctx.post(target, effect.subject(), new SEffectSubject(this._effectorFact.subject()), undefined, onEffectResult);
+            }
+
+            
+            // ここで Flush している理由は次の通り。
+            // 1. ダメージを個々に表示したい
+            // 2. 表示の順序関係を守りたい
+            //
+            // 1については、連撃等何らかの理由で複数回受けたときに個別に表示する。
+            // 経験値の場合はまとめて表示したいのでこことは異なる箇所で表示するが、これはそうではないケース。
+            // 例えば「Aは合計でXXXのダメージを受けた」といったように後でまとめて表示する場合はこの処理はいらない。
+            //
+            // 2については、現状では経験値の表示処理など後でまとめて表示するとき、その順序関係は Entity 順になってしまうため。
+            cctx.postEffectResult(target);
+
+            if (target.isDeathStateAffected()) {
+                //deadCount++;
+                const battler = target.findEntityBehavior(LBattlerBehavior);
+                if (battler instanceof LEnemyBehavior) {
+                    this._effectorFact.subject()._reward.addExp(battler.exp());
+                }
             }
         });
     }

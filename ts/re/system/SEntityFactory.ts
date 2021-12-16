@@ -46,7 +46,7 @@ import { LEscapeAI } from "../objects/ai/LEscapeAI";
 import { LEscapeBehavior } from "../objects/behaviors/LEscapeBehavior";
 import { LStumblePreventionBehavior } from "../objects/behaviors/LPreventionBehavior";
 import { LActivityCharmBehavior } from "../objects/behaviors/LActivityCharmBehavior";
-import { LExperiencedBehavior } from "../objects/behaviors/LExperiencedBehavior";
+import { LExperienceBehavior } from "../objects/behaviors/LExperienceBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -69,7 +69,7 @@ export class SEntityFactory {
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
-        e.addBehavior(LExperiencedBehavior);
+        e.addBehavior(LExperienceBehavior);
         e.addBehavior(LActorBehavior);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
         e.addBehavior(LEaterBehavior);
         e.addBehavior(LSurvivorBehavior);

@@ -11,7 +11,7 @@ import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { assert } from "ts/re/Common";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { REBasics } from "ts/re/data/REBasics";
-import { LExperiencedBehavior } from "ts/re/objects/behaviors/LExperiencedBehavior";
+import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -22,7 +22,7 @@ test("concretes.item.grass.LevelUpGrass", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    const experience = player1.getEntityBehavior(LExperiencedBehavior);
+    const experience = player1.getEntityBehavior(LExperienceBehavior);
     const level1 = experience.level(player1);
 
     // アイテム作成 & インベントリに入れる
