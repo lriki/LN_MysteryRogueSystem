@@ -344,8 +344,9 @@ export abstract class LBehavior extends LObject {
     
 
 
+    public onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void { }
     
-    public onRefreshConditions(): void { }
+    public onRefreshConditions(self: LEntity): void { }
 
 
 

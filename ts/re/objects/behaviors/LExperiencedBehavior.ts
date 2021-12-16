@@ -13,6 +13,10 @@ import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DActionId } from "ts/re/data/DAction";
 import { UAction } from "ts/re/usecases/UAction";
 import { SStepPhase } from "ts/re/system/SCommon";
+import { DParameterId } from "ts/re/data/DParameter";
+import { DClass } from "ts/re/data/DClass";
+import { RE_Data_Actor } from "ts/re/data/DActor";
+import { assert } from "ts/re/Common";
 
 export class LExperiencedBehavior extends LBehavior {
 
@@ -123,7 +127,117 @@ export class LExperiencedBehavior extends LBehavior {
         self.setActualParam(REBasics.params.exp, 0);
     }
 
+    onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
+        if (paramId == REBasics.params.level) {
+            self.setActualParam(REBasics.params.exp, this.expForLevel(self, newValue));
+        }
+        else if (paramId == REBasics.params.exp) {
+            this.refreshLevel(self);
+        }
+    }
+    
+    onRefreshConditions(self: LEntity): void {
+        
+    }
 
+    private level(self: LEntity): number {
+        return self.actualParam(REBasics.params.level);
+    }
 
+    // Game_Actor.prototype.actor
+    private actor(self: LEntity): RE_Data_Actor {
+        const data = self.data().actor;
+        assert(data);
+        return data;
+    }
+
+    // Game_Actor.prototype.maxLevel
+    private maxLevel(self: LEntity): number {
+        return this.actor(self).maxLevel;
+    };
+
+    // Game_Actor.prototype.isMaxLevel
+    private isMaxLevel(self: LEntity): boolean {
+        return this.level(self) >= this.maxLevel(self);
+    };
+
+    private currentClass(self: LEntity): DClass {
+        const classId = self.data().classId;
+        return REData.classes[classId];
+    }
+    
+    // Game_Actor.prototype.expForLevel
+    private expForLevel(self: LEntity, level: number): number {
+        const c = this.currentClass(self);
+        const basis = c.expParams[0];
+        const extra = c.expParams[1];
+        const acc_a = c.expParams[2];
+        const acc_b = c.expParams[3];
+        return Math.round(
+            (basis * Math.pow(level - 1, 0.9 + acc_a / 250) * level * (level + 1)) /
+                (6 + Math.pow(level, 2) / 50 / acc_b) +
+                (level - 1) * extra
+        );
+    }
+
+    // Game_Actor.prototype.currentExp
+    private currentExp(self: LEntity): number {
+        return self.actualParam(REBasics.params.exp);
+    }
+    
+    // Game_Actor.prototype.nextLevelExp
+    private nextLevelExp(self: LEntity): number {
+        return this.expForLevel(self, this.level(self) + 1);
+    };
+
+    // Game_Actor.prototype.currentLevelExp
+    private currentLevelExp(self: LEntity): number {
+        return this.expForLevel(self, this.level(self));
+    }
+
+    // 現在 Exp に Level をあわせる
+    private refreshLevel(self: LEntity): void {
+        //const lastLevel = this._level;
+        //const lastSkills = this.skills();
+
+        while (!this.isMaxLevel(self) && this.currentExp(self) >= this.nextLevelExp(self)) {
+            this.levelUp(self);
+        }
+        while (this.currentExp(self) < this.currentLevelExp(self)) {
+            this.levelDown(self);
+        }
+    }
+
+    // Game_Actor.prototype.levelUp
+    private levelUp(self: LEntity): void {
+        self.gainActualParam(REBasics.params.level, 1, false);
+        this.ownerEntity()._effectResult.levelup = true;
+        //for (const learning of this.currentClass().learnings) {
+        //    if (learning.level === this._level) {
+        //        this.learnSkill(learning.skillId);
+        //    }
+        //}
+    }
+
+    // Game_Actor.prototype.levelDown
+    private levelDown(self: LEntity): void {
+        self.gainActualParam(REBasics.params.level, -1, false);
+        this.ownerEntity()._effectResult.leveldown = true;
+    }
+
+    // private changeLevel(self: LEntity, value: number, keepExpWhenDown: boolean): void {
+    //     const level = this.level(self);
+    //     if (value > level) {          // LevelUp
+    //         this.changeExp(this.expForLevel(value));
+    //     }
+    //     else if (value < level) {     // LevelDown
+    //         if (keepExpWhenDown) {
+    //             this.changeExp(this.expForLevel(value + 1) - 1);
+    //         }
+    //         else {
+    //             this.changeExp(this.expForLevel(value));
+    //         }
+    //     }
+    // }
 }
 

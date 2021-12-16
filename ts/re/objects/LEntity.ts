@@ -518,11 +518,19 @@ export class LEntity extends LObject
         this.setActualDamgeParam(paramId, max - value);
     }
 
+    private notifyParamChanged(paramId: DParameterId, newValue: number, oldValue: number): void {
+        this.iterateBehaviorsReverse(b => b.onParamChanged(this, paramId, newValue, oldValue));
+    }
+
     public setActualDamgeParam(paramId: DParameterId, value: number): void {
         const param = this._params.param(paramId);
         if (param) {
-            param.setActualDamgeParam(value);
-            this.refreshConditions();
+            if (param.actualParamDamge() != value) {
+                const oldValue = this.actualParam(paramId);
+                param.setActualDamgeParam(value);
+                this.notifyParamChanged(paramId, this.actualParam(paramId), oldValue);
+                this.refreshConditions();
+            }
         }
         else {
             throw new Error(`LParam not registerd (paramId:${paramId})`);
@@ -534,10 +542,14 @@ export class LEntity extends LObject
 
         const param = this._params.param(paramId);
         if (param) {
-            param.gainActualParam(value);
-            if (refresh) {
-                this.refreshConditions();
-            }
+            if (value != 0) {
+                const oldValue = this.actualParam(paramId);
+                param.gainActualParam(value);
+                this.notifyParamChanged(paramId, this.actualParam(paramId), oldValue);
+                if (refresh) {
+                    this.refreshConditions();
+                }
+            } 
         }
         else {
             throw new Error(`LParam not registerd (paramId:${paramId})`);
@@ -567,7 +579,7 @@ export class LEntity extends LObject
         // Min/Max clamp.
         this._params.refresh(this);
         
-        this.basicBehaviors().forEach(b => b.onRefreshConditions());
+        this.basicBehaviors().forEach(b => b.onRefreshConditions(this));
         
     
         // refresh 後、HP が 0 なら DeadState を付加する

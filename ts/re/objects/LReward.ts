@@ -1,4 +1,5 @@
 import { RESerializable } from "../Common";
+import { REBasics } from "../data/REBasics";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LEntity } from "./LEntity";
 
@@ -27,10 +28,11 @@ export class LReward {
     }
 
     public apply(entity: LEntity): void {
-        const b = entity.findEntityBehavior(LBattlerBehavior);
-        if (b) {
-            b.gainExp(this._exp);
-        }
+        // const b = entity.findEntityBehavior(LBattlerBehavior);
+        // if (b) {
+        //     b.gainExp(this._exp);
+        // }
+        entity.gainActualParam(REBasics.params.exp, this._exp, true);
 
         this.clear();
     }

@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.grass.LevelUpGrass"
+                "-t", "concretes.item.grass.VisibleGrass"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
