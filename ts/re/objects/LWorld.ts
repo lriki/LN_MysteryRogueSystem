@@ -230,13 +230,14 @@ export class LWorld
      * このメソッドで移動しても、足元に対するアクションは行わない。(罠を踏んだり、アイテムを拾ったりしない)
      */
     _transferEntity(entity: LEntity, floorId: LFloorId, x: number = -1, y: number = -1): boolean {
-        if (REGame.map.floorId() != floorId && floorId.isRandomMap()) {
+        const mapFloorId = REGame.map.floorId();
+        if (mapFloorId != floorId && floorId.isRandomMap()) {
             // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
             assert(x < 0);
             assert(y < 0);
         }
 
-        if (REGame.map.isValid() && REGame.map.floorId() != floorId && REGame.map.floorId().equals(entity.floorId)) {
+        if (REGame.map.isValid() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
             // 現在マップからの離脱
             REGame.map._removeEntity(entity);
         }
@@ -248,7 +249,7 @@ export class LWorld
             UState.attemptRemoveStateAtFloorTransfer(entity);
         }
 
-        if (REGame.map.floorId().equals(floorId)) {
+        if (mapFloorId.equals(floorId)) {
             if (entity.floorId.equals(floorId)) {
                 // 現在マップ内での座標移動
                 UMovement.locateEntity(entity, x, y);
@@ -267,7 +268,7 @@ export class LWorld
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
         if (REGame.camera.focusedEntityId().equals(entity.entityId()) &&
-            REGame.map.floorId() != entity.floorId) {
+            mapFloorId != entity.floorId) {
             REGame.camera._reserveFloorTransferToFocusedEntity();
         }
 

@@ -253,14 +253,15 @@ test("SpeedLevel.Sequel", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    // enemy は 2回行動し、それぞれ MoveSequel が積まれている
+    // enemy は 2回行動し、2つめは relatedSequels が積まれている
     const s = TestEnv.activeSequelSet;
     expect(s.runs().length).toBe(1);
     expect(s.runs()[0].clips().length).toBe(1);
     const sequels = s.runs()[0].clips()[0].sequels();
-    expect(sequels.length).toBe(2);
+    expect(sequels.length).toBe(1);
     expect((sequels[0] as SMotionSequel).sequelId()).toBe(2);
-    expect((sequels[1] as SMotionSequel).sequelId()).toBe(2);
+    expect((sequels[0] as SMotionSequel).relatedSequels().length).toBe(1);
+    expect((sequels[0] as SMotionSequel).relatedSequels()[0].sequelId()).toBe(2);
 });
 
 // Player が速くなる場合

@@ -58,8 +58,6 @@ export class LBattlerBehavior extends LBehavior {
         params.acquireParam(REBasics.params.tp);
         params.acquireParam(REBasics.params.fp);
         params.acquireParam(REBasics.params.pow);
-        params.acquireParam(REBasics.params.level);
-        params.acquireParam(REBasics.params.exp);
     }
     
     onQueryReactions(actions: DActionId[]): void {
@@ -92,7 +90,7 @@ export class LBattlerBehavior extends LBehavior {
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
         this.clearStates();
-        this.paramSet().params().forEach(x => x?.clearDamage());
+        this.paramSet().params().forEach(x => x?.clearDamage(this.ownerEntity()));
         //for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
 
         //    this._actualParamDamges[paramId] = 0;

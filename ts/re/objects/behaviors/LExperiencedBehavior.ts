@@ -111,6 +111,13 @@ export class LExperiencedBehavior extends LBehavior {
         return b;
     }
 
+    onAttached(self: LEntity): void {
+        const params = self.params();
+        params.acquireParam(REBasics.params.level);
+        params.acquireParam(REBasics.params.exp);
+        self.setActualParam(REBasics.params.level, 1);
+        self.setActualParam(REBasics.params.exp, 0);
+    }
 
 
 

@@ -126,6 +126,8 @@ export class REDataManager
         REData.parameters[REBasics.params.upgradeValue].selfLossMessage = DTextManager.actorLoss;
         REData.parameters[REBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
         REData.parameters[REBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
+        REData.parameters[REBasics.params.level].initialValue = 1;
+        REData.parameters[REBasics.params.exp].initialValue = 0;
         
         
         REBasics.entityKinds = {

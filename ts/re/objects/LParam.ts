@@ -1,6 +1,6 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
-import { DParameterId } from "ts/re/data/DParameter";
+import { DParameterId, REData_Parameter } from "ts/re/data/DParameter";
 import { REData } from "ts/re/data/REData";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
@@ -50,6 +50,10 @@ export class LParam {
         return this._dataId;
     }
 
+    public data(): REData_Parameter {
+        return REData.parameters[this._dataId];
+    }
+
     public actualParamDamge(): number {
         return this._actualParamDamge;
     }
@@ -94,8 +98,14 @@ export class LParam {
         return this._mulBuff.level * REData.parameters[this._dataId].mulBuffCore + 1.0;
     }
 
-    public clearDamage(): void {
-        this._actualParamDamge = 0;
+    public clearDamage(owner: LEntity): void {
+        const data = this.data();
+        if (data.initialValue === undefined) {
+            this._actualParamDamge = 0;
+        }
+        else {
+            owner.setActualParam(this.parameterId(), data.initialValue);
+        }
     }
 
     public clearParamPlus(): void {

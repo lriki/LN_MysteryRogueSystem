@@ -58,6 +58,10 @@ export class REData_Parameter
     /** 拡張パラメータの時の、初期値 */
     initialIdealValue: number;
 
+    /** 初期値。undefined の場合、Ideal.
+     * Level なら 1, Exp なら 0, HP なら Ideal など。 */
+    initialValue: number | undefined;
+
     minValue: number;
     maxValue: number;
 
