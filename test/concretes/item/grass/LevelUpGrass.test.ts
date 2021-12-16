@@ -10,6 +10,7 @@ import { TestUtils } from "test/TestUtils";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { assert } from "ts/re/Common";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -39,6 +40,7 @@ test("concretes.item.grass.LevelUpGrass", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
+    const a2 = player1.actualParam(REBasics.params.level);
     const level2 = actor1.level();
     expect(level2).toBe(level1 + 1);
     

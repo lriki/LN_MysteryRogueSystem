@@ -98,7 +98,11 @@ export class LExperiencedBehavior extends LBehavior {
     ただし、経験値の取得は EffectContext を出てから行われるため、必ずしも EffectContext 内から、というわけではない。
 
 
-    
+    [2021/12/16] 違和感
+    ----------
+    - 他のパラメータは減算方式で、デフォルトは Ideal.
+    - レベルを上げるためのパラメータ計算方式が "回復"
+        - でもこれはちからの最大値を上げるのも同様。
 
     */
 

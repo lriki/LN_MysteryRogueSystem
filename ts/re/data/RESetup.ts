@@ -187,12 +187,16 @@ export class RESetup {
                 }
                 
                 break;
-            case "kグロースドラッグ":
+            case "kグロースドラッグ": {
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                const effect = entity.emittorSet.mainEmittor().effectSet.effects[0];
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.level, "1", DParameterEffectApplyType.Recover));
                 break;
+            }
             case "kワープドラッグ":
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
