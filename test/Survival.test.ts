@@ -9,6 +9,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { REData } from "ts/re/data/REData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -18,9 +19,8 @@ test("Survival.FP", () => {
     TestEnv.newGame();
 
     // Player
-    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
 
     expect(player1.actualParam(REBasics.params.fp)).toBe(10000); // 初期 FP は 10000
     

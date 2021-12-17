@@ -11,8 +11,11 @@ export class SActionHitTest {
             return r1;
         }
 
-        const hitRate = paraIndirectPhysicalHitRate;            // 攻撃側命中率
-        const evaRate = this.evaRate(target, hitType) * 100;    // 受け側回避率
+        // 攻撃側命中率
+        const hitRate = (hitType == DEffectHitType.Physical) ? paraIndirectPhysicalHitRate : 100;
+
+        // 受け側回避率
+        const evaRate = this.evaRate(target, hitType) * 100;
 
         const missed = rand.nextIntWithMax(100) >= hitRate;
         const evaded = !missed && rand.nextIntWithMax(100) < evaRate;

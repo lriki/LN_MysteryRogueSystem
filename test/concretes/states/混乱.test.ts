@@ -135,6 +135,7 @@ test("concretes.states.混乱.throw", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    actor1.addState(REData.getState("kState_UnitTest_投擲必中").id);
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
     const items = [];
     for (let i = 0; i < 5; i++) {

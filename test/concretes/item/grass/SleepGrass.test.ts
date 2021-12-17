@@ -35,14 +35,7 @@ test("concretes.item.grass.SleepGrass", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
-    
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    // 睡眠状態になる
-    expect(player1.isStateAffected(stateId)).toBeTruthy();
+    //----------------------------------------------------------------------------------------------------
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
@@ -52,6 +45,18 @@ test("concretes.item.grass.SleepGrass", () => {
 
     // 睡眠状態になる
     expect(enemy1.isStateAffected(stateId)).toBeTruthy();
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // [食べる]
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // 睡眠状態になる
+    expect(player1.isStateAffected(stateId)).toBeTruthy();
+    player1.removeState(stateId);
     
     TestUtils.testCommonGrassEnd(player1, item1);
 });
