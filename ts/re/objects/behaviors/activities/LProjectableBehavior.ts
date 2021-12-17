@@ -14,8 +14,9 @@ import { MovingMethod } from "ts/re/objects/LMap";
 import { UAction } from "ts/re/usecases/UAction";
 import { REData } from "ts/re/data/REData";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DEffectSet } from "ts/re/data/DEffect";
+import { DEffectHitType, DEffectSet } from "ts/re/data/DEffect";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { SActionHitTest } from "ts/re/system/SActionHitTest";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -80,6 +81,10 @@ export class LProjectableBehavior extends LBehavior {
         this.blowMoveCount = 0;
     }
 
+    private hitType(): DEffectHitType {
+        if (this._effectSet) return this._effectSet.hitType();
+        return DEffectHitType.Certain;
+    }
 
     
     onQueryReactions(actions: DActionId[]): void {
@@ -157,6 +162,7 @@ export class LProjectableBehavior extends LBehavior {
             
             common.blowMoveCount--;
 
+            const subject = args.subject.entity();//activity.subject();
 
             
 
@@ -164,8 +170,11 @@ export class LProjectableBehavior extends LBehavior {
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(DBlockLayerKind.Unit);
             if (hitTarget) {
 
-                
-                if (this._effectSet) {
+                if (!SActionHitTest.testProjectle(subject, self, hitTarget, this.hitType(), cctx.random())) {
+                    // 当たらなかった
+                    this.endMoving(cctx ,self);
+                }
+                else if (this._effectSet) {
                     // スキルや魔法弾
                     //
                     // v0.4.0 時点ではこの if の else 側から投げられる CollideActivity を LProjectableBehavior(self) の onActivity で受けて処理をしていた。
@@ -179,7 +188,6 @@ export class LProjectableBehavior extends LBehavior {
                     // - 矢弾をキャッチしてインベントリに加える(マゼルン系)実装で都合が悪い
 
                     const target = hitTarget;//activity.objects2()[0];
-                    const subject = args.subject.entity();//activity.subject();
 
                     cctx.postDestroy(self);
                     //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
@@ -201,19 +209,6 @@ export class LProjectableBehavior extends LBehavior {
                         .withOtherSubject(args.subject.entity())
                         .withEffectDirection(common.blowDirection));
                 }
-                /*
-                cctx.post(
-                    hitTarget, self, args.subject, undefined, onCollidePreReaction,
-                    () => {
-                        const args2: CollideActionArgs = {
-                            dir: common.blowDirection,
-                        };
-                        cctx.post(self, hitTarget, args.subject, args2, onCollideAction, () => {
-                            return true;
-                        });
-                        return true;
-                    });
-                    */
 
                 return SCommandResponse.Handled;
             }

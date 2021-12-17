@@ -483,5 +483,9 @@ export class DEffectSet {
         //     this.subEffects.push(e.clone());
         // }
     }
+
+    public hitType(): DEffectHitType {
+        return this.effects[0].hitType;
+    }
 }
 
