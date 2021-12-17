@@ -49,6 +49,6 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
     const hp2 = player1.actualParam(REBasics.params.hp);
     expect(hp2).toBe(hp1);
 
-    expect(inventory.entities()[0].dataId() == REData.getEntity("kItem_雑草").id).toBe(true);
+    //expect(inventory.entities()[0].dataId() == REData.getEntity("kItem_雑草").id).toBe(true);
 });
 

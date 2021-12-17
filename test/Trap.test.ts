@@ -69,6 +69,7 @@ test("Trap.TriggerRate", () => {
 
 test("Trap.Basic", () => {
     TestEnv.newGame();
+    const stateId = TestEnv.StateId_Sleep;
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -88,7 +89,7 @@ test("Trap.Basic", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-    expect(player1.isStateAffected(TestEnv.StateId_Sleep)).toBe(true);   // 睡眠状態
+    expect(player1.isStateAffected(stateId)).toBe(true);   // 睡眠状態
 });
 
 test("Trap.Enemy", () => {

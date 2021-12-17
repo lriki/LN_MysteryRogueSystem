@@ -227,11 +227,41 @@ export class RESetup {
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
                 break;
+            case "kポイズンドラッグ": {
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                
+                const emittor = entity.emittorSet.emittors(DEffectCause.Eat)[0];
+                const effect = emittor.effectSet.effects[0];
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
+                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
+                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
+
+                const effect2 = new DEffect(entity.entity.key);
+                effect2.matchConditions.kindId = REBasics.entityKinds.MonsterKindId;
+                effect2.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                effect2.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
+                entity.emittorSet.mainEmittor().effectSet.effects.push(effect2);
+                break;
+            }
             case "kキュアリーフ":
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
                 break;
+            case "kスリープドラッグ": {
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+                entity.emittorSet.addEmittor(DEffectCause.Hit, entity.emittorSet.mainEmittor());
+                break;
+            }
             case "k火炎草70_50":
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
