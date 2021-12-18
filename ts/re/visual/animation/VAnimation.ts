@@ -384,11 +384,10 @@ export class VAnimation {
         for (let i = 0; i < animations.length; i++) {
             if (animations[i].key == key) {
                 animations[i] = instance;
-                console.log("key add");
                 return;
             }
         }
-        console.log("add");
+        
         // 無ければ新しく追加
         animations.push(instance);
         

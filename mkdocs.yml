@@ -30,6 +30,7 @@ nav:
             - index: tutorial/index.md
     - Manual:
         - index: manual/index.md
+        - ドロップアイテム: manual/State.md
         - ドロップアイテム: manual/DropItem.md
     - リファレンス:
         - index: reference/Traits.md

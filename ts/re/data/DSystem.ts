@@ -68,9 +68,9 @@ export class DSystem {
 
     public link(testMode: boolean): void {
 
-        const bless = REData.getState("kState_UT祝福");
-        const curse = REData.getState("kState_UT呪い")
-        const seal = REData.getState("kState_UT封印");
+        const bless = REData.getState("kState_System_Bless");
+        const curse = REData.getState("kState_System_Curse")
+        const seal = REData.getState("kState_System_Seal");
 
         bless.displayNameIcon = true;
         curse.displayNameIcon = true;

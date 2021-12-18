@@ -1162,7 +1162,7 @@ export class RESetup {
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: REBasics.params.hp });
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.ActualParam, formula: "a.fp <= 0" });
                 break;
-            case "kState_UT封印":
+            case "kState_System_Seal":
                 data.effect.traits.push({ code: REBasics.traits.SealSpecialAbility, dataId: REBasics.actions.EatActionId, value: 0 });
                 break;
             case "kState_UT透明":

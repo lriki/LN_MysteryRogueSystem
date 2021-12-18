@@ -56,7 +56,7 @@ export class LProjectableBehavior extends LBehavior {
         
         //entity.dir = args.sender.dir;
 
-        entity.addState(REData.getState("kSystemState_Projectile").id, false);
+        entity.addState(REData.getState("kState_System_Projectile").id, false);
         
         cctx.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -70,7 +70,7 @@ export class LProjectableBehavior extends LBehavior {
         common.blowDirection = dir;
         common.blowMoveCount = length;
         
-        entity.addState(REData.getState("kSystemState_Projectile").id, false);
+        entity.addState(REData.getState("kState_System_Projectile").id, false);
         
         cctx.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -285,7 +285,7 @@ export class LProjectableBehavior extends LBehavior {
         }
         else {
             // 表示変更用のステート解除
-            self.removeState(REData.getState("kSystemState_Projectile").id);
+            self.removeState(REData.getState("kState_System_Projectile").id);
 
             UAction.postFall(cctx, self);
     

@@ -49,7 +49,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy を封印
-    enemy1.addState(REData.getState("kState_UT封印").id);
+    enemy1.addState(REData.getState("kState_System_Seal").id);
     
     // [←]
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());

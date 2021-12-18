@@ -15,7 +15,7 @@ beforeAll(() => {
 
 test("concretes.item.staff.SealStaff.basic", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT封印").id;
+    const stateId = REData.getState("kState_System_Seal").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);

@@ -85,15 +85,6 @@ export class VManualActionDialogVisual extends VDialog {
             return;
         }
 
-        /*
-        if (Input.isTriggered("pageup")) {
-            entity.addState(REData.getStateFuzzy("kState_UTアイテム擬態").id);
-            this._model.submit(DialogSubmitMode.ConsumeAction);
-            return;
-        }
-        */
-
-
         
         // if (entity.immediatelyAfterAdjacentMoving) {
         //     entity.immediatelyAfterAdjacentMoving = false;

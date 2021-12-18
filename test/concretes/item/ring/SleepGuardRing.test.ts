@@ -48,7 +48,6 @@ test("concretes.item.ring.SleepGuardRing", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        
         expect(REGame.messageHistory.includesText("効かなかった")).toBe(true);
 
         // 睡眠状態？
