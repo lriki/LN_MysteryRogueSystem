@@ -38,7 +38,7 @@ export class SActionHitTest {
     private static testCertainIndirectHits(subject: LEntity, projectile: LEntity, target: LEntity): boolean | undefined {
         const awful = subject.hasTrait(REBasics.traits.AwfulPhysicalIndirectAttack);
         const hit = subject.hasTrait(REBasics.traits.CertainIndirectAttack);
-        const avoid = target.hasTrait(REBasics.traits.CartailDodgePhysicalAttack);
+        const avoid = target.hasTrait(REBasics.traits.DodgePhysicalIndirectAttack);
         if (hit && avoid) {
             // 絶対命中と絶対回避がコンフリクトしている場合は通常の判定を行う
             return undefined;

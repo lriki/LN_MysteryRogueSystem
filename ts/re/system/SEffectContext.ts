@@ -353,7 +353,7 @@ export class SEffectContext {
         else if (type == SEffectIncidentType.IndirectAttack) {
             const awful = (subject.traits(REBasics.traits.AwfulPhysicalIndirectAttack).length > 0);
             const hit = (subject.traits(REBasics.traits.CertainIndirectAttack).length > 0);
-            const avoid = (target.traits(REBasics.traits.CartailDodgePhysicalAttack).length > 0);
+            const avoid = (target.traits(REBasics.traits.DodgePhysicalIndirectAttack).length > 0);
             if (hit && avoid) {
                 // 絶対命中と絶対回避がコンフリクトしている場合は通常の判定を行う
                 return false;

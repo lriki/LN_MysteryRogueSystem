@@ -1176,8 +1176,8 @@ export class RESetup {
             case "kState_UT足つかみ":
                 data.effect.behaviors.push({ name: "LGrabFootBehavior" });
                 break;
-            case "kState_UT身かわし":
-                data.effect.traits.push({ code: REBasics.traits.CartailDodgePhysicalAttack, dataId: 0, value: 0 });
+            case "kState_物理投擲回避":
+                data.effect.traits.push({ code: REBasics.traits.DodgePhysicalIndirectAttack, dataId: 0, value: 0 });
                 break;
             case "kState_UT下手投げ":
                 data.effect.traits.push({ code: REBasics.traits.AwfulPhysicalIndirectAttack, dataId: 0, value: 0 });

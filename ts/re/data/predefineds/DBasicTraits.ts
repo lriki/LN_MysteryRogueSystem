@@ -55,7 +55,7 @@ export interface DBasicTraits {
     CertainIndirectAttack: DTraitId;//,
 
     /** 物理的な関節攻撃を完全回避する。 */
-    CartailDodgePhysicalAttack: DTraitId;
+    DodgePhysicalIndirectAttack: DTraitId;
 
     /** 物理的な間接攻撃が全く当たらなくなる。 */
     AwfulPhysicalIndirectAttack: DTraitId;
