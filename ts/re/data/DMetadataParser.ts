@@ -17,11 +17,14 @@ export class DMetadata {
     /** MR-Trait */
     traits: IDataTrait[];
 
+    races: string[];
+
     public constructor() {
         this.key = "";
         this.kind = "";
         this.behaviors = [];
         this.traits = [];
+        this.races = [];
     }
 }
 
@@ -66,6 +69,14 @@ export class DMetadataParser {
                     dataId: this.parseTraitDataId(c.args[0]),
                     value: Number(c.args[1]),
                 });
+            }
+        }
+
+        const races = meta["MR-Race"];
+        if (races) {
+            const list = ((races instanceof Array) ? races : [races]) as string[];
+            for (const data of list) {
+                result.races.push(data.trim());
             }
         }
 

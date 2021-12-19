@@ -512,7 +512,7 @@ export class SEffectApplyer {
         value = this.applyVariance(value, paramEffect.variance);
         value = this.applyGuard(value, target);
         value = this.applyProficiency(value);
-        value = this.applyDamageRate(value, paramEffect.paramId, target);
+        value = this.applyDamageRate(value, paramEffect.paramId, paramEffect.elementId, target);
         value = Math.round(value);
         return value;
     }
@@ -598,10 +598,13 @@ export class SEffectApplyer {
         return damage * this._effect.fact().genericEffectRate();
     }
     
-    private applyDamageRate(damage: number, paramId: DParameterId, target: LEntity): number {
+    private applyDamageRate(damage: number, paramId: DParameterId, elementId: number, target: LEntity): number {
         if (damage > 0) {
             return damage * target.traitsPi(REBasics.traits.ParamDamageRate, paramId)
         }
+        // else if (damage < 0) {
+        //     target.traitsPi(REBasics.traits.RecoverRate);
+        // }
         else {
             return damage;
         }

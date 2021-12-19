@@ -258,6 +258,9 @@ export class REDataManager
             REBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
             REBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
             REBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
+            REBasics.traits.DisableTrap = REData.newTrait("DisableTrap").id;
+            REBasics.traits.RecoverRate = REData.newTrait("RecoverRate").id;
+            //REBasics.traits.ElementedRecoverRate = REData.newTrait("ElementedRecoverRate").id;
         }
 
         // Factions
@@ -532,12 +535,20 @@ export class REDataManager
         // Import Classes
         $dataClasses.forEach(x => {
             if (x) {
-                const id = REData.addClass(x.name ?? "null");
-                const c = REData.classes[id];
-                c.expParams = x.expParams ?? [];
-                c.params = x.params ?? [];
-                c.traits = x.traits ?? [];
-                c.learnings = x.learnings;
+                const meta = DMetadataParser.parse(x.meta);
+                if (meta.kind == "Race") {
+                    const race = REData.newRace();
+                    race.key = meta.key;
+                    race.name = x.name;
+                }
+                else {
+                    const id = REData.addClass(x.name ?? "null");
+                    const c = REData.classes[id];
+                    c.expParams = x.expParams ?? [];
+                    c.params = x.params ?? [];
+                    c.traits = x.traits ?? [];
+                    c.learnings = x.learnings;
+                }
             }
         });
         REBasics.defaultEnemyClass = REData.classes[9].id;  // TODO:
@@ -742,12 +753,15 @@ export class REDataManager
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
                 enemy.dropItems = DDropItem.makeFromRmmzDropItemList(x.dropItems, x.gold);
-                entity.entity = parseMetaToEntityProperties(x.meta);
+                entity.entity = parseMetaToEntityProperties(x.meta);    // TODO: ↓DMetadataParserを使う
                 entity.entity.kindId = REBasics.entityKinds.MonsterKindId;
                 entity.factionId = REData.system.factions.enemy;
                 entity.classId =  REBasics.defaultEnemyClass;
 
                 enemy.traits = enemy.traits.concat(DTrait.parseTraitMetadata(x.meta));
+
+                const meta = DMetadataParser.parse(x.meta);
+                entity.raceIds = meta.races.map(x => REData.getRace(x).id);
 
                 RESetup.setupEnemy(entity);
             }

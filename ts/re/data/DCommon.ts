@@ -4,7 +4,7 @@ export type DEntityKindId = number;
 export type DAttackElementId = number;
 export type DSkillId = number;
 export type DSpecificEffectId = number;
-
+export type DRaceId = number;
 
 // /**
 //  * システムに基づいた根本的な分類。

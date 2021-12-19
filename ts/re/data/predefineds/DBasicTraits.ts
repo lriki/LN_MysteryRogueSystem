@@ -153,5 +153,18 @@ export interface DBasicTraits {
      * 罠にかからなくなる。浮遊とは意味が違うので注意。
      */
     DisableTrap: DTraitId;
+
+    
+    /**
+     * 指定属性の回復効果に対する倍率
+     */
+    RecoverRate: DTraitId;
+
+    /**
+     * 指定属性の回復効果に対する倍率
+     * dataId: ElementId
+     * dataIdが0の場合は属性を問わない。
+     */
+    //ElementedRecoverRate: DTraitId;
 }
 

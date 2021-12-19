@@ -1077,6 +1077,9 @@ export class RESetup {
             case "kEnemy_ウルフA":
                 entity.majorActionDeclines = 1;
                 break;
+            case "kEnemy_ゾンビA":
+                data.traits.push({ code: REBasics.traits.RecoverRate, dataId: 0, value: -1.0 });
+                break;
             case "kEnemy_プレゼンにゃーA":
                 //data.traits.push({ code: DBasics.traits.ItemDropRate, dataId: 0, value: 1.0 });
                 break;

@@ -3,7 +3,7 @@ import { DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
 import { DAnnotationReader } from "./DAnnotationReader";
 import { DClassId } from "./DClass";
-import { DAttackElementId } from "./DCommon";
+import { DAttackElementId, DRaceId } from "./DCommon";
 import { DEmittorSet, DEmittorId } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
@@ -163,6 +163,8 @@ export class DEntity {
 
     classId: DClassId;
 
+    raceIds: DRaceId[];
+
     /** この Entity 自身に対する Trait */
     selfTraits: IDataTrait[];
 
@@ -229,6 +231,7 @@ export class DEntity {
         this.itemData = undefined;
         this.enemy = undefined;
         this.classId = 0;
+        this.raceIds = [];
         this.selfTraits = [];
         this.affestTraits = [];
         this.isTraitCharmItem = false;

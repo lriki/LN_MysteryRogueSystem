@@ -45,7 +45,7 @@ declare interface IDataClass
         note: string;
         skillId: number;
     }[];
-    name?: string;
+    name: string;
     note?: string;
     params?: number[][];
     meta?: any;

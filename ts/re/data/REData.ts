@@ -27,6 +27,7 @@ import { REDataExtension } from "./REDataExtension";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
+import { DRace } from "./DRace";
 // import { DPreset } from "./DPreset";
 
 
@@ -142,6 +143,7 @@ export class REData
     static equipmentParts: DEquipmentPart[] = [];
     static entityKinds: DEntityKind[] = [];
     static classes: DClass[] = [];
+    static races: DRace[] = [];
     static actors: DEntityId[] = [];
     static enemies: DEntityId[] = [];
     static lands: DLand[] = [];
@@ -182,6 +184,7 @@ export class REData
 
         this.classes = [];
         this.addClass("null");
+        this.races = [new DRace(0)];
 
         this.actors = [];
 
@@ -252,6 +255,31 @@ export class REData
         });
         return newId;
     }
+    
+    //--------------------
+
+    static newRace(): DRace {
+        const data = new DRace(this.races.length);
+        this.races.push(data);
+        return data;
+    }
+
+    static findRace(pattern: string): DRace | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.races[id];
+        else {
+            return this.races.find(x => (x.key != "" && x.key == pattern) || x.name == pattern);
+        }
+    }
+
+    static getRace(pattern: string): DRace {
+        const d = this.findRace(pattern);
+        if (d) return d;
+        throw new Error(`Race "${pattern}" not found.`);
+    }
+
+    //--------------------
     
     static addAction(displayName: string, typeName: string, priority?: number): number {
         const newId = this.actions.length;
