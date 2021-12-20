@@ -156,22 +156,22 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Handled;
     }
 
-    [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-        throw new Error("deprecated");
-        const self = args.self;
+    // [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
+    //     throw new Error("deprecated");
+    //     const self = args.self;
         
-        cctx.postDestroy(self);
+    //     cctx.postDestroy(self);
 
-        const a = args.args as CollideActionArgs;
-        this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Hit, a.dir);
+    //     const a = args.args as CollideActionArgs;
+    //     this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Hit, a.dir);
         
-        //
+    //     //
 
-        //LProjectableBehavior.startMoveAsProjectile(cctx, args.sender, a.dir, 5);
+    //     //LProjectableBehavior.startMoveAsProjectile(cctx, args.sender, a.dir, 5);
         
 
-        return SCommandResponse.Handled;
-    }
+    //     return SCommandResponse.Handled;
+    // }
     
     private applyEffect(cctx: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();

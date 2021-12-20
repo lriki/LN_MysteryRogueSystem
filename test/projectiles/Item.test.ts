@@ -136,8 +136,7 @@ test("Item.ReflectionObject", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
 
     // object1
-    const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kObject_投擲反射石").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
-    REGame.world._transferEntity(object1, floorId, 13, 10);
+    const object1 = TestEnv.createReflectionObject(floorId, 13, 10);
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));

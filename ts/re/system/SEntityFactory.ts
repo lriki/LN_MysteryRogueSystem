@@ -12,7 +12,6 @@ import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LEnemyBehavior } from "ts/re/objects/behaviors/LEnemyBehavior";
 import { LEquipmentBehavior } from "ts/re/objects/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { LMagicBulletBehavior } from "ts/re/objects/behaviors/LMagicBulletBehavior";
 import { DEntity, DEntityId, DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LEntryPointBehavior } from "ts/re/objects/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
@@ -145,16 +144,6 @@ export class SEntityFactory {
     public static buildExitPoint(e: LEntity): void {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LExitPointBehavior);
-    }
-
-    public static newMagicBullet(ownerItem: LEntity): LEntity {
-        const e = REGame.world.spawnEntity(REData.getEntity("kSystem_MagicBullet").id);
-        this.buildMagicBullet(e, ownerItem);
-        return e;
-    }
-
-    public static buildMagicBullet(e: LEntity, ownerItem: LEntity): void {
-        e.addBehavior(LMagicBulletBehavior, ownerItem);
     }
 
     public static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {

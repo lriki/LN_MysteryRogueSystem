@@ -867,7 +867,7 @@ export class RESetup {
             case "kItem_Gold":
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.emittorSet.mainEmittor()));
                 break;
-            case "kObject_投擲反射石":
+            case "kObject_投擲反射石A":
                 entity.selfTraits.push({code: REBasics.traits.PhysicalProjectileReflector, dataId: 0, value: 0});
                 break;
                 

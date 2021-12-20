@@ -15,7 +15,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.grass.AntiPoisonGrass", () => {
+test("concretes.item.grass.AntiPoisonGrass.enemy", () => {
     TestEnv.newGame();
 
     // Player
@@ -67,3 +67,56 @@ test("concretes.item.grass.AntiPoisonGrass", () => {
     //TestUtils.testCommonGrassEnd(player1, item1);
 });
 
+
+test("concretes.item.grass.AntiPoisonGrass.player", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const pow1 = player1.actualParam(REBasics.params.pow);
+
+    const object1 = TestEnv.createReflectionObject(floorId, 13, 10);
+
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item2"));
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
+
+    TestUtils.testCommonGrassBegin(player1, item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    player1.setActualParam(REBasics.params.pow, 1);
+    expect(player1.actualParam(REBasics.params.pow)).toBe(1);       // 一応チェック
+
+    // [食べる]
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    const pow2 = player1.actualParam(REBasics.params.pow);
+    expect(pow2).toBe(pow1);    // ちからが最大まで回復
+
+    TestUtils.testCommonGrassEnd(player1, item1);
+
+    //----------------------------------------------------------------------------------------------------
+    
+    player1.setActualParam(REBasics.params.pow, 1);
+    expect(player1.actualParam(REBasics.params.pow)).toBe(1);       // 一応チェック
+    const hp1 = player1.actualParam(REBasics.params.hp);
+
+    // [投げる] > 反射
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    const pow3 = player1.actualParam(REBasics.params.pow);
+    const hp2 = player1.actualParam(REBasics.params.hp);
+    expect(pow3).toBe(pow1);        // ちからが最大まで回復
+    expect(hp2).toBeLessThan(hp1);  // ダメージをうけたりしていない
+    
+});

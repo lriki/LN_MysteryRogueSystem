@@ -19,10 +19,11 @@ import { DLandId } from "ts/re/data/DLand";
 import { DStateId } from "ts/re/data/DState";
 import { SDialogContext } from "ts/re/system/SDialogContext";
 import { SDialog } from "ts/re/system/SDialog";
-import { DEntityId } from "ts/re/data/DEntity";
+import { DEntityCreateInfo, DEntityId } from "ts/re/data/DEntity";
 import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { REBasics } from "ts/re/data/REBasics";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
 
 declare global {
     interface Number {
@@ -113,6 +114,12 @@ export class TestEnv {
         REGame.world._transferEntity(player, floorId, mx, my);
         TestEnv.performFloorTransfer();
         return player;
+    }
+
+    public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
+        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kObject_投擲反射石A").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
+        REGame.world._transferEntity(object1, floorId, 13, 10);
+        return object1;
     }
 
     public static performFloorTransfer(): void {
