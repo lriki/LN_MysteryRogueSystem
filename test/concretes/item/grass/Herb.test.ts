@@ -8,6 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -87,19 +88,20 @@ Race は Class として定義してみる。オマケ的に、これによっ�
 */
 
 
-test("concretes.item.grass.Herb", () => {
+test("concretes.item.grass.Herb.player", () => {
     TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
     
     // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    REGame.world._transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
@@ -109,26 +111,84 @@ test("concretes.item.grass.Herb", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
-
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    // ワープしている
-    expect(enemy1.x == 15 && enemy1.y == 10).toBeFalsy();
-
-    //----------------------------------------------------------------------------------------------------
+    const player1HpMax1 = player1.idealParam(REBasics.params.hp);
     
-    // [食べる]
+    // [食べる] (HP Max)
     RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // ワープしている
-    expect(player1.x == 10 && player1.y == 10).toBeFalsy();
+    // 最大HPが増えている
+    const player1HpMax2 = player1.idealParam(REBasics.params.hp);
+    expect(player1HpMax2).toBeGreaterThan(player1HpMax1);
 
     TestUtils.testCommonGrassEnd(player1, item1);
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 適当に HP を減らしておく
+    player1.setActualParam(REBasics.params.hp, Math.max(player1HpMax1 - 50, 1));
+    const player1Hp1 = player1.actualParam(REBasics.params.hp);
+    
+    // [食べる]
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // HPが回復している
+    const player1Hp2 = player1.actualParam(REBasics.params.hp);
+    expect(player1Hp2).toBeGreaterThan(player1Hp1);
+});
+
+test("concretes.item.grass.Herb.enemy", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+    
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+
+    // Enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+
+    // アイテム作成 & インベントリに入れる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item2"));
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    const enemy1HpMax1 = enemy1.idealParam(REBasics.params.hp);
+    
+    // [投げる] (HP Max)
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // 最大HPは変わらない
+    const enemy1HpMax2 = enemy1.idealParam(REBasics.params.hp);
+    expect(enemy1HpMax2).toBe(enemy1HpMax1);
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 適当に HP を減らしておく
+    enemy1.setActualParam(REBasics.params.hp, Math.max(enemy1HpMax1 - 50, 1));
+    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
+    
+    // [投げる]
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // HPが回復している
+    const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
+    expect(enemy1Hp2).toBeGreaterThan(enemy1Hp1);
 });
 

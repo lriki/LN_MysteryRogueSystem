@@ -250,11 +250,20 @@ export class RESetup {
                 entity.emittorSet.mainEmittor().effectSet.effects.push(effect2);
                 break;
             }
-            case "kキュアリーフ":
+            case "kキュアリーフ": {
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
                 entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+
+                const emittor = entity.emittorSet.emittors(DEffectCause.Eat)[0];
+                const effect = emittor.effectSet.effects[0];
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Recover)
+                    .withApplyTarget(DParameterApplyTarget.Maximum)
+                    .withConditionFormula("a.hp >= a.max_hp"));
+
                 break;
+            }
             case "kスリープドラッグ": {
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);

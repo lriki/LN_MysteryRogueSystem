@@ -166,5 +166,12 @@ export interface DBasicTraits {
      * dataIdが0の場合は属性を問わない。
      */
     //ElementedRecoverRate: DTraitId;
+
+    /**
+     * 種族に対するダメージ倍率。攻撃側に付く Trait.
+     * dataId: RaceId
+     * value: 率 (1.0 = 100%)
+     */
+    RaceRate: DTraitId;
 }
 

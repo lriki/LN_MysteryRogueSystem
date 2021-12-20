@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.ring.SleepGuardRing"
+                "-t", "concretes.item.grass.Herb.enemy"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
