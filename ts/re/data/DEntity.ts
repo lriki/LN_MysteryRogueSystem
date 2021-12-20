@@ -4,7 +4,7 @@ import { RE_Data_Actor } from "./DActor";
 import { DAnnotationReader } from "./DAnnotationReader";
 import { DClassId } from "./DClass";
 import { DAttackElementId, DRaceId } from "./DCommon";
-import { DEmittorSet, DEmittorId } from "./DEmittor";
+import { DEmittorSet, DEmittorId, DEmittor } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
@@ -30,7 +30,7 @@ export interface DEntityNamePlate {
     iconIndex: number;
 }
 
-export interface DReaction {
+export class DReaction {
 /*
     [2021/10/6] Cause と Reaction 見直ししたいメモ
     ----------
@@ -98,6 +98,16 @@ export interface DReaction {
 
 
     emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
+
+    public constructor(actionId: DActionId, emittorId: DEmittorId) {
+        this.actionId = actionId;
+        this.emittingEffect = emittorId;
+    }
+
+    public emittor(): DEmittor {
+        assert(this.emittingEffect > 0);
+        return REData.emittors[this.emittingEffect];
+    }
 }
 
 export interface DEntityAutoAdditionState {
@@ -274,8 +284,19 @@ export class DEntity {
 
     public addReaction(actionId: DActionId, emittorId: DEmittorId): void {
         if (!this.reactions.find(x => x.actionId == actionId && x.emittingEffect == emittorId)) {
-            this.reactions.push({ actionId: actionId, emittingEffect: emittorId });
+            this.reactions.push(new DReaction(actionId, emittorId));
         }
+    }
+
+    public findReaction(actionId: DActionId): DReaction | undefined {
+        const reaction = this.reactions.find(x => x.actionId == actionId);
+        return reaction;
+    }
+
+    public getReaction(actionId: DActionId): DReaction {
+        const reaction = this.reactions.find(x => x.actionId == actionId);
+        assert(reaction);
+        return reaction;
     }
 
     public makeDisplayName(stackCont: number): string {

@@ -16,11 +16,12 @@ export class TestUtils {
         expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBe(true);
 
         // [食べる] に対応する Emittor がある？
-        const emittors = data.emittorSet.emittors(DEffectCause.Eat);
-        assert(!!emittors);
+        const emittor = data.getReaction(REBasics.actions.EatActionId).emittor();//data.emittorSet.emittors(DEffectCause.Eat);
+        assert(!!emittor);
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!emittors.find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500")));
+        //expect(!!emittors.find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500")));
+        expect(!!emittor.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500"));
 
         // おなかを減らしておく
         actor.setActualParam(REBasics.params.fp, 5000);

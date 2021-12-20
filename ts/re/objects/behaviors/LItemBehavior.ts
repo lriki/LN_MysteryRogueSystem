@@ -81,7 +81,7 @@ export class LItemBehavior extends LBehavior {
             const subject = new SEffectSubject(activity.subject());
             actx.postHandleActivity(cctx, target)
             .then(() => {
-                this.applyEffect(cctx, self, target, subject, DEffectCause.Hit, activity.effectDirection(), (targets: LEntity[]) => {
+                this.applyHitEffect(cctx, self, target, subject, activity.effectDirection(), (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {
                         // ここは postDestroy() ではなく普通の destroy().
                         // 上記 applyEffect() の中から postAnimation() が実行されるが、
@@ -131,11 +131,28 @@ export class LItemBehavior extends LBehavior {
         }
         // [食べられた]
         else if (activity.actionId() == REBasics.actions.EatActionId) {
+            
             const subject = activity.actor();
             const reactor = activity.object();
             if (reactor) {
                 UIdentify.identifyByTiming(cctx, subject, reactor, DIdentifiedTiming.Eat);
-                cctx.post(reactor, subject, new SEffectSubject(subject), undefined, onEatReaction);
+
+
+                const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.EatActionId);
+                for (const reaction of reactions) {
+                    SEmittorPerformer.makeWithEmitor(subject, subject, REData.getEmittorById(reaction.emittingEffect))
+                        .setItemEntity(self)
+                        .setSelectedTargetItems(activity.objects2())
+                        .perform(cctx);
+
+                    // 食べられたので削除。
+                    // [かじる] も [食べる] の一部として考えるような場合は Entity が削除されることは無いので、
+                    // actor 側で destroy するのは望ましくない。
+                    cctx.postDestroy(self);
+                }
+
+
+                //cctx.post(reactor, subject, new SEffectSubject(subject), undefined, onEatReaction);
             }
             
             return SCommandResponse.Handled;
@@ -144,17 +161,17 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    [onEatReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-        const self = args.self;
-        this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Eat, self.dir);
+    // [onEatReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
+    //     const self = args.self;
+    //     this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Eat, self.dir);
 
-        // 食べられたので削除。
-        // [かじる] も [食べる] の一部として考えるような場合は Entity が削除されることは無いので、
-        // actor 側で destroy するのは望ましくない。
-        self.destroy();
+    //     // 食べられたので削除。
+    //     // [かじる] も [食べる] の一部として考えるような場合は Entity が削除されることは無いので、
+    //     // actor 側で destroy するのは望ましくない。
+    //     self.destroy();
 
-        return SCommandResponse.Handled;
-    }
+    //     return SCommandResponse.Handled;
+    // }
 
     // [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
     //     throw new Error("deprecated");
@@ -173,20 +190,21 @@ export class LItemBehavior extends LBehavior {
     //     return SCommandResponse.Handled;
     // }
     
-    private applyEffect(cctx: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, cause: DEffectCause, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
+    private applyHitEffect(cctx: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();
-        const emittors = entityData.emittorSet.emittors(cause);
-        if (emittors.length > 0) {
+        //const emittors = entityData.emittorSet.emittors(cause);
+        const emittor = entityData.getReaction(REBasics.actions.collide).emittor();
+        //if (emittors.length > 0) {
             cctx.postCall(() => {
-                for (const emittor of emittors) {
+                //for (const emittor of emittors) {
                     //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
                     SEmittorPerformer.makeWithEmitor(subject.entity(), target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
                         .perform(cctx, onPerformedFunc);
-                }
+                //}
             });
-        }
+        //}
         
         // const skill = entityData.emittorSet.skill(cause);
         // if (skill) {
