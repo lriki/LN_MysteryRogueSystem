@@ -261,6 +261,8 @@ export class REDataManager
             REBasics.traits.DisableTrap = REData.newTrait("DisableTrap").id;
             REBasics.traits.RecoverRate = REData.newTrait("RecoverRate").id;
             //REBasics.traits.ElementedRecoverRate = REData.newTrait("ElementedRecoverRate").id;
+            REBasics.traits.RaceRate = REData.newTrait("RaceRate").id;
+            REBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
         }
 
         // Factions

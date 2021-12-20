@@ -17,6 +17,7 @@ import { SCommandResponse } from "./RECommand";
 import { RESystem } from "./RESystem";
 import { assert } from "../Common";
 import { LObject, LObjectType } from "../objects/LObject";
+import { UEffect } from "../usecases/UEffect";
 
 
 export enum SEffectIncidentType {
@@ -104,68 +105,85 @@ export class SEffectContext {
     }
 
     public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): RECCMessageCommand {
-        //let deadCount = 0;
-        for (const target of targets) {
-            const localTargets = new Map<LEntity, SEffect[]>();
 
-            // まず SubComponent を含めた適用対象を取り出す
-            for (const effect of this._effectorFact.effects()) {
-                // Find sub-components
-                const subComponentKey = effect.data().matchConditions.key;
-                if (subComponentKey) {
-                    for (const subTarget of target.querySubEntities(subComponentKey)) {
-                        const pair = localTargets.get(subTarget);
-                        if (pair) {
-                            pair.push(effect);
-                        }
-                        else {
-                            localTargets.set(subTarget, [effect]);
-                        }
-                    }
-                }
-                else {
-                    // Main Effect
-                    const pair = localTargets.get(target);
-                    if (pair) {
-                        pair.push(effect);
-                    }
-                    else {
-                        localTargets.set(target, [effect]);
-                    }
-                }
-            }
+        const applies = UEffect.resolveApplyEffects(this._effectorFact.effects(), targets, cctx.random());
 
-            for (const [key, value] of localTargets.entries()) {
+        for (const info of applies) {
+            
+            for (const [key, value] of info.targets.entries()) {
                 const effects = this.selectEffects(value, cctx.random());
                 for (const effect of effects) {
                     if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
-                        this.applyWithHitTest(cctx, effect, key, target);
+                        this.applyWithHitTest(cctx, effect, key, info.mainTarget);
                     }
                 }
                 //entries.push(`${key}:${value}`);
             }
 
-            //this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
-
-
-            //const effect = this._effectorFact.selectEffect(target);
-
-
-            // if (target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
-            //     const targets = new Map<LEntity, SEffect[]>();
-            //     targets.set(target, [effect]);
-
-            //     // Main Effect
-            //     this.applyEffectToTarget(cctx, effect, target);
-            //     // Sub Effects
-            //     for (const subEffect of this._effectorFact.subEffects()) {
-            //         for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
-            //             this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
-            //         }
-            //     }
-            // }
-
         }
+
+        // //let deadCount = 0;
+        // for (const target of targets) {
+        //     const localTargets = new Map<LEntity, SEffect[]>();
+
+        //     // まず SubComponent を含めた適用対象を取り出す
+        //     for (const effect of this._effectorFact.effects()) {
+        //         // Find sub-components
+        //         const subComponentKey = effect.data().matchConditions.key;
+        //         if (subComponentKey) {
+        //             for (const subTarget of target.querySubEntities(subComponentKey)) {
+        //                 const pair = localTargets.get(subTarget);
+        //                 if (pair) {
+        //                     pair.push(effect);
+        //                 }
+        //                 else {
+        //                     localTargets.set(subTarget, [effect]);
+        //                 }
+        //             }
+        //         }
+        //         else {
+        //             // Main Effect
+        //             const pair = localTargets.get(target);
+        //             if (pair) {
+        //                 pair.push(effect);
+        //             }
+        //             else {
+        //                 localTargets.set(target, [effect]);
+        //             }
+        //         }
+        //     }
+
+        //     for (const [key, value] of localTargets.entries()) {
+        //         const effects = this.selectEffects(value, cctx.random());
+        //         for (const effect of effects) {
+        //             if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+        //                 this.applyWithHitTest(cctx, effect, key, target);
+        //             }
+        //         }
+        //         //entries.push(`${key}:${value}`);
+        //     }
+
+        //     //this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
+
+
+        //     //const effect = this._effectorFact.selectEffect(target);
+
+
+        //     // if (target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+        //     //     const targets = new Map<LEntity, SEffect[]>();
+        //     //     targets.set(target, [effect]);
+
+        //     //     // Main Effect
+        //     //     this.applyEffectToTarget(cctx, effect, target);
+        //     //     // Sub Effects
+        //     //     for (const subEffect of this._effectorFact.subEffects()) {
+        //     //         for (const subTarget of target.querySubEntities(subEffect.subTargetKey)) {
+        //     //             this.applyEffectToTarget(cctx, subEffect.effect, subTarget);
+        //     //         }
+        //     //     }
+        //     // }
+
+        // }
 
         return cctx.postCall(() => {});
     }

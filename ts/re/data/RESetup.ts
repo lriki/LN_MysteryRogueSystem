@@ -867,6 +867,9 @@ export class RESetup {
             case "kItem_Gold":
                 entity.emittorSet.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.emittorSet.mainEmittor()));
                 break;
+            case "kObject_投擲反射石":
+                entity.selfTraits.push({code: REBasics.traits.PhysicalProjectileReflector, dataId: 0, value: 0});
+                break;
                 
         }
     }
@@ -1120,6 +1123,9 @@ export class RESetup {
     
     public static setupDirectly_State(data: DState) {
         switch (data.key) {
+            case "kState_System_ItemStanding":
+                data.effect.behaviors.push({ name: "LItemStandingBehavior" });
+                break;
             case "kState_UT睡眠":
                 data.idleSequel = REBasics.sequels.asleep;
                 break;

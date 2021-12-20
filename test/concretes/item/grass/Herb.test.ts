@@ -139,7 +139,7 @@ test("concretes.item.grass.Herb.player", () => {
 
     // HPが回復している
     const player1Hp2 = player1.actualParam(REBasics.params.hp);
-    expect(player1Hp2).toBeGreaterThan(player1Hp1);
+    expect(player1Hp2).toBeGreaterThan(player1Hp1 + 5); // 自動回復も行われるので、少し offset つける
 });
 
 test("concretes.item.grass.Herb.enemy", () => {

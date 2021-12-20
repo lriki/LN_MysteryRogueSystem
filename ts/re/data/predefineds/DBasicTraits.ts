@@ -173,5 +173,7 @@ export interface DBasicTraits {
      * value: 率 (1.0 = 100%)
      */
     RaceRate: DTraitId;
+
+    PhysicalProjectileReflector: DTraitId;
 }
 

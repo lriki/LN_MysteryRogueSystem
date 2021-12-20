@@ -8,6 +8,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -20,30 +21,30 @@ test("Item.ThrowAndDrop", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1.dir = 6;
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    player1.dir = 6;
+    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     RESystem.scheduler.stepSimulation();
 
     //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
+    const activity1 = LActivity.makeThrow(player1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();
 
     // [投げる]
-    const activity2 = LActivity.makeThrow(actor1, item2).withConsumeAction();
+    const activity2 = LActivity.makeThrow(player1, item2).withConsumeAction();
     RESystem.dialogContext.postActivity(activity2);
     RESystem.dialogContext.activeDialog().submit();
     
@@ -57,14 +58,14 @@ test("Item.DropAndDestroy", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    actor1.dir = 6;
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    player1.dir = 6;
+    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 床にアイテムを敷き詰める
     const ox = 7//10;
@@ -81,7 +82,7 @@ test("Item.DropAndDestroy", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
+    const activity1 = LActivity.makeThrow(player1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit();
     
@@ -96,12 +97,12 @@ test("projectiles.Item.AwfulThrowing", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getState("kState_UT下手投げ").id);
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    player1.addState(REData.getState("kState_UT下手投げ").id);
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1"));
-    actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
@@ -112,7 +113,7 @@ test("projectiles.Item.AwfulThrowing", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    const activity1 = LActivity.makeThrow(actor1, item1).withEntityDirection(6).withConsumeAction();
+    const activity1 = LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction();
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit();
     
@@ -127,3 +128,37 @@ test("projectiles.Item.AwfulThrowing", () => {
     expect(item1.isDestroyed()).toBe(false);
 });
 
+test("Item.ReflectionObject", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
+
+    // object1
+    const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kObject_投擲反射石").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
+    REGame.world._transferEntity(object1, floorId, 13, 10);
+
+    // アイテムを作ってインベントリに入れる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 適当に HP を減らしておく
+    const player1HpMax1 = player1.idealParam(REBasics.params.hp);
+    player1.setActualParam(REBasics.params.hp, Math.max(player1HpMax1 - 10, 1));
+    //const player1Hp1 = player1.actualParam(REBasics.params.hp);
+    
+    // [投げる]
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // HPが回復している
+    const player1Hp2 = player1.actualParam(REBasics.params.hp);
+    expect(player1Hp2).toBe(player1HpMax1);
+});

@@ -22,6 +22,7 @@ import { LGrabFootBehavior } from "../objects/abilities/LGrabFootBehavior";
 import { DBehaviorInstantiation } from "../data/DEntityProperties";
 import { LEquipmentBehavior } from "../objects/behaviors/LEquipmentBehavior";
 import { LRevivalItemBehavior } from "../objects/behaviors/LRevivalItemBehavior";
+import { LItemStandingBehavior } from "../objects/states/LItemStandingState";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -49,6 +50,7 @@ export class SBehaviorFactory {
         { fullName: "LIllusionStateBehavior", friendlyName: "IllusionState", create: () => new LIllusionStateBehavior() },
         { fullName: "LGrabFootBehavior", friendlyName: "FootBehavior", create: () => new LGrabFootBehavior() },
         { fullName: "LRevivalItemBehavior", friendlyName: "RevivalItem", create: () => new LRevivalItemBehavior() },
+        { fullName: "LItemStandingBehavior", friendlyName: "ItemStanding", create: () => new LItemStandingBehavior() },
         
         
         

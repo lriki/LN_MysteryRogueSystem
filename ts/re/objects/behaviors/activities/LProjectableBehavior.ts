@@ -169,10 +169,15 @@ export class LProjectableBehavior extends LBehavior {
             // 他 Unit との衝突判定
             const hitTarget = REGame.map.block(tx, ty).aliveEntity(DBlockLayerKind.Unit);
             if (hitTarget) {
-
-                if (!SActionHitTest.testProjectle(subject, self, hitTarget, this.hitType(), cctx.random())) {
+                if (hitTarget.hasTrait(REBasics.traits.PhysicalProjectileReflector)) {
+                    // 跳ね返し
+                    this.blowDirection = UMovement.reverseDir(this.blowDirection);
+                    common.blowMoveCount++; // 水晶オブジェクトの下に落ちても困るので、移動数を+1
+                }
+                else if (!SActionHitTest.testProjectle(subject, self, hitTarget, this.hitType(), cctx.random())) {
                     // 当たらなかった
                     this.endMoving(cctx ,self);
+                    return SCommandResponse.Handled;
                 }
                 else if (this._effectSet) {
                     // スキルや魔法弾
@@ -208,9 +213,9 @@ export class LProjectableBehavior extends LBehavior {
                     cctx.postActivity(LActivity.makeCollide(self, hitTarget)
                         .withOtherSubject(args.subject.entity())
                         .withEffectDirection(common.blowDirection));
+                    return SCommandResponse.Handled;
                 }
 
-                return SCommandResponse.Handled;
             }
         
 
