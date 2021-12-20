@@ -326,7 +326,7 @@ export class DEffect {
         //    range: DEffectFieldScopeRange.Front1,
         //    length: -1,
         //    projectilePrefabKey: "" };
-        this.matchConditions = { kindId: 0, key: undefined };
+        this.matchConditions = { kindId: 0, raceId: 0, key: undefined };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;

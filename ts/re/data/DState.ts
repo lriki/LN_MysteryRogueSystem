@@ -105,10 +105,15 @@ export namespace DStateRestriction {
     }
 }
 
+
+export interface DStateMatchConditions {
+    kindId: DEntityKindId;
+}
+
 export class DStateEffect {
 
     /** このステートが Match の子効果として定義される際の有効化条件 */
-    matchConditions: DMatchConditions;
+    matchConditions: DStateMatchConditions;
 
     /** Restriction */
     restriction: DStateRestriction;
@@ -125,7 +130,7 @@ export class DStateEffect {
 
 
     public constructor() {
-        this.matchConditions = { kindId: 0, key: undefined };
+        this.matchConditions = { kindId: 0 };
         this.restriction = 0;
         this.traits = [];
         this.behaviors = [];

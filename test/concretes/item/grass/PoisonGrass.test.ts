@@ -26,6 +26,7 @@ test("concretes.item.grass.PoisonGrass", () => {
     player1.addState(state2);
     const hp1 = player1.actualParam(REBasics.params.hp);
     const pow1 = player1.actualParam(REBasics.params.pow);
+    const player1Atk1 = player1.actualParam(REBasics.params.atk);
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
@@ -50,10 +51,12 @@ test("concretes.item.grass.PoisonGrass", () => {
 
     const hp2 = player1.actualParam(REBasics.params.hp);
     const pow2 = player1.actualParam(REBasics.params.pow);
-    expect(hp2).toBeLessThan(hp1);      // ダメージをうける
-    expect(pow2).toBeLessThan(pow1);    // ちからが減る
+    const player1Atk2 = player1.actualParam(REBasics.params.atk);
+    expect(hp2).toBeLessThan(hp1);          // ダメージをうける
+    expect(pow2).toBeLessThan(pow1);        // ちからが減る
     expect(player1.isStateAffected(state1)).toBeFalsy();
     expect(player1.isStateAffected(state2)).toBeFalsy();
+    expect(player1Atk2).toBe(player1Atk1);  // 攻撃力が下がったりしていない
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());

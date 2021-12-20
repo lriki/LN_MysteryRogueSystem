@@ -250,6 +250,19 @@ export class RESetup {
                 entity.emittorSet.mainEmittor().effectSet.effects.push(effect2);
                 break;
             }
+            case "kアンチポイズン": {
+                this.setupGrassCommon(entity);
+                entity.addReaction(REBasics.actions.EatActionId, 0);
+                entity.emittorSet.addEmittor(DEffectCause.Eat, entity.emittorSet.mainEmittor());
+
+                const emittor = entity.emittorSet.emittors(DEffectCause.Hit)[0];
+                const effect = emittor.effectSet.effects[0];
+                effect.matchConditions.raceId = REData.getRace("kRace_ドレイン族").id;
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
+
+                break;
+            }
             case "kキュアリーフ": {
                 this.setupGrassCommon(entity);
                 entity.addReaction(REBasics.actions.EatActionId, 0);
@@ -1087,7 +1100,8 @@ export class RESetup {
                 entity.majorActionDeclines = 1;
                 break;
             case "kEnemy_ゾンビA":
-                data.traits.push({ code: REBasics.traits.RecoverRate, dataId: 0, value: -1.0 });
+                //data.traits.push({ code: REBasics.traits.RecoverRate, dataId: 0, value: -1.0 });
+                entity.raceIds.push(REData.getRace("kRace_ドレイン族").id);
                 break;
             case "kEnemy_プレゼンにゃーA":
                 //data.traits.push({ code: DBasics.traits.ItemDropRate, dataId: 0, value: 1.0 });

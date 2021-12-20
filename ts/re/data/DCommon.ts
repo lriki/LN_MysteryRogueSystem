@@ -27,6 +27,7 @@ export type DRaceId = number;
 // }
 
 
+// Sub-Component を検索するためのキー
 export class DSubComponentEffectTargetKey {
     path: string;
     kindId: DEntityKindId;
@@ -58,7 +59,12 @@ export class DSubComponentEffectTargetKey {
 
 export interface DMatchConditions {
     kindId: DEntityKindId;
+
+    /** 判定する RaceId。 0 の場合は対象外。 */
+    raceId: DRaceId;
     
+    // Sub-Component を検索するための情報。
+    // undefined ではない場合、上記の条件に一致した Entity に対して、さらにこの内容で検索をかける。
     key: DSubComponentEffectTargetKey | undefined;
 }
 
