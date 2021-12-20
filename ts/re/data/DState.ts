@@ -1,11 +1,8 @@
-import { DEntityKindId, DMatchConditions } from "./DCommon";
-import { DEffect } from "./DEffect";
+import { DEntityKindId } from "./DCommon";
 import { DBehaviorInstantiation } from "./DEntityProperties";
 import { DParameterId } from "./DParameter";
 import { DSequelId } from "./DSequel";
 import { DStateGroupId } from "./DStateGroup";
-import { DTraitId } from "./DTraits";
-import { REData } from "./REData";
 
 export type DStateId = number;
 

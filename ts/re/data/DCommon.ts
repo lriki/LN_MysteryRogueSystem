@@ -63,9 +63,19 @@ export interface DMatchConditions {
     /** 判定する RaceId。 0 の場合は対象外。 */
     raceId: DRaceId;
     
+    applyRating: number | undefined;  // EnemyAction と同じ整数。
+    
     // Sub-Component を検索するための情報。
     // undefined ではない場合、上記の条件に一致した Entity に対して、さらにこの内容で検索をかける。
     key: DSubComponentEffectTargetKey | undefined;
+
+    //fallback: boolean;
+
+    /*
+    基本の考えは RMMZ イベントの [出現条件] と同じ。
+    条件は AND。設定されているものが全て満たされていれば、マッチする。
+    ただし、全く未設定の場合は無条件で有効となる。
+    */
 }
 
 

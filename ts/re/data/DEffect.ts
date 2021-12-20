@@ -256,7 +256,6 @@ export class DEffect {
     sourceKey: string;
 
     matchConditions: DMatchConditions;
-    applyRating: number | undefined;  // EnemyAction と同じ整数。
     
     /**
      * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
@@ -326,7 +325,7 @@ export class DEffect {
         //    range: DEffectFieldScopeRange.Front1,
         //    length: -1,
         //    projectilePrefabKey: "" };
-        this.matchConditions = { kindId: 0, raceId: 0, key: undefined };
+        this.matchConditions = { kindId: 0, raceId: 0, key: undefined, applyRating: undefined };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
@@ -350,7 +349,6 @@ export class DEffect {
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
         this.matchConditions = { ...src.matchConditions }
-        this.applyRating = src.applyRating;
         this.critical = src.critical;
         this.successRate = src.successRate;
         this.hitType = src.hitType;
