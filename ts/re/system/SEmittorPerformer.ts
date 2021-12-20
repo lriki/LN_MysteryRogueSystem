@@ -462,14 +462,14 @@ export class SEmittorPerformer {
         // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
         // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
         //const emittorEffects = itemEntity?.data().emittorSet.emittors(DEffectCause.Hit);
-        const itemEmittor = itemEntity?.data().getReaction(REBasics.actions.collide).emittor();
+        const itemEmittors = itemEntity?.data().getReaction(REBasics.actions.collide).emittors();
         // ↑今は杖用。杖を投げ当てた時と同じ効果を取り出す。
 
         //const actualEmittor = emittorEffects ?? emittor;
         let actualEmittor = emittor;
-        if (itemEmittor) {
-            //assert(emittorEffects.length == 1); // TODO: 今は一つだけ
-            actualEmittor = itemEmittor;
+        if (itemEmittors) {
+            assert(itemEmittors.length == 1); // TODO: 今は一つだけ
+            actualEmittor = itemEmittors[0];
         }
 
         let actualEffectSet = actualEmittor.effectSet;

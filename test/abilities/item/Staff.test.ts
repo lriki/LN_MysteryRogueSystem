@@ -44,16 +44,18 @@ test("Items.Staff.Knockback", () => {
     enemy1._name = "enemy1";
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
     // 振ってみる
     {
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        //----------------------------------------------------------------------------------------------------
         
         // [振る]
         const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity2);
         RESystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
         expect(item1.actualParam(REBasics.params.remaining)).toBe(0);    // 使用回数が減っている
@@ -61,12 +63,14 @@ test("Items.Staff.Knockback", () => {
 
     // 振ってみる (使用回数切れ)
     {
+        //----------------------------------------------------------------------------------------------------
+
         // [振る]
         const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity2);
         RESystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         expect(enemy1.x).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
         expect(item1.actualParam(REBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
@@ -77,14 +81,16 @@ test("Items.Staff.Knockback", () => {
         // Enemy を Player の右側に配置
         REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-        //RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
         
+        //----------------------------------------------------------------------------------------------------
+
         // [投げる]
         const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity1);
         RESystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         
         expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく

@@ -31,12 +31,13 @@ export class LActivityCharmBehavior extends LBehavior {
         const owner = this.ownerEntity();
         const activity = actx.activity();
 
-        const reaction = owner.data().reactions.find(x => x.actionId == activity.actionId());
+        const reaction = owner.data().getReaction(activity.actionId());
         if (reaction) {
-            
-            SEmittorPerformer.makeWithEmitor(self, self, REData.getEmittorById(reaction.emittingEffect))
-                .setItemEntity(self)
-                .perform(cctx);
+            for (const emittor of reaction.emittors()) {
+                SEmittorPerformer.makeWithEmitor(self, self, emittor)
+                    .setItemEntity(self)
+                    .perform(cctx);
+            }
 
                 // TODO: test
             RESystem.scheduler.reset();

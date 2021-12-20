@@ -16,12 +16,12 @@ export class TestUtils {
         expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBe(true);
 
         // [食べる] に対応する Emittor がある？
-        const emittor = data.getReaction(REBasics.actions.EatActionId).emittor();//data.emittorSet.emittors(DEffectCause.Eat);
-        assert(!!emittor);
+        const reaction = data.getReaction(REBasics.actions.EatActionId);
+        assert(!!reaction.hasEmittor());
 
         // 食べた時に FP を回復する効果がある？
-        //expect(!!emittors.find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500")));
-        expect(!!emittor.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500"));
+        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500")));
+        //expect(!!emittor.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500"));
 
         // おなかを減らしておく
         actor.setActualParam(REBasics.params.fp, 5000);
@@ -51,9 +51,9 @@ export class TestUtils {
         expect(item.queryReactions().includes(REBasics.actions.ReadActionId)).toBe(true);
 
         // [読む] に対応する Emittor がある？
-        const reaction = data.reactions.find(x => x.actionId == REBasics.actions.ReadActionId);
+        const reaction = data.getReaction(REBasics.actions.ReadActionId);
         assert(reaction);
-        assert(!!reaction.emittingEffect);
+        assert(!!reaction.hasEmittor());
     }
     
     public static testCommonScrollEnd(actor: LEntity, item: LEntity) {

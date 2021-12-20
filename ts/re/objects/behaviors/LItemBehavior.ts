@@ -108,9 +108,9 @@ export class LItemBehavior extends LBehavior {
         // [振られた]
         if (activity.actionId() == REBasics.actions.WaveActionId) {
             const actor = activity.actor();
-            const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.WaveActionId);
-            for (const reaction of reactions) {
-                SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
+            const reaction = self.data().getReaction(REBasics.actions.WaveActionId);
+            for (const emittor of reaction.emittors()) {
+                SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
                     .setItemEntity(self)
                     .perform(cctx);
             }
@@ -119,10 +119,9 @@ export class LItemBehavior extends LBehavior {
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
             const actor = activity.actor();
             UIdentify.identifyByTiming(cctx, actor, self, DIdentifiedTiming.Read);
-
-            const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.ReadActionId);
-            for (const reaction of reactions) {
-                SEmittorPerformer.makeWithEmitor(actor, actor, REData.getEmittorById(reaction.emittingEffect))
+            const reaction = self.data().getReaction(REBasics.actions.ReadActionId);
+            for (const emittor of reaction.emittors()) {
+                SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
                     .setItemEntity(self)
                     .setSelectedTargetItems(activity.objects2())
                     .perform(cctx);
@@ -138,9 +137,9 @@ export class LItemBehavior extends LBehavior {
                 UIdentify.identifyByTiming(cctx, subject, reactor, DIdentifiedTiming.Eat);
 
 
-                const reactions = self.data().reactions.filter(x => x.actionId == REBasics.actions.EatActionId);
-                for (const reaction of reactions) {
-                    SEmittorPerformer.makeWithEmitor(subject, subject, REData.getEmittorById(reaction.emittingEffect))
+                const reaction = self.data().getReaction(REBasics.actions.EatActionId);
+                for (const emittor of reaction.emittors()) {
+                    SEmittorPerformer.makeWithEmitor(subject, subject, emittor)
                         .setItemEntity(self)
                         .setSelectedTargetItems(activity.objects2())
                         .perform(cctx);
@@ -193,18 +192,18 @@ export class LItemBehavior extends LBehavior {
     private applyHitEffect(cctx: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();
         //const emittors = entityData.emittorSet.emittors(cause);
-        const emittor = entityData.getReaction(REBasics.actions.collide).emittor();
-        //if (emittors.length > 0) {
+        const emittors = entityData.getReaction(REBasics.actions.collide).emittors();
+        if (emittors.length > 0) {
             cctx.postCall(() => {
-                //for (const emittor of emittors) {
+                for (const emittor of emittors) {
                     //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
                     SEmittorPerformer.makeWithEmitor(subject.entity(), target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
                         .perform(cctx, onPerformedFunc);
-                //}
+                }
             });
-        //}
+        }
         
         // const skill = entityData.emittorSet.skill(cause);
         // if (skill) {

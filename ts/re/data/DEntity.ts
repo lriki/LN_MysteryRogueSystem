@@ -94,19 +94,35 @@ export class DReaction {
      * Entity が反応する Action.
      * 例えば "Eat" があれば、その Entity は食べることができる。
      */
-    actionId: DActionId;
+    private _actionId: DActionId;
 
 
-    emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
+    //emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
+    private _emittorIds: DEmittorId[];
 
-    public constructor(actionId: DActionId, emittorId: DEmittorId) {
-        this.actionId = actionId;
-        this.emittingEffect = emittorId;
+    public constructor(actionId: DActionId) {
+        this._actionId = actionId;
+        this._emittorIds = [];
     }
 
-    public emittor(): DEmittor {
-        assert(this.emittingEffect > 0);
-        return REData.emittors[this.emittingEffect];
+    public actionId(): DActionId {
+        return this._actionId;
+    }
+
+    public addEmittor(emittor: DEmittor): void {
+        this._emittorIds.push(emittor.id);
+    }
+
+    public hasEmittor(): boolean {
+        return this._emittorIds.length > 0;
+    }
+
+    public emittorIds(): readonly DEmittorId[] {
+        return this._emittorIds;
+    }
+
+    public emittors(): DEmittor[] {
+        return this._emittorIds.map(x => REData.getEmittorById(x));
     }
 }
 
@@ -282,19 +298,29 @@ export class DEntity {
         return (this.isTraitCharmItem) ? this.affestTraits : [];
     }
 
-    public addReaction(actionId: DActionId, emittorId: DEmittorId): void {
-        if (!this.reactions.find(x => x.actionId == actionId && x.emittingEffect == emittorId)) {
-            this.reactions.push(new DReaction(actionId, emittorId));
+    public addReaction(actionId: DActionId, emittor?: DEmittor): void {
+        const reaction = this.reactions.find(x => x.actionId() == actionId);
+        if (reaction) {
+            if (emittor) {
+                reaction.addEmittor(emittor);
+            }
+        }
+        else {
+            const r = new DReaction(actionId);
+            if (emittor) {
+                r.addEmittor(emittor);
+            }
+            this.reactions.push(r);
         }
     }
 
     public findReaction(actionId: DActionId): DReaction | undefined {
-        const reaction = this.reactions.find(x => x.actionId == actionId);
+        const reaction = this.reactions.find(x => x.actionId() == actionId);
         return reaction;
     }
 
     public getReaction(actionId: DActionId): DReaction {
-        const reaction = this.reactions.find(x => x.actionId == actionId);
+        const reaction = this.reactions.find(x => x.actionId() == actionId);
         assert(reaction);
         return reaction;
     }

@@ -31,22 +31,26 @@ test("concretes.item.grass.目つぶし草", () => {
 
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // [食べる]
     RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // めつぶし状態になる
     expect(!!player1.states().find(x => x.stateDataId() == REData.getState("kState_UT目つぶし").id)).toBe(true);
 
+    //----------------------------------------------------------------------------------------------------
+    
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // めつぶし状態になる
     expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UT目つぶし").id)).toBe(true);
