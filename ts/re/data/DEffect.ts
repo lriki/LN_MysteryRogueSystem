@@ -262,7 +262,7 @@ export interface DEffectConditions {
     applyRating: number;  // EnemyAction と同じ整数。0 はレート無し
     
 
-    //fallback: boolean;
+    fallback: boolean;
 
     /*
     基本の考えは RMMZ イベントの [出現条件] と同じ。
@@ -361,7 +361,7 @@ export class DEffect {
         //    length: -1,
         //    projectilePrefabKey: "" };
         this.subEntityFindKey = { kindId: 0, key: undefined };
-        this.conditions = { kindId: 0, raceId: 0, applyRating: 0 };
+        this.conditions = { kindId: 0, raceId: 0, applyRating: 0, fallback: false };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;

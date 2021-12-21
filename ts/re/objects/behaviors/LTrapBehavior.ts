@@ -14,7 +14,7 @@ import { DEventId, SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents"
 import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DEffectCause, DEmittor } from "ts/re/data/DEmittor";
+import { DEmittor } from "ts/re/data/DEmittor";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { DCounterAction } from "ts/re/data/DEntity";

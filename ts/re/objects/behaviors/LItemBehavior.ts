@@ -1,6 +1,5 @@
 import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { DEffectCause } from "ts/re/data/DEmittor";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";

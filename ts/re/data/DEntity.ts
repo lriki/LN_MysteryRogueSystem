@@ -4,7 +4,7 @@ import { RE_Data_Actor } from "./DActor";
 import { DAnnotationReader } from "./DAnnotationReader";
 import { DClassId } from "./DClass";
 import { DAttackElementId, DRaceId } from "./DCommon";
-import { DEmittorSet, DEmittorId, DEmittor } from "./DEmittor";
+import { DEmittorId, DEmittor } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";

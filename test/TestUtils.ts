@@ -1,6 +1,5 @@
 import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { DEffectCause } from "ts/re/data/DEmittor";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
 

@@ -1,7 +1,7 @@
 import { DClarificationType, REBasics } from "./REBasics";
 import { DBlockLayerKind, DSpecialEffectCodes, DSubComponentEffectTargetKey } from "./DCommon";
 import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, LStateLevelType } from "./DEffect";
-import { DEffectCause, DEmittor } from "./DEmittor";
+import { DEmittor } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DIdentifiedTiming } from "./DIdentifyer";
 import { DItemEffect } from "./DItemEffect";
@@ -233,22 +233,22 @@ export class RESetup {
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 break;
             case "kポイズンドラッグ": {
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                // entity.addReaction(REBasics.actions.EatActionId, 0);
-                // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
-                
-                //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                const effect = eatEmittor.effectSet.effects[0];
+                // mainEmittor は setupGrassCommon() の中で clone されて Eat と Collide に振り分けられるので、共通 Effect は先に設定しておく。
+                const mainEmittor = entity.mainEmittor();
+                const effect = mainEmittor.effectSet.effects[0];
+                effect.conditions.fallback = true;
                 effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
                 effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
-
+                
                 const effect2 = new DEffect(entity.entity.key);
                 effect2.conditions.kindId = REBasics.entityKinds.MonsterKindId;
                 effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
                 effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
-                eatEmittor.effectSet.effects.push(effect2);
+                mainEmittor.effectSet.effects.push(effect2);
+
+                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 break;
             }
             case "kアンチポイズン": {

@@ -20,7 +20,6 @@ import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { RESetup } from './RESetup';
-import { DEffectCause } from './DEmittor';
 import { DAttackElement } from './DAttackElement';
 import { REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';

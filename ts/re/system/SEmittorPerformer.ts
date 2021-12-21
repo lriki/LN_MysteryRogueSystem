@@ -17,7 +17,7 @@ import { DParameterId } from "ts/re/data/DParameter";
 import { SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DBlockLayerKind, DBlockLayerScope, DSkillId } from "../data/DCommon";
 import { SEffectorFact } from "./SEffectApplyer";
-import { DEffectCause, DEmittor } from "../data/DEmittor";
+import { DEmittor } from "../data/DEmittor";
 import { USearch } from "../usecases/USearch";
 import { LBlock } from "../objects/LBlock";
 import { UAction } from "../usecases/UAction";
