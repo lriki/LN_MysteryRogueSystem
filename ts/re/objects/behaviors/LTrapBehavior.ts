@@ -182,7 +182,7 @@ export class LTrapBehavior extends LBehavior {
         // const emittors = self.data().emittorSet.emittors(DEffectCause.Affect);
         // assert(emittors.length == 1);   // TODO: とりあえず
         //const emittor = emittors[0];
-        const emittor = self.data().emittorSet.mainEmittor();
+        const emittor = self.data().mainEmittor();
 
 
         if (emittor) {

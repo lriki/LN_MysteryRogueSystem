@@ -221,7 +221,12 @@ export class DEntity {
      * 
      * TODO: reactions とまとめられないか考えたいところ。
      */
-    emittorSet: DEmittorSet;
+    //emittorSet: DEmittorSet;
+
+    /**
+     * RMMZ エディタで指定され Item の効果
+     */
+    private _mainEmittorId: DEmittorId;
 
     /**
      * 自動追加ステート。
@@ -264,7 +269,8 @@ export class DEntity {
         this.factionId = 0;//REData.system.factions.neutral;
         this.idealParams = [];
         this.reactions = [];
-        this.emittorSet = new DEmittorSet();
+        //this.emittorSet = new DEmittorSet();
+        this._mainEmittorId = 0;
         this.autoAdditionStates = [];
         this.majorActionDeclines = 0;
         this.volatilityProjectile = false;
@@ -323,6 +329,15 @@ export class DEntity {
         const reaction = this.reactions.find(x => x.actionId() == actionId);
         assert(reaction);
         return reaction;
+    }
+
+    public setMainEmittor(emittor: DEmittor): void {
+        this._mainEmittorId = emittor.id;
+    }
+
+    public mainEmittor(): DEmittor {
+        assert(this._mainEmittorId > 0);
+        return REData.emittors[this._mainEmittorId];
     }
 
     public makeDisplayName(stackCont: number): string {

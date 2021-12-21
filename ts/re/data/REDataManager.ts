@@ -637,7 +637,7 @@ export class REDataManager
                 //effect.rmmzItemEffectQualifying = x.effects.
                 emittor.effectSet.effects.push(effect);
 
-                entity.emittorSet.setMainEmittor(emittor);
+                entity.setMainEmittor(emittor);
                 // TODO:
                 //item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
                 //item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
