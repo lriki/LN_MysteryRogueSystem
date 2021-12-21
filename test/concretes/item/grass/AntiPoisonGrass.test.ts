@@ -117,6 +117,6 @@ test("concretes.item.grass.AntiPoisonGrass.player", () => {
     const pow3 = player1.actualParam(REBasics.params.pow);
     const hp2 = player1.actualParam(REBasics.params.hp);
     expect(pow3).toBe(pow1);        // ちからが最大まで回復
-    expect(hp2).toBeLessThan(hp1);  // ダメージをうけたりしていない
+    expect(hp2).toBe(hp1);  // ダメージをうけたりしていない
     
 });

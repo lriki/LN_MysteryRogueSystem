@@ -252,15 +252,22 @@ export class RESetup {
                 break;
             }
             case "kアンチポイズン": {
+                const mainEmittor = entity.mainEmittor();
+
+                const effect1 = mainEmittor.effectSet.effects[0];
+                effect1.conditions.fallback = true;
+                effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "b.max_pow - b.pow", DParameterEffectApplyType.Recover));
+
+                const effect2 = new DEffect(entity.entity.key);
+                effect2.conditions.raceId = REData.getRace("kRace_ドレイン族").id;
+                effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
+                mainEmittor.effectSet.effects.push(effect2);
+
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
 
                 //const emittor = entity.getReaction(REBasics.actions.collide).emittor();
-                const effect = collideEmittor.effectSet.effects[0];
-                effect.conditions.raceId = REData.getRace("kRace_ドレイン族").id;
-                effect.parameterQualifyings.push(
-                    new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
 
                 break;
             }

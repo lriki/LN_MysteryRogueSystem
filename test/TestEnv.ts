@@ -93,7 +93,7 @@ export class TestEnv {
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
         this.StateId_debug_MoveRight = REData.getState("kState_Test_MoveRight").id
-        this.StateId_Sleep = REData.getState("UT睡眠").id;
+        this.StateId_Sleep = REData.getState("kState_UT睡眠").id;
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
         this.EntityId_Herb = REData.getEntity("kキュアリーフ").id;
         this.EntityId_Weapon1 = REData.getEntity("kゴブリンのこん棒").id;

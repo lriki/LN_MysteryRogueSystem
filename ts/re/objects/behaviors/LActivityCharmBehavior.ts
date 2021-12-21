@@ -31,7 +31,7 @@ export class LActivityCharmBehavior extends LBehavior {
         const owner = this.ownerEntity();
         const activity = actx.activity();
 
-        const reaction = owner.data().getReaction(activity.actionId());
+        const reaction = owner.data().findReaction(activity.actionId());
         if (reaction) {
             for (const emittor of reaction.emittors()) {
                 SEmittorPerformer.makeWithEmitor(self, self, emittor)

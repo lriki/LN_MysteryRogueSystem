@@ -96,7 +96,6 @@ test("Items.Staff.Knockback", () => {
         expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
 
     }
-
 });
 
 test("Items.Staff.Identify", () => {

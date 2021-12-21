@@ -32,7 +32,7 @@ test("concretes.item.grass.PoisonGrass", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
-    const enemy1Pow1 = player1.actualParam(REBasics.params.pow);
+    const enemy1Pow1 = enemy1.actualParam(REBasics.params.pow);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンドラッグ").id, [], "item1"));
@@ -67,7 +67,7 @@ test("concretes.item.grass.PoisonGrass", () => {
 
     const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
     const enemy1Atk2 = enemy1.actualParam(REBasics.params.atk);
-    const enemy1Pow2 = player1.actualParam(REBasics.params.pow);
+    const enemy1Pow2 = enemy1.actualParam(REBasics.params.pow);
     expect(enemy1Hp2).toBeLessThan(enemy1Hp1);  // ダメージをうける
     expect(enemy1Atk2).toBe(0);                 // 攻撃力 0
     expect(enemy1Pow2).toBe(enemy1Pow1);        // ちからは減らない
