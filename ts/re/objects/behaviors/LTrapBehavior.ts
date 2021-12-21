@@ -179,10 +179,11 @@ export class LTrapBehavior extends LBehavior {
 
         //const trapItem = this.ownerEntity().getBehavior(LItemBehavior);
         //const itemData = trapItem.itemData();
-        const emittors = self.data().emittorSet.emittors(DEffectCause.Affect);
-        assert(emittors.length == 1);   // TODO: とりあえず
+        // const emittors = self.data().emittorSet.emittors(DEffectCause.Affect);
+        // assert(emittors.length == 1);   // TODO: とりあえず
+        //const emittor = emittors[0];
+        const emittor = self.data().emittorSet.mainEmittor();
 
-        const emittor = emittors[0];
 
         if (emittor) {
 

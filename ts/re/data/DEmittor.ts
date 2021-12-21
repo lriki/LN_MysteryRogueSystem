@@ -84,34 +84,38 @@ export enum DEffectCause {
 export class DEmittorSet {
     // 1つの cause に複数の Emittor を持つ必要がある。
     // 例えばドラゴン草は、[飲む] に対応して 「"自分の" FPを5回復する」「"相手に" 炎を飛ばす」といったスコープの異なる2つの効果がある。
-    private _emittors: (DEmittor[] | undefined)[] = [];
-    //private _mainEmittor: DEmittor | undefined;
+    //private _emittors: (DEmittor[] | undefined)[] = [];
+    private _mainEmittor: DEmittor | undefined;
 
     // private _skills: (DSkill | undefined)[] = [];
 
     public setMainEmittor(emittor: DEmittor): void {
-        this._emittors[DEffectCause.Affect] = [emittor];
+        this._mainEmittor = emittor;
+        //this._emittors[DEffectCause.Affect] = [emittor];
     }
 
-    public addEmittor(cause: DEffectCause, emittor: DEmittor): void {
-        const list = this.aquireEmittorList(cause);
-        list.push(emittor);
-    }
+    // public addEmittor(cause: DEffectCause, emittor: DEmittor): void {
+    //     const list = this.aquireEmittorList(cause);
+    //     list.push(emittor);
+    // }
 
     // public setSkill(cause: DEffectCause, value: DSkill): void {
     //     this._skills[cause] = value;
     // }
+    
 
     public mainEmittor(): DEmittor {
-        const list = this._emittors[DEffectCause.Affect];
-        assert(list);
-        return list[0];
+        assert(this._mainEmittor);
+        return this._mainEmittor;
+        // const list = this._emittors[DEffectCause.Affect];
+        // assert(list);
+        // return list[0];
     }
 
-    public emittors(cause: DEffectCause): DEmittor[] {
-        const list = this._emittors[cause];
-        return list ? list : [];
-    }
+    // public emittors(cause: DEffectCause): DEmittor[] {
+    //     const list = this._emittors[cause];
+    //     return list ? list : [];
+    // }
 
     // public skill(cause: DEffectCause): DSkill | undefined {
     //     return this._skills[cause];
@@ -131,17 +135,17 @@ export class DEmittorSet {
     }
     */
 
-    private aquireEmittorList(cause: DEffectCause): DEmittor[] {
-        let list = this._emittors[cause];
-        if (list) {
-            return list;
-        }
-        else {
-            list = [];
-            this._emittors[cause] = list;
-            return list;
-        }
-    }
+    // private aquireEmittorList(cause: DEffectCause): DEmittor[] {
+    //     let list = this._emittors[cause];
+    //     if (list) {
+    //         return list;
+    //     }
+    //     else {
+    //         list = [];
+    //         this._emittors[cause] = list;
+    //         return list;
+    //     }
+    // }
 
     //public addParamQualifying(data: DParameterQualifying): void {
 //
