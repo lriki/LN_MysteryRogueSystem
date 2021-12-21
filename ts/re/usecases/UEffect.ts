@@ -82,31 +82,48 @@ export class UEffect {
     }
 
     private static resolveApplyEffectsSingleTarget(result: UResolvedApplyEffectTarget, rand: LRandom): void {
-        // 条件でフィルタリング
-        const candidates = result.candidateEffects.filter(x => this.meetsCondition(x, result.target));
-
-        const ratedCandidates = [];
-        for (const effect of candidates) {
-            if (effect.data().conditions.applyRating > 0) {
-                // レート付きの Effect は後程選択する
-                ratedCandidates.push(effect);
-            }
-            else {
-                // レート無しはここで確定
-                result.actualEffects.push(effect);
-            }
+        // 条件無し Effect はそのまま使える
+        const wthoutConditionEffects = result.candidateEffects.filter(x => !x.data().hasCondition());
+        for (const effect of wthoutConditionEffects) {
+            result.actualEffects.push(effect);
         }
 
-        // レート付きの中から1つ選択
-        const re = this.selectEffect(ratedCandidates, rand);
-        if (re) {
-            result.actualEffects.push(re);
+        // 条件でフィルタリング
+        const candidates = result.candidateEffects.filter(x => x.data().hasCondition() && this.meetsCondition(x, result.target));
+        if (candidates.length > 0) {
+            const ratedCandidates = [];
+            for (const effect of candidates) {
+                if (effect.data().conditions.applyRating > 0) {
+                    // レート付きの Effect は後程選択する
+                    ratedCandidates.push(effect);
+                }
+                else {
+                    // レート無しはここで確定
+                    result.actualEffects.push(effect);
+                }
+            }
+    
+            // レート付きの中から1つ選択
+            const re = this.selectEffect(ratedCandidates, rand);
+            if (re) {
+                result.actualEffects.push(re);
+            }
+        }
+        else {
+            // 条件に一致するものが無かったら、fallback を使う
+            for (const effect of result.candidateEffects.filter(x => x.data().conditions.fallback)) {
+                result.actualEffects.push(effect);
+            }
         }
     }
 
     private static meetsCondition(effect: SEffect, target: LEntity): boolean {
         const data = effect.data();
         const entityData = target.data();
+
+        if (data.conditions.fallback) {
+            return false;
+        }
 
         if (data.conditions.kindId != 0) {
             if (data.conditions.kindId != target.kindDataId()) {

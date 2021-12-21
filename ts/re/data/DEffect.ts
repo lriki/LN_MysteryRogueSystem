@@ -264,6 +264,7 @@ export interface DEffectConditions {
 
     fallback: boolean;
 
+
     /*
     基本の考えは RMMZ イベントの [出現条件] と同じ。
     条件は AND。設定されているものが全て満たされていれば、マッチする。
@@ -282,6 +283,7 @@ export interface DEffectConditions {
 
     
     */
+   
 }
 
 export class DEffect {
@@ -419,6 +421,14 @@ export class DEffect {
                 this.rmmzSpecialEffectQualifyings.length > 0 ||
                 this.buffQualifying.length > 0;
         
+    }
+
+    public hasCondition(): boolean {
+        if (this.conditions.kindId != 0) return true;
+        if (this.conditions.raceId != 0) return true;
+        if (this.conditions.applyRating != 0) return true;
+        if (this.conditions.fallback) return true;
+        return false;
     }
 }
 
