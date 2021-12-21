@@ -108,17 +108,24 @@ export class SEffectContext {
 
         const applies = UEffect.resolveApplyEffects(this._effectorFact.effects(), targets, cctx.random());
 
-        for (const info of applies) {
-            
-            for (const [key, value] of info.targets.entries()) {
-                const effects = this.selectEffects(value, cctx.random());
-                for (const effect of effects) {
-                    if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
-                        this.applyWithHitTest(cctx, effect, key, info.mainTarget);
-                    }
+        for (const info of applies.targets) {
+            for (const effect of info.actualEffects) {
+                if (info.target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+                    this.applyWithHitTest(cctx, effect, info.target, info.mainTarget);
                 }
-                //entries.push(`${key}:${value}`);
             }
+
+
+            
+            // for (const [key, value] of info.targets.entries()) {
+            //     const effects = this.selectEffects(value, cctx.random());
+            //     for (const effect of effects) {
+            //         if (key.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+            //             this.applyWithHitTest(cctx, effect, key, info.mainTarget);
+            //         }
+            //     }
+            //     //entries.push(`${key}:${value}`);
+            // }
 
         }
 
@@ -189,9 +196,9 @@ export class SEffectContext {
     }
 
     public selectEffects(effectList: SEffect[], rand: LRandom): SEffect[] {
-        const ratingMax = Math.max(...effectList.map(a => a.data().matchConditions.applyRating ?? 0));
+        const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating ?? 0));
         if (ratingMax > 0) {
-            const effect = this.selectEffect(effectList.filter(x => !!x.data().matchConditions.applyRating), rand);
+            const effect = this.selectEffect(effectList.filter(x => !!x.data().conditions.applyRating), rand);
             return effect ? [effect] : [];
         }
         else {
@@ -200,15 +207,15 @@ export class SEffectContext {
     };
 
     public selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined {
-        const ratingMax = Math.max(...effectList.map(a => a.data().matchConditions.applyRating ?? 0));
+        const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating ?? 0));
         const ratingZero = ratingMax - 10;//- 3;
-        const sum = effectList.reduce((r, a) => r + (a.data().matchConditions.applyRating ?? 0) - ratingZero, 0);
+        const sum = effectList.reduce((r, a) => r + (a.data().conditions.applyRating ?? 0) - ratingZero, 0);
         if (sum > 0) {
             let value = rand.nextIntWithMax(sum);
             for (const action of effectList) {
-                if (!action.data().matchConditions.applyRating) continue;
+                if (!action.data().conditions.applyRating) continue;
 
-                value -= (action.data().matchConditions.applyRating ?? 0) - ratingZero;
+                value -= (action.data().conditions.applyRating ?? 0) - ratingZero;
                 if (value < 0) {
                     return action;
                 }

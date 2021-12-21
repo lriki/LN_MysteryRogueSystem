@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DMatchConditions, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey } from "./DCommon";
+import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey, DRaceId } from "./DCommon";
 import { DEntityId } from "./DEntity";
 import { DParameterId } from "./DParameter";
 import { DSpecialEffect, DSkill } from "./DSkill";
@@ -252,10 +252,44 @@ export interface DSpecialEffectRef {
     value?: any;
 }
 
+
+export interface DEffectConditions {
+    kindId: DEntityKindId;
+
+    /** 判定する RaceId。 0 の場合は対象外。 */
+    raceId: DRaceId;
+    
+    applyRating: number;  // EnemyAction と同じ整数。0 はレート無し
+    
+
+    //fallback: boolean;
+
+    /*
+    基本の考えは RMMZ イベントの [出現条件] と同じ。
+    条件は AND。設定されているものが全て満たされていれば、マッチする。
+    ただし、全く未設定の場合は無条件で有効となる。
+
+    選択処理は次の通り。
+    - 条件が何も設定されてないものは常に発動する。
+       複数ある場合は同時に発動する。
+        他に条件指定がある Effect とも同時発動する。
+    - 条件が設定されているものは次のように選択する。
+        - まず条件が設定されているものをフィルタリングする。
+        - rating を持つものがひとつでもある場合、rating が 1 以上の Effect を対象にランダム選択する。
+        - rating が 0 のものは常に発動する。
+        - 上記の結果ひとつも実行できるものが無い場合、fallback の Effect を発動する。
+
+
+    
+    */
+}
+
 export class DEffect {
     sourceKey: string;
 
-    matchConditions: DMatchConditions;
+
+    subEntityFindKey: DSubEntityFindKey;
+    conditions: DEffectConditions;
     
     /**
      * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
@@ -317,6 +351,7 @@ export class DEffect {
     //rejectionLevel: DEffectRejectionLevel;
     
 
+
     constructor(sourceKey: string) {
         this.sourceKey = sourceKey;
         //this.id = id;
@@ -325,7 +360,8 @@ export class DEffect {
         //    range: DEffectFieldScopeRange.Front1,
         //    length: -1,
         //    projectilePrefabKey: "" };
-        this.matchConditions = { kindId: 0, raceId: 0, key: undefined, applyRating: undefined };
+        this.subEntityFindKey = { kindId: 0, key: undefined };
+        this.conditions = { kindId: 0, raceId: 0, applyRating: 0 };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
@@ -348,7 +384,8 @@ export class DEffect {
 
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
-        this.matchConditions = { ...src.matchConditions }
+        this.subEntityFindKey = { ...src.subEntityFindKey }
+        this.conditions = { ...src.conditions }
         this.critical = src.critical;
         this.successRate = src.successRate;
         this.hitType = src.hitType;

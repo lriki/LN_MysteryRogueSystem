@@ -134,7 +134,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
     }
 
     // 1回くらいは +3 されるだろう
-    expect(total > count).toBe(true);
+    expect(total).toBeGreaterThan(count);
 });
 
 test("concretes.item.scroll.ReinforcementScroll.Shield.basic", () => {
