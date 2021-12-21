@@ -182,8 +182,8 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onEntityReEnterMap(entity: LEntity): void {
-        this.onEntityLeavedMap(entity);
-        this.onEntityEnteredMap(entity);
+        // this.onEntityLeavedMap(entity);
+        // this.onEntityEnteredMap(entity);
     }
 
     onSetLandExitResult(result: LandExitResult): void {

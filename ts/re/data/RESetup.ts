@@ -441,8 +441,6 @@ export class RESetup {
                 break;
             case "kItem_チェンジの杖":
                 //this.setupStaffCommon(entity);
-                //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
-                //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_変化").emittor());
                 entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_変化").emittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[REBasics.params.remaining] = 3;
@@ -926,6 +924,7 @@ export class RESetup {
                 break;
             case "kSkill_変化":
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance });
+                emittor.effectSet.effects[0].rmmzAnimationId = 40;
                 break;
             case "kSkill_投げ当て_1ダメ":
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
