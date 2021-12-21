@@ -475,7 +475,8 @@ export class RESetup {
                // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[REBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.effects[0];effect.buffQualifying.push({
+                const effect = entity.mainEmittor().effectSet.effects[0];
+                effect.buffQualifying.push({
                     paramId: REBasics.params.agi,
                     mode: DBuffMode.Weakness,
                     level: 1,
@@ -483,6 +484,7 @@ export class RESetup {
                     op: DBuffOp.Add,
                     turn: 10,
                 });
+                effect.rmmzAnimationId = 54;
                 break;
             }
             case "kItem_ダブルペインの杖": {
