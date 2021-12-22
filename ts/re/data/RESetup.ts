@@ -493,9 +493,14 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const emittor = entity.mainEmittor();
+                //emittor.selfAnimationId = 60;
+
                 //emittor.scope.range = DEffectFieldScopeRange.Performer;
                 const effect1 = emittor.effectSet.effects[0];
+                effect1.rmmzAnimationId = 60;
+
                 const effect2 = REData.getItem("kItem_ダブルペインの杖_使用者側効果").mainEmittor().effectSet.effects[0];
+                effect2.rmmzAnimationId = 60;
                 emittor.effectSet.succeededSelfEffect = effect2;
 
                 break;

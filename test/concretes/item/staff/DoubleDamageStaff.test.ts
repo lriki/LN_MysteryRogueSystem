@@ -33,7 +33,7 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
     
     //----------------------------------------------------------------------------------------------------
 
-    // [振る]
+    // [振る] (壁に向かって)
     RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(8).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -47,7 +47,7 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    // [振る]
+    // [振る] (相手に向かって)
     RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 

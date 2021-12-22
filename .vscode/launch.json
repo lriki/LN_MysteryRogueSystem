@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Items.ChangeEntityInstance.Wave"
+                "-t", "concretes.item.staff.DoubleDamageStaff.basic"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
