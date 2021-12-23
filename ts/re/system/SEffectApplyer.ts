@@ -209,6 +209,10 @@ export class SEffectorFact {
         return this._subjectBattlerBehavior;
     }
 
+    public effectSet(): DEffectSet {
+        return this._subjectEffects;
+    }
+
     public subEffects(): SSubEffect[] {
         return this._subEffects;
     }

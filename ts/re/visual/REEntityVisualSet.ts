@@ -100,14 +100,12 @@ export class REEntityVisualSet {
     }
 
     public reserveDeleteVisual(entity: LEntity): void {
-        console.log("reserveDeleteVisual");
 
         const index = this._visualEntities.findIndex(x => x.entity() == entity);
         if (index >= 0) {
             const visual = this._visualEntities[index];
             visual.reservedDestroy = true;
             
-            console.log("reserveDeleteVisual", visual.entity().debugDisplayName());
         }
     }
 
@@ -115,9 +113,6 @@ export class REEntityVisualSet {
         for (let i = this._visualEntities.length - 1; i >= 0; i--) {
             const visual = this._visualEntities[i];
             if (visual.reservedDestroy) {
-                console.log("reservedDestroy", visual.entity().debugDisplayName(), 
-                visual.sequelContext().isCancellationLocked(), visual.sequelContext().isAnimationWaintng(), visual.sequelContext().isFrameWaiting());
-
                 if (visual.sequelContext().isLogicalCompleted2()) {
                     this.detachVisual(visual);
                     
@@ -125,7 +120,6 @@ export class REEntityVisualSet {
                     // そのときはマップ遷移後に Spriteset_Map が新しいインスタンスで new されるため、
                     // ↑の erase() の意味もあまりないが、影響はないため現状とする。
             
-                    console.log("deleteVisuals", visual.entity().debugDisplayName());
     
                     this._visualEntities.splice(i, 1);
                 }

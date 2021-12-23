@@ -111,6 +111,9 @@ export class SEffectContext {
         for (const info of applies.targets) {
             for (const effect of info.actualEffects) {
                 if (info.target.previewRejection(cctx, { kind: "Effect", effect: effect.data() })) {
+
+
+
                     this.applyWithHitTest(cctx, effect, info.target, info.mainTarget);
                 }
             }
@@ -257,6 +260,8 @@ export class SEffectContext {
         // Animation
         // ワープなど、特殊効果の中から Motion が発動することもあるため、apply の前に post しておく。
         {
+            let animationPosted = false;
+
             const effectData = effect.data();
             const behavior = this._effectorFact.subjectBehavior();
             const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
@@ -264,10 +269,22 @@ export class SEffectContext {
             if (rmmzAnimationId > 0) {
                 const animationTarget2 = this.findAnimationEntity(target);
                 if (animationTarget2) {
-                    cctx.postAnimation(animationTarget2, rmmzAnimationId, true);
+                    cctx.postAnimation(animationTarget2, rmmzAnimationId, false);
+                    animationPosted = true;
+                }
+            }
+
+            const selfEffect = this._effectorFact.effectSet().succeededSelfEffect;
+            if (selfEffect) {
+                if (selfEffect.rmmzAnimationId) {
+                    cctx.postAnimation(effect.subject(), selfEffect.rmmzAnimationId, false);
+                    animationPosted = true;
                 }
             }
             
+            if (animationPosted) {
+                cctx.postWaitSequel();
+            }
         }
 
         // 以下、アニメーションが終わった後に実行したい。

@@ -6,6 +6,7 @@ import { REVisual } from "./REVisual";
 export class REVisualSequelManager {
     private _entityVisualSet: REEntityVisualSet;
     private _activeSequelSet: SSequelSet | undefined;
+    //private _waitForAll: boolean = false;
     private _currentSequelRun: number = -1;
     private _runningVisuals: REVisual_Entity[] = [];
 
@@ -16,6 +17,7 @@ export class REVisualSequelManager {
     setup(sequelSet: SSequelSet) {
         this._activeSequelSet = sequelSet;
         this._currentSequelRun = -1;
+        //this._waitForAll = sequelSet.isWaitForAll();
         this._runningVisuals.splice(0);
         this.update();
     }
@@ -90,9 +92,11 @@ export class REVisualSequelManager {
     // 現在実行中の Run に含まれる Visual (_runningVisuals) の Sequel が、
     // unlock されるまで実行されているか。
     private isLogicalCompleted(): boolean {
+        const waitForAll = (this._activeSequelSet) ? this._activeSequelSet.isWaitForAll() : false;
+
         for (let i = 0; i < this._runningVisuals.length; i++) {
             const c = this._runningVisuals[i].sequelContext();
-            if (!c.isLogicalCompleted()) {
+            if (!c.isLogicalCompleted(waitForAll)) {
                 return false;
             }
         }

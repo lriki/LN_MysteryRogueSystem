@@ -203,7 +203,7 @@ export class SScheduler {
         }
         else {
             // ターン終了時に Sequel が残っていればすべて掃き出す
-            RESystem.sequelContext.flushSequelSet();
+            RESystem.sequelContext.flushSequelSet(false);
         }
 
         this._data.chedulerPhase = LSchedulerPhase.RoundStarting
@@ -589,7 +589,7 @@ export class SScheduler_old
         }
         else {
             // ターン終了時に Sequel が残っていればすべて掃き出す
-            RESystem.sequelContext.flushSequelSet();
+            RESystem.sequelContext.flushSequelSet(false);
         }
 
         this._phase = SchedulerPhase_old.RoundStarting;

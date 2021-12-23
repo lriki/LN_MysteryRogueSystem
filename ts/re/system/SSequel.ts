@@ -249,11 +249,13 @@ export class SSequelRun {
 export class SSequelSet {
     private _runs: SSequelRun[];
     private _allParallel: boolean;
+    private _waitForAll: boolean;
     private _isEmpty: boolean;
 
     constructor() {
         this._runs = [];
         this._allParallel = true;
+        this._waitForAll = true;
         this._isEmpty = true;
     }
 
@@ -273,6 +275,15 @@ export class SSequelSet {
         this._runs.splice(0);
         this._allParallel = true;
         this._isEmpty = true;
+        this._waitForAll = false;
+    }
+
+    public waitForAll(): void {
+        this._waitForAll = true;
+    }
+
+    public isWaitForAll(): boolean {
+        return this._waitForAll;
     }
 
     addSequel(sequel: SSequelUnit) {

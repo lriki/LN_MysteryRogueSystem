@@ -378,7 +378,7 @@ export class SCommandContext
     postWaitSequel() {
         const m1 = () => {
             Log.doCommand("WaitSequel");
-            this._sequelContext.flushSequelSet();
+            this._sequelContext.flushSequelSet(true);
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };

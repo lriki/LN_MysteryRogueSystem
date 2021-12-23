@@ -18,7 +18,7 @@ export class SSequelContext {
         // 攻撃などのメジャーアクションで同期的　Sequel が post されていれば flush.
         // もし歩行など並列のみであればあとでまとめて実行したので不要。
         if (!this._sequelSet.isAllParallel() || force) {
-            this.flushSequelSet();
+            this.flushSequelSet(false);
         }
     }
     
@@ -26,13 +26,17 @@ export class SSequelContext {
         this._sequelSet.addSequel(sequel);
     }
 
-    public flushSequelSet() {
+    public flushSequelSet(waitForAll: boolean) {
         Log.d("[FlushSequel]");
 
         if (!this.isEmptySequelSet()) {
             if (REGame.signalFlushSequelSet) {
                 REGame.signalFlushSequelSet(this._sequelSet);
             }
+            if (waitForAll) {
+                this._sequelSet.waitForAll();
+            }
+            
             RESystem.integration.flushSequelSet(this._sequelSet);
 
             this._sequelSet = new SSequelSet();

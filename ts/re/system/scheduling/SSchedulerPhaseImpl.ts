@@ -41,7 +41,7 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
         assert(this.testProcessable(entity, unitBehavior));
 
         // 倍速対策。Pallarel 付きでも強制的に Flush.
-        RESystem.sequelContext.flushSequelSet();
+        RESystem.sequelContext.flushSequelSet(false);
 
         entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
     }

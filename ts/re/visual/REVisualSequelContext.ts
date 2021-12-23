@@ -70,11 +70,11 @@ export class REVisualSequelContext {
         return this._cancellationLocked;
     }
 
-    isAnimationWaintng(): boolean {
-        if (this._animationWaiting && this._entityVisual.rmmzEvent().isAnimationPlaying()) {
+    private isAnimationWaintng(globalWaiting: boolean): boolean {
+        if ((globalWaiting || this._animationWaiting) && this._entityVisual.rmmzEvent().isAnimationPlaying()) {
             return true;
         }
-        if (this._balloonWaiting && this._entityVisual.rmmzEvent().isBalloonPlaying()) {
+        if ((globalWaiting || this._balloonWaiting) && this._entityVisual.rmmzEvent().isBalloonPlaying()) {
             return true;
         }
         return false;
@@ -88,10 +88,10 @@ export class REVisualSequelContext {
         //if (this._currentIdleSequelId > 0) return true;
         if (this._currentClip < 0) return true;
         
-        return this.isLogicalCompleted();
+        return this.isLogicalCompleted(false);
     }
-    public isLogicalCompleted(): boolean {
-        return !this.isCancellationLocked() && !this.isAnimationWaintng() && !this.isFrameWaiting();
+    public isLogicalCompleted(globalWaiting: boolean): boolean {
+        return !this.isCancellationLocked() && !this.isAnimationWaintng(globalWaiting) && !this.isFrameWaiting();
         //return this.isCancellationLocked() || this.isAnimationWaintng() || this.isFrameWaiting();
     }
 
