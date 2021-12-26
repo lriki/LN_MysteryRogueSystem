@@ -270,9 +270,11 @@ export class UAction {
      * item を actionId として使うとき、対象アイテムの選択が必要であるかを判断する。
      */
     public static checkItemSelectionRequired(item: LEntity, actionId: DActionId): boolean {
-        const reaction = item.data().getReaction(actionId);
-        for (const emittor of reaction.emittors()) {
-            if (emittor.scope.range == DEffectFieldScopeRange.Selection) return true;
+        const reaction = item.data().findReaction(actionId);
+        if (reaction) {
+            for (const emittor of reaction.emittors()) {
+                if (emittor.scope.range == DEffectFieldScopeRange.Selection) return true;
+            }
         }
         return false;
     }
