@@ -40,12 +40,14 @@ test("concretes.trap.StumbleTrap", () => {
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    // モーション発行順チェック
     expect(TestEnv.sequelSets.length).toBe(2);
     const set1 = TestEnv.sequelSets[0];
     const sequels1 = set1.runs()[0].clips()[0].sequels();
     expect(sequels1.length).toBe(1);
     expect((sequels1[0] as SMotionSequel).sequelId()).toBe(REBasics.sequels.MoveSequel);
 
+    // モーション発行順チェック
     const set2 = TestEnv.sequelSets[1];
     const clips2 = set2.runs()[0].clips();
     expect(clips2.length).toBe(2);

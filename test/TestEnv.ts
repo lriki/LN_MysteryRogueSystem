@@ -73,7 +73,6 @@ export class TestEnv {
     static activeSequelSet: SSequelSet;
 
     static setupDatabase() {
-        this.sequelSets = [];
         REData.testMode = true;
         this.loadRmmzDatabase();
         REData.reset();
@@ -162,6 +161,7 @@ export class TestEnv {
     }
 
     public static newGame(): void {
+        this.sequelSets = [];
         SGameManager.createGameObjects();
         SGameManager.setupNewGame();
     }

@@ -341,6 +341,7 @@ export class REDataManager
         REData.sequels[REBasics.sequels.MoveSequel].fluidSequence = true;
         REData.sequels[REBasics.sequels.CollapseSequel].parallel = true;
         REData.sequels[REBasics.sequels.stumble].parallel = true;
+        REData.sequels[REBasics.sequels.dropSequel].parallel = true;    // 転倒とアイテムドロップを並列実行したい
         REData.sequels[REBasics.sequels.jump].parallel = true;
         
         RESystem.skills = {

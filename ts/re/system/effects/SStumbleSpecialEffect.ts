@@ -17,6 +17,8 @@ export class SStumbleSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
 
+        result.makeSuccess();
+
         if (target.previewRejection(cctx, { kind: "EffectBehavior", id: data.specialEffectId })) {
             const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
             cctx.postActivity(activity);
