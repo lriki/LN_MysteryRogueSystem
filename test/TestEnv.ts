@@ -69,9 +69,11 @@ export class TestEnv {
         { name: "$dataMapInfos", src: "MapInfos.json" }
     ];
 
+    static sequelSets: SSequelSet[];
     static activeSequelSet: SSequelSet;
 
     static setupDatabase() {
+        this.sequelSets = [];
         REData.testMode = true;
         this.loadRmmzDatabase();
         REData.reset();
@@ -262,6 +264,7 @@ export class TestEnvIntegration extends SIntegration {
         TestEnv.activeSequelSet = sequelSet;
         this.sequelFlushCount++;
         this.records.push({ type: "onFlushSequelSet" });
+        TestEnv.sequelSets.push(sequelSet);
     }
     onCheckVisualSequelRunning(): boolean {
         // Visual 表示は伴わない

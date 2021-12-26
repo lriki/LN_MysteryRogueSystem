@@ -4,7 +4,7 @@ import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmz
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
 import { REData } from "ts/re/data/REData";
-import { LGenerateDropItemCause, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
+import { LGenerateDropItemCause, onPerformTrap, onStepOnTrap, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
@@ -103,6 +103,26 @@ export class UAction {
         if (reactor) {
             cctx.post(entity, reactor, new SEffectSubject(entity), undefined, onWalkedOnTopAction);
             cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onWalkedOnTopReaction);
+        }
+    }
+
+    public static postStepOnTrap(cctx: SCommandContext, entity: LEntity): void {
+        const block = REGame.map.block(entity.x, entity.y);
+        const layer = block.layer(DBlockLayerKind.Ground);
+        const reactor = layer.firstEntity();
+        if (reactor) {
+            
+            const response = cctx.callSymbol(reactor, entity, new SEffectSubject(reactor), undefined, onStepOnTrap);
+            //cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onStepOnTrap);
+        }
+    }
+
+    public static postAttemptPerformTrap(cctx: SCommandContext, entity: LEntity): void {
+        const block = REGame.map.block(entity.x, entity.y);
+        const layer = block.layer(DBlockLayerKind.Ground);
+        const reactor = layer.firstEntity();
+        if (reactor) {
+            cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onPerformTrap);
         }
     }
 

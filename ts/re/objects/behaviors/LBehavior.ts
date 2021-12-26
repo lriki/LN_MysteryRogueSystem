@@ -111,6 +111,8 @@ export const onWalkedOnTopAction = Symbol("onWalkedOnTopAction");
 export const onWalkedOnTopReaction = Symbol("onWalkedOnTopReaction");
 export const onMoveAsMagicBullet = Symbol("onMoveAsMagicBullet");
 
+export const onStepOnTrap = Symbol("onStepOnTrap");
+export const onPerformTrap = Symbol("onPerformTrap");
 
 
 /**

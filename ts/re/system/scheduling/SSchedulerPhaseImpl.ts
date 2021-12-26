@@ -76,11 +76,33 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
     }
 
     onEnd(scheduler: SScheduler): void {
+        for (const unit of scheduler.data()._schedulingUnits) {
+            if (unit.isValid()) {
+                const unitBehavior = unit.unitBehavior();
+                if (unitBehavior.requiredTrapProcess()) {
+                    UAction.postStepOnTrap(RESystem.commandContext, unit.entity());
+                    unitBehavior.clearTrapProcess();
+                }
+            }
+        }
         
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         //RESystem.sequelContext.flushSequelSet();
-        RESystem.sequelContext.attemptFlush(false);
+        //RESystem.sequelContext.attemptFlush(!RESystem.sequelContext.isMoveOnly());
+        //RESystem.sequelContext.attemptFlush(false);
+        RESystem.sequelContext.attemptFlush(RESystem.sequelContext.trapPerforming);
+        RESystem.sequelContext.trapPerforming = false;
+        // true で実行しないと、このあとの stumble に伴う drop が、Move と並列実行されてしまう。
+        // 先に Move は Flush しておきたい。
+        // しかしこの時点ではまだ罠の発動判定をしていないので、true にしても効果が無い。
+        // でももしワナの発動が無かったら、false のまま実行したい。
+        // → 罠の発動判定と、発動処理を別にしなければならないかも。
+
+        // TODO: 発動 trap リストをどこかに作っておきたい
+        for (const entity of REGame.map.entities()) {
+            UAction.postAttemptPerformTrap(RESystem.commandContext, entity);
+        }
 
         // ステート更新は全 Entity の移動が終わった後に行いたい
         // let feetRequired = false;

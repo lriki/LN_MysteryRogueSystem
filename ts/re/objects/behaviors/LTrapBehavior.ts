@@ -6,7 +6,7 @@ import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
-import { CommandArgs, LBehavior, onWalkedOnTopReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onPerformTrap, onStepOnTrap, onWalkedOnTopReaction } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -136,8 +136,10 @@ export class LTrapBehavior extends LBehavior {
         const r = rand.nextIntWithMax(100);
         return (r < this.triggerRate(target));
     }
+
+    private _launching = false;
     
-    [onWalkedOnTopReaction](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
+    [onStepOnTrap](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
         const target = e.sender;
 
@@ -153,14 +155,51 @@ export class LTrapBehavior extends LBehavior {
         cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
 
         if (trigger) {
-            this.performTrapEffect(self, cctx, target.dir);
+            this._launching = true;
+            RESystem.sequelContext.trapPerforming = true;
         }
         else {
             cctx.postMessage(tr("しかし罠にはかからなかった。"));
         }
         
-        return SCommandResponse.Handled;
+        return SCommandResponse.Canceled;
     }
+    
+    [onPerformTrap](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
+        const self = this.ownerEntity();
+        const target = e.sender;
+        if (this._launching) {
+            this._launching = false;
+            this.performTrapEffect(self, cctx, target.dir);
+            return SCommandResponse.Handled;
+        }
+        return SCommandResponse.Canceled;
+    }
+
+    // [onWalkedOnTopReaction](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
+    //     const self = this.ownerEntity();
+    //     const target = e.sender;
+
+    //     // この罠にかかることができる？
+    //     if (!this.checkValidTarget(target)) return SCommandResponse.Pass;
+
+    //     // Exposed を変更する前に発動判定
+    //     const trigger = this.testTrigger(target, cctx.random());
+
+    //     // 発動の成否にかかわらず、露出
+    //     this.setExposed(true);
+
+    //     cctx.postMessage(tr("{0} を踏んだ！", self.getDisplayName().name));
+
+    //     if (trigger) {
+    //         this.performTrapEffect(self, cctx, target.dir);
+    //     }
+    //     else {
+    //         cctx.postMessage(tr("しかし罠にはかからなかった。"));
+    //     }
+        
+    //     return SCommandResponse.Handled;
+    // }
 
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         // [踏まれた]

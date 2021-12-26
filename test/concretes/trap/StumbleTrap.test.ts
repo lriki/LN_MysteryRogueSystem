@@ -6,6 +6,8 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { SMotionSequel } from "ts/re/system/SSequel";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -37,6 +39,20 @@ test("concretes.trap.StumbleTrap", () => {
     
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    expect(TestEnv.sequelSets.length).toBe(2);
+    const set1 = TestEnv.sequelSets[0];
+    const sequels1 = set1.runs()[0].clips()[0].sequels();
+    expect(sequels1.length).toBe(1);
+    expect((sequels1[0] as SMotionSequel).sequelId()).toBe(REBasics.sequels.MoveSequel);
+
+    const set2 = TestEnv.sequelSets[1];
+    const clips2 = set2.runs()[0].clips();
+    expect(clips2.length).toBe(2);
+    const sequels2_1 = clips2[0].sequels()[0];
+    const sequels2_2 = clips2[1].sequels()[0];
+    expect((sequels2_1 as SMotionSequel).sequelId()).toBe(REBasics.sequels.jump);
+    expect((sequels2_2 as SMotionSequel).sequelId()).toBe(REBasics.sequels.stumble);
 
     // アイテムが目の前に落ちる
     const item1 = REGame.map.block(12, 10).getFirstEntity();

@@ -1,10 +1,13 @@
 import { Log } from "ts/re/Common";
 import { REGame } from "ts/re/objects/REGame";
-import { SSequelUnit, SSequelSet } from "ts/re/system/SSequel";
+import { SSequelUnit, SSequelSet, SMotionSequel } from "ts/re/system/SSequel";
+import { REBasics } from "../data/REBasics";
 import { RESystem } from "./RESystem";
 
 export class SSequelContext {
     private _sequelSet: SSequelSet = new SSequelSet();
+
+    public trapPerforming = false;
 
     public clear(): void {
         this._sequelSet = new SSequelSet();
@@ -12,6 +15,22 @@ export class SSequelContext {
 
     public isEmptySequelSet(): boolean {
         return this._sequelSet.isEmpty();
+    }
+
+    public isMoveOnly(): boolean {
+        for (const run of this._sequelSet.runs()) {
+            for (const clip of run.clips()) {
+                for (const s of clip.sequels()) {
+                    if (s instanceof SMotionSequel && s.sequelId() == REBasics.sequels.MoveSequel) {
+                        
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public attemptFlush(force: boolean): void {

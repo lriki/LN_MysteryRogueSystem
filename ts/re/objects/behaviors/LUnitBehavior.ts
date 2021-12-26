@@ -83,6 +83,7 @@ export class LUnitBehavior extends LBehavior {
     // 歩行移動したため、足元にある Entity に対して処理が必要かどうか。
     // アイテムを拾おうとしたり、罠の起動判定を行ったりする。
     private _requiredFeetProcess: boolean = false;
+    private _requiredTrapProcess: boolean = false;
 
 
 
@@ -107,6 +108,14 @@ export class LUnitBehavior extends LBehavior {
     
     public clearFeetProcess(): void {
         this._requiredFeetProcess = false;
+    }
+
+    public requiredTrapProcess(): boolean {
+        return this._requiredTrapProcess;
+    }
+    
+    public clearTrapProcess(): void {
+        this._requiredTrapProcess = false;
     }
 
     queryCharacterFileName(): DPrefabActualImage | undefined {
@@ -191,6 +200,7 @@ export class LUnitBehavior extends LBehavior {
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 self.immediatelyAfterAdjacentMoving = true;
                 this._requiredFeetProcess = true;
+                this._requiredTrapProcess = true;
                 
                 return SCommandResponse.Handled;
             }
