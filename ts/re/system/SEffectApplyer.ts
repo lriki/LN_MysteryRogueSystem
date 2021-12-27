@@ -525,7 +525,10 @@ export class SEffectApplyer {
     }
 
     private elemetedRecoverRate(target: LEntity, elementId: DAttackElementId): number {
-        const rate = target.traitsSum(REBasics.traits.ElementedRecoveryRate, elementId);
+        // traitsSum だと、デフォルト値が 0.0 になるため、全ての Battler にひとつの ElementedRecoveryRate を持たせておかないと回復ができなくなる。
+        // 命中率と同じではあるが、ちょっとそれは面倒すぎる。
+
+        const rate = target.traitsPi(REBasics.traits.ElementedRecoveryRate, elementId);
         return rate;
     }
 

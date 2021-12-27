@@ -565,11 +565,17 @@ export class LEntity extends LObject
     }
 
     public refreshConditions(): void {
-        // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
         const hpParam = this._params.param(REBasics.params.hp);
         if (hpParam) {
             const dead = !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);//this.isDeathStateAffected();
             const hp = this.actualParam(REBasics.params.hp);
+
+            // DeadState が外れた直後など、HP0 なのに DeadState がついていなければ HP1 にする。
+            // if (!dead && hp == 0) {
+            //     hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp) - 1);
+            // }
+
+            // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
             if (dead && hp != 0) {
                 hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp));
                 this.removeAllStates();

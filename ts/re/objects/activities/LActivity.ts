@@ -1,5 +1,5 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
+import { DAction, DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { DSkillId } from "ts/re/data/DCommon";
 import { SAIHelper } from "ts/re/system/SAIHelper";
@@ -9,6 +9,7 @@ import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
+import { REData } from "ts/re/data/REData";
 
 export interface LEntityIdData {
     index: number;
@@ -87,6 +88,10 @@ export class LActivity {
 
     public actionId(): DActionId {
         return this._actionId;
+    }
+
+    public get action(): DAction {
+        return REData.actions[this._actionId];
     }
 
     public actor(): LEntity {
