@@ -359,7 +359,6 @@ export class LUnitBehavior extends LBehavior {
 
                     cctx.post(actual, self, subject, undefined, onThrowReaction)
                         .then(() => {
-                            console.log("...", UName.makeNameAsItem(actual));
                             cctx.postMessage(tr("{0} を撃った", UName.makeNameAsItem(actual)));
                             return true;
                         });

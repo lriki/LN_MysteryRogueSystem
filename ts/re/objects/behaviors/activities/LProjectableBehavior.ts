@@ -167,7 +167,8 @@ export class LProjectableBehavior extends LBehavior {
         self.dir = this.blowDirection;
 
 
-        if (UMovement.moveEntity(cctx, self, tx, ty, MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
+
+        if (UMovement.moveEntity(cctx, self, tx, ty, this._penetration ? MovingMethod.Penetration : MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
             cctx.postSequel(self, REBasics.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
@@ -300,9 +301,7 @@ export class LProjectableBehavior extends LBehavior {
                 throw new Error("Not implemented.");
             }
             else {
-                cctx.postActivity(LActivity.makeCollide(self, hitTarget)
-                    .withOtherSubject(subject.entity())
-                    .withEffectDirection(this.blowDirection));
+                cctx.postEmitEffect(self, REBasics.actions.collide, subject.entity(), hitTarget, this.blowDirection);
             }
         }
     
@@ -326,6 +325,16 @@ export class LProjectableBehavior extends LBehavior {
 
         一方、マゼルン系は、collide を受けた時、その Projectile が Penetration であるかは知れないとダメ。
 
+        遠投ねだやしの動きは参考になりそう？
+        遠投は基本的に、マップ端までにヒットした Uint を一度リストに覚えておき、
+        遠投移動終了時に全部処理を行う。
+        この時、このすべての Unit に対して、collide Activity を実行することになる。
+
+        …でもそう考えると、これは Activity にするべきではないかもしれない。
+        マゼルンは、Collide Activity をキャンセルすることでアイテムを飲み込む。
+        遠投状態で Collide Activity を送ってしまうと、貫通したのに飲み込まれたりする。
+        
+
         */
     }
 
@@ -345,7 +354,7 @@ export class LProjectableBehavior extends LBehavior {
         Entity側に持たせるのが無難かも。
         指定し忘れで魔法弾が地面に落ちてしまうようなことも無いだろう。
         */
-        if (entityData.volatilityProjectile/*this._effectSet*/) {
+        if (entityData.volatilityProjectile || this._penetration) {
             cctx.postDestroy(self);
         }
         else {

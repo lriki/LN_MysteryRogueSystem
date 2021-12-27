@@ -17,6 +17,7 @@ import { CollideActionArgs, CommandArgs, LBehavior, LParamMinMaxInfo, onAttackRe
 import { UAction } from "ts/re/usecases/UAction";
 import { DParameterId } from "ts/re/data/DParameter";
 import { SActivityContext } from "ts/re/system/SActivityContext";
+import { DActionId } from "ts/re/data/DAction";
 
 
 /**
@@ -80,7 +81,7 @@ export class LItemBehavior extends LBehavior {
             const subject = new SEffectSubject(activity.subject());
             actx.postHandleActivity(cctx, target)
             .then(() => {
-                this.applyHitEffect(cctx, self, target, subject, activity.effectDirection(), (targets: LEntity[]) => {
+                this.applyHitEffect(cctx, self, REBasics.actions.collide, target, subject.entity(), activity.effectDirection(), (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {
                         // ここは postDestroy() ではなく普通の destroy().
                         // 上記 applyEffect() の中から postAnimation() が実行されるが、
@@ -159,44 +160,21 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    // [onEatReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-    //     const self = args.self;
-    //     this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Eat, self.dir);
-
-    //     // 食べられたので削除。
-    //     // [かじる] も [食べる] の一部として考えるような場合は Entity が削除されることは無いので、
-    //     // actor 側で destroy するのは望ましくない。
-    //     self.destroy();
-
-    //     return SCommandResponse.Handled;
-    // }
-
-    // [onCollideAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-    //     throw new Error("deprecated");
-    //     const self = args.self;
-        
-    //     cctx.postDestroy(self);
-
-    //     const a = args.args as CollideActionArgs;
-    //     this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Hit, a.dir);
-        
-    //     //
-
-    //     //LProjectableBehavior.startMoveAsProjectile(cctx, args.sender, a.dir, 5);
-        
-
-    //     return SCommandResponse.Handled;
-    // }
     
-    private applyHitEffect(cctx: SCommandContext, self: LEntity, target: LEntity, subject: SEffectSubject, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
+    onEmitEffect(self: LEntity, cctx: SCommandContext, actionId: DActionId, subject: LEntity, target: LEntity, dir: number): SCommandResponse {
+        this.applyHitEffect(cctx, self, actionId, target, subject, dir);
+        return SCommandResponse.Pass;
+    }
+
+    private applyHitEffect(cctx: SCommandContext, self: LEntity, actionId: DActionId, target: LEntity, subject: LEntity, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();
         //const emittors = entityData.emittorSet.emittors(cause);
-        const emittors = entityData.getReaction(REBasics.actions.collide).emittors();
+        const emittors = entityData.getReaction(actionId).emittors();
         if (emittors.length > 0) {
             cctx.postCall(() => {
                 for (const emittor of emittors) {
                     //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
-                    SEmittorPerformer.makeWithEmitor(subject.entity(), target, emittor)
+                    SEmittorPerformer.makeWithEmitor(subject, target, emittor)
                         .setItemEntity(self)
                         .setDffectDirection(effectDir)
                         .perform(cctx, onPerformedFunc);

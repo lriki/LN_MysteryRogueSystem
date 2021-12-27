@@ -23,6 +23,7 @@ import { UBlock } from "../usecases/UBlock";
 export enum MovingMethod {
     Walk,
     Projectile,
+    Penetration,
 }
 
 /*
@@ -480,8 +481,12 @@ export class LMap extends LObject {
             if (UBlock.checkPurifier(block, entity)) return false;  // 聖域の巻物とかがある
         }
 
-        // TODO: 壁抜けや浮遊状態で変わる
-        return !block.layers()[layer].isOccupied() && block.tileShape() == TileShape.Floor;
+        if (method == MovingMethod.Penetration) {
+            return !block.layers()[layer].isOccupied();
+        }
+        else {
+            return !block.layers()[layer].isOccupied() && block.tileShape() == TileShape.Floor;
+        }
     }
     
     canLeaving(block: LBlock, entity: LEntity): boolean {

@@ -386,7 +386,8 @@ export abstract class LBehavior extends LObject {
      */
     onPreApplyEffect(self: LEntity, cctx: SCommandContext, effect: SEffect): SCommandResponse { return SCommandResponse.Pass; }
 
-    onApplyEffect(self: LEntity, cctx: SCommandContext, effect: SEffectContext): SCommandResponse { return SCommandResponse.Pass; }
+    /** 特定の Reaction に割り当てられている Effect を、命中判定無しで発動する。遠投の処理で使用する。 */
+    onEmitEffect(self: LEntity, cctx: SCommandContext, actionId: DActionId, subject: LEntity, target: LEntity, dir: number): SCommandResponse { return SCommandResponse.Pass; }
 
 
 

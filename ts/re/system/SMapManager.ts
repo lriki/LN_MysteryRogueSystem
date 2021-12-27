@@ -170,7 +170,6 @@ export class SMapManager {
     }
 
     public buildStructurs(): void {
-        console.log("this._map.structures()", this._map.structures());
         // モンスターハウス
         for (const s of this._map.structures()) {
             if (s.id() == 0) {

@@ -16,6 +16,7 @@ import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LActionTokenType } from "../objects/LActionToken";
 import { SActivityContext } from "./SActivityContext";
+import { DActionId } from "../data/DAction";
 
 export type MCEntryProc = () => SCommandResponse;
 export type CommandResultCallback = () => boolean;
@@ -397,14 +398,12 @@ export class SCommandContext
         Log.postCommand("Wait");
     }
 
-    public postApplyEffect(target: LEntity, cctx: SCommandContext, effect: SEffectContext): void {
+    public postEmitEffect(entity: LEntity, actionId: DActionId, subject: LEntity, target: LEntity, dir: number): void {
         const m1 = () => {
-            for (const b of target.collectBehaviors()) {
-                const r = b.onApplyEffect(target, this, effect);
-                if (!checkContinuousResponse(r)) {
-                    return r;
-                }
-            }
+            entity.iterateBehaviorsReverse(b => {
+                const r = b.onEmitEffect(entity, this, actionId, subject, target, dir);
+                return r == SCommandResponse.Pass;
+            });
             return SCommandResponse.Pass;
         };
         this._recodingCommandList.push(new RECCMessageCommand("ApplyEffect", m1));
