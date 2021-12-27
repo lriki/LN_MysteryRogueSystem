@@ -43,31 +43,33 @@ test("Items.Arrow", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const initialHP = enemy1.actualParam(REBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // 足元のアイテムを拾う
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    expect(item1._stackCount).toBe(2);      // スタックが増えている
     expect(item2.isDestroyed()).toBe(true); // item1 へスタックされ、item2 自体は消える
 
-    //----------
+    //----------------------------------------------------------------------------------------------------
 
-    // item1 は [撃つ] ことができる (※[撃つ] と [投げる] は同じ Action)
-    expect(item1.queryReactions().includes(REBasics.actions.ThrowActionId)).toBe(true);
+    // item1 は [撃つ] ことができる
+    expect(item1.queryReactions().includes(REBasics.actions.ShootingActionId)).toBe(true);
     
     // [撃つ]
-    const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
+    const activity1 = LActivity.makeShooting(actor1, item1).withConsumeAction();
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
-
-    const data = REData.getEntity("kウッドアロー");
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const hp = enemy1.actualParam(REBasics.params.hp);
-    expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
+    expect(hp < initialHP).toBe(true);      // ダメージを受けているはず
+    expect(item1._stackCount).toBe(1);      // スタックが減っている
 });
 

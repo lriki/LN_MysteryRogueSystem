@@ -254,6 +254,10 @@ export class LActivity {
     public static makeThrow(actor: LEntity, object: LEntity): LActivity {
         return (new LActivity()).setup(REBasics.actions.ThrowActionId, actor, object);
     }
+
+    public static makeShooting(actor: LEntity, object: LEntity): LActivity {
+        return (new LActivity()).setup(REBasics.actions.ShootingActionId, actor, object);
+    }
     
     public static makeFall(actor: LEntity): LActivity {
         return (new LActivity()).setup(REBasics.actions.FallActionId, actor);
