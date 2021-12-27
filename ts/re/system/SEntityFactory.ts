@@ -46,6 +46,7 @@ import { LEscapeBehavior } from "../objects/behaviors/LEscapeBehavior";
 import { LStumblePreventionBehavior } from "../objects/behaviors/LPreventionBehavior";
 import { LActivityCharmBehavior } from "../objects/behaviors/LActivityCharmBehavior";
 import { LExperienceBehavior } from "../objects/behaviors/LExperienceBehavior";
+import { LRaceBehavior } from "../objects/behaviors/LRaceBehavior";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -87,6 +88,7 @@ export class SEntityFactory {
         e.addBehavior(LInventoryBehavior);
         //e.addBehavior(LExperiencedBehavior);
         e.addBehavior(LEnemyBehavior);
+        e.addBehavior(LRaceBehavior);
         this.setupDirectly_Enemy(e, enemyEntityData);
     }
     

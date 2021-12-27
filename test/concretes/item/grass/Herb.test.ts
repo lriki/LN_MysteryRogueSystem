@@ -192,3 +192,34 @@ test("concretes.item.grass.Herb.enemy", () => {
     expect(enemy1Hp2).toBeGreaterThan(enemy1Hp1);
 });
 
+test("concretes.item.grass.Herb.undead", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+    
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+
+    // Enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
+
+    // アイテム作成 & インベントリに入れる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [投げる]
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // ダメージを受けている
+    const enemy2Hp1 = enemy1.actualParam(REBasics.params.hp);
+    expect(enemy2Hp1).toBeLessThan(enemy1Hp1);
+});
+

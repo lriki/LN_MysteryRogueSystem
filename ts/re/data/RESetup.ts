@@ -12,10 +12,11 @@ import { DStateGroup } from "./DStateGroup";
 import { REData } from "./REData";
 import { assert, tr2 } from "../Common";
 import { DItem } from "./DItem";
+import { DRace } from "./DRace";
 
 export class RESetup {
 
-    public static setupPrefab(data: DPrefab) {
+    public static setupPrefab(data: DPrefab): void {
         
         switch (data.key) {
             case "pActor1":
@@ -29,8 +30,16 @@ export class RESetup {
                 break;
         }
     }
+
+    public static setupRace(data: DRace): void {
+        switch (data.key) {
+            case "kRace_アンデッド族":
+                data.traits.push({code: REBasics.traits.ElementedRecoveryRate, dataId: 0, value: -1.0});
+                break;
+        }
+    }
     
-    public static setupActor(entity: DEntity) {
+    public static setupActor(entity: DEntity): void {
         const actor = entity.actorData();
         switch (actor.id) {
             case 1:
@@ -43,7 +52,7 @@ export class RESetup {
     // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
     // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
     // そのためここで直定義して一通り作ってみた後、再検討する。
-    public static setupDirectly_DItem(entity: DEntity) {
+    public static setupDirectly_DItem(entity: DEntity): void{
         const data = entity.item();
         switch (entity.entity.key) {
             case "kゴブリンのこん棒":
@@ -1143,7 +1152,8 @@ export class RESetup {
                 break;
             case "kEnemy_ゾンビA":
                 //data.traits.push({ code: REBasics.traits.RecoverRate, dataId: 0, value: -1.0 });
-                entity.raceIds.push(REData.getRace("kRace_ドレイン族").id);
+                // entity.raceIds.push(REData.getRace("kRace_ドレイン族").id);
+                // entity.raceIds.push(REData.getRace("kRace_アンデッド族").id);
                 break;
             case "kEnemy_プレゼンにゃーA":
                 //data.traits.push({ code: DBasics.traits.ItemDropRate, dataId: 0, value: 1.0 });

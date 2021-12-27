@@ -55,10 +55,9 @@ cloc ts --include-lang=TypeScript
 ```
 
 ```
-pip install mkdocs
-pip install mkdocs-material
-mkdocs build
-mkdocs serve
+poetry install
+poetry run mkdocs build
+poetry run mkdocs serve
 ```
 
 ### ブラウザ上でデバッグ実行するには

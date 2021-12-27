@@ -15,59 +15,6 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.grass.AntiPoisonGrass.enemy", () => {
-    TestEnv.newGame();
-
-    // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(REBasics.params.hp);
-    const pow1 = player1.actualParam(REBasics.params.pow);
-
-    // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
-    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
-
-    // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item2"));
-    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
-    player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
-
-    //TestUtils.testCommonGrassBegin(player1, item1);
-
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    //----------------------------------------------------------------------------------------------------
-
-    // // [食べる]
-    // RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
-    // RESystem.dialogContext.activeDialog().submit();
-    
-    //RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    // const hp2 = player1.actualParam(REBasics.params.hp);
-    // const pow2 = player1.actualParam(REBasics.params.pow);
-    // expect(hp2).toBeLessThan(hp1);      // ダメージをうける
-    // expect(pow2).toBeLessThan(pow1);    // ちからが減る
-    // expect(player1.isStateAffected(state1)).toBeFalsy();
-    // expect(player1.isStateAffected(state2)).toBeFalsy();
-
-    //----------------------------------------------------------------------------------------------------
-    
-    // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
-
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
-    expect(enemy1Hp2).toBeLessThan(enemy1Hp1);  // ダメージをうける
-    
-    //TestUtils.testCommonGrassEnd(player1, item1);
-});
-
-
 test("concretes.item.grass.AntiPoisonGrass.player", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
@@ -119,4 +66,36 @@ test("concretes.item.grass.AntiPoisonGrass.player", () => {
     expect(pow3).toBe(pow1);        // ちからが最大まで回復
     expect(hp2).toBe(hp1);  // ダメージをうけたりしていない
     
+});
+
+test("concretes.item.grass.AntiPoisonGrass.enemy", () => {
+    TestEnv.newGame();
+
+    // Player
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const hp1 = player1.actualParam(REBasics.params.hp);
+    const pow1 = player1.actualParam(REBasics.params.pow);
+
+    // Enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
+
+    // アイテム作成 & インベントリに入れる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1"));
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
+
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // [投げる]
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
+    expect(enemy1Hp2).toBeLessThan(enemy1Hp1);  // ドレイン系はダメージをうける
 });

@@ -28,22 +28,26 @@ test("concretes.item.grass.混乱草", () => {
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 混乱状態になる
     expect(!!player1.states().find(x => x.stateDataId() == REData.getState("kState_UT混乱").id)).toBe(true);
+
+    //----------------------------------------------------------------------------------------------------
 
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 混乱状態になる
     expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UT混乱").id)).toBe(true);

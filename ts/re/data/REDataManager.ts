@@ -258,8 +258,9 @@ export class REDataManager
             REBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
             REBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
             REBasics.traits.DisableTrap = REData.newTrait("DisableTrap").id;
-            REBasics.traits.RecoverRate = REData.newTrait("RecoverRate").id;
+            //REBasics.traits.RecoverRate = REData.newTrait("RecoverRate").id;
             //REBasics.traits.ElementedRecoverRate = REData.newTrait("ElementedRecoverRate").id;
+            REBasics.traits.ElementedRecoveryRate = REData.newTrait("ElementedRecoverRate").id;
             REBasics.traits.RaceRate = REData.newTrait("RaceRate").id;
             REBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
         }
@@ -542,6 +543,7 @@ export class REDataManager
                     const race = REData.newRace();
                     race.key = meta.key;
                     race.name = x.name;
+                    race.traits = x.traits ?? [];
                 }
                 else {
                     const id = REData.addClass(x.name ?? "null");
@@ -554,6 +556,7 @@ export class REDataManager
             }
         });
         REBasics.defaultEnemyClass = REData.classes[9].id;  // TODO:
+        for (const race of REData.races) RESetup.setupRace(race);
 
         // Import Actors
         REData.actors = [];

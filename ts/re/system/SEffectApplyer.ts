@@ -1,5 +1,5 @@
 import { REBasics } from "../data/REBasics";
-import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey } from "../data/DCommon";
+import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey, DAttackElementId } from "../data/DCommon";
 import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSpecialEffectRef } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
@@ -508,6 +508,9 @@ export class SEffectApplyer {
             value *= target.sparam(REBasics.sparams.mdr);
         }
         if (baseValue < 0) {
+            value *= this.elemetedRecoverRate(target, paramEffect.elementId);
+        }
+        if (baseValue < 0) {
             value *= target.sparam(REBasics.sparams.rec);
         }
         if (critical) {
@@ -519,6 +522,11 @@ export class SEffectApplyer {
         value = this.applyDamageRate(value, paramEffect.paramId, paramEffect.elementId, target);
         value = Math.round(value);
         return value;
+    }
+
+    private elemetedRecoverRate(target: LEntity, elementId: DAttackElementId): number {
+        const rate = target.traitsSum(REBasics.traits.ElementedRecoveryRate, elementId);
+        return rate;
     }
 
     // Game_Action.prototype.evalDamageFormula
