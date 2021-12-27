@@ -10,6 +10,7 @@ import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { assert } from "ts/re/Common";
 import { SMotionSequel } from "ts/re/system/SSequel";
+import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -406,5 +407,39 @@ test("SpeedLevel.ChangeSpeed5", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.x).toBe(10);  // 速度ダウンを検知したときに行動トークンが削られるので、Enemy に Turn はまわらない
+});
+
+test("SpeedLevel.State", () => {
+    TestEnv.newGame();
+    const stateId = REData.getState("kState_UT混乱").id;
+
+    // actor1 - x1 速
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 1, 5); 
+    actor1.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(1);
+
+    // enemy2 - x2 速
+    const enemy2 = SEntityFactory.newMonster(REData.enemyEntity(1));
+    enemy2._name = "enemy2";
+    enemy2.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(2);
+    enemy2.addState(TestEnv.StateId_debug_MoveRight);
+    enemy2.addState(stateId);
+    REGame.world._transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 1, 7);
+    const state = enemy2.findState(stateId);
+    const behavior = state?.stateBehabiors().find(b => b instanceof LGenericRMMZStateBehavior) as LGenericRMMZStateBehavior;
+    const turn = behavior._stateTurn;
+    assert(turn);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [待機]
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // Enemy だけ倍速で動いているとき、ステートがちゃんと 2 ターン分経過していること
+    expect(behavior._stateTurn).toBe(turn - 2);
 });
 

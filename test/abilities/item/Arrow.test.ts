@@ -51,7 +51,7 @@ test("Items.Arrow", () => {
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    RESystem.scheduler.stepSimulation();    
 
     expect(item1._stackCount).toBe(2);      // スタックが増えている
     expect(item2.isDestroyed()).toBe(true); // item1 へスタックされ、item2 自体は消える

@@ -22,7 +22,7 @@ import { SActivityContext } from "ts/re/system/SActivityContext";
 
 
 export class LGenericRMMZStateBehavior extends LBehavior {
-    private _stateTurn: number | null = 0;
+    _stateTurn: number | null = 0;
     //private _persistent: boolean = false;   // 永続ステータス？
     private _characterAI: LCharacterAI | undefined;
     
