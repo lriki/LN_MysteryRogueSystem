@@ -189,6 +189,7 @@ export interface DBasicActions {
     // 話す
     talk: DActionId;
 
+    // ぶつかる ("ぶつける" ではなく)
     collide: DActionId;
 
     dialogResult: DActionId;

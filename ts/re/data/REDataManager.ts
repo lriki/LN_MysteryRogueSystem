@@ -263,6 +263,8 @@ export class REDataManager
             REBasics.traits.ElementedRecoveryRate = REData.newTrait("ElementedRecoverRate").id;
             REBasics.traits.RaceRate = REData.newTrait("RaceRate").id;
             REBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
+            REBasics.traits.PenetrationItem = REData.newTrait("PenetrationItem").id;
+            REBasics.traits.PenetrationThrower = REData.newTrait("PenetrationThrower").id;
         }
 
         // Factions

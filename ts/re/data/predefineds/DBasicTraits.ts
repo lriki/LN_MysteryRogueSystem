@@ -190,5 +190,11 @@ export interface DBasicTraits {
     RaceRate: DTraitId;
 
     PhysicalProjectileReflector: DTraitId;
+
+    /** 貫通 (このアイテムが投げられたときは貫通になる。銀の矢) */
+    PenetrationItem: DTraitId;
+
+    /** 貫通 (この人が投げるアイテムはすべて貫通になる。遠投の腕輪) */
+    PenetrationThrower: DTraitId;
 }
 

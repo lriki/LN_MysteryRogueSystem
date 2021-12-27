@@ -128,6 +128,13 @@ export class RESetup {
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId);
                 break;
+            case "kシルバーアロー":
+                this.setupArrowCommon(entity);
+                entity.display.stackedName = "%1本の" + entity.display.name;
+                entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
+                entity.selfTraits.push({code: REBasics.traits.PenetrationItem, dataId: 0, value: 0});
+                entity.addReaction(REBasics.actions.ShootingActionId);
+                break;
             case "kItem_毒矢":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
