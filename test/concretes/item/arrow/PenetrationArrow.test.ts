@@ -17,9 +17,10 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
-    // actor1 配置
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
-    const inventory = actor1.getEntityBehavior(LInventoryBehavior);
+    // player1 配置
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
+    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kシルバーアロー").id));
@@ -42,7 +43,7 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [撃つ]
-    const activity1 = LActivity.makeShooting(actor1, item1).withEntityDirection(6).withConsumeAction();
+    const activity1 = LActivity.makeShooting(player1, item1).withEntityDirection(6).withConsumeAction();
     RESystem.dialogContext.postActivity(activity1);
     RESystem.dialogContext.activeDialog().submit();
     
