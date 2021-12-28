@@ -12,7 +12,7 @@ export class TestUtils {
         expect(name.includes(data.display.name)).toBe(false);
         
         // [食べる] ができる？
-        expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBe(true);
+        expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBeTruthy();
 
         // [食べる] に対応する Emittor がある？
         const reaction = data.getReaction(REBasics.actions.EatActionId);
@@ -28,15 +28,15 @@ export class TestUtils {
     
     public static testCommonGrassEnd(actor: LEntity, item: LEntity) {
         // 食べられたので消滅済み
-        expect(item.isDestroyed()).toBe(true);
+        expect(item.isDestroyed()).toBeTruthy();
 
         // FP が回復しているはず
-        expect(actor.actualParam(REBasics.params.fp) > 5000).toBe(true);
+        expect(actor.actualParam(REBasics.params.fp) > 5000).toBeTruthy();
 
         // 食べられたら識別済みになる
         const name = UName.makeNameAsItem(item);
         const data = item.data();
-        expect(name.includes(data.display.name)).toBe(true);
+        expect(name.includes(data.display.name)).toBeTruthy();
     }
 
     public static testCommonScrollBegin(actor: LEntity, item: LEntity) {
@@ -47,7 +47,7 @@ export class TestUtils {
         expect(name.includes(data.display.name)).toBe(false);
         
         // [読む] ができる？
-        expect(item.queryReactions().includes(REBasics.actions.ReadActionId)).toBe(true);
+        expect(item.queryReactions().includes(REBasics.actions.ReadActionId)).toBeTruthy();
 
         // [読む] に対応する Emittor がある？
         const reaction = data.getReaction(REBasics.actions.ReadActionId);
@@ -57,12 +57,20 @@ export class TestUtils {
     
     public static testCommonScrollEnd(actor: LEntity, item: LEntity) {
         // 読まれたので消滅済み
-        expect(item.isDestroyed()).toBe(true);
+        expect(item.isDestroyed()).toBeTruthy();
 
         // 読まれたら識別済みになる
         const name = UName.makeNameAsItem(item);
         const data = item.data();
-        expect(name.includes(data.display.name)).toBe(true);
+        expect(name.includes(data.display.name)).toBeTruthy();
+    }
+
+    public static testCommonArrow(item: LEntity): void {
+        // [撃つ] ことができる
+        expect(item.queryReactions().includes(REBasics.actions.ShootingActionId)).toBeTruthy();
+
+        // スタックできる
+        expect(item.hasTrait(REBasics.traits.Stackable)).toBeTruthy();
     }
 }
 
