@@ -1,5 +1,4 @@
-import { SScheduler, SScheduler_old } from "./SScheduler";
-import { LTOUnit } from "ts/re/objects/LScheduler";
+import { SScheduler } from "./SScheduler";
 import { LEntity } from "../../objects/LEntity";
 import { LUnitBehavior } from "../../objects/behaviors/LUnitBehavior";
 

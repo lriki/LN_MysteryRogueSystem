@@ -1,6 +1,6 @@
 import { DecisionPhase } from "ts/re/objects/behaviors/LBehavior";
 import { REGame } from "ts/re/objects/REGame";
-import { SScheduler, SScheduler_old } from "./SScheduler";
+import { SScheduler } from "./SScheduler";
 import { RESystem } from "../RESystem";
 import { UAction } from "../../usecases/UAction";
 import { LTOUnit } from "ts/re/objects/LScheduler";

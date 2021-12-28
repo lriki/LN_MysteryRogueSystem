@@ -18,7 +18,7 @@ import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecut
 import { LEventServer } from "ts/re/objects/LEventServer";
 import { SMinimapData } from "./SMinimapData";
 import { LFloorDirector } from "ts/re/objects/LFloorDirector";
-import { LScheduler, LScheduler2 } from "ts/re/objects/LScheduler";
+import { LScheduler2 } from "ts/re/objects/LScheduler";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/re/PluginParameters";

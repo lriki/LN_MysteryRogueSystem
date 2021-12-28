@@ -1,5 +1,3 @@
-
-
 import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
@@ -13,9 +11,6 @@ import { TileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
-});
-
-afterAll(() => {
 });
 
 test("concretes.item.arrow.PenetrationArrow", () => {

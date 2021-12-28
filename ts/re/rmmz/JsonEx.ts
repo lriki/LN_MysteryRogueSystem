@@ -5,7 +5,6 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LRoom } from "ts/re/objects/LRoom";
-import { LScheduler } from "ts/re/objects/LScheduler";
 import { LSystem } from "ts/re/objects/LSystem";
 import { LWorld } from "ts/re/objects/LWorld";
 import { LBlock } from "ts/re/objects/LBlock";

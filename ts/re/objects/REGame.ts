@@ -11,7 +11,7 @@ import { SImmediatelyCommandExecuteScheduler } from "ts/re/system/SImmediatelyCo
 import { LEventServer } from "./LEventServer";
 import { LFloorDirector } from "./LFloorDirector";
 import { LBlock } from "./LBlock";
-import { LScheduler, LScheduler2 } from "./LScheduler";
+import { LScheduler2 } from "./LScheduler";
 import { REGameExtension } from "./REGameExtension";
 
 /**
@@ -30,7 +30,6 @@ export class REGame
     static map: LMap;
     static camera: LCamera;
     static scheduler: LScheduler2;
-    static scheduler_old: LScheduler;
     static identifyer: LIdentifyer;
     static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
