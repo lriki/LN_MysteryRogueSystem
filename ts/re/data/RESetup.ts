@@ -174,6 +174,9 @@ export class RESetup {
                 });
                 eatEmittor.effectSet.effects.push(effect);
                 collideEmittor.effectSet.effects.push(effect);
+
+                
+                effect.rmmzAnimationId = 12;
                 
                 // emittor.effectSet.effects.push(effect);
                 // entity.addEmittor(DEffectCause.Eat, emittor);
@@ -217,6 +220,7 @@ export class RESetup {
                     // });
                     eatEmittor.effectSet.effects.push(effect);
                     //entity.addEmittor(DEffectCause.Eat, emittor);
+                    effect.rmmzAnimationId = 51;
                 }
                 
                 break;
@@ -227,35 +231,42 @@ export class RESetup {
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 const effect = entity.mainEmittor().effectSet.effects[0];
-                effect.parameterQualifyings.push(
-                    new DParameterQualifying(REBasics.params.level, "1", DParameterEffectApplyType.Recover));
+                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.level, "1", DParameterEffectApplyType.Recover));
+                effect.rmmzAnimationId = 52;
                 break;
             }
             case "kワープドラッグ": {
+                entity.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
+
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                eatEmittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 break;
             }
-            case "kブラインドドラッグ":
+            case "kブラインドドラッグ": {}
                 this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 break;
-            case "kパニックドラッグ":
+            case "kパニックドラッグ": {
+                const effect = entity.mainEmittor().effectSet.effects[0];
+                effect.rmmzAnimationId = 63;
                 this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 break;
-            case "kビジブルドラッグ":
+            }
+            case "kビジブルドラッグ": {
+                const effect = entity.mainEmittor().effectSet.effects[0];
+                effect.rmmzAnimationId = 97;
                 this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 break;
+            }
             case "kマッドドラッグ":
                 this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);

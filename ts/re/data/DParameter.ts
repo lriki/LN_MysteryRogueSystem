@@ -4,6 +4,11 @@ export type DParameterId = number;
 export type DXParamId = number;
 export type DSParamId = number;
 
+export enum DParamMessageValueSource {
+    Relative,
+    Absolute,
+}
+
 /**
  * Unit(Battler) が持つパラメータ
  * 
@@ -77,6 +82,8 @@ export class REData_Parameter
     selfLossMessage: string | undefined;
     targetGainMessage: string | undefined;
     targetLossMessage: string | undefined;
+
+    messageValueSource: DParamMessageValueSource;
     
 
     public static makeBuiltin(id: DParameterId, code: string, displayName: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
@@ -99,6 +106,7 @@ export class REData_Parameter
         this.maxValue = Infinity;
         this.addBuffCoe = 100;
         this.mulBuffCore = 0.25;
+        this.messageValueSource = DParamMessageValueSource.Relative;
         // this.selfDamageMessage = DTextManager.actorDamage;
         // this.targetDamageMessage = DTextManager.enemyDamage;
         // this.selfDamageRecovery = DTextManager.actorRecovery;

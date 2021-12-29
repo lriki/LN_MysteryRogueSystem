@@ -4,7 +4,7 @@ import { REData } from "ts/re/data/REData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/re/objects/LIdentifyer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
-import { DParameterId, REData_Parameter } from "ts/re/data/DParameter";
+import { DParameterId, DParamMessageValueSource, REData_Parameter } from "ts/re/data/DParameter";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LActorBehavior } from "./behaviors/LActorBehavior";
 import { SSoundManager } from "ts/re/system/SSoundManager";
@@ -27,6 +27,21 @@ export class LParamEffectResult {
     public constructor(paramId: DParameterId, qualifying: DParameterQualifying) {
         this.paramId = paramId;
         this.qualifying = qualifying;
+    }
+
+    public getValue(entity: LEntity, recover: boolean): number {
+        if (REData.parameters[this.paramId].messageValueSource == DParamMessageValueSource.Relative) {
+            if (recover)
+                return -this.damage;
+            else
+                return this.damage;
+        }
+        else if (REData.parameters[this.paramId].messageValueSource == DParamMessageValueSource.Absolute) {
+            return entity.actualParam(this.paramId);
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
     }
 }
 
@@ -248,7 +263,7 @@ export class LEffectResult {
             }
             else {
                 for (const param of this.paramEffects2) {
-                    cctx.postMessage(this.makeParamDamageText(targetName, param));
+                    cctx.postMessage(this.makeParamDamageText(entity, targetName, param));
                 }
             }
 
@@ -322,7 +337,7 @@ export class LEffectResult {
     }
 
     // Window_BattleLog.prototype.makeHpDamageText
-    private makeParamDamageText(entityName: string, paramResult: LParamEffectResult): string {
+    private makeParamDamageText(entity: LEntity, entityName: string, paramResult: LParamEffectResult): string {
         const paramData = REData.parameters[paramResult.paramId];
         const damage = paramResult.damage;
         const isActor = this.focusedFriendly;
@@ -331,9 +346,9 @@ export class LEffectResult {
             fmt = isActor ? DTextManager.actorDrain : DTextManager.enemyDrain;
             return fmt.format(entityName, paramData.displayName, damage);
         } else if (damage > 0) {
-            return this.makeDamageOrLossMessage(paramResult, entityName, paramData, isActor);
+            return this.makeDamageOrLossMessage(entity, paramResult, entityName, paramData, isActor);
         } else if (damage < 0) {
-            return this.makeRecoveryOrGainMessage(paramResult, entityName, paramData, isActor);
+            return this.makeRecoveryOrGainMessage(entity, paramResult, entityName, paramData, isActor);
         } else {
             if (paramResult.paramId == REBasics.params.hp) {
                 fmt = isActor ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
@@ -345,8 +360,8 @@ export class LEffectResult {
         }
     }
 
-    private makeDamageOrLossMessage(paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
-        const damage = paramResult.damage;
+    private makeDamageOrLossMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
+        const damage = paramResult.getValue(entity, false);
         if (isSubjectivity) {
             if (paramResult.qualifying && paramResult.qualifying.alliesSideLossMessage) {
                 return paramResult.qualifying.alliesSideLossMessage.format(entityName, param.displayName, damage);
@@ -371,28 +386,28 @@ export class LEffectResult {
         }
     }
 
-    private makeRecoveryOrGainMessage(paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
-        const damage = paramResult.damage;
+    private makeRecoveryOrGainMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
+        const value = paramResult.getValue(entity, true);
         if (isSubjectivity) {
             if (paramResult.qualifying && paramResult.qualifying.alliesSideGainMessage) {
-                return paramResult.qualifying.alliesSideGainMessage.format(entityName, param.displayName, -damage);
+                return paramResult.qualifying.alliesSideGainMessage.format(entityName, param.displayName, value);
             }
             else if (param.selfGainMessage) {
-                return param.selfGainMessage.format(entityName, param.displayName, -damage);
+                return param.selfGainMessage.format(entityName, param.displayName, value);
             }
             else {
-                return DTextManager.actorRecovery.format(entityName, param.displayName, -damage);
+                return DTextManager.actorRecovery.format(entityName, param.displayName, value);
             }
         }
         else {
             if (paramResult.qualifying && paramResult.qualifying.opponentGainMessage) {
-                return paramResult.qualifying.opponentGainMessage.format(entityName, param.displayName, -damage);
+                return paramResult.qualifying.opponentGainMessage.format(entityName, param.displayName, value);
             }
             else if (param.targetGainMessage) {
-                return param.targetGainMessage.format(entityName, param.displayName, -damage);
+                return param.targetGainMessage.format(entityName, param.displayName, value);
             }
             else {
-                return DTextManager.enemyRecovery.format(entityName, param.displayName, -damage);
+                return DTextManager.enemyRecovery.format(entityName, param.displayName, value);
             }
         }
     }

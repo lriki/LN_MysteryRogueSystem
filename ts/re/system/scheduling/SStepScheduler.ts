@@ -139,6 +139,8 @@ export class SStepScheduler2 {
     }
 
     private process_RunStarting(): void {
+        console.log("RunStarting");
+
         for (const unit of this._data.schedulingUnits()) {
             if (unit.isValid()) {
                 unit.entity()._schedulingResult.clear();
@@ -146,7 +148,7 @@ export class SStepScheduler2 {
         }
 
         if (this._data.schedulingUnits().length <= 0) {
-            // Unit がひとつもない。何もする必要はない。
+            // Unit がひとつもない。何もする必要はない。(通常、ここに来ることは無い)
             this._stepPhase = SStepPhase.RunClosing;
         }
         else {

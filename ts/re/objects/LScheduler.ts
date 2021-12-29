@@ -449,10 +449,18 @@ export class LScheduler2 {
                     maxSpeed = Math.max(unit.speedLevel2, maxSpeed);
                     unit.speedLevel = unit.speedLevel2;
 
-                    this.maxRunCount = Math.max(this.maxRunCount, unit.speedLevel);
+                    
+                    if (unit == this.currentUnit()) {
+                        // 素早さ草を飲んだ場合など、自分自身で速度アップした場合、Run をまたがずに直後に再行動したい。
+                        // この時行動速度が x1 の Unit しかいないのに Run を増やすと、モーションのタイミングがずれることがある。
+                        // 例えば、x1 Enemy が次の Run で行動することになるため、Player が移動後アイテムを拾ったときのモーションとの間に
+                        // Run1 の AIMajorPhase が入り、ここで Flush されるため、Player と Enemy のモーションがまとめて再生されなくなる。
+                    }
+                    else {
+                        this.maxRunCount = Math.max(this.maxRunCount, unit.speedLevel);
+                    }
                     
                     // 速度の増減分だけ、行動トークンも調整する。
-                    // 例えば速度が増えた時は次の Run で追加の行動が発生するので、動けるようになる。
                     entity._actionToken.charge(diff);
 
                     if (this.existsHighSpeedReadyEntity(unit)) {

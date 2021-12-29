@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.arrow.PenetrationArrow"
+                "-t", "concretes.item.grass.すばやさ草.2"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

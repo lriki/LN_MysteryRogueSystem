@@ -21,7 +21,7 @@ import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { RESetup } from './RESetup';
 import { DAttackElement } from './DAttackElement';
-import { REData_Parameter } from './DParameter';
+import { DParamMessageValueSource, REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
@@ -131,6 +131,7 @@ export class REDataManager
         //REData.parameters[REBasics.params.level].selfLossMessage = DTextManager.actorLoss;
         REData.parameters[REBasics.params.level].targetGainMessage = DTextManager.levelUp;
         //REData.parameters[REBasics.params.level].targetLossMessage = DTextManager.enemyLoss;
+        REData.parameters[REBasics.params.level].messageValueSource = DParamMessageValueSource.Absolute;
         
         
         REBasics.entityKinds = {

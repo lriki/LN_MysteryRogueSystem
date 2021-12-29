@@ -188,7 +188,7 @@ export class LExperienceBehavior extends LBehavior {
     }
     
     // Game_Actor.prototype.expForLevel
-    private expForLevel(self: LEntity, level: number): number {
+    public expForLevel(self: LEntity, level: number): number {
         const c = this.currentClass(self);
         const basis = c.expParams[0];
         const extra = c.expParams[1];
