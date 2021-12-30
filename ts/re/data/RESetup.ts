@@ -341,10 +341,14 @@ export class RESetup {
 
                 const effect1 = mainEmittor.effectSet.effects[0];
 
+                // ダメージを与えるときに 最大HP 上昇効果を発動したくない。
+                // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
+                // 単に受け側で回復をダメージ扱いするだけでは足りない。
                 const effect2 = effect1.clone();
                 effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
                 //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
                 mainEmittor.effectSet.effects.push(effect2);
+                effect2.rmmzAnimationId = 0;
 
                 effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
 
@@ -398,13 +402,39 @@ export class RESetup {
                 break;
             }
             case "kエリクシール": {
+                const mainEmittor = entity.mainEmittor();
+                const effect1 = mainEmittor.effectSet.effects[0];
+
+                // ダメージを与えるときに 最大HP 上昇効果を発動したくない。
+                // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
+                // 単に受け側で回復をダメージ扱いするだけでは足りない。
+                const effect2 = effect1.clone();
+                effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
+                //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
+                mainEmittor.effectSet.effects.push(effect2);
+
+                effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-                // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
+
                 //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                eatEmittor.effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "999", DParameterEffectApplyType.Recover));
-                eatEmittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.removeStatesByIntentions, value: DStateIntentions.Negative });
+                const effect = eatEmittor.effectSet.effects[0];
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "2", DParameterEffectApplyType.Recover)
+                    .withApplyTarget(DParameterApplyTarget.Maximum)
+                    .withConditionFormula("a.hp >= a.max_hp"));
+
+                break;
+
+                // const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
+                // // entity.addReaction(REBasics.actions.EatActionId, 0);
+                // // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
+                // // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
+                // //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
+                // eatEmittor.effectSet.effects[0].parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "999", DParameterEffectApplyType.Recover));
+                // eatEmittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.removeStatesByIntentions, value: DStateIntentions.Negative });
                 break;
             }
             case "kItem_ドラゴン草":

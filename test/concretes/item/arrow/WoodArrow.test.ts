@@ -20,6 +20,7 @@ test("concretes.item.arrow.WoodArrow", () => {
 
     // player1 配置
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
+    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
