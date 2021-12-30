@@ -24,6 +24,7 @@ test("concretes.item.grass.火炎草.test", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    enemy1.addState(REData.getState("kState_UTからぶり").id);
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
 
     enemy1.params().param(REBasics.params.hp)?.setIdealParamPlus(500);
@@ -53,7 +54,7 @@ test("concretes.item.grass.火炎草.test", () => {
     expect(enemy1Hp2 < enemy1Hp1).toBeTruthy();
 
     // Player はダメージを受けない (Issue 修正確認)
-    const player1Hp2 = enemy1.actualParam(REBasics.params.hp);
+    const player1Hp2 = player1.actualParam(REBasics.params.hp);
     expect(player1Hp2).toBe(player1Hp1);
     
     //----------------------------------------------------------------------------------------------------

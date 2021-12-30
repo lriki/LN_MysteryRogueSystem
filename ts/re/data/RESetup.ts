@@ -370,10 +370,20 @@ export class RESetup {
                 // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 break;
             }
-            case "k火炎草70_50":
-                this.setupGrassCommon(entity);
+            case "k火炎草70_50": {
+                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
+
+                const eatEmittor2 = REData.getItem("kItem_火炎草_ブレス").mainEmittor();
+                eatEmittor2.scope.range = DEffectFieldScopeRange.Front1;
+                entity.addReaction(REBasics.actions.EatActionId, eatEmittor2);
+                // const effect1 = .effectSet.effects[0];
+                // eatEmittor2.effectSet.effects.push effect1;
+
+                const effect2 = REData.getItem("kItem_火炎草_投げ当て").mainEmittor().effectSet.effects[0];
+                collideEmittor.effectSet.effects[0] = effect2;
+
                 // entity.addReaction(REBasics.actions.EatActionId, 0);]
-                entity.addReaction(REBasics.actions.EatActionId, REData.getSkill("kSkill_火炎草ブレス").emittor());
+                //entity.addReaction(REBasics.actions.EatActionId, REData.getSkill("kSkill_火炎草ブレス").emittor());
                 // const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
                 // emittor
                 //entity.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_火炎草ブレス").emittor());
@@ -386,6 +396,7 @@ export class RESetup {
                 //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
                 //entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 break;
+            }
             case "kエリクシール": {
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);

@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.grass.AntiPoisonGrass.player"
+                "-t", "concretes.item.grass.火炎草.test"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
