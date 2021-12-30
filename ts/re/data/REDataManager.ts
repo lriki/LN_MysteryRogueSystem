@@ -670,7 +670,7 @@ export class REDataManager
         $dataWeapons.forEach(x => {
             const [entity, item] = REData.newItem();
             if (x) {
-                entity.display.name = x.name;
+                entity.display.name = DHelpers.parseDisplayName(x.name);
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.cellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);

@@ -188,4 +188,12 @@ export class DHelpers {
             return { name: expr.trim(), args: [] };
         }
     }
+
+    public static parseDisplayName(name: string): string {
+        const index = name.lastIndexOf(".");
+        if (index >= 0)
+            return name.substring(0, index);
+        else
+            return name;
+    }
 }

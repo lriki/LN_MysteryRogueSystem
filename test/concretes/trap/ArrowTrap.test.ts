@@ -112,7 +112,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
-    const itemData2 = REData.getEntity("kウッドアロー");
+    const itemData2 = REData.getEntity("kItem_WoodArrow");
 
     const item2 = REGame.map.entities().find(e => e.dataId() == itemData2.id);
     assert(item2);

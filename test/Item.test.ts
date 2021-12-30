@@ -28,7 +28,7 @@ test("Items.Stack", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 矢1本
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_WoodArrow").id));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
@@ -38,7 +38,7 @@ test("Items.Stack", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 矢2本
-    const info2 = DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id);
+    const info2 = DEntityCreateInfo.makeSingle(REData.getEntity("kItem_WoodArrow").id);
     info2.stackCount = 2;
     const item2 = SEntityFactory.newEntity(info2);
     REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
@@ -52,7 +52,7 @@ test("Items.Stack", () => {
     expect(item1._stackCount).toBe(3);  // 3本にまとめられている
 
     // 矢99本
-    const info3 = DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id);
+    const info3 = DEntityCreateInfo.makeSingle(REData.getEntity("kItem_WoodArrow").id);
     info2.stackCount = 99;
     const item3 = SEntityFactory.newEntity(info2);
     REGame.world._transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
@@ -66,7 +66,7 @@ test("Items.Stack", () => {
     expect(item1._stackCount).toBe(99);  // 99本が最大
 
     // 矢1本
-    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kウッドアロー").id));
+    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_WoodArrow").id));
     REGame.world._transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う

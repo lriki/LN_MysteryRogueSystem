@@ -130,7 +130,7 @@ export class RESetup {
             case "kきれいな指輪":
                 this.setupRingCommon(entity);
                 break;
-            case "kウッドアロー":
+            case "kItem_WoodArrow":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
@@ -282,6 +282,7 @@ export class RESetup {
                 effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
+                effect.rmmzAnimationId = 59;
                 
                 const effect2 = new DEffect(entity.entity.key);
                 effect2.conditions.kindId = REBasics.entityKinds.MonsterKindId;
@@ -766,7 +767,7 @@ export class RESetup {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kウッドアロー";
+                emittor.scope.projectilePrefabKey = "kItem_WoodArrow";
                 break;
             }
             case "kItem_毒矢の罠": {
@@ -1005,7 +1006,7 @@ export class RESetup {
             case "kSkill_射撃_矢":
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kウッドアロー";
+                emittor.scope.projectilePrefabKey = "kItem_WoodArrow";
                 break;
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
