@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.grass.火炎草.test"
+                "-t", "concretes.item.grass.Herb.player"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

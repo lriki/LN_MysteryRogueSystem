@@ -337,32 +337,53 @@ export class RESetup {
                 break;
             }
             case "kキュアリーフ": {
-                const mainEmittor = entity.mainEmittor();
+                if (1) {
+                    const mainEmittor = entity.mainEmittor();
+                    const effect1 = mainEmittor.effectSet.effects[0];
+                    const effect2 = effect1.clone();
 
-                const effect1 = mainEmittor.effectSet.effects[0];
+                    // effect1: 一般用 (HP 回復のみ)
+                    effect1.conditions.fallback = true;
 
-                // ダメージを与えるときに 最大HP 上昇効果を発動したくない。
-                // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
-                // 単に受け側で回復をダメージ扱いするだけでは足りない。
-                const effect2 = effect1.clone();
-                effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
-                //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
-                mainEmittor.effectSet.effects.push(effect2);
-                effect2.rmmzAnimationId = 0;
+                    // effect2: Actor 専用 (最大HP の上昇効果もある)
+                    effect2.conditions.kindId = REBasics.entityKinds.actor;
+                    effect2.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+                    effect2.parameterQualifyings.push(
+                        new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Recover)
+                        .withApplyTarget(DParameterApplyTarget.Maximum)
+                        .withConditionFormula("a.hp >= a.max_hp"));
+                    mainEmittor.effectSet.effects.push(effect2);
 
-                effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
-
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                // entity.addReaction(REBasics.actions.EatActionId, 0);
-                // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-
-                //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                const effect = eatEmittor.effectSet.effects[0];
-                effect.parameterQualifyings.push(
-                    new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Recover)
-                    .withApplyTarget(DParameterApplyTarget.Maximum)
-                    .withConditionFormula("a.hp >= a.max_hp"));
-
+                    const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
+                }
+                else {
+                    const mainEmittor = entity.mainEmittor();
+    
+                    const effect1 = mainEmittor.effectSet.effects[0];
+    
+                    // ダメージを与えるときに 最大HP 上昇効果を発動したくない。
+                    // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
+                    // 単に受け側で回復をダメージ扱いするだけでは足りない。
+                    const effect2 = effect1.clone();
+                    effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
+                    //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
+                    mainEmittor.effectSet.effects.push(effect2);
+                    effect2.rmmzAnimationId = 0;
+    
+                    effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+    
+                    const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
+                    // entity.addReaction(REBasics.actions.EatActionId, 0);
+                    // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
+    
+                    //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
+                    const effect = eatEmittor.effectSet.effects[0];
+                    effect.parameterQualifyings.push(
+                        new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Recover)
+                        .withApplyTarget(DParameterApplyTarget.Maximum)
+                        .withConditionFormula("a.hp >= a.max_hp"));
+    
+                }
                 break;
             }
             case "kスリープドラッグ": {
@@ -404,28 +425,21 @@ export class RESetup {
             case "kエリクシール": {
                 const mainEmittor = entity.mainEmittor();
                 const effect1 = mainEmittor.effectSet.effects[0];
-
-                // ダメージを与えるときに 最大HP 上昇効果を発動したくない。
-                // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
-                // 単に受け側で回復をダメージ扱いするだけでは足りない。
                 const effect2 = effect1.clone();
-                effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
-                //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
-                mainEmittor.effectSet.effects.push(effect2);
 
-                effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+                // effect1: 一般用 (HP 回復のみ)
+                effect1.conditions.fallback = true;
 
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                // entity.addReaction(REBasics.actions.EatActionId, 0);
-                // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-
-                //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                const effect = eatEmittor.effectSet.effects[0];
-                effect.parameterQualifyings.push(
-                    new DParameterQualifying(REBasics.params.hp, "2", DParameterEffectApplyType.Recover)
+                // effect2: Actor 専用 (最大HP の上昇効果もある)
+                effect2.conditions.kindId = REBasics.entityKinds.actor;
+                effect2.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+                effect2.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Recover)
                     .withApplyTarget(DParameterApplyTarget.Maximum)
                     .withConditionFormula("a.hp >= a.max_hp"));
+                mainEmittor.effectSet.effects.push(effect2);
 
+                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 break;
 
                 // const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
