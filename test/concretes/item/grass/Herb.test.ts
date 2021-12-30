@@ -122,6 +122,8 @@ test("concretes.item.grass.Herb.player", () => {
     // 最大HPが増えている
     const player1HpMax2 = player1.idealParam(REBasics.params.hp);
     expect(player1HpMax2).toBeGreaterThan(player1HpMax1);
+    expect(REGame.messageHistory.includesText("最大HP")).toBeTruthy();
+    expect(REGame.messageHistory.includesText("増えた")).toBeTruthy();  // "回復した" ではないこと
 
     TestUtils.testCommonGrassEnd(player1, item1);
 

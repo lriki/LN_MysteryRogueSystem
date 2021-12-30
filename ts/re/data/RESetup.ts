@@ -285,8 +285,15 @@ export class RESetup {
                 
                 const effect2 = new DEffect(entity.entity.key);
                 effect2.conditions.kindId = REBasics.entityKinds.MonsterKindId;
-                effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
-                effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
+                if (0) {
+                    // トルネコ仕様
+                    effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Damage));
+                }
+                else {
+                    // シレン仕様
+                    effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                    effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
+                }
                 mainEmittor.effectSet.effects.push(effect2);
 
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
@@ -313,6 +320,17 @@ export class RESetup {
                 break;
             }
             case "kキュアリーフ": {
+                const mainEmittor = entity.mainEmittor();
+
+                const effect1 = mainEmittor.effectSet.effects[0];
+
+                const effect2 = effect1.clone();
+                effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
+                //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
+                mainEmittor.effectSet.effects.push(effect2);
+
+                effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
@@ -327,6 +345,8 @@ export class RESetup {
                 break;
             }
             case "kスリープドラッグ": {
+                const effect = entity.mainEmittor().effectSet.effects[0];
+                effect.rmmzAnimationId = 62;
                 this.setupGrassCommon(entity);
                 // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());

@@ -29,6 +29,9 @@ export enum DParameterApplyTarget {
 export class DParameterQualifying {
     _parameterId: DParameterId;
 
+    /** IDataSkill.damage.type  */
+    applyType: DParameterEffectApplyType;
+
     applyTarget: DParameterApplyTarget;
 
 
@@ -36,8 +39,6 @@ export class DParameterQualifying {
 
     formula: string;
 
-    /** IDataSkill.damage.type  */
-    applyType: DParameterEffectApplyType;
 
 
     /** 分散度 (%) */
@@ -55,10 +56,10 @@ export class DParameterQualifying {
 
     public constructor(paramId: DParameterId, formula: string, applyType: DParameterEffectApplyType) {
         this._parameterId = paramId;
+        this.applyType = applyType;
         this.applyTarget = DParameterApplyTarget.Current;
         this.elementId = 0;
         this.formula = formula;
-        this.applyType = applyType;
         this.variance = 0;
         this.silent = false;
     }
@@ -86,6 +87,27 @@ export class DParameterQualifying {
     public withConditionFormula(value: string): this {
         this.conditionFormula = value;
         return this;
+    }
+
+    public clone(): DParameterQualifying {
+        const i = new DParameterQualifying(0, "", DParameterEffectApplyType.None);
+        i.copyFrom(this);
+        return i;
+    }
+
+    public copyFrom(src: DParameterQualifying): void {
+        this._parameterId = src._parameterId;
+        this.applyType = src.applyType;
+        this.applyTarget = src.applyTarget;
+        this.elementId = src.elementId;
+        this.formula = src.formula;
+        this.variance = src.variance;
+        this.silent = src.silent;
+        this.conditionFormula = src.conditionFormula;
+        this.alliesSideGainMessage = src.alliesSideGainMessage;
+        this.alliesSideLossMessage = src.alliesSideLossMessage;
+        this.opponentGainMessage = src.opponentGainMessage;
+        this.opponentLossMessage = src.opponentLossMessage;
     }
 }
 
@@ -386,14 +408,14 @@ export class DEffect {
 
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
-        this.subEntityFindKey = { ...src.subEntityFindKey }
-        this.conditions = { ...src.conditions }
+        this.subEntityFindKey = { ...src.subEntityFindKey };
+        this.conditions = { ...src.conditions };
         this.critical = src.critical;
         this.successRate = src.successRate;
         this.hitType = src.hitType;
         this.rmmzAnimationId = src.rmmzAnimationId;
         
-        this.parameterQualifyings = src.parameterQualifyings.slice();
+        this.parameterQualifyings = src.parameterQualifyings.map(x => x.clone());
         this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
         this.effectBehaviors = src.effectBehaviors.slice();
         this.rmmzSpecialEffectQualifyings = src.rmmzSpecialEffectQualifyings.slice();

@@ -10,7 +10,7 @@ import { LActorBehavior } from "./behaviors/LActorBehavior";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { UName } from "ts/re/usecases/UName";
 import { DTextManager } from "../data/DTextManager";
-import { DEffect, DParameterQualifying } from "../data/DEffect";
+import { DEffect, DParameterApplyTarget, DParameterQualifying } from "../data/DEffect";
 import { REGame } from "./REGame";
 import { REBasics } from "../data/REBasics";
 import { DEntityId } from "../data/DEntity";
@@ -27,6 +27,16 @@ export class LParamEffectResult {
     public constructor(paramId: DParameterId, qualifying: DParameterQualifying) {
         this.paramId = paramId;
         this.qualifying = qualifying;
+    }
+
+    public paramDisplayName(): string {
+        const data = REData.parameters[this.paramId];
+        if (this.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
+            return data.displayNameMaximum;
+        }
+        else {
+            return data.displayName;
+        }
     }
 
     public getValue(entity: LEntity, recover: boolean): number {
@@ -361,13 +371,14 @@ export class LEffectResult {
     }
 
     private makeDamageOrLossMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
+        const paramName = paramResult.paramDisplayName();
         const damage = paramResult.getValue(entity, false);
         if (isSubjectivity) {
             if (paramResult.qualifying && paramResult.qualifying.alliesSideLossMessage) {
-                return paramResult.qualifying.alliesSideLossMessage.format(entityName, param.displayName, damage);
+                return paramResult.qualifying.alliesSideLossMessage.format(entityName, paramName, damage);
             }
             else if (param.selfLossMessage) {
-                return param.selfLossMessage.format(entityName, param.displayName, damage);
+                return param.selfLossMessage.format(entityName, paramName, damage);
             }
             else {
                 return DTextManager.actorDamage.format(entityName, damage);
@@ -375,10 +386,10 @@ export class LEffectResult {
         }
         else {
             if (paramResult.qualifying && paramResult.qualifying.opponentLossMessage) {
-                return paramResult.qualifying.opponentLossMessage.format(entityName, param.displayName, damage);
+                return paramResult.qualifying.opponentLossMessage.format(entityName, paramName, damage);
             }
             else if (param.targetLossMessage) {
-                return param.targetLossMessage.format(entityName, param.displayName, damage);
+                return param.targetLossMessage.format(entityName, paramName, damage);
             }
             else {
                 return DTextManager.enemyDamage.format(entityName, damage);
@@ -387,27 +398,34 @@ export class LEffectResult {
     }
 
     private makeRecoveryOrGainMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
+        const paramName = paramResult.paramDisplayName();
         const value = paramResult.getValue(entity, true);
+
+        if (paramResult.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
+            // TODO: とりいそぎ。最大値の変化は "回復した" ではなく "増えた" にしたい。
+            return DTextManager.actorGain.format(entityName, paramName, value);
+        }
+
         if (isSubjectivity) {
             if (paramResult.qualifying && paramResult.qualifying.alliesSideGainMessage) {
-                return paramResult.qualifying.alliesSideGainMessage.format(entityName, param.displayName, value);
+                return paramResult.qualifying.alliesSideGainMessage.format(entityName, paramName, value);
             }
             else if (param.selfGainMessage) {
-                return param.selfGainMessage.format(entityName, param.displayName, value);
+                return param.selfGainMessage.format(entityName, paramName, value);
             }
             else {
-                return DTextManager.actorRecovery.format(entityName, param.displayName, value);
+                return DTextManager.actorRecovery.format(entityName, paramName, value);
             }
         }
         else {
             if (paramResult.qualifying && paramResult.qualifying.opponentGainMessage) {
-                return paramResult.qualifying.opponentGainMessage.format(entityName, param.displayName, value);
+                return paramResult.qualifying.opponentGainMessage.format(entityName, paramName, value);
             }
             else if (param.targetGainMessage) {
-                return param.targetGainMessage.format(entityName, param.displayName, value);
+                return param.targetGainMessage.format(entityName, paramName, value);
             }
             else {
-                return DTextManager.enemyRecovery.format(entityName, param.displayName, value);
+                return DTextManager.enemyRecovery.format(entityName, paramName, value);
             }
         }
     }
