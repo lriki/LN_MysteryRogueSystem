@@ -131,16 +131,11 @@ test("concretes.item.grass.すばやさ草.2", () => {
     
     //----------------------------------------------------------------------------------------------------
 
-    const sh1 = REGame.scheduler;
-
     // [食べる]
     RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-
-    
 
     expect(enemy1.x).toBe(15);
 
@@ -150,52 +145,14 @@ test("concretes.item.grass.すばやさ草.2", () => {
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    const sh2 = REGame.scheduler;
-
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // Flush 回数は 2 回であるはず
-    expect(TestEnv.sequelSets.length).toBe(2);
+    const sets = TestEnv.sequelSets;
+    expect(sets.length).toBe(3);
     
     const set = TestEnv.activeSequelSet;
     expect(set.runs().length).toBe(1);
     const clips = set.runs()[0].clips();
     expect(clips.length).toBe(2);
-
-    
-
-    console.log("");
-
-    /*
-    最初からplayerが倍速だと、runは2回。
-
-    Player1 | * | * |
-    Enemy1  |   | * |
-
-    途中から倍速になると、
-    これが、
-
-    Player1 | * |
-    Enemy1  | * |
-
-    ↓こうなる
-
-    Player1 | * | * |   |
-    Enemy1  |   |   | * |
-
-    ↓調べた感じ、どうもこうなってるぽい
-
-    Player1 | * |   |
-    Player1 | * |   |	// iteration Count が増えるので、MainProcess(ManualPhase)が複数回実行される
-    Enemy1  |   | * |
-
-    対策は次のいずれか
-    A. Run1 で Enemy1 も動かす
-    B. Flush するタイミングを遅らせる
-
-    A の場合:
-    
-
-    */
 });
 
