@@ -279,6 +279,25 @@ export class RESetup {
                 const effect = mainEmittor.effectSet.effects[0];
                 effect.conditions.fallback = true;
                 effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "3", DParameterEffectApplyType.Damage));
+                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
+                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
+                effect.rmmzAnimationId = 59;
+                
+                const effect2 = new DEffect(entity.entity.key);
+                effect2.conditions.kindId = REBasics.entityKinds.MonsterKindId;
+                effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Damage));
+                mainEmittor.effectSet.effects.push(effect2);
+
+                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
+                break;
+            }
+            case "kItem_毒草_B": { // シレン仕様
+                // mainEmittor は setupGrassCommon() の中で clone されて Eat と Collide に振り分けられるので、共通 Effect は先に設定しておく。
+                const mainEmittor = entity.mainEmittor();
+                const effect = mainEmittor.effectSet.effects[0];
+                effect.conditions.fallback = true;
+                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
                 effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
                 effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: REData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
@@ -286,15 +305,8 @@ export class RESetup {
                 
                 const effect2 = new DEffect(entity.entity.key);
                 effect2.conditions.kindId = REBasics.entityKinds.MonsterKindId;
-                if (0) {
-                    // トルネコ仕様
-                    effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Damage));
-                }
-                else {
-                    // シレン仕様
-                    effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
-                    effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
-                }
+                effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
                 mainEmittor.effectSet.effects.push(effect2);
 
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
@@ -305,11 +317,15 @@ export class RESetup {
 
                 const effect1 = mainEmittor.effectSet.effects[0];
                 effect1.conditions.fallback = true;
-                effect1.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "b.max_pow - b.pow", DParameterEffectApplyType.Recover));
+                const q = new DParameterQualifying(REBasics.params.pow, "b.max_pow - b.pow", DParameterEffectApplyType.Recover);
+                q.alliesSideGainMessage = "%1の%2が回復した。";
+                effect1.parameterQualifyings.push(q);
+                effect1.rmmzAnimationId = 45;
 
                 const effect2 = new DEffect(entity.entity.key);
                 effect2.conditions.raceId = REData.getRace("kRace_ドレイン族").id;
                 effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
+                effect2.rmmzAnimationId = 45;
                 mainEmittor.effectSet.effects.push(effect2);
 
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);

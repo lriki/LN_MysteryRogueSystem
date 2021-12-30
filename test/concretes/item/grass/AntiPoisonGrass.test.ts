@@ -46,6 +46,7 @@ test("concretes.item.grass.AntiPoisonGrass.player", () => {
 
     const pow2 = player1.actualParam(REBasics.params.pow);
     expect(pow2).toBe(pow1);    // ちからが最大まで回復
+    expect(REGame.messageHistory.includesText("回復した")).toBeTruthy();
 
     TestUtils.testCommonGrassEnd(player1, item1);
 

@@ -134,7 +134,7 @@ export class LIdentifyer {
                 const names = REData.pseudonymous.getNameList(kind.id);
                 const entities = REData.entities.filter(x => x.entity.kindId == kind.id && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
                 if (names.length < entities.length) {
-                    throw new Error(tr2(`Kind:${kind} の pseudonym が不足しています。(c: ${names.length})`));
+                    throw new Error(tr2(`Kind:${kind.name} の pseudonym が不足しています。(c: ${names.length})`));
                 }
     
                 names.mutableShuffle();

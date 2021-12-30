@@ -7,8 +7,6 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
@@ -17,26 +15,28 @@ beforeAll(() => {
 
 test("concretes.item.grass.PoisonGrass", () => {
     TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
     const state1 = REData.getState("kState_UTまどわし").id;
     const state2 = REData.getState("kState_UT混乱").id;
 
     // Player
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     player1.addState(state1);
     player1.addState(state2);
+    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
     const hp1 = player1.actualParam(REBasics.params.hp);
     const pow1 = player1.actualParam(REBasics.params.pow);
     const player1Atk1 = player1.actualParam(REBasics.params.atk);
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    REGame.world._transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
     const enemy1Pow1 = enemy1.actualParam(REBasics.params.pow);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンドラッグ").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンドラッグ").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_毒草_B").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_毒草_B").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
