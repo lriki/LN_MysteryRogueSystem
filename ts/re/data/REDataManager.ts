@@ -153,6 +153,7 @@ export class REDataManager
             FigurineKindId: REData.addEntityKind("土偶", "Figurine"),
             MonsterKindId: REData.addEntityKind("モンスター", "Monster"),
             exitPoint: REData.addEntityKind("出口", "ExitPoint"),
+            Ornament: REData.addEntityKind("Ornament", "Ornament"),
         };
 
         REBasics.xparams = { // RMMZ と同じ配列
@@ -1034,9 +1035,9 @@ export class REDataManager
                         throw new Error(`Invalid system prefab name. (${data.system})`);
                     }
                 }
-                else if (data.kind && data.kind == "ornament") {
-                    prefab.dataSource = DPrefabDataSource.Ornament;
-                }
+                // else if (data.kind && data.kind == "ornament") {
+                //     prefab.dataSource = DPrefabDataSource.Ornament;
+                // }
                 else {
                     //throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
                 }

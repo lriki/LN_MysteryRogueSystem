@@ -20,4 +20,5 @@ export interface BasicEntityKinds {
     FigurineKindId: DEntityKindId;          // 土偶
     MonsterKindId: DEntityKindId;           // モンスター
     exitPoint: DEntityKindId;               // 出口
+    Ornament: DEntityKindId;
 }

@@ -184,7 +184,7 @@ export class SEntityFactory {
         else if (prefab.isExitPoint()) {
             entity = this.newExitPoint();
         }
-        else if (prefab.dataSource = DPrefabDataSource.Ornament) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {//prefab.dataSource = DPrefabDataSource.Ornament) {
             entity = this.newOrnament(createInfo.entityId, prefab);
         }
         else {
@@ -243,7 +243,7 @@ export class SEntityFactory {
         else if (prefab.isExitPoint()) {
             this.buildExitPoint(entity);
         }
-        else if (prefab.dataSource = DPrefabDataSource.Ornament) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {//if (prefab.dataSource = DPrefabDataSource.Ornament) {
             this.buildOrnament(entity, prefab);
         }
         else {
