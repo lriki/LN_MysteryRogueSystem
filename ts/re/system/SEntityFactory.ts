@@ -163,14 +163,15 @@ export class SEntityFactory {
         const prefab = REData.prefabs[entityData.prefabId];
         let entity: LEntity;
 
-        if (prefab.isEnemyKind()) {
-            const entityId = REData.enemies[prefab.dataId];
-            if (entityId)
-                entity = SEntityFactory.newMonster(REData.entities[entityId]);
-            else
-                throw new Error("Invalid enemy key: " + prefab.key);
+        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {//prefab.isEnemyKind()) {
+            entity = SEntityFactory.newMonster(entityData);
+            // const entityId = REData.enemies[prefab.dataId];
+            // if (entityId)
+            //     entity = SEntityFactory.newMonster(REData.entities[entityId]);
+            // else
+            //     throw new Error("Invalid enemy key: " + prefab.key);
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {//prefab.isTrapKind()) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {
             entity = REGame.world.spawnEntity(createInfo.entityId);
             this.buildTrap(entity, entityData.item().id);
         }
@@ -184,7 +185,7 @@ export class SEntityFactory {
         else if (prefab.isExitPoint()) {
             entity = this.newExitPoint();
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {//prefab.dataSource = DPrefabDataSource.Ornament) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {
             entity = this.newOrnament(createInfo.entityId, prefab);
         }
         else {
@@ -224,14 +225,15 @@ export class SEntityFactory {
         const entityData = REData.entities[dataId];
         const prefab = REData.prefabs[entityData.prefabId];
         
-        if (prefab.isEnemyKind()) {
-            const entityId = REData.enemies[prefab.dataId];
-            if (entityId)
-                this.buildMonster(entity, REData.entities[entityId]);
-            else
-                throw new Error("Invalid enemy key: " + prefab.key);
+        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {//prefab.isEnemyKind()) {
+            this.buildMonster(entity, entityData);
+            // const entityId = REData.enemies[prefab.dataId];
+            // if (entityId)
+            //     this.buildMonster(entity, REData.entities[entityId]);
+            // else
+            //     throw new Error("Invalid enemy key: " + prefab.key);
         }
-        else if (prefab.isTrapKind()) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {//prefab.isTrapKind()) {
             this.buildTrap(entity, prefab.dataId);
         }
         else if (prefab.isItemKind()) {

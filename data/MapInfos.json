@@ -1,7 +1,7 @@
 [
 null,
 {"id":1,"expanded":true,"name":"MR-Database","order":1,"parentId":0,"scrollX":811,"scrollY":453.5},
-{"id":2,"expanded":true,"name":"MR-Prefabs","order":2,"parentId":1,"scrollX":811,"scrollY":641.5},
+{"id":2,"expanded":true,"name":"MR-Prefabs","order":2,"parentId":1,"scrollX":811,"scrollY":461.5},
 {"id":3,"expanded":false,"name":"MR-MapTemplates","order":3,"parentId":1,"scrollX":811,"scrollY":461.5},
 {"id":4,"expanded":true,"name":"MR-(Reserved.Map4)Structures","order":14,"parentId":1,"scrollX":811,"scrollY":461.5},
 {"id":5,"expanded":true,"name":"MR-(Reserved.Map5)","order":15,"parentId":1,"scrollX":811,"scrollY":461.5},

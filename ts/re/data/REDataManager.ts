@@ -1011,7 +1011,6 @@ export class REDataManager
 
                 REData.prefabs.push(prefab);
                 if (data.enemy) {
-                    prefab.dataSource = DPrefabDataSource.Enemy;
                     prefab.dataId = REData.getEnemy(data.enemy).id;
                     if (prefab.dataId <= 0) {
                         throw new Error(`EnemyData not found. (${data.enemy})`);
@@ -1060,6 +1059,10 @@ export class REDataManager
                             if (prefab) {
                                 entity.prefabId = prefab.id;
                                 RESetup.setupPrefab(prefab);
+
+                                if (entity.entity.key == "kEnemy_スライムA") {//kPrefab_スライムA
+                                    console.log("kEnemy_スライムA entity", entity);
+                                }
                             }
                             else {
                                 throw new Error(`Unknown Prefab "${entity.entity.meta_prefabName}".`);

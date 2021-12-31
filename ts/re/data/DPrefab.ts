@@ -19,9 +19,7 @@ export enum DPrefabKind {
 export enum DPrefabDataSource {
     Unknown,
     Item,
-    Enemy,
     System,
-    Ornament,
 }
 
 export enum DSystemPrefabKind {
@@ -120,17 +118,17 @@ export class DPrefab {
         this.moveType = DPrefabMoveType.Random;
     }
 
-    public isEnemyKind(): boolean {
-        return this.dataSource == DPrefabDataSource.Enemy;
-    }
+    // public isEnemyKind(): boolean {
+    //     return this.dataSource == DPrefabDataSource.Enemy;
+    // }
 
     public isItemKind(): boolean {
         return this.dataSource == DPrefabDataSource.Item;
     }
 
-    public isTrapKind(): boolean {
-        return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kindId == REBasics.entityKinds.TrapKindId;
-    }
+    // public isTrapKind(): boolean {
+    //     return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kindId == REBasics.entityKinds.TrapKindId;
+    // }
 
     public isEntryPoint(): boolean {
         return this.dataSource == DPrefabDataSource.System && this.dataId == DSystemPrefabKind.EntryPoint;

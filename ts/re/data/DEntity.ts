@@ -13,6 +13,7 @@ import { DEquipment, DItem } from "./DItem";
 import { DPrefab, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroopId } from "./DTroop";
+import { REBasics } from "./REBasics";
 import { DFactionId, REData } from "./REData";
 
 export type DEntityId = number;
@@ -399,7 +400,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     
     public isEnemyKind(): boolean {
         if (this.entityId <= 0) return false;
-        return REData.prefabs[REData.entities[this.entityId].prefabId].isEnemyKind();
+        return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.MonsterKindId;
     }
 
     public isItemKind(): boolean {
@@ -409,7 +410,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
 
     public isTrapKind(): boolean {
         if (this.entityId <= 0) return false;
-        return REData.prefabs[REData.entities[this.entityId].prefabId].isTrapKind();
+        return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.TrapKindId;
     }
 
     public isEntryPoint(): boolean {
