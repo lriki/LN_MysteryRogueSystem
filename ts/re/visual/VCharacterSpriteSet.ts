@@ -31,8 +31,6 @@ interface SpriteData {
 export class VCharacterSpriteSet {
     private _parent: Spriteset_Map;
     private _owner: Sprite_Character;
-    //private _weaponSprite: Sprite;
-    //private _shieldSprite: Sprite;
 
     private _sprites: SpriteData[];
     private _revisionNumber: number;
@@ -42,22 +40,6 @@ export class VCharacterSpriteSet {
         this._owner = owner;
         this._sprites = [];
         this._revisionNumber = 0;
-
-        /*
-        const weaponBitmap = ImageManager.loadCharacter("RE-Weapon-1");
-        this._weaponSprite = new Sprite(weaponBitmap);
-        this._weaponSprite.visible = false;
-        this._weaponSprite.anchor.x = 0.5;
-        this._weaponSprite.anchor.y = 1.0;
-        this._parent.addChild(this._weaponSprite);
-        
-        const shieldBitmap = ImageManager.loadCharacter("RE-Shield-1");
-        this._shieldSprite = new Sprite(shieldBitmap);
-        this._shieldSprite.visible = false;
-        this._shieldSprite.anchor.x = 0.5;
-        this._shieldSprite.anchor.y = 1.0;
-        this._parent.addChild(this._shieldSprite);
-        */
     }
 
     public update(): void {
@@ -80,22 +62,9 @@ export class VCharacterSpriteSet {
                         itemEntityDataId: 0,
                     });
                  }
-                /*
-                for (let i = 0; i < items.length; i++) {
-                    if (!this._sprites[i]) {
-                        this._sprites[i] = {
-                            imageName: "",
-                            sprite: undefined,
-                            itemId: 0,
-                        };
-                    }
-                }
-                */
-
-
 
                 for (let i = 0; i < items.length; i++) {
-                    const itemEntityData = items[i].data();//REData.entities[items[i].entityId];
+                    const itemEntityData = items[i].data();
                     
                     const newImage = itemEntityData.entity.equipmentImage.name;
                     const current = (i < this._sprites.length) ? this._sprites[i].imageName : "";
@@ -149,19 +118,6 @@ export class VCharacterSpriteSet {
                     }
                 }
             }
-/*
-            this._weaponSprite.setFrame(sx, sy, pw, ph);
-            this._shieldSprite.setFrame(sx, sy, pw, ph);
-            this._weaponSprite.position = this._owner.position;
-            this._shieldSprite.position = this._owner.position;
-    
-            const d = this._owner._character.direction();
-            this._weaponSprite.z = this._owner.z + ZOFFSET_TABLE_RIGHT_HAND[d];
-            this._shieldSprite.z = this._owner.z + ZOFFSET_TABLE_LEFT_HAND[d];
-
-            this._weaponSprite.visible = true;
-            this._shieldSprite.visible = true;
-            */
         }
         else {
             for (const s of this._sprites) {

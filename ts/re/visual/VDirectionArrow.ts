@@ -12,7 +12,7 @@ export class VDirectionArrow extends Sprite {
     public constructor() {
         super(undefined);
 
-        this._bitmap = ImageManager.loadSystem("RE-DirectionArrow");
+        this._bitmap = ImageManager.loadSystem("MR-DirectionArrow");
 
         this._sprites = [
             new Sprite(this._bitmap), new Sprite(this._bitmap), new Sprite(this._bitmap),

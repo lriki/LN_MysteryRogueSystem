@@ -12,8 +12,8 @@ export class VVisibilityShadow {
     constructor(spritesetMap: Spriteset_Map) {
         this._spritesetMap = spritesetMap;
         
-        this._visibilityShadowBitmap = ImageManager.loadSystem("RE-VisibilityShadow");
-        //this._visibilityShadowBitmap = ImageManager.loadSystem("RE-VisibilityShadow-Grid");
+        this._visibilityShadowBitmap = ImageManager.loadSystem("MR-VisibilityShadow");
+        //this._visibilityShadowBitmap = ImageManager.loadSystem("MR-VisibilityShadow-Grid");
         this._visibilityShadowInnerSprites = [];
         this._visibilityShadowInnerSprites[1] = this.createVisibilityShadowPart(16, 0.5, 0.5);
         this._visibilityShadowInnerSprites[2] = this.createVisibilityShadowPart(17, 0.5, 0.5);
