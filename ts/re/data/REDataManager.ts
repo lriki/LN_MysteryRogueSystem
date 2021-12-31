@@ -867,7 +867,7 @@ export class REDataManager
                     // 以下、必ず親Mapが必要なもの
                     const parentInfo = $dataMapInfos[info.parentId];
                     if (parentInfo) {
-                        if (info.parentId > 0 && parentInfo.name.includes("RE-TemplateMaps")) {
+                        if (info.parentId > 0 && parentInfo.name.includes("MR-MapTemplates")) {
                             mapData.mapKind = REFloorMapKind.TemplateMap;
                             REData.templateMaps.push({
                                 ...DTemplateMap_Default(),
@@ -1168,7 +1168,7 @@ export class REDataManager
 
     static isDatabaseMap(mapId: number) : boolean {
         const info = $dataMapInfos[mapId];
-        if (info && info.name && info.name.startsWith("RE-Database"))
+        if (info && info.name && info.name.startsWith("MR-Prefabs"))
             return true;
         else
             return false;

@@ -54,7 +54,7 @@ Game_Event.prototype.initialize = function(mapId: number, eventId: number) {
 
 var _Game_Event_initMembers = Game_Event.prototype.initMembers;
 Game_Event.prototype.initMembers = function() {
-    // RE-Event の場合、mapId は "RE-Database" のマップのイベントとして扱う。
+    // RE-Event の場合、mapId は "MR-Prefabs" のマップのイベントとして扱う。
     // セルフスイッチをコントロールするときに参照される。
     // REシステムとしてはセルフスイッチは使用しないため実際のところなんでもよい。
 

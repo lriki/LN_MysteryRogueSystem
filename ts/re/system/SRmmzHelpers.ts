@@ -87,12 +87,9 @@ export class SRmmzHelpers {
         const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabName : false);
         if (index >= 0) {
             return index;
-            //const event = databaseMap.events[index];
-            //if (event) return event;
-            //throw new Error(`${prefabName} not found in RE-Database map.`);
         }
         else {
-            throw new Error(`${prefabName} not found in RE-Database map.`);
+            throw new Error(`${prefabName} not found in MR-Prefabs map.`);
         }
     }
     
@@ -102,7 +99,7 @@ export class SRmmzHelpers {
         assert(databaseMap.events);
         const event = databaseMap.events[id];
         if (event) return event;
-        throw new Error(`${id} not found in RE-Database map.`);
+        throw new Error(`${id} not found in MR-Prefabs map.`);
     }
 
     public static getRegionId(x: number, y: number): number {
