@@ -126,8 +126,15 @@ export class SEntityFactory {
         e.addBehavior(LTrapBehavior);
     }
 
-    public static newEntryPoint(): LEntity {
+    public static newBasicEntryPoint(): LEntity {
         const e = REGame.world.spawnEntity(REData.getEntity("kEntryPoint").id);
+        this.buildEntryPoint(e);
+        return e;
+    }
+
+    public static newEntryPoint(entityId: DEntityId): LEntity {
+        assert(REData.getEntity("kEntryPoint").id == entityId);
+        const e = REGame.world.spawnEntity(entityId);
         this.buildEntryPoint(e);
         return e;
     }
@@ -137,7 +144,8 @@ export class SEntityFactory {
         e.addBehavior(LEntryPointBehavior);
     }
 
-    public static newExitPoint(): LEntity {
+    public static newExitPoint(entityId: DEntityId): LEntity {
+        assert(REData.getEntity("kExitPoint").id == entityId);
         const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
         this.buildExitPoint(e);
         return e;
@@ -163,16 +171,13 @@ export class SEntityFactory {
         const prefab = REData.prefabs[entityData.prefabId];
         let entity: LEntity;
 
-        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {//prefab.isEnemyKind()) {
+        assert(entityData.id == createInfo.entityId);
+
+        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {
             entity = SEntityFactory.newMonster(entityData);
-            // const entityId = REData.enemies[prefab.dataId];
-            // if (entityId)
-            //     entity = SEntityFactory.newMonster(REData.entities[entityId]);
-            // else
-            //     throw new Error("Invalid enemy key: " + prefab.key);
         }
         else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {
-            entity = REGame.world.spawnEntity(createInfo.entityId);
+            entity = REGame.world.spawnEntity(entityData.id);
             this.buildTrap(entity, entityData.item().id);
         }
         else if (prefab.isItemKind()) {
@@ -180,13 +185,13 @@ export class SEntityFactory {
             this.buildItem(entity);
         }
         else if (prefab.isEntryPoint()) {
-            entity = this.newEntryPoint();
+            entity = this.newEntryPoint(entityData.id);
         }
         else if (prefab.isExitPoint()) {
-            entity = this.newExitPoint();
+            entity = this.newExitPoint(entityData.id);
         }
         else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {
-            entity = this.newOrnament(createInfo.entityId, prefab);
+            entity = this.newOrnament(entityData.id, prefab);
         }
         else {
             throw new Error("Not implemented.");
@@ -225,16 +230,11 @@ export class SEntityFactory {
         const entityData = REData.entities[dataId];
         const prefab = REData.prefabs[entityData.prefabId];
         
-        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {//prefab.isEnemyKind()) {
+        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {
             this.buildMonster(entity, entityData);
-            // const entityId = REData.enemies[prefab.dataId];
-            // if (entityId)
-            //     this.buildMonster(entity, REData.entities[entityId]);
-            // else
-            //     throw new Error("Invalid enemy key: " + prefab.key);
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {//prefab.isTrapKind()) {
-            this.buildTrap(entity, prefab.dataId);
+        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {
+            this.buildTrap(entity, entityData.item().id);
         }
         else if (prefab.isItemKind()) {
             this.buildItem(entity);
@@ -245,7 +245,7 @@ export class SEntityFactory {
         else if (prefab.isExitPoint()) {
             this.buildExitPoint(entity);
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {//if (prefab.dataSource = DPrefabDataSource.Ornament) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {
             this.buildOrnament(entity, prefab);
         }
         else {

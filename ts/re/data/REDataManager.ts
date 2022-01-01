@@ -1010,13 +1010,7 @@ export class REDataManager
                 }
 
                 REData.prefabs.push(prefab);
-                if (data.enemy) {
-                    prefab.dataId = REData.getEnemy(data.enemy).id;
-                    if (prefab.dataId <= 0) {
-                        throw new Error(`EnemyData not found. (${data.enemy})`);
-                    }
-                }
-                else if (data.item) {
+                if (data.item) {
                     const item = REData.getItem(data.item);
                     prefab.dataSource = DPrefabDataSource.Item;
                     prefab.dataId = item.item().id;

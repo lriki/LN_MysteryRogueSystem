@@ -434,7 +434,7 @@ export class RESetup {
                 effect2.conditions.kindId = REBasics.entityKinds.actor;
                 effect2.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
                 effect2.parameterQualifyings.push(
-                    new DParameterQualifying(REBasics.params.hp, "1", DParameterEffectApplyType.Recover)
+                    new DParameterQualifying(REBasics.params.hp, "2", DParameterEffectApplyType.Recover)
                     .withApplyTarget(DParameterApplyTarget.Maximum)
                     .withConditionFormula("a.hp >= a.max_hp"));
                 mainEmittor.effectSet.effects.push(effect2);
