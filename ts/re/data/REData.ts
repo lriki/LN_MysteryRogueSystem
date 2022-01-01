@@ -223,11 +223,10 @@ export class REData
 
     static addEntityKind(displayName: string, name: string): number {
         const newId = this.entityKinds.length;
-        this.entityKinds.push({
-            id: newId,
-            name: name,
-            displayName: displayName,
-        });
+        const data = new DEntityKind(newId);
+        data.name = name;
+        data.displayName = displayName;
+        this.entityKinds.push(data);
         return newId;
     }
 

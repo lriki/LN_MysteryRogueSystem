@@ -1011,30 +1011,30 @@ export class REDataManager
                 }
 
                 REData.prefabs.push(prefab);
-                if (data.item) {
-                    const item = REData.getItem(data.item);
-                    prefab.dataSource = DPrefabDataSource.Item;
-                    prefab.dataId = item.item().id;
-                    item.entity.prefabId = prefab.id;   // 相互リンク
-                }
-                else if (data.system) {
-                    prefab.dataSource = DPrefabDataSource.System;
-                    if (data.system == "RE-SystemPrefab:EntryPoint") {
-                        prefab.dataId = DSystemPrefabKind.EntryPoint;
-                    }
-                    else if (data.system == "RE-SystemPrefab:ExitPoint") {
-                        prefab.dataId = DSystemPrefabKind.ExitPoint;
-                    }
-                    else {
-                        throw new Error(`Invalid system prefab name. (${data.system})`);
-                    }
-                }
-                // else if (data.kind && data.kind == "ornament") {
-                //     prefab.dataSource = DPrefabDataSource.Ornament;
+                // if (data.item) {
+                //     const item = REData.getItem(data.item);
+                //     prefab.dataSource = DPrefabDataSource.Item;
+                //     prefab.dataId = item.item().id;
+                //     item.entity.prefabId = prefab.id;   // 相互リンク
                 // }
-                else {
-                    //throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
-                }
+                // else if (data.system) {
+                //     prefab.dataSource = DPrefabDataSource.System;
+                //     if (data.system == "RE-SystemPrefab:EntryPoint") {
+                //         prefab.dataId = DSystemPrefabKind.EntryPoint;
+                //     }
+                //     else if (data.system == "RE-SystemPrefab:ExitPoint") {
+                //         prefab.dataId = DSystemPrefabKind.ExitPoint;
+                //     }
+                //     else {
+                //         throw new Error(`Invalid system prefab name. (${data.system})`);
+                //     }
+                // }
+                // // else if (data.kind && data.kind == "ornament") {
+                // //     prefab.dataSource = DPrefabDataSource.Ornament;
+                // // }
+                // else {
+                //     //throw new Error(`Unknown Prefab kind. (Event: ${event.id}.${event.name})`);
+                // }
 
                 for (let i = 1; i < event.pages.length; i++) {
                     const pageData = DAnnotationReader.readPrefabSubPageMetadata(event.pages[i]);

@@ -28,14 +28,6 @@ export interface DEntityProperties {
     
     equipmentImage: DItemEquipmentImage;
 
-    /**
-     * プレハブID
-     * 
-     * 例えば固定お店の処理において、アイテムのリストはツクールのイベントからアイテムIDで指定される。（プレハブIDではない）
-     * このアイテムIDをインスタンス化するときにプレハブIDが必要になるため、アイテムデータはプレハブIDを知っている必要がある。
-     */
-    prefabId: DPrefabId;
-
     meta_prefabName: string;
 }
 
@@ -57,7 +49,6 @@ export function DEntityProperties_Default(): DEntityProperties {
             name: "",
             side: DItemEquipmentSide.Right,
         },
-        prefabId: 0,
         meta_prefabName: "",
     }
 }
@@ -79,7 +70,6 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
                 name: "",
                 side: DItemEquipmentSide.Right,
             },
-            prefabId: 0,
             meta_prefabName: (meta["MR-Prefab"] ?? "").trim(),
         };
 

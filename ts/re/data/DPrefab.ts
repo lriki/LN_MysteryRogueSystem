@@ -111,20 +111,20 @@ export class DPrefab {
     //     return this.dataSource == DPrefabDataSource.Enemy;
     // }
 
-    public isItemKind(): boolean {
-        return this.dataSource == DPrefabDataSource.Item;
-    }
+    // public isItemKind(): boolean {
+    //     return this.dataSource == DPrefabDataSource.Item;
+    // }
 
     // public isTrapKind(): boolean {
     //     return this.dataSource == DPrefabDataSource.Item && REData.itemEntity(this.dataId).entity.kindId == REBasics.entityKinds.TrapKindId;
     // }
 
-    public isEntryPoint(): boolean {
-        return this.dataSource == DPrefabDataSource.System && this.dataId == DSystemPrefabKind.EntryPoint;
-    }
+    // public isEntryPoint(): boolean {
+    //     return this.dataSource == DPrefabDataSource.System && this.dataId == DSystemPrefabKind.EntryPoint;
+    // }
 
-    public isExitPoint(): boolean {
-        return this.dataSource == DPrefabDataSource.System && this.dataId == DSystemPrefabKind.ExitPoint;
-    }
+    // public isExitPoint(): boolean {
+    //     return this.dataSource == DPrefabDataSource.System && this.dataId == DSystemPrefabKind.ExitPoint;
+    // }
 }
 

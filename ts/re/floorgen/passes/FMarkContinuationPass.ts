@@ -4,6 +4,7 @@ import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock, FSector } from
 import { DHelpers } from "ts/re/data/DHelper";
 import { REData } from "ts/re/data/REData";
 import { DAnnotationReader } from "ts/re/data/DAnnotationReader";
+import { DEntityKind } from "ts/re/data/DEntityKind";
 
 
 
@@ -125,7 +126,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
                 if (!metadata) return false;
                 const entity = REData.findEntity(metadata.data);
                 if (!entity) return false;
-                return REData.prefabs[entity.prefabId].isEntryPoint();
+                return DEntityKind.isEntryPoint(entity);
             });
             
             if (entryPointEvent) {

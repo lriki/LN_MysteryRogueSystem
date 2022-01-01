@@ -367,13 +367,13 @@ export class DLand {
                 if (spawnInfo.troopId > 0) {
                     table.enemies[i].push(entity);        // troop は enemy と一緒にしてみる
                 }
-                else if (spawnInfo.isEnemyKind()) {
+                else if (DEntityKind.isMonster(spawnInfo.entityData())) {
                     table.enemies[i].push(entity);
                 }
-                else if (spawnInfo.isTrapKind()) {
+                else if (DEntityKind.isTrap(spawnInfo.entityData())) {
                     table.traps[i].push(entity);
                 }
-                else if (spawnInfo.isItemKind()) {
+                else if (DEntityKind.isItem(spawnInfo.entityData())) {
                     table.items[i].push(entity);
                 }
                 else {

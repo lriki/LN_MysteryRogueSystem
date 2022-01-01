@@ -47,6 +47,7 @@ import { LStumblePreventionBehavior } from "../objects/behaviors/LPreventionBeha
 import { LActivityCharmBehavior } from "../objects/behaviors/LActivityCharmBehavior";
 import { LExperienceBehavior } from "../objects/behaviors/LExperienceBehavior";
 import { LRaceBehavior } from "../objects/behaviors/LRaceBehavior";
+import { DEntityKind } from "../data/DEntityKind";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -75,11 +76,11 @@ export class SEntityFactory {
         e.addBehavior(LSurvivorBehavior);
     }
 
-    public static newMonster(enemyEntityData: DEntity): LEntity {
-        const e = REGame.world.spawnEntity(enemyEntityData.id);
-        this.buildMonster(e, enemyEntityData);
-        return e;
-    }
+    // public static newMonster(enemyEntityData: DEntity): LEntity {
+    //     const e = REGame.world.spawnEntity(enemyEntityData.id);
+    //     this.buildMonster(e, enemyEntityData);
+    //     return e;
+    // }
     
     public static buildMonster(e: LEntity, enemyEntityData: DEntity): void {
         this.setupCommon(e);
@@ -168,37 +169,8 @@ export class SEntityFactory {
 
     public static newEntity(createInfo: DEntityCreateInfo, floorId?: LFloorId): LEntity {
         const entityData = REData.entities[createInfo.entityId];
-        const prefab = REData.prefabs[entityData.prefabId];
-        let entity: LEntity;
-
-        assert(entityData.id == createInfo.entityId);
-
-        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {
-            entity = SEntityFactory.newMonster(entityData);
-        }
-        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {
-            entity = REGame.world.spawnEntity(entityData.id);
-            this.buildTrap(entity, entityData.item().id);
-        }
-        else if (prefab.isItemKind()) {
-            entity = REGame.world.spawnEntity(entityData.id);
-            this.buildItem(entity);
-        }
-        else if (entityData.entity.kindId == REBasics.entityKinds.entryPoint) {
-            entity = REGame.world.spawnEntity(entityData.id);
-            this.buildEntryPoint(entity);
-        }
-        else if (entityData.entity.kindId == REBasics.entityKinds.exitPoint) {
-            entity = REGame.world.spawnEntity(entityData.id);
-            this.buildExitPoint(entity);
-        }
-        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {
-            entity = REGame.world.spawnEntity(entityData.id);
-            this.buildOrnament(entity, prefab);
-        }
-        else {
-            throw new Error("Not implemented.");
-        }
+        const entity = REGame.world.spawnEntity(entityData.id);
+        this.buildEntity(entity);
 
         // ステート追加
         for (const stateId of createInfo.stateIds) {
@@ -233,26 +205,23 @@ export class SEntityFactory {
         const entityData = REData.entities[dataId];
         const prefab = REData.prefabs[entityData.prefabId];
         
-        if (entityData.entity.kindId == REBasics.entityKinds.MonsterKindId) {
+        if (DEntityKind.isMonster(entityData)) {
             this.buildMonster(entity, entityData);
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.TrapKindId) {
+        else if (DEntityKind.isTrap(entityData)) {
             this.buildTrap(entity, entityData.item().id);
         }
-        else if (prefab.isItemKind()) {
-            this.buildItem(entity);
-        }
-        else if (entityData.entity.kindId == REBasics.entityKinds.entryPoint) {
+        else if (DEntityKind.isEntryPoint(entityData)) {
             this.buildEntryPoint(entity);
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.exitPoint) {
+        else if (DEntityKind.isExitPoint(entityData)) {
             this.buildExitPoint(entity);
         }
-        else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {
+        else if (DEntityKind.isOrnament(entityData)) {
             this.buildOrnament(entity, prefab);
         }
         else {
-            throw new Error("Not implemented.");
+            this.buildItem(entity);
         }
     }
 

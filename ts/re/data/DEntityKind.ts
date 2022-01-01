@@ -1,4 +1,6 @@
 import { DEntityKindId } from "./DCommon";
+import { DEntity } from "./DEntity";
+import { REBasics } from "./REBasics";
 
 /**
  * Entity の種別
@@ -15,8 +17,7 @@ import { DEntityKindId } from "./DCommon";
  * 
  * 
  */
-export interface DEntityKind
-{
+export class DEntityKind {
     /** ID (0 is Invalid). */
     id: DEntityKindId;
 
@@ -25,6 +26,41 @@ export interface DEntityKind
     /** Name. */
     displayName: string;
 
+    
+    public constructor(id: DEntityKindId) {
+        this.id = id;
+        this.name = "";
+        this.displayName = "";
+    }
+    
+    // Enemy とは区別する。
+    // Enemy は敵対という意味も含むため。
+    // Monster は仲間になることもある。
+    public static isMonster(entity: DEntity): boolean {
+        return entity.entity.kindId == REBasics.entityKinds.MonsterKindId;
+    }
 
+    public static isTrap(entity: DEntity): boolean {
+        return entity.entity.kindId == REBasics.entityKinds.TrapKindId;
+    }
+
+    public static isEntryPoint(entity: DEntity): boolean {
+        return entity.entity.kindId == REBasics.entityKinds.entryPoint;
+    }
+
+    public static isExitPoint(entity: DEntity): boolean {
+        return entity.entity.kindId == REBasics.entityKinds.exitPoint;
+    }
+
+    public static isOrnament(entity: DEntity): boolean {
+        return entity.entity.kindId == REBasics.entityKinds.Ornament;
+    }
+
+    public static isItem(entity: DEntity): boolean {
+        return  !this.isMonster(entity) &&
+                !this.isEntryPoint(entity) &&
+                !this.isExitPoint(entity) &&
+                !this.isOrnament(entity);
+    }
     
 }

@@ -21,6 +21,7 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { USpawner } from "../usecases/USpawner";
 import { ULimitations } from "../usecases/ULimitations";
 import { paramMaxTrapsInMap } from "../PluginParameters";
+import { DEntityKind } from "../data/DEntityKind";
 
 
 /**
@@ -75,7 +76,7 @@ export class SMapManager {
             if (exitPoint) {
                 const appearanceTable = REData.lands[floorId.landId()].appearanceTable;
                 const prefab = appearanceTable.system[floorId.floorNumber()].find(e => {
-                    return e.spawiInfo.isExitPoint();
+                    return DEntityKind.isExitPoint(e.spawiInfo.entityData());
                 });
                 assert(prefab);
 

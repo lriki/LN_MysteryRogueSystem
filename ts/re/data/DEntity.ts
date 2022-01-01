@@ -3,7 +3,7 @@ import { DActionId } from "./DAction";
 import { RE_Data_Actor } from "./DActor";
 import { DAnnotationReader } from "./DAnnotationReader";
 import { DClassId } from "./DClass";
-import { DAttackElementId, DRaceId } from "./DCommon";
+import { DAttackElementId, DEntityKindId, DRaceId } from "./DCommon";
 import { DEmittorId, DEmittor } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
@@ -397,31 +397,36 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         //this.entityId = 0;
         //this.stateIds = [];
     }
+
+    public entityData(): DEntity {
+        assert(this.entityId > 0);
+        return REData.entities[this.entityId];
+    }
     
-    public isEnemyKind(): boolean {
-        if (this.entityId <= 0) return false;
-        return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.MonsterKindId;
-    }
+    // public isEnemyKind(): boolean {
+    //     if (this.entityId <= 0) return false;
+    //     return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.MonsterKindId;
+    // }
 
-    public isItemKind(): boolean {
-        if (this.entityId <= 0) return false;
-        return REData.prefabs[REData.entities[this.entityId].prefabId].isItemKind();
-    }
+    // public isItemKind(): boolean {
+    //     if (this.entityId <= 0) return false;
+    //     return REData.prefabs[REData.entities[this.entityId].prefabId].isItemKind();
+    // }
 
-    public isTrapKind(): boolean {
-        if (this.entityId <= 0) return false;
-        return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.TrapKindId;
-    }
+    // public isTrapKind(): boolean {
+    //     if (this.entityId <= 0) return false;
+    //     return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.TrapKindId;
+    // }
 
-    public isEntryPoint(): boolean {
-        if (this.entityId <= 0) return false;
-        return REData.prefabs[REData.entities[this.entityId].prefabId].isEntryPoint();
-    }
+    // public isEntryPoint(): boolean {
+    //     if (this.entityId <= 0) return false;
+    //     return REData.prefabs[REData.entities[this.entityId].prefabId].isEntryPoint();
+    // }
 
-    public isExitPoint(): boolean {
-        if (this.entityId <= 0) return false;
-        return REData.prefabs[REData.entities[this.entityId].prefabId].isExitPoint();
-    }
+    // public isExitPoint(): boolean {
+    //     if (this.entityId <= 0) return false;
+    //     return REData.prefabs[REData.entities[this.entityId].prefabId].isExitPoint();
+    // }
 
     public static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined {
         return this.makeFromEventPageData(event.id, event.pages[0]);
