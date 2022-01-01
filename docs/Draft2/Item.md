@@ -11,7 +11,7 @@ Item
 
 ```
 <MR-Key: kItem_薬草>
-<RE-Kind: Grass>
+<MR-Kind: Grass>
 <MR-Behavior: Eatable(command="食べる", subject_effect=self)>
 <MR-Behavior: Throwable()>
 <MR-Behavior: Hittable(subject_effect=self)>
@@ -23,7 +23,7 @@ Item
 
 ```
 <MR-Key: kItem_kいかすしの巻物>
-<RE-Kind: Grass>
+<MR-Kind: Grass>
 <MR-Behavior: Readable(command="読む", subject_effect=self)>
 <MR-Behavior: Eatable(command="食べる", subject_effect=kSkill_FP30回復)>  # Skill が持つ Effect を使う
 <MR-Behavior: Throwable()>
@@ -36,7 +36,7 @@ Item
 
 ```rb
 <MR-Key: kItem_銀の矢>
-<RE-Kind: Arrow>
+<MR-Kind: Arrow>
 <MR-Behavior: Wavable()>
 <MR-Behavior: Shootable(command="撃つ")>
 <MR-Behavior: Hittable(target_effect=self)>
@@ -47,7 +47,7 @@ Item
 
 ```
 <MR-Key: kItem_ふきとばしの杖>
-<RE-Kind: Grass>
+<MR-Kind: Grass>
 <MR-Behavior: Wavable(command="振る", subject_effect=self, this_effect=kShotMagicBullet)>
 <MR-Behavior: Throwable()>
 <MR-Behavior: Hittable(subject_effect=self)>
@@ -56,7 +56,7 @@ Item
 
 ```
 <MR-Key: kAbility_Knockback10>
-<RE-Kind: Ability>
+<MR-Kind: Ability>
 <MR-Behavior: Knockback(10)>     # 追加効果として、ふきとばしを適用する
 ```
 
@@ -72,7 +72,7 @@ Item
 
 ```
 <MR-Key: kItem_薬草>
-<RE-Kind: Grass>
+<MR-Kind: Grass>
 <MR-Behavior: Wavable(command="振る")>
 <MR-Behavior: Throwable()>
 <MR-Behavior: Hittable()>
@@ -81,7 +81,7 @@ Item
 
 ```
 <MR-Key: kAbility_正面火柱>
-<RE-Kind: Ability>
+<MR-Kind: Ability>
 <MR-Behavior: 正面火柱()>    # どの Activity に反応するかはこの中が判断する
 ```
 
@@ -94,7 +94,7 @@ Item
 
 ```
 <MR-Key: kItem_薬草>
-<RE-Kind: Grass>
+<MR-Kind: Grass>
 <MR-Behavior: Wavable(command="振る")>
 <MR-Behavior: Throwable()>
 <MR-Behavior: Hittable()>

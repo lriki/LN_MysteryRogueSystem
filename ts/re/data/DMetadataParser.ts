@@ -34,7 +34,7 @@ export class DMetadataParser {
         const result = new DMetadata();
         if (!meta) return result;
 
-        const kind = meta["RE-Kind"];
+        const kind = meta["MR-Kind"];
         if (kind) {
             result.kind = kind.trim();
         }

@@ -516,7 +516,7 @@ export class REDataManager
         // Import Abilities
         {
             REData.abilities = $dataStates
-                .filter(state => !state || (state.meta && state.meta["RE-Kind"] == "Ability"))
+                .filter(state => !state || (state.meta && state.meta["MR-Kind"] == "Ability"))
                 .map((state, index) => {
                     if (state) {
                         const ability: DAbility = {
