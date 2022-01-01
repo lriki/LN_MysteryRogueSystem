@@ -80,7 +80,7 @@ export class SMapManager {
                 assert(prefab);
 
 
-                const entity = SEntityFactory.newBasicEntryPoint();
+                const entity = SEntityFactory.newBasicExitPoint();
                 
                 REGame.world._transferEntity(entity, floorId, exitPoint.mx(), exitPoint.my());
             }

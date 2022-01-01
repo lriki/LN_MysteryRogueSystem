@@ -152,6 +152,7 @@ export class REDataManager
             TrapKindId: REData.addEntityKind("罠", "Trap"),
             FigurineKindId: REData.addEntityKind("土偶", "Figurine"),
             MonsterKindId: REData.addEntityKind("モンスター", "Monster"),
+            entryPoint: REData.addEntityKind("入り口", "EntryPoint"),
             exitPoint: REData.addEntityKind("出口", "ExitPoint"),
             Ornament: REData.addEntityKind("Ornament", "Ornament"),
         };

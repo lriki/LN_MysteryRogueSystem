@@ -19,6 +19,7 @@ export interface BasicEntityKinds {
     TrapKindId: DEntityKindId;              // 罠
     FigurineKindId: DEntityKindId;          // 土偶
     MonsterKindId: DEntityKindId;           // モンスター
+    entryPoint: DEntityKindId;               //
     exitPoint: DEntityKindId;               // 出口
     Ornament: DEntityKindId;
 }

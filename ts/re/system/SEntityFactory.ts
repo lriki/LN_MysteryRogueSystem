@@ -126,41 +126,41 @@ export class SEntityFactory {
         e.addBehavior(LTrapBehavior);
     }
 
-    public static newBasicEntryPoint(): LEntity {
-        const e = REGame.world.spawnEntity(REData.getEntity("kEntryPoint").id);
-        this.buildEntryPoint(e);
+    public static newBasicExitPoint(): LEntity {
+        const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
+        this.buildExitPoint(e);
         return e;
     }
 
-    public static newEntryPoint(entityId: DEntityId): LEntity {
-        assert(REData.getEntity("kEntryPoint").id == entityId);
-        const e = REGame.world.spawnEntity(entityId);
-        this.buildEntryPoint(e);
-        return e;
-    }
+    // public static newEntryPoint(entityId: DEntityId): LEntity {
+    //     assert(REData.getEntity("kEntryPoint").id == entityId);
+    //     const e = REGame.world.spawnEntity(entityId);
+    //     this.buildEntryPoint(e);
+    //     return e;
+    // }
 
     public static buildEntryPoint(e: LEntity): void {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LEntryPointBehavior);
     }
 
-    public static newExitPoint(entityId: DEntityId): LEntity {
-        assert(REData.getEntity("kExitPoint").id == entityId);
-        const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
-        this.buildExitPoint(e);
-        return e;
-    }
+    // public static newExitPoint(entityId: DEntityId): LEntity {
+    //     assert(REData.getEntity("kExitPoint").id == entityId);
+    //     const e = REGame.world.spawnEntity(REData.getEntity("kExitPoint").id);
+    //     this.buildExitPoint(e);
+    //     return e;
+    // }
 
     public static buildExitPoint(e: LEntity): void {
         e.addBehavior(LProjectableBehavior);
         e.addBehavior(LExitPointBehavior);
     }
 
-    public static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {
-        const e = REGame.world.spawnEntity(entityId);
-        this.buildOrnament(e, prefab);
-        return e;
-    }
+    // public static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {
+    //     const e = REGame.world.spawnEntity(entityId);
+    //     this.buildOrnament(e, prefab);
+    //     return e;
+    // }
 
     public static buildOrnament(e: LEntity, prefab: DPrefab): void {
         e.addBehavior(LProjectableBehavior);
@@ -184,14 +184,17 @@ export class SEntityFactory {
             entity = REGame.world.spawnEntity(entityData.id);
             this.buildItem(entity);
         }
-        else if (prefab.isEntryPoint()) {
-            entity = this.newEntryPoint(entityData.id);
+        else if (entityData.entity.kindId == REBasics.entityKinds.entryPoint) {
+            entity = REGame.world.spawnEntity(entityData.id);
+            this.buildEntryPoint(entity);
         }
-        else if (prefab.isExitPoint()) {
-            entity = this.newExitPoint(entityData.id);
+        else if (entityData.entity.kindId == REBasics.entityKinds.exitPoint) {
+            entity = REGame.world.spawnEntity(entityData.id);
+            this.buildExitPoint(entity);
         }
         else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {
-            entity = this.newOrnament(entityData.id, prefab);
+            entity = REGame.world.spawnEntity(entityData.id);
+            this.buildOrnament(entity, prefab);
         }
         else {
             throw new Error("Not implemented.");
@@ -239,10 +242,10 @@ export class SEntityFactory {
         else if (prefab.isItemKind()) {
             this.buildItem(entity);
         }
-        else if (prefab.isEntryPoint()) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.entryPoint) {
             this.buildEntryPoint(entity);
         }
-        else if (prefab.isExitPoint()) {
+        else if (entityData.entity.kindId == REBasics.entityKinds.exitPoint) {
             this.buildExitPoint(entity);
         }
         else if (entityData.entity.kindId == REBasics.entityKinds.Ornament) {

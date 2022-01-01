@@ -28,8 +28,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     inventory.addEntity(item1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(REData.getEnemy("kEnemy_レッドスライムA").entity());
-    enemy1._name = "enemy1";
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId();
 
@@ -62,8 +61,7 @@ test("Items.ChangeEntityInstance.Throw", () => {
     inventory.addEntity(item1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newMonster(REData.getEnemy("kEnemy_レッドスライムA").entity());
-    enemy1._name = "enemy1";
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId();
 
