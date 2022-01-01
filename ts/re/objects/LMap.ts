@@ -28,7 +28,7 @@ export enum MovingMethod {
 
 /*
     ### ランダムフロアへ移動したときのフロー
-    - マップ移動イベントにより、RE-Land マップの (x,0) へ移動
+    - マップ移動イベントにより、MR-Land マップの (x,0) へ移動
     - FloorInfo を確認。ランダムマップであれば、FMap をランダム構築
     - FMap を使って LMap を setup
     - 

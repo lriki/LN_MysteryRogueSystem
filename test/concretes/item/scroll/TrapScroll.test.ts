@@ -18,7 +18,7 @@ beforeAll(() => {
 
 test("concretes.item.scroll.TrapScroll", () => {
     TestEnv.newGame();
-    const floorId = LFloorId.makeFromKeys("RE-Land:UnitTestDungeon1", "kFloor_ランダム罠テスト");
+    const floorId = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_ランダム罠テスト");
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
     const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

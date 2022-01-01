@@ -13,7 +13,7 @@ afterAll(() => {
 test("Abilities.Enemy.Flock", () => {
     TestEnv.newGame();
 
-    const floor = LFloorId.makeFromKeys("RE-Land:UnitTestDungeon1", "kFloor_UTフロックウルフ(ランダム)");
+    const floor = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_UTフロックウルフ(ランダム)");
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

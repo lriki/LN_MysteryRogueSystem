@@ -15,7 +15,7 @@ afterAll(() => {
 test("ExitPoint.Reactions", () => {
     TestEnv.newGame();
 
-    const floor = LFloorId.makeFromKeys("RE-Land:UnitTestDungeon1", "kFloor_UTドラゴン(ランダム)");
+    const floor = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_UTドラゴン(ランダム)");
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);

@@ -784,7 +784,7 @@ export class REDataManager
         REData.lands.push(new DLand(1)); // [1] REシステム管理外の RMMZ マップを表す Land
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
-            if (info && info.name?.startsWith("RE-Land:")) {
+            if (info && info.name?.startsWith("MR-Land:")) {
                 const land = new DLand(REData.lands.length);
                 land.name = info.name;
                 land.rmmzMapId = i;
@@ -801,7 +801,7 @@ export class REDataManager
             if (info) {
                 const parent = (info && info.parentId) ? $dataMapInfos[info.parentId] : undefined;
                 
-                if (info.name?.includes("RE-ExitMap")) {
+                if (info.name?.includes("MR-ExitMap")) {
                     const land = (parent) ? REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId) : undefined;
                     if (land) {
                         land.exitRMMZMapId = i;
@@ -834,7 +834,7 @@ export class REDataManager
         for (const land of REData.lands) {
             if (land.id > 0 && land.id != DHelpers.RmmzNormalMapLandId) {
                 if (land.exitRMMZMapId == 0) {
-                    throw new Error(`Land[${land.name}] is RE-ExitMap not defined.`);
+                    throw new Error(`Land[${land.name}] is MR-ExitMap not defined.`);
                 }
             }
         }
@@ -878,7 +878,7 @@ export class REDataManager
                                 mapId: mapData.id,
                             });
                         }
-                        else if (info.name?.startsWith("RE-Land:")) {
+                        else if (info.name?.startsWith("MR-Land:")) {
                             const land = REData.lands.find(x => x.rmmzMapId == i);
                             assert(land);
                             mapData.landId = land.id;
@@ -894,13 +894,13 @@ export class REDataManager
                                 else if (parentInfo.name.includes("[ShuffleMaps]")) {
                                     mapData.mapKind = REFloorMapKind.ShuffleMap;
                                 }
-                                else if (parentInfo.name.includes("RE-FixedMaps")) {
+                                else if (parentInfo.name.includes("MR-FixedMaps")) {
                                     mapData.mapKind = REFloorMapKind.FixedMap;
                                 }
                             }
                         }
                                 
-                        if (info.name?.includes("RE-ExitMap")) {
+                        if (info.name?.includes("MR-ExitMap")) {
                             mapData.exitMap = true;
                         }
 
@@ -1151,7 +1151,7 @@ export class REDataManager
 
     static isLandMap(mapId: number) : boolean {
         const info = $dataMapInfos[mapId];
-        if (info && info.name && info.name.startsWith("RE-Land:"))
+        if (info && info.name && info.name.startsWith("MR-Land:"))
             return true;
         else
             return false;

@@ -134,7 +134,7 @@ export class DLand {
 
     name: string;
 
-    /** Land の生成元になった、対応するツクール MapId (RE-Land:). */
+    /** Land の生成元になった、対応するツクール MapId (MR-Land:). */
     rmmzMapId: number;
 
     /** EventTable MapId. */
