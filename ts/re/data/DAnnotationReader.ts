@@ -30,23 +30,23 @@ export interface RmmzEventPrefabStateImage {
 */
 
 export interface RmmzEventPrefabMetadata {
-    kind?: string;   // TODO: 必須にしてみる
-    item?: string;
-    enemy?: string;
-    system?: string;
+    // kind?: string;   // TODO: 必須にしてみる
+    // item?: string;
+    // enemy?: string;
+    // system?: string;
 
     stateImages?: any[]; // [stateId, characterName, characterIndex]
 
     //projectilePage?: string;    // Projectile として移動中にアクティブになるイベントページ (1~)
 
-    // deprecated
-    weaponId?: number;
-    // deprecated
-    armorId?: number;
-    // deprecated
-    itemId?: number;    // RMMZ データベース上の ItemId
-    // deprecated
-    enemyId?: number;   // RMMZ データベース上の EnemyId
+    // // deprecated
+    // weaponId?: number;
+    // // deprecated
+    // armorId?: number;
+    // // deprecated
+    // itemId?: number;    // RMMZ データベース上の ItemId
+    // // deprecated
+    // enemyId?: number;   // RMMZ データベース上の EnemyId
 
 
 }

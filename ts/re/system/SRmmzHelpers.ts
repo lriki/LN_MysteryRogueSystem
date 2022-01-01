@@ -30,9 +30,9 @@ export class SRmmzHelpers {
     }
 
 
-    public static isItemPrefab(data: RmmzEventPrefabMetadata): boolean {
-        return !!data.itemId;
-    }
+    // public static isItemPrefab(data: RmmzEventPrefabMetadata): boolean {
+    //     return !!data.itemId;
+    // }
 
     //public static isExitPointPrefab(data: RMMZEventEntityMetadata): boolean {
     //    return data.prefab.includes("ExitPoint");
