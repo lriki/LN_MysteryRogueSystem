@@ -25,7 +25,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
 
     // Item1作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     inventory1.addEntity(item1);
     
@@ -84,7 +84,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
     // Item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
     REGame.world._transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
@@ -130,7 +130,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item2
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item2"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_キュアリーフ_A").id, [], "item2"));
     inventory1.addEntity(item2);
     
     // enemy1
@@ -139,7 +139,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
     // Item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
     REGame.world._transferEntity(item1, floorId, 14, 10);
 
     // □□□□□

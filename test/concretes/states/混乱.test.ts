@@ -139,7 +139,7 @@ test("concretes.states.混乱.throw", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
     const items = [];
     for (let i = 0; i < 5; i++) {
-        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "enemy1"));
+        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "enemy1"));
         inventory.addEntity(items[i]);
     }
     

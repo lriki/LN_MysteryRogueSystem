@@ -336,7 +336,7 @@ export class RESetup {
 
                 break;
             }
-            case "kキュアリーフ": {
+            case "kItem_キュアリーフ_A": {
                 if (1) {
                     const mainEmittor = entity.mainEmittor();
                     const effect1 = mainEmittor.effectSet.effects[0];

@@ -96,7 +96,7 @@ export class TestEnv {
         this.StateId_debug_MoveRight = REData.getState("kState_Test_MoveRight").id
         this.StateId_Sleep = REData.getState("kState_UT睡眠").id;
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
-        this.EntityId_Herb = REData.getEntity("kキュアリーフ").id;
+        this.EntityId_Herb = REData.getEntity("kItem_キュアリーフ_A").id;
         this.EntityId_Weapon1 = REData.getEntity("kゴブリンのこん棒").id;
         this.EntityId_Shield1 = REData.getEntity("kレザーシールド").id;
         this.EntityId_SleepTrap = REData.getEntity("k眠りガス").id;

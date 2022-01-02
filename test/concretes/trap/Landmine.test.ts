@@ -25,7 +25,7 @@ test("concretes.trap.Landmine.basic", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 9);
 
     // trap 生成&配置

@@ -26,8 +26,8 @@ test("generally.草", () => {
     TestEnv.performFloorTransfer();
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kキュアリーフ").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_キュアリーフ_A").id, [], "item2"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

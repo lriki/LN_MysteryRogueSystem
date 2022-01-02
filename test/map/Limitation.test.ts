@@ -35,11 +35,11 @@ test("map.Limitation.Item", () => {
     for (let i = 0; i < (paramMaxItemsInMap - existsItems); i++) {
         const x = i % 20;
         const y = Math.floor(i / 20);
-        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
         REGame.world._transferEntity(item1, floorId, 10 + x, 10 + y);
     }
     
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kキュアリーフ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
