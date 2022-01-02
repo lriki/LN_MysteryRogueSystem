@@ -1,8 +1,4 @@
 ﻿node_modules/
-audio/
-effects/Model
-effects/Texture
-effects/*.efkefc
 dist/
 mksite/
 coverage/

@@ -30,7 +30,6 @@ s
 ### ビルド実行
 
 ```
-npm install
 ./build.ps1
 ```
 
