@@ -11,7 +11,7 @@ export class DDataImporter {
         // 出現テーブルは当初単一のマップであったが、次のような理由で分けることにした。
         // - Shop 対応を始めたことでテーブルが非常に大きくなり始め、編集が大変になってきた。
         // - 単一の出現テーブルで、ある Entity の出現領域を細かく制御するのが難しい。
-        if (parent1.name.includes("[Tables]")) {
+        if (parent1.name.includes("[Table]")) {
             const land = this.findLand(parent2);
             if (land) {
                 if (data.name == "Event") {

@@ -792,45 +792,6 @@ export class REDataManager
             }
         }
 
-
-
-
-        // parent が Land である Map を、データテーブル用のマップとして関連付ける
-        for (var i = 0; i < $dataMapInfos.length; i++) {
-            const info = $dataMapInfos[i];
-            if (info) {
-                const parent = (info && info.parentId) ? $dataMapInfos[info.parentId] : undefined;
-                
-                // if (info.name?.includes("MR-ExitMap")) {
-                //     const land = (parent) ? REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId) : undefined;
-                //     if (land) {
-                //         land.exitRMMZMapId = i;
-                //     }
-                // }
-                
-                /*
-                if (info.name?.includes("RE-EventTable")) {
-                    const land = this.findLand(i)
-                    if (land) land.eventTableMapId = i;
-                }
-                if (info.name?.includes("RE-ItemTable")) {
-                    const land = this.findLand(i)
-                    if (land) land.itemTableMapId = i;
-                }
-                if (info.name?.includes("RE-EnemyTable")) {
-                    const land = this.findLand(i)
-                    if (land) land.enemyTableMapId = i;
-                }
-                if (info.name?.includes("RE-TrapTable")) {
-                    const land = this.findLand(i)
-                    if (land) land.trapTableMapId = i;
-                }
-                */
-            }
-
-        }
-
-
         // Floor 情報を作る
         // ※フロア数を Land マップの width としているが、これは MapInfo から読み取ることはできず、
         //   全マップを一度ロードする必要がある。しかしそうすると処理時間が大きくなってしまう。
@@ -880,13 +841,13 @@ export class REDataManager
                             const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
                             if (land) {
                                 mapData.landId = land.id;
-                                if (parentInfo.name.includes("[RandomMaps]")) {
+                                if (parentInfo.name.includes("[Random]")) {
                                     mapData.mapKind = REFloorMapKind.RandomMap;
                                 }
-                                else if (parentInfo.name.includes("[ShuffleMaps]")) {
+                                else if (parentInfo.name.includes("[Shuffle]")) {
                                     mapData.mapKind = REFloorMapKind.ShuffleMap;
                                 }
-                                else if (parentInfo.name.includes("[FixedMaps]")) {
+                                else if (parentInfo.name.includes("[Fixed]")) {
                                     mapData.mapKind = REFloorMapKind.FixedMap;
                                 }
                             }
@@ -924,7 +885,7 @@ export class REDataManager
                 }
             }
         }
-        
+
         // Import Troop
         REData.troops = [];
         for (const x of $dataTroops) {
