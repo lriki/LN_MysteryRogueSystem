@@ -801,12 +801,12 @@ export class REDataManager
             if (info) {
                 const parent = (info && info.parentId) ? $dataMapInfos[info.parentId] : undefined;
                 
-                if (info.name?.includes("MR-ExitMap")) {
-                    const land = (parent) ? REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId) : undefined;
-                    if (land) {
-                        land.exitRMMZMapId = i;
-                    }
-                }
+                // if (info.name?.includes("MR-ExitMap")) {
+                //     const land = (parent) ? REData.lands.find(x => info.parentId && x.rmmzMapId == info.parentId) : undefined;
+                //     if (land) {
+                //         land.exitRMMZMapId = i;
+                //     }
+                // }
                 
                 /*
                 if (info.name?.includes("RE-EventTable")) {
@@ -830,14 +830,6 @@ export class REDataManager
 
         }
 
-        // 検証
-        for (const land of REData.lands) {
-            if (land.id > 0 && land.id != DHelpers.RmmzNormalMapLandId) {
-                if (land.exitRMMZMapId == 0) {
-                    throw new Error(`Land[${land.name}] is MR-ExitMap not defined.`);
-                }
-            }
-        }
 
         // Floor 情報を作る
         // ※フロア数を Land マップの width としているが、これは MapInfo から読み取ることはできず、
@@ -894,7 +886,7 @@ export class REDataManager
                                 else if (parentInfo.name.includes("[ShuffleMaps]")) {
                                     mapData.mapKind = REFloorMapKind.ShuffleMap;
                                 }
-                                else if (parentInfo.name.includes("MR-FixedMaps")) {
+                                else if (parentInfo.name.includes("[FixedMaps]")) {
                                     mapData.mapKind = REFloorMapKind.FixedMap;
                                 }
                             }
@@ -924,6 +916,15 @@ export class REDataManager
             }
         }
 
+        // 検証
+        for (const land of REData.lands) {
+            if (land.id > 0 && land.id != DHelpers.RmmzNormalMapLandId) {
+                if (land.exitRMMZMapId == 0) {
+                    throw new Error(`Land[${land.name}] is MR-ExitMap not defined.`);
+                }
+            }
+        }
+        
         // Import Troop
         REData.troops = [];
         for (const x of $dataTroops) {

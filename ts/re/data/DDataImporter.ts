@@ -43,6 +43,14 @@ export class DDataImporter {
                 }
             }
         }
+        else if (parent1.name.includes("[System]")) {
+            const land = this.findLand(parent2);
+            if (land) {
+                if (data.name == "ExitMap") {
+                    land.exitRMMZMapId = data.id;
+                }
+            }
+        }
     }
 
     public static beginLoadLandDatabase(land: DLand): void {
