@@ -44,7 +44,7 @@ export class VHudWindow extends Window_Base {
         const level = experience.level(entity);
         const prevExp = experience.expForLevel(entity, experience.level(entity));
         const nextExp = experience.nextLevelExp(entity);
-        const extRatio = (experience.currentExp(entity) - prevExp) / (nextExp - prevExp);
+        const extRatio = Math.max(0, (experience.currentExp(entity) - prevExp) / (nextExp - prevExp));
 
         this.drawFloorNumber(0, 0, REGame.map.floorId());
         this.drawLevel(150, 0, level, extRatio);

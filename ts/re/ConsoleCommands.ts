@@ -1,3 +1,4 @@
+import { REBasics } from "./data/REBasics";
 import { REData } from "./data/REData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
 import { TileShape } from "./objects/LBlock";
@@ -53,10 +54,17 @@ function visitAll() {
     RESystem.minimapData.setRefreshNeeded();
 }
 
+function levelMax() {
+    const player = REGame.camera.focusedEntity();
+    if (player) {
+        player.setActualParam(REBasics.params.level, 99);
+    }
+}
 
 
 
-(window as any).re = {
+
+(window as any).MR = {
     entities: entities,
     mapInfo: mapInfo,
     setHP: setHP,
@@ -64,6 +72,7 @@ function visitAll() {
     addState: addState,
     visitAll: visitAll,
     setVariable: setVariable,
+    levelMax: levelMax,
 
 };
 

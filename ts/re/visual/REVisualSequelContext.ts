@@ -238,9 +238,6 @@ export class REVisualSequelContext {
 
         if (idleRequested) {
             const id = this._entityVisual.getIdleSequelId();
-
-            console.log("_startSequel", id, this._currentIdleSequelId, this._entityVisual.entity().debugDisplayName());
-            
             if (this._currentIdleSequelId != id) {
                 if (id != 0) {
                     const pos = this._entityVisual.position();
