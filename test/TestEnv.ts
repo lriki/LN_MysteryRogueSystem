@@ -106,7 +106,7 @@ export class TestEnv {
         //actor1._name = "actor1";
     }
 
-    public static setupPlayer(floorId: LFloorId, mx: number, my: number, dir: number = 0): LEntity {
+    public static setupPlayer(floorId: LFloorId, mx?: number, my?: number, dir: number = 0): LEntity {
         const player = REGame.world.entity(REGame.system.mainPlayerEntityId);
         player._name = "Player";
         if (dir) {

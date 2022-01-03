@@ -231,7 +231,7 @@ export class LWorld
      */
     _transferEntity(entity: LEntity, floorId: LFloorId, x: number = -1, y: number = -1): boolean {
         const mapFloorId = REGame.map.floorId();
-        if (mapFloorId != floorId && floorId.isRandomMap()) {
+        if (!mapFloorId .equals(floorId) && floorId.isRandomMap()) {
             // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
             assert(x < 0);
             assert(y < 0);

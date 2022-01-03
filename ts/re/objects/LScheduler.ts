@@ -385,8 +385,8 @@ export class LScheduler2 {
         // NPC しか残っていないときは、残行動数分まとめて動ける。
         if (actionCount >= 2) {
             let manualActionMax = 0;
-            for (const unit of this._schedulingUnits) {
-                if (unit.isManual() && !unit.isActionCompleted()) {
+            for (const unit2 of this._schedulingUnits) {
+                if (unit2.isValid() && unit2.isManual() && !unit2.isActionCompleted()) {
                     manualActionMax = Math.max(manualActionMax, actionCount);
                 }
             }
