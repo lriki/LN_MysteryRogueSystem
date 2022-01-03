@@ -4,6 +4,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { Log, RESerializable } from "ts/re/Common";
 import { LEntityId } from "./LObject";
 import { LFloorId } from "./LFloorId";
+import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -59,11 +60,25 @@ export class LCamera {
     }
 
     focusedEntity(): LEntity | undefined {
+        if (!this._focusedEntityId.hasAny()) return undefined;
         return REGame.world.entity(this._focusedEntityId);
     }
 
     focus(entity: LEntity) {
+        const oldEntity = this.focusedEntity();
+        if (oldEntity) {
+            const unit = oldEntity.findEntityBehavior(LUnitBehavior);
+            if (unit) {
+                unit.setManualMovement(false);
+            }
+        }
+
         this._focusedEntityId = entity.entityId();
+
+        const unit = entity.findEntityBehavior(LUnitBehavior);
+        if (unit) {
+            unit.setManualMovement(true);
+        }
     }
 
     clearFocus() {

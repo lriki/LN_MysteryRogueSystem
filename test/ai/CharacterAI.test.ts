@@ -142,7 +142,7 @@ test("ai.CharacterAI.Issue2", () => {
     const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_バットA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 15, 4);
     enemy1.dir = 4;
 
@@ -152,7 +152,6 @@ test("ai.CharacterAI.Issue2", () => {
     enemy2.dir = 6;
 
     // 10 ターン分 シミュレーション実行
-    //REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------

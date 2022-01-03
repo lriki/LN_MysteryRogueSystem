@@ -13,6 +13,8 @@ export class RE_Data_Actor {
     id: DActorId;
 
 
+    rmmzActorId: number;
+
     /** 初期配置フロア */
     //initialFloorId: number;
     
@@ -32,6 +34,7 @@ export class RE_Data_Actor {
 
     constructor(id: DActorId) {
         this.id = id;
+        this.rmmzActorId = 0;
         this.initialX = 0;
         this.initialY = 0;
         this.maxLevel = 0;
@@ -40,6 +43,7 @@ export class RE_Data_Actor {
     }
 
     public setup(data: IDataActor) {
+        this.rmmzActorId = data.id;
         this.initialLevel = data.initialLevel;
         this.maxLevel = data.maxLevel;
     }

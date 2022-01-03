@@ -61,6 +61,14 @@ export class LWorld
         }
     }
 
+    public iterateEntity(func: ((x: LEntity) => void) | ((x: LEntity) => boolean)): void {
+        for (const obj of this._objects) {
+            if (obj && obj.objectType() == LObjectType.Entity) {
+                if (func(obj as LEntity) === false) return;
+            }
+        }
+    }
+
     public findEntity(id: LEntityId): LEntity | undefined {
         const obj = this.findObject(id);
         if (obj && obj.objectType() == LObjectType.Entity)

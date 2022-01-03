@@ -1,4 +1,6 @@
 import { UTransfer } from "ts/re/usecases/UTransfer";
+import { assert } from "../Common";
+import { LEntity } from "../objects/LEntity";
 import { REGame } from "../objects/REGame";
 
 var _Game_Interpreter_updateWaitMode = Game_Interpreter.prototype.updateWaitMode;
@@ -29,6 +31,29 @@ Game_Interpreter.prototype.command201 = function(params: any): boolean {
     }
 */
     return true;
+}
+
+// Change Party Member
+var _Game_Interpreter_command129 = Game_Interpreter.prototype.command129;
+Game_Interpreter.prototype.command129 = function(params: any): boolean {
+    const result = _Game_Interpreter_command129.call(this, params);
+
+    const rmmzActorId = $gameParty.members()[0].actorId();
+
+    let actorEntity: LEntity | undefined;
+    REGame.world.iterateEntity(entity => {
+        const actorData = entity.data().actor;
+        if (actorData && actorData.rmmzActorId == rmmzActorId) {
+            actorEntity = entity;
+            return false;
+        }
+        return true;
+    });
+    assert(actorEntity);
+
+    REGame.camera.focus(actorEntity);
+
+    return result;
 }
 
 

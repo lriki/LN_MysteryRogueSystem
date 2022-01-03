@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.states.RatedRandom.Issue1"
+                "-t", "ai.CharacterAI.Issue2"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

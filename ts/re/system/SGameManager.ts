@@ -99,10 +99,6 @@ export class SGameManager {
         // 1 番 Actor をデフォルトで操作可能 (Player) とする
         const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         REGame.system.mainPlayerEntityId = firstActor.entityId();
-        const unit = firstActor.findEntityBehavior(LUnitBehavior);
-        if (unit) {
-            unit.setManualMovement(true);
-        }
         REGame.camera.focus(firstActor);
 
         // Player を Party に入れる
