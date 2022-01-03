@@ -139,8 +139,6 @@ export class SStepScheduler2 {
     }
 
     private process_RunStarting(): void {
-        console.log("RunStarting");
-
         for (const unit of this._data.schedulingUnits()) {
             if (unit.isValid()) {
                 unit.entity()._schedulingResult.clear();

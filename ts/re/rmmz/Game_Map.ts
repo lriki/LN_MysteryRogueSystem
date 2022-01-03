@@ -1,6 +1,7 @@
 import { RESystem } from "ts/re/system/RESystem";
 import { SView } from "ts/re/system/SView";
 import { Log } from "../Common";
+import { REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
@@ -37,7 +38,6 @@ Game_Map.prototype.unlinkREEvents = function(): void {
 
 const _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
-
     // 先に REMap をクリーンアップしておく。
     // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
     // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。

@@ -853,8 +853,9 @@ export class REDataManager
                             }
                         }
                                 
-                        if (info.name?.includes("MR-ExitMap")) {
+                        if (info.name?.includes("ExitMap")) {
                             mapData.exitMap = true;
+                            mapData.landId = DHelpers.RmmzNormalMapLandId;
                         }
 
 

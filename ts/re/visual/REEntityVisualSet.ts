@@ -138,10 +138,6 @@ export class REEntityVisualSet {
     
 
     public createVisual2(entity: LEntity): void {
-        
-        console.log("entity", entity);
-        console.log("entity.data().", entity.data());
-        console.log("entity.data().prefabId", entity.data().prefabId);
 
         // Prefab 検索
         const prefabId = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
