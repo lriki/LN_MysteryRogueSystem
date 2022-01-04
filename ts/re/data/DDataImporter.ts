@@ -1,12 +1,13 @@
 import { assert, tr2 } from "../Common";
+import { DHelpers } from "./DHelper";
 import { DLand } from "./DLand";
-import { REData } from "./REData";
+import { DMap, REData } from "./REData";
 import { REDataManager } from "./REDataManager";
 
 export class DDataImporter {
 
     // ここではまずマップ ID の関連付けのみ行う。
-    public static importMapData(data: IDataMapInfo, parent1: IDataMapInfo, parent2: IDataMapInfo | undefined): void {
+    public static importMapData(mapData: DMap, data: IDataMapInfo, parent1: IDataMapInfo, parent2: IDataMapInfo | undefined): void {
 
         // 出現テーブルは当初単一のマップであったが、次のような理由で分けることにした。
         // - Shop 対応を始めたことでテーブルが非常に大きくなり始め、編集が大変になってきた。
@@ -50,6 +51,10 @@ export class DDataImporter {
                     land.exitRMMZMapId = data.id;
                 }
             }
+        }
+        else if (parent1.name.includes("[Event]")) {
+            mapData.eventMap = true;
+            mapData.landId = DHelpers.RmmzNormalMapLandId;
         }
     }
 

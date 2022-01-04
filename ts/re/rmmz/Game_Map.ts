@@ -5,6 +5,7 @@ import { REData } from "../data/REData";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
+import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
     interface Game_Map {
@@ -46,7 +47,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     
     // Game_Map.setup が呼ばれるのは、マップが切り替わるとき。
     // タイミングの都合で DataManager.onLoad によって前のマップの REEvent が $dataMap.event に含まれているので、これを削除しておく。
-    this.unlinkREEvents();
+    //this.unlinkREEvents();
 
     _Game_Map_setup.call(this, mapId);
 
@@ -92,16 +93,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     // レコーディング開始
     REGame.recorder.startRecording();
 
-    // onStart trigger
-    {
-        for (const event of this.events()) {
-            if (event._reEventData && event._reEventData.trigger && event._reEventData.trigger == "onStart") {
-                if (event.x == 0) {
-                    event.start();
-                }
-            }
-        }
-    }
+    RMMZHelper.triggerOnStartEvent();
     
     // 新しいマップへの移動時は、遅くてもここで RMMZ 側の Map への更新をかけておく。
     // Game_Map.setup は抜けるとこの後する Game_Player の locate が行われるが、それまでにマップのサイズを確定させておく必要がある。

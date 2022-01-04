@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DFloorInfo, DLand, DLandId } from "ts/re/data/DLand";
-import { REData } from "ts/re/data/REData";
+import { DMap, REData } from "ts/re/data/REData";
 import { REDataManager } from "ts/re/data/REDataManager";
 
 /**

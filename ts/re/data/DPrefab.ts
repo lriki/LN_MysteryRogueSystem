@@ -82,6 +82,10 @@ export class DPrefab {
 
     moveType: DPrefabMoveType;
 
+    // ランダムマップに配置される Entity と、Lang テーブル内で定義した RMMZ Event を関連付けたい場合がある。
+    // 例えば、イベント用の階段や NPC。
+    // 固定マップを使っている場合等は Land 定義マップが固定マップと異なる RMMZ マップとなるため、参照したければ Land マップのロードが必要になってしまう。
+    // RMMZ Evnet のデータをあらかじめ取り出しておくことで対策する。
     rmmzMapId: number;
     rmmzEventData: IDataMapEvent;
 

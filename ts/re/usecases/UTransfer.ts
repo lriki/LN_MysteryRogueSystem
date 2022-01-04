@@ -18,12 +18,13 @@ export class UTransfer {
      */
     public static transterRmmzDirectly(newMapId: number, newX: number, newY: number): void {
         const landId = REData.maps[newMapId].landId;
+        const mapData = REData.maps[newMapId];
         //let actualMapId = 0;
         let actualFloorNumber = 0;
         let actualX = -1;
         let actualY = -1;
 
-        if (landId == DHelpers.RmmzNormalMapLandId) {
+        if (landId == DHelpers.RmmzNormalMapLandId || mapData.eventMap) {
             // REシステム管理外
             //actualMapId = newMapId;
             actualFloorNumber = newMapId;

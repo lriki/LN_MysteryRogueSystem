@@ -23,18 +23,18 @@ import { REVisual } from "../visual/REVisual";
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(prefab: DPrefab, resetEventId?: number): Game_Event;
+        spawnREEvent(prefab: DPrefab, resetEventId: number | undefined, overrideEventData: IDataMapEvent | undefined): Game_Event;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(prefab: DPrefab, resetEventId?: number): Game_Event {
+Game_Map.prototype.spawnREEvent = function(prefab: DPrefab, resetEventId: number | undefined, overrideEventData: IDataMapEvent | undefined): Game_Event {
     if (!$dataMap.events) {
         throw new Error();
     }
 
     assert(prefab.id > 0);
     assert(prefab.rmmzEventData.id > 0);
-    const eventData = prefab.rmmzEventData;//SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
+    const eventData = overrideEventData ?? prefab.rmmzEventData;
 
     // override 指定がある場合は既存イベントを再 setup する。
     // これによって固定マップのイベントではなく、Prefab マップのイベント内容として構築される。

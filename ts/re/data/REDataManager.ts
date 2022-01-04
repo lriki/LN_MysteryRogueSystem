@@ -803,7 +803,7 @@ export class REDataManager
                 const info = $dataMapInfos[i];
                 
                 const mapData: DMap = {
-                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false,
+                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false,
                 };
                 REData.maps[i] = mapData;
 
@@ -860,7 +860,7 @@ export class REDataManager
 
 
                         DDataImporter.importMapData(
-                            info, parentInfo,
+                            mapData, info, parentInfo,
                             parentInfo.parentId > 0 ? $dataMapInfos[parentInfo.parentId] : undefined);
                     }
                 }
@@ -1122,8 +1122,9 @@ export class REDataManager
     }
 
     static isRESystemMap(mapId: number) : boolean {
-        const flooor = REData.maps[mapId];
-        return flooor.landId > DHelpers.RmmzNormalMapLandId;
+        const map = REData.maps[mapId];
+        if (map.eventMap) return false;
+        return map.landId > DHelpers.RmmzNormalMapLandId;
     }
 
     static isFloorMap(mapId: number) : boolean {

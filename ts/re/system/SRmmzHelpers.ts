@@ -22,7 +22,9 @@ export class SRmmzHelpers {
 
     static readEntityMetadata(event: Game_Event): DEntitySpawner2 | undefined {
         if (event._pageIndex >= 0) {
-            return DEntitySpawner2.makeFromEventPageData(event.eventId(), event.page());
+            const data = event.event();
+            assert(data);
+            return DEntitySpawner2.makeFromEventPageData(data, event.page());
         }
         else {
             return undefined;

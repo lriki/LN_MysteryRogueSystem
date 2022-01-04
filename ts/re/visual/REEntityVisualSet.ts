@@ -139,18 +139,25 @@ export class REEntityVisualSet {
 
     public createVisual2(entity: LEntity): void {
 
-        // Prefab 検索
+        let overrideEvent: IDataMapEvent | undefined;
+        const floorNumber = REGame.map.floorId().floorNumber();
+        const land = REGame.map.land2();
+        for (const info of land.landData().appearanceTable.entities) {
+            if (info.startFloorNumber <= floorNumber && floorNumber <= info.lastFloorNumber) {
+                if (info.spawiInfo.entityId == entity.dataId()) {
+                    overrideEvent = info.spawiInfo.overrideEvent;
+                }
+            }
+        }
+
+
         const prefab = REData.prefabs[entity.data().prefabId];
-        console.log("entity.data()", entity.data());
-        console.log("REData.prefabs", REData.prefabs);
-        console.log("prefab", prefab);
-        //const prefabEventId = SRmmzHelpers.getPrefabEventDataId(.key);
 
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
             // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
             assert(entity.rmmzEventId > 0);
-            $gameMap.spawnREEvent(prefab, entity.rmmzEventId);
+            $gameMap.spawnREEvent(prefab, entity.rmmzEventId, undefined);
         }
         else {
             //assert(entity.rmmzEventId == 0);
@@ -164,7 +171,7 @@ export class REEntityVisualSet {
             }
             else {
                 //  entity に対応する動的イベントを新たに生成する
-                const event = $gameMap.spawnREEvent(prefab);
+                const event = $gameMap.spawnREEvent(prefab, undefined, overrideEvent);
                 entity.rmmzEventId = event.eventId();
             }
         }

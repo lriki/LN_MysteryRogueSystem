@@ -388,12 +388,14 @@ export class DEntityCreateInfo {
 // こっちは Event の metadata としての情報
 export class DEntitySpawner2 extends DEntityCreateInfo {
     public troopId: DTroopId;
+    public overrideEvent: IDataMapEvent | undefined;
     //public entityId: DEntityId;
     //public stateIds: DStateId[];
 
     public constructor() {
         super();
         this.troopId = 0;
+        this.overrideEvent = undefined;
         //this.entityId = 0;
         //this.stateIds = [];
     }
@@ -429,10 +431,10 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     // }
 
     public static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined {
-        return this.makeFromEventPageData(event.id, event.pages[0]);
+        return this.makeFromEventPageData(event, event.pages[0]);
     }
 
-    public static makeFromEventPageData(eventId: number, page: IDataMapEventPage): DEntitySpawner2 | undefined {
+    public static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage): DEntitySpawner2 | undefined {
         const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(page);
         if (!entityMetadata) return undefined;
         
@@ -442,6 +444,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.stackCount = entityMetadata.stackCount;
         entity.override = entityMetadata.override;
         entity.gold = entityMetadata.gold;
+        entity.overrideEvent = entityMetadata.overrideEvent ? event : undefined;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);

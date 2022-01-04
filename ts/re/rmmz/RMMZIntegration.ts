@@ -84,20 +84,16 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onUpdateBlock(block: LBlock): void {
-        console.log("onUpdateBlock", arguments);
-
         if (REVisual.mapBuilder) {
             //const width = $dataMap.width;
             //const height = $dataMap.height;
             //$dataMap.data[(z * height + y) * width + x] = tileId;
 
-            console.log("onUpdateTile", arguments);
             //REVisual.mapBuilder.setTileId
             //REVisual.mapBuilder.set
             REVisual.mapBuilder.refreshBlock(block);
     
             if (REVisual.spriteset) {
-                console.log("refresh");
                 REVisual.spriteset._tilemap.refresh();
             }
         }

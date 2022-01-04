@@ -63,6 +63,7 @@ export interface RE_Data_EntityFeature
 
 /**
  * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
+ * FloorInfo と似ているが、こちらは RMMZ Map に対する直接の追加情報を意味する。
  */
 export interface DMap
 {
@@ -82,6 +83,9 @@ export interface DMap
     
     /** 非REシステムマップにおいて、RMMZオリジナルのメニューを使うか。(つまり、一切 RE システムと関係ないマップであるか) */
     defaultSystem: boolean;
+
+    /** 明示的に RMMZ 標準マップとするか */
+    eventMap: boolean;
 }
 
 export type DFactionId = number;
@@ -190,7 +194,7 @@ export class REData
 
         this.enemies = [];
         this.lands = [];
-        this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false }];
+        this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false }];
         this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', typeName: "", priority: 0}];

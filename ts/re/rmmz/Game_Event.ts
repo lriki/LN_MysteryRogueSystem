@@ -126,12 +126,12 @@ Game_Event.prototype.meetsConditions = function(page: IDataMapEventPage): boolea
 
 const _Game_Event_update = Game_Event.prototype.update;
 Game_Event.prototype.update = function() {
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    // if (REGame.map.floorId().isEntitySystemMap()) {
         
-    }
-    else {
+    // }
+    // else {
         _Game_Event_update.call(this);
-    }
+    // }
 }
 
 Game_Event.prototype.setupPrefab = function(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void {

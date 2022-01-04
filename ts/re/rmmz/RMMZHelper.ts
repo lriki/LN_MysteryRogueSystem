@@ -115,5 +115,23 @@ export class RMMZHelper {
             }
         }
     }
+
+    public static triggerOnStartEvent(): void {
+        for (const event of $gameMap.events()) {
+            if (event._reEventData && event._reEventData.trigger && event._reEventData.trigger == "onStart") {
+                //if (event.x == 0) {
+                    event.start();
+                //}
+            }
+        }
+    }
+
+    public static triggerOnKeeperLostEvent(): void {
+        for (const event of $gameMap.events()) {
+            if (event._reEventData && event._reEventData.trigger && event._reEventData.trigger == "onKeeperLost") {
+                event.start();
+            }
+        }
+    }
 }
 
