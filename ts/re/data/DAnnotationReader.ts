@@ -69,6 +69,8 @@ interface RMMZEventRawMetadata {
     override?: boolean;
 
     overrideEvent?: boolean;
+
+    keeper?: boolean;
     
     gold?: number;
 }
@@ -87,6 +89,8 @@ export interface RmmzEventEntityMetadata {
     override: boolean;
 
     overrideEvent: boolean;
+
+    keeper: boolean;
 
     gold: number;
 }
@@ -228,6 +232,7 @@ export class DAnnotationReader {
             stackCount: rawData.stack ?? 1,
             override: rawData.override ?? false,
             overrideEvent: rawData.overrideEvent ?? false,
+            keeper: rawData.keeper ?? false,
             gold: rawData.gold ?? 0,
         };
     }

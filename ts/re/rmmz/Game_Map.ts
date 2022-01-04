@@ -132,6 +132,12 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
     _Game_Map_update.call(this, sceneActive);
 
     //SGameManager.attemptRestartFloor();
+
+    if (REGame.map.lastKeeperCount != REGame.map.keeperCount &&
+        REGame.map.keeperCount == 0) {
+        RMMZHelper.triggerOnKeeperLostEvent();
+    }
+    REGame.map.lastKeeperCount = REGame.map.keeperCount;
 }
 
 /*

@@ -19,6 +19,7 @@ import { REGame } from "../objects/REGame";
 import { FloorRestartSequence } from "./FloorRestartSequence";
 
 export class RMMZIntegration extends SIntegration {
+
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
 
     }
@@ -62,6 +63,8 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onLoadFixedMapEvents(): void {
+        REGame.map.keeperCount = 0;
+
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
             const data = SRmmzHelpers.readEntityMetadata(e);
@@ -78,9 +81,16 @@ export class RMMZIntegration extends SIntegration {
                     else {
                         e.setTransparent(true);
                     }
+
+                    if (data.keeper) {
+                        entity.keeper = true;
+                        REGame.map.keeperCount++;
+                    }
                 }
             }
         });
+
+        REGame.map.lastKeeperCount = REGame.map.keeperCount;
     }
 
     onUpdateBlock(block: LBlock): void {
@@ -175,6 +185,10 @@ export class RMMZIntegration extends SIntegration {
         // Entity と RMMZ-Event の関連付けを解除
         entity.inhabitsCurrentFloor = false;
         entity.rmmzEventId = 0;
+        if (entity.keeper) {
+            entity.keeper = false;
+            REGame.map.keeperCount--;
+        }
     }
 
     onEntityReEnterMap(entity: LEntity): void {

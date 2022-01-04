@@ -389,6 +389,7 @@ export class DEntityCreateInfo {
 export class DEntitySpawner2 extends DEntityCreateInfo {
     public troopId: DTroopId;
     public overrideEvent: IDataMapEvent | undefined;
+    public keeper: boolean;
     //public entityId: DEntityId;
     //public stateIds: DStateId[];
 
@@ -396,6 +397,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         super();
         this.troopId = 0;
         this.overrideEvent = undefined;
+        this.keeper = false;
         //this.entityId = 0;
         //this.stateIds = [];
     }
@@ -445,6 +447,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.override = entityMetadata.override;
         entity.gold = entityMetadata.gold;
         entity.overrideEvent = entityMetadata.overrideEvent ? event : undefined;
+        entity.keeper = entityMetadata.keeper ?? false;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);

@@ -232,6 +232,7 @@ export class LEntity extends LObject
      * これは現状の仕様とする。
      */
     inhabitsCurrentFloor :boolean = false;
+    keeper: boolean = false;
 
     // HC3 までは PositionalAttribute に持たせていたが、こっちに持ってきた。
     // お店のセキュリティシステムなど、これらを使わない Entity もあるのだが、

@@ -73,6 +73,9 @@ export class LMap extends LObject {
     trapClarity = false;  // マップ上の罠が見える: 敵味方問わず罠が見えるようになる。
     sightClarity = false;   // 視界明瞭？
 
+    keeperCount: number = 0;
+    lastKeeperCount: number = 0;
+    
     constructor() {
         super(LObjectType.Map);
     }
