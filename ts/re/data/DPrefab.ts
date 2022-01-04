@@ -4,13 +4,6 @@ import { REData } from "./REData";
 
 export type DPrefabId = number;
 
-/** どのデータテーブルの要素と関連づいているか */
-export enum DPrefabDataSource {
-    Unknown,
-    Item,
-    System,
-}
-
 export enum DSystemPrefabKind {
     Unknown,
     EntryPoint,
@@ -80,8 +73,6 @@ export class DPrefab {
 
     id: DPrefabId = 0;
     key: string = "";
-    dataSource: DPrefabDataSource = DPrefabDataSource.Unknown;
-    dataId: number = 0;
     image: DPrefabActualImage;
     subPages: DPrefabPageInfo[];
     stateImages: DPrefabStateImage[];

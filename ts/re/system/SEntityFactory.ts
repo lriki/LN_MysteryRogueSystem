@@ -23,7 +23,7 @@ import { LSurvivorBehavior } from "ts/re/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
 import { LSanctuaryBehavior } from "ts/re/objects/behaviors/LSanctuaryBehavior";
 import { LClingFloorBehavior } from "ts/re/objects/behaviors/LClingFloorBehavior";
-import { DPrefab, DPrefabDataSource, DPrefabId } from "ts/re/data/DPrefab";
+import { DPrefab } from "ts/re/data/DPrefab";
 import { DTroop } from "ts/re/data/DTroop";
 import { DStateId } from "ts/re/data/DState";
 import { UMovement } from "../usecases/UMovement";

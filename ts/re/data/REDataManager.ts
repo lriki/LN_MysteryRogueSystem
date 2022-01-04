@@ -10,7 +10,7 @@ import { parseMetaToEntityProperties } from "./DEntityProperties";
 import { DFloorMonsterHouse, DLand } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
-import { DPrefab, DPrefabDataSource, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
+import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
 import { RE_Data_Actor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTrait } from './DTraits';

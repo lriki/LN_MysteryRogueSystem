@@ -95,13 +95,13 @@ export class SRmmzHelpers {
         }
     }
     
-    public static getPrefabEventDataById(id: number): IDataMapEvent {
+    public static getPrefabEventDataById(rmmzEventId: number): IDataMapEvent {
         const databaseMap = REDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
-        const event = databaseMap.events[id];
+        const event = databaseMap.events[rmmzEventId];
         if (event) return event;
-        throw new Error(`${id} not found in MR-Prefabs map.`);
+        throw new Error(`${rmmzEventId} not found in MR-Prefabs map.`);
     }
 
     public static getRegionId(x: number, y: number): number {
