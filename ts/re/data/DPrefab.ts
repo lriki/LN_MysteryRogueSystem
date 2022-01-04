@@ -82,7 +82,11 @@ export class DPrefab {
 
     moveType: DPrefabMoveType;
 
-    public constructor() {
+    rmmzMapId: number;
+    rmmzEventData: IDataMapEvent;
+
+    public constructor(id: DPrefabId) {
+        this.id = id;
         this.image = {
             characterName: "",
             direction: 2,
@@ -96,6 +100,56 @@ export class DPrefab {
         this.stateImages = [];
         this.downImage = {};
         this.moveType = DPrefabMoveType.Random;
+        this.rmmzMapId = 0;
+        this.rmmzEventData = {
+            id: 0,
+            name: "null",
+            note: "",
+            pages: [
+                {
+                    conditions: {
+                        actorId: 1,
+                        actorValid: false,
+                        itemId: 1,
+                        itemValid: false,
+                        selfSwitchCh: "A",
+                        selfSwitchValid: false,
+                        switch1Id: 1,
+                        switch1Valid: false,
+                        switch2Id: 1,
+                        switch2Valid: false,
+                        variableId: 1,
+                        variableValid: false,
+                        variableValue: 1,
+                    },
+                    directionFix: false,
+                    image: {
+                        tileId: 0,
+                        characterName: "",
+                        direction: 2,
+                        pattern: 0,
+                        characterIndex: 1
+                    },
+                    list: [],
+                    moveFrequency: 3,
+                    moveRoute: {
+                        list: [],
+                        repeat: true,
+                        skippable: false,
+                        wait: false,
+                    },
+                    moveSpeed: 3,
+                    moveType: 0,
+                    priorityType: 1,
+                    stepAnime: false,
+                    through: false,
+                    trigger: 0,
+                    walkAnime: true,
+                }
+            ],
+            x: 0,
+            y: 0,
+        };;
     }
 
     // public isEnemyKind(): boolean {

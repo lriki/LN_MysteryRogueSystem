@@ -206,7 +206,7 @@ export class REData
 
         this.states = [];
         //this._behaviorFactories = [() => new LBehavior()];
-        this.prefabs = [new DPrefab()];
+        this.prefabs = [new DPrefab(0)];
         this.entities = [new DEntity(0)];
         this.emittors = [new DEmittor(0, "null")];
     }
@@ -351,6 +351,16 @@ export class REData
         if (d) return d;
         throw new Error(`Entity "${pattern}" not found.`);
     }
+
+    //--------------------
+
+    static newPrefab(): DPrefab {
+        const newId = this.prefabs.length;
+        const data = new DPrefab(newId);
+        this.prefabs.push(data);
+        return data;
+    }
+
 
     //--------------------
 

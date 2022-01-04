@@ -13,6 +13,7 @@
 
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
+import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { REDataManager } from "../data/REDataManager";
 import { REVisual } from "../visual/REVisual";
 
@@ -22,19 +23,18 @@ import { REVisual } from "../visual/REVisual";
 declare global {
     interface Game_Map {
         getREPrefabEvents(): Game_CharacterBase[];
-        spawnREEvent(prefabEventDataId: number, resetEventId?: number): Game_Event;
-        //spawnREEventFromCurrentMapEvent(eventId: number): Game_REPrefabEvent;
+        spawnREEvent(prefab: DPrefab, resetEventId?: number): Game_Event;
     }
 }
 
-Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEventId?: number): Game_Event {
+Game_Map.prototype.spawnREEvent = function(prefab: DPrefab, resetEventId?: number): Game_Event {
     if (!$dataMap.events) {
         throw new Error();
     }
 
-    assert(prefabEventDataId > 0);
-
-    const eventData = SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
+    assert(prefab.id > 0);
+    assert(prefab.rmmzEventData.id > 0);
+    const eventData = prefab.rmmzEventData;//SRmmzHelpers.getPrefabEventDataById(prefabEventDataId);
 
     // override 指定がある場合は既存イベントを再 setup する。
     // これによって固定マップのイベントではなく、Prefab マップのイベント内容として構築される。
@@ -44,24 +44,22 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         const event = this._events[resetEventId] as Game_Event;
         event.initMembers();
         event.increaseRERevision();
-        event.setupPrefab(prefabEventDataId, $gameMap.mapId(), data);
+        event.setupPrefab(prefab, $gameMap.mapId(), data);
         return event;
     }
 
     // フリー状態の REEvent を探してみる
     let eventId = this._events.findIndex(e =>e && e.isREEvent() && e.isREExtinct());
     if (eventId < 0) {
-        console.log("見つからなければ新しく作る");
         // 見つからなければ新しく作る
         eventId = this._events.length;
         
-        const event = new Game_Event(REDataManager.databaseMapId, eventId);
-        event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
+        const event = new Game_Event(prefab.rmmzMapId, eventId);
+        event.setupPrefab(prefab, prefab.rmmzMapId, eventData);
         this._events[eventId] = event;
         return event;
     }
     else {
-        console.log("再構築");
         const event = this._events[eventId] as Game_Event;
         assert(event.isREEvent());
 
@@ -69,7 +67,7 @@ Game_Map.prototype.spawnREEvent = function(prefabEventDataId: number, resetEvent
         const spritePrepared_RE = event.isRESpritePrepared();
         event.initMembers();
         event.increaseRERevision();
-        event.setupPrefab(prefabEventDataId, REDataManager.databaseMapId, eventData);
+        event.setupPrefab(prefab, prefab.rmmzMapId, eventData);
         event.setSpritePrepared(spritePrepared_RE); // initMembers でリセットされるが、スプライト割り当て済みフラグは維持する
         return event;
     }

@@ -955,9 +955,10 @@ export class REDataManager
                 const data = DAnnotationReader.readPrefabMetadata(event, this.databaseMapId);
                 if (!data) continue;
 
-                const prefab = new DPrefab();
-                prefab.id = REData.prefabs.length;
+                const prefab =  REData.newPrefab();
                 prefab.key = event.name;
+                prefab.rmmzMapId = this.databaseMapId;
+                prefab.rmmzEventData = event;
 
                 prefab.image.characterName = event.pages[0].image.characterName;
                 prefab.image.direction = event.pages[0].image.direction;

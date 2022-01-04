@@ -232,9 +232,20 @@ export class DLand {
                             this.identifiedKinds[kind.id] = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
                         }
                     }
-                    
                 }
                 break;
+            }
+        }
+
+        // Pick prefab
+        for (const event of mapData.events) {
+            if (event) {
+                const prefabData = DAnnotationReader.readPrefabMetadata(event, this.rmmzMapId);
+                if (prefabData) {
+                    const prefab = REData.newPrefab();
+                    prefab.rmmzMapId = this.rmmzMapId;
+                    prefab.rmmzEventData = event;
+                }
             }
         }
     }

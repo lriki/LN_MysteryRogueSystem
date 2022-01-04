@@ -84,8 +84,6 @@ export class SRmmzHelpers {
         assert(databaseMap);
         assert(databaseMap.events);
 
-        console.log("prefabName", prefabName);
-
         const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabName : false);
         if (index >= 0) {
             return index;

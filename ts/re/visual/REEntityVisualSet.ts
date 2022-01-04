@@ -140,13 +140,17 @@ export class REEntityVisualSet {
     public createVisual2(entity: LEntity): void {
 
         // Prefab 検索
-        const prefabId = SRmmzHelpers.getPrefabEventDataId(REData.prefabs[entity.data().prefabId].key);
+        const prefab = REData.prefabs[entity.data().prefabId];
+        console.log("entity.data()", entity.data());
+        console.log("REData.prefabs", REData.prefabs);
+        console.log("prefab", prefab);
+        //const prefabEventId = SRmmzHelpers.getPrefabEventDataId(.key);
 
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。
             // 固定マップの場合はここに入ってくるが、$gameMap.events の既存のインスタンスを参照しているため追加は不要。
             assert(entity.rmmzEventId > 0);
-            $gameMap.spawnREEvent(prefabId, entity.rmmzEventId);
+            $gameMap.spawnREEvent(prefab, entity.rmmzEventId);
         }
         else {
             //assert(entity.rmmzEventId == 0);
@@ -160,7 +164,7 @@ export class REEntityVisualSet {
             }
             else {
                 //  entity に対応する動的イベントを新たに生成する
-                const event = $gameMap.spawnREEvent(prefabId);
+                const event = $gameMap.spawnREEvent(prefab);
                 entity.rmmzEventId = event.eventId();
             }
         }

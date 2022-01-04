@@ -2,6 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
 import { DAnnotationReader, RmmzREEventMetadata } from "../data/DAnnotationReader";
+import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { REDataManager } from "../data/REDataManager";
 import { LState } from "../objects/states/LState";
 import { REVisual } from "../visual/REVisual";
@@ -25,11 +26,11 @@ declare global {
 
         
         _spritePrepared_RE: boolean;
-        _prefabEventDataId_RE: number;   // Database マップ上の Prefab イベントId.
+        _prefabId_RE: DPrefabId;
         _eventData_RE: IDataMapEvent | undefined;
         _pageData_RE: (RmmzREEventMetadata | undefined)[];
 
-        setupPrefab(prefabEventDataId: number, mapId: number, eventData: IDataMapEvent): void;
+        setupPrefab(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void;
         isREEntity(): boolean;
         isREEvent(): boolean;
         isREPrefab(): boolean;
@@ -59,7 +60,7 @@ Game_Event.prototype.initMembers = function() {
     // REシステムとしてはセルフスイッチは使用しないため実際のところなんでもよい。
 
     _Game_Event_initMembers.call(this);
-    this._prefabEventDataId_RE = 0;
+    this._prefabId_RE = 0;
     this._spritePrepared_RE = false;
     this._pageData_RE = [];
 }
@@ -133,9 +134,9 @@ Game_Event.prototype.update = function() {
     }
 }
 
-Game_Event.prototype.setupPrefab = function(prefabEventDataId: number, mapId: number,eventData: IDataMapEvent): void {
+Game_Event.prototype.setupPrefab = function(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void {
     this._mapId = mapId;
-    this._prefabEventDataId_RE = prefabEventDataId;
+    this._prefabId_RE = prefab.id;
     this._eventData_RE = eventData;
     this._pageData_RE = [];
     for (let i = 0; i < this._eventData_RE.pages.length; i++) {
@@ -152,11 +153,11 @@ Game_Event.prototype.isREEntity = function(): boolean {
 }
 
 Game_Event.prototype.isREEvent = function() {
-    return this._prefabEventDataId_RE > 0;
+    return this._prefabId_RE > 0;
 }
 
 Game_Event.prototype.isREPrefab = function() {
-    return this._prefabEventDataId_RE > 0;
+    return this._prefabId_RE > 0;
 }
 
 Game_Event.prototype.isREExtinct = function(): boolean {
