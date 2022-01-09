@@ -1,7 +1,7 @@
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
 import { RESystem } from "ts/re/system/RESystem";
-import { Log, RESerializable } from "ts/re/Common";
+import { assert, Log, RESerializable } from "ts/re/Common";
 import { LEntityId } from "./LObject";
 import { LFloorId } from "./LFloorId";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";

@@ -97,8 +97,11 @@ export class SGameManager {
         //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
 
         // 1 番 Actor をデフォルトで操作可能 (Player) とする
-        const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
-        REGame.system.mainPlayerEntityId = firstActor.entityId();
+        //const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
+        //REGame.system.mainPlayerEntityId = firstActor.entityId();
+        //REGame.camera.focus(firstActor);
+        const rmmzActorId = $gameParty.members()[0].actorId();
+        const firstActor = REGame.world.getEntityByRmmzActorId(rmmzActorId);
         REGame.camera.focus(firstActor);
 
         // Player を Party に入れる

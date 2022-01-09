@@ -320,5 +320,18 @@ export class LWorld
 
     }
 
+    public getEntityByRmmzActorId(rmmzActorId: number): LEntity {
+        let actorEntity: LEntity | undefined;
+        REGame.world.iterateEntity(entity => {
+            const actorData = entity.data().actor;
+            if (actorData && actorData.rmmzActorId == rmmzActorId) {
+                actorEntity = entity;
+                return false;
+            }
+            return true;
+        });
+        assert(actorEntity);
+        return actorEntity;
+    }
 }
 

@@ -37,22 +37,8 @@ Game_Interpreter.prototype.command201 = function(params: any): boolean {
 var _Game_Interpreter_command129 = Game_Interpreter.prototype.command129;
 Game_Interpreter.prototype.command129 = function(params: any): boolean {
     const result = _Game_Interpreter_command129.call(this, params);
-
     const rmmzActorId = $gameParty.members()[0].actorId();
-
-    let actorEntity: LEntity | undefined;
-    REGame.world.iterateEntity(entity => {
-        const actorData = entity.data().actor;
-        if (actorData && actorData.rmmzActorId == rmmzActorId) {
-            actorEntity = entity;
-            return false;
-        }
-        return true;
-    });
-    assert(actorEntity);
-
-    REGame.camera.focus(actorEntity);
-
+    REGame.camera.focus(REGame.world.getEntityByRmmzActorId(rmmzActorId));
     return result;
 }
 
