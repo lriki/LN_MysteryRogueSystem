@@ -61,7 +61,15 @@ function levelMax() {
     }
 }
 
+function moveToExit() {
+    const exitPoint = REGame.map.entities().find(x => x.kindDataId() == REBasics.entityKinds.exitPoint);
+    if (!exitPoint) return;
 
+    const player = REGame.camera.focusedEntity();
+    if (!player) return;
+
+    REGame.world._transferEntity(player, player.floorId, exitPoint.x, exitPoint.y);
+}
 
 
 (window as any).MR = {
@@ -73,7 +81,7 @@ function levelMax() {
     visitAll: visitAll,
     setVariable: setVariable,
     levelMax: levelMax,
-
+    moveToExit: moveToExit,
 };
 
 export {}
