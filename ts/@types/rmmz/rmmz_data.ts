@@ -326,7 +326,7 @@ declare interface IDataSystem
     optSideView?: boolean;
     optSlipDeath?: boolean;
     optTransparent?: boolean;
-    partyMembers?: number[];
+    partyMembers: number[];
     ship?: IVehicle;
     skillTypes?: string[];
     sounds?: IDataSound[];

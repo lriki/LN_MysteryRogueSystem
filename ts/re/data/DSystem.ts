@@ -45,6 +45,8 @@ export class DSystem {
 
     //public fallbackTrapEntityId: DEntityId;
 
+    public initialPartyMembers: DEntityId[];
+
 
     constructor() {
         //this.elements = $dataSystem.elements ?? [];
@@ -64,6 +66,7 @@ export class DSystem {
         this.fallbackItemEntityId = 0;
         this.fallbackGoldEntityId = 0;
         //this.fallbackTrapEntityId = 0;
+        this.initialPartyMembers = [];
     }
 
     public link(testMode: boolean): void {

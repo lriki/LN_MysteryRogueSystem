@@ -33,6 +33,7 @@ import { LObjectType } from "ts/re/objects/LObject";
 import { STurnContext } from "./STurnContext";
 import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
+import { LEntity } from "../objects/LEntity";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -97,11 +98,26 @@ export class SGameManager {
         //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
 
         // 1 番 Actor をデフォルトで操作可能 (Player) とする
-        //const firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
+        //
         //REGame.system.mainPlayerEntityId = firstActor.entityId();
         //REGame.camera.focus(firstActor);
-        const rmmzActorId = $gameParty.members()[0].actorId();
-        const firstActor = REGame.world.getEntityByRmmzActorId(rmmzActorId);
+        let firstActor : LEntity | undefined;
+        // if ($gameParty) {
+        //     const rmmzActorId = $gameParty.members()[0].actorId();
+        //     firstActor = REGame.world.getEntityByRmmzActorId(rmmzActorId);
+        // }
+        // else {
+        //     firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
+        // }
+        REGame.world.iterateEntity(x => {
+            if ( x.dataId() == REData.system.initialPartyMembers[0]) {
+                firstActor = x;
+                return false;
+            }
+            return true;
+        });
+        assert(firstActor);
+        REGame.system.mainPlayerEntityId = firstActor.entityId();
         REGame.camera.focus(firstActor);
 
         // Player を Party に入れる

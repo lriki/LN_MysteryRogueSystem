@@ -437,36 +437,6 @@ export class REDataManager
             });
         }
 
-            /*
-        if ($dataSystem.equipTypes && $dataSystem.armorTypes) {
-            REData.rmmzWeaponTypeIdOffset = 0;
-            const weaponTypes = $dataSystem.equipTypes.map((x, i) => {
-                if (x) {
-                    return {
-                        id: i + REData.rmmzWeaponTypeIdOffset,
-                        name: x,
-                    };
-                }
-                else {
-                    return DEquipmentType_Default
-                }
-            });
-            REData.rmmzArmorTypeIdOffset = weaponTypes.length;
-            const armorTypes = $dataSystem.armorTypes.map((x, i) => {
-                if (x) {
-                    return {
-                        id: i + REData.rmmzArmorTypeIdOffset,
-                        name: x,
-                    };
-                }
-                else {
-                    return DEquipmentType_Default
-                }
-            });
-
-            REData.equipTypes = weaponTypes.concat(armorTypes);
-        }
-            */
 
         // Import States
         {
@@ -738,7 +708,12 @@ export class REDataManager
         RESystem.items = {
             autoSupplyFood: 2,
         };
-        
+        REData.system.initialPartyMembers = [];
+        for (const actorId of $dataSystem.partyMembers) {
+            const entity = REData.entities.find(x => x.actor && x.actor.rmmzActorId == actorId);
+            assert(entity);
+            REData.system.initialPartyMembers.push(entity.id);
+        }
 
         // Import Enemies
         $dataEnemies.forEach(x => {

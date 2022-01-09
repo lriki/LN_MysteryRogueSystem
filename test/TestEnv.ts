@@ -88,7 +88,7 @@ export class TestEnv {
         }
 
         this.UnitTestLandId = REData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
-        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.getMap("拠点メイン").mapId);
+        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.getMap("テスト拠点").mapId);
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
