@@ -15,7 +15,7 @@ import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { MovingMethod } from "../LMap";
-import { DecisionPhase, onGrounded, testPutInItem } from "../internal";
+import { DecisionPhase, onGrounded, onPreStepFeetProcess, onPreStepFeetProcess_Actor, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { UName } from "ts/re/usecases/UName";
@@ -33,6 +33,13 @@ import { ULimitations } from "ts/re/usecases/ULimitations";
 import { LTrapBehavior } from "./LTrapBehavior";
 import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { RESystem } from "ts/re/system/RESystem";
+
+enum LFeetProcess {
+    None,
+    Dialog,
+    RideOnMessage,
+    AutoPick,
+}
 
 /**
  * 
@@ -497,9 +504,49 @@ export class LUnitBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
+    
+    [onPreStepFeetProcess_Actor](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
+        const self = this.ownerEntity();
+
+        const [result, targetEntity] = this.judgeFeetProcess(self);
+        if (result == LFeetProcess.Dialog) {
+            RESystem.sequelContext.trapPerforming = true;
+        }
+
+        return SCommandResponse.Pass;
+    }
 
     [onWalkedOnTopAction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
+        const self = this.ownerEntity();
 
+        const [result, targetEntity] = this.judgeFeetProcess(self);
+        switch (result) {
+            case LFeetProcess.None:
+                break;
+            case LFeetProcess.Dialog:
+                if (targetEntity) {
+                    cctx.openDialog(self, new LFeetDialog(targetEntity), false);
+                }
+                break;
+            case LFeetProcess.RideOnMessage:
+                if (targetEntity) {
+                    cctx.postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
+                }
+                break;
+            case LFeetProcess.AutoPick:
+                // 歩行による自動拾得から実行される場合、この時点では Sequel は Flush されていないことがある。
+                // v0.5.0 時点では Pick のハンドリングでは REGame.map._removeEntity() を直接実行しているので、
+                // その前に Flush しておかないと、移動前にいきなり Item が消えたように見えてしまう。
+                RESystem.sequelContext.attemptFlush(true);
+                cctx.postActivity(LActivity.makePick(self));
+                break;
+            default:
+                throw new Error("Unreachable.");
+        }
+
+        return SCommandResponse.Pass;
+
+        /*
         if (this._manualMovement) {
             const self = this.ownerEntity();
             if (self.immediatelyAfterAdjacentMoving) {
@@ -539,8 +586,40 @@ export class LUnitBehavior extends LBehavior {
                 }
             }
         }
-
         return SCommandResponse.Pass;
+        */
+
+    }
+
+    
+    private judgeFeetProcess(self: LEntity): [LFeetProcess, LEntity | undefined] {
+        if (this._manualMovement) {
+            if (self.immediatelyAfterAdjacentMoving) {
+                const targetEntity = REGame.map.firstFeetEntity(self);
+                if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
+                    const actions = targetEntity.queryReactions();
+                    if (actions.length > 0) {
+                        const actions = targetEntity.queryReactions();
+                        if (actions.length > 0) {
+                            if (actions.includes(REBasics.actions.PickActionId) &&
+                                !targetEntity._shopArticle.isSalling()) {
+                                if (this._straightDashing) {
+                                    return [LFeetProcess.RideOnMessage, targetEntity];
+                                }
+                                else {
+                                    // 歩行移動時に足元に拾えるものがあれば取得試行
+                                    return [LFeetProcess.AutoPick, targetEntity];
+                                }
+                            }
+                            else {
+                                return [LFeetProcess.Dialog, targetEntity];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return [LFeetProcess.None, undefined];
     }
     
     onTalk(self: LEntity, cctx: SCommandContext, person: LEntity): SCommandResponse {

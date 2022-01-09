@@ -6,7 +6,7 @@ import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
-import { CommandArgs, LBehavior, onPerformTrap, onStepOnTrap, onWalkedOnTopReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onPerformStepFeetProcess, onPreStepFeetProcess } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -139,7 +139,7 @@ export class LTrapBehavior extends LBehavior {
 
     private _launching = false;
     
-    [onStepOnTrap](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
+    [onPreStepFeetProcess](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
         const target = e.sender;
 
@@ -165,7 +165,7 @@ export class LTrapBehavior extends LBehavior {
         return SCommandResponse.Canceled;
     }
     
-    [onPerformTrap](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
+    [onPerformStepFeetProcess](e: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = this.ownerEntity();
         const target = e.sender;
         if (this._launching) {

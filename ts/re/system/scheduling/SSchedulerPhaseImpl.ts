@@ -79,8 +79,9 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         for (const unit of scheduler.data()._schedulingUnits) {
             if (unit.isValid()) {
                 const unitBehavior = unit.unitBehavior();
-                if (unitBehavior.requiredTrapProcess()) {
-                    UAction.postStepOnTrap(RESystem.commandContext, unit.entity());
+                if (unitBehavior.requiredTrapProcess() ||
+                    unitBehavior.requiredFeetProcess()) {   // 足元 Dialog の前処理がしたい
+                    UAction.postPreStepFeetProcess(RESystem.commandContext, unit.entity());
                     unitBehavior.clearTrapProcess();
                 }
             }
@@ -101,7 +102,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
 
         // TODO: 発動 trap リストをどこかに作っておきたい
         for (const entity of REGame.map.entities()) {
-            UAction.postAttemptPerformTrap(RESystem.commandContext, entity);
+            UAction.postAttemptPerformStepFeetProcess(RESystem.commandContext, entity);
         }
 
         // ステート更新は全 Entity の移動が終わった後に行いたい

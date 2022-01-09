@@ -4,7 +4,7 @@ import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmz
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
 import { REData } from "ts/re/data/REData";
-import { LGenerateDropItemCause, onPerformTrap, onStepOnTrap, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
+import { LGenerateDropItemCause, onPerformStepFeetProcess, onPreStepFeetProcess, onPreStepFeetProcess_Actor, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
@@ -25,6 +25,8 @@ import { SPoint } from "./UCommon";
 import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 import { LActivity } from "../objects/activities/LActivity";
 import { ULimitations } from "./ULimitations";
+import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
+import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -106,23 +108,24 @@ export class UAction {
         }
     }
 
-    public static postStepOnTrap(cctx: SCommandContext, entity: LEntity): void {
+    public static postPreStepFeetProcess(cctx: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
             
-            const response = cctx.callSymbol(reactor, entity, new SEffectSubject(reactor), undefined, onStepOnTrap);
+            cctx.callSymbol(entity, reactor, new SEffectSubject(entity), undefined, onPreStepFeetProcess_Actor);
+            cctx.callSymbol(reactor, entity, new SEffectSubject(reactor), undefined, onPreStepFeetProcess);
             //cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onStepOnTrap);
         }
     }
 
-    public static postAttemptPerformTrap(cctx: SCommandContext, entity: LEntity): void {
+    public static postAttemptPerformStepFeetProcess(cctx: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
-            cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onPerformTrap);
+            cctx.post(reactor, entity, new SEffectSubject(reactor), undefined, onPerformStepFeetProcess);
         }
     }
 
@@ -278,7 +281,6 @@ export class UAction {
         }
         return false;
     }
-
 
 
     private static checkAdjacentDirectlyAttack(self: LEntity, target: LEntity): boolean {
