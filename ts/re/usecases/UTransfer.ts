@@ -34,10 +34,14 @@ export class UTransfer {
         else if (REDataManager.isLandMap(newMapId)) {
             assert(newY === 0);
             const floorNumber = newX;
-            const info = REData.lands[landId].floorInfos[floorNumber];
+            const land = REData.lands[landId];
+            const info = land.floorInfos[floorNumber];
+            const fixedMap = land.findFixedMapByName(info.fixedMapName);
+            //if ()
+            
 
-            const rmmzFixedMapId = $dataMapInfos.findIndex(x => x && x.name == info.fixedMapName);
-            if (rmmzFixedMapId > 0) {
+            //const rmmzFixedMapId = map.mapId;//$dataMapInfos.findIndex(x => x && x.name == info.fixedMapName);
+            if (fixedMap) {
                 // Land 定義マップ経由の、固定マップへの移動
                 //actualMapId = rmmzFixedMapId;
                 actualFloorNumber = floorNumber;

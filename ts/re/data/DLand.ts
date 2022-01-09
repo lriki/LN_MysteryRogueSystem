@@ -5,7 +5,7 @@ import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
-import { REData } from "./REData";
+import { DMap, REData } from "./REData";
 
 
 export type DLandId = number;
@@ -171,6 +171,8 @@ export class DLand {
     /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
     floorIds: DMapId[];
 
+    fixedMapIds: DMapId[];
+
     /** (index: DEntityKindId) */
     identifiedKinds: (DLandIdentificationLevel | undefined)[];
 
@@ -203,9 +205,23 @@ export class DLand {
         this.exitRMMZMapId = 0;
         this.floorInfos = [];
         this.floorIds = [];
+        this.fixedMapIds = [];
         this.identifiedKinds = [];
         this.forwardDirection = DLandForwardDirection.Uphill;
     }
+
+    public findFixedMapByName(name: string): DMap | undefined {
+        if (!name) return undefined;
+        const mapId = this.fixedMapIds.find(x => REData.maps[x].name == name);
+        if (!mapId) return undefined;
+        return REData.maps[mapId];
+    }
+
+    // public getFixedMapByName(name: string): DMap {
+    //     const mapId = this.fixedMapIds.find(x => REData.maps[x].name == name);
+    //     assert(mapId);
+    //     return REData.maps[mapId];
+    // }
     
     public import(mapData: IDataMap): void {
         

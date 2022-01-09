@@ -25,8 +25,6 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onReserveTransferMap(mapId: number, x: number, y: number, d: number): void {
-        //console.log("reload");
-
         $gamePlayer.reserveTransfer(mapId, x, y, d, 0);
 
         // マップ遷移後、同一マップへの遷移でも Game_Map.setup が実行されるようにする。Scene_Load の処理と同じ。

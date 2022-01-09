@@ -7,7 +7,7 @@ import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState"
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DFloorMonsterHouse, DLand } from "./DLand";
+import { DFloorMonsterHouse, DLand, DMapId } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
@@ -798,14 +798,16 @@ export class REDataManager
         //   ひとまず欠番は多くなるが、最大フロア数でデータを作ってみる。
         {
             // 固定マップ
-            REData.maps = new Array($dataMapInfos.length);
-            for (let i = 0; i < $dataMapInfos.length; i++) {
+            //REData.maps = new Array($dataMapInfos.length);
+            for (let i = 1; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
                 
-                const mapData: DMap = {
-                    id: i, landId: DHelpers.RmmzNormalMapLandId, mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false,
-                };
-                REData.maps[i] = mapData;
+                const mapData = REData.newMap();
+                mapData.landId = DHelpers.RmmzNormalMapLandId;
+                // DMap = {
+                //     id: i, landId: , mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false,
+                // };
+                //REData.maps[i] = mapData;
 
                 if (!info) {
                     // Map 無し。mapId は 0 のまま。
@@ -814,6 +816,8 @@ export class REDataManager
                 else {
                     mapData.mapId = i;
                 }
+
+                assert(mapData.id == i);
 
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
@@ -849,6 +853,7 @@ export class REDataManager
                                 }
                                 else if (parentInfo.name.includes("[Fixed]")) {
                                     mapData.mapKind = REFloorMapKind.FixedMap;
+                                    land.fixedMapIds.push(mapData.id);
                                 }
                             }
                         }
@@ -867,7 +872,7 @@ export class REDataManager
 
                 // null 回避のため、REシステム管理外のマップの FloorInfo を作っておく
                 if (mapData.landId == DHelpers.RmmzNormalMapLandId) {
-                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.id] = {
+                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.mapId] = {
                         key: "",
                         template: undefined,
                         displayName: undefined,
@@ -1105,7 +1110,7 @@ export class REDataManager
         return REData.maps[mapId];
     }
 
-    static isDatabaseMap(mapId: number) : boolean {
+    static isDatabaseMap(mapId: DMapId) : boolean {
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("MR-Prefabs"))
             return true;
@@ -1113,7 +1118,7 @@ export class REDataManager
             return false;
     }
 
-    static isLandMap(mapId: number) : boolean {
+    static isLandMap(mapId: DMapId) : boolean {
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("MR-Land:"))
             return true;
@@ -1121,13 +1126,13 @@ export class REDataManager
             return false;
     }
 
-    static isRESystemMap(mapId: number) : boolean {
+    static isRESystemMap(mapId: DMapId) : boolean {
         const map = REData.maps[mapId];
         if (map.eventMap) return false;
         return map.landId > DHelpers.RmmzNormalMapLandId;
     }
 
-    static isFloorMap(mapId: number) : boolean {
+    static isFloorMap(mapId: DMapId) : boolean {
         return REData.maps[mapId].landId > 0;
         /*
         const info = $dataMapInfos[mapId];

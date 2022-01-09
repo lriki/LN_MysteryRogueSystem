@@ -65,7 +65,7 @@ export interface RE_Data_EntityFeature
  * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
  * FloorInfo と似ているが、こちらは RMMZ Map に対する直接の追加情報を意味する。
  */
-export interface DMap
+export class DMap
 {
     /** ID (0 is Invalid). */
     id: number;
@@ -86,6 +86,22 @@ export interface DMap
 
     /** 明示的に RMMZ 標準マップとするか */
     eventMap: boolean;
+
+    public constructor(id: number) {
+        this.id = id;
+        this.landId = 0;
+        this.mapId = 0;
+        this.mapKind = REFloorMapKind.FixedMap;
+        this.exitMap = false;
+        this.defaultSystem = false;
+        this.eventMap = false;
+    }
+
+    public get name(): string {
+        const info = $dataMapInfos[this.mapId];
+        if (!info) return "";
+        return info.name;
+    }
 }
 
 export type DFactionId = number;
@@ -194,7 +210,7 @@ export class REData
 
         this.enemies = [];
         this.lands = [];
-        this.maps = [{ id: 0, mapId: 0, landId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false }];
+        this.maps = [new DMap(0)];
         this.templateMaps = [DTemplateMap_Default()];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', typeName: "", priority: 0}];
@@ -365,6 +381,29 @@ export class REData
         return data;
     }
 
+    //--------------------
+
+    public static newMap(): DMap {
+        const newId = this.maps.length;
+        const data = new DMap(newId);
+        this.maps.push(data);
+        return data;
+    }
+
+    public static findMap(pattern: string): DMap | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.maps[id];
+        else {
+            return this.maps.find(x => (x.name != "" && x.name == pattern));
+        }
+    }
+
+    public static getMap(pattern: string): DMap {
+        const d = this.findMap(pattern);
+        if (d) return d;
+        throw new Error(`Map "${pattern}" not found.`);
+    }
 
     //--------------------
 

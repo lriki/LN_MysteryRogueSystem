@@ -148,8 +148,10 @@ export class LFloorId {
     }
 
     public rmmzFixedMapId(): number {
+        const land = this.landData();
         const info = this.floorInfo();
-        return $dataMapInfos.findIndex(x => x && x.name == info.fixedMapName);
+        const map = land.findFixedMapByName(info.fixedMapName);
+        return map ? map.mapId : 0;
     }
 
     public isNormalMap(): boolean {
