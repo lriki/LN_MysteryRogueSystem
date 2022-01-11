@@ -1,6 +1,14 @@
 
 var pluginName = 'LN_MysteryRogueSystem';
 
+function getNumber(key: string, defaultValue: number): number {
+    if (typeof PluginManager == "undefined") return defaultValue;
+    const v = PluginManager.parameters(pluginName)[key];
+    if (v === undefined) return defaultValue;
+    return Number(v);
+    
+}
+
 // 固定マップで部屋をマークするためのリージョンID
 export var paramFixedMapRoomRegionId = 1;
 
@@ -36,10 +44,14 @@ export var paramExposedTrapTriggerRate = 50;
 // 物理間接攻撃の基本命中率 (%)
 export var paraIndirectPhysicalHitRate = 85;
 
+// 1ターンの満腹度減少量
+export var paramFPLoss = getNumber("BasicFPLoss", 10);
 
 export var paramMaxUnitsInMap = 50;
 export var paramMaxItemsInMap = 100;
 export var paramMaxTrapsInMap = 100;
+
+
 
 //Maximum number of items in the map
 

@@ -1,5 +1,6 @@
 import { RESerializable, tr2 } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
+import { paramFPLoss } from "ts/re/PluginParameters";
 import { SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
@@ -43,11 +44,11 @@ export class LSurvivorBehavior extends LBehavior {
     ある程度柔軟性を持ちつつわかりやすいかもしれない。
     */
 
-    private _basicLoss = 10;
+    private _basicLoss = paramFPLoss;
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LSurvivorBehavior);
-        return b
+        return b;
     }
 
     onAttached(self: LEntity): void {
