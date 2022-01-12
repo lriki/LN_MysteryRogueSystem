@@ -341,8 +341,11 @@ export class UAction {
         // 状況に応じた候補追加
         performer.iterateBehaviorsReverse(b => {
             b.onPostMakeSkillActions(result);
-            return true;
         });
+
+        if (performer.hasTrait(REBasics.traits.UseSkillForced)) {
+            result.mutableRemove(x => x.action.skillId == RESystem.skills.normalAttack);
+        }
 
         let maxRating = 0;
         result.forEach(r => maxRating = Math.max(r.action.rating, maxRating));
