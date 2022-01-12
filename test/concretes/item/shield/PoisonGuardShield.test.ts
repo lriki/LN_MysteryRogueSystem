@@ -26,7 +26,9 @@ test("concretes.item.shield.PoisonGuardShield.test", () => {
     player1.addState(REData.getState("kState_UT罠必中").id);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンシールド").id, [], "shield1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_毒草_B").id, [], "item1"));
     inventory.addEntity(shield1);
+    inventory.addEntity(item1);
     equipmentUser.equipOnUtil(shield1);
 
     // trap 生成&配置
@@ -44,5 +46,16 @@ test("concretes.item.shield.PoisonGuardShield.test", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     const pow2 = player1.actualParam(REBasics.params.pow);
-    expect(pow2).toBe(pow1);    // ちからは減っていない
+    expect(pow2).toBeLessThan(pow1);        // 毒矢の効果は受けてしまう
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [食べる]
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const pow4 = player1.actualParam(REBasics.params.pow);
+    expect(pow4).toBeLessThan(pow1);        // 毒草の効果は受けてしまう
 });

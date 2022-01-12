@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "Dialog.FeetDialogSequelTiming"
+                "-t", "concretes.item.shield.PoisonGuardShield.test"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

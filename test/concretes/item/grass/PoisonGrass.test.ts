@@ -42,13 +42,15 @@ test("concretes.item.grass.PoisonGrass", () => {
 
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // [食べる]
     RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const hp2 = player1.actualParam(REBasics.params.hp);
     const pow2 = player1.actualParam(REBasics.params.pow);
@@ -59,11 +61,13 @@ test("concretes.item.grass.PoisonGrass", () => {
     expect(player1.isStateAffected(state2)).toBeFalsy();
     expect(player1Atk2).toBe(player1Atk1);  // 攻撃力が下がったりしていない
 
+    //----------------------------------------------------------------------------------------------------
+    
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
     const enemy1Atk2 = enemy1.actualParam(REBasics.params.atk);

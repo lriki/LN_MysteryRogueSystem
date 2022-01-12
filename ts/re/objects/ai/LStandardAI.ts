@@ -75,8 +75,6 @@ export class LCharacterAI_Normal extends LCharacterAI {
         // FIXME: ここでやるのが最善かわからないが、攻撃対象が決められていない場合は
         // Major Phase でも行動消費するアクションがとれないので、ハングアップしてしまう。
         // ここで消費しておく。
-        console.log("self", self);
-        console.log("self.data()", self.data());
         if (self._actionToken.canMajorAction()) {
             cctx.postConsumeActionToken(self, LActionTokenType.Major);
         }

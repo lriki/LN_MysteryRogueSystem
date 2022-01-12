@@ -86,6 +86,9 @@ export class RESetup {
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.5 });
                 entity.selfTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.upgradeValue, value: 0.0 });
                 break;
+            case "kポイズンシールド":
+                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
+                break;
             case "kアウェイクリング":
                 this.setupRingCommon(entity);
                 break;
@@ -1388,6 +1391,9 @@ export class RESetup {
                 break;
             case "kState_UT下手投げ":
                 data.effect.traits.push({ code: REBasics.traits.AwfulPhysicalIndirectAttack, dataId: 0, value: 0 });
+                break;
+            case "kState_Anger":
+                data.effect.traits.push({ code: REBasics.traits.UseSkillForced, dataId: 0, value: 0 });
                 break;
             case "kState_UT爆発四散":
                 data.deadState  = true;

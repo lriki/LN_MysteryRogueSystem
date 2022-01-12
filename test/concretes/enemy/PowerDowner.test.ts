@@ -26,7 +26,7 @@ test("concretes.enemies.PowerDowner", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ test("concretes.enemies.PowerDowner", () => {
     RESystem.dialogContext.activeDialog().submit();
 
     REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ちからが減っている
     const pow2 = player1.actualParam(REBasics.params.pow);
