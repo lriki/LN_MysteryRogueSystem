@@ -15,7 +15,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.item.shield.PoisonGuardShield.test", () => {
+test("concretes.item.shield.PoisonGuardShield", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
@@ -58,4 +58,19 @@ test("concretes.item.shield.PoisonGuardShield.test", () => {
 
     const pow4 = player1.actualParam(REBasics.params.pow);
     expect(pow4).toBeLessThan(pow1);        // 毒草の効果は受けてしまう
+
+    //----------------------------------------------------------------------------------------------------
+
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
+    enemy1.addState(REData.getState("kState_Anger").id);
+    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+
+    // [待機]
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const pow5 = player1.actualParam(REBasics.params.pow);
+    expect(pow5).toBe(pow1);                // 特定スキルからの効果は受けない
 });
