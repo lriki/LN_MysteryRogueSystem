@@ -58,12 +58,28 @@ test("concretes.item.shield.PoisonGuardShield", () => {
 
     const pow4 = player1.actualParam(REBasics.params.pow);
     expect(pow4).toBeLessThan(pow1);        // 毒草の効果は受けてしまう
+});
 
-    //----------------------------------------------------------------------------------------------------
+test("concretes.item.shield.PoisonGuardShield2", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
+    const pow1 = player1.actualParam(REBasics.params.pow);
+
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンシールド").id, [], "shield1"));
+    inventory.addEntity(shield1);
+    equipmentUser.equipOnUtil(shield1);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_Anger").id);
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
 
     // [待機]
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
