@@ -19,7 +19,7 @@ import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
-import { RESetup } from './RESetup';
+import { DSetupScript, RESetup } from './RESetup';
 import { DAttackElement } from './DAttackElement';
 import { DParamMessageValueSource, REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
@@ -924,6 +924,8 @@ export class REDataManager
         for (const templateMap of REData.templateMaps) {
             this.beginLoadTemplateMap(templateMap);
         }
+
+        this.beginLoadSetupScript();
     }
 
     private static beginLoadPrefabs(): void {
@@ -1029,6 +1031,12 @@ export class REDataManager
         // Database マップ読み込み開始
         const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
         DataManager.loadDataFile("RE_databaseMap", filename);
+    }
+
+    public static beginLoadSetupScript(): void {
+        this.loadTextFile("rogue/Setup.js", (obj) => {
+            DSetupScript.load(obj);
+        });
     }
 
     public static padZero(v: number, length: number) {
@@ -1166,6 +1174,15 @@ export class REDataManager
             xhr.onload = () => this.onXhrLoad(xhr, src, url, (obj) => { onLoad(obj); this.loadedDataFileCount++; });
             xhr.onerror = () => DataManager.onXhrError(src, src, url);
             xhr.send();
+        }
+    }
+    private static loadTextFile(src: string, onLoad: (obj: string) => void) {
+        if (DHelpers.isNode()) {
+            const dataDir = "data/";
+            onLoad(fs.readFileSync(dataDir + src).toString());
+        }
+        else {
+            throw new Error("Not implemented.");
         }
     }
 

@@ -1500,3 +1500,19 @@ export class RESetup {
     }
 }
 
+
+
+
+
+
+
+interface DSetupScriptDB {
+
+}
+
+export class DSetupScript {
+    public static load(script: string) {
+        
+    }
+}
+
