@@ -77,6 +77,13 @@ export class RESetup {
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
                 entity.affestTraits.push({code: REBasics.traits.RaceRate, dataId: REData.getRace("kRace_ドラゴン族").id, value: 1.5});
                 break;
+            case "kWeapon_ダミードラゴンキラー":
+                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
+                entity.upgradeMax = 99;
+                entity.idealParams[REBasics.params.upgradeValue] = 0;
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+                entity.identifiedTiming = DIdentifiedTiming.Equip;
+                break;
             case "kレザーシールド":
                 entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
                 entity.upgradeMax = 99;

@@ -216,7 +216,8 @@ NOTE:
         const equipment = itemEntity.data().equipment;
         assert(equipment);
         const itemPart = equipment.equipmentPart;
-        let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
+        // let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
+        const slot = this._slots.find(x => x.partId == itemPart);
         assert(slot);
         slot.itemEntityId = itemEntity.entityId();
         this.ownerEntity().refreshConditions();
