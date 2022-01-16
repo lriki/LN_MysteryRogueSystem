@@ -118,7 +118,7 @@
         "pitch": 100,
         "volume": 90
     },
-    "editMapId": 118,
+    "editMapId": 45,
     "elements": [
         "",
         "物理",
@@ -344,9 +344,9 @@
             "volume": 90
         }
     ],
-    "startMapId": 118,
-    "startX": 20,
-    "startY": 11,
+    "startMapId": 45,
+    "startX": 13,
+    "startY": 12,
     "switches": [
         "",
         "[Test]BOSSクリア",
@@ -562,7 +562,7 @@
         "",
         ""
     ],
-    "versionId": 51510808,
+    "versionId": 24699900,
     "victoryMe": {
         "name": "Victory1",
         "pan": 0,
