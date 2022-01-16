@@ -30,7 +30,7 @@ import { UState } from "ts/re/usecases/UState";
 import { DEffect, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
-import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey } from "../data/DCommon";
+import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey, DRaceId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
 import { LPriceInfo, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
@@ -822,6 +822,10 @@ export class LEntity extends LObject
             return true;
         });
         return result;
+    }
+
+    public queryRaceIds(): readonly DRaceId[] {
+        return this.data().raceIds;
     }
 
     //----------------------------------------

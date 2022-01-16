@@ -132,7 +132,7 @@ export class UEffect {
         }
 
         if (data.conditions.raceId != 0) {
-            if (!entityData.raceIds.includes(data.conditions.raceId)) {
+            if (!target.queryRaceIds().includes(data.conditions.raceId)) {
                 return false;
             }
         }

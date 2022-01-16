@@ -90,3 +90,4 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
     const pow5 = player1.actualParam(REBasics.params.pow);
     expect(pow5).toBe(pow1);                // 特定スキルからの効果は受けない
 });
+

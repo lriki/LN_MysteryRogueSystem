@@ -520,6 +520,7 @@ export class SEffectApplyer {
         value = this.applyGuard(value, target);
         value = this.applyProficiency(value);
         value = this.applyDamageRate(value, paramEffect.paramId, paramEffect.elementId, target);
+        value = this.applyRaceRate(value, target);
         value = Math.round(value);
         return value;
     }
@@ -625,6 +626,52 @@ export class SEffectApplyer {
         }
     }
     
+    private getRacePointRate(count: number): number {
+        // 最初の印は等倍。以降は 0.1 倍。
+        // 原作ではかなり細かく設定されているが、ひとまずはこの仕様で。
+        // http://shiren2.lsx3.com/?%B0%F5
+        if (count == 0) return 1.0;
+        return 0.1;
+    }
+
+    private applyRaceRate(damage: number, target: LEntity): number {
+        const traits = this._effect.subject().traits(REBasics.traits.RaceRate);
+        if (traits.length > 0) {
+            const points: { value: number, count: number }[] = [];
+
+            // value (特効倍率) の大きい順にソートする
+            traits.sort((a, b) => {
+                return a.value - b.value;
+            });
+
+            // Race ごとに、特効割合を計算する
+            for (const t of traits) {
+                if (points[t.dataId] === undefined) {
+                    points[t.dataId] = {
+                        value: 0,
+                        count: 0,
+                    };
+                }
+                const p = points[t.dataId];
+                p.value += t.value * this.getRacePointRate(p.count);
+                p.count++;
+            }
+
+            let rate = 0;
+            let count = 0;
+            for (const raceId of target.queryRaceIds()) {
+                if (points[raceId] !== undefined) {
+                    rate += points[raceId].value;
+                    count++;
+                }
+            }
+            if (count > 0) {
+                return rate * damage;
+            }
+        }
+        return damage;
+    }
+
     // Game_Action.prototype.executeDamage
     // Game_Action.prototype.executeHpDamage
     private executeDamage(paramEffect: SParameterEffect, target: LEntity, value: number, result: LEffectResult): void {
