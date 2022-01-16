@@ -237,18 +237,33 @@ export class LUnitBehavior extends LBehavior {
                     .then(() => {
                         REGame.map._removeEntity(itemEntity);
 
+                        let picked = false;
                         const gold = itemEntity.findEntityBehavior(LGoldBehavior);
                         if (gold) {
                             inventory.gainGold(gold.gold());
                             cctx.postDestroy(itemEntity);
+                            picked = true;
                         }
                         else {
-                            inventory.addEntityWithStacking(itemEntity);
+                            if (inventory.isFully) {
+                                picked = false;
+                            }
+                            else {
+                                inventory.addEntityWithStacking(itemEntity);
+                                picked = true;
+                            }
                         }
                         
                         const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
-                        cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
-                        SSoundManager.playPickItem();
+                        if (picked) {
+                            cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
+                            SSoundManager.playPickItem();
+                        }
+                        else {
+                            cctx.postMessage(tr2("持ち物がいっぱいで拾えない。"));
+                            cctx.postMessage(tr2("%1 に乗った。").format(name));
+                        }
+
                         return SHandleCommandResult.Resolved;
                     });
                 }

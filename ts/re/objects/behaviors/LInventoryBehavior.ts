@@ -111,6 +111,7 @@ import { DEffect } from "ts/re/data/DEffect";
 export class LInventoryBehavior extends LBehavior {
     private _entities: LEntityId[] = [];
     private _gold: number = 0;
+    private _capacity: number = 20;
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LInventoryBehavior);
@@ -119,6 +120,18 @@ export class LInventoryBehavior extends LBehavior {
         b._entities = [];
         b._gold = this._gold;
         return b
+    }
+
+    public get capacity(): number {
+        return this._capacity;
+    }
+
+    public get isFully(): boolean {
+        return this._entities.length >= this._capacity;
+    }
+
+    public hasAnyItem(): boolean {
+        return this._entities.length > 0;
     }
 
     public entities(): LEntity[] {
@@ -136,13 +149,10 @@ export class LInventoryBehavior extends LBehavior {
         return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
     }
 
-    public hasAnyItem(): boolean {
-        return this._entities.length > 0;
-    }
-
     public addEntity(entity: LEntity) {
         assert(!entity.parentEntity());
         assert(!entity.isDestroyed());
+        assert(!this.isFully);
 
         const id = entity.entityId();
         assert(this._entities.find(x => x.equals(id)) === undefined);
@@ -153,6 +163,7 @@ export class LInventoryBehavior extends LBehavior {
 
     public addEntityWithStacking(entity: LEntity): void {
         assert(!entity.parentEntity());
+        assert(!this.isFully);
 
         for (const item of this.entities()) {
             if (item.checkStackable(entity)) {
