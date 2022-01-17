@@ -21,7 +21,7 @@ test("concretes.trap.Landmine.basic", () => {
     player1.setActualParam(REBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     // item
@@ -71,7 +71,7 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     REGame.world._transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 10, 11);
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

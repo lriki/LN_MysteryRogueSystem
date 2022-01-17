@@ -959,8 +959,8 @@ export class REDataManager
                                 entity.prefabId = prefab.id;
                                 RESetup.setupPrefab(prefab);
 
-                                if (entity.entity.key == "kEnemy_スライムA") {//kPrefab_スライムA
-                                    console.log("kEnemy_スライムA entity", entity);
+                                if (entity.entity.key == "kEntity_スライム_A") {//kPrefab_スライム_A
+                                    console.log("kEntity_スライム_A entity", entity);
                                 }
                             }
                             else {

@@ -249,7 +249,7 @@ test("Equipment.IdentifyUpgradeValue", () => {
     const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kゴブリンのこん棒").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "item1"));
 
     // 修正値+2
     item1.setActualParam(REBasics.params.upgradeValue, 2);

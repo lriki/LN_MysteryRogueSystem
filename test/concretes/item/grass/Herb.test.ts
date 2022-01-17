@@ -96,7 +96,7 @@ test("concretes.item.grass.Herb.player", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
@@ -152,7 +152,7 @@ test("concretes.item.grass.Herb.enemy", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる

@@ -55,7 +55,7 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
     const enemyhp1 = enemy1.actualParam(REBasics.params.hp);
 

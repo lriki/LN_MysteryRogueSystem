@@ -19,7 +19,7 @@ test("ai.CharacterAI.Moving1", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 19, 4);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 13, 5);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -57,7 +57,7 @@ test("ai.CharacterAI.AttackOnDiagonalEdge", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // enemy1 (Player の右下に配置)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の右に壁を作る
@@ -115,7 +115,7 @@ test("ai.CharacterAI.issue1", () => {
     const player1 = TestEnv.setupPlayer(floorId, 3, 13);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 13);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -142,7 +142,7 @@ test("ai.CharacterAI.Issue2", () => {
     const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 15, 4);
     enemy1.dir = 4;
 

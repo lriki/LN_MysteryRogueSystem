@@ -28,7 +28,7 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     inventory.addEntity(item1);
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy2"));
     const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミミックA").id, [REData.getState("kState_UTアイテム擬態").id], "enemy3"));
     REGame.world._transferEntity(enemy1, floorId, 19, 4);

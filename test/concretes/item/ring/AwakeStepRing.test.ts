@@ -30,7 +30,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
     expect(name.includes("+")).toBe(false); // Issue 修正確認。修正値は持たない
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 19, 4);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------

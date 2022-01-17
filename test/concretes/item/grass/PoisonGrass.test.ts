@@ -29,7 +29,7 @@ test("concretes.item.grass.PoisonGrass", () => {
     const player1Atk1 = player1.actualParam(REBasics.params.atk);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
     const enemy1Pow1 = enemy1.actualParam(REBasics.params.pow);

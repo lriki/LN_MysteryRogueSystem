@@ -33,7 +33,7 @@ export class RESetup {
 
     public static setupRace(data: DRace): void {
         switch (data.key) {
-            case "kRace_アンデッド族":
+            case "kRace_アンデッド系":
                 data.traits.push({code: REBasics.traits.ElementedRecoveryRate, dataId: 0, value: -1.0});
                 break;
         }
@@ -65,19 +65,19 @@ export class RESetup {
         }
 
         switch (entity.entity.key) {
-            case "kゴブリンのこん棒":
+            case "kEntity_ゴブリンのこん棒_A":
                 break;
-            case "kシルバーソード":
+            case "kEntity_シルバーソード_A":
                 break;
-            case "kドラゴンキラー":
+            case "kEntity_ドラゴンキラー_A":
                 entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
                 entity.upgradeMax = 99;
                 entity.idealParams[REBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
-                //entity.affestTraits.push({code: REBasics.traits.RaceRate, dataId: REData.getRace("kRace_ドラゴン族").id, value: 1.5});
+                //entity.affestTraits.push({code: REBasics.traits.RaceRate, dataId: REData.getRace("kRace_ドラゴン系").id, value: 1.5});
                 break;
-            case "kWeapon_ダミードラゴンキラー":
+            case "kEntity_ダミードラゴンキラー_A":
                 break;
             case "kレザーシールド":
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.5 });
@@ -328,7 +328,7 @@ export class RESetup {
                 effect1.rmmzAnimationId = 45;
 
                 const effect2 = new DEffect(entity.entity.key);
-                effect2.conditions.raceId = REData.getRace("kRace_ドレイン族").id;
+                effect2.conditions.raceId = REData.getRace("kRace_ドレイン系").id;
                 effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
                 effect2.rmmzAnimationId = 45;
                 mainEmittor.effectSet.effects.push(effect2);
@@ -370,7 +370,7 @@ export class RESetup {
                     // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
                     // 単に受け側で回復をダメージ扱いするだけでは足りない。
                     const effect2 = effect1.clone();
-                    effect2.conditions.raceId = REData.getRace("kRace_アンデッド族").id;
+                    effect2.conditions.raceId = REData.getRace("kRace_アンデッド系").id;
                     //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
                     mainEmittor.effectSet.effects.push(effect2);
                     effect2.rmmzAnimationId = 0;
@@ -1281,8 +1281,8 @@ export class RESetup {
                 break;
             case "kEnemy_ゾンビA":
                 //data.traits.push({ code: REBasics.traits.RecoverRate, dataId: 0, value: -1.0 });
-                // entity.raceIds.push(REData.getRace("kRace_ドレイン族").id);
-                // entity.raceIds.push(REData.getRace("kRace_アンデッド族").id);
+                // entity.raceIds.push(REData.getRace("kRace_ドレイン系").id);
+                // entity.raceIds.push(REData.getRace("kRace_アンデッド系").id);
                 break;
             case "kEnemy_プレゼンにゃーA":
                 //data.traits.push({ code: DBasics.traits.ItemDropRate, dataId: 0, value: 1.0 });

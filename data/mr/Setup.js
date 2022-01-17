@@ -1,8 +1,8 @@
 db.items = {
 
-    "kドラゴンキラー": {
+    "kEntity_ドラゴンキラー_A": {
         equipmentTraits: [
-            { code: "RaceRate", data: "kRace_ドラゴン族", value: 1.5 }
+            { code: "RaceRate", data: "kRace_ドラゴン系", value: 1.5 }
         ]
     },
 

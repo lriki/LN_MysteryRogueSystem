@@ -105,7 +105,7 @@ test("Trap.Enemy", () => {
     // TODO: 罠state:必ず発動
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -133,7 +133,7 @@ test("Trap.Attack", () => {
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
     const hp1 = enemy1.actualParam(REBasics.params.hp);
 

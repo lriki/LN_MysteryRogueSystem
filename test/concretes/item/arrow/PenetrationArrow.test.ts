@@ -28,8 +28,8 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     inventory.addEntity(item1);
     
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スライムA").id, [], "enemy2"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     REGame.world._transferEntity(enemy1, floorId, 15, 10);
     REGame.world._transferEntity(enemy2, floorId, 17, 10);
     const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);

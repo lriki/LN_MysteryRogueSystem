@@ -84,7 +84,7 @@ export class DSystem {
         this.states.seal = seal.id;
         this.states.plating = REData.getState("kState_System_Plating").id;
 
-        this.fallbackEnemyEntityId = REData.getEnemy("kEnemy_スライムA").entityId;
+        this.fallbackEnemyEntityId = REData.getEnemy("kEntity_スライム_A").entityId;
         this.fallbackItemEntityId = REData.getItem("kItem_雑草").id;
         this.fallbackGoldEntityId = REData.getItem("kItem_Gold").id;
         //this.fallbackTrapEntityId = REData.getItem("kItem_トラバサミ").id;

@@ -32,6 +32,7 @@ nav:
             - 1. サンプルプロジェクト: tutorial/1-first/1-project.md
             - 2. 基本概念: tutorial/1-first/2-basic.md
             - 3. ダンジョン攻略の流れ: tutorial/1-first/3-land.md
+            - 4. データベースの編集: tutorial/1-first/4-database.md
     - 実装:
         - index: implementation/index.md
         - アイテム:
