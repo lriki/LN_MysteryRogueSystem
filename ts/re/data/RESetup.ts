@@ -75,7 +75,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.upgradeValue] = 0;
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 entity.identifiedTiming = DIdentifiedTiming.Equip;
-                entity.affestTraits.push({code: REBasics.traits.RaceRate, dataId: REData.getRace("kRace_ドラゴン族").id, value: 1.5});
+                //entity.affestTraits.push({code: REBasics.traits.RaceRate, dataId: REData.getRace("kRace_ドラゴン族").id, value: 1.5});
                 break;
             case "kWeapon_ダミードラゴンキラー":
                 break;
@@ -1512,30 +1512,4 @@ export class RESetup {
 
 
 
-
-
-interface DSetupScriptDB_Item {
-
-}
-
-interface DSetupScriptDB {
-    items?: any,
-}
-
-export class DSetupScript {
-    public static load(script: string) {
-        let db: DSetupScriptDB | undefined = {};
-        eval(script);
-        if (db) {
-            console.log("db", db);
-            if (db.items) {
-                const aa = db.items["kワープリング"];
-                const abba = db.items["xxx"];
-                console.log("aa", aa);
-
-
-            }
-        }
-    }
-}
 

@@ -19,7 +19,7 @@ import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
-import { DSetupScript, RESetup } from './RESetup';
+import { RESetup } from './RESetup';
 import { DAttackElement } from './DAttackElement';
 import { DParamMessageValueSource, REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
@@ -27,6 +27,7 @@ import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
 import { DAnnotationReader } from './DAnnotationReader';
 import { DMetadataParser } from './DMetadataParser';
+import { DSetupScript } from './DSetupScript';
 
 
 declare global {  
@@ -882,25 +883,6 @@ export class REDataManager
         {
             REData.system.link(testMode);
 
-            // SystemState 等を参照したいので、System の Link の後で。
-            for (const skill of REData.skills) {
-                RESetup.setupDirectly_Skill(skill)
-            }
-            REData.skills.forEach(x => RESetup.linkSkill(x));
-
-            for (const item of REData.items) {
-                RESetup.setupDirectly_DItem(REData.entities[item]);
-            }
-
-            for (const id of REData.actors) {
-                if (id > 0) RESetup.setupActor(REData.entities[id]);
-            }
-
-            // Skill を参照するので、Skill の Link の後で。
-            for (const id of REData.items) {
-                RESetup.linkItem(REData.entities[id]);
-            }
-
             for (const state of REData.states) {
                 for (const key of state.stateGroupKeys) {
                     const id = REData.stateGroups.findIndex(x => x.key == key);
@@ -915,7 +897,7 @@ export class REDataManager
 
         }
 
-        this.loadDataFile("rogue/Pseudonymous.json", (obj) => REData.pseudonymous.setup(obj));
+        this.loadDataFile("mr/Pseudonymous.json", (obj) => REData.pseudonymous.setup(obj));
 
         // Load Prefabs
         this.beginLoadPrefabs();
@@ -1034,8 +1016,33 @@ export class REDataManager
     }
 
     public static beginLoadSetupScript(): void {
-        this.loadTextFile("rogue/Setup.js", (obj) => {
-            DSetupScript.load(obj);
+        this.loadTextFile("mr/Setup.js", (obj) => {
+            const scriptDB = new DSetupScript(obj);
+
+            
+            // SystemState 等を参照したいので、System の Link の後で。
+            for (const skill of REData.skills) {
+                RESetup.setupDirectly_Skill(skill)
+            }
+            REData.skills.forEach(x => RESetup.linkSkill(x));
+
+            for (const item of REData.items) {
+                scriptDB.setupItem(REData.entities[item]);
+            }
+
+            for (const item of REData.items) {
+                RESetup.setupDirectly_DItem(REData.entities[item]);
+            }
+
+            for (const id of REData.actors) {
+                if (id > 0) RESetup.setupActor(REData.entities[id]);
+            }
+
+            // Skill を参照するので、Skill の Link の後で。
+            for (const id of REData.items) {
+                RESetup.linkItem(REData.entities[id]);
+            }
+
         });
     }
 
