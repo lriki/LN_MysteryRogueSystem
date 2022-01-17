@@ -98,7 +98,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const count = 20;
+    const count = inventory.capacity - 1;
     const items = [];
     for (let i = 0; i < count; i++) {
         const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_レインフォーススクロール").id, [], "item1"));

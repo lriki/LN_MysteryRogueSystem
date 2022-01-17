@@ -54,20 +54,20 @@ export class RESetup {
     // そのためここで直定義して一通り作ってみた後、再検討する。
     public static setupDirectly_DItem(entity: DEntity): void{
         const data = entity.item();
+
+        switch (entity.entity.kindId) {
+            case REBasics.entityKinds.WeaponKindId:
+                this.setupWeaponCommon(entity);
+                break;
+            case REBasics.entityKinds.ShieldKindId:
+                this.setupShieldCommon(entity);
+                break;
+        }
+
         switch (entity.entity.key) {
             case "kゴブリンのこん棒":
-                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
-                entity.upgradeMax = 99;
-                entity.idealParams[REBasics.params.upgradeValue] = 0;
-                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
-                entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kシルバーソード":
-                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
-                entity.upgradeMax = 99;
-                entity.idealParams[REBasics.params.upgradeValue] = 0;
-                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
-                entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kドラゴンキラー":
                 entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
@@ -78,20 +78,12 @@ export class RESetup {
                 entity.affestTraits.push({code: REBasics.traits.RaceRate, dataId: REData.getRace("kRace_ドラゴン族").id, value: 1.5});
                 break;
             case "kWeapon_ダミードラゴンキラー":
-                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
-                entity.upgradeMax = 99;
-                entity.idealParams[REBasics.params.upgradeValue] = 0;
-                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
-                entity.identifiedTiming = DIdentifiedTiming.Equip;
                 break;
             case "kレザーシールド":
-                entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
-                entity.upgradeMax = 99;
-                entity.idealParams[REBasics.params.upgradeValue] = 0;
-                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
-                entity.identifiedTiming = DIdentifiedTiming.Equip;
                 entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.5 });
                 entity.selfTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.upgradeValue, value: 0.0 });
+                break;
+            case "kアイアンシールド":
                 break;
             case "kポイズンシールド":
                 entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃").id, value: 0 });
@@ -1425,6 +1417,22 @@ export class RESetup {
                 data.exclusive = true;
                 break;
         }
+    }
+
+    private static setupWeaponCommon(entity: DEntity): void {
+        entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
+        entity.upgradeMax = 99;
+        entity.idealParams[REBasics.params.upgradeValue] = 0;
+        entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+        entity.identifiedTiming = DIdentifiedTiming.Equip;
+    }
+
+    private static setupShieldCommon(entity: DEntity): void {
+        entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
+        entity.upgradeMax = 99;
+        entity.idealParams[REBasics.params.upgradeValue] = 0;
+        entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
+        entity.identifiedTiming = DIdentifiedTiming.Equip;
     }
 
     private static setupRingCommon(entity: DEntity): void {
