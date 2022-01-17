@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "system.Inventory.Fully"
+                "-t", "concretes.item.scroll.ReinforcementScroll.Weapon.Up3"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

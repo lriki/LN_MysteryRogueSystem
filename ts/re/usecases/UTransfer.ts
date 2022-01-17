@@ -106,9 +106,6 @@ export class UTransfer {
 
                 const exitRMMZMapId = floorId.landData().exitRMMZMapId;
                 assert(exitRMMZMapId > 0);
-                
-                console.log("踏破！");
-                console.log("exitRMMZMapId", exitRMMZMapId);
 
                 const newFloorId = LFloorId.makeByRmmzNormalMapId(exitRMMZMapId)
 

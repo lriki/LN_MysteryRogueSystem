@@ -19,7 +19,7 @@ export class RESetup {
     public static setupPrefab(data: DPrefab): void {
         
         switch (data.key) {
-            case "pActor1":
+            case "kPrefab_Actor_A":
                 data.downImage.characterName = "Damage1";
                 data.downImage.characterIndex = 0;
                 data.downImage.direction = 4;

@@ -39,13 +39,10 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(thi
 });
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
-    console.log("MR-ProceedFloorBackword");
     const entity = REGame.camera.focusedEntity();
     if (entity) {
         const floorId = entity.floorId;
         const newFloorNumber = floorId.floorNumber() - 1;
-
-        console.log("newFloorNumber", newFloorNumber);
 
         // 最初のフロアから戻った？
         if (newFloorNumber <= 0) {

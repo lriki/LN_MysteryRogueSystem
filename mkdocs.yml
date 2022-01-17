@@ -1,4 +1,4 @@
-site_name: My Docs
+site_name: RPGツクールMV 不思議のダンジョンプラグイン
 docs_dir: mkdocs
 site_dir: mksite
 
@@ -20,14 +20,18 @@ theme:
         logo: material/school
         repo: fontawesome/brands/git-alt
     #favicon: favicon.png
-    
+
+extra_css:
+    - stylesheets/extra.css
+
 nav:
     - Home: index.md
-    - 入門:
-        - index: tutorial/index.md
-        - 1: tutorial/2-Tutorial.md
-        - test:
-            - index: tutorial/index.md
+    - 入門: 
+        - index:  tutorial/index.md
+        - 入門チュートリアル:
+            - 1. サンプルプロジェクト: tutorial/1-first/1-project.md
+            - 2. 基本概念: tutorial/1-first/2-basic.md
+            - 3. ダンジョン攻略の流れ: tutorial/1-first/3-land.md
     - 実装:
         - index: implementation/index.md
         - アイテム:
