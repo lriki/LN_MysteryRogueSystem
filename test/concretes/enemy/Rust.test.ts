@@ -52,6 +52,6 @@ test("concretes.enemy.Rust", () => {
     const weapon1_UP2 = weapon1.actualParam(REBasics.params.upgradeValue);
     const shield1_UP2 = shield1.actualParam(REBasics.params.upgradeValue);
 
-    expect(weapon1_UP2 == weapon1_UP1 - 1).toBe(true);
-    expect(shield1_UP2 == shield1_UP1 - 1).toBe(true);
+    expect(weapon1_UP2).toBe(weapon1_UP1 - 1);
+    expect(shield1_UP2).toBe(shield1_UP1 - 1);
 });

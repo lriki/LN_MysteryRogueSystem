@@ -1506,13 +1506,28 @@ export class RESetup {
 
 
 
-interface DSetupScriptDB {
+interface DSetupScriptDB_Item {
 
+}
+
+interface DSetupScriptDB {
+    items?: any,
 }
 
 export class DSetupScript {
     public static load(script: string) {
-        
+        let db: DSetupScriptDB | undefined = {};
+        eval(script);
+        if (db) {
+            console.log("db", db);
+            if (db.items) {
+                const aa = db.items["kワープリング"];
+                const abba = db.items["xxx"];
+                console.log("aa", aa);
+
+
+            }
+        }
     }
 }
 
