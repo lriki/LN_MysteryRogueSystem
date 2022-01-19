@@ -23,7 +23,7 @@ test("concretes.item.arrow.IronArrow", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアイアンアロー").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // enemy1
@@ -47,4 +47,5 @@ test("concretes.item.arrow.IronArrow", () => {
     const hp = enemy1.actualParam(REBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
 });
+
 

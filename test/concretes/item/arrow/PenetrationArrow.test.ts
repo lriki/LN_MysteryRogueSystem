@@ -23,7 +23,7 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kシルバーアロー").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_シルバーアロー_A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
     

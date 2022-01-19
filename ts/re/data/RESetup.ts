@@ -135,26 +135,26 @@ export class RESetup {
             case "kきれいな指輪":
                 this.setupRingCommon(entity);
                 break;
-            case "kItem_WoodArrow":
+            case "kEntity_ウッドアロー_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId);
                 break;
-            case "kアイアンアロー":
+            case "kEntity_アイアンアロー_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId);
                 break;
-            case "kシルバーアロー":
+            case "kEntity_シルバーアロー_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.selfTraits.push({code: REBasics.traits.PenetrationItem, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId);
                 break;
-            case "kItem_毒矢":
+            case "kEntity_毒矢_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
@@ -843,14 +843,14 @@ export class RESetup {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kItem_WoodArrow";
+                emittor.scope.projectilePrefabKey = "kEntity_ウッドアロー_A";
                 break;
             }
             case "kItem_毒矢の罠": {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kItem_毒矢";
+                emittor.scope.projectilePrefabKey = "kEntity_毒矢_A";
                 emittor.effectSet.effects[0].parameterQualifyings.push(
                     new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
                 // emittor.effectSet.effects[0].parameterQualifyings.push({
@@ -1082,7 +1082,7 @@ export class RESetup {
             case "kSkill_射撃_矢":
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kItem_WoodArrow";
+                emittor.scope.projectilePrefabKey = "kEntity_ウッドアロー_A";
                 break;
             case "kSkill_足つかみ":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
