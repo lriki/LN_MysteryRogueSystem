@@ -5,6 +5,18 @@ db.items = {
             { code: "RaceRate", data: "kRace_ドラゴン系", value: 1.5 }
         ]
     },
+    "kアウェイクリング": {
+        equipmentTraits: [
+            { code: "AwakeStep" }
+        ]
+    },
+    "kアウェイクガードリング": {
+        equipmentTraits: [
+            { code: "SilentStep" }
+        ]
+    },
+
+    
 
     // "kアイアンシールド": {
     //     // params: {

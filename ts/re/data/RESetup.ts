@@ -80,14 +80,14 @@ export class RESetup {
             case "kEntity_ダミードラゴンキラー_A":
                 break;
             case "kレザーシールド":
-                entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.5 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.5 });
                 entity.selfTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.upgradeValue, value: 0.0 });
                 break;
             case "kアイアンシールド":
                 break;
             case "kポイズンシールド":
-                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃").id, value: 0 });
-                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃").id, value: 0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
                 break;
             case "kアウェイクリング":
                 this.setupRingCommon(entity);
@@ -99,38 +99,38 @@ export class RESetup {
                 break;
             case "kワープリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 1.0 / 16.0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 1.0 / 16.0 });
                 break;
             case "kスリープガードリング":
                 this.setupRingCommon(entity);
                 break;
             case "kハングリーリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 2.0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 2.0 });
                 break;
             case "kポイズンガードリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.pow, value: 0.0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.pow, value: 0.0 });
                 break;
             case "kビジブルリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
                 break;
             case "kインプリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_レベルダウン").id, value: 0 });
-                entity.affestTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_レベルダウン").id, value: 0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
                 break;
             case "kアウェイクガードリング":
                 this.setupRingCommon(entity);
                 break;
             case "kトラップガードリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.DisableTrap, dataId: 0, value: 0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.DisableTrap, dataId: 0, value: 0 });
                 break;
             case "kハングリーガードリング":
                 this.setupRingCommon(entity);
-                entity.affestTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
+                entity.equipmentTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
                 break;
             case "kきれいな指輪":
                 this.setupRingCommon(entity);

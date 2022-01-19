@@ -7,8 +7,8 @@ import { REData } from "./REData";
 
 interface DSetupScriptDB_Trait {
     code: string;
-    data: string;
-    value: number;
+    data?: string;
+    value?: number;
 }
 
 interface DSetupScriptDB_Item {
@@ -46,14 +46,19 @@ export class DSetupScript {
                     const trait: IDataTrait = {
                         code: traitData.id,
                         dataId: 0,
-                        value: t.value,
+                        value: t.value ?? 0,
                     };
-                    switch (traitData.id) {
-                        case REBasics.traits.RaceRate:
-                            trait.dataId = REData.getRace(t.data).id;
-                            break;
+
+                    // Convert data
+                    if (t.data) {
+                        switch (traitData.id) {
+                            case REBasics.traits.RaceRate:
+                                trait.dataId = REData.getRace(t.data).id;
+                                break;
+                        }
                     }
-                    entity.affestTraits.push(trait);
+
+                    entity.equipmentTraits.push(trait);
                 }
             }
         }

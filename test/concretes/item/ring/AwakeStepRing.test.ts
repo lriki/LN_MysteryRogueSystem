@@ -46,17 +46,6 @@ test("concretes.item.ring.AwakeStepRing", () => {
     // 装備されていること。
     const equipmens = player1.getEntityBehavior(LEquipmentUserBehavior);
     expect(equipmens.isEquipped(ring1)).toBe(true);
-    
-    // //----------------------------------------------------------------------------------------------------
-
-    // // [はずす]
-    // RESystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, ring1).withConsumeAction());
-    // RESystem.dialogContext.activeDialog().submit();
-    
-    // RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
-
-    // // 外れていること。
-    // expect(equipmens.isEquipped(ring1)).toBe(false);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -75,6 +64,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
         enemy1.addState(stateId);
     }
 
+    
 
     // for (let i = 0; i < 100; i++) {
     //     // 移動。部屋に入る

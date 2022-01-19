@@ -196,7 +196,7 @@ export class DEntity {
     selfTraits: IDataTrait[];
 
     /** 装備したときに、装備者に対して適用する Trait */
-    affestTraits: IDataTrait[];
+    equipmentTraits: IDataTrait[];
 
     /** 持っているだけで affestTraits の効果があるか */
     isTraitCharmItem: boolean;
@@ -265,7 +265,7 @@ export class DEntity {
         this.classId = 0;
         this.raceIds = [];
         this.selfTraits = [];
-        this.affestTraits = [];
+        this.equipmentTraits = [];
         this.isTraitCharmItem = false;
         this.factionId = 0;//REData.system.factions.neutral;
         this.idealParams = [];
@@ -298,11 +298,11 @@ export class DEntity {
     }
 
     public equippedTraits(): readonly IDataTrait[] {
-        return (!this.isTraitCharmItem) ? this.affestTraits : [];
+        return (!this.isTraitCharmItem) ? this.equipmentTraits : [];
     }
 
     public charmedTraits(): readonly IDataTrait[] {
-        return (this.isTraitCharmItem) ? this.affestTraits : [];
+        return (this.isTraitCharmItem) ? this.equipmentTraits : [];
     }
 
     public addReaction(actionId: DActionId, emittor?: DEmittor): void {
