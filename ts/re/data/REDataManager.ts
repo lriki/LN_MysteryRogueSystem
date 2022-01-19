@@ -448,7 +448,7 @@ export class REDataManager
                 if (x) {
                     const meta = DMetadataParser.parse(x.meta);
 
-                    if (meta.kind == "StateGroup") {
+                    if (meta.type == "StateGroup") {
                         const stateGroup = new DStateGroup(REData.stateGroups.length);
                         stateGroup.name = x.name;
                         stateGroup.key = meta.key;
@@ -487,7 +487,7 @@ export class REDataManager
         // Import Abilities
         {
             REData.abilities = $dataStates
-                .filter(state => !state || (state.meta && state.meta["MR-Kind"] == "Ability"))
+                .filter(state => !state || (state.meta && state.meta["MR-Type"] == "Ability"))
                 .map((state, index) => {
                     if (state) {
                         const ability: DAbility = {
@@ -958,10 +958,6 @@ export class REDataManager
                             if (prefab) {
                                 entity.prefabId = prefab.id;
                                 RESetup.setupPrefab(prefab);
-
-                                if (entity.entity.key == "kEntity_スライム_A") {//kPrefab_スライム_A
-                                    console.log("kEntity_スライム_A entity", entity);
-                                }
                             }
                             else {
                                 throw new Error(`Unknown Prefab "${entity.entity.meta_prefabName}".`);

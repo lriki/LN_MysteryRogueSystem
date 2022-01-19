@@ -7,6 +7,8 @@ import { REData } from "./REData";
 export class DMetadata {
     key: string;
 
+    type: string;
+
     kind: string;
 
     capacity: string | undefined;
@@ -21,6 +23,7 @@ export class DMetadata {
 
     public constructor() {
         this.key = "";
+        this.type = "";
         this.kind = "";
         this.behaviors = [];
         this.traits = [];
@@ -33,6 +36,11 @@ export class DMetadataParser {
     public static parse(meta: any | undefined): DMetadata {
         const result = new DMetadata();
         if (!meta) return result;
+
+        const type = meta["MR-Type"];
+        if (type) {
+            result.type = type.trim();
+        }
 
         const kind = meta["MR-Kind"];
         if (kind) {
