@@ -54,7 +54,7 @@ export class DSkill {
     public parseMetadata(meta: any | undefined): void {
         if (!meta) return;
         this.key = (meta["MR-Key"] ?? "").trim();
-        this.kind = (meta["MR-Kind"] ?? "").trim();
+        this.kind = (meta["MR-Category"] ?? "").trim();
     }
 
     public emittor(): DEmittor {

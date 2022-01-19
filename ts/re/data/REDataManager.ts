@@ -515,7 +515,7 @@ export class REDataManager
         $dataClasses.forEach(x => {
             if (x) {
                 const meta = DMetadataParser.parse(x.meta);
-                if (meta.kind == "Race") {
+                if (meta.type == "Race") {
                     const race = REData.newRace();
                     race.key = meta.key;
                     race.name = x.name;

@@ -56,7 +56,7 @@ export function DEntityProperties_Default(): DEntityProperties {
 /** @deprecated DMetadataParser */
 export function parseMetaToEntityProperties(meta: any | undefined): DEntityProperties {
     if (meta) {
-        const kindName = meta["MR-Kind"];
+        const kindName = meta["MR-Category"];
         const kind = kindName ? REData.findEntityKind(kindName.trim()) : undefined;
         const data: DEntityProperties = {
             key: (meta["MR-Key"] ?? "").trim(),

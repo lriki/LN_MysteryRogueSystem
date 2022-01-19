@@ -11,7 +11,7 @@
 [アクター] を開き、[メモ] を確認してください。次のような記述が見つかるはずです。
 
 ```
-<MR-Kind: Actor>
+<MR-Category: Actor>
 <MR-Key: kActor_A>
 <MR-Prefab: kPrefab_Actor_A>
 ```

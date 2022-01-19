@@ -42,7 +42,7 @@ export class DMetadataParser {
             result.type = type.trim();
         }
 
-        const kind = meta["MR-Kind"];
+        const kind = meta["MR-Category"];
         if (kind) {
             result.kind = kind.trim();
         }
