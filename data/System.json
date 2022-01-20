@@ -118,7 +118,7 @@
         "pitch": 100,
         "volume": 90
     },
-    "editMapId": 45,
+    "editMapId": 92,
     "elements": [
         "",
         "物理",
@@ -344,9 +344,9 @@
             "volume": 90
         }
     ],
-    "startMapId": 45,
-    "startX": 13,
-    "startY": 12,
+    "startMapId": 92,
+    "startX": 1,
+    "startY": 0,
     "switches": [
         "",
         "[Test]BOSSクリア",
@@ -541,10 +541,10 @@
     },
     "variables": [
         "",
-        "RE-ExitResult",
-        "RE-ProceedDirection",
+        "MR-LandExitResult",
+        "ProceedDirection",
         "MR-Result",
-        "",
+        "MR-LandExitResult",
         "",
         "",
         "",
@@ -562,7 +562,7 @@
         "",
         ""
     ],
-    "versionId": 59453533,
+    "versionId": 45085375,
     "victoryMe": {
         "name": "Victory1",
         "pan": 0,

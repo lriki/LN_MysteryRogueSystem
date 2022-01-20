@@ -392,6 +392,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     public keeper: boolean;
     //public entityId: DEntityId;
     //public stateIds: DStateId[];
+    public xName: string | undefined;//
 
     public constructor() {
         super();
@@ -448,6 +449,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.gold = entityMetadata.gold;
         entity.overrideEvent = entityMetadata.overrideEvent ? event : undefined;
         entity.keeper = entityMetadata.keeper ?? false;
+        entity.xName = entityMetadata.data;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);
