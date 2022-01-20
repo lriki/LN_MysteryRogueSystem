@@ -29,7 +29,7 @@ nav:
     - 入門: 
         - index:  tutorial/index.md
         - 入門チュートリアル:
-            - 1. サンプルプロジェクト: tutorial/1-first/1-project.md
+            - 1. データの設定方法: tutorial/1-first/1-project.md
             - 2. 基本概念: tutorial/1-first/2-basic.md
             - 3. ダンジョン攻略の流れ: tutorial/1-first/3-land.md
             - 4. データベースの編集: tutorial/1-first/4-database.md
