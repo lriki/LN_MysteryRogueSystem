@@ -128,13 +128,13 @@ export class SEntityFactory {
     }
 
     public static newBasicExitPoint(): LEntity {
-        const e = REGame.world.spawnEntity(REData.getEntity("kObject_ExitPoint_A").id);
+        const e = REGame.world.spawnEntity(REData.getEntity("kEntity_ExitPoint_A").id);
         this.buildExitPoint(e);
         return e;
     }
 
     // public static newEntryPoint(entityId: DEntityId): LEntity {
-    //     assert(REData.getEntity("kObject_EntryPoint_A").id == entityId);
+    //     assert(REData.getEntity("kEntity_EntryPoint_A").id == entityId);
     //     const e = REGame.world.spawnEntity(entityId);
     //     this.buildEntryPoint(e);
     //     return e;
@@ -146,8 +146,8 @@ export class SEntityFactory {
     }
 
     // public static newExitPoint(entityId: DEntityId): LEntity {
-    //     assert(REData.getEntity("kObject_ExitPoint_A").id == entityId);
-    //     const e = REGame.world.spawnEntity(REData.getEntity("kObject_ExitPoint_A").id);
+    //     assert(REData.getEntity("kEntity_ExitPoint_A").id == entityId);
+    //     const e = REGame.world.spawnEntity(REData.getEntity("kEntity_ExitPoint_A").id);
     //     this.buildExitPoint(e);
     //     return e;
     // }

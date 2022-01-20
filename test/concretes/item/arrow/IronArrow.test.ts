@@ -21,6 +21,7 @@ test("concretes.item.arrow.IronArrow", () => {
     // player1 配置
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "item1"));
