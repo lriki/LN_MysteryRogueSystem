@@ -3,7 +3,6 @@ import { LandExitResult, REData } from "ts/re/data/REData";
 import { SWarehouseDialog } from "ts/re/system/dialogs/SWarehouseDialog";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
-import { paramLandExitResultVariableId } from "ts/re/PluginParameters";
 import { RESystem } from "ts/re/system/RESystem";
 import { REVisual } from "ts/re/visual/REVisual";
 import { UTransfer } from "ts/re/usecases/UTransfer";
@@ -46,7 +45,7 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(th
 
         // 最初のフロアから戻った？
         if (newFloorNumber <= 0) {
-            $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Escape / 100));
+            RESystem.integration.onSetLandExitResult(LandExitResult.Escape);
 
             const exitRMMZMapId = floorId.landData().exitRMMZMapId;
             assert(exitRMMZMapId > 0);

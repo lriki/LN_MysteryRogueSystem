@@ -30,9 +30,6 @@ export var paramRandomMapDefaultHeight = 48;
 // エネミーのランダム出現時、自分の周囲に生成しないようにする範囲
 export var paramEnemySpawnInvalidArea  = 12;
 
-// 
-export var paramLandExitResultVariableId  = 1;
-
 export var paramPowerToAtk = true;
 
 // 見えない罠を踏んだ時の発動率 (%)

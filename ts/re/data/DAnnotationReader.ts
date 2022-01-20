@@ -219,7 +219,7 @@ export class DAnnotationReader {
     }
 
     public static readEntityMetadataFromPage(page: IDataMapEventPage): RmmzEventEntityMetadata | undefined {
-        const block = this.findFirstAnnotationFromPage("@MR-Entity", page);
+        const block = this.findFirstAnnotationFromPage("@MR-Spawner", page);
         if (!block) return undefined;
         let rawData: RMMZEventRawMetadata | undefined;
         eval(`rawData = ${block}`);

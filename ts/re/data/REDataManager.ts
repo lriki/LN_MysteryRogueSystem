@@ -417,6 +417,8 @@ export class REDataManager
 
         REBasics.variables = {
             result: $dataSystem.variables.findIndex(x => x == "MR-Result"),
+            landExitResult: $dataSystem.variables.findIndex(x => x == "MR-LandExitResult"),
+            landExitResultDetail: $dataSystem.variables.findIndex(x => x == "MR-LandExitResultDetail"),
         };
 
         REBasics.elements = {

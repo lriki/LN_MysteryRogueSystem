@@ -14,6 +14,8 @@ import { DFactionId } from "./REData";
 
 export interface DBasicVariables {
     result: number,
+    landExitResult: number,
+    landExitResultDetail: number,
 }
 
 export interface DBasicElements {

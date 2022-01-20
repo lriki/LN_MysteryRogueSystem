@@ -217,7 +217,7 @@ export class DState {
     public import(data: IDataState): void {
         if (data.meta) {
             {
-                const raws = data.meta["RE-StateGroup"];
+                const raws = data.meta["MR-StateGroup"];
                 if (raws) {
                     this.stateGroupKeys = (raws instanceof Array) ? raws : [raws];
                 }

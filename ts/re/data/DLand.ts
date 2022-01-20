@@ -342,7 +342,7 @@ export class DLand {
             const x = event.x;
             const y = event.y;
 
-            // @MR-Entity
+            // @MR-Spawner
             const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
@@ -432,7 +432,7 @@ export class DLand {
             const x = event.x;
             const y = event.y;
 
-            // @MR-Entity
+            // @MR-Spawner
             const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);

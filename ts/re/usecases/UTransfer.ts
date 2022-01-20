@@ -5,7 +5,6 @@ import { REDataManager } from "ts/re/data/REDataManager";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
-import { paramLandExitResultVariableId } from "ts/re/PluginParameters";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { createNoSubstitutionTemplateLiteral } from "typescript";
@@ -102,7 +101,7 @@ export class UTransfer {
 
             // 最後のフロアを踏破した？
             if (newFloorNumber > REGame.map.land2().maxFloorNumber()) {
-                $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(LandExitResult.Goal / 100));
+                RESystem.integration.onSetLandExitResult(LandExitResult.Goal);
 
                 const exitRMMZMapId = floorId.landData().exitRMMZMapId;
                 assert(exitRMMZMapId > 0);

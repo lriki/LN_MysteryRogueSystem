@@ -11,12 +11,12 @@ import { LMap } from "ts/re/objects/LMap";
 import { VMapEditor } from "./VMapEditor";
 import { SDialogContext } from "ts/re/system/SDialogContext";
 import { SDialog } from "ts/re/system/SDialog";
-import { paramLandExitResultVariableId } from "ts/re/PluginParameters";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { REGame } from "../objects/REGame";
 import { FloorRestartSequence } from "./FloorRestartSequence";
+import { REBasics } from "../data/REBasics";
 
 export class RMMZIntegration extends SIntegration {
 
@@ -195,7 +195,8 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onSetLandExitResult(result: LandExitResult): void {
-        $gameVariables.setValue(paramLandExitResultVariableId, Math.floor(result / 100));
+        $gameVariables.setValue(REBasics.variables.landExitResultDetail, result);
+        $gameVariables.setValue(REBasics.variables.landExitResult, Math.floor(result / 100));
     }
 
 }
