@@ -219,7 +219,8 @@ export class DState {
             {
                 const raws = data.meta["MR-StateGroup"];
                 if (raws) {
-                    this.stateGroupKeys = (raws instanceof Array) ? raws : [raws];
+                    const keys: string[] = (raws instanceof Array) ? raws : [raws];
+                    this.stateGroupKeys = keys.map(x => x.trim());
                 }
             }
         }

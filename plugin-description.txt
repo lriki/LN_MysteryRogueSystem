@@ -1,12 +1,12 @@
 //=============================================================================
 // LN_MysteryRogueSystem.js
 // ----------------------------------------------------------------------------
-// Copyright (c) 2021 lriki
+// Copyright (c) 2022 lriki
 // This software is released under the MIT License.
 // http://opensource.org/licenses/mit-license.php
 // ----------------------------------------------------------------------------
-// [GitHub] : https://github.com/lriki/LN_MysteryRogueSystem
-// [Twitter]: https://twitter.com/lriki8
+// [GitHub]  : https://github.com/lriki/LN_MysteryRogueSystem
+// [Twitter] : https://twitter.com/lriki8
 //=============================================================================
 
 /*:ja
