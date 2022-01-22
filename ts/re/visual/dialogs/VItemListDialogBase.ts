@@ -28,6 +28,26 @@ export class VItemListDialogBase extends VDialog {
         // CommandWindow は最初は空。表示するとき、複数選択かどうかなどを考慮して Command を作る。
         this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
         this.addWindow(this._commandWindow);
+
+        // Layout
+        {
+            const itemsParPage = 12;
+            const contentHeight = this._itemListWindow.itemHeight() * itemsParPage;
+            this._itemListWindow.height = contentHeight + this._itemListWindow.padding * 2;
+            this._itemListWindow.refresh();
+
+            this._itemListWindow.y = Graphics.boxHeight - this._itemListWindow.height;
+
+            // this._itemListWindow.updatePlacement();
+            // this._itemListWindow.updateBackground();
+            this._itemListWindow.createContents();
+            this._itemListWindow.refresh();
+            // console.log("this._itemListWindow.itemHeight()", this._itemListWindow.itemHeight());
+            // console.log("this._itemListWindow.contentsHeight()", this._itemListWindow.contentsHeight());
+            // console.log("this._itemListWindow.itemRect()", this._itemListWindow.itemRect(0));
+            // console.log("this._itemListWindow.itemRectWithPadding()", this._itemListWindow.itemRectWithPadding(0));
+            ;
+        }
     }
     
     onCreate() {
