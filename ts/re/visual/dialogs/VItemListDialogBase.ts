@@ -49,6 +49,7 @@ export class VItemListDialogBase extends VDialog {
             this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
 
             this._itemListWindow.deactivate();
+            this._commandWindow.refresh();
             this._commandWindow.openness = 255;
             this._commandWindow.activate();
         }
