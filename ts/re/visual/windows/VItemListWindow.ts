@@ -31,7 +31,7 @@ export class VItemListWindow extends Window_Selectable {
     }
 
     public get maxPageCount(): number {
-        return Math.max(Math.floor(this._entities.length / this.itemsParPage) + 1, 0);
+        return Math.max(Math.floor((this._entities.length - 1) / this.itemsParPage) + 1, 0);
     }
 
     public setInventory(inventory: LInventoryBehavior): void {
