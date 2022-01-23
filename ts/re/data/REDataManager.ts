@@ -7,7 +7,7 @@ import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState"
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DFloorMonsterHouse, DLand, DMapId } from "./DLand";
+import { DFloorMonsterHouse, DLand, DLandIdentificationLevel, DMapId } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
@@ -759,7 +759,18 @@ export class REDataManager
         // 最初に Land を作る
         REData.lands = [];
         REData.lands.push(new DLand(0)); // [0] dummy
-        REData.lands.push(new DLand(1)); // [1] REシステム管理外の RMMZ マップを表す Land
+
+        
+        const defaltLand = new DLand(1);
+        REData.lands.push(defaltLand); // [1] REシステム管理外の RMMZ マップを表す Land
+        
+        {
+            const level = DLandIdentificationLevel.Entity;
+            for (const kind of REData.entityKinds) {
+                defaltLand.identifiedKinds[kind.id] = level;
+            }
+        }
+
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info && info.name?.startsWith("MR-Land:")) {

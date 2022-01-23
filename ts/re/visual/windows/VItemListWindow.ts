@@ -1,3 +1,4 @@
+import { assert } from "ts/re/Common";
 import { REData } from "ts/re/data/REData";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -5,24 +6,35 @@ import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { UName } from "ts/re/usecases/UName";
 
-
+export class VItemListWindowItem {
+    public entity: LEntity;
+    public selectedIndex: number | undefined;
+    
+    constructor(item: LEntity) {
+        this.entity = item;
+        this.selectedIndex = undefined;
+    }
+}
 
 /**
  */
 export class VItemListWindow extends Window_Selectable {
     private _inventory: LInventoryBehavior | undefined;;
     private _equipmentUser: LEquipmentUserBehavior | undefined;
-    private _entities: LEntity[];
+    private _items: VItemListWindowItem[];
     private _pagenationEnabled: boolean;
     private _currentPageIndex: number;
     private _leftArrowSprite: Sprite | undefined;
     private _rightArrowSprite: Sprite | undefined;
 
+    public multipleSelectionEnabled: boolean;
+
     constructor(rect: Rectangle) {
         super(rect);
-        this._entities = [];
+        this._items = [];
         this._pagenationEnabled = true;
         this._currentPageIndex = 0;
+        this.multipleSelectionEnabled = false;
         this.createPagenationArrowSprites();
     }
 
@@ -31,12 +43,12 @@ export class VItemListWindow extends Window_Selectable {
     }
 
     public get maxPageCount(): number {
-        return Math.max(Math.floor((this._entities.length - 1) / this.itemsParPage) + 1, 0);
+        return Math.max(Math.floor((this._items.length - 1) / this.itemsParPage) + 1, 0);
     }
 
     public setInventory(inventory: LInventoryBehavior): void {
         this._inventory = inventory;
-        this._entities = inventory.entities();
+        this._items = inventory.entities().map(x => new VItemListWindowItem(x));
         this.refresh();
     }
 
@@ -44,12 +56,33 @@ export class VItemListWindow extends Window_Selectable {
         this._equipmentUser = equipmentUser;
     }
     
-    selectedItem(): LEntity {
-        return this.itemAt(this.index());
+    public selectedItem(): LEntity {
+        return this.itemAt(this.index()).entity;
     }
 
-    selectedItems(): [LEntity] {
-        return [this.itemAt(this.index())];
+    public getSelectedItems(): LEntity[] {
+        const result: VItemListWindowItem[] = [];
+        
+        // まずは複数選択状態の Item を探してみる
+        for (const item of this._items) {
+            if (item.selectedIndex !== undefined) {
+                result.push(item);
+            }
+        }
+
+        if (result.length == 0) {
+            // もしひとつも選択状態ないなら、カーソル位置の Item を返す
+            return [this.itemAt(this.index()).entity];
+        }
+        else {
+            // 選択された順で返す
+            const items = result.sort((a, b) => {
+                assert(a.selectedIndex !== undefined);
+                assert(b.selectedIndex !== undefined);
+                return a.selectedIndex - b.selectedIndex;
+            });
+            return items.map(x => x.entity);
+        }
     }
 
     // override
@@ -61,10 +94,10 @@ export class VItemListWindow extends Window_Selectable {
     maxItems(): number {
         if (this._pagenationEnabled) {
             const left = this.itemsParPage * this._currentPageIndex;
-            return Math.max(Math.min(this._entities.length - left, this.itemsParPage), 0);
+            return Math.max(Math.min(this._items.length - left, this.itemsParPage), 0);
         }
         else {
-            return this._entities.length;
+            return this._items.length;
         }
     }
     
@@ -97,10 +130,21 @@ export class VItemListWindow extends Window_Selectable {
         if (item) {
             const numberWidth = this.numberWidth();
             const rect = this.itemLineRect(index);
-            this.changePaintOpacity(this.isEnabled(item));
+            this.changePaintOpacity(true);
             this.drawEntityItemName(item, rect.x, rect.y, rect.width - numberWidth);
             //this.drawItemNumber(item, rect.x, rect.y, rect.width);
             this.changePaintOpacity(true);
+        }
+    }
+
+    // override
+    update(): void {
+        super.update();
+        if (Input.isTriggered("shift")) {
+            if (this.multipleSelectionEnabled) {
+                console.log("toggle");
+                this.toggleItemSelection(this.itemAt(this.index()));
+            }
         }
     }
 
@@ -128,14 +172,11 @@ export class VItemListWindow extends Window_Selectable {
         if (this._pagenationEnabled) {
             const pageCount = this.maxPageCount;
             if (pageCount <= 1) return;
-            
-            console.log("pageCount", pageCount);
 
             this._currentPageIndex--;
             if (this._currentPageIndex < 0) {
                 this._currentPageIndex = pageCount - 1;
             }
-            console.log("this._currentPageIndex", this._currentPageIndex);
             this.correctSelectedIndex();
             this.refresh();
             this.playCursorSound();
@@ -145,38 +186,68 @@ export class VItemListWindow extends Window_Selectable {
         }
     }
 
+    private toggleItemSelection(item: VItemListWindowItem): void {
+        if (item.selectedIndex === undefined) {
+            // 新しく選択する
+            let maxIndex = -1;
+            for (const item of this._items) {
+                if (item.selectedIndex !== undefined) {
+                    maxIndex = Math.max(maxIndex, item.selectedIndex);
+                }
+            }
+            item.selectedIndex = maxIndex + 1;
+        }
+        else {
+            // 選択解除
+            const removeIndex = item.selectedIndex;
+            for (const item of this._items) {
+                if (item.selectedIndex !== undefined && item.selectedIndex > removeIndex) {
+                    item.selectedIndex -= 1;
+                }
+            }
+            item.selectedIndex = undefined;
+        }
+        this.playCursorSound();
+        this.paint();
+    }
+
     private correctSelectedIndex(): void {
         const max = this.maxItems();
         if (this.index() > max - 1) {
             this.select(max - 1);
         }
     }
-
-    private isEnabled(item: LEntity): boolean {
-        return true;
-    }
     
     private numberWidth(): number {
         return this.textWidth("000");
     }
 
-    private itemAt(index: number): LEntity {
+    private itemAt(index: number): VItemListWindowItem {
         if (this._pagenationEnabled) {
-            return this._entities[this._currentPageIndex * this.itemsParPage + index];
+            return this._items[this._currentPageIndex * this.itemsParPage + index];
         }
         else {
-            return this._entities[index];
+            return this._items[index];
         }
     }
 
     // private makeItemList(): void {
     // }
     
-    private drawEntityItemName(item: LEntity, x: number, y: number, width: number): void {
+    private drawEntityItemName(item: VItemListWindowItem, x: number, y: number, width: number): void {
         if (item) {
+            const entity = item.entity;
             const iconY = y + (this.lineHeight() - ImageManager.iconHeight) / 2;
             const nameX = x + ImageManager.iconWidth;
-            const desc = UName.makeNameAsItem(item);
+            const desc = UName.makeNameAsItem(entity);
+
+
+            if (item.selectedIndex !== undefined) {
+                const size =  this.contents.fontSize;
+                this.contents.fontSize = 16;
+                this.drawText((item.selectedIndex + 1), x - 4, y - 6, 100, "left");
+                this.contents.fontSize = size;
+            }
 
             // State Icon
             {
@@ -193,20 +264,20 @@ export class VItemListWindow extends Window_Selectable {
                 this.drawTextEx(desc, nameX, y, itemWidth);
 
                 // 装備していればアイコンを表示する
-                if (this._equipmentUser && this._equipmentUser.isEquipped(item)) {
+                if (this._equipmentUser && this._equipmentUser.isEquipped(entity)) {
                     this.drawIcon(12, nameX, iconY);
                 }
 
                 // メッキ状態アイコンを表示する
-                if (item.isStateAffected(REData.system.states.plating)) {
+                if (entity.isStateAffected(REData.system.states.plating)) {
                     this.drawIcon(13, nameX, iconY);
                 }
             }
 
             // 値札
-            const itemBehavior = item.findEntityBehavior(LItemBehavior);
+            const itemBehavior = entity.findEntityBehavior(LItemBehavior);
             if (itemBehavior && itemBehavior.shopStructureId() > 0) {
-                const price = item.queryPrice();
+                const price = entity.queryPrice();
                 const text = price.cellingPrice.toString();
                 const tw = this.textWidth(text) + 8;
                 const size = this.textSizeEx(text);
