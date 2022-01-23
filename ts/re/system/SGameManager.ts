@@ -34,6 +34,8 @@ import { STurnContext } from "./STurnContext";
 import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntity } from "../objects/LEntity";
+import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
+import { DEntityCreateInfo } from "../data/DEntity";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -85,7 +87,7 @@ export class SGameManager {
                     //unit.floorId = LFlo;//x.initialFloorId;
                     unit.x = actor.initialX;
                     unit.y = actor.initialY;
-                    REGame.system.uniqueActorUnits.push(unit.entityId());
+                    REGame.system.uniqueActorUnits.push(unit.entityId().clone());
                 }
             }
         }
@@ -136,6 +138,24 @@ export class SGameManager {
            
         // test
         //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
+        {
+            const inventory = firstActor.getEntityBehavior(LInventoryBehavior);
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_スピードドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパワードラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kグロースドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kブラインドドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kワープドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパニックドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kビジブルドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kマッドドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kスリープドラッグ").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1")));
+            
+            
+        }
     }
 
     

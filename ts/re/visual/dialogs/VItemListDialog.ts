@@ -57,7 +57,7 @@ export class VItemListDialog extends VItemListDialogBase {
 
         const equipmentUser = this._model.entity().findEntityBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
-            this._itemListWindow.setEquipmentUser(equipmentUser);
+            this.itemListWindow.setEquipmentUser(equipmentUser);
         }
     }
     
@@ -103,32 +103,30 @@ export class VItemListDialog extends VItemListDialogBase {
     // }
 
     private handleAction(actionId: DActionId): void {
-        if (this._itemListWindow) {
-            const itemEntity = this._itemListWindow.selectedItem();
+        const itemEntity = this.itemListWindow.selectedItem();
+        
+        if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
+            // 対象アイテムの選択が必要
             
-            if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
-                // 対象アイテムの選択が必要
-                
-                const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
-                this.openSubDialog(model, (result: any) => {
-                    const item = model.selectedEntity();
-                    assert(item);
-                    const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
-                    activity.setObjects2([item]);
-                    RESystem.dialogContext.postActivity(activity);
-                    this.submit();
-                });
-            }
-            else {
+            const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
+            this.openSubDialog(model, (result: any) => {
+                const item = model.selectedEntity();
+                assert(item);
                 const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+                activity.setObjects2([item]);
                 RESystem.dialogContext.postActivity(activity);
                 this.submit();
-            }
+            });
+        }
+        else {
+            const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+            RESystem.dialogContext.postActivity(activity);
+            this.submit();
         }
     }
 
     private handlePeek(): void {
-        const itemEntity = this._itemListWindow.selectedItem();
+        const itemEntity = this.itemListWindow.selectedItem();
         const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
         this.openSubDialog(new SItemListDialog(this._model.entity(), inventory, SItemListMode.Selection), (result: any) => {
             this.submit();
@@ -136,7 +134,7 @@ export class VItemListDialog extends VItemListDialogBase {
     }
 
     private handlePutIn(): void {
-        const storage = this._itemListWindow.selectedItem();
+        const storage = this.itemListWindow.selectedItem();
         const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
         this.openSubDialog(model, (result: any) => {
             const item = model.selectedEntity();
@@ -148,7 +146,7 @@ export class VItemListDialog extends VItemListDialogBase {
     }
 
     private handleDetails(): void {
-        const itemEntity = this._itemListWindow.selectedItem();
+        const itemEntity = this.itemListWindow.selectedItem();
         const model = new SDetailsDialog(itemEntity);
         this.openSubDialog(model, (result: any) => {
             //this.activateCommandWindow();
@@ -156,10 +154,10 @@ export class VItemListDialog extends VItemListDialogBase {
         });
     }
 
-
+    // override
     onMakeCommandList(window: VFlexCommandWindow): void {
 
-        const itemEntity = this._itemListWindow.selectedItem();
+        const itemEntity = this.itemListWindow.selectedItem();
         const actorEntity = this._model.entity();
 
         // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、

@@ -6,11 +6,10 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
 export class VItemListDialogBase extends VDialog {
-
-    _actorEntity: LEntity;
-    _inventory: LInventoryBehavior;
-    _itemListWindow: VItemListWindow;
-    _commandWindow: VFlexCommandWindow;
+    private _actorEntity: LEntity;
+    private _inventory: LInventoryBehavior;
+    private _itemListWindow: VItemListWindow;
+    private _commandWindow: VFlexCommandWindow;
 
     private _itemsParPage = 12;
 
@@ -51,6 +50,14 @@ export class VItemListDialogBase extends VDialog {
             // console.log("this._itemListWindow.itemRectWithPadding()", this._itemListWindow.itemRectWithPadding(0));
             ;
         }
+    }
+
+    public get itemListWindow(): VItemListWindow {
+        return this._itemListWindow;
+    }
+
+    public get commandWindow(): VFlexCommandWindow {
+        return this._commandWindow;
     }
     
     onCreate() {

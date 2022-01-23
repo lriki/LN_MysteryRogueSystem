@@ -5,17 +5,15 @@ import { VWarehouseMenuCommandWindow } from "../windows/VWarehouseMenuCommandWin
 import { SWarehouseStoreDialog } from "ts/re/system/dialogs/SWarehouseStoreDialog";
 import { SWarehouseWithdrawDialog } from "ts/re/system/dialogs/SWarehouseWithdrawDialog";
 import { VDialog } from "./VDialog";
+import { SDialog } from "ts/re/system/SDialog";
 
 export class VWarehouseDialog extends VDialog {
     private _model: SWarehouseDialog;
-    //private _inventory: LInventoryBehavior;
     private _commandWindow: VWarehouseMenuCommandWindow;
 
     constructor(model: SWarehouseDialog) {
         super(model);
         this._model = model;
-        //this._inventory = this._model.userEntity().getBehavior(LInventoryBehavior);
-        
         const y = 100;
         const cw = 200;
         this._commandWindow = new VWarehouseMenuCommandWindow(new Rectangle(0, y, cw, 200));
@@ -35,8 +33,8 @@ export class VWarehouseDialog extends VDialog {
     private handleStoreCommand() {
         const user = this._model.userEntity();
         const inventory = user.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SWarehouseStoreDialog(user, inventory), (result: any) => {
-            this._model.storeItems(result as LEntity[]);
+        this.openSubDialog(new SWarehouseStoreDialog(user, inventory), (result: SWarehouseStoreDialog) => {
+            this._model.storeItems(result.resultItems());
         });
 
     }
@@ -45,8 +43,8 @@ export class VWarehouseDialog extends VDialog {
 
         const user = this._model.userEntity();
         const inventory = this._model.warehouseEntity().getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SWarehouseWithdrawDialog(user, inventory), (result: any) => {
-            this._model.withdrawItems(result as LEntity[]);
+        this.openSubDialog(new SWarehouseWithdrawDialog(user, inventory), (result: SWarehouseWithdrawDialog) => {
+            this._model.withdrawItems(result.resultItems());
         });
     }
     

@@ -13,10 +13,10 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
-        const items = this._itemListWindow.selectedItems();
+        const items = this.itemListWindow.selectedItems();
 
-        this._commandWindow.addSystemCommand(tr("引き出す"), "store", () => this.handleWithdraw(items));
-        this._commandWindow.refresh();
+        this.commandWindow.addSystemCommand(tr("引き出す"), "store", () => this.handleWithdraw(items));
+        this.commandWindow.refresh();
     }
     
     private handleWithdraw(items: LEntity[]): void {

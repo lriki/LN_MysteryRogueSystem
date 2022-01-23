@@ -206,7 +206,7 @@ export class REData
         this.addClass("null");
         this.races = [new DRace(0)];
 
-        this.actors = [];
+        this.actors = [0];
 
         this.enemies = [];
         this.lands = [];

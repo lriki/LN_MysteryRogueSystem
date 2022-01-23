@@ -537,10 +537,10 @@ export class REDataManager
         for (const race of REData.races) RESetup.setupRace(race);
 
         // Import Actors
-        REData.actors = [];
+        //REData.actors = [];
         $dataActors.forEach(x => {
-            const [entity, actor] = REData.newActor();
             if (x) {
+                const [entity, actor] = REData.newActor();
                 entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.factionId = REData.system.factions.neutral;
