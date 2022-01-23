@@ -509,7 +509,7 @@ declare class Window_Selectable extends Window_Scrollable {
 	/**
 	 * 
 	 */
-	contentsHeight(): void;
+	contentsHeight(): number;
 		
 	/**
 	 * 

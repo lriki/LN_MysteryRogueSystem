@@ -6,10 +6,14 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
 export class VItemListDialogBase extends VDialog {
+
     _actorEntity: LEntity;
     _inventory: LInventoryBehavior;
     _itemListWindow: VItemListWindow;
     _commandWindow: VFlexCommandWindow;
+
+    private _itemsParPage = 12;
+
 
     public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, model: SDialog) {
         super(model);
@@ -31,8 +35,7 @@ export class VItemListDialogBase extends VDialog {
 
         // Layout
         {
-            const itemsParPage = 12;
-            const contentHeight = this._itemListWindow.itemHeight() * itemsParPage;
+            const contentHeight = this._itemListWindow.itemHeight() * this._itemsParPage;
             this._itemListWindow.height = contentHeight + this._itemListWindow.padding * 2;
             this._itemListWindow.refresh();
 

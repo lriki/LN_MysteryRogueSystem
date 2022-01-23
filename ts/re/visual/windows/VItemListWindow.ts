@@ -13,10 +13,25 @@ export class VItemListWindow extends Window_Selectable {
     private _inventory: LInventoryBehavior | undefined;;
     private _equipmentUser: LEquipmentUserBehavior | undefined;
     private _entities: LEntity[];
+    private _pagenationEnabled: boolean;
+    private _currentPageIndex: number;
+    private _leftArrowSprite: Sprite | undefined;
+    private _rightArrowSprite: Sprite | undefined;
 
     constructor(rect: Rectangle) {
         super(rect);
         this._entities = [];
+        this._pagenationEnabled = true;
+        this._currentPageIndex = 0;
+        this.createPagenationArrowSprites();
+    }
+
+    public get itemsParPage(): number {
+        return Math.floor((this.contentsHeight() - this.padding * 2) / this.itemHeight());
+    }
+
+    public get maxPageCount(): number {
+        return Math.max(Math.floor(this._entities.length / this.itemsParPage) + 1, 0);
     }
 
     public setInventory(inventory: LInventoryBehavior): void {
@@ -44,7 +59,13 @@ export class VItemListWindow extends Window_Selectable {
 
     // override
     maxItems(): number {
-        return this._entities.length;
+        if (this._pagenationEnabled) {
+            const left = this.itemsParPage * this._currentPageIndex;
+            return Math.max(Math.min(this._entities.length - left, this.itemsParPage), 0);
+        }
+        else {
+            return this._entities.length;
+        }
     }
     
     // override
@@ -54,8 +75,10 @@ export class VItemListWindow extends Window_Selectable {
 
     // override
     refresh(): void {
-        this.makeItemList();
+        // this.makeItemList();
         super.refresh();
+        this.refreshPagenationArrows();
+        this.updatePagenationArrows();
     }
     
     // override
@@ -79,7 +102,55 @@ export class VItemListWindow extends Window_Selectable {
             //this.drawItemNumber(item, rect.x, rect.y, rect.width);
             this.changePaintOpacity(true);
         }
-    };
+    }
+
+    // override
+    cursorRight(wrap: boolean): void {
+        if (this._pagenationEnabled) {
+            const pageCount = this.maxPageCount;
+            if (pageCount <= 1) return;
+
+            this._currentPageIndex++;
+            if (this._currentPageIndex >= pageCount) {
+                this._currentPageIndex = 0;
+            }
+            this.correctSelectedIndex();
+            this.refresh();
+            this.playCursorSound();
+        }
+        else {
+            super.cursorRight(wrap);
+        }
+    }
+
+    // override
+    cursorLeft(wrap: boolean): void {
+        if (this._pagenationEnabled) {
+            const pageCount = this.maxPageCount;
+            if (pageCount <= 1) return;
+            
+            console.log("pageCount", pageCount);
+
+            this._currentPageIndex--;
+            if (this._currentPageIndex < 0) {
+                this._currentPageIndex = pageCount - 1;
+            }
+            console.log("this._currentPageIndex", this._currentPageIndex);
+            this.correctSelectedIndex();
+            this.refresh();
+            this.playCursorSound();
+        }
+        else {
+            super.cursorRight(wrap);
+        }
+    }
+
+    private correctSelectedIndex(): void {
+        const max = this.maxItems();
+        if (this.index() > max - 1) {
+            this.select(max - 1);
+        }
+    }
 
     private isEnabled(item: LEntity): boolean {
         return true;
@@ -90,11 +161,16 @@ export class VItemListWindow extends Window_Selectable {
     }
 
     private itemAt(index: number): LEntity {
-        return this._entities[index];
+        if (this._pagenationEnabled) {
+            return this._entities[this._currentPageIndex * this.itemsParPage + index];
+        }
+        else {
+            return this._entities[index];
+        }
     }
 
-    private makeItemList(): void {
-    }
+    // private makeItemList(): void {
+    // }
     
     private drawEntityItemName(item: LEntity, x: number, y: number, width: number): void {
         if (item) {
@@ -144,6 +220,51 @@ export class VItemListWindow extends Window_Selectable {
         }
     }
 
+    private createPagenationArrowSprites(): void {
+        this._leftArrowSprite = new Sprite(undefined);
+        this.addChild(this._leftArrowSprite);
+        this._rightArrowSprite = new Sprite(undefined);
+        this.addChild(this._rightArrowSprite);
+    }
 
+    private refreshPagenationArrows(): void {
+        const w = this.width;
+        const h = this.height;
+        const p = 24;
+        const q = p / 2;
+        const sx = 96 + p;
+        const sy = 24 + q;
+        if (this._leftArrowSprite) {
+            this._leftArrowSprite.bitmap = this.windowskin;
+            this._leftArrowSprite.anchor.x = 0.5;
+            this._leftArrowSprite.anchor.y = 0.5;
+            this._leftArrowSprite.setFrame(sx, sy, q, p);
+            this._leftArrowSprite.move(q, h / 2);
+        }
+        if (this._rightArrowSprite) {
+            this._rightArrowSprite.bitmap = this.windowskin;
+            this._rightArrowSprite.anchor.x = 0.5;
+            this._rightArrowSprite.anchor.y = 0.5;
+            this._rightArrowSprite.setFrame(sx + p + q, sy, q, p);
+            this._rightArrowSprite.move(w - q, h / 2);
+        }
+    }
+
+    private updatePagenationArrows(): void {
+        if (!this._leftArrowSprite) return;
+        if (!this._rightArrowSprite) return;
+
+        this._leftArrowSprite.visible = false;
+        this._rightArrowSprite.visible = false;
+
+        if (this._pagenationEnabled) {
+            if (this._currentPageIndex > 0) {
+                this._leftArrowSprite.visible = true;
+            }
+            if (this._currentPageIndex < this.maxPageCount - 1) {
+                this._rightArrowSprite.visible = true;
+            }
+        }
+    }
 }
 
