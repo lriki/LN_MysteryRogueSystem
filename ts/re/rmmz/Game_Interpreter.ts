@@ -2,11 +2,16 @@ import { UTransfer } from "ts/re/usecases/UTransfer";
 import { assert } from "../Common";
 import { LEntity } from "../objects/LEntity";
 import { REGame } from "../objects/REGame";
+import { RESystem } from "../system/RESystem";
 
 var _Game_Interpreter_updateWaitMode = Game_Interpreter.prototype.updateWaitMode;
 Game_Interpreter.prototype.updateWaitMode = function(): boolean {
     if (this._waitMode == "REResultWinodw") {
         return REGame.challengeResultShowing;
+    }
+    else if (this._waitMode == "MR-Dialog") {
+        console.log("wait MR-Dialog", RESystem.dialogContext._hasDialogModel() || RESystem.commandContext.checkOpenDialogRequired());
+        return RESystem.dialogContext._hasDialogModel() || RESystem.commandContext.checkOpenDialogRequired();
     }
     else {
         return _Game_Interpreter_updateWaitMode.call(this);

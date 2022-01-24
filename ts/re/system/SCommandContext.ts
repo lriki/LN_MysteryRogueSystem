@@ -149,6 +149,9 @@ export class SCommandContext
         return REGame.world.random();
     }
 
+    public checkOpenDialogRequired(): boolean {
+        return this._recodingCommandList.find(x => x._name == "openDialog") !== undefined;
+    }
 
     postConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
         const behavior = entity.findEntityBehavior(LUnitBehavior);

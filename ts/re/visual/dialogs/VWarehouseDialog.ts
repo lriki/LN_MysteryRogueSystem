@@ -32,9 +32,8 @@ export class VWarehouseDialog extends VDialog {
 
     private handleStoreCommand() {
         const user = this._model.userEntity();
-        const inventory = user.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SWarehouseStoreDialog(user, inventory), (result: SWarehouseStoreDialog) => {
-            this._model.storeItems(result.resultItems());
+        this.openSubDialog(new SWarehouseStoreDialog(user, this._model.warehouseEntity()), (result: SWarehouseStoreDialog) => {
+            //this._model.storeItems(result.resultItems());
         });
 
     }

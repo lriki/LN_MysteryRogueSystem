@@ -63,8 +63,10 @@ export class SDialog {
         return true;
     }
 
-    public then(func: SDialogResultCallback): void {
-        this._resultCallback = func;
+    public then<T extends SDialog>(func: (dialog: T) => void): void {
+        this._resultCallback = (d) => {
+            func(d as T);
+        };
     }
 
     public submit(): void {

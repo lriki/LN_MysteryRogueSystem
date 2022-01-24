@@ -35,11 +35,20 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
     const actorKey: string = args.actorKey;
     if (REVisual.manager) {
-        const warehouse = REGame.system.uniqueActorUnits.find(x => REGame.world.entity(x).data().entity.key == actorKey);
+        const warehouse = REGame.system.uniqueActorUnits
+            .map(x => REGame.world.entity(x))
+            .find(x => x.data().entity.key == actorKey);
         if (!warehouse) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(actorKey));
         const player = REGame.camera.focusedEntity();
         assert(player);
-        //RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player.entityId(), warehouse.entityId()), false);
+
+        RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player, warehouse), false)
+        .then((d: SWarehouseStoreDialog) => {
+            console.log("then", d);
+            $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
+        });
+
+        $gameMap._interpreter.setWaitMode("MR-Dialog");
     }
 });
 

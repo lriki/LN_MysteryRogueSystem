@@ -1,6 +1,11 @@
+import { tr2 } from "../Common";
+import { testPickOutItem, testPutInItem } from "../objects/behaviors/LBehavior";
 import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { LEntity } from "../objects/LEntity";
+import { SCommandContext } from "../system/SCommandContext";
+import { SEffectSubject } from "../system/SEffectContext";
+import { UName } from "./UName";
 
 export class UInventory {
     /**
@@ -54,5 +59,39 @@ export class UInventory {
             }
         }
         return entities;
+    }
+
+    /**
+     * [預ける]
+     */
+    public static postStoreItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[]): void {
+        const userInventory = user.getEntityBehavior(LInventoryBehavior);
+        const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
+        const subject = new SEffectSubject(user);
+
+        console.log("!!!!!  storeItems", items);
+
+        items.forEach(item => {
+            console.log("0");
+            // Item を取り出せるか確認
+            cctx.post(user, user, subject, item, testPickOutItem,
+                () => {
+                    console.log("2");
+
+                    // Item を格納できるか確認
+                    cctx.post(warehouse, warehouse, subject, item, testPutInItem,
+                        () => {
+                            console.log("4");
+    
+                            // Item を移す
+                            userInventory.removeEntity(item);
+                            warehouseInventory.addEntity(item);
+
+                            cctx.postMessage(tr2("%1を預けた。").format(UName.makeNameAsItem(item)));
+                            return true;
+                        });
+                    return true;
+                });
+        });
     }
 }

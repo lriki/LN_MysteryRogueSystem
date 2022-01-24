@@ -8,6 +8,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { SDialog } from "../SDialog";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { UName } from "ts/re/usecases/UName";
+import { UInventory } from "ts/re/usecases/UInventory";
 
 export class SWarehouseDialog extends SDialog {
     private _userEntityId: LEntityId;
@@ -28,38 +29,7 @@ export class SWarehouseDialog extends SDialog {
     }
 
     public storeItems(items: LEntity[]): void {
-        const user = this.userEntity();
-        const warehouse = this.warehouseEntity();
-        const userInventory = user.getEntityBehavior(LInventoryBehavior);
-        const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
-        const subject = new SEffectSubject(user);
-
-        console.log("!!!!!  storeItems", items);
-        const context = RESystem.commandContext;
-
-        items.forEach(item => {
-            console.log("0");
-            // Item を取り出せるか確認
-            context.post(user, user, subject, item, testPickOutItem,
-                () => {
-                    console.log("2");
-
-                    // Item を格納できるか確認
-                    context.post(warehouse, warehouse, subject, item, testPutInItem,
-                        () => {
-                            console.log("4");
-    
-                            // Item を移す
-                            userInventory.removeEntity(item);
-                            warehouseInventory.addEntity(item);
-
-                            context.postMessage(tr("{0} を預けた。", UName.makeNameAsItem(item)));
-                            return true;
-                        });
-                    return true;
-                });
-        })
-
+        UInventory.postStoreItemsToWarehouse(RESystem.commandContext, this.userEntity(), this.warehouseEntity(), items);
         this.submit();
     }
     
