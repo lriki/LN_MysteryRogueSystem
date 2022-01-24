@@ -46,7 +46,7 @@ Scene_Map.prototype.createDisplayObjects = function() {
     // refresh はホントは onMapLoaded のフック内で呼ぶのが自然な気がするが、
     // createDisplayObjects() の前に呼んでおきたい。
     // そうしないと、特にランダムダンジョン内にいるときのセーブデータをロードした後、Tilemap 生成とのタイミングの問題で何も表示されなくなる。
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    if (REGame.map.floorId().isTacticsMap()) {
         RESystem.mapManager.attemptRefreshVisual();
     }
 
@@ -96,7 +96,7 @@ Scene_Map.prototype.update = function() {
     FloorRestartSequence.update(this);
 
     if (!isTransterEffectRunning()) {
-        if (REGame.map.floorId().isEntitySystemMap()) {
+        if (REGame.map.floorId().isTacticsMap()) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
     
                 if (REGame.camera.isFloorTransfering()) {
@@ -132,7 +132,7 @@ Scene_Map.prototype.update = function() {
     // 位置合わせは Game_Player だけではなく Game_Map や Game_Screen など様々なオブジェクトに対しても影響するため、
     // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
     // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    if (REGame.map.floorId().isTacticsMap()) {
         if (REVisual._syncCamera) {
             RMMZHelper.syncCameraPositionToGamePlayer();
         }
@@ -151,7 +151,7 @@ Scene_Map.prototype.callMenu = function() {
         // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
-    else if (REGame.map.floorId().isEntitySystemMap()) {
+    else if (REGame.map.floorId().isTacticsMap()) {
         // REシステムマップ
         this.menuCalling = false;
     }
@@ -180,7 +180,7 @@ Scene_Map.prototype.isMenuCalled = function() {
 
 const _Scene_Map_shouldAutosave = Scene_Map.prototype.shouldAutosave;
 Scene_Map.prototype.shouldAutosave = function() {
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    if (REGame.map.floorId().isTacticsMap()) {
         return true;
     }
     else {
@@ -190,7 +190,7 @@ Scene_Map.prototype.shouldAutosave = function() {
 
 const _Scene_Map_isAutosaveEnabled = Scene_Map.prototype.isAutosaveEnabled;
 Scene_Base.prototype.isAutosaveEnabled = function() {
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    if (REGame.map.floorId().isTacticsMap()) {
         return true;
     }
     else {

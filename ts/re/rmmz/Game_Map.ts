@@ -77,7 +77,7 @@ Game_Map.prototype.setup = function(mapId: number) {
 
 
     if (REGame.camera.isFloorTransfering()) {
-        if (REGame.camera.transferingNewFloorId().isEntitySystemMap()) {
+        if (REGame.camera.transferingNewFloorId().isTacticsMap()) {
             // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
             // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
             if (REDataManager.isLandMap(mapId)) {

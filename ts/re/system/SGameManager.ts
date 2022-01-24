@@ -9,7 +9,6 @@ import { LCamera } from "../objects/LCamera";
 import { RESystem } from "./RESystem";
 import { SActivityRecorder } from "./SActivityRecorder";
 import { assert, Log } from "ts/re/Common";
-import { LMessage } from "ts/re/objects/LMessage";
 import { LMessageHistory } from "ts/re/objects/LMessageHistory";
 import { LIdentifyer } from "ts/re/objects/LIdentifyer";
 import { SSequelContext } from "./SSequelContext";
@@ -70,7 +69,6 @@ export class SGameManager {
         REGame.identifyer = new LIdentifyer();
         REGame.recorder = new SActivityRecorder();
         REGame.messageHistory = new LMessageHistory();
-        REGame.message = new LMessage();
         REGame.eventServer = new LEventServer();
         REGame.floorDirector = new LFloorDirector();
         REGame.borderWall = new LBlock(-1, -1);
@@ -138,7 +136,7 @@ export class SGameManager {
            
         // test
         //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
-        if (0) {
+        if (1) {
             const inventory = firstActor.getEntityBehavior(LInventoryBehavior);
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_スピードドラッグ").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパワードラッグ").id, [], "item1")));
@@ -174,7 +172,7 @@ export class SGameManager {
                 REGame.identifyer.reset(newFloorId.landData());
             }
     
-            if (newFloorId.isEntitySystemMap()) {
+            if (newFloorId.isTacticsMap()) {
                 const mapSeed = REGame.world.random().nextInt();
                 console.log("seed:", mapSeed);
 

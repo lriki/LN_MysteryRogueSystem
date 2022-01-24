@@ -1,4 +1,4 @@
-import { assert } from "ts/re/Common";
+import { assert, tr2 } from "ts/re/Common";
 import { LandExitResult, REData } from "ts/re/data/REData";
 import { SWarehouseDialog } from "ts/re/system/dialogs/SWarehouseDialog";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -9,6 +9,7 @@ import { UTransfer } from "ts/re/usecases/UTransfer";
 import { REBasics } from "../data/REBasics";
 import { LEntityId } from "../objects/LObject";
 import { LEntity } from "../objects/LEntity";
+import { SWarehouseStoreDialog } from "../system/dialogs/SWarehouseStoreDialog";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -31,6 +32,19 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
     }
 });
 
+PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
+    const actorKey: string = args.actorKey;
+    if (REVisual.manager) {
+        const warehouse = REGame.system.uniqueActorUnits.find(x => REGame.world.entity(x).data().entity.key == actorKey);
+        if (!warehouse) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(actorKey));
+        const player = REGame.camera.focusedEntity();
+        assert(player);
+        //RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player.entityId(), warehouse.entityId()), false);
+    }
+});
+
+PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (args: any) => {
+});
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
     UTransfer.proceedFloorForwardForPlayer();

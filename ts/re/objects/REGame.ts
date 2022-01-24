@@ -3,7 +3,6 @@ import { LWorld } from "./LWorld";
 import { LSystem } from "./LSystem";
 import { LCamera } from "./LCamera";
 import { SActivityRecorder } from "ts/re/system/SActivityRecorder";
-import { LMessage } from "./LMessage";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
 import { SSequelSet } from "../system/SSequel";
@@ -33,7 +32,6 @@ export class REGame
     static identifyer: LIdentifyer;
     static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
-    static message: LMessage;
     static eventServer: LEventServer;
     static floorDirector: LFloorDirector;
 

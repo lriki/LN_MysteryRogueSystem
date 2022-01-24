@@ -62,7 +62,7 @@ Game_CharacterBase.prototype.reRevision = function(): number {
 
 const _Game_CharacterBase_updatePattern = Game_CharacterBase.prototype.updatePattern;
 Game_CharacterBase.prototype.updatePattern = function() {
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    if (REGame.map.floorId().isTacticsMap()) {
         // RE System の下では、見た目の制御は Sequel に任せる
     }
     else {
@@ -72,7 +72,7 @@ Game_CharacterBase.prototype.updatePattern = function() {
 
 const _Game_CharacterBase_updateAnimation = Game_CharacterBase.prototype.updateAnimation;
 Game_CharacterBase.prototype.updateAnimation = function() {
-    if (REGame.map.floorId().isEntitySystemMap()) {
+    if (REGame.map.floorId().isTacticsMap()) {
         // RE System の下では、見た目の制御は Sequel に任せる
     }
     else {

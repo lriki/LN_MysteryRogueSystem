@@ -76,7 +76,6 @@ export class VItemListDialog extends VItemListDialogBase {
     onUpdate() {
         if (this._model.mode() == SItemListMode.Use) {
             if (Input.isTriggered("pagedown")) {
-                console.log("pagedown");
                 UInventory.sort(this._model.inventory());
                 this.itemListWindow.refreshItems();
                 this.itemListWindow.playCursorSound();

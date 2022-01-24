@@ -28,6 +28,18 @@
  * @arg actorId
  * @type number
  *
+ * @command MR-ShowWarehouseStoreDialog
+ * @text ShowWarehouseStoreDialog
+ * @desc 預ける
+ * @arg actorKey
+ * @type string
+
+ * @command MR-ShowWarehouseWithdrawDialog
+ * @text ShowWarehouseWithdrawDialog
+ * @desc 引き出す
+ * @arg actorKey
+ * @type string
+
  * @command MR-ProceedFloorForward
  * @text ProceedFloorForward
  * @desc 次のフロアへ

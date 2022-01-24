@@ -178,7 +178,7 @@ export class LFloorId {
     }
 
     /** Entity を登場させるマップであるか。false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
-    public isEntitySystemMap(): boolean {
+    public isTacticsMap(): boolean {
         return this._landId != DHelpers.RmmzNormalMapLandId;
     }
 

@@ -42,7 +42,7 @@ export class VDirectionArrow extends Sprite {
     // override
     update(): void {
         
-        if (REGame.map.floorId().isEntitySystemMap()) {
+        if (REGame.map.floorId().isTacticsMap()) {
             this.visible = true;
         }
         else {

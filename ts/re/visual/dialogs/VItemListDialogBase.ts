@@ -18,6 +18,8 @@ export class VItemListDialogBase extends VDialog {
         super(model);
         this._actorEntity = actorEntity;
         this._inventory = inventory;
+
+        
         
         const y = 100;
         const cw = 200;
@@ -27,10 +29,6 @@ export class VItemListDialogBase extends VDialog {
         this._itemListWindow.setHandler("cancel", () => this.handleItemCancel());
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
-
-        // CommandWindow は最初は空。表示するとき、複数選択かどうかなどを考慮して Command を作る。
-        this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-        this.addWindow(this._commandWindow);
 
         // Layout
         {
@@ -50,6 +48,10 @@ export class VItemListDialogBase extends VDialog {
             // console.log("this._itemListWindow.itemRectWithPadding()", this._itemListWindow.itemRectWithPadding(0));
             ;
         }
+
+        // CommandWindow は最初は空。表示するとき、複数選択かどうかなどを考慮して Command を作る。
+        this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, this._itemListWindow.y, 200, 200));
+        this.addWindow(this._commandWindow);
     }
 
     public get itemListWindow(): VItemListWindow {

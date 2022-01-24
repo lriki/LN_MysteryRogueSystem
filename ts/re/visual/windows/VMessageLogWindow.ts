@@ -1,6 +1,7 @@
 import { assert } from "ts/re/Common";
 import { linear } from "ts/re/math/Math";
 import { LMessageHistory } from "ts/re/objects/LMessageHistory";
+import { REGame } from "ts/re/objects/REGame";
 
 
 // TextState の拡張
@@ -61,6 +62,8 @@ export class VMessageLogWindow extends Window_Base {
     
     // override
     update() {
+        if (!REGame.map.floorId().isTacticsMap()) return;
+
         this.checkToNotClose();
         Window_Base.prototype.update.call(this);
         while (!this.isOpening() && !this.isClosing()) {

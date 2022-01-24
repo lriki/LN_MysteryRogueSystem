@@ -177,7 +177,7 @@ const _Tilemap__addAutotile = Tilemap.prototype._addAutotile;
 Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     const kind = Tilemap.getAutotileKind(tileId);
 
-    if (REGame.map.floorId().isEntitySystemMap() && Tilemap.isTileA4(tileId)) {
+    if (REGame.map.floorId().isTacticsMap() && Tilemap.isTileA4(tileId)) {
         const x = dx / this._tileWidth;
         const y = dy / this._tileHeight;
     
