@@ -17,6 +17,7 @@ import { TileShape } from "ts/re/objects/LBlock";
 import { SDetailsDialog } from "ts/re/system/dialogs/SDetailsDialog";
 import { UAction } from "ts/re/usecases/UAction";
 import { VItemListDialogBase } from "./VItemListDialogBase";
+import { UInventory } from "ts/re/usecases/UInventory";
 
 export class VItemListDialog extends VItemListDialogBase {
     private _model: SItemListDialog;
@@ -73,6 +74,14 @@ export class VItemListDialog extends VItemListDialogBase {
     }
     
     onUpdate() {
+        if (this._model.mode() == SItemListMode.Use) {
+            if (Input.isTriggered("pagedown")) {
+                console.log("pagedown");
+                UInventory.sort(this._model.inventory());
+                this.itemListWindow.refreshItems();
+                this.itemListWindow.playCursorSound();
+            }
+        }
     }
 
     // private handleItemOk(): void {

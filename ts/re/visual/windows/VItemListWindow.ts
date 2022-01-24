@@ -48,8 +48,14 @@ export class VItemListWindow extends Window_Selectable {
 
     public setInventory(inventory: LInventoryBehavior): void {
         this._inventory = inventory;
-        this._items = inventory.entities().map(x => new VItemListWindowItem(x));
-        this.refresh();
+        this.refreshItems();
+    }
+
+    public refreshItems(): void {
+        if (this._inventory) {
+            this._items = this._inventory.entities().map(x => new VItemListWindowItem(x));
+            this.refresh();
+        }
     }
 
     public setEquipmentUser(equipmentUser: LEquipmentUserBehavior): void {
@@ -107,8 +113,9 @@ export class VItemListWindow extends Window_Selectable {
     }
 
     // override
+    // 表示を更新したいときに呼ぶ。選択状態までリセットされてほしくないので、この中でアイテムリストの再構築は行わない。
+    // アイテムリストの再構築をしたいときは refreshItems() を使うこと。
     refresh(): void {
-        // this.makeItemList();
         super.refresh();
         this.refreshPagenationArrows();
         this.updatePagenationArrows();
