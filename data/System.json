@@ -118,7 +118,7 @@
         "pitch": 100,
         "volume": 90
     },
-    "editMapId": 92,
+    "editMapId": 36,
     "elements": [
         "",
         "物理",
@@ -344,9 +344,9 @@
             "volume": 90
         }
     ],
-    "startMapId": 92,
-    "startX": 1,
-    "startY": 0,
+    "startMapId": 36,
+    "startX": 14,
+    "startY": 24,
     "switches": [
         "",
         "[Test]BOSSクリア",
@@ -541,18 +541,18 @@
     },
     "variables": [
         "",
-        "MR-LandExitResult",
+        "🚩---MRシステム",
+        "MR-ExitResult",
+        "MR-ExitResultDetail",
+        "MR-CommndResult1",
+        "MR-CommndResult2",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "🎲---ゲーム用",
         "ProceedDirection",
-        "MR-Result",
-        "MR-LandExitResult",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
         "",
         "",
         "",
@@ -562,7 +562,7 @@
         "",
         ""
     ],
-    "versionId": 45085375,
+    "versionId": 45863747,
     "victoryMe": {
         "name": "Victory1",
         "pan": 0,

@@ -10,7 +10,6 @@ Game_Interpreter.prototype.updateWaitMode = function(): boolean {
         return REGame.challengeResultShowing;
     }
     else if (this._waitMode == "MR-Dialog") {
-        console.log("wait MR-Dialog", RESystem.dialogContext._hasDialogModel() || RESystem.commandContext.checkOpenDialogRequired());
         return RESystem.dialogContext._hasDialogModel() || RESystem.commandContext.checkOpenDialogRequired();
     }
     else {

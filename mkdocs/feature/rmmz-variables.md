@@ -1,7 +1,7 @@
 変数
 ==========
 
-MR-LandExitResultDetail
+MR-ExitResultDetail
 ----------
 
 ランドから出て `ExitMap` へ移動した時の原因が格納されます。値は次の通りです。
@@ -20,12 +20,12 @@ MR-LandExitResultDetail
 - 4xx 番: 冒険失敗。ペナルティ有り。(持ち物を失う等)
 
 
-MR-LandExitResult
+MR-ExitResult
 ----------
 
-`MR-LandExitResultDetail` の値を 100 で割った値が格納されます。
+`MR-ExitResultDetail` の値を 100 で割った値が格納されます。
 
-MR-Result
+MR-CommndResult1
 ----------
 
 各種プラグインコマンドを実行した結果が格納されます。
