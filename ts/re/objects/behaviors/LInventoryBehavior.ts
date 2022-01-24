@@ -107,9 +107,10 @@ import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { DEffect } from "ts/re/data/DEffect";
 //import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
+//import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 
 export class LInventoryBehavior extends LBehavior {
-    private _entities: LEntityId[] = [];
+    _entities: LEntityId[] = [];
     private _gold: number = 0;
     private _capacity: number = 20;
 
@@ -175,7 +176,7 @@ export class LInventoryBehavior extends LBehavior {
         this.addEntity(entity);
     }
 
-    public removeEntity(entity: LEntity) {
+    public removeEntity(entity: LEntity): void {
         assert(entity.parentObject() == this);
 
         const id = entity.entityId();
@@ -185,6 +186,7 @@ export class LInventoryBehavior extends LBehavior {
         
         entity.clearParent();
     }
+
 
     onRemoveChild(entity: LEntity): void {
         if (this._entities.mutableRemove(x => x.equals(entity.entityId()))) {

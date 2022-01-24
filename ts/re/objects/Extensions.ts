@@ -6,6 +6,7 @@ declare global {
     interface Array<T> {
         pushArray(ary: readonly T[]): void;
         mutableResize(newSize: number, defaultValue: T): void;
+        mutableRemoveAt(index: number): void;
         mutableRemove(predicate: (x: T) => boolean): boolean;
         mutableRemoveAll(predicate: (x: T) => boolean): boolean;
         mutableShuffle(): void;
@@ -31,6 +32,16 @@ Array.prototype.pushArray = function<T>(ary: readonly T[]): void {
 Array.prototype.mutableResize = function<T>(newSize: number, defaultValue: T): void {
     while(this.length > newSize) { this.pop(); }
     while(this.length < newSize) { this.push(defaultValue); }
+}
+
+Array.prototype.mutableRemoveAt = function<T>(index: number): boolean {
+    if (index >= 0) {
+        this.splice(index, 1);
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 Array.prototype.mutableRemove = function<T>(predicate: (x: T) => boolean): boolean {
