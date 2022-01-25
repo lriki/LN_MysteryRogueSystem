@@ -1,4 +1,4 @@
-import { assert } from "../Common";
+import { assert, tr2 } from "../Common";
 import { DBlockLayerKind } from "../data/DCommon";
 import { DEffectFieldScope } from "../data/DEffect";
 import { DStateRestriction } from "../data/DState";
@@ -235,5 +235,13 @@ export class USearch {
         }
 
         throw new Error("Unreachable.");
+    }
+    
+    public static getUniqueActorByKey(key: string): LEntity {
+        const entity = REGame.system.uniqueActorUnits
+            .map(x => REGame.world.entity(x))
+            .find(x => x.data().entity.key == key);
+        if (!entity) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(key));
+        return entity;
     }
 }

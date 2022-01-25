@@ -60,6 +60,10 @@ export class VFlexCommandWindow extends Window_Command {
         this._commands = [];
         this.refresh();
     }
+
+    public fitHeight(): void {
+        this.height = this.fittingHeight(this._commands.length);
+    }
     
     // override. 外部から再構築したいときは refresh を呼ぶこと。
     makeCommandList(): void {

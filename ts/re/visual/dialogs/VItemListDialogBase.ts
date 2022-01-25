@@ -38,6 +38,9 @@ export class VItemListDialogBase extends VDialog {
 
             this._itemListWindow.y = Graphics.boxHeight - this._itemListWindow.height;
 
+            console.log("this._itemListWindow.y", this._itemListWindow.y);
+            console.log("this._itemListWindow.padding", this._itemListWindow.padding);
+
             // this._itemListWindow.updatePlacement();
             // this._itemListWindow.updateBackground();
             this._itemListWindow.createContents();
@@ -73,17 +76,20 @@ export class VItemListDialogBase extends VDialog {
 
     }
 
+    protected activateCommandWindow(): void {
+        this._itemListWindow.deactivate();
+        this._commandWindow.refresh();
+        this._commandWindow.openness = 255;
+        this._commandWindow.activate();
+    }
+
     private handleItemSubmit(): void {
         if (this._itemListWindow && this._commandWindow) {
-
             this._commandWindow.clear();
             this.onMakeCommandList(this._commandWindow);
             this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
-
-            this._itemListWindow.deactivate();
-            this._commandWindow.refresh();
-            this._commandWindow.openness = 255;
-            this._commandWindow.activate();
+            this._commandWindow.fitHeight();
+            this.activateCommandWindow();
         }
     }
         

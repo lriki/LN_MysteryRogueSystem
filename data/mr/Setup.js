@@ -1,4 +1,4 @@
-db.items = {
+db.entities = {
 
     "kEntity_ドラゴンキラー_A": {
         equipmentTraits: [
@@ -16,6 +16,12 @@ db.items = {
         ]
     },
 
+    "kItem_スピードドラッグ": {
+        descriptions: [
+            "説明文１行目",
+            "説明文2行目"
+        ]
+    },
     
 
     // "kアイアンシールド": {

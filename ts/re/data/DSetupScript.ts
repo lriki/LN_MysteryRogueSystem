@@ -11,12 +11,13 @@ interface DSetupScriptDB_Trait {
     value?: number;
 }
 
-interface DSetupScriptDB_Item {
-    equipmentTraits?: DSetupScriptDB_Trait[],
+interface DSetupScriptDB_Entity {
+    descriptions?: string[];
+    equipmentTraits?: DSetupScriptDB_Trait[];
 }
 
 interface DSetupScriptDB {
-    items: any,
+    entities: any,
 }
 
 export class DSetupScript {
@@ -38,8 +39,13 @@ export class DSetupScript {
     }
 
     public setupItem(entity: DEntity): void {
-        const data: DSetupScriptDB_Item = this._db.items[entity.entity.key];
+        const data: DSetupScriptDB_Entity = this._db.entities[entity.entity.key];
         if (data) {
+            if (data.descriptions) {
+                const text = data.descriptions.join("\n");
+                entity.description = text;
+            }
+
             if (data.equipmentTraits) {
                 for (const t of data.equipmentTraits) {
                     const traitData = REData.getTrait(t.code);

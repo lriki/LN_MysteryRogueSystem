@@ -7,7 +7,7 @@ export class VDetailsWindow extends Window_Base {
     onClose: (() => void) | undefined;
 
     constructor(entity: LEntity) {
-        super(new Rectangle(0, 100, Graphics.boxWidth, 400));
+        super(new Rectangle(0, 64, Graphics.boxWidth, 400));
         this._entity = entity;
         //this.openness = 0;  // 初期状態では非表示
         this.refresh();

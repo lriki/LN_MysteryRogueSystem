@@ -13,6 +13,7 @@ declare global {
         distinct(): Array<T>;
         immutableSort(compareFn?: (a: T, b: T) => number): Array<T>;
         selectMin(fn: (a: T, b: T) => number): T | undefined;
+        count(predicate: (x: T) => boolean): number;
 
         isEmpty(): boolean;
         front(): T;
@@ -96,6 +97,16 @@ Array.prototype.selectMin = function<T>(fn: (a: T, b: T) => number): T | undefin
         }
     }
     return m;
+}
+
+Array.prototype.count = function<T>(predicate: (x: T) => boolean): number {
+    let c = 0;
+    for (const i of this) {
+        if (predicate(i)) {
+            c++;
+        }
+    }
+    return c;
 }
 
 Array.prototype.isEmpty = function(): boolean {

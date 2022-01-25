@@ -64,6 +64,12 @@ export class LCamera {
         return REGame.world.entity(this._focusedEntityId);
     }
 
+    getFocusedEntity(): LEntity {
+        const entity = this.focusedEntity();
+        assert(entity);
+        return entity;
+    }
+
     focus(entity: LEntity) {
         const oldEntity = this.focusedEntity();
         if (oldEntity) {

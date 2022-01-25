@@ -66,6 +66,10 @@ export class VItemListWindow extends Window_Selectable {
         return this.itemAt(this.index()).entity;
     }
 
+    public isMultipleSelecting(): boolean {
+        return this._items.find(x => x.selectedIndex !== undefined) !== undefined;
+    }
+
     public getSelectedItems(): LEntity[] {
         const result: VItemListWindowItem[] = [];
         

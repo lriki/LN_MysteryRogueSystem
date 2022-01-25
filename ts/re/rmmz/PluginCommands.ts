@@ -10,6 +10,8 @@ import { REBasics } from "../data/REBasics";
 import { LEntityId } from "../objects/LObject";
 import { LEntity } from "../objects/LEntity";
 import { SWarehouseStoreDialog } from "../system/dialogs/SWarehouseStoreDialog";
+import { USearch } from "../usecases/USearch";
+import { SWarehouseWithdrawDialog } from "../system/dialogs/SWarehouseWithdrawDialog";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -35,23 +37,25 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
     const actorKey: string = args.actorKey;
     if (REVisual.manager) {
-        const warehouse = REGame.system.uniqueActorUnits
-            .map(x => REGame.world.entity(x))
-            .find(x => x.data().entity.key == actorKey);
-        if (!warehouse) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(actorKey));
-        const player = REGame.camera.focusedEntity();
-        assert(player);
-
-        RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player, warehouse), false)
+        const player = REGame.camera.getFocusedEntity();
+        RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player, USearch.getUniqueActorByKey(actorKey)), false)
         .then((d: SWarehouseStoreDialog) => {
             $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
         });
-
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (args: any) => {
+    const actorKey: string = args.actorKey;
+    if (REVisual.manager) {
+        const player = REGame.camera.getFocusedEntity();
+        RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(player, USearch.getUniqueActorByKey(actorKey)), false)
+        .then((d: SWarehouseWithdrawDialog) => {
+            $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
+        });
+        $gameMap._interpreter.setWaitMode("MR-Dialog");
+    }
 });
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
