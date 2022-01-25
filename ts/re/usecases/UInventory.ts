@@ -69,6 +69,12 @@ export class UInventory {
         const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
 
+        if (warehouseInventory.itemCount + items.length > warehouseInventory.capacity) {
+            cctx.postMessage(tr2("倉庫がいっぱいです。"));
+            return;
+        }
+        
+
         console.log("!!!!!  storeItems", items);
 
         items.forEach(item => {
@@ -103,6 +109,11 @@ export class UInventory {
         const userInventory = user.getEntityBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
+
+        if (userInventory.itemCount + items.length > userInventory.capacity) {
+            cctx.postMessage(tr2("もちものがいっぱいです。"));
+            return;
+        }
 
         items.forEach(item => {
             console.log("0");
