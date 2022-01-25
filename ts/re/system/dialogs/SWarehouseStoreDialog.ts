@@ -7,26 +7,24 @@ import { RESystem } from "../RESystem";
 import { SDialog } from "../SDialog";
 
 export class SWarehouseStoreDialog extends SDialog {
-    private _actorEntityId: LEntityId;
+    private _userEntityId: LEntityId;
     private _inventoryBehaviorId: LBehaviorId;
     private _warehouseEntityId: LEntityId;
-    private _warehouseInventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
 
-    public constructor(actorEntity: LEntity, warehouse: LEntity) {
+    public constructor(user: LEntity, warehouse: LEntity) {
         super();
-        this._actorEntityId = actorEntity.entityId();
-        this._inventoryBehaviorId = actorEntity.getEntityBehavior(LInventoryBehavior).id();
+        this._userEntityId = user.entityId();
+        this._inventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
         this._warehouseEntityId = warehouse.entityId();
-        this._warehouseInventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
     }
 
-    public entity(): LEntity {
-        return REGame.world.entity(this._actorEntityId);
+    public get user(): LEntity {
+        return REGame.world.entity(this._userEntityId);
     }
 
-    public inventory(): LInventoryBehavior {
+    public get inventory(): LInventoryBehavior {
         return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
@@ -43,7 +41,7 @@ export class SWarehouseStoreDialog extends SDialog {
     }
     
     public storeItems(items: LEntity[]): void {
-        UInventory.postStoreItemsToWarehouse(RESystem.commandContext, this.entity(), this.warehouseEntity, items);
+        UInventory.postStoreItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items);
         this.submit();
     }
 }

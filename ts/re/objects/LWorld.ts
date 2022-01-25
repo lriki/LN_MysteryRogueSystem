@@ -77,6 +77,27 @@ export class LWorld
             return undefined;
     }
 
+    public findFirstEntity(func: (entity: LEntity) => boolean): LEntity | undefined {
+        const r = REGame.world.objects().find(x => {
+            if (x instanceof LEntity) {
+                return func(x);
+            }
+            return false;
+        });
+        if (r && r instanceof LEntity) {
+            return r;
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    public getFirstEntityByKey(key: string): LEntity {
+        const entity = this.findFirstEntity(x => x.data().entity.key == key);
+        if (!entity) throw new Error(`Entity not found (${key})`);
+        return entity;
+    }
+
     public findBehavior(id: LBehaviorId): LBehavior | undefined {
         const obj = this.findObject(id);
         if (obj && obj.objectType() == LObjectType.Behavior)

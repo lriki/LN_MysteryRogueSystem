@@ -34,36 +34,7 @@ export class SWarehouseDialog extends SDialog {
     }
     
     public withdrawItems(items: LEntity[]): void {
-        const user = this.userEntity();
-        const warehouse = this.warehouseEntity();
-        const userInventory = user.getEntityBehavior(LInventoryBehavior);
-        const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
-        const subject = new SEffectSubject(user);
-        const context = RESystem.commandContext;
-
-        items.forEach(item => {
-            console.log("0");
-            // Item を取り出せるか確認
-            context.post(warehouse, warehouse, subject, item, testPickOutItem,
-                () => {
-                    console.log("2");
-
-                    // Item を格納できるか確認
-                    context.post(user, user, subject, item, testPutInItem,
-                        () => {
-                            console.log("4");
-    
-                            // Item を移す
-                            warehouseInventory.removeEntity(item);
-                            userInventory.addEntity(item);
-
-                            context.postMessage(tr("{0} を取り出した。", UName.makeNameAsItem(item)));
-                            return true;
-                        });
-                    return true;
-                });
-        })
-
+        UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.userEntity(), this.warehouseEntity(), items);
         this.submit();
     }
 }

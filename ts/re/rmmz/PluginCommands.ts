@@ -44,7 +44,6 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
 
         RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player, warehouse), false)
         .then((d: SWarehouseStoreDialog) => {
-            console.log("then", d);
             $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
         });
 

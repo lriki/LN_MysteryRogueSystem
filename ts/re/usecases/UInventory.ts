@@ -88,6 +88,39 @@ export class UInventory {
                             warehouseInventory.addEntity(item);
 
                             cctx.postMessage(tr2("%1を預けた。").format(UName.makeNameAsItem(item)));
+                            this.sort(warehouseInventory);
+                            return true;
+                        });
+                    return true;
+                });
+        });
+    }
+    
+    /**
+     * [引き出す]
+     */
+    public static postWithdrawItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[]): void {
+        const userInventory = user.getEntityBehavior(LInventoryBehavior);
+        const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
+        const subject = new SEffectSubject(user);
+
+        items.forEach(item => {
+            console.log("0");
+            // Item を取り出せるか確認
+            cctx.post(warehouse, warehouse, subject, item, testPickOutItem,
+                () => {
+                    console.log("2");
+
+                    // Item を格納できるか確認
+                    cctx.post(user, user, subject, item, testPutInItem,
+                        () => {
+                            console.log("4");
+    
+                            // Item を移す
+                            warehouseInventory.removeEntity(item);
+                            userInventory.addEntity(item);
+
+                            cctx.postMessage(tr2("%1を取り出した。").format(UName.makeNameAsItem(item)));
                             return true;
                         });
                     return true;

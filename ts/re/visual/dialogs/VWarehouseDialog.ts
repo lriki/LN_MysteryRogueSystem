@@ -41,8 +41,7 @@ export class VWarehouseDialog extends VDialog {
     private handleWithdrawCommand() {
 
         const user = this._model.userEntity();
-        const inventory = this._model.warehouseEntity().getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SWarehouseWithdrawDialog(user, inventory), (result: SWarehouseWithdrawDialog) => {
+        this.openSubDialog(new SWarehouseWithdrawDialog(user, this._model.warehouseEntity()), (result: SWarehouseWithdrawDialog) => {
             this._model.withdrawItems(result.resultItems());
         });
     }
