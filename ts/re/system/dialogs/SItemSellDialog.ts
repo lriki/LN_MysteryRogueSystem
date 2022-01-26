@@ -8,16 +8,22 @@ import { SDialog } from "../SDialog";
 
 export class SItemSellDialog extends SDialog {
     private _userEntityId: LEntityId;
+    private _inventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
 
     public constructor(user: LEntity) {
         super();
         this._userEntityId = user.entityId();
+        this._inventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
     }
 
     public get user(): LEntity {
         return REGame.world.entity(this._userEntityId);
+    }
+
+    public get inventory(): LInventoryBehavior {
+        return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
     public setResultItems(items: LEntity[]) {

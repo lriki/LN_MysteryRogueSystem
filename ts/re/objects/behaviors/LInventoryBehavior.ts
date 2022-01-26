@@ -127,6 +127,10 @@ export class LInventoryBehavior extends LBehavior {
         return this._capacity;
     }
 
+    public set capacity(value: number) {
+        this._capacity = value;
+    }
+
     public get itemCount(): number {
         return this._entities.length;
     }

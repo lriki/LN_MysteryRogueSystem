@@ -12,6 +12,7 @@ import { LEntity } from "../objects/LEntity";
 import { SWarehouseStoreDialog } from "../system/dialogs/SWarehouseStoreDialog";
 import { USearch } from "../usecases/USearch";
 import { SWarehouseWithdrawDialog } from "../system/dialogs/SWarehouseWithdrawDialog";
+import { UProperty } from "../usecases/UProperty";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -122,4 +123,11 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
     else {
         $gameVariables.setValue(REBasics.variables.result, -1);
     }
+});
+
+PluginManager.registerCommand(pluginName, "MR-SetProperty", function(this: Game_Interpreter, args: any) {
+    const entityKey = args["entityKey"];
+    const propertyPath = args["propertyPath"];
+    const value = args["value"];
+    UProperty.setValue(entityKey, propertyPath, value);
 });

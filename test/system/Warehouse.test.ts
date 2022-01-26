@@ -9,6 +9,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SWarehouseStoreDialog } from "ts/re/system/dialogs/SWarehouseStoreDialog";
 import { SWarehouseWithdrawDialog } from "ts/re/system/dialogs/SWarehouseWithdrawDialog";
 import { SItemSellDialog } from "ts/re/system/dialogs/SItemSellDialog";
+import { UProperty } from "ts/re/usecases/UProperty";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -222,4 +223,15 @@ test("system.Warehouse.Sell", () => {
     expect(weapon1.isDestroyed()).toBeTruthy();
     expect(grass1.isDestroyed()).toBeTruthy();
     expect(inventory1.gold()).toBe(weapon1.data().purchasePrice + grass1.data().purchasePrice);
+});
+
+test("system.Warehouse.ChangeCapacity", () => {
+    TestEnv.newGame();
+
+    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
+
+    UProperty.setValue("kActor_Warehouse_A", "inventory.capacity", 100);
+
+    expect(inventory2.capacity).toBe(100);
 });

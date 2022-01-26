@@ -831,7 +831,7 @@ export class LEntity extends LObject
     //----------------------------------------
     // Behavior
 
-    private basicBehaviors(): LBehavior[] {
+    public basicBehaviors(): LBehavior[] {
         return this._basicBehaviors.map(x => REGame.world.behavior(x));
     }
 

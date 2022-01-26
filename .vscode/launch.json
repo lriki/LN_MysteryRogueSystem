@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "system.Warehouse.Sell"
+                "-t", "system.Warehouse.ChangeCapacity"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
