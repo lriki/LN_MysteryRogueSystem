@@ -6,12 +6,9 @@ import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
-import { UInventory } from "ts/re/usecases/UInventory";
-import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { SWarehouseStoreDialog } from "ts/re/system/dialogs/SWarehouseStoreDialog";
 import { SWarehouseWithdrawDialog } from "ts/re/system/dialogs/SWarehouseWithdrawDialog";
+import { SItemSellDialog } from "ts/re/system/dialogs/SItemSellDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -186,4 +183,43 @@ test("system.Warehouse.Withdraw.Fully", () => {
     // アイテムの受け渡しは発生していないこと
     expect(inventory1.itemCount).toBe(inventory1.capacity - 1);
     expect(inventory2.itemCount).toBe(2);
+});
+
+test("system.Warehouse.Sell", () => {
+    TestEnv.newGame();
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+
+    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
+
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "grass1"));
+    inventory2.addEntity(weapon1);
+    inventory2.addEntity(grass1);
+
+    // Dialog を開く
+    let submitted = false;
+    RESystem.commandContext.openDialog(player1, new SItemSellDialog(player1), false)
+    .then((d: SItemSellDialog) => {
+        submitted = true;
+    });
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    const dialog = RESystem.dialogContext.activeDialog();
+    assert(dialog instanceof SItemSellDialog);
+
+    dialog.setResultItems([grass1, weapon1]);
+    dialog.submitSell();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    
+    expect(inventory2.hasAnyItem()).toBeFalsy();
+    expect(weapon1.isDestroyed()).toBeTruthy();
+    expect(grass1.isDestroyed()).toBeTruthy();
+    expect(inventory1.gold()).toBe(weapon1.data().purchasePrice + grass1.data().purchasePrice);
 });

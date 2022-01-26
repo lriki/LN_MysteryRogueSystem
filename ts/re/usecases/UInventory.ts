@@ -138,4 +138,30 @@ export class UInventory {
                 });
         });
     }
+
+    /**
+     * [売る] 
+     */
+    public static postSellItemsAndDestroy(cctx: SCommandContext, customer: LEntity, items: LEntity[]): void {
+        const customerInventory = customer.getEntityBehavior(LInventoryBehavior);
+        const subject = new SEffectSubject(customer);
+
+        let testCount = 0;
+        for (const item of items) {
+            cctx.post(customer, customer, subject, item, testPickOutItem, () => {   // Item を取り出せるか確認
+                testCount++;
+                if (testCount >= items.length) {
+                    // 全部確認完了
+                    let price = 0;
+                    for (const item of items) {
+                        price += item.data().purchasePrice;
+                        item.removeFromParent();
+                        item.destroy();
+                    }
+                    customerInventory.gainGold(price);
+                }
+                return true;
+            });
+        }
+    }
 }
