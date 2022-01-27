@@ -15,7 +15,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
     public constructor(user: LEntity, warehouse: LEntity) {
         super();
         this._userEntityId = user.entityId();
-        this._inventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
+        this._inventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._warehouseEntityId = warehouse.entityId();
         this._resultItems = [];
     }
