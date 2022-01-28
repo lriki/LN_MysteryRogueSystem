@@ -151,7 +151,6 @@ test("ai.CharacterAI.Issue2", () => {
     REGame.world._transferEntity(enemy2, floorId, 14, 4);
     enemy2.dir = 6;
 
-    // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
@@ -161,4 +160,34 @@ test("ai.CharacterAI.Issue2", () => {
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+});
+
+// 通路移動中、向きが変更されない問題の修正確認
+test("ai.CharacterAI.Issue3", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(floorId, 20, 10);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 26, 14);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // シミュレーション実行
+    for (let i = 0; i < 7; i++) {
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        
+        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    }
+
+    expect(enemy1.x).toBe(21);
+    expect(enemy1.y).toBe(12);
+
+
 });
