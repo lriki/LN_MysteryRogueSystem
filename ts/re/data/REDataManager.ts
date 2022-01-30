@@ -601,8 +601,8 @@ export class REDataManager
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
-                entity.cellingPrice2 = x.price;
-                entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
+                entity.sellingPrice2 = x.price;
+                entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
 
                 const emittor = REData.newEmittor(entity.entity.key);
                 const effect = new DEffect(entity.entity.key);
@@ -647,8 +647,8 @@ export class REDataManager
             if (x) {
                 entity.display.name = DHelpers.parseDisplayName(x.name);
                 entity.display.iconIndex = x.iconIndex ?? 0;
-                entity.cellingPrice2 = x.price;
-                entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
+                entity.sellingPrice2 = x.price;
+                entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentPart = x.etypeId;
                 entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
@@ -691,8 +691,8 @@ export class REDataManager
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
-                entity.cellingPrice2 = x.price;
-                entity.purchasePrice = Math.max(entity.cellingPrice2 / 2, 1);
+                entity.sellingPrice2 = x.price;
+                entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentPart = x.etypeId;
                 entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };

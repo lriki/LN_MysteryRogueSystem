@@ -816,7 +816,7 @@ export class LEntity extends LObject
 
     public queryPrice(): LPriceInfo {
         const data = this.data();
-        const result: LPriceInfo = { cellingPrice: data.cellingPrice2, purchasePrice: data.purchasePrice };
+        const result: LPriceInfo = { sellingPrice: data.sellingPrice2, purchasePrice: data.purchasePrice };
         this.iterateBehaviorsReverse(b => {
             b.onQueryPrice(result);
             return true;

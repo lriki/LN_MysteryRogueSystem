@@ -49,7 +49,7 @@ export class VWindowHelper {
             const itemBehavior = item.findEntityBehavior(LItemBehavior);
             if (itemBehavior && itemBehavior.shopStructureId() > 0) {
                 const price = item.queryPrice();
-                const text = price.cellingPrice.toString();
+                const text = price.sellingPrice.toString();
                 const tw = window.textWidth(text) + 8;
                 const size = window.textSizeEx(text);
                 const th = size.height - 4;

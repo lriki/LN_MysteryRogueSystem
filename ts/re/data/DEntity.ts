@@ -172,7 +172,7 @@ export class DEntity {
 
 
     /** 買い値（販売価格） */
-    cellingPrice2: number;
+    sellingPrice2: number;
 
     /** 売り値 (買取価格) */
     purchasePrice: number;
@@ -257,7 +257,7 @@ export class DEntity {
         this.description = "";
         this.identificationDifficulty = DIdentificationDifficulty.Clear;
         this.identifiedTiming = DIdentifiedTiming.None;
-        this.cellingPrice2 = 0;
+        this.sellingPrice2 = 0;
         this.purchasePrice = 0;
         this.canModifierState = true;
         this.itemData = undefined;

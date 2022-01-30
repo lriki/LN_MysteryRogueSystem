@@ -16,6 +16,12 @@ export class VItemListWindowItem {
     }
 }
 
+export enum VItemListPriceTag {
+    None,
+    SellingPrice,
+    PurchasePrice,
+}
+
 /**
  */
 export class VItemListWindow extends Window_Selectable {
@@ -28,6 +34,7 @@ export class VItemListWindow extends Window_Selectable {
     private _rightArrowSprite: Sprite | undefined;
 
     public multipleSelectionEnabled: boolean;
+    public priceTag: VItemListPriceTag;
 
     constructor(rect: Rectangle) {
         super(rect);
@@ -35,6 +42,7 @@ export class VItemListWindow extends Window_Selectable {
         this._pagenationEnabled = true;
         this._currentPageIndex = 0;
         this.multipleSelectionEnabled = false;
+        this.priceTag = VItemListPriceTag.None;
         this.createPagenationArrowSprites();
     }
 
@@ -46,6 +54,21 @@ export class VItemListWindow extends Window_Selectable {
         return Math.max(Math.floor((this._items.length - 1) / this.itemsParPage) + 1, 0);
     }
 
+    public getActualPriceTag(item: LEntity): VItemListPriceTag {
+        if (this.priceTag != VItemListPriceTag.None) {
+            return this.priceTag;
+        }
+        else {
+            const itemBehavior = item.findEntityBehavior(LItemBehavior);
+            if (itemBehavior && itemBehavior.shopStructureId() > 0) {
+                return VItemListPriceTag.SellingPrice;
+            }
+            else {
+                return VItemListPriceTag.None;
+            }
+        }
+    }
+    
     public setInventory(inventory: LInventoryBehavior): void {
         this._inventory = inventory;
         this.refreshItems();
@@ -286,10 +309,11 @@ export class VItemListWindow extends Window_Selectable {
             }
 
             // 値札
-            const itemBehavior = entity.findEntityBehavior(LItemBehavior);
-            if (itemBehavior && itemBehavior.shopStructureId() > 0) {
+            const priceTag = this.getActualPriceTag(entity);
+            if (priceTag != VItemListPriceTag.None) {
                 const price = entity.queryPrice();
-                const text = price.cellingPrice.toString();
+                const value = (priceTag == VItemListPriceTag.SellingPrice) ? price.sellingPrice : price.purchasePrice;
+                const text = value.toString();
                 const tw = this.textWidth(text) + 8;
                 const size = this.textSizeEx(text);
                 const th = size.height - 4;

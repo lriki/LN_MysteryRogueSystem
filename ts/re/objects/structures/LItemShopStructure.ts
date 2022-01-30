@@ -123,7 +123,7 @@ export class LItemShopStructure extends LStructure {
     // 請求額
     public getBillingPrice(): number {
         const items = this.getLossItems();
-        return items.reduce((r, i) => r + i.queryPrice().cellingPrice, 0);
+        return items.reduce((r, i) => r + i.queryPrice().sellingPrice, 0);
     }
 
     // 買取中の未精算額

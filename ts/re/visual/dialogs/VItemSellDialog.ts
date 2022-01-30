@@ -4,6 +4,7 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase } from "./VItemListDialogBase";
 import { SItemSellDialog } from "ts/re/system/dialogs/SItemSellDialog";
+import { VItemListPriceTag } from "../windows/VItemListWindow";
 
 export class VItemSellDialog extends VItemListDialogBase {
     private _model: SItemSellDialog;
@@ -12,6 +13,7 @@ export class VItemSellDialog extends VItemListDialogBase {
         super(model.inventory, model);
         this._model = model;
         this.itemListWindow.multipleSelectionEnabled = true;
+        this.itemListWindow.priceTag = VItemListPriceTag.PurchasePrice;
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {

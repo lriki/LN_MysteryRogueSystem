@@ -2,7 +2,7 @@
 export type LStructureId = number;
 
 export interface LPriceInfo {
-    cellingPrice: number;
+    sellingPrice: number;
     purchasePrice: number;
 }
 
