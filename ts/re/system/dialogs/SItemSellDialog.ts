@@ -7,35 +7,42 @@ import { RESystem } from "../RESystem";
 import { SDialog } from "../SDialog";
 
 export class SItemSellDialog extends SDialog {
-    private _userEntityId: LEntityId;
-    private _inventoryBehaviorId: LBehaviorId;
+    private _serviceProviderId: LEntityId;
+    private _serviceUserId: LEntityId;
+    private _inventoryId: LBehaviorId;
     private _resultItems: LEntityId[];
 
-    public constructor(user: LEntity) {
+    public constructor(serviceProvider: LEntity, serviceUser: LEntity, inventoryHolder: LEntity) {
         super();
-        this._userEntityId = user.entityId();
-        this._inventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
+        this._serviceProviderId = serviceProvider.entityId();
+        this._serviceUserId = serviceUser.entityId();
+        this._inventoryId = inventoryHolder.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
     }
 
-    public get user(): LEntity {
-        return REGame.world.entity(this._userEntityId);
+    public get serviceProvider(): LEntity {
+        return REGame.world.entity(this._serviceProviderId);
+    }
+
+    public get serviceUser(): LEntity {
+        return REGame.world.entity(this._serviceUserId);
     }
 
     public get inventory(): LInventoryBehavior {
-        return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
+        return REGame.world.behavior(this._inventoryId) as LInventoryBehavior;
+    }
+
+    public get resultItems(): LEntity[] {
+        return this._resultItems.map(e => REGame.world.entity(e));
     }
 
     public setResultItems(items: LEntity[]) {
         this._resultItems = items.map(e => e.entityId());
     }
 
-    public resultItems(): LEntity[] {
-        return this._resultItems.map(e => REGame.world.entity(e));
-    }
     
     public submitSell(): void {
-        UInventory.postSellItemsAndDestroy(RESystem.commandContext, this.user, this.resultItems());
+        UInventory.postSellItemsAndDestroy(RESystem.commandContext, this.serviceUser, this.resultItems);
         this.submit();
     }
 }

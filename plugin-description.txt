@@ -40,6 +40,12 @@
  * @arg actorKey
  * @type string
 
+ * @command MR-ShowItemSellDialog
+ * @text ShowItemSellDialog
+ * @desc 売る
+ * @arg serviceProviderKey
+ * @type string
+
  * @command MR-ProceedFloorForward
  * @text ProceedFloorForward
  * @desc 次のフロアへ

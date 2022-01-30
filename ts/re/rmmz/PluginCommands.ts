@@ -13,6 +13,7 @@ import { SWarehouseStoreDialog } from "../system/dialogs/SWarehouseStoreDialog";
 import { USearch } from "../usecases/USearch";
 import { SWarehouseWithdrawDialog } from "../system/dialogs/SWarehouseWithdrawDialog";
 import { UProperty } from "../usecases/UProperty";
+import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -54,6 +55,19 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (arg
         RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(player, USearch.getUniqueActorByKey(actorKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
             $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
+        });
+        $gameMap._interpreter.setWaitMode("MR-Dialog");
+    }
+});
+
+PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) => {
+    const serviceProviderKey: string = args.serviceProviderKey;
+    if (REVisual.manager) {
+        const player = REGame.camera.getFocusedEntity();
+        const serviceProvider = USearch.getUniqueActorByKey(serviceProviderKey);
+        RESystem.commandContext.openDialog(player, new SItemSellDialog(serviceProvider, player, serviceProvider), false)
+        .then((d: SItemSellDialog) => {
+            $gameVariables.setValue(REBasics.variables.result, d.resultItems.length);
         });
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }

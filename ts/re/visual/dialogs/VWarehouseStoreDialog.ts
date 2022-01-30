@@ -12,7 +12,7 @@ export class VWarehouseStoreDialog extends VItemListDialogBase {
     _model: SWarehouseStoreDialog;
 
     public constructor(model: SWarehouseStoreDialog) {
-        super(model.user, model.inventory, model);
+        super(model.inventory, model);
         this._model = model;
         this.itemListWindow.multipleSelectionEnabled = true;
     }

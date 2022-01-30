@@ -42,6 +42,8 @@ import { REBasics } from "../data/REBasics";
 import { VWarpSequel } from "./sequels/VWarpSequel";
 import { VStumbleSequel } from "./sequels/VStumbleSequel";
 import { VJumpSequel } from "./sequels/VJumpSequel";
+import { VItemSellDialog } from "./dialogs/VItemSellDialog";
+import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
 
 /**
  */
@@ -111,6 +113,8 @@ export class REVisual_Manager
             this._dialogNavigator._openDialog(new VItemListDialog(model));
         else if (model instanceof SDetailsDialog)
             this._dialogNavigator._openDialog(new VDetailsDialog(model));
+        else if (model instanceof SItemSellDialog)
+            this._dialogNavigator._openDialog(new VItemSellDialog(model));
             
 
             

@@ -202,7 +202,7 @@ test("system.Warehouse.Sell", () => {
 
     // Dialog を開く
     let submitted = false;
-    RESystem.commandContext.openDialog(player1, new SItemSellDialog(player1), false)
+    RESystem.commandContext.openDialog(player1, new SItemSellDialog(warehouse1, player1, warehouse1), false)
     .then((d: SItemSellDialog) => {
         submitted = true;
     });

@@ -35,7 +35,7 @@ export class VItemListDialog extends VItemListDialogBase {
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
     constructor(model: SItemListDialog) {
-        super(model.entity(), model.inventory(), model);
+        super(model.inventory(), model);
         this._model = model;
 
         

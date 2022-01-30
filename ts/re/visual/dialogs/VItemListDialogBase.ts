@@ -6,7 +6,6 @@ import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
 export class VItemListDialogBase extends VDialog {
-    private _actorEntity: LEntity;
     private _inventory: LInventoryBehavior;
     private _itemListWindow: VItemListWindow;
     private _commandWindow: VFlexCommandWindow;
@@ -14,9 +13,8 @@ export class VItemListDialogBase extends VDialog {
     private _itemsParPage = 12;
 
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, model: SDialog) {
+    public constructor(inventory: LInventoryBehavior, model: SDialog) {
         super(model);
-        this._actorEntity = actorEntity;
         this._inventory = inventory;
 
         

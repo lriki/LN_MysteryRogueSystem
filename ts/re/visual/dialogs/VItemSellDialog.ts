@@ -9,7 +9,7 @@ export class VItemSellDialog extends VItemListDialogBase {
     private _model: SItemSellDialog;
 
     public constructor(model: SItemSellDialog) {
-        super(model.user, model.inventory, model);
+        super(model.inventory, model);
         this._model = model;
         this.itemListWindow.multipleSelectionEnabled = true;
     }
