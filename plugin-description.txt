@@ -31,19 +31,26 @@
  * @command MR-ShowWarehouseStoreDialog
  * @text ShowWarehouseStoreDialog
  * @desc 預ける
- * @arg actorKey
+ * @arg serviceProviderKey
+ * @type string
+ * @arg serviceUserKey
  * @type string
 
  * @command MR-ShowWarehouseWithdrawDialog
  * @text ShowWarehouseWithdrawDialog
  * @desc 引き出す
- * @arg actorKey
+ * @arg serviceProviderKey
+ * @type string
+ * @arg serviceUserKey
  * @type string
 
  * @command MR-ShowItemSellDialog
- * @text ShowItemSellDialog
  * @desc 売る
  * @arg serviceProviderKey
+ * @type string
+ * @arg serviceUserKey
+ * @type string
+ * @arg inventoryOwnerKey
  * @type string
 
  * @command MR-ProceedFloorForward

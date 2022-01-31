@@ -37,10 +37,11 @@ PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
-    const actorKey: string = args.actorKey;
+    const serviceProviderKey: string = args.serviceProviderKey;
+    const serviceUserKey: string = args.serviceUserKey;
     if (REVisual.manager) {
         const player = REGame.camera.getFocusedEntity();
-        RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(player, USearch.getUniqueActorByKey(actorKey)), false)
+        RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseStoreDialog) => {
             $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
         });
@@ -49,10 +50,11 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (args: any) => {
-    const actorKey: string = args.actorKey;
+    const serviceProviderKey: string = args.serviceProviderKey;
+    const serviceUserKey: string = args.serviceUserKey;
     if (REVisual.manager) {
         const player = REGame.camera.getFocusedEntity();
-        RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(player, USearch.getUniqueActorByKey(actorKey)), false)
+        RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
             $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
         });
@@ -62,10 +64,11 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (arg
 
 PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) => {
     const serviceProviderKey: string = args.serviceProviderKey;
+    const serviceUserKey: string = args.serviceUserKey;
+    const inventoryOwnerKey: string = args.inventoryOwnerKey;
     if (REVisual.manager) {
         const player = REGame.camera.getFocusedEntity();
-        const serviceProvider = USearch.getUniqueActorByKey(serviceProviderKey);
-        RESystem.commandContext.openDialog(player, new SItemSellDialog(serviceProvider, player, serviceProvider), false)
+        RESystem.commandContext.openDialog(player, new SItemSellDialog(USearch.getEntityByKeyPattern(serviceProviderKey), USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(inventoryOwnerKey)), false)
         .then((d: SItemSellDialog) => {
             $gameVariables.setValue(REBasics.variables.result, d.resultItems.length);
         });

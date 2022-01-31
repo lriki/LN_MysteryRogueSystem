@@ -153,15 +153,6 @@ export class VItemListDialog extends VItemListDialogBase {
         });
     }
 
-    private handleDetails(): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        const model = new SDetailsDialog(itemEntity);
-        this.openSubDialog(model, (result: any) => {
-            //this.activateCommandWindow();
-            throw new Error("Not Implemented.");
-        });
-    }
-
     // override
     onMakeCommandList(window: VFlexCommandWindow): void {
 
@@ -227,19 +218,7 @@ export class VItemListDialog extends VItemListDialogBase {
             window.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
         }
 
-        // [説明] を終端に追加
-        window.addSystemCommand(tr2("説明"), "details", x => this.handleDetails());
-
-        /*
-        const self = this;
-        this._commandWindow.setActionList2(actualActions.map(actionId => {
-            return {
-                actionId: actionId,
-                handler: (x) => self.onAction(x),
-            };
-        }));
-        */
-
+        this.onMakeCommandList(window);
     }
 
     // private showCommandListWindow(): void {

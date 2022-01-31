@@ -19,28 +19,13 @@ export class VWarehouseStoreDialog extends VItemListDialogBase {
 
     // override
     onMakeCommandList(window: VFlexCommandWindow): void {
-        //window.clear();
         window.addSystemCommand(tr2("預ける"), "store", () => this.handleStore());
-        if (!this.itemListWindow.isMultipleSelecting()) {
-            window.addSystemCommand(tr2("説明"), "details", () => this.handleDetails());
-        }
-        
-        // this.itemListWindow.deactivate();
-        // window.openness = 255;
-        // window.activate();
+        super.onMakeCommandList(window);
     }
 
     private handleStore(): void {
         const items = this.itemListWindow.getSelectedItems();
         this._model.setResultItems(items);
         this._model.storeItems(this._model.resultItems());
-    }
-    
-    private handleDetails(): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        const model = new SDetailsDialog(itemEntity);
-        this.openSubDialog(model, (result: any) => {
-            this.activateCommandWindow();
-        });
     }
 }

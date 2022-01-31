@@ -244,4 +244,17 @@ export class USearch {
         if (!entity) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(key));
         return entity;
     }
+
+    public static getEntityByKeyPattern(keyPattern: string): LEntity {
+        if (keyPattern == "${Player}") {
+            return REGame.camera.getFocusedEntity();
+        }
+        else {
+            const entity = REGame.system.uniqueActorUnits
+                .map(x => REGame.world.entity(x))
+                .find(x => x.data().entity.key == keyPattern);
+            if (!entity) throw new Error(tr2("%1は見つかりませんでした。").format(keyPattern));
+            return entity;
+        }
+    }
 }

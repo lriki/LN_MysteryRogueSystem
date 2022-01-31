@@ -19,6 +19,7 @@ export class VItemSellDialog extends VItemListDialogBase {
     protected onMakeCommandList(window: VFlexCommandWindow): void {
         const items = this.itemListWindow.getSelectedItems();
         window.addSystemCommand(tr2("売る"), "sell", () => this.handleSell(items));
+        super.onMakeCommandList(window);
     }
     
     private handleSell(items: LEntity[]): void {

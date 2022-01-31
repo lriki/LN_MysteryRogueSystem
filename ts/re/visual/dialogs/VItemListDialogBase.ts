@@ -1,5 +1,7 @@
+import { tr2 } from "ts/re/Common";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
+import { SDetailsDialog } from "ts/re/system/dialogs/SDetailsDialog";
 import { SDialog } from "ts/re/system/SDialog";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
@@ -71,7 +73,9 @@ export class VItemListDialogBase extends VDialog {
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
-
+        if (!this.itemListWindow.isMultipleSelecting()) {
+            window.addSystemCommand(tr2("説明"), "details", () => this.handleDetails());
+        }
     }
 
     protected activateCommandWindow(): void {
@@ -102,13 +106,20 @@ export class VItemListDialogBase extends VDialog {
             this._commandWindow.openness = 0;
         }
     }
+    
+    private handleDetails(): void {
+        const itemEntity = this.itemListWindow.selectedItem();
+        const model = new SDetailsDialog(itemEntity);
+        this.openSubDialog(model, (result: any) => {
+            this.activateCommandWindow();
+        });
+    }
 
     private activateItemWindow() {
         if (this._itemListWindow) {
             this._itemListWindow.refresh();
             this._itemListWindow.activate();
         }
-    };
-
+    }
 }
 

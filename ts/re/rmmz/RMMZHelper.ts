@@ -132,6 +132,5 @@ export class RMMZHelper {
                 event.start();
             }
         }
-    }
-}
+    }}
 

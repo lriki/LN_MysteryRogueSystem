@@ -14,9 +14,8 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
         const items = this.itemListWindow.getSelectedItems();
-
-        this.commandWindow.addSystemCommand(tr("引き出す"), "store", () => this.handleWithdraw(items));
-        this.commandWindow.refresh();
+        window.addSystemCommand(tr("引き出す"), "store", () => this.handleWithdraw(items));
+        super.onMakeCommandList(window);
     }
     
     private handleWithdraw(items: LEntity[]): void {
