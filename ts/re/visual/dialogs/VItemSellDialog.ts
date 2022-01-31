@@ -23,6 +23,7 @@ export class VItemSellDialog extends VItemListDialogBase {
     }
     
     private handleSell(items: LEntity[]): void {
+        SoundManager.playShop();
         this._model.setResultItems(items);
         this._model.submitSell();
     }

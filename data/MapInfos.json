@@ -35,7 +35,7 @@ null,
 {"id":33,"expanded":true,"name":"緑燐の丘 1F","order":129,"parentId":94,"scrollX":811,"scrollY":461.5},
 {"id":34,"expanded":true,"name":"Sandbox","order":60,"parentId":27,"scrollX":819,"scrollY":462.5},
 {"id":35,"expanded":true,"name":"標準システムマップ","order":119,"parentId":25,"scrollX":811,"scrollY":461.5},
-{"id":36,"expanded":false,"name":"テスト拠点","order":120,"parentId":35,"scrollX":811,"scrollY":824.5},
+{"id":36,"expanded":false,"name":"テスト拠点","order":120,"parentId":35,"scrollX":811,"scrollY":979},
 {"id":37,"expanded":false,"name":"宿屋","order":121,"parentId":35,"scrollX":811,"scrollY":461.5},
 {"id":38,"expanded":false,"name":"ダンジョン1","order":124,"parentId":31,"scrollX":811,"scrollY":461.5},
 {"id":39,"expanded":false,"name":"CharacterAI","order":62,"parentId":27,"scrollX":819,"scrollY":463},
@@ -149,5 +149,5 @@ null,
 {"id":147,"expanded":false,"name":"MAP147","order":48,"parentId":140,"scrollX":0,"scrollY":0},
 {"id":148,"expanded":false,"name":"MAP148","order":49,"parentId":140,"scrollX":0,"scrollY":0},
 {"id":149,"expanded":false,"name":"MAP149","order":50,"parentId":140,"scrollX":0,"scrollY":0},
-{"id":150,"expanded":false,"name":"🗂ゲームマップ","order":150,"parentId":0,"scrollX":0,"scrollY":0}
+{"id":150,"expanded":false,"name":"🗂ゲームマップ","order":150,"parentId":0,"scrollX":811,"scrollY":461.5}
 ]
