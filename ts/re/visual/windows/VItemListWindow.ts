@@ -162,7 +162,7 @@ export class VItemListWindow extends Window_Selectable {
     drawItem(index: number): void {
         const item = this.itemAt(index);
         if (item) {
-            const numberWidth = this.numberWidth();
+            const numberWidth = 0;//this.numberWidth();
             const rect = this.itemLineRect(index);
             this.changePaintOpacity(true);
             this.drawEntityItemName(item, rect.x, rect.y, rect.width - numberWidth);
@@ -314,14 +314,27 @@ export class VItemListWindow extends Window_Selectable {
                 const price = entity.queryPrice();
                 const value = (priceTag == VItemListPriceTag.SellingPrice) ? price.sellingPrice : price.purchasePrice;
                 const text = value.toString();
-                const tw = this.textWidth(text) + 8;
+                const tw = this.textWidth(text);
                 const size = this.textSizeEx(text);
                 const th = size.height - 4;
-                const ty = y + (this.lineHeight() - th) / 2;
-                const tx = width - tw + 4;
+
+                // Label rect
+                const labelPaddingV = 2; // Top & Bottom
+                const labelPaddingH = 8; // Left & Right
+                const labelH = this.lineHeight() - labelPaddingV * 2;
+                const labelW = tw + labelPaddingH * 2;
+                const labelX = x + width - labelW;
+                const labelY = y + labelPaddingV;
+
+                // Label backgroud
                 this.changeTextColor(ColorManager.textColor(29));
-                this.drawRect(tx, ty, tw, th);
-                this.drawTextEx(text, width - tw, ty, tw);
+                this.drawRect(labelX, labelY, labelW, labelH);
+
+                const textPaddingV = 0; // Top & Bottom
+                const textPaddingH = 8;
+                const textY = y + textPaddingV;
+                const textX = labelX + textPaddingH;
+                this.drawTextEx(text, textX, textY, tw);
             }
         }
     }
