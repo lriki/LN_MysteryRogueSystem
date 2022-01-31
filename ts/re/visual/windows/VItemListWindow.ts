@@ -174,9 +174,8 @@ export class VItemListWindow extends Window_Selectable {
     // override
     update(): void {
         super.update();
-        if (Input.isTriggered("shift")) {
+        if (Input.isTriggered("pageup")) {
             if (this.multipleSelectionEnabled) {
-                console.log("toggle");
                 this.toggleItemSelection(this.itemAt(this.index()));
             }
         }

@@ -16,7 +16,7 @@ export class VMenuCommandWindow extends Window_Command {
         this.addCommand("足元", "feet", true, undefined);
         this.addCommand("その他", "other", true, undefined);
 
-        if (REGame.map.floorId().isSafety()) {
+        if (REGame.map.floorId().isSafetyMap()) {
             this.addCommand(DTextManager.save, "save", true, undefined);
         }
         else {

@@ -55,7 +55,7 @@ export class VHudWindow extends Window_Base {
     update() {
         this.refresh();
 
-        if (REGame.map.floorId().isTacticsMap()) {
+        if (REGame.map.floorId().isTacticsMap() || REGame.map.floorId().isSafetyMap()) {
             this.visible = true;
         }
         else {

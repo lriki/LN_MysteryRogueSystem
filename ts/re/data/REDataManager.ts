@@ -812,6 +812,10 @@ export class REDataManager
                     this.databaseMapId = i;
                 }
                 else {
+                    if (info.name?.startsWith("MR-Safety:")) {
+                        mapData.safetyMap = true;
+                    }
+
                     // 以下、必ず親Mapが必要なもの
                     const parentInfo = $dataMapInfos[info.parentId];
                     if (parentInfo) {

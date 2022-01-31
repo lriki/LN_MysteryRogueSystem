@@ -172,8 +172,14 @@ export class LFloorId {
         return this.rmmzFixedMapId() > 0;
     }
 
-    public isSafety(): boolean {
-        if (this._landId == DHelpers.RmmzNormalMapLandId) return true; // RE 管理外のマップは常に Safety
+    public isSafetyMap(): boolean {
+        if (this._landId == DHelpers.RmmzNormalMapLandId) {
+            const mapId = this.rmmzMapId();
+            if (REData.maps[mapId].safetyMap) {
+                return true;
+            }
+        }
+
         return this.floorInfo().safetyActions;
     }
 

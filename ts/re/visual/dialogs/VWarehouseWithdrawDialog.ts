@@ -10,6 +10,7 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     public constructor(model: SWarehouseWithdrawDialog) {
         super(model.inventory, model);
         this._model = model;
+        this.itemListWindow.multipleSelectionEnabled = true;
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {

@@ -80,6 +80,9 @@ export class DMap
     mapKind: REFloorMapKind;
 
     exitMap: boolean;
+
+    /** 明示的な MRセーフティマップであるか */
+    safetyMap: boolean;
     
     /** 非REシステムマップにおいて、RMMZオリジナルのメニューを使うか。(つまり、一切 RE システムと関係ないマップであるか) */
     defaultSystem: boolean;
@@ -93,6 +96,7 @@ export class DMap
         this.mapId = 0;
         this.mapKind = REFloorMapKind.FixedMap;
         this.exitMap = false;
+        this.safetyMap = false;
         this.defaultSystem = false;
         this.eventMap = false;
     }
