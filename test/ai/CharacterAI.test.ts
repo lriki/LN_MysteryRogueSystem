@@ -177,17 +177,19 @@ test("ai.CharacterAI.Issue3", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
-    
-    // シミュレーション実行
-    for (let i = 0; i < 7; i++) {
+    const step = (x: number, y: number) => {
         RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
-        
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
-    }
+        expect(enemy1.x).toBe(x);
+        expect(enemy1.y).toBe(y);
+    };
 
-    expect(enemy1.x).toBe(21);
-    expect(enemy1.y).toBe(12);
-
-
+    step(25, 14);
+    step(24, 14);
+    step(23, 14);
+    step(23, 13);
+    step(23, 12);
+    step(22, 12);
+    step(21, 12);
 });

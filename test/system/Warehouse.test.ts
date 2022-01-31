@@ -26,7 +26,7 @@ test("system.Warehouse.Store", () => {
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     // Dialog を開く
@@ -67,7 +67,7 @@ test("system.Warehouse.Store.Fully", () => {
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     // 容量-1 までアイテムを詰め込む
@@ -106,7 +106,7 @@ test("system.Warehouse.Withdraw", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
@@ -148,7 +148,7 @@ test("system.Warehouse.Withdraw.Fully", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
     
     // 容量-1 までアイテムを詰め込む
@@ -192,7 +192,7 @@ test("system.Warehouse.Sell", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
@@ -228,10 +228,10 @@ test("system.Warehouse.Sell", () => {
 test("system.Warehouse.ChangeCapacity", () => {
     TestEnv.newGame();
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kActor_Warehouse_A");
+    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    UProperty.setValue("kActor_Warehouse_A", "inventory.capacity", 100);
+    UProperty.setValue("kEntity_Warehouse_A", "inventory.capacity", 100);
 
     expect(inventory2.capacity).toBe(100);
 });
