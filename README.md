@@ -68,6 +68,8 @@ code --install-extension ruakr.vsc-nwjs
 
 `F1` > `nwjs install` > `0.48.4`
 
+git config --local core.hooksPath .githooks
+
 用語整理
 ----------
 
