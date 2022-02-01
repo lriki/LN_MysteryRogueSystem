@@ -1,4 +1,0 @@
-#!/bin/sh
-
-echo "Abort commiting."
-python ./data/format.py

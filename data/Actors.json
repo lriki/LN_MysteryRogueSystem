@@ -1,8 +1,124 @@
 [
-null,
-{"id":1,"battlerName":"","characterIndex":0,"characterName":"MR-Actor1-X","classId":1,"equips":[0,0,0,3,0],"faceIndex":0,"faceName":"","traits":[{"code":11,"dataId":1,"value":1}],"initialLevel":1,"maxLevel":99,"name":"ヒカリ","nickname":"","note":"<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_A>\n<MR-Prefab: kPrefab_Actor_A>\n<MR-Behavior: Eater(1, \"aa\")>\n<MR-Behavior: Waver(1, \"aa\")>\n","profile":""},
-{"id":2,"battlerName":"","characterIndex":1,"characterName":"","classId":1,"equips":[0,0,0,9,0],"faceIndex":1,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"アクターB","nickname":"","note":"<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_B>\n<MR-Prefab: kPrefab_Actor_B>","profile":""},
-{"id":3,"battlerName":"","characterIndex":2,"characterName":"","classId":5,"equips":[31,0,65,5,0],"faceIndex":2,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"アクターC","nickname":"","note":"<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_C>\n<MR-Prefab: kPrefab_Actor_C>","profile":""},
-{"id":4,"battlerName":"","characterIndex":3,"characterName":"","classId":5,"equips":[31,0,0,5,0],"faceIndex":3,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"アクターD","nickname":"","note":"<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_D>\n<MR-Prefab: kPrefab_Actor_D>","profile":""},
-{"id":5,"battlerName":"","characterIndex":0,"characterName":"","classId":1,"equips":[0,0,0,0,0],"faceIndex":0,"faceName":"","traits":[],"initialLevel":1,"maxLevel":99,"name":"倉庫","nickname":"","note":"<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Warehouse_A>\n<MR-Prefab: kPrefab_Warehouse_A>","profile":""}
+  null,
+  {
+    "id": 1,
+    "battlerName": "",
+    "characterIndex": 0,
+    "characterName": "MR-Actor1-X",
+    "classId": 1,
+    "equips": [
+      0,
+      0,
+      0,
+      3,
+      0
+    ],
+    "faceIndex": 0,
+    "faceName": "",
+    "traits": [
+      {
+        "code": 11,
+        "dataId": 1,
+        "value": 1
+      }
+    ],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "ヒカリ",
+    "nickname": "",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_A>\n<MR-Prefab: kPrefab_Actor_A>\n<MR-Behavior: Eater(1, \"aa\")>\n<MR-Behavior: Waver(1, \"aa\")>\n",
+    "profile": ""
+  },
+  {
+    "id": 2,
+    "battlerName": "",
+    "characterIndex": 1,
+    "characterName": "",
+    "classId": 1,
+    "equips": [
+      0,
+      0,
+      0,
+      9,
+      0
+    ],
+    "faceIndex": 1,
+    "faceName": "",
+    "traits": [],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "アクターB",
+    "nickname": "",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_B>\n<MR-Prefab: kPrefab_Actor_B>",
+    "profile": ""
+  },
+  {
+    "id": 3,
+    "battlerName": "",
+    "characterIndex": 2,
+    "characterName": "",
+    "classId": 5,
+    "equips": [
+      31,
+      0,
+      65,
+      5,
+      0
+    ],
+    "faceIndex": 2,
+    "faceName": "",
+    "traits": [],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "アクターC",
+    "nickname": "",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_C>\n<MR-Prefab: kPrefab_Actor_C>",
+    "profile": ""
+  },
+  {
+    "id": 4,
+    "battlerName": "",
+    "characterIndex": 3,
+    "characterName": "",
+    "classId": 5,
+    "equips": [
+      31,
+      0,
+      0,
+      5,
+      0
+    ],
+    "faceIndex": 3,
+    "faceName": "",
+    "traits": [],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "アクターD",
+    "nickname": "",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_D>\n<MR-Prefab: kPrefab_Actor_D>",
+    "profile": ""
+  },
+  {
+    "id": 5,
+    "battlerName": "",
+    "characterIndex": 0,
+    "characterName": "",
+    "classId": 1,
+    "equips": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "faceIndex": 0,
+    "faceName": "",
+    "traits": [],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "倉庫",
+    "nickname": "",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Warehouse_A>\n<MR-Prefab: kPrefab_Warehouse_A>",
+    "profile": ""
+  }
 ]
