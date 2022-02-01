@@ -180,7 +180,8 @@ export class LFloorId {
             }
         }
 
-        return this.floorInfo().safetyActions;
+        return false;
+        //return this.floorInfo().safetyActions;
     }
 
     /** Entity を登場させるマップであるか。false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */

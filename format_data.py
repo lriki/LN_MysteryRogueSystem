@@ -3,7 +3,7 @@ import json
 import glob
 
 dir = os.path.dirname(os.path.abspath(__file__))
-files = glob.glob(dir + "/*.json")
+files = glob.glob(dir + "/data/*.json")
 
 for file in files:
     print("file", file)

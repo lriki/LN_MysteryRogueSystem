@@ -4579,7 +4579,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kObject_EntryPoint_Marker_A\","
+                "    data: \"kEntity_EntryPoint_Marker_A\","
               ]
             },
             {
