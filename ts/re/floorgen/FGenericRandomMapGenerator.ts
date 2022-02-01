@@ -163,7 +163,7 @@ export class FGenericRandomMapGenerator {
         const tracedSectorIds: FSectorId[] = [];               // 一筆書きで通ったところ
         const sectorCount = this._map.sectors().length;
 
-        // 最初に、開始点 Sector を決めてそこから一筆書きの要領で適当に接続していく
+        // 接続の偏りを無くすため、最初に開始点 Sector を決めてそこから一筆書きの要領で適当に接続していく
         {
 
             // 開始 Sector
