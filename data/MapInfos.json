@@ -318,11 +318,11 @@
   {
     "id": 36,
     "expanded": false,
-    "name": "テスト拠点",
+    "name": "MR-Safety:テスト拠点",
     "order": 120,
     "parentId": 35,
-    "scrollX": 811,
-    "scrollY": 979
+    "scrollX": 819,
+    "scrollY": 978.5
   },
   {
     "id": 37,
