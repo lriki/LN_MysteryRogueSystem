@@ -139,19 +139,19 @@ export class SGameManager {
         if (0) {
             const inventory = firstActor.getEntityBehavior(LInventoryBehavior);
             //const inventory = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_スピードドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパワードラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kグロースドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kブラインドドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kワープドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパニックドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kビジブルドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kマッドドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kスリープドラッグ").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_グロースドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ブラインドドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ワープドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ビジブルドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_マッドドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アンチポイズン_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1")));
             
             
         }

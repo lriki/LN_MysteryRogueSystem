@@ -35,8 +35,8 @@ test("concretes.item.grass.PoisonGrass", () => {
     const enemy1Pow1 = enemy1.actualParam(REBasics.params.pow);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_毒草_B").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_毒草_B").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒草_B").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒草_B").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

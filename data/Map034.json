@@ -4429,7 +4429,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_キュアリーフ_A\","
+                "    data: \"kEntity_キュアリーフ_A\","
               ]
             },
             {
@@ -4732,7 +4732,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_キュアリーフ_A\","
+                "    data: \"kEntity_キュアリーフ_A\","
               ]
             },
             {
@@ -5035,7 +5035,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k火炎草70_50\","
+                "    data: \"kEntity_フレイムリーフ_A\","
               ]
             },
             {
@@ -5109,7 +5109,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパニックドラッグ\","
+                "    data: \"kEntity_パニックドラッグ_A\","
               ]
             },
             {
@@ -5641,7 +5641,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ドラゴン草\","
+                "    data: \"kEntity_ドラゴン草_A\","
               ]
             },
             {
@@ -5715,7 +5715,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパワードラッグ\","
+                "    data: \"kEntity_パワードラッグ_A\","
               ]
             },
             {
@@ -5789,7 +5789,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_Gold\","
+                "    data: \"kEntity_Gold\","
               ]
             },
             {

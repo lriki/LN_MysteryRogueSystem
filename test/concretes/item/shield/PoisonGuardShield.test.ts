@@ -26,7 +26,7 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     player1.addState(REData.getState("kState_UT罠必中").id);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンシールド").id, [], "shield1"));
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_毒草_B").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒草_B").id, [], "item1"));
     inventory.addEntity(shield1);
     inventory.addEntity(item1);
     equipmentUser.equipOnUtil(shield1);

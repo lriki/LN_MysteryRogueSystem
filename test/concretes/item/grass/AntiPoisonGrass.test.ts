@@ -24,8 +24,8 @@ test("concretes.item.grass.AntiPoisonGrass.player", () => {
 
     const object1 = TestEnv.createReflectionObject(floorId, 13, 10);
 
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アンチポイズン_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アンチポイズン_A").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
@@ -83,7 +83,7 @@ test("concretes.item.grass.AntiPoisonGrass.enemy", () => {
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアンチポイズン").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アンチポイズン_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
 

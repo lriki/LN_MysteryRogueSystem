@@ -23,12 +23,12 @@ test("system.Inventory.Fully", () => {
 
     // 持てる数だけアイテムを入れる
     for (let i = 0; i < inventory.capacity; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item"));
         inventory.addEntity(item);
     }
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -52,9 +52,9 @@ test("system.Inventory.Sort", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_スピードドラッグ").id, [], "grass1"));
-    const grass2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパワードラッグ").id, [], "grass2"));
-    const grass3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kグロースドラッグ").id, [], "grass3"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "grass1"));
+    const grass2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パワードラッグ_A").id, [], "grass2"));
+    const grass3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_グロースドラッグ_A").id, [], "grass3"));
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
     const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴールドソード_A").id, [], "weapon2"));
     const weapon3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_セイクリッドセイバー_A").id, [], "weapon3"));

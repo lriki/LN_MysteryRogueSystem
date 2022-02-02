@@ -105,7 +105,7 @@ test("concretes.activity.Stumble.player.onItem", () => {
     }
 
     // アイテムを置く
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kパワードラッグ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1"));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

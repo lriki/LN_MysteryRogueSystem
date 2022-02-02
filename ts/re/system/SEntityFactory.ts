@@ -261,13 +261,13 @@ export class SEntityFactory {
                 entity.addBehavior(LInventoryBehavior);
                 entity.addBehavior(LStorageBehavior);
                 break;
-            case "kItem_Gold":
+            case "kEntity_Gold":
                 entity.addBehavior(LGoldBehavior);
                 break;
             case "kItem_リープの杖":
                 entity.addBehavior(LStumblePreventionBehavior);
                 break;
-            case "kItem_RevivalGrass":
+            case "kEntity_RevivalGrass_A":
                 entity.addBehavior(LActivityCharmBehavior);
                 break;
 

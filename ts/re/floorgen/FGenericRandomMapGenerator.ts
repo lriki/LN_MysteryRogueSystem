@@ -7,7 +7,7 @@ const AreaMinSize = RoomMinSize + 3;
 export enum FGenericRandomMapWayConnectionMode
 {
     /** 区画の辺に通路を繋げる。通路が部屋を回り込んだり、全体的に長くなるためクロスが多くなったり、予測しづらく複雑なマップを生成する。 */
-    AreaEdge,
+    SectionEdge,
 
     /** 部屋の辺に通路を繋げる。通路の回り込みは無くなり、部屋の基準点間の最短距離を結ぶようになる。部屋から通路が伸びる方向にはほぼ必ず部屋があるため、予測しやすく難易度の低いマップとなる。 */
     RoomEdge,
@@ -40,7 +40,7 @@ export class FGenericRandomMapGenerator {
 
     public constructor(map: FMap) {
         this._map = map;
-        this._wayConnectionMode = FGenericRandomMapWayConnectionMode.AreaEdge;
+        this._wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
     }
 
     public generate(): void {
@@ -306,7 +306,7 @@ export class FGenericRandomMapGenerator {
                     sector.edge(FDirection.R).addPin(oy + y);
                 }
             }
-            else if (this._wayConnectionMode == FGenericRandomMapWayConnectionMode.AreaEdge) {
+            else if (this._wayConnectionMode == FGenericRandomMapWayConnectionMode.SectionEdge) {
                 const sx = sector.x1();
                 const sy = sector.y1();
 

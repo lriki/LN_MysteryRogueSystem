@@ -10,7 +10,7 @@ import { RESerializable } from "ts/re/Common";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 
 /**
- * @deprecated see kItem_スピードドラッグ
+ * @deprecated see kEntity_スピードドラッグ_A
  */
 @RESerializable
 export class LEaterBehavior extends LBehavior {

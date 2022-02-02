@@ -4667,7 +4667,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_RevivalGrass\","
+                "    data: \"kEntity_RevivalGrass_A\","
               ]
             },
             {

@@ -26,8 +26,8 @@ test("concretes.item.grass.Hypericum.player", () => {
     REGame.world._transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kエリクシール").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kエリクシール").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
@@ -82,8 +82,8 @@ test("concretes.item.grass.Hypericum.enemy", () => {
     REGame.world._transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kエリクシール").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kエリクシール").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
@@ -133,7 +133,7 @@ test("concretes.item.grass.Hypericum.undead", () => {
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kエリクシール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------

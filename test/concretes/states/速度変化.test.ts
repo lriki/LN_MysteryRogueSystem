@@ -132,7 +132,7 @@ test("concretes.states.速度変化.Issue1", () => {
     //actor1.addBuff(buff1);
     //const param = actor1.params().param(DBasics.params.agi);
     //assert(param);
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // enemy1

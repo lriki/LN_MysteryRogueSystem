@@ -25,7 +25,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     inventory1.gainGold(10000);
 
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     REGame.world._transferEntity(gold1, floorId, 13, 10);
     

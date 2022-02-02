@@ -295,7 +295,7 @@ test("SpeedLevel.ChangeSpeed2", () => {
 
     // Players
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_スピードドラッグ").id, [], "item3"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item3"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.addState(REData.getState("kState_UnitTest_投擲必中").id);
 

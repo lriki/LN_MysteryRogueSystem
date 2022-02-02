@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スピードドラッグ\","
+                "    data: \"kEntity_スピードドラッグ_A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_きえさり草\","
+                "    data: \"kEntity_きえさり草_A\","
               ]
             },
             {
@@ -4974,7 +4974,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kブラインドドラッグ\","
+                "    data: \"kEntity_ブラインドドラッグ_A\","
               ]
             },
             {
@@ -5125,7 +5125,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパニックドラッグ\","
+                "    data: \"kEntity_パニックドラッグ_A\","
               ]
             },
             {
@@ -5199,7 +5199,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kマッドドラッグ\","
+                "    data: \"kEntity_マッドドラッグ_A\","
               ]
             },
             {
@@ -5273,7 +5273,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_しびれ草\","
+                "    data: \"kEntity_しびれ草_A\","
               ]
             },
             {

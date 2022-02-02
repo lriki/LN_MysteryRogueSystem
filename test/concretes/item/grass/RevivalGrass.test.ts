@@ -24,7 +24,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_RevivalGrass").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_RevivalGrass_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy1
@@ -49,6 +49,6 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
     const hp2 = player1.actualParam(REBasics.params.hp);
     expect(hp2).toBe(hp1);
 
-    //expect(inventory.entities()[0].dataId() == REData.getEntity("kItem_雑草").id).toBe(true);
+    //expect(inventory.entities()[0].dataId() == REData.getEntity("kEntity_雑草_A").id).toBe(true);
 });
 

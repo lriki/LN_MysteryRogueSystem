@@ -24,12 +24,12 @@ test("concretes.item.Gold", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     
     // gold1 - 地面に配置
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     REGame.world._transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // gold2 - インベントリに入れる
-    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_Gold").id, [], "gold2"));
+    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold").id, [], "gold2"));
     gold2.getEntityBehavior(LGoldBehavior).setGold(200);
     inventory1.addEntity(gold2);
 

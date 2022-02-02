@@ -26,7 +26,7 @@ test("concretes.item.grass.LevelUpGrass", () => {
     const level1 = experience.level(player1);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kグロースドラッグ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_グロースドラッグ_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     TestUtils.testCommonGrassBegin(player1, item1);

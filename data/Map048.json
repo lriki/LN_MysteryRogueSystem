@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スピードドラッグ\","
+                "    data: \"kEntity_スピードドラッグ_A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパワードラッグ\","
+                "    data: \"kEntity_パワードラッグ_A\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kグロースドラッグ\","
+                "    data: \"kEntity_グロースドラッグ_A\","
               ]
             },
             {
@@ -4747,7 +4747,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kブラインドドラッグ\","
+                "    data: \"kEntity_ブラインドドラッグ_A\","
               ]
             },
             {
@@ -4821,7 +4821,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kワープドラッグ\","
+                "    data: \"kEntity_ワープドラッグ_A\","
               ]
             },
             {
@@ -4895,7 +4895,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパニックドラッグ\","
+                "    data: \"kEntity_パニックドラッグ_A\","
               ]
             },
             {
@@ -4969,7 +4969,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kビジブルドラッグ\","
+                "    data: \"kEntity_ビジブルドラッグ_A\","
               ]
             },
             {
@@ -5205,7 +5205,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kマッドドラッグ\","
+                "    data: \"kEntity_マッドドラッグ_A\","
               ]
             },
             {
@@ -5279,7 +5279,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kポイズンドラッグ\","
+                "    data: \"kEntity_ポイズンドラッグ_A\","
               ]
             },
             {
@@ -5353,7 +5353,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_キュアリーフ_A\","
+                "    data: \"kEntity_キュアリーフ_A\","
               ]
             },
             {
@@ -5508,7 +5508,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kObject_投擲反射石A\","
+                "    data: \"kEntity_投擲反射石_A\","
               ]
             },
             {
@@ -5590,7 +5590,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kアンチポイズン\","
+                "    data: \"kEntity_アンチポイズン_A\","
               ]
             },
             {
@@ -5664,7 +5664,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kスリープドラッグ\","
+                "    data: \"kEntity_スリープドラッグ_A\","
               ]
             },
             {
@@ -5738,7 +5738,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k火炎草70_50\","
+                "    data: \"kEntity_フレイムリーフ_A\","
               ]
             },
             {
@@ -5812,7 +5812,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kエリクシール\","
+                "    data: \"kEntity_エリクシール_A\","
               ]
             },
             {
@@ -5886,7 +5886,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_雑草\","
+                "    data: \"kEntity_雑草_A\","
               ]
             },
             {
@@ -5960,7 +5960,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スピードドラッグ\","
+                "    data: \"kEntity_スピードドラッグ_A\","
               ]
             },
             {
@@ -6034,7 +6034,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kブラインドドラッグ\","
+                "    data: \"kEntity_ブラインドドラッグ_A\","
               ]
             },
             {
@@ -6108,7 +6108,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kワープドラッグ\","
+                "    data: \"kEntity_ワープドラッグ_A\","
               ]
             },
             {
@@ -6182,7 +6182,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパニックドラッグ\","
+                "    data: \"kEntity_パニックドラッグ_A\","
               ]
             },
             {
@@ -6256,7 +6256,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kアンチポイズン\","
+                "    data: \"kEntity_アンチポイズン_A\","
               ]
             },
             {
@@ -6331,7 +6331,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kスリープドラッグ\","
+                "    data: \"kEntity_スリープドラッグ_A\","
               ]
             },
             {

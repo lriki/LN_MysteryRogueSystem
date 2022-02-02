@@ -29,7 +29,7 @@ test("concretes.item.識別の巻物", () => {
     inventory.addEntity(item1);
 
     // item2
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_キュアリーフ_A").id, [], "item2"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
     inventory.addEntity(item2);
 
     const name1 = UName.makeNameAsItem(item2);

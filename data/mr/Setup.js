@@ -16,7 +16,7 @@ db.entities = {
         ]
     },
 
-    "kItem_スピードドラッグ": {
+    "kEntity_スピードドラッグ_A": {
         descriptions: [
             "説明文１行目",
             "説明文2行目"
@@ -36,7 +36,7 @@ db.entities = {
     //     ]
     // },
     
-    // "kItem_キュアリーフ_A": {
+    // "kEntity_キュアリーフ_A": {
     //     emittors: [
     //         { code: "SuddenSkillEffect", data: "kSkill_Warp", value: 1.0 / 16.0 }
     //     ]

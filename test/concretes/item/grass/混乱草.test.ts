@@ -23,8 +23,8 @@ test("concretes.item.grass.混乱草", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパニックドラッグ").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパニックドラッグ").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックドラッグ_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックドラッグ_A").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

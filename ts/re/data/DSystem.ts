@@ -85,8 +85,8 @@ export class DSystem {
         this.states.plating = REData.getState("kState_System_Plating").id;
 
         this.fallbackEnemyEntityId = REData.getEnemy("kEntity_スライム_A").entityId;
-        this.fallbackItemEntityId = REData.getItem("kItem_雑草").id;
-        this.fallbackGoldEntityId = REData.getItem("kItem_Gold").id;
+        this.fallbackItemEntityId = REData.getItem("kEntity_雑草_A").id;
+        this.fallbackGoldEntityId = REData.getItem("kEntity_Gold").id;
         //this.fallbackTrapEntityId = REData.getItem("kItem_トラバサミ").id;
 
         for (let i = 1; i < REData.enemies.length; i++) {

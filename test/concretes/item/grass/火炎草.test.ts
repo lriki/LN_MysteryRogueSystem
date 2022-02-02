@@ -32,8 +32,8 @@ test("concretes.item.grass.火炎草.test", () => {
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フレイムリーフ_A").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

@@ -9691,7 +9691,7 @@
     },
     {
       "id": 8,
-      "name": "pスピードドラッグ",
+      "name": "kPrefab_スピードドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -13844,7 +13844,7 @@
     },
     {
       "id": 69,
-      "name": "pパワードラッグ",
+      "name": "kPrefab_パワードラッグ_A",
       "note": "",
       "pages": [
         {
@@ -13911,7 +13911,7 @@
     },
     {
       "id": 70,
-      "name": "pグロースドラッグ",
+      "name": "kPrefab_グロースドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -13978,7 +13978,7 @@
     },
     {
       "id": 71,
-      "name": "pブラインドドラッグ",
+      "name": "kPrefab_ブラインドドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14045,7 +14045,7 @@
     },
     {
       "id": 72,
-      "name": "pワープドラッグ",
+      "name": "kPrefab_ワープドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14112,7 +14112,7 @@
     },
     {
       "id": 73,
-      "name": "pパニックドラッグ",
+      "name": "kPrefab_パニックドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14179,7 +14179,7 @@
     },
     {
       "id": 74,
-      "name": "pビジブルドラッグ",
+      "name": "kPrefab_ビジブルドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14246,7 +14246,7 @@
     },
     {
       "id": 75,
-      "name": "pマッドドラッグ",
+      "name": "kPrefab_マッドドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14313,7 +14313,7 @@
     },
     {
       "id": 76,
-      "name": "pポイズンドラッグ",
+      "name": "kPrefab_ポイズンドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14447,7 +14447,7 @@
     },
     {
       "id": 78,
-      "name": "pアンチポイズン",
+      "name": "kPrefab_アンチポイズン_A",
       "note": "",
       "pages": [
         {
@@ -14514,7 +14514,7 @@
     },
     {
       "id": 79,
-      "name": "pスリープドラッグ",
+      "name": "kPrefab_スリープドラッグ_A",
       "note": "",
       "pages": [
         {
@@ -14581,7 +14581,7 @@
     },
     {
       "id": 80,
-      "name": "p火炎草70_50",
+      "name": "kPrefab_フレイムリーフ_A",
       "note": "",
       "pages": [
         {
@@ -14648,7 +14648,7 @@
     },
     {
       "id": 81,
-      "name": "pエリクシール",
+      "name": "kPrefab_エリクシール_A",
       "note": "",
       "pages": [
         {
@@ -17726,7 +17726,7 @@
     },
     {
       "id": 125,
-      "name": "pドラゴン草",
+      "name": "kPrefab_ドラゴン草_A",
       "note": "",
       "pages": [
         {
@@ -17927,7 +17927,7 @@
     },
     {
       "id": 128,
-      "name": "pしびれ草",
+      "name": "kPrefab_しびれ草_A",
       "note": "",
       "pages": [
         {
@@ -17994,7 +17994,7 @@
     },
     {
       "id": 129,
-      "name": "pきえさり草",
+      "name": "kPrefab_きえさり草_A",
       "note": "",
       "pages": [
         {
@@ -18195,7 +18195,7 @@
     },
     {
       "id": 132,
-      "name": "pItem_Gold",
+      "name": "kPrefab_Gold",
       "note": "",
       "pages": [
         {
@@ -18262,7 +18262,7 @@
     },
     {
       "id": 133,
-      "name": "kPrefab_雑草",
+      "name": "kPrefab_雑草_A",
       "note": "",
       "pages": [
         {
@@ -19129,7 +19129,7 @@
     },
     {
       "id": 144,
-      "name": "kPrefab_RevivalGrass",
+      "name": "kPrefab_RevivalGrass_A",
       "note": "",
       "pages": [
         {

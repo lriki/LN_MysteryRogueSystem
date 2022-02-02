@@ -88,7 +88,7 @@ export class TestEnv {
         }
 
         this.UnitTestLandId = REData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
-        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.getMap("テスト拠点").mapId);
+        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.getMap("MR-Safety:テスト拠点").mapId);
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
@@ -96,7 +96,7 @@ export class TestEnv {
         this.StateId_debug_MoveRight = REData.getState("kState_Test_MoveRight").id
         this.StateId_Sleep = REData.getState("kState_UT睡眠").id;
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
-        this.EntityId_Herb = REData.getEntity("kItem_キュアリーフ_A").id;
+        this.EntityId_Herb = REData.getEntity("kEntity_キュアリーフ_A").id;
         this.EntityId_Weapon1 = REData.getEntity("kEntity_ゴブリンのこん棒_A").id;
         this.EntityId_Shield1 = REData.getEntity("kレザーシールド").id;
         this.EntityId_SleepTrap = REData.getEntity("k眠りガス").id;
@@ -118,7 +118,7 @@ export class TestEnv {
     }
 
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
-        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kObject_投擲反射石A").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
+        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_投擲反射石_A").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
         REGame.world._transferEntity(object1, floorId, 13, 10);
         return object1;
     }

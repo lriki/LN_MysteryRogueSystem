@@ -101,7 +101,7 @@ test("projectiles.Item.AwfulThrowing", () => {
     player1.addState(REData.getState("kState_UT下手投げ").id);
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("k火炎草70_50").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // enemy1

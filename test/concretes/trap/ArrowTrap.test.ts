@@ -90,7 +90,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     const hp1 = player1.actualParam(REBasics.params.hp);
 
     // アイテム入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kパワードラッグ").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // trap 生成&配置
