@@ -19,21 +19,8 @@ declare global {
 
 const _Spriteset_Map_initialize = Spriteset_Map.prototype.initialize;
 Spriteset_Map.prototype.initialize = function(): void {
-    _Spriteset_Map_initialize.call(this);
     assert(!REVisual.spriteSet2);
-
-    if (RMMZHelper.isRESystemMap()) {
-        REVisual.spriteSet2 = new VSpriteSet(this);
-        //REVisual.hudSpriteSet = new VHudWindow();
-        //this.addChild(REVisual.hudSpriteSet);
-    }
-    else {
-        //if (REVisual.hudSpriteSet) {
-        //    this.removeChild(REVisual.hudSpriteSet);
-        //   REVisual.hudSpriteSet = undefined;
-        //}
-        REVisual.spriteSet2 = undefined;
-    }
+    _Spriteset_Map_initialize.call(this);
 }
 
 const _Spriteset_Map_destroy = Spriteset_Map.prototype.destroy;
@@ -46,12 +33,26 @@ Spriteset_Map.prototype.createLowerLayer = function() {
     _Spriteset_Map_prototype_createLowerLayer.call(this);
 }
 
+var _Spriteset_Map_prototype_createPictures = Spriteset_Map.prototype.createPictures;
+Spriteset_Map.prototype.createPictures = function() {
+
+    if (RMMZHelper.isRESystemMap()) {
+        // VisibilityShadow はピクチャなどよりも先に描画したいので、Picture のレイヤーよりも先に作っておく
+        REVisual.spriteSet2 = new VSpriteSet(this);
+    }
+    else {
+        REVisual.spriteSet2 = undefined;
+    }
+
+    _Spriteset_Map_prototype_createPictures.call(this);
+}
 
 var _Spriteset_Map_prototype_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
     _Spriteset_Map_prototype_createCharacters.call(this);
     REVisual.spriteset = this;
 };
+
 
 var _Spriteset_Map_prototype_updateTilemap = Spriteset_Map.prototype.updateTilemap;
 Spriteset_Map.prototype.updateTilemap = function() {
