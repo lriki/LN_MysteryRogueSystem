@@ -363,6 +363,15 @@ export class FGenericRandomMapGenerator {
                     }
                 }
             }
+            /*
+            isRoomBeside～ で外周チェックしないと、次のように通路ができてしまう。
+               *----------
+               | 通路
+            +--+    +-----
+            |       |
+            |       |
+
+            */
 
             connection.setConnectedPins(
                 candidates1[this._map.random().nextIntWithMax(candidates1.length)],

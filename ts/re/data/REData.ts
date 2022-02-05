@@ -28,6 +28,7 @@ import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
+import { DTerrainPreset } from "./DTerrainPreset";
 // import { DPreset } from "./DPreset";
 
 
@@ -193,6 +194,7 @@ export class REData
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
     static emittors: DEmittor[] = [];
+    static terrainPresets: DTerrainPreset[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
 
     static itemDataIdOffset: number = 0;
@@ -233,6 +235,7 @@ export class REData
         this.prefabs = [new DPrefab(0)];
         this.entities = [new DEntity(0)];
         this.emittors = [new DEmittor(0, "null")];
+        this.terrainPresets = [new DTerrainPreset(0)];
     }
 
     //--------------------
@@ -430,6 +433,31 @@ export class REData
         const d = this.emittors[id];
         if (d) return d;
         throw new Error(`Effect "${id}" not found.`);
+    }
+
+    //--------------------
+
+    static newTerrainPreset(key: string): DTerrainPreset {
+        const newId = this.terrainPresets.length;
+        const data = new DTerrainPreset(newId);
+        data.key = key;
+        this.terrainPresets.push(data);
+        return data;
+    }
+    
+    static findTerrainPreset(pattern: string): DTerrainPreset | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.terrainPresets[id];
+        else {
+            return this.terrainPresets.find(e => (e.key != "" && e.key == pattern));
+        }
+    }
+
+    static getTerrainPreset(pattern: string): DTerrainPreset {
+        const d = this.findTerrainPreset(pattern);
+        if (d) return d;
+        throw new Error(`Entity "${pattern}" not found.`);
     }
 
     //--------------------

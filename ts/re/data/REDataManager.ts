@@ -394,6 +394,18 @@ export class REDataManager
             performeSkill: REData.newEffectBehavior("PerformeSkill").id,
         };
 
+        {
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Default");
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");
+                preset.divisionCountX = 1;
+                preset.divisionCountY = 1;
+            }
+
+        }
+
         // REBasics.presets = {
         //     trap: REData.newPreset("Trap").id,
         // }

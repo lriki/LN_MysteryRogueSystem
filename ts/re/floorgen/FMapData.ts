@@ -248,6 +248,7 @@ export class FSector {
         this._room = room;
     }
 
+    // 指定された mx 座標が、この Sector に含まれる Room の左端のひとつ左、または、右端のひとつ右 (つまり床に隣接した壁) であるか
     public isRoomBesideX(mx: number): boolean {
         if (this._room) {
             return (this._room.x1() - 1 == mx) || (this._room.x2() + 1 == mx);
@@ -257,6 +258,7 @@ export class FSector {
         }
     }
 
+    // 指定された my 座標が、この Sector に含まれる Room の上端のひとつ上、または、下端のひとつ下 (つまり床に隣接した壁) であるか
     public isRoomBesideY(my: number): boolean {
         if (this._room) {
             return (this._room.y1() - 1 == my) || (this._room.y2() + 1 == my);
