@@ -1,6 +1,7 @@
 
 import { assert, tr2 } from "../Common";
-import { DAnnotationReader, RmmzMonsterHouseMetadata } from "./DAnnotationReader";
+import { DAnnotationReader, RMMZFloorMetadata, RmmzMonsterHouseMetadata } from "./DAnnotationReader";
+import { DTerrainPresetId } from "./DCommon";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers } from "./DHelper";
@@ -80,6 +81,29 @@ export class DFloorMonsterHouse {
     }
 }
 
+export class DTerrainPresetRef {
+    terrainPresetId: DTerrainPresetId;
+    rating: number;
+
+    public constructor(terrainPresetId: DTerrainPresetId, rating: number) {
+        this.terrainPresetId = terrainPresetId;
+        this.rating = rating;
+    }
+
+    public static parse(data: RMMZFloorMetadata): DTerrainPresetRef[] {
+        if (data.presets) {
+            return data.presets.map((x): DTerrainPresetRef => { 
+                const key = (x[0] as string);
+                const rate = (x[1] as number);
+                return new DTerrainPresetRef(REData.getTerrainPreset(key).id, rate);
+            });
+        }
+        else {
+            return [new DTerrainPresetRef(REData.getTerrainPreset("kTerrainPreset_Default").id, 1)];
+        }
+    }
+}
+
 export interface DFloorInfo {
     key: string;
     template: string | undefined;
@@ -101,6 +125,8 @@ export interface DFloorInfo {
 
     //structures: DFloorStructures;
     monsterHouse: DFloorMonsterHouse;
+
+    presets: DTerrainPresetRef[];
 }
 
 export enum DLandIdentificationLevel {
@@ -309,6 +335,7 @@ export class DLand {
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
                     monsterHouse: new DFloorMonsterHouse(monsterHouses),
+                    presets: DTerrainPresetRef.parse(floorData),
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

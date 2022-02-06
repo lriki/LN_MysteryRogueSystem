@@ -191,7 +191,6 @@ export class SGameManager {
                     //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                     const builder = new FMapBuilder();
                     builder.buildForRandomMap(mapData);
-    
                     
                     mapData.print();
                 }

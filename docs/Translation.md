@@ -179,6 +179,8 @@
 | メッキの巻物 | Plating Scroll |
 | ワナ消しの巻物 | Trap Deletion Scroll |
 
+https://shirenthewanderer.com/shiren5/item/scrolls
+
 ### 壺
 |   |   |
 |---|---|

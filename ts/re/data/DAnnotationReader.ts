@@ -20,6 +20,7 @@ export interface RMMZFloorMetadata {
     fixedMap?: string;
     safety?: boolean;
     bgm?: any[];
+    presets?: any[];
 }
 
 /*

@@ -883,6 +883,7 @@ export class REDataManager
                         displayName: undefined,
                         fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100,
                         monsterHouse: new DFloorMonsterHouse(undefined),
+                        presets: [],
                     };
                 }
             }
