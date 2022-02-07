@@ -35,6 +35,9 @@ import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntity } from "../objects/LEntity";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DEntityCreateInfo } from "../data/DEntity";
+import { UEffect } from "../usecases/UEffect";
+import { DTerrainPreset } from "../data/DTerrainPreset";
+import { DTerrainPresetRef } from "../data/DLand";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -174,7 +177,8 @@ export class SGameManager {
             }
     
             if (newFloorId.isTacticsMap()) {
-                const mapSeed = REGame.world.random().nextInt();
+                const rand = REGame.world.random();
+                const mapSeed = rand.nextInt();
                 console.log("seed:", mapSeed);
 
                 const mapData = new FMap(newFloorId, mapSeed);
@@ -186,8 +190,13 @@ export class SGameManager {
                 }
                 else {
                     mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
+                    const floorInto = newFloorId.floorInfo();
+
+                    const preset = UEffect.selectRating<DTerrainPresetRef>(rand, floorInto.presets, x => x.rating);
+                    assert(preset);
+                    
                     //(new FMiddleSingleRoomGenerator()).generate(mapData);
-                    (new FGenericRandomMapGenerator(mapData)).generate();
+                    (new FGenericRandomMapGenerator(mapData, REData.terrainPresets[preset.terrainPresetId]).generate());
                     //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                     const builder = new FMapBuilder();
                     builder.buildForRandomMap(mapData);

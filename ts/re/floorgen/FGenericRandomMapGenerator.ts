@@ -1,4 +1,5 @@
 import { assert } from "ts/re/Common";
+import { DTerrainPreset } from "../data/DTerrainPreset";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSector, FSectorAdjacency, FSectorId } from "./FMapData";
 
 const RoomMinSize = 4;
@@ -36,10 +37,12 @@ export enum FGenericRandomMapWayConnectionMode
  */
 export class FGenericRandomMapGenerator {
     private _map: FMap;
+    private _preset: DTerrainPreset;
     private _wayConnectionMode: FGenericRandomMapWayConnectionMode;
 
-    public constructor(map: FMap) {
+    public constructor(map: FMap, preset: DTerrainPreset) {
         this._map = map;
+        this._preset = preset;
         this._wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
     }
 
@@ -63,8 +66,8 @@ export class FGenericRandomMapGenerator {
     }
         
     private makeAreas(): boolean {
-        const countH = 3;
-        const countV = 3;
+        const countH = this._preset.divisionCountX;
+        const countV = this._preset.divisionCountY;
 
         /*
         Area の最小構成は次のようになる。

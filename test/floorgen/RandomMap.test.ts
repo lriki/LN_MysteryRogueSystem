@@ -2,6 +2,8 @@ import { TestEnv } from "./../TestEnv";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
+import { REData } from "ts/re/data/REData";
+import { REBasics } from "ts/re/data/REBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -14,7 +16,7 @@ test("RandomMap.1001562234", () => {
 
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
         map.reset(60, 48);
-        (new FGenericRandomMapGenerator(map)).generate();
+        (new FGenericRandomMapGenerator(map, REData.terrainPresets[REBasics.defaultTerrainPresetId])).generate();
         (new FMapBuilder()).buildForRandomMap(map);
     
         //map.print();

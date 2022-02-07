@@ -397,6 +397,7 @@ export class REDataManager
         {
             {
                 const preset = REData.newTerrainPreset("kTerrainPreset_Default");
+                REBasics.defaultTerrainPresetId = preset.id;
             }
             {
                 const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");

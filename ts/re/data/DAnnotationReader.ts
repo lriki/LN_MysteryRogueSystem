@@ -250,6 +250,7 @@ export class DAnnotationReader {
             fixedMap: rawData.fixedMap,
             safety: rawData.safety,
             bgm: rawData.bgm,
+            presets: rawData.presets,
         };
     }
 

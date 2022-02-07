@@ -142,17 +142,38 @@ export class UEffect {
     }
 
     private static selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined {
-        const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating));
+        return this.selectRating<SEffect>(rand, effectList, x => x.data().conditions.applyRating);
+        // const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating));
+        // const ratingZero = ratingMax - 10;//- 3;
+        // const sum = effectList.reduce((r, a) => r + (a.data().conditions.applyRating) - ratingZero, 0);
+        // if (sum > 0) {
+        //     let value = rand.nextIntWithMax(sum);
+        //     for (const action of effectList) {
+        //         if (!action.data().conditions.applyRating) continue;
+
+        //         value -= (action.data().conditions.applyRating) - ratingZero;
+        //         if (value < 0) {
+        //             return action;
+        //         }
+        //     }
+        // } else {
+        //     return undefined;
+        // }
+    }
+
+    public static selectRating<T>(rand: LRandom, items: T[], rating: (item: T) => number): T | undefined {
+        const ratingMax = Math.max(...items.map(a => rating(a)));
         const ratingZero = ratingMax - 10;//- 3;
-        const sum = effectList.reduce((r, a) => r + (a.data().conditions.applyRating) - ratingZero, 0);
+        const sum = items.reduce((r, a) => r + rating(a) - ratingZero, 0);
         if (sum > 0) {
             let value = rand.nextIntWithMax(sum);
-            for (const action of effectList) {
-                if (!action.data().conditions.applyRating) continue;
+            for (const item of items) {
+                const r = rating(item);
+                if (!r) continue;
 
-                value -= (action.data().conditions.applyRating) - ratingZero;
+                value -= (r) - ratingZero;
                 if (value < 0) {
-                    return action;
+                    return item;
                 }
             }
         } else {
