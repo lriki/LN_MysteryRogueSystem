@@ -24,11 +24,11 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_アイテムスクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイテムスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // item
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_アイテムスクロール").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイテムスクロール_A").id, [], "item1"));
     REGame.world._transferEntity(item2, floorId, 19,4);  
 
     expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeFalsy();

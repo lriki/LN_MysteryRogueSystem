@@ -24,7 +24,7 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_モンスタースクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_モンスタースクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy

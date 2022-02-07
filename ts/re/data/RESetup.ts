@@ -883,13 +883,13 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.PutInActionId);
                 entity.addReaction(REBasics.actions.PickOutActionId);
                 break;
-            case "kItem_ノーマウススクロール":
+            case "kEntity_ノーマウススクロール_A":
                 this.setupScrollCommon(entity);
                 //entity.effectSet.mainEmittor().effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
-            case "kItem_トラップスクロール": {
+            case "kEntity_トラップスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.trapProliferation });
@@ -897,7 +897,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_プレートスクロール": {
+            case "kEntity_プレートスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
@@ -906,7 +906,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_モンスタースクロール": {
+            case "kEntity_モンスタースクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -916,7 +916,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_アイテムスクロール": {
+            case "kEntity_アイテムスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -925,7 +925,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_マップスクロール": {
+            case "kEntity_マップスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -937,7 +937,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_レインフォーススクロール": {
+            case "kEntity_レインフォーススクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -948,7 +948,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_レデューススクロール": {
+            case "kEntity_レデューススクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -959,7 +959,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_ディスペルスクロール": {
+            case "kEntity_ディスペルスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -977,7 +977,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_フランスパンスクロール": {
+            case "kEntity_フランスパンスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
@@ -986,7 +986,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_マジックスクロール": {
+            case "kEntity_マジックスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
@@ -995,7 +995,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_ストップスクロール": {
+            case "kEntity_ストップスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Around;
@@ -1005,7 +1005,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_ストームスクロール": {
+            case "kEntity_ストームスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Room;
@@ -1016,7 +1016,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
             }
-            case "kItem_リスタートスクロール": {
+            case "kEntity_リスタートスクロール_A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -1025,14 +1025,14 @@ export class RESetup {
                 emittor.selfAnimationId = 118;
                 break;
             }
-            case "kItem_エスケープスクロール":
+            case "kEntity_エスケープスクロール_A":
                 this.setupScrollCommon(entity);
                 entity.mainEmittor().effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
-            case "kItem_識別の巻物":
+            case "kEntity_識別の巻物_A":
                 this.setupScrollCommon(entity);
                 entity.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
                 entity.mainEmittor().effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_識別"});

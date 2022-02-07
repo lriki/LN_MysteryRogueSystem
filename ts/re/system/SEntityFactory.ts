@@ -251,7 +251,7 @@ export class SEntityFactory {
     // そのためここで直定義して一通り作ってみた後、再検討する。
     static setupDirectly_Item(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
-            case "kItem_サンクチュアリスクロール":
+            case "kEntity_サンクチュアリスクロール_A":
                 entity.addBehavior(LSanctuaryBehavior);
                 entity.addBehavior(LClingFloorBehavior);
                 break;

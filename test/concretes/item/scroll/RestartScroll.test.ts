@@ -26,7 +26,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_リスタートスクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_リスタートスクロール_A").id, [], "item1"));
     inventory1.addEntity(item1);
 
     // enemy1

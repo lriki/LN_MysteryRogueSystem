@@ -5280,7 +5280,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_識別の巻物\","
+                "    data: \"kEntity_識別の巻物_A\","
               ]
             },
             {
@@ -5354,7 +5354,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_識別の巻物\","
+                "    data: \"kEntity_識別の巻物_A\","
               ]
             },
             {

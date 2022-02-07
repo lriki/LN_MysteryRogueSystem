@@ -25,7 +25,7 @@ test("concretes.item.識別の巻物", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_識別の巻物").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_識別の巻物_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // item2

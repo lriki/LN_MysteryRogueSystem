@@ -4525,7 +4525,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_サンクチュアリスクロール\","
+                "    data: \"kEntity_サンクチュアリスクロール_A\","
               ]
             },
             {
@@ -4761,7 +4761,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_レインフォーススクロール\","
+                "    data: \"kEntity_レインフォーススクロール_A\","
               ]
             },
             {
@@ -4909,7 +4909,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_プレートスクロール\","
+                "    data: \"kEntity_プレートスクロール_A\","
               ]
             },
             {
@@ -5212,7 +5212,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_レデューススクロール\","
+                "    data: \"kEntity_レデューススクロール_A\","
               ]
             },
             {
@@ -5286,7 +5286,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_リスタートスクロール\","
+                "    data: \"kEntity_リスタートスクロール_A\","
               ]
             },
             {
@@ -5360,7 +5360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_モンスタースクロール\","
+                "    data: \"kEntity_モンスタースクロール_A\","
               ]
             },
             {
@@ -5434,7 +5434,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_アイテムスクロール\","
+                "    data: \"kEntity_アイテムスクロール_A\","
               ]
             },
             {
@@ -5508,7 +5508,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_マップスクロール\","
+                "    data: \"kEntity_マップスクロール_A\","
               ]
             },
             {
@@ -5582,7 +5582,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_フランスパンスクロール\","
+                "    data: \"kEntity_フランスパンスクロール_A\","
               ]
             },
             {
@@ -5818,7 +5818,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ディスペルスクロール\","
+                "    data: \"kEntity_ディスペルスクロール_A\","
               ]
             },
             {
@@ -5892,7 +5892,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_マジックスクロール\","
+                "    data: \"kEntity_マジックスクロール_A\","
               ]
             },
             {
@@ -6040,7 +6040,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ストップスクロール\","
+                "    data: \"kEntity_ストップスクロール_A\","
               ]
             },
             {
@@ -6114,7 +6114,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ストームスクロール\","
+                "    data: \"kEntity_ストームスクロール_A\","
               ]
             },
             {
@@ -6188,7 +6188,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_エスケープスクロール\","
+                "    data: \"kEntity_エスケープスクロール_A\","
               ]
             },
             {
@@ -6262,7 +6262,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ノーマウススクロール\","
+                "    data: \"kEntity_ノーマウススクロール_A\","
               ]
             },
             {
@@ -6336,7 +6336,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_トラップスクロール\","
+                "    data: \"kEntity_トラップスクロール_A\","
               ]
             },
             {
@@ -6572,7 +6572,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_マップスクロール\","
+                "    data: \"kEntity_マップスクロール_A\","
               ]
             },
             {

@@ -26,7 +26,7 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     // 隣の部屋の中央は 19,4
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_マップスクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_マップスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // Enemy

@@ -28,7 +28,7 @@ test("concretes.item.scroll.DispelScroll", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ディスペルスクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ディスペルスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // 装備 (呪い付き)

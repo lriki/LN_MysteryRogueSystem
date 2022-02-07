@@ -5144,7 +5144,7 @@
     },
     {
       "id": 13,
-      "name": "pサンクチュアリスクロール",
+      "name": "サンクチュアリスクロール",
       "note": "",
       "pages": [
         {
@@ -5183,7 +5183,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_サンクチュアリスクロール\","
+                "    data: \"kEntity_サンクチュアリスクロール_A\","
               ]
             },
             {
@@ -5567,7 +5567,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_エスケープスクロール\","
+                "    data: \"kEntity_エスケープスクロール_A\","
               ]
             },
             {
@@ -6571,7 +6571,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_レインフォーススクロール\","
+                "    data: \"kEntity_レインフォーススクロール_A\","
               ]
             },
             {

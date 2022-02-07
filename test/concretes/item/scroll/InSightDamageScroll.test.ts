@@ -22,7 +22,7 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     const player1HP1 = player1.actualParam(REBasics.params.hp);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ストームスクロール").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ストームスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy
