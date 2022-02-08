@@ -403,6 +403,8 @@ export class REDataManager
                 const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");
                 preset.divisionCountX = 1;
                 preset.divisionCountY = 1;
+                preset.forceRoomShapes = [{typeName: "FullPlane"}];
+                //preset.forceStructures = [""];
             }
 
         }

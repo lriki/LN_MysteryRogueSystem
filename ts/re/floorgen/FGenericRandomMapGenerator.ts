@@ -1,6 +1,8 @@
 import { assert } from "ts/re/Common";
 import { DTerrainPreset } from "../data/DTerrainPreset";
-import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSector, FSectorAdjacency, FSectorId } from "./FMapData";
+import { LRandom } from "../objects/LRandom";
+import { FSector, FSectorAdjacency } from "./data/FSector";
+import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
@@ -46,6 +48,10 @@ export class FGenericRandomMapGenerator {
         this._wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
     }
 
+    public get random(): LRandom {
+        return this._map.random();
+    }
+
     public generate(): void {
 
         if (!this.makeAreas()) {
@@ -54,6 +60,7 @@ export class FGenericRandomMapGenerator {
 
         this.makeSectorAdjacency();
         this.makeSectorConnections();
+        this.makeRoomShapeDefinitions();
         this.makeRooms();
         this.makeEdgePins();
         this.makePinConnections();
@@ -170,7 +177,7 @@ export class FGenericRandomMapGenerator {
         {
 
             // 開始 Sector
-            let sector = this._map.sectors()[this._map.random().nextIntWithMax(sectorCount)];
+            let sector = this._map.sectors()[this.random.nextIntWithMax(sectorCount)];
 
             for (let i = 0; i < sectorCount; i++) { // 最大でも Sector 総数までしかループしないので、念のための無限ループ回避
 
@@ -187,7 +194,7 @@ export class FGenericRandomMapGenerator {
                 
                 // 接続する隣接情報を決定して接続
                 if (candidateAdjacencies.length > 0) {
-                    const adjacency = candidateAdjacencies[this._map.random().nextIntWithMax(candidateAdjacencies.length)];
+                    const adjacency = candidateAdjacencies[this.random.nextIntWithMax(candidateAdjacencies.length)];
                     this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
                     connectionRaisedSectorIds.push(sector.id());
                     tracedSectorIds.push(sector.id());
@@ -222,7 +229,7 @@ export class FGenericRandomMapGenerator {
                         
                         // 接続する隣接情報を決定して接続
                         if (candidateAdjacencies.length > 0) {
-                            const adjacency = candidateAdjacencies[this._map.random().nextIntWithMax(candidateAdjacencies.length)];
+                            const adjacency = candidateAdjacencies[this.random.nextIntWithMax(candidateAdjacencies.length)];
                             this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
                             connectionRaisedSectorIds.push(sector.id());
                         }
@@ -235,39 +242,69 @@ export class FGenericRandomMapGenerator {
 
             }
         }
+    }
 
+    // RoomShape を選択する
+    private makeRoomShapeDefinitions(): void {
+        const sectors = this._map.sectors();
+        const sectorCount = sectors.length;
+        let shapeDefCount = this._preset.forceRoomShapes.length;
+        if (shapeDefCount >= sectorCount) {
+            shapeDefCount = sectorCount;
+        }
+
+        // まずは強制的に設定したいものを処理する
+        {
+            const shapes = new Array<string>(sectorCount);
+            for (let i = 0; i < shapeDefCount; i++) {
+                shapes[i] = this._preset.forceRoomShapes[i].typeName;
+            }
+            this.random.mutableShuffleArray(shapes);
+    
+            for (let i = 0; i < sectorCount; i++) {
+                if (shapes[i]) {
+                    sectors[i].roomShapeType = shapes[i];
+                }
+            }
+        }
     }
 
     private makeRooms(): void {
         for (const sector of this._map.sectors()) {
+            const room = this._map.newRoom(sector);
+
             // 部屋を作れる範囲
             let l = 0;
             let t = 0;
-            let r = sector.width() - 1;     // 区画の右端と下端 Block に部屋を生成することはできない
-            let b = sector.height() - 1;    // 区画の右端と下端 Block に部屋を生成することはできない
+            let r = sector.width() - 1;
+            let b = sector.height() - 1;
 
             // 他の区画と接続されている方向は、Block 1 つ分のマージンが必要
             if (sector.edge(FDirection.L).hasConnection()) l += 1;
-            if (sector.edge(FDirection.R).hasConnection()) r -= 1;
+            if (sector.edge(FDirection.R).hasConnection()) r -= 2;  // 右側は 2 ブロック、右 Sector と併せて、部屋間には最低 3 ブロック設けたい
             if (sector.edge(FDirection.T).hasConnection()) t += 1;
-            if (sector.edge(FDirection.B).hasConnection()) b -= 1;
+            if (sector.edge(FDirection.B).hasConnection()) b -= 2;  // 下側は 2 ブロック、下 Sector と併せて、部屋間には最低 3 ブロック設けたい
 
-            const maxRoomWidth = (r - l);
-            const maxRoomHeight = (b - t);
-            const w = this._map.random().nextIntWithMinMax(RoomMinSize, (r - l) + 1);
-            const h = this._map.random().nextIntWithMinMax(RoomMinSize, (b - t) + 1);
-            const x = l + ((w != maxRoomWidth) ? this._map.random().nextIntWithMax(maxRoomWidth - w + 1) : 0);
-            const y = t + ((h != maxRoomHeight) ? this._map.random().nextIntWithMax(maxRoomHeight - h + 1) : 0);
+            const maxRoomWidth = (r - l) + 1;
+            const maxRoomHeight = (b - t) + 1;
 
-            const room = this._map.newRoom(sector);
-            room.setRect(sector.x1() + x, sector.y1() + y, w, h);
-
+            if (sector.roomShapeType == "FullPlane") {
+                room.setRect(sector.x1() + l, sector.y1() + t, maxRoomWidth, maxRoomHeight);
+            }
+            else {
+                const w = this.random.nextIntWithMinMax(RoomMinSize, maxRoomWidth);
+                const h = this.random.nextIntWithMinMax(RoomMinSize, maxRoomHeight);
+                const x = l + ((w != maxRoomWidth) ? this.random.nextIntWithMax(maxRoomWidth - w) : 0);
+                const y = t + ((h != maxRoomHeight) ? this.random.nextIntWithMax(maxRoomHeight - h) : 0);
+                room.setRect(sector.x1() + x, sector.y1() + y, w, h);
+            }
+    
             // 部屋内に Pivot を作る
             const ox = room.x1() - sector.x1();
             const oy = room.y1() - sector.y1();
             assert(ox >= 0);
             assert(oy >= 0);
-            sector.setPivot(ox + this._map.random().nextIntWithMax(w), oy + this._map.random().nextIntWithMax(h));
+            sector.setPivot(ox + this.random.nextIntWithMax(room.width()), oy + this.random.nextIntWithMax(room.height()));
         }
     }
 
@@ -377,8 +414,8 @@ export class FGenericRandomMapGenerator {
             */
 
             connection.setConnectedPins(
-                candidates1[this._map.random().nextIntWithMax(candidates1.length)],
-                candidates2[this._map.random().nextIntWithMax(candidates2.length)]);
+                candidates1[this.random.nextIntWithMax(candidates1.length)],
+                candidates2[this.random.nextIntWithMax(candidates2.length)]);
         }
     }
 
@@ -457,7 +494,7 @@ export class FGenericRandomMapGenerator {
                     assert(primaryWayXCandidates.length > 0);
                     
                     // PrimaryWay の X 座標を決める
-                    const primaryWayX = primaryWayXCandidates[this._map.random().nextIntWithMax(primaryWayXCandidates.length)];
+                    const primaryWayX = primaryWayXCandidates[this.random.nextIntWithMax(primaryWayXCandidates.length)];
 
                     // PrimaryWay の Top, Bottom 座標を決める
                     const primaryWayT = Math.min(pin1.my(), pin2.my());
@@ -503,7 +540,7 @@ export class FGenericRandomMapGenerator {
                     assert(primaryWayYCandidates.length > 0);
                     
                     // PrimaryWay の Y 座標を決める
-                    const primaryWayY = primaryWayYCandidates[this._map.random().nextIntWithMax(primaryWayYCandidates.length)];
+                    const primaryWayY = primaryWayYCandidates[this.random.nextIntWithMax(primaryWayYCandidates.length)];
 
                     // PrimaryWay の Top, Bottom 座標を決める
                     const primaryWayL = Math.min(pin1.mx(), pin2.mx());

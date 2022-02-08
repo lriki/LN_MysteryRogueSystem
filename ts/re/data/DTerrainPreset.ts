@@ -12,9 +12,17 @@ export enum DSectorConnectionPreset {
     T,
 }
 
-export interface DTerrainRoomDef {
+export interface DForceTerrainRoomShape {
+    typeName: string;
+}
+
+export interface DTerrainStructureDef {
     typeName: string;
     rate: number;
+}
+
+export interface DForceTerrainStructure {
+    typeName: string;
 }
 
 export interface DTerrainShopDef {
@@ -35,7 +43,9 @@ export class DTerrainPreset {
     divisionCountX: number;
     divisionCountY: number;
     connectionPreset: DSectorConnectionPreset;
-    roomDefs: DTerrainRoomDef[];
+    forceRoomShapes: DForceTerrainRoomShape[];
+    structureDefs: DTerrainStructureDef[];
+    forceStructures: DForceTerrainStructure[];
     shopDefs: DTerrainShopDef[];
     monsterHouseDefs: DTerrainMonsterHouseDef[];
     
@@ -47,7 +57,9 @@ export class DTerrainPreset {
         this.divisionCountX = 3;
         this.divisionCountY = 3;
         this.connectionPreset = DSectorConnectionPreset.Default;
-        this.roomDefs = [{typeName: "default", rate: 5}];
+        this.forceRoomShapes = [];
+        this.structureDefs = [{typeName: "default", rate: 5}];
+        this.forceStructures = [];
         this.shopDefs = [{typeName: "default", rate: 5}];
         this.monsterHouseDefs = [{typeName: "default", rate: 5}];
     }
