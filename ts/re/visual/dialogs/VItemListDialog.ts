@@ -218,7 +218,7 @@ export class VItemListDialog extends VItemListDialogBase {
             window.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
         }
 
-        this.onMakeCommandList(window);
+        super.onMakeCommandList(window);
     }
 
     // private showCommandListWindow(): void {
