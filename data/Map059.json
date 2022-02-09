@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ハーフの杖\","
+                "    data: \"kEntity_ハーフの杖_A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_インヴィジブルの杖\","
+                "    data: \"kEntity_インヴィジブルの杖_A\","
               ]
             },
             {
@@ -4673,7 +4673,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スピードアップの杖\","
+                "    data: \"kEntity_スピードアップの杖_A\","
               ]
             },
             {
@@ -4747,7 +4747,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スパークの杖\","
+                "    data: \"kEntity_スパークの杖_A\","
               ]
             },
             {
@@ -4821,7 +4821,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_パニックの杖\","
+                "    data: \"kEntity_パニックの杖_A\","
               ]
             },
             {
@@ -4895,7 +4895,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スピリットの杖\","
+                "    data: \"kEntity_スピリットの杖_A\","
               ]
             },
             {
@@ -4969,7 +4969,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スリープの杖\","
+                "    data: \"kEntity_スリープの杖_A\","
               ]
             },
             {
@@ -5043,7 +5043,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_シールの杖\","
+                "    data: \"kEntity_シールの杖_A\","
               ]
             },
             {
@@ -5117,7 +5117,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_チェンジの杖\","
+                "    data: \"kEntity_チェンジの杖_A\","
               ]
             },
             {
@@ -5191,7 +5191,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ワープの杖\","
+                "    data: \"kEntity_ワープの杖_A\","
               ]
             },
             {
@@ -5265,7 +5265,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_スピードダウンの杖\","
+                "    data: \"kEntity_スピードダウンの杖_A\","
               ]
             },
             {
@@ -5339,7 +5339,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_ダブルペインの杖\","
+                "    data: \"kEntity_ダブルペインの杖_A\","
               ]
             },
             {
@@ -5413,7 +5413,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_リープの杖\","
+                "    data: \"kEntity_リープの杖_A\","
               ]
             },
             {
@@ -5487,7 +5487,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_デスの杖\","
+                "    data: \"kEntity_デスの杖_A\","
               ]
             },
             {
@@ -5642,7 +5642,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_転び石\","
+                "    data: \"kEntity_転び石_A\","
               ]
             },
             {

@@ -4424,7 +4424,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_木の矢の罠\","
+                "    data: \"kEntity_木の矢の罠_A\","
               ]
             },
             {
@@ -4505,7 +4505,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_転び石\","
+                "    data: \"kEntity_転び石_A\","
               ]
             },
             {
@@ -4586,7 +4586,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {
@@ -4889,7 +4889,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_突風の罠\","
+                "    data: \"kEntity_突風の罠_A\","
               ]
             },
             {
@@ -4970,7 +4970,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_地雷\","
+                "    data: \"kEntity_地雷_A\","
               ]
             },
             {
@@ -5051,7 +5051,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_毒矢の罠\","
+                "    data: \"kEntity_毒矢の罠_A\","
               ]
             },
             {
@@ -5132,7 +5132,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_バネ\","
+                "    data: \"kEntity_バネ_A\","
               ]
             },
             {
@@ -5287,7 +5287,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_リープの杖\","
+                "    data: \"kEntity_リープの杖_A\","
               ]
             },
             {
@@ -5361,7 +5361,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_トラバサミ\","
+                "    data: \"kEntity_トラバサミ_A\","
               ]
             },
             {
@@ -5442,7 +5442,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_地雷\","
+                "    data: \"kEntity_地雷_A\","
               ]
             },
             {
@@ -5523,7 +5523,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_錆ワナ\","
+                "    data: \"kEntity_錆ワナ_A\","
               ]
             },
             {
@@ -5752,7 +5752,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_落とし穴\","
+                "    data: \"kEntity_落とし穴_A\","
               ]
             },
             {
@@ -5834,7 +5834,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_地雷\","
+                "    data: \"kEntity_地雷_A\","
               ]
             },
             {
@@ -5915,7 +5915,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_地雷\","
+                "    data: \"kEntity_地雷_A\","
               ]
             },
             {

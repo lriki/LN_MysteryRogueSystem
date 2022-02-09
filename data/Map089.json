@@ -4895,7 +4895,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {
@@ -5272,7 +5272,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_毒矢の罠\","
+                "    data: \"kEntity_毒矢の罠_A\","
               ]
             },
             {
@@ -5818,7 +5818,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {

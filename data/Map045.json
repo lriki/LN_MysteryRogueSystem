@@ -5036,7 +5036,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_錆ワナ\","
+                "    data: \"kEntity_錆ワナ_A\","
               ]
             },
             {
@@ -5272,7 +5272,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_錆ワナ\","
+                "    data: \"kEntity_錆ワナ_A\","
               ]
             },
             {

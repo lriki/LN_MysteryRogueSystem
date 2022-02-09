@@ -1671,7 +1671,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kクロワッサン\","
+                "    data: \"kEntity_クロワッサン_A\","
               ]
             },
             {
@@ -1745,7 +1745,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kクロワッサン\","
+                "    data: \"kEntity_クロワッサン_A\","
               ]
             },
             {
@@ -1819,7 +1819,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {

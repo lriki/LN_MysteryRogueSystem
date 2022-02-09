@@ -3765,7 +3765,7 @@
     },
     {
       "id": 5,
-      "name": "pふきとばしの杖",
+      "name": "kPrefab_ふきとばしの杖_A",
       "note": "",
       "pages": [
         {
@@ -3804,7 +3804,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kふきとばしの杖\","
+                "    data: \"kEntity_ふきとばしの杖_A\","
               ]
             },
             {
@@ -3878,7 +3878,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {
@@ -6247,7 +6247,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {
@@ -6282,7 +6282,7 @@
     },
     {
       "id": 38,
-      "name": "pふきとばしの杖",
+      "name": "kPrefab_ふきとばしの杖_A",
       "note": "",
       "pages": [
         {
@@ -6321,7 +6321,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kふきとばしの杖\","
+                "    data: \"kEntity_ふきとばしの杖_A\","
               ]
             },
             {
@@ -8245,7 +8245,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"k眠りガス\","
+                "    data: \"kEntity_眠りガス_A\","
               ]
             },
             {

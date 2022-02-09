@@ -23,7 +23,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_チェンジの杖").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_チェンジの杖_A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
     
@@ -56,7 +56,7 @@ test("Items.ChangeEntityInstance.Throw", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_チェンジの杖").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_チェンジの杖_A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
     

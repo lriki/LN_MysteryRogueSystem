@@ -6361,7 +6361,7 @@
     },
     {
       "id": 4,
-      "name": "pふきとばしの杖",
+      "name": "kPrefab_ふきとばしの杖_A",
       "note": "",
       "pages": [
         {
@@ -6400,7 +6400,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kふきとばしの杖\","
+                "    data: \"kEntity_ふきとばしの杖_A\","
               ]
             },
             {

@@ -87,7 +87,7 @@ export class DSystem {
         this.fallbackEnemyEntityId = REData.getEnemy("kEntity_スライム_A").entityId;
         this.fallbackItemEntityId = REData.getItem("kEntity_雑草_A").id;
         this.fallbackGoldEntityId = REData.getItem("kEntity_Gold").id;
-        //this.fallbackTrapEntityId = REData.getItem("kItem_トラバサミ").id;
+        //this.fallbackTrapEntityId = REData.getItem("kEntity_トラバサミ_A").id;
 
         for (let i = 1; i < REData.enemies.length; i++) {
             const data = REData.enemyData(i);

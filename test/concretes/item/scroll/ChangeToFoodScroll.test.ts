@@ -37,7 +37,7 @@ test("concretes.item.scroll.ChangeToFoodScroll", () => {
 
     const items = inventory.entities();
     expect(items.length).toBe(1);
-    expect(items[0].data().entity.key).toBe("kフランスパン");
+    expect(items[0].data().entity.key).toBe("kEntity_フランスパン_A");
     expect(item2.isDestroyed()).toBeFalsy();    // Entity が変異しただけなので、インスタンス自体は削除されていない
     expect(REGame.messageHistory.includesText("変化した")).toBeTruthy();
 });

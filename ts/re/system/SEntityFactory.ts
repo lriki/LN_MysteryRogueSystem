@@ -255,16 +255,16 @@ export class SEntityFactory {
                 entity.addBehavior(LSanctuaryBehavior);
                 entity.addBehavior(LClingFloorBehavior);
                 break;
-            // case "kItem_突風の罠":
+            // case "kEntity_突風の罠_A":
             //     break;
-            case "kItem_保存の壺":
+            case "kEntity_保存の壺_A":
                 entity.addBehavior(LInventoryBehavior);
                 entity.addBehavior(LStorageBehavior);
                 break;
             case "kEntity_Gold":
                 entity.addBehavior(LGoldBehavior);
                 break;
-            case "kItem_リープの杖":
+            case "kEntity_リープの杖_A":
                 entity.addBehavior(LStumblePreventionBehavior);
                 break;
             case "kEntity_RevivalGrass_A":

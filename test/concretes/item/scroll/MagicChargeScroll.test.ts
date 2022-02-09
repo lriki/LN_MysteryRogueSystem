@@ -23,7 +23,7 @@ test("concretes.item.scroll.MagicChargeScroll", () => {
 
     // item
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_マジックスクロール_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_リープの杖").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_リープの杖_A").id, [], "item1"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
     const remaining1 = item2.actualParam(REBasics.params.remaining);

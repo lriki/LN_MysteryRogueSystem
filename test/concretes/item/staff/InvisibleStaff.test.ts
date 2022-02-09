@@ -23,7 +23,7 @@ test("concretes.item.staff.InvisibleStaff.basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_インヴィジブルの杖").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_インヴィジブルの杖_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy

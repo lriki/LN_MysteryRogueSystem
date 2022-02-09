@@ -22,7 +22,7 @@ test("concretes.item.staff.ConfusionStaff.basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_パニックの杖").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックの杖_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy

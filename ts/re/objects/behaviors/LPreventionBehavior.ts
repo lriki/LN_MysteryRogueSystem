@@ -22,7 +22,7 @@ export class LStumblePreventionBehavior extends LBehavior {
 
     onPreviewRejection(self: LEntity, cctx: SCommandContext, rejection: SRejectionInfo): SCommandResponse {
         if (rejection.kind == "Effect") {
-            if (rejection.effect.sourceKey == "kItem_転び石") {
+            if (rejection.effect.sourceKey == "kEntity_転び石_A") {
                 return this.rejectStumble(cctx, self);
             }
         }
@@ -47,7 +47,7 @@ export class LStumblePreventionBehavior extends LBehavior {
 
     // onPreviewEffectRejection(cctx: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
 
-    //     if (effect.sourceKey == "kItem_転び石") {
+    //     if (effect.sourceKey == "kEntity_転び石_A") {
     //         if (self.actualParam(REBasics.params.remaining) > 0) {
     //             // 使用回数を減らして効果を防止する
     //             self.gainActualParam(REBasics.params.remaining, -1);

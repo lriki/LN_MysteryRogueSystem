@@ -21,7 +21,7 @@ test("concretes.item.staff.WarpStaff.basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ワープの杖").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ワープの杖_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy

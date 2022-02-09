@@ -28,7 +28,7 @@ test("Items.Staff.Knockback", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ふきとばしの杖_A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
 
@@ -107,7 +107,7 @@ test("Items.Staff.Identify", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kふきとばしの杖").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ふきとばしの杖_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     const nameView1 = item1.getDisplayName();

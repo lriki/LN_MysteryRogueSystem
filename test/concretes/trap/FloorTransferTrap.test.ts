@@ -18,7 +18,7 @@ test("concretes.trap.FloorTransferTrap.nextFloor", () => {
     player1.addState(REData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_突風の罠").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_突風の罠_A").id, [], "trap1"));
     REGame.world._transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

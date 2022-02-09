@@ -404,7 +404,7 @@ export class REDataManager
                 preset.divisionCountX = 1;
                 preset.divisionCountY = 1;
                 preset.forceRoomShapes = [{typeName: "FullPlane"}];
-                //preset.forceStructures = [""];
+                preset.forceStructures = [{typeName: "MonsterHouse"}];
             }
 
         }

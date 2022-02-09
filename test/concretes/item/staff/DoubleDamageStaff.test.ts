@@ -21,7 +21,7 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
     const player1HP1 = player1.actualParam(REBasics.params.hp);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kItem_ダブルペインの杖").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ダブルペインの杖_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy

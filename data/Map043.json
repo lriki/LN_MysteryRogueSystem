@@ -4835,7 +4835,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kふきとばしの杖\","
+                "    data: \"kEntity_ふきとばしの杖_A\","
               ]
             },
             {
@@ -5131,7 +5131,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_錆ワナ\","
+                "    data: \"kEntity_錆ワナ_A\","
               ]
             },
             {
@@ -5966,7 +5966,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_シールの杖\","
+                "    data: \"kEntity_シールの杖_A\","
               ]
             },
             {

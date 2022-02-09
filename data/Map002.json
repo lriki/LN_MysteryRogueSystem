@@ -9758,7 +9758,7 @@
     },
     {
       "id": 9,
-      "name": "p眠りガス",
+      "name": "kPrefab_眠りガス_A",
       "note": "",
       "pages": [
         {
@@ -10026,7 +10026,7 @@
     },
     {
       "id": 13,
-      "name": "pふきとばしの杖",
+      "name": "kPrefab_ふきとばしの杖_A",
       "note": "",
       "pages": [
         {
@@ -10093,7 +10093,7 @@
     },
     {
       "id": 14,
-      "name": "pMagicBullet",
+      "name": "kPrefab_System_MagicBullet_A",
       "note": "",
       "pages": [
         {
@@ -14979,7 +14979,7 @@
     },
     {
       "id": 84,
-      "name": "p腐食したフランスパン",
+      "name": "kPrefab_腐食したフランスパン_A",
       "note": "",
       "pages": [
         {
@@ -15046,7 +15046,7 @@
     },
     {
       "id": 85,
-      "name": "pクロワッサン",
+      "name": "kPrefab_クロワッサン_A",
       "note": "",
       "pages": [
         {
@@ -15113,7 +15113,7 @@
     },
     {
       "id": 86,
-      "name": "pフランスパン",
+      "name": "kPrefab_フランスパン_A",
       "note": "",
       "pages": [
         {
@@ -16319,7 +16319,7 @@
     },
     {
       "id": 104,
-      "name": "p炎のブレス",
+      "name": "kPrefab_System_炎のブレス_A",
       "note": "",
       "pages": [
         {
@@ -16453,7 +16453,7 @@
     },
     {
       "id": 106,
-      "name": "pハーフの杖",
+      "name": "kPrefab_ハーフの杖_A",
       "note": "",
       "pages": [
         {
@@ -16520,7 +16520,7 @@
     },
     {
       "id": 107,
-      "name": "pインヴィジブルの杖",
+      "name": "kPrefab_インヴィジブルの杖_A",
       "note": "",
       "pages": [
         {
@@ -16587,7 +16587,7 @@
     },
     {
       "id": 108,
-      "name": "pスピードアップの杖",
+      "name": "kPrefab_スピードアップの杖_A",
       "note": "",
       "pages": [
         {
@@ -16654,7 +16654,7 @@
     },
     {
       "id": 109,
-      "name": "pスパークの杖",
+      "name": "kPrefab_スパークの杖_A",
       "note": "",
       "pages": [
         {
@@ -16721,7 +16721,7 @@
     },
     {
       "id": 110,
-      "name": "pパニックの杖",
+      "name": "kPrefab_パニックの杖_A",
       "note": "",
       "pages": [
         {
@@ -16855,7 +16855,7 @@
     },
     {
       "id": 112,
-      "name": "pスリープの杖",
+      "name": "kPrefab_スリープの杖_A",
       "note": "",
       "pages": [
         {
@@ -16922,7 +16922,7 @@
     },
     {
       "id": 113,
-      "name": "pシールの杖",
+      "name": "kPrefab_シールの杖_A",
       "note": "",
       "pages": [
         {
@@ -16989,7 +16989,7 @@
     },
     {
       "id": 114,
-      "name": "pチェンジの杖",
+      "name": "kPrefab_チェンジの杖_A",
       "note": "",
       "pages": [
         {
@@ -17056,7 +17056,7 @@
     },
     {
       "id": 115,
-      "name": "pワープの杖",
+      "name": "kPrefab_ワープの杖_A",
       "note": "",
       "pages": [
         {
@@ -17123,7 +17123,7 @@
     },
     {
       "id": 116,
-      "name": "pスピードダウンの杖",
+      "name": "kPrefab_スピードダウンの杖_A",
       "note": "",
       "pages": [
         {
@@ -17190,7 +17190,7 @@
     },
     {
       "id": 117,
-      "name": "pダブルペインの杖",
+      "name": "kPrefab_ダブルペインの杖_A",
       "note": "",
       "pages": [
         {
@@ -17257,7 +17257,7 @@
     },
     {
       "id": 118,
-      "name": "pリープの杖",
+      "name": "kPrefab_リープの杖_A",
       "note": "",
       "pages": [
         {
@@ -17324,7 +17324,7 @@
     },
     {
       "id": 119,
-      "name": "pデスの杖",
+      "name": "kPrefab_デスの杖_A",
       "note": "",
       "pages": [
         {
@@ -17391,7 +17391,7 @@
     },
     {
       "id": 120,
-      "name": "pItem_保存の壺",
+      "name": "kPrefab_保存の壺_A",
       "note": "",
       "pages": [
         {
@@ -17458,7 +17458,7 @@
     },
     {
       "id": 121,
-      "name": "pItem_変化の壺",
+      "name": "kPrefab_変化の壺_A",
       "note": "",
       "pages": [
         {
@@ -17525,7 +17525,7 @@
     },
     {
       "id": 122,
-      "name": "pItem_回復の壺",
+      "name": "kPrefab_回復の壺_A",
       "note": "",
       "pages": [
         {
@@ -17592,7 +17592,7 @@
     },
     {
       "id": 123,
-      "name": "pItem_合成の壺",
+      "name": "kPrefab_合成の壺_A",
       "note": "",
       "pages": [
         {
@@ -18329,7 +18329,7 @@
     },
     {
       "id": 134,
-      "name": "kPrefab_地雷",
+      "name": "kPrefab_地雷_A",
       "note": "",
       "pages": [
         {
@@ -18396,7 +18396,7 @@
     },
     {
       "id": 135,
-      "name": "kPrefab_トラバサミ",
+      "name": "kPrefab_トラバサミ_A",
       "note": "",
       "pages": [
         {
@@ -18463,7 +18463,7 @@
     },
     {
       "id": 136,
-      "name": "kPrefab_バネ",
+      "name": "kPrefab_バネ_A",
       "note": "",
       "pages": [
         {
@@ -18530,7 +18530,7 @@
     },
     {
       "id": 137,
-      "name": "kPrefab_転び石",
+      "name": "kPrefab_転び石_A",
       "note": "",
       "pages": [
         {
@@ -18597,7 +18597,7 @@
     },
     {
       "id": 138,
-      "name": "kPrefab_木の矢の罠",
+      "name": "kPrefab_木の矢の罠_A",
       "note": "",
       "pages": [
         {
@@ -18664,7 +18664,7 @@
     },
     {
       "id": 139,
-      "name": "kPrefab_毒矢の罠",
+      "name": "kPrefab_毒矢の罠_A",
       "note": "",
       "pages": [
         {
@@ -18731,7 +18731,7 @@
     },
     {
       "id": 140,
-      "name": "kPrefab_錆ワナ",
+      "name": "kPrefab_錆ワナ_A",
       "note": "",
       "pages": [
         {
@@ -18798,7 +18798,7 @@
     },
     {
       "id": 141,
-      "name": "kPrefab_落とし穴",
+      "name": "kPrefab_落とし穴_A",
       "note": "",
       "pages": [
         {
@@ -18930,7 +18930,7 @@
     },
     {
       "id": 142,
-      "name": "kPrefab_突風の罠",
+      "name": "kPrefab_突風の罠_A",
       "note": "",
       "pages": [
         {

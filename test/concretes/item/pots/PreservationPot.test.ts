@@ -24,7 +24,7 @@ test("concretes.item.pots.PreservationPot.Basic", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kItem_保存の壺").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_保存の壺_A").id, [], "item1"));
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
     inventory1.addEntity(item1);
     inventory1.addEntity(item2);

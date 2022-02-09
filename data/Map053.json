@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_チェンジの杖\","
+                "    data: \"kEntity_チェンジの杖_A\","
               ]
             },
             {
@@ -4599,7 +4599,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kItem_チェンジの杖\","
+                "    data: \"kEntity_チェンジの杖_A\","
               ]
             },
             {
@@ -4822,7 +4822,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kふきとばしの杖\","
+                "    data: \"kEntity_ふきとばしの杖_A\","
               ]
             },
             {
@@ -4896,7 +4896,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kふきとばしの杖\","
+                "    data: \"kEntity_ふきとばしの杖_A\","
               ]
             },
             {

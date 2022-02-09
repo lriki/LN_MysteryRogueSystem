@@ -478,13 +478,13 @@ export class RESetup {
                 entity.entity.behaviors.push({name: "RevivalItem"});
                 entity.addReaction(REBasics.actions.dead, entity.mainEmittor());
                 break;
-            case "kSystem_炎のブレス":
+            case "kEntity_System_炎のブレス_A":
                 entity.volatilityProjectile = true;
                 break;
-            case "kSystem_MagicBullet":
+            case "kEntity_System_MagicBullet_A":
                 entity.volatilityProjectile = true;
                 break;
-            case "kふきとばしの杖":
+            case "kEntity_ふきとばしの杖_A":
                 //this.setupStaffCommon(entity);
                 //data.effectSet.setEffect(DEffectCause.Hit, REData.getSkill("kSkill_変化").effect);
                 entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_ふきとばし").emittor());
@@ -493,7 +493,7 @@ export class RESetup {
                 entity.idealParams[REBasics.params.remaining] = 5;
                 entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
                 break;
-            case "kItem_ハーフの杖": {
+            case "kEntity_ハーフの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -503,7 +503,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 55;
                 break;
             }
-            case "kItem_インヴィジブルの杖": {
+            case "kEntity_インヴィジブルの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -513,7 +513,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 101;
                 break;
             }
-            case "kItem_スピードアップの杖": {
+            case "kEntity_スピードアップの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -529,7 +529,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 12;
                 break;
             }
-            case "kItem_スパークの杖": {
+            case "kEntity_スパークの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -541,7 +541,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 77;
                 break;
             }
-            case "kItem_パニックの杖": {
+            case "kEntity_パニックの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -551,7 +551,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 63;
                 break;
             }
-            case "kItem_スピリットの杖": {
+            case "kEntity_スピリットの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -561,7 +561,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 106;
                 break;
             }
-            case "kItem_スリープの杖": {
+            case "kEntity_スリープの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -571,13 +571,13 @@ export class RESetup {
                 effect.rmmzAnimationId = 62;
                 break;
             }
-            case "kItem_シールの杖":
+            case "kEntity_シールの杖_A":
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[REBasics.params.remaining] = 5;
                 break;
-            case "kItem_チェンジの杖":
+            case "kEntity_チェンジの杖_A":
                 //this.setupStaffCommon(entity);
                 entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_変化").emittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -599,7 +599,7 @@ export class RESetup {
                     そうでなければ、魔法弾は「自分を射出したEntity(杖) の Cause.Hit の効果を発動する」とか。
                 */
                 break;
-            case "kItem_ワープの杖": {
+            case "kEntity_ワープの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -608,7 +608,7 @@ export class RESetup {
                 effect.effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
                 break;
             }
-            case "kItem_スピードダウンの杖": {
+            case "kEntity_スピードダウンの杖_A": {
                 this.setupStaffCommon(entity);
                // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -625,7 +625,7 @@ export class RESetup {
                 effect.rmmzAnimationId = 54;
                 break;
             }
-            case "kItem_ダブルペインの杖": {
+            case "kEntity_ダブルペインの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -637,13 +637,13 @@ export class RESetup {
                 const effect1 = emittor.effectSet.effects[0];
                 effect1.rmmzAnimationId = 60;
 
-                const effect2 = REData.getItem("kItem_ダブルペインの杖_使用者側効果").mainEmittor().effectSet.effects[0];
+                const effect2 = REData.getItem("kEntity_ダブルペインの杖_使用者側効果_A").mainEmittor().effectSet.effects[0];
                 effect2.rmmzAnimationId = 60;
                 emittor.effectSet.succeededSelfEffect = effect2;
 
                 break;
             }
-            case "kItem_リープの杖":
+            case "kEntity_リープの杖_A":
                 this.setupStaffCommon(entity);
                 entity.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.stumble });
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
@@ -754,7 +754,7 @@ export class RESetup {
                 スキル、Effect, EffectBehavior, SpecialEffect などそれぞれでリジェクトするかを Behavior 側で判断できる仕組みにしてみる。
                 */
                 break;
-            case "kItem_デスの杖": {
+            case "kEntity_デスの杖_A": {
                 this.setupStaffCommon(entity);
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
@@ -763,13 +763,13 @@ export class RESetup {
                 effect.rmmzAnimationId = 65;
                 break;
             }
-            case "k眠りガス": {
+            case "kEntity_眠りガス_A": {
                 const emittor = entity.mainEmittor();
                 emittor.selfAnimationId = 35;
                 emittor.scope.range = DEffectFieldScopeRange.Center;
                 break;
             }
-            case "kItem_地雷": {
+            case "kEntity_地雷_A": {
                 const emittor = entity.mainEmittor();
                 const effect = emittor.effectSet.effects[0];
                 
@@ -821,32 +821,32 @@ export class RESetup {
                 */
                 break;
             }
-            case "kItem_トラバサミ": {
+            case "kEntity_トラバサミ_A": {
                 const emittor = entity.mainEmittor();
                 const effect = emittor.effectSet.effects[0];
                 emittor.scope.range = DEffectFieldScopeRange.Center;
                 effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UTトラバサミ").id, value1: 1.0, value2: 0});
                 break;
             }
-            case "kItem_バネ": {
+            case "kEntity_バネ_A": {
                 const emittor = entity.mainEmittor();
                 const effect = emittor.effectSet.effects[0];
                 emittor.scope.range = DEffectFieldScopeRange.Center;
                 effect.effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.warp });
                 break;
             }
-            case "kItem_転び石":
+            case "kEntity_転び石_A":
                 entity.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
                 entity.mainEmittor().effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.stumble });
                 break;
-            case "kItem_木の矢の罠": {
+            case "kEntity_木の矢の罠_A": {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kEntity_ウッドアロー_A";
                 break;
             }
-            case "kItem_毒矢の罠": {
+            case "kEntity_毒矢の罠_A": {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
                 emittor.scope.length = Infinity;
@@ -864,22 +864,22 @@ export class RESetup {
                 // });
                 break;
             }
-            case "kItem_錆ワナ":
+            case "kEntity_錆ワナ_A":
                 break;
-            case "kItem_落とし穴": {
+            case "kEntity_落とし穴_A": {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Center;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.transferToLowerFloor });
                 break;
             }
-            case "kItem_突風の罠": {
+            case "kEntity_突風の罠_A": {
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Center;
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.transferToNextFloor });
                 emittor.selfAnimationId = 94;
                 break;
             }
-            case "kItem_保存の壺":
+            case "kEntity_保存の壺_A":
                 entity.addReaction(REBasics.actions.PutInActionId);
                 entity.addReaction(REBasics.actions.PickOutActionId);
                 break;
@@ -981,7 +981,7 @@ export class RESetup {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
                 emittor.scope.range = DEffectFieldScopeRange.Selection;
-                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance, entityId: REData.getItem("kフランスパン").id });
+                emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance, entityId: REData.getItem("kEntity_フランスパン_A").id });
                 emittor.effectSet.effects[0].rmmzAnimationId = 2;
                 entity.addReaction(REBasics.actions.ReadActionId, emittor);
                 break;
@@ -1056,12 +1056,12 @@ export class RESetup {
             case "kSkill_炎のブレス_直線":
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
+                emittor.scope.projectilePrefabKey = "kEntity_System_炎のブレス_A";
                 break;
             case "kSkill_魔法弾発射_一般":
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
                 emittor.scope.length = Infinity;
-                emittor.scope.projectilePrefabKey = "kSystem_MagicBullet";
+                emittor.scope.projectilePrefabKey = "kEntity_System_MagicBullet_A";
                 data.emittor().costs.setParamCost(DSkillCostSource.Item, REBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
             case "kSkill_ふきとばし":
@@ -1077,7 +1077,7 @@ export class RESetup {
             case "kSkill_火炎草ブレス":
                 emittor.scope.range = DEffectFieldScopeRange.Front1;
                 //emittor.scope.length = Infinity;
-                //emittor.scope.projectilePrefabKey = "kSystem_炎のブレス";
+                //emittor.scope.projectilePrefabKey = "kEntity_System_炎のブレス_A";
                 break;
             case "kSkill_射撃_矢":
                 emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
@@ -1255,7 +1255,7 @@ export class RESetup {
     static linkItem(entity: DEntity) {
         const data = entity.item();
         switch (entity.entity.key) {
-            case "kItem_錆ワナ": {
+            case "kEntity_錆ワナ_A": {
                 const emittor = entity.mainEmittor();
                 const effect1 = REData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.effects[0].clone();
                 const effect2 = REData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.effects[0].clone();
