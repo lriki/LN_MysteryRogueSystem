@@ -153,8 +153,8 @@ export class FMapBlock {
     private _roomId: FRoomId;
     private _doorway: boolean;  // 部屋の入口
     private _continuation: boolean; // ゴールとなる階段から地続きであるか
-    private _monsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
-    private _itemShopTypeId: DItemShopTypeId;
+    private _fixedMapMonsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
+    private _fixedMapItemShopTypeId: DItemShopTypeId;
 
     public constructor(x: number, y: number) {
         this._x = x;
@@ -165,8 +165,8 @@ export class FMapBlock {
         this._roomId = 0;
         this._doorway = false;
         this._continuation = false;
-        this._monsterHouseTypeId = 0;
-        this._itemShopTypeId = 0;
+        this._fixedMapMonsterHouseTypeId = 0;
+        this._fixedMapItemShopTypeId = 0;
     }
 
     public x(): number {
@@ -193,20 +193,20 @@ export class FMapBlock {
         return this._blockComponent;
     }
 
-    public setMonsterHouseTypeId(value: DMonsterHouseTypeId): void {
-        this._monsterHouseTypeId = value;
+    public setFixedMapMonsterHouseTypeId(value: DMonsterHouseTypeId): void {
+        this._fixedMapMonsterHouseTypeId = value;
     }
 
-    public monsterHouseTypeId(): DMonsterHouseTypeId {
-        return this._monsterHouseTypeId;
+    public fixedMapMonsterHouseTypeId(): DMonsterHouseTypeId {
+        return this._fixedMapMonsterHouseTypeId;
     }
 
-    public setItemShopTypeId(value: DItemShopTypeId): void {
-        this._itemShopTypeId = value;
+    public setFixedMapItemShopTypeId(value: DItemShopTypeId): void {
+        this._fixedMapItemShopTypeId = value;
     }
 
-    public itemShopTypeId(): DItemShopTypeId {
-        return this._itemShopTypeId;
+    public fixedMapItemShopTypeId(): DItemShopTypeId {
+        return this._fixedMapItemShopTypeId;
     }
     
     public setSectorId(value: FSectorId): void {

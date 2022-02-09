@@ -141,11 +141,11 @@ export class SRmmzHelpers {
                 }
                 else if (regionId == paramFixedMapMonsterHouseRoomRegionId) {
                     block.setComponent(FBlockComponent.Room);
-                    block.setMonsterHouseTypeId(REBasics.monsterHouses.fixed);
+                    block.setFixedMapMonsterHouseTypeId(REBasics.monsterHouses.fixed);
                 }
                 else if (regionId == paramFixedMapItemShopRoomRegionId) {
                     block.setComponent(FBlockComponent.Room);
-                    block.setItemShopTypeId(REBasics.itemShops.fixed);
+                    block.setFixedMapItemShopTypeId(REBasics.itemShops.fixed);
                 }
                 else if (regionId == paramFixedMapPassagewayRegionId) {
                     block.setComponent(FBlockComponent.Passageway);

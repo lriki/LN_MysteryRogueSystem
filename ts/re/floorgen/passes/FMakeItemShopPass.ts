@@ -9,7 +9,7 @@ export class FMakeItemShopPass extends FMapBuildPass {
         // その Room をもとにして MonsterHouse を作る。
         for (const room of map.rooms()) {
             room.forEachBlocks((block) => {
-                const shopId = block.itemShopTypeId();
+                const shopId = block.fixedMapItemShopTypeId();
                 if (shopId > 0) {
                     const structure = map.structures().find(s => s instanceof FItemShopStructure && s.itemShopTypeId() == shopId);
                     if (structure) {

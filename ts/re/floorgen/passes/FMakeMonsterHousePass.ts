@@ -6,13 +6,16 @@ import { FMonsterHouseStructure } from "../FStructure";
 import { FMapBuildPass } from "./FMapBuildPass";
 
 // Room の形状や、固定マップから設定された Block 情報などをもとにモンスターハウスとなる Room をマークする。
-export class FMakeMonsterHousePass extends FMapBuildPass {
+/**
+ * @deprecated
+ */
+export class FMakeMonsterHouseForFixedMapPass extends FMapBuildPass {
     public execute(map: FMap): void {
         // Room 内の Block に固定マップから指定された MonsterHouse フラグが設定されている場合、
         // その Room をもとにして MonsterHouse を作る。
         for (const room of map.rooms()) {
             room.forEachBlocks((block) => {
-                const mh = block.monsterHouseTypeId();
+                const mh = block.fixedMapMonsterHouseTypeId();
                 if (mh > 0) {
                     const structure = map.structures().find(s => s instanceof FMonsterHouseStructure && s.monsterHouseTypeId() == mh);
                     if (structure) {
