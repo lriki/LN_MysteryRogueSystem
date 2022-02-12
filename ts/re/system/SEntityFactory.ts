@@ -261,7 +261,7 @@ export class SEntityFactory {
                 entity.addBehavior(LInventoryBehavior);
                 entity.addBehavior(LStorageBehavior);
                 break;
-            case "kEntity_Gold":
+            case "kEntity_Gold_A":
                 entity.addBehavior(LGoldBehavior);
                 break;
             case "kEntity_リープの杖_A":

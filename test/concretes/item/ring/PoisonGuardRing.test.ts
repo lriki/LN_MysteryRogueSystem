@@ -25,7 +25,7 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
     const pow1 = player1.actualParam(REBasics.params.pow);
     player1.addState(REData.getState("kState_UT罠必中").id);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンガードリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンガードリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 

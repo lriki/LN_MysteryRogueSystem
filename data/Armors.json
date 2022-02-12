@@ -41,7 +41,7 @@
     ],
     "iconIndex": 128,
     "name": "皮の盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kレザーシールド>\n<MR-Prefab: pレザーシールド>\n<RE-EquipmentImage:RE-Shield-2,Left>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_レザーシールド_A>\n<MR-Prefab: kPrefab_レザーシールド_A>\n<RE-EquipmentImage:RE-Shield-2,Left>",
     "params": [
       0,
       0,
@@ -68,7 +68,7 @@
     ],
     "iconIndex": 128,
     "name": "ラウンドバックラー",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kアイアンシールド>\n<MR-Prefab: pアイアンシールド>\n<RE-EquipmentImage:RE-Shield-1,Left>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_アイアンシールド_A>\n<MR-Prefab: kPrefab_アイアンシールド_A>\n<RE-EquipmentImage:RE-Shield-1,Left>",
     "params": [
       0,
       0,
@@ -95,7 +95,7 @@
     ],
     "iconIndex": 128,
     "name": "うろこの盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kポイズンシールド>\n<MR-Prefab: pポイズンシールド>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_ポイズンシールド_A>\n<MR-Prefab: kPrefab_ポイズンシールド_A>",
     "params": [
       0,
       0,
@@ -122,7 +122,7 @@
     ],
     "iconIndex": 128,
     "name": "クリスタルシールド",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kクリスタルシールド>\n<MR-Prefab: pクリスタルシールド>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_クリスタルシールド_A>\n<MR-Prefab: kPrefab_クリスタルシールド_A>",
     "params": [
       0,
       0,
@@ -149,7 +149,7 @@
     ],
     "iconIndex": 128,
     "name": "グランドシールド",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kグランドシールド>\n<MR-Prefab: pグランドシールド>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_グランドシールド_A>\n<MR-Prefab: kPrefab_グランドシールド_A>",
     "params": [
       0,
       0,
@@ -181,7 +181,7 @@
     ],
     "iconIndex": 128,
     "name": "ドラゴンシールド",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kドラゴンシールド>\n<MR-Prefab: pドラゴンシールド>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_ドラゴンシールド_A>\n<MR-Prefab: kPrefab_ドラゴンシールド_A>",
     "params": [
       0,
       0,
@@ -208,7 +208,7 @@
     ],
     "iconIndex": 128,
     "name": "インペリアルシールド",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kインペリアルシールド>\n<MR-Prefab: pインペリアルシールド>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_インペリアルシールド_A>\n<MR-Prefab: kPrefab_インペリアルシールド_A>",
     "params": [
       0,
       0,
@@ -316,7 +316,7 @@
     ],
     "iconIndex": 144,
     "name": "アウェイクリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kアウェイクリング>\n<MR-Prefab: pアウェイクリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_アウェイクリング_A>\n<MR-Prefab: kPrefab_アウェイクリング_A>",
     "params": [
       0,
       0,
@@ -343,7 +343,7 @@
     ],
     "iconIndex": 144,
     "name": "パワーリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kパワーリング>\n<MR-Prefab: pパワーリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_パワーリング_A>\n<MR-Prefab: kPrefab_パワーリング_A>",
     "params": [
       0,
       0,
@@ -370,7 +370,7 @@
     ],
     "iconIndex": 144,
     "name": "ワープリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kワープリング>\n<MR-Prefab: pワープリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ワープリング_A>\n<MR-Prefab: kPrefab_ワープリング_A>",
     "params": [
       0,
       0,
@@ -402,7 +402,7 @@
     ],
     "iconIndex": 144,
     "name": "スリープガードリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kスリープガードリング>\n<MR-Prefab: pスリープガードリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_スリープガードリング_A>\n<MR-Prefab: kPrefab_スリープガードリング_A>",
     "params": [
       0,
       0,
@@ -429,7 +429,7 @@
     ],
     "iconIndex": 144,
     "name": "ハングリーリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kハングリーリング>\n<MR-Prefab: pハングリーリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ハングリーリング_A>\n<MR-Prefab: kPrefab_ハングリーリング_A>",
     "params": [
       0,
       0,
@@ -456,7 +456,7 @@
     ],
     "iconIndex": 144,
     "name": "ポイズンガードリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kポイズンガードリング>\n<MR-Prefab: pポイズンガードリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ポイズンガードリング_A>\n<MR-Prefab: kPrefab_ポイズンガードリング_A>",
     "params": [
       0,
       0,
@@ -483,7 +483,7 @@
     ],
     "iconIndex": 144,
     "name": "ビジブルリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kビジブルリング>\n<MR-Prefab: pビジブルリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ビジブルリング_A>\n<MR-Prefab: kPrefab_ビジブルリング_A>",
     "params": [
       0,
       0,
@@ -510,7 +510,7 @@
     ],
     "iconIndex": 144,
     "name": "インプリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kインプリング>\n<MR-Prefab: pインプリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_インプリング_A>\n<MR-Prefab: kPrefab_インプリング_A>",
     "params": [
       0,
       0,
@@ -537,7 +537,7 @@
     ],
     "iconIndex": 144,
     "name": "アウェイクガードリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kアウェイクガードリング>\n<MR-Prefab: pアウェイクガードリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_アウェイクガードリング_A>\n<MR-Prefab: kPrefab_アウェイクガードリング_A>",
     "params": [
       0,
       0,
@@ -591,7 +591,7 @@
     ],
     "iconIndex": 144,
     "name": "トラップガードリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kトラップガードリング>\n<MR-Prefab: pトラップガードリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_トラップガードリング_A>\n<MR-Prefab: kPrefab_トラップガードリング_A>",
     "params": [
       0,
       0,
@@ -618,7 +618,7 @@
     ],
     "iconIndex": 144,
     "name": "ハングリーガードリング",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kハングリーガードリング>\n<MR-Prefab: pハングリーガードリング>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ハングリーガードリング_A>\n<MR-Prefab: kPrefab_ハングリーガードリング_A>",
     "params": [
       0,
       0,
@@ -645,7 +645,7 @@
     ],
     "iconIndex": 144,
     "name": "きれいな指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kきれいな指輪>\n<MR-Prefab: pきれいな指輪>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_きれいな指輪_A>\n<MR-Prefab: kPrefab_きれいな指輪_A>",
     "params": [
       0,
       0,

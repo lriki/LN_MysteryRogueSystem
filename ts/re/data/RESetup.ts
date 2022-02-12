@@ -79,60 +79,60 @@ export class RESetup {
                 break;
             case "kEntity_ダミードラゴンキラー_A":
                 break;
-            case "kレザーシールド":
+            case "kEntity_レザーシールド_A":
                 entity.equipmentTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.5 });
                 entity.selfTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.upgradeValue, value: 0.0 });
                 break;
-            case "kアイアンシールド":
+            case "kEntity_アイアンシールド_A":
                 break;
-            case "kポイズンシールド":
+            case "kEntity_ポイズンシールド_A":
                 entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃").id, value: 0 });
                 entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
                 break;
-            case "kアウェイクリング":
+            case "kEntity_アウェイクリング_A":
                 this.setupRingCommon(entity);
                 break;
-            case "kパワーリング":
+            case "kEntity_パワーリング_A":
                 this.setupRingCommon(entity);
                 assert(entity.equipment);
                 entity.equipment.parameters[REBasics.params.pow] = { value: 3, upgradeRate: 0 };
                 break;
-            case "kワープリング":
+            case "kEntity_ワープリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.SuddenSkillEffect, dataId: REData.getSkill("kSkill_Warp").id, value: 1.0 / 16.0 });
                 break;
-            case "kスリープガードリング":
+            case "kEntity_スリープガードリング_A":
                 this.setupRingCommon(entity);
                 break;
-            case "kハングリーリング":
+            case "kEntity_ハングリーリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 2.0 });
                 break;
-            case "kポイズンガードリング":
+            case "kEntity_ポイズンガードリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.ParamDamageRate, dataId: REBasics.params.pow, value: 0.0 });
                 break;
-            case "kビジブルリング":
+            case "kEntity_ビジブルリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.ForceVisible, dataId: 0, value: 0 });
                 break;
-            case "kインプリング":
+            case "kEntity_インプリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_レベルダウン").id, value: 0 });
                 entity.equipmentTraits.push({ code: REBasics.traits.SkillGuard, dataId: REData.getSkill("kSkill_毒攻撃_強").id, value: 0 });
                 break;
-            case "kアウェイクガードリング":
+            case "kEntity_アウェイクガードリング_A":
                 this.setupRingCommon(entity);
                 break;
-            case "kトラップガードリング":
+            case "kEntity_トラップガードリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.DisableTrap, dataId: 0, value: 0 });
                 break;
-            case "kハングリーガードリング":
+            case "kEntity_ハングリーガードリング_A":
                 this.setupRingCommon(entity);
                 entity.equipmentTraits.push({ code: REBasics.traits.SurvivalParamLossRate, dataId: REBasics.params.fp, value: 0.0 });
                 break;
-            case "kきれいな指輪":
+            case "kEntity_きれいな指輪_A":
                 this.setupRingCommon(entity);
                 break;
             case "kEntity_ウッドアロー_A":
@@ -1039,7 +1039,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
-            case "kEntity_Gold":
+            case "kEntity_Gold_A":
                 entity.addReaction(REBasics.actions.collide, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.mainEmittor()));
                 break;

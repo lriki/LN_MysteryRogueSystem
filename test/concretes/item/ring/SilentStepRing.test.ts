@@ -24,7 +24,7 @@ test("concretes.item.ring.SilentStepRing", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアウェイクガードリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アウェイクガードリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 
@@ -61,7 +61,7 @@ test("concretes.item.ring.SilentStepRing.Attack", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアウェイクガードリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アウェイクガードリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 

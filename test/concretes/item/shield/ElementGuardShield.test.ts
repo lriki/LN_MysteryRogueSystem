@@ -24,7 +24,7 @@ test("concretes.item.shield.ElementGuardShield", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const hp1 = player1.actualParam(REBasics.params.hp);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kドラゴンシールド").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ドラゴンシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ドラゴンA").id, [], "enemy1"));

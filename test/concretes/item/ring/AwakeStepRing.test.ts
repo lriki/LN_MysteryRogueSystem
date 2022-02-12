@@ -23,7 +23,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアウェイクリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アウェイクリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     
     const name = UName.makeNameAsItem(ring1);

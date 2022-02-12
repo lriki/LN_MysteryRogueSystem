@@ -4503,7 +4503,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kアイアンシールド\","
+                "    data: \"kEntity_アイアンシールド_A\","
               ]
             },
             {
@@ -4880,7 +4880,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kレザーシールド\","
+                "    data: \"kEntity_レザーシールド_A\","
               ]
             },
             {
@@ -5789,7 +5789,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_Gold\","
+                "    data: \"kEntity_Gold_A\","
               ]
             },
             {
@@ -6187,7 +6187,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kレザーシールド\","
+                "    data: \"kEntity_レザーシールド_A\","
               ]
             },
             {

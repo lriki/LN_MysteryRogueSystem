@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kレザーシールド\","
+                "    data: \"kEntity_レザーシールド_A\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kアイアンシールド\","
+                "    data: \"kEntity_アイアンシールド_A\","
               ]
             },
             {
@@ -4666,7 +4666,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kポイズンシールド\","
+                "    data: \"kEntity_ポイズンシールド_A\","
               ]
             },
             {
@@ -4740,7 +4740,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kクリスタルシールド\","
+                "    data: \"kEntity_クリスタルシールド_A\","
               ]
             },
             {
@@ -4814,7 +4814,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kグランドシールド\","
+                "    data: \"kEntity_グランドシールド_A\","
               ]
             },
             {
@@ -4888,7 +4888,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kドラゴンシールド\","
+                "    data: \"kEntity_ドラゴンシールド_A\","
               ]
             },
             {
@@ -4962,7 +4962,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kインペリアルシールド\","
+                "    data: \"kEntity_インペリアルシールド_A\","
               ]
             },
             {

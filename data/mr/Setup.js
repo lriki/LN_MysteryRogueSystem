@@ -5,12 +5,12 @@ db.entities = {
             { code: "RaceRate", data: "kRace_ドラゴン系", value: 1.5 }
         ]
     },
-    "kアウェイクリング": {
+    "kEntity_アウェイクリング_A": {
         equipmentTraits: [
             { code: "AwakeStep" }
         ]
     },
-    "kアウェイクガードリング": {
+    "kEntity_アウェイクガードリング_A": {
         equipmentTraits: [
             { code: "SilentStep" }
         ]
@@ -24,13 +24,13 @@ db.entities = {
     },
     
 
-    // "kアイアンシールド": {
+    // "kEntity_アイアンシールド_A": {
     //     // params: {
     //     //     "grade": "0",   // 初期値。"2-5" とかにすると、その範囲をランダムに設定
     //     // }
     // },
 
-    // "kワープリング": {
+    // "kEntity_ワープリング_A": {
     //     equipmentTraits: [
     //         { code: "SuddenSkillEffect", data: "kSkill_Warp", value: 1.0 / 16.0 }
     //     ]

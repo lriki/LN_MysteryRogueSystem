@@ -21,7 +21,7 @@ test("concretes.trap.RustTrap", () => {
     player1.addState(REData.getState("kState_UT罠必中").id);
 
     // アイテム 入手
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kアイアンシールド").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
 
     // trap1 生成&配置

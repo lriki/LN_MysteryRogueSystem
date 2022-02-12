@@ -6474,7 +6474,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kレザーシールド\","
+                "    data: \"kEntity_レザーシールド_A\","
               ]
             },
             {
@@ -6548,7 +6548,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパワーリング\","
+                "    data: \"kEntity_パワーリング_A\","
               ]
             },
             {

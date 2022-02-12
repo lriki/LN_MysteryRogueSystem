@@ -6099,7 +6099,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kレザーシールド\","
+                "    data: \"kEntity_レザーシールド_A\","
               ]
             },
             {
@@ -8320,6 +8320,27 @@
               "indent": 0,
               "parameters": [
                 "    presets: [[\"kTerrainPreset_GreatHall\", 1]]"
+              ]
+            },
+            {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "@MR-MonsterHouse"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "    rate: 100,"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "    patterns: [[\"normal\", 100]]"
               ]
             },
             {

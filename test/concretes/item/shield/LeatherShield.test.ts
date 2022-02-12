@@ -26,7 +26,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const fp1 = player1.actualParam(REBasics.params.fp);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kレザーシールド").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_レザーシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
     equipmentUser.equipOnUtil(shield1);
 

@@ -30,7 +30,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     const hp1 = player1.actualParam(REBasics.params.hp);
 
     // Item
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kインプリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_インプリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
 
     // Enemy

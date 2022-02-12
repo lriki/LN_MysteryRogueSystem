@@ -25,7 +25,7 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     const pow1 = player1.actualParam(REBasics.params.pow);
     player1.addState(REData.getState("kState_UT罠必中").id);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンシールド").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンシールド_A").id, [], "shield1"));
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒草_B").id, [], "item1"));
     inventory.addEntity(shield1);
     inventory.addEntity(item1);
@@ -69,7 +69,7 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const pow1 = player1.actualParam(REBasics.params.pow);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kポイズンシールド").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
     equipmentUser.equipOnUtil(shield1);
 

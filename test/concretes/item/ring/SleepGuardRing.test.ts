@@ -26,7 +26,7 @@ test("concretes.item.ring.SleepGuardRing", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // Item
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kスリープガードリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スリープガードリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 

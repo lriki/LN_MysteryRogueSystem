@@ -25,7 +25,7 @@ test("concretes.item.ring.TrapGuardRing", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // Item
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kトラップガードリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_トラップガードリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 

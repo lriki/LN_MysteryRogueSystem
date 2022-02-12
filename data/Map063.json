@@ -4747,7 +4747,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_Gold\","
+                "    data: \"kEntity_Gold_A\","
               ]
             },
             {
@@ -4909,7 +4909,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_Gold\","
+                "    data: \"kEntity_Gold_A\","
               ]
             },
             {

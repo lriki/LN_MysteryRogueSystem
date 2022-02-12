@@ -24,7 +24,7 @@ test("concretes.item.ring.HungryRing.test", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const fp1 = player1.actualParam(REBasics.params.fp);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kハングリーリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ハングリーリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 

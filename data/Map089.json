@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kアウェイクリング\","
+                "    data: \"kEntity_アウェイクリング_A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kインプリング\","
+                "    data: \"kEntity_インプリング_A\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kきれいな指輪\","
+                "    data: \"kEntity_きれいな指輪_A\","
               ]
             },
             {
@@ -4666,7 +4666,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kパワーリング\","
+                "    data: \"kEntity_パワーリング_A\","
               ]
             },
             {
@@ -4740,7 +4740,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kスリープガードリング\","
+                "    data: \"kEntity_スリープガードリング_A\","
               ]
             },
             {
@@ -4976,7 +4976,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kアウェイクガードリング\","
+                "    data: \"kEntity_アウェイクガードリング_A\","
               ]
             },
             {
@@ -5050,7 +5050,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kワープリング\","
+                "    data: \"kEntity_ワープリング_A\","
               ]
             },
             {
@@ -5124,7 +5124,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kハングリーリング\","
+                "    data: \"kEntity_ハングリーリング_A\","
               ]
             },
             {
@@ -5198,7 +5198,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kポイズンガードリング\","
+                "    data: \"kEntity_ポイズンガードリング_A\","
               ]
             },
             {
@@ -5434,7 +5434,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kビジブルリング\","
+                "    data: \"kEntity_ビジブルリング_A\","
               ]
             },
             {
@@ -5670,7 +5670,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kハングリーガードリング\","
+                "    data: \"kEntity_ハングリーガードリング_A\","
               ]
             },
             {
@@ -5744,7 +5744,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kトラップガードリング\","
+                "    data: \"kEntity_トラップガードリング_A\","
               ]
             },
             {

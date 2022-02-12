@@ -98,7 +98,7 @@ export class TestEnv {
         this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
         this.EntityId_Herb = REData.getEntity("kEntity_キュアリーフ_A").id;
         this.EntityId_Weapon1 = REData.getEntity("kEntity_ゴブリンのこん棒_A").id;
-        this.EntityId_Shield1 = REData.getEntity("kレザーシールド").id;
+        this.EntityId_Shield1 = REData.getEntity("kEntity_レザーシールド_A").id;
         this.EntityId_SleepTrap = REData.getEntity("kEntity_眠りガス_A").id;
         
         // デバッグしやすいように共通の名前を付けておく

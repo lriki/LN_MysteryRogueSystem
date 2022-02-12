@@ -30,7 +30,7 @@ export class DSetupScript {
         this._db = db;
         
         if (db.items) {
-            const aa = db.items["kワープリング"];
+            const aa = db.items["kEntity_ワープリング_A"];
             const abba = db.items["xxx"];
             console.log("aa", aa);
 

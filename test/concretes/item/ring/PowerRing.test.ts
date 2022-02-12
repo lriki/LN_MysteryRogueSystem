@@ -23,7 +23,7 @@ test("concretes.item.ring.PowerRing", () => {
     const power1 = player1.actualParam(REBasics.params.pow);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kパワーリング").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パワーリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
