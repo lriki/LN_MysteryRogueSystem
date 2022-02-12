@@ -1,6 +1,7 @@
 import { DFloorMonsterHousePattern } from "ts/re/data/DLand";
 import { REData } from "ts/re/data/REData";
 import { LRandom } from "ts/re/objects/LRandom";
+import { UEffect } from "ts/re/usecases/UEffect";
 import { FMap } from "../FMapData";
 import { FMonsterHouseStructure } from "../FStructure";
 import { FMapBuildPass } from "./FMapBuildPass";
@@ -69,4 +70,30 @@ export class FMakeMonsterHouseForFixedMapPass extends FMapBuildPass {
     }
 }
 
+
+export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
+    public execute(map: FMap): void {
+        const monsterHouse = map.floorId().floorInfo().monsterHouse;
+
+        for (const sector of map.sectors()) {
+            if (sector.structureType == "MonsterHouse") {
+                const pattern = UEffect.selectRating(map.random(), monsterHouse.patterns, x => x.rating);
+                //const pattern = this.selectPattern(, map.random());
+                if (pattern) {
+                    const candidates = map.rooms().filter(x => x.structures().length == 0);
+                    const room = map.random().selectOrUndefined(candidates);
+                    if (room) {
+                        const data = REData.monsterHouses.find(x => x.name == pattern.name);
+                        if (!data) throw new Error(`MonsterHouses "${pattern.name}" は存在しません。`);
+        
+                        const s = new FMonsterHouseStructure(room.id(), data.id);
+                        map.addStructure(s);
+                        room.addStructureRef(s);
+                    }
+                }
+            }
+        }
+        
+    }
+}
 

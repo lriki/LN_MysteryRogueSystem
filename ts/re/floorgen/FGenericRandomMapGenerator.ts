@@ -54,13 +54,14 @@ export class FGenericRandomMapGenerator {
 
     public generate(): void {
 
-        if (!this.makeAreas()) {
+        if (!this.makeSectors()) {
             return;
         }
 
         this.makeSectorAdjacency();
         this.makeSectorConnections();
         this.makeRoomShapeDefinitions();
+        this.makeStructureDefinitions();
         this.makeRooms();
         this.makeEdgePins();
         this.makePinConnections();
@@ -72,7 +73,7 @@ export class FGenericRandomMapGenerator {
         throw new Error(message);
     }
         
-    private makeAreas(): boolean {
+    private makeSectors(): boolean {
         const countH = this._preset.divisionCountX;
         const countV = this._preset.divisionCountY;
 
@@ -244,7 +245,8 @@ export class FGenericRandomMapGenerator {
         }
     }
 
-    // RoomShape を選択する
+    // RoomShape を選択する。
+    // 種類によっては行き止まりにしか生成できない、など制約があるので、Connection を作った後に処理する。
     private makeRoomShapeDefinitions(): void {
         const sectors = this._map.sectors();
         const sectorCount = sectors.length;
@@ -264,6 +266,31 @@ export class FGenericRandomMapGenerator {
             for (let i = 0; i < sectorCount; i++) {
                 if (shapes[i]) {
                     sectors[i].roomShapeType = shapes[i];
+                }
+            }
+        }
+    }
+    
+    // 構造物。RoomShape とほぼ同じ。
+    private makeStructureDefinitions(): void {
+        const sectors = this._map.sectors();
+        const sectorCount = sectors.length;
+        let structureDefCount = this._preset.forceStructures.length;
+        if (structureDefCount >= sectorCount) {
+            structureDefCount = sectorCount;
+        }
+
+        // まずは強制的に設定したいものを処理する
+        {
+            const shapes = new Array<string>(sectorCount);
+            for (let i = 0; i < structureDefCount; i++) {
+                shapes[i] = this._preset.forceStructures[i].typeName;
+            }
+            this.random.mutableShuffleArray(shapes);
+    
+            for (let i = 0; i < sectorCount; i++) {
+                if (shapes[i]) {
+                    sectors[i].structureType = shapes[i];
                 }
             }
         }

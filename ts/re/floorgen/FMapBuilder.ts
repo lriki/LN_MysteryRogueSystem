@@ -3,7 +3,7 @@ import { FMap, FMapBlock } from "./FMapData";
 import { FMarkContinuationPass } from "./passes/FMarkContinuationPass";
 import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPass";
 import { FMakeTileKindPass } from "./passes/FMakeTileKindPass";
-import { FMakeMonsterHouseForFixedMapPass } from "./passes/FMakeMonsterHousePass";
+import { FMakeMonsterHouseForFixedMapPass, FMakeMonsterHouseForRandomMapPass } from "./passes/FMakeMonsterHousePass";
 import { FMakeItemShopPass } from "./passes/FMakeItemShopPass";
 
 
@@ -15,7 +15,7 @@ export class FMapBuilder {
             new FMarkContinuationPass(),
             new FMakeTileKindPass(),
             new FEntryPointAndExitPointPass(),
-            //new FMakeMonsterHouseForFixedMapPass(),
+            new FMakeMonsterHouseForRandomMapPass(),
             new FMakeItemShopPass(),
         ];
         // Apply passes

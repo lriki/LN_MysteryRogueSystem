@@ -13,6 +13,7 @@ export class FSector {
     private _py: number = 0;    // Pivot. y1 からの相対座標 (Room 座標系)
     private _edges: FSectorEdge[];
     private _roomShapeType: string;
+    private _structureType: string;
     private _room: FRoom | undefined;
     //private _wayPointsX: number[];  // x1~x2 間で、通路を作ってもよい X 座標
     //private _wayPointsY: number[];  // y1~y2 間で、通路を作ってもよい Y 座標
@@ -27,6 +28,7 @@ export class FSector {
             new FSectorEdge(this, FDirection.R),
         ];
         this._roomShapeType = "";
+        this._structureType = "";
         //this._wayPointsX = [];
         //this._wayPointsY = [];
     }
@@ -106,6 +108,14 @@ export class FSector {
 
     public set roomShapeType(value: string) {
         this._roomShapeType = value;
+    }
+
+    public get structureType(): string {
+        return this._structureType;
+    }
+
+    public set structureType(value: string) {
+        this._structureType= value;
     }
 
     public room(): FRoom | undefined {
