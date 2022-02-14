@@ -48,6 +48,10 @@ export var paramMaxUnitsInMap = 50;
 export var paramMaxItemsInMap = 100;
 export var paramMaxTrapsInMap = 100;
 
+export var paramMonsterHouseEnemiesMax = 20;
+export var paramMonsterHouseEnemiesMin = 5;
+export var paramMonsterHouseItemsMax = 20;  // アイテムまたはトラップ。同じマスに置けないし、ワナ師ダンジョンでは両方アイテムと考えるのが妥当だろう。
+export var paramMonsterHouseItemsMin = 5;
 
 
 //Maximum number of items in the map

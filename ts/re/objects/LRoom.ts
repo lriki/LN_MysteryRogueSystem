@@ -41,6 +41,14 @@ export class LRoom {
         return this._y2;
     }
 
+    public get width(): number {
+        return this._x2 - this._x1 + 1;
+    }
+
+    public get height(): number {
+        return this._y2 - this._y1 + 1;
+    }
+
     public contains(x: number, y: number): boolean {
         return this._x1 <= x && x <= this._x2 && this._y1 <= y && y <= this._y2;
     }
