@@ -193,3 +193,55 @@ test("ai.CharacterAI.Issue3", () => {
     step(22, 12);
     step(21, 12);
 });
+
+// 
+test("ai.CharacterAI.Issue_NS#10", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(floorId, 20, 10);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_バットA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 26, 14);
+
+    const info = DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_仮眠2").id], "enemy1");
+    const enemy2 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy2, floorId, 25, 13);
+    const enemy3 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy3, floorId, 26, 13);
+    const enemy4 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy4, floorId, 27, 13);
+
+    const enemy5 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy5, floorId, 25, 14);
+    const enemy6 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy6, floorId, 27, 14);
+
+    const enemy7 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy7, floorId, 25, 15);
+    const enemy8 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy8, floorId, 26, 15);
+    const enemy9 = SEntityFactory.newEntity(info);
+    REGame.world._transferEntity(enemy9, floorId, 27, 15);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    const step = () => {
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        expect(enemy1.x).toBe(26);
+        expect(enemy1.y).toBe(14);
+    };
+
+    step();
+    step();
+    step();
+    step();
+    step();
+    step();
+    step();
+});
