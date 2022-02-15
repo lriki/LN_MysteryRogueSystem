@@ -13,11 +13,23 @@ import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
+import { Helpers } from "ts/re/system/Helpers";
 
 interface SkillAction {
     skillId: DSkillId;
     target: LEntityId;
 };
+
+export enum LConfusionAIRestriction {
+    /** 敵を攻撃 */
+    AttcakToOpponent = 0,
+
+    /** 誰かを攻撃 */
+    AttackToOther = 1,
+
+    /** 味方を攻撃 */
+    AttcakToFriend = 2,
+}
 
 @RESerializable
 export class LConfusionAI extends LCharacterAI {
@@ -29,15 +41,17 @@ export class LConfusionAI extends LCharacterAI {
     特に AI は Move と Action を別のフェーズで行う必要があるため、そのケアは CharacterAI 側でしか実装できない。
     */
 
+    private _restriction: LConfusionAIRestriction;
     private _candidateSkillActions: SkillAction[];
 
-    public constructor() {
+    public constructor(restriction: LConfusionAIRestriction) {
         super();
+        this._restriction = restriction;
         this._candidateSkillActions = [];
     }
 
     public clone(): LCharacterAI {
-        const i = new LConfusionAI();
+        const i = new LConfusionAI(this._restriction);
         for (const s of this._candidateSkillActions) {
             i._candidateSkillActions.push({ skillId: s.skillId, target: s.target });
         }
@@ -61,11 +75,21 @@ export class LConfusionAI extends LCharacterAI {
         // 通常攻撃できるか試してみる。
         // 実際の攻撃は Major フェーズで行いたいので、ここでは行動は消費しない。
         // 攻撃候補を覚えておく。
-        const block = UMovement.getAdjacentBlock(self, dir);
-        const targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.x() && e.y == block.y());
-        if (targets.length > 0) {
-            this._candidateSkillActions.push({ skillId: RESystem.skills.normalAttack, target: targets[0].entityId() });
-            return SPhaseResult.Handled;
+        {
+            const block = UMovement.getAdjacentBlock(self, dir);
+            let targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.x() && e.y == block.y());
+    
+            if (this._restriction == LConfusionAIRestriction.AttcakToFriend) {
+                targets = targets.filter(x => Helpers.isFriend(self, x));
+            }
+            else if (this._restriction == LConfusionAIRestriction.AttcakToOpponent) {
+                targets = targets.filter(x => Helpers.isHostile(self, x));
+            }
+    
+            if (targets.length > 0) {
+                this._candidateSkillActions.push({ skillId: RESystem.skills.normalAttack, target: targets[0].entityId() });
+                return SPhaseResult.Handled;
+            }
         }
         
         // ここまで来てしまったら何もせず待機行動。

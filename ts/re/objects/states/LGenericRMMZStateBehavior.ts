@@ -7,7 +7,7 @@ import { LState } from "./LState";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateRestriction } from "ts/re/data/DState";
 import { assert } from "ts/re/Common";
 import { REGame } from "../REGame";
-import { LConfusionAI } from "../ai/LConfusionAI";
+import { LConfusionAI, LConfusionAIRestriction } from "../ai/LConfusionAI";
 import { LActivity } from "../activities/LActivity";
 import { LUnitBehavior } from "../behaviors/LUnitBehavior";
 import { REBasics } from "ts/re/data/REBasics";
@@ -97,7 +97,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         
         const effect = this.stateEffect();
         if (effect.restriction == DStateRestriction.AttackToOther) {
-            this._characterAI = new LConfusionAI();
+            this._characterAI = new LConfusionAI(LConfusionAIRestriction.AttackToOther);
         }
         else if (effect.restriction == DStateRestriction.Blind) {
             this._characterAI = new LBlindAI();

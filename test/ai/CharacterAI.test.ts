@@ -194,7 +194,7 @@ test("ai.CharacterAI.Issue3", () => {
     step(21, 12);
 });
 
-// 
+// RatedRandomAI が、他 Unit の方へ移動が発生したときに assert が発生する問題の修正確認
 test("ai.CharacterAI.Issue_NS#10", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;

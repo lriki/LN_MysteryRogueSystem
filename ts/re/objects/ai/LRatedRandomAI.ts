@@ -3,7 +3,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LCharacterAI_Normal } from "./LStandardAI";
-import { LConfusionAI } from "./LConfusionAI";
+import { LConfusionAI, LConfusionAIRestriction } from "./LConfusionAI";
 import { assert, RESerializable } from "ts/re/Common";
 
 @RESerializable
@@ -18,7 +18,7 @@ export class LRatedRandomAI extends LCharacterAI {
         this._randomRate = 50;
         this._rundomTurn = false;
         this._standardAI  = new LCharacterAI_Normal();
-        this._randomAI  = new LConfusionAI();
+        this._randomAI  = new LConfusionAI(LConfusionAIRestriction.AttcakToOpponent);
     }
 
     public clone(): LCharacterAI {
