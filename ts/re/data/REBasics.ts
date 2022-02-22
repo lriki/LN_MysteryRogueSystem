@@ -1,5 +1,5 @@
 import { DClassId } from "./DClass";
-import { DAttackElementId, DSpecificEffectId as DSpecialEffectId, DTerrainSettingId } from "./DCommon";
+import { DAttackElementId, DSpecificEffectId as DSpecialEffectId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
@@ -79,6 +79,6 @@ export class REBasics {
     
 
     static defaultEnemyClass: DClassId;
-    static defaultTerrainSettingId: DTerrainSettingId;
+    static defaultTerrainPresetId: DTerrainPresetId;
 }
 

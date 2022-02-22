@@ -8319,7 +8319,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    presets: [[\"kTerrainPreset_GreatHall\", 1]]"
+                "    preset: \"kTerrainPreset_GreatHall\""
               ]
             },
             {

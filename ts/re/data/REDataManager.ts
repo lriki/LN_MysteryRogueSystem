@@ -7,7 +7,7 @@ import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState"
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DFloorMonsterHouse, DLand, DLandIdentificationLevel, DMapId } from "./DLand";
+import { DFloorMonsterHouse, DLand, DLandIdentificationLevel, DMapId, DTerrainSettingRef } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
@@ -396,17 +396,25 @@ export class REDataManager
 
         {
             {
-                const preset = REData.newTerrainSettings("kTerrainSetting_Default");
-                REBasics.defaultTerrainSettingId = preset.id;
+                const setting = REData.newTerrainSetting("kTerrainSetting_Default");
             }
             {
-                const preset = REData.newTerrainSettings("kTerrainSetting_GreatHall");
-                preset.divisionCountX = 1;
-                preset.divisionCountY = 1;
-                preset.forceRoomShapes = [{typeName: "FullPlane"}];
-                preset.forceStructures = [{typeName: "MonsterHouse"}];
+                const setting = REData.newTerrainSetting("kTerrainSetting_GreatHall");
+                setting.divisionCountX = 1;
+                setting.divisionCountY = 1;
+                setting.forceRoomShapes = [{typeName: "FullPlane"}];
+                setting.forceStructures = [{typeName: "MonsterHouse"}];
             }
 
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Default");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+                REBasics.defaultTerrainPresetId = preset.id;
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1)); 
+            }
         }
 
         // REBasics.presets = {
@@ -886,7 +894,7 @@ export class REDataManager
                         displayName: undefined,
                         fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100,
                         monsterHouse: new DFloorMonsterHouse(undefined),
-                        presets: [],
+                        presetId: 0,
                     };
                 }
             }

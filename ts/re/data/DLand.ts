@@ -1,7 +1,7 @@
 
 import { assert, tr2 } from "../Common";
 import { DAnnotationReader, RMMZFloorMetadata, RmmzMonsterHouseMetadata } from "./DAnnotationReader";
-import { DTerrainSettingId } from "./DCommon";
+import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers } from "./DHelper";
@@ -90,18 +90,18 @@ export class DTerrainSettingRef {
         this.rating = rating;
     }
 
-    public static parse(data: RMMZFloorMetadata): DTerrainSettingRef[] {
-        if (data.presets) {
-            return data.presets.map((x): DTerrainSettingRef => { 
-                const key = (x[0] as string);
-                const rate = (x[1] as number);
-                return new DTerrainSettingRef(REData.getTerrainSettings(key).id, rate);
-            });
-        }
-        else {
-            return [new DTerrainSettingRef(REData.getTerrainSettings("kTerrainSetting_Default").id, 1)];
-        }
-    }
+    // public static parse(data: RMMZFloorMetadata): DTerrainSettingRef[] {
+    //     if (data.presets) {
+    //         return data.presets.map((x): DTerrainSettingRef => { 
+    //             const key = (x[0] as string);
+    //             const rate = (x[1] as number);
+    //             return new DTerrainSettingRef(REData.getTerrainSetting(key).id, rate);
+    //         });
+    //     }
+    //     else {
+    //         return [new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1)];
+    //     }
+    // }
 }
 
 export interface DFloorInfo {
@@ -126,7 +126,7 @@ export interface DFloorInfo {
     //structures: DFloorStructures;
     monsterHouse: DFloorMonsterHouse;
 
-    presets: DTerrainSettingRef[];
+    presetId: DTerrainPresetId;
 }
 
 export enum DLandIdentificationLevel {
@@ -335,7 +335,7 @@ export class DLand {
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
                     monsterHouse: new DFloorMonsterHouse(monsterHouses),
-                    presets: DTerrainSettingRef.parse(floorData),
+                    presetId: floorData.preset ? REData.getTerrainPreset(floorData.preset).id : 0,
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

@@ -15,7 +15,7 @@ test("Preset.GreatHall", () => {
     // 適当なフロアの Preset を強制的に変更
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presets = [new DTerrainSettingRef(REData.getTerrainSettings("kTerrainSetting_GreatHall").id, 1)];
+    floorInfo.presetId = REData.getTerrainPreset("kTerrainPreset_GreatHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
 

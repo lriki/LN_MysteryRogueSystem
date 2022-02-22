@@ -1,5 +1,6 @@
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "../PluginParameters";
-import { DTerrainSettingId } from "./DCommon";
+import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
+import { DTerrainSettingRef } from "./DLand";
 
 export enum DSectorConnectionPreset {
     Default,
@@ -111,7 +112,7 @@ export class DTerrainSetting {
     shopDefs: DTerrainShopDef[];
     monsterHouseDefs: DTerrainMonsterHouseDef[];
     
-    public constructor(id: number) {
+    public constructor(id: DTerrainSettingId) {
         this.id = id;
         this.key = "";
         this.width = paramRandomMapDefaultWidth;
@@ -124,5 +125,17 @@ export class DTerrainSetting {
         this.forceStructures = [];
         this.shopDefs = [{typeName: "default", rate: 5}];
         this.monsterHouseDefs = [{typeName: "default", rate: 5}];
+    }
+}
+
+export class DTerrainPreset {
+    id: DTerrainPresetId;
+    key: string;
+    presets: DTerrainSettingRef[];
+    
+    public constructor(id: DTerrainPresetId) {
+        this.id = id;
+        this.key = "";
+        this.presets = [];
     }
 }

@@ -20,7 +20,7 @@ export interface RMMZFloorMetadata {
     fixedMap?: string;
     safety?: boolean;
     bgm?: any[];
-    presets?: any[];
+    preset?: string;
 }
 
 /*
@@ -250,7 +250,7 @@ export class DAnnotationReader {
             fixedMap: rawData.fixedMap,
             safety: rawData.safety,
             bgm: rawData.bgm,
-            presets: rawData.presets,
+            preset: rawData.preset,
         };
     }
 
