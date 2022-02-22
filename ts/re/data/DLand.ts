@@ -1,7 +1,7 @@
 
 import { assert, tr2 } from "../Common";
 import { DAnnotationReader, RMMZFloorMetadata, RmmzMonsterHouseMetadata } from "./DAnnotationReader";
-import { DTerrainPresetId } from "./DCommon";
+import { DTerrainSettingId } from "./DCommon";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers } from "./DHelper";
@@ -81,25 +81,25 @@ export class DFloorMonsterHouse {
     }
 }
 
-export class DTerrainPresetRef {
-    terrainPresetId: DTerrainPresetId;
+export class DTerrainSettingRef {
+    terrainSettingsId: DTerrainSettingId;
     rating: number;
 
-    public constructor(terrainPresetId: DTerrainPresetId, rating: number) {
-        this.terrainPresetId = terrainPresetId;
+    public constructor(terrainSettingsId: DTerrainSettingId, rating: number) {
+        this.terrainSettingsId = terrainSettingsId;
         this.rating = rating;
     }
 
-    public static parse(data: RMMZFloorMetadata): DTerrainPresetRef[] {
+    public static parse(data: RMMZFloorMetadata): DTerrainSettingRef[] {
         if (data.presets) {
-            return data.presets.map((x): DTerrainPresetRef => { 
+            return data.presets.map((x): DTerrainSettingRef => { 
                 const key = (x[0] as string);
                 const rate = (x[1] as number);
-                return new DTerrainPresetRef(REData.getTerrainPreset(key).id, rate);
+                return new DTerrainSettingRef(REData.getTerrainSettings(key).id, rate);
             });
         }
         else {
-            return [new DTerrainPresetRef(REData.getTerrainPreset("kTerrainPreset_Default").id, 1)];
+            return [new DTerrainSettingRef(REData.getTerrainSettings("kTerrainSetting_Default").id, 1)];
         }
     }
 }
@@ -126,7 +126,7 @@ export interface DFloorInfo {
     //structures: DFloorStructures;
     monsterHouse: DFloorMonsterHouse;
 
-    presets: DTerrainPresetRef[];
+    presets: DTerrainSettingRef[];
 }
 
 export enum DLandIdentificationLevel {
@@ -335,7 +335,7 @@ export class DLand {
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
                     monsterHouse: new DFloorMonsterHouse(monsterHouses),
-                    presets: DTerrainPresetRef.parse(floorData),
+                    presets: DTerrainSettingRef.parse(floorData),
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

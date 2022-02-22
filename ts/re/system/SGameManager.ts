@@ -36,8 +36,8 @@ import { LEntity } from "../objects/LEntity";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DEntityCreateInfo } from "../data/DEntity";
 import { UEffect } from "../usecases/UEffect";
-import { DTerrainPreset } from "../data/DTerrainPreset";
-import { DTerrainPresetRef } from "../data/DLand";
+import { DTerrainSetting } from "../data/DTerrainPreset";
+import { DTerrainSettingRef } from "../data/DLand";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -192,11 +192,11 @@ export class SGameManager {
                     mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
                     const floorInto = newFloorId.floorInfo();
 
-                    const preset = UEffect.selectRating<DTerrainPresetRef>(rand, floorInto.presets, x => x.rating);
+                    const preset = UEffect.selectRating<DTerrainSettingRef>(rand, floorInto.presets, x => x.rating);
                     assert(preset);
                     
                     //(new FMiddleSingleRoomGenerator()).generate(mapData);
-                    (new FGenericRandomMapGenerator(mapData, REData.terrainPresets[preset.terrainPresetId]).generate());
+                    (new FGenericRandomMapGenerator(mapData, REData.terrainSettings[preset.terrainSettingsId]).generate());
                     //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                     const builder = new FMapBuilder();
                     builder.buildForRandomMap(mapData);

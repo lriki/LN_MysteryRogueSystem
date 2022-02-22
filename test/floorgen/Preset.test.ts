@@ -1,7 +1,7 @@
 import { TestEnv } from "../TestEnv";
 import { REGame } from "ts/re/objects/REGame";
 import { REData } from "ts/re/data/REData";
-import { DTerrainPresetRef } from "ts/re/data/DLand";
+import { DTerrainSettingRef } from "ts/re/data/DLand";
 import { RESystem } from "ts/re/system/RESystem";
 import { TileShape } from "ts/re/objects/LBlock";
 
@@ -15,7 +15,7 @@ test("Preset.GreatHall", () => {
     // 適当なフロアの Preset を強制的に変更
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presets = [new DTerrainPresetRef(REData.getTerrainPreset("kTerrainPreset_GreatHall").id, 1)];
+    floorInfo.presets = [new DTerrainSettingRef(REData.getTerrainSettings("kTerrainSetting_GreatHall").id, 1)];
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
 

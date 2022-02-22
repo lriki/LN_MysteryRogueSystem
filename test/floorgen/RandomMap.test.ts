@@ -16,7 +16,7 @@ test("RandomMap.1001562234", () => {
 
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
         map.reset(60, 48);
-        (new FGenericRandomMapGenerator(map, REData.terrainPresets[REBasics.defaultTerrainPresetId])).generate();
+        (new FGenericRandomMapGenerator(map, REData.terrainSettings[REBasics.defaultTerrainSettingId])).generate();
         (new FMapBuilder()).buildForRandomMap(map);
     
         //map.print();

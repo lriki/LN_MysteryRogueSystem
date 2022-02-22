@@ -28,7 +28,7 @@ import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
-import { DTerrainPreset } from "./DTerrainPreset";
+import { DTerrainSetting } from "./DTerrainPreset";
 // import { DPreset } from "./DPreset";
 
 
@@ -194,7 +194,7 @@ export class REData
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
     static emittors: DEmittor[] = [];
-    static terrainPresets: DTerrainPreset[] = [];
+    static terrainSettings: DTerrainSetting[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
 
     static itemDataIdOffset: number = 0;
@@ -235,7 +235,7 @@ export class REData
         this.prefabs = [new DPrefab(0)];
         this.entities = [new DEntity(0)];
         this.emittors = [new DEmittor(0, "null")];
-        this.terrainPresets = [new DTerrainPreset(0)];
+        this.terrainSettings = [new DTerrainSetting(0)];
     }
 
     //--------------------
@@ -437,27 +437,27 @@ export class REData
 
     //--------------------
 
-    static newTerrainPreset(key: string): DTerrainPreset {
-        const newId = this.terrainPresets.length;
-        const data = new DTerrainPreset(newId);
+    static newTerrainSettings(key: string): DTerrainSetting {
+        const newId = this.terrainSettings.length;
+        const data = new DTerrainSetting(newId);
         data.key = key;
-        this.terrainPresets.push(data);
+        this.terrainSettings.push(data);
         return data;
     }
     
-    static findTerrainPreset(pattern: string): DTerrainPreset | undefined {
+    static findTerrainSettings(pattern: string): DTerrainSetting | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
-            return this.terrainPresets[id];
+            return this.terrainSettings[id];
         else {
-            return this.terrainPresets.find(e => (e.key != "" && e.key == pattern));
+            return this.terrainSettings.find(e => (e.key != "" && e.key == pattern));
         }
     }
 
-    static getTerrainPreset(pattern: string): DTerrainPreset {
-        const d = this.findTerrainPreset(pattern);
+    static getTerrainSettings(pattern: string): DTerrainSetting {
+        const d = this.findTerrainSettings(pattern);
         if (d) return d;
-        throw new Error(`Entity "${pattern}" not found.`);
+        throw new Error(`TerrainSettings "${pattern}" not found.`);
     }
 
     //--------------------

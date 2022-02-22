@@ -1,5 +1,5 @@
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "../PluginParameters";
-import { DTerrainPresetId } from "./DCommon";
+import { DTerrainSettingId } from "./DCommon";
 
 export enum DSectorConnectionPreset {
     Default,
@@ -51,8 +51,8 @@ export interface DTerrainMonsterHouseDef {
  * ```
  * @MR-Floor
  *     presets: [
- *         ["kTerrainPreset_Default", 5],
- *         ["kTerrainPreset_GreatHallMonsterHouse", 5],
+ *         ["kTerrainSetting_Default", 5],
+ *         ["kTerrainSetting_GreatHallMonsterHouse", 5],
  *     ]
  * ```
  * 
@@ -62,11 +62,11 @@ export interface DTerrainMonsterHouseDef {
  * @MR-Floor
  *     presets: [
  *         {
- *             key: "kTerrainPreset_Default",
+ *             key: "kTerrainSetting_Default",
  *             rate: 5,
  *         },
  *         {
- *             key: "kTerrainPreset_GreatHallMonsterHouse",
+ *             key: "kTerrainSetting_GreatHallMonsterHouse",
  *             rate: 5,
  *             forceStructures: ["MonsterHouse"]
  *         },
@@ -97,8 +97,8 @@ export interface DTerrainMonsterHouseDef {
  * - kTerrainPresets_ダンジョンA_中層
  * - kTerrainPresets_ダンジョンA_深層
  */
-export class DTerrainPreset {
-    id: DTerrainPresetId;
+export class DTerrainSetting {
+    id: DTerrainSettingId;
     key: string;
     width: number;
     height: number;

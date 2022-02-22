@@ -396,11 +396,11 @@ export class REDataManager
 
         {
             {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Default");
-                REBasics.defaultTerrainPresetId = preset.id;
+                const preset = REData.newTerrainSettings("kTerrainSetting_Default");
+                REBasics.defaultTerrainSettingId = preset.id;
             }
             {
-                const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");
+                const preset = REData.newTerrainSettings("kTerrainSetting_GreatHall");
                 preset.divisionCountX = 1;
                 preset.divisionCountY = 1;
                 preset.forceRoomShapes = [{typeName: "FullPlane"}];

@@ -5,7 +5,7 @@ export type DAttackElementId = number;
 export type DSkillId = number;
 export type DSpecificEffectId = number;
 export type DRaceId = number;
-export type DTerrainPresetId = number;
+export type DTerrainSettingId = number;
 
 // /**
 //  * システムに基づいた根本的な分類。

@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DTerrainPreset } from "../data/DTerrainPreset";
+import { DTerrainSetting } from "../data/DTerrainPreset";
 import { LRandom } from "../objects/LRandom";
 import { FSector, FSectorAdjacency } from "./data/FSector";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
@@ -39,12 +39,12 @@ export enum FGenericRandomMapWayConnectionMode
  */
 export class FGenericRandomMapGenerator {
     private _map: FMap;
-    private _preset: DTerrainPreset;
+    private _setting: DTerrainSetting;
     private _wayConnectionMode: FGenericRandomMapWayConnectionMode;
 
-    public constructor(map: FMap, preset: DTerrainPreset) {
+    public constructor(map: FMap, setting: DTerrainSetting) {
         this._map = map;
-        this._preset = preset;
+        this._setting = setting;
         this._wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
     }
 
@@ -74,8 +74,8 @@ export class FGenericRandomMapGenerator {
     }
         
     private makeSectors(): boolean {
-        const countH = this._preset.divisionCountX;
-        const countV = this._preset.divisionCountY;
+        const countH = this._setting.divisionCountX;
+        const countV = this._setting.divisionCountY;
 
         /*
         Area の最小構成は次のようになる。
@@ -250,7 +250,7 @@ export class FGenericRandomMapGenerator {
     private makeRoomShapeDefinitions(): void {
         const sectors = this._map.sectors();
         const sectorCount = sectors.length;
-        let shapeDefCount = this._preset.forceRoomShapes.length;
+        let shapeDefCount = this._setting.forceRoomShapes.length;
         if (shapeDefCount >= sectorCount) {
             shapeDefCount = sectorCount;
         }
@@ -259,7 +259,7 @@ export class FGenericRandomMapGenerator {
         {
             const shapes = new Array<string>(sectorCount);
             for (let i = 0; i < shapeDefCount; i++) {
-                shapes[i] = this._preset.forceRoomShapes[i].typeName;
+                shapes[i] = this._setting.forceRoomShapes[i].typeName;
             }
             this.random.mutableShuffleArray(shapes);
     
@@ -275,7 +275,7 @@ export class FGenericRandomMapGenerator {
     private makeStructureDefinitions(): void {
         const sectors = this._map.sectors();
         const sectorCount = sectors.length;
-        let structureDefCount = this._preset.forceStructures.length;
+        let structureDefCount = this._setting.forceStructures.length;
         if (structureDefCount >= sectorCount) {
             structureDefCount = sectorCount;
         }
@@ -284,7 +284,7 @@ export class FGenericRandomMapGenerator {
         {
             const shapes = new Array<string>(sectorCount);
             for (let i = 0; i < structureDefCount; i++) {
-                shapes[i] = this._preset.forceStructures[i].typeName;
+                shapes[i] = this._setting.forceStructures[i].typeName;
             }
             this.random.mutableShuffleArray(shapes);
     
