@@ -94,7 +94,6 @@ export class FSectorConnectionBuilder {
                 if (connectionRaisedSectorIds.length == sectorCount) {
                     break;
                 }
-
             }
         }
     }

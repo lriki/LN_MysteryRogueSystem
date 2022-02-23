@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DTerrainSetting } from "../data/DTerrainPreset";
+import { DTerrainSetting, FGenericRandomMapWayConnectionMode } from "../data/DTerrainPreset";
 import { LRandom } from "../objects/LRandom";
 import { FSector, FSectorAdjacency } from "./data/FSector";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
@@ -7,15 +7,6 @@ import { FSectorConnectionBuilder } from "./FSectorConnectionBuilder";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
-
-export enum FGenericRandomMapWayConnectionMode
-{
-    /** 区画の辺に通路を繋げる。通路が部屋を回り込んだり、全体的に長くなるためクロスが多くなったり、予測しづらく複雑なマップを生成する。 */
-    SectionEdge,
-
-    /** 部屋の辺に通路を繋げる。通路の回り込みは無くなり、部屋の基準点間の最短距離を結ぶようになる。部屋から通路が伸びる方向にはほぼ必ず部屋があるため、予測しやすく難易度の低いマップとなる。 */
-    RoomEdge,
-};
 
 /**
  * 床・壁・通路・区画情報 などマップの基本情報を生成するモジュール。
@@ -41,12 +32,10 @@ export enum FGenericRandomMapWayConnectionMode
 export class FGenericRandomMapGenerator {
     private _map: FMap;
     private _setting: DTerrainSetting;
-    private _wayConnectionMode: FGenericRandomMapWayConnectionMode;
 
     public constructor(map: FMap, setting: DTerrainSetting) {
         this._map = map;
         this._setting = setting;
-        this._wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
     }
 
     public get random(): LRandom {
@@ -284,6 +273,16 @@ export class FGenericRandomMapGenerator {
                 if (sector.roomShapeType == "FullPlane") {
                     room.setRect(sector.x1() + l, sector.y1() + t, maxRoomWidth, maxRoomHeight);
                 }
+                else if (sector.roomShapeType == "HalfPlane") {
+                    const sw = sector.width();
+                    const sh = sector.height();
+                    const w = sw / 2;
+                    const h = sh / 2;
+                    const ox = (sw - w) / 2;
+                    const oy = (sh - h) / 2;
+                    console.log("wwww", sw, w, ox, sector.x1() + ox);
+                    room.setRect(sector.x1() + ox, sector.y1() + oy, w, h);
+                }
                 else {
                     const w = this.random.nextIntWithMinMax(RoomMinSize, maxRoomWidth);
                     const h = this.random.nextIntWithMinMax(RoomMinSize, maxRoomHeight);
@@ -343,7 +342,7 @@ export class FGenericRandomMapGenerator {
                 outerB = -1;
             }
 
-            if (this._wayConnectionMode == FGenericRandomMapWayConnectionMode.RoomEdge) {
+            if (this._setting.wayConnectionMode == FGenericRandomMapWayConnectionMode.RoomEdge) {
                 for (let x = 0; x < width; x++) {
                     sector.edge(FDirection.T).addPin(ox + x);
                     sector.edge(FDirection.B).addPin(ox + x);
@@ -353,7 +352,7 @@ export class FGenericRandomMapGenerator {
                     sector.edge(FDirection.R).addPin(oy + y);
                 }
             }
-            else if (this._wayConnectionMode == FGenericRandomMapWayConnectionMode.SectionEdge) {
+            else if (this._setting.wayConnectionMode == FGenericRandomMapWayConnectionMode.SectionEdge) {
                 const sx = sector.x1();
                 const sy = sector.y1();
 

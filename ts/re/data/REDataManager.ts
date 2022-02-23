@@ -28,7 +28,7 @@ import { DTextManager } from './DTextManager';
 import { DAnnotationReader } from './DAnnotationReader';
 import { DMetadataParser } from './DMetadataParser';
 import { DSetupScript } from './DSetupScript';
-import { DSectorConnectionPreset } from './DTerrainPreset';
+import { DSectorConnectionPreset, FGenericRandomMapWayConnectionMode } from './DTerrainPreset';
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from '../PluginParameters';
 
 
@@ -399,6 +399,11 @@ export class REDataManager
         {
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_Default");
+                setting.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
+            }
+            {
+                const setting = REData.newTerrainSetting("kTerrainSetting_SimpleDefault");
+                setting.wayConnectionMode = FGenericRandomMapWayConnectionMode.RoomEdge;
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_Small4x4");
@@ -415,13 +420,22 @@ export class REDataManager
                 setting.divisionCountX = 1;
                 setting.divisionCountY = 1;
                 setting.forceRoomShapes = [{typeName: "FullPlane"}];
-                setting.forceStructures = [{typeName: "MonsterHouse"}];
+                //setting.forceStructures = [{typeName: "MonsterHouse"}];
+            }
+            {
+                const setting = REData.newTerrainSetting("kTerrainSetting_HalfHall");
+                setting.divisionCountX = 1;
+                setting.divisionCountY = 1;
+                setting.forceRoomShapes = [{typeName: "HalfPlane"}];
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_C");
                 setting.divisionCountX = 3;
                 setting.divisionCountY = 3;
                 setting.connectionPreset = DSectorConnectionPreset.C;
+            }
+            {
+                const setting = REData.newTerrainSetting("kTerrainSetting_Default");
             }
 
             {
@@ -439,7 +453,39 @@ export class REDataManager
             }
             {
                 const preset = REData.newTerrainPreset("kTerrainPreset_Level2");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1)); 
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level3_First");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level3");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level4_First");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level4");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level5_First");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level5");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
             }
         }
 

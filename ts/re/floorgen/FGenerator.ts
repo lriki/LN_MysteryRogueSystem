@@ -1,6 +1,9 @@
 import { FBlockComponent, FMap } from "./FMapData";
 
 // 単一中部屋マップ
+/**
+ * @deprecated
+ */
 export class FMiddleSingleRoomGenerator {
     public generate(map: FMap): void {
         const w = map.width() / 2;

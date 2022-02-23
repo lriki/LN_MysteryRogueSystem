@@ -13,6 +13,15 @@ export enum DSectorConnectionPreset {
     T,
 }
 
+export enum FGenericRandomMapWayConnectionMode
+{
+    /** 区画の辺に通路を繋げる。通路が部屋を回り込んだり、全体的に長くなるためクロスが多くなったり、予測しづらく複雑なマップを生成する。 */
+    SectionEdge,
+
+    /** 部屋の辺に通路を繋げる。通路の回り込みは無くなり、部屋の基準点間の最短距離を結ぶようになる。部屋から通路が伸びる方向にはほぼ必ず部屋があるため、予測しやすく難易度の低いマップとなる。 */
+    RoomEdge,
+};
+
 export interface DForceTerrainRoomShape {
     typeName: string;
 }
@@ -107,6 +116,7 @@ export class DTerrainSetting {
     divisionCountY: number;
     roomCountMin: number;
     roomCountMax: number;
+    wayConnectionMode: FGenericRandomMapWayConnectionMode;
     connectionPreset: DSectorConnectionPreset;
     forceRoomShapes: DForceTerrainRoomShape[];
     structureDefs: DTerrainStructureDef[];
@@ -123,6 +133,7 @@ export class DTerrainSetting {
         this.divisionCountY = 3;
         this.roomCountMin = Infinity;
         this.roomCountMax = Infinity;
+        this.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
         this.connectionPreset = DSectorConnectionPreset.Default;
         this.forceRoomShapes = [];
         this.structureDefs = [{typeName: "default", rate: 5}];
