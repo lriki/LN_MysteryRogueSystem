@@ -307,9 +307,7 @@ export class FGenericRandomMapGenerator {
             }
             else {
                 // 区画内に Pivot を作る
-                const ox = sector.x1();
-                const oy = sector.y1();
-                sector.setPivot(ox + this.random.nextIntWithMax(sector.width()), oy + this.random.nextIntWithMax(sector.height()));
+                sector.setPivot(this.random.nextIntWithMax(sector.width()), this.random.nextIntWithMax(sector.height()));
             }
         }
     }

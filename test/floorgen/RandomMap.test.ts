@@ -46,3 +46,12 @@ test("RandomMap.1001562234", () => {
     }
 });
 
+// Pivot 位置の計算が間違っていた問題の修正確認
+test("RandomMap.967875183", () => {
+    const seed = 967875183;
+    const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
+    const setting = REData.getTerrainSetting("kTerrainSetting_Small4x4");
+    map.reset(setting.width, setting.height);
+    (new FGenericRandomMapGenerator(map, setting)).generate();
+    (new FMapBuilder()).buildForRandomMap(map);
+});
