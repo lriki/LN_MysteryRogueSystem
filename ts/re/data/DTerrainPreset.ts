@@ -105,6 +105,8 @@ export class DTerrainSetting {
     height: number;
     divisionCountX: number;
     divisionCountY: number;
+    roomCountMin: number;
+    roomCountMax: number;
     connectionPreset: DSectorConnectionPreset;
     forceRoomShapes: DForceTerrainRoomShape[];
     structureDefs: DTerrainStructureDef[];
@@ -119,6 +121,8 @@ export class DTerrainSetting {
         this.height = paramRandomMapDefaultHeight;
         this.divisionCountX = 3;
         this.divisionCountY = 3;
+        this.roomCountMin = Infinity;
+        this.roomCountMax = Infinity;
         this.connectionPreset = DSectorConnectionPreset.Default;
         this.forceRoomShapes = [];
         this.structureDefs = [{typeName: "default", rate: 5}];

@@ -614,8 +614,8 @@
   },
   {
     "id": 69,
-    "expanded": false,
-    "name": "MR-Land:Sandbox",
+    "expanded": true,
+    "name": "MR-Land:RandomMaps",
     "order": 101,
     "parentId": 25,
     "scrollX": 811,
@@ -678,11 +678,11 @@
   {
     "id": 76,
     "expanded": true,
-    "name": "kFloor_Sandbox_エネミー",
-    "order": 108,
-    "parentId": 72,
-    "scrollX": 811,
-    "scrollY": 461.5
+    "name": "Enemy",
+    "order": 105,
+    "parentId": 70,
+    "scrollX": 819,
+    "scrollY": 453.5
   },
   {
     "id": 77,

@@ -190,15 +190,17 @@ export class SGameManager {
                     builder.buildForFixedMap(mapData);
                 }
                 else {
-                    mapData.reset(paramRandomMapDefaultWidth, paramRandomMapDefaultHeight);
                     const floorInto = newFloorId.floorInfo();
 
                     const preset = floorInto.presetId ? REData.terrainPresets[floorInto.presetId] : REData.terrainPresets[REBasics.defaultTerrainPresetId];
                     const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.presets, x => x.rating);
                     assert(settingId);
                     
+                    const setting = REData.terrainSettings[settingId.terrainSettingsId];
+                    mapData.reset(setting.width, setting.height);
+
                     //(new FMiddleSingleRoomGenerator()).generate(mapData);
-                    (new FGenericRandomMapGenerator(mapData, REData.terrainSettings[settingId.terrainSettingsId]).generate());
+                    (new FGenericRandomMapGenerator(mapData, setting).generate());
                     //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                     const builder = new FMapBuilder();
                     builder.buildForRandomMap(mapData);

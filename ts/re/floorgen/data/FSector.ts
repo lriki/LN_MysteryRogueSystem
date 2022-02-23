@@ -15,6 +15,7 @@ export class FSector {
     private _roomShapeType: string;
     private _structureType: string;
     private _room: FRoom | undefined;
+    
     //private _wayPointsX: number[];  // x1~x2 間で、通路を作ってもよい X 座標
     //private _wayPointsY: number[];  // y1~y2 間で、通路を作ってもよい Y 座標
 

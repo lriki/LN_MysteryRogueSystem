@@ -3,6 +3,7 @@ import { DTerrainSetting } from "../data/DTerrainPreset";
 import { LRandom } from "../objects/LRandom";
 import { FSector, FSectorAdjacency } from "./data/FSector";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
+import { FSectorConnectionBuilder } from "./FSectorConnectionBuilder";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
@@ -63,6 +64,7 @@ export class FGenericRandomMapGenerator {
         this.makeRoomShapeDefinitions();
         this.makeStructureDefinitions();
         this.makeRooms();
+        this.makePivots();
         this.makeEdgePins();
         this.makePinConnections();
         this.makePassageWay();
@@ -167,82 +169,10 @@ export class FGenericRandomMapGenerator {
     }
 
     // 実際に Connection を作成する。
-    // Sector ごとに、ランダムでいずれかの Adjacency を選択する。
-    // 四辺のどれかひとつに向かって腕を伸ばすイメージ。
     private makeSectorConnections(): void {
-        const connectionRaisedSectorIds: FSectorId[] = [];  // Connection を作った Sector (相手側は含まない)
-        const tracedSectorIds: FSectorId[] = [];               // 一筆書きで通ったところ
-        const sectorCount = this._map.sectors().length;
 
-        // 接続の偏りを無くすため、最初に開始点 Sector を決めてそこから一筆書きの要領で適当に接続していく
-        {
+        FSectorConnectionBuilder.connect(this._map, this.random, this._setting);
 
-            // 開始 Sector
-            let sector = this._map.sectors()[this.random.nextIntWithMax(sectorCount)];
-
-            for (let i = 0; i < sectorCount; i++) { // 最大でも Sector 総数までしかループしないので、念のための無限ループ回避
-
-                // 接続候補を集める
-                const candidateAdjacencies: FSectorAdjacency[] = [];
-                for (const e of sector.edges()) {
-                    for (const a of e.adjacencies()) {
-                        const e2 = a.otherSide(e);
-                        if (!tracedSectorIds.includes(e2.sector().id())) {  // 既に通った Sector は除外
-                            candidateAdjacencies.push(a);
-                        }
-                    }
-                }
-                
-                // 接続する隣接情報を決定して接続
-                if (candidateAdjacencies.length > 0) {
-                    const adjacency = candidateAdjacencies[this.random.nextIntWithMax(candidateAdjacencies.length)];
-                    this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
-                    connectionRaisedSectorIds.push(sector.id());
-                    tracedSectorIds.push(sector.id());
-
-                    sector = adjacency.otherSideBySector(sector).sector();
-                }
-                else {
-                    // 候補が無ければ行き止まり
-                    break;
-                }
-            }
-
-        }
-
-        // 次に、一筆書きで通らなかった Sector から通った Sector へ接続していく
-        {
-            for (let i = 0; i < sectorCount; i++) { // 最大でも Sector 総数までしかループしないので、念のための無限ループ回避
-                
-                for (const sector of this._map.sectors()) {
-                    if (!connectionRaisedSectorIds.includes(sector.id())) {
-                        
-                        // 接続候補を集める
-                        const candidateAdjacencies: FSectorAdjacency[] = [];
-                        for (const e of sector.edges()) {
-                            for (const a of e.adjacencies()) {
-                                const e2 = a.otherSide(e);
-                                if (connectionRaisedSectorIds.includes(e2.sector().id())) { // Connection 作成済みのところへ向かって接続したい
-                                    candidateAdjacencies.push(a);
-                                }
-                            }
-                        }
-                        
-                        // 接続する隣接情報を決定して接続
-                        if (candidateAdjacencies.length > 0) {
-                            const adjacency = candidateAdjacencies[this.random.nextIntWithMax(candidateAdjacencies.length)];
-                            this._map.connectSectors(adjacency.edge1(), adjacency.edge2());
-                            connectionRaisedSectorIds.push(sector.id());
-                        }
-                    }
-                }
-
-                if (connectionRaisedSectorIds.length == sectorCount) {
-                    break;
-                }
-
-            }
-        }
     }
 
     // RoomShape を選択する。
@@ -297,41 +227,91 @@ export class FGenericRandomMapGenerator {
     }
 
     private makeRooms(): void {
+        // 大部屋？
+        const grateHall = this._map.sectors().length == 1;
+
+        // Room を作れそうな Sector を集める
+        const candidateSectors: FSector[] = [];
         for (const sector of this._map.sectors()) {
-            const room = this._map.newRoom(sector);
-
-            // 部屋を作れる範囲
-            let l = 0;
-            let t = 0;
-            let r = sector.width() - 1;
-            let b = sector.height() - 1;
-
-            // 他の区画と接続されている方向は、Block 1 つ分のマージンが必要
-            if (sector.edge(FDirection.L).hasConnection()) l += 1;
-            if (sector.edge(FDirection.R).hasConnection()) r -= 2;  // 右側は 2 ブロック、右 Sector と併せて、部屋間には最低 3 ブロック設けたい
-            if (sector.edge(FDirection.T).hasConnection()) t += 1;
-            if (sector.edge(FDirection.B).hasConnection()) b -= 2;  // 下側は 2 ブロック、下 Sector と併せて、部屋間には最低 3 ブロック設けたい
-
-            const maxRoomWidth = (r - l) + 1;
-            const maxRoomHeight = (b - t) + 1;
-
-            if (sector.roomShapeType == "FullPlane") {
-                room.setRect(sector.x1() + l, sector.y1() + t, maxRoomWidth, maxRoomHeight);
+            if (grateHall || sector.hasAnyConnection()) {
+                candidateSectors.push(sector);
             }
             else {
-                const w = this.random.nextIntWithMinMax(RoomMinSize, maxRoomWidth);
-                const h = this.random.nextIntWithMinMax(RoomMinSize, maxRoomHeight);
-                const x = l + ((w != maxRoomWidth) ? this.random.nextIntWithMax(maxRoomWidth - w) : 0);
-                const y = t + ((h != maxRoomHeight) ? this.random.nextIntWithMax(maxRoomHeight - h) : 0);
-                room.setRect(sector.x1() + x, sector.y1() + y, w, h);
+                // Connection の無い Sector は、自動での部屋生成は不要。
+                // 埋蔵金部屋などは別途作る。
             }
+        }
+
+        // candidateSectors の各 Sector に対して Room の生成有無をランダムに決める
+        const candidateSectorCount = candidateSectors.length;
+        const roomEnables = new Array<boolean>(candidateSectorCount);
+        let roomCount = 0;
+        if (this._setting.roomCountMax == Infinity) {
+            roomCount = candidateSectorCount;
+        }
+        else {
+            roomCount = this.random.nextIntWithMinMax(this._setting.roomCountMin, this._setting.roomCountMax + 1);
+            roomCount = Math.min(Math.max(roomCount, 2), candidateSectorCount);
+        }
+        for (let i = 0; i < roomCount; i++) {
+            roomEnables[i] = true;
+        }
+        if (roomCount < roomEnables.length) {
+            this.random.mutableShuffleArray(roomEnables);
+        }
+
+        // 各候補 Sector について、生成フラグの立っているものへ Room を作る
+        for (let iSector = 0; iSector < candidateSectorCount; iSector++) {
+            const sector = candidateSectors[iSector];
+            if (roomEnables[iSector]) {
+                const room = this._map.newRoom(sector);
     
-            // 部屋内に Pivot を作る
-            const ox = room.x1() - sector.x1();
-            const oy = room.y1() - sector.y1();
-            assert(ox >= 0);
-            assert(oy >= 0);
-            sector.setPivot(ox + this.random.nextIntWithMax(room.width()), oy + this.random.nextIntWithMax(room.height()));
+                // 部屋を作れる範囲
+                let l = 0;
+                let t = 0;
+                let r = sector.width() - 1;
+                let b = sector.height() - 1;
+    
+                // 他の区画と接続されている方向は、Block 1 つ分のマージンが必要
+                if (sector.edge(FDirection.L).hasConnection()) l += 1;
+                if (sector.edge(FDirection.R).hasConnection()) r -= 2;  // 右側は 2 ブロック、右 Sector と併せて、部屋間には最低 3 ブロック設けたい
+                if (sector.edge(FDirection.T).hasConnection()) t += 1;
+                if (sector.edge(FDirection.B).hasConnection()) b -= 2;  // 下側は 2 ブロック、下 Sector と併せて、部屋間には最低 3 ブロック設けたい
+    
+                const maxRoomWidth = (r - l) + 1;
+                const maxRoomHeight = (b - t) + 1;
+    
+                if (sector.roomShapeType == "FullPlane") {
+                    room.setRect(sector.x1() + l, sector.y1() + t, maxRoomWidth, maxRoomHeight);
+                }
+                else {
+                    const w = this.random.nextIntWithMinMax(RoomMinSize, maxRoomWidth);
+                    const h = this.random.nextIntWithMinMax(RoomMinSize, maxRoomHeight);
+                    const x = l + ((w != maxRoomWidth) ? this.random.nextIntWithMax(maxRoomWidth - w) : 0);
+                    const y = t + ((h != maxRoomHeight) ? this.random.nextIntWithMax(maxRoomHeight - h) : 0);
+                    room.setRect(sector.x1() + x, sector.y1() + y, w, h);
+                }
+            }
+        }
+    }
+
+    private makePivots(): void {
+        for (const sector of this._map.sectors()) {
+            const room = sector.room();
+            if (room) {
+                // 部屋内に Pivot を作る
+                const ox = room.x1() - sector.x1();
+                const oy = room.y1() - sector.y1();
+                assert(ox >= 0);
+                assert(oy >= 0);
+                sector.setPivot(ox + this.random.nextIntWithMax(room.width()), oy + this.random.nextIntWithMax(room.height()));
+            }
+            else {
+                // 区画内に Pivot を作る
+                const ox = sector.x1();
+                const oy = sector.y1();
+                sector.setPivot(ox + this.random.nextIntWithMax(sector.width()), oy + this.random.nextIntWithMax(sector.height()));
+            }
         }
     }
 

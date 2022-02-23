@@ -28,6 +28,8 @@ import { DTextManager } from './DTextManager';
 import { DAnnotationReader } from './DAnnotationReader';
 import { DMetadataParser } from './DMetadataParser';
 import { DSetupScript } from './DSetupScript';
+import { DSectorConnectionPreset } from './DTerrainPreset';
+import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from '../PluginParameters';
 
 
 declare global {  
@@ -399,11 +401,27 @@ export class REDataManager
                 const setting = REData.newTerrainSetting("kTerrainSetting_Default");
             }
             {
+                const setting = REData.newTerrainSetting("kTerrainSetting_Small4x4");
+                setting.width = Math.floor(paramRandomMapDefaultWidth * (2 / 3));
+                setting.height = Math.floor(paramRandomMapDefaultHeight * (2 / 3));
+                setting.divisionCountX = 2;
+                setting.divisionCountY = 2;
+                setting.roomCountMin = 3;
+                setting.roomCountMax = 4;
+            }
+
+            {
                 const setting = REData.newTerrainSetting("kTerrainSetting_GreatHall");
                 setting.divisionCountX = 1;
                 setting.divisionCountY = 1;
                 setting.forceRoomShapes = [{typeName: "FullPlane"}];
                 setting.forceStructures = [{typeName: "MonsterHouse"}];
+            }
+            {
+                const setting = REData.newTerrainSetting("kTerrainSetting_C");
+                setting.divisionCountX = 3;
+                setting.divisionCountY = 3;
+                setting.connectionPreset = DSectorConnectionPreset.C;
             }
 
             {
@@ -415,8 +433,17 @@ export class REDataManager
                 const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");
                 preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1)); 
             }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level1");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Small4x4").id, 1)); 
+            }
+            {
+                const preset = REData.newTerrainPreset("kTerrainPreset_Level2");
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1)); 
+            }
         }
 
+        
         // REBasics.presets = {
         //     trap: REData.newPreset("Trap").id,
         // }
