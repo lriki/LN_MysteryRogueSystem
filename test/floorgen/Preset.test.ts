@@ -32,3 +32,31 @@ test("Preset.GreatHall", () => {
 
 });
 
+test("Preset.PoorVisibility", () => {
+    TestEnv.newGame();
+
+    // 適当なフロアの Preset を強制的に変更
+    const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
+    floorInfo.fixedMapName = "";
+    floorInfo.presetId = REData.getTerrainPreset("kTerrainPreset_GreatHall").id;
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
+
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+
+    const map = REGame.map;
+
+    // 部屋全体が Pass になっていないこと
+    const room = map.rooms()[0];
+    let foundNoPass = true;
+    room.forEachBlocks(x => {
+        if (!x._passed) {
+            foundNoPass = true;
+        }
+    });
+    expect(foundNoPass).toBeTruthy();
+
+    // 大部屋マップへの遷移時、(0,0) が Pass になってしまう問題の修正確認
+    expect(map.block(0, 0)._passed).toBeFalsy();
+});
+

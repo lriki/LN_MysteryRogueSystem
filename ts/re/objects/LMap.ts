@@ -19,6 +19,7 @@ import { FMap } from "ts/re/floorgen/FMapData";
 import { LItemShopStructure } from "./structures/LItemShopStructure";
 import { DBlockLayerKind } from "../data/DCommon";
 import { UBlock } from "../usecases/UBlock";
+import { paramDefaultVisibiltyLength } from "../PluginParameters";
 
 export enum MovingMethod {
     Walk,
@@ -369,7 +370,12 @@ export class LMap extends LObject {
     /** entity の視界内の Entity を取得する */
     public getInsightEntities(subject: LEntity): LEntity[] {
         if (subject.isOnRoom()) {
-            return this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
+            const room = this.room(subject.roomId());
+            let entities = this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
+            if (room.poorVisibility) {
+                entities = entities.filter(x => UMovement.blockDistance(subject.x, subject.y, x.x, x.y) <= paramDefaultVisibiltyLength);
+            }
+            return entities;
         }
         else {
             return this.entities().filter(entity => UMovement.checkAdjacentEntities(entity, subject) && entity != subject);

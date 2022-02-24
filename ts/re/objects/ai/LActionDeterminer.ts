@@ -55,7 +55,7 @@ export class LActionDeterminer {
         // の移動目標位置決定はもう少し後の Phase なのだが、敵対 Entity への移動目標位置決定はこの Phase で行う。
         // こうしておかないと、Player の移動を追うように Enemy が移動できなくなる。
         {
-            // 同じ部屋にいる敵対 Entity のうち、一番近い Entity を検索
+            // 視界内にいる敵対 Entity のうち、一番近い Entity を検索
             const target = UAction.findInSightNearlyHostileEntity(self);
             if (target) {
                 this._primaryTargetEntityId = target.entityId().clone();
