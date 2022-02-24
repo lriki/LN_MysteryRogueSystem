@@ -232,7 +232,7 @@
     "order": 52,
     "parentId": 25,
     "scrollX": 819,
-    "scrollY": 461.5
+    "scrollY": 453.5
   },
   {
     "id": 27,
@@ -623,7 +623,7 @@
   },
   {
     "id": 70,
-    "expanded": false,
+    "expanded": true,
     "name": "[Table]",
     "order": 102,
     "parentId": 69,
@@ -632,18 +632,18 @@
   },
   {
     "id": 71,
-    "expanded": false,
+    "expanded": true,
     "name": "[System]",
-    "order": 105,
+    "order": 106,
     "parentId": 69,
     "scrollX": 0,
     "scrollY": 0
   },
   {
     "id": 72,
-    "expanded": false,
+    "expanded": true,
     "name": "[Fixed]",
-    "order": 107,
+    "order": 108,
     "parentId": 69,
     "scrollX": 811,
     "scrollY": 453.5
@@ -652,7 +652,7 @@
     "id": 73,
     "expanded": false,
     "name": "ExitMap",
-    "order": 106,
+    "order": 107,
     "parentId": 71,
     "scrollX": 811,
     "scrollY": 453.5
