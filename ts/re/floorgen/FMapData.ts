@@ -267,6 +267,8 @@ export class FRoom {
     private _y2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
     private _structures: FStructure[] = [];
 
+    public poorVisibility: boolean = false; // 視界不明瞭？
+
     public constructor(map: FMap, id: FRoomId, sector: FSector) {
         this._map = map;
         this._id = id;

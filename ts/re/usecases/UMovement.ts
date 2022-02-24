@@ -14,6 +14,7 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { LRoom } from "../objects/LRoom";
 import { SPoint } from "./UCommon";
 import { LFloorId } from "../objects/LFloorId";
+import { paramDefaultVisibiltyLength } from "../PluginParameters";
 
 
 interface Edge {
@@ -651,8 +652,17 @@ export class UMovement {
         block._passed = true;
         if (block._roomId > 0) {
             const room = map.room(block._roomId);
-            room.forEachBlocks(b => b._passed = true);
-            room.forEachEdgeBlocks(b => b._passed = true);
+            if (room.poorVisibility) {
+                room.forEachSightableBlocks(b => {
+                    if (this.blockDistance(block.x(), block.y(), b.x(), b.y()) <= paramDefaultVisibiltyLength) {
+                        b._passed = true
+                    }
+                });
+                room.forEachEdgeBlocks(b => b._passed = true);
+            }
+            else {
+                room.forEachSightableBlocks(b => b._passed = true);
+            }
         }
         else {
             // 通路なら外周1タイルを通過済みにする

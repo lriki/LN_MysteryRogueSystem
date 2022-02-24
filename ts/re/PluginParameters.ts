@@ -53,6 +53,9 @@ export var paramMonsterHouseEnemiesMin = 5;
 export var paramMonsterHouseItemsMax = 20;  // アイテムまたはトラップ。同じマスに置けないし、ワナ師ダンジョンでは両方アイテムと考えるのが妥当だろう。
 export var paramMonsterHouseItemsMin = 5;
 
+// 視界不明瞭部屋での視界 (半径)
+export var paramDefaultVisibiltyLength = 5;
+
 
 //Maximum number of items in the map
 

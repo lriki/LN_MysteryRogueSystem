@@ -17,12 +17,15 @@ export class LRoom {
     private _x2: number = -1;   // 有効範囲内右下座標
     private _y2: number = -1;   // 有効範囲内右下座標
 
+    public poorVisibility: boolean = false; // 視界不明瞭？
+
     public setup(room: FRoom): void {
         this._roomId = room.id();
         this._x1 = room.x1();
         this._y1 = room.y1();
         this._x2 = room.x2();
         this._y2 = room.y2();
+        this.poorVisibility = room.poorVisibility;
     }
 
     public x1(): number {
@@ -109,6 +112,11 @@ export class LRoom {
                 func(map.block(x, this._y2 + 1));
             }
         }
+    }
+
+    public forEachSightableBlocks(func: (block: LBlock) => void): void {
+        this.forEachBlocks(func);
+        this.forEachEdgeBlocks(func);
     }
 
     /** 部屋の入口 Block リスト。埋蔵金部屋など、入り口が無い場合は空リストを返す。 */

@@ -272,6 +272,7 @@ export class FGenericRandomMapGenerator {
     
                 if (sector.roomShapeType == "FullPlane") {
                     room.setRect(sector.x1() + l, sector.y1() + t, maxRoomWidth, maxRoomHeight);
+                    room.poorVisibility = true;
                 }
                 else if (sector.roomShapeType == "HalfPlane") {
                     const sw = sector.width();
@@ -280,8 +281,8 @@ export class FGenericRandomMapGenerator {
                     const h = sh / 2;
                     const ox = (sw - w) / 2;
                     const oy = (sh - h) / 2;
-                    console.log("wwww", sw, w, ox, sector.x1() + ox);
                     room.setRect(sector.x1() + ox, sector.y1() + oy, w, h);
+                    room.poorVisibility = true;
                 }
                 else {
                     const w = this.random.nextIntWithMinMax(RoomMinSize, maxRoomWidth);
