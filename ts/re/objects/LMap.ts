@@ -429,12 +429,18 @@ export class LMap extends LObject {
     // appearEntity の、マップ遷移時用
     _reappearEntity(entity: LEntity): void {
         assert(entity.floorId.equals(this.floorId()));
-        
-        const block = this.block(entity.x, entity.y);
-        const layer = entity.getHomeLayer();
-        block.addEntity(layer, entity);
-        UMovement._postLocate(entity, undefined, block, this, undefined);
-        this._addEntityInternal(entity);
+
+        if (entity.isOnOffstage()) {
+            // ランダムマップ遷移時、Player などの UniqueEntity はこの状態になる
+            this._addEntityInternal(entity);
+        }
+        else {
+            const block = this.block(entity.x, entity.y);
+            const layer = entity.getHomeLayer();
+            block.addEntity(layer, entity);
+            UMovement._postLocate(entity, undefined, block, this, undefined);
+            this._addEntityInternal(entity);
+        }
     }
 
     _removeEntity(entity: LEntity): void {
@@ -524,7 +530,7 @@ export class LMap extends LObject {
 
     /** 指定した Entity が、このマップ上に出現しているかを確認する。 */
     public checkAppearing(entity: LEntity): boolean {
-        return this._floorId.equals(entity.floorId) && !entity.isEnteringToFloor();
+        return this._floorId.equals(entity.floorId) && !entity.isOnOffstage();
     }
 
 

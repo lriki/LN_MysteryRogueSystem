@@ -628,6 +628,8 @@ export class UMovement {
     }
 
     public static _postLocate(entity: LEntity, oldBlock: LBlock | undefined, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
+        assert(!entity.isOnOffstage());
+
         if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
@@ -658,7 +660,6 @@ export class UMovement {
                         b._passed = true
                     }
                 });
-                room.forEachEdgeBlocks(b => b._passed = true);
             }
             else {
                 room.forEachSightableBlocks(b => b._passed = true);

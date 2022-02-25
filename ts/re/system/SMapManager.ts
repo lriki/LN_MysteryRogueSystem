@@ -153,7 +153,7 @@ export class SMapManager {
         const entryPoint = initialMap.entryPoint();
         assert(entryPoint);
         for (const entity of enterdEntities) {
-            if (entity.isEnteringToFloor()) {
+            if (entity.isOnOffstage()) {
 
                 // TODO: 複数 Entity が重なるときの対策
 
@@ -230,12 +230,12 @@ export class SMapManager {
                 // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
                 // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
                 // それはここでは追加しない。
-                const isNoEnterd = !entity.hasParent();
+                const isEnterd = entity.hasParent();
 
                 // onLoadFixedMapEvents() によって既に追加されているものは対象外
                 if (entity.isAppearedOnMap()) continue;
 
-                if (this._map.floorId().equals(entity.floorId) && isNoEnterd) {
+                if (this._map.floorId().equals(entity.floorId) && !isEnterd) {
                     //if (isFixedMap) {
                         this._map._reappearEntity(entity);
                         result.push(entity);
