@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { DSectorConnectionPreset, DTerrainSetting } from "../data/DTerrainPreset";
+import { DSectorConnectionPreset, DTerrainSetting, DTerrainShape } from "../data/DTerrainPreset";
 import { LRandom } from "../objects/LRandom";
 import { FSector, FSectorAdjacency } from "./data/FSector";
 import { FDirection, FMap, FSectorId } from "./FMapData";
@@ -8,13 +8,13 @@ import { FDirection, FMap, FSectorId } from "./FMapData";
 
 export class FSectorConnectionBuilder {
 
-    public static connect(map: FMap, rand: LRandom, setting: DTerrainSetting): void {
-        switch (setting.connectionPreset) {
+    public static connect(map: FMap, rand: LRandom, shape: DTerrainShape): void {
+        switch (shape.connectionPreset) {
             case DSectorConnectionPreset.Default:
                 this.connectDefault(map, rand);
                 break;
             case DSectorConnectionPreset.C:
-                this.connectC(map, rand, setting);
+                this.connectC(map, rand, shape);
                 break;
             default:
                 throw new Error("Not implemented.");
@@ -98,32 +98,32 @@ export class FSectorConnectionBuilder {
         }
     }
 
-    private static sector(map: FMap, setting: DTerrainSetting, x: number, y: number): FSector {
-        const w = setting.divisionCountX;
+    private static sector(map: FMap, shape: DTerrainShape, x: number, y: number): FSector {
+        const w = shape.divisionCountX;
         return map.sectors()[w * y + x];
     }
 
-    private static connectC(map: FMap, rand: LRandom, setting: DTerrainSetting): void {
-        assert(setting.divisionCountX >= 3);
-        assert(setting.divisionCountY >= 3);
+    private static connectC(map: FMap, rand: LRandom, shape: DTerrainShape): void {
+        assert(shape.divisionCountX >= 3);
+        assert(shape.divisionCountY >= 3);
 
-        const r = setting.divisionCountX - 1;
-        const b = setting.divisionCountX - 1;
+        const r = shape.divisionCountX - 1;
+        const b = shape.divisionCountX - 1;
         for (let x = 0; x < r; x++) {
-            const s1 = this.sector(map, setting, x, 0);
-            const s2 = this.sector(map, setting, x + 1, 0);
+            const s1 = this.sector(map, shape, x, 0);
+            const s2 = this.sector(map, shape, x + 1, 0);
             map.connectSectors(s1.edge(FDirection.R), s2.edge(FDirection.L));
         }
 
         for (let y = 0; y < b; y++) {
-            const s1 = this.sector(map, setting, 0, y);
-            const s2 = this.sector(map, setting, 0, y + 1);
+            const s1 = this.sector(map, shape, 0, y);
+            const s2 = this.sector(map, shape, 0, y + 1);
             map.connectSectors(s1.edge(FDirection.B), s2.edge(FDirection.T));
         }
 
         for (let x = 0; x < r; x++) {
-            const s1 = this.sector(map, setting, x, b);
-            const s2 = this.sector(map, setting, x + 1, b);
+            const s1 = this.sector(map, shape, x, b);
+            const s2 = this.sector(map, shape, x + 1, b);
             map.connectSectors(s1.edge(FDirection.R), s2.edge(FDirection.L));
         }
     }

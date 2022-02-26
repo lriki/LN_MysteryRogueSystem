@@ -453,8 +453,8 @@ export class FMap {
             const y = Math.trunc(i / this._fullWidth);
             const block = new FMapBlock(x, y);
             this._blocks[i] = block;
-            if (this.ox <= x && this.ox + this._innerWidth &&
-                this.oy <= y && this.oy + this._innerHeight) {
+            if (this.ox <= x && x < this.ox + this._innerWidth &&
+                this.oy <= y && y < this.oy + this._innerHeight) {
                 this._innerBlocks.push(block);
             }
             else {
@@ -594,7 +594,7 @@ export class FMap {
     }
 
     public isValid(x: number, y: number): boolean {
-        return 0 <= x && x < this._innerWidth && 0 <= y && y < this._innerHeight;
+        return 0 <= x && x < this._fullWidth && 0 <= y && y < this._fullHeight;
     }
 
     public setEntryPont(value: FEntryPont) {

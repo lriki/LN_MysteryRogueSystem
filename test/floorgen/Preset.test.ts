@@ -32,6 +32,7 @@ test("Preset.GreatHall", () => {
     const map = REGame.map;
     const room = map.rooms()[1];
     room.forEachBlocks(block => {
+        assert(block.tileShape() == TileShape.Floor);
         expect(block.tileShape()).toBe(TileShape.Floor);
     });
 });

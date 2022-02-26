@@ -398,50 +398,71 @@ export class REDataManager
 
         {
             {
+                const shape = REData.newTerrainShape("kTerrainShape_Default");
+                shape.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
+            }
+            {
+                const shape = REData.newTerrainShape("kTerrainShape_SimpleDefault");
+                shape.wayConnectionMode = FGenericRandomMapWayConnectionMode.RoomEdge;
+            }
+            {
+                const shape = REData.newTerrainShape("kTerrainShape_Small2x2");
+                shape.width = Math.floor(paramRandomMapDefaultWidth * (2 / 3));
+                shape.height = Math.floor(paramRandomMapDefaultHeight * (2 / 3));
+                shape.divisionCountX = 2;
+                shape.divisionCountY = 2;
+                shape.roomCountMin = 3;
+                shape.roomCountMax = 4;
+            }
+            {
+                const shape = REData.newTerrainShape("kTerrainShape_GreatHall");
+                shape.divisionCountX = 1;
+                shape.divisionCountY = 1;
+                shape.forceRoomShapes = [{typeName: "FullPlane"}];
+            }
+            {
+                const shape = REData.newTerrainShape("kTerrainShape_HalfHall");
+                shape.divisionCountX = 1;
+                shape.divisionCountY = 1;
+                shape.forceRoomShapes = [{typeName: "HalfPlane"}];
+            }
+            {
+                const shape = REData.newTerrainShape("kTerrainShape_C");
+                shape.divisionCountX = 3;
+                shape.divisionCountY = 3;
+                shape.connectionPreset = DSectorConnectionPreset.C;
+            }
+
+            //----------
+
+            {
                 const setting = REData.newTerrainSetting("kTerrainSetting_Default");
-                setting.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_SimpleDefault");
-                setting.wayConnectionMode = FGenericRandomMapWayConnectionMode.RoomEdge;
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_SimpleDefault").id, rate: 1});
             }
             {
-                const setting = REData.newTerrainSetting("kTerrainSetting_Small4x4");
-                setting.width = Math.floor(paramRandomMapDefaultWidth * (2 / 3));
-                setting.height = Math.floor(paramRandomMapDefaultHeight * (2 / 3));
-                setting.divisionCountX = 2;
-                setting.divisionCountY = 2;
-                setting.roomCountMin = 3;
-                setting.roomCountMax = 4;
+                const setting = REData.newTerrainSetting("kTerrainSetting_Small2x2");
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Small2x2").id, rate: 1});
             }
-
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_GreatHall");
-                setting.divisionCountX = 1;
-                setting.divisionCountY = 1;
-                setting.forceRoomShapes = [{typeName: "FullPlane"}];
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_GreatHall").id, rate: 1});
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_HalfHall");
-                setting.divisionCountX = 1;
-                setting.divisionCountY = 1;
-                setting.forceRoomShapes = [{typeName: "HalfPlane"}];
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_HalfHall").id, rate: 1});
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_C");
-                setting.divisionCountX = 3;
-                setting.divisionCountY = 3;
-                setting.connectionPreset = DSectorConnectionPreset.C;
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_Default");
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_C").id, rate: 1});
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_GreatHallMH");
-                setting.divisionCountX = 1;
-                setting.divisionCountY = 1;
-                setting.forceRoomShapes = [{typeName: "FullPlane"}];
-                setting.forceStructures = [{typeName: "MonsterHouse"}];
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_GreatHall").id, rate: 1});
+                setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
             }
 
             //----------
@@ -458,11 +479,10 @@ export class REDataManager
             {
                 const preset = REData.newTerrainPreset("kTerrainPreset_GreatHallMH");
                 preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHallMH").id, 1)); 
-
             }
             {
                 const preset = REData.newTerrainPreset("kTerrainPreset_Level1");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Small4x4").id, 1)); 
+                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Small2x2").id, 1)); 
             }
             {
                 const preset = REData.newTerrainPreset("kTerrainPreset_Level2");

@@ -197,11 +197,7 @@ export class SGameManager {
                     assert(settingId);
                     
                     const setting = REData.terrainSettings[settingId.terrainSettingsId];
-                    mapData.resetFromInnerSize(setting.width, setting.height, paramMapPaddingX, paramMapPaddingY);
-
-                    //(new FMiddleSingleRoomGenerator()).generate(mapData);
                     (new FGenericRandomMapGenerator(mapData, setting).generate());
-                    //(new FGenericRandomMapGenerator(mapData, 69)).generate();
                     const builder = new FMapBuilder();
                     builder.buildForRandomMap(mapData);
                     

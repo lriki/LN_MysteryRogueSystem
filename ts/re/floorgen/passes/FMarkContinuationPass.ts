@@ -21,8 +21,6 @@ export class FMarkContinuationPass extends FMapBuildPass {
     public execute(map: FMap): void {
 
         // すべての部屋の入口 Block をマークする
-        //for (const sector of map.sectors()) {
-        //    const room = sector.room();
         for (const room of map.rooms()) {
             if (room) {
                 for (let mx = room.x1(); mx <= room.x2(); mx++) {

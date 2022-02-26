@@ -1,9 +1,13 @@
 import { assert } from "ts/re/Common";
-import { DTerrainSetting, FGenericRandomMapWayConnectionMode } from "../data/DTerrainPreset";
+import { DTerrainSetting, DTerrainShape, DTerrainShapeRef, DTerrainStructureDef, FGenericRandomMapWayConnectionMode } from "../data/DTerrainPreset";
 import { LRandom } from "../objects/LRandom";
+import { USearch } from "../usecases/USearch";
+import { UEffect } from "../usecases/UEffect";
 import { FSector, FSectorAdjacency } from "./data/FSector";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
 import { FSectorConnectionBuilder } from "./FSectorConnectionBuilder";
+import { REData } from "../data/REData";
+import { paramMapPaddingX, paramMapPaddingY } from "../PluginParameters";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
@@ -32,10 +36,14 @@ const AreaMinSize = RoomMinSize + 3;
 export class FGenericRandomMapGenerator {
     private _map: FMap;
     private _setting: DTerrainSetting;
+    private _shape: DTerrainShape;
 
     public constructor(map: FMap, setting: DTerrainSetting) {
         this._map = map;
         this._setting = setting;
+        const shape = UEffect.selectRating<DTerrainShapeRef>(this.random, setting.shapeRefs, x => x.rate);
+        this._shape = shape ? REData.terrainShapes[shape.dataId] : REData.getTerrainShape("kTerrainShape_Default");
+        map.resetFromInnerSize(this._shape.width, this._shape.height, paramMapPaddingX, paramMapPaddingY);
     }
 
     public get random(): LRandom {
@@ -65,8 +73,8 @@ export class FGenericRandomMapGenerator {
     }
         
     private makeSectors(): boolean {
-        const countH = this._setting.divisionCountX;
-        const countV = this._setting.divisionCountY;
+        const countH = this._shape.divisionCountX;
+        const countV = this._shape.divisionCountY;
 
         /*
         Area の最小構成は次のようになる。
@@ -105,7 +113,7 @@ export class FGenericRandomMapGenerator {
                     const sector = this._map.newSector();
                     const sectorW = (x < countH - 1) ? w : this._map.innerWidth - (w * (countH - 1)); // 最後の Sector は一杯まで広げる
                     const sectorH = (y < countV - 1) ? h : this._map.innerHeight - (h * (countV - 1)); // 最後の Sector は一杯まで広げる
-                    sector.setRect(this._map.ox + w * x, this._map.ox + h * y, sectorW, sectorH);
+                    sector.setRect(this._map.ox + w * x, this._map.oy + h * y, sectorW, sectorH);
                 }
             }
         }
@@ -140,7 +148,7 @@ export class FGenericRandomMapGenerator {
 
     // 実際に Connection を作成する。
     private makeSectorConnections(): void {
-        FSectorConnectionBuilder.connect(this._map, this.random, this._setting);
+        FSectorConnectionBuilder.connect(this._map, this.random, this._shape);
     }
 
     // RoomShape を選択する。
@@ -148,7 +156,7 @@ export class FGenericRandomMapGenerator {
     private makeRoomShapeDefinitions(): void {
         const sectors = this._map.sectors();
         const sectorCount = sectors.length;
-        let shapeDefCount = this._setting.forceRoomShapes.length;
+        let shapeDefCount = this._shape.forceRoomShapes.length;
         if (shapeDefCount >= sectorCount) {
             shapeDefCount = sectorCount;
         }
@@ -157,7 +165,7 @@ export class FGenericRandomMapGenerator {
         {
             const shapes = new Array<string>(sectorCount);
             for (let i = 0; i < shapeDefCount; i++) {
-                shapes[i] = this._setting.forceRoomShapes[i].typeName;
+                shapes[i] = this._shape.forceRoomShapes[i].typeName;
             }
             this.random.mutableShuffleArray(shapes);
     
@@ -180,9 +188,16 @@ export class FGenericRandomMapGenerator {
 
         // まずは強制的に設定したいものを処理する
         {
+            const structures: string[] = [];
+            for (const s of this._setting.forceStructures) {
+                if (this.random.nextIntWithMax(100) < s.rate) {
+                    structures.push(s.typeName);
+                }
+            }
+
             const shapes = new Array<string>(sectorCount);
-            for (let i = 0; i < structureDefCount; i++) {
-                shapes[i] = this._setting.forceStructures[i].typeName;
+            for (let i = 0; i < structures.length; i++) {
+                shapes[i] = structures[i];
             }
             this.random.mutableShuffleArray(shapes);
     
@@ -192,6 +207,14 @@ export class FGenericRandomMapGenerator {
                 }
             }
         }
+
+        // for (const sector of sectors) {
+        //     if (!sector.structureType) {
+        //         const structure = UEffect.selectRating<DTerrainStructureDef>(this.random, this._setting.structureDefs, x => x.rate);
+        //         assert(structure);
+        //         sector.structureType = structure.typeName;
+        //     }
+        // }
     }
 
     private makeRooms(): void {
@@ -214,11 +237,11 @@ export class FGenericRandomMapGenerator {
         const candidateSectorCount = candidateSectors.length;
         const roomEnables = new Array<boolean>(candidateSectorCount);
         let roomCount = 0;
-        if (this._setting.roomCountMax == Infinity) {
+        if (this._shape.roomCountMax == Infinity) {
             roomCount = candidateSectorCount;
         }
         else {
-            roomCount = this.random.nextIntWithMinMax(this._setting.roomCountMin, this._setting.roomCountMax + 1);
+            roomCount = this.random.nextIntWithMinMax(this._shape.roomCountMin, this._shape.roomCountMax + 1);
             roomCount = Math.min(Math.max(roomCount, 2), candidateSectorCount);
         }
         for (let i = 0; i < roomCount; i++) {
@@ -320,7 +343,7 @@ export class FGenericRandomMapGenerator {
                 outerB = -1;
             }
 
-            if (this._setting.wayConnectionMode == FGenericRandomMapWayConnectionMode.RoomEdge) {
+            if (this._shape.wayConnectionMode == FGenericRandomMapWayConnectionMode.RoomEdge) {
                 for (let x = 0; x < width; x++) {
                     sector.edge(FDirection.T).addPin(ox + x);
                     sector.edge(FDirection.B).addPin(ox + x);
@@ -330,7 +353,7 @@ export class FGenericRandomMapGenerator {
                     sector.edge(FDirection.R).addPin(oy + y);
                 }
             }
-            else if (this._setting.wayConnectionMode == FGenericRandomMapWayConnectionMode.SectionEdge) {
+            else if (this._shape.wayConnectionMode == FGenericRandomMapWayConnectionMode.SectionEdge) {
                 const sx = sector.x1();
                 const sy = sector.y1();
 

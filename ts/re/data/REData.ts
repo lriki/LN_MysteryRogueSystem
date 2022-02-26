@@ -28,7 +28,7 @@ import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
-import { DTerrainPreset, DTerrainSetting } from "./DTerrainPreset";
+import { DTerrainPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
 // import { DPreset } from "./DPreset";
 
 
@@ -194,6 +194,7 @@ export class REData
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
     static emittors: DEmittor[] = [];
+    static terrainShapes: DTerrainShape[] = [];
     static terrainSettings: DTerrainSetting[] = [];
     static terrainPresets: DTerrainPreset[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
@@ -435,6 +436,31 @@ export class REData
         const d = this.emittors[id];
         if (d) return d;
         throw new Error(`Effect "${id}" not found.`);
+    }
+
+    //--------------------
+
+    static newTerrainShape(key: string): DTerrainShape {
+        const newId = this.terrainShapes.length;
+        const data = new DTerrainShape(newId);
+        data.key = key;
+        this.terrainShapes.push(data);
+        return data;
+    }
+    
+    static findTerrainShape(pattern: string): DTerrainShape | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.terrainShapes[id];
+        else {
+            return this.terrainShapes.find(e => (e.key != "" && e.key == pattern));
+        }
+    }
+
+    static getTerrainShape(pattern: string): DTerrainShape {
+        const d = this.findTerrainShape(pattern);
+        if (d) return d;
+        throw new Error(`TerrainShape "${pattern}" not found.`);
     }
 
     //--------------------

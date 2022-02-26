@@ -1,5 +1,5 @@
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "../PluginParameters";
-import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
+import { DTerrainPresetId, DTerrainSettingId, DTerrainShapeId } from "./DCommon";
 import { DTerrainSettingRef } from "./DLand";
 
 export enum DSectorConnectionPreset {
@@ -33,6 +33,7 @@ export interface DTerrainStructureDef {
 
 export interface DForceTerrainStructure {
     typeName: string;
+    rate: number;   // これは % なので注意
 }
 
 export interface DTerrainShopDef {
@@ -44,6 +45,41 @@ export interface DTerrainMonsterHouseDef {
     typeName: string;
     rate: number;
 }
+
+export class DTerrainShape {
+    id: DTerrainShapeId;
+    key: string;
+    width: number;
+    height: number;
+    divisionCountX: number;
+    divisionCountY: number;
+    roomCountMin: number;
+    roomCountMax: number;
+    wayConnectionMode: FGenericRandomMapWayConnectionMode;
+    connectionPreset: DSectorConnectionPreset;
+    forceRoomShapes: DForceTerrainRoomShape[];
+    
+    public constructor(id: DTerrainShapeId) {
+        this.id = id;
+        this.key = "";
+        this.width = paramRandomMapDefaultWidth;
+        this.height = paramRandomMapDefaultHeight;
+        this.divisionCountX = 3;
+        this.divisionCountY = 3;
+        this.roomCountMin = Infinity;
+        this.roomCountMax = Infinity;
+        this.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
+        this.connectionPreset = DSectorConnectionPreset.Default;
+        this.forceRoomShapes = [];
+    }
+}
+
+export interface DTerrainShapeRef {
+    dataId: DTerrainShapeId;
+    rate: number;
+}
+
+
 
 /**
  * 
@@ -110,32 +146,18 @@ export interface DTerrainMonsterHouseDef {
 export class DTerrainSetting {
     id: DTerrainSettingId;
     key: string;
-    width: number;
-    height: number;
-    divisionCountX: number;
-    divisionCountY: number;
-    roomCountMin: number;
-    roomCountMax: number;
-    wayConnectionMode: FGenericRandomMapWayConnectionMode;
-    connectionPreset: DSectorConnectionPreset;
-    forceRoomShapes: DForceTerrainRoomShape[];
+
+
+    shapeRefs: DTerrainShapeRef[];
     structureDefs: DTerrainStructureDef[];
-    forceStructures: DForceTerrainStructure[];
+    forceStructures: DForceTerrainStructure[];  // これが最優先。モンスターハウスを100%出したければ ["MonsterHouse",100]、"Shop" を複数出したければ ["Shop", 20], ["Shop", 20] にする。
     shopDefs: DTerrainShopDef[];
     monsterHouseDefs: DTerrainMonsterHouseDef[];
     
     public constructor(id: DTerrainSettingId) {
         this.id = id;
         this.key = "";
-        this.width = paramRandomMapDefaultWidth;
-        this.height = paramRandomMapDefaultHeight;
-        this.divisionCountX = 3;
-        this.divisionCountY = 3;
-        this.roomCountMin = Infinity;
-        this.roomCountMax = Infinity;
-        this.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
-        this.connectionPreset = DSectorConnectionPreset.Default;
-        this.forceRoomShapes = [];
+        this.shapeRefs = [];
         this.structureDefs = [{typeName: "default", rate: 5}];
         this.forceStructures = [];
         this.shopDefs = [{typeName: "default", rate: 5}];
