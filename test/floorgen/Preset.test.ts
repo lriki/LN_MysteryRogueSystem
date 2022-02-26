@@ -26,13 +26,10 @@ test("Preset.GreatHall", () => {
 
     // 全部床であることを確認する
     const map = REGame.map;
-    for (let y = 0; y < map.height(); y++) {
-        for (let x = 0; x < map.width(); x++) {
-            const block = map.block(x, y);
-            expect(block.tileShape()).toBe(TileShape.Floor);
-        }
-    }
-
+    const room = map.rooms()[1];
+    room.forEachBlocks(block => {
+        expect(block.tileShape()).toBe(TileShape.Floor);
+    });
 });
 
 test("Preset.PoorVisibility", () => {
