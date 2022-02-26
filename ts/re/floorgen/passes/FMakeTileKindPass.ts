@@ -8,7 +8,7 @@ import { FMapBuildPass } from "./FMapBuildPass";
     public execute(map: FMap): void {
 
         // TODO: 適当状態
-        for (const block of map.blocks()) {
+        for (const block of map.innerBlocks) {
             if (block.isPassagableComponent()) {
                 block.setTileShape(TileShape.Floor);
             }

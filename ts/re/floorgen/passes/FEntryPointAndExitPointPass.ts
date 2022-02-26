@@ -14,7 +14,7 @@ export class FEntryPointAndExitPointPass extends FMapBuildPass {
 
         // ExitPoint
         {
-            const candidates = map.blocks().filter(b => b.isRoom() && b.isContinuation());
+            const candidates = map.innerBlocks.filter(b => b.isRoom() && b.isContinuation());
             assert(candidates.length > 0);
     
             const block = candidates[map.random().nextIntWithMax(candidates.length)];

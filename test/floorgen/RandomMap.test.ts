@@ -4,6 +4,7 @@ import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGene
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
 import { REData } from "ts/re/data/REData";
 import { REBasics } from "ts/re/data/REBasics";
+import { paramMapPaddingX, paramMapPaddingY } from "ts/re/PluginParameters";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -15,7 +16,7 @@ test("RandomMap.1001562234", () => {
         console.log("seed", seed);
 
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
-        map.reset(60, 48);
+        map.resetFromFullSize(60, 48, 0, 0);
         (new FGenericRandomMapGenerator(map, REData.terrainSettings[1])).generate();
         (new FMapBuilder()).buildForRandomMap(map);
     
@@ -38,7 +39,7 @@ test("RandomMap.1001562234", () => {
         */
     
         // すべての部屋は、到達可能になっているはず
-        for (const b of map.blocks()) {
+        for (const b of map.innerBlocks) {
             if (b.isRoom()) {
                 expect(b.isContinuation()).toBe(true);
             }
@@ -51,7 +52,7 @@ test("RandomMap.967875183", () => {
     const seed = 967875183;
     const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
     const setting = REData.getTerrainSetting("kTerrainSetting_Small4x4");
-    map.reset(setting.width, setting.height);
+    map.resetFromInnerSize(setting.width, setting.height, paramMapPaddingX, paramMapPaddingY);
     (new FGenericRandomMapGenerator(map, setting)).generate();
     (new FMapBuilder()).buildForRandomMap(map);
 });

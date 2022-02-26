@@ -159,7 +159,7 @@ export class FMapBlock {
     public constructor(x: number, y: number) {
         this._x = x;
         this._y = y;
-        this._tileShape = TileShape.Floor;
+        this._tileShape = TileShape.Wall;
         this._blockComponent = FBlockComponent.None;
         this._sectorId = 0;
         this._roomId = 0;
@@ -400,9 +400,14 @@ export class FMap {
     private _floorId: LFloorId;
     private _randSeed: number; // for debug
     private _rand: LRandom;
-    private _width: number;
-    private _height: number;
+    private _innerWidth: number;
+    private _innerHeight: number;
+    private _fullWidth: number;
+    private _fullHeight: number;
+    private _paddingX: number;
+    private _paddingY: number;
     private _blocks: FMapBlock[];
+    private _innerBlocks: FMapBlock[];
     private _sectors: FSector[];
     private _sectorAdjacencies: FSectorAdjacency[];
     private _sectorConnections: FSectorConnection[];
@@ -415,9 +420,14 @@ export class FMap {
         this._floorId = floorId;
         this._randSeed = randSeed;
         this._rand = new LRandom(this._randSeed);
-        this._width = 0;
-        this._height = 0;
+        this._innerWidth = 0;
+        this._innerHeight = 0;
+        this._fullWidth = 0;
+        this._fullHeight = 0;
+        this._paddingX = 0;
+        this._paddingY = 0;
         this._blocks = [];
+        this._innerBlocks = [];
         this._sectorAdjacencies = [];
         this._sectorConnections = [];
         this._sectors = [];
@@ -425,14 +435,31 @@ export class FMap {
         this._structures = [];
     }
 
-    public reset(width: number, height: number) {
-        this._width = width;
-        this._height = height;
-        this._blocks = new Array<FMapBlock>(width * height);
+    public resetFromInnerSize(innerWidth: number, innerHeight: number, paddingX: number, paddingY: number): void {
+        this.resetFromFullSize(innerWidth + (paddingX * 2), innerHeight + (paddingY * 2), paddingX, paddingY);
+    }
+
+    public resetFromFullSize(fullWidth: number, fullHeight: number, paddingX: number, paddingY: number): void {
+        this._fullWidth = fullWidth;
+        this._fullHeight = fullHeight;
+        this._innerWidth = fullWidth - (paddingX * 2);
+        this._innerHeight = fullHeight - (paddingY * 2);
+        this._paddingX = paddingX;
+        this._paddingY = paddingY;
+        this._blocks = new Array<FMapBlock>(fullWidth * fullHeight);
+        this._innerBlocks = [];//new Array<FMapBlock>(this._innerWidth * this._innerHeight);
         for (let i = 0; i < this._blocks.length; i++) {
-            const x = Math.trunc(i % this._width);
-            const y = Math.trunc(i / this._width);
-            this._blocks[i] = new FMapBlock(x, y);
+            const x = Math.trunc(i % this._fullWidth);
+            const y = Math.trunc(i / this._fullWidth);
+            const block = new FMapBlock(x, y);
+            this._blocks[i] = block;
+            if (this.ox <= x && this.ox + this._innerWidth &&
+                this.oy <= y && this.oy + this._innerHeight) {
+                this._innerBlocks.push(block);
+            }
+            else {
+                block.setTileShape(TileShape.Wall);
+            }
         }
         this._sectors = [new FSector(this, 0)];    // dummy
         this._rooms = [new FRoom(this, 0, this._sectors[0])];    // dummy
@@ -446,29 +473,57 @@ export class FMap {
         return this._rand;
     }
 
-    public width(): number {
-        return this._width;
+    /** Inner の左上 X 座標 */
+    public get ox(): number {
+        return this._paddingX;
     }
     
-    public height(): number {
-        return this._height;
+    /** Inner の左上 Ys 座標 */
+    public get oy(): number {
+        return this._paddingY;
     }
 
-    public block(x: number, y: number): FMapBlock {
-        return this._blocks[y * this._width + x];
+    public get fullWidth(): number {
+        return this._fullWidth;
+    }
+    
+    public get fullHeight(): number {
+        return this._fullHeight;
+    }
+
+    public get innerWidth(): number {
+        return this._innerWidth;
+    }
+    
+    public get innerHeight(): number {
+        return this._innerHeight;
+    }
+
+    public blocks(): readonly FMapBlock[] {
+        return this._blocks;
+    }
+
+    public get innerBlocks(): readonly FMapBlock[] {
+        return this._innerBlocks;
+    }
+
+    public innerBlock(x: number, y: number): FMapBlock {
+        return this.block(this._paddingX + x, this._paddingY + y);
     }
 
     public blockTry(x: number, y: number): FMapBlock | undefined {
         if (this.isValid(x, y)) {
-            return this._blocks[y * this._width + x];
+            return this._blocks[y * this._fullWidth + x];
         }
         else {
             return undefined;
         }
     }
 
-    public blocks(): readonly FMapBlock[] {
-        return this._blocks;
+    public block(x: number, y: number): FMapBlock {
+        const block = this._blocks[y * this._fullWidth + x];
+        assert(block);
+        return block;
     }
 
     public sectors(): readonly FSector[] {
@@ -539,7 +594,7 @@ export class FMap {
     }
 
     public isValid(x: number, y: number): boolean {
-        return 0 <= x && x < this._width && 0 <= y && y < this._height;
+        return 0 <= x && x < this._innerWidth && 0 <= y && y < this._innerHeight;
     }
 
     public setEntryPont(value: FEntryPont) {
@@ -567,8 +622,8 @@ export class FMap {
     public print(): void {
 
         let s = "";
-        for (let y = 0; y < this._height; y++) {
-            for (let x = 0; x < this._width; x++) {
+        for (let y = 0; y < this._fullHeight; y++) {
+            for (let x = 0; x < this._fullWidth; x++) {
                 if (this._exitPont && this._exitPont.mx() == x && this._exitPont.my() == y) {
                     s += "!";
                 }

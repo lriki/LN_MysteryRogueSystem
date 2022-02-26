@@ -93,8 +93,8 @@ export class FGenericRandomMapGenerator {
 
         // Split area
         {
-            const w = this._map.width() / countH;
-            const h = this._map.height() / countV;
+            const w = this._map.innerWidth / countH;
+            const h = this._map.innerHeight/ countV;
             if (w < AreaMinSize || h < AreaMinSize) {
                 this.reportError("Map size too small for number of area divisions.");
                 return false;
@@ -103,31 +103,12 @@ export class FGenericRandomMapGenerator {
             for (let y = 0; y < countV; y++) {
                 for (let x = 0; x < countH; x++) {
                     const sector = this._map.newSector();
-                    const sectorW = (x < countH - 1) ? w : this._map.width() - (w * (countH - 1)); // 最後の Sector は一杯まで広げる
-                    const sectorH = (y < countV - 1) ? h : this._map.height() - (h * (countV - 1)); // 最後の Sector は一杯まで広げる
-                    sector.setRect(w * x, h * y, sectorW, sectorH);
+                    const sectorW = (x < countH - 1) ? w : this._map.innerWidth - (w * (countH - 1)); // 最後の Sector は一杯まで広げる
+                    const sectorH = (y < countV - 1) ? h : this._map.innerHeight - (h * (countV - 1)); // 最後の Sector は一杯まで広げる
+                    sector.setRect(this._map.ox + w * x, this._map.ox + h * y, sectorW, sectorH);
                 }
             }
         }
-
-/*
-        for (int y = 0; y < countV; y++) {
-            for (int x = 0; x < countH; x++) {
-                auto& area = areaList[y * countH + x];
-
-                area->edges[North] = ln::makeObject<FloorAreaEdge>();
-                area->edges[South] = ln::makeObject<FloorAreaEdge>();
-                area->edges[West] = ln::makeObject<FloorAreaEdge>();
-                area->edges[East] = ln::makeObject<FloorAreaEdge>();
-                area->edges[North]->area = area->edges[South]->area = area->edges[West]->area = area->edges[East]->area = area;
-
-                if (y > 0) area->edges[North]->adjacencyArea = areaList[(y - 1) * countH + (x)];
-                if (y < countV - 1) area->edges[South]->adjacencyArea = areaList[(y + 1) * countH + (x)];
-                if (x > 0) area->edges[West]->adjacencyArea = areaList[(y) * countH + (x - 1)];
-                if (x < countH - 1) area->edges[East]->adjacencyArea = areaList[(y) * countH + (x + 1)];
-            }
-        }
-        */
         return true;
     }
 
@@ -159,9 +140,7 @@ export class FGenericRandomMapGenerator {
 
     // 実際に Connection を作成する。
     private makeSectorConnections(): void {
-
         FSectorConnectionBuilder.connect(this._map, this.random, this._setting);
-
     }
 
     // RoomShape を選択する。

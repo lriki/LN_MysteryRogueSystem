@@ -6,10 +6,10 @@ import { FBlockComponent, FMap } from "./FMapData";
  */
 export class FMiddleSingleRoomGenerator {
     public generate(map: FMap): void {
-        const w = map.width() / 2;
-        const h = map.height() / 2;
-        const ox = (map.width() - w) / 2;
-        const oy = (map.height() - h) / 2;
+        const w = map.innerWidth / 2;
+        const h = map.innerHeight / 2;
+        const ox = (map.innerWidth - w) / 2;
+        const oy = (map.innerHeight - h) / 2;
 
         for (let y = oy; y < oy + h; y++) {
             for (let x = ox; x < ox + w; x++) {

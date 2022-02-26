@@ -56,6 +56,9 @@ export var paramMonsterHouseItemsMin = 5;
 // 視界不明瞭部屋での視界 (半径)
 export var paramDefaultVisibiltyLength = 5;
 
+export var paramMapPaddingX = 8;
+export var paramMapPaddingY = 6;
+
 
 //Maximum number of items in the map
 

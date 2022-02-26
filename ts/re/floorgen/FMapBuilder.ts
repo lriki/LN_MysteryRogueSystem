@@ -44,7 +44,7 @@ export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
         
         while (true) {
             // RoomId が割り当てられていないが、Room としてマークされている Block を集める
-            const roomBlocks = map.blocks().filter(block => block.isRoom() && block.roomId() == 0);
+            const roomBlocks = map.innerBlocks.filter(block => block.isRoom() && block.roomId() == 0);
             if (roomBlocks.length == 0) {
                 // 全部解決した。終了。
                 break;

@@ -5,7 +5,7 @@ import { REDataManager } from "ts/re/data/REDataManager";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { REGame } from "ts/re/objects/REGame";
 import { TileShape } from "ts/re/objects/LBlock";
-import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId } from "ts/re/PluginParameters";
+import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId, paramMapPaddingX, paramMapPaddingY } from "ts/re/PluginParameters";
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/re/data/DEntity";
 import { LEntity } from "../objects/LEntity";
@@ -122,10 +122,10 @@ export class SRmmzHelpers {
         }
         const width = $dataMap.width ?? 10;
         const height = $dataMap.height ?? 10;
-        map.reset(width, height);
+        map.resetFromFullSize(width, height, 0, 0);
 
-        for (let y = 0; y < map.height(); y++) {
-            for (let x = 0; x < map.width(); x++) {
+        for (let y = 0; y < map.innerHeight; y++) {
+            for (let x = 0; x < map.innerWidth; x++) {
                 const block = map.block(x, y);
 
                 if (Game_Map_Impl.checkPassage(x, y, 0xF)) {

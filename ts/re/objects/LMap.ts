@@ -54,6 +54,12 @@ export interface RE_Game_Data
  * この Map 上にいることになっている Entity は、自動的に追加される。
  * 
  * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
+ * 
+ * [2022/2/25] Player をマップ中央に表示するための、外周のマージンはどうやって表現しよう？
+ * ----------
+ * SFCシレンの場合、大部屋の左上が (4,4) となっており、4ブロック分のマージンがあることがわかる。
+ * https://give-up-easily.hatenadiary.org/entry/20120223/1330019652
+ * ちょうど1画面分。
  */
 @RESerializable
 export class LMap extends LObject {
@@ -133,8 +139,8 @@ export class LMap extends LObject {
     private build(data: FMap): void {
         this._roundCount = 0;
         {
-            const width = data.width();
-            const height = data.height();
+            const width = data.fullWidth;
+            const height = data.fullHeight;
             this.setupEmptyMap(width, height);
 
             for (let y = 0; y < height; y++) {
