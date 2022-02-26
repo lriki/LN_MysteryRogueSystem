@@ -278,7 +278,7 @@ export class LEntity extends LObject
     _deathResult: LDeathResult = new LDeathResult();
     _reward: LReward = new LReward();
 
-
+    // onEntityLocated イベントの発行を遅延実行するためのフラグ
     _located: boolean = false;
 
     _actionToken: LActionToken = new LActionToken();

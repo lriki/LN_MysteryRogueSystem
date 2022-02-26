@@ -31,6 +31,8 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
     }
 
     onStart(): void {
+        // マップ移動に伴う初期配置後、onLocatedEntity イベントを発行したい
+        REGame.map.updateLocatedResults(RESystem.commandContext);
     }
 
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {

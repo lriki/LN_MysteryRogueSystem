@@ -10,6 +10,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { assert } from "ts/re/Common";
 import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseStructure";
+import { MonsterHouseState } from "ts/re/objects/LRoom";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -38,7 +39,7 @@ test("Preset.GreatHall", () => {
 test("Preset.GreatHallMonsterHouse", () => {
     TestEnv.newGame();
 
-    
+    // 大部屋モンスターハウス
     const landId = REData.lands.findIndex(x => x.name.includes("RandomMaps"));
     const floorId = new LFloorId(landId, 1);
     const floorInfo = floorId.floorInfo();
@@ -48,17 +49,15 @@ test("Preset.GreatHallMonsterHouse", () => {
 
     const player1 = TestEnv.setupPlayer(floorId);
 
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     const map = REGame.map;
     const structures = map.structures();
     const monsterHouse = structures[1] as LMonsterHouseStructure;
     assert(monsterHouse);
-    
-    const entities = map.entities();
 
-
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
-
+    // 最初から Activated
+    assert(monsterHouse.monsterHouseState() == MonsterHouseState.Activated);
 });
 
 test("Preset.PoorVisibility", () => {

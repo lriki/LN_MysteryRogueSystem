@@ -6,6 +6,13 @@ export class SSoundManager {
             SoundManager.playSystemSound(n);
         }
     }
+    
+    public static playBgm(sound: IDataSound) {
+        if (typeof SoundManager !== 'undefined') {
+            AudioManager.playBgm(sound, 0);
+        }
+    }
+
     public static playSe(sound: IDataSound) {
         if (typeof SoundManager !== 'undefined') {
             AudioManager.playSe(sound);

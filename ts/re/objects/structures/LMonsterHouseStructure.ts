@@ -8,6 +8,7 @@ import { REGame } from "../REGame";
 import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
+import { SSoundManager } from "ts/re/system/SSoundManager";
 
 @RESerializable
 export class LMonsterHouseStructure extends LStructure {
@@ -50,7 +51,7 @@ export class LMonsterHouseStructure extends LStructure {
 
         cctx.postWaitSequel();
         cctx.postMessage(tr2("モンスターハウスだ！"));
-        AudioManager.playBgm(this.monsterHouseData().bgm, 0);
+        SSoundManager.playBgm(this.monsterHouseData().bgm);
 
         this._monsterHouseState = MonsterHouseState.Activated;
     }
