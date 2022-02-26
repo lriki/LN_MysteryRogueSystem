@@ -78,7 +78,6 @@ export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
         for (const sector of map.sectors()) {
             if (sector.structureType == "MonsterHouse") {
                 const pattern = UEffect.selectRating(map.random(), monsterHouse.patterns, x => x.rating);
-                //const pattern = this.selectPattern(, map.random());
                 if (pattern) {
                     const candidates = map.rooms().filter(x => x.structures().length == 0);
                     const room = map.random().selectOrUndefined(candidates);
@@ -93,7 +92,6 @@ export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
                 }
             }
         }
-        
     }
 }
 

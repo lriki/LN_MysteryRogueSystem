@@ -7,6 +7,9 @@ import { TileShape } from "ts/re/objects/LBlock";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { LFloorId } from "ts/re/objects/LFloorId";
+import { assert } from "ts/re/Common";
+import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseStructure";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -30,6 +33,32 @@ test("Preset.GreatHall", () => {
     room.forEachBlocks(block => {
         expect(block.tileShape()).toBe(TileShape.Floor);
     });
+});
+
+test("Preset.GreatHallMonsterHouse", () => {
+    TestEnv.newGame();
+
+    
+    const landId = REData.lands.findIndex(x => x.name.includes("RandomMaps"));
+    const floorId = new LFloorId(landId, 1);
+    const floorInfo = floorId.floorInfo();
+    floorInfo.fixedMapName = "";
+    floorInfo.presetId = REData.getTerrainPreset("kTerrainPreset_GreatHallMH").id;
+    floorInfo.monsterHouse.patterns.push({name: "normal", rating: 1});
+
+    const player1 = TestEnv.setupPlayer(floorId);
+
+
+    const map = REGame.map;
+    const structures = map.structures();
+    const monsterHouse = structures[1] as LMonsterHouseStructure;
+    assert(monsterHouse);
+    
+    const entities = map.entities();
+
+
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+
 });
 
 test("Preset.PoorVisibility", () => {
