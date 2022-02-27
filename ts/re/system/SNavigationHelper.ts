@@ -3,6 +3,7 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "../data/REBasics";
 import { LExitPointBehavior } from "../objects/behaviors/LExitPointBehavior";
+import { paramDefaultVisibiltyLength } from "../PluginParameters";
 import { UMovement } from "../usecases/UMovement";
 import { Helpers } from "./Helpers";
 
@@ -49,13 +50,22 @@ export class SNavigationHelper {
         }
 
         // 同じ部屋にいれば Faction を問わず見える
-        // if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
+        if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
+            const room = map.room(subject.roomId());
+            if (room.poorVisibility) {
+                // 視界不明瞭マップでは視界半径をチェック
+                if (UMovement.blockDistance(subject.x, subject.y, target.x, target.y) <= paramDefaultVisibiltyLength) {
+                    return true;
+                }
+            }
+            else {
+                return true;
+            }
+        }
+        // const block = map.block(target.x, target.y);
+        // if (block._passed) {
         //     return true;
         // }
-        const block = map.block(target.x, target.y);
-        if (block._passed) {
-            return true;
-        }
 
         if (map.unitClarity) {
             if (target.isUnit()) {
