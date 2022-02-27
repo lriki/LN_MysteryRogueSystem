@@ -292,14 +292,23 @@ export class SMapManager {
         if (list.length == 0) return [];    // 出現テーブルが空
 
         const data = list[this.rand().nextIntWithMax(list.length)];
+        let entites: LEntity[];
         if (data.spawiInfo.troopId > 0) {
-            return SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
+            entites = SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
         }
         else {
             const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
             REGame.world._transferEntity(entity, floorId, mx, my);
-            return [entity];
+            entites = [entity];
         }
+
+        // 向きをランダムに決定
+        const dir = this.rand().select(UMovement.directions);
+        for (const e of entites) {
+            e.dir = dir;
+        }
+
+        return entites;
     }
 
     /** 出現テーブルからランダムに選択して Item を作る */
