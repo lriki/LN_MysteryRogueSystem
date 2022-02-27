@@ -17,6 +17,18 @@
  *
  * MIT License
  *
+ * @param RandomMapPaddingX
+ * @text ランダムマップの外周幅 (上下)
+ * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
+ * @default 8
+ * @type number
+ *
+ * @param RandomPaddingY
+ * @text ランダムマップの外周幅 (左右)
+ * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
+ * @default 6
+ * @type number
+ *
  *
  * @command RE.ShowChallengeResult
  * @text ShowChallengeResult

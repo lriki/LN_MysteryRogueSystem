@@ -3,7 +3,7 @@ import { FMap } from "ts/re/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
 import { REData } from "ts/re/data/REData";
-import { paramMapPaddingX, paramMapPaddingY } from "ts/re/PluginParameters";
+import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/re/PluginParameters";
 import { assert } from "ts/re/Common";
 
 beforeAll(() => {

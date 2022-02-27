@@ -7,7 +7,7 @@ import { FSector, FSectorAdjacency } from "./data/FSector";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
 import { FSectorConnectionBuilder } from "./FSectorConnectionBuilder";
 import { REData } from "../data/REData";
-import { paramMapPaddingX, paramMapPaddingY } from "../PluginParameters";
+import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "../PluginParameters";
 
 const RoomMinSize = 4;
 const AreaMinSize = RoomMinSize + 3;
@@ -43,7 +43,7 @@ export class FGenericRandomMapGenerator {
         this._setting = setting;
         const shape = UEffect.selectRating<DTerrainShapeRef>(this.random, setting.shapeRefs, x => x.rate);
         this._shape = shape ? REData.terrainShapes[shape.dataId] : REData.getTerrainShape("kTerrainShape_Default");
-        map.resetFromInnerSize(this._shape.width, this._shape.height, paramMapPaddingX, paramMapPaddingY);
+        map.resetFromInnerSize(this._shape.width, this._shape.height, paramRandomMapPaddingX, paramRandomMapPaddingY);
     }
 
     public get random(): LRandom {

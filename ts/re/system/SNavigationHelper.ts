@@ -49,7 +49,11 @@ export class SNavigationHelper {
         }
 
         // 同じ部屋にいれば Faction を問わず見える
-        if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
+        // if (subject.isOnRoom() && subject.roomId() == target.roomId()) {
+        //     return true;
+        // }
+        const block = map.block(target.x, target.y);
+        if (block._passed) {
             return true;
         }
 

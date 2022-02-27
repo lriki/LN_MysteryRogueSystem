@@ -54,10 +54,10 @@ export var paramMonsterHouseItemsMax = 20;  // アイテムまたはトラップ
 export var paramMonsterHouseItemsMin = 5;
 
 // 視界不明瞭部屋での視界 (半径)
-export var paramDefaultVisibiltyLength = 5;
+export var paramDefaultVisibiltyLength = 6;
 
-export var paramMapPaddingX = 8;
-export var paramMapPaddingY = 6;
+export var paramRandomMapPaddingX = getNumber("RandomMapPaddingX", 8);
+export var paramRandomMapPaddingY = getNumber("RandomMapPaddingY", 6);
 
 
 //Maximum number of items in the map

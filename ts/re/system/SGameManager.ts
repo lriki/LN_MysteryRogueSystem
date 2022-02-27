@@ -20,7 +20,7 @@ import { LFloorDirector } from "ts/re/objects/LFloorDirector";
 import { LScheduler2 } from "ts/re/objects/LScheduler";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
-import { paramMapPaddingX, paramMapPaddingY, paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/re/PluginParameters";
+import { paramRandomMapPaddingX, paramRandomMapPaddingY, paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/re/PluginParameters";
 import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
