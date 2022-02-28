@@ -248,6 +248,17 @@ export class LActivity {
         return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
     }
 
+    public static makePrimaryUse(subject: LEntity, object: LEntity): LActivity {
+        const reaction = object.data().reactions.find(x => x.primariyUse);
+        if (reaction) {
+            const a = (new LActivity()).setup(reaction.actionId, subject, object);
+            return a;
+        }
+        else {
+            return this.make(subject);
+        }
+    }
+
     public static makePick(actor: LEntity): LActivity {
         return (new LActivity()).setup(REBasics.actions.PickActionId, actor);
     }

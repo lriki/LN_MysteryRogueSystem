@@ -99,14 +99,29 @@ export class DReaction {
 
 
     //emittingEffect: DEmittorId; // 0可。その場合、onActivity への通知だけが行われる。
+
+    /**
+     * この Reaction に反応する Emittor。
+     * 
+     * 複数指定可能。例えば火炎草は、次の2つが登録される。
+     * - 使用者に対する FP 回復効果
+     * - 目の前の別エンティティに対するダメージ効果
+     * 
+     * ひとつも登録されていない場合は何も起こらないが、Behavior への通知は行われる。
+     * これによって、 Emittor に依らない特殊効果をコードで実装することもできる。
+     */
     private _emittorIds: DEmittorId[];
+
+    
+    public primariyUse: boolean;
 
     public constructor(actionId: DActionId) {
         this._actionId = actionId;
         this._emittorIds = [];
+        this.primariyUse = false;
     }
 
-    public actionId(): DActionId {
+    public get actionId(): DActionId {
         return this._actionId;
     }
 
@@ -305,29 +320,31 @@ export class DEntity {
         return (this.isTraitCharmItem) ? this.equipmentTraits : [];
     }
 
-    public addReaction(actionId: DActionId, emittor?: DEmittor): void {
-        const reaction = this.reactions.find(x => x.actionId() == actionId);
-        if (reaction) {
+    public addReaction(actionId: DActionId, emittor?: DEmittor, primaryUse?: boolean): void {
+        let reaction = this.reactions.find(x => x.actionId == actionId);
+        if (!reaction) {
+            reaction = new DReaction(actionId);
+            this.reactions.push(reaction);
             if (emittor) {
                 reaction.addEmittor(emittor);
             }
         }
-        else {
-            const r = new DReaction(actionId);
-            if (emittor) {
-                r.addEmittor(emittor);
-            }
-            this.reactions.push(r);
+
+        if (emittor) {
+            reaction.addEmittor(emittor);
+        }
+        if (primaryUse) {
+            reaction.primariyUse = primaryUse;
         }
     }
 
     public findReaction(actionId: DActionId): DReaction | undefined {
-        const reaction = this.reactions.find(x => x.actionId() == actionId);
+        const reaction = this.reactions.find(x => x.actionId == actionId);
         return reaction;
     }
 
     public getReaction(actionId: DActionId): DReaction {
-        const reaction = this.reactions.find(x => x.actionId() == actionId);
+        const reaction = this.reactions.find(x => x.actionId == actionId);
         assert(reaction);
         return reaction;
     }

@@ -49,8 +49,16 @@ NOTE:
 なので必要な任意のタイミングで refresh かけて、slot の変動に合わせて自動的につけ外しする仕組みが無いとダメそう。
 
 */
-    private _slots: SlotPart2[] = [];
-    private _revisitonNumber: number = 0;
+    private _slots: SlotPart2[];
+    private _shortcutItemEntityId: LEntityId;
+    private _revisitonNumber: number;
+
+    public constructor() {
+        super();
+        this._slots = [];
+        this._shortcutItemEntityId = LEntityId.makeEmpty();
+        this._revisitonNumber = 0;
+    }
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEquipmentUserBehavior);
@@ -160,51 +168,54 @@ NOTE:
 
             const itemEntity = activity.object();
             assert(itemEntity);
-            //const itemBehavior = itemEntity.getBehavior(LItemBehavior);
-            //const equipmentBehavior = itemEntity.getBehavior(LEquipmentBehavior);
-            //const itemPart = itemBehavior.itemData().equipmentParts[0];
             const equipment = itemEntity.data().equipment;
-            assert(equipment);
-            const itemPart = equipment.equipmentPart;
-            assert(itemPart > 0);
+            if (equipment) {
+                // 武器、盾などの通常の装備アイテム
+                const itemPart = equipment.equipmentPart;
+                assert(itemPart > 0);
 
-            //const inventory = self.getEntityBehavior(LInventoryBehavior);
-            //const equipmentUser = actor.getBehavior(LEquipmentUserBehavior);
-
-
-            // まず空きが無いか調べてみる
-            let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
-
-            if (slot) {
-                // 空きがあればそのまま装備
-                this.equipOn(cctx, self, slot, itemEntity);
-            }
-            else {
-                // 空きが無ければ交換対象を探す
-                slot = this._slots.find(x => x.partId == itemPart);
+                // まず空きが無いか調べてみる
+                let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());
+    
                 if (slot) {
-                    const localSlot = slot;
-
-                    // まずは外す
-                    this.equipOff(cctx, self, REGame.world.entity(localSlot.itemEntityId))
-                        .then(() => {
-                            // 外せたら装備する
-                            this.equipOn(cctx, self, localSlot, itemEntity);
-                            return true;
-                        });
+                    // 空きがあればそのまま装備
+                    this.equipOn(cctx, self, slot, itemEntity);
                 }
                 else {
-                    // ここまでで slot が見つからなければ装備不可能
-                    cctx.postMessage(tr2("%1 は装備できない。").format(UName.makeNameAsItem(itemEntity)));
+                    // 空きが無ければ交換対象を探す
+                    slot = this._slots.find(x => x.partId == itemPart);
+                    if (slot) {
+                        const localSlot = slot;
+    
+                        // まずは外す
+                        this.equipOff(cctx, self, REGame.world.entity(localSlot.itemEntityId))
+                            .then(() => {
+                                // 外せたら装備する
+                                this.equipOn(cctx, self, localSlot, itemEntity);
+                                return true;
+                            });
+                    }
+                    else {
+                        // ここまでで slot が見つからなければ装備不可能
+                        cctx.postMessage(tr2("%1 は装備できない。").format(UName.makeNameAsItem(itemEntity)));
+                    }
                 }
+            }
+            else {
+                // 装備アイテムではないものを装備しようとしたときはショートカットに登録する
+                this.equipOnShortcut(cctx, itemEntity);
             }
             
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == REBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
-            this.equipOff(cctx, self, itemEntity);
-
+            if (this._shortcutItemEntityId.equals(itemEntity.entityId())) {
+                this.equipOffShortcut(cctx, itemEntity);
+            }
+            else {
+                this.equipOff(cctx, self, itemEntity);
+            }
             return SCommandResponse.Handled;
         }
         return SCommandResponse.Pass;
@@ -263,6 +274,20 @@ NOTE:
             }
         }
         return false;
+    }
+
+    private equipOnShortcut(cctx: SCommandContext, item: LEntity): void {
+        this._shortcutItemEntityId = item.entityId();
+        SSoundManager.playEquip();
+        cctx.postMessage(tr2("%1 を装備した。").format(UName.makeNameAsItem(item)));
+    }
+
+    private equipOffShortcut(cctx: SCommandContext, itemEntity: LEntity): void {
+        if (this._shortcutItemEntityId.equals(itemEntity.entityId())) {
+            SSoundManager.playEquip();
+            cctx.postMessage(tr2("%1 をはずした。").format(UName.makeNameAsItem(itemEntity)));
+            this._shortcutItemEntityId = LEntityId.makeEmpty();
+        }
     }
 
     private refreshSlots(): void {

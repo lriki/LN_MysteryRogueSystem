@@ -139,26 +139,26 @@ export class RESetup {
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
-                entity.addReaction(REBasics.actions.ShootingActionId);
+                entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
                 break;
             case "kEntity_アイアンアロー_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
-                entity.addReaction(REBasics.actions.ShootingActionId);
+                entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
                 break;
             case "kEntity_シルバーアロー_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.selfTraits.push({code: REBasics.traits.PenetrationItem, dataId: 0, value: 0});
-                entity.addReaction(REBasics.actions.ShootingActionId);
+                entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
                 break;
             case "kEntity_毒矢_A":
                 this.setupArrowCommon(entity);
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
-                entity.addReaction(REBasics.actions.ShootingActionId);
+                entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
                 break;
             case "kEntity_スピードドラッグ_A": {
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
