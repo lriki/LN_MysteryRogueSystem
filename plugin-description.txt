@@ -73,6 +73,16 @@
  * @text ProceedFloorBackword
  * @desc 前のフロアへ
  *
+ * @command MR-GetProperty
+ * @text MR-GetProperty
+ * @desc entityKey で指定された Entity から様々な情報を取得し、変数に代入します。
+ * @arg entityKey
+ * @type string
+ * @arg property
+ * @type string
+ * @arg variable
+ *
+ *
  * @command MR-LivingResult-GetIncludesState
  * @text MR-LivingResult-GetIncludesState
  * @desc actorKey で指定された Entity の戦闘不能原因に、stateKey で指定されたステートが含まれているかを確認します。

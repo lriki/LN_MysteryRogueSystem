@@ -148,3 +148,24 @@ PluginManager.registerCommand(pluginName, "MR-SetProperty", function(this: Game_
     const value = args["value"];
     UProperty.setValue(entityKey, propertyPath, value);
 });
+
+PluginManager.registerCommand(pluginName, "MR-GetProperty", function(this: Game_Interpreter, args: any) {
+    const entityKey = args["entityKey"];
+    const property = args["property"];
+    const variable = args["variable"];
+    const value = UProperty.getValue(entityKey, property);
+
+    const id = parseInt(variable);
+    if (!isNaN(id)) {
+        $gameVariables.setValue(id, value);
+    }
+    else {
+        const index = $dataSystem.variables.findIndex(x => x == variable);
+        if (index >= 0) {
+            $gameVariables.setValue(id, value);
+        }
+        else {
+            throw new Error(`${variable} not found.`);
+        }
+    }
+});

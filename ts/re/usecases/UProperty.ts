@@ -1,5 +1,8 @@
 import { tr2 } from "../Common";
+import { LEntity } from "../objects/LEntity";
+import { LObject } from "../objects/LObject";
 import { REGame } from "../objects/REGame";
+import { SFormulaOperand } from "../system/SFormulaOperand";
 
 export class UProperty {
 
@@ -10,7 +13,7 @@ export class UProperty {
         if (propPath.componentType == UComponentType.Behavior) {
             let behavior;
             for (const b of entity.basicBehaviors()) {
-                if (b.constructor.name.toLowerCase().includes(propPath.componentName)) {
+                if (b.constructor.name.toLowerCase().includes(propPath.behaviorName)) {
                     behavior = b;
                 }
             }
@@ -23,12 +26,51 @@ export class UProperty {
         }
     }
 
-    public static getValue(key: string, path: string, value: any): any {
-        throw new Error("Not implemented.");
+    public static getValue(key: string, path: string): any {
+        const entity = REGame.world.getFirstEntityByKey(key);
+        throw this.getValueFromEntity(entity, path);
+    }
+
+    public static getValueFromEntity(entity: LEntity, path: string): any {
+        const propPath = new UPropertyPath(path);
+        const obj = this.getObject(entity, propPath);
+        if (obj) {
+            let value: any;
+            eval(`value = obj.${propPath.propertyName}`);
+            return value;
+        }
+        else {
+            throw new Error(`Invalid property path. ${path}`);
+        }
+    }
+
+    private static getObject(entity: LEntity, path: UPropertyPath): any | undefined {
+        if (path.componentType == UComponentType.Entity) {
+            return entity;
+        }
+        else if (path.componentType == UComponentType.Param) {
+            const op = new SFormulaOperand();
+            op.wrap(entity);
+            return op;
+        }
+        else if (path.componentType == UComponentType.Behavior) {
+            let behavior;
+            for (const b of entity.basicBehaviors()) {
+                if (b.constructor.name.toLowerCase().includes(path.behaviorName)) {
+                    behavior = b;
+                }
+            }
+            return behavior;
+        }
+        else {
+            throw new Error("Not implemented.");
+        }
     }
 }
 
 enum UComponentType {
+    Entity,
+    Param,
     Behavior,
     State,
     Ability,
@@ -38,7 +80,7 @@ enum UComponentType {
  * 
  * 書式:
  * ```
- * [componentType:]componentName.propertyName[.index]
+ * [componentType:][componentName.]propertyName
  * ```
  * 
  * 将来的に、だが、例えば State の持続時間を指定したいときは、
@@ -48,45 +90,55 @@ enum UComponentType {
  */
 class UPropertyPath {
     public componentType: UComponentType;
-    public componentName: string;
+    public behaviorName: string;
     public propertyName: string;
-    public index: number;
 
     public constructor(path: string) {
         const tokens1 = path.split(":");
         let after;
+        let componentType = undefined;
         if (tokens1.length == 1) {
-            this.componentType = UComponentType.Behavior;
             after = tokens1[0];
         }
         else {
-            this.componentType = this.parseComponentType(tokens1[0]);
+            componentType = this.parseComponentType(tokens1[0]);
             after = tokens1[1];
         }
 
+        // [componentType:] の後ろの部分を . で split
         const tokens2 = after.split(".");
-        this.componentName = tokens2[0];
-        this.propertyName = tokens2[1].toLowerCase();
-        if (tokens2.length >= 3) {
-            this.index = Number(tokens2[2]);
+        if (tokens2.length >= 2) {
+            this.behaviorName = tokens2[0];
+            this.propertyName = tokens2[1];
+            if (!componentType) {
+                componentType = UComponentType.Behavior;
+            }
         }
         else {
-            this.index = 0;
+            this.behaviorName = "";
+            this.propertyName = tokens2[0];
+            if (!componentType) {
+                componentType = UComponentType.Param;   // デフォルトは Param とする。これがもっともよく使う
+            }
         }
+
+        this.componentType = componentType;
     }
 
     private parseComponentType(type: string): UComponentType {
-        if (type == "behavior") {
-            return UComponentType.Behavior;
-        }
-        else if (type == "state") {
-            return UComponentType.State;
-        }
-        else if (type == "ability") {
-            return UComponentType.Ability;
-        }
-        else {
-            throw new Error(tr2("プロパティパスのコンポーネント種類が不正です。(%1)").format(type));
+        switch (type.toLocaleLowerCase()) {
+            case "entity":
+                return UComponentType.Entity;
+            case "param":
+                return UComponentType.Param;
+            case "behavior":
+                return UComponentType.Behavior;
+            case "state":
+                return UComponentType.State;
+            case "ability":
+                return UComponentType.Ability;
+            default:
+                throw new Error(tr2("プロパティパスのコンポーネント種類が不正です。(%1)").format(type));
         }
     }
 }

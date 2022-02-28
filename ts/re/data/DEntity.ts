@@ -325,9 +325,6 @@ export class DEntity {
         if (!reaction) {
             reaction = new DReaction(actionId);
             this.reactions.push(reaction);
-            if (emittor) {
-                reaction.addEmittor(emittor);
-            }
         }
 
         if (emittor) {
