@@ -567,7 +567,7 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.WaveActionId, REData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[REBasics.params.remaining] = 5;
                 const effect = entity.mainEmittor().effectSet.effects[0];
-                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT睡眠").id, value1: 1.0, value2: 0 });
+                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_睡眠").id, value1: 1.0, value2: 0 });
                 effect.rmmzAnimationId = 62;
                 break;
             }
@@ -1304,7 +1304,7 @@ export class RESetup {
             case "kState_System_ItemStanding":
                 data.effect.behaviors.push({ name: "LItemStandingBehavior" });
                 break;
-            case "kState_UT睡眠":
+            case "kState_睡眠":
                 data.idleSequel = REBasics.sequels.asleep;
                 break;
             case "kState_UT気配察知":

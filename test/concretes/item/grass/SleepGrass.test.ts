@@ -16,7 +16,7 @@ beforeAll(() => {
 
 test("concretes.item.grass.SleepGrass", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT睡眠").id
+    const stateId = REData.getState("kState_睡眠").id
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);

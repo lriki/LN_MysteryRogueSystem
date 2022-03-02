@@ -14,6 +14,7 @@ import { USearch } from "../usecases/USearch";
 import { SWarehouseWithdrawDialog } from "../system/dialogs/SWarehouseWithdrawDialog";
 import { UProperty } from "../usecases/UProperty";
 import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
+import { RMMZHelper } from "./RMMZHelper";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -153,19 +154,6 @@ PluginManager.registerCommand(pluginName, "MR-GetProperty", function(this: Game_
     const entityKey = args["entityKey"];
     const property = args["property"];
     const variable = args["variable"];
-    const value = UProperty.getValue(entityKey, property);
-
-    const id = parseInt(variable);
-    if (!isNaN(id)) {
-        $gameVariables.setValue(id, value);
-    }
-    else {
-        const index = $dataSystem.variables.findIndex(x => x == variable);
-        if (index >= 0) {
-            $gameVariables.setValue(id, value);
-        }
-        else {
-            throw new Error(`${variable} not found.`);
-        }
-    }
+    const entity = USearch.getEntityByKeyPattern(entityKey);
+    RMMZHelper.setVariable(variable, UProperty.getValueFromEntity(entity, property));
 });

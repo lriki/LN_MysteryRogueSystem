@@ -1459,7 +1459,7 @@
                 "MR-LivingResult-GetIncludesState",
                 {
                   "actorKey": "",
-                  "stateKey": "kState_UT睡眠"
+                  "stateKey": "kState_睡眠"
                 }
               ]
             },
@@ -1474,7 +1474,7 @@
               "code": 657,
               "indent": 1,
               "parameters": [
-                "stateKey = kState_UT睡眠"
+                "stateKey = kState_睡眠"
               ]
             },
             {

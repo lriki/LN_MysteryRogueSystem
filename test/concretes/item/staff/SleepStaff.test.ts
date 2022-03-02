@@ -15,7 +15,7 @@ beforeAll(() => {
 
 test("concretes.item.staff.SleepStaff.basic", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT睡眠").id;
+    const stateId = REData.getState("kState_睡眠").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);

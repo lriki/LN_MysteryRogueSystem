@@ -55,14 +55,14 @@ test("concretes.states.混乱.attack", () => {
 
     // 周りを移動できない Enemy で囲ってみる
     const enemies = [
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
     ];
     REGame.world._transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
     REGame.world._transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);

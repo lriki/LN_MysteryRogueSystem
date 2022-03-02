@@ -7764,6 +7764,214 @@
       ],
       "x": 17,
       "y": 23
+    },
+    {
+      "id": 12,
+      "name": "MR-GetProperty Test",
+      "note": "",
+      "pages": [
+        {
+          "conditions": {
+            "actorId": 1,
+            "actorValid": false,
+            "itemId": 1,
+            "itemValid": false,
+            "selfSwitchCh": "A",
+            "selfSwitchValid": false,
+            "switch1Id": 1,
+            "switch1Valid": false,
+            "switch2Id": 1,
+            "switch2Valid": false,
+            "variableId": 1,
+            "variableValid": true,
+            "variableValue": 0
+          },
+          "directionFix": false,
+          "image": {
+            "tileId": 0,
+            "characterName": "!Crystal",
+            "direction": 2,
+            "pattern": 0,
+            "characterIndex": 2
+          },
+          "list": [
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-GetProperty",
+                "MR-GetProperty",
+                {
+                  "entityKey": "${Player}",
+                  "property": "hp",
+                  "variable": "MR-CommndResult1"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "entityKey = ${Player}"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "property = hp"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "variable = MR-CommndResult1"
+              ]
+            },
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-GetProperty",
+                "MR-GetProperty",
+                {
+                  "entityKey": "${Player}",
+                  "property": "max_hp",
+                  "variable": "MR-CommndResult2"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "entityKey = ${Player}"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "property = max_hp"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "variable = MR-CommndResult2"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "プレイヤーのHP: \\V[4]"
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "プレイヤーの最大HP: \\V[5]"
+              ]
+            },
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-GetProperty",
+                "MR-GetProperty",
+                {
+                  "entityKey": "${Player}",
+                  "property": "State[kState_睡眠]",
+                  "variable": "MR-CommndResult1"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "entityKey = ${Player}"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "property = State[kState_睡眠]"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "variable = MR-CommndResult1"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "プレイヤーの睡眠ステートの有無: \\V[4]"
+              ]
+            },
+            {
+              "code": 0,
+              "indent": 0,
+              "parameters": []
+            }
+          ],
+          "moveFrequency": 3,
+          "moveRoute": {
+            "list": [
+              {
+                "code": 0,
+                "parameters": []
+              }
+            ],
+            "repeat": true,
+            "skippable": false,
+            "wait": false
+          },
+          "moveSpeed": 3,
+          "moveType": 0,
+          "priorityType": 1,
+          "stepAnime": true,
+          "through": false,
+          "trigger": 0,
+          "walkAnime": false
+        }
+      ],
+      "x": 11,
+      "y": 25
     }
   ]
 }

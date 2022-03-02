@@ -132,5 +132,22 @@ export class RMMZHelper {
                 event.start();
             }
         }
-    }}
+    }
+
+    public static setVariable(pattern: string, value: any): void {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) {
+            $gameVariables.setValue(id, value);
+        }
+        else {
+            const index = $dataSystem.variables.findIndex(x => x && x == pattern);
+            if (index >= 0) {
+                $gameVariables.setValue(index, value);
+            }
+            else {
+                throw new Error(`${pattern} not found.`);
+            }
+        }
+    }
+}
 

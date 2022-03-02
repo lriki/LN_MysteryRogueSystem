@@ -627,7 +627,7 @@
     "minTurns": 10,
     "motion": 0,
     "name": "UT睡眠",
-    "note": "<MR-Type: State>\n<MR-Key: kState_UT睡眠>\n<MR-StateGroup: kStateGroup_睡眠系>\n",
+    "note": "<MR-Type: State>\n<MR-Key: kState_睡眠>\n<MR-StateGroup: kStateGroup_睡眠系>\n",
     "overlay": 0,
     "priority": 50,
     "removeAtBattleEnd": false,

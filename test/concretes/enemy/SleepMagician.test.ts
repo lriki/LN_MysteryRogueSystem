@@ -33,7 +33,7 @@ test("concretes.enemies.SleepMagician", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Player は睡眠状態になっている
-    const stateId = REData.getState("kState_UT睡眠").id;
+    const stateId = REData.getState("kState_睡眠").id;
     expect(player1.hasState(stateId)).toBe(true);
 });
 
