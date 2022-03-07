@@ -1439,6 +1439,20 @@ export class RESetup {
         entity.idealParams[REBasics.params.upgradeValue] = 0;
         entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
         entity.identifiedTiming = DIdentifiedTiming.Equip;
+
+        const damage = entity.equipment?.parameters[REBasics.params.def];
+        assert(damage);
+        
+        const emittor = REData.newEmittor(entity.entity.key);
+        emittor.scope.range = DEffectFieldScopeRange.Performer;
+        const effect = new DEffect(entity.entity.key);
+        effect.critical = false;
+        effect.successRate = 100;
+        effect.hitType = DEffectHitType.Physical;
+        const q = new DParameterQualifying(REBasics.params.hp, damage.value.toString(), DParameterEffectApplyType.Damage);
+        effect.parameterQualifyings.push(q);
+        emittor.effectSet.effects.push(effect);
+        entity.addReaction(REBasics.actions.collide, emittor);
     }
 
     private static setupArrowCommon(entity: DEntity): void {
