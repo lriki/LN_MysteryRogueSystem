@@ -114,9 +114,6 @@ export class LEquipmentBehavior extends LBehavior {
                 assert(removed);
             }
         }
-        else {
-            throw new Error("Not Implemented.");
-        }
     }
 
     [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

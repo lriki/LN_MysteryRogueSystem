@@ -13,6 +13,7 @@ import { REData } from "./REData";
 import { assert, tr2 } from "../Common";
 import { DItem } from "./DItem";
 import { DRace } from "./DRace";
+import { RESystem } from "../system/RESystem";
 
 export class RESetup {
 
@@ -1425,6 +1426,11 @@ export class RESetup {
         entity.idealParams[REBasics.params.upgradeValue] = 0;
         entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
         entity.identifiedTiming = DIdentifiedTiming.Equip;
+        
+        // Collide
+        // TODO: 暫定対応。とりあえずダメージを出したい
+        this.setupArrowCommon(entity);
+
     }
 
     private static setupShieldCommon(entity: DEntity): void {
@@ -1433,6 +1439,22 @@ export class RESetup {
         entity.idealParams[REBasics.params.upgradeValue] = 0;
         entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
         entity.identifiedTiming = DIdentifiedTiming.Equip;
+    }
+
+    private static setupArrowCommon(entity: DEntity): void {
+        const emittor = REData.newEmittor(entity.entity.key);
+        emittor.scope.range = DEffectFieldScopeRange.Performer;
+        const effect = new DEffect(entity.entity.key);
+        effect.critical = false;
+        effect.successRate = 100;
+        effect.hitType = DEffectHitType.Physical;
+        // TODO: DB で定義したい
+        const q = new DParameterQualifying(REBasics.params.hp, "a.atk * 4 - b.def * 2", DParameterEffectApplyType.Damage)
+            .withVariance(20);
+        effect.parameterQualifyings.push(q);
+        emittor.effectSet.effects.push(effect);
+        entity.addReaction(REBasics.actions.collide, emittor);
+
     }
 
     private static setupRingCommon(entity: DEntity): void {
@@ -1480,31 +1502,6 @@ export class RESetup {
     private static setupScrollCommon(entity: DEntity): void {
         entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
         entity.identifiedTiming = DIdentifiedTiming.Read;
-    }
-
-    private static setupArrowCommon(entity: DEntity): void {
-        const emittor = REData.newEmittor(entity.entity.key);
-        emittor.scope.range = DEffectFieldScopeRange.Performer;
-        const effect = new DEffect(entity.entity.key);
-        effect.critical = false;
-        effect.successRate = 100;
-        effect.hitType = DEffectHitType.Physical;
-        // const q: DParameterQualifying = {
-        //     parameterId: REBasics.params.hp,
-        //     applyTarget: DParameterApplyTarget.Current,
-        //     elementId: 0,
-        //     formula: "a.atk * 4 - b.def * 2",
-        //     applyType: DParameterEffectApplyType.Damage,
-        //     variance: 20,
-        //     silent: false,
-        // };
-        const q = new DParameterQualifying(REBasics.params.hp, "a.atk * 4 - b.def * 2", DParameterEffectApplyType.Damage)
-            .withVariance(20);
-        effect.parameterQualifyings.push(q);
-        emittor.effectSet.effects.push(effect);
-        //entity.addEmittor(DEffectCause.Hit, emittor);
-        entity.addReaction(REBasics.actions.collide, emittor);
-
     }
 }
 

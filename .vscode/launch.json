@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "ai.CharacterAI.Issue_NS#10"
+                "-t", "effects.CollideEffects.Weapon"
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",
