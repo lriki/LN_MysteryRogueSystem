@@ -264,6 +264,8 @@ export class DEntity {
 
     counterActions: DCounterAction[];
 
+    shortcut: boolean = false;
+
     constructor(id: DEntityId) {
         this.id = id;
         this.prefabId = 0;

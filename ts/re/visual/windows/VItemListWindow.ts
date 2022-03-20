@@ -297,7 +297,7 @@ export class VItemListWindow extends Window_Selectable {
                 this.drawTextEx(desc, nameX, y, itemWidth);
 
                 // 装備していればアイコンを表示する
-                if (this._equipmentUser && this._equipmentUser.isEquipped(entity)) {
+                if (this._equipmentUser && (this._equipmentUser.isEquipped(entity) || this._equipmentUser.isShortcutEquipped(entity))) {
                     this.drawIcon(12, nameX, iconY);
                 }
 

@@ -106,6 +106,7 @@ import { UAction } from "ts/re/usecases/UAction";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { DEffect } from "ts/re/data/DEffect";
+import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 //import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 //import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 
@@ -199,6 +200,11 @@ export class LInventoryBehavior extends LBehavior {
     onRemoveChild(entity: LEntity): void {
         if (this._entities.mutableRemove(x => x.equals(entity.entityId()))) {
             entity.clearParent();
+
+            const equipmentUser = this.ownerEntity().findEntityBehavior(LEquipmentUserBehavior);
+            if (equipmentUser) {
+                equipmentUser.onRemoveItemFromInventory(entity);
+            }
         }
     }
 

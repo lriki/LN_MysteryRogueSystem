@@ -34,6 +34,7 @@ export class VWarehouseDialog extends VDialog {
         const user = this._model.userEntity();
         this.openSubDialog(new SWarehouseStoreDialog(user, this._model.warehouseEntity()), (result: SWarehouseStoreDialog) => {
             //this._model.storeItems(result.resultItems());
+            return true;
         });
 
     }
@@ -43,6 +44,7 @@ export class VWarehouseDialog extends VDialog {
         const user = this._model.userEntity();
         this.openSubDialog(new SWarehouseWithdrawDialog(user, this._model.warehouseEntity()), (result: SWarehouseWithdrawDialog) => {
             this._model.withdrawItems(result.resultItems());
+            return true;
         });
     }
     

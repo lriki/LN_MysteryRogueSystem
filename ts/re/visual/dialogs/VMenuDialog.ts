@@ -46,7 +46,8 @@ export class VMainMenuDialog extends VDialog {
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (inventory) {
             this.openSubDialog(new SItemListDialog(entity, inventory, SItemListMode.Use), d => {
-                if (d.isSubmitted()) this.submit();
+                //if (d.isSubmitted()) this.submit();
+                return false;
             });
         }
     }
@@ -55,7 +56,8 @@ export class VMainMenuDialog extends VDialog {
         const feetEntity = REGame.map.firstFeetEntity(this._model.entity());
         if (feetEntity) {
             this.openSubDialog(new LFeetDialog(feetEntity), d => {
-                if (d.isSubmitted()) this.submit();
+                //if (d.isSubmitted()) this.submit();
+                return false;
             });
         }
         else {

@@ -1,4 +1,4 @@
-import { SDialog } from "ts/re/system/SDialog";
+import { SDialog, SDialogAction } from "ts/re/system/SDialog";
 import { RESystem } from "ts/re/system/RESystem";
 import { REDialogVisualNavigator } from "./REDialogVisual";
 import { SDialogContext } from "ts/re/system/SDialogContext";
@@ -28,8 +28,26 @@ export class VDialog {
 
     // NOTE: maindialog
     //protected openSubDialog(dialog: REDialog, result: LDialogResultCallback) {
-    protected openSubDialog<T extends SDialog>(dialog: T, result: (model: T) => void) {
-        dialog._resultCallbackVisual = result;
+    protected openSubDialog<T extends SDialog>(dialog: T, onResult: (model: T) => boolean) {
+        dialog._resultCallbackVisual = (model: T) => {
+            const handled = onResult(model);
+            if (!handled) {
+                console.log("model.resultAction", model.resultAction);
+                switch (model.resultAction) {
+                    case SDialogAction.Submit:
+                        this.submit();
+                        break;
+                    case SDialogAction.Cancel:
+                        //this.cancel();
+                        break;
+                    case SDialogAction.CloseAllSubDialogs:
+                        if (RESystem.dialogContext.dialogs().length >= 2) {
+                            this.closeAllSubDialogs();
+                        }
+                        break;
+                }
+            }
+        }
         RESystem.dialogContext.open(dialog);
     }
     
@@ -52,6 +70,10 @@ export class VDialog {
         //this._dialogResult = false;
         this._baseModel.cancel();
         //REVisual.manager?._dialogNavigator.pop();
+    }
+
+    protected closeAllSubDialogs() {
+        this._baseModel.closeAllSubDialogs();
     }
 
     //public isSubmitted(): boolean {

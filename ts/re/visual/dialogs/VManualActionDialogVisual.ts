@@ -16,6 +16,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { UName } from "ts/re/usecases/UName";
 import { Helpers } from "ts/re/system/Helpers";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
+import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 
 enum UpdateMode {
     Normal,
@@ -43,6 +44,10 @@ export class VManualActionDialogVisual extends VDialog {
 
     private actionButton(): string {
         return "ok";
+    }
+
+    private shortcutButton(): string {
+        return "pageup";
     }
 
     private dashButton(): string {
@@ -208,6 +213,10 @@ export class VManualActionDialogVisual extends VDialog {
             this.attemptFrontAction(context, entity);
             return;
         }
+        else if (Input.isTriggered(this.shortcutButton())) {
+            this.attemptShortcutAction(context, entity);
+            return;
+        }
         else if (this.isOffDirectionButton()) {
             this._updateMode = UpdateMode.DirSelecting;
             REGame.map.increaseRevision();
@@ -216,11 +225,13 @@ export class VManualActionDialogVisual extends VDialog {
         }
         else if (Input.isTriggered("menu")) {
             SoundManager.playOk();
-            this.openSubDialog(new SMainMenuDialog(entity), d => {
-                if (d.isSubmitted()) {
-                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
-                    this._model.submit();
+            this.openSubDialog(new SMainMenuDialog(entity), (d: SMainMenuDialog) => {
+                console.log("close 1");
+                if (d.isSubmitted) {
+                    //this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
+                    //this._model.submit();
                 }
+                return false;
             });
             return;
         }
@@ -249,16 +260,21 @@ export class VManualActionDialogVisual extends VDialog {
             this.endDirectionSelecting();
             return;
         }
+        else if (Input.isTriggered(this.shortcutButton())) {
+            this.attemptShortcutAction(context, entity);
+            return;
+        }
         else if (this.isOffDirectionButton()) {
             this.endDirectionSelecting();
         }
         else if (Input.isTriggered("menu")) {
             this.endDirectionSelecting();
-            this.openSubDialog(new SMainMenuDialog(entity), d => {
-                if (d.isSubmitted()) {
-                    this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
-                    this._model.submit();
+            this.openSubDialog(new SMainMenuDialog(entity), (d: SMainMenuDialog) => {
+                if (d.isSubmitted) {
+                    //this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
+                    //this._model.submit();
                 }
+                return false;
             });
             return;
         }
@@ -353,6 +369,19 @@ export class VManualActionDialogVisual extends VDialog {
         // [通常攻撃] スキル発動
         context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction(LActionTokenType.Major));
         this._model.submit();
+        
+        return true;
+    }
+
+    private attemptShortcutAction(context: SDialogContext, entity: LEntity): boolean {
+
+        const equipmentUser = entity.getEntityBehavior(LEquipmentUserBehavior);
+        const item = equipmentUser.shortcutItem;
+        if (item) {
+            const activity1 = LActivity.makePrimaryUse(entity, item).withConsumeAction();
+            context.postActivity(activity1);
+            this._model.submit();
+        }
         
         return true;
     }

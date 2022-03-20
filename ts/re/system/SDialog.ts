@@ -1,12 +1,15 @@
 import { LFloorId } from "ts/re/objects/LFloorId";
+import { assert } from "../Common";
 import { LEntity } from "../objects/LEntity";
 import { RESystem } from "./RESystem";
 import { SDialogContext } from "./SDialogContext";
 
 
 export enum SDialogAction {
+    None,
     Submit,
     Cancel,
+    CloseAllSubDialogs,
 }
 
 export interface SDialogResult {
@@ -52,7 +55,7 @@ export class SDialog {
     
     public constructor() {
         this._dialogResult = {
-            action: SDialogAction.Cancel,
+            action: SDialogAction.None,
             selectedItems: [],
         };
     }
@@ -70,21 +73,25 @@ export class SDialog {
     }
 
     public submit(): void {
+        assert(this._dialogResult.action == SDialogAction.None);
         this._dialogResult.action = SDialogAction.Submit;
-
-        RESystem.dialogContext._closeDialog();
-        
-        if (this._resultCallbackVisual) {
-            this._resultCallbackVisual(this);
-        }
-        if (this._resultCallback) {
-            this._resultCallback(this);
-        }
+        this.onClose();
     }
 
     public cancel(): void {
+        assert(this._dialogResult.action == SDialogAction.None);
         this._dialogResult.action = SDialogAction.Cancel;
+        this.onClose();
+    }
+    
+    public closeAllSubDialogs(): void {
+        assert(RESystem.dialogContext.dialogs().length >= 2);
+        assert(this._dialogResult.action == SDialogAction.None);
+        this._dialogResult.action = SDialogAction.CloseAllSubDialogs;
+        this.onClose();
+    }
 
+    private onClose(): void {
         RESystem.dialogContext._closeDialog();
         
         if (this._resultCallbackVisual) {
@@ -95,15 +102,19 @@ export class SDialog {
         }
     }
 
-    public result(): SDialogResult {
+    public get dialogResult(): SDialogResult {
         return this._dialogResult;
     }
 
-    public isSubmitted(): boolean {
+    public get resultAction(): SDialogAction {
+        return this._dialogResult.action;
+    }
+
+    public get isSubmitted(): boolean {
         return this._dialogResult.action == SDialogAction.Submit;
     }
 
-    public isCanceled(): boolean {
-        return this._dialogResult.action == SDialogAction.Cancel;
-    }
+    // public isCanceled(): boolean {
+    //     return this._dialogResult.action == SDialogAction.Cancel;
+    // }
 }

@@ -117,13 +117,16 @@ export class VItemListDialog extends VItemListDialogBase {
             // 対象アイテムの選択が必要
             
             const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
-            this.openSubDialog(model, (result: any) => {
-                const item = model.selectedEntity();
-                assert(item);
-                const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
-                activity.setObjects2([item]);
-                RESystem.dialogContext.postActivity(activity);
-                this.submit();
+            this.openSubDialog(model, (result: SItemListDialog) => {
+                if (result.isSubmitted) {
+                    const item = model.selectedEntity();
+                    assert(item);
+                    const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
+                    activity.setObjects2([item]);
+                    RESystem.dialogContext.postActivity(activity);
+                    //this.submit();
+                }
+                return false;
             });
         }
         else {
@@ -133,23 +136,39 @@ export class VItemListDialog extends VItemListDialogBase {
         }
     }
 
+    private handleShortcutSet(): void {
+        const itemEntity = this.itemListWindow.selectedItem();
+        const equipmentUser = this._model.entity().getEntityBehavior(LEquipmentUserBehavior);
+        equipmentUser.equipOnShortcut(RESystem.commandContext, itemEntity);
+        this.closeAllSubDialogs();
+    }
+
+    private handleShortcutUnset(): void {
+        const itemEntity = this.itemListWindow.selectedItem();
+        const equipmentUser = this._model.entity().getEntityBehavior(LEquipmentUserBehavior);
+        equipmentUser.equipOffShortcut(RESystem.commandContext, itemEntity);
+        this.closeAllSubDialogs();
+    }
+
     private handlePeek(): void {
         const itemEntity = this.itemListWindow.selectedItem();
         const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SItemListDialog(this._model.entity(), inventory, SItemListMode.Selection), (result: any) => {
-            this.submit();
+        this.openSubDialog(new SItemListDialog(this._model.entity(), inventory, SItemListMode.Selection), (result: SItemListDialog) => {
+            //this.submit();
+            return false;
         });
     }
 
     private handlePutIn(): void {
         const storage = this.itemListWindow.selectedItem();
         const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
-        this.openSubDialog(model, (result: any) => {
+        this.openSubDialog(model, (result: SItemListDialog) => {
             const item = model.selectedEntity();
             assert(item);
             const activity = LActivity.makePutIn(this._model.entity(), storage, item);
             RESystem.dialogContext.postActivity(activity);
             this.submit();
+            return false;
         });
     }
 
@@ -202,6 +221,19 @@ export class VItemListDialog extends VItemListDialogBase {
             if (itemEntity.findEntityBehavior(LStorageBehavior)) {
                 window.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
                 window.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePutIn());
+            }
+
+            {
+                if (itemEntity.data().shortcut) {
+                    const equipments = actorEntity.getEntityBehavior(LEquipmentUserBehavior);
+                    const shorcutItem = equipments.shortcutItem;
+                    if (shorcutItem && shorcutItem == itemEntity) {
+                        window.addSystemCommand(tr2("はずす"), "UnsetShortcutSet", x => this.handleShortcutUnset());
+                    }
+                    else {
+                        window.addSystemCommand(tr2("セット"), "SetShortcutSet", x => this.handleShortcutSet());
+                    }
+                }
             }
         }
 

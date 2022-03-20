@@ -1456,6 +1456,7 @@ export class RESetup {
     }
 
     private static setupArrowCommon(entity: DEntity): void {
+        entity.shortcut = true;
         const emittor = REData.newEmittor(entity.entity.key);
         emittor.scope.range = DEffectFieldScopeRange.Performer;
         const effect = new DEffect(entity.entity.key);

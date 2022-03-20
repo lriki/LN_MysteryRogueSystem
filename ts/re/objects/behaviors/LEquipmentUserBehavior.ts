@@ -71,6 +71,21 @@ NOTE:
         return this._slots.findIndex(part => part.itemEntityId.equals(entityId)) >= 0;
     }
 
+    public isShortcutEquipped(item: LEntity): boolean {
+        return this._shortcutItemEntityId.equals(item.entityId());
+    }
+
+    // public get hasShortcut(): boolean {
+    //     return this._shortcutItemEntityId.hasAny();
+    // }
+
+    public get shortcutItem(): LEntity | undefined {
+        if (this._shortcutItemEntityId.hasAny()) {
+            return REGame.world.entity(this._shortcutItemEntityId);
+        }
+        return undefined;
+    }
+
     public equippedItemEntities(): LEntity[] {
         const result: LEntity[] = [];
         for (const part of this._slots) {
@@ -276,16 +291,22 @@ NOTE:
         return false;
     }
 
-    private equipOnShortcut(cctx: SCommandContext, item: LEntity): void {
+    public equipOnShortcut(cctx: SCommandContext, item: LEntity): void {
         this._shortcutItemEntityId = item.entityId();
         SSoundManager.playEquip();
         cctx.postMessage(tr2("%1 を装備した。").format(UName.makeNameAsItem(item)));
     }
 
-    private equipOffShortcut(cctx: SCommandContext, itemEntity: LEntity): void {
+    public equipOffShortcut(cctx: SCommandContext, itemEntity: LEntity): void {
         if (this._shortcutItemEntityId.equals(itemEntity.entityId())) {
             SSoundManager.playEquip();
             cctx.postMessage(tr2("%1 をはずした。").format(UName.makeNameAsItem(itemEntity)));
+            this._shortcutItemEntityId = LEntityId.makeEmpty();
+        }
+    }
+
+    public onRemoveItemFromInventory(item: LEntity): void {
+        if (item.entityId().equals(this._shortcutItemEntityId)) {
             this._shortcutItemEntityId = LEntityId.makeEmpty();
         }
     }
