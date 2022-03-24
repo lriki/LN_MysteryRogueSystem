@@ -106,9 +106,9 @@ import { UAction } from "ts/re/usecases/UAction";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { DEffect } from "ts/re/data/DEffect";
-import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
-//import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
-//import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
+import { REBasics } from "ts/re/data/REBasics";
+import { RESystem } from "ts/re/system/RESystem";
+import { ItemRemovedFromInventoryArgs } from "ts/re/data/predefineds/DBasicEvents";
 
 export class LInventoryBehavior extends LBehavior {
     _entities: LEntityId[] = [];
@@ -201,10 +201,11 @@ export class LInventoryBehavior extends LBehavior {
         if (this._entities.mutableRemove(x => x.equals(entity.entityId()))) {
             entity.clearParent();
 
-            const equipmentUser = this.ownerEntity().findEntityBehavior(LEquipmentUserBehavior);
-            if (equipmentUser) {
-                equipmentUser.onRemoveItemFromInventory(entity);
-            }
+            
+            const args: ItemRemovedFromInventoryArgs = {
+                item: entity,
+            };
+            REGame.eventServer.publish(RESystem.commandContext, REBasics.events.itemRemovedFromInventory, args);
         }
     }
 

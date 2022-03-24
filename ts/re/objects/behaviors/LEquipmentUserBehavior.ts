@@ -11,9 +11,6 @@ import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
-import { LItemBehavior } from "./LItemBehavior";
-import { LActivity } from "../activities/LActivity";
 import { DParameterId } from "ts/re/data/DParameter";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
@@ -23,6 +20,8 @@ import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { UName } from "ts/re/usecases/UName";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { DSubComponentEffectTargetKey } from "ts/re/data/DCommon";
+import { LEventResult } from "../LEventServer";
+import { DEventId, ItemRemovedFromInventoryArgs } from "ts/re/data/predefineds/DBasicEvents";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -60,10 +59,25 @@ NOTE:
         this._revisitonNumber = 0;
     }
 
+    onAttached(self: LEntity): void {
+        REGame.eventServer.subscribe(REBasics.events.itemRemovedFromInventory, this);
+    }
+
+    onDetached(self: LEntity): void {
+        REGame.eventServer.unsubscribe(REBasics.events.itemRemovedFromInventory, this);
+    }
+    
+    onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
+        if (eventId == REBasics.events.itemRemovedFromInventory) {
+            this.onRemoveItemFromInventory((args as ItemRemovedFromInventoryArgs).item);
+        }
+        return LEventResult.Pass;
+    }
+
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEquipmentUserBehavior);
         throw new Error("Not implemented."); // TODO: コピーされたインベントリから参照しないとダメでは？
-        return b
+        return b;
     }
 
     public isEquipped(item: LEntity): boolean {

@@ -25,6 +25,9 @@ export interface SkillEmittedArgs {
     skillId: DSkillId;  // Skill ではない場合は 0.
 }
 
+export interface ItemRemovedFromInventoryArgs {
+    item: LEntity;
+}
 
 // TODO: symbol や string にしたほうがいいかも。
 export interface DBasicEvents {
@@ -44,5 +47,7 @@ export interface DBasicEvents {
      * 発動した場合はターゲットの有無・命中有無にかかわらず、このイベントが発生する。
      */
     skillEmitted: DEventId, // SkillEmittedArgs
+
+    itemRemovedFromInventory: DEventId, // ItemRemovedFromInventoryArgs
 }
 

@@ -66,6 +66,7 @@ export class REDataManager
                 prePut: 5,
                 effectReacted: 6,
                 skillEmitted: 7,
+                itemRemovedFromInventory: 8,
             }
         }
 
