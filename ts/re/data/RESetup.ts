@@ -138,18 +138,21 @@ export class RESetup {
                 break;
             case "kEntity_ウッドアロー_A":
                 this.setupArrowCommon(entity);
+                entity.shortcut = true;
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
                 break;
             case "kEntity_アイアンアロー_A":
                 this.setupArrowCommon(entity);
+                entity.shortcut = true;
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
                 break;
             case "kEntity_シルバーアロー_A":
                 this.setupArrowCommon(entity);
+                entity.shortcut = true;
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.selfTraits.push({code: REBasics.traits.PenetrationItem, dataId: 0, value: 0});
@@ -157,6 +160,7 @@ export class RESetup {
                 break;
             case "kEntity_毒矢_A":
                 this.setupArrowCommon(entity);
+                entity.shortcut = true;
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
@@ -1456,7 +1460,6 @@ export class RESetup {
     }
 
     private static setupArrowCommon(entity: DEntity): void {
-        entity.shortcut = true;
         const emittor = REData.newEmittor(entity.entity.key);
         emittor.scope.range = DEffectFieldScopeRange.Performer;
         const effect = new DEffect(entity.entity.key);
