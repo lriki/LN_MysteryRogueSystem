@@ -21,12 +21,12 @@ test("concretes.enemy.ItemThief.Basic", () => {
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
-    actor1.addState(TestEnv.StateId_CertainDirectAttack);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
 
     // Item1作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     inventory1.addEntity(item1);
     
     // enemy1
@@ -39,7 +39,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy の目の前へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction(LActionTokenType.Minor));
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction(LActionTokenType.Minor));
     RESystem.dialogContext.activeDialog().submit();
     
     REGame.world.random().resetSeed(9);     // 乱数調整
@@ -58,7 +58,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -76,7 +76,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
@@ -97,7 +97,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -109,7 +109,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     enemy1.dir = 6; // TODO: 今はAIにバグがあるので
@@ -126,8 +126,8 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
     // item2
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
@@ -151,7 +151,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -163,7 +163,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 置く
-    RESystem.dialogContext.postActivity(LActivity.makePut(actor1, item2).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makePut(player1, item2).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -178,8 +178,8 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 10);
-    actor1.addState(TestEnv.StateId_CertainDirectAttack);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
@@ -191,7 +191,7 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -202,3 +202,37 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     assert(item);
     expect(!!item.findEntityBehavior(LItemBehavior)).toBe(true);
 });
+
+test("concretes.enemy.ItemThief.Equipment", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+
+    // 武器 入手
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
+    inventory1.addEntity(weapon1);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [装備]
+    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    REGame.world.random().resetSeed(9);     // 乱数調整
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // Player のインベントリにあったアイテムが盗まれ、Enemy のインベントリに移動している
+    expect(inventory1.entities().length).toBe(1);
+    expect(inventory2.entities().length).toBe(0);
+    expect(inventory1.contains(weapon1)).toBeTruthy();
+})

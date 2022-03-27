@@ -2,6 +2,7 @@ import { tr2 } from "ts/re/Common";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
 import { REBasics } from "ts/re/data/REBasics";
+import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
 import { LItemThiefBehavior } from "ts/re/objects/behaviors/LItemThiefBehavior";
@@ -19,6 +20,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 export class SItemStealSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+        result.makeSuccess();
 
         // TODO: これだとアイテム化けに対応できない
         //if (target.findEntityBehavior(LItemBehavior)) {
@@ -50,7 +52,14 @@ export class SItemStealSpecialEffect extends SSpecialEffect {
         const inventory = target.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return undefined;
         
-        const items = inventory.entities();
+        let items = inventory.entities();
+        if (items.length == 0) return undefined;
+
+        // 装備中のアイテムは除外
+        const equipmentUser = target.findEntityBehavior(LEquipmentUserBehavior);
+        if (equipmentUser) {
+            items = items.filter(x => !equipmentUser.isEquipped(x) && !equipmentUser.isShortcutEquipped(x));
+        }
         if (items.length == 0) return undefined;
 
         const item = rand.select(items);

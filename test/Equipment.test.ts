@@ -21,15 +21,19 @@ test("Equipment.EquipOnOff", () => {
     // player1 配置
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10); 
 
+    // Enemy
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
+
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
-    // player を右へ移動\
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();    // 行動確定
+    // // player を右へ移動\
+    // RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+    // RESystem.dialogContext.activeDialog().submit();    // 行動確定
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    // RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
@@ -59,6 +63,8 @@ test("Equipment.EquipOnOff", () => {
     expect(inventory.contains(shield1)).toBe(true);
     expect(weapon1.parentObject()).toBe(inventory);
     expect(shield1.parentObject()).toBe(inventory);
+    
+    expect(enemy1.x).toBe(20);  // Enemy にターンが回っている
     
     //----------------------------------------------------------------------------------------------------
 
