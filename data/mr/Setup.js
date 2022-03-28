@@ -24,6 +24,15 @@ db.entities = {
     },
     
 
+
+    // "kEntity_クロワッサン_A": {
+    //     reactions: [
+    //         { action: "Eat", emittor: "self" },
+    //     ]
+
+    // },
+
+
     // "kEntity_アイアンシールド_A": {
     //     // params: {
     //     //     "grade": "0",   // 初期値。"2-5" とかにすると、その範囲をランダムに設定

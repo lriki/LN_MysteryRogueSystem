@@ -768,6 +768,58 @@ export class RESetup {
                 effect.rmmzAnimationId = 65;
                 break;
             }
+
+
+            case "kEntity_腐食したフランスパン_A": {
+                const emittor = entity.mainEmittor();
+                const effect = new DEffect(entity.entity.key);
+
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "10000", DParameterEffectApplyType.Recover)
+                    .withSilent());
+                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.pow, "1", DParameterEffectApplyType.Damage));
+                
+                emittor.effectSet.effects.push(effect);
+                entity.addReaction(REBasics.actions.EatActionId, emittor);
+                break;
+            }
+            case "kEntity_クロワッサン_A": {
+                const emittor = entity.mainEmittor();
+                const effect = new DEffect(entity.entity.key);
+
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "5000", DParameterEffectApplyType.Recover)
+                    .withSilent());
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "200", DParameterEffectApplyType.Recover)
+                    .withApplyTarget(DParameterApplyTarget.Maximum)
+                    .withConditionFormula("a.fp > a.max_fp-100")
+                    .withSilent());
+
+                emittor.effectSet.effects.push(effect);
+                entity.addReaction(REBasics.actions.EatActionId, emittor);
+                break;
+            }
+            case "kEntity_フランスパン_A": {
+                const emittor = entity.mainEmittor();
+                const effect = new DEffect(entity.entity.key);
+
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "10000", DParameterEffectApplyType.Recover)
+                    .withSilent());
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "500", DParameterEffectApplyType.Recover)
+                    .withApplyTarget(DParameterApplyTarget.Maximum)
+                    .withConditionFormula("a.fp > a.max_fp-100")
+                    .withSilent());
+
+                emittor.effectSet.effects.push(effect);
+                entity.addReaction(REBasics.actions.EatActionId, emittor);
+                break;
+            }
+
+
             case "kEntity_眠りガス_A": {
                 const emittor = entity.mainEmittor();
                 emittor.selfAnimationId = 35;

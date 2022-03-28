@@ -1,9 +1,30 @@
 import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
+import { RESystem } from "ts/re/system/RESystem";
 import { UName } from "ts/re/usecases/UName";
 
 export class TestUtils {
+    public static submitActivity(activity: LActivity) {
+        RESystem.dialogContext.postActivity(activity);
+        RESystem.dialogContext.activeDialog().submit();
+    }
+
+    public static testCommonFood(item: LEntity) {
+        const data = item.data();
+
+        // [食べる] ができる？
+        expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBeTruthy();
+
+        // [食べる] に対応する Emittor がある？
+        const reaction = data.getReaction(REBasics.actions.EatActionId);
+        assert(!!reaction.hasEmittor());
+
+        // 食べた時に FP を回復する効果がある？
+        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp)));
+    }
+
     public static testCommonGrassBegin(actor: LEntity, item: LEntity) {
         const name = UName.makeNameAsItem(item);
         const data = item.data();
