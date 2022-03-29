@@ -85,6 +85,12 @@ test("concretes.item.food.CorrodedFood", () => {
     inventory1.addEntity(item1);
     inventory1.addEntity(item2);
     
+    // Enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1Pow1 = enemy1.actualParam(REBasics.params.pow);
+
     // おなかを減らしておく
     player1.setActualParam(REBasics.params.fp, 2000);    // 20%
 
@@ -93,7 +99,6 @@ test("concretes.item.food.CorrodedFood", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
-
 
     // [食べる]
     TestUtils.submitActivity(LActivity.makeEat(player1, item1).withConsumeAction());
