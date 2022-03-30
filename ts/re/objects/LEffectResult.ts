@@ -42,13 +42,14 @@ export class LParamEffectResult {
     }
 
     public getValue(entity: LEntity, recover: boolean): number {
-        if (REData.parameters[this.paramId].messageValueSource == DParamMessageValueSource.Relative) {
+        const paramData = REData.parameters[this.paramId];
+        if (paramData.messageValueSource == DParamMessageValueSource.Relative) {
             if (recover)
                 return -this.damage;
             else
                 return this.damage;
         }
-        else if (REData.parameters[this.paramId].messageValueSource == DParamMessageValueSource.Absolute) {
+        else if (paramData.messageValueSource == DParamMessageValueSource.Absolute) {
             return entity.actualParam(this.paramId);
         }
         else {
@@ -356,7 +357,7 @@ export class LEffectResult {
         let fmt;
         if (damage > 0 && paramResult.drain) {
             fmt = isFliendly ? DTextManager.actorDrain : DTextManager.enemyDrain;
-            return fmt.format(entityName, paramData.displayName, damage);
+            return fmt.format(entityName, paramData.displayName, paramData.makeDisplayValue(damage));
         }
 
         const conditionalMessage = this.makeDamageMessage(entity, paramResult, entityName, paramData, isFliendly);
@@ -384,9 +385,10 @@ export class LEffectResult {
         const paramName = paramResult.paramDisplayName();
         const damage = paramResult.getValue(entity, false);
 
-        if (paramResult.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
+        if (damage < 0 &&
+            paramResult.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
             // TODO: とりいそぎ。最大値の変化は "回復した" ではなく "増えた" にしたい。
-            return DTextManager.actorGain.format(entityName, paramName, damage);
+            return DTextManager.actorGain.format(entityName, paramName, param.makeDisplayValue(-damage));
         }
         
         const messageSet = (isFliendly) ? param.friendlySideMessages : param.opponentSideMessages;
@@ -397,7 +399,7 @@ export class LEffectResult {
         for (const message of messageSet) {
             const r = eval(message.condition);
             if (r) {
-                return message.message.format(entityName, paramName, damage);
+                return message.message.format(entityName, paramName, param.makeDisplayValue(damage));
             }
         }
         return undefined;

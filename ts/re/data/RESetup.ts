@@ -786,11 +786,13 @@ export class RESetup {
                 const emittor = entity.mainEmittor();
                 const effect = new DEffect(entity.entity.key);
 
-                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.fp, "5000", DParameterEffectApplyType.Recover));
                 effect.parameterQualifyings.push(
                     new DParameterQualifying(REBasics.params.fp, "200", DParameterEffectApplyType.Recover)
                     .withApplyTarget(DParameterApplyTarget.Maximum)
                     .withConditionFormula("a.fp > a.max_fp-100"));
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "5000", DParameterEffectApplyType.Recover)
+                    .withFallback());
 
                 emittor.effectSet.effects.push(effect);
                 entity.addReaction(REBasics.actions.EatActionId, emittor);
@@ -800,11 +802,13 @@ export class RESetup {
                 const emittor = entity.mainEmittor();
                 const effect = new DEffect(entity.entity.key);
 
-                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.fp, "10000", DParameterEffectApplyType.Recover));
                 effect.parameterQualifyings.push(
                     new DParameterQualifying(REBasics.params.fp, "500", DParameterEffectApplyType.Recover)
                     .withApplyTarget(DParameterApplyTarget.Maximum)
                     .withConditionFormula("a.fp > a.max_fp-100"));
+                effect.parameterQualifyings.push(
+                    new DParameterQualifying(REBasics.params.fp, "10000", DParameterEffectApplyType.Recover)
+                    .withFallback());
 
                 emittor.effectSet.effects.push(effect);
                 entity.addReaction(REBasics.actions.EatActionId, emittor);

@@ -1,10 +1,12 @@
 import { assert } from "ts/re/Common";
 import { DTextManager } from "ts/re/data/DTextManager";
 import { REBasics } from "ts/re/data/REBasics";
+import { REData } from "ts/re/data/REData";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
+import { REGame } from "ts/re/objects/REGame";
 import { UName } from "ts/re/usecases/UName";
 import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
 import { easing } from "../animation/VEasing";
@@ -246,8 +248,9 @@ export class VMainStatusWindow extends Window_Base {
         }
         
         // 満腹度
-        const cfp = Math.ceil(this._entity.actualParam(REBasics.params.fp) / 100);
-        const mfp = Math.ceil(this._entity.idealParam(REBasics.params.fp) / 100);
+        const fpData = REData.parameters[REBasics.params.fp];
+        const cfp = Math.ceil(fpData.makeDisplayValue(this._entity.actualParam(REBasics.params.fp)));
+        const mfp = Math.ceil(fpData.makeDisplayValue(this._entity.idealParam(REBasics.params.fp)));
         this._fpValue.setText(`${cfp}/${mfp}`);
 
         // ちから

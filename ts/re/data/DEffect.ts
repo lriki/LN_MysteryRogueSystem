@@ -49,6 +49,7 @@ export class DParameterQualifying {
     silent: boolean;
 
     conditionFormula?: string | undefined;
+    fallback: boolean = false;
 
     alliesSideGainMessage?: string | undefined;
     alliesSideLossMessage?: string | undefined;
@@ -91,6 +92,11 @@ export class DParameterQualifying {
 
     public withConditionFormula(value: string): this {
         this.conditionFormula = value;
+        return this;
+    }
+
+    public withFallback(value: boolean = true): this {
+        this.fallback = value;
         return this;
     }
 

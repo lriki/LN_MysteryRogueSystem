@@ -48,7 +48,7 @@ test("concretes.item.food.LittleFood", () => {
     expect(player1.actualParam(REBasics.params.fp)).toBe(6990);
 
     const message = REGame.messageHistory;
-    expect(message.includesText("おなかがふくれた。")).toBeTruthy();
+    expect(message.countIncludesText("おなかがふくれた。")).toBe(1);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -66,7 +66,8 @@ test("concretes.item.food.LittleFood", () => {
     const fp2 = player1.actualParam(REBasics.params.fp);
     expect(maxFp2).toBeGreaterThan(maxFp1);
     expect(fp2).toBe(maxFp2 - 10);
-    expect(message.includesText("おなかがいっぱいになった。")).toBeTruthy();
+    expect(message.countIncludesText("おなかがふくれた。")).toBe(1);    // 前のメッセージ履歴
+    expect(message.countIncludesText("最大満腹度が 2 増えた")).toBe(1);
 });
 
 
@@ -110,29 +111,13 @@ test("concretes.item.food.CorrodedFood", () => {
     // 食べられたので消滅済み
     expect(item1.isDestroyed()).toBeTruthy();
 
+    const message = REGame.messageHistory;
     const hp2 = player1.actualParam(REBasics.params.hp);
     const pow2 = player1.actualParam(REBasics.params.pow);
     expect(player1.actualParam(REBasics.params.fp)).toBeGreaterThan(2000);// FP が回復しているはず。
     expect(hp2).toBeLessThan(hp1);          // ダメージをうける
     expect(pow2).toBeLessThan(pow1);        // ちからが減る
-    //----------------------------------------------------------------------------------------------------
-
-    // // 満腹にする
-    // const maxFp1 = player1.idealParam(REBasics.params.fp);
-    // player1.setActualParam(REBasics.params.fp, maxFp1);
-
-    // // [食べる]
-    // TestUtils.submitActivity(LActivity.makeEat(player1, item2).withConsumeAction());
-    
-    // RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
-
-    // const m = REGame.messageHistory;
-
-    // // 最大値も含め、FPが増えている
-    // const maxFp2 = player1.idealParam(REBasics.params.fp);
-    // const fp2 = player1.actualParam(REBasics.params.fp);
-    // expect(maxFp2).toBeGreaterThan(maxFp1);
-    // expect(fp2).toBe(maxFp2 - 10);
+    expect(message.includesText("おなかがいっぱいになった。")).toBeTruthy();
 });
 
 

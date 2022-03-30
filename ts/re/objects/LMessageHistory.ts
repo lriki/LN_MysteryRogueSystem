@@ -48,5 +48,8 @@ export class LMessageHistory {
     public includesText(text: string): boolean {
         return !!this._texts.find(x => x.includes(text));
     }
+    public countIncludesText(text: string): number {
+        return this._texts.count(x => x.includes(text));
+    }
 }
 

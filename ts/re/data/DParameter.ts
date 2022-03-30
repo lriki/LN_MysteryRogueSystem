@@ -77,6 +77,8 @@ export class REData_Parameter
     minValue: number;
     maxValue: number;
 
+    magnification: number = 1;
+
 
     addBuffCoe: number;
     mulBuffCore: number;
@@ -98,6 +100,7 @@ export class REData_Parameter
     
     friendlySideMessages: DParamMessage[] = [];
     opponentSideMessages: DParamMessage[] = [];
+
 
     public static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
         const p = new REData_Parameter(id, code);
@@ -128,7 +131,9 @@ export class REData_Parameter
         // this.targetDamageRecovery = DTextManager.enemyRecovery;
     }
 
-
+    public makeDisplayValue(value: number): number {
+        return value * this.magnification;
+    }
 
 }
 

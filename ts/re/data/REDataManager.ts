@@ -121,6 +121,7 @@ export class REDataManager
         assert(REData.parameters[REBasics.params.agi].battlerParamId === 6);
         assert(REData.parameters[REBasics.params.luk].battlerParamId === 7);
 
+        REData.parameters[REBasics.params.fp].magnification = 0.01;
         REData.parameters[REBasics.params.fp].friendlySideMessages = [
             { condition: "value >= max", message: tr("%1はおなかがいっぱいになった。") },
             { condition: "value < max", message: tr("%1はおなかがふくれた。") }

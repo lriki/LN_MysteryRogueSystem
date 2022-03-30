@@ -334,12 +334,19 @@ export class SParameterEffect {
         return this.applyType == SParameterEffectApplyType.Recover;
     }
 
-    public isValid(): boolean {
+    public  get isValid(): boolean {
         return this._valid;
     }
 
+    public set isValid(value: boolean) {
+        this._valid = value;
+    }
+
     public evalConditions(target: LEntity): void {
-        if (target.params().hasParam(this.paramId)) {
+        if (this.qualifying.fallback) {
+            this._valid = false;
+        }
+        else if (target.params().hasParam(this.paramId)) {
             this._valid = this.meetsConditions(target);
         }
         else {
@@ -347,7 +354,7 @@ export class SParameterEffect {
         }
     }
 
-    public meetsConditions(target: LEntity): boolean {
+    private meetsConditions(target: LEntity): boolean {
         if (this.qualifying.conditionFormula) {
             const a = RESystem.formulaOperandA as any;
             a.wrap(target);
@@ -454,8 +461,18 @@ export class SEffectApplyer {
             }
         }
         
+        // 条件に一致する or 条件を持たない Param 効果をアクティブにする
+        let fallback = true;
         for (const paramEffect of modifier.parameterEffects2()) {
             paramEffect.evalConditions(target);
+            if (paramEffect.isValid) {
+                fallback = false;
+            }
+        }
+        if (fallback) {
+            // アクティブなものが１つも無いときは fallback を実行
+            const p = modifier.parameterEffects2().find(x => x.qualifying.fallback);
+            if (p) p.isValid = true;
         }
     
         // Damage
@@ -463,7 +480,7 @@ export class SEffectApplyer {
             //const pe = modifier.parameterEffect(i);
         for (const pe of modifier.parameterEffects2())
             if (pe && pe.applyType != SParameterEffectApplyType.None) {
-                if (pe.isValid()) {
+                if (pe.isValid) {
                     const value = this.makeDamageValue(pe, target, result.critical);
                     this.executeDamage(pe, target, value, result);
                 }
