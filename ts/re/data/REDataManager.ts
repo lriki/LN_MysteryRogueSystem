@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { RESystem } from "ts/re/system/RESystem";
-import { assert, RESerializable, tr2 } from "../Common";
+import { assert, RESerializable, tr, tr2 } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
 import { REBasics } from "./REBasics";
 import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState";
@@ -121,6 +121,10 @@ export class REDataManager
         assert(REData.parameters[REBasics.params.agi].battlerParamId === 6);
         assert(REData.parameters[REBasics.params.luk].battlerParamId === 7);
 
+        REData.parameters[REBasics.params.fp].friendlySideMessages = [
+            { condition: "value >= max", message: tr("%1はおなかがいっぱいになった。") },
+            { condition: "value < max", message: tr("%1はおなかがふくれた。") }
+        ];
         REData.parameters[REBasics.params.pow].selfGainMessage = DTextManager.actorGain;
         REData.parameters[REBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
         REData.parameters[REBasics.params.pow].targetGainMessage = DTextManager.actorGain;

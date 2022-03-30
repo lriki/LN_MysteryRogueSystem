@@ -26,10 +26,6 @@ export enum DParameterApplyTarget {
     Maximum,
 }
 
-export interface DParamMessage {
-    condition: string;  // value=新しい値, old=古い値, min=最小値, max=最大値
-    message: string;
-}
 
 export class DParameterQualifying {
     _parameterId: DParameterId;
@@ -54,17 +50,10 @@ export class DParameterQualifying {
 
     conditionFormula?: string | undefined;
 
-    /** @deprecated */
     alliesSideGainMessage?: string | undefined;
-    /** @deprecated */
     alliesSideLossMessage?: string | undefined;
-    /** @deprecated */
     opponentGainMessage?: string | undefined;
-    /** @deprecated */
     opponentLossMessage?: string | undefined;
-
-    friendlySideMessages: DParamMessage[] = [];
-    opponentSideMessages: DParamMessage[] = [];
     
 
 

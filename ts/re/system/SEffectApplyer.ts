@@ -488,6 +488,11 @@ export class SEffectApplyer {
         this.applyItemUserEffect(target);
         
         target.refreshConditions();
+
+        // 効果適用後の値は refresh() 後でとらないと、min-max clamp されていない。
+        for (const paramResult of result.paramEffects2) {
+            paramResult.newValue = target.actualParam(paramResult.paramId);
+        }
     }
 
     
@@ -680,23 +685,16 @@ export class SEffectApplyer {
 
         //b.gainActualParam(DBasics.params.hp, -value);
 
-
+        const oldValue = target.actualParam(paramEffect.paramId);
 
         if (value === 0) {
             result.critical = false;
         }
 
         if (paramEffect.isDrain) {
-            value = Math.min(target.actualParam(paramEffect.paramId), value);
+            value = Math.min(oldValue, value);
         }
         result.makeSuccess();
-
-        if (!paramEffect.qualifying.silent) {
-            const paramResult = new LParamEffectResult(paramEffect.paramId, paramEffect.qualifying);
-            paramResult.damage = value;
-            paramResult.drain = paramEffect.isDrain;
-            result.paramEffects2.push(paramResult);
-        }
 
         if (paramEffect.qualifying.applyTarget == DParameterApplyTarget.Current) {
 
@@ -712,6 +710,15 @@ export class SEffectApplyer {
         }
         else {
             throw new Error("Not implemented.");
+        }
+
+        if (!paramEffect.qualifying.silent) {
+            const paramResult = new LParamEffectResult(paramEffect.paramId, paramEffect.qualifying);
+            paramResult.damage = value;
+            paramResult.oldValue = oldValue;
+            //paramResult.newValue = target.actualParam(paramEffect.paramId);
+            paramResult.drain = paramEffect.isDrain;
+            result.paramEffects2.push(paramResult);
         }
 
 

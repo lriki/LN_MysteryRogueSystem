@@ -9,6 +9,11 @@ export enum DParamMessageValueSource {
     Absolute,
 }
 
+export interface DParamMessage {
+    condition: string;  // value=新しい値, old=古い値, min=最小値, max=最大値
+    message: string;
+}
+
 /**
  * Unit(Battler) が持つパラメータ
  * 
@@ -80,13 +85,19 @@ export class REData_Parameter
     // targetDamageMessage: string;    // "ダメージを与えた"
     // selfDamageRecovery: string;      // "%1の%2が %3 回復した！"
     // targetDamageRecovery: string;    // "ダメージを与えた"
+    /** @deprecated */
     selfGainMessage: string | undefined;
+    /** @deprecated */
     selfLossMessage: string | undefined;
+    /** @deprecated */
     targetGainMessage: string | undefined;
+    /** @deprecated */
     targetLossMessage: string | undefined;
 
     messageValueSource: DParamMessageValueSource;
     
+    friendlySideMessages: DParamMessage[] = [];
+    opponentSideMessages: DParamMessage[] = [];
 
     public static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
         const p = new REData_Parameter(id, code);

@@ -20,6 +20,8 @@ import { DEntityId } from "../data/DEntity";
 export class LParamEffectResult {
     paramId: DParameterId;
     damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
+    oldValue: number = 0;
+    newValue: number = 0;
     drain: boolean = false;
     qualifying: DParameterQualifying;
     //priorotyMessage: DParameterQualifying | undefined;
@@ -350,24 +352,55 @@ export class LEffectResult {
     private makeParamDamageText(entity: LEntity, entityName: string, paramResult: LParamEffectResult): string {
         const paramData = REData.parameters[paramResult.paramId];
         const damage = paramResult.damage;
-        const isActor = this.focusedFriendly;
+        const isFliendly = this.focusedFriendly;
         let fmt;
         if (damage > 0 && paramResult.drain) {
-            fmt = isActor ? DTextManager.actorDrain : DTextManager.enemyDrain;
+            fmt = isFliendly ? DTextManager.actorDrain : DTextManager.enemyDrain;
             return fmt.format(entityName, paramData.displayName, damage);
-        } else if (damage > 0) {
-            return this.makeDamageOrLossMessage(entity, paramResult, entityName, paramData, isActor);
+        }
+
+        const conditionalMessage = this.makeDamageMessage(entity, paramResult, entityName, paramData, isFliendly);
+        if (conditionalMessage) {
+            return conditionalMessage;
+        }
+
+        
+        if (damage > 0) {
+            return this.makeDamageOrLossMessage(entity, paramResult, entityName, paramData, isFliendly);
         } else if (damage < 0) {
-            return this.makeRecoveryOrGainMessage(entity, paramResult, entityName, paramData, isActor);
+            return this.makeRecoveryOrGainMessage(entity, paramResult, entityName, paramData, isFliendly);
         } else {
             if (paramResult.paramId == REBasics.params.hp) {
-                fmt = isActor ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
+                fmt = isFliendly ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
                 return fmt.format(entityName);
             }
             else {
                 return tr2("%1の%2は下がらなかった。").format(entityName, paramData.displayName);
             }
         }
+    }
+
+    private makeDamageMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isFliendly: boolean): string | undefined {
+        const paramName = paramResult.paramDisplayName();
+        const damage = paramResult.getValue(entity, false);
+
+        if (paramResult.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
+            // TODO: とりいそぎ。最大値の変化は "回復した" ではなく "増えた" にしたい。
+            return DTextManager.actorGain.format(entityName, paramName, damage);
+        }
+        
+        const messageSet = (isFliendly) ? param.friendlySideMessages : param.opponentSideMessages;
+        const value = paramResult.newValue;
+        const old = paramResult.oldValue;
+        const min = entity.paramMin(param.id);
+        const max = entity.idealParam(param.id);
+        for (const message of messageSet) {
+            const r = eval(message.condition);
+            if (r) {
+                return message.message.format(entityName, paramName, damage);
+            }
+        }
+        return undefined;
     }
 
     private makeDamageOrLossMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
@@ -400,11 +433,6 @@ export class LEffectResult {
     private makeRecoveryOrGainMessage(entity: LEntity, paramResult: LParamEffectResult, entityName: string, param: REData_Parameter, isSubjectivity: boolean): string {
         const paramName = paramResult.paramDisplayName();
         const value = paramResult.getValue(entity, true);
-
-        if (paramResult.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
-            // TODO: とりいそぎ。最大値の変化は "回復した" ではなく "増えた" にしたい。
-            return DTextManager.actorGain.format(entityName, paramName, value);
-        }
 
         if (isSubjectivity) {
             if (paramResult.qualifying && paramResult.qualifying.alliesSideGainMessage) {
