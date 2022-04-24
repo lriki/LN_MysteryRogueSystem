@@ -36,12 +36,18 @@ export class USearch {
     }
 
     /**
-     * subject から見て target は可視であるか
+     * subject から見て target は可視であるか (視界内か、ではない点に注意)
      */
     public static isVisibleFromSubject(subject: LEntity, target: LEntity): boolean {
+        // あかりの巻物など、フロア自体に可視効果がある
         if (REGame.map.unitClarity) return true;
+        
+        // よく見え状態なら、相手が透明状態でも見える
         if (subject.hasTrait(REBasics.traits.ForceVisible)) return true;
+
+        // 相手が透明状態なので、見えない
         if (target.hasTrait(REBasics.traits.Invisible)) return false;
+
         return true;
     }
 

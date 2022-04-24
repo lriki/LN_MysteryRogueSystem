@@ -457,7 +457,7 @@ export class UAction {
                         break;
                     }
 
-                    // 視界内チェック
+                    // Block の視界内チェック (部屋の外周 1 マスは視界内)
                     if (scope.area == DEffectFieldScopeArea.Room) {
                         const room = block.room();
                         if (room) {
