@@ -9,6 +9,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
+import { TileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -92,6 +93,60 @@ test("Item.DropAndDestroy", () => {
     expect(item1.isDestroyed()).toBe(true);
 });
 
+// 壁にめり込まないことのチェック
+test("Item.ThrowingDropByWall", () => {
+    TestEnv.newGame();
+
+    // Player
+    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    player1.dir = 6;
+    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.performFloorTransfer();
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+
+    /*
+    □□■■
+    ｐ□□■
+    □□■■
+    */
+    REGame.map.block(7, 4)._tileShape = TileShape.Wall;
+    REGame.map.block(8, 4)._tileShape = TileShape.Wall;
+    REGame.map.block(8, 5)._tileShape = TileShape.Wall;
+    REGame.map.block(7, 6)._tileShape = TileShape.Wall;
+    REGame.map.block(8, 6)._tileShape = TileShape.Wall;
+
+    // アイテムを作ってインベントリに入れる
+    const items = [];
+    for (let i = 0; i < 4; i++) {
+        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
+        inventory1.addEntity(item1);
+        items.push(item1);
+    }
+
+    RESystem.scheduler.stepSimulation();
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [投げる] * 4
+    for (let i = 0; i < 4; i++) {
+        RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, items[i]).withConsumeAction());
+        RESystem.dialogContext.activeDialog().submit();
+        RESystem.scheduler.stepSimulation();
+    }
+    
+    const item1 = REGame.map.block(7, 5).getFirstEntity();
+    const item2 = REGame.map.block(6, 4).getFirstEntity();
+    const item3 = REGame.map.block(6, 5).getFirstEntity();
+    const item4 = REGame.map.block(6, 6).getFirstEntity();
+    assert(item1);
+    assert(item2);
+    assert(item3);
+    assert(item4);
+    expect(items.includes(item1)).toBeTruthy();
+    expect(items.includes(item2)).toBeTruthy();
+    expect(items.includes(item3)).toBeTruthy();
+    expect(items.includes(item4)).toBeTruthy();
+});
 
 test("projectiles.Item.AwfulThrowing", () => {
     TestEnv.newGame();

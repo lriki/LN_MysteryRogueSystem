@@ -405,6 +405,11 @@ export class UMovement {
         for (let distance = 0; distance <= maxDistance; distance++) {
             const candidates = REGame.map.getEdgeBlocks(mx, my, distance)
                 .filter(b => {
+                    if (b.isWallLikeShape()) {
+                        // 壁の中には落ちない
+                        return false;
+                    }
+
                     const layer = b.layer(layerKind);
                     if (layer.isContainsAnyEntity())   // 既に何か Entity がいる？
                         if (layer.entityIds().length == 1 && layer.entityIds()[0].equals(entity.entityId()))
