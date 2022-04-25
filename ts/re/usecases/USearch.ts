@@ -14,6 +14,7 @@ import { LRoom } from "../objects/LRoom";
 import { REGame } from "../objects/REGame";
 import { paramEnemySpawnInvalidArea } from "../PluginParameters";
 import { Helpers } from "../system/Helpers";
+import { UMovement } from "./UMovement";
 
 
 /**
@@ -49,6 +50,27 @@ export class USearch {
         if (target.hasTrait(REBasics.traits.Invisible)) return false;
 
         return true;
+    }
+
+    /**
+     * subject から見て、 block は可視であるか
+     * @param subject 
+     * @param block 
+     */
+    public static checkInSightBlockFromSubject(subject: LEntity, block: LBlock): boolean {
+        // 失明状態？
+        if (this.hasBlindness(subject)) return false;
+
+        if (subject.isOnRoom()) {
+            // 部屋の中からは、部屋の外周上の Block も可視となる
+            const room = REGame.map.room(subject.roomId());
+            return room.checkVisibilityBlock(block);
+        }
+        else {
+            // 部屋の外にいる場合、たとえ部屋の外周 Block 上にいても、部屋内は見えない。
+            // 隣接のみ見える。
+            return UMovement.checkAdjacentPositions(subject.x, subject.y, block.x(), block.y());
+        }
     }
 
     /**

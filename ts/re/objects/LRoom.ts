@@ -131,6 +131,8 @@ export class LRoom {
     /**
      * 指定した Block が、この部屋として有効な視界内にあるかを確認する。
      * (部屋の床タイルと、周囲１マスの壁は有効視界である)
+     * 
+     * @see USearch.checkInSightBlockFromSubject
      */
     public checkVisibilityBlock(block: LBlock): boolean {
         return this._x1 - 1 <= block.x() && block.x() <= this._x2 + 1 &&

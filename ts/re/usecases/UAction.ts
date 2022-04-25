@@ -461,7 +461,7 @@ export class UAction {
                     if (scope.area == DEffectFieldScopeArea.Room) {
                         const room = block.room();
                         if (room) {
-                            if (room.checkVisibilityBlock(block)) {
+                            if (USearch.checkInSightBlockFromSubject(performer, block)) {
                                 // 視界内
                             }
                             else {
@@ -495,7 +495,6 @@ export class UAction {
             }
 
             return candidates;
-            //return { action: action, targets: targets };
         }
         else if (scope.range == DEffectFieldScopeRange.Room) {
             const candidates: LEntity[] = [];
@@ -551,6 +550,7 @@ export class UAction {
     /**
      * self の視界内にいる敵対 Entity のうち、一番近いものを検索する。
      */
+    // TODO: Move o USerarch
     public static findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
         if (USearch.hasBlindness(self)) return undefined;   // 盲目
 
