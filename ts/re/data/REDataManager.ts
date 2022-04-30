@@ -425,8 +425,8 @@ export class REDataManager {
 
         REData.monsterHouses = [
             { id: 0, name: "null", bgm: { name: "", pan: 0, pitch: 100, volume: 90 } },
-            { id: 1, name: "fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
-            { id: 2, name: "normal", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+            { id: 1, name: "Fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+            { id: 2, name: "Default", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
         ];
         REBasics.monsterHouses = {
             fixed: 1,
@@ -435,8 +435,8 @@ export class REDataManager {
 
         REData.itemShops = [
             { id: 0, name: "null", bgm: { name: "", pan: 0, pitch: 100, volume: 90 } },
-            { id: 1, name: "fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
-            { id: 2, name: "normal", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+            { id: 1, name: "Fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
+            { id: 2, name: "Default", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
         ];
         REBasics.itemShops = {
             fixed: 1,
@@ -503,6 +503,11 @@ export class REDataManager {
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_Default");
                 setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
+            }
+            {
+                const setting = REData.newTerrainSetting("kTerrainSetting_Test_DefaultMH");
+                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
+                setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
             }
             {
                 const setting = REData.newTerrainSetting("kTerrainSetting_SimpleDefault");

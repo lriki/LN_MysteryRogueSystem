@@ -692,6 +692,22 @@ export class REData
         throw new Error(`State "${pattern}" not found.`);
     }
     
+    //--------------------
+
+    static findMonsterHouse(pattern: string): DMonsterHouseType | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return this.monsterHouses[id];
+        else
+            return this.monsterHouses.find(x => x.name == pattern/* || (x.key != "" && x.key == pattern)*/);
+    }
+
+    static getMonsterHouse(pattern: string): DMonsterHouseType {
+        const d = this.findMonsterHouse(pattern);
+        if (d) return d;
+        throw new Error(`MonsterHouse "${pattern}" not found.`);
+    }
+    
 
     //-------------------
 

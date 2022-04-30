@@ -3,6 +3,7 @@ import { DHelpers } from "ts/re/data/DHelper";
 import { DFloorInfo, DLand, DLandId } from "ts/re/data/DLand";
 import { DMap, REData } from "ts/re/data/REData";
 import { REDataManager } from "ts/re/data/REDataManager";
+import { DFloorPreset } from "../data/DTerrainPreset";
 
 /**
  * LandId と フロア番号によってフロアを識別するもの。
@@ -46,6 +47,12 @@ export class LFloorId {
 
     public floorNumber(): number {
         return this._floorNumber;
+    }
+
+    public get preset(): DFloorPreset {
+        const id = this.floorInfo().presetId;
+        assert(id > 0);
+        return REData.floorPresets[id];
     }
 
     public isEmpty(): boolean {

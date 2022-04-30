@@ -108,3 +108,23 @@ test("Preset.PoorVisibility", () => {
     expect(enemy1.y).toBe(room.y1() + 1);
 });
 
+test("Preset.DefaultMonsterHouse", () => {
+    TestEnv.newGame();
+
+    const landId = REData.lands.findIndex(x => x.name.includes("RandomMaps"));
+    const floorId = new LFloorId(landId, 1);
+    const floorInfo = floorId.floorInfo();
+    floorInfo.fixedMapName = "";
+    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_Test_DefaultMH").id;
+    floorInfo.monsterHouse.patterns.push({name: "normal", rating: 1});
+
+    const player1 = TestEnv.setupPlayer(floorId);
+
+    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+
+    // ひとつ MH ができている
+    const map = REGame.map;
+    const structures = map.structures();
+    const monsterHouse = structures[1] as LMonsterHouseStructure;
+    assert(monsterHouse);
+});

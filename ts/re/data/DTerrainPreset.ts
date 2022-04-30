@@ -1,6 +1,6 @@
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "../PluginParameters";
 import { DTerrainPresetId as DFloorPresetId, DTerrainSettingId, DTerrainShapeId } from "./DCommon";
-import { DTerrainSettingRef } from "./DLand";
+import { DFloorMonsterHousePattern, DTerrainSettingRef } from "./DLand";
 
 export enum DSectorConnectionPreset {
     Default,
@@ -169,10 +169,12 @@ export class DFloorPreset {
     id: DFloorPresetId;
     key: string;
     presets: DTerrainSettingRef[];
+    monsterHouses: DFloorMonsterHousePattern[];
     
     public constructor(id: DFloorPresetId) {
         this.id = id;
         this.key = "";
         this.presets = [];
+        this.monsterHouses = [];
     }
 }

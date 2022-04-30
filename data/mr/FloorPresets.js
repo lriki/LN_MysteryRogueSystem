@@ -1,8 +1,25 @@
+//==============================================================================
+// FloorPreset 設定ファイル
+//------------------------------------------------------------------------------
+// フロアの形状や出現する構造物を決めるためのファイルです。
+// 簡易的なデータはイベント実行内容のコメント @MR-Floor にて設定できますが、
+// これらのデータは複雑であるため、コメントではなく別ファイルに分けています。
+//
+//==============================================================================
 db.floorPresets = {
     // デフォルト。Preset しての無いフロアに自動的に適用される。
     "kFloorPreset_Default": {
         terrains: {
             "kTerrainSetting_Default": 1,
+        }
+    },
+    // テスト用。モンスターハウス有り。
+    "kFloorPreset_Test_DefaultMH": {
+        terrains: {
+            "kTerrainSetting_Test_DefaultMH": 1,
+        },
+        monsterHouses: {
+            "Default": 1,
         }
     },
     // テスト用。大部屋のみが発生するフロア。
@@ -68,9 +85,9 @@ db.floorPresets = {
     "kFloorPreset_Level5": {
         terrains: {
             "kTerrainSetting_Default": 2,
-            "kTerrainSetting_C": 2,         // C 型
-            "kTerrainSetting_GreatHall": 1, // 大部屋
-            "kTerrainSetting_HalfHall": 1,  // 中部屋
+            // "kTerrainSetting_C": 2,         // C 型
+            // "kTerrainSetting_GreatHall": 1, // 大部屋
+            // "kTerrainSetting_HalfHall": 1,  // 中部屋
         }
     },
 }

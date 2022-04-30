@@ -7,6 +7,7 @@ import { assert } from "ts/re/Common";
 
 interface DBTerrainSetting {
     presets: Map<string, number>;   // 
+    
 }
 
 interface DBTerrainSettingDB {

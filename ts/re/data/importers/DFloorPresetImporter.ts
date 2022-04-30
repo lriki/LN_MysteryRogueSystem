@@ -4,6 +4,7 @@ import { REData } from "../REData";
 
 interface DBFloorPreset {
     terrains: Map<string, number>;   // TerrainSettingKey, rate
+    monsterHouses: Map<string, number> | undefined;
 }
 
 interface DBFloorPresetsDB {
@@ -26,9 +27,18 @@ export class DFloorPresetImporter {
             const key = pair1[0] as string;
             const preset = pair1[1] as DBFloorPreset;
             const data = REData.newFloorPreset(key);
+
+            // terrains
             for (const [terrainSettingKey, rate] of Object.entries(preset.terrains)) {
                 const terraintSettingId = REData.getTerrainSetting(terrainSettingKey).id;
                 data.presets.push(new DTerrainSettingRef(terraintSettingId, rate)); 
+            }
+
+            // monsterHouses
+            if (preset.monsterHouses) {
+                for (const [name, rate] of Object.entries(preset.monsterHouses)) {
+                    data.monsterHouses.push({name: name, rating: rate as number}); 
+                }
             }
         }
     }

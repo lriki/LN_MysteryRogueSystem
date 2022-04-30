@@ -73,21 +73,21 @@ export class FMakeMonsterHouseForFixedMapPass extends FMapBuildPass {
 
 export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
     public execute(map: FMap): void {
-        const monsterHouse = map.floorId().floorInfo().monsterHouse;
+        const floorPreset = map.floorId().preset;
 
         for (const sector of map.sectors()) {
             if (sector.structureType == "MonsterHouse") {
-                const pattern = UEffect.selectRating(map.random(), monsterHouse.patterns, x => x.rating);
+                const pattern = UEffect.selectRating(map.random(), floorPreset.monsterHouses, x => x.rating);
                 if (pattern) {
                     const candidates = map.rooms().filter(x => x.structures().length == 0);
                     const room = map.random().selectOrUndefined(candidates);
                     if (room) {
-                        const data = REData.monsterHouses.find(x => x.name == pattern.name);
-                        if (!data) throw new Error(`MonsterHouses "${pattern.name}" は存在しません。`);
+                        const data = REData.getMonsterHouse(pattern.name);
         
                         const s = new FMonsterHouseStructure(room.id(), data.id);
                         map.addStructure(s);
                         room.addStructureRef(s);
+                        console.log("MONSET_HOUSE!!!", room);
                     }
                 }
             }
