@@ -28,7 +28,7 @@ import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
-import { DTerrainPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
+import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
 // import { DPreset } from "./DPreset";
 
 
@@ -196,7 +196,7 @@ export class REData
     static emittors: DEmittor[] = [];
     static terrainShapes: DTerrainShape[] = [];
     static terrainSettings: DTerrainSetting[] = [];
-    static terrainPresets: DTerrainPreset[] = [];
+    static floorPresets: DFloorPreset[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
 
     static itemDataIdOffset: number = 0;
@@ -238,7 +238,7 @@ export class REData
         this.entities = [new DEntity(0)];
         this.emittors = [new DEmittor(0, "null")];
         this.terrainSettings = [new DTerrainSetting(0)];
-        this.terrainPresets = [new DTerrainPreset(0)];
+        this.floorPresets = [new DFloorPreset(0)];
     }
 
     //--------------------
@@ -490,25 +490,25 @@ export class REData
 
     //--------------------
 
-    static newTerrainPreset(key: string): DTerrainPreset {
-        const newId = this.terrainPresets.length;
-        const data = new DTerrainPreset(newId);
+    static newFloorPreset(key: string): DFloorPreset {
+        const newId = this.floorPresets.length;
+        const data = new DFloorPreset(newId);
         data.key = key;
-        this.terrainPresets.push(data);
+        this.floorPresets.push(data);
         return data;
     }
     
-    static findTerrainPreset(pattern: string): DTerrainPreset | undefined {
+    static findFloorPreset(pattern: string): DFloorPreset | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
-            return this.terrainPresets[id];
+            return this.floorPresets[id];
         else {
-            return this.terrainPresets.find(e => (e.key != "" && e.key == pattern));
+            return this.floorPresets.find(e => (e.key != "" && e.key == pattern));
         }
     }
 
-    static getTerrainPreset(pattern: string): DTerrainPreset {
-        const d = this.findTerrainPreset(pattern);
+    static getFloorPreset(pattern: string): DFloorPreset {
+        const d = this.findFloorPreset(pattern);
         if (d) return d;
         throw new Error(`TerrainPreset "${pattern}" not found.`);
     }

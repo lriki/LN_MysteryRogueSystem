@@ -98,7 +98,7 @@ Scene_Boot.prototype.isReady = function() {
 var _Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
 Scene_Boot.prototype.onDatabaseLoaded = function() {
     _Scene_Boot_onDatabaseLoaded.call(this);
-    REDataManager.loadData(false);
+    REDataManager.load();
     
     REVisual.initialize();
     RESystem.integration = new RMMZIntegration();

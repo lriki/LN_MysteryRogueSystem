@@ -1,5 +1,5 @@
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "../PluginParameters";
-import { DTerrainPresetId, DTerrainSettingId, DTerrainShapeId } from "./DCommon";
+import { DTerrainPresetId as DFloorPresetId, DTerrainSettingId, DTerrainShapeId } from "./DCommon";
 import { DTerrainSettingRef } from "./DLand";
 
 export enum DSectorConnectionPreset {
@@ -165,12 +165,12 @@ export class DTerrainSetting {
     }
 }
 
-export class DTerrainPreset {
-    id: DTerrainPresetId;
+export class DFloorPreset {
+    id: DFloorPresetId;
     key: string;
     presets: DTerrainSettingRef[];
     
-    public constructor(id: DTerrainPresetId) {
+    public constructor(id: DFloorPresetId) {
         this.id = id;
         this.key = "";
         this.presets = [];

@@ -58,24 +58,6 @@ export class DDataImporter {
         }
     }
 
-    public static beginLoadLandDatabase(land: DLand): void {
-        if (land.rmmzMapId > 0) REDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { 
-            land.import(data);
-            
-            if (land.enemyTableMapId > 0) REDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(land, data, land.enemyTableMapId, land.appearanceTable, land.appearanceTable.enemies);
-            });
-            if (land.itemTableMapId > 0) REDataManager.beginLoadMapData(land.itemTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(land, data, land.itemTableMapId, land.appearanceTable, land.appearanceTable.items);
-            });
-            if (land.trapTableMapId > 0) REDataManager.beginLoadMapData(land.trapTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(land, data, land.trapTableMapId, land.appearanceTable, land.appearanceTable.traps);
-            });
-            if (land.shopTableMapId > 0) REDataManager.beginLoadMapData(land.shopTableMapId, (data: any) => {
-                DLand.buildSubAppearanceTable(land, data, land.shopTableMapId, land.appearanceTable, land.appearanceTable.shop);
-            });
-        });
-    }
 
     private static findLand(data: IDataMapInfo | undefined): DLand | undefined {
         if (!data) return undefined;

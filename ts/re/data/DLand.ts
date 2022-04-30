@@ -335,7 +335,7 @@ export class DLand {
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
                     monsterHouse: new DFloorMonsterHouse(monsterHouses),
-                    presetId: floorData.preset ? REData.getTerrainPreset(floorData.preset).id : 0,
+                    presetId: floorData.preset ? REData.getFloorPreset(floorData.preset).id : 0,
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

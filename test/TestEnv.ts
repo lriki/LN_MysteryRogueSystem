@@ -76,7 +76,8 @@ export class TestEnv {
         REData.testMode = true;
         this.loadRmmzDatabase();
         REData.reset();
-        REDataManager.loadData(true);
+        REDataManager.testMode = true;
+        REDataManager.load();
         this.integration = new TestEnvIntegration();
         RESystem.integration = this.integration;
         RESystem.unittest = true;

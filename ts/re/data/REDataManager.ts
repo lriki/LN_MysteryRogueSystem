@@ -30,6 +30,8 @@ import { DMetadataParser } from './DMetadataParser';
 import { DSetupScript } from './DSetupScript';
 import { DSectorConnectionPreset, FGenericRandomMapWayConnectionMode } from './DTerrainPreset';
 import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from '../PluginParameters';
+import { DTerrainSettingImporter } from './importers/DTerrainSettingImporter';
+import { DFloorPresetImporter } from './importers/DFloorPresetImporter';
 
 
 declare global {  
@@ -43,17 +45,74 @@ declare global {
     }
 }
 
-export class REDataManager
-{
+type NextFunc = () => void;
+type TaskFunc = (next: NextFunc) => void;
+
+export class REDataManager {
+    static testMode: boolean;
     static databaseMapId: number = 0;
-    //static landMapDataLoading: boolean = false;
-    //static _dataLandDefinitionMap: IDataMap | undefined = undefined;
-    
     static loadedLandId: number = 0;
     static loadedFloorMapId: number = 0;
     static loadingMapId: number = 0;
 
-    static setupCommonData() {
+    static _loadTasks: (TaskFunc)[];
+    static _currentTask: (TaskFunc) | undefined;
+
+    public static load(): void {
+        this._loadTasks = [];
+        this._loadTasks.push((n) => this.setupCommonData(n));
+        this._loadTasks.push((n) => this.loadData(n));
+        this._loadTasks.push((n) => this.importTerrainSettings(n));
+        this._loadTasks.push((n) => this.importFloorPreset(n));
+        this._loadTasks.push((n) => this.importLandAndFloors(n));
+        this._loadTasks.push((n) => this.importPseudonymous(n));
+        this._loadTasks.push((n) => this.importPrefabs(n));
+        this._loadTasks.push((n) => this.importLandDatabase(n));
+        this._loadTasks.push((n) => this.importTemplateMaps(n));
+        this._loadTasks.push((n) => this.importSetupScript(n));
+        
+        if (DHelpers.isNode()) {
+            this._currentTask = this._loadTasks.shift();
+            while (this._currentTask) {
+                const task = this._currentTask;
+                this._currentTask = undefined;
+                task(() => this.nextFunc());
+            }
+        }
+        else {
+            this._currentTask = this._loadTasks.shift();
+            assert(this._currentTask);
+            this._currentTask(this.nextFunc);
+        }
+    }
+
+    public static isImportCompleted(): boolean {
+        return this._currentTask == undefined && this.loadingDataFileCount == this.loadedDataFileCount;
+    }
+
+    private static nextFunc() {
+        if (this._loadTasks.length > 0) {
+            this._currentTask = this._loadTasks.shift();
+        }
+        else {
+            this._currentTask = undefined;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private static setupCommonData(next: NextFunc) {
         REData.reset();
 
         // Events
@@ -474,69 +533,68 @@ export class REDataManager
             //----------
 
             {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Default");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-                REBasics.defaultTerrainPresetId = preset.id;
+                // const preset = REData.newFloorPreset("kFloorPreset_Default");
+                // preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+                REBasics.defaultTerrainPresetId = 1;////preset.id;
             }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_GreatHall");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1)); 
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_GreatHallMH");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHallMH").id, 1)); 
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level1");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Small2x2").id, 1)); 
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level2");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level3_First");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level3");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level4_First");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level4");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level5_First");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            }
-            {
-                const preset = REData.newTerrainPreset("kTerrainPreset_Level5");
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
-                preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
-            }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_GreatHall");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1)); 
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_GreatHallMH");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHallMH").id, 1)); 
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level1");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Small2x2").id, 1)); 
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level2");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level3_First");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level3");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level4_First");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level4");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level5_First");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
+            // }
+            // {
+            //     const preset = REData.newFloorPreset("kFloorPreset_Level5");
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
+            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
+            // }
         }
 
         
         // REBasics.presets = {
         //     trap: REData.newPreset("Trap").id,
         // }
+        next();
     }
 
-    static loadData(testMode: boolean): void
-    {
-        this.setupCommonData();
+    private static loadData(next: NextFunc): void {
 
         REData.system = new DSystem();
 
@@ -890,6 +948,54 @@ export class REDataManager
             }
         });
 
+        // Import Troop
+        REData.troops = [];
+        for (const x of $dataTroops) {
+            const troop = new DTroop(REData.troops.length);
+            REData.troops.push(troop);
+            if (x) {
+                troop.key = x.name;
+                troop.members = x.members.map(m => REData.enemies[m.enemyId]);
+            }
+        }
+
+        // Link
+        {
+            REData.system.link(this.testMode);
+
+            for (const state of REData.states) {
+                for (const key of state.stateGroupKeys) {
+                    const id = REData.stateGroups.findIndex(x => x.key == key);
+                    if (id > 0) {
+                        state.stateGroupIds.push(id);
+                    }
+                    else {
+                        throw new Error(`StateGroup not found. ${key}`);
+                    }
+                }
+            }
+        }
+
+        next();
+    }
+
+    private static importTerrainSettings(next: NextFunc) {
+        // 依存関係があるので、
+        this.loadTextFile("mr/TerrainSettings.js", (obj) => {
+            new DTerrainSettingImporter(obj);
+            next();
+        });
+    }
+
+    private static importFloorPreset(next: NextFunc) {
+        this.loadTextFile("mr/FloorPresets.js", (obj) => {
+            new DFloorPresetImporter(obj);
+            console.log();
+            next();
+        });
+    }
+
+    private static importLandAndFloors(next: NextFunc) {
         // Import Lands
         // 最初に Land を作る
         REData.lands = [];
@@ -1021,49 +1127,17 @@ export class REDataManager
             }
         }
 
-        // Import Troop
-        REData.troops = [];
-        for (const x of $dataTroops) {
-            const troop = new DTroop(REData.troops.length);
-            REData.troops.push(troop);
-            if (x) {
-                troop.key = x.name;
-                troop.members = x.members.map(m => REData.enemies[m.enemyId]);
-            }
-        }
-
-        // Link
-        {
-            REData.system.link(testMode);
-
-            for (const state of REData.states) {
-                for (const key of state.stateGroupKeys) {
-                    const id = REData.stateGroups.findIndex(x => x.key == key);
-                    if (id > 0) {
-                        state.stateGroupIds.push(id);
-                    }
-                    else {
-                        throw new Error(`StateGroup not found. ${key}`);
-                    }
-                }
-            }
-
-        }
-
-        this.loadDataFile("mr/Pseudonymous.json", (obj) => REData.pseudonymous.setup(obj));
-
-        // Load Prefabs
-        this.beginLoadPrefabs();
-
-        // Load Template Map
-        for (const templateMap of REData.templateMaps) {
-            this.beginLoadTemplateMap(templateMap);
-        }
-
-        this.beginLoadSetupScript();
+        next();
     }
 
-    private static beginLoadPrefabs(): void {
+    private static importPseudonymous(next: NextFunc) : void{
+        this.loadDataFile("mr/Pseudonymous.json", (obj) => {
+            REData.pseudonymous.setup(obj);
+            next();
+        });
+    }
+
+    private static importPrefabs(next: NextFunc): void {
         assert(this.databaseMapId > 0);
         this.beginLoadMapData(this.databaseMapId, (obj: any) => { 
             const mapData: IDataMap = obj;
@@ -1129,45 +1203,55 @@ export class REDataManager
                 illusionActor: REData.getPrefab("pまどわしUnit").id,
                 illusionItem: REData.getPrefab("pまどわしItem").id,
             };
-            
-            // Load Land database
-            for (const land of REData.lands) {
-                DDataImporter.beginLoadLandDatabase(land);
-            }
+
+            next();
         });
     }
 
-    private static beginLoadTemplateMap(templateMap: DTemplateMap): void {
-        if (templateMap.mapId > 0) this.beginLoadMapData(templateMap.mapId, (obj: any) => { buildTemplateMapData(obj, templateMap); });
-    }
+    private static importLandDatabase(next: NextFunc): void {
+        const validLands = REData.lands.filter(x => x.rmmzMapId > 0);
+        for (let iLand = 0; iLand < validLands.length; iLand++) {
+            const land = validLands[iLand];
+            REDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { 
+                land.import(data);
+                
+                if (land.enemyTableMapId > 0) REDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => {
+                    DLand.buildSubAppearanceTable(land, data, land.enemyTableMapId, land.appearanceTable, land.appearanceTable.enemies);
+                });
+                if (land.itemTableMapId > 0) REDataManager.beginLoadMapData(land.itemTableMapId, (data: any) => {
+                    DLand.buildSubAppearanceTable(land, data, land.itemTableMapId, land.appearanceTable, land.appearanceTable.items);
+                });
+                if (land.trapTableMapId > 0) REDataManager.beginLoadMapData(land.trapTableMapId, (data: any) => {
+                    DLand.buildSubAppearanceTable(land, data, land.trapTableMapId, land.appearanceTable, land.appearanceTable.traps);
+                });
+                if (land.shopTableMapId > 0) REDataManager.beginLoadMapData(land.shopTableMapId, (data: any) => {
+                    DLand.buildSubAppearanceTable(land, data, land.shopTableMapId, land.appearanceTable, land.appearanceTable.shop);
+                });
 
-    
-    public static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
-        const filename = `Map${this.padZero(rmmzMapId, 3)}.json`;
-        this.loadDataFile(filename, onLoad);
-    }
-    private static findLand(rmmzMapId: number): DLand | undefined {
-        let mapId = rmmzMapId;
-        while (mapId > 0) {
-            const land = REData.lands.find(x => x.rmmzMapId == mapId);
-            if (land) return land;
-            const parentInfo = $dataMapInfos[mapId];
-            if (!parentInfo) break;
-            mapId = parentInfo.parentId;
+                if (iLand == validLands.length - 1) {
+                    next();
+                }
+            });
         }
-        return undefined;
     }
 
-    public static loadPrefabDatabaseMap(): void {
-        // Database マップ読み込み開始
-        const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
-        DataManager.loadDataFile("RE_databaseMap", filename);
+    private static importTemplateMaps(next: NextFunc): void {
+        const validMaps = REData.templateMaps.filter(x => x.mapId > 0);
+        for (let iMap = 0; iMap < validMaps.length; iMap++) {
+            const templateMap = validMaps[iMap];
+            this.beginLoadMapData(templateMap.mapId, (obj: any) => { 
+                buildTemplateMapData(obj, templateMap);
+
+                if (iMap == validMaps.length - 1) {
+                    next();
+                }
+            });
+        }
     }
 
-    public static beginLoadSetupScript(): void {
+    public static importSetupScript(next: NextFunc): void {
         this.loadTextFile("mr/Setup.js", (obj) => {
             const scriptDB = new DSetupScript(obj);
-
             
             // SystemState 等を参照したいので、System の Link の後で。
             for (const skill of REData.skills) {
@@ -1192,7 +1276,32 @@ export class REDataManager
                 RESetup.linkItem(REData.entities[id]);
             }
 
+            console.log("importSetupScript end.");
+            next();
         });
+    }
+
+    
+    public static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
+        const filename = `Map${this.padZero(rmmzMapId, 3)}.json`;
+        this.loadDataFile(filename, onLoad);
+    }
+    private static findLand(rmmzMapId: number): DLand | undefined {
+        let mapId = rmmzMapId;
+        while (mapId > 0) {
+            const land = REData.lands.find(x => x.rmmzMapId == mapId);
+            if (land) return land;
+            const parentInfo = $dataMapInfos[mapId];
+            if (!parentInfo) break;
+            mapId = parentInfo.parentId;
+        }
+        return undefined;
+    }
+
+    public static loadPrefabDatabaseMap(): void {
+        // Database マップ読み込み開始
+        const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
+        DataManager.loadDataFile("RE_databaseMap", filename);
     }
 
     public static padZero(v: number, length: number) {
@@ -1342,9 +1451,6 @@ export class REDataManager
         }
     }
 
-    public static isImportCompleted(): boolean {
-        return this.loadingDataFileCount == this.loadedDataFileCount;
-    }
 
     private static onXhrLoad(xhr: XMLHttpRequest, src: string, url: string, onLoad: (obj: any) => void) {
         if (xhr.status < 400) {

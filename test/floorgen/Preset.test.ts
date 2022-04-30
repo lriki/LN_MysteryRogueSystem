@@ -22,7 +22,7 @@ test("Preset.GreatHall", () => {
     // 適当なフロアの Preset を強制的に変更
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getTerrainPreset("kTerrainPreset_GreatHall").id;
+    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
 
@@ -45,7 +45,7 @@ test("Preset.GreatHallMonsterHouse", () => {
     const floorId = new LFloorId(landId, 1);
     const floorInfo = floorId.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getTerrainPreset("kTerrainPreset_GreatHallMH").id;
+    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHallMH").id;
     floorInfo.monsterHouse.patterns.push({name: "normal", rating: 1});
 
     const player1 = TestEnv.setupPlayer(floorId);
@@ -67,7 +67,7 @@ test("Preset.PoorVisibility", () => {
     // 適当なフロアの Preset を強制的に変更
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getTerrainPreset("kTerrainPreset_GreatHall").id;
+    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
     const map = REGame.map;
