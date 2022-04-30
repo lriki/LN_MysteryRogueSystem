@@ -46,7 +46,6 @@ test("Preset.GreatHallMonsterHouse", () => {
     const floorInfo = floorId.floorInfo();
     floorInfo.fixedMapName = "";
     floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHallMH").id;
-    floorInfo.monsterHouse.patterns.push({name: "normal", rating: 1});
 
     const player1 = TestEnv.setupPlayer(floorId);
 
@@ -116,7 +115,6 @@ test("Preset.DefaultMonsterHouse", () => {
     const floorInfo = floorId.floorInfo();
     floorInfo.fixedMapName = "";
     floorInfo.presetId = REData.getFloorPreset("kFloorPreset_Test_DefaultMH").id;
-    floorInfo.monsterHouse.patterns.push({name: "normal", rating: 1});
 
     const player1 = TestEnv.setupPlayer(floorId);
 

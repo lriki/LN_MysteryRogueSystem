@@ -7,7 +7,7 @@ import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState"
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DFloorMonsterHouse, DLand, DLandIdentificationLevel, DMapId, DTerrainSettingRef } from "./DLand";
+import { DLand, DLandIdentificationLevel, DMapId, DTerrainSettingRef } from "./DLand";
 import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
@@ -1116,7 +1116,6 @@ export class REDataManager {
                         template: undefined,
                         displayName: undefined,
                         fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100,
-                        monsterHouse: new DFloorMonsterHouse(undefined),
                         presetId: 0,
                     };
                 }

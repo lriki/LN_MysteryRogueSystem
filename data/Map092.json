@@ -2105,27 +2105,6 @@
               ]
             },
             {
-              "code": 108,
-              "indent": 0,
-              "parameters": [
-                "@MR-MonsterHouse"
-              ]
-            },
-            {
-              "code": 408,
-              "indent": 0,
-              "parameters": [
-                "    rate: 100,"
-              ]
-            },
-            {
-              "code": 408,
-              "indent": 0,
-              "parameters": [
-                "    patterns: [[\"normal\", 75]]"
-              ]
-            },
-            {
               "code": 0,
               "indent": 0,
               "parameters": []

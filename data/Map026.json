@@ -5712,27 +5712,6 @@
               ]
             },
             {
-              "code": 108,
-              "indent": 0,
-              "parameters": [
-                "@MR-MonsterHouse"
-              ]
-            },
-            {
-              "code": 408,
-              "indent": 0,
-              "parameters": [
-                "    rate: 100,"
-              ]
-            },
-            {
-              "code": 408,
-              "indent": 0,
-              "parameters": [
-                "    patterns: [[\"normal\", 100]]"
-              ]
-            },
-            {
               "code": 0,
               "indent": 0,
               "parameters": []
@@ -8319,28 +8298,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    preset: \"kTerrainPreset_GreatHall\""
-              ]
-            },
-            {
-              "code": 108,
-              "indent": 0,
-              "parameters": [
-                "@MR-MonsterHouse"
-              ]
-            },
-            {
-              "code": 408,
-              "indent": 0,
-              "parameters": [
-                "    rate: 100,"
-              ]
-            },
-            {
-              "code": 408,
-              "indent": 0,
-              "parameters": [
-                "    patterns: [[\"normal\", 100]]"
+                "    preset: \"kFloorPreset_GreatHall\""
               ]
             },
             {

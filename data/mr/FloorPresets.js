@@ -32,6 +32,9 @@ db.floorPresets = {
     "kFloorPreset_GreatHallMH": {
         terrains: {
             "kTerrainSetting_GreatHallMH": 1,
+        },
+        monsterHouses: {
+            "Default": 1,
         }
     },
     // 難易度 Level1: 2x2フロアのみ。

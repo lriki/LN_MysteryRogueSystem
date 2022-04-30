@@ -10,10 +10,6 @@ export interface RmmzLandMetadata {
 export interface RmmzStructuresMetadata {
 }
 
-export interface RmmzMonsterHouseMetadata {
-    rate: number;
-    patterns: any[];
-}
 export interface RMMZFloorMetadata {
     template?: string;
     displayName?: string;
@@ -189,15 +185,6 @@ export class DAnnotationReader {
         const block = this.findFirstAnnotationFromEvent("@MR-Structures", event);
         if (!block) return undefined;
         let rawData: RmmzStructuresMetadata | undefined;
-        eval(`rawData = ${block}`);
-        assert(rawData);
-        return rawData;
-    }
-    
-    public static readMonsterHouseMetadata(event: IDataMapEvent): RmmzMonsterHouseMetadata | undefined {
-        const block = this.findFirstAnnotationFromEvent("@MR-MonsterHouse", event);
-        if (!block) return undefined;
-        let rawData: RmmzMonsterHouseMetadata | undefined;
         eval(`rawData = ${block}`);
         assert(rawData);
         return rawData;

@@ -32,26 +32,26 @@ export class FMakeMonsterHouseForFixedMapPass extends FMapBuildPass {
         }
 
         // モンスターハウスが1つもなければランダム生成を試す。
-        if (!map.structures().find(x => x instanceof FMonsterHouseStructure)) {
-            const monsterHouse = map.floorId().floorInfo().monsterHouse;
+        // if (!map.structures().find(x => x instanceof FMonsterHouseStructure)) {
+        //     const monsterHouse = map.floorId().floorInfo().monsterHouse;
 
-            // そもそも出現させるかを判定する
-            if (map.random().nextIntWithMax(100) < monsterHouse.rating) {
-                const pattern = this.selectPattern(monsterHouse.patterns, map.random());
-                if (pattern) {
-                    const candidates = map.rooms().filter(x => x.structures().length == 0);
-                    const room = map.random().selectOrUndefined(candidates);
-                    if (room) {
-                        const data = REData.monsterHouses.find(x => x.name == pattern.name);
-                        if (!data) throw new Error(`MonsterHouses "${pattern.name}" は存在しません。`);
+        //     // そもそも出現させるかを判定する
+        //     if (map.random().nextIntWithMax(100) < monsterHouse.rating) {
+        //         const pattern = this.selectPattern(monsterHouse.patterns, map.random());
+        //         if (pattern) {
+        //             const candidates = map.rooms().filter(x => x.structures().length == 0);
+        //             const room = map.random().selectOrUndefined(candidates);
+        //             if (room) {
+        //                 const data = REData.monsterHouses.find(x => x.name == pattern.name);
+        //                 if (!data) throw new Error(`MonsterHouses "${pattern.name}" は存在しません。`);
 
-                        const s = new FMonsterHouseStructure(room.id(), data.id);
-                        map.addStructure(s);
-                        room.addStructureRef(s);
-                    }
-                }
-            }
-        }
+        //                 const s = new FMonsterHouseStructure(room.id(), data.id);
+        //                 map.addStructure(s);
+        //                 room.addStructureRef(s);
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     private selectPattern(patterns: DFloorMonsterHousePattern[], rand: LRandom): DFloorMonsterHousePattern | undefined {
@@ -73,10 +73,10 @@ export class FMakeMonsterHouseForFixedMapPass extends FMapBuildPass {
 
 export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
     public execute(map: FMap): void {
-        const floorPreset = map.floorId().preset;
 
         for (const sector of map.sectors()) {
             if (sector.structureType == "MonsterHouse") {
+                const floorPreset = map.floorId().preset;
                 const pattern = UEffect.selectRating(map.random(), floorPreset.monsterHouses, x => x.rating);
                 if (pattern) {
                     const candidates = map.rooms().filter(x => x.structures().length == 0);
@@ -87,7 +87,6 @@ export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
                         const s = new FMonsterHouseStructure(room.id(), data.id);
                         map.addStructure(s);
                         room.addStructureRef(s);
-                        console.log("MONSET_HOUSE!!!", room);
                     }
                 }
             }

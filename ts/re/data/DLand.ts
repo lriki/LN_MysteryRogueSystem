@@ -1,6 +1,6 @@
 
 import { assert, tr2 } from "../Common";
-import { DAnnotationReader, RMMZFloorMetadata, RmmzMonsterHouseMetadata } from "./DAnnotationReader";
+import { DAnnotationReader, RMMZFloorMetadata } from "./DAnnotationReader";
 import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
@@ -65,22 +65,6 @@ export interface DFloorMonsterHousePattern {
     rating: number; // %
 }
 
-export class DFloorMonsterHouse {
-    public rating: number;    // %
-    public patterns: DFloorMonsterHousePattern[];
-
-    constructor(data: RmmzMonsterHouseMetadata | undefined) {
-        if (data) {
-            this.rating = data.rate;
-            this.patterns = data.patterns.map((x): DFloorMonsterHousePattern => { return { name: (x[0] as string), rating: (x[1] as number) }; });
-        }
-        else {
-            this.rating = 0;
-            this.patterns = [];
-        }
-    }
-}
-
 export class DTerrainSettingRef {
     terrainSettingsId: DTerrainSettingId;
     rating: number;
@@ -122,9 +106,6 @@ export interface DFloorInfo {
     bgmName: string;
     bgmVolume: 90;
     bgmPitch: number;
-
-    //structures: DFloorStructures;
-    monsterHouse: DFloorMonsterHouse;
 
     presetId: DTerrainPresetId;
 }
@@ -322,8 +303,6 @@ export class DLand {
             // @MR-Floor 設定を取り出す
             const floorData = DAnnotationReader.readFloorMetadataFromPage(event.pages[0]);
             if (floorData) {
-                //const structures = DHelpers.readStructuresMetadata(event);
-                const monsterHouses = DAnnotationReader.readMonsterHouseMetadata(event);
 
                 const info: DFloorInfo = {
                     key: event.name,
@@ -334,7 +313,6 @@ export class DLand {
                     bgmName: floorData.bgm ? floorData.bgm[0] : "",
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
-                    monsterHouse: new DFloorMonsterHouse(monsterHouses),
                     presetId: floorData.preset ? REData.getFloorPreset(floorData.preset).id : 0,
                 }
 
