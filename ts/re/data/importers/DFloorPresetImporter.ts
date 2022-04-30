@@ -31,7 +31,7 @@ export class DFloorPresetImporter {
             // terrains
             for (const [terrainSettingKey, rate] of Object.entries(preset.terrains)) {
                 const terraintSettingId = REData.getTerrainSetting(terrainSettingKey).id;
-                data.presets.push(new DTerrainSettingRef(terraintSettingId, rate)); 
+                data.terrains.push(new DTerrainSettingRef(terraintSettingId, rate)); 
             }
 
             // monsterHouses

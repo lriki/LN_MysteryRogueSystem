@@ -193,7 +193,7 @@ export class SGameManager {
                     const floorInto = newFloorId.floorInfo();
 
                     const preset = floorInto.presetId ? REData.floorPresets[floorInto.presetId] : REData.floorPresets[REBasics.defaultTerrainPresetId];
-                    const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.presets, x => x.rating);
+                    const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.terrains, x => x.rating);
                     assert(settingId);
                     
                     const setting = REData.terrainSettings[settingId.terrainSettingsId];

@@ -526,7 +526,7 @@ export class REDataManager {
                 setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_HalfHall").id, rate: 1});
             }
             {
-                const setting = REData.newTerrainSetting("kTerrainSetting_C");
+                const setting = REData.newTerrainSetting("kTerrainSetting_Alphabet");
                 setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_C").id, rate: 1});
             }
             {
@@ -535,61 +535,8 @@ export class REDataManager {
                 setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
             }
 
-            //----------
 
-            {
-                // const preset = REData.newFloorPreset("kFloorPreset_Default");
-                // preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-                REBasics.defaultTerrainPresetId = 1;////preset.id;
-            }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_GreatHall");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1)); 
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_GreatHallMH");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHallMH").id, 1)); 
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level1");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Small2x2").id, 1)); 
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level2");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level3_First");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level3");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level4_First");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level4");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level5_First");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_SimpleDefault").id, 1));
-            // }
-            // {
-            //     const preset = REData.newFloorPreset("kFloorPreset_Level5");
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_Default").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_C").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_GreatHall").id, 1));
-            //     preset.presets.push(new DTerrainSettingRef(REData.getTerrainSetting("kTerrainSetting_HalfHall").id, 1));
-            // }
+            REBasics.defaultTerrainPresetId = 1;
         }
 
         

@@ -168,13 +168,13 @@ export class DTerrainSetting {
 export class DFloorPreset {
     id: DFloorPresetId;
     key: string;
-    presets: DTerrainSettingRef[];
+    terrains: DTerrainSettingRef[];
     monsterHouses: DFloorMonsterHousePattern[];
     
     public constructor(id: DFloorPresetId) {
         this.id = id;
         this.key = "";
-        this.presets = [];
+        this.terrains = [];
         this.monsterHouses = [];
     }
 }
