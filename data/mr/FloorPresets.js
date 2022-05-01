@@ -106,10 +106,10 @@ db.floorPresets = {
     // 難易度 Level5 の 2F 以降用。
     "kFloorPreset_Level5": {
         terrains: {
-            "kTerrainSetting_Default": 2,
-            "kTerrainSetting_Alphabet": 2,  // アルファベット型
-            "kTerrainSetting_GreatHall": 1, // 大部屋
-            "kTerrainSetting_HalfHall": 1,  // 中部屋
+            "kTerrainSetting_Default": 2,   // 基本のランダムマップ。出現レーティング 2
+            "kTerrainSetting_Alphabet": 2,  // アルファベット型。出現レーティング 2
+            "kTerrainSetting_GreatHall": 1, // 大部屋。出現レーティング 1
+            "kTerrainSetting_HalfHall": 1,  // 中部屋。出現レーティング 1
         },
         monsterHouses: {
             "Default": 1,

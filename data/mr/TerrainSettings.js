@@ -33,16 +33,17 @@ db.terrainSettings = {
             "kTerrainShape_Default": 1,
         },
         structures: {
-            "MonsterHouse": 1/16,
+            "MonsterHouse": 1/16,   // モンスターハウス出現率 1/16
         }
     },
-    // テスト用。モンスターハウスが必ず出現する。
-    "kTerrainSetting_Test_DefaultMH": {
+    // アルファベット。shapes の中のいずれかひとつが選択される。
+    "kTerrainSetting_Alphabet": {
         shapes: {
-            "kTerrainShape_Default": 1,
+            "kTerrainShape_C": 1,
+            "kTerrainShape_H": 1,
         },
         structures: {
-            "MonsterHouse": 1.0,    // 100%
+            "MonsterHouse": 1/16,   // モンスターハウス出現率 1/16
         }
     },
     // 一般的な 3x3 部屋のフロア形状でだた、通路生成の複雑度を低くした地形生成モード。
@@ -69,20 +70,19 @@ db.terrainSettings = {
             "kTerrainShape_HalfHall": 1,
         }
     },
-    // アルファベット。shapes の中のいずれかひとつが選択される。
-    "kTerrainSetting_Alphabet": {
-        shapes: {
-            "kTerrainShape_C": 1,
-            "kTerrainShape_H": 1,
-        },
-        structures: {
-            "MonsterHouse": 1/16,
-        }
-    },
     // 確定モンスターハウス大部屋。
     "kTerrainSetting_GreatHallMH": {
         shapes: {
             "kTerrainShape_GreatHall": 1,
+        },
+        structures: {
+            "MonsterHouse": 1.0,    // 100%
+        }
+    },
+    // テスト用。モンスターハウスが必ず出現する。
+    "kTerrainSetting_Test_DefaultMH": {
+        shapes: {
+            "kTerrainShape_Default": 1,
         },
         structures: {
             "MonsterHouse": 1.0,    // 100%
