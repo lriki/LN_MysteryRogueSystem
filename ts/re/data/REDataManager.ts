@@ -500,40 +500,40 @@ export class REDataManager {
 
             //----------
 
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_Default");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_Test_DefaultMH");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
-                setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_SimpleDefault");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_SimpleDefault").id, rate: 1});
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_Small2x2");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Small2x2").id, rate: 1});
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_GreatHall");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_GreatHall").id, rate: 1});
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_HalfHall");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_HalfHall").id, rate: 1});
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_Alphabet");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_C").id, rate: 1});
-            }
-            {
-                const setting = REData.newTerrainSetting("kTerrainSetting_GreatHallMH");
-                setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_GreatHall").id, rate: 1});
-                setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
-            }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_Default");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_Test_DefaultMH");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Default").id, rate: 1});
+            //     setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_SimpleDefault");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_SimpleDefault").id, rate: 1});
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_Small2x2");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_Small2x2").id, rate: 1});
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_GreatHall");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_GreatHall").id, rate: 1});
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_HalfHall");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_HalfHall").id, rate: 1});
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_Alphabet");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_C").id, rate: 1});
+            // }
+            // {
+            //     const setting = REData.newTerrainSetting("kTerrainSetting_GreatHallMH");
+            //     setting.shapeRefs.push({dataId: REData.getTerrainShape("kTerrainShape_GreatHall").id, rate: 1});
+            //     setting.forceStructures = [{typeName: "MonsterHouse", rate: 100}];
+            // }
 
 
             REBasics.defaultTerrainPresetId = 1;
