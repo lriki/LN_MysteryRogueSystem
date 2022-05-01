@@ -6,11 +6,6 @@ export enum DSectorConnectionPreset {
     Default,
     C,
     H,
-    N,
-    S,
-    O,
-    F,
-    T,
 }
 
 export enum FGenericRandomMapWayConnectionMode

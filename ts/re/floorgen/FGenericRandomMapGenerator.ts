@@ -201,14 +201,11 @@ export class FGenericRandomMapGenerator {
             }
             this.random.mutableShuffleArray(shapes);
     
-            console.log("shapes", shapes);
             for (let i = 0; i < sectorCount; i++) {
                 if (shapes[i]) {
                     sectors[i].structureType = shapes[i];
-                    console.log("MH!!", i);
                 }
             }
-            console.log("xxxxxxxxxxxx", sectors);
         }
 
         // for (const sector of sectors) {

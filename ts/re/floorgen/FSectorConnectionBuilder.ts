@@ -16,6 +16,9 @@ export class FSectorConnectionBuilder {
             case DSectorConnectionPreset.C:
                 this.connectC(map, rand, shape);
                 break;
+            case DSectorConnectionPreset.H:
+                this.connectH(map, rand, shape);
+                break;
             default:
                 throw new Error("Not implemented.");
         }
@@ -106,24 +109,52 @@ export class FSectorConnectionBuilder {
     private static connectC(map: FMap, rand: LRandom, shape: DTerrainShape): void {
         assert(shape.divisionCountX >= 3);
         assert(shape.divisionCountY >= 3);
-
         const r = shape.divisionCountX - 1;
-        const b = shape.divisionCountX - 1;
+        const b = shape.divisionCountY - 1;
+
+        // 上側1行
         for (let x = 0; x < r; x++) {
             const s1 = this.sector(map, shape, x, 0);
             const s2 = this.sector(map, shape, x + 1, 0);
             map.connectSectors(s1.edge(FDirection.R), s2.edge(FDirection.L));
         }
-
+        // 左側1列
         for (let y = 0; y < b; y++) {
             const s1 = this.sector(map, shape, 0, y);
             const s2 = this.sector(map, shape, 0, y + 1);
             map.connectSectors(s1.edge(FDirection.B), s2.edge(FDirection.T));
         }
-
+        // 下側1行
         for (let x = 0; x < r; x++) {
             const s1 = this.sector(map, shape, x, b);
             const s2 = this.sector(map, shape, x + 1, b);
+            map.connectSectors(s1.edge(FDirection.R), s2.edge(FDirection.L));
+        }
+    }
+    
+    private static connectH(map: FMap, rand: LRandom, shape: DTerrainShape): void {
+        assert(shape.divisionCountX >= 3);
+        assert(shape.divisionCountY >= 3);
+        const r = shape.divisionCountX - 1;
+        const b = shape.divisionCountY - 1;
+        const c = Math.floor(shape.divisionCountY / 2);
+
+        // 左側1列
+        for (let y = 0; y < b; y++) {
+            const s1 = this.sector(map, shape, 0, y);
+            const s2 = this.sector(map, shape, 0, y + 1);
+            map.connectSectors(s1.edge(FDirection.B), s2.edge(FDirection.T));
+        }
+        // 右側1列
+        for (let y = 0; y < b; y++) {
+            const s1 = this.sector(map, shape, r, y);
+            const s2 = this.sector(map, shape, r, y + 1);
+            map.connectSectors(s1.edge(FDirection.B), s2.edge(FDirection.T));
+        }
+        // 中央1行
+        for (let x = 0; x < r; x++) {
+            const s1 = this.sector(map, shape, x, c);
+            const s2 = this.sector(map, shape, x + 1, c);
             map.connectSectors(s1.edge(FDirection.R), s2.edge(FDirection.L));
         }
     }

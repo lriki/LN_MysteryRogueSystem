@@ -497,6 +497,13 @@ export class REDataManager {
                 shape.divisionCountY = 3;
                 shape.connectionPreset = DSectorConnectionPreset.C;
             }
+            {
+                const shape = REData.newTerrainShape("kTerrainShape_H");
+                shape.divisionCountX = 3;
+                shape.divisionCountY = 3;
+                shape.connectionPreset = DSectorConnectionPreset.H;
+            }
+
 
             //----------
 
