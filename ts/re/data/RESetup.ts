@@ -1117,9 +1117,12 @@ export class RESetup {
                 emittor.scope.projectilePrefabKey = "kEntity_System_MagicBullet_A";
                 data.emittor().costs.setParamCost(DSkillCostSource.Item, REBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
-            case "kSkill_ふきとばし":
-                emittor.effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+            case "kSkill_ふきとばし": {
+                const effect = emittor.effectSet.effects[0];
+                effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "5", DParameterEffectApplyType.Damage));
                 break;
+            }
             case "kSkill_変化":
                 emittor.effectSet.effects[0].effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.changeInstance });
                 emittor.effectSet.effects[0].rmmzAnimationId = 40;

@@ -169,17 +169,23 @@ export class LItemBehavior extends LBehavior {
     private applyHitEffect(cctx: SCommandContext, self: LEntity, actionId: DActionId, target: LEntity, subject: LEntity, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
         const entityData = self.data();
         //const emittors = entityData.emittorSet.emittors(cause);
-        const emittors = entityData.getReaction(actionId).emittors();
-        if (emittors.length > 0) {
-            cctx.postCall(() => {
-                for (const emittor of emittors) {
-                    //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
-                    SEmittorPerformer.makeWithEmitor(subject, target, emittor)
-                        .setItemEntity(self)
-                        .setDffectDirection(effectDir)
-                        .perform(cctx, onPerformedFunc);
-                }
-            });
+        const reaction = entityData.findReaction(actionId);
+        if (reaction) {
+            const emittors = reaction.emittors();
+            if (emittors.length > 0) {
+                cctx.postCall(() => {
+                    for (const emittor of emittors) {
+                        //SEmittorPerformer.makeWithEmitor(subject.entity(), emittor)
+                        SEmittorPerformer.makeWithEmitor(subject, target, emittor)
+                            .setItemEntity(self)
+                            .setDffectDirection(effectDir)
+                            .perform(cctx, onPerformedFunc);
+                    }
+                });
+            }
+        }
+        else {
+            // 吹き飛ばした Enemy が他 Enemy と衝突した場合など、Reaction を持たない場合
         }
         
         // const skill = entityData.emittorSet.skill(cause);

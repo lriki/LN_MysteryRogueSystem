@@ -66,18 +66,18 @@ export class LSelfExplosionBehavior extends LBehavior {
     [onEffectResult](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
 
+        // 既に戦闘不能なら処理不要
+        if (self.isDeathStateAffected()) return SCommandResponse.Pass;
 
         const mhp = self.idealParam(REBasics.params.hp);
         const hp = self.actualParam(REBasics.params.hp);
-        //if (hp < 100) {
-        if (hp < 50) {
+        if (hp < 10) {          // 残り1桁で爆発
             const skill = REData.getSkill("kSkill_大爆発");
             cctx.postActivity(LActivity.makePerformSkill(self, skill.id));
             cctx.postCall(() => cctx.postDestroy(self));
             return SCommandResponse.Handled;
         }
-        //if (hp < mhp * 0.3) {
-        if (hp < 80) {
+        if (hp < mhp * 0.5) {   // 残り 50% で着火状態
             const stateId = REData.getState("kState_UT自爆着火").id;
             if (!self.hasState(stateId)) {
                 self.addState(stateId);
