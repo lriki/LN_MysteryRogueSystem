@@ -1,5 +1,6 @@
 import { Vector2 } from "ts/re/math/Vector2";
 import { Helpers } from "ts/re/system/Helpers";
+import { SMotionSequel } from "ts/re/system/SSequel";
 import { REVisualSequel } from "../REVisualSequel";
 import { REVisualSequelContext } from "../REVisualSequelContext";
 import { REVisual_Entity } from "../REVisual_Entity";
@@ -16,12 +17,11 @@ export class VDropSequel extends REVisualSequel {
         const frameCount = context.frameCount();
         const entity = visual.entity();
 
-        const velocityX = (entity.x - context.startPosition().x) / DROP_TIME;
-        const velocityY = (entity.y - context.startPosition().y) / DROP_TIME;
-
+        const sequel = context.sequel() as SMotionSequel;
+        const velocityX = (sequel.targetX() - context.startPosition().x) / DROP_TIME;
+        const velocityY = (sequel.targetY() - context.startPosition().y) / DROP_TIME;
 
         const ratio = frameCount / DROP_TIME;
-
 
         let ox = 0;
         let oy = 0;

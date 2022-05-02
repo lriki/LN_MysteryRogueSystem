@@ -148,17 +148,7 @@ export class USearch {
             }
         })
     }
-
-    /**
-     * ランダムワープ先の Block を選択する。
-    public static selectRandomWarpBlock(rand: LRandom): void {
-        const room = this.getRondomWarpRoom(rand);
-        
-
-
-    }
-     */
-
+    
     public static getFirstUnderFootEntity(entity: LEntity): LEntity | undefined {
         const block = REGame.map.tryGetBlock(entity.x, entity.y);
         if (block) {
