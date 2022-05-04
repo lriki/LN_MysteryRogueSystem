@@ -42,8 +42,15 @@ export class UProperty {
         }
 
         if (obj) {
-            if (propPath.propertyName) {
-                let value: any;
+            if (propPath.behaviorName) {
+                const behavior = entity.findEntityBehaviorByName(propPath.behaviorName);
+                if (!behavior) new Error(`Behavior not found. ${path}`);
+                let value: any = undefined;
+                eval(`value = behavior.${propPath.propertyName}`);
+                return value;
+            }
+            else if (propPath.propertyName) {
+                let value: any = undefined;
                 eval(`value = obj.${propPath.propertyName}`);
                 return value;
             }
@@ -143,13 +150,13 @@ export class UPropertyPath {
             const tokens2 = after.split(".");
             if (tokens2.length >= 2) {
                 this.behaviorName = tokens2[0];
-                this.propertyName = tokens2[1];
+                this.propertyName = tokens2.slice(1).join(".");
                 if (componentType === undefined) {
                     componentType = UComponentType.Entity;
                 }
             }
             else {
-                this.propertyName = tokens2[0];
+                this.propertyName = tokens2.join(".");
                 if (componentType === undefined) {
                     componentType = UComponentType.Param;   // デフォルトは Param とする。これがもっともよく使う
                 }

@@ -46,8 +46,8 @@ test("concretes.enemy.ItemThief.Basic", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Player のインベントリにあったアイテムが盗まれ、Enemy のインベントリに移動している
-    expect(inventory1.entities().length).toBe(0);
-    expect(inventory2.entities().length).toBe(1);
+    expect(inventory1.items.length).toBe(0);
+    expect(inventory2.items.length).toBe(1);
     expect(inventory2.contains(item1)).toBe(true);
 
     // Enemy1 はワープしている
@@ -116,7 +116,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 盗まれている
-    expect(inventory2.entities().length).toBe(1);
+    expect(inventory2.items.length).toBe(1);
     expect(inventory2.contains(item1)).toBe(true);
 });
 
@@ -232,7 +232,7 @@ test("concretes.enemy.ItemThief.Equipment", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Player のインベントリにあったアイテムが盗まれ、Enemy のインベントリに移動している
-    expect(inventory1.entities().length).toBe(1);
-    expect(inventory2.entities().length).toBe(0);
+    expect(inventory1.items.length).toBe(1);
+    expect(inventory2.items.length).toBe(0);
     expect(inventory1.contains(weapon1)).toBeTruthy();
 })

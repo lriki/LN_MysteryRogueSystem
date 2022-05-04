@@ -76,7 +76,7 @@ export class VItemListWindow extends Window_Selectable {
 
     public refreshItems(): void {
         if (this._inventory) {
-            this._items = this._inventory.entities().map(x => new VItemListWindowItem(x));
+            this._items = this._inventory.items.map(x => new VItemListWindowItem(x));
             this.refresh();
         }
     }

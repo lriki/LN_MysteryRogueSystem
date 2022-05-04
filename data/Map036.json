@@ -7796,6 +7796,27 @@
           },
           "list": [
             {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "--------------------------------------------------"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "プレイヤーパラメータの取得テスト"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "--------------------------------------------------"
+              ]
+            },
+            {
               "code": 357,
               "indent": 0,
               "parameters": [
@@ -7891,6 +7912,27 @@
               ]
             },
             {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "--------------------------------------------------"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "ステートの取得テスト"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "--------------------------------------------------"
+              ]
+            },
+            {
               "code": 357,
               "indent": 0,
               "parameters": [
@@ -7941,6 +7983,80 @@
               "indent": 0,
               "parameters": [
                 "プレイヤーの睡眠ステートの有無: \\V[4]"
+              ]
+            },
+            {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "--------------------------------------------------"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "持ち物数の取得テスト"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "--------------------------------------------------"
+              ]
+            },
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-GetProperty",
+                "MR-GetProperty",
+                {
+                  "entityKey": "${Player}",
+                  "property": "Entity:Inventory.items.length",
+                  "variable": "MR-CommndResult1"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "entityKey = ${Player}"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "property = Entity:Inventory.items.length"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "variable = MR-CommndResult1"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "プレイヤーの持ち物の数: \\V[4]"
               ]
             },
             {

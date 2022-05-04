@@ -108,7 +108,7 @@ test("Shop.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(inventory1.gold() < 1000).toBe(true);    // ゴールドが減っている
-    expect(inventory1.entities()[0].getEntityBehavior(LItemBehavior).shopStructureId()).toBe(0);    // 値札が外れている
+    expect(inventory1.items[0].getEntityBehavior(LItemBehavior).shopStructureId()).toBe(0);    // 値札が外れている
 
     // ゲーム中ではここで「ありがとうございました」等メッセージが表示される。
     

@@ -52,7 +52,7 @@ export class SItemStealSpecialEffect extends SSpecialEffect {
         const inventory = target.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return undefined;
         
-        let items = inventory.entities();
+        let items = inventory.items;
         if (items.length == 0) return undefined;
 
         // 装備中のアイテムは除外

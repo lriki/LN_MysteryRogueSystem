@@ -55,8 +55,8 @@ test("activity.PickAndPut", () => {
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている
-    expect(inventory.entities().length).toBe(1);
-    expect(inventory.entities()[0]).toBe(item1);
+    expect(inventory.items.length).toBe(1);
+    expect(inventory.items[0]).toBe(item1);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -70,7 +70,7 @@ test("activity.PickAndPut", () => {
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(true);
 
     // item1 はインベントリから外れている
-    expect(inventory.entities.length).toBe(0);
+    expect(inventory.items.length).toBe(0);
 });
 
 test("activity.PickAtMoved", () => {
@@ -104,7 +104,7 @@ test("activity.PickAtMoved", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(enemy1.x).toBe(19);  // enemy は動いていない (ターンは回っていない)
-    expect(actor1.getEntityBehavior(LInventoryBehavior).entities()[0]).toBe(item1);   // アイテムを拾えていること
+    expect(actor1.getEntityBehavior(LInventoryBehavior).items[0]).toBe(item1);   // アイテムを拾えていること
 
     // Item は移動アニメの後に Map から除外されること
     const records = TestEnv.integration.records;

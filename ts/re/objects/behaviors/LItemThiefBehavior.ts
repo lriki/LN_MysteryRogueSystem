@@ -97,7 +97,7 @@ export class LItemThiefBehavior extends LBehavior {
             if (target && Helpers.isHostile(self, target)) {
                 const inventory = target.findEntityBehavior(LInventoryBehavior);
                 if (inventory) {
-                    if (inventory.entities().length > 0) {
+                    if (inventory.items.length > 0) {
                         candidates.push({
                             action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
                             targets: [target.entityId()],

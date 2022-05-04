@@ -2,6 +2,9 @@ import { TestEnv } from "../TestEnv";
 import { UComponentType, UProperty, UPropertyPath } from "ts/re/usecases/UProperty";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
+import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/re/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -21,6 +24,11 @@ test("system.Property.basic", () => {
     expect(max_hp2).toBe(max_hp1);
     const state = UProperty.getValueFromEntity(player1, "State[kState_UTかなしばり]");
     expect(state).toBe(1);
+
+    // アイテム数
+    player1.getEntityBehavior(LInventoryBehavior).addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
+    const count = UProperty.getValueFromEntity(player1, "Entity:Inventory.items.length");
+    expect(count).toBe(1);
 });
 
 test("system.Property.PathParser", () => {

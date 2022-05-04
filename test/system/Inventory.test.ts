@@ -74,7 +74,7 @@ test("system.Inventory.Sort", () => {
     for (let i = 0; i < 3; i++) {   // 数回ソートして、結果がわからないことを確認する
         UInventory.sort(inventory);
     
-        const items = inventory.entities();
+        const items = inventory.items;
         expect(items.length).toBe(7);
         expect(items[0]).toBe(weapon3); // 装備しているものは先頭に来る
         expect(items[1]).toBe(weapon1);

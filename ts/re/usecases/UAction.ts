@@ -260,10 +260,10 @@ export class UAction {
         if (!inventory) return [];
         
         if (equipmentUser) {
-            return inventory.entities().filter(x => !equipmentUser.isEquipped(x));
+            return inventory.items.filter(x => !equipmentUser.isEquipped(x));
         }
         else {
-            return inventory.entities();
+            return inventory.items;
         }
     }
 

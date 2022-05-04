@@ -45,7 +45,7 @@ export class UInventory {
     }
 
     public static makeMergedStackables(inventory: LInventoryBehavior): LEntity[] {
-        const entities = inventory.entities();
+        const entities = inventory.items;
         for (let i = entities.length - 1; i >= 0; i--) {    // 後ろからループ
             for (let j = i - 1; j >= 0; j--) {              // i のひとつ前から前方へ確認
                 const src = entities[i];

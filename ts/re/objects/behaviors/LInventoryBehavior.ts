@@ -144,7 +144,7 @@ export class LInventoryBehavior extends LBehavior {
         return this._entities.length > 0;
     }
 
-    public entities(): LEntity[] {
+    public get items(): LEntity[] {
         return this._entities.map(x => REGame.world.entity(x));
     }
 
@@ -175,7 +175,7 @@ export class LInventoryBehavior extends LBehavior {
         assert(!entity.parentEntity());
         assert(!this.isFully);
 
-        for (const item of this.entities()) {
+        for (const item of this.items) {
             if (item.checkStackable(entity)) {
                 item.increaseStack(entity);
                 return;

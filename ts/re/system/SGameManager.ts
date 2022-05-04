@@ -157,7 +157,6 @@ export class SGameManager {
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1")));
             
-            
         }
     }
 

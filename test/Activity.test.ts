@@ -44,7 +44,7 @@ test("Activity.Eat", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
-    expect(actor1.getEntityBehavior(LInventoryBehavior).entities().length).toBe(0);
+    expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(0);
 });
 
 test("Activity.Throw", () => {
@@ -76,7 +76,7 @@ test("Activity.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
-    expect(actor1.getEntityBehavior(LInventoryBehavior).entities().length).toBe(1);
+    expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(1);
 
     // とりあえず、Actor 位置より右に落ちること。
     expect(item1.x > 10).toBe(true);
@@ -94,7 +94,7 @@ test("Activity.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
-    expect(actor1.getEntityBehavior(LInventoryBehavior).entities().length).toBe(0);
+    expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(0);
 
     // 壁の手前に落ちていること
     expect(item2.x).toBe(actor1.x);
@@ -166,7 +166,7 @@ test("Activity.Exchange", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(inventory.entities().length).toBe(1);
+    expect(inventory.items.length).toBe(1);
     expect(inventory.contains(item2)).toBe(true);                          // item2 が持ち物に入っている
     expect(REGame.map.block(10, 10).containsEntity(item1)).toBe(true);  // item1 が足元にある
 });

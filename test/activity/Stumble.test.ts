@@ -80,7 +80,7 @@ test("concretes.activity.Stumble.player.wall", () => {
     expect(REGame.map.block(1, 3).getFirstEntity() !== undefined).toBe(true);
     expect(REGame.map.block(1, 4).getFirstEntity() !== undefined).toBe(true);
     expect(REGame.map.block(1, 5).getFirstEntity() !== undefined).toBe(true);
-    expect(inventory.entities().length).toBe(6);
+    expect(inventory.items.length).toBe(6);
 });
 
 
@@ -121,7 +121,7 @@ test("concretes.activity.Stumble.player.onItem", () => {
 
     // 持ち物が前方に落ちる。壁にはめり込まない。
     expect(REGame.map.block(11, 10).getEntities().length === 1).toBe(true);
-    expect(inventory.entities().length).toBe(2);
+    expect(inventory.items.length).toBe(2);
 });
 
 test("concretes.activity.Stumble.enemy", () => {

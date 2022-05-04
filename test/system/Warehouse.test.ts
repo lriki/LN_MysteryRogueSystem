@@ -50,7 +50,7 @@ test("system.Warehouse.Store", () => {
     
     expect(inventory1.hasAnyItem()).toBeFalsy(); // もちものは空になる
 
-    const items = inventory2.entities();
+    const items = inventory2.items;
     expect(items.length).toBe(2);
     expect(items[0]).toBe(weapon1);
     expect(items[1]).toBe(grass1);
@@ -136,7 +136,7 @@ test("system.Warehouse.Withdraw", () => {
     expect(inventory2.hasAnyItem()).toBeFalsy(); // 倉庫空になる
 
     // もちものには、ソートはされずに追加されている。
-    const items = inventory1.entities();
+    const items = inventory1.items;
     expect(items.length).toBe(2);
     expect(items[0]).toBe(grass1);
     expect(items[1]).toBe(weapon1);

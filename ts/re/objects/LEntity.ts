@@ -1105,6 +1105,23 @@ export class LEntity extends LObject
         return undefined;
     }
 
+    public findEntityBehaviorByName(name: string): LBehavior | undefined {
+        const lowerName = name.toLocaleLowerCase();
+        for (const id of this._basicBehaviors) {
+            const b = REGame.world.behavior(id);
+            let behaviorName = b.constructor.name;
+            const index = behaviorName.lastIndexOf("Behavior");
+            if (index >= 0) {
+                behaviorName = behaviorName.substring(0, index);
+            }
+
+            if (behaviorName.toLocaleLowerCase().endsWith(lowerName)) {
+                return b;
+            }
+        }
+        return undefined;
+    }
+
     /**
      * この Entity に直接アタッチされている Behavior を取得します。
      * State や Ability にアタッチされている Behavior は対象外です。

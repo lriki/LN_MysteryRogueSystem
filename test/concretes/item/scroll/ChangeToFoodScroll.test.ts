@@ -35,7 +35,7 @@ test("concretes.item.scroll.ChangeToFoodScroll", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const items = inventory.entities();
+    const items = inventory.items;
     expect(items.length).toBe(1);
     expect(items[0].data().entity.key).toBe("kEntity_フランスパン_A");
     expect(item2.isDestroyed()).toBeFalsy();    // Entity が変異しただけなので、インスタンス自体は削除されていない

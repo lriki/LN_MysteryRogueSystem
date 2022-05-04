@@ -81,7 +81,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     onGenerateDropItems(self: LEntity, cause: LGenerateDropItemCause, result: LEntity[]): void {
         const inventory = self.findEntityBehavior(LInventoryBehavior);
         if (inventory && inventory.hasAnyItem()) {
-            for (const item of inventory.entities()) {
+            for (const item of inventory.items) {
                 inventory.removeEntity(item);
                 result.push(item);
             }

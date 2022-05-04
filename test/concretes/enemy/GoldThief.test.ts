@@ -70,7 +70,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     // また、アイテム化された Gold を持っている
     expect(enemy1.x != 13 && enemy1.y != 10).toBe(true);
     expect(inventory2.hasAnyItem()).toBe(true);
-    const item1 = inventory2.entities()[0];
+    const item1 = inventory2.items[0];
     
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
