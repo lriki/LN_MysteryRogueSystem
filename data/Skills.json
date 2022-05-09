@@ -554,9 +554,9 @@
     "damage": {
       "critical": false,
       "elementId": 0,
-      "formula": "a.hp * 0.75",
+      "formula": "b.hp - 1",
       "type": 1,
-      "variance": 20
+      "variance": 0
     },
     "description": "",
     "effects": [],
@@ -603,7 +603,7 @@
     "message1": "",
     "message2": "",
     "mpCost": 0,
-    "name": "┗大爆発（モンスター）",
+    "name": "[deprecated]┗大爆発（モンスター）",
     "note": "<MR-Type: Skill>\n<MR-Key: kSkill_大爆発_モンスター>",
     "occasion": 0,
     "repeats": 1,

@@ -16,6 +16,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
+// HP を一気に削り切ったときのテスト
 test("concretes.enemy.SelfExplosion.NotExplosion", () => {
     TestEnv.newGame();
 
@@ -39,11 +40,12 @@ test("concretes.enemy.SelfExplosion.NotExplosion", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(enemy1.isDestroyed()).toBeTruthy();          // Enemy は消えている
+
     const player1HP1 = player1.idealParam(REBasics.params.hp);
     const player1HP2 = player1.actualParam(REBasics.params.hp);
     expect(player1.isDeathStateAffected()).toBe(false); // Player は生きている
     expect(player1HP2).toBe(player1HP1);                // 爆発していないので、ダメージは受けていない
+    expect(enemy1.isDestroyed()).toBeTruthy();          // Enemy は倒れている
 });
 
 test("concretes.enemy.SelfExplosion.Explosion", () => {
@@ -87,7 +89,7 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
 
     const player1HP2 = player1.actualParam(REBasics.params.hp);
     expect(player1.isDeathStateAffected()).toBe(false); // Player は生きている
-    expect(player1HP2).toBeLessThan(player1HP1);        // Player は爆発のダメージ受けている
+    expect(player1HP2).toBe(2);                         // Player は爆発のダメージ受けている。HP1 になる -> 自動回復するので 2 となる。
     expect(enemy1.isDeathStateAffected()).toBe(false);  // Enemy1 は爆発で消滅している
     expect(enemy2.isDestroyed()).toBe(true);            // 爆発によって隣接している敵は即死
 });
