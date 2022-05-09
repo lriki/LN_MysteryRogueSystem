@@ -42,6 +42,7 @@ test("concretes.states.RatedRandom", () => {
     expect(enemy1.x != 11 && enemy1.y != 10).toBe(true);
 });
 
+// ランダム行動の中で、攻撃が発生した時にクラッシュすることがある問題の修正確認
 test("concretes.states.RatedRandom.Issue1", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
@@ -70,34 +71,4 @@ test("concretes.states.RatedRandom.Issue1", () => {
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
-    
-
-    /*
-    ■■■■■
-    ■敵敵敵■
-    ■敵ｐ敵■
-    ■敵敵敵■
-    ■■■■■
-    */
-   /*
-    const player1 = TestEnv.setupPlayer(floorId, 20, 10);
-    USearch.iterateAroundPositions(20, 10, 2, (mx, my) => {
-        REGame.map.block(mx, my)._tileShape = TileShape.Wall;
-    });
-    USearch.iterateAroundPositions(20, 10, 1, (mx, my) => {
-        const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-        REGame.world._transferEntity(enemy1, floorId, mx, my);
-    });
-
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
-
-    // 10 ターン分 シミュレーション実行
-    for (let i = 0; i < 10; i++) {
-        player1.setActualDamgeParam(REBasics.params.hp, 0);
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
-    }
-    */
-
 });

@@ -7,10 +7,10 @@ import { MovingMethod } from "../LMap";
 import { LActivity } from "../activities/LActivity";
 import { LActionTokenType } from "../LActionToken";
 
-export class LDebugMoveRightState extends LBehavior {
+export class LDebugMoveRightBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LDebugMoveRightState);
+        const b = REGame.world.spawn(LDebugMoveRightBehavior);
         return b
     }
 

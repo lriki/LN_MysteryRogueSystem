@@ -1,7 +1,7 @@
 import { LEntity } from "../objects/LEntity";
 import { LBehavior } from "ts/re/objects/behaviors/LBehavior";
 import { REGame } from "ts/re/objects/REGame";
-import { LDebugMoveRightState } from "ts/re/objects/states/DebugMoveRightState";
+import { LDebugMoveRightBehavior } from "ts/re/objects/states/LDebugMoveRight";
 import { LNapStateBehavior } from "ts/re/objects/states/LNapStateBehavior";
 import { LKnockbackBehavior } from "ts/re/objects/abilities/LKnockbackBehavior";
 import { LCommonBehavior } from "ts/re/objects/behaviors/LCommonBehavior";
@@ -54,10 +54,10 @@ export class SBehaviorFactory {
         { fullName: "LItemStandingBehavior", friendlyName: "ItemStanding", create: () => new LItemStandingBehavior() },
         
         
-        
-
         { fullName: "LKnockbackBehavior", friendlyName: "Knockback", create: () => new LKnockbackBehavior() },
         { fullName: "LSelfExplosionBehavior", friendlyName: "SelfExplosion", create: () => new LSelfExplosionBehavior() },
+        
+        { fullName: "LDebugMoveRightBehavior", friendlyName: "DebugMoveRight", create: () => new LDebugMoveRightBehavior() },
     ];
     
     
@@ -116,16 +116,7 @@ export class SBehaviorFactory {
             return e.create();
         }
         else {
-            switch (name) {
-                //case "Staff":
-                //    return new LStaffItemBehavior();
-                case "DebugMoveRight":
-                    return new LDebugMoveRightState();
-                //case "Nap":
-                //    return new LNapStateBehavior();
-                default:
-                    return undefined;
-            }
+            return undefined;
         }
     }
 }
