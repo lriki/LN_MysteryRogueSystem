@@ -21,14 +21,17 @@ interface SkillAction {
 };
 
 export enum LConfusionAIRestriction {
+    /** 攻撃しない */
+    None = 0,
+
     /** 敵を攻撃 */
-    AttcakToOpponent = 0,
+    AttcakToOpponent = 1,
 
     /** 誰かを攻撃 */
-    AttackToOther = 1,
+    AttackToOther = 2,
 
     /** 味方を攻撃 */
-    AttcakToFriend = 2,
+    AttcakToFriend = 3,
 }
 
 @RESerializable
@@ -75,7 +78,7 @@ export class LConfusionAI extends LCharacterAI {
         // 通常攻撃できるか試してみる。
         // 実際の攻撃は Major フェーズで行いたいので、ここでは行動は消費しない。
         // 攻撃候補を覚えておく。
-        {
+        if (this._restriction != LConfusionAIRestriction.None) {
             const block = UMovement.getAdjacentBlock(self, dir);
             let targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.x() && e.y == block.y());
     

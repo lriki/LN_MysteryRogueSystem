@@ -18,7 +18,9 @@ export class LRatedRandomAI extends LCharacterAI {
         this._randomRate = 50;
         this._rundomTurn = false;
         this._standardAI  = new LCharacterAI_Normal();
-        this._randomAI  = new LConfusionAI(LConfusionAIRestriction.AttcakToOpponent);
+
+        // ランダム移動には混乱の処理を流用するが、その中のランダム攻撃は発動しないようにしておく
+        this._randomAI  = new LConfusionAI(LConfusionAIRestriction.None);
     }
 
     public clone(): LCharacterAI {
