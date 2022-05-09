@@ -93,3 +93,33 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
     expect(enemy1.isDeathStateAffected()).toBe(false);  // Enemy1 は爆発で消滅している
     expect(enemy2.isDestroyed()).toBe(true);            // 爆発によって隣接している敵は即死
 });
+
+// HP0 の状態で爆発を受けると戦闘不能
+test("concretes.enemy.SelfExplosion.Explosion.Dead", () => {
+    TestEnv.newGame();
+
+    // Player
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
+    player1.addState(REData.getState("kState_UT10ダメージ").id);
+    SDebugHelpers.setHP(player1, 1);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ブラストミミックA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    SDebugHelpers.setHP(enemy1, 15);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [攻撃]
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const player1HP2 = player1.actualParam(REBasics.params.hp);
+    expect(player1.isDeathStateAffected()).toBeTruthy(); 
+    expect(player1HP2).toBe(0);
+});

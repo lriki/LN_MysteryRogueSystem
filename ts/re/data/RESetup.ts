@@ -1330,6 +1330,7 @@ export class RESetup {
         const data = entity.enemyData();
         switch (entity.entity.key) {
             case "kEnemy_ブラストミミックA":
+                entity.entity.behaviors.push({name: "SelfExplosion"});
                 //entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
                 break;
             case "kEnemy_ウルフA":

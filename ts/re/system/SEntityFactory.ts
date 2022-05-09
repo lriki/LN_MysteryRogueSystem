@@ -90,6 +90,7 @@ export class SEntityFactory {
         //e.addBehavior(LExperiencedBehavior);
         e.addBehavior(LEnemyBehavior);
         e.addBehavior(LRaceBehavior);
+        SBehaviorFactory.attachBehaviors(e, enemyEntityData.entity.behaviors);
         this.setupDirectly_Enemy(e, enemyEntityData);
     }
     
@@ -290,9 +291,6 @@ export class SEntityFactory {
                 break;
             case "kEnemy_フロックウルフA":
                 entity.addBehavior(LFlockBehavior);
-                break;
-            case "kEnemy_ブラストミミックA":
-                entity.addBehavior(LSelfExplosionBehavior);
                 break;
             case "kEnemy_ミニゴーレムA":
                 entity.addBehavior(LGrabFootBehavior);

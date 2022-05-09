@@ -23,6 +23,7 @@ import { DBehaviorInstantiation } from "../data/DEntityProperties";
 import { LEquipmentBehavior } from "../objects/behaviors/LEquipmentBehavior";
 import { LRevivalItemBehavior } from "../objects/behaviors/LRevivalItemBehavior";
 import { LItemStandingBehavior } from "../objects/states/LItemStandingState";
+import { LSelfExplosionBehavior } from "../objects/behaviors/LSelfExplosionBehavior";
 
 interface SBehaviorFactoryEntry {
     fullName: string;
@@ -56,6 +57,7 @@ export class SBehaviorFactory {
         
 
         { fullName: "LKnockbackBehavior", friendlyName: "Knockback", create: () => new LKnockbackBehavior() },
+        { fullName: "LSelfExplosionBehavior", friendlyName: "SelfExplosion", create: () => new LSelfExplosionBehavior() },
     ];
     
     

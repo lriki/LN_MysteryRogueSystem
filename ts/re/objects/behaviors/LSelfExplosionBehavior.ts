@@ -48,8 +48,6 @@ export class LSelfExplosionBehavior extends LBehavior {
     ### ダメージ効果に対して "タグ" を設定する
 
 
-
-
     */
 
 
