@@ -12,7 +12,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.trap.Landmine.basic", () => {
+test("concretes.trap.Landmine.DamageAndDestruct", () => {
     TestEnv.newGame();
 
     // Player
@@ -49,7 +49,38 @@ test("concretes.trap.Landmine.basic", () => {
     expect(trap1.isDestroyed()).toBe(false);    // 消滅していないこと
     expect(enemy1.isDestroyed()).toBe(true);    // 寄ってきたモンスターは爆発に巻き込まれて即死
     expect(item1.isDestroyed()).toBe(true);     // アイテムは消滅
+
+    //----------------------------------------------------------------------------------------------------
+    // 端数切り上げのダメージになっているかチェック
+
+    player1.setActualParam(REBasics.params.hp, 3);
+
+    // [踏む]
+    RESystem.dialogContext.postActivity(LActivity.makeTrample(player1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const hp3 = player1.actualParam(REBasics.params.hp);
+    expect(hp3).toBe(2);    // 端数切り上げで 2 ダメージ -> 自動回復で1回復
+
+    //----------------------------------------------------------------------------------------------------
+    // HP1 の時に爆発したら戦闘不能になるかチェック
+
+    player1.setActualParam(REBasics.params.hp, 1);
+
+    // [踏む]
+    RESystem.dialogContext.postActivity(LActivity.makeTrample(player1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const hp4 = player1.actualParam(REBasics.params.hp);
+    expect(hp4).toBe(0);                                // HP0
+    expect(player1.isDeathStateAffected()).toBe(true);  // 戦闘不能
+    expect(player1.isDestroyed()).toBe(false);          // 消滅していないこと
 });
+
 
 test("concretes.trap.Landmine.InducedExplosion", () => {
     TestEnv.newGame();
