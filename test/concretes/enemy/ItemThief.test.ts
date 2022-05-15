@@ -236,3 +236,46 @@ test("concretes.enemy.ItemThief.Equipment", () => {
     expect(inventory2.items.length).toBe(0);
     expect(inventory1.contains(weapon1)).toBeTruthy();
 })
+
+// 2体のが同じ床落ちアイテムを盗もうとしたときにクラッシュする問題の修正確認
+test("concretes.enemy.ItemThief.Issue2", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+
+    // enemy2
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    REGame.world._transferEntity(enemy2, floorId, 15, 11);
+    
+    // Item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    REGame.world._transferEntity(item1, floorId, 16, 11);
+
+    /*
+    □□□□
+    □敵草□
+    □敵□□
+    □□□□
+    */
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // enemy2 はメジャーアクションが取れなかった
+    expect(enemy2.x).toBe(15);
+    expect(enemy2.y).toBe(11);
+});

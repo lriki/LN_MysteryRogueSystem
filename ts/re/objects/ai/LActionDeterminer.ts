@@ -162,8 +162,9 @@ export class LActionDeterminer {
                     return true;
                 }
                 else {
-                    // 
-                    throw new Error("Not implemented.");
+                    // 別の Unit のアクションでマップ上から対象が消えた、など
+                    cctx.postConsumeActionToken(self, LActionTokenType.Major);
+                    return true;
                 }
                 
             }
