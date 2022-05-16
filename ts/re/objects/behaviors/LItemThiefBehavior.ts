@@ -13,7 +13,7 @@ import { LMovingTargetFinder_Item } from "../ai/LMovingTargetFinder";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { DecisionPhase, LBehavior, LGenerateDropItemCause } from "./LBehavior";
+import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause } from "./LBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
@@ -85,6 +85,10 @@ export class LItemThiefBehavior extends LBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemThiefBehavior);
         return b;
+    }
+
+    public behaviorGroup(): LBehaviorGroup {
+        return LBehaviorGroup.SpecialAbility;
     }
 
     onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {

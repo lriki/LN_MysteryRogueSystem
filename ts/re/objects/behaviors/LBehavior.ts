@@ -62,8 +62,8 @@ export enum DecisionPhase {
 }
 
 export enum LBehaviorGroup {
-    Underlying = 0,
-    SpecialAbility = 1,
+    Underlying = 0,     // 特殊能力として封印できない
+    SpecialAbility = 1, // 特殊能力を封印できる
 }
 
 export enum LGenerateDropItemCause {

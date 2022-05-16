@@ -279,3 +279,39 @@ test("concretes.enemy.ItemThief.Issue2", () => {
     expect(enemy2.x).toBe(15);
     expect(enemy2.y).toBe(11);
 });
+
+test("concretes.enemy.ItemThief.Issue3_Seal", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+    
+    // enemy1 (封印)
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    enemy1.addState(REData.getState("kState_System_Seal").id);
+    const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
+    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+
+    // Item1作成 & インベントリに入れる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    inventory1.addEntity(item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // アイテムは盗まれていないし、ワープもしていない
+    expect(inventory1.items.length).toBe(1);
+    expect(inventory2.items.length).toBe(0);
+    expect(enemy1.x).toBe(11);
+    expect(enemy1.y).toBe(10);
+});
