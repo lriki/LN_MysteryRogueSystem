@@ -124,7 +124,9 @@ export class VItemListDialog extends VItemListDialogBase {
                     const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
                     activity.setObjects2([item]);
                     RESystem.dialogContext.postActivity(activity);
-                    //this.submit();
+                }
+                else {
+                    this.activateCommandWindow();
                 }
                 return false;
             });

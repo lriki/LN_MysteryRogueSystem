@@ -38,18 +38,8 @@ export class VItemListDialogBase extends VDialog {
 
             this._itemListWindow.y = Graphics.boxHeight - this._itemListWindow.height;
 
-            console.log("this._itemListWindow.y", this._itemListWindow.y);
-            console.log("this._itemListWindow.padding", this._itemListWindow.padding);
-
-            // this._itemListWindow.updatePlacement();
-            // this._itemListWindow.updateBackground();
             this._itemListWindow.createContents();
             this._itemListWindow.refresh();
-            // console.log("this._itemListWindow.itemHeight()", this._itemListWindow.itemHeight());
-            // console.log("this._itemListWindow.contentsHeight()", this._itemListWindow.contentsHeight());
-            // console.log("this._itemListWindow.itemRect()", this._itemListWindow.itemRect(0));
-            // console.log("this._itemListWindow.itemRectWithPadding()", this._itemListWindow.itemRectWithPadding(0));
-            ;
         }
 
         // CommandWindow は最初は空。表示するとき、複数選択かどうかなどを考慮して Command を作る。
