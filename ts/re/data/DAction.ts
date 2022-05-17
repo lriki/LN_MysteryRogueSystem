@@ -17,7 +17,5 @@ export interface DAction
     /** Name */
     displayName: string;
 
-    typeName: string;
-
     priority: number;
 }
