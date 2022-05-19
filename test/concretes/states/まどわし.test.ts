@@ -25,10 +25,17 @@ test("concretes.states.まどわし", () => {
     enemy1.dir = 6; // 右へ
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
+    // item1
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+
     // View には何か別のものを表示させようとする
-    const visibility = SView.getEntityVisibility(enemy1);
-    expect(visibility.visible).toBe(true);
-    expect(visibility.image != undefined).toBe(true);
+    const enemy1Visibility1 = SView.getEntityVisibility(enemy1);
+    const item1Visibility1 = SView.getEntityVisibility(item1);
+    expect(enemy1Visibility1.visible).toBe(true);
+    expect(enemy1Visibility1.image).not.toBeUndefined();
+    expect(item1Visibility1.visible).toBe(true);
+    expect(item1Visibility1.image).not.toBeUndefined();
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -47,6 +54,14 @@ test("concretes.states.まどわし", () => {
     // 10 ターンで解除
     expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(false);
     expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
+
+    // 表示が元に戻ること
+    const enemy1Visibility2 = SView.getEntityVisibility(enemy1);
+    const item1Visibility2 = SView.getEntityVisibility(item1);
+    expect(enemy1Visibility2.visible).toBe(true);
+    expect(enemy1Visibility2.image).toBeUndefined();
+    expect(item1Visibility2.visible).toBe(true);
+    expect(item1Visibility2.image).toBeUndefined();
 });
 
 
