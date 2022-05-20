@@ -12,11 +12,10 @@ import { SSpecialEffect } from "./SSpecialEffect";
 export class SLevelDownSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
-        target.gainActualParam(REBasics.params.level, -1, false);
-        // const experience = target.findEntityBehavior(LExperiencedBehavior);
-        // if (experience) {
-        //     //experience.changeLevel(battler.level() - 1, true);
-        // }
+        if (target.actualParam(REBasics.params.level) > 1) {
+            target.gainActualParam(REBasics.params.level, -1, false);
+            result.leveldown = true;
+            result.makeSuccess();
+        }
     }
-
 }
