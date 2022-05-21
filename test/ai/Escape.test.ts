@@ -167,3 +167,30 @@ test("ai.Escape.3", () => {
     expect(enemy1.y).toBe(4);
 });
 
+// 倍速1回行動エネミーが、通路へ逃げ込もうとしたが、そこへ移動不可能だったときにクラッシュする問題の修正確認
+test("ai.Escape.Issue1", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+    const stateId = REData.getState("kState_UTかなしばり").id;
+
+    // Player
+    const actor1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [stateId], "enemy2"));
+    REGame.world._transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口
+    REGame.world._transferEntity(enemy2, floorId, 14, 4);   // 通路
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // クラッシュせずに終了すればOK
+});

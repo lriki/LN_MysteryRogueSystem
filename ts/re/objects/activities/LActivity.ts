@@ -154,7 +154,7 @@ export class LActivity {
     }
 
     public withConsumeAction(tokenType?: LActionTokenType | undefined): this {
-        if (tokenType) {
+        if (tokenType !== undefined) {
             this._consumeActionType = tokenType;
         }
         else {

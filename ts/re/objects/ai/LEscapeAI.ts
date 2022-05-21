@@ -122,11 +122,12 @@ export class LEscapeAI extends LCharacterAI {
                 if (!blocks.find(b => UMovement.checkPassageBlockToBlock(self, block, b, MovingMethod.Walk))) {
 
                     if (!UMovement.checkAdjacentPositions(self.x, self.y, target.x, target.y)) {
-                        // 隣接していなければ相手を向いて待機
+                        // 隣接していなければ相手を向いて待機。
+                        // 消費 Token を Major にしてしまうと、倍速1回行動の時に上手く動かないので Minor で消費する。
                         cctx.postActivity(
                             LActivity.make(self)
                             .withEntityDirection(dir)
-                            .withConsumeAction(LActionTokenType.Major));
+                            .withConsumeAction(LActionTokenType.Minor));
                         return SPhaseResult.Handled;
                     }
                     else {
