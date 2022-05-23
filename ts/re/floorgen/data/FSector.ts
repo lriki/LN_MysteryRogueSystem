@@ -82,6 +82,14 @@ export class FSector {
         return this._py;
     }
 
+    public get pivotMX(): number {
+        return this._x1 + this._px;
+    }
+
+    public get pivotMY(): number {
+        return this._y1 + this._py;
+    }
+
     public width(): number {
         return this._x2 - this._x1 + 1;
     }
@@ -166,6 +174,22 @@ export class FSector {
 
     public hasAnyConnection(): boolean {
         return this._edges.some(e => e.hasConnection());
+    }
+
+    // 部屋を作れる範囲 (Sector内のローカル座標)
+    public getRoomCandidateRelativeRect(): [number, number, number, number] {
+        let l = 0;
+        let t = 0;
+        let r = this.width() - 1;
+        let b = this.height() - 1;
+
+        // 他の区画と接続されている方向は、Block 1 つ分のマージンが必要
+        if (this.edge(FDirection.L).hasConnection()) l += 1;
+        if (this.edge(FDirection.R).hasConnection()) r -= 2;  // 右側は 2 ブロック、右 Sector と併せて、部屋間には最低 3 ブロック設けたい
+        if (this.edge(FDirection.T).hasConnection()) t += 1;
+        if (this.edge(FDirection.B).hasConnection()) b -= 2;  // 下側は 2 ブロック、下 Sector と併せて、部屋間には最低 3 ブロック設けたい
+
+        return [l, t, r, b];
     }
 }
 

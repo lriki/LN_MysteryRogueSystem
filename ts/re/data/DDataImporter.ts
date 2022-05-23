@@ -1,8 +1,6 @@
-import { assert, tr2 } from "../Common";
 import { DHelpers } from "./DHelper";
 import { DLand } from "./DLand";
 import { DMap, REData } from "./REData";
-import { REDataManager } from "./REDataManager";
 
 export class DDataImporter {
 

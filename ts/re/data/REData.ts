@@ -3,7 +3,7 @@ import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSpecialEffect, DSkill } from "./DSkill";
-import { DClass, DClass_Default } from "./DClass";
+import { DClass } from "./DClass";
 import { DItem, DItemDataId } from "./DItem";
 import { DLand } from "./DLand";
 import { DEntityKind } from "./DEntityKind";
@@ -11,10 +11,10 @@ import { DSequel, DSequelId } from "./DSequel";
 import { DEnemy, DEnemyId } from "./DEnemy";
 import { DAction } from "./DAction";
 import { DEquipmentPart } from "./DEquipmentPart";
-import { RE_Data_Actor } from "./DActor";
+import { DActor } from "./DActor";
 import { DAbility } from "./DAbility";
 import { DMonsterHouseType } from "./DMonsterHouse";
-import { DTemplateMap, DTemplateMap_Default } from "./DMap";
+import { DTemplateMap } from "./DTemplateMap";
 import { DPrefab } from "./DPrefab";
 import { DTrait } from "./DTraits";
 import { DParameterId, REData_Parameter } from "./DParameter";
@@ -211,7 +211,7 @@ export class REData
         this.entityKinds = [{ id: 0, displayName: 'null', name: "" }];
 
         this.classes = [];
-        this.addClass("null");
+        this.newClass("null");
         this.races = [new DRace(0)];
 
         this.actors = [0];
@@ -219,7 +219,7 @@ export class REData
         this.enemies = [];
         this.lands = [];
         this.maps = [new DMap(0)];
-        this.templateMaps = [DTemplateMap_Default()];
+        this.templateMaps = [new DTemplateMap(0)];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', priority: 0}];
         this.sequels = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
@@ -272,16 +272,13 @@ export class REData
         return kind;
     }
     
-    /**
-     * Add class.
-     */
-    static addClass(name: string): number {
+    //--------------------
+    
+    static newClass(name: string): number {
         const newId = this.classes.length;
-        this.classes.push({
-            ...DClass_Default,
-            id: newId,
-            name: name,
-        });
+        const data = new DClass(newId);
+        data.name = name;
+        this.classes.push(data);
         return newId;
     }
     
@@ -306,6 +303,15 @@ export class REData
         const d = this.findRace(pattern);
         if (d) return d;
         throw new Error(`Race "${pattern}" not found.`);
+    }
+
+    //--------------------
+
+    static newTemplateMap(): DTemplateMap {
+        const newId = this.templateMaps.length;
+        const data = new DTemplateMap(newId);
+        this.templateMaps.push(data);
+        return data;
     }
 
     //--------------------
@@ -514,9 +520,9 @@ export class REData
 
     //--------------------
 
-    static newActor(): [DEntity, RE_Data_Actor] {
+    static newActor(): [DEntity, DActor] {
         const entity = REData.newEntity();
-        const data = new RE_Data_Actor(REData.actors.length);
+        const data = new DActor(REData.actors.length);
         REData.actors.push(data.id);
         entity.actor = data;
         return [entity, data];
@@ -526,11 +532,11 @@ export class REData
         return this.entities[this.enemies[id]];
     }
 
-    static actorData(id: DEnemyId): RE_Data_Actor {
+    static actorData(id: DEnemyId): DActor {
         return this.actorEntity(id).actorData();
     }
 
-    static findActor(pattern: string): RE_Data_Actor | undefined {
+    static findActor(pattern: string): DActor | undefined {
         const id = parseInt(pattern);
         if (!isNaN(id)) 
             return this.entities[this.actors[id]].actorData();
@@ -546,7 +552,7 @@ export class REData
         }
     }
 
-    static getActor(pattern: string): RE_Data_Actor {
+    static getActor(pattern: string): DActor {
         const d = this.findActor(pattern);
         if (d) return d;
         throw new Error(`Actor "${pattern}" not found.`);

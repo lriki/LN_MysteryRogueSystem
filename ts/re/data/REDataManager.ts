@@ -8,10 +8,10 @@ import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
 import { DLand, DLandIdentificationLevel, DMapId, DTerrainSettingRef } from "./DLand";
-import { buildTemplateMapData, DTemplateMap, DTemplateMap_Default } from "./DMap";
+import { buildTemplateMapData } from "./DTemplateMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
-import { RE_Data_Actor } from './DActor';
+import { DActor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTrait } from './DTraits';
 import { DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect, DParameterApplyTarget } from './DEffect';
@@ -674,7 +674,7 @@ export class REDataManager {
                     race.traits = x.traits ?? [];
                 }
                 else {
-                    const id = REData.addClass(x.name ?? "null");
+                    const id = REData.newClass(x.name ?? "null");
                     const c = REData.classes[id];
                     c.expParams = x.expParams ?? [];
                     c.params = x.params ?? [];
@@ -1019,12 +1019,9 @@ export class REDataManager {
                     if (parentInfo) {
                         if (info.parentId > 0 && parentInfo.name.includes("MR-MapTemplates")) {
                             mapData.mapKind = REFloorMapKind.TemplateMap;
-                            REData.templateMaps.push({
-                                ...DTemplateMap_Default(),
-                                id: REData.templateMaps.length,
-                                name: info.name,
-                                mapId: mapData.id,
-                            });
+                            const templateMap = REData.newTemplateMap();
+                            templateMap.name = info.name;
+                            templateMap.mapId = mapData.id;
                         }
                         else if (info.name?.startsWith("MR-Land:")) {
                             const land = REData.lands.find(x => x.rmmzMapId == i);
@@ -1416,7 +1413,7 @@ export class REDataManager {
         }
     }
 
-    static setupDirectly_Actor(data: RE_Data_Actor) {
+    static setupDirectly_Actor(data: DActor) {
         switch (data.id) {
             case 1:
                 //data.traits.push({ code: DTraits.Proficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });

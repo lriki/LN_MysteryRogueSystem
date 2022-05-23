@@ -1,15 +1,12 @@
 
 import { assert } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { DSpecialEffectCodes } from "ts/re/data/DCommon";
-import { DEnemyId, DEnemy, DDropItem } from "ts/re/data/DEnemy";
+import {  DEnemy, DDropItem } from "ts/re/data/DEnemy";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { DParameterId } from "ts/re/data/DParameter";
-import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
+import {  SPhaseResult } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SEffect } from "ts/re/system/SEffectApplyer";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { UAction } from "ts/re/usecases/UAction";
 import { USpawner } from "ts/re/usecases/USpawner";
 import { DecisionPhase, LBehavior, LGenerateDropItemCause } from "../internal";
 import { LEntity } from "../LEntity";
@@ -17,8 +14,6 @@ import { LRandom } from "../LRandom";
 import { REGame } from "../REGame";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { SAIHelper } from "ts/re/system/SAIHelper";
-
 
 /**
  */

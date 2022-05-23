@@ -1,5 +1,5 @@
 import { DClarificationType, REBasics } from "./REBasics";
-import { DBlockLayerKind, DSpecialEffectCodes, DSubComponentEffectTargetKey } from "./DCommon";
+import { DBlockLayerKind, DSubComponentEffectTargetKey } from "./DCommon";
 import { DBuffMode, DBuffOp, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, LStateLevelType } from "./DEffect";
 import { DEmittor } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";

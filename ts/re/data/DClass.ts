@@ -7,7 +7,7 @@ export interface DClassLearningSkill {
     skillId: number;
 }
 
-export interface DClass {
+export class DClass {
     /** ID (0 is Invalid). */
     id: DClassId;
 
@@ -23,14 +23,13 @@ export interface DClass {
     traits: IDataTrait[];
 
     learnings: DClassLearningSkill[];
+
+    public constructor(id: DClassId) {
+        this.id = 0;
+        this.name = "null";
+        this.expParams = [];
+        this.params = [];
+        this.traits = [];
+        this.learnings = [];
+    }
 }
-
-export const DClass_Default: DClass = {
-    id: 0,
-    name: "null",
-    expParams: [],
-    params: [],
-    traits: [],
-    learnings: [],
-};
-

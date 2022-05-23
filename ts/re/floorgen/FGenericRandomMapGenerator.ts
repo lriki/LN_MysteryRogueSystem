@@ -258,17 +258,8 @@ export class FGenericRandomMapGenerator {
                 const room = this._map.newRoom(sector);
     
                 // 部屋を作れる範囲
-                let l = 0;
-                let t = 0;
-                let r = sector.width() - 1;
-                let b = sector.height() - 1;
-    
-                // 他の区画と接続されている方向は、Block 1 つ分のマージンが必要
-                if (sector.edge(FDirection.L).hasConnection()) l += 1;
-                if (sector.edge(FDirection.R).hasConnection()) r -= 2;  // 右側は 2 ブロック、右 Sector と併せて、部屋間には最低 3 ブロック設けたい
-                if (sector.edge(FDirection.T).hasConnection()) t += 1;
-                if (sector.edge(FDirection.B).hasConnection()) b -= 2;  // 下側は 2 ブロック、下 Sector と併せて、部屋間には最低 3 ブロック設けたい
-    
+                const [l, t, r, b] = sector.getRoomCandidateRelativeRect();
+                
                 const maxRoomWidth = (r - l) + 1;
                 const maxRoomHeight = (b - t) + 1;
     
@@ -310,7 +301,8 @@ export class FGenericRandomMapGenerator {
             }
             else {
                 // 区画内に Pivot を作る
-                sector.setPivot(this.random.nextIntWithMax(sector.width()), this.random.nextIntWithMax(sector.height()));
+                const [l, t, r, b] = sector.getRoomCandidateRelativeRect();
+                sector.setPivot(l + this.random.nextIntWithMax(r - l), t + this.random.nextIntWithMax(b - t));
             }
         }
     }
@@ -544,7 +536,9 @@ export class FGenericRandomMapGenerator {
                             primaryWayYCandidates.push(y);
                         }
                     }
-                    assert(primaryWayYCandidates.length > 0);
+                    if (primaryWayYCandidates.length <= 0) {
+                        assert(primaryWayYCandidates.length > 0);
+                    }
                     
                     // PrimaryWay の Y 座標を決める
                     const primaryWayY = primaryWayYCandidates[this.random.nextIntWithMax(primaryWayYCandidates.length)];

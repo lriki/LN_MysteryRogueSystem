@@ -1,6 +1,4 @@
-import { DClassId } from "./DClass";
-
-type DActorId = number;
+import { DActorId } from "./DCommon";
 
 /**
  * Actor はゲームシナリオ全体を通して存在する一意の登場人物を表すデータ構造。
@@ -8,7 +6,7 @@ type DActorId = number;
  * ツクールの Actor とほぼ同義で、そこからインポートして使う。
  * ただし、必ずしも味方であるとは限らない。
  */
-export class RE_Data_Actor {
+export class DActor {
     /** ID (0 is Invalid). */
     id: DActorId;
 

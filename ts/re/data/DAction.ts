@@ -9,13 +9,13 @@ export type DActionId = number;
  * 
  * Command は dynamic なデータ構造だが、こちらは static.
  */
-export interface DAction
-{
+export interface DAction {
     /** ID (0 is Invalid). */
     id: number;
 
     /** Name */
     displayName: string;
 
+    /** GUI への表示優先度 (値が大きいほうが先頭に来る) */
     priority: number;
 }

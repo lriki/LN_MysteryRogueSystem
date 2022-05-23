@@ -6,7 +6,7 @@ import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { LMap } from "ts/re/objects/LMap";
 import { SMinimapData } from "ts/re/system/SMinimapData";
 import { LBlock, LBlockSystemDecoration, TileShape } from "ts/re/objects/LBlock";
-import { DTemplateMap } from "ts/re/data/DMap";
+import { DTemplateMap } from "ts/re/data/DTemplateMap";
 
 
 interface Point {

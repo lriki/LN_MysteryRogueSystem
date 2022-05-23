@@ -15,7 +15,7 @@ import { UAction } from "ts/re/usecases/UAction";
 import { SStepPhase } from "ts/re/system/SCommon";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DClass } from "ts/re/data/DClass";
-import { RE_Data_Actor } from "ts/re/data/DActor";
+import { DActor } from "ts/re/data/DActor";
 import { assert, RESerializable } from "ts/re/Common";
 
 @RESerializable
@@ -166,7 +166,7 @@ export class LExperienceBehavior extends LBehavior {
     }
 
     // Game_Actor.prototype.actor
-    private actor(self: LEntity): RE_Data_Actor {
+    private actor(self: LEntity): DActor {
         const data = self.data().actor;
         assert(data);
         return data;

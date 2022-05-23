@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { RE_Data_Actor } from "ts/re/data/DActor";
+import { DActor } from "ts/re/data/DActor";
 import { REBasics } from "ts/re/data/REBasics";
 import { DClass } from "ts/re/data/DClass";
 import { DParameterId } from "ts/re/data/DParameter";
@@ -75,7 +75,7 @@ export class LActorBehavior extends LBattlerBehavior {
     }
 
     // Game_Actor.prototype.actor
-    actor(): RE_Data_Actor {
+    actor(): DActor {
         const entity = this.ownerEntity().data();
         assert(entity.actor);
         return entity.actor;

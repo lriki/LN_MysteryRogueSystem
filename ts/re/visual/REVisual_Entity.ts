@@ -12,6 +12,7 @@ import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { REBasics } from "../data/REBasics";
+import { DColorIndex } from "../data/DCommon";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -307,7 +308,7 @@ export class REVisual_Entity
             const hpParams = result.paramEffects2.filter(i => i.paramId == REBasics.params.hp);
             if (hpParams.length > 0) {
                 const hpDamage = hpParams.reduce((r, i) => r + i.damage, 0);
-                event.popupDamage_RE(hpDamage, 0);
+                event.popupDamage_RE(hpDamage, DColorIndex.Default);
             }
         }
     }

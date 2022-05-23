@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "./DAction";
-import { RE_Data_Actor } from "./DActor";
+import { DActor } from "./DActor";
 import { DAnnotationReader } from "./DAnnotationReader";
 import { DClassId } from "./DClass";
 import { DAttackElementId, DEntityKindId, DRaceId } from "./DCommon";
@@ -195,7 +195,7 @@ export class DEntity {
     /** 祝福・呪い・封印状態になるか。 */
     canModifierState: boolean;
 
-    actor: RE_Data_Actor | undefined;
+    actor: DActor | undefined;
 
     itemData: DItem | undefined;
 
@@ -299,7 +299,7 @@ export class DEntity {
         return REData.prefabs[this.prefabId];
     }
     
-    public actorData(): RE_Data_Actor {
+    public actorData(): DActor {
         assert(this.actor);
         return this.actor;
     }

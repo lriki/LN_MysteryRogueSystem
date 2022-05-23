@@ -59,6 +59,7 @@ test("RandomMap.967875183", () => {
 });
 
 // フロアの開始から階段まで経路が通っているかを検証するパスで、部屋の無い区画を開始地点として選んでしまう問題の修正確認
+// 部屋の無い部屋があるとき、その Pivot が区画外周に隣接してしまいエラーになる問題の修正確認
 test("RandomMap.ValidationStartIssue", () => {
     TestEnv.newGame();
     for (let i = 0; i < 100; i++) {
