@@ -22,8 +22,7 @@ test("activity.PickAndPut", () => {
     REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    item1._name = "item1";
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
     // マップ移動
@@ -81,8 +80,7 @@ test("activity.PickAtMoved", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-    item1._name = "item1";
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1 (ターン経過チェック用)
@@ -111,4 +109,40 @@ test("activity.PickAtMoved", () => {
     const r1 = records.findIndex(x => x.type == "onFlushSequelSet");
     const r2 = records.findIndex(x => x.type == "onEntityLeavedMap");
     expect(r1 < r2).toBeTruthy();
+});
+
+test("activity.PickAtMoved.Maximum", () => {
+    // New Game
+    TestEnv.newGame();
+
+    // actor1 配置
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
+
+    // Item を最大まで持たせる
+    for (let i = 0; i < inventory1.capacity; i++) {
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
+        inventory1.addEntity(item);
+    }
+
+    // item1 生成&配置
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
+    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    
+    //----------------------------------------------------------------------------------------------------
+
+    // player を右へ移動して拾う
+    const dialogContext = RESystem.dialogContext;
+    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    dialogContext.activeDialog().submit();    // 行動確定
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    const message = REGame.messageHistory;
+
+    const block = REGame.map.block(11, 10);
+    const item = block.layer(DBlockLayerKind.Ground).firstEntity();
+    expect(item).toBe(item1);
 });

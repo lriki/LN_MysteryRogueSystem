@@ -235,33 +235,29 @@ export class LUnitBehavior extends LBehavior {
                 if (itemEntity) {
                     actx.postHandleActivity(cctx, itemEntity)
                     .then(() => {
-                        REGame.map._removeEntity(itemEntity);
+                        const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
 
-                        let picked = false;
                         const gold = itemEntity.findEntityBehavior(LGoldBehavior);
                         if (gold) {
+                            // お金だった
                             inventory.gainGold(gold.gold());
+                            REGame.map._removeEntity(itemEntity);
                             cctx.postDestroy(itemEntity);
-                            picked = true;
-                        }
-                        else {
-                            if (inventory.isFully) {
-                                picked = false;
-                            }
-                            else {
-                                inventory.addEntityWithStacking(itemEntity);
-                                picked = true;
-                            }
-                        }
-                        
-                        const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
-                        if (picked) {
-                            cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
+                            cctx.postMessage(tr2("%1は%2をひろった").format(name, UName.makeNameAsItem(itemEntity)));
                             SSoundManager.playPickItem();
                         }
                         else {
-                            cctx.postMessage(tr2("持ち物がいっぱいで拾えない。"));
-                            cctx.postMessage(tr2("%1 に乗った。").format(name));
+                            // 普通のアイテムだった
+                            if (inventory.isFully) {
+                                cctx.postMessage(tr2("持ち物がいっぱいで拾えない。"));
+                                cctx.postMessage(tr2("%1に乗った。").format(name));
+                            }
+                            else {
+                                REGame.map._removeEntity(itemEntity);
+                                inventory.addEntityWithStacking(itemEntity);
+                                cctx.postMessage(tr2("%1は%2をひろった").format(name, UName.makeNameAsItem(itemEntity)));
+                                SSoundManager.playPickItem();
+                            }
                         }
 
                         return SHandleCommandResult.Resolved;
