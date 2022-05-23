@@ -5,6 +5,7 @@ import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
 import { REData } from "ts/re/data/REData";
 import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/re/PluginParameters";
 import { assert } from "ts/re/Common";
+import { REGame } from "ts/re/objects/REGame";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -55,4 +56,16 @@ test("RandomMap.967875183", () => {
     const setting = REData.getTerrainSetting("kTerrainSetting_Small2x2");
     (new FGenericRandomMapGenerator(map, setting)).generate();
     (new FMapBuilder()).buildForRandomMap(map);
+});
+
+// フロアの開始から階段まで経路が通っているかを検証するパスで、部屋の無い区画を開始地点として選んでしまう問題の修正確認
+test("RandomMap.ValidationStartIssue", () => {
+    TestEnv.newGame();
+    for (let i = 0; i < 100; i++) {
+        const seed = i==0 ? 1504087190 : REGame.world.random().nextInt();
+        const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
+        const setting = REData.getTerrainSetting("kTerrainSetting_Small2x2");
+        (new FGenericRandomMapGenerator(map, setting)).generate();
+        (new FMapBuilder()).buildForRandomMap(map);
+    }
 });

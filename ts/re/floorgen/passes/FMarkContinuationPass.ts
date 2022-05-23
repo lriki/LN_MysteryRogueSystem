@@ -48,7 +48,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
 
         {
             // 最初に見つかった床 Block を開始点とする
-            const baseBlock = this.selectFirstBlock(map);//room.blocks().find(b => b.component() == FBlockComponent.Room);
+            const baseBlock = this.selectSeekStartBlock(map);//room.blocks().find(b => b.component() == FBlockComponent.Room);
             assert(baseBlock);
             
             let current: FMapBlock[] = [baseBlock];
@@ -91,7 +91,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
         }
     }
 
-    private selectFirstBlock(map: FMap): FMapBlock {
+    private selectSeekStartBlock(map: FMap): FMapBlock {
         if (map.floorId().isRandomMap()) {
             // ランダムマップの場合は接続情報なども考慮し、
             // 埋蔵金部屋など独立した部屋を優先しないようにする
@@ -99,7 +99,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
             const sectors = map.sectors();
             assert(sectors.length > 0);
     
-            const connectedSectors = sectors.filter(s => s.edges().find(e => e.hasConnection()));
+            const connectedSectors = sectors.filter(s => s.edges().find(e => e.hasConnection()) && s.room());
             let sector;
             if (connectedSectors.length > 0) {
                 // 別の Sector を接続された Sector があれば、それらを優先する。
@@ -110,6 +110,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
                 sector = sectors[map.random().nextIntWithMax(sectors.length)];
             }
             
+            // フロア開始位置が通路というケースはないはずなので、この時点では何らかの room 必須とする
             const room = sector.room();
             assert(room);
             const block = room.blocks().find(b => b.component() == FBlockComponent.Room);
