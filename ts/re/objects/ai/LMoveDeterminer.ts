@@ -40,6 +40,7 @@ export class LMoveDeterminer {
         return i;
     }
     
+    // decide() の後に呼び出すことで、通常の移動処理の目標位置をオーバーライドできる。
     public setTargetPosition(x: number, y: number): void {
         this._targetPositionX = x;
         this._targetPositionY = y;

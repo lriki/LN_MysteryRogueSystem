@@ -69,6 +69,12 @@ export abstract class LCharacterAI {
 
     public abstract thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult;
     
+    /**
+     * メジャーアクション
+     * 
+     * thinkMoving() で Handled を返しても、MajorActionToken が残っていれば呼び出されるので、
+     * 移動だけしたいときはフラグを立てておき、thinkAction() では Pass を返すようにすること。
+     */
     public abstract thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult;
 
 }

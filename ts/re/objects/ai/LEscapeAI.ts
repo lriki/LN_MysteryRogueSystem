@@ -12,16 +12,18 @@ import { REGame } from "../REGame";
 import { LSaunteringAIHelper } from "./LSaunteringAIHelper";
 import { RESerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
+import { LMoveDeterminer } from "./LMoveDeterminer";
 
 @RESerializable
 export class LEscapeAI extends LCharacterAI {
-    private _movingHelper: LSaunteringAIHelper;
-    private _targetEntityId: LEntityId;
+    private _moveDeterminer = new LMoveDeterminer();
+    // private _movingHelper: LSaunteringAIHelper;
+    // private _targetEntityId: LEntityId;
 
     public constructor() {
         super();
-        this._movingHelper = new LSaunteringAIHelper();
-        this._targetEntityId = LEntityId.makeEmpty();
+        // this._movingHelper = new LSaunteringAIHelper();
+        // this._targetEntityId = LEntityId.makeEmpty();
     }
 
     public clone(): LCharacterAI {
@@ -91,6 +93,7 @@ export class LEscapeAI extends LCharacterAI {
     
     public thinkMoving(cctx: SCommandContext, self: LEntity): SPhaseResult {
 
+        this._moveDeterminer.decide(cctx, self);
         
         const target = UAction.findInSightNearlyHostileEntity(self);
         if (target/* && !target.entityId().equals(this._targetEntityId)*/) {
@@ -109,7 +112,8 @@ export class LEscapeAI extends LCharacterAI {
                 
             if (doorway) {
                 // 相手に対して、背面等に通路がある。そこへ逃げ込む。
-                this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
+                //this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
+                this._moveDeterminer.setTargetPosition(doorway.x(), doorway.y());
             }
             else {
                 // 相手が通路側に立ちふさがっている場合など
@@ -135,7 +139,8 @@ export class LEscapeAI extends LCharacterAI {
                         const doorway = cctx.random().selectOrUndefined(room.doorwayBlocks());
                         if (doorway) {
                             // 出口を目的地設定して移動
-                            this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
+                            //this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
+                            this._moveDeterminer.setTargetPosition(doorway.x(), doorway.y());
                         }
                         else {
                             // 出口の内部屋。通常の移動プロセスにしたがう
@@ -174,7 +179,10 @@ export class LEscapeAI extends LCharacterAI {
 
         }
 
-        if (this._movingHelper.thinkMoving(self, cctx)) {
+        // if (this._movingHelper.thinkMoving(self, cctx)) {
+        //     return SPhaseResult.Handled;
+        // }
+        if (this._moveDeterminer.perform(cctx, self)) {
             return SPhaseResult.Handled;
         }
 
@@ -187,8 +195,10 @@ export class LEscapeAI extends LCharacterAI {
     }
     
     public thinkAction(cctx: SCommandContext, self: LEntity): SPhaseResult {
+        // この AI は逃げるだけで MajorAction はとらないため、なにもしない
+        return SPhaseResult.Pass;
         // 攻撃の成否に関わらず行動を消費する。
-        cctx.postConsumeActionToken(self, LActionTokenType.Major);
-        return SPhaseResult.Handled;
+        //cctx.postConsumeActionToken(self, LActionTokenType.Major);
+        //return SPhaseResult.Handled;
     }
 }
