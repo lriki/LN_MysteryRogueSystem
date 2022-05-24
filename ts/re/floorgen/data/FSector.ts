@@ -5,10 +5,10 @@ import { FAxis, FConnectionId, FDirection, FEdgePin, FMap, FRoom, FSectorEdge, F
 export class FSector {
     private _map: FMap;
     private _id: FSectorId;
-    private _x1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
-    private _y1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
-    private _x2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
-    private _y2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _mx1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _my1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _mx2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _my2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
     private _px: number = 0;    // Pivot. x1 からの相対座標 (Room 座標系)
     private _py: number = 0;    // Pivot. y1 からの相対座標 (Room 座標系)
     private _edges: FSectorEdge[];
@@ -34,15 +34,15 @@ export class FSector {
         //this._wayPointsY = [];
     }
 
-    public setRect(x: number, y: number, w: number, h: number): void {
-        this._x1 = x;
-        this._y1 = y;
-        this._x2 = x + w - 1;
-        this._y2 = y + h - 1;
+    public setRect(mx: number, my: number, mw: number, mh: number): void {
+        this._mx1 = mx;
+        this._my1 = my;
+        this._mx2 = mx + mw - 1;
+        this._my2 = my + mh - 1;
         
         // Link block and ection
-        for (let y = this._y1; y <= this._y2; y++) {
-            for (let x = this._x1; x <= this._x2; x++) {
+        for (let y = this._my1; y <= this._my2; y++) {
+            for (let x = this._mx1; x <= this._mx2; x++) {
                 this._map.block(x, y).setSectorId(this._id);
             }
         }
@@ -58,20 +58,24 @@ export class FSector {
         return this._id;
     }
 
-    public x1(): number {
-        return this._x1;
+    /** 有効範囲内左上座標 (Map 座標系) */
+    public get mx1(): number {
+        return this._mx1;
     }
 
-    public y1(): number {
-        return this._y1;
+    /** 有効範囲内左上座標 (Map 座標系) */
+    public get my1(): number {
+        return this._my1;
     }
 
-    public x2(): number {
-        return this._x2;
+    /** 有効範囲内右下座標 (Map 座標系) */
+    public get mx2(): number {
+        return this._mx2;
     }
 
-    public y2(): number {
-        return this._y2;
+    /** 有効範囲内右下座標 (Map 座標系) */
+    public get my2(): number {
+        return this._my2;
     }
 
     public px(): number {
@@ -83,19 +87,19 @@ export class FSector {
     }
 
     public get pivotMX(): number {
-        return this._x1 + this._px;
+        return this._mx1 + this._px;
     }
 
     public get pivotMY(): number {
-        return this._y1 + this._py;
+        return this._my1 + this._py;
     }
 
     public width(): number {
-        return this._x2 - this._x1 + 1;
+        return this._mx2 - this._mx1 + 1;
     }
 
     public height(): number {
-        return this._y2 - this._y1 + 1;
+        return this._my2 - this._my1 + 1;
     }
 
     public setPivot(px: number, py: number): void {
@@ -161,15 +165,15 @@ export class FSector {
     //}
 
     public GlobalToLocalX(gx: number): number {
-        return gx - this.x1();
+        return gx - this.mx1;
     }
 
     public GlobalToLocalY(gy: number): number {
-        return gy - this.y1();
+        return gy - this.my1;
     }
 
     public contains(mx: number, my: number): boolean {
-        return this._x1 <= mx && mx < this._x2 && this._y1 <= my && my < this._y2;
+        return this._mx1 <= mx && mx < this._mx2 && this._my1 <= my && my < this._my2;
     }
 
     public hasAnyConnection(): boolean {

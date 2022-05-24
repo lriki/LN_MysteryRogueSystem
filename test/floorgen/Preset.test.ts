@@ -125,4 +125,10 @@ test("Preset.DefaultMonsterHouse", () => {
     const structures = map.structures();
     const monsterHouse = structures[1] as LMonsterHouseStructure;
     assert(monsterHouse);
+
+    // 部屋の外に Entity が配置されていないことの確認
+    for (const entity of map.entities()) {
+        const block = map.block(entity.x, entity.y);
+        expect(block.isFloorLikeShape()).toBeTruthy();
+    }
 });

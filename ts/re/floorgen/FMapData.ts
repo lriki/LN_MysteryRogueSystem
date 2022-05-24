@@ -51,13 +51,13 @@ export class FEdgePin {
         const s = this._edge.sector();
         const d = this._edge.direction();
         if (d == FDirection.L) {
-            return s.x1();
+            return s.mx1;
         }
         else if (d == FDirection.R) {
-            return s.x2();
+            return s.mx2;
         }
         else {
-            return s.x1() + this._pos;
+            return s.mx1 + this._pos;
         }
     }
 
@@ -65,13 +65,13 @@ export class FEdgePin {
         const s = this._edge.sector();
         const d = this._edge.direction();
         if (d == FDirection.T) {
-            return s.y1();
+            return s.my1;
         }
         else if (d == FDirection.B) {
-            return s.y2();
+            return s.my2;
         }
         else {
-            return s.y1() + this._pos;
+            return s.my1 + this._pos;
         }
     }
 }
@@ -145,8 +145,8 @@ export class FSectorEdge {
 }
 
 export class FMapBlock {
-    private _x;
-    private _y;
+    private _mx;
+    private _my;
     private _tileShape: TileShape;
     private _blockComponent: FBlockComponent;
     private _sectorId: FSectorId;
@@ -156,9 +156,9 @@ export class FMapBlock {
     private _fixedMapMonsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
     private _fixedMapItemShopTypeId: DItemShopTypeId;
 
-    public constructor(x: number, y: number) {
-        this._x = x;
-        this._y = y;
+    public constructor(mx: number, my: number) {
+        this._mx = mx;
+        this._my = my;
         this._tileShape = TileShape.Wall;
         this._blockComponent = FBlockComponent.None;
         this._sectorId = 0;
@@ -169,12 +169,12 @@ export class FMapBlock {
         this._fixedMapItemShopTypeId = 0;
     }
 
-    public x(): number {
-        return this._x;
+    public get mx(): number {
+        return this._mx;
     }
 
-    public y(): number {
-        return this._y;
+    public get my(): number {
+        return this._my;
     }
 
     public setTileShape(value: TileShape): void {
@@ -449,12 +449,12 @@ export class FMap {
         this._blocks = new Array<FMapBlock>(fullWidth * fullHeight);
         this._innerBlocks = [];//new Array<FMapBlock>(this._innerWidth * this._innerHeight);
         for (let i = 0; i < this._blocks.length; i++) {
-            const x = Math.trunc(i % this._fullWidth);
-            const y = Math.trunc(i / this._fullWidth);
-            const block = new FMapBlock(x, y);
+            const mx = Math.trunc(i % this._fullWidth);
+            const my = Math.trunc(i / this._fullWidth);
+            const block = new FMapBlock(mx, my);
             this._blocks[i] = block;
-            if (this.ox <= x && x < this.ox + this._innerWidth &&
-                this.oy <= y && y < this.oy + this._innerHeight) {
+            if (this.ox <= mx && mx < this.ox + this._innerWidth &&
+                this.oy <= my && my < this.oy + this._innerHeight) {
                 this._innerBlocks.push(block);
             }
             else {
@@ -478,7 +478,7 @@ export class FMap {
         return this._paddingX;
     }
     
-    /** Inner の左上 Ys 座標 */
+    /** Inner の左上 Y 座標 */
     public get oy(): number {
         return this._paddingY;
     }
@@ -627,7 +627,7 @@ export class FMap {
                 if (this._exitPont && this._exitPont.mx() == x && this._exitPont.my() == y) {
                     s += "!";
                 }
-                else if (this._sectors.find(s => (s.x1() + s.px()) == x && (s.y1() + s.py()) == y)) {
+                else if (this._sectors.find(s => (s.mx1 + s.px()) == x && (s.my1 + s.py()) == y)) {
                     s += "@";
                 }
                 else if (this.block(x, y).isContinuation()) {

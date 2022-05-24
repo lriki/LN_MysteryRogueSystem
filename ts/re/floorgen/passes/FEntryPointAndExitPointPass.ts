@@ -18,7 +18,7 @@ export class FEntryPointAndExitPointPass extends FMapBuildPass {
             assert(candidates.length > 0);
     
             const block = candidates[map.random().nextIntWithMax(candidates.length)];
-            map.setExitPont(new FExitPont(block.x(), block.y()));
+            map.setExitPont(new FExitPont(block.mx, block.my));
         }
     }
 }

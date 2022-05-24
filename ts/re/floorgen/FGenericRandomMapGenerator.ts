@@ -125,19 +125,19 @@ export class FGenericRandomMapGenerator {
         for (const s1 of this._map.sectors()) {
             for (const s2 of this._map.sectors()) {
                 if (s1 != s2) {
-                    if (s1.y1() <= s2.y2() && s1.y2() >= s2.y1()) {         // Y軸としては衝突している
-                        if ((s1.x1() - 1) == s2.x2()) {                     // s1 は s2 の右側と隣接している
+                    if (s1.my1 <= s2.my2 && s1.my2 >= s2.my1) {         // Y軸としては衝突している
+                        if ((s1.mx1 - 1) == s2.mx2) {                     // s1 は s2 の右側と隣接している
                             this._map.attemptNewAdjacency(s1, FDirection.L, s2, FDirection.R);
                         }
-                        else if ((s1.x2() + 1) == s2.x1()) {                // s1 は s2 の左側と隣接している
+                        else if ((s1.mx2 + 1) == s2.mx1) {                // s1 は s2 の左側と隣接している
                             this._map.attemptNewAdjacency(s1, FDirection.R, s2, FDirection.L);
                         }
                     }
-                    else if (s1.x1() <= s2.x2() && s1.x2() >= s2.x1()) {    // X軸としては衝突している
-                        if ((s1.y1() - 1) == s2.y2()) {                     // s1 は s2 の下側と隣接している
+                    else if (s1.mx1 <= s2.mx2 && s1.mx2 >= s2.mx1) {    // X軸としては衝突している
+                        if ((s1.my1 - 1) == s2.my2) {                     // s1 は s2 の下側と隣接している
                             this._map.attemptNewAdjacency(s1, FDirection.T, s2, FDirection.B);
                         }
-                        else if ((s1.y2() + 1) == s2.y1()) {                // s1 は s2 の上側と隣接している
+                        else if ((s1.my2 + 1) == s2.my1) {                // s1 は s2 の上側と隣接している
                             this._map.attemptNewAdjacency(s1, FDirection.B, s2, FDirection.T);
                         }
                     }
@@ -264,7 +264,7 @@ export class FGenericRandomMapGenerator {
                 const maxRoomHeight = (b - t) + 1;
     
                 if (sector.roomShapeType == "FullPlane") {
-                    room.setRect(sector.x1() + l, sector.y1() + t, maxRoomWidth, maxRoomHeight);
+                    room.setRect(sector.mx1 + l, sector.my1 + t, maxRoomWidth, maxRoomHeight);
                     room.poorVisibility = true;
                 }
                 else if (sector.roomShapeType == "HalfPlane") {
@@ -274,7 +274,7 @@ export class FGenericRandomMapGenerator {
                     const h = sh / 2;
                     const ox = (sw - w) / 2;
                     const oy = (sh - h) / 2;
-                    room.setRect(sector.x1() + ox, sector.y1() + oy, w, h);
+                    room.setRect(sector.mx1 + ox, sector.my1 + oy, w, h);
                     room.poorVisibility = true;
                 }
                 else {
@@ -282,7 +282,7 @@ export class FGenericRandomMapGenerator {
                     const h = this.random.nextIntWithMinMax(RoomMinSize, maxRoomHeight);
                     const x = l + ((w != maxRoomWidth) ? this.random.nextIntWithMax(maxRoomWidth - w) : 0);
                     const y = t + ((h != maxRoomHeight) ? this.random.nextIntWithMax(maxRoomHeight - h) : 0);
-                    room.setRect(sector.x1() + x, sector.y1() + y, w, h);
+                    room.setRect(sector.mx1 + x, sector.my1 + y, w, h);
                 }
             }
         }
@@ -293,8 +293,8 @@ export class FGenericRandomMapGenerator {
             const room = sector.room();
             if (room) {
                 // 部屋内に Pivot を作る
-                const ox = room.x1() - sector.x1();
-                const oy = room.y1() - sector.y1();
+                const ox = room.x1() - sector.mx1;
+                const oy = room.y1() - sector.my1;
                 assert(ox >= 0);
                 assert(oy >= 0);
                 sector.setPivot(ox + this.random.nextIntWithMax(room.width()), oy + this.random.nextIntWithMax(room.height()));
@@ -317,8 +317,8 @@ export class FGenericRandomMapGenerator {
             if (room) {
                 width = room.width();
                 height = room.height();
-                ox = room.x1() - sector.x1();
-                oy = room.y1() - sector.y1();
+                ox = room.x1() - sector.mx1;
+                oy = room.y1() - sector.my1;
                 outerL = room.x1() - 1;
                 outerR = room.x2() + 1;
                 outerT = room.y1() - 1;
@@ -346,8 +346,8 @@ export class FGenericRandomMapGenerator {
                 }
             }
             else if (this._shape.wayConnectionMode == FGenericRandomMapWayConnectionMode.SectionEdge) {
-                const sx = sector.x1();
-                const sy = sector.y1();
+                const sx = sector.mx1;
+                const sy = sector.my1;
 
                 for (let x = 0; x < sector.width() - 1; x++) {      // 区画の右端に通路は作れないため、pin は作らない。そのための -1
                     if ((sx + x) != outerL && (sx + x) != outerR) { // 部屋の外周に一致する場所には生成しない
@@ -464,7 +464,7 @@ export class FGenericRandomMapGenerator {
                     // Sector と Room の位置関係を確認
                     let secorL: FSector;
                     let secorR: FSector;
-                    if (secor1.x1() < secor2.x2()) {
+                    if (secor1.mx1 < secor2.mx2) {
                         secorL = secor1;
                         secorR = secor2;
                     }
@@ -483,8 +483,8 @@ export class FGenericRandomMapGenerator {
 
                     // PrimaryWay を配置する選択肢を作る (Pivot の間)
                     const primaryWayXCandidates: number[] = [];
-                    const left = secorL.x1() + secorL.px() + OriginToPrimaryWayMargin;
-                    const right = secorR.x1() + secorR.px() - OriginToPrimaryWayMargin;
+                    const left = secorL.mx1 + secorL.px() + OriginToPrimaryWayMargin;
+                    const right = secorR.mx1 + secorR.px() - OriginToPrimaryWayMargin;
                     for (let x = left; x <= right; x++) {
                         if (x != roomLOuterX && x != roomROuterX) {
                             primaryWayXCandidates.push(x);
@@ -512,7 +512,7 @@ export class FGenericRandomMapGenerator {
                     // Sector と Room の位置関係を確認
                     let secorT: FSector;
                     let secorB: FSector;
-                    if (secor1.x1() < secor2.x2()) {
+                    if (secor1.mx1 < secor2.mx2) {
                         secorT = secor1;
                         secorB = secor2;
                     }
@@ -529,8 +529,8 @@ export class FGenericRandomMapGenerator {
 
                     // PrimaryWay を配置する選択肢を作る
                     const primaryWayYCandidates: number[] = [];
-                    const top = secorT.y1() + secorT.py() + OriginToPrimaryWayMargin;
-                    const bottom = secorB.y1() + secorB.py() - OriginToPrimaryWayMargin;
+                    const top = secorT.my1 + secorT.py() + OriginToPrimaryWayMargin;
+                    const bottom = secorB.my1 + secorB.py() - OriginToPrimaryWayMargin;
                     for (let y = top; y <= bottom; y++) {
                         if (y != roomTOuterY && y != roomBOuterY) {
                             primaryWayYCandidates.push(y);
@@ -572,8 +572,8 @@ export class FGenericRandomMapGenerator {
      * @param relationship 
      */
     private plotSecondaryWay(startX: number, startY: number, targetSector: FSector, relationship: FAxis): void {
-        const px = targetSector.x1() + targetSector.px();
-        const py = targetSector.y1() + targetSector.py();
+        const px = targetSector.mx1 + targetSector.px();
+        const py = targetSector.my1 + targetSector.py();
         switch (relationship) {
             case FAxis.H: { // sector は横並び
                 // まずは Pin から基準点へ向かうように水平線を引いて、

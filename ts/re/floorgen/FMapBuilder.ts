@@ -65,22 +65,22 @@ export class FMapBuildPass_MakeRoomId extends FMapBuildPass {
                         b.setRoomId(room.id());
     
                         // 左
-                        const b1 = map.blockTry(b.x() - 1, b.y());
+                        const b1 = map.blockTry(b.mx - 1, b.my);
                         if (b1 && b1.isRoom() && b1.roomId() == 0) {
                             next.push(b1);
                         }
                         // 上
-                        const b2 = map.blockTry(b.x(), b.y() - 1);
+                        const b2 = map.blockTry(b.mx, b.my - 1);
                         if (b2 && b2.isRoom() && b2.roomId() == 0) {
                             next.push(b2);
                         }
                         // 右
-                        const b3 = map.blockTry(b.x() + 1, b.y());
+                        const b3 = map.blockTry(b.mx + 1, b.my);
                         if (b3 && b3.isRoom() && b3.roomId() == 0) {
                             next.push(b3);
                         }
                         // 下
-                        const b4 = map.blockTry(b.x(), b.y() + 1);
+                        const b4 = map.blockTry(b.mx, b.my + 1);
                         if (b4 && b4.isRoom() && b4.roomId() == 0) {
                             next.push(b4);
                         }
@@ -104,7 +104,7 @@ export class FMapBuildPass_ResolveRoomShapes extends FMapBuildPass {
     public execute(map: FMap): void {
         for (const block of map.blocks()) {
             const room = map.room(block.roomId());
-            room.tryInfrateRect(block.x(), block.y());
+            room.tryInfrateRect(block.mx, block.my);
         }
     }
 }
