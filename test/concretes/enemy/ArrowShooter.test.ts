@@ -1,10 +1,7 @@
-import { assert } from "ts/re/Common";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -27,7 +24,7 @@ test("concretes.enemies.ArrowShooter", () => {
     enemy1.addState(REData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
     REGame.world._transferEntity(enemy1, floorId, 12, 10);
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -35,7 +32,7 @@ test("concretes.enemies.ArrowShooter", () => {
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const a = TestEnv.integration.skillEmittedCount;
 
@@ -49,7 +46,7 @@ test("concretes.enemies.ArrowShooter", () => {
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 隣接していても 100% 矢を撃ってくる
     const hp3 = player1.actualParam(REBasics.params.hp);
@@ -68,7 +65,7 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 9, 4);
 
-    RESystem.scheduler.stepSimulation();
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -76,7 +73,7 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     for (let i = 0; i < 5; i++) {
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
-        RESystem.scheduler.stepSimulation();
+        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
     // 矢が撃たれ、床に落ちていないこと

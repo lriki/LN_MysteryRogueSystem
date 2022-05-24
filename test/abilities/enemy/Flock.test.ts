@@ -7,9 +7,6 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-afterAll(() => {
-});
-
 test("Abilities.Enemy.Flock", () => {
     TestEnv.newGame();
 
@@ -20,7 +17,7 @@ test("Abilities.Enemy.Flock", () => {
     REGame.world._transferEntity(actor1, floor);
     TestEnv.performFloorTransfer();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
     const entites = REGame.map.entities();

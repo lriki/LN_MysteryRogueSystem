@@ -18,6 +18,7 @@ import { RESystem } from "./RESystem";
 import { assert } from "../Common";
 import { LObject, LObjectType } from "../objects/LObject";
 import { UEffect } from "../usecases/UEffect";
+import { UAction } from "../usecases/UAction";
 
 
 export enum SEffectIncidentType {
@@ -472,5 +473,8 @@ export class SEffectContext {
                 applyer.apply(cctx, effect2, this._effectorFact.subject());
             }
         }
+
+        // 成否がなんであれ、何らかの効果を与えようという意思が働いたことを通知する
+        UAction.postEffectSensed(cctx, target);
     }
 }

@@ -40,18 +40,18 @@ export class LDecisionBehavior extends LBehavior {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
 
-            const behavior = self.getEntityBehavior(LUnitBehavior);
-            behavior._fastforwarding = false;
+            const unit = self.getEntityBehavior(LUnitBehavior);
+            unit._fastforwarding = false;
 
-            if (behavior._straightDashing && UMovement.checkDashStopBlock(self)) {
+            if (unit._straightDashing && UMovement.checkDashStopBlock(self)) {
                 cctx.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction(LActionTokenType.Minor));
                 return SPhaseResult.Handled;
             }
             else {
                 const dialog = new SManualActionDialog();
-                dialog.dashingEntry = behavior._straightDashing;
+                dialog.dashingEntry = unit._straightDashing;
                 cctx.openDialog(self, dialog, false);
-                behavior._straightDashing = false;
+                unit.clearStraightDashing();
                 return SPhaseResult.Handled;
             }
 

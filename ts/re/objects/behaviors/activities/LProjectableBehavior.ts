@@ -239,7 +239,7 @@ export class LProjectableBehavior extends LBehavior {
             }
             else if (!SActionHitTest.testProjectle(subject.entity(), self, hitTarget, this.hitType(), cctx.random())) {
                 // 当たらなかった
-                this.endMoving(cctx ,self);
+                this.endMoving(cctx, self);
                 return;
             }
             else if (this._effectSet) {

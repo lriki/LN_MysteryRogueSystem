@@ -146,7 +146,7 @@ export class SStepScheduler2 {
         }
 
         if (this._data.schedulingUnits().length <= 0) {
-            // Unit がひとつもない。何もする必要はない。(通常、ここに来ることは無い)
+            // Unit がひとつもない。何もする必要はない。(プレイヤーは常に存在しているはずなので、通常、ここに来ることは無い)
             this._stepPhase = SStepPhase.RunClosing;
         }
         else {

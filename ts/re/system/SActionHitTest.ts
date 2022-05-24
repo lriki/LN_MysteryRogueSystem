@@ -5,6 +5,13 @@ import { LRandom } from "../objects/LRandom";
 import { paraIndirectPhysicalHitRate } from "../PluginParameters";
 
 export class SActionHitTest {
+    /**
+     * Projectle 用の命中判定
+     * 
+     * RMMZ では命中判定とダメージ適用を1つの処理で行っているが、
+     * MR では飛び道具の命中判定の後に様々な処理が割り込む可能性があるため、分ける必要がある。
+     * 例えば飛び道具の反射など。
+     */
     public static testProjectle(subject: LEntity, projectile: LEntity, target: LEntity, hitType: DEffectHitType, rand: LRandom): boolean {
         const r1 = this.testCertainIndirectHits(subject, projectile, target);
         if (r1 !== undefined) {

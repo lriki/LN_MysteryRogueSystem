@@ -83,7 +83,9 @@ export class LUnitBehavior extends LBehavior {
     manualMovement(): boolean { return this._manualMovement; }
     setManualMovement(value: boolean): LUnitBehavior { this._manualMovement = value; return this; }
 
-
+    public clearStraightDashing(): void {
+        this._straightDashing = false;
+    }
 
 
 
@@ -163,6 +165,11 @@ export class LUnitBehavior extends LBehavior {
     onQueryReactions(actions: DActionId[]): void {
         actions.push(REBasics.actions.AttackActionId);
     }
+
+    onEffectSensed(self: LEntity, cctx: SCommandContext): SCommandResponse { 
+        this._straightDashing = false;
+        return SCommandResponse.Pass;
+     }
 
     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const subject = new SEffectSubject(self);

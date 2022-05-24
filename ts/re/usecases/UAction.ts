@@ -98,6 +98,12 @@ export class UAction {
     }
     */
 
+    public static postEffectSensed(cctx: SCommandContext, entity: LEntity): void {
+        cctx.postCall(() => {
+            entity.iterateBehaviorsReverse(b => b.onEffectSensed(entity, cctx));
+        });
+    }
+
     public static postStepOnGround(cctx: SCommandContext, entity: LEntity): void {
         const block = REGame.map.block(entity.x, entity.y);
         const layer = block.layer(DBlockLayerKind.Ground);
