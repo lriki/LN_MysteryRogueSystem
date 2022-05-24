@@ -257,7 +257,7 @@ export class LUnitBehavior extends LBehavior {
                             // 普通のアイテムだった
                             if (inventory.isFully) {
                                 cctx.postMessage(tr2("持ち物がいっぱいで拾えない。"));
-                                cctx.postMessage(tr2("%1に乗った。").format(name));
+                                cctx.postMessage(tr2("%1に乗った。").format(UName.makeNameAsItem(itemEntity)));
                             }
                             else {
                                 REGame.map._removeEntity(itemEntity);

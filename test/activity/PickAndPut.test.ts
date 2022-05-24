@@ -145,4 +145,6 @@ test("activity.PickAtMoved.Maximum", () => {
     const block = REGame.map.block(11, 10);
     const item = block.layer(DBlockLayerKind.Ground).firstEntity();
     expect(item).toBe(item1);
+    expect(message.includesText("薬草")).toBeTruthy();
+    expect(message.includesText("乗った")).toBeTruthy();
 });
