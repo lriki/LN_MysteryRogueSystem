@@ -261,10 +261,10 @@ export class FRoom {
     private _map: FMap;
     private _id: FRoomId;
     private _sector: FSector;
-    private _x1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
-    private _y1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
-    private _x2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
-    private _y2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _mx1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _my1: number = -1;   // 有効範囲内左上座標 (Map 座標系)
+    private _mx2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
+    private _my2: number = -1;   // 有効範囲内右下座標 (Map 座標系)
     private _structures: FStructure[] = [];
 
     public poorVisibility: boolean = false; // 視界不明瞭？
@@ -283,68 +283,68 @@ export class FRoom {
         return this._sector;
     }
 
-    public x1(): number {
-        return this._x1;
+    public get mx1(): number {
+        return this._mx1;
     }
 
-    public y1(): number {
-        return this._y1;
+    public get my1(): number {
+        return this._my1;
     }
 
-    public x2(): number {
-        return this._x2;
+    public get mx2(): number {
+        return this._mx2;
     }
 
-    public y2(): number {
-        return this._y2;
+    public get my2(): number {
+        return this._my2;
     }
 
-    public width(): number {
-        return this._x2 - this._x1 + 1;
+    public get width(): number {
+        return this._mx2 - this._mx1 + 1;
     }
 
-    public height(): number {
-        return this._y2 - this._y1 + 1;
+    public get height(): number {
+        return this._my2 - this._my1 + 1;
     }
 
-    public tryInfrateRect(x: number, y: number): void {
+    public tryInfrateRect(mx: number, my: number): void {
         if (this._id == 0) return;
 
-        if (this._x1 < 0) {
-            this._x1 = x;
-            this._y1 = y;
-            this._x2 = x;
-            this._y2 = y;
+        if (this._mx1 < 0) {
+            this._mx1 = mx;
+            this._my1 = my;
+            this._mx2 = mx;
+            this._my2 = my;
         }
         else {
-            this._x1 = Math.min(this._x1, x);
-            this._y1 = Math.min(this._y1, y);
-            this._x2 = Math.max(this._x2, x);
-            this._y2 = Math.max(this._y2, y);
+            this._mx1 = Math.min(this._mx1, mx);
+            this._my1 = Math.min(this._my1, my);
+            this._mx2 = Math.max(this._mx2, mx);
+            this._my2 = Math.max(this._my2, my);
         }
     }
 
     public forEachBlocks(func: (block: FMapBlock) => void): void {
         if (this._id == 0) return;
         
-        for (let y = this._y1; y <= this._y2; y++) {
-            for (let x = this._x1; x <= this._x2; x++) {
+        for (let y = this._my1; y <= this._my2; y++) {
+            for (let x = this._mx1; x <= this._mx2; x++) {
                 func(this._map.block(x, y));
             }
         }
     }
 
-    public setRect(x: number, y: number, w: number, h: number): void {
-        this._x1 = x;
-        this._y1 = y;
-        this._x2 = x + w - 1;
-        this._y2 = y + h - 1;
+    public setRect(mx: number, my: number, mw: number, mh: number): void {
+        this._mx1 = mx;
+        this._my1 = my;
+        this._mx2 = mx + mw - 1;
+        this._my2 = my + mh - 1;
     }
     
     public blocks(): FMapBlock[] {
         const result = [];
-        for (let my = this._y1; my <= this._y2; my++) {
-            for (let mx = this._x1; mx <= this._x2; mx++) {
+        for (let my = this._my1; my <= this._my2; my++) {
+            for (let mx = this._mx1; mx <= this._mx2; mx++) {
                 result.push(this._map.block(mx, my));
             }
         }

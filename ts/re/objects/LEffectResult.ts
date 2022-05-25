@@ -70,29 +70,29 @@ export class LEffectResult {
     // 確率計算の前に、現状知りえる情報内で明らかに適用できるかどうかを判定する。
     // 例えば HP Full の時に回復アイテムを使ったときは false になったりする。
     // false の場合「しかし、なにもおこらなかった」を表示したりする。
-    used: boolean = false;  // TODO: NotImplemented
+    used: boolean = false;
 
     // 攻撃側の命中判定結果。true の場合命中。used == true の場合参照できる。
-    missed: boolean = false;  // TODO: NotImplemented
+    missed: boolean = false;
 
     // 防御側の回避判定結果。true の場合命中。used == true の場合参照できる。
-    evaded: boolean = false;  // TODO: NotImplemented
+    evaded: boolean = false;
 
     // 物理攻撃であるか。回避判定に eva を使うか、mev を使うかきめたり、クリティカルの発生有無を決めるのに使う。
     // Game_Action.prototype.isPhysical 参照。
-    physical: boolean = false;  // TODO: NotImplemented
+    physical: boolean = false;
 
-    //drain: boolean = false;  // TODO: NotImplemented
+    //drain: boolean = false;
 
     // Game_Action.prototype.itemCri
-    critical: boolean = false;  // TODO: NotImplemented
+    critical: boolean = false;
 
     // 効果適用の成否。false の場合、 "%1には効かなかった！"
     // used, missed, evaded の判定後、実際に防御側のパラメータを変動させたかどうか。
     success: boolean = false;
 
     // HP に関係する効果であったか。文字の色を変えたりする
-    hpAffected = false;  // TODO: NotImplemented
+    hpAffected = false;
 
     paramEffects2: LParamEffectResult[] = [];
     //parameterDamags: number[] = [];    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。

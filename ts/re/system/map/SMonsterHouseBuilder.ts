@@ -14,8 +14,8 @@ export class SMonsterHouseBuilder {
         const enemyCount = rand.nextIntWithMinMax(paramMonsterHouseEnemiesMin, paramMonsterHouseEnemiesMax + 1);
         for (let i = 0; i < enemyCount; i++) {
             const id = rand.nextIntWithMax(blockCount);
-            const mx = room.x1() + Math.floor(id % room.width);
-            const my = room.y1() + Math.floor(id / room.width);
+            const mx = room.mx1 + Math.floor(id % room.width);
+            const my = room.my1 + Math.floor(id / room.width);
             const entities = manager.spawnEnemy(mx, my);
             for (const entity of entities) {
                 entity.addState(REBasics.states.nap);
@@ -26,8 +26,8 @@ export class SMonsterHouseBuilder {
         const itemCount = rand.nextIntWithMinMax(paramMonsterHouseItemsMin, paramMonsterHouseItemsMax + 1);
         for (let i = 0; i < itemCount; i++) {
             const id = rand.nextIntWithMax(blockCount);
-            const mx = room.x1() + Math.floor(id % room.width);
-            const my = room.y1() + Math.floor(id / room.width);
+            const mx = room.mx1 + Math.floor(id % room.width);
+            const my = room.my1 + Math.floor(id / room.width);
 
             const groundRD = 80;
             const rd = rand.nextIntWithMax(100);

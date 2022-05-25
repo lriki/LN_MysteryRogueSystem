@@ -125,8 +125,6 @@ export class LExperienceBehavior extends LBehavior {
         params.acquireParam(REBasics.params.level);
         params.acquireParam(REBasics.params.exp);
         this.resetLevel(self);
-        // self.setActualParam(REBasics.params.level, 1);
-        // self.setActualParam(REBasics.params.exp, 0);
     }
 
     onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {

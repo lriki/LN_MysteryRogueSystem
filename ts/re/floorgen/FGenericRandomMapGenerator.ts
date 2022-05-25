@@ -293,11 +293,11 @@ export class FGenericRandomMapGenerator {
             const room = sector.room();
             if (room) {
                 // 部屋内に Pivot を作る
-                const ox = room.x1() - sector.mx1;
-                const oy = room.y1() - sector.my1;
+                const ox = room.mx1 - sector.mx1;
+                const oy = room.my1 - sector.my1;
                 assert(ox >= 0);
                 assert(oy >= 0);
-                sector.setPivot(ox + this.random.nextIntWithMax(room.width()), oy + this.random.nextIntWithMax(room.height()));
+                sector.setPivot(ox + this.random.nextIntWithMax(room.width), oy + this.random.nextIntWithMax(room.height));
             }
             else {
                 // 区画内に Pivot を作る
@@ -315,14 +315,14 @@ export class FGenericRandomMapGenerator {
             let ox, oy;
             let outerL, outerR, outerT, outerB;
             if (room) {
-                width = room.width();
-                height = room.height();
-                ox = room.x1() - sector.mx1;
-                oy = room.y1() - sector.my1;
-                outerL = room.x1() - 1;
-                outerR = room.x2() + 1;
-                outerT = room.y1() - 1;
-                outerB = room.y2() + 1;
+                width = room.width;
+                height = room.height;
+                ox = room.mx1 - sector.mx1;
+                oy = room.my1 - sector.my1;
+                outerL = room.mx1 - 1;
+                outerR = room.mx2 + 1;
+                outerT = room.my1 - 1;
+                outerB = room.my2 + 1;
             }
             else {
                 width = sector.width();
@@ -478,8 +478,8 @@ export class FGenericRandomMapGenerator {
                     const roomR = secorR.room();
 
                     // 部屋に隣接している位置。この X 座標に PrimaryWay を置くことはできない。
-                    const roomLOuterX = roomL ? roomL.x2() + 1 : -100;
-                    const roomROuterX = roomR ? roomR.x1() - 1 : -100;
+                    const roomLOuterX = roomL ? roomL.mx2 + 1 : -100;
+                    const roomROuterX = roomR ? roomR.mx1 - 1 : -100;
 
                     // PrimaryWay を配置する選択肢を作る (Pivot の間)
                     const primaryWayXCandidates: number[] = [];
@@ -524,8 +524,8 @@ export class FGenericRandomMapGenerator {
                     const roomB = secorB.room();
 
                     // 部屋に隣接している位置。この Y 座標に PrimaryWay を置くことはできない。
-                    const roomTOuterY = roomT ? roomT.y2() + 1 : -100;
-                    const roomBOuterY = roomB ? roomB.y1() - 1 : -100;
+                    const roomTOuterY = roomT ? roomT.my2 + 1 : -100;
+                    const roomBOuterY = roomB ? roomB.my1 - 1 : -100;
 
                     // PrimaryWay を配置する選択肢を作る
                     const primaryWayYCandidates: number[] = [];
@@ -615,8 +615,8 @@ export class FGenericRandomMapGenerator {
     private makeBlocks(): void {
         for (const room of this._map.rooms()) {
             
-            for (let y = room.y1(); y <= room.y2(); y++) {
-                for (let x = room.x1(); x <= room.x2(); x++) {
+            for (let y = room.my1; y <= room.my2; y++) {
+                for (let x = room.mx1; x <= room.mx2; x++) {
                     const block = this._map.block(x, y);
                     block.setComponent(FBlockComponent.Room);
                     block.setRoomId(room.id());

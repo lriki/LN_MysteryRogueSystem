@@ -80,10 +80,10 @@ export class VVisibilityShadow {
                     if (room) {
                         const tw = $gameMap.tileWidth();
                         //const room = REGame.map.rooms()[roomId];
-                        tx1 = $gameMap.adjustX(room.x1()) * tw;
-                        tx2 = $gameMap.adjustX(room.x2()) * tw + tw;
-                        ty1 = $gameMap.adjustY(room.y1()) * tw;
-                        ty2 = $gameMap.adjustY(room.y2()) * tw + tw;
+                        tx1 = $gameMap.adjustX(room.mx1) * tw;
+                        tx2 = $gameMap.adjustX(room.mx2) * tw + tw;
+                        ty1 = $gameMap.adjustY(room.my1) * tw;
+                        ty2 = $gameMap.adjustY(room.my2) * tw + tw;
                     }
     
     

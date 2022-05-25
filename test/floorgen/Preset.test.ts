@@ -87,12 +87,12 @@ test("Preset.PoorVisibility", () => {
     //----------
 
     // Player を左上に配置
-    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, room.x1(), room.y1());
+    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, room.mx1, room.my1);
 
     // Enemy を右上に配置 (下向き)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.dir = 2;
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, room.x2(), room.y1());
+    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, room.mx2, room.my1);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -103,8 +103,8 @@ test("Preset.PoorVisibility", () => {
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     // Enemy は正面に移動している (視界外なので、Player には寄ってこない)
-    expect(enemy1.x).toBe(room.x2());
-    expect(enemy1.y).toBe(room.y1() + 1);
+    expect(enemy1.x).toBe(room.mx2);
+    expect(enemy1.y).toBe(room.my1 + 1);
 });
 
 test("Preset.DefaultMonsterHouse", () => {

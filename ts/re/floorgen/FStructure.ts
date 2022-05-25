@@ -8,7 +8,7 @@ export class FStructure {
 
 export class FMonsterHouseStructure extends FStructure {
     private _roomId: FRoomId;
-    private _monsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
+    private _monsterHouseTypeId: DMonsterHouseTypeId;   // RMMZ のリージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
     
     constructor(roomId: FRoomId, monsterHouseId: DMonsterHouseTypeId) {
         super();

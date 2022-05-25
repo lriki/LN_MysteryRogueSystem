@@ -23,24 +23,24 @@ export class FMarkContinuationPass extends FMapBuildPass {
         // すべての部屋の入口 Block をマークする
         for (const room of map.rooms()) {
             if (room) {
-                for (let mx = room.x1(); mx <= room.x2(); mx++) {
+                for (let mx = room.mx1; mx <= room.mx2; mx++) {
                     // 上端
-                    if (map.isValid(mx, room.y1() - 1) && map.block(mx, room.y1() - 1).component() == FBlockComponent.Passageway) {
-                        map.block(mx, room.y1()).setDoorway(true);
+                    if (map.isValid(mx, room.my1 - 1) && map.block(mx, room.my1 - 1).component() == FBlockComponent.Passageway) {
+                        map.block(mx, room.my1).setDoorway(true);
                     }
                     // 下端
-                    if (map.isValid(mx, room.y2() + 1) && map.block(mx, room.y2() + 1).component() == FBlockComponent.Passageway) {
-                        map.block(mx, room.y2()).setDoorway(true);
+                    if (map.isValid(mx, room.my2 + 1) && map.block(mx, room.my2 + 1).component() == FBlockComponent.Passageway) {
+                        map.block(mx, room.my2).setDoorway(true);
                     }
                 }
-                for (let my = room.y1(); my <= room.y2(); my++) {
+                for (let my = room.my1; my <= room.my2; my++) {
                     // 左端
-                    if (map.isValid(room.x1() - 1, my) && map.block(room.x1() - 1, my).component() == FBlockComponent.Passageway) {
-                        map.block(room.x1(), my).setDoorway(true);
+                    if (map.isValid(room.mx1 - 1, my) && map.block(room.mx1 - 1, my).component() == FBlockComponent.Passageway) {
+                        map.block(room.mx1, my).setDoorway(true);
                     }
                     // 右端
-                    if (map.isValid(room.x2() + 1, my) && map.block(room.x2() + 1, my).component() == FBlockComponent.Passageway) {
-                        map.block(room.x2(), my).setDoorway(true);
+                    if (map.isValid(room.mx2 + 1, my) && map.block(room.mx2 + 1, my).component() == FBlockComponent.Passageway) {
+                        map.block(room.mx2, my).setDoorway(true);
                     }
                 }
             }

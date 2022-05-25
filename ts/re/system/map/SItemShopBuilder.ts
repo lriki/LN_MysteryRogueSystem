@@ -86,19 +86,19 @@ export class SItemShopBuilder {
             let block1: LBlock | undefined = undefined;
             let block2: LBlock | undefined = undefined;
 
-            if (block.x() == room.x1()) {   // 部屋の左側
+            if (block.x() == room.mx1) {   // 部屋の左側
                 block1 = this.getInRoomFloorBlock(room, block.x(), block.y() - 1);
                 block2 = this.getInRoomFloorBlock(room, block.x(), block.y() + 1);
             }
-            else if (block.x() == room.x2()) {   // 部屋の右側
+            else if (block.x() == room.mx2) {   // 部屋の右側
                 block1 = this.getInRoomFloorBlock(room, block.x(), block.y() - 1);
                 block2 = this.getInRoomFloorBlock(room, block.x(), block.y() + 1);
             }
-            else if (block.y() == room.y1()) {   // 部屋の上側
+            else if (block.y() == room.my1) {   // 部屋の上側
                 block1 = this.getInRoomFloorBlock(room, block.x() - 1, block.y());
                 block2 = this.getInRoomFloorBlock(room, block.x() + 1, block.y());
             }
-            else if (block.y() == room.y2()) {   // 部屋の下側
+            else if (block.y() == room.my2) {   // 部屋の下側
                 block1 = this.getInRoomFloorBlock(room, block.x() - 1, block.y());
                 block2 = this.getInRoomFloorBlock(room, block.x() + 1, block.y());
             }

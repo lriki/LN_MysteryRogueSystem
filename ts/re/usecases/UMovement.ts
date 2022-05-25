@@ -237,8 +237,8 @@ export class UMovement {
      * 重心を取得する
      */
     public static getCenterOfRoom(room: LRoom): SPoint {
-        const x = (room.x1() + room.x2()) / 2;
-        const y = (room.y1() + room.y2()) / 2;
+        const x = (room.mx1 + room.mx2) / 2;
+        const y = (room.my1 + room.my2) / 2;
         return {x: Math.floor(x), y: Math.floor(y )};
     }
 

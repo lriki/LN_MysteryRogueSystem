@@ -12,48 +12,51 @@ export enum MonsterHouseState {
 @RESerializable
 export class LRoom {
     private _roomId: number = 0;
-    private _x1: number = -1;   // 有効範囲内左上座標
-    private _y1: number = -1;   // 有効範囲内左上座標
-    private _x2: number = -1;   // 有効範囲内右下座標
-    private _y2: number = -1;   // 有効範囲内右下座標
-
-    public poorVisibility: boolean = false; // 視界不明瞭？
+    private _mx1: number = -1;   // 有効範囲内左上座標
+    private _my1: number = -1;   // 有効範囲内左上座標
+    private _mx2: number = -1;   // 有効範囲内右下座標
+    private _my2: number = -1;   // 有効範囲内右下座標
+    private _poorVisibility: boolean = false; // 視界不明瞭？
 
     public setup(room: FRoom): void {
         this._roomId = room.id();
-        this._x1 = room.x1();
-        this._y1 = room.y1();
-        this._x2 = room.x2();
-        this._y2 = room.y2();
-        this.poorVisibility = room.poorVisibility;
+        this._mx1 = room.mx1;
+        this._my1 = room.my1;
+        this._mx2 = room.mx2;
+        this._my2 = room.my2;
+        this._poorVisibility = room.poorVisibility;
     }
 
-    public x1(): number {
-        return this._x1;
+    public get mx1(): number {
+        return this._mx1;
     }
 
-    public y1(): number {
-        return this._y1;
+    public get my1(): number {
+        return this._my1;
     }
 
-    public x2(): number {
-        return this._x2;
+    public get mx2(): number {
+        return this._mx2;
     }
 
-    public y2(): number {
-        return this._y2;
+    public get my2(): number {
+        return this._my2;
     }
 
     public get width(): number {
-        return this._x2 - this._x1 + 1;
+        return this._mx2 - this._mx1 + 1;
     }
 
     public get height(): number {
-        return this._y2 - this._y1 + 1;
+        return this._my2 - this._my1 + 1;
     }
 
-    public contains(x: number, y: number): boolean {
-        return this._x1 <= x && x <= this._x2 && this._y1 <= y && y <= this._y2;
+    public get poorVisibility(): boolean {
+        return this._poorVisibility;
+    }
+
+    public contains(mx: number, my: number): boolean {
+        return this._mx1 <= mx && mx <= this._mx2 && this._my1 <= my && my <= this._my2;
     }
     
     public forEachEntities(func: (entity: LEntity) => void): void {
@@ -78,8 +81,8 @@ export class LRoom {
     /** 部屋内の Block を列挙する。 */
     public forEachBlocks(func: (block: LBlock) => void): void {
         const map = REGame.map;
-        for (let y = this._y1; y <= this._y2; y++) {
-            for (let x = this._x1; x <= this._x2; x++) {
+        for (let y = this._my1; y <= this._my2; y++) {
+            for (let x = this._mx1; x <= this._mx2; x++) {
                 const block = map.block(x, y);
                 func(block);
             }
@@ -89,27 +92,27 @@ export class LRoom {
     /** 部屋の外側、外周1タイル分の Block を列挙する */
     public forEachEdgeBlocks(func: (block: LBlock) => void): void {
         const map = REGame.map;
-        const left = Math.max(0, this._x1 - 1);
-        const right = Math.min(this._x2 + 1, map.width() - 1);
+        const left = Math.max(0, this._mx1 - 1);
+        const right = Math.min(this._mx2 + 1, map.width() - 1);
 
-        if (1 <= this._y1) {
+        if (1 <= this._my1) {
             for (let x = left; x <= right; x++) {
-                func(map.block(x, this._y1 - 1));
+                func(map.block(x, this._my1 - 1));
             }
         }
-        if (1 <= this._x1) {
-            for (let y = this._y1; y <= this._y2; y++) {
-                func(map.block(this._x1 - 1, y));
+        if (1 <= this._mx1) {
+            for (let y = this._my1; y <= this._my2; y++) {
+                func(map.block(this._mx1 - 1, y));
             }
         }
-        if (this._x2 < REGame.map.width() - 1) {
-            for (let y = this._y1; y <= this._y2; y++) {
-                func(map.block(this._x2 + 1, y));
+        if (this._mx2 < REGame.map.width() - 1) {
+            for (let y = this._my1; y <= this._my2; y++) {
+                func(map.block(this._mx2 + 1, y));
             }
         }
-        if (this._y2 < REGame.map.height() - 1) {
+        if (this._my2 < REGame.map.height() - 1) {
             for (let x = left; x <= right; x++) {
-                func(map.block(x, this._y2 + 1));
+                func(map.block(x, this._my2 + 1));
             }
         }
     }
@@ -135,48 +138,9 @@ export class LRoom {
      * @see USearch.checkInSightBlockFromSubject
      */
     public checkVisibilityBlock(block: LBlock): boolean {
-        return this._x1 - 1 <= block.x() && block.x() <= this._x2 + 1 &&
-               this._y1 - 1 <= block.y() && block.y() <= this._y2 + 1;
+        return this._mx1 - 1 <= block.x() && block.x() <= this._mx2 + 1 &&
+               this._my1 - 1 <= block.y() && block.y() <= this._my2 + 1;
     }
-
-    /*
-    public forEachEntranceBlocks(func: (block: REGame_Block) => void): void {
-        const map = REGame.map;
-        if (1 <= this._x1) {
-            for (let y = this._y1; y <= this._y2; y++) {
-                const block = map.block(this._x1 - 1, y);
-                if (block.tileKind() == TileKind.Floor) {
-                    func(block);
-                }
-            }
-        }
-        if (1 <= this._y1) {
-            for (let x = this._x1; x <= this._x2; x++) {
-                const block = map.block(x, this._y1 - 1);
-                if (block.tileKind() == TileKind.Floor) {
-                    func(block);
-                }
-            }
-        }
-        if (this._x2 < REGame.map.width() - 1) {
-            for (let y = this._y1; y <= this._y2; y++) {
-                const block = map.block(this._x2 + 1, y);
-                if (block.tileKind() == TileKind.Floor) {
-                    func(block);
-                }
-            }
-        }
-        if (this._y2 < REGame.map.height() - 1) {
-            for (let x = this._x1; x <= this._x2; x++) {
-                const block = map.block(x, this._y1 + 1);
-                if (block.tileKind() == TileKind.Floor) {
-                    func(block);
-                }
-            }
-        }
-    }
-    */
-
 }
 
 
