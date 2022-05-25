@@ -1,3 +1,4 @@
+import { RESerializable } from "../Common";
 import { REGame } from "./REGame";
 
 
@@ -13,6 +14,7 @@ export type ChoiceCallback = (n: number) => void;
  * このあたりもそれなりに複雑なので、ひとつのウィンドウにたくさんのことをさせたくない。
  * （実際に原作でも、ログ用ウィンドウと会話用ウィンドウではタイピングの有無などいろいろ差がある）
  */
+@RESerializable
 export class LMessageHistory {
     // 履歴。Floor 開始から現在までの全てのメッセージを行単位で保持する
     private _texts: string[];

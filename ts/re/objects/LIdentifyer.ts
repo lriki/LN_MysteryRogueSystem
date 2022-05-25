@@ -1,4 +1,4 @@
-import { tr2 } from "ts/re/Common";
+import { RESerializable, tr2 } from "ts/re/Common";
 import { DEntityId, DIdentificationDifficulty } from "ts/re/data/DEntity";
 import { DLand } from "ts/re/data/DLand";
 import { REData } from "ts/re/data/REData";
@@ -119,6 +119,7 @@ interface IdentificationState {
  * 
  * 
  */
+@RESerializable
 export class LIdentifyer {
     /** 種別としての識別済みフラグ。undefined の場合、その Entity は常に少なくとも名前は識別済み。 Index: DEntityId */
     private _identificationStates: (IdentificationState | undefined)[] = [];

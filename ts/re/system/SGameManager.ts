@@ -227,32 +227,40 @@ export class SGameManager {
     
     // テスト用
     public static makeSaveContentsCore(): any {
-
         let contents: any = {};
         contents.system = REGame.system;
         contents.world = REGame.world;
-        //contents.map = REGame.map;
+        contents.map = REGame.map;
         contents.camera = REGame.camera;
         contents.scheduler = REGame.scheduler;
+        contents.identifyer = REGame.identifyer;
+        contents.messageHistory = REGame.messageHistory;
+        contents.eventServer = REGame.eventServer;
         return contents;
+    }
+
+    public static loadSaveContentsCore(contents: any): void {
+        REGame.system = contents.system;
+        REGame.world = contents.world;
+        REGame.map = contents.map;
+        REGame.camera = contents.camera;
+        REGame.scheduler = contents.scheduler;
+        REGame.identifyer = contents.identifyer;
+        REGame.messageHistory = contents.messageHistory;
+        REGame.eventServer = contents.eventServer;
     }
 
     public static makeSaveContents(): any {
         const contents = this.makeSaveContentsCore();
 
-        console.log("makeSaveContents 1");
         if (!RESystem.floorStartSaveContents) {
-            console.log("makeSaveContents 2");
             RESystem.floorStartSaveContents = JsonEx.stringify(contents);
         }
         return contents;
     }
 
     public static loadGameObjects(contents: any) {
-        REGame.system = contents.system;
-        REGame.world = contents.world;
-        REGame.camera = contents.camera;
-        REGame.scheduler = contents.scheduler;
+        this.loadSaveContentsCore(contents);
         
         const map = REGame.world.objects().find(x => x && x.objectType() == LObjectType.Map);
         assert(map);
@@ -261,16 +269,10 @@ export class SGameManager {
 
         // Visual 側の準備が整い次第、Game レイヤーが持っているマップ情報を Visual に反映してほしい
         RESystem.mapManager.requestRefreshVisual();
-
-        // test
-        //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
     }
 
     public static loadGame(contents: any) {
         this.createSystemObjects();
-
-
-
         this.loadGameObjects(contents);
 
         if (RESystem.requestedRestartFloorItem.hasAny()) {
@@ -303,38 +305,5 @@ export class SGameManager {
             throw e;  
         }
     }
-
-    public static attemptRestartFloor(): void {
-        
-        if (RESystem.requestedRestartFloorItem.hasAny()) {
-            // フロア移動で代用するのはダメなの？
-            // ----------
-            // フロア移動に伴い、通常のフロア移動時の初期 Entity 配置処理が行われてしまうため良くない。
-            // これは考え方の問題であるが、たとえば普通のロード時には Game_Map.setup は呼ばれない。
-            // この機能はあくまでセーブデータのロード処理を拡張するものなので、できるだけその基本の流れを崩したくない。
-            // でないと、ただでさえ RMMZ との結合のため複雑になっているロード、マップ遷移処理がさらに複雑になってしまうから。
-            //
-            // セーブデータロード処理をそのまま実行しないの？
-            // ----------
-            // ユニットテストができなくなる。
-            //
-            //REGame.camera._reserveFloorTransferToFocusedEntity();
-
-            //console.log("attemptRestartFloor");
-            assert(RESystem.floorStartSaveContents);
-            this.createSystemObjects();
-            this.loadGameObjects(JsonEx.parse(RESystem.floorStartSaveContents));
-            // TODO: ここで Visual 参照するとユニットテストがコンパイルできなくなる
-            //REVisual.entityVisualSet?.resetVisuals();
-
-            RESystem.requestedRestartFloorItem.clear();
-        //     const savefileId = $gameSystem.savefileId();
-        //     DataManager.loadGame(savefileId)
-        //         .then(() => this.onLoadSuccess())
-        //         .catch(() => this.onLoadFailure());
-        //     //SGameManager.loadGameObjects(TestJsonEx.parse(savedata1));
-        }
-    }
-
 }
 

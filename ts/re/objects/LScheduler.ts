@@ -77,6 +77,7 @@ export enum LSchedulerPhase
     RoundEnding,
 }
 
+@RESerializable
 export class LSchedulingUnit {
     private _index: number;
     private _entityId: LEntityId;
