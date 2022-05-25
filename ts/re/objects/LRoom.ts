@@ -138,8 +138,8 @@ export class LRoom {
      * @see USearch.checkInSightBlockFromSubject
      */
     public checkVisibilityBlock(block: LBlock): boolean {
-        return this._mx1 - 1 <= block.x() && block.x() <= this._mx2 + 1 &&
-               this._my1 - 1 <= block.y() && block.y() <= this._my2 + 1;
+        return this._mx1 - 1 <= block.mx && block.mx <= this._mx2 + 1 &&
+               this._my1 - 1 <= block.my && block.my <= this._my2 + 1;
     }
 }
 

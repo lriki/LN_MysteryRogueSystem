@@ -69,7 +69,7 @@ export class USearch {
         else {
             // 部屋の外にいる場合、たとえ部屋の外周 Block 上にいても、部屋内は見えない。
             // 隣接のみ見える。
-            return UMovement.checkAdjacentPositions(subject.x, subject.y, block.x(), block.y());
+            return UMovement.checkAdjacentPositions(subject.x, subject.y, block.mx, block.my);
         }
     }
 
@@ -174,8 +174,8 @@ export class USearch {
         // まず操作キャラのすぐ近くは避けて検索してみる
         const candidateBlocks = spawnableBlocks.filter(b => {
             if (b._roomId == player.roomId()) return false;
-            const dx = Math.abs(b.x() - px);
-            const dy = Math.abs(b.y() - py);
+            const dx = Math.abs(b.mx - px);
+            const dy = Math.abs(b.my - py);
             return dx > paramEnemySpawnInvalidArea || dy > paramEnemySpawnInvalidArea;
         });
         if (candidateBlocks.length > 0) {

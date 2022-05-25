@@ -106,14 +106,14 @@ export class LEscapeAI extends LCharacterAI {
             // 
             const doorway = room.doorwayBlocks()
                 .filter(b =>
-                    !this.checkDeadInArea(self, target, b.x(), b.y()) &&    // block は敵対の向こう側にあるのでそっちは除外
-                    (b.x() != self.x || b.y() != self.y))                   // 足元は除外
-                .selectMin((a, b) => UMovement.distanceSq(a.x(), a.y(), b.x(), b.y()));
+                    !this.checkDeadInArea(self, target, b.mx, b.my) &&    // block は敵対の向こう側にあるのでそっちは除外
+                    (b.mx != self.x || b.my != self.y))                   // 足元は除外
+                .selectMin((a, b) => UMovement.distanceSq(a.mx, a.my, b.mx, b.my));
                 
             if (doorway) {
                 // 相手に対して、背面等に通路がある。そこへ逃げ込む。
                 //this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
-                this._moveDeterminer.setTargetPosition(doorway.x(), doorway.y());
+                this._moveDeterminer.setTargetPosition(doorway.mx, doorway.my);
             }
             else {
                 // 相手が通路側に立ちふさがっている場合など
@@ -139,8 +139,7 @@ export class LEscapeAI extends LCharacterAI {
                         const doorway = cctx.random().selectOrUndefined(room.doorwayBlocks());
                         if (doorway) {
                             // 出口を目的地設定して移動
-                            //this._movingHelper.setTargetPosition(doorway.x(), doorway.y());
-                            this._moveDeterminer.setTargetPosition(doorway.x(), doorway.y());
+                            this._moveDeterminer.setTargetPosition(doorway.mx, doorway.my);
                         }
                         else {
                             // 出口の内部屋。通常の移動プロセスにしたがう

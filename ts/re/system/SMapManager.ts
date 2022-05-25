@@ -106,7 +106,7 @@ export class SMapManager {
                         const block = this.findSpawnableBlockRandom(layer);
                         assert(block);
                         
-                        UMovement.locateEntity(entity, block.x(), block.y());
+                        UMovement.locateEntity(entity, block.mx, block.my);
                     }
                 //}
             }
@@ -118,7 +118,7 @@ export class SMapManager {
             const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Unit);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
-                this.spawnEnemy(block.x(), block.y());
+                this.spawnEnemy(block.mx, block.my);
             }
         }
 
@@ -128,7 +128,7 @@ export class SMapManager {
             const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
-                this.spawnItem(block.x(), block.y());
+                this.spawnItem(block.mx, block.my);
             }
         }
 
@@ -276,7 +276,7 @@ export class SMapManager {
     private spawnRandomEnemy(): void {
         const block = USearch.selectUnitSpawnableBlock(this.rand());
         if (block) {
-            this.spawnEnemy(block.x(), block.y());
+            this.spawnEnemy(block.mx, block.my);
         }
         else {
             throw new Error("Not implemented.");
@@ -341,7 +341,7 @@ export class SMapManager {
         for (let i = 0; i < actualCount; i++) {
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
-                const entity = this.spawnTrap(block.x(), block.y());
+                const entity = this.spawnTrap(block.mx, block.my);
                 candidateBlocks.mutableRemove(x => x == block);
             }
         }

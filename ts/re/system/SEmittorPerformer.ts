@@ -383,7 +383,7 @@ export class SEmittorPerformer {
         else if (emittor.scope.range == DEffectFieldScopeRange.ReceiveProjectile) {
             const dir = this._effectDirection != 0 ? this._effectDirection : performer.dir;
             const block = USearch.findFirstWallInDirection(performer.x, performer.y, dir);
-            this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, block.x(), block.y(), UMovement.reverseDir(dir));
+            this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, block.mx, block.my, UMovement.reverseDir(dir));
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
             const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);

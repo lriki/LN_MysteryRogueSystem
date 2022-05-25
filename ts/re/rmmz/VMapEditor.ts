@@ -57,8 +57,8 @@ export class VMapEditor {
     }
 
     public refreshBlock(block: LBlock): void {
-        const x = block.x();
-        const y = block.y();
+        const x = block.mx;
+        const y = block.my;
 
         switch (block.tileShape()) {
             case TileShape.Floor:

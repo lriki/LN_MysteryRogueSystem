@@ -69,8 +69,8 @@ export class LSaunteringAIHelper {
                     const candidates = room.doorwayBlocks();
                     if (candidates.length > 0) {
                         const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
-                        this._targetPositionX = block.x();
-                        this._targetPositionY = block.y();
+                        this._targetPositionX = block.mx;
+                        this._targetPositionY = block.my;
                     }
                     else {
                         // 入り口のない部屋。左折の法則による移動を継続する。
@@ -84,11 +84,11 @@ export class LSaunteringAIHelper {
                     moveToLHRule = true;
                     
     
-                    const candidates = room.doorwayBlocks().filter(b => b.x() != self.x && b.y() != self.y);    // 足元フィルタ
+                    const candidates = room.doorwayBlocks().filter(b => b.mx != self.x && b.my != self.y);    // 足元フィルタ
                     if (candidates.length > 0) {
                         const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
-                        this._targetPositionX = block.x();
-                        this._targetPositionY = block.y();
+                        this._targetPositionX = block.mx;
+                        this._targetPositionY = block.my;
                     }
                     else {
                         self.dir = UMovement.reverseDir(self.dir);
@@ -188,7 +188,7 @@ export class LSaunteringAIHelper {
     }
     
     private postMoveToAdjacent(self: LEntity, block: LBlock, cctx: SCommandContext): void {
-        const dir = Helpers.offsetToDir(block.x() - self.x, block.y() - self.y);
+        const dir = Helpers.offsetToDir(block.mx - self.x, block.my - self.y);
         cctx.postActivity(LActivity.makeDirectionChange(self, dir));
         cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
         cctx.postConsumeActionToken(self,LActionTokenType.Minor);

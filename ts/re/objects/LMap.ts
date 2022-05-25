@@ -394,7 +394,7 @@ export class LMap extends LObject {
             const room = this.room(roomId);
             const outers: LBlock[] = [];
             room.forEachEdgeBlocks(b => outers.push(b));
-            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.x() == entity.x && b.y() == entity.y) != undefined));
+            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.mx == entity.x && b.my == entity.y) != undefined));
         }
         else {
             return this.entities().filter(entity => this.roomId(entity) == roomId);

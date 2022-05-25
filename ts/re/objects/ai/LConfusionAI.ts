@@ -80,7 +80,7 @@ export class LConfusionAI extends LCharacterAI {
         // 攻撃候補を覚えておく。
         if (this._restriction != LConfusionAIRestriction.None) {
             const block = UMovement.getAdjacentBlock(self, dir);
-            let targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.x() && e.y == block.y());
+            let targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.mx && e.y == block.my);
     
             if (this._restriction == LConfusionAIRestriction.AttcakToFriend) {
                 targets = targets.filter(x => Helpers.isFriend(self, x));

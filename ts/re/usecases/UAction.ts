@@ -186,7 +186,7 @@ export class UAction {
             if (block) {
                 //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
                 //context.postCall(() => {
-                    UMovement.locateEntity(entity, block.x(), block.y(), targetLayer);
+                    UMovement.locateEntity(entity, block.mx, block.my, targetLayer);
                     //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
                     cctx.postSequel(entity, REBasics.sequels.dropSequel);
                 //});
@@ -205,7 +205,7 @@ export class UAction {
 
         const block = USearch.selectUnitSpawnableBlock(cctx.random());
         if (block) {
-            cctx.postTransferFloor(entity, entity.floorId, block.x(), block.y());   // SpecialEffect として実行される場合は事前にpostされる発動側Animationを待ちたいので post.
+            cctx.postTransferFloor(entity, entity.floorId, block.mx, block.my);   // SpecialEffect として実行される場合は事前にpostされる発動側Animationを待ちたいので post.
             cctx.postSequel(entity, REBasics.sequels.warp);
         }
         else {
@@ -293,8 +293,8 @@ export class UAction {
         const map = REGame.map;
         const selfBlock = map.block(self.x, self.y);
         const targetBlock = map.block(target.x, target.y);
-        const dx = targetBlock.x() - selfBlock.x();
-        const dy = targetBlock.y() - selfBlock.y();
+        const dx = targetBlock.mx - selfBlock.mx;
+        const dy = targetBlock.my - selfBlock.my;
 
         if (Math.abs(dx) > 1) return false; // 隣接 Block への攻撃ではない
         if (Math.abs(dy) > 1) return false; // 隣接 Block への攻撃ではない

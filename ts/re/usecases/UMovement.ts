@@ -169,8 +169,8 @@ export class UMovement {
         const map = REGame.map;
         const actualLayer = layer || entity.getHomeLayer();
 
-        const dx = newBlock.x() - oldBlock.x();
-        const dy = newBlock.y() - oldBlock.y();
+        const dx = newBlock.mx - oldBlock.mx;
+        const dy = newBlock.my - oldBlock.my;
 
         if (Math.abs(dx) > 1) return false; // 隣接 Block への移動ではない
         if (Math.abs(dy) > 1) return false; // 隣接 Block への移動ではない
@@ -661,7 +661,7 @@ export class UMovement {
             const room = map.room(block._roomId);
             if (room.poorVisibility) {
                 room.forEachSightableBlocks(b => {
-                    if (this.blockDistance(block.x(), block.y(), b.x(), b.y()) <= paramDefaultVisibiltyLength) {
+                    if (this.blockDistance(block.mx, block.my, b.mx, b.my) <= paramDefaultVisibiltyLength) {
                         b._passed = true
                     }
                 });
@@ -673,8 +673,8 @@ export class UMovement {
         else {
             // 通路なら外周1タイルを通過済みにする
             this.adjacent8Offsets.forEach(offset => {
-                const x = block.x() + offset[0];
-                const y = block.y() + offset[1];
+                const x = block.mx + offset[0];
+                const y = block.my + offset[1];
                 if (map.isValidPosition(x, y)) {
                     map.block(x, y)._passed = true;
                 }

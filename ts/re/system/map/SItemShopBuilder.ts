@@ -51,8 +51,8 @@ export class SItemShopBuilder {
         // 店主配置
         const entrances = this.setupEntranceBlocks(room);
         for (const entrance of entrances) {
-            const e = info.addShopEntrance(entrance.home.x(), entrance.home.y(), entrance.gate.x(), entrance.gate.y());
-            const entity = USpawner.spawnSingleEntity("kEnemy_店主A", entrance.home.x(), entrance.home.y());
+            const e = info.addShopEntrance(entrance.home.mx, entrance.home.my, entrance.gate.mx, entrance.gate.my);
+            const entity = USpawner.spawnSingleEntity("kEnemy_店主A", entrance.home.mx, entrance.home.my);
             const behavior = entity.getEntityBehavior(LShopkeeperBehavior);
             behavior.setup( info.id(), e.index());
         }
@@ -86,21 +86,21 @@ export class SItemShopBuilder {
             let block1: LBlock | undefined = undefined;
             let block2: LBlock | undefined = undefined;
 
-            if (block.x() == room.mx1) {   // 部屋の左側
-                block1 = this.getInRoomFloorBlock(room, block.x(), block.y() - 1);
-                block2 = this.getInRoomFloorBlock(room, block.x(), block.y() + 1);
+            if (block.mx == room.mx1) {   // 部屋の左側
+                block1 = this.getInRoomFloorBlock(room, block.mx, block.my - 1);
+                block2 = this.getInRoomFloorBlock(room, block.mx, block.my + 1);
             }
-            else if (block.x() == room.mx2) {   // 部屋の右側
-                block1 = this.getInRoomFloorBlock(room, block.x(), block.y() - 1);
-                block2 = this.getInRoomFloorBlock(room, block.x(), block.y() + 1);
+            else if (block.mx == room.mx2) {   // 部屋の右側
+                block1 = this.getInRoomFloorBlock(room, block.mx, block.my - 1);
+                block2 = this.getInRoomFloorBlock(room, block.mx, block.my + 1);
             }
-            else if (block.y() == room.my1) {   // 部屋の上側
-                block1 = this.getInRoomFloorBlock(room, block.x() - 1, block.y());
-                block2 = this.getInRoomFloorBlock(room, block.x() + 1, block.y());
+            else if (block.my == room.my1) {   // 部屋の上側
+                block1 = this.getInRoomFloorBlock(room, block.mx - 1, block.my);
+                block2 = this.getInRoomFloorBlock(room, block.mx + 1, block.my);
             }
-            else if (block.y() == room.my2) {   // 部屋の下側
-                block1 = this.getInRoomFloorBlock(room, block.x() - 1, block.y());
-                block2 = this.getInRoomFloorBlock(room, block.x() + 1, block.y());
+            else if (block.my == room.my2) {   // 部屋の下側
+                block1 = this.getInRoomFloorBlock(room, block.mx - 1, block.my);
+                block2 = this.getInRoomFloorBlock(room, block.mx + 1, block.my);
             }
             
             assert(block1 || block2);

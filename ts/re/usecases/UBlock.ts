@@ -11,7 +11,7 @@ export class UBlock {
 
     public static pos(a1: any, a2: any): [number, number] {
         if (a1 instanceof LBlock) {
-            return [a1.x(), a1.y()];
+            return [a1.mx, a1.my];
         }
         else {
             return [a1, a2];
@@ -47,7 +47,7 @@ export class UBlock {
 
     /** 指定 Block の周囲 8 Block を取得する */
     public static getAdjacentBlocks8(map: LMap, block: LBlock): LBlock[] {
-        return this.adjacentBlocks8XY(map, block.x(), block.y());
+        return this.adjacentBlocks8XY(map, block.mx, block.my);
     }
 
     
