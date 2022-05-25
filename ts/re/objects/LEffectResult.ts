@@ -272,7 +272,7 @@ export class LEffectResult {
             }
             
             if (this.missed) {
-                cctx.postMessage(tr2("TEST: 外れた。"));
+                cctx.postMessage(DTextManager.enemyNoHit.format(targetName));
             }
             else {
                 for (const param of this.paramEffects2) {
@@ -318,7 +318,7 @@ export class LEffectResult {
             }
 
             
-            if (!this.success) {
+            if (this.isHit() && !this.success) {    // 条件は Window_BattleLog.prototype.displayFailure と同じ
                 cctx.postMessage(DTextManager.actionFailure.format(targetName));
             }
 

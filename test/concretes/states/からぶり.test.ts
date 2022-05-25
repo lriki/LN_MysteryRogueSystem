@@ -47,5 +47,9 @@ test("concretes.states.からぶり", () => {
 
     // 攻撃自体は互いに行われている
     expect(TestEnv.integration.skillEmittedCount).toBe(20);
+
+    const message = REGame.messageHistory;
+    expect(message.countIncludesText("ミス")).toBe(20);
+    expect(message.includesText("効かなかった")).toBeFalsy();
 });
 

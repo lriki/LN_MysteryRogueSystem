@@ -38,12 +38,14 @@ export class DTextManager {
     public static get actorNoDamage(): string { return this.message("actorNoDamage"); }
     public static get actorGain(): string { return this.message("actorGain"); }
     public static get actorLoss(): string { return this.message("actorLoss"); }
+    public static get actorNoHit(): string { return this.message("actorNoHit"); }
     public static get enemyDamage(): string { return this.message("enemyDamage"); }
     public static get enemyRecovery(): string { return this.message("enemyRecovery"); }
     public static get enemyDrain(): string { return this.message("enemyDrain"); }
     public static get enemyNoDamage(): string { return this.message("enemyNoDamage"); }
     public static get enemyGain(): string { return this.message("enemyGain"); }
     public static get enemyLoss(): string { return this.message("enemyLoss"); }
+    public static get enemyNoHit(): string { return this.message("enemyNoHit"); }
     public static get buffAdd(): string { return this.message("buffAdd"); }
     public static get debuffAdd(): string { return this.message("debuffAdd"); }
     public static get buffRemove(): string { return this.message("buffRemove"); }
