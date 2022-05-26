@@ -9,7 +9,7 @@ import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionI
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/re/data/DEntity";
 import { LEntity } from "../objects/LEntity";
-import { RmmzEventPrefabMetadata } from "../data/DAttributeReader";
+import { RmmzEventPrefabAttribute } from "../data/DAttributeReader";
 import { DHelpers } from "../data/DHelper";
 
 

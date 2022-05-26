@@ -1,6 +1,6 @@
 
 import { assert, tr2 } from "../Common";
-import { DAnnotationReader, RMMZFloorMetadata } from "./DAttributeReader";
+import { DAnnotationReader, RmmzFloorRawAttribute } from "./DAttributeReader";
 import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";

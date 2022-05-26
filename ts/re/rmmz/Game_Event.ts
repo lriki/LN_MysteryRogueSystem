@@ -1,7 +1,7 @@
 import { REGame } from "ts/re/objects/REGame";
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
-import { DAnnotationReader, RmmzREEventMetadata } from "../data/DAttributeReader";
+import { DAnnotationReader, RmmzREEventAttribute } from "../data/DAttributeReader";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { REDataManager } from "../data/REDataManager";
 import { LState } from "../objects/states/LState";
@@ -22,13 +22,13 @@ declare global {
     interface Game_Event {
         //_entityData: DEntitySpawner2 | undefined;
         _isREEntity: boolean;
-        _reEventData: RmmzREEventMetadata | undefined;
+        _reEventData: RmmzREEventAttribute | undefined;
 
         
         _spritePrepared_RE: boolean;
         _prefabId_RE: DPrefabId;
         _eventData_RE: IDataMapEvent | undefined;
-        _pageData_RE: (RmmzREEventMetadata | undefined)[];
+        _pageData_RE: (RmmzREEventAttribute | undefined)[];
 
         setupPrefab(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void;
         isREEntity(): boolean;
