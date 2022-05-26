@@ -87,8 +87,8 @@ export class SGameManager {
                     const unit = SEntityFactory.newActor(entityId);
                     //unit.prefabKey = `Actor:${actor.id}`;
                     //unit.floorId = LFlo;//x.initialFloorId;
-                    unit.x = actor.initialX;
-                    unit.y = actor.initialY;
+                    unit.mx = actor.initialX;
+                    unit.my = actor.initialY;
                     REGame.system.uniqueActorUnits.push(unit.entityId().clone());
                 }
             }

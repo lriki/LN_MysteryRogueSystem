@@ -335,8 +335,8 @@ export class SCommandContext
 
     postSequel(entity: LEntity, sequelId: number, targetX?: number, targetY?: number, args?: any): SMotionSequel {
         assert(sequelId > 0);
-        const tx = targetX ?? entity.x;
-        const ty = targetY ?? entity.y;
+        const tx = targetX ?? entity.mx;
+        const ty = targetY ?? entity.my;
         const s = new SMotionSequel(entity, sequelId, tx, ty, args);
         const m1 = () => {
             Log.doCommand("Sequel");

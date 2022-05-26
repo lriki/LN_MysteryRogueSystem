@@ -148,12 +148,12 @@ test("concretes.states.速度変化.Issue1", () => {
     
     //----------
     // Round
-    expect(enemy1.x).toBe(30);
+    expect(enemy1.mx).toBe(30);
     RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(30);
+    expect(enemy1.mx).toBe(30);
     const buf = actor1.params().params()[REBasics.params.agi];
     assert(buf);
     buf.getAddBuff().turn = 2;  // テスト用に残りターン数調整。あと2回ManualAction取ると通常速度に戻るイメージ。
@@ -162,12 +162,12 @@ test("concretes.states.速度変化.Issue1", () => {
 
     //----------
     // Round
-    expect(enemy1.x).toBe(29);
+    expect(enemy1.mx).toBe(29);
     wait();
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     // ↑この中で速度変化は解除される
 
-    expect(enemy1.x).toBe(28);
+    expect(enemy1.mx).toBe(28);
     wait();
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 

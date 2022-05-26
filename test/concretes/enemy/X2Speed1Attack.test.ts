@@ -32,7 +32,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 倍速で近づいて来る
-    expect(enemy1.x).toBe(12);
+    expect(enemy1.mx).toBe(12);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Minor で接近し、Major で攻撃が発生している
-    expect(enemy1.x).toBe(11);
+    expect(enemy1.mx).toBe(11);
     expect(TestEnv.integration.skillEmittedCount).toBe(1);
 
     //----------------------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 封印されているので等速
-    expect(enemy1.x).toBe(10);
+    expect(enemy1.mx).toBe(10);
     expect(TestEnv.integration.skillEmittedCount).toBe(1);
     
     //----------------------------------------------------------------------------------------------------

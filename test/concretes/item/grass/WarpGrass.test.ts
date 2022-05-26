@@ -42,7 +42,7 @@ test("concretes.item.grass.WarpGrass", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // ワープしている
-    expect(enemy1.x == 15 && enemy1.y == 10).toBeFalsy();
+    expect(enemy1.mx == 15 && enemy1.my == 10).toBeFalsy();
 
     //----------------------------------------------------------------------------------------------------
     
@@ -53,7 +53,7 @@ test("concretes.item.grass.WarpGrass", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // ワープしている
-    expect(player1.x == 10 && player1.y == 10).toBeFalsy();
+    expect(player1.mx == 10 && player1.my == 10).toBeFalsy();
 
     TestUtils.testCommonGrassEnd(player1, item1);
 });

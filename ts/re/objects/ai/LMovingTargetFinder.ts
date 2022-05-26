@@ -33,7 +33,7 @@ export class LMovingTargetFinder_Item {
 
         const item = USearch.findLatestItemInVisibilityBlocks(self);
         if (item) {
-            return [item.x, item.y];
+            return [item.mx, item.my];
         }
 
         return undefined;
@@ -49,7 +49,7 @@ export class LMovingTargetFinder_Gold {
 
         const item = USearch.findLatestItemInVisibilityBlocks(self);
         if (item && item.checkLooksLikeGold()) {
-            return [item.x, item.y];
+            return [item.mx, item.my];
         }
 
         return undefined;

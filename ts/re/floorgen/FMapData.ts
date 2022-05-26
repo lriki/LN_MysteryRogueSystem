@@ -2,7 +2,7 @@ import { assert } from "ts/re/Common";
 import { DMonsterHouseTypeId } from "ts/re/data/DMonsterHouse";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { LRandom } from "ts/re/objects/LRandom";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { FStructure } from "./FStructure";
 import { DItemShopTypeId } from "ts/re/data/DItemShop";
 import { FSector, FSectorAdjacency, FSectorConnection } from "./data/FSector";
@@ -147,7 +147,7 @@ export class FSectorEdge {
 export class FMapBlock {
     private _mx;
     private _my;
-    private _tileShape: TileShape;
+    private _tileShape: LTileShape;
     private _blockComponent: FBlockComponent;
     private _sectorId: FSectorId;
     private _roomId: FRoomId;
@@ -159,7 +159,7 @@ export class FMapBlock {
     public constructor(mx: number, my: number) {
         this._mx = mx;
         this._my = my;
-        this._tileShape = TileShape.Wall;
+        this._tileShape = LTileShape.Wall;
         this._blockComponent = FBlockComponent.None;
         this._sectorId = 0;
         this._roomId = 0;
@@ -177,11 +177,11 @@ export class FMapBlock {
         return this._my;
     }
 
-    public setTileShape(value: TileShape): void {
+    public setTileShape(value: LTileShape): void {
         this._tileShape = value;
     }
 
-    public tileShape(): TileShape {
+    public tileShape(): LTileShape {
         return this._tileShape;
     }
 
@@ -458,7 +458,7 @@ export class FMap {
                 this._innerBlocks.push(block);
             }
             else {
-                block.setTileShape(TileShape.Wall);
+                block.setTileShape(LTileShape.Wall);
             }
         }
         this._sectors = [new FSector(this, 0)];    // dummy

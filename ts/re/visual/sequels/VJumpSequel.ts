@@ -35,15 +35,15 @@ export class VJumpSequel extends REVisualSequel {
         //context.unlockCamera();
 
         if (frameCount == 0) {
-            this.jump(entity.x - context.startPosition().x, entity.y - context.startPosition().y);
+            this.jump(entity.mx - context.startPosition().x, entity.my - context.startPosition().y);
             this._realX = context.startPosition().x;
             this._realY = context.startPosition().y;
         }
 
         this._jumpCount--;
         
-        this._realX = (this._realX * this._jumpCount + entity.x) / (this._jumpCount + 1.0);
-        this._realY = (this._realY * this._jumpCount + entity.y) / (this._jumpCount + 1.0);
+        this._realX = (this._realX * this._jumpCount + entity.mx) / (this._jumpCount + 1.0);
+        this._realY = (this._realY * this._jumpCount + entity.my) / (this._jumpCount + 1.0);
 
         visual.setX(this._realX);
         visual.setY(this._realY - this.jumpHeight() / 40);

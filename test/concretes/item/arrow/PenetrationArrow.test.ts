@@ -7,7 +7,7 @@ import { TestEnv } from "../../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -36,7 +36,7 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     const enemy2HP1 = enemy2.actualParam(REBasics.params.hp);
 
     // Player の右に壁を作る
-    REGame.map.block(11, 10)._tileShape = TileShape.Wall;
+    REGame.map.block(11, 10)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

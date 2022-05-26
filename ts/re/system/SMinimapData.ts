@@ -146,28 +146,28 @@ export class SMinimapData {
                 // 何も表示しない
             }
             else if (entity.entityId().equals(subject.entityId())) {
-                this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 9);
+                this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 9);
             }
             else {
                 if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
                     if (entity.findEntityBehavior(LTrapBehavior)) {
-                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 13);
+                        this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 13);
                     }
                     else if (entity.findEntityBehavior(LBattlerBehavior)) {
                         if (Helpers.isHostile(subject, entity)) {
                             // 敵対勢力
-                            this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 11);
+                            this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 11);
                         }
                         else {
                             // 中立 or 味方
-                            this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 12);
+                            this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 12);
                         }
                     }
                     else if (entity.findEntityBehavior(LItemBehavior)) {
-                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + 10);
+                        this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 10);
                     }
                     else if (entity.findEntityBehavior(LExitPointBehavior)) {
-                        this.setData(entity.x, entity.y, 1, Tilemap.TILE_ID_A5 + ExitPointTileIdOffset);
+                        this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + ExitPointTileIdOffset);
                     }
                 }
             }

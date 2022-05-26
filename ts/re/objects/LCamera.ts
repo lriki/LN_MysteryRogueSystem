@@ -102,7 +102,7 @@ export class LCamera {
     _reserveFloorTransferToFocusedEntity(): void {
         const entity = this.focusedEntity();
         if (entity) {
-            this.reserveFloorTransfer(entity.floorId, entity.x, entity.y, 2);
+            this.reserveFloorTransfer(entity.floorId, entity.mx, entity.my, 2);
         }
     }
 
@@ -118,17 +118,5 @@ export class LCamera {
         this._transferingNewX = 0;
         this._transferingNewY = 0;
     }
-
-    /*
-    _update() {
-        // 注視している Entity が別の Floor にいる場合、Camera を移動する
-        const entity = this.focusedEntity();
-        if (entity) {
-            if (REGame.map.floorId() != entity.floorId) {
-
-            }
-        }
-    }
-    */
 }
 

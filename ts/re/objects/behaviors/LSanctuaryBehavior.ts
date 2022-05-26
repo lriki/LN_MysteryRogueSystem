@@ -27,7 +27,7 @@ export class LSanctuaryBehavior extends LBehavior {
     // v0.1.0 では歩行侵入時に処理していたが、それ以外にも Block への侵入は様々にあるので、
     // カバーしきれるように onStabilizeSituation() を使う。
     onStabilizeSituation(self: LEntity, cctx: SCommandContext): SCommandResponse {
-        const block = REGame.map.tryGetBlock(self.x, self.y);
+        const block = REGame.map.tryGetBlock(self.mx, self.my);
         if (block) {
             for (const entity of block.getEntities()) {
                 // 戦闘不能ステート 付加

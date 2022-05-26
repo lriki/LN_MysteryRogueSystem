@@ -136,7 +136,7 @@ export class LItemImitatorBehavior extends LBehavior {
             this.parentAs(LState)?.removeThisState();
             
             self.removeFromParent();
-            REGame.map.appearEntity(self, actor.x, actor.y);
+            REGame.map.appearEntity(self, actor.mx, actor.my);
             UAction.postDropOrDestroyOnCurrentPos(RESystem.commandContext, self, self.getHomeLayer());
 
             return SCommandResponse.Canceled;
@@ -152,7 +152,7 @@ export class LItemImitatorBehavior extends LBehavior {
 
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
             if (Helpers.isHostileFactionId(e.walker.getOutwardFactionId(), self.getInnermostFactionId()) &&
-                e.targetX == self.x && e.targetY == self.y) {
+                e.targetX == self.mx && e.targetY == self.my) {
                 this.parentAs(LState)?.removeThisState();
                 return LEventResult.Handled;
             }

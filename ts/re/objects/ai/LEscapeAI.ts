@@ -34,10 +34,10 @@ export class LEscapeAI extends LCharacterAI {
     // (mx, my) は subject から見て、hostileEntity の背面(向こう側)にあるかを判断する。
     // そっちの方向には行きたくない判断に使う。
     private checkDeadInArea(subject: LEntity, hostileEntity: LEntity, mx: number, my: number): boolean {
-        const sx = subject.x;
-        const sy = subject.y;
-        const ex = hostileEntity.x;
-        const ey = hostileEntity.y;
+        const sx = subject.mx;
+        const sy = subject.my;
+        const ex = hostileEntity.mx;
+        const ey = hostileEntity.my;
         const dx = Math.abs(sx - ex);
         const dy = Math.abs(sy - ey);
 
@@ -100,14 +100,14 @@ export class LEscapeAI extends LCharacterAI {
 
             //this._targetEntityId = target.entityId().clone();
 
-            const block = REGame.map.block(self.x, self.y);
+            const block = REGame.map.block(self.mx, self.my);
             const room = REGame.map.room(block._roomId);
 
             // 
             const doorway = room.doorwayBlocks()
                 .filter(b =>
                     !this.checkDeadInArea(self, target, b.mx, b.my) &&    // block は敵対の向こう側にあるのでそっちは除外
-                    (b.mx != self.x || b.my != self.y))                   // 足元は除外
+                    (b.mx != self.mx || b.my != self.my))                   // 足元は除外
                 .selectMin((a, b) => UMovement.distanceSq(a.mx, a.my, b.mx, b.my));
                 
             if (doorway) {
@@ -125,7 +125,7 @@ export class LEscapeAI extends LCharacterAI {
                 const blocks = UMovement.getWay3FrontBlocks(self, rdir);
                 if (!blocks.find(b => UMovement.checkPassageBlockToBlock(self, block, b, MovingMethod.Walk))) {
 
-                    if (!UMovement.checkAdjacentPositions(self.x, self.y, target.x, target.y)) {
+                    if (!UMovement.checkAdjacentPositions(self.mx, self.my, target.mx, target.my)) {
                         // 隣接していなければ相手を向いて待機。
                         // 消費 Token を Major にしてしまうと、倍速1回行動の時に上手く動かないので Minor で消費する。
                         cctx.postActivity(

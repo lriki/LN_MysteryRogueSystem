@@ -46,8 +46,8 @@ test("concretes.enemy.GoldThief.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // Enemy は Gold の上に移動している
-    expect(enemy1.x).toBe(13);
-    expect(enemy1.y).toBe(10);
+    expect(enemy1.mx).toBe(13);
+    expect(enemy1.my).toBe(10);
 
     // 右へ移動。まだ隣接しない
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
@@ -56,8 +56,8 @@ test("concretes.enemy.GoldThief.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // Enemy は Gold の上に居座っている
-    expect(enemy1.x).toBe(13);
-    expect(enemy1.y).toBe(10);
+    expect(enemy1.mx).toBe(13);
+    expect(enemy1.my).toBe(10);
 
     // 右へ移動
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
@@ -68,7 +68,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
 
     // Enemy1 はワープしている
     // また、アイテム化された Gold を持っている
-    expect(enemy1.x != 13 && enemy1.y != 10).toBe(true);
+    expect(enemy1.mx != 13 && enemy1.my != 10).toBe(true);
     expect(inventory2.hasAnyItem()).toBe(true);
     const item1 = inventory2.items[0];
     
@@ -83,8 +83,8 @@ test("concretes.enemy.GoldThief.Basic", () => {
     // Enemy は倒れ、足元に item が落ちている
     expect(enemy1.isDestroyed()).toBe(true);
     expect(item1.floorId.equals(floorId)).toBe(true);
-    expect(item1.x).toBe(12);
-    expect(item1.y).toBe(11);
+    expect(item1.mx).toBe(12);
+    expect(item1.my).toBe(11);
 });
 
 test("concretes.enemy.GoldThief.DropItem", () => {

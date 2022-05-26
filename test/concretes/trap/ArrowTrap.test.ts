@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REBasics } from "ts/re/data/REBasics";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { assert } from "ts/re/Common";
@@ -98,8 +98,8 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     // 右下に移動できないような壁を作る
-    REGame.map.block(12, 9)._tileShape = TileShape.Wall;
-    REGame.map.block(13, 10)._tileShape = TileShape.Wall;
+    REGame.map.block(12, 9)._tileShape = LTileShape.Wall;
+    REGame.map.block(13, 10)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

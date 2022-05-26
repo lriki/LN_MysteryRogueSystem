@@ -4,7 +4,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 

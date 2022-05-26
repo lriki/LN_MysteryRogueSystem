@@ -48,7 +48,7 @@ export class LMoveDeterminer {
 
     public decide(cctx: SCommandContext, self: LEntity): void {
         const rand = cctx.random();
-        const block = REGame.map.block(self.x, self.y);
+        const block = REGame.map.block(self.mx, self.my);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
@@ -83,7 +83,7 @@ export class LMoveDeterminer {
                     // => 現在位置以外のランダムな入口を目的地に設定し、左折の法則による移動
                     // => 他に入口がなければ逆方向を向き、左折の法則による移動
     
-                    const candidates = room.doorwayBlocks().filter(b => b.mx != self.x && b.my != self.y);    // 足元フィルタ
+                    const candidates = room.doorwayBlocks().filter(b => b.mx != self.mx && b.my != self.my);    // 足元フィルタ
                     if (candidates.length > 0) {
                         const block = candidates[rand.nextIntWithMax(candidates.length)];
                         this._targetPositionX = block.mx;
@@ -160,8 +160,8 @@ export class LMoveDeterminer {
 
                 // 移動後、向きの修正
                 const dir = (this.hasDestination()) ?
-                    SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY) : // 目標があるならそちらを向ける
-                    UMovement.getLookAtDirFromPos(self.x, self.y, block.mx, block.my);                    // 目標が無ければ進行方向を向く
+                    SAIHelper.distanceToDir(self.mx, self.my, this._targetPositionX, this._targetPositionY) : // 目標があるならそちらを向ける
+                    UMovement.getLookAtDirFromPos(self.mx, self.my, block.mx, block.my);                    // 目標が無ければ進行方向を向く
                 cctx.postActivity(LActivity.makeDirectionChange(self, dir));
 
                 return true;
@@ -170,8 +170,8 @@ export class LMoveDeterminer {
 
 
         if (this.hasDestination() &&
-            self.x == this._targetPositionX &&
-            self.y == this._targetPositionY) {
+            self.mx == this._targetPositionX &&
+            self.my == this._targetPositionY) {
             // 目標座標が指定されているが既に到達済みの場合は、ランダム移動を行わない。
             // 店主など、明示的に移動させない Entity が該当する。
             return true;
@@ -192,14 +192,14 @@ export class LMoveDeterminer {
     }
 
     private canModeToTarget(self: LEntity): boolean {
-        return this.hasDestination() && (self.x != this._targetPositionX || self.y != this._targetPositionY);
+        return this.hasDestination() && (self.mx != this._targetPositionX || self.my != this._targetPositionY);
     }
 
     private moveToTarget(self: LEntity, cctx: SCommandContext): boolean {
         // 目的地設定済みで、未到達であること
         assert(this.canModeToTarget(self));
 
-        const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+        const dir = SAIHelper.distanceToDir(self.mx, self.my, this._targetPositionX, this._targetPositionY);
         if (dir != 0 && UMovement.checkPassageToDir(self, dir)) {
             cctx.postActivity(LActivity.makeDirectionChange(self, dir));
             cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
@@ -213,7 +213,7 @@ export class LMoveDeterminer {
     }
     
     private postMoveToAdjacent(self: LEntity, block: LBlock, cctx: SCommandContext): void {
-        const dir = Helpers.offsetToDir(block.mx - self.x, block.my - self.y);
+        const dir = Helpers.offsetToDir(block.mx - self.mx, block.my - self.my);
         cctx.postActivity(LActivity.makeDirectionChange(self, dir));
         cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
         cctx.postConsumeActionToken(self, LActionTokenType.Minor);

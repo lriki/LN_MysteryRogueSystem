@@ -140,7 +140,7 @@ export class LProjectableBehavior extends LBehavior {
 
         const self = args.self;
 
-        REGame.map.appearEntity(self, self.x, self.y, DBlockLayerKind.Projectile);
+        REGame.map.appearEntity(self, self.mx, self.my, DBlockLayerKind.Projectile);
 
 
         LProjectableBehavior.startMoveAsProjectile(cctx, self, args.subject, args.sender.dir, 5);
@@ -160,8 +160,8 @@ export class LProjectableBehavior extends LBehavior {
 
         //const args = (cmd.args() as REMoveToAdjacentArgs);
         const offset = Helpers.dirToTileOffset(this.blowDirection);
-        const tx = self.x + offset.x;
-        const ty = self.y + offset.y;
+        const tx = self.mx + offset.x;
+        const ty = self.my + offset.y;
 
 
         self.dir = this.blowDirection;

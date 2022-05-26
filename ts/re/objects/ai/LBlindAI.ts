@@ -47,7 +47,7 @@ export class LBlindAI extends LCharacterAI {
         // 実際の攻撃は Major フェーズで行いたいので、ここでは行動は消費しない。
         // 攻撃候補を覚えておく。
         const block = UMovement.getAdjacentBlock(self, frontDir);
-        const targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.x == block.mx && e.y == block.my);
+        const targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.mx == block.mx && e.my == block.my);
         if (targets.length > 0) {
             this._candidateSkillActions.push({ skillId: RESystem.skills.normalAttack, target: targets[0].entityId() });
             return SPhaseResult.Handled;

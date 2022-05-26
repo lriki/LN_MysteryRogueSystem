@@ -1,6 +1,6 @@
 import { FRoom } from "ts/re/floorgen/FMapData";
 import { REGame } from "./REGame";
-import { LBlock, TileShape } from "./LBlock";
+import { LBlock, LTileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { RESerializable } from "../Common";
 
@@ -61,7 +61,7 @@ export class LRoom {
     
     public forEachEntities(func: (entity: LEntity) => void): void {
         for (const entity of REGame.map.entities()) {
-            if (this.contains(entity.x, entity.y)) {
+            if (this.contains(entity.mx, entity.my)) {
                 func(entity);
             }
         }
@@ -69,7 +69,7 @@ export class LRoom {
     
     public findEntityInRoom(func: (entity: LEntity) => boolean): LEntity | undefined {
         for (const entity of REGame.map.entities()) {
-            if (this.contains(entity.x, entity.y)) {
+            if (this.contains(entity.mx, entity.my)) {
                 if (func(entity)) {
                     return entity;
                 }

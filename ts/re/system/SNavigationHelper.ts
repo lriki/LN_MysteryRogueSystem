@@ -30,7 +30,7 @@ export class SNavigationHelper {
      */
     public static testVisibilityForMinimap(subject: LEntity, target: LEntity): boolean {
         const map = REGame.map;
-        const targetBlock = REGame.map.block(target.x, target.y);
+        const targetBlock = REGame.map.block(target.mx, target.my);
 
         // Trap は未発見の場合、どのような勢力からであっても不可視
         const trap = target.findEntityBehavior(LTrapBehavior);
@@ -54,7 +54,7 @@ export class SNavigationHelper {
             const room = map.room(subject.roomId());
             if (room.poorVisibility) {
                 // 視界不明瞭マップでは視界半径をチェック
-                if (UMovement.blockDistance(subject.x, subject.y, target.x, target.y) <= paramDefaultVisibiltyLength) {
+                if (UMovement.blockDistance(subject.mx, subject.my, target.mx, target.my) <= paramDefaultVisibiltyLength) {
                     return true;
                 }
             }

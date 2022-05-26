@@ -64,7 +64,7 @@ test("Equipment.EquipOnOff", () => {
     expect(weapon1.parentObject()).toBe(inventory);
     expect(shield1.parentObject()).toBe(inventory);
     
-    expect(enemy1.x).toBe(20);  // Enemy にターンが回っている
+    expect(enemy1.mx).toBe(20);  // Enemy にターンが回っている
     
     //----------------------------------------------------------------------------------------------------
 

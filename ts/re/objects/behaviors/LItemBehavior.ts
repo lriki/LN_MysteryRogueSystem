@@ -89,7 +89,7 @@ export class LItemBehavior extends LBehavior {
                         self.destroy();
                     }
                     else {
-                        UAction.postDropOrDestroy(cctx, self, self.x, self.y);
+                        UAction.postDropOrDestroy(cctx, self, self.mx, self.my);
                     }
                 });
                 return SHandleCommandResult.Resolved;

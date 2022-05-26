@@ -41,7 +41,7 @@ test("concretes.item.ring.WarpRing", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         // ワープしている
-        if (player1.x != 11 || player1.y != 10) count++;
+        if (player1.mx != 11 || player1.my != 10) count++;
     }
 
     // 1回くらいはワープしているだろう

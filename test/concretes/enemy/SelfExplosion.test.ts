@@ -10,7 +10,7 @@ import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { assert } from "ts/re/Common";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -73,7 +73,7 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
     REGame.world._transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 11, 11);
     
     // ふきとばし効果でダメージを与えたいので、Enemy1 の後ろに壁を作る
-    REGame.map.block(12, 10)._tileShape = TileShape.Wall;
+    REGame.map.block(12, 10)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -85,7 +85,7 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(enemy1.x).toBe(11);  // 一応、爆発位置を確認
+    expect(enemy1.mx).toBe(11);  // 一応、爆発位置を確認
 
     const player1HP2 = player1.actualParam(REBasics.params.hp);
     expect(player1.isDeathStateAffected()).toBe(false); // Player は生きている

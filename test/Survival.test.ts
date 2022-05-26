@@ -78,7 +78,7 @@ test("Survival.FP", () => {
     // UT薬草を Player の右に置く
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item2._name = "item2";
-    REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, player1.x + 2, player1.y);
+    REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, player1.mx + 2, player1.my);
     
     // UT薬草を Player へ向かって吹き飛ばす
     const subject = new SEffectSubject(player1); // 適当に

@@ -15,7 +15,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 export class SDivisionSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
-        const block = REGame.map.block(target.x, target.y);
+        const block = REGame.map.block(target.mx, target.my);
 
         result.makeSuccess();
 
@@ -26,7 +26,7 @@ export class SDivisionSpecialEffect extends SSpecialEffect {
             const newEntity = target.clone();
             REGame.world._transferEntity(newEntity, target.floorId, newBlock.mx, newBlock.my);
 
-            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(target.x, target.y);
+            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(target.mx, target.my);
             cctx.postWaitSequel();
         }
         else {

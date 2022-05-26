@@ -48,7 +48,7 @@ test("concretes.states.透明.EnemyMove", () => {
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
-    expect(enemy1.x > 11).toBe(true);
+    expect(enemy1.mx > 11).toBe(true);
 });
 
 
@@ -76,6 +76,6 @@ test("concretes.states.透明.Enemy", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // enemy1 は Player を視認できなくなったので通路へ向かって移動している
-    expect(enemy1.x).toBe(12);
-    expect(enemy1.y).toBe(5);
+    expect(enemy1.mx).toBe(12);
+    expect(enemy1.my).toBe(5);
 });

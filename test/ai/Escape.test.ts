@@ -34,8 +34,8 @@ test("ai.Escape.1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 通路へ向かって逃げている
-    expect(enemy1.x).toBe(12);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(12);
+    expect(enemy1.my).toBe(4);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -48,8 +48,8 @@ test("ai.Escape.1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 壁側へ向かって逃げている
-    expect(enemy1.x).toBe(9);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(9);
+    expect(enemy1.my).toBe(4);
     
     //----------------------------------------------------------------------------------------------------
 
@@ -64,8 +64,8 @@ test("ai.Escape.1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Enemy は移動しない
-    expect(enemy1.x).toBe(9);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(9);
+    expect(enemy1.my).toBe(4);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ test("ai.Escape.1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 観念して Player とすれ違うように移動している
-    expect(enemy1.x).toBe(10);
+    expect(enemy1.mx).toBe(10);
 });
 
 
@@ -108,8 +108,8 @@ test("ai.Escape.2", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 部屋の内側へ向かって逃げる
-    expect(enemy1.x).toBe(12);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(12);
+    expect(enemy1.my).toBe(4);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -120,8 +120,8 @@ test("ai.Escape.2", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 部屋の内側へ向かって逃げる
-    expect(enemy1.x).toBe(11);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(11);
+    expect(enemy1.my).toBe(4);
 });
 
 
@@ -150,8 +150,8 @@ test("ai.Escape.3", () => {
 
     // 通路内へ逃げる
     expect(enemy1.dir).toBe(6);
-    expect(enemy1.x).toBe(14);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(14);
+    expect(enemy1.my).toBe(4);
     
     //----------------------------------------------------------------------------------------------------
 
@@ -163,8 +163,8 @@ test("ai.Escape.3", () => {
 
     // 部屋の内側へ向かって逃げる
     expect(enemy1.dir).toBe(6);
-    expect(enemy1.x).toBe(15);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(15);
+    expect(enemy1.my).toBe(4);
 });
 
 // 倍速1回行動エネミーが、通路へ逃げ込もうとしたが、そこへ移動不可能だったときにクラッシュする問題の修正確認
@@ -218,5 +218,5 @@ test("ai.Escape.SpeedLevel2", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 通路方向へ倍速で逃げてほしい
-    expect(enemy1.x).toBe(14);
+    expect(enemy1.mx).toBe(14);
 });

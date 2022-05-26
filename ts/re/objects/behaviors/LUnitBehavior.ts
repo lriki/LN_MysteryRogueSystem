@@ -192,11 +192,11 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
 
             const offset = Helpers.dirToTileOffset(activity.effectDirection());
-            const startX = self.x;
-            const startY = self.y;
+            const startX = self.mx;
+            const startY = self.my;
             
             // Prepare event
-            const args: WalkEventArgs = { walker: self, targetX: self.x + offset.x, targetY: self.y + offset.y };
+            const args: WalkEventArgs = { walker: self, targetX: self.mx + offset.x, targetY: self.my + offset.y };
             if (!REGame.eventServer.publish(cctx, REBasics.events.preWalk, args)) return SCommandResponse.Canceled;
 
             if (activity.isFastForward()) {
@@ -205,7 +205,7 @@ export class LUnitBehavior extends LBehavior {
 
             const layer = self.getHomeLayer();
 
-            if (UMovement.moveEntity(cctx, self, self.x + offset.x, self.y + offset.y, MovingMethod.Walk, layer)) {
+            if (UMovement.moveEntity(cctx, self, self.mx + offset.x, self.my + offset.y, MovingMethod.Walk, layer)) {
                 cctx.postSequel(self, REBasics.sequels.MoveSequel).setStartPosition(startX, startY);
 
                 // Projectile の移動では通知したくないので、UMovement.moveEntity() の中ではなく Unit の移動側で通知する。
@@ -236,7 +236,7 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == REBasics.actions.PickActionId) {
             const inventory = self.findEntityBehavior(LInventoryBehavior);
             if (inventory) {
-                const block = REGame.map.block(self.x, self.y);
+                const block = REGame.map.block(self.mx, self.my);
                 const layer = block.layer(DBlockLayerKind.Ground);
                 const itemEntity = layer.firstEntity();
                 if (itemEntity) {
@@ -283,7 +283,7 @@ export class LUnitBehavior extends LBehavior {
             assert(itemEntity);
             assert(inventory);
             
-            const block = REGame.map.block(self.x, self.y);
+            const block = REGame.map.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
@@ -297,7 +297,7 @@ export class LUnitBehavior extends LBehavior {
                             itemEntity.removeFromParent();
                             //cctx.remo
                             //inventory.removeEntity(itemEntity);
-                            REGame.map.appearEntity(itemEntity, self.x, self.y);
+                            REGame.map.appearEntity(itemEntity, self.mx, self.my);
     
                             cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
                             cctx.post(itemEntity, self, subject, undefined, onGrounded);
@@ -326,8 +326,8 @@ export class LUnitBehavior extends LBehavior {
                     //itemEntity.callRemoveFromWhereabouts(cctx);
 
                     itemEntity.removeFromParent();
-                    itemEntity.x = self.x;
-                    itemEntity.y = self.y;
+                    itemEntity.mx = self.mx;
+                    itemEntity.my = self.my;
 
                     /*
                     let actual: LEntity;
@@ -378,8 +378,8 @@ export class LUnitBehavior extends LBehavior {
                         actual = itemEntity;
                     }
 
-                    actual.x = self.x;
-                    actual.y = self.y;
+                    actual.mx = self.mx;
+                    actual.my = self.my;
 
 
                     cctx.post(actual, self, subject, undefined, onThrowReaction)
@@ -396,7 +396,7 @@ export class LUnitBehavior extends LBehavior {
             
             const inventory = self.getEntityBehavior(LInventoryBehavior);
             const item1 = activity.object();
-            const block = REGame.map.block(self.x, self.y);
+            const block = REGame.map.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
             const item2 = layer.firstEntity();
             if (item2) {
@@ -405,7 +405,7 @@ export class LUnitBehavior extends LBehavior {
                 REGame.map._removeEntity(item2);
                 inventory.removeEntity(item1);
 
-                REGame.map.appearEntity(item1, self.x, self.y);
+                REGame.map.appearEntity(item1, self.mx, self.my);
                 inventory.addEntity(item2);
 
                 cctx.postMessage(tr("{0} と {1} を交換した。", UName.makeNameAsItem(item1), UName.makeNameAsItem(item2)));

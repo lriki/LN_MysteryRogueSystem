@@ -56,7 +56,7 @@ test("Items.Staff.Knockback", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-        expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
+        expect(enemy1.mx).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
         expect(item1.actualParam(REBasics.params.remaining)).toBe(0);    // 使用回数が減っている
     }
 
@@ -71,7 +71,7 @@ test("Items.Staff.Knockback", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-        expect(enemy1.x).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
+        expect(enemy1.mx).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
         expect(item1.actualParam(REBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
     }
 
@@ -92,7 +92,7 @@ test("Items.Staff.Knockback", () => {
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         
-        expect(enemy1.x).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
+        expect(enemy1.mx).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
 
     }
 });

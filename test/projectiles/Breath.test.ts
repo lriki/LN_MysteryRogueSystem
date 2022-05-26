@@ -8,7 +8,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -25,7 +25,7 @@ test("projectiles.Breath", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 投げ当てテスト用に壁を作る
-    REGame.map.block(12, 10)._tileShape = TileShape.Wall;
+    REGame.map.block(12, 10)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation();
 

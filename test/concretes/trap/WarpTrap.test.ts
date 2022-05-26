@@ -33,9 +33,9 @@ test("concretes.trap.WarpTrap.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ワープしている
-    if (player1.x != 11 && player1.y != 10) {
-        console.log("pos: ", player1.x, player1.y);
+    if (player1.mx != 11 && player1.my != 10) {
+        console.log("pos: ", player1.mx, player1.my);
     }
-    expect(player1.x == 11 && player1.y == 10).toBeFalsy();
+    expect(player1.mx == 11 && player1.my == 10).toBeFalsy();
     expect(REGame.messageHistory.includesText("効かなかった")).toBeFalsy(); // 余計なメッセージが出ていなこと
 });

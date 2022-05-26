@@ -105,7 +105,7 @@ export class UAction {
     }
 
     public static postStepOnGround(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.x, entity.y);
+        const block = REGame.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
@@ -115,7 +115,7 @@ export class UAction {
     }
 
     public static postPreStepFeetProcess(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.x, entity.y);
+        const block = REGame.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
@@ -127,7 +127,7 @@ export class UAction {
     }
 
     public static postAttemptPerformStepFeetProcess(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.x, entity.y);
+        const block = REGame.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
@@ -182,7 +182,7 @@ export class UAction {
 
         }
         else {
-            const block = UMovement.selectNearbyLocatableBlock(cctx.random(), entity.x, entity.y, targetLayer, entity);
+            const block = UMovement.selectNearbyLocatableBlock(cctx.random(), entity.mx, entity.my, targetLayer, entity);
             if (block) {
                 //context.postSequel(entity, RESystem.sequels.dropSequel, { movingDir: blowDirection });
                 //context.postCall(() => {
@@ -239,15 +239,15 @@ export class UAction {
             const loops = Math.min(items.length, positions.length);
             let iItem = 0;
             for (let i = 0; i < positions.length && iItem < items.length; i++) {
-                const mx = entity.x + positions[i].x;
-                const my = entity.y + positions[i].y;
+                const mx = entity.mx + positions[i].x;
+                const my = entity.my + positions[i].y;
 
                 // 地形などを考慮して、本当に落とすアイテムを決める
                 const block = REGame.map.tryGetBlock(mx, my);
                 if (block && block.isFloorLikeShape() && !block.layer(DBlockLayerKind.Ground).isContainsAnyEntity()) {
                     const item = items[iItem];
                     item.removeFromParent();
-                    REGame.world._transferEntity(item, REGame.map.floorId(), entity.x, entity.y);
+                    REGame.world._transferEntity(item, REGame.map.floorId(), entity.mx, entity.my);
                     cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
                     cctx.postSequel(item, REBasics.sequels.jump);
                     iItem++;
@@ -291,8 +291,8 @@ export class UAction {
 
     private static checkAdjacentDirectlyAttack(self: LEntity, target: LEntity): boolean {
         const map = REGame.map;
-        const selfBlock = map.block(self.x, self.y);
-        const targetBlock = map.block(target.x, target.y);
+        const selfBlock = map.block(self.mx, self.my);
+        const targetBlock = map.block(target.mx, target.my);
         const dx = targetBlock.mx - selfBlock.mx;
         const dy = targetBlock.my - selfBlock.my;
 
@@ -412,7 +412,7 @@ export class UAction {
 
                 if (!this.checkAdjacentDirectlyAttack(performer, target)) return false; // 壁の角など、隣接攻撃できなければダメ
 
-                const targetBlock = REGame.map.block(target.x, target.y);
+                const targetBlock = REGame.map.block(target.mx, target.my);
                 if (!targetBlock || UBlock.checkPurifier(targetBlock, performer)) return false; // target の場所に聖域効果があるならダメ
 
                 return true;
@@ -454,8 +454,8 @@ export class UAction {
                 const ox = Helpers._dirToTileOffsetTable[dir].x;
                 const oy = Helpers._dirToTileOffsetTable[dir].y;
                 for (let i = 1; i < scope.length; i++) { // 足元を含む必要はないので i=1 から開始
-                    const x = performer.x + (ox * i);
-                    const y = performer.y + (oy * i);
+                    const x = performer.mx + (ox * i);
+                    const y = performer.my + (oy * i);
                     const block = REGame.map.tryGetBlock(x, y);
 
                     // マップ外まで見たら列挙終了
@@ -584,7 +584,7 @@ export class UAction {
         assert(map.checkAppearing(entity));
         const items = entity.generateDropItems(cause);
         for (const item of items) {
-            this.postDropOrDestroy(cctx, item, entity.x, entity.y);
+            this.postDropOrDestroy(cctx, item, entity.mx, entity.my);
         }
     }
 

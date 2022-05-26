@@ -41,5 +41,5 @@ test("system.BDash.ArrowDamageStop", () => {
     const unit = player1.getEntityBehavior(LUnitBehavior);
     expect(hp2).toBeLessThan(hp1);              // ダメージを受けている
     expect(unit._straightDashing).toBeFalsy();  // ダッシュ状態は解除されている
-    expect(player1.x).toBe(11);                 // ダメージを受けたところで止まっている
+    expect(player1.mx).toBe(11);                 // ダメージを受けたところで止まっている
 });

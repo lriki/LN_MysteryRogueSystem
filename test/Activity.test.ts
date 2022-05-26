@@ -1,7 +1,7 @@
 import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
@@ -64,7 +64,7 @@ test("Activity.Throw", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     // 投げ当てテスト用に壁を作る
-    REGame.map.block(actor1.x, actor1.y + 2)._tileShape = TileShape.Wall;
+    REGame.map.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -79,7 +79,7 @@ test("Activity.Throw", () => {
     expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(1);
 
     // とりあえず、Actor 位置より右に落ちること。
-    expect(item1.x > 10).toBe(true);
+    expect(item1.mx > 10).toBe(true);
     expect(item1.layer()).toBe(DBlockLayerKind.Ground);
 
     // 下を向く
@@ -97,8 +97,8 @@ test("Activity.Throw", () => {
     expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(0);
 
     // 壁の手前に落ちていること
-    expect(item2.x).toBe(actor1.x);
-    expect(item2.y).toBe(actor1.y + 1);
+    expect(item2.mx).toBe(actor1.mx);
+    expect(item2.my).toBe(actor1.my + 1);
     expect(item2.layer()).toBe(DBlockLayerKind.Ground);
 });
 

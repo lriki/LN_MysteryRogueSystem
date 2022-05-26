@@ -155,7 +155,7 @@ export class LActionDeterminer {
                     // このままスキルを発動しようとすると空振りしてしまう。
                     // ここで向きを Target の方向に向けておく。
                     const pos = UMovement.getCenter(targetEntites);
-                    self.dir = UMovement.getLookAtDirFromPos(self.x, self.y, pos.x, pos.y);
+                    self.dir = UMovement.getLookAtDirFromPos(self.mx, self.my, pos.x, pos.y);
                     
                     SEmittorPerformer.makeWithSkill(self, self, this._requiredSkillAction.action.skillId).perform(cctx);
                     cctx.postConsumeActionToken(self, LActionTokenType.Major);

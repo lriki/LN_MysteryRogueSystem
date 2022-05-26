@@ -81,7 +81,7 @@ export class UMovement {
      * 2 つの Entity が隣接しているか確認する
      */
     public static checkAdjacentEntities(entity1: LEntity, entity2: LEntity): boolean {
-        return (Math.abs(entity1.x - entity2.x) <= 1 && Math.abs(entity1.y - entity2.y) <= 1);
+        return (Math.abs(entity1.mx - entity2.mx) <= 1 && Math.abs(entity1.my - entity2.my) <= 1);
     }
     
 
@@ -98,8 +98,8 @@ export class UMovement {
      * 2つの Entity が隣接しているかどうか
      */
     public static checkEntityAdjacent(e1: LEntity, e2: LEntity): boolean {
-        const dx = e1.x - e2.x;
-        const dy = e1.y - e2.y;
+        const dx = e1.mx - e2.mx;
+        const dy = e1.my - e2.my;
         return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
     }
 
@@ -121,8 +121,8 @@ export class UMovement {
             // 斜め場合
             const fl = UMovement.rotatePositionByDir(7, d);  // 左前
             const fr = UMovement.rotatePositionByDir(9, d);  // 右前
-            const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
-            const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+            const flBlock = map.block(entity.mx + fl.x, entity.my + fl.y);
+            const frBlock = map.block(entity.mx + fr.x, entity.my + fr.y);
             if (flBlock.isWallLikeShape()) return true;
             if (frBlock.isWallLikeShape()) return true;
             return false;
@@ -139,8 +139,8 @@ export class UMovement {
     public static checkPassageToDir(entity: LEntity, dir: number): boolean {
         const offset = Helpers.dirToTileOffset(dir);
         const map = REGame.map;
-        const oldBlock = map.block(entity.x, entity.y);
-        const newBlock = map.block(entity.x + offset.x, entity.y + offset.y);
+        const oldBlock = map.block(entity.mx, entity.my);
+        const newBlock = map.block(entity.mx + offset.x, entity.my + offset.y);
         return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
     }
     
@@ -189,8 +189,8 @@ export class UMovement {
                 // 斜め移動の場合
                 const fl = this.rotatePositionByDir(7, d);  // 左前
                 const fr = this.rotatePositionByDir(9, d);  // 右前
-                const flBlock = map.block(entity.x + fl.x, entity.y + fl.y);
-                const frBlock = map.block(entity.x + fr.x, entity.y + fr.y);
+                const flBlock = map.block(entity.mx + fl.x, entity.my + fl.y);
+                const frBlock = map.block(entity.mx + fr.x, entity.my + fr.y);
                 if (flBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
                 if (frBlock.isWallLikeShape()) return false;    // 壁があるので移動できない
             }
@@ -208,8 +208,8 @@ export class UMovement {
      * base が target を向く時の方向を計算する
      */
     public static getLookAtDir(base: LEntity, target: LEntity): number {
-        const dx = target.x - base.x;
-        const dy = target.y - base.y;
+        const dx = target.mx - base.mx;
+        const dy = target.my - base.my;
         return Helpers.offsetToDir(dx, dy);
     }
 
@@ -227,8 +227,8 @@ export class UMovement {
         let x = 0;
         let y = 0;
         for (const e of entities) {
-            x += e.x;
-            y += e.y;
+            x += e.mx;
+            y += e.my;
         }
         return {x: Math.floor(x / entities.length), y: Math.floor(y / entities.length)};
     }
@@ -274,7 +274,7 @@ export class UMovement {
      */
     static getAdjacentBlock(entity: LEntity, dir: number): LBlock {
         const offset = Helpers._dirToTileOffsetTable[dir];
-        const block = REGame.map.block(entity.x + offset.x, entity.y + offset.y);
+        const block = REGame.map.block(entity.mx + offset.x, entity.my + offset.y);
         return block;
     }
 
@@ -296,8 +296,8 @@ export class UMovement {
 
         const blocks: LBlock[] = [];
         for (const offset of this.adjacent8Offsets) {
-            const x = entity.x + offset[0];
-            const y = entity.y + offset[1];
+            const x = entity.mx + offset[0];
+            const y = entity.my + offset[1];
             if (map.isValidPosition(x, y)) {
                 blocks.push(map.block(x, y));
             }
@@ -329,8 +329,8 @@ export class UMovement {
         let d = entity.dir;
         for (let i = 0; i < 9; i++) {
             const offset = Helpers.dirToTileOffset(d);
-            const mx = entity.x + offset.x;
-            const my = entity.y + offset.y;
+            const mx = entity.mx + offset.x;
+            const my = entity.my + offset.y;
             const e = map.block(mx, my).aliveEntity(DBlockLayerKind.Unit);
             if (e) {
                 return d;
@@ -353,10 +353,10 @@ export class UMovement {
         }
         */
         const map = REGame.map;
-        const oldBlock = map.block(entity.x, entity.y);
+        const oldBlock = map.block(entity.mx, entity.my);
         for (const offset of this.LHRuleOffsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, dir);
-            const block = map.tryGetBlock(entity.x + pos.x, entity.y + pos.y);
+            const block = map.tryGetBlock(entity.mx + pos.x, entity.my + pos.y);
             if (block && this.checkPassageBlockToBlock(entity, oldBlock, block, MovingMethod.Walk)) {
                 return block;
             }
@@ -372,7 +372,7 @@ export class UMovement {
         const map = REGame.map;
         for (const offset of this.way3Offsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, dir);
-            const block = map.tryGetBlock(entity.x + pos.x, entity.y + pos.y);
+            const block = map.tryGetBlock(entity.mx + pos.x, entity.my + pos.y);
             if (block) {
                 result.push(block);
             }
@@ -387,10 +387,10 @@ export class UMovement {
     public static getMovableAdjacentTiles(entity: LEntity): LBlock[] {
         const result: LBlock[] = [];
         const map = REGame.map;
-        const oldBlock = map.block(entity.x, entity.y);
+        const oldBlock = map.block(entity.mx, entity.my);
         for (const d of this.AdjacentDirs) {
             const offset = Helpers.dirToTileOffset(d);
-            const block = map.tryGetBlock(entity.x + offset.x, entity.y + offset.y);
+            const block = map.tryGetBlock(entity.mx + offset.x, entity.my + offset.y);
             if (block && this.checkPassageBlockToBlock(entity, oldBlock, block, MovingMethod.Walk)) {
                 result.push(block);
             }
@@ -548,8 +548,8 @@ export class UMovement {
     }
 
     public static checkDashStopBlock(entity: LEntity): boolean {
-        const x = entity.x;
-        const y = entity.y;
+        const x = entity.mx;
+        const y = entity.my;
         const map = REGame.map;
         const front = Helpers.dirToTileOffset(entity.dir);
         const block = map.block(x, y);
@@ -582,13 +582,13 @@ export class UMovement {
             return false;   // マップ外への移動
         }
         
-        const oldBlock = map.block(entity.x, entity.y);
+        const oldBlock = map.block(entity.mx, entity.my);
         const newBlock = map.block(x, y);
 
         if (this.checkPassageBlockToBlock(entity, oldBlock, newBlock, method, toLayer)) {
             assert(oldBlock.removeEntity(entity));
-            entity.x = x;
-            entity.y = y;
+            entity.mx = x;
+            entity.my = y;
             newBlock.addEntity(toLayer, entity);
             this._postLocate(entity, oldBlock, newBlock, map, cctx);
             return true;
@@ -610,15 +610,15 @@ export class UMovement {
         const map = REGame.map;
         assert(entity.floorId.equals(map.floorId()));
 
-        const oldBlock = map.block(entity.x, entity.y);
+        const oldBlock = map.block(entity.mx, entity.my);
         const newBlock = map.block(x, y);
         assert(newBlock);
         
         const layer = (toLayer) ? toLayer : entity.getHomeLayer();
 
         oldBlock.removeEntity(entity);
-        entity.x = x;
-        entity.y = y;
+        entity.mx = x;
+        entity.my = y;
         newBlock.addEntity(layer, entity);
         this._postLocate(entity, oldBlock, newBlock, map, undefined);
 
@@ -628,8 +628,8 @@ export class UMovement {
     
     public static locateEntityAtFloorMoved(entity: LEntity, floorId: LFloorId, x: number, y: number): void {
         entity.floorId = floorId.clone();
-        entity.x = x;
-        entity.y = y;
+        entity.mx = x;
+        entity.my = y;
     }
 
     public static _postLocate(entity: LEntity, oldBlock: LBlock | undefined, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {

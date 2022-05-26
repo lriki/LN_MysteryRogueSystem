@@ -33,6 +33,6 @@ test("concretes.enemies.WarpMagician", () => {
     RESystem.scheduler.stepSimulation();
 
     // player1 はワープしている
-    expect(player1.x != 10 && player1.y != 10).toBe(true);
+    expect(player1.mx != 10 && player1.my != 10).toBe(true);
 });
 

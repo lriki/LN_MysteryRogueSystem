@@ -136,15 +136,15 @@ test("SpeedLevel.TurnOrderTable", () => {
         RESystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
-        expect(actor1.x).toBe(2);
-        expect(enemy1.x).toBe(2);
-        expect(enemy2.x).toBe(2);
-        expect(enemy3.x).toBe(3);
-        expect(enemy4.x).toBe(3);
-        expect(enemy5.x).toBe(4);
-        expect(enemy6.x).toBe(4);
-        expect(enemy7.x).toBe(1);   // 鈍足状態 (になった直後のターン) は行動しない
-        expect(enemy8.x).toBe(1);   // 鈍足状態 (になった直後のターン) は行動しない
+        expect(actor1.mx).toBe(2);
+        expect(enemy1.mx).toBe(2);
+        expect(enemy2.mx).toBe(2);
+        expect(enemy3.mx).toBe(3);
+        expect(enemy4.mx).toBe(3);
+        expect(enemy5.mx).toBe(4);
+        expect(enemy6.mx).toBe(4);
+        expect(enemy7.mx).toBe(1);   // 鈍足状態 (になった直後のターン) は行動しない
+        expect(enemy8.mx).toBe(1);   // 鈍足状態 (になった直後のターン) は行動しない
 
         // Sequel はまとめて1度だけFlush
         expect(TestEnv.integration.sequelFlushCount).toBe(count1 + 1);
@@ -161,15 +161,15 @@ test("SpeedLevel.TurnOrderTable", () => {
         RESystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
-        expect(actor1.x).toBe(3);
-        expect(enemy1.x).toBe(3);
-        expect(enemy2.x).toBe(3);
-        expect(enemy3.x).toBe(5);
-        expect(enemy4.x).toBe(5);
-        expect(enemy5.x).toBe(7);
-        expect(enemy6.x).toBe(7);
-        expect(enemy7.x).toBe(2);
-        expect(enemy8.x).toBe(2);
+        expect(actor1.mx).toBe(3);
+        expect(enemy1.mx).toBe(3);
+        expect(enemy2.mx).toBe(3);
+        expect(enemy3.mx).toBe(5);
+        expect(enemy4.mx).toBe(5);
+        expect(enemy5.mx).toBe(7);
+        expect(enemy6.mx).toBe(7);
+        expect(enemy7.mx).toBe(2);
+        expect(enemy8.mx).toBe(2);
     }
 
 });
@@ -278,7 +278,7 @@ test("SpeedLevel.ChangeSpeed1", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(10);  // まだ enemy にターンは回らないので移動していない
+    expect(enemy1.mx).toBe(10);  // まだ enemy にターンは回らないので移動していない
 
     // [待機]
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
@@ -286,7 +286,7 @@ test("SpeedLevel.ChangeSpeed1", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(11);  // enemy にターンは回って移動してる
+    expect(enemy1.mx).toBe(11);  // enemy にターンは回って移動してる
 });
 
 // Enemy が速くなる場合 -> Player の後に Enemy が2回行動
@@ -317,7 +317,7 @@ test("SpeedLevel.ChangeSpeed2", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(12);
+    expect(enemy1.mx).toBe(12);
 
     // [待機]
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
@@ -325,7 +325,7 @@ test("SpeedLevel.ChangeSpeed2", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(14);
+    expect(enemy1.mx).toBe(14);
 });
 
 // 倍速 Enemy がいるときに Player が倍速になる
@@ -351,7 +351,7 @@ test("SpeedLevel.ChangeSpeed3", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(11);  // Enemy に 1度だけ turn がまわる
+    expect(enemy1.mx).toBe(11);  // Enemy に 1度だけ turn がまわる
 });
 
 test("SpeedLevel.ChangeSpeed4", () => {
@@ -375,7 +375,7 @@ test("SpeedLevel.ChangeSpeed4", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(11);  // Enemy に 1度だけ turn がまわる
+    expect(enemy1.mx).toBe(11);  // Enemy に 1度だけ turn がまわる
 });
 
 test("SpeedLevel.ChangeSpeed5", () => {
@@ -398,7 +398,7 @@ test("SpeedLevel.ChangeSpeed5", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.x).toBe(10);  // 速度ダウンを検知したときに行動トークンが削られるので、Enemy に Turn はまわらない
+    expect(enemy1.mx).toBe(10);  // 速度ダウンを検知したときに行動トークンが削られるので、Enemy に Turn はまわらない
 });
 
 test("SpeedLevel.State", () => {

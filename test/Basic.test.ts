@@ -121,8 +121,8 @@ test("Basic1", () => {
         RESystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
-        expect(actor1.x).toBe(5);
-        expect(actor1.y).toBe(6);
+        expect(actor1.mx).toBe(5);
+        expect(actor1.my).toBe(6);
     
         // 移動に伴い実行されるべきアニメーション情報も作られている
         expect(TestEnv.activeSequelSet.runs().length).toBe(1);

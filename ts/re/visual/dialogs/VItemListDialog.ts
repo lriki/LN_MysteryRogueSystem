@@ -13,7 +13,7 @@ import { REData } from "ts/re/data/REData";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";
 import { assert, tr2 } from "ts/re/Common";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { SDetailsDialog } from "ts/re/system/dialogs/SDetailsDialog";
 import { UAction } from "ts/re/usecases/UAction";
 import { VItemListDialogBase } from "./VItemListDialogBase";

@@ -40,7 +40,7 @@ test("concretes.states.混乱.move", () => {
     expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
-    expect(enemy1.x > 11).toBe(true);
+    expect(enemy1.mx > 11).toBe(true);
 });
 
 test("concretes.states.混乱.attack", () => {
@@ -103,7 +103,7 @@ test("concretes.states.混乱.movePlayer", () => {
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
-    expect(actor1.x < 20).toBe(true);
+    expect(actor1.mx < 20).toBe(true);
 });
 
 test("concretes.states.混乱.attackPlayer", () => {

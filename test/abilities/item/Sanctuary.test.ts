@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { REData } from "ts/re/data/REData";
@@ -37,8 +37,8 @@ test("Items.Sanctuary", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
-    expect(enemy1.x).toBe(11);
-    expect(enemy1.y).toBe(11);
+    expect(enemy1.mx).toBe(11);
+    expect(enemy1.my).toBe(11);
 
     //----------------------------------------------------------------------------------------------------
     
@@ -49,8 +49,8 @@ test("Items.Sanctuary", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy は攻撃をせずに、左折の法則に従って進む。
-    expect(enemy1.x).toBe(10);
-    expect(enemy1.y).toBe(10);
+    expect(enemy1.mx).toBe(10);
+    expect(enemy1.my).toBe(10);
 
 });
 
@@ -68,7 +68,7 @@ test("Items.Sanctuary.ForceDeth", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
     REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
     
-    REGame.map.block(5, 10)._tileShape = TileShape.Wall;
+    REGame.map.block(5, 10)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 

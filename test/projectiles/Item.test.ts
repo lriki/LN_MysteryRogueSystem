@@ -9,7 +9,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -52,7 +52,7 @@ test("Item.ThrowAndDrop", () => {
     RESystem.scheduler.stepSimulation();
 
     // item1 と item2 は違うところに落ちたはず
-    expect(item1.x != item2.x || item1.y != item2.y).toBe(true);
+    expect(item1.mx != item2.mx || item1.my != item2.my).toBe(true);
 });
 
 test("Item.DropAndDestroy", () => {
@@ -109,11 +109,11 @@ test("Item.ThrowingDropByWall", () => {
     ｐ□□■
     □□■■
     */
-    REGame.map.block(7, 4)._tileShape = TileShape.Wall;
-    REGame.map.block(8, 4)._tileShape = TileShape.Wall;
-    REGame.map.block(8, 5)._tileShape = TileShape.Wall;
-    REGame.map.block(7, 6)._tileShape = TileShape.Wall;
-    REGame.map.block(8, 6)._tileShape = TileShape.Wall;
+    REGame.map.block(7, 4)._tileShape = LTileShape.Wall;
+    REGame.map.block(8, 4)._tileShape = LTileShape.Wall;
+    REGame.map.block(8, 5)._tileShape = LTileShape.Wall;
+    REGame.map.block(7, 6)._tileShape = LTileShape.Wall;
+    REGame.map.block(8, 6)._tileShape = LTileShape.Wall;
 
     // アイテムを作ってインベントリに入れる
     const items = [];
@@ -178,8 +178,8 @@ test("projectiles.Item.AwfulThrowing", () => {
     const block = REGame.map.block(12, 10);
     const item = block.layer(DBlockLayerKind.Ground).firstEntity();
     expect(item).toBe(item1);
-    expect(item1.x).toBe(12);
-    expect(item1.y).toBe(10);
+    expect(item1.mx).toBe(12);
+    expect(item1.my).toBe(10);
     expect(item1.isDestroyed()).toBe(false);
 });
 

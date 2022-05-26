@@ -5,7 +5,7 @@ import { REData } from "ts/re/data/REData";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { LMap } from "ts/re/objects/LMap";
 import { SMinimapData } from "ts/re/system/SMinimapData";
-import { LBlock, LBlockSystemDecoration, TileShape } from "ts/re/objects/LBlock";
+import { LBlock, LBlockSystemDecoration, LTileShape } from "ts/re/objects/LBlock";
 import { DTemplateMap } from "ts/re/data/DTemplateMap";
 
 
@@ -61,7 +61,7 @@ export class VMapEditor {
         const y = block.my;
 
         switch (block.tileShape()) {
-            case TileShape.Floor:
+            case LTileShape.Floor:
                 if (block.systemDecoration() == LBlockSystemDecoration.ItemShop) {
                     // お店の床装飾
                     this.putAutoTile(x, y, 0, this._templateMap.itemShopFloorAutoTileKind);
@@ -70,7 +70,7 @@ export class VMapEditor {
                     this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
                 }
                 break;
-            case TileShape.Wall:
+            case LTileShape.Wall:
                 this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
                 if (this.isValidPos(x, y + 1) && this._coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
                     this.putAutoTile(x, y, 1, this._templateMap.wallEdgeAutoTileKind);

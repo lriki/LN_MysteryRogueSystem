@@ -37,8 +37,8 @@ test("concretes.states.ShallowSleep.RoomIn", () => {
         if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
 
         // 目は覚ましても移動はしていない
-        expect(enemy1.x).toBe(19);
-        expect(enemy1.y).toBe(4);
+        expect(enemy1.mx).toBe(19);
+        expect(enemy1.my).toBe(4);
         
         // 元に戻す
         REGame.world._transferEntity(player1, floorId, 16, 4);
@@ -177,8 +177,8 @@ test("concretes.states.ShallowSleep.Issue1", () => {
         if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
 
         // 目は覚ましても移動はしていない
-        expect(enemy1.x).toBe(19);
-        expect(enemy1.y).toBe(4);
+        expect(enemy1.mx).toBe(19);
+        expect(enemy1.my).toBe(4);
         
         // 元に戻す
         REGame.world._transferEntity(player1, floorId, 15, 4);

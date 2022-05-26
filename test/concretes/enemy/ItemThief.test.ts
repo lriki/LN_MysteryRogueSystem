@@ -51,7 +51,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     expect(inventory2.contains(item1)).toBe(true);
 
     // Enemy1 はワープしている
-    expect(enemy1.x != 12 && enemy1.y != 10).toBe(true);
+    expect(enemy1.mx != 12 && enemy1.my != 10).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -66,8 +66,8 @@ test("concretes.enemy.ItemThief.Basic", () => {
     // Enemy は倒れ、足元に item が落ちている
     expect(enemy1.isDestroyed()).toBe(true);
     expect(item1.floorId.equals(floorId)).toBe(true);
-    expect(item1.x).toBe(12);
-    expect(item1.y).toBe(10);
+    expect(item1.mx).toBe(12);
+    expect(item1.my).toBe(10);
 });
 
 
@@ -103,8 +103,8 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy1 はアイテムに向かって移動している
-    expect(enemy1.x == 13).toBe(true);
-    expect(enemy1.y == 10).toBe(true);
+    expect(enemy1.mx == 13).toBe(true);
+    expect(enemy1.my == 10).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -157,8 +157,8 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy1 はアイテムに向かって移動している
-    expect(enemy1.x == 13).toBe(true);
-    expect(enemy1.y == 10).toBe(true);
+    expect(enemy1.mx == 13).toBe(true);
+    expect(enemy1.my == 10).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -169,8 +169,8 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy1 は新しいアイテムに向かって移動している
-    expect(enemy1.x == 12).toBe(true);
-    expect(enemy1.y == 10).toBe(true);
+    expect(enemy1.mx == 12).toBe(true);
+    expect(enemy1.my == 10).toBe(true);
 });
 
 test("concretes.enemy.ItemThief.DropItem", () => {
@@ -276,8 +276,8 @@ test("concretes.enemy.ItemThief.Issue2", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // enemy2 はメジャーアクションが取れなかった
-    expect(enemy2.x).toBe(15);
-    expect(enemy2.y).toBe(11);
+    expect(enemy2.mx).toBe(15);
+    expect(enemy2.my).toBe(11);
 });
 
 test("concretes.enemy.ItemThief.Issue3_Seal", () => {
@@ -312,6 +312,6 @@ test("concretes.enemy.ItemThief.Issue3_Seal", () => {
     // アイテムは盗まれていないし、ワープもしていない
     expect(inventory1.items.length).toBe(1);
     expect(inventory2.items.length).toBe(0);
-    expect(enemy1.x).toBe(11);
-    expect(enemy1.y).toBe(10);
+    expect(enemy1.mx).toBe(11);
+    expect(enemy1.my).toBe(10);
 });

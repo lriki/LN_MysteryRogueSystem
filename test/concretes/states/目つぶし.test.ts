@@ -47,5 +47,5 @@ test("concretes.states.目つぶし", () => {
     expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
 
     // Player に隣接していても攻撃せず、まっすぐ進む
-    expect(enemy1.x == 20).toBe(true);
+    expect(enemy1.mx == 20).toBe(true);
 });

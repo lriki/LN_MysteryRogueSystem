@@ -67,7 +67,7 @@ export class SChainAfterScheduler {
         
         {
             for (const entity of REGame.map.entities()) {
-                const block = REGame.map.block(entity.x, entity.y);
+                const block = REGame.map.block(entity.mx, entity.my);
                 const currentLayer = block.findEntityLayerKind(entity);
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();

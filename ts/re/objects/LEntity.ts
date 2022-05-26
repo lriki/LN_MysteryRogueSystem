@@ -2,7 +2,6 @@ import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LName
 import { REGame } from "./REGame";
 import { SCommandResponse, SPhaseResult } from "../system/RECommand";
 import { SCommandContext } from "../system/SCommandContext";
-import { LRoomId } from "./LBlock";
 import { RESystem } from "ts/re/system/RESystem";
 import { DState, DStateId } from "ts/re/data/DState";
 import { assert, RESerializable } from "ts/re/Common";
@@ -32,7 +31,7 @@ import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey, DRaceId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
-import { LPriceInfo, LStructureId } from "./LCommon";
+import { LPriceInfo, LRoomId, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
@@ -247,8 +246,8 @@ export class LEntity extends LObject
      * 直接変更禁止。transfarMap を使うこと
      */
     floorId: LFloorId = LFloorId.makeEmpty();
-    x: number = 0;          /**< 論理 X 座標。マイナス値は正当（クラスコメント参照） */
-    y: number = 0;          /**< 論理 Y 座標。マイナス値は正当（クラスコメント参照） */
+    mx: number = 0;          /**< 論理 X 座標。マップ座標系。マイナス値は正当（クラスコメント参照） */
+    my: number = 0;          /**< 論理 Y 座標。マップ座標系。マイナス値は正当（クラスコメント参照） */
 
     //--------------------
     // 以下、一時的に Entity に直接持たせてる Attr. 利用率とかで、別途 Attr クラスに分けたりする。
@@ -300,8 +299,8 @@ export class LEntity extends LObject
         entity.rmmzEventId = 0; // 固定マップのイベントを参照するわけではないのでリセット
         entity.inhabitsCurrentFloor = false;    // true のまま引き継いでしまうと、新たに生成された Entity に対応する RMMZ Event が生成されない
         entity.floorId = LFloorId.makeEmpty();
-        entity.x = 0;
-        entity.y = 0;
+        entity.mx = 0;
+        entity.my = 0;
         entity.dir = this.dir;
         entity._actionToken = this._actionToken.clone();   
         entity._stackCount = this._stackCount;  // "分裂" という意味ではスタック数もコピーしてもよさそう。TODO: タイトル要求と大きくかかわるのでオプションにした方がいいかも。
@@ -1416,8 +1415,8 @@ export class LEntity extends LObject
         let contents: any = {};
         contents.id = this.entityId();
         contents.floorId = this.floorId;
-        contents.x = this.x;
-        contents.y = this.y;
+        contents.x = this.mx;
+        contents.y = this.my;
         contents.behaviors = this._basicBehaviors;
         return contents;
     }
@@ -1425,8 +1424,8 @@ export class LEntity extends LObject
     extractSaveContents(contents: any) {
         this._setObjectId(contents.id);
         this.floorId = contents.floorId;
-        this.x = contents.x;
-        this.y = contents.y;
+        this.mx = contents.x;
+        this.my = contents.y;
 
         this._basicBehaviors = contents.behaviors;
     }
@@ -1442,7 +1441,7 @@ export class LEntity extends LObject
      */
     isOnGround(): boolean {
         if (this.floorId.hasAny()) {
-            const block = REGame.map.block(this.x, this.y);
+            const block = REGame.map.block(this.mx, this.my);
             return block.findEntityLayerKind(this) == DBlockLayerKind.Ground;
         }
         else {
@@ -1456,7 +1455,7 @@ export class LEntity extends LObject
 
     /** 0 is Invalid. */
     public roomId(): LRoomId {
-        return REGame.map.block(this.x, this.y)._roomId;
+        return REGame.map.block(this.mx, this.my)._roomId;
     }
 
     public isOnRoom(): boolean {
@@ -1468,20 +1467,20 @@ export class LEntity extends LObject
     }
 
     public layer(): DBlockLayerKind {
-        const r = REGame.map.block(this.x, this.y).findEntityLayerKind(this);
+        const r = REGame.map.block(this.mx, this.my).findEntityLayerKind(this);
         assert(r);
         return r;
     }
 
     /** 特定の座標を持っておらず、Floor へ進入中であるかどうか。Map がロードされた後、EntryPoint へ配置される状態。 */
     public isOnOffstage(): boolean {
-        return this.x < 0;
+        return this.mx < 0;
     }
 
     /** 現在のマップ上に出現しているか (いずれかの Block 上に存在しているか) */
     public isAppearedOnMap(): boolean {
-        if (!REGame.map.isValidPosition(this.x, this.y)) return false;
-        const block = REGame.map.block(this.x, this.y);
+        if (!REGame.map.isValidPosition(this.mx, this.my)) return false;
+        const block = REGame.map.block(this.mx, this.my);
         return block.containsEntity(this);
     }
 

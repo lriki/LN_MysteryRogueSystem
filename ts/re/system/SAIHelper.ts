@@ -69,8 +69,8 @@ export class SAIHelper {
     }
 
     public static entityDistanceToDir(start: LEntity, target: LEntity): number {
-        const dx = target.x - start.x;
-        const dy = target.y - start.y;
+        const dx = target.mx - start.mx;
+        const dy = target.my - start.my;
         return this.axisToDir(dx, dy);
     }
 }

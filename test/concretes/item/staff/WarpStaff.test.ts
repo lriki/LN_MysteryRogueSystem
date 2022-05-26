@@ -39,5 +39,5 @@ test("concretes.item.staff.WarpStaff.basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ワープしている
-    expect(player1.x == 15 && player1.y == 10).toBeFalsy();
+    expect(player1.mx == 15 && player1.my == 10).toBeFalsy();
 });

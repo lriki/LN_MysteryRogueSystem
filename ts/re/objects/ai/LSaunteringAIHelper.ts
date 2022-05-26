@@ -41,7 +41,7 @@ export class LSaunteringAIHelper {
             // 移動後、向きを target へ向けておく
             if (this.hasDestination()) {
                 // 移動後、向きを target へ向けておく
-                const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+                const dir = SAIHelper.distanceToDir(self.mx, self.my, this._targetPositionX, this._targetPositionY);
                 cctx.postActivity(LActivity.makeDirectionChange(self, dir));
             }
         }
@@ -51,7 +51,7 @@ export class LSaunteringAIHelper {
     public thinkMovingCore(self: LEntity, cctx: SCommandContext): boolean {
         let moveToLHRule = false;
         let moveToPassageWay: LBlock | undefined;
-        const block = REGame.map.block(self.x, self.y);
+        const block = REGame.map.block(self.mx, self.my);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
@@ -84,7 +84,7 @@ export class LSaunteringAIHelper {
                     moveToLHRule = true;
                     
     
-                    const candidates = room.doorwayBlocks().filter(b => b.mx != self.x && b.my != self.y);    // 足元フィルタ
+                    const candidates = room.doorwayBlocks().filter(b => b.mx != self.mx && b.my != self.my);    // 足元フィルタ
                     if (candidates.length > 0) {
                         const block = candidates[cctx.random().nextIntWithMax(candidates.length)];
                         this._targetPositionX = block.mx;
@@ -136,7 +136,7 @@ export class LSaunteringAIHelper {
 
         // 左折の法則による移動
         if (moveToLHRule) {
-            const dir = this.hasDestination() ? SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY) : self.dir;
+            const dir = this.hasDestination() ? SAIHelper.distanceToDir(self.mx, self.my, this._targetPositionX, this._targetPositionY) : self.dir;
             const block = UMovement.getMovingCandidateBlockAsLHRule(self, dir);
             if (block) {
                 this.postMoveToAdjacent(self, block, cctx);
@@ -167,14 +167,14 @@ export class LSaunteringAIHelper {
     }
 
     private canModeToTarget(self: LEntity): boolean {
-        return this.hasDestination() && (self.x != this._targetPositionX || self.y != this._targetPositionY);
+        return this.hasDestination() && (self.mx != this._targetPositionX || self.my != this._targetPositionY);
     }
 
     private moveToTarget(self: LEntity, cctx: SCommandContext): boolean {
         // 目的地設定済みで、未到達であること
         assert(this.canModeToTarget(self));
 
-        const dir = SAIHelper.distanceToDir(self.x, self.y, this._targetPositionX, this._targetPositionY);
+        const dir = SAIHelper.distanceToDir(self.mx, self.my, this._targetPositionX, this._targetPositionY);
         if (dir != 0 && UMovement.checkPassageToDir(self, dir)) {
             cctx.postActivity(LActivity.makeDirectionChange(self, dir));
             cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
@@ -188,7 +188,7 @@ export class LSaunteringAIHelper {
     }
     
     private postMoveToAdjacent(self: LEntity, block: LBlock, cctx: SCommandContext): void {
-        const dir = Helpers.offsetToDir(block.mx - self.x, block.my - self.y);
+        const dir = Helpers.offsetToDir(block.mx - self.mx, block.my - self.my);
         cctx.postActivity(LActivity.makeDirectionChange(self, dir));
         cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
         cctx.postConsumeActionToken(self,LActionTokenType.Minor);

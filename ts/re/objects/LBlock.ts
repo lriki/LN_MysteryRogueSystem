@@ -6,12 +6,10 @@ import { REBlockLayer } from "./LBlockLayer";
 import { LRoom } from "./LRoom";
 import { RESystem } from "ts/re/system/RESystem";
 import { DBlockLayerKind } from "../data/DCommon";
-
-export type LRoomId = number;
-
+import { LRoomId } from "./LCommon";
 
 /** Tile の本質的な形状 */
-export enum TileShape {
+export enum LTileShape {
     /** 中空 */
     Void = 0,
 
@@ -76,7 +74,7 @@ export class LBlock {
 
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     
-    _tileShape: TileShape = TileShape.Floor;
+    _tileShape: LTileShape = LTileShape.Floor;
 
     // お店の床など、ゲームシステムとして明示したい装飾
     _systemDecoration: LBlockSystemDecoration = LBlockSystemDecoration.None;
@@ -123,7 +121,7 @@ export class LBlock {
     //    return this._layers[BlockLayerKind.Terrain].entities()[0];
     //}
 
-    tileShape(): TileShape {
+    tileShape(): LTileShape {
         //const attr = this.tile().findAttribute(RETileAttribute);
         //return attr ? attr.tileKind() : TileKind.Void;
         return this._tileShape;
@@ -145,11 +143,11 @@ export class LBlock {
 
     /** 地面上で、歩行による移動が可能であるか。(中空や水地形ではない) */
     public isFloorLikeShape(): boolean {
-        return this._tileShape == TileShape.Floor;
+        return this._tileShape == LTileShape.Floor;
     }
 
     public isWallLikeShape(): boolean {
-        return this._tileShape == TileShape.Wall || this._tileShape == TileShape.HardWall;
+        return this._tileShape == LTileShape.Wall || this._tileShape == LTileShape.HardWall;
     }
 
     /** 部屋内のブロックであるか */

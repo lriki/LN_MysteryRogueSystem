@@ -35,7 +35,7 @@ test("concretes.enemy.GrabFooter", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     const hp2 = actor1.actualParam(REBasics.params.hp);
-    expect(actor1.x).toBe(11);      // 移動できている
+    expect(actor1.mx).toBe(11);      // 移動できている
     expect(hp2 < hp1).toBe(true);   // 攻撃を受けている
 
     // 下へ移動
@@ -45,7 +45,7 @@ test("concretes.enemy.GrabFooter", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     const hp3 = actor1.actualParam(REBasics.params.hp);
-    expect(actor1.y).toBe(10);      // 移動できない (キャンセルされる)
+    expect(actor1.my).toBe(10);      // 移動できない (キャンセルされる)
     expect(hp3 < hp2).toBe(true);   // モンスターにターンが回り、攻撃を受けている
 
 });

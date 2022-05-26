@@ -101,7 +101,7 @@ test("activity.PickAtMoved", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(enemy1.x).toBe(19);  // enemy は動いていない (ターンは回っていない)
+    expect(enemy1.mx).toBe(19);  // enemy は動いていない (ターンは回っていない)
     expect(actor1.getEntityBehavior(LInventoryBehavior).items[0]).toBe(item1);   // アイテムを拾えていること
 
     // Item は移動アニメの後に Map から除外されること

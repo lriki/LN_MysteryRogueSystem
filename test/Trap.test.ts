@@ -7,7 +7,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { REBasics } from "ts/re/data/REBasics";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -180,7 +180,7 @@ test("Trap.Attack", () => {
     REGame.world._transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の下に壁を作る
-    REGame.map.block(10, 11)._tileShape = TileShape.Wall;
+    REGame.map.block(10, 11)._tileShape = LTileShape.Wall;
 
     // 右下を向いて攻撃
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 3).withConsumeAction());

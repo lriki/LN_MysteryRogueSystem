@@ -82,7 +82,7 @@ test("concretes.states.Paralysis.Pos", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(enemy1.x).toBe(15);
-    expect(enemy1.y).toBe(10);
+    expect(enemy1.mx).toBe(15);
+    expect(enemy1.my).toBe(10);
     expect(enemy1.dir).toBe(2);
 });

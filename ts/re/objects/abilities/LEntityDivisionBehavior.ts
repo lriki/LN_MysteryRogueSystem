@@ -22,7 +22,7 @@ export class LEntityDivisionBehavior extends LBehavior {
         const battler = self.getEntityBehavior(LBattlerBehavior);
         if (self.isDeathStateAffected()) return SCommandResponse.Pass;
 
-        const selfBlock = REGame.map.block(self.x, self.y);
+        const selfBlock = REGame.map.block(self.mx, self.my);
 
         // 有効な隣接 Block があり、その方向へ移動可能かを調べる
         const candidates = UMovement.getAdjacentBlocks(self).filter(b => UMovement.checkPassageBlockToBlock(self, selfBlock, b, MovingMethod.Walk));
@@ -31,7 +31,7 @@ export class LEntityDivisionBehavior extends LBehavior {
             const newEntity = self.clone();
             REGame.world._transferEntity(newEntity, self.floorId, newBlock.mx, newBlock.my);
 
-            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(self.x, self.y);
+            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(self.mx, self.my);
             cctx.postWaitSequel();
         }
         else {

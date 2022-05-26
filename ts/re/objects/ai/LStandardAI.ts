@@ -90,7 +90,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
         if (this._actionDeterminer.hasPrimaryTarget()) {
             // 攻撃対象が設定されていれば、常に目標座標を更新し続ける
             const target = this._actionDeterminer.primaryTarget();
-            this._moveDeterminer.setTargetPosition(target.x, target.y);
+            this._moveDeterminer.setTargetPosition(target.mx, target.my);
         }
         else if (prevHasPrimaryTarget != this._actionDeterminer.hasPrimaryTarget()) {
             // decide() によってこれまでの PrimaryTarget を見失った

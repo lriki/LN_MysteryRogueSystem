@@ -4,7 +4,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
@@ -33,8 +33,8 @@ test("ai.CharacterAI.Moving1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // enemy1 は入り口に向かって↑に移動している
-    expect(enemy1.x).toBe(13);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(13);
+    expect(enemy1.my).toBe(4);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -45,8 +45,8 @@ test("ai.CharacterAI.Moving1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // enemy1 は通路に向かって→に移動している
-    expect(enemy1.x).toBe(14);
-    expect(enemy1.y).toBe(4);
+    expect(enemy1.mx).toBe(14);
+    expect(enemy1.my).toBe(4);
 });
 
 // 壁角斜め方向への攻撃はしない
@@ -61,7 +61,7 @@ test("ai.CharacterAI.AttackOnDiagonalEdge", () => {
     REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の右に壁を作る
-    REGame.map.block(11, 10)._tileShape = TileShape.Wall;
+    REGame.map.block(11, 10)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -75,8 +75,8 @@ test("ai.CharacterAI.AttackOnDiagonalEdge", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // enemy1 は左折の法則により移動しているはず
-    expect(enemy1.x).toBe(10);
-    expect(enemy1.y).toBe(11);
+    expect(enemy1.mx).toBe(10);
+    expect(enemy1.my).toBe(11);
 });
 
 test("ai.CharacterAI.ActionPattern", () => {
@@ -128,7 +128,7 @@ test("ai.CharacterAI.issue1", () => {
         
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
         
-        expect(enemy1.x).toBe(11 - (i + 1));
+        expect(enemy1.mx).toBe(11 - (i + 1));
         expect(enemy1.dir).toBe(4);
     }
 });
@@ -181,8 +181,8 @@ test("ai.CharacterAI.Issue3", () => {
         RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
-        expect(enemy1.x).toBe(x);
-        expect(enemy1.y).toBe(y);
+        expect(enemy1.mx).toBe(x);
+        expect(enemy1.my).toBe(y);
     };
 
     step(25, 14);
@@ -233,8 +233,8 @@ test("ai.CharacterAI.Issue_NS#10", () => {
         RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
-        expect(enemy1.x).toBe(26);
-        expect(enemy1.y).toBe(14);
+        expect(enemy1.mx).toBe(26);
+        expect(enemy1.my).toBe(14);
     };
 
     step();

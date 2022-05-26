@@ -51,7 +51,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     // 倍速になる
     expect(LScheduler2.getSpeedLevel(player1)).toBe(2);
     
-    expect(enemy1.x).toBe(10);  // まだ enemy にターンは回らないので移動していない
+    expect(enemy1.mx).toBe(10);  // まだ enemy にターンは回らないので移動していない
 
     //----------------------------------------------------------------------------------------------------
 
@@ -137,7 +137,7 @@ test("concretes.item.grass.すばやさ草.2", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(enemy1.x).toBe(15);
+    expect(enemy1.mx).toBe(15);
 
     //----------------------------------------------------------------------------------------------------
 

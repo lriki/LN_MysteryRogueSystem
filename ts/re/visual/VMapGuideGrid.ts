@@ -77,8 +77,8 @@ export class VMapGuideGrid {
         if (entity) {
             for (let i = 0; i < 100; i++) {
                 const offset = Helpers._dirToTileOffsetTable[entity.dir];
-                const x = entity.x + offset.x * i;
-                const y = entity.y + offset.y * i;
+                const x = entity.mx + offset.x * i;
+                const y = entity.my + offset.y * i;
                 const block = map.tryGetBlock(x, y);
                 if (block && block._blockComponent != FBlockComponent.None) {
                     this.setMapData(x, y, StartETileId + 2);

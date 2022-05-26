@@ -19,9 +19,9 @@ export class VBlowMoveSequel extends REVisualSequel {
         const speed = Math.pow(2, moveSpeed) / 256;
         //const frameCount = 1.0 / speed; // 水平1Tile移動に何Frame必要？
 
-        const velocity = Vector2.mul(Vector2.sub(new Vector2(entity.x, entity.y), context.startPosition()), speed);
+        const velocity = Vector2.mul(Vector2.sub(new Vector2(entity.mx, entity.my), context.startPosition()), speed);
 
-        const d = Vector2.sub(new Vector2(entity.x, entity.y), visual.position());
+        const d = Vector2.sub(new Vector2(entity.mx, entity.my), visual.position());
 
         if ((Math.abs(d.x) <= speed && Math.abs(d.y) <= speed) ||
             context.frameCount() > 30) {    // 速度に何か異常があっても、時間経過で必ず終了させる

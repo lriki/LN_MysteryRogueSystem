@@ -1,7 +1,7 @@
 import { REBasics } from "./data/REBasics";
 import { REData } from "./data/REData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
-import { TileShape } from "./objects/LBlock";
+import { LTileShape } from "./objects/LBlock";
 import { LEntity } from "./objects/LEntity";
 import { LMap } from "./objects/LMap";
 import { REGame } from "./objects/REGame";
@@ -68,7 +68,7 @@ function moveToExit() {
     const player = REGame.camera.focusedEntity();
     if (!player) return;
 
-    REGame.world._transferEntity(player, player.floorId, exitPoint.x, exitPoint.y);
+    REGame.world._transferEntity(player, player.floorId, exitPoint.mx, exitPoint.my);
 }
 
 

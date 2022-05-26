@@ -69,7 +69,7 @@ export class USearch {
         else {
             // 部屋の外にいる場合、たとえ部屋の外周 Block 上にいても、部屋内は見えない。
             // 隣接のみ見える。
-            return UMovement.checkAdjacentPositions(subject.x, subject.y, block.mx, block.my);
+            return UMovement.checkAdjacentPositions(subject.mx, subject.my, block.mx, block.my);
         }
     }
 
@@ -150,7 +150,7 @@ export class USearch {
     }
     
     public static getFirstUnderFootEntity(entity: LEntity): LEntity | undefined {
-        const block = REGame.map.tryGetBlock(entity.x, entity.y);
+        const block = REGame.map.tryGetBlock(entity.mx, entity.my);
         if (block) {
             const target = block.getFirstEntity(DBlockLayerKind.Ground);
             return target;
@@ -168,8 +168,8 @@ export class USearch {
 
         const player = REGame.camera.focusedEntity();
         assert(player);
-        const px = player.x;
-        const py = player.y;
+        const px = player.mx;
+        const py = player.my;
 
         // まず操作キャラのすぐ近くは避けて検索してみる
         const candidateBlocks = spawnableBlocks.filter(b => {

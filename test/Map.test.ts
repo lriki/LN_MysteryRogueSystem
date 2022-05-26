@@ -4,7 +4,7 @@ import "./Extension";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { RESystem } from "ts/re/system/RESystem";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
 beforeAll(() => {
@@ -39,8 +39,8 @@ test("MapTransfarDirectly", () => {
 
     TestEnv.performFloorTransfer();
     expect(REGame.map.floorId().equals(TestEnv.FloorId_FlatMap50x50)).toBe(true);   // 移動できていること
-    expect(actor1.x).toBe(1);   // EntryPoint の位置へ移動できていること
-    expect(actor1.y).toBe(2);   // EntryPoint の位置へ移動できていること
+    expect(actor1.mx).toBe(1);   // EntryPoint の位置へ移動できていること
+    expect(actor1.my).toBe(2);   // EntryPoint の位置へ移動できていること
 
 
     //--------------------
@@ -52,8 +52,8 @@ test("MapTransfarDirectly", () => {
 
     TestEnv.performFloorTransfer();
     expect(REGame.map.floorId().equals(floor2)).toBe(true);   // 移動できていること
-    expect(actor1.x).not.toBe(-1);  // いずれかの座標に配置されていること
-    expect(actor1.y).not.toBe(-1);  // いずれかの座標に配置されていること
+    expect(actor1.mx).not.toBe(-1);  // いずれかの座標に配置されていること
+    expect(actor1.my).not.toBe(-1);  // いずれかの座標に配置されていること
 
     //--------------------
     // Land マップを経由した固定マップへの移動
@@ -68,8 +68,8 @@ test("MapTransfarDirectly", () => {
 
     TestEnv.performFloorTransfer();
     expect(REGame.map.floorId().equals(TestEnv.FloorId_FlatMap50x50)).toBe(true);   // 移動できていること
-    expect(actor1.x).toBe(5);   // EntryPoint の位置へ移動できていること
-    expect(actor1.y).toBe(5);   // EntryPoint の位置へ移動できていること
+    expect(actor1.mx).toBe(5);   // EntryPoint の位置へ移動できていること
+    expect(actor1.my).toBe(5);   // EntryPoint の位置へ移動できていること
 });
 
 test("TransformRotationBlock", () => {
@@ -155,8 +155,8 @@ test("MoveDiagonal_CollideWalls", () => {
     TestEnv.performFloorTransfer();
 
     // 右下に移動できないような壁を作る
-    REGame.map.block(6, 5)._tileShape = TileShape.Wall;
-    REGame.map.block(5, 6)._tileShape = TileShape.Wall;
+    REGame.map.block(6, 5)._tileShape = LTileShape.Wall;
+    REGame.map.block(5, 6)._tileShape = LTileShape.Wall;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
@@ -168,6 +168,6 @@ test("MoveDiagonal_CollideWalls", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
     // 壁があるので移動できていない
-    expect(actor1.x).toBe(5);
-    expect(actor1.y).toBe(5);
+    expect(actor1.mx).toBe(5);
+    expect(actor1.my).toBe(5);
 });

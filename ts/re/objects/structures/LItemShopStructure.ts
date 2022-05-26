@@ -1,6 +1,5 @@
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { REGame } from "../REGame";
-import { LRoomId } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { DItemShopTypeId } from "ts/re/data/DItemShop";
@@ -9,8 +8,7 @@ import { assert } from "ts/re/Common";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntityId } from "../LObject";
 import { DFactionId, REData } from "ts/re/data/REData";
-import { REBasics } from "ts/re/data/REBasics";
-import { RESystem } from "ts/re/system/RESystem";
+import { LRoomId } from "../LCommon";
 
 // 店の入り口情報
 export class LShopEntrance {
@@ -95,8 +93,8 @@ export class LItemShopStructure extends LStructure {
         const room = REGame.map.room(this._roomId);
         for (const id of this._sellngItems) {
             const item = REGame.world.entity(id);
-            if (item.floorId.equals(REGame.map.floorId()) && room.contains(item.x, item.y)) {
-                const block = REGame.map.block(item.x, item.y);
+            if (item.floorId.equals(REGame.map.floorId()) && room.contains(item.mx, item.my)) {
+                const block = REGame.map.block(item.mx, item.my);
                 assert(block.containsEntity(item)); // 一応、本当に Block に含まれているかチェックする
                 // 所有
             }
@@ -152,7 +150,7 @@ export class LItemShopStructure extends LStructure {
     }
 
     onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.x, entity.y);
+        const block = REGame.map.block(entity.mx, entity.my);
         if (block._roomId == this._roomId) {
         }
     }

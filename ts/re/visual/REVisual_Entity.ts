@@ -53,7 +53,7 @@ export class REVisual_Entity
         this._rmmzEventId = rmmzEventId;
         this._rmmzSpriteIndex = -1;
         this._sequelContext = new REVisualSequelContext(this);
-        this._position = new Vector2(entity.x, entity.y);
+        this._position = new Vector2(entity.mx, entity.my);
         this._sequelOpacity = 1.0;
     }
 
@@ -113,8 +113,8 @@ export class REVisual_Entity
     }
 
     resetPosition() {
-        this._position.x = this._entity.x;
-        this._position.y = this._entity.y;
+        this._position.x = this._entity.mx;
+        this._position.y = this._entity.my;
     }
 
     sequelContext(): REVisualSequelContext {

@@ -4,7 +4,7 @@ import { REData } from "ts/re/data/REData";
 import { REDataManager } from "ts/re/data/REDataManager";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { REGame } from "ts/re/objects/REGame";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId, paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/re/PluginParameters";
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner2 } from "ts/re/data/DEntity";
@@ -149,7 +149,7 @@ export class SRmmzHelpers {
         }
     }
 
-    private static getTileShape(mx: number, my: number): TileShape {
+    private static getTileShape(mx: number, my: number): LTileShape {
         if (Game_Map_Impl.checkPassage(mx, my, 0xF)) {
 
             const tiles = Game_Map_Impl.allTiles(mx, my);
@@ -157,13 +157,13 @@ export class SRmmzHelpers {
                 // RMMZ で壁オートタイル(A4)は、上面にあたる部分が必ず通行可能となる。
                 // 単純に通行可否で TileShape を決定してしまうと、MRとして壁にしたい部分も床となってしまう。
                 // そのため、A4 を一律 Wall 扱いする。
-                if (DHelpers.isTileA4(t)) return TileShape.HardWall;
+                if (DHelpers.isTileA4(t)) return LTileShape.HardWall;
             }
 
-            return TileShape.Floor;
+            return LTileShape.Floor;
         }
         else {
-            return TileShape.HardWall;
+            return LTileShape.HardWall;
         }
     }
 }

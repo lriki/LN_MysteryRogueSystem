@@ -45,7 +45,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.dataId()).not.toBe(entityDataId); // 種類が変わっていること
-    expect(enemy1.x).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
+    expect(enemy1.mx).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
 });
 
 test("Items.ChangeEntityInstance.Throw", () => {
@@ -75,5 +75,5 @@ test("Items.ChangeEntityInstance.Throw", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.dataId()).not.toBe(entityDataId); // 種類が変わっていること
-    expect(enemy1.x).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
+    expect(enemy1.mx).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
 });

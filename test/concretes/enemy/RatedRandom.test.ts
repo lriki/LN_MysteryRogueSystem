@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { USearch } from "ts/re/usecases/USearch";
 import { REBasics } from "ts/re/data/REBasics";
 
@@ -39,7 +39,7 @@ test("concretes.states.RatedRandom", () => {
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
-    expect(enemy1.x != 11 && enemy1.y != 10).toBe(true);
+    expect(enemy1.mx != 11 && enemy1.my != 10).toBe(true);
 });
 
 // ランダム行動の中で、攻撃が発生した時にクラッシュすることがある問題の修正確認
@@ -55,12 +55,12 @@ test("concretes.states.RatedRandom.Issue1", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_バットA").id, [], "enemy1"));
     REGame.world._transferEntity(enemy1, floorId, 11, 10);
-    REGame.map.block(10, 9)._tileShape = TileShape.Wall;
-    REGame.map.block(11, 9)._tileShape = TileShape.Wall;
-    REGame.map.block(9, 10)._tileShape = TileShape.Wall;
-    REGame.map.block(12, 10)._tileShape = TileShape.Wall;
-    REGame.map.block(10, 11)._tileShape = TileShape.Wall;
-    REGame.map.block(11, 11)._tileShape = TileShape.Wall;
+    REGame.map.block(10, 9)._tileShape = LTileShape.Wall;
+    REGame.map.block(11, 9)._tileShape = LTileShape.Wall;
+    REGame.map.block(9, 10)._tileShape = LTileShape.Wall;
+    REGame.map.block(12, 10)._tileShape = LTileShape.Wall;
+    REGame.map.block(10, 11)._tileShape = LTileShape.Wall;
+    REGame.map.block(11, 11)._tileShape = LTileShape.Wall;
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

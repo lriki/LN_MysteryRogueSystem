@@ -1,5 +1,5 @@
 import { assert, RESerializable } from "../Common";
-import { LRoomId, LBlock, TileShape } from "./LBlock";
+import { LBlock, LTileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
 import { Helpers } from "ts/re/system/Helpers";
@@ -20,6 +20,7 @@ import { LItemShopStructure } from "./structures/LItemShopStructure";
 import { DBlockLayerKind } from "../data/DCommon";
 import { UBlock } from "../usecases/UBlock";
 import { paramDefaultVisibiltyLength } from "../PluginParameters";
+import { LRoomId } from "./LCommon";
 
 export enum MovingMethod {
     Walk,
@@ -132,7 +133,7 @@ export class LMap extends LObject {
             const x = Math.trunc(i % this._width);
             const y = Math.trunc(i / this._width);
             this._blocks[i] = new LBlock(x, y);
-            this._blocks[i]._tileShape = TileShape.Floor;
+            this._blocks[i]._tileShape = LTileShape.Floor;
         }
     }
 
@@ -330,7 +331,7 @@ export class LMap extends LObject {
 
     /** "部屋" 内の "床" である Block を取得する */
     public roomFloorBlocks(): LBlock[] {
-        return this._blocks.filter(b => b.isRoom() && b.tileShape() == TileShape.Floor);
+        return this._blocks.filter(b => b.isRoom() && b.tileShape() == LTileShape.Floor);
     }
 
     /**
@@ -352,7 +353,7 @@ export class LMap extends LObject {
     public roomId(entity: LEntity, _?: any): LRoomId;
     public roomId(a1: any, a2: any): LRoomId {
         if (a1 instanceof LEntity) {
-            return this.roomId(a1.x, a1.y);
+            return this.roomId(a1.mx, a1.my);
         }
         else {
             return this.block(a1, a2)._roomId;
@@ -379,7 +380,7 @@ export class LMap extends LObject {
             const room = this.room(subject.roomId());
             let entities = this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
             if (room.poorVisibility) {
-                entities = entities.filter(x => UMovement.blockDistance(subject.x, subject.y, x.x, x.y) <= paramDefaultVisibiltyLength);
+                entities = entities.filter(x => UMovement.blockDistance(subject.mx, subject.my, x.mx, x.my) <= paramDefaultVisibiltyLength);
             }
             return entities;
         }
@@ -394,7 +395,7 @@ export class LMap extends LObject {
             const room = this.room(roomId);
             const outers: LBlock[] = [];
             room.forEachEdgeBlocks(b => outers.push(b));
-            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.mx == entity.x && b.my == entity.y) != undefined));
+            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.mx == entity.mx && b.my == entity.my) != undefined));
         }
         else {
             return this.entities().filter(entity => this.roomId(entity) == roomId);
@@ -441,7 +442,7 @@ export class LMap extends LObject {
             this._addEntityInternal(entity);
         }
         else {
-            const block = this.block(entity.x, entity.y);
+            const block = this.block(entity.mx, entity.my);
             const layer = entity.getHomeLayer();
             block.addEntity(layer, entity);
             UMovement._postLocate(entity, undefined, block, this, undefined);
@@ -473,7 +474,7 @@ export class LMap extends LObject {
         assert(entity.floorId.equals(this.floorId()));
         
         if (entity.floorId.isRESystem()) {
-            const block = this.block(entity.x, entity.y);
+            const block = this.block(entity.mx, entity.my);
             const result = block.removeEntity(entity);
             assert(result);
         }
@@ -506,14 +507,14 @@ export class LMap extends LObject {
             return !block.layers()[layer].isOccupied();
         }
         else {
-            return !block.layers()[layer].isOccupied() && block.tileShape() == TileShape.Floor;
+            return !block.layers()[layer].isOccupied() && block.tileShape() == LTileShape.Floor;
         }
     }
     
     canLeaving(block: LBlock, entity: LEntity): boolean {
 
         // TODO: 壁抜けや浮遊状態で変わる
-        return /*!block->isOccupied() &&*/ block.tileShape() == TileShape.Floor;
+        return /*!block->isOccupied() &&*/ block.tileShape() == LTileShape.Floor;
     }
     
     // NOTE: 斜め移動の禁止は、隣接タイルや Entity が、自分の角を斜め移動可能とするか、で検知したほうがいいかも。
@@ -522,8 +523,8 @@ export class LMap extends LObject {
     // deprecated: use SMomementCommon
     checkPassage(entity: LEntity, dir: number, method: MovingMethod, toLayer?: DBlockLayerKind): boolean {
         const offset = Helpers.dirToTileOffset(dir);
-        const oldBlock = this.block(entity.x, entity.y);
-        const newBlock = this.block(entity.x + offset.x, entity.y + offset.y);
+        const oldBlock = this.block(entity.mx, entity.my);
+        const newBlock = this.block(entity.mx + offset.x, entity.my + offset.y);
         const layer = (toLayer) ? toLayer : entity.getHomeLayer();
 
         if (this.canLeaving(oldBlock, entity) && this.canWalkEntering(newBlock, entity, method, layer)) {
@@ -558,7 +559,7 @@ export class LMap extends LObject {
 
     /** 足元の Entity を取得する */
     public firstFeetEntity(entity: LEntity): LEntity | undefined {
-        const block = REGame.map.block(entity.x, entity.y);
+        const block = REGame.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         return layer.firstEntity();
     }

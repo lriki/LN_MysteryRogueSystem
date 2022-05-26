@@ -84,10 +84,10 @@ test("concretes.item.scroll.RestartScroll", async () => {
     const enemy1HP3 = enemy1_2.actualParam(REBasics.params.hp);
 
     // 色々元に戻っている
-    expect(player1_2.x).toBe(10);
-    expect(player1_2.y).toBe(10);
-    expect(enemy1_2.x).toBe(13);
-    expect(enemy1_2.y).toBe(10);
+    expect(player1_2.mx).toBe(10);
+    expect(player1_2.my).toBe(10);
+    expect(enemy1_2.mx).toBe(13);
+    expect(enemy1_2.my).toBe(10);
     expect(enemy1HP3).toBe(enemy1HP1);
 
     // アイテムは消えている

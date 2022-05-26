@@ -41,5 +41,5 @@ test("concretes.item.staff.Knockback.basic", () => {
 
     const enemy1HP2 = enemy1.actualParam(REBasics.params.hp);
     expect(enemy1HP2).toBe(enemy1HP1 - 5);
-    expect(enemy1.x).toBe(24);
+    expect(enemy1.mx).toBe(24);
 });

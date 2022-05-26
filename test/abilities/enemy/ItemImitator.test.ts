@@ -34,7 +34,7 @@ test("abilities.enemy.ItemImitator", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 移動は失敗している
-    expect(player1.x).toBe(10);
+    expect(player1.mx).toBe(10);
     
     const hp = player1.actualParam(REBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
@@ -60,7 +60,7 @@ test("abilities.enemy.Issue1", () => {
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-        expect(enemy1.x).toBe(20);
-        expect(enemy1.y).toBe(10);
+        expect(enemy1.mx).toBe(20);
+        expect(enemy1.my).toBe(10);
     }
 });

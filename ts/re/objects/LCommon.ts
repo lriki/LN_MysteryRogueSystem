@@ -1,4 +1,5 @@
 
+export type LRoomId = number;
 export type LStructureId = number;
 
 export interface LPriceInfo {

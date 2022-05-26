@@ -378,11 +378,11 @@ export class SEmittorPerformer {
             }
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
-            this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, performer.x, performer.y, performer.dir);
+            this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, performer.mx, performer.my, performer.dir);
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.ReceiveProjectile) {
             const dir = this._effectDirection != 0 ? this._effectDirection : performer.dir;
-            const block = USearch.findFirstWallInDirection(performer.x, performer.y, dir);
+            const block = USearch.findFirstWallInDirection(performer.mx, performer.my, dir);
             this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, block.mx, block.my, UMovement.reverseDir(dir));
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
@@ -404,7 +404,7 @@ export class SEmittorPerformer {
             const withCenter = (emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter);
 
             const targets: LEntity[] = [];
-            USearch.iterateAroundEntities(performer.x, performer.y, emittor.scope.length, withCenter, (entity) => {
+            USearch.iterateAroundEntities(performer.mx, performer.my, emittor.scope.length, withCenter, (entity) => {
                 if (!entity.equals(performer)) {
                     targets.push(entity);
                 }
@@ -414,7 +414,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Center) {
             const targets: LEntity[] = [];
-            const block = REGame.map.tryGetBlock(performer.x, performer.y);
+            const block = REGame.map.tryGetBlock(performer.mx, performer.my);
             if (block) {
                 for (const entity of block.getEntities()) {
                     if (!entity.equals(performer)) {

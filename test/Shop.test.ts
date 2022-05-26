@@ -56,10 +56,10 @@ test("Shop.Basic", () => {
 
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-        expect(keeper1.x).toBe(19);
-        expect(keeper1.y).toBe(6);
-        expect(keeper2.x).toBe(19);
-        expect(keeper2.y).toBe(12);
+        expect(keeper1.mx).toBe(19);
+        expect(keeper1.my).toBe(6);
+        expect(keeper2.mx).toBe(19);
+        expect(keeper2.my).toBe(12);
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -71,10 +71,10 @@ test("Shop.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 店主は通路をふさぐように移動している
-    expect(keeper1.x).toBe(19);
-    expect(keeper1.y).toBe(7);
-    expect(keeper2.x).toBe(19);
-    expect(keeper2.y).toBe(13);
+    expect(keeper1.mx).toBe(19);
+    expect(keeper1.my).toBe(7);
+    expect(keeper2.mx).toBe(19);
+    expect(keeper2.my).toBe(13);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -118,8 +118,8 @@ test("Shop.Basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 店主は元の位置に移動する
-    expect(keeper1.x).toBe(19);
-    expect(keeper1.y).toBe(6);
-    expect(keeper2.x).toBe(19);
-    expect(keeper2.y).toBe(12);
+    expect(keeper1.mx).toBe(19);
+    expect(keeper1.my).toBe(6);
+    expect(keeper2.mx).toBe(19);
+    expect(keeper2.my).toBe(12);
 });

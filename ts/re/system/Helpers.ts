@@ -57,13 +57,13 @@ export class Helpers {
 
     static makeEntityFrontPosition(entity: LEntity, length: number): Vector2 {
         const offset = this._dirToTileOffsetTable[entity.dir];
-        return new Vector2(entity.x + offset.x * length, entity.y + offset.y * length);
+        return new Vector2(entity.mx + offset.x * length, entity.my + offset.y * length);
     }
 
     // 2 つの Entity 間の直線距離を取得
     static getDistance(entity1: LEntity, entity2: LEntity): number {
-        const x = entity1.x - entity2.x;
-        const y = entity1.y - entity2.y;
+        const x = entity1.mx - entity2.mx;
+        const y = entity1.my - entity2.my;
         return Math.sqrt((x * x) + (y * y));
     }
     

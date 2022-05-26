@@ -3,7 +3,7 @@ import { TestEnv } from "./../TestEnv";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { RESystem } from "ts/re/system/RESystem";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";

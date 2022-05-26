@@ -149,7 +149,7 @@ test("concretes.activity.Stumble.enemy", () => {
     // 何か足元に落ちてる
     const item1 = REGame.map.block(13, 10).getFirstEntity();
     expect(item1 !== undefined).toBe(true);
-    expect(enemy1.x).toBe(12);
+    expect(enemy1.mx).toBe(12);
 
     //----------------------------------------------------------------------------------------------------
 

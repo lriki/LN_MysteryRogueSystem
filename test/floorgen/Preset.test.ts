@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { REData } from "ts/re/data/REData";
 import { DTerrainSettingRef } from "ts/re/data/DLand";
 import { RESystem } from "ts/re/system/RESystem";
-import { TileShape } from "ts/re/objects/LBlock";
+import { LTileShape } from "ts/re/objects/LBlock";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
@@ -32,8 +32,8 @@ test("Preset.GreatHall", () => {
     const map = REGame.map;
     const room = map.rooms()[1];
     room.forEachBlocks(block => {
-        assert(block.tileShape() == TileShape.Floor);
-        expect(block.tileShape()).toBe(TileShape.Floor);
+        assert(block.tileShape() == LTileShape.Floor);
+        expect(block.tileShape()).toBe(LTileShape.Floor);
     });
 });
 
@@ -103,8 +103,8 @@ test("Preset.PoorVisibility", () => {
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     // Enemy は正面に移動している (視界外なので、Player には寄ってこない)
-    expect(enemy1.x).toBe(room.mx2);
-    expect(enemy1.y).toBe(room.my1 + 1);
+    expect(enemy1.mx).toBe(room.mx2);
+    expect(enemy1.my).toBe(room.my1 + 1);
 });
 
 test("Preset.DefaultMonsterHouse", () => {
@@ -128,7 +128,7 @@ test("Preset.DefaultMonsterHouse", () => {
 
     // 部屋の外に Entity が配置されていないことの確認
     for (const entity of map.entities()) {
-        const block = map.block(entity.x, entity.y);
+        const block = map.block(entity.mx, entity.my);
         expect(block.isFloorLikeShape()).toBeTruthy();
     }
 });

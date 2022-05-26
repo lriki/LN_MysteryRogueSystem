@@ -45,7 +45,7 @@ Game_Player.prototype.refresh = function() {
         // これが無いと、プレイヤー初期位置が画面中央になるようにスクロールしてくれない。
         const entity = REGame.camera.focusedEntity();
         if (entity) {
-            $gamePlayer.locate(entity.x, entity.y);
+            $gamePlayer.locate(entity.mx, entity.my);
         }
     }
 }

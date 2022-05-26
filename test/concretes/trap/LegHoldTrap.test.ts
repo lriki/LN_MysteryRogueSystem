@@ -36,7 +36,7 @@ test("concretes.trap.LegHoldTrap.Basic", () => {
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
         expect(player1.isStateAffected(REData.getState("kState_UTトラバサミ").id)).toBe(true);
-        expect(player1.x).toBe(11);      // 移動できない (キャンセルされる)
+        expect(player1.mx).toBe(11);      // 移動できない (キャンセルされる)
 
         // player を右 (罠上) へ移動
         RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
@@ -47,7 +47,7 @@ test("concretes.trap.LegHoldTrap.Basic", () => {
     
     // ステート解除判定のタイミングの都合で、解除されるターンは移動がキャンセルされる
     expect(player1.isStateAffected(REData.getState("kState_UTトラバサミ").id)).toBe(false);
-    expect(player1.x).toBe(11);      // ステート解除。移動できる。
+    expect(player1.mx).toBe(11);      // ステート解除。移動できる。
     
     // player を右 (罠上) へ移動
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
@@ -55,5 +55,5 @@ test("concretes.trap.LegHoldTrap.Basic", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(player1.x).toBe(12);      // 移動できる。
+    expect(player1.mx).toBe(12);      // 移動できる。
 });
