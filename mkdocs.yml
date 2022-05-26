@@ -52,6 +52,7 @@ nav:
             - 回復アイテム: implementation/items/recovery-item.md
     - リファレンス:
         - reference/index.md
+        - "@MR属性": reference/MRAttributes.md
         - Traits: reference/Traits.md
     - 拡張:
         - index: extensions/index.md

@@ -1,7 +1,7 @@
 import { REGame } from "ts/re/objects/REGame";
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
-import { DAnnotationReader, RmmzREEventMetadata } from "../data/DAnnotationReader";
+import { DAnnotationReader, RmmzREEventMetadata } from "../data/DAttributeReader";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { REDataManager } from "../data/REDataManager";
 import { LState } from "../objects/states/LState";

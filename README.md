@@ -53,6 +53,9 @@ npm run test -- -t Basic1
 cloc ts --include-lang=TypeScript
 ```
 
+マニュアルのビルド・確認方法
+----------
+
 ```
 poetry install
 poetry run mkdocs build

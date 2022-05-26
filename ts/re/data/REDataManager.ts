@@ -25,7 +25,7 @@ import { DParamMessageValueSource, REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
-import { DAnnotationReader } from './DAnnotationReader';
+import { DAnnotationReader } from './DAttributeReader';
 import { DMetadataParser } from './DMetadataParser';
 import { DSetupScript } from './DSetupScript';
 import { DSectorConnectionPreset, FGenericRandomMapWayConnectionMode } from './DTerrainPreset';

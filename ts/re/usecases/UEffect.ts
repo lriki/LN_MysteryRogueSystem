@@ -183,6 +183,29 @@ export class UEffect {
         }
     }
 
+    public static selectRatingForce<T>(rand: LRandom, items: T[], rating: (item: T) => number): T {
+        assert(items.length > 0);
+        const ratingMax = Math.max(...items.map(a => rating(a)));
+        const ratingZero = ratingMax - 10;//- 3;
+        const actualItems = items.filter(a => rating(a) > ratingZero);
+        const sum = actualItems.reduce((r, a) => r + rating(a) - ratingZero, 0);
+        if (sum > 0) {
+            let value = rand.nextIntWithMax(sum);
+            for (const item of actualItems) {
+                const r = rating(item);
+                if (!r) continue;
+
+                value -= (r) - ratingZero;
+                if (value < 0) {
+                    return item;
+                }
+            }
+            throw new Error("Unreachable.");
+        } else {
+            // レーティングがすべて 0 なら普通にランダム選択する
+            return items[rand.nextIntWithMax(items.length)];
+        }
+    }
 
     // public static resolveApplyEffectsMainTarget(allEffects: readonly SEffect[], target: LEntity, rand: LRandom): Map<LEntity, SEffect[]> {
     //     const localTargets = new Map<LEntity, SEffect[]>();

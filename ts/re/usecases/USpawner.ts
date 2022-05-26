@@ -4,7 +4,9 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { DAppearanceTableEntity } from "../data/DLand";
 import { LRandom } from "../objects/LRandom";
+import { UEffect } from "./UEffect";
 
 
 export class USpawner {
@@ -55,7 +57,22 @@ export class USpawner {
         const list = table.items[floorId.floorNumber()];
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
-        const data = list[rand.nextIntWithMax(list.length)];
+        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, x => x.spawiInfo.rate);
+        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
+        return entity;
+    }
+    
+    /**
+     * 指定したフロアの出現テーブルから、罠を作成する。
+     * 作成したアイテムはマップ上に出現していない。
+     */
+    public static createTrapFromSpawnTable(floorId: LFloorId, rand: LRandom): LEntity | undefined {
+        const table = floorId.landData().appearanceTable;
+        if (table.traps.length == 0) return undefined;    // 出現テーブルが空
+        const list = table.traps[floorId.floorNumber()];
+        if (list.length == 0) return undefined;    // 出現テーブルが空
+
+        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, x => x.spawiInfo.rate);
         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
         return entity;
     }

@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "./DAction";
 import { DActor } from "./DActor";
-import { DAnnotationReader } from "./DAnnotationReader";
+import { DAnnotationReader } from "./DAttributeReader";
 import { DClassId } from "./DClass";
 import { DAttackElementId, DEntityKindId, DRaceId } from "./DCommon";
 import { DEmittorId, DEmittor } from "./DEmittor";
@@ -409,12 +409,16 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     //public entityId: DEntityId;
     //public stateIds: DStateId[];
     public xName: string | undefined;//
+    
+    /** 出現率 */
+    public rate: number;
 
     public constructor() {
         super();
         this.troopId = 0;
         this.overrideEvent = undefined;
         this.keeper = false;
+        this.rate = 100;
         //this.entityId = 0;
         //this.stateIds = [];
     }
@@ -459,13 +463,14 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         
         const entity = new DEntitySpawner2();
         entity.troopId = entityMetadata.troopId;
-        entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.data);
+        entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.entity);
         entity.stackCount = entityMetadata.stackCount;
         entity.override = entityMetadata.override;
         entity.gold = entityMetadata.gold;
         entity.overrideEvent = entityMetadata.overrideEvent ? event : undefined;
         entity.keeper = entityMetadata.keeper ?? false;
-        entity.xName = entityMetadata.data;
+        entity.xName = entityMetadata.entity;
+        entity.rate = entityMetadata.rate ?? 100;
 
         for (const stateKey of entityMetadata.states) {
             const index = REData.states.findIndex(s => s.key == stateKey);

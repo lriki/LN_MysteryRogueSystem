@@ -1,6 +1,6 @@
 
 import { assert, tr2 } from "../Common";
-import { DAnnotationReader, RMMZFloorMetadata } from "./DAnnotationReader";
+import { DAnnotationReader, RMMZFloorMetadata } from "./DAttributeReader";
 import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
@@ -352,7 +352,7 @@ export class DLand {
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {
-                    throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+                    throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
                 }
                 if (spawnInfo.entityId <= 0 && spawnInfo.troopId <= 0) {
                     throw new Error(`Entity "${spawnInfo.xName}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
@@ -445,7 +445,7 @@ export class DLand {
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event);
                 if (!spawnInfo) {
-                    throw new Error(`Entity "${entityMetadata.data}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+                    throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
                 }
 
                 const tableItem: DAppearanceTableEntity = {

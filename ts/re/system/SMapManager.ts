@@ -1,5 +1,3 @@
-
-
 import { REGame } from "ts/re/objects/REGame";
 import { LEntity } from "ts/re/objects/LEntity";
 import { RESystem } from "./RESystem";
@@ -22,6 +20,8 @@ import { USpawner } from "../usecases/USpawner";
 import { ULimitations } from "../usecases/ULimitations";
 import { paramMaxTrapsInMap } from "../PluginParameters";
 import { DEntityKind } from "../data/DEntityKind";
+import { UEffect } from "../usecases/UEffect";
+import { DAppearanceTableEntity } from "../data/DLand";
 
 
 /**
@@ -96,19 +96,14 @@ export class SMapManager {
             
             //const objects = REGame.world.objects();
             for (const entity of enterdEntities) {
-            //for (let i = 1; i < objects.length; i++) {
-            //    const obj = objects[i];
-            //    if (obj && obj.objectType() == LObjectType.Entity) {
-                    //const entity = obj as LEntity;
-                    if (entity.floorId.equals(this._map.floorId())) {
+                if (entity.floorId.equals(this._map.floorId())) {
 
-                        const layer = entity.getHomeLayer();
-                        const block = this.findSpawnableBlockRandom(layer);
-                        assert(block);
-                        
-                        UMovement.locateEntity(entity, block.mx, block.my);
-                    }
-                //}
+                    const layer = entity.getHomeLayer();
+                    const block = this.findSpawnableBlockRandom(layer);
+                    assert(block);
+                    
+                    UMovement.locateEntity(entity, block.mx, block.my);
+                }
             }
         }
 
@@ -291,7 +286,7 @@ export class SMapManager {
         const list = table.enemies[floorId.floorNumber()];
         if (list.length == 0) return [];    // 出現テーブルが空
 
-        const data = list[this.rand().nextIntWithMax(list.length)];
+        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(this.rand(), list, x => x.spawiInfo.rate);
         let entites: LEntity[];
         if (data.spawiInfo.troopId > 0) {
             entites = SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
@@ -324,14 +319,10 @@ export class SMapManager {
     /** 出現テーブルからランダムに選択して Trap を作る */
     public spawnTrap(mx: number, my: number): void {
         const floorId = this._map.floorId();
-        const table = this._map.land2().landData().appearanceTable;
-        if (table.traps.length == 0) return undefined;    // 出現テーブルが空
-        const list = table.traps[floorId.floorNumber()];
-        if (list.length == 0) return undefined;    // 出現テーブルが空
-
-        const data = list[this.rand().nextIntWithMax(list.length)];
-        const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-        REGame.world._transferEntity(entity, floorId, mx, my);
+        const entity = USpawner.createTrapFromSpawnTable(floorId, this.rand());
+        if (entity) {
+            REGame.world._transferEntity(entity, floorId, mx, my);
+        }
     }
 
     public spawnTraps(count: number): void {

@@ -52,10 +52,14 @@ export interface RmmzEventPrefabSubPageMetadata {
     state?: string;
 }
 
-interface RMMZEventRawMetadata {
-    data: string;
+interface RmmzSpawnerRawAttribute {
+    data?: string;
+
+    /** @deprecated use data */
+    entity?: string;
+
     states?: string[];
-    troop?: string;
+    troop?: string;     // TODO: data と混ぜていいかも
     stack?: number;
 
     // true を指定すると、このイベントにより生成された Entity は
@@ -70,12 +74,13 @@ interface RMMZEventRawMetadata {
     keeper?: boolean;
     
     gold?: number;
+
+    rate?: number;
 }
 
 
-export interface RmmzEventEntityMetadata {
-    
-    data: string;
+export interface RmmzSpawnerAttribute {
+    entity: string;
 
     states: string[];
 
@@ -90,6 +95,8 @@ export interface RmmzEventEntityMetadata {
     keeper: boolean;
 
     gold: number;
+
+    rate: number;
 }
 
 interface RmmzREEventRawMetadata {
@@ -206,15 +213,15 @@ export class DAnnotationReader {
         return rawData;
     }
 
-    public static readEntityMetadataFromPage(page: IDataMapEventPage): RmmzEventEntityMetadata | undefined {
+    public static readEntityMetadataFromPage(page: IDataMapEventPage): RmmzSpawnerAttribute | undefined {
         const block = this.findFirstAnnotationFromPage("@MR-Spawner", page);
         if (!block) return undefined;
-        let rawData: RMMZEventRawMetadata | undefined;
+        let rawData: RmmzSpawnerRawAttribute | undefined;
         eval(`rawData = ${block}`);
         assert(rawData);
         const rawData_ = rawData;
         return {
-            data: rawData.data,
+            entity: rawData.entity ? (rawData.entity ?? "") : (rawData.data ?? ""),
             states: rawData.states ?? [],
             troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
             stackCount: rawData.stack ?? 1,
@@ -222,6 +229,7 @@ export class DAnnotationReader {
             overrideEvent: rawData.overrideEvent ?? false,
             keeper: rawData.keeper ?? false,
             gold: rawData.gold ?? 0,
+            rate: rawData.rate ?? 100,
         };
     }
 
