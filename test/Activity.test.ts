@@ -23,7 +23,7 @@ test("Activity.Eat", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // アイテム作成
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
@@ -53,7 +53,7 @@ test("Activity.Throw", () => {
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1.dir = 6; // 右を向く
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
@@ -109,12 +109,12 @@ test("Activity.ThrowAndHit", () => {
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1.dir = 6; // 右を向く
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     SDebugHelpers.setHP(enemy1, 1); // HP1
 
     // アイテムを作ってインベントリに入れる
@@ -143,7 +143,7 @@ test("Activity.Exchange", () => {
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1.dir = 6; // 右を向く
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
     TestEnv.performFloorTransfer();
 
@@ -155,7 +155,7 @@ test("Activity.Exchange", () => {
     // 足元にアイテムを作る
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item2._name = "item2";
-    REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

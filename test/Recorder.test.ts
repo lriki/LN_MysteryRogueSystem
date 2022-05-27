@@ -32,7 +32,7 @@ test("Recorder.Basic1", async () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 13, 10);  // 配置
+    REGame.world.transferEntity(enemy1, floorId, 13, 10);  // 配置
     const initialHP1 = enemy1.actualParam(REBasics.params.hp);
 
     // 初期状態を Save

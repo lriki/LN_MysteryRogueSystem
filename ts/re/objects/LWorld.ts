@@ -250,20 +250,20 @@ export class LWorld
      *   - 移動先の同一 BlockLayer に別の Entity がいた場合、移動は失敗する。
      * - 表示中以外のマップ(固定マップ)へ移動した場合、
      *   - 移動先の同一 BlockLayer に別の Entity がいた場合、移動は失敗する。
-     * - 表示中以外のマップ(ランダムマップ)へ移動した場合、
-     *   - 座標は常に 0,0 へ移動し、成功する。ほかの Entity とは重なるが、ランダムマップ生成時に再配置される。
      * 
      * 直ちに座標を変更するため、コマンドチェーン実行内からの呼び出しは禁止。
      * CommandContext.postTransferFloor() を使うこと。
      * 
      * このメソッドで移動しても、足元に対するアクションは行わない。(罠を踏んだり、アイテムを拾ったりしない)
+     * 
+     * mx, my は省略可能。これは、未ロードのランダムマップへの遷移時に使用する。
      */
-    _transferEntity(entity: LEntity, floorId: LFloorId, x: number = -1, y: number = -1): boolean {
+    public transferEntity(entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): boolean {
         const mapFloorId = REGame.map.floorId();
         if (!mapFloorId .equals(floorId) && floorId.isRandomMap()) {
             // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
-            assert(x < 0);
-            assert(y < 0);
+            assert(mx < 0);
+            assert(my < 0);
         }
 
         if (REGame.map.isValid() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
@@ -281,18 +281,19 @@ export class LWorld
         if (mapFloorId.equals(floorId)) {
             if (entity.floorId.equals(floorId)) {
                 // 現在マップ内での座標移動
-                UMovement.locateEntity(entity, x, y);
+                UMovement.locateEntity(entity, mx, my);
             }
             else {
                 // 他の Floor から、現在表示中の Floor へ移動
                 entity.floorId = floorId;
-                UMovement.locateEntity(entity, x, y);
+                UMovement.locateEntity(entity, mx, my);
                 REGame.map._addEntityInternal(entity);
             }
 
         }
         else {
-            UMovement.locateEntityAtFloorMoved(entity, floorId, x, y);
+            // 現在マップから他のフロアへの移動
+            UMovement.locateEntityAtFloorMoved(entity, floorId, mx, my);
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移

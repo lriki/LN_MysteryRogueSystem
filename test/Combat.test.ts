@@ -25,11 +25,11 @@ test("Combat.DamageAndCollapse", () => {
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
     TestEnv.performFloorTransfer();
@@ -55,13 +55,13 @@ test("Combat.DamageAndGameover", () => {
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     actor1._name = "actor1";
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // 配置
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // 配置
     SDebugHelpers.setHP(actor1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置
 
     TestEnv.performFloorTransfer();
 

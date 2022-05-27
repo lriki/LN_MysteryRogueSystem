@@ -31,7 +31,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 13, 10);
+    REGame.world.transferEntity(enemy1, floorId, 13, 10);
     const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
 
 

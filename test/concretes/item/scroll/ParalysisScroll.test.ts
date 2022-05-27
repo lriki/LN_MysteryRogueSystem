@@ -30,9 +30,9 @@ test("concretes.item.scroll.ParalysisScroll", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy3"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);  // Adjacent
-    REGame.world._transferEntity(enemy2, floorId, 11, 11);  // Adjacent
-    REGame.world._transferEntity(enemy3, floorId, 12, 10);  // Not adjacent
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);  // Adjacent
+    REGame.world.transferEntity(enemy2, floorId, 11, 11);  // Adjacent
+    REGame.world.transferEntity(enemy3, floorId, 12, 10);  // Not adjacent
 
     TestUtils.testCommonScrollBegin(player1, item1);
 

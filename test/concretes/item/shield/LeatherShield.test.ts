@@ -32,7 +32,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, floorId, 11, 10);
+    REGame.world.transferEntity(trap1, floorId, 11, 10);
     const shield1_UP1 = shield1.actualParam(REBasics.params.upgradeValue);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------

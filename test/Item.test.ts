@@ -21,7 +21,7 @@ test("Items.Stack", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
@@ -29,7 +29,7 @@ test("Items.Stack", () => {
 
     // 矢1本
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
@@ -41,7 +41,7 @@ test("Items.Stack", () => {
     const info2 = DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id);
     info2.stackCount = 2;
     const item2 = SEntityFactory.newEntity(info2);
-    REGame.world._transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    REGame.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
@@ -55,7 +55,7 @@ test("Items.Stack", () => {
     const info3 = DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id);
     info2.stackCount = 99;
     const item3 = SEntityFactory.newEntity(info2);
-    REGame.world._transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    REGame.world.transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
@@ -67,7 +67,7 @@ test("Items.Stack", () => {
 
     // 矢1本
     const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id));
-    REGame.world._transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    REGame.world.transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());

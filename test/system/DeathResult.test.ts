@@ -23,7 +23,7 @@ test("system.DeathResult.State", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

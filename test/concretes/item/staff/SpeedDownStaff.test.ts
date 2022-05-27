@@ -28,7 +28,7 @@ test("concretes.item.staff.SpeedDownStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const enemy1AGI1 = enemy1.actualParam(REBasics.params.agi);
 
     expect(LScheduler2.getSpeedLevel(enemy1)).toBe(1);

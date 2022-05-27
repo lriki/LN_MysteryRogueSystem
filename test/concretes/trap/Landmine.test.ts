@@ -22,15 +22,15 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     // item
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 9);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 9);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_地雷_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -98,12 +98,12 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_地雷_A").id, [], "trap1"));
     const trap2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_地雷_A").id, [], "trap2"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    REGame.world._transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 10, 11);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 10, 11);
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

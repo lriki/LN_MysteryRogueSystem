@@ -51,7 +51,7 @@ test("concretes.states.Paralysis.Attack", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -69,7 +69,7 @@ test("concretes.states.Paralysis.Pos", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     enemy1.dir = 2;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

@@ -24,7 +24,7 @@ test("Item.ThrowAndDrop", () => {
     // Player
     const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     player1.dir = 6;
-    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
@@ -61,7 +61,7 @@ test("Item.DropAndDestroy", () => {
     // Player
     const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     player1.dir = 6;
-    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
@@ -74,7 +74,7 @@ test("Item.DropAndDestroy", () => {
     for (let y = 0; y < 7; y++) {
         for (let x = 0; x < 7; x++) {
             const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-            REGame.world._transferEntity(item, TestEnv.FloorId_FlatMap50x50, ox + x, oy + y);
+            REGame.world.transferEntity(item, TestEnv.FloorId_FlatMap50x50, ox + x, oy + y);
         }
     }
 
@@ -100,7 +100,7 @@ test("Item.ThrowingDropByWall", () => {
     // Player
     const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
     player1.dir = 6;
-    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
@@ -161,7 +161,7 @@ test("projectiles.Item.AwfulThrowing", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     RESystem.scheduler.stepSimulation();
 

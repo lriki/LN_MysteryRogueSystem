@@ -23,7 +23,7 @@ test("Equipment.EquipOnOff", () => {
 
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
@@ -143,7 +143,7 @@ test("Equipment.Curse", () => {
 
     // 武器 入手 (呪い付き)
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getState("kState_System_Curse").id]));
-    REGame.world._transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 

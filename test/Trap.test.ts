@@ -20,7 +20,7 @@ test("Trap.TriggerRate", () => {
     const hp1 = player1.actualParam(REBasics.params.hp);
 
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_地雷_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
     
     REGame.world.random().resetSeed(5);     // 乱数調整
@@ -40,7 +40,7 @@ test("Trap.TriggerRate", () => {
 
         const hp2 = player1.actualParam(REBasics.params.hp);
         if (hp2 < hp1) triggerd1++;
-        REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setActualParam(REBasics.params.hp, hp1);
     }
 
@@ -58,7 +58,7 @@ test("Trap.TriggerRate", () => {
 
         const hp2 = player1.actualParam(REBasics.params.hp);
         if (hp2 < hp1) triggerd2++;
-        REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setActualParam(REBasics.params.hp, hp1);
     }
 
@@ -77,7 +77,7 @@ test("Trap.Basic", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -101,12 +101,12 @@ test("Trap.Enemy", () => {
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap));
     trap1._name = "trap1";
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -130,11 +130,11 @@ test("Trap.Attack", () => {
 
     // trap1
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
     const hp1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -158,7 +158,7 @@ test("Trap.Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy をどける
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
 
     // 右を向いて攻撃
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
@@ -177,7 +177,7 @@ test("Trap.Attack", () => {
 
     // Player の右下に罠を作る
     const trap2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap2"));
-    REGame.world._transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    REGame.world.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の下に壁を作る
     REGame.map.block(10, 11)._tileShape = LTileShape.Wall;

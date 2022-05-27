@@ -31,11 +31,11 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
 
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world.transferEntity(enemy1, floorId, 19, 4);
     
     // trap1 
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world._transferEntity(trap1, floorId, 20, 4);
+    REGame.world.transferEntity(trap1, floorId, 20, 4);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

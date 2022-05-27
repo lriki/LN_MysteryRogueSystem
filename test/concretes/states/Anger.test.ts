@@ -25,7 +25,7 @@ test("concretes.states.Anger", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_Anger").id);
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

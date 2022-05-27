@@ -22,7 +22,7 @@ test("Items.Staff.Knockback", () => {
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.dir = 6;
     TestEnv.performFloorTransfer();
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
@@ -41,7 +41,7 @@ test("Items.Staff.Knockback", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -78,7 +78,7 @@ test("Items.Staff.Knockback", () => {
     // 投げてみる
     {
         // Enemy を Player の右側に配置
-        REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+        REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
         
@@ -102,7 +102,7 @@ test("Items.Staff.Identify", () => {
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    REGame.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
     TestEnv.performFloorTransfer();
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 

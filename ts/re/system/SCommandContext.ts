@@ -462,7 +462,7 @@ export class SCommandContext
     postTransferFloor(entity: LEntity, floorId: LFloorId, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
-            REGame.world._transferEntity(entity, floorId, x, y);
+            REGame.world.transferEntity(entity, floorId, x, y);
             return SCommandResponse.Handled;
         };
         this._recodingCommandList.push(new RECCMessageCommand("TransferFloor", m1));

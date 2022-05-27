@@ -24,7 +24,7 @@ export class SDivisionSpecialEffect extends SSpecialEffect {
         if (candidates.length > 1) {
             const newBlock = candidates[cctx.random().nextIntWithMax(candidates.length)];
             const newEntity = target.clone();
-            REGame.world._transferEntity(newEntity, target.floorId, newBlock.mx, newBlock.my);
+            REGame.world.transferEntity(newEntity, target.floorId, newBlock.mx, newBlock.my);
 
             cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(target.mx, target.my);
             cctx.postWaitSequel();

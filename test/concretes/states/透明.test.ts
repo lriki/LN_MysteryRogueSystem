@@ -33,7 +33,7 @@ test("concretes.states.透明.EnemyMove", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // Minimap には表示されない
     expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
@@ -61,7 +61,7 @@ test("concretes.states.透明.Enemy", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
 
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

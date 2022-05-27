@@ -87,12 +87,12 @@ test("Preset.PoorVisibility", () => {
     //----------
 
     // Player を左上に配置
-    REGame.world._transferEntity(player1, TestEnv.FloorId_FlatMap50x50, room.mx1, room.my1);
+    REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, room.mx1, room.my1);
 
     // Enemy を右上に配置 (下向き)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.dir = 2;
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, room.mx2, room.my1);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, room.mx2, room.my1);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 

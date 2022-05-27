@@ -19,7 +19,7 @@ test("concretes.enemies.WarpMagician", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アークメイジA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();
 

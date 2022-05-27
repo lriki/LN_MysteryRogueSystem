@@ -77,7 +77,7 @@ export class UTransfer {
         
         const playerEntity = REGame.camera.focusedEntity();
         if (playerEntity) {
-            REGame.world._transferEntity(playerEntity, floorId, actualX, actualY);
+            REGame.world.transferEntity(playerEntity, floorId, actualX, actualY);
         }
 
         //$gamePlayer.reserveTransfer();
@@ -109,7 +109,7 @@ export class UTransfer {
                 const newFloorId = LFloorId.makeByRmmzNormalMapId(exitRMMZMapId)
 
                 //const newFloorId = LFloorId.make(DHelpers.RmmzNormalMapLandId, exitRMMZMapId);
-                REGame.world._transferEntity(entity, newFloorId);
+                REGame.world.transferEntity(entity, newFloorId);
 
                 //$gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
                 //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
@@ -117,7 +117,7 @@ export class UTransfer {
             }
             else {
                 const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
-                REGame.world._transferEntity(entity, newFloorId);
+                REGame.world.transferEntity(entity, newFloorId);
             }
 
             if (interpreter) {

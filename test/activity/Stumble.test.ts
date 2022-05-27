@@ -106,7 +106,7 @@ test("concretes.activity.Stumble.player.onItem", () => {
 
     // アイテムを置く
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -132,7 +132,7 @@ test("concretes.activity.Stumble.enemy", () => {
     
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

@@ -16,14 +16,14 @@ test("concretes.states.からぶり", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     actor1.addState(REData.getState("kState_UTからぶり").id);
     const actorHP1 = actor1.actualParam(REBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UTからぶり").id], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const enemyHP1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

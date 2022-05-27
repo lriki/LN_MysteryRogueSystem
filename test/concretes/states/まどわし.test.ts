@@ -23,11 +23,11 @@ test("concretes.states.まどわし", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     enemy1.dir = 6; // 右へ
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // View には何か別のものを表示させようとする
     const enemy1Visibility1 = SView.getEntityVisibility(enemy1);

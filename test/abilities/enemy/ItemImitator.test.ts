@@ -21,7 +21,7 @@ test("abilities.enemy.ItemImitator", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UTアイテム擬態").id], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -48,7 +48,7 @@ test("abilities.enemy.Issue1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UTアイテム擬態").id], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

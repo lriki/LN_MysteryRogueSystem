@@ -237,7 +237,7 @@ export class SEntityFactory {
 
             const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer(), entity);
             if (block) {
-                REGame.world._transferEntity(entity, REGame.map.floorId(), block.mx, block.my);
+                REGame.world.transferEntity(entity, REGame.map.floorId(), block.mx, block.my);
             }
             else {
                 // 配置できないなら無理に出さない

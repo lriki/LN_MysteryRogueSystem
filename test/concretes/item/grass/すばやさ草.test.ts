@@ -24,7 +24,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
 
     // アイテム作成 & インベントリに入れる
@@ -87,7 +87,7 @@ test("concretes.item.grass.すばやさ草.throw", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item3"));
@@ -118,14 +118,14 @@ test("concretes.item.grass.すばやさ草.2", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1,floorId, 15, 10);
+    REGame.world.transferEntity(enemy1,floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item3"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item2"));
-    REGame.world._transferEntity(item2, floorId, 11, 10);
+    REGame.world.transferEntity(item2, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     

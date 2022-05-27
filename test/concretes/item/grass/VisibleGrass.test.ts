@@ -22,7 +22,7 @@ test("concretes.item.grass.VisibleGrass", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ビジブルドラッグ_A").id, [], "item1"));
@@ -30,7 +30,7 @@ test("concretes.item.grass.VisibleGrass", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     const enemy1Visibility1 = SView.getEntityVisibility(enemy1);
     expect(enemy1Visibility1.visible).toBeFalsy();    // 一応確認

@@ -29,7 +29,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -62,7 +62,7 @@ test("Items.ChangeEntityInstance.Throw", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

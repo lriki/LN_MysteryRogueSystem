@@ -25,7 +25,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -52,11 +52,11 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
     const enemyhp1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -95,7 +95,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     // 右下に移動できないような壁を作る
     REGame.map.block(12, 9)._tileShape = LTileShape.Wall;

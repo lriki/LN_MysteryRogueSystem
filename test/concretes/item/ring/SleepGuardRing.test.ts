@@ -32,7 +32,7 @@ test("concretes.item.ring.SleepGuardRing", () => {
 
     // Trap
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world._transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -42,7 +42,7 @@ test("concretes.item.ring.SleepGuardRing", () => {
     let count = 0;
     for (let i = 0; i < 100; i++) {
         // 移動
-        REGame.world._transferEntity(player1, floorId, 10, 10);
+        REGame.world.transferEntity(player1, floorId, 10, 10);
         RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         

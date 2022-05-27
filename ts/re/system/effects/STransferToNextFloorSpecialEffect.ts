@@ -26,7 +26,7 @@ export class STransferToNextFloorSpecialEffect extends SSpecialEffect {
             }
             else {
                 const newFloorId = LFloorId.make(currentFloorId.landId(), newFloorNumber);
-                REGame.world._transferEntity(target, newFloorId);
+                REGame.world.transferEntity(target, newFloorId);
             }
             result.makeSuccess();
         }

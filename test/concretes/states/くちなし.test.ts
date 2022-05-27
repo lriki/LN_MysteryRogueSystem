@@ -54,7 +54,7 @@ test("concretes.states.くちなし.AutoRemove", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(stateId);
-    REGame.world._transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    REGame.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

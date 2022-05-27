@@ -39,7 +39,7 @@ test("concretes.states.速度変化", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
     // デフォルトの行動回数は 1 (等速)
@@ -137,7 +137,7 @@ test("concretes.states.速度変化.Issue1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
 
     const wait = () => {
         RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));

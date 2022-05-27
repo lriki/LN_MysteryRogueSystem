@@ -22,7 +22,7 @@ test("State_Brace", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // "睡眠" 強制付加
@@ -45,7 +45,7 @@ test("State.AutoRemove", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // "睡眠" 強制付加
@@ -72,7 +72,7 @@ test("State.Proficiency", () => {
     
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);

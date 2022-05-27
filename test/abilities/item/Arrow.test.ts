@@ -32,11 +32,11 @@ test("Items.Arrow", () => {
     
     // item2
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id, [], "item2"));
-    REGame.world._transferEntity(item2, floorId, 10, 10);  // Player の足元へ
+    REGame.world.transferEntity(item2, floorId, 10, 10);  // Player の足元へ
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 13, 10);
+    REGame.world.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

@@ -30,7 +30,7 @@ test("effects.CollideEffects.Weapon", () => {
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_UTからぶり").id);
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
     const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -80,7 +80,7 @@ test("effects.CollideEffects.Shield", () => {
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_UTからぶり").id);
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
     const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

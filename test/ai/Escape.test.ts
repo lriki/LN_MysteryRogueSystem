@@ -21,7 +21,7 @@ test("ai.Escape.1", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 4);
+    REGame.world.transferEntity(enemy1, floorId, 11, 4);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -40,8 +40,8 @@ test("ai.Escape.1", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Player が通路側に立ちはだかる
-    REGame.world._transferEntity(actor1, floorId, 11, 4);
-    REGame.world._transferEntity(enemy1, floorId, 10, 4);
+    REGame.world.transferEntity(actor1, floorId, 11, 4);
+    REGame.world.transferEntity(enemy1, floorId, 10, 4);
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -56,8 +56,8 @@ test("ai.Escape.1", () => {
     // - Player が通路側に立ちはだかる
     // - Enemy の後ろが壁
     // - Player と Enemy は隣接していない
-    REGame.world._transferEntity(actor1, floorId, 11, 4);
-    REGame.world._transferEntity(enemy1, floorId, 9, 4);
+    REGame.world.transferEntity(actor1, floorId, 11, 4);
+    REGame.world.transferEntity(enemy1, floorId, 9, 4);
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -72,8 +72,8 @@ test("ai.Escape.1", () => {
     // - Player が通路側に立ちはだかる
     // - Enemy の後ろが壁
     // - Player と Enemy は隣接している
-    REGame.world._transferEntity(actor1, floorId, 10, 4);
-    REGame.world._transferEntity(enemy1, floorId, 9, 4);
+    REGame.world.transferEntity(actor1, floorId, 10, 4);
+    REGame.world.transferEntity(enemy1, floorId, 9, 4);
     RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -95,7 +95,7 @@ test("ai.Escape.2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
+    REGame.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -136,7 +136,7 @@ test("ai.Escape.3", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
+    REGame.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -179,8 +179,8 @@ test("ai.Escape.Issue1", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [stateId], "enemy2"));
-    REGame.world._transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口
-    REGame.world._transferEntity(enemy2, floorId, 14, 4);   // 通路
+    REGame.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口
+    REGame.world.transferEntity(enemy2, floorId, 14, 4);   // 通路
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -205,7 +205,7 @@ test("ai.Escape.SpeedLevel2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 12, 4);
+    REGame.world.transferEntity(enemy1, floorId, 12, 4);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

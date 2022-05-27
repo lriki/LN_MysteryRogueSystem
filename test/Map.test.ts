@@ -23,7 +23,7 @@ test("MapTransfarDirectly", () => {
 
     // 最初に Player を REシステム管理外の 通常マップに配置しておく
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_DefaultNormalMap, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_DefaultNormalMap, 5, 5);
 
     TestEnv.performFloorTransfer();
 
@@ -34,7 +34,7 @@ test("MapTransfarDirectly", () => {
     //--------------------
     // 固定マップへの移動 (EntryPoint を移動先とする)
 
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, -1, -1);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, -1, -1);
     expect(REGame.camera.isFloorTransfering()).toBe(true);  // Camera が移動待機状態になっていること
 
     TestEnv.performFloorTransfer();
@@ -47,7 +47,7 @@ test("MapTransfarDirectly", () => {
     // ランダムマップフロアへの移動
 
     const floor2 = new LFloorId(TestEnv.UnitTestLandId, 2);
-    REGame.world._transferEntity(actor1, floor2, -1, -1);
+    REGame.world.transferEntity(actor1, floor2, -1, -1);
     expect(REGame.camera.isFloorTransfering()).toBe(true);  // Camera が移動待機状態になっていること
 
     TestEnv.performFloorTransfer();
@@ -63,7 +63,7 @@ test("MapTransfarDirectly", () => {
     //--------------------
     // 固定マップへの移動 (座標指定)
 
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     expect(REGame.camera.isFloorTransfering()).toBe(true);  // Camera が移動待機状態になっていること
 
     TestEnv.performFloorTransfer();
@@ -151,7 +151,7 @@ test("MoveDiagonal_CollideWalls", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // 右下に移動できないような壁を作る

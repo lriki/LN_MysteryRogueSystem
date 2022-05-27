@@ -79,7 +79,7 @@ test("Shop.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 店主の隣へ移動
-    REGame.world._transferEntity(player1, floorId, 20, 7);
+    REGame.world.transferEntity(player1, floorId, 20, 7);
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 

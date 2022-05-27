@@ -21,7 +21,7 @@ test("Dialog.FeetDialogSequelTiming", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ExitPoint_A").id, [], ""));
-    REGame.world._transferEntity(exitPoint1, floorId, 11, 10);
+    REGame.world.transferEntity(exitPoint1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

@@ -21,11 +21,11 @@ test("Items.Sanctuary", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -62,11 +62,11 @@ test("Items.Sanctuary.ForceDeth", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
     
     REGame.map.block(5, 10)._tileShape = LTileShape.Wall;
 

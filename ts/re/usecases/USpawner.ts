@@ -14,7 +14,7 @@ export class USpawner {
     public static spawnSingleEntity(entityKey: string, mx: number, my: number): LEntity {
         const floorId = REGame.map.floorId();
         const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(entityKey).id), floorId);
-        REGame.world._transferEntity(entity, floorId, mx, my);
+        REGame.world.transferEntity(entity, floorId, mx, my);
         return entity;
     }
 

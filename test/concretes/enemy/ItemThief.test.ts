@@ -31,7 +31,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -57,7 +57,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
 
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    REGame.world.transferEntity(enemy1, floorId, 12, 10);
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
     RESystem.dialogContext.activeDialog().submit();
 
@@ -80,12 +80,12 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
     // Item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, floorId, 14, 10);
+    REGame.world.transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
     // Ｐ□敵□草
@@ -135,12 +135,12 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
     // Item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, floorId, 14, 10);
+    REGame.world.transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
     // Ｐ□敵□草
@@ -183,7 +183,7 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -217,7 +217,7 @@ test("concretes.enemy.ItemThief.Equipment", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -248,15 +248,15 @@ test("concretes.enemy.ItemThief.Issue2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    REGame.world.transferEntity(enemy1, floorId, 15, 10);
 
     // enemy2
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy2, floorId, 15, 11);
+    REGame.world.transferEntity(enemy2, floorId, 15, 11);
     
     // Item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, floorId, 16, 11);
+    REGame.world.transferEntity(item1, floorId, 16, 11);
 
     /*
     □□□□
@@ -293,7 +293,7 @@ test("concretes.enemy.ItemThief.Issue3_Seal", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_System_Seal").id);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     // Item1作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));

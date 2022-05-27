@@ -14,7 +14,7 @@ test("Abilities.Enemy.Flock", () => {
 
     // Player
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, floor);
+    REGame.world.transferEntity(actor1, floor);
     TestEnv.performFloorTransfer();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

@@ -19,7 +19,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ウルフA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 14, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 14, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

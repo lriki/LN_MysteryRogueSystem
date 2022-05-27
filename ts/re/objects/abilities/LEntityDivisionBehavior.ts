@@ -29,7 +29,7 @@ export class LEntityDivisionBehavior extends LBehavior {
         if (candidates.length > 1) {
             const newBlock = candidates[cctx.random().nextIntWithMax(candidates.length)];
             const newEntity = self.clone();
-            REGame.world._transferEntity(newEntity, self.floorId, newBlock.mx, newBlock.my);
+            REGame.world.transferEntity(newEntity, self.floorId, newBlock.mx, newBlock.my);
 
             cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(self.mx, self.my);
             cctx.postWaitSequel();

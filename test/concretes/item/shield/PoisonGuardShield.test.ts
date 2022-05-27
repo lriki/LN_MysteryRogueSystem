@@ -33,7 +33,7 @@ test("concretes.item.shield.PoisonGuardShield", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, floorId, 11, 10);
+    REGame.world.transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -75,7 +75,7 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_Anger").id);
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    REGame.world.transferEntity(enemy1, floorId, 12, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

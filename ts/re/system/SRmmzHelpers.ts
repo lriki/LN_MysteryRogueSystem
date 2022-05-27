@@ -78,7 +78,7 @@ export class SRmmzHelpers {
         // }
         //entity.rmmzEventId = eventId;
         //entity.inhabitsCurrentFloor = true;
-        REGame.world._transferEntity(entity, REGame.map.floorId(), x, y);
+        REGame.world.transferEntity(entity, REGame.map.floorId(), x, y);
         return entity;
     }
 

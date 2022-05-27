@@ -167,7 +167,7 @@ export class UAction {
      */
     public static postDropOrDestroy(cctx: SCommandContext, entity: LEntity, mx: number, my: number): void {
         cctx.postCall(() => {
-            REGame.world._transferEntity(entity, REGame.map.floorId(), mx, my);
+            REGame.world.transferEntity(entity, REGame.map.floorId(), mx, my);
             this.postDropOrDestroyOnCurrentPos(cctx, entity, entity.getHomeLayer());
         });
     }
@@ -247,7 +247,7 @@ export class UAction {
                 if (block && block.isFloorLikeShape() && !block.layer(DBlockLayerKind.Ground).isContainsAnyEntity()) {
                     const item = items[iItem];
                     item.removeFromParent();
-                    REGame.world._transferEntity(item, REGame.map.floorId(), entity.mx, entity.my);
+                    REGame.world.transferEntity(item, REGame.map.floorId(), entity.mx, entity.my);
                     cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
                     cctx.postSequel(item, REBasics.sequels.jump);
                     iItem++;

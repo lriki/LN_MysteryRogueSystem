@@ -26,7 +26,7 @@ test("concretes.enemy.SelfExplosion.NotExplosion", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ブラストミミックA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
     
@@ -63,14 +63,14 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ブラストミミックA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
     assert(enemy1HP1 > 10);     // テスト用に、最低これだけは確保しておく
     SDebugHelpers.setHP(enemy1, 10); // 爆発する一歩手前にしておく
 
     // enemy2
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
-    REGame.world._transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    REGame.world.transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 11, 11);
     
     // ふきとばし効果でダメージを与えたいので、Enemy1 の後ろに壁を作る
     REGame.map.block(12, 10)._tileShape = LTileShape.Wall;
@@ -106,7 +106,7 @@ test("concretes.enemy.SelfExplosion.Explosion.Dead", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ブラストミミックA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     SDebugHelpers.setHP(enemy1, 15);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

@@ -21,7 +21,7 @@ test("concretes.item.脱出の巻物", () => {
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
@@ -35,7 +35,7 @@ test("concretes.item.脱出の巻物", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     const initialHP = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

@@ -79,7 +79,7 @@ test("concretes.item.grass.AntiPoisonGrass.enemy", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる

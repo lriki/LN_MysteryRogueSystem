@@ -27,10 +27,10 @@ test("concretes.enemy.GoldThief.Basic", () => {
 
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold_A").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
-    REGame.world._transferEntity(gold1, floorId, 13, 10);
+    REGame.world.transferEntity(gold1, floorId, 13, 10);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 12, 10);
+    REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
     // □□□□□
@@ -74,7 +74,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
-    REGame.world._transferEntity(enemy1, floorId, 12, 11);  // 強制移動
+    REGame.world.transferEntity(enemy1, floorId, 12, 11);  // 強制移動
     RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, RESystem.skills.normalAttack, 2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -97,7 +97,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 11, 10);
+    REGame.world.transferEntity(enemy1, floorId, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

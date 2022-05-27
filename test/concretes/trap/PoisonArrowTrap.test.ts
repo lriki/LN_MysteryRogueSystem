@@ -23,7 +23,7 @@ test("concretes.trap.PoisonArrowTrap.Basic", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
-    REGame.world._transferEntity(trap1, floorId, 11, 10);
+    REGame.world.transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

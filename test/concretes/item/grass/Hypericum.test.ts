@@ -23,7 +23,7 @@ test("concretes.item.grass.Hypericum.player", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    REGame.world.transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item1"));
@@ -79,7 +79,7 @@ test("concretes.item.grass.Hypericum.enemy", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    REGame.world.transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エリクシール_A").id, [], "item1"));
@@ -129,7 +129,7 @@ test("concretes.item.grass.Hypericum.undead", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    REGame.world.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる

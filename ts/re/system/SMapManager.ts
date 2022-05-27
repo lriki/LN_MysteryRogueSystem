@@ -83,7 +83,7 @@ export class SMapManager {
 
                 const entity = SEntityFactory.newBasicExitPoint();
                 
-                REGame.world._transferEntity(entity, floorId, exitPoint.mx(), exitPoint.my());
+                REGame.world.transferEntity(entity, floorId, exitPoint.mx(), exitPoint.my());
             }
         }
         
@@ -293,7 +293,7 @@ export class SMapManager {
         }
         else {
             const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-            REGame.world._transferEntity(entity, floorId, mx, my);
+            REGame.world.transferEntity(entity, floorId, mx, my);
             entites = [entity];
         }
 
@@ -311,7 +311,7 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const entity = USpawner.createItemFromSpawnTable(floorId, this.rand());
         if (entity) {
-            REGame.world._transferEntity(entity, floorId, mx, my);
+            REGame.world.transferEntity(entity, floorId, mx, my);
         }
         return entity;
     }
@@ -321,7 +321,7 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const entity = USpawner.createTrapFromSpawnTable(floorId, this.rand());
         if (entity) {
-            REGame.world._transferEntity(entity, floorId, mx, my);
+            REGame.world.transferEntity(entity, floorId, mx, my);
         }
     }
 

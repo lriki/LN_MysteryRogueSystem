@@ -26,7 +26,7 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

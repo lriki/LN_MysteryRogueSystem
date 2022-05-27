@@ -27,7 +27,7 @@ test("concretes.item.staff.DeathStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

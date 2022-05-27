@@ -36,7 +36,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミステリーインプA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_UTからぶり").id);
-    REGame.world._transferEntity(enemy1, floorId, 11, 4);
+    REGame.world.transferEntity(enemy1, floorId, 11, 4);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 

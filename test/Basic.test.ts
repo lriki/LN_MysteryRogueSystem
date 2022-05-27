@@ -74,7 +74,7 @@ test("Basic1", () => {
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // 【RMMZ で使うときはこのあたりで $dataMap をロードしたりする】
 

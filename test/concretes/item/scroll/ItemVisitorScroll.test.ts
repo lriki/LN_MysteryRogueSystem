@@ -29,7 +29,7 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
 
     // item
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイテムスクロール_A").id, [], "item1"));
-    REGame.world._transferEntity(item2, floorId, 19,4);  
+    REGame.world.transferEntity(item2, floorId, 19,4);  
 
     expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeFalsy();
 

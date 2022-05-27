@@ -23,7 +23,7 @@ test("system.BDash.ArrowDamageStop", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
-    REGame.world._transferEntity(enemy1, floorId, 15, 10);
+    REGame.world.transferEntity(enemy1, floorId, 15, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

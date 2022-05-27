@@ -21,7 +21,7 @@ test("concretes.states.ShallowSleep.RoomIn", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -41,7 +41,7 @@ test("concretes.states.ShallowSleep.RoomIn", () => {
         expect(enemy1.my).toBe(4);
         
         // 元に戻す
-        REGame.world._transferEntity(player1, floorId, 16, 4);
+        REGame.world.transferEntity(player1, floorId, 16, 4);
         enemy1.addState(stateId);
     }
 
@@ -59,7 +59,7 @@ test("concretes.states.ShallowSleep.AdjacentMove", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -75,7 +75,7 @@ test("concretes.states.ShallowSleep.AdjacentMove", () => {
         if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
         
         // 元に戻す
-        REGame.world._transferEntity(player1, floorId, 17, 4);
+        REGame.world.transferEntity(player1, floorId, 17, 4);
         enemy1.addState(stateId);
     }
 
@@ -93,7 +93,7 @@ test("concretes.states.ShallowSleep.AwayMove", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -109,7 +109,7 @@ test("concretes.states.ShallowSleep.AwayMove", () => {
         if (enemy1.isStateAffected(REBasics.states.nap)) affected++;
 
         // 元に戻す
-        REGame.world._transferEntity(player1, floorId, 17, 6);
+        REGame.world.transferEntity(player1, floorId, 17, 6);
         enemy1.addState(stateId);
     }
 
@@ -127,7 +127,7 @@ test("concretes.states.ShallowSleep.Skill", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -161,7 +161,7 @@ test("concretes.states.ShallowSleep.Issue1", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
-    REGame.world._transferEntity(enemy1, floorId, 19, 4);
+    REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(REBasics.states.nap)).toBe(true);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -181,7 +181,7 @@ test("concretes.states.ShallowSleep.Issue1", () => {
         expect(enemy1.my).toBe(4);
         
         // 元に戻す
-        REGame.world._transferEntity(player1, floorId, 15, 4);
+        REGame.world.transferEntity(player1, floorId, 15, 4);
         enemy1.addState(stateId);
     }
 

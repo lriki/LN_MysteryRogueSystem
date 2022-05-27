@@ -19,11 +19,11 @@ test("activity.PickAndPut", () => {
 
     // actor1 配置
     const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
+    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
     // マップ移動
     TestEnv.performFloorTransfer();
@@ -81,11 +81,11 @@ test("activity.PickAtMoved", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1 (ターン経過チェック用)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // マップ移動
     //TestEnv.performFloorTransfer();
@@ -127,7 +127,7 @@ test("activity.PickAtMoved.Maximum", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     

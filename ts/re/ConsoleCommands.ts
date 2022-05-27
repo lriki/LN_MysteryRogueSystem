@@ -68,7 +68,7 @@ function moveToExit() {
     const player = REGame.camera.focusedEntity();
     if (!player) return;
 
-    REGame.world._transferEntity(player, player.floorId, exitPoint.mx, exitPoint.my);
+    REGame.world.transferEntity(player, player.floorId, exitPoint.mx, exitPoint.my);
 }
 
 

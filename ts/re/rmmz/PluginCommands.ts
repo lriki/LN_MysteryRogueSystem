@@ -99,7 +99,7 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(th
         }
         else {
             const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
-            REGame.world._transferEntity(entity, newFloorId);
+            REGame.world.transferEntity(entity, newFloorId);
 
             // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
             // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。

@@ -22,7 +22,7 @@ test("concretes.item.scroll.TrapScroll", () => {
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
     const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world._transferEntity(player1, floorId);
+    REGame.world.transferEntity(player1, floorId);
     TestEnv.performFloorTransfer();
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 

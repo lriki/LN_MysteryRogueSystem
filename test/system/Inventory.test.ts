@@ -29,7 +29,7 @@ test("system.Inventory.Fully", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    REGame.world._transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     

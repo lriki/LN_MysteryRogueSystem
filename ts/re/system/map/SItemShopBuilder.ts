@@ -68,7 +68,7 @@ export class SItemShopBuilder {
                     if (room.contains(mx, my)) {
                         const data = manager.rand().select(items);
                         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-                        REGame.world._transferEntity(entity, floorId, mx, my);
+                        REGame.world.transferEntity(entity, floorId, mx, my);
                         spawnedItems.push(entity);
 
                         // 値札をつける

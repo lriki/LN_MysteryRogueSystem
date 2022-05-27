@@ -29,7 +29,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------

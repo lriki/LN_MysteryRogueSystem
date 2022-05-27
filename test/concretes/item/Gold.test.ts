@@ -26,7 +26,7 @@ test("concretes.item.Gold", () => {
     // gold1 - 地面に配置
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold_A").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
-    REGame.world._transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    REGame.world.transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // gold2 - インベントリに入れる
     const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold_A").id, [], "gold2"));
@@ -35,7 +35,7 @@ test("concretes.item.Gold", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
     const hp1 = enemy1.actualParam(REBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

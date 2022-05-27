@@ -22,7 +22,7 @@ test("Abilities.Enemy.Division", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スピリットスライムA").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_UTからぶり").id);   // Player を倒さないように
-    REGame.world._transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

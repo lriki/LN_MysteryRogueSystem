@@ -34,7 +34,7 @@ test("concretes.item.ring.WarpRing", () => {
     let count = 0;
     for (let i = 0; i < 200; i++) {
         // 移動
-        REGame.world._transferEntity(player1, floorId, 10, 10);
+        REGame.world.transferEntity(player1, floorId, 10, 10);
         RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         

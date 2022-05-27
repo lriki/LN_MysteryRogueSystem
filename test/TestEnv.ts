@@ -113,14 +113,14 @@ export class TestEnv {
         if (dir) {
             player.dir = dir;
         }
-        REGame.world._transferEntity(player, floorId, mx, my);
+        REGame.world.transferEntity(player, floorId, mx, my);
         TestEnv.performFloorTransfer();
         return player;
     }
 
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
         const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_投擲反射石_A").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
-        REGame.world._transferEntity(object1, floorId, 13, 10);
+        REGame.world.transferEntity(object1, floorId, 13, 10);
         return object1;
     }
 

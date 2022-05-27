@@ -36,7 +36,7 @@ test("map.Limitation.Item", () => {
         const x = i % 20;
         const y = Math.floor(i / 20);
         const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-        REGame.world._transferEntity(item1, floorId, 10 + x, 10 + y);
+        REGame.world.transferEntity(item1, floorId, 10 + x, 10 + y);
     }
     
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
