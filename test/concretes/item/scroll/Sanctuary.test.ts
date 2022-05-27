@@ -84,6 +84,18 @@ test("concretes.item.scroll.Sanctuary.Basic", () => {
     expect(hp1).toBe(hp2);
     expect(enemy1.mx).toBe(10);
     expect(enemy1.my).toBe(11);
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // [拾う]
+    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+    
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // 拾えていない
+    expect(REGame.messageHistory.includesText("はりついている")).toBeTruthy();
+    expect(inventory1.itemCount).toBe(0);
 });
 
 test("concretes.item.scroll.Sanctuary.ForceDeth", () => {

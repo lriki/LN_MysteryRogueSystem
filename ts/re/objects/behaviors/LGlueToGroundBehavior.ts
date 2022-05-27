@@ -1,7 +1,9 @@
 import { RESerializable, tr2 } from "ts/re/Common";
+import { REBasics } from "ts/re/data/REBasics";
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
+import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
@@ -25,6 +27,16 @@ export class LGlueToGroundBehavior extends LBehavior {
     
     public set glued(value: boolean) {
         this._glued = value;
+    }
+
+    onActivityPreReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
+        if (activity.actionId() == REBasics.actions.PickActionId) {
+            if (this._glued) {
+                cctx.postMessage(tr2("%1は地面にはりついている。").format(UName.makeNameAsItem(self)));
+                return SCommandResponse.Canceled;
+            }
+        }
+        return SCommandResponse.Pass;
     }
 
     [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

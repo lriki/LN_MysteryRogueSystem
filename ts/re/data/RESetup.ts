@@ -1085,6 +1085,11 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
+            case "kEntity_サンクチュアリスクロール_A":
+                this.setupScrollCommon(entity);
+                entity.addReaction(REBasics.actions.ReadActionId);
+                entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                break;
             case "kEntity_識別の巻物_A":
                 this.setupScrollCommon(entity);
                 entity.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;

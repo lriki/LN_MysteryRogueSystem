@@ -54,7 +54,7 @@ export class SActivityContext {
             let result1: any = SCommandResponse.Pass;
             objectum.iterateBehaviorsReverse(b => {
                 result1 = b.onActivityPreReaction(objectum, cctx, this._activity);
-                if (result1 != SCommandResponse.Canceled) { // TODO: ここ Succeeded のほうがいいかも
+                if (result1 != SCommandResponse.Pass) { // TODO: ここ Succeeded のほうがいいかも
                     return false;
                 }
                 else {
