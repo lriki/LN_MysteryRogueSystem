@@ -7,24 +7,23 @@ import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
 
 /**
- * 
+ * 置くと床に張り付く
  */
 @RESerializable
-export class LClingFloorBehavior extends LBehavior {
+export class LGlueToGroundBehavior extends LBehavior {
 
-    private _cling: boolean = false;
+    private _glued: boolean = false;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LClingFloorBehavior);
+        const b = REGame.world.spawn(LGlueToGroundBehavior);
         throw new Error("Not implemented.");
-        return b
     }
 
     
     [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
-        if (this._cling) {
-            cctx.postMessage(tr2("%1 地面にはりついている。").format(UName.makeNameAsItem(self)));
+        if (this._glued) {
+            cctx.postMessage(tr2("%1は地面にはりついている。").format(UName.makeNameAsItem(self)));
             return SCommandResponse.Canceled;
         }
         else {
@@ -33,7 +32,7 @@ export class LClingFloorBehavior extends LBehavior {
     }
 
     [onGrounded](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-        this._cling = true;
+        this._glued = true;
         return SCommandResponse.Pass;
     }
     

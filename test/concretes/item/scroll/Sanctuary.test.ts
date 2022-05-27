@@ -1,26 +1,28 @@
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
-import { TestEnv } from "../../TestEnv";
+import { TestEnv } from "../../../TestEnv";
 import { LTileShape } from "ts/re/objects/LBlock";
 import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
+import { REBasics } from "ts/re/data/REBasics";
+import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("Items.Sanctuary", () => {
+test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     TestEnv.newGame();
-
-    // player1 配置
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
+    const hp1 = player1.actualParam(REBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
@@ -36,9 +38,9 @@ test("Items.Sanctuary", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
+    // 巻物は張り付いていないので、Enemy はアイテムの上に載ってくる
     expect(enemy1.mx).toBe(11);
-    expect(enemy1.my).toBe(11);
+    expect(enemy1.my).toBe(10);
 
     //----------------------------------------------------------------------------------------------------
     
@@ -48,16 +50,44 @@ test("Items.Sanctuary", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    // Enemy は攻撃をせずに、左折の法則に従って進む。
-    expect(enemy1.mx).toBe(10);
-    expect(enemy1.my).toBe(10);
-
+    // Enemy は攻撃してくる
+    const hp2 = player1.actualParam(REBasics.params.hp);
+    expect(hp1).toBeLessThan(hp2);
 });
 
-test("Items.Sanctuary.ForceDeth", () => {
+test("concretes.item.scroll.Sanctuary.Basic", () => {
     TestEnv.newGame();
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
+    const hp1 = player1.actualParam(REBasics.params.hp);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+
+    // item1: 持たせる
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
+    inventory1.addEntity(item1);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-    // player1 配置
+    //----------------------------------------------------------------------------------------------------
+    
+    // [置く]
+    RESystem.dialogContext.postActivity(LActivity.makePut(player1, item1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // 攻撃してこない。Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
+    const hp2 = player1.actualParam(REBasics.params.hp);
+    expect(hp1).toBe(hp2);
+    expect(enemy1.mx).toBe(10);
+    expect(enemy1.my).toBe(11);
+});
+
+test("concretes.item.scroll.Sanctuary.ForceDeth", () => {
+    TestEnv.newGame();
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 4);
     
     // enemy1

@@ -22,7 +22,7 @@ import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjec
 import { LSurvivorBehavior } from "ts/re/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
 import { LSanctuaryBehavior } from "ts/re/objects/behaviors/LSanctuaryBehavior";
-import { LClingFloorBehavior } from "ts/re/objects/behaviors/LClingFloorBehavior";
+import { LGlueToGroundBehavior } from "ts/re/objects/behaviors/LGlueToGroundBehavior";
 import { DPrefab } from "ts/re/data/DPrefab";
 import { DTroop } from "ts/re/data/DTroop";
 import { DStateId } from "ts/re/data/DState";
@@ -254,7 +254,7 @@ export class SEntityFactory {
         switch (entityData.entity.key) {
             case "kEntity_サンクチュアリスクロール_A":
                 entity.addBehavior(LSanctuaryBehavior);
-                entity.addBehavior(LClingFloorBehavior);
+                entity.addBehavior(LGlueToGroundBehavior);
                 break;
             // case "kEntity_突風の罠_A":
             //     break;

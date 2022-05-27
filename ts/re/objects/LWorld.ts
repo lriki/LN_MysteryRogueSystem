@@ -19,8 +19,7 @@ import { UState } from "ts/re/usecases/UState";
  * 1ゲーム内に1インスタンス存在する。
  */
 @RESerializable
-export class LWorld
-{
+export class LWorld {
     private _objects: (LObject | undefined)[] = [];
     private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);
     private _lands: LLand[];
@@ -207,43 +206,6 @@ export class LWorld
         }
     }
 
-    /*
-    _registerBehavior(behavior: LBehavior) {
-        assert(!behavior.hasId());
-        // TODO: 空き場所を愚直に線形探索。
-        // 大量の Entity を扱うようになったら最適化する。
-        const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);
-        if (index < 0) {
-            behavior._setObjectId(new LEntityId(this._behaviors.length, this._random.nextInt()));
-            this._behaviors.push(behavior);
-        }
-        else {
-            behavior._setObjectId(new LEntityId(index, this._random.nextInt()));
-            this._behaviors[index] = behavior;
-        }
-    }
-
-    _unregisterBehavior(behavior: LBehavior) {
-        this._behaviors[behavior.id().index2()] = undefined;
-        behavior._clearObjectId();
-    }
-    */
-
-    /*
-    newBehavior<T>(ctor: { new(...args: any[]): T }): T {
-
-        // TODO: 空き場所を愚直に線形探索。
-        // 大量の Entity を扱うようになったら最適化する。
-        const index = this._behaviors.findIndex((x, i) => i > 0 && x == undefined);
-        const newId: LBehaviorId = {
-            index: (index < 0) ? this._behaviors.length : index,
-            key : this._random.nextInt(),
-        }
-
-        const behavior = new T(newId);
-        this._behaviors[newId.index] = behavior;
-    }
-    */
     /**
      * Entity を指定した位置に移動する。
      * - 現在表示中のマップへ移動した場合、そのマップへ登場する。
