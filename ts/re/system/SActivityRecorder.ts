@@ -5,6 +5,7 @@ import { SActivityPlaybackDialog } from 'ts/re/system/dialogs/SActivityPlaybackD
 import { RESystem } from './RESystem';
 import { LActivity, LActivityData } from 'ts/re/objects/activities/LActivity';
 import { RmmzStorageManager } from 'ts/re/rmmz/StorageManager';
+import { REDataManager } from '../data/REDataManager';
 
 export enum ActivityRecordingCommandType {
     Activity = 1,

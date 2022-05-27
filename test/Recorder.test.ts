@@ -62,7 +62,7 @@ test("Recorder.Basic1", async () => {
     //----------------------------------------------------------------------------------------------------
 
     // 初期状態を Load
-    SGameManager.loadGame(TestJsonEx.parse(savedata1));
+    SGameManager.loadGame(TestJsonEx.parse(savedata1), true);
 
     // 同一IDの LEntity を取得してみる。それぞれ ID は一致するが、インスタンスは別物となっている。
     const player1_2 = REGame.world.entity(player1.entityId());

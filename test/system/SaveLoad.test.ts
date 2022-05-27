@@ -15,6 +15,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
+
 // LEventServer を保存していなかったため、以前のゲーム状態の Behavior を参照していた問題の修正確認
 test("system.SaveLoad.EventServerIssue", () => {
     TestEnv.newGame();
@@ -37,7 +38,7 @@ test("system.SaveLoad.EventServerIssue", () => {
     TestEnv.newGame();
 
     // Load
-    SGameManager.loadGame(TestJsonEx.parse(savedata1));
+    SGameManager.loadGame(TestJsonEx.parse(savedata1), false);
 
     // Load 後は、Dialog を開くため 1 回必要
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

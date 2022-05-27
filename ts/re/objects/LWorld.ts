@@ -137,7 +137,7 @@ export class LWorld {
         if (e.objectType() == LObjectType.Ability)
             return e as LAbility;
         else
-            throw new Error(`Invalid entity type. (id: [${id.index2()}, ${id.key2()}])`);
+            throw new Error(`Invalid ability type. (id: [${id.index2()}, ${id.key2()}])`);
     }
 
     random(): LRandom {
