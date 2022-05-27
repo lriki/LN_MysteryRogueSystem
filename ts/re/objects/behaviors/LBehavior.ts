@@ -51,6 +51,7 @@ import { LMap } from "../LMap";
 import { DEmittor } from "ts/re/data/DEmittor";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { SStepPhase } from "ts/re/system/SCommon";
+import { LFieldEffect } from "../LFieldEffect";
 
 export enum DecisionPhase {
     //Prepare,
@@ -400,6 +401,8 @@ export abstract class LBehavior extends LObject {
 
     /** 主に AI 行動決定用に、スキルの一覧を取得する */
     onCollectSkillActions(result: IDataAction[]): void {}
+
+    *onCollectFieldEffect(self: LEntity): Generator<LFieldEffect, void, unknown> {}
 
     onPostMakeSkillActions(candidates: LCandidateSkillAction[]): void {}
 

@@ -40,6 +40,7 @@ import { LSchedulingResult } from "./LSchedulingResult";
 import { LDeathResult } from "./LDeathResult";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LItemBehavior } from "./behaviors/LItemBehavior";
+import { LFieldEffect } from "./LFieldEffect";
 
 enum BlockLayer
 {
@@ -712,6 +713,19 @@ export class LEntity extends LObject
         return this.traitsSet(REBasics.traits.TRAIT_ATTACK_ELEMENT);
     }
 
+    //----------------------------------------
+    // FieldEffect
+
+    public *fieldEffects(): Generator<LFieldEffect, void, unknown> {
+        // TODO: behavior も Generator 対応
+        const behaviors: LBehavior[] = [];
+        this.iterateBehaviorsReverse(b => {
+            behaviors.push(b);
+        }, true);
+        for (const b of behaviors) {
+            yield* b.onCollectFieldEffect(this);
+        }
+    }
 
     //----------------------------------------
     // Property

@@ -19,7 +19,14 @@ export class LGlueToGroundBehavior extends LBehavior {
         throw new Error("Not implemented.");
     }
 
+    public get glued(): boolean {
+        return this._glued;
+    }
     
+    public set glued(value: boolean) {
+        this._glued = value;
+    }
+
     [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         if (this._glued) {

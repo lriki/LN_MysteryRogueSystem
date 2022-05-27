@@ -82,6 +82,9 @@ export class SChainAfterScheduler {
                 b.onStabilizeSituation(entity, cctx);
                 return true;
             });
+            for (const fe of entity.fieldEffects()) {
+                fe.onStabilizeSituation(cctx);
+            }
         }
 
         this._phase = SChainAfterSchedulerPhase.PreviewDead;
