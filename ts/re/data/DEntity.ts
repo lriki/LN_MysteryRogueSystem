@@ -410,7 +410,13 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     //public stateIds: DStateId[];
     public xName: string | undefined;//
     
-    /** 出現率 */
+    /**
+     * 出現率
+     * 
+     * デフォルトは 100。RMMZ だと 1~9 で指定することが多いが、
+     * 原作に従って細かく指定したい場合、もっと少ない出現率を指定したいこともあるためこのようにしている。
+     * https://oyasen20.tripod.com/torneco_obtainable.html
+     */
     public rate: number;
 
     public constructor() {

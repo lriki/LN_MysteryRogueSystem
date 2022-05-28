@@ -57,7 +57,7 @@ export class USpawner {
         const list = table.items[floorId.floorNumber()];
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
-        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, x => x.spawiInfo.rate);
+        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, 100, x => x.spawiInfo.rate);
         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
         return entity;
     }
@@ -72,7 +72,7 @@ export class USpawner {
         const list = table.traps[floorId.floorNumber()];
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
-        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, x => x.spawiInfo.rate);
+        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, 100, x => x.spawiInfo.rate);
         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
         return entity;
     }

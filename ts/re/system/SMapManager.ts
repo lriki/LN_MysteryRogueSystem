@@ -286,7 +286,7 @@ export class SMapManager {
         const list = table.enemies[floorId.floorNumber()];
         if (list.length == 0) return [];    // 出現テーブルが空
 
-        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(this.rand(), list, x => x.spawiInfo.rate);
+        const data = UEffect.selectRatingForce<DAppearanceTableEntity>(this.rand(), list, 100, x => x.spawiInfo.rate);
         let entites: LEntity[];
         if (data.spawiInfo.troopId > 0) {
             entites = SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);

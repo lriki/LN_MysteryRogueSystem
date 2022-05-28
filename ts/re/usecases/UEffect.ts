@@ -183,10 +183,18 @@ export class UEffect {
         }
     }
 
-    public static selectRatingForce<T>(rand: LRandom, items: T[], rating: (item: T) => number): T {
+    /**
+     * 
+     * @param rand 
+     * @param items 
+     * @param excludeDiff この値以上離れているレーティングはそもそも採用しない
+     * @param rating 
+     * @returns 
+     */
+    public static selectRatingForce<T>(rand: LRandom, items: T[], excludeDiff: number, rating: (item: T) => number): T {
         assert(items.length > 0);
         const ratingMax = Math.max(...items.map(a => rating(a)));
-        const ratingZero = ratingMax - 10;//- 3;
+        const ratingZero = ratingMax - excludeDiff;
         const actualItems = items.filter(a => rating(a) > ratingZero);
         const sum = actualItems.reduce((r, a) => r + rating(a) - ratingZero, 0);
         if (sum > 0) {
