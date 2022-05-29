@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey, DRaceId } from "./DCommon";
+import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DAttackElementId } from "./DCommon";
 import { DEntityId } from "./DEntity";
 import { DParameterId } from "./DParameter";
 import { DSpecialEffect, DSkill } from "./DSkill";
@@ -36,7 +36,7 @@ export class DParameterQualifying {
     applyTarget: DParameterApplyTarget;
 
 
-    elementId: number;  // (Index of DSystem.elements)
+    elementIds: DAttackElementId[];  // (Index of DSystem.elements)
 
     formula: string;
 
@@ -64,7 +64,7 @@ export class DParameterQualifying {
         this._parameterId = paramId;
         this.applyType = applyType;
         this.applyTarget = DParameterApplyTarget.Current;
-        this.elementId = 0;
+        this.elementIds = [0];
         this.formula = formula;
         this.variance = 0;
         this.silent = false;
@@ -76,7 +76,7 @@ export class DParameterQualifying {
     }
 
     public withElementId(value: number): this {
-        this.elementId = value;
+        this.elementIds[0] = value;
         return this;
     }
 
@@ -110,7 +110,7 @@ export class DParameterQualifying {
         this._parameterId = src._parameterId;
         this.applyType = src.applyType;
         this.applyTarget = src.applyTarget;
-        this.elementId = src.elementId;
+        this.elementIds = [...src.elementIds];
         this.formula = src.formula;
         this.variance = src.variance;
         this.silent = src.silent;

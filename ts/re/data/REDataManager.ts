@@ -339,6 +339,7 @@ export class REDataManager {
             REBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
             REBasics.traits.PenetrationItem = REData.newTrait("PenetrationItem").id;
             REBasics.traits.PenetrationThrower = REData.newTrait("PenetrationThrower").id;
+            REBasics.traits.DeathVulnerableElement = REData.newTrait("DeathVulnerableElement").id;
         }
 
         // Factions
@@ -1293,7 +1294,7 @@ export class REDataManager {
                 throw new Error();
         }
         const param = new DParameterQualifying(parameterId, damage.formula ?? "0", applyType);
-        param.elementId = damage.elementId ?? 0;
+        param.elementIds[0] = damage.elementId ?? 0;
         param.variance = damage.variance ?? 0;
         return param;
         // return {

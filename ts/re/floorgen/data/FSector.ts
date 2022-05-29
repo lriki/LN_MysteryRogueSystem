@@ -54,6 +54,7 @@ export class FSector {
         this._edges[FDirection.R].resetLength(this.height());
     }
 
+    /** ID. (0 is Dummy) */
     public id(): FSectorId {
         return this._id;
     }

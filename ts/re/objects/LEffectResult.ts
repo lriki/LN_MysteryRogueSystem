@@ -155,6 +155,10 @@ export class LEffectResult {
         this._dirty = false;
     }
 
+    public clearParamEffects(): void {
+        this.paramEffects2 = [];
+    }
+
     public hasResult(): boolean {
         return true;
     }

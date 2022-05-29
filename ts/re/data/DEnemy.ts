@@ -65,7 +65,7 @@ export class DEnemy {
     /** 取得経験値 */
     exp: number;
 
-
+    /** @deprecated Dentity.selfTraits に統合していいかも？ */
     traits: IDataTrait[];
 
     actions: IDataAction[];

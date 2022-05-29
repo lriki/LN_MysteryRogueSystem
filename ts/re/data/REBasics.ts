@@ -10,7 +10,6 @@ import { DBasicPrefabs } from "./predefineds/DBasicPrefabs";
 import { BasicSequels } from "./predefineds/DBasicSequels";
 import { DBasicStates } from "./predefineds/DBasicStates";
 import { DBasicTraits } from "./predefineds/DBasicTraits";
-import { DFactionId } from "./REData";
 
 export interface DBasicVariables {
     result: number,

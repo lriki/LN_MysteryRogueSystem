@@ -45,7 +45,7 @@ export class RESetup {
         switch (actor.id) {
             case 1:
                 //entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RATE, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
-                entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RESIST, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
+                //entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RESIST, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
                 break;
         }
     }
@@ -164,6 +164,9 @@ export class RESetup {
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
+                break;
+            case "kEntity_Gold_A":
+                this.setupItemCommon(entity);
                 break;
             case "kEntity_スピードドラッグ_A": {
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
@@ -831,9 +834,13 @@ export class RESetup {
                 emittor.selfAnimationId = 109;
                 //emittor.selfSequelId = REBasics.sequels.explosion;
                 //effect.qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
-                effect.parameterQualifyings.push(
-                    new DParameterQualifying(REBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage)
-                    .withElementId(REBasics.elements.explosion));
+                const pp = new DParameterQualifying(REBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage)
+                    .withElementId(REBasics.elements.explosion);
+                pp.elementIds.push(REData.getAttackElement("kElement_DeathExplosion").id);
+                effect.parameterQualifyings.push(pp);
+                    // effect.parameterQualifyings.push(
+                    //     new DParameterQualifying(0, "0", DParameterEffectApplyType.Damage)
+                    //     .withElementId(REData.getAttackElement("kElement_DeathExplosion").id));
                 // effect.parameterQualifyings.push({
                 //     parameterId: REBasics.params.hp,
                 //     applyTarget: DParameterApplyTarget.Current,
@@ -843,14 +850,14 @@ export class RESetup {
                 //     variance: 0,
                 //     silent: false,
                 // });
-                effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 1.0, value2: 0});
+                //effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 1.0, value2: 0});
 
                 // 必中だと耐性を持っているはずの Player も即死してしまうので。
                 effect.hitType = DEffectHitType.Magical;
 
                 entity.counterActions.push({ conditionAttackType: REBasics.elements.explosion, emitSelf: true });
 
-                entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RESIST, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
+                //entity.selfTraits.push({ code: REBasics.traits.TRAIT_STATE_RESIST, dataId: REData.getState("kState_UT爆発四散").id, value: 0 });
 
                 /*
                 地雷でEnemy側に「ダメージを受けた」メッセージが出る問題
@@ -871,6 +878,33 @@ export class RESetup {
                 前者は Behavior の実装が必要であり汎用化できないのでできれば避けたいが…。
                 ダメージ計算を考えても、State の方が有利かも。
                 ツクールデフォルトとは多分異なるが、戦闘不能系ステートが付加されたらParamResultを全部クリアしてしまう、で行けそう。
+                */
+                /*
+                [2022/5/29] 即死爆発
+                ----------
+                これまでは戦闘不能ステート (kState_UT爆発四散) を用いることで対策してきた。
+                しかしこれだとデフォが消滅になるため、重要なオブジェクトには間違いなく爆死ステート耐性を持たせなければならない。
+                階段などに指定し忘れると、ゲームが進行不能になる。(実際に遇った)
+                なので、デフォは耐性持ちにしたい。
+                
+                それか、「ある属性に対する脆弱性」のような Trait で実現したほうがいいだろうか？
+
+                ### デフォでステート耐性を持たせる場合
+                - 「持たせない」という指定をどうするのか、逆にちょっと仕様がすっきりしないかも。
+                - RMMZ で同じ「アイテム」画面で設定するが、カテゴリによってデフォが異なるので、何に対しでデフォで耐性つけるのか仕様を考える必要がある。
+                  - 通常のアイテムは耐性無し
+                  - トラップは耐性あり、など
+                - どのステートをデフォの耐性アリとするのか？の指定をどうするか（kState_UT爆発四散 だけでよいのか？）
+
+                ### 脆弱性システムを作る場合
+                - 必要なものに Trait などを指定すればよいので、「脆弱性が "ある"」というイメージで設定しやすい。
+                - デフォが脆弱性無しなので、少なくとも想定外のオブジェクトが消えてしまう問題を回避できる。
+
+                ### 属性脆弱 vs ステート脆弱
+                どちらでもよさそう。
+                - 爆発属性は自然。爆発戦闘不能というステートを作るとすると、爆発耐性の無い Entity にとっては不要なステートが付かないような工夫が要る。
+                - 毒状態が付いたら即死するようなモンスターのデザインは在りかも。
+
                 */
                 break;
             }
@@ -1154,8 +1188,9 @@ export class RESetup {
                 emittor.scope.length = 1;
                 //emittor.effectSet.effects[0].qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
                 //emittor.effectSet.effects[0].qualifyings.parameterQualifyings;
-                emittor.effectSet.effects[0].rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 100, value2: 0});
+                //emittor.effectSet.effects[0].rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 100, value2: 0});
                 //emittor.selfAnimationId = 109;
+                emittor.effectSet.effects[0].parameterQualifyings[0].elementIds.push(REData.getAttackElement("kElement_DeathExplosion").id);
                 emittor.selfSequelId = REBasics.sequels.explosion;
                 emittor.effectSet.effects[0].hitType = DEffectHitType.Magical;
                 break;
@@ -1333,6 +1368,7 @@ export class RESetup {
 
     public static setupEnemy(entity: DEntity): void {
         const data = entity.enemyData();
+        data.traits.push({ code: REBasics.traits.DeathVulnerableElement, dataId: REData.getAttackElement("kElement_DeathExplosion").id, value: 0 });
         switch (entity.entity.key) {
             case "kEnemy_ブラストミミックA":
                 entity.entity.behaviors.push({name: "SelfExplosion"});
@@ -1457,9 +1493,9 @@ export class RESetup {
             case "kState_Anger":
                 data.effect.traits.push({ code: REBasics.traits.UseSkillForced, dataId: 0, value: 0 });
                 break;
-            case "kState_UT爆発四散":
-                data.deadState  = true;
-                break;
+            // case "kState_UT爆発四散":
+            //     data.deadState  = true;
+            //     break;
             case "kState_UTトラバサミ":
                 data.effect.traits.push({ code: REBasics.traits.SealActivity, dataId: REBasics.actions.MoveToAdjacentActionId, value: 0 });
                 break;
@@ -1481,7 +1517,12 @@ export class RESetup {
         }
     }
 
+    private static setupItemCommon(entity: DEntity): void {
+        this.addVulnerableDeathExplosion(entity);
+    }
+
     private static setupWeaponCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
         entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
         entity.upgradeMax = 99;
         entity.idealParams[REBasics.params.upgradeValue] = 0;
@@ -1495,6 +1536,7 @@ export class RESetup {
     }
 
     private static setupShieldCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
         entity.upgradeMin = -99;    // TODO: 攻撃力下限までにしたい
         entity.upgradeMax = 99;
         entity.idealParams[REBasics.params.upgradeValue] = 0;
@@ -1517,6 +1559,7 @@ export class RESetup {
     }
 
     private static setupArrowCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
         const emittor = REData.newEmittor(entity.entity.key);
         emittor.scope.range = DEffectFieldScopeRange.Performer;
         const effect = new DEffect(entity.entity.key);
@@ -1533,10 +1576,13 @@ export class RESetup {
     }
 
     private static setupRingCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
         entity.entity.behaviors.push({name: "Equipment"});
     }
 
     private static setupGrassCommon(entity: DEntity): [DEmittor, DEmittor] {
+        this.setupItemCommon(entity);
+
         // MainEmittor が Eat, Collide 両方の効果になるようにする。
         // ただし Eat には FP 回復効果も付くため、先に Collide 用の Emittor を clone で作っておき、
         // そのあと MainEmittor に FP 回復効果を追加する。
@@ -1569,14 +1615,20 @@ export class RESetup {
     }
 
     private static setupStaffCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
         const mainEmittor = entity.mainEmittor();
         entity.addReaction(REBasics.actions.collide, mainEmittor);
         //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
     }
 
     private static setupScrollCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
         entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
         entity.identifiedTiming = DIdentifiedTiming.Read;
+    }
+
+    private static addVulnerableDeathExplosion(entity: DEntity) {
+        entity.selfTraits.push({ code: REBasics.traits.DeathVulnerableElement, dataId: REData.getAttackElement("kElement_DeathExplosion").id, value: 0 });
     }
 }
 

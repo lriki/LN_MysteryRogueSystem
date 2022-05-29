@@ -205,5 +205,12 @@ export interface DBasicTraits {
 
     /** 可能であれば (通常攻撃ではなく) スキルを使用する。 */
     UseSkillForced: DTraitId;
+    
+    /**
+     * 指定の属性攻撃を受けた時に即死するか (戦闘不能ステートを付加するか)
+     * dataId: DElementId
+     * value: -
+     */
+     DeathVulnerableElement: DTraitId;
 }
 

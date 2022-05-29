@@ -20,6 +20,8 @@ import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { paramExposedTrapTriggerRate } from "../PluginParameters";
 import { UState } from "../usecases/UState";
+import { DStateId } from "../data/DState";
+import { assert } from "../Common";
 
 
 
@@ -289,7 +291,7 @@ export class SParameterEffect {
     paramId: DParameterId;
     qualifying: DParameterQualifying;
     
-    elementId: number;  // (Index of DSystem.elements)
+    elementIds: DAttackElementId[];
 
     formula: string;
 
@@ -324,7 +326,8 @@ export class SParameterEffect {
                 throw new Error();
         }
         this.paramId = data._parameterId;
-        this.elementId = data.elementId;
+        this.elementIds = data.elementIds;
+        assert(this.elementIds.length > 0);
         this.formula = data.formula;
         this.variance = data.variance;
         this._valid = true;
@@ -478,11 +481,21 @@ export class SEffectApplyer {
         // Damage
         //for (let i = 0; i < REData.parameters.length; i++) {
             //const pe = modifier.parameterEffect(i);
-        for (const pe of modifier.parameterEffects2())
-            if (pe && pe.applyType != SParameterEffectApplyType.None) {
-                if (pe.isValid) {
-                    const value = this.makeDamageValue(pe, target, result.critical);
-                    this.executeDamage(pe, target, value, result);
+        for (const paramEffect of modifier.parameterEffects2())
+            if (paramEffect && paramEffect.applyType != SParameterEffectApplyType.None) {
+                if (paramEffect.isValid) {
+                    if (paramEffect.paramId != 0) {
+                        const value = this.makeDamageValue(paramEffect, target, result.critical);
+                        this.executeDamage(paramEffect, target, value, result);
+                    }
+                }
+
+                // applyDeathVulnerable
+                // Item に対して致死爆発を適用するときなど、 Param を持っていない者に対しても処理したいので、isValid は考慮しない。
+                for (const elementId of paramEffect.elementIds) {
+                    if (target.traitsWithId(REBasics.traits.DeathVulnerableElement, elementId).length > 0) {
+                        this.addState(target, REBasics.states.dead, result);
+                    }
                 }
             }
        // }
@@ -503,6 +516,8 @@ export class SEffectApplyer {
             b.onApplyTargetEffect(cctx, effect, this._effect.fact().subject(),  this._effect.fact().item(), modifier, target, target._effectResult);
         }
         this.applyItemUserEffect(target);
+
+        
         
         target.refreshConditions();
 
@@ -530,7 +545,7 @@ export class SEffectApplyer {
             value *= target.sparam(REBasics.sparams.mdr);
         }
         if (baseValue < 0) {
-            value *= this.elemetedRecoverRate(target, paramEffect.elementId);
+            value *= this.elemetedRecoverRate(target, paramEffect);
         }
         if (baseValue < 0) {
             value *= target.sparam(REBasics.sparams.rec);
@@ -541,17 +556,20 @@ export class SEffectApplyer {
         value = this.applyVariance(value, paramEffect.variance);
         value = this.applyGuard(value, target);
         value = this.applyProficiency(value);
-        value = this.applyDamageRate(value, paramEffect.paramId, paramEffect.elementId, target);
+        value = this.applyDamageRate(value, paramEffect.paramId, target);
         value = this.applyRaceRate(value, target);
         value = Math.round(value);
         return value;
     }
 
-    private elemetedRecoverRate(target: LEntity, elementId: DAttackElementId): number {
+    private elemetedRecoverRate(target: LEntity, paramEffect: SParameterEffect): number {
         // traitsSum だと、デフォルト値が 0.0 になるため、全ての Battler にひとつの ElementedRecoveryRate を持たせておかないと回復ができなくなる。
         // 命中率と同じではあるが、ちょっとそれは面倒すぎる。
 
-        const rate = target.traitsPi(REBasics.traits.ElementedRecoveryRate, elementId);
+        let rate = 1.0;
+        for (const elementId of paramEffect.elementIds) {
+            rate *= target.traitsPi(REBasics.traits.ElementedRecoveryRate, elementId);
+        }
         return rate;
     }
 
@@ -592,13 +610,17 @@ export class SEffectApplyer {
     
     // Game_Action.prototype.calcElementRate
     private calcElementRate(paramEffect: SParameterEffect, target: LEntity): number {
-        if (paramEffect.elementId < 0) {
-            const subjectBehavior = this._effect.subject();
-            const attackElements = subjectBehavior ? subjectBehavior.attackElements() : [];
-            return this.elementsMaxRate(target, attackElements);
-        } else {
-            return target.elementRate(paramEffect.elementId);
+        let rate = 1.0;
+        for (const elementId of paramEffect.elementIds) {
+            if (elementId < 0) {
+                const subjectBehavior = this._effect.subject();
+                const attackElements = subjectBehavior ? subjectBehavior.attackElements() : [];
+                rate *= this.elementsMaxRate(target, attackElements);
+            } else {
+                rate *= target.elementRate(elementId);
+            }
         }
+        return rate;
     }
     
     // Game_Action.prototype.elementsMaxRate
@@ -636,7 +658,7 @@ export class SEffectApplyer {
         return damage * this._effect.fact().genericEffectRate();
     }
     
-    private applyDamageRate(damage: number, paramId: DParameterId, elementId: number, target: LEntity): number {
+    private applyDamageRate(damage: number, paramId: DParameterId, target: LEntity): number {
         if (damage > 0) {
             return damage * target.traitsPi(REBasics.traits.ParamDamageRate, paramId)
         }
@@ -675,10 +697,11 @@ export class SEffectApplyer {
                     };
                 }
                 const p = points[t.dataId];
-                p.value += t.value * this.getRacePointRate(p.count);
+                p.value += t.value * this.getRacePointRate(p.count);    // 印の重ね掛けに対する割合調整
                 p.count++;
             }
 
+            // 対象が持つ Race に特効割合を加算していく
             let rate = 0;
             let count = 0;
             for (const raceId of target.queryRaceIds()) {
@@ -832,6 +855,10 @@ export class SEffectApplyer {
                 throw new Error("Not implemented.");
         }
     }
+
+    // public applyDeathVulnerable(): void {
+
+    // }
     
     // Game_Action.prototype.applyItemUserEffect
     private applyItemUserEffect(target: LEntity): void {
@@ -871,12 +898,17 @@ export class SEffectApplyer {
         }
 
         if (this._rand.nextIntWithMax(100) < (chance * 100)) {
-            target.addState(effect.dataId);
-            result.makeSuccess();
+            this.addState(target, effect.dataId, result);
+        }
+    }
 
-            if (stateData.deadState) {
-                result.paramEffects2 = [];
-            }
+    private addState(target: LEntity, stateId: DStateId, result: LEffectResult) {
+        target.addState(stateId);
+        result.makeSuccess();
+
+        const stateData = REData.states[stateId];
+        if (stateData.deadState) {
+            result.clearParamEffects();
         }
     }
 

@@ -81,7 +81,6 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     expect(player1.isDestroyed()).toBe(false);          // 消滅していないこと
 });
 
-
 test("concretes.trap.Landmine.InducedExplosion", () => {
     TestEnv.newGame();
 
