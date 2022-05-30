@@ -1119,6 +1119,7 @@ export class RESetup {
                 entity.mainEmittor().effectSet.effects[0].otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(REBasics.actions.ReadActionId, entity.mainEmittor());
                 entity.addReaction(REBasics.actions.collide, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
+                entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
             case "kEntity_サンクチュアリスクロール_A":
