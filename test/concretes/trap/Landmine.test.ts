@@ -50,6 +50,10 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     expect(enemy1.isDestroyed()).toBe(true);    // 寄ってきたモンスターは爆発に巻き込まれて即死
     expect(item1.isDestroyed()).toBe(true);     // アイテムは消滅
 
+    const message = REGame.messageHistory;
+    expect(message.countIncludesText("ダメージを受けた")).toBe(1);    // Player の分のダメージ表示だけ出ている。Enemy の分は無いこと。
+    expect(message.countIncludesText("倒れた")).toBe(0);            // Enemy 及び Item に対して "倒れた" メッセージの表示は無いこと。
+
     //----------------------------------------------------------------------------------------------------
     // 端数切り上げのダメージになっているかチェック
 

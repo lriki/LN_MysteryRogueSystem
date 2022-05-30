@@ -79,7 +79,7 @@ export class LBattlerBehavior extends LBehavior {
 
     // Game_BattlerBase.prototype.clearStates
     private clearStates(): void {
-        this.ownerEntity().removeAllStates();
+        this.ownerEntity().removeAllStates(false);
     }
 
     // Game_BattlerBase.prototype.isGuard 

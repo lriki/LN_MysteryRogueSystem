@@ -131,7 +131,7 @@
     "光",
     "闇",
     "爆発##kElement_Explosion",
-    ""
+    "致死爆発##kElement_DeathExplosion"
   ],
   "equipTypes": [
     "",

@@ -347,7 +347,7 @@ export class LEntity extends LObject
     private clearInstance(): void {
         this.removeAllBehaviors();
         //this.removeAllAbilities();    // TODO: assert するのでコメントアウト
-        this.removeAllStates();
+        this.removeAllStates(false);
     }
 
     protected onRemoveChild(obj: LObject): void {
@@ -579,7 +579,7 @@ export class LEntity extends LObject
             // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
             if (dead && hp != 0) {
                 hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp));
-                this.removeAllStates();
+                this.removeAllStates(true);
             }
         }
 
@@ -592,9 +592,11 @@ export class LEntity extends LObject
         // refresh 後、HP が 0 なら DeadState を付加する
         if (this.idealParam(REBasics.params.hp) !== 0) {
             if (this.actualParam(REBasics.params.hp) === 0) {
-                this.addState(REBasics.states.dead, false);
+                if (!this.isDeathStateAffected()) {
+                    this.addState(REBasics.states.dead, false);
+                }
             } else {
-                if (this.isStateAffected(REBasics.states.dead)) {   // removeState() はけっこういろいろやるので、不要なら実行しない
+                if (this.isDeathStateAffected()) {   // removeState() はけっこういろいろやるので、不要なら実行しない
                     this.removeState(REBasics.states.dead);
                 }
             }
@@ -927,12 +929,18 @@ export class LEntity extends LObject
     }
 
     /** 全ての State を除外します。 */
-    public removeAllStates(): void {
-        this.states().forEach(s => {
-            s.clearParent();
-            s.onDetached(this);
-        });
-        this._states = [];
+    public removeAllStates(withoutDeadStates: boolean): void {
+        if (withoutDeadStates) {
+            const removes = this.states().filter(s => !s.isDeathState).map(s => s.stateDataId());
+            this.removeStates(removes);
+        }
+        else {
+            this.states().forEach(s => {
+                s.clearParent();
+                s.onDetached(this);
+            });
+            this._states = [];
+        }
         this._needVisualRefresh = true;
     }
 
@@ -964,10 +972,9 @@ export class LEntity extends LObject
         return this.isStateAffected(REData.system.states.seal);
     }
 
-
     // Game_BattlerBase.prototype.isDeathStateAffected
-    isDeathStateAffected(): boolean {
-        return !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);
+    public isDeathStateAffected(): boolean {
+        return !!this.states().find(s => s.isDeathState);
     }
 
     public removeDeadStates(): void {

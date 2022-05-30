@@ -209,7 +209,7 @@ export interface DBasicTraits {
     /**
      * 指定の属性攻撃を受けた時に即死するか (戦闘不能ステートを付加するか)
      * dataId: DElementId
-     * value: -
+     * value: 付加する DStateId
      */
      DeathVulnerableElement: DTraitId;
 }

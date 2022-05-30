@@ -7,6 +7,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "../behaviors/LBehavior";
 import { DParameterId } from "ts/re/data/DParameter";
+import { REBasics } from "ts/re/data/REBasics";
 
 export type LStateId = LObjectId;
 
@@ -280,6 +281,11 @@ export class LState extends LObject {
 
     public stateData(): DState {
         return REData.states[this._stateId];
+    }
+
+    public get isDeathState(): boolean {
+        const data = this.stateData();
+        return data.id == REBasics.states.dead || data.deadState;
     }
 
     public stateEffect(): DStateEffect {

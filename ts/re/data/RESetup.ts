@@ -167,6 +167,8 @@ export class RESetup {
                 break;
             case "kEntity_Gold_A":
                 this.setupItemCommon(entity);
+                entity.addReaction(REBasics.actions.collide, entity.mainEmittor());
+                //entity.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.mainEmittor()));
                 break;
             case "kEntity_スピードドラッグ_A": {
                 const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
@@ -1131,10 +1133,6 @@ export class RESetup {
                 entity.addReaction(REBasics.actions.ReadActionId, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
-            case "kEntity_Gold_A":
-                entity.addReaction(REBasics.actions.collide, entity.mainEmittor());
-                //entity.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.mainEmittor()));
-                break;
             case "kEntity_投擲反射石_A":
                 entity.selfTraits.push({code: REBasics.traits.PhysicalProjectileReflector, dataId: 0, value: 0});
                 break;
@@ -1368,7 +1366,7 @@ export class RESetup {
 
     public static setupEnemy(entity: DEntity): void {
         const data = entity.enemyData();
-        data.traits.push({ code: REBasics.traits.DeathVulnerableElement, dataId: REData.getAttackElement("kElement_DeathExplosion").id, value: 0 });
+        data.traits.push({ code: REBasics.traits.DeathVulnerableElement, dataId: REData.getAttackElement("kElement_DeathExplosion").id, value: REData.getState("kState_System_ExplosionDeath").id });
         switch (entity.entity.key) {
             case "kEnemy_ブラストミミックA":
                 entity.entity.behaviors.push({name: "SelfExplosion"});
@@ -1401,6 +1399,9 @@ export class RESetup {
         switch (data.key) {
             case "kState_System_ItemStanding":
                 data.effect.behaviors.push({ name: "LItemStandingBehavior" });
+                break;
+            case "kState_System_ExplosionDeath":
+                data.deadState = true;
                 break;
             case "kState_睡眠":
                 data.idleSequel = REBasics.sequels.asleep;
@@ -1628,7 +1629,7 @@ export class RESetup {
     }
 
     private static addVulnerableDeathExplosion(entity: DEntity) {
-        entity.selfTraits.push({ code: REBasics.traits.DeathVulnerableElement, dataId: REData.getAttackElement("kElement_DeathExplosion").id, value: 0 });
+        entity.selfTraits.push({ code: REBasics.traits.DeathVulnerableElement, dataId: REData.getAttackElement("kElement_DeathExplosion").id, value: REData.getState("kState_System_ExplosionDeath").id });
     }
 }
 

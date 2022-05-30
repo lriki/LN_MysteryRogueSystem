@@ -493,8 +493,8 @@ export class SEffectApplyer {
                 // applyDeathVulnerable
                 // Item に対して致死爆発を適用するときなど、 Param を持っていない者に対しても処理したいので、isValid は考慮しない。
                 for (const elementId of paramEffect.elementIds) {
-                    if (target.traitsWithId(REBasics.traits.DeathVulnerableElement, elementId).length > 0) {
-                        this.addState(target, REBasics.states.dead, result);
+                    for (const trait of target.traitsWithId(REBasics.traits.DeathVulnerableElement, elementId)) {
+                        this.addState(target, trait.value, result);
                     }
                 }
             }
