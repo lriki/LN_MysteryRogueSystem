@@ -152,6 +152,11 @@ export interface DCounterAction {
     emitSelf: boolean;
 }
 
+export interface DRange {
+    minValue: number;
+    maxValue: number;
+}
+
 /**
  * [2021/6/22] Database 修正について
  * ----------
@@ -226,6 +231,12 @@ export class DEntity {
      * Index は rmmz の params とは異なるので注意。
      */
     idealParams: (number | undefined)[];
+
+    /**
+     * スタック数の初期値。
+     * Entity 生成時の DEntityCreateInfo.stackCount が指定されている場合はそちらにオーバーライドされる。
+     */
+    initialStackCount: DRange | undefined;
 
     /** この Entity が受け付ける Action のリスト */
     reactions: DReaction[];
@@ -378,7 +389,7 @@ export class DEntityCreateInfo {
     public entityId: DEntityId;
     public stateIds: DStateId[];
     public debugName: string;
-    public stackCount: number;
+    public stackCount: number | undefined;
     public override: boolean;
     public gold: number;
 
@@ -387,7 +398,7 @@ export class DEntityCreateInfo {
         this.entityId = 0;
         this.stateIds = [];
         this.debugName = "";
-        this.stackCount = 1;
+        this.stackCount = undefined;
         this.override = false;
         this.gold = 0;
     }

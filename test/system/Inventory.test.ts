@@ -83,6 +83,6 @@ test("system.Inventory.Sort", () => {
         expect(items[4]).toBe(grass1);
         expect(items[5]).toBe(grass2);
         expect(items[6]).toBe(grass3);
-        expect(2).toBe(arrow1._stackCount);
+        expect(arrow1._stackCount).toBeGreaterThan(4); // Stack 可能なものはまとめられる
     }
 });

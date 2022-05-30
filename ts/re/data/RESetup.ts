@@ -142,6 +142,7 @@ export class RESetup {
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
+                entity.initialStackCount = { minValue: 2, maxValue: 7 };
                 break;
             case "kEntity_アイアンアロー_A":
                 this.setupArrowCommon(entity);
@@ -149,6 +150,7 @@ export class RESetup {
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
+                entity.initialStackCount = { minValue: 2, maxValue: 7 };
                 break;
             case "kEntity_シルバーアロー_A":
                 this.setupArrowCommon(entity);
@@ -157,6 +159,7 @@ export class RESetup {
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.selfTraits.push({code: REBasics.traits.PenetrationItem, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
+                entity.initialStackCount = { minValue: 2, maxValue: 7 };
                 break;
             case "kEntity_毒矢_A":
                 this.setupArrowCommon(entity);
@@ -164,6 +167,7 @@ export class RESetup {
                 entity.display.stackedName = "%1本の" + entity.display.name;
                 entity.selfTraits.push({code: REBasics.traits.Stackable, dataId: 0, value: 0});
                 entity.addReaction(REBasics.actions.ShootingActionId, undefined, true);
+                entity.initialStackCount = { minValue: 2, maxValue: 7 };
                 break;
             case "kEntity_Gold_A":
                 this.setupItemCommon(entity);

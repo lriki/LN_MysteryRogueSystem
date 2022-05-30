@@ -179,7 +179,16 @@ export class SEntityFactory {
         }
 
         entity._name = createInfo.debugName;
-        entity._stackCount = createInfo.stackCount;
+
+        if (createInfo.stackCount !== undefined) {
+            entity._stackCount = createInfo.stackCount;
+        }
+        else if (entityData.initialStackCount !== undefined) {
+            entity._stackCount = REGame.world.random().nextIntWithMinMax(entityData.initialStackCount.minValue, entityData.initialStackCount.maxValue + 1);
+        }
+        else {
+            entity._stackCount = 1;
+        }
 
         // 個体識別済みチェック
         if (floorId) {

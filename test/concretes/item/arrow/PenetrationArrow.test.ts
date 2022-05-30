@@ -26,6 +26,7 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_シルバーアロー_A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
+    item1._stackCount = 1;  // 消滅のチェックをしたいので、スタック数1に調整する
     
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));

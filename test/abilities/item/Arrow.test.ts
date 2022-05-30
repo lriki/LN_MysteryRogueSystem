@@ -29,10 +29,12 @@ test("Items.Arrow", () => {
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id, [], "item1"));
     inventory.addEntity(item1);
+    const stack1 = item1._stackCount;
     
     // item2
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id, [], "item2"));
     REGame.world.transferEntity(item2, floorId, 10, 10);  // Player の足元へ
+    const stack2 = item2._stackCount;
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
@@ -49,7 +51,7 @@ test("Items.Arrow", () => {
 
     RESystem.scheduler.stepSimulation();    
 
-    expect(item1._stackCount).toBe(2);      // スタックが増えている
+    expect(item1._stackCount).toBe(stack1 + stack2);      // スタックが増えている
     expect(item2.isDestroyed()).toBeTruthy(); // item1 へスタックされ、item2 自体は消える
 
     //----------------------------------------------------------------------------------------------------
@@ -66,6 +68,6 @@ test("Items.Arrow", () => {
 
     const hp = enemy1.actualParam(REBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
-    expect(item1._stackCount).toBe(1);      // スタックが減っている
+    expect(item1._stackCount).toBe(stack1 + stack2 - 1);      // スタックが減っている
 });
 
