@@ -170,6 +170,33 @@ export class SCommandContext
         Log.postCommand("ConsumeActionToken");
     }
 
+
+    /*
+    [2022/5/28] postActivity vs postCall(メソッド直接コール) vs post(シンボル)
+    ----------
+    ### postActivity
+    - 例えば Move は 3-Way する必要はない。
+        - でも、逆に言えば今のところ、Move 以外は 3-Way する余地はある。
+    - 引数は any を使う必要がある。
+    
+    ### postCall(メソッド直接コール)
+    - 引数を柔軟に決められる。TurnEnd など、フレームワークで決められたタイミングを通知するために使うべき。
+
+    ### post(シンボル)
+    - 引数は any を使う必要がある。
+    - 現時点までで作ったシンボルを見ると、上記２つに統合してもよさそう。
+    - Activity から別の Activity を投げるのは OK（ゲイズのあやつりなど）なので、シンボル使う意味も薄くなってきてる。
+    - 必要そうなのは test 系。つまり、複数の Activity から使いたい共通のハンドシェイク。
+        - test 系の統合は難しい。例えば今は testPickOutItem でアイテムをその場から取り出せるかをチェックするが、
+          統合するなら Reaction 側で取り出す系の Activity 全てに反応しなければならない。
+          当然ながら、拡張性が乏しくなる。
+            - 今の 聖域の巻物の onActivityPreReaction も危険。
+        - onWalkedOnTopAction も共通処理か。Move や Fall など、地面上を移動したときの共通処理。
+
+    ### SActivityContext にシンボルも混ぜてあげる案
+    
+
+    */
     public postActivity(srcActivity: LActivity, withPreprocess: boolean = true): SActivityContext {
 
         let activity = srcActivity;
