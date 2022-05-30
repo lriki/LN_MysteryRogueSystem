@@ -69,7 +69,7 @@ test("Item.DropAndDestroy", () => {
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 床にアイテムを敷き詰める
-    const ox = 7//10;
+    const ox = 12//10;
     const oy = 2//5;
     for (let y = 0; y < 7; y++) {
         for (let x = 0; x < 7; x++) {

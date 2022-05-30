@@ -59,6 +59,9 @@ export var paramDefaultVisibiltyLength = 6;
 export var paramRandomMapPaddingX = getNumber("RandomMapPaddingX", 8);
 export var paramRandomMapPaddingY = getNumber("RandomMapPaddingY", 6);
 
+// 投げた時の飛距離
+export var paramThrowingDistance = 10;
+
 
 //Maximum number of items in the map
 

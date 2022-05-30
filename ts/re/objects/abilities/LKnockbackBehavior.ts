@@ -1,6 +1,6 @@
 import { SCommandResponse } from "ts/re/system/RECommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { LProjectableBehavior } from "../behaviors/activities/LProjectableBehavior";
+import { LProjectileBehavior } from "../behaviors/activities/LProjectileBehavior";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";

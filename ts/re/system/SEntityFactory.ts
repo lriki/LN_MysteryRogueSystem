@@ -18,7 +18,7 @@ import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { LEaterBehavior } from "ts/re/objects/behaviors/actors/LEaterBehavior";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
-import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
+import { LProjectileBehavior } from "ts/re/objects/behaviors/activities/LProjectileBehavior";
 import { LSurvivorBehavior } from "ts/re/objects/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
 import { LSanctuaryBehavior } from "ts/re/objects/behaviors/LSanctuaryBehavior";
@@ -58,7 +58,7 @@ export class SEntityFactory {
 
     private static setupCommon(e: LEntity): void {
         e.addBehavior(LCommonBehavior);
-        e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LProjectileBehavior);
         e.addBehavior(LItemBehavior);
     }
 
@@ -142,7 +142,7 @@ export class SEntityFactory {
     // }
 
     public static buildEntryPoint(e: LEntity): void {
-        e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LProjectileBehavior);
         e.addBehavior(LEntryPointBehavior);
     }
 
@@ -154,7 +154,7 @@ export class SEntityFactory {
     // }
 
     public static buildExitPoint(e: LEntity): void {
-        e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LProjectileBehavior);
         e.addBehavior(LExitPointBehavior);
     }
 
@@ -165,7 +165,7 @@ export class SEntityFactory {
     // }
 
     public static buildOrnament(e: LEntity, prefab: DPrefab): void {
-        e.addBehavior(LProjectableBehavior);
+        e.addBehavior(LProjectileBehavior);
     }
 
     public static newEntity(createInfo: DEntityCreateInfo, floorId?: LFloorId): LEntity {

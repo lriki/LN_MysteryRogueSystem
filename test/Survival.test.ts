@@ -6,7 +6,7 @@ import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
+import { LProjectileBehavior } from "ts/re/objects/behaviors/activities/LProjectileBehavior";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REData } from "ts/re/data/REData";
@@ -82,7 +82,7 @@ test("Survival.FP", () => {
     
     // UT薬草を Player へ向かって吹き飛ばす
     const subject = new SEffectSubject(player1); // 適当に
-    LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, item2, subject, 4, 5);
+    LProjectileBehavior.startMoveAsProjectile(RESystem.commandContext, item2, subject, 4, 5);
 
     // Player は何もしない (FP は 1 減る)
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());

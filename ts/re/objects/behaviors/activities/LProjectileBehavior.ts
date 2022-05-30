@@ -17,6 +17,7 @@ import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEffectHitType, DEffectSet } from "ts/re/data/DEffect";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { SActionHitTest } from "ts/re/system/SActionHitTest";
+import { paramThrowingDistance } from "ts/re/PluginParameters";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -29,7 +30,7 @@ import { SActionHitTest } from "ts/re/system/SActionHitTest";
  * - 壁に当たって落下することができる。
  */
 @RESerializable
-export class LProjectableBehavior extends LBehavior {
+export class LProjectileBehavior extends LBehavior {
     
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
@@ -39,7 +40,7 @@ export class LProjectableBehavior extends LBehavior {
     private _penetration: boolean = false;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LProjectableBehavior);
+        const b = REGame.world.spawn(LProjectileBehavior);
         b.blowDirection = this.blowDirection;
         b.blowMoveCount = this.blowMoveCount;
         return b
@@ -47,7 +48,7 @@ export class LProjectableBehavior extends LBehavior {
 
     // こちらはアイテムが投げられたとき。
     public static startMoveAsProjectile(cctx: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, distance: number): void {
-        const common = entity.findEntityBehavior(LProjectableBehavior);
+        const common = entity.findEntityBehavior(LProjectileBehavior);
         assert(common);
 
         // 普通のアイテムは吹き飛ばし扱いで移動開始
@@ -73,7 +74,7 @@ export class LProjectableBehavior extends LBehavior {
     
     // こちらは飛び道具効果のあるスキル（ブレスや魔法弾）
     public static startMoveAsEffectProjectile(cctx: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEffectSet): void {
-        const common = entity.findEntityBehavior(LProjectableBehavior);
+        const common = entity.findEntityBehavior(LProjectileBehavior);
         assert(common);
 
         common._effectSet = effectSet;
@@ -100,40 +101,6 @@ export class LProjectableBehavior extends LBehavior {
     onQueryReactions(actions: DActionId[]): void {
         actions.push(REBasics.actions.ThrowActionId);
     }
-
-    // onActivity(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
-        
-    //     if (activity.actionId() == REBasics.actions.collide) {
-            
-    //         if (this._effectSet) {
-    //             // スキルや魔法弾
-
-    //             const target = activity.objects2()[0];
-    //             const subject = activity.subject();
-
-    //             cctx.postDestroy(self);
-    //             //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
-                
-    //             const animationId = 1;  // TODO:
-
-    //             const effectSubject = new SEffectorFact(subject, this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
-    //             const effectContext = new SEffectContext(effectSubject, cctx.random());
-        
-    //             cctx.postAnimation(target, animationId, true);
-        
-    //             // アニメーションを Wait してから効果を発動したいので、ここでは post が必要。
-    //             cctx.postCall(() => {
-    //                 effectContext.applyWithWorth(cctx, [target]);
-    //             });
-                
-    //             return SCommandResponse.Handled;
-    //         }
-            
-    //     }
-
-    //     return SCommandResponse.Pass;
-    // }
-
     
     // 投げられた
     [onThrowReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
@@ -143,7 +110,7 @@ export class LProjectableBehavior extends LBehavior {
         REGame.map.appearEntity(self, self.mx, self.my, DBlockLayerKind.Projectile);
 
 
-        LProjectableBehavior.startMoveAsProjectile(cctx, self, args.subject, args.sender.dir, 5);
+        LProjectileBehavior.startMoveAsProjectile(cctx, self, args.subject, args.sender.dir, paramThrowingDistance);
 
         
         return SCommandResponse.Pass;
@@ -153,7 +120,7 @@ export class LProjectableBehavior extends LBehavior {
     [onMoveAsProjectile](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const self = args.self;
         
-        const common = self.findEntityBehavior(LProjectableBehavior);
+        const common = self.findEntityBehavior(LProjectileBehavior);
         assert(common);
         assert(this.blowDirection != 0);
         

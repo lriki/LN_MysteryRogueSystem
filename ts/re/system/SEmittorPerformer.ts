@@ -2,7 +2,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope, DEffectSet } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
-import { LProjectableBehavior } from "ts/re/objects/behaviors/activities/LProjectableBehavior";
+import { LProjectileBehavior } from "ts/re/objects/behaviors/activities/LProjectileBehavior";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { onAttackReaction } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -477,7 +477,7 @@ export class SEmittorPerformer {
             actualEffectSet = this._projectilePriorityEffectSet;
         }
 
-        LProjectableBehavior.startMoveAsEffectProjectile(cctx, bullet, new SEffectSubject(performer), dir, emittor.scope.length, actualEffectSet);
+        LProjectileBehavior.startMoveAsEffectProjectile(cctx, bullet, new SEffectSubject(performer), dir, emittor.scope.length, actualEffectSet);
     }
 
     private applyEffect(cctx: SCommandContext, performer: LEntity, emittor: DEmittor, targets: LEntity[], skillId: DSkillId, itemEntity: LEntity | undefined) {

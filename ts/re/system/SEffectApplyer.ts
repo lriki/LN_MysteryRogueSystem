@@ -5,7 +5,7 @@ import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DSpecialEffect, DSkill } from "../data/DSkill";
 import { LandExitResult, REData } from "../data/REData";
-import { LProjectableBehavior } from "../objects/behaviors/activities/LProjectableBehavior";
+import { LProjectileBehavior } from "../objects/behaviors/activities/LProjectileBehavior";
 import { LBattlerBehavior } from "../objects/behaviors/LBattlerBehavior";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { LEntity } from "../objects/LEntity";
@@ -18,7 +18,7 @@ import { UTransfer } from "../usecases/UTransfer";
 import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
-import { paramExposedTrapTriggerRate } from "../PluginParameters";
+import { paramExposedTrapTriggerRate, paramThrowingDistance } from "../PluginParameters";
 import { UState } from "../usecases/UState";
 import { DStateId } from "../data/DState";
 import { assert } from "../Common";
@@ -842,7 +842,7 @@ export class SEffectApplyer {
         switch (effect.key) {
             case "kSystemEffect_ふきとばし":
                 const subject = this._effect.subject();
-                LProjectableBehavior.startMoveAsProjectile(cctx, targetEntity, new SEffectSubject(subject), this._effect.fact().direction(), 10);
+                LProjectileBehavior.startMoveAsProjectile(cctx, targetEntity, new SEffectSubject(subject), this._effect.fact().direction(), paramThrowingDistance);
                 break;
             case "kSystemEffect_脱出":
                 cctx.postSequel(targetEntity, REBasics.sequels.escape);
