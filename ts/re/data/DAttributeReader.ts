@@ -87,7 +87,7 @@ export interface RmmzSpawnerAttribute {
 
     troopId: DTroopId;
 
-    stackCount: number;
+    stackCount: number | undefined;
 
     override: boolean;
 
@@ -226,7 +226,7 @@ export class DAnnotationReader {
             entity: rawData.entity ? (rawData.entity ?? "") : (rawData.data ?? ""),
             states: rawData.states ?? [],
             troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
-            stackCount: rawData.stack ?? 1,
+            stackCount: rawData.stack,
             override: rawData.override ?? false,
             overrideEvent: rawData.overrideEvent ?? false,
             keeper: rawData.keeper ?? false,
