@@ -2,13 +2,13 @@ import { tr } from "ts/re/Common";
 import { SWarehouseWithdrawDialog } from "ts/re/system/dialogs/SWarehouseWithdrawDialog";
 import { LEntity } from "ts/re/objects/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
-import { VItemListDialogBase } from "./VItemListDialogBase";
+import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 
 export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     private _model: SWarehouseWithdrawDialog;
 
     public constructor(model: SWarehouseWithdrawDialog) {
-        super(model.inventory, model);
+        super(model.inventory, model, VItemListMode.Use);
         this._model = model;
         this.itemListWindow.multipleSelectionEnabled = true;
     }

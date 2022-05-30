@@ -7,17 +7,24 @@ import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 
+export enum VItemListMode {
+    Use,
+    Selection,
+}
+
 export class VItemListDialogBase extends VDialog {
     private _inventory: LInventoryBehavior;
     private _itemListWindow: VItemListWindow;
     private _commandWindow: VFlexCommandWindow;
+    private _mode: VItemListMode;
 
     private _itemsParPage = 12;
 
 
-    public constructor(inventory: LInventoryBehavior, model: SDialog) {
+    public constructor(inventory: LInventoryBehavior, model: SDialog, mode: VItemListMode) {
         super(model);
         this._inventory = inventory;
+        this._mode = mode;
 
         
         
@@ -62,6 +69,10 @@ export class VItemListDialogBase extends VDialog {
     onUpdate() {
     }
 
+    protected onSelectionSubmit(): void {
+
+    }
+
     protected onMakeCommandList(window: VFlexCommandWindow): void {
         if (!this.itemListWindow.isMultipleSelecting()) {
             window.addSystemCommand(tr2("説明"), "details", () => this.handleDetails());
@@ -76,12 +87,21 @@ export class VItemListDialogBase extends VDialog {
     }
 
     private handleItemSubmit(): void {
-        if (this._itemListWindow && this._commandWindow) {
-            this._commandWindow.clear();
-            this.onMakeCommandList(this._commandWindow);
-            this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
-            this._commandWindow.fitHeight();
-            this.activateCommandWindow();
+        if (this._mode == VItemListMode.Use) {
+            if (this._itemListWindow && this._commandWindow) {
+                this._commandWindow.clear();
+                this.onMakeCommandList(this._commandWindow);
+                this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
+                this._commandWindow.fitHeight();
+                this.activateCommandWindow();
+            }
+        }
+        else if (this._mode == VItemListMode.Selection) {
+            this.onSelectionSubmit();
+            this.submit();
+        }
+        else {
+            throw new Error("Unreachable.");
         }
     }
         

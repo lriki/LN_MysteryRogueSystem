@@ -1,5 +1,5 @@
 
-import { SItemListDialog, SItemListMode } from "ts/re/system/dialogs/SItemListDialog";
+import { SItemListDialog } from "ts/re/system/dialogs/SItemListDialog";
 import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
@@ -45,7 +45,7 @@ export class VMainMenuDialog extends VDialog {
         const entity = this._model.entity();
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (inventory) {
-            this.openSubDialog(new SItemListDialog(entity, inventory, SItemListMode.Use), d => {
+            this.openSubDialog(new SItemListDialog(entity, inventory), d => {
                 //if (d.isSubmitted()) this.submit();
                 return false;
             });

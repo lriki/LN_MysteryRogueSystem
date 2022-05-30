@@ -4,7 +4,7 @@ import { LBehaviorId, LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
 import { SDialog } from "../SDialog";
 
-export class SItemListDialog extends SDialog {
+export class SItemSelectionDialog extends SDialog {
     private _actorEntityId: LEntityId;
     private _inventoryBehaviorId: LBehaviorId;
     private _selectedEntity: LEntity | undefined;

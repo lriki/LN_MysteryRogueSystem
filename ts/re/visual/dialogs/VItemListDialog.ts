@@ -1,6 +1,6 @@
 import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
-import { SItemListDialog, SItemListMode } from "ts/re/system/dialogs/SItemListDialog";
+import { SItemListDialog } from "ts/re/system/dialogs/SItemListDialog";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -16,8 +16,9 @@ import { assert, tr2 } from "ts/re/Common";
 import { LTileShape } from "ts/re/objects/LBlock";
 import { SDetailsDialog } from "ts/re/system/dialogs/SDetailsDialog";
 import { UAction } from "ts/re/usecases/UAction";
-import { VItemListDialogBase } from "./VItemListDialogBase";
+import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { UInventory } from "ts/re/usecases/UInventory";
+import { SItemSelectionDialog } from "ts/re/system/dialogs/SItemSelectionDialog";
 
 export class VItemListDialog extends VItemListDialogBase {
     private _model: SItemListDialog;
@@ -35,7 +36,7 @@ export class VItemListDialog extends VItemListDialogBase {
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
     constructor(model: SItemListDialog) {
-        super(model.inventory(), model);
+        super(model.inventory(), model, VItemListMode.Use);
         this._model = model;
 
         
@@ -74,12 +75,10 @@ export class VItemListDialog extends VItemListDialogBase {
     }
     
     onUpdate() {
-        if (this._model.mode() == SItemListMode.Use) {
-            if (Input.isTriggered("pagedown")) {
-                UInventory.sort(this._model.inventory());
-                this.itemListWindow.refreshItems();
-                this.itemListWindow.playCursorSound();
-            }
+        if (Input.isTriggered("pagedown")) {
+            UInventory.sort(this._model.inventory());
+            this.itemListWindow.refreshItems();
+            this.itemListWindow.playCursorSound();
         }
     }
 
@@ -116,8 +115,9 @@ export class VItemListDialog extends VItemListDialogBase {
         if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
             // 対象アイテムの選択が必要
             
-            const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
-            this.openSubDialog(model, (result: SItemListDialog) => {
+            const model = new SItemSelectionDialog(this._model.entity(), this._model.inventory());
+            this.openSubDialog(model, (result: SItemSelectionDialog) => {
+                console.log("openSubDialog result", result);
                 if (result.isSubmitted) {
                     const item = model.selectedEntity();
                     assert(item);
@@ -155,7 +155,7 @@ export class VItemListDialog extends VItemListDialogBase {
     private handlePeek(): void {
         const itemEntity = this.itemListWindow.selectedItem();
         const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SItemListDialog(this._model.entity(), inventory, SItemListMode.Selection), (result: SItemListDialog) => {
+        this.openSubDialog(new SItemSelectionDialog(this._model.entity(), inventory), (result: SItemSelectionDialog) => {
             //this.submit();
             return false;
         });
@@ -163,8 +163,8 @@ export class VItemListDialog extends VItemListDialogBase {
 
     private handlePutIn(): void {
         const storage = this.itemListWindow.selectedItem();
-        const model = new SItemListDialog(this._model.entity(), this._model.inventory(), SItemListMode.Selection);
-        this.openSubDialog(model, (result: SItemListDialog) => {
+        const model = new SItemSelectionDialog(this._model.entity(), this._model.inventory());
+        this.openSubDialog(model, (result: SItemSelectionDialog) => {
             const item = model.selectedEntity();
             assert(item);
             const activity = LActivity.makePutIn(this._model.entity(), storage, item);
