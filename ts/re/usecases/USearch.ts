@@ -4,6 +4,8 @@ import { DEffectFieldScope } from "../data/DEffect";
 import { DStateRestriction } from "../data/DState";
 import { REBasics } from "../data/REBasics";
 import { FBlockComponent } from "../floorgen/FMapData";
+import { LEntryPointBehavior } from "../objects/behaviors/LEntryPointBehavior";
+import { LExitPointBehavior } from "../objects/behaviors/LExitPointBehavior";
 import { LItemBehavior } from "../objects/behaviors/LItemBehavior";
 import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
@@ -83,7 +85,11 @@ export class USearch {
         // Trap は対象勢力を持ち、その勢力は拾うことはできない。
         if (entity.findEntityBehavior(LTrapBehavior)) return false;
 
-        return true;
+        // 階段
+        if (entity.findEntityBehavior(LExitPointBehavior)) return false;
+        if (entity.findEntityBehavior(LEntryPointBehavior)) return false;
+
+        return !!entity.findEntityBehavior(LItemBehavior);
     }
 
     /**

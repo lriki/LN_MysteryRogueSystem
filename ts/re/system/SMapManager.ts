@@ -32,10 +32,16 @@ export class SMapManager {
     private _enemySpanwRate: number = 10;
     private _enemySpawnCount: number = 0;   // TODO: これは Ojbect 側に持って行かないとまずいかも
     private _needRefreshVisual: boolean = false;
+    private _exitPoint: LEntity | undefined;
 
     constructor() {
         this._map = REGame.map;
         this._enemySpawnCount = this._enemySpanwRate;
+    }
+
+    public get exitPoint(): LEntity {
+        assert(this._exitPoint);
+        return this._exitPoint;
     }
 
     public setMap(map: LMap): void {
@@ -80,10 +86,8 @@ export class SMapManager {
                 });
                 assert(prefab);
 
-
-                const entity = SEntityFactory.newBasicExitPoint();
-                
-                REGame.world.transferEntity(entity, floorId, exitPoint.mx(), exitPoint.my());
+                this._exitPoint = SEntityFactory.newBasicExitPoint();
+                REGame.world.transferEntity(this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
             }
         }
         

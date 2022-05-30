@@ -315,3 +315,27 @@ test("concretes.enemy.ItemThief.Issue3_Seal", () => {
     expect(enemy1.mx).toBe(11);
     expect(enemy1.my).toBe(10);
 });
+
+// 部屋に階段しかないときに、それを目指して移動してしまう問題の修正
+test("concretes.enemy.ItemThief.Issue4_IgnoreExitPoint", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    const player1 = TestEnv.setupPlayer(floorId, 15, 10);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
+    
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    REGame.world.transferEntity(enemy1, floorId, 10, 10);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    
+    //----------------------------------------------------------------------------------------------------
+    
+    // [待機]
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    expect(enemy1.mx).toBe(11);
+});
