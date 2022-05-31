@@ -55,7 +55,7 @@ export class VMainMenuDialog extends VDialog {
     private handleFeet() {
         const feetEntity = REGame.map.firstFeetEntity(this._model.entity());
         if (feetEntity) {
-            this.openSubDialog(new LFeetDialog(feetEntity), d => {
+            this.openSubDialog(new LFeetDialog(this._model.entity(), feetEntity), d => {
                 //if (d.isSubmitted()) this.submit();
                 return false;
             });

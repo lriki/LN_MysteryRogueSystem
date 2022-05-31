@@ -180,45 +180,7 @@ export class VItemListDialog extends VItemListDialogBase {
         const itemEntity = this.itemListWindow.selectedItem();
         const actorEntity = this._model.entity();
 
-        // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
-        // 実際に実行できる Action のリストができる。
-        const actions = actorEntity.queryActions();
-        const reactions = itemEntity.queryReactions();
-        const actualActions = reactions
-            .filter(actionId => actions.includes(actionId))
-            .distinct();
-
-        // コマンドカスタマイズ。
-        // ここで行うのはあくまで見た目に関係するもの。
-        // Actor や Item が性質として持っている ActionList と、実際に UI からどれを選択できるようにするかは別物なので、
-        // 例えば「Item に非表示 Action を持たせる」みたいな案があったが、それはやっぱりおかしいだろう。
-        // 操作性はタイトルとして決める。そしてタイトルごとに大きく変えるべきは View。なのでここで対応してみる。
         {
-            // [装備] [はずす] チェック
-            {
-                const equipments = actorEntity.getEntityBehavior(LEquipmentUserBehavior);
-                if (equipments.isEquipped(itemEntity))
-                    actualActions.mutableRemove(x => x == REBasics.actions.EquipActionId);   // [装備] を除く
-                else
-                    actualActions.mutableRemove(x => x == REBasics.actions.EquipOffActionId);  // [はずす] を除く
-            }
-
-            // 足元に何かあれば [置く] を [交換] にする
-            {
-                const feetEntity = REGame.map.firstFeetEntity(actorEntity);
-                if (feetEntity) {
-                    if (actualActions.mutableRemove(x => x == REBasics.actions.PutActionId)) {
-                        actualActions.push(REBasics.actions.ExchangeActionId);
-                    }
-                }
-            }
-
-            // [撃つ] があれば [投げる] を除く
-            {
-                if (actualActions.includes(REBasics.actions.ShootingActionId)) {
-                    actualActions.mutableRemove(x => x == REBasics.actions.ThrowActionId);
-                }
-            }
 
             if (itemEntity.findEntityBehavior(LStorageBehavior)) {
                 window.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
@@ -240,15 +202,7 @@ export class VItemListDialog extends VItemListDialogBase {
         }
 
 
-        const finalActions = actualActions
-            .distinct()
-            .immutableSort((a, b) => {
-                const ad = REData.actions[a];
-                const bd = REData.actions[b];
-                if (ad.priority == bd.priority) return ad.id - bd.id;
-                return bd.priority - ad.priority;   // 降順
-            });
-        for (const actionId of finalActions) {
+        for (const actionId of this._model.makeActionList(itemEntity)) {
             window.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
         }
 

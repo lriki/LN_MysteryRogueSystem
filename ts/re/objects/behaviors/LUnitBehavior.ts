@@ -543,7 +543,7 @@ export class LUnitBehavior extends LBehavior {
                 break;
             case LFeetProcess.Dialog:
                 if (targetEntity) {
-                    cctx.openDialog(self, new LFeetDialog(targetEntity), false);
+                    cctx.openDialog(self, new LFeetDialog(self, targetEntity), false);
                 }
                 break;
             case LFeetProcess.RideOnMessage:

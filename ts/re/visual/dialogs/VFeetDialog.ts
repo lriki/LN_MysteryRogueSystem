@@ -32,7 +32,7 @@ export class VFeetDialog extends VDialog {
 
         this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
 
-        const actualActions = this._model.reactions();
+        const actualActions = this._model.makeActionList();
         for (const actionId of actualActions) {
             this._commandWindow.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
         }

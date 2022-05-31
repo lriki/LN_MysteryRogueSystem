@@ -356,7 +356,7 @@ export class REDataManager {
         REBasics.actions = {
             DirectionChangeActionId: REData.addAction("DirectionChange"),
             MoveToAdjacentActionId: REData.addAction("MoveToAdjacent"),
-            PickActionId: REData.addAction("Pick"),
+            PickActionId: REData.addAction("拾う"),
             PutActionId: REData.addAction("置く"),
             ExchangeActionId: REData.addAction("交換"),
             ThrowActionId: REData.addAction("投げる"),
