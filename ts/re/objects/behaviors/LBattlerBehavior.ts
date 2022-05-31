@@ -60,7 +60,7 @@ export class LBattlerBehavior extends LBehavior {
         params.acquireParam(REBasics.params.pow);
     }
     
-    onQueryReactions(actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, actions: DActionId[]): void {
         // 敵味方を問わず、話しかけることは可能。
         actions.push(REBasics.actions.talk);
     }

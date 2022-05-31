@@ -45,7 +45,7 @@ export class LEntityId {
         return new LEntityId(0, 0);
     }
 
-    get object(): LObject {
+    public get object(): LObject {
         return REGame.world.object(this);
     }
 }

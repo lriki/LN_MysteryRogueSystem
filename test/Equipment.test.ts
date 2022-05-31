@@ -274,4 +274,27 @@ test("Equipment.IdentifyUpgradeValue", () => {
     RESystem.scheduler.stepSimulation();
 });
 
+test("Equipment.EquipReaction", () => {
+    TestEnv.newGame();
+
+    // Player
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+
+    // 装備 入手
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));
+    inventory.addEntity(weapon1);
+
+    // 盾は足元へ
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
+    REGame.world.transferEntity(shield1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // インベントリに入っているものに対してのみ、[装備] を実行できる
+    expect(weapon1.queryReactions().includes(REBasics.actions.EquipActionId)).toBeTruthy();
+    expect(shield1.queryReactions().includes(REBasics.actions.EquipActionId)).toBeFalsy();
+});
 

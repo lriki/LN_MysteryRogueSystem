@@ -6,19 +6,19 @@ import { SDialog } from "../SDialog";
 
 export class LFeetDialog extends SDialog {
     private _targetEntityId: LEntityId;
-    private _actions: DActionId[];
+    private _reactions: DActionId[];
 
     constructor(targetEntity: LEntity) {
         super();
         this._targetEntityId = targetEntity.entityId();
-        this._actions = targetEntity.queryReactions();
+        this._reactions = targetEntity.queryReactions();
     }
 
     public targetEntity(): LEntity {
         return REGame.world.entity(this._targetEntityId);
     }
 
-    public actions(): DActionId[] {
-        return this._actions;
+    public reactions(): DActionId[] {
+        return this._reactions;
     }
 }

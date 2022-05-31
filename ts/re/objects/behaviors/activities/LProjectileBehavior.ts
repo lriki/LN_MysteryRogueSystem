@@ -98,7 +98,7 @@ export class LProjectileBehavior extends LBehavior {
     }
 
     
-    onQueryReactions(actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, actions: DActionId[]): void {
         actions.push(REBasics.actions.ThrowActionId);
     }
     

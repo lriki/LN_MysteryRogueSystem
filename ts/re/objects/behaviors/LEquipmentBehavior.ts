@@ -84,7 +84,7 @@ export class LEquipmentBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEquipmentBehavior);
-        return b
+        return b;
     }
     
     onAttached(self: LEntity): void {
@@ -96,9 +96,11 @@ export class LEquipmentBehavior extends LBehavior {
         }
     }
     
-    onQueryReactions(actions: DActionId[]): void {
-        actions.push(REBasics.actions.EquipActionId);
-        actions.push(REBasics.actions.EquipOffActionId);
+    onQueryReactions(self: LEntity, actions: DActionId[]): void {
+        if (self.parentAs(LInventoryBehavior)) {
+            actions.push(REBasics.actions.EquipActionId);
+            actions.push(REBasics.actions.EquipOffActionId);
+        }
     }
     
     onOwnerRemoveFromParent(owner: LObject): void {

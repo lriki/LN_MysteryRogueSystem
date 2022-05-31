@@ -15,14 +15,14 @@ export class LEntryPointBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEntryPointBehavior);
-        return b
+        return b;
     }
 
     queryHomeLayer(): DBlockLayerKind | undefined {
         return DBlockLayerKind.Ground;
     }
 
-    onQueryReactions(actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, actions: DActionId[]): void {
         actions.splice(0);
         actions.push(REBasics.actions.BackwardFloorActionId);
     }

@@ -52,7 +52,7 @@ export class LExitPointBehavior extends LBehavior {
         return DBlockLayerKind.Ground;
     }
 
-    onQueryReactions(actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, actions: DActionId[]): void {
         actions.splice(0);
         actions.push(REBasics.actions.ForwardFloorActionId);
     }

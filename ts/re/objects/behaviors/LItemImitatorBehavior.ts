@@ -114,7 +114,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return DBlockLayerKind.Ground;
     }
     
-    onQueryReactions(actions: DActionId[]): DActionId[] {
+    onQueryReactions(self: LEntity, actions: DActionId[]): DActionId[] {
         for (const a of this.itemEntity().queryReactions()) {
             actions.push(a);
         }

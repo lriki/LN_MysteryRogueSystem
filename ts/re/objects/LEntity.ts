@@ -1228,7 +1228,7 @@ export class LEntity extends LObject
             //result = REGame.world.behavior(this._basicBehaviors[i]).onQueryReactions(result);
         //}
         for (const b of this.collectBehaviors()) {
-            b.onQueryReactions(result);
+            b.onQueryReactions(this, result);
         }
         return result;
     }

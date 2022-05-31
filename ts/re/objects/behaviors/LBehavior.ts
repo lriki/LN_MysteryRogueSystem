@@ -336,13 +336,15 @@ export abstract class LBehavior extends LObject {
      * この Behavior が Attach されている Entity に対して送信できる Action を取得する。
      * 例えばアイテムはキャラクターに "拾われる" ことができる。
      * 
-     * こちらも onQueryActions() 同様、状態に関係なくEntity が反応できる行動を返すこと。
+     * こちらも onQueryActions() 同様、基本的に状態に関係なくEntity が反応できる行動を返すこと。
      * 例えば "床に張り付いた聖域の巻物" は "拾う" ことはできないが、メニューから行動として
      * "拾う" を選択することはできるので、このメソッドは PickAction を返すべき。
      * 
+     * 状況に応じて、そもそもメニューに表示したくない Action は返さないようにしてもよい。
+     * 
      * なお "階段" Entity がこのメソッドで PickAction を返すと、階段を拾うことができてしまう。
      */
-    public onQueryReactions(actions: DActionId[]): void { }
+    public onQueryReactions(self: LEntity, actions: DActionId[]): void { }
 
     public onQueryCharacterAI(characterAIs: LCharacterAI[]): void { }
     
