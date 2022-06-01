@@ -1,31 +1,47 @@
+import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
+import { REData } from "ts/re/data/REData";
 
+export type SActivityCommandHandler = (actionId: DActionId) => void;
+export type SSystemCommandHandler = (commandId: string) => void;
 
 /**
  * UI のコマンドリストなどに表示するアクションアイテム。
  * QAction のようなもの。
  */
 export class SDialogCommand {
+    private _displayName: string;
     private _actionId: DActionId;
-    private _systemCommandName: string;
+    private _activityCommandHandler: SActivityCommandHandler | undefined;
+    private _systemCommandId: string;
+    private _systemCommandIdHandler: SSystemCommandHandler | undefined;
 
-    public static makeActivityCommand(actionId: DActionId): SDialogCommand {
-        const i = new SDialogCommand();
-        i._actionId = actionId;
-        return i;
+    public static makeActivityCommand(actionId: DActionId, handler: SActivityCommandHandler): SDialogCommand {
+        const cmd = new SDialogCommand();
+        cmd._displayName = REData.actions[actionId].displayName;
+        cmd._actionId = actionId;
+        cmd._activityCommandHandler = handler;
+        return cmd;
     }
 
-    public static makeSystemCommand(systemCommandName: string): SDialogCommand {
-        const i = new SDialogCommand();
-        i._systemCommandName = systemCommandName;
-        return i;
+    public static makeSystemCommand(displayName: string, systemCommandId: string, handler: SSystemCommandHandler): SDialogCommand {
+        const cmd = new SDialogCommand();
+        cmd._displayName = displayName;
+        cmd._systemCommandId = systemCommandId;
+        cmd._systemCommandIdHandler = handler;
+        return cmd;
     }
 
     private constructor() {
+        this._displayName = "";
         this._actionId = 0;
-        this._systemCommandName = "";
+        this._systemCommandId = "";
     }
 
+    public get displayName(): string {
+        return this._displayName;
+    }
+    
     public get isActivityCommand(): boolean {
         return this._actionId != 0;
     }
@@ -33,13 +49,23 @@ export class SDialogCommand {
     public get actionId(): DActionId {
         return this._actionId;
     }
-
-    public get isSystemCommand(): boolean {
-        return this._systemCommandName.length > 0;
+    
+    public get activityCommandHandler(): SActivityCommandHandler {
+        assert(this._activityCommandHandler);
+        return this._activityCommandHandler;
     }
 
-    public get systemCommandName(): string {
-        return this._systemCommandName;
+    public get isSystemCommand(): boolean {
+        return this._systemCommandId.length > 0;
+    }
+
+    public get systemCommandId(): string {
+        return this._systemCommandId;
+    }
+
+    public get systemCommandIdHandler(): SSystemCommandHandler {
+        assert(this._systemCommandIdHandler);
+        return this._systemCommandIdHandler;
     }
 }
 

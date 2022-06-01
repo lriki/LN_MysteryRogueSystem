@@ -117,4 +117,26 @@ export class SDialog {
     // public isCanceled(): boolean {
     //     return this._dialogResult.action == SDialogAction.Cancel;
     // }
+
+    protected openSubDialog<T extends SDialog>(dialog: T, onResult: (model: T) => boolean) {
+        dialog._resultCallbackVisual = (model: T) => {
+            const handled = onResult(model);
+            if (!handled) {
+                switch (model.resultAction) {
+                    case SDialogAction.Submit:
+                        this.submit();
+                        break;
+                    case SDialogAction.Cancel:
+                        //this.cancel();
+                        break;
+                    case SDialogAction.CloseAllSubDialogs:
+                        if (RESystem.dialogContext.dialogs().length >= 2) {
+                            this.closeAllSubDialogs();
+                        }
+                        break;
+                }
+            }
+        }
+        RESystem.dialogContext.open(dialog);
+    }
 }

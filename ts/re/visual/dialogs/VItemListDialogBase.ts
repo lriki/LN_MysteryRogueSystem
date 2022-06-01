@@ -69,6 +69,10 @@ export class VItemListDialogBase extends VDialog {
     onUpdate() {
     }
 
+    protected onSelectedItemsChanged(items: LEntity[]): void {
+
+    }
+
     protected onSelectionSubmit(): void {
 
     }
@@ -87,6 +91,8 @@ export class VItemListDialogBase extends VDialog {
     }
 
     private handleItemSubmit(): void {
+        this.onSelectedItemsChanged(this._itemListWindow.getSelectedItems());
+
         if (this._mode == VItemListMode.Use) {
             if (this._itemListWindow && this._commandWindow) {
                 this._commandWindow.clear();

@@ -20,8 +20,14 @@ import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { UInventory } from "ts/re/usecases/UInventory";
 import { SItemSelectionDialog } from "ts/re/system/dialogs/SItemSelectionDialog";
 
+enum VItemListDialogPhase {
+    ItemSelecting,
+    CommandSelection,
+}
+
 export class VItemListDialog extends VItemListDialogBase {
     private _model: SItemListDialog;
+    private _phase: VItemListDialogPhase;
     // _itemListWindow: VItemListWindow;// | undefined;
     // _commandWindow: VFlexCommandWindow | undefined;
     //_peekItemListWindow: VItemListWindow;
@@ -38,6 +44,7 @@ export class VItemListDialog extends VItemListDialogBase {
     constructor(model: SItemListDialog) {
         super(model.inventory(), model, VItemListMode.Use);
         this._model = model;
+        this._phase = VItemListDialogPhase.ItemSelecting;
 
         
         // const y = 100;
@@ -73,6 +80,17 @@ export class VItemListDialog extends VItemListDialogBase {
         // this.addWindow(this._commandWindow);
 
     }
+
+    onStart() {
+        switch (this._phase) {
+            case VItemListDialogPhase.ItemSelecting:
+                this.itemListWindow.activate();
+                break;
+            case VItemListDialogPhase.CommandSelection:
+                this.commandWindow.activate();
+                break;
+        }
+    }
     
     onUpdate() {
         if (Input.isTriggered("pagedown")) {
@@ -80,6 +98,10 @@ export class VItemListDialog extends VItemListDialogBase {
             this.itemListWindow.refreshItems();
             this.itemListWindow.playCursorSound();
         }
+    }
+
+    onSelectedItemsChanged(items: LEntity[]): void {
+        this._model.setSelectedEntity(items[0]);    // TODO: multi
     }
 
     // private handleItemOk(): void {
@@ -109,101 +131,22 @@ export class VItemListDialog extends VItemListDialogBase {
     //     }
     // }
 
-    private handleAction(actionId: DActionId): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        
-        if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
-            // 対象アイテムの選択が必要
-            
-            const model = new SItemSelectionDialog(this._model.entity(), this._model.inventory());
-            this.openSubDialog(model, (result: SItemSelectionDialog) => {
-                console.log("openSubDialog result", result);
-                if (result.isSubmitted) {
-                    const item = model.selectedEntity();
-                    assert(item);
-                    const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
-                    activity.setObjects2([item]);
-                    RESystem.dialogContext.postActivity(activity);
-                }
-                else {
-                    this.activateCommandWindow();
-                }
-                return false;
-            });
-        }
-        else {
-            const activity = (new LActivity).setup(actionId, this._model.entity(), itemEntity, this._model.entity().dir);
-            RESystem.dialogContext.postActivity(activity);
-            this.submit();
-        }
-    }
-
-    private handleShortcutSet(): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        const equipmentUser = this._model.entity().getEntityBehavior(LEquipmentUserBehavior);
-        equipmentUser.equipOnShortcut(RESystem.commandContext, itemEntity);
-        this.closeAllSubDialogs();
-    }
-
-    private handleShortcutUnset(): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        const equipmentUser = this._model.entity().getEntityBehavior(LEquipmentUserBehavior);
-        equipmentUser.equipOffShortcut(RESystem.commandContext, itemEntity);
-        this.closeAllSubDialogs();
-    }
-
-    private handlePeek(): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SItemSelectionDialog(this._model.entity(), inventory), (result: SItemSelectionDialog) => {
-            //this.submit();
-            return false;
-        });
-    }
-
-    private handlePutIn(): void {
-        const storage = this.itemListWindow.selectedItem();
-        const model = new SItemSelectionDialog(this._model.entity(), this._model.inventory());
-        this.openSubDialog(model, (result: SItemSelectionDialog) => {
-            const item = model.selectedEntity();
-            assert(item);
-            const activity = LActivity.makePutIn(this._model.entity(), storage, item);
-            RESystem.dialogContext.postActivity(activity);
-            this.submit();
-            return false;
-        });
-    }
-
     // override
     onMakeCommandList(window: VFlexCommandWindow): void {
 
         const itemEntity = this.itemListWindow.selectedItem();
         const actorEntity = this._model.entity();
 
-        {
-
-            if (itemEntity.findEntityBehavior(LStorageBehavior)) {
-                window.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
-                window.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePutIn());
+        for (const command of this._model.makeActionList(itemEntity)) {
+            if (command.isActivityCommand) {
+                window.addActionCommand(command.actionId, `act#${command.actionId}`, command.activityCommandHandler);
             }
-
-            {
-                if (itemEntity.data().shortcut) {
-                    const equipments = actorEntity.getEntityBehavior(LEquipmentUserBehavior);
-                    const shorcutItem = equipments.shortcutItem;
-                    if (shorcutItem && shorcutItem == itemEntity) {
-                        window.addSystemCommand(tr2("はずす"), "UnsetShortcutSet", x => this.handleShortcutUnset());
-                    }
-                    else {
-                        window.addSystemCommand(tr2("セット"), "SetShortcutSet", x => this.handleShortcutSet());
-                    }
-                }
+            else if (command.isSystemCommand) {
+                window.addSystemCommand(command.displayName, command.systemCommandId, command.systemCommandIdHandler);
             }
-        }
-
-
-        for (const actionId of this._model.makeActionList(itemEntity)) {
-            window.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
+            else {
+                throw new Error("Unreachable.");
+            }
         }
 
         super.onMakeCommandList(window);

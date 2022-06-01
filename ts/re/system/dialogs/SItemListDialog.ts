@@ -1,12 +1,19 @@
+import { assert, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
+import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
+import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LBehaviorId, LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
+import { UAction } from "ts/re/usecases/UAction";
+import { RESystem } from "../RESystem";
 import { SDialog } from "../SDialog";
+import { SDialogCommand } from "./SDialogCommand";
+import { SItemSelectionDialog } from "./SItemSelectionDialog";
 
 export class SItemListDialog extends SDialog {
     private _actorEntityId: LEntityId;
@@ -31,12 +38,35 @@ export class SItemListDialog extends SDialog {
         this._selectedEntity = entity;
     }
 
-    public selectedEntity(): LEntity | undefined {
+    public selectedEntity(): LEntity {
+        assert(this._selectedEntity);
         return this._selectedEntity;
     }
 
-    public makeActionList(item: LEntity): DActionId[] {
+    public makeActionList(item: LEntity): SDialogCommand[] {
         const actor = this.entity();
+        let commands: SDialogCommand[] = [];
+
+        
+        if (item.findEntityBehavior(LStorageBehavior)) {
+            commands.push(SDialogCommand.makeSystemCommand("peek", tr2("見る"), _ => this.handlePeek()));
+            commands.push(SDialogCommand.makeSystemCommand("putIn", tr2("入れる"), _ => this.handlePutIn()));
+            // window.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
+            // window.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePutIn());
+        }
+        
+        
+        if (item.data().shortcut) {
+            const equipments = actor.getEntityBehavior(LEquipmentUserBehavior);
+            const shorcutItem = equipments.shortcutItem;
+            if (shorcutItem && shorcutItem == item) {
+                commands.push(SDialogCommand.makeSystemCommand("UnsetShortcutSet", tr2("はずす"), _ => this.handleShortcutUnset()));
+            }
+            else {
+                commands.push(SDialogCommand.makeSystemCommand("SetShortcutSet", tr2("セット"), _ => this.handleShortcutSet()));
+            }
+        }
+        
         
         // itemEntity が受け取れる Action を、actor が実行できる Action でフィルタすると、
         // 実際に実行できる Action のリストができる。
@@ -79,7 +109,11 @@ export class SItemListDialog extends SDialog {
             }
         }
 
-        return SItemListDialog.normalizeActionList(actualActions);
+        commands = commands.concat(SItemListDialog.normalizeActionList(actualActions).map(a => SDialogCommand.makeActivityCommand(a, _ => this.handleAction(a))));
+
+
+
+        return commands;
     }
 
     public static normalizeActionList(actions: DActionId[]): DActionId[] {
@@ -91,5 +125,69 @@ export class SItemListDialog extends SDialog {
                 if (ad.priority == bd.priority) return ad.id - bd.id;
                 return bd.priority - ad.priority;   // 降順
             });
+    }
+
+    private handleAction(actionId: DActionId): void {
+        const itemEntity = this.selectedEntity();
+        
+        if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
+            // 対象アイテムの選択が必要
+            
+            const model = new SItemSelectionDialog(this.entity(), this.inventory());
+            this.openSubDialog(model, (result: SItemSelectionDialog) => {
+                if (result.isSubmitted) {
+                    const item = model.selectedEntity();
+                    assert(item);
+                    const activity = (new LActivity).setup(actionId, this.entity(), itemEntity, this.entity().dir);
+                    activity.setObjects2([item]);
+                    RESystem.dialogContext.postActivity(activity);
+                }
+                else {
+                    //this.activateCommandWindow();
+                }
+                return false;
+            });
+        }
+        else {
+            const activity = (new LActivity).setup(actionId, this.entity(), itemEntity, this.entity().dir);
+            RESystem.dialogContext.postActivity(activity);
+            this.submit();
+        }
+    }
+
+    private handleShortcutSet(): void {
+        const itemEntity = this.selectedEntity();
+        const equipmentUser = this.entity().getEntityBehavior(LEquipmentUserBehavior);
+        equipmentUser.equipOnShortcut(RESystem.commandContext, itemEntity);
+        this.closeAllSubDialogs();
+    }
+
+    private handleShortcutUnset(): void {
+        const itemEntity = this.selectedEntity();
+        const equipmentUser = this.entity().getEntityBehavior(LEquipmentUserBehavior);
+        equipmentUser.equipOffShortcut(RESystem.commandContext, itemEntity);
+        this.closeAllSubDialogs();
+    }
+
+    private handlePeek(): void {
+        const itemEntity = this.selectedEntity();
+        const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
+        this.openSubDialog(new SItemSelectionDialog(this.entity(), inventory), (result: SItemSelectionDialog) => {
+            //this.submit();
+            return false;
+        });
+    }
+
+    private handlePutIn(): void {
+        const storage = this.selectedEntity();
+        const model = new SItemSelectionDialog(this.entity(), this.inventory());
+        this.openSubDialog(model, (result: SItemSelectionDialog) => {
+            const item = model.selectedEntity();
+            assert(item);
+            const activity = LActivity.makePutIn(this.entity(), storage, item);
+            RESystem.dialogContext.postActivity(activity);
+            this.submit();
+            return false;
+        });
     }
 }
