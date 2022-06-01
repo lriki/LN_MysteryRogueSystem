@@ -46,7 +46,7 @@ export class UState {
      * 本当に消すべきもの・残すべきもの・追加するべきものを判断して必要な操作だけを行えるようにする。
      */
     public static resolveStates(entity: LEntity, newStates: StateAddition[], removeStateIds: DStateId[]): LState[] {
-        const entityData = entity.data();
+        const entityData = entity.data;
         const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), submatchEffectIndex: s.submatchEffectIndex(), removing: false, new: false, level: s.level() }; });
         const stateGroups: WorkStateGroup[] = REData.stateGroups.map(sg => { return { data: sg, states: [] }; });
 

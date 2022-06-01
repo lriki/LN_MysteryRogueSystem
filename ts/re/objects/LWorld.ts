@@ -92,7 +92,7 @@ export class LWorld {
     }
 
     public getFirstEntityByKey(key: string): LEntity {
-        const entity = this.findFirstEntity(x => x.data().entity.key == key);
+        const entity = this.findFirstEntity(x => x.data.entity.key == key);
         if (!entity) throw new Error(`Entity not found (${key})`);
         return entity;
     }
@@ -307,7 +307,7 @@ export class LWorld {
     public getEntityByRmmzActorId(rmmzActorId: number): LEntity {
         let actorEntity: LEntity | undefined;
         REGame.world.iterateEntity(entity => {
-            const actorData = entity.data().actor;
+            const actorData = entity.data.actor;
             if (actorData && actorData.rmmzActorId == rmmzActorId) {
                 actorEntity = entity;
                 return false;

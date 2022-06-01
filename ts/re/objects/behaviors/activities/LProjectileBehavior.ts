@@ -308,7 +308,7 @@ export class LProjectileBehavior extends LBehavior {
     private endMoving(cctx: SCommandContext, self: LEntity): void {
         this.clearKnockback();
 
-        const entityData = self.data();
+        const entityData = self.data;
 
         /*
         矢ワナは効果のオーバーライドがあるので startMoveAsEffectProjectile で開始する。

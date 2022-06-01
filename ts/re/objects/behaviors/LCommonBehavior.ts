@@ -66,7 +66,7 @@ export class LCommonBehavior extends LBehavior {
     }
 
     onEffectPerformed(self: LEntity, cctx: SCommandContext, emittor: DEmittor): SCommandResponse {
-        const data = self.data();
+        const data = self.data;
 
         if (this.reservedCounterActionIndex < 0) {
             for (const [i, act] of data.counterActions.entries()) {
@@ -85,7 +85,7 @@ export class LCommonBehavior extends LBehavior {
         // 反撃相当の処理は Scheduler の特定のタイミングではなく、コマンドチェーンが完了した時に行う。
         // こうしないと、例えば地雷が連続で誘爆していくとき、1ステップ内で繰り返し performTrapEffect() を呼び出せない。
         if (this.reservedCounterActionIndex >= 0) {
-            const data = self.data();
+            const data = self.data;
             self.iterateBehaviorsReverse(b => {
                 return b.onCounterAction(self, cctx, data.counterActions[this.reservedCounterActionIndex]) == SCommandResponse.Pass;
             });

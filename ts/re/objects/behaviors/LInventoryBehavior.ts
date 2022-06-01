@@ -212,7 +212,7 @@ export class LInventoryBehavior extends LBehavior {
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
         super.onCollectTraits(self, result);
         this.iterateItems(item => {
-            result.pushArray(item.data().charmedTraits());
+            result.pushArray(item.data.charmedTraits());
         });
     }
 
@@ -229,7 +229,7 @@ export class LInventoryBehavior extends LBehavior {
     onPreviewRejection(self: LEntity, cctx: SCommandContext, rejection: SRejectionInfo): SCommandResponse {
         let result = true;
         this.iterateItems(item => {
-            if (item.data().isTraitCharmItem) {
+            if (item.data.isTraitCharmItem) {
                 if (!item.previewRejection(cctx, rejection)) {
                     result = false;
                     return false;

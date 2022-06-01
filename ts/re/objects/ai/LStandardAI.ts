@@ -63,7 +63,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
         
 
         // 移動メイン
-        if (self.data().prefab().moveType == DPrefabMoveType.Random) {
+        if (self.data.prefab().moveType == DPrefabMoveType.Random) {
             if (this._moveDeterminer.perform(cctx, self)) {
                 return SPhaseResult.Handled;
             }

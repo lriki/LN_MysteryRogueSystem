@@ -33,7 +33,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
     }
 
     public enemyData(): DEnemy {
-        const entity = this.ownerEntity().data();
+        const entity = this.ownerEntity().data;
         assert(entity.enemy);
         return entity.enemy;
     }

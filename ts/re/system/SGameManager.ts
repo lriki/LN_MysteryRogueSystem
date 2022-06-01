@@ -114,7 +114,7 @@ export class SGameManager {
         //     firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         // }
         REGame.world.iterateEntity(x => {
-            if ( x.dataId() == REData.system.initialPartyMembers[0]) {
+            if ( x.dataId == REData.system.initialPartyMembers[0]) {
                 firstActor = x;
                 return false;
             }

@@ -165,7 +165,7 @@ export class LExperienceBehavior extends LBehavior {
 
     // Game_Actor.prototype.actor
     private actor(self: LEntity): DActor {
-        const data = self.data().actor;
+        const data = self.data.actor;
         assert(data);
         return data;
     }
@@ -181,7 +181,7 @@ export class LExperienceBehavior extends LBehavior {
     };
 
     private currentClass(self: LEntity): DClass {
-        const classId = self.data().classId;
+        const classId = self.data.classId;
         return REData.classes[classId];
     }
     

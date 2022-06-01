@@ -133,7 +133,7 @@ NOTE:
     // item が持つ paramId の増減量を計算する。
     // ステータスウィンドウの表示でも使うので、ここでは熟練度は考慮しない。
     public static calcEquipmentParam(item: LEntity, paramId: DParameterId): number {
-        const data = item.data();
+        const data = item.data;
         const equipmentData = data.equipment;
         if (equipmentData) {
             const upgrade = item.actualParam(REBasics.params.upgradeValue);
@@ -183,7 +183,7 @@ NOTE:
         super.onCollectTraits(self, result);
 
         for (const entity of this.equippedItemEntities()) {
-            for (const trait of entity.data().equippedTraits()) {
+            for (const trait of entity.data.equippedTraits()) {
                 result.push(trait);
             }
         }
@@ -197,7 +197,7 @@ NOTE:
 
             const itemEntity = activity.object();
             assert(itemEntity);
-            const equipment = itemEntity.data().equipment;
+            const equipment = itemEntity.data.equipment;
             if (equipment) {
                 // 武器、盾などの通常の装備アイテム
                 const itemPart = equipment.equipmentPart;
@@ -253,7 +253,7 @@ NOTE:
     // テスト用ユーティリティ
     public equipOnUtil(itemEntity: LEntity): void {
         this.refreshSlots();
-        const equipment = itemEntity.data().equipment;
+        const equipment = itemEntity.data.equipment;
         assert(equipment);
         const itemPart = equipment.equipmentPart;
         // let slot = this._slots.find(x => x.partId == itemPart && x.itemEntityId.isEmpty());

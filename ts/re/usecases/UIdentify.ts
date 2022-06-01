@@ -9,7 +9,7 @@ export class UIdentify {
     public static identifyByTiming(cctx: SCommandContext, actor: LEntity , target: LEntity, timing: DIdentifiedTiming, withMessage: boolean = true): void {
         if (REGame.camera.focusedEntity() != actor) return;
 
-        const data = target.data();
+        const data = target.data;
         if (data.identifiedTiming.includes(timing)) {
             this.identify(cctx, target, withMessage);
         }
@@ -25,7 +25,7 @@ export class UIdentify {
             // 名前未識別であればメッセージも表示する
             const name1 = UName.makeNameAsItem(target);
             target.setIndividualIdentified(true);
-            REGame.identifyer.identifyGlobal(target.dataId());
+            REGame.identifyer.identifyGlobal(target.dataId);
             const name2 = UName.makeNameAsItem(target);
             if (withMessage) {
                 cctx.postMessage(tr2("%1は%2だった。").format(name1, name2));

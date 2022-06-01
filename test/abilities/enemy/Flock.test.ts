@@ -21,6 +21,6 @@ test("Abilities.Enemy.Flock", () => {
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
     const entites = REGame.map.entities();
-    const enemy1 = entites.find(x => x.data().entity.key == "kEnemy_フロックウルフA");
+    const enemy1 = entites.find(x => x.data.entity.key == "kEnemy_フロックウルフA");
     expect(enemy1 != undefined).toBe(true);
 });

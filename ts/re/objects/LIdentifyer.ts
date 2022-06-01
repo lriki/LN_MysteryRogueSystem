@@ -160,8 +160,8 @@ export class LIdentifyer {
     }
 
     public resolveDescription(viewSubject: LEntity, entity: LEntity): LEntityDescription {
-        const dataId = entity.dataId();
-        const entityData = entity.data();
+        const dataId = entity.dataId;
+        const entityData = entity.data;
 
         const state = this._identificationStates[dataId];
         let individualIdentified = true;
@@ -237,7 +237,7 @@ export class LIdentifyer {
     }
 
     public checkGlobalIdentified(entity: LEntity): boolean {
-        const dataId = entity.dataId();
+        const dataId = entity.dataId;
         const state = this._identificationStates[dataId];
         if (!state)
             return true;

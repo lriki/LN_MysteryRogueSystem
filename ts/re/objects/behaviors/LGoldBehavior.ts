@@ -45,7 +45,7 @@ export class LGoldBehavior extends LBehavior {
     }
 
     queryDisplayName(): LNameView | undefined {
-        const data = this.ownerEntity().data();
+        const data = this.ownerEntity().data;
         return {
             name: this.gold().toString() + DTextManager.currencyUnit,
             iconIndex: data.display.iconIndex,

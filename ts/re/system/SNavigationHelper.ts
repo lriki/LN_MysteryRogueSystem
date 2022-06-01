@@ -97,7 +97,7 @@ export class SNavigationHelper {
     }
 
     private static isItem(entity: LEntity): boolean {
-        if (!!entity.data().itemData) {
+        if (!!entity.data.itemData) {
             if (!entity.findEntityBehavior(LExitPointBehavior)) {
                 return true;
             }

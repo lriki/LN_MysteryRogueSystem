@@ -39,7 +39,7 @@ export class VDetailsWindow extends Window_Base {
         let y = 0;
         this.drawTextEx(summary, 0, y, 300); y += lineHeight * 2;
 
-        this.drawTextEx(this._entity.data().description, 0, y, 300); y += lineHeight;
+        this.drawTextEx(this._entity.data.description, 0, y, 300); y += lineHeight;
 
         /*
         const lh = this.itemHeight();

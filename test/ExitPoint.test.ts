@@ -26,7 +26,7 @@ test("ExitPoint.Reactions", () => {
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
     const entites = REGame.map.entities();
-    const exitpoint = entites.find(x => x.data().entity.key == "kEntity_ExitPoint_A");
+    const exitpoint = entites.find(x => x.data.entity.key == "kEntity_ExitPoint_A");
     assert(exitpoint);
     const reactions = exitpoint.queryReactions();
     expect(reactions.length).toBe(1);

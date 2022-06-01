@@ -30,7 +30,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
-    const entityDataId = enemy1.dataId();
+    const entityDataId = enemy1.dataId;
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -44,7 +44,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.dataId()).not.toBe(entityDataId); // 種類が変わっていること
+    expect(enemy1.dataId).not.toBe(entityDataId); // 種類が変わっていること
     expect(enemy1.mx).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
 });
 
@@ -63,7 +63,7 @@ test("Items.ChangeEntityInstance.Throw", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
-    const entityDataId = enemy1.dataId();
+    const entityDataId = enemy1.dataId;
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -74,6 +74,6 @@ test("Items.ChangeEntityInstance.Throw", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    expect(enemy1.dataId()).not.toBe(entityDataId); // 種類が変わっていること
+    expect(enemy1.dataId).not.toBe(entityDataId); // 種類が変わっていること
     expect(enemy1.mx).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
 });

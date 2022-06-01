@@ -44,7 +44,7 @@ export class VUseItemSequel extends REVisualSequel {
             this._baseX = event._realX;
             this._baseY = event._realY;
 
-            const itemData = item.data();
+            const itemData = item.data;
             
             
             VHelper.setIconFrame(this._itemSprite, itemData.display.iconIndex);

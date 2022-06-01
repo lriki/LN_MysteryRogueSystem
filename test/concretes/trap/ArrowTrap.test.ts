@@ -114,7 +114,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
     const itemData2 = REData.getEntity("kEntity_ウッドアロー_A");
 
-    const item2 = REGame.map.entities().find(e => e.dataId() == itemData2.id);
+    const item2 = REGame.map.entities().find(e => e.dataId == itemData2.id);
     assert(item2);
     //expect(item2 !== undefined).toBe(true);
     expect(UMovement.checkAdjacentEntities(item2, trap1)).toBe(true);

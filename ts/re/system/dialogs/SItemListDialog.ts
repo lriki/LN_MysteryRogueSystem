@@ -55,7 +55,7 @@ export class SItemListDialog extends SDialog {
         }
         
         
-        if (item.data().shortcut) {
+        if (item.data.shortcut) {
             const equipments = actor.getEntityBehavior(LEquipmentUserBehavior);
             const shorcutItem = equipments.shortcutItem;
             if (shorcutItem && shorcutItem == item) {

@@ -129,7 +129,7 @@ export class LUnitBehavior extends LBehavior {
 
     queryCharacterFileName(): DPrefabActualImage | undefined {
         const self = this.ownerEntity();
-        const e = self.data();
+        const e = self.data;
         const p = REData.prefabs[e.prefabId];
         
         const image = { ...p.image };

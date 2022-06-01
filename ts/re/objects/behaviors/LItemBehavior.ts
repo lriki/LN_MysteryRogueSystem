@@ -67,7 +67,7 @@ export class LItemBehavior extends LBehavior {
 
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
         super.onCollectTraits(self, result);
-        for (const trait of self.data().selfTraits){
+        for (const trait of self.data.selfTraits){
             result.push(trait);
         }
     }
@@ -108,7 +108,7 @@ export class LItemBehavior extends LBehavior {
         // [振られた]
         if (activity.actionId() == REBasics.actions.WaveActionId) {
             const actor = activity.actor();
-            const reaction = self.data().getReaction(REBasics.actions.WaveActionId);
+            const reaction = self.data.getReaction(REBasics.actions.WaveActionId);
             for (const emittor of reaction.emittors()) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
                     .setItemEntity(self)
@@ -119,7 +119,7 @@ export class LItemBehavior extends LBehavior {
         else if (activity.actionId() == REBasics.actions.ReadActionId) {
             const actor = activity.actor();
             UIdentify.identifyByTiming(cctx, actor, self, DIdentifiedTiming.Read);
-            const reaction = self.data().getReaction(REBasics.actions.ReadActionId);
+            const reaction = self.data.getReaction(REBasics.actions.ReadActionId);
             for (const emittor of reaction.emittors()) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
                     .setItemEntity(self)
@@ -137,7 +137,7 @@ export class LItemBehavior extends LBehavior {
                 UIdentify.identifyByTiming(cctx, subject, reactor, DIdentifiedTiming.Eat);
 
 
-                const reaction = self.data().getReaction(REBasics.actions.EatActionId);
+                const reaction = self.data.getReaction(REBasics.actions.EatActionId);
                 for (const emittor of reaction.emittors()) {
                     SEmittorPerformer.makeWithEmitor(subject, subject, emittor)
                         .setItemEntity(self)
@@ -167,7 +167,7 @@ export class LItemBehavior extends LBehavior {
     }
 
     private applyHitEffect(cctx: SCommandContext, self: LEntity, actionId: DActionId, target: LEntity, subject: LEntity, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
-        const entityData = self.data();
+        const entityData = self.data;
         //const emittors = entityData.emittorSet.emittors(cause);
         const reaction = entityData.findReaction(actionId);
         if (reaction) {

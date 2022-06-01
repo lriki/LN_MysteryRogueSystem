@@ -27,7 +27,7 @@ export class UInventory {
                 const sb = equipmentUser.isEquipped(b) ? b.kindDataId() : b.kindDataId() + 10000;
                 if (sa == sb) {
                     // DataId も確認
-                    return a.dataId() - b.dataId();
+                    return a.dataId - b.dataId;
                 }
                 else {
                     return sa - sb;
@@ -154,7 +154,7 @@ export class UInventory {
                     // 全部確認完了
                     let price = 0;
                     for (const item of items) {
-                        price += item.data().purchasePrice;
+                        price += item.data.purchasePrice;
                         item.removeFromParent();
                         item.destroy();
                     }

@@ -226,7 +226,7 @@ export class VMainStatusWindow extends Window_Base {
             let atk = 0;
             let def = 0;
             for (const item of equipmentUser.equippedItemEntities()) {
-                const data = item.data();
+                const data = item.data;
                 assert(data.equipment);
                 atk += LEquipmentUserBehavior.calcEquipmentParam(item, REBasics.params.atk);//data.equipment.parameters[REBasics.params.atk];
                 def += LEquipmentUserBehavior.calcEquipmentParam(item, REBasics.params.def);//data.equipment.parameters[REBasics.params.def];

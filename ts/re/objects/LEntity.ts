@@ -152,10 +152,10 @@ export class LEntity extends LObject
         }
 
         // 初期識別状態
-        this._individualIdentified = (this.data().identificationDifficulty == DIdentificationDifficulty.Clear);
+        this._individualIdentified = (this.data.identificationDifficulty == DIdentificationDifficulty.Clear);
 
         this._params.clear();
-        const params = this.data().idealParams;
+        const params = this.data.idealParams;
         for (let i = 0; i < params.length; i++) {
             const value = params[i];
             if (value !== undefined) {
@@ -169,20 +169,20 @@ export class LEntity extends LObject
     //----------------------------------------
     // Object Reference Management
     
-    public dataId(): DEntityId {
+    public get dataId(): DEntityId {
         return this._entityDataId;
     }
 
-    public data(): DEntity {
+    public get data(): DEntity {
         return REData.entities[this._entityDataId];
     }
 
     public kindDataId(): DEntityKindId {
-        return this.data().entity.kindId;
+        return this.data.entity.kindId;
     }
 
     public kindData(): DEntityKind {
-        return REData.entityKinds[this.data().entity.kindId];
+        return REData.entityKinds[this.data.entity.kindId];
     }
 
     public entityId(): LEntityId {
@@ -737,7 +737,7 @@ export class LEntity extends LObject
             const v = b.queryDisplayName();
             if (v) return v;
         }
-        const data = this.data();
+        const data = this.data;
         let name = data.makeDisplayName(this._stackCount);
 
         const result: LNameView = { name: name, iconIndex: data.display.iconIndex, upgrades: 0 };
@@ -813,7 +813,7 @@ export class LEntity extends LObject
         const param = REData.parameters[paramId];
         const result: LParamMinMax = { min: param.minValue, max: param.maxValue };
         if (paramId == REBasics.params.upgradeValue) {
-            const data = this.data();
+            const data = this.data;
             result.min = data.upgradeMin;
             result.max = data.upgradeMax;
         }
@@ -830,7 +830,7 @@ export class LEntity extends LObject
     }
 
     public queryPrice(): LPriceInfo {
-        const data = this.data();
+        const data = this.data;
         const result: LPriceInfo = { sellingPrice: data.sellingPrice2, purchasePrice: data.purchasePrice };
         this.iterateBehaviorsReverse(b => {
             b.onQueryPrice(result);
@@ -840,7 +840,7 @@ export class LEntity extends LObject
     }
 
     public queryRaceIds(): readonly DRaceId[] {
-        return this.data().raceIds;
+        return this.data.raceIds;
     }
 
     //----------------------------------------
@@ -1207,7 +1207,7 @@ export class LEntity extends LObject
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
         // FIXME: 既定では拾ったり投げたりできないほうがいいかも。階段とか罠とか、間違って操作してしまう。やっぱりすべてに共通なものをここに置きたい。
-        let result: DActionId[] = this.data().reactions.map(x => x.actionId).concat(
+        let result: DActionId[] = this.data.reactions.map(x => x.actionId).concat(
         [
             //DBasics.actions.ExchangeActionId,
             REBasics.actions.ThrowActionId,
@@ -1601,7 +1601,7 @@ export class LEntity extends LObject
         if (!other.collectTraits().find(x => x.code == REBasics.traits.Stackable)) return false;
 
         // TODO: 今は矢だけなのでこれでよいが、アタッチされているAbilityなども見るべき
-        return this.dataId() == other.dataId();
+        return this.dataId == other.dataId;
     }
 
     public isStacked(): boolean {
@@ -1634,7 +1634,7 @@ export class LEntity extends LObject
     // Debug Utils
 
     public debugDisplayName(): string {
-        return `Entity:${this._name}(${this.entityId().index2()}:${this.entityId().key2()})-(${this.data().entity.key})`;
+        return `Entity:${this._name}(${this.entityId().index2()}:${this.entityId().key2()})-(${this.data.entity.key})`;
     }
 
     //----------------------------------------

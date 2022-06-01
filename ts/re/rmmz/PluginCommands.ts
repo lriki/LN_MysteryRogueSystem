@@ -116,7 +116,7 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
     if (actorKey) {
         const r = REGame.world.objects().find(x => {
             if (x instanceof LEntity) {
-                if (x.data().entity.key == actorKey) {
+                if (x.data.entity.key == actorKey) {
                     return true;
                 }
             }

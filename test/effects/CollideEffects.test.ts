@@ -87,7 +87,7 @@ test("effects.CollideEffects.Shield", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    const damage = shield1.data().equipment?.parameters[REBasics.params.def];
+    const damage = shield1.data.equipment?.parameters[REBasics.params.def];
     assert(damage);
 
     // [攻撃]

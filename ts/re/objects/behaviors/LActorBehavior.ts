@@ -54,7 +54,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     onAttached(self: LEntity): void {
         super.onAttached(self);
-        this._classId = self.data().classId;
+        this._classId = self.data.classId;
 
         //this._name = actor.name;
         //this._nickname = actor.nickname;
@@ -76,7 +76,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.actor
     actor(): DActor {
-        const entity = this.ownerEntity().data();
+        const entity = this.ownerEntity().data;
         assert(entity.actor);
         return entity.actor;
     }
@@ -128,7 +128,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
         super.onCollectTraits(self, result);
-        for (const t of self.data().selfTraits){
+        for (const t of self.data.selfTraits){
             result.push(t);
         }
         for (const t of this.currentClass().traits){

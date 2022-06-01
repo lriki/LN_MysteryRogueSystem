@@ -105,7 +105,7 @@ export class LItemImitatorBehavior extends LBehavior {
     }
     
     queryCharacterFileName(): DPrefabActualImage | undefined {
-        const e = this.itemEntity().data();
+        const e = this.itemEntity().data;
         const p = REData.prefabs[e.prefabId];
         return p.image;
     }

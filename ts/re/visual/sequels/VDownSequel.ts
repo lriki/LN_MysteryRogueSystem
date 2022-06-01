@@ -4,7 +4,7 @@ import { REVisual_Entity } from "../REVisual_Entity";
 
 export class VDownSequel extends REVisualSequel {
     onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
-        const prefab = visual.entity().data().prefab();
+        const prefab = visual.entity().data.prefab();
         const event = visual.rmmzEvent();
         const image = prefab.downImage;
         if (image) {

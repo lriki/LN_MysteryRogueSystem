@@ -12,7 +12,7 @@ export class TestUtils {
     }
 
     public static testCommonFood(item: LEntity) {
-        const data = item.data();
+        const data = item.data;
 
         // [食べる] ができる？
         expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBeTruthy();
@@ -27,7 +27,7 @@ export class TestUtils {
 
     public static testCommonGrassBegin(actor: LEntity, item: LEntity) {
         const name = UName.makeNameAsItem(item);
-        const data = item.data();
+        const data = item.data;
 
         // 未識別で仮名が付いている？
         expect(name.includes(data.display.name)).toBe(false);
@@ -56,13 +56,13 @@ export class TestUtils {
 
         // 食べられたら識別済みになる
         const name = UName.makeNameAsItem(item);
-        const data = item.data();
+        const data = item.data;
         expect(name.includes(data.display.name)).toBeTruthy();
     }
 
     public static testCommonScrollBegin(actor: LEntity, item: LEntity) {
         const name = UName.makeNameAsItem(item);
-        const data = item.data();
+        const data = item.data;
 
         // 未識別で仮名が付いている？
         expect(name.includes(data.display.name)).toBe(false);
@@ -82,7 +82,7 @@ export class TestUtils {
 
         // 読まれたら識別済みになる
         const name = UName.makeNameAsItem(item);
-        const data = item.data();
+        const data = item.data;
         expect(name.includes(data.display.name)).toBeTruthy();
     }
 

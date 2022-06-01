@@ -64,7 +64,7 @@ export class VCharacterSpriteSet {
                  }
 
                 for (let i = 0; i < items.length; i++) {
-                    const itemEntityData = items[i].data();
+                    const itemEntityData = items[i].data;
                     
                     const newImage = itemEntityData.entity.equipmentImage.name;
                     const current = (i < this._sprites.length) ? this._sprites[i].imageName : "";

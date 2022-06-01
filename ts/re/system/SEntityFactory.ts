@@ -96,7 +96,7 @@ export class SEntityFactory {
     
     public static buildItem(e: LEntity): void {
         this.setupCommon(e);
-        const entityData = e.data();
+        const entityData = e.data;
 
         if (entityData.entity.kindId == REBasics.entityKinds.WeaponKindId ||
             entityData.entity.kindId == REBasics.entityKinds.ShieldKindId) {
@@ -210,7 +210,7 @@ export class SEntityFactory {
     }
 
     public static buildEntity(entity: LEntity) {
-        const dataId = entity.dataId();
+        const dataId = entity.dataId;
         assert(dataId > 0);
         const entityData = REData.entities[dataId];
         const prefab = REData.prefabs[entityData.prefabId];

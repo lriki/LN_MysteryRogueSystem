@@ -119,7 +119,7 @@ export class UEffect {
 
     private static meetsCondition(effect: SEffect, target: LEntity): boolean {
         const data = effect.data();
-        const entityData = target.data();
+        const entityData = target.data;
 
         if (data.conditions.fallback) {
             return false;

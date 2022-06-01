@@ -12,17 +12,11 @@ export enum VItemListMode {
     Selection,
 }
 
-enum VItemListDialogPhase {
-    ItemSelecting,
-    CommandSelection,
-}
-
 export class VItemListDialogBase extends VDialog {
     private _inventory: LInventoryBehavior;
     private _itemListWindow: VItemListWindow;
     private _commandWindow: VFlexCommandWindow;
     private _mode: VItemListMode;
-    private _phase: VItemListDialogPhase;
 
     private _itemsParPage = 12;
 
@@ -31,7 +25,6 @@ export class VItemListDialogBase extends VDialog {
         super(model);
         this._inventory = inventory;
         this._mode = mode;
-        this._phase = VItemListDialogPhase.ItemSelecting;
 
         
         
@@ -43,6 +36,7 @@ export class VItemListDialogBase extends VDialog {
         this._itemListWindow.setHandler("cancel", () => this.handleItemCancel());
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
+        this.activateWindow(this._itemListWindow);
 
         // Layout
         {
@@ -72,17 +66,6 @@ export class VItemListDialogBase extends VDialog {
     onCreate() {
         this.activateItemWindow();
     }
-    
-    onStart() {
-        switch (this._phase) {
-            case VItemListDialogPhase.ItemSelecting:
-                this.itemListWindow.activate();
-                break;
-            case VItemListDialogPhase.CommandSelection:
-                this.commandWindow.activate();
-                break;
-        }
-    }
 
     onUpdate() {
     }
@@ -102,10 +85,9 @@ export class VItemListDialogBase extends VDialog {
     }
 
     protected activateCommandWindow(): void {
-        this._itemListWindow.deactivate();
         this._commandWindow.refresh();
         this._commandWindow.openness = 255;
-        this._commandWindow.activate();
+        this.activateWindow(this._commandWindow);
     }
 
     private handleItemSubmit(): void {
@@ -118,7 +100,6 @@ export class VItemListDialogBase extends VDialog {
                 this._commandWindow.setHandler("cancel", () => this.handleCommandCancel());
                 this._commandWindow.fitHeight();
                 this.activateCommandWindow();
-                this._phase = VItemListDialogPhase.CommandSelection;
             }
         }
         else if (this._mode == VItemListMode.Selection) {
@@ -136,10 +117,8 @@ export class VItemListDialogBase extends VDialog {
 
     private handleCommandCancel(): void {
         if (this._itemListWindow && this._commandWindow) {
-            this._itemListWindow.activate();
-            this._commandWindow.deactivate();
+            this.activateWindow(this._itemListWindow);
             this._commandWindow.openness = 0;
-            this._phase = VItemListDialogPhase.ItemSelecting;
         }
     }
     

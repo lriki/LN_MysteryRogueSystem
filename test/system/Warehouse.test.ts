@@ -222,7 +222,7 @@ test("system.Warehouse.Sell", () => {
     expect(inventory2.hasAnyItem()).toBeFalsy();
     expect(weapon1.isDestroyed()).toBeTruthy();
     expect(grass1.isDestroyed()).toBeTruthy();
-    expect(inventory1.gold()).toBe(weapon1.data().purchasePrice + grass1.data().purchasePrice);
+    expect(inventory1.gold()).toBe(weapon1.data.purchasePrice + grass1.data.purchasePrice);
 });
 
 test("system.Warehouse.ChangeCapacity", () => {

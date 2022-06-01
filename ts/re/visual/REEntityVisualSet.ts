@@ -144,14 +144,14 @@ export class REEntityVisualSet {
         const land = REGame.map.land2();
         for (const info of land.landData().appearanceTable.entities) {
             if (info.startFloorNumber <= floorNumber && floorNumber <= info.lastFloorNumber) {
-                if (info.spawiInfo.entityId == entity.dataId()) {
+                if (info.spawiInfo.entityId == entity.dataId) {
                     overrideEvent = info.spawiInfo.overrideEvent;
                 }
             }
         }
 
 
-        const prefab = REData.prefabs[entity.data().prefabId];
+        const prefab = REData.prefabs[entity.data.prefabId];
 
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。

@@ -86,6 +86,6 @@ test("concretes.item.EscapeScroll.Identification", () => {
     // 他の巻物が未識別であるような環境でも、脱出の巻物は名前がわかる。
     const name1 = UName.makeNameAsItem(item1);
     const name2 = UName.makeNameAsItem(item2);
-    expect(name1.includes(item1.data().display.name)).toBeTruthy();
-    expect(name2.includes(item2.data().display.name)).toBeFalsy();
+    expect(name1.includes(item1.data.display.name)).toBeTruthy();
+    expect(name2.includes(item2.data.display.name)).toBeFalsy();
 });

@@ -355,7 +355,6 @@ export class DEntity {
 
     public getReaction(actionId: DActionId): DReaction {
         const reaction = this.reactions.find(x => x.actionId == actionId);
-        console.log("getReaction", this);
         assert(reaction);
         return reaction;
     }

@@ -264,7 +264,7 @@ export class USearch {
     public static getUniqueActorByKey(key: string): LEntity {
         const entity = REGame.system.uniqueActorUnits
             .map(x => REGame.world.entity(x))
-            .find(x => x.data().entity.key == key);
+            .find(x => x.data.entity.key == key);
         if (!entity) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(key));
         return entity;
     }
@@ -276,7 +276,7 @@ export class USearch {
         else {
             const entity = REGame.system.uniqueActorUnits
                 .map(x => REGame.world.entity(x))
-                .find(x => x.data().entity.key == keyPattern);
+                .find(x => x.data.entity.key == keyPattern);
             if (!entity) throw new Error(tr2("%1は見つかりませんでした。").format(keyPattern));
             return entity;
         }

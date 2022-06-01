@@ -249,7 +249,7 @@ export class LActivity {
     }
 
     public static makePrimaryUse(subject: LEntity, object: LEntity): LActivity {
-        const reaction = object.data().reactions.find(x => x.primariyUse);
+        const reaction = object.data.reactions.find(x => x.primariyUse);
         if (reaction) {
             const a = (new LActivity()).setup(reaction.actionId, subject, object);
             return a;
