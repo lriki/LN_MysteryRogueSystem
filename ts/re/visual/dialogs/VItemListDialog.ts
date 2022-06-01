@@ -133,22 +133,8 @@ export class VItemListDialog extends VItemListDialogBase {
 
     // override
     onMakeCommandList(window: VFlexCommandWindow): void {
-
         const itemEntity = this.itemListWindow.selectedItem();
-        const actorEntity = this._model.entity();
-
-        for (const command of this._model.makeActionList(itemEntity)) {
-            if (command.isActivityCommand) {
-                window.addActionCommand(command.actionId, `act#${command.actionId}`, command.activityCommandHandler);
-            }
-            else if (command.isSystemCommand) {
-                window.addSystemCommand(command.displayName, command.systemCommandId, command.systemCommandIdHandler);
-            }
-            else {
-                throw new Error("Unreachable.");
-            }
-        }
-
+        this.commandWindow.setupFromCommandList(this._model.makeActionList(itemEntity));
         super.onMakeCommandList(window);
     }
 

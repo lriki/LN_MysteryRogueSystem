@@ -1,5 +1,6 @@
 import { DActionId } from "ts/re/data/DAction";
 import { REData } from "ts/re/data/REData";
+import { SDialogCommand } from "ts/re/system/dialogs/SDialogCommand";
 
 export type ActionCommandHandler = (actionId: DActionId) => void;
 
@@ -34,6 +35,21 @@ export class VFlexCommandWindow extends Window_Command {
         // そのためここで設定後、refresh() することでコマンドリストを再構築している。
         //this._actions = actions;
         this.refresh();
+    }
+
+    public setupFromCommandList(commands: SDialogCommand[]): void {
+        this.clear();
+        for (const command of commands) {
+            if (command.isActivityCommand) {
+                this.addActionCommand(command.actionId, `act#${command.actionId}`, command.activityCommandHandler);
+            }
+            else if (command.isSystemCommand) {
+                this.addSystemCommand(command.displayName, command.systemCommandId, command.systemCommandIdHandler);
+            }
+            else {
+                throw new Error("Unreachable.");
+            }
+        }
     }
 
     public addActionCommand(actionId: DActionId, commandId: string, handler: ActionCommandHandler): void {

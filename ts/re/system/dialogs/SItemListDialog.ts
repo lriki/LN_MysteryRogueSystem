@@ -12,6 +12,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { UAction } from "ts/re/usecases/UAction";
 import { RESystem } from "../RESystem";
 import { SDialog } from "../SDialog";
+import { SCommonCommand } from "./SCommonCommand";
 import { SDialogCommand } from "./SDialogCommand";
 import { SItemSelectionDialog } from "./SItemSelectionDialog";
 
@@ -51,8 +52,6 @@ export class SItemListDialog extends SDialog {
         if (item.findEntityBehavior(LStorageBehavior)) {
             commands.push(SDialogCommand.makeSystemCommand("peek", tr2("見る"), _ => this.handlePeek()));
             commands.push(SDialogCommand.makeSystemCommand("putIn", tr2("入れる"), _ => this.handlePutIn()));
-            // window.addSystemCommand(tr2("見る"), "peek", x => this.handlePeek());
-            // window.addSystemCommand(tr2("入れる"), "putIn", x => this.handlePutIn());
         }
         
         
@@ -129,30 +128,7 @@ export class SItemListDialog extends SDialog {
 
     private handleAction(actionId: DActionId): void {
         const itemEntity = this.selectedEntity();
-        
-        if (UAction.checkItemSelectionRequired(itemEntity, actionId)) {
-            // 対象アイテムの選択が必要
-            
-            const model = new SItemSelectionDialog(this.entity(), this.inventory());
-            this.openSubDialog(model, (result: SItemSelectionDialog) => {
-                if (result.isSubmitted) {
-                    const item = model.selectedEntity();
-                    assert(item);
-                    const activity = (new LActivity).setup(actionId, this.entity(), itemEntity, this.entity().dir);
-                    activity.setObjects2([item]);
-                    RESystem.dialogContext.postActivity(activity);
-                }
-                else {
-                    //this.activateCommandWindow();
-                }
-                return false;
-            });
-        }
-        else {
-            const activity = (new LActivity).setup(actionId, this.entity(), itemEntity, this.entity().dir);
-            RESystem.dialogContext.postActivity(activity);
-            this.submit();
-        }
+        SCommonCommand.handleAction(this, this.entity(), this.inventory(), itemEntity, actionId);
     }
 
     private handleShortcutSet(): void {

@@ -31,20 +31,7 @@ export class VFeetDialog extends VDialog {
         this.addWindow(this._entityNameWindow);
 
         this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
-
-        const actualActions = this._model.makeActionList();
-        for (const actionId of actualActions) {
-            this._commandWindow.addActionCommand(actionId, `act#${actionId}`, x => this.handleAction(x));
-        }
-        /*
-        const self = this;
-        this._commandWindow.setActionList2(this._model.actions().map(actionId => {
-            return {
-                actionId: actionId,
-                handler: (x) => self.handleAction(x),
-            };
-        }));
-        */
+        this._commandWindow.setupFromCommandList(this._model.makeActionList());
         this._commandWindow.setHandler("cancel", () => this.cancel());
         this.addWindow(this._commandWindow);
         this._commandWindow.refresh();

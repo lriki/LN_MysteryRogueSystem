@@ -118,7 +118,7 @@ export class SDialog {
     //     return this._dialogResult.action == SDialogAction.Cancel;
     // }
 
-    protected openSubDialog<T extends SDialog>(dialog: T, onResult: (model: T) => boolean) {
+    public openSubDialog<T extends SDialog>(dialog: T, onResult: (model: T) => boolean) {
         dialog._resultCallbackVisual = (model: T) => {
             const handled = onResult(model);
             if (!handled) {
@@ -139,4 +139,8 @@ export class SDialog {
         }
         RESystem.dialogContext.open(dialog);
     }
+
+
+    //------------------------------------------------------------------------------
+    
 }
