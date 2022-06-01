@@ -18,10 +18,10 @@ export class SCommonCommand {
             const model = new SItemSelectionDialog(actor, inventory);
             dialog.openSubDialog(model, (result: SItemSelectionDialog) => {
                 if (result.isSubmitted) {
-                    const item = model.selectedEntity();
-                    assert(item);
+                    const target = model.selectedEntity();
+                    assert(target);
                     const activity = (new LActivity).setup(actionId, actor, item, actor.dir);
-                    activity.setObjects2([item]);
+                    activity.setObjects2([target]);
                     RESystem.dialogContext.postActivity(activity);
                 }
                 else {

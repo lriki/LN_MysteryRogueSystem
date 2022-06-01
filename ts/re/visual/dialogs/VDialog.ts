@@ -11,6 +11,7 @@ export class VDialog {
     _destroying: boolean = false;
     _navigator: REDialogVisualNavigator | undefined;
     _windows: Window_Base[] = [];
+    private _activeWindow: Window_Base | undefined;
     //_resultCallback: DialogResultCallback | undefined;  // deprecated
     //_dialogResult: boolean = false;
 
@@ -100,7 +101,9 @@ export class VDialog {
 
     // push または Sub が pop されてアクティブになった時
     onStart() {
-
+        if (this._activeWindow) {
+            this._activeWindow.activate();
+        }
     }
 
     onUpdate() {
@@ -113,7 +116,9 @@ export class VDialog {
 
     // SubDialog が push されたとき
     onStop() {
-
+        if (this._activeWindow) {
+            this._activeWindow.deactivate();
+        }
     }
 
     onDestroy() {
@@ -128,6 +133,16 @@ export class VDialog {
         throw new Error("Not implemented.");
         //const windowLayer = SceneManager._scene._windowLayer as any;
         //windowLayer.removeChild(window);
+    }
+
+    protected activateWindow(window: Window_Base): void {
+        if (this._activeWindow) {
+            this._activeWindow.deactivate();
+        }
+        this._activeWindow = window;
+        if (this._activeWindow) {
+            this._activeWindow.activate();
+        }
     }
 
     _destroy() {

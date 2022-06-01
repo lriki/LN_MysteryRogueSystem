@@ -20,14 +20,8 @@ import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { UInventory } from "ts/re/usecases/UInventory";
 import { SItemSelectionDialog } from "ts/re/system/dialogs/SItemSelectionDialog";
 
-enum VItemListDialogPhase {
-    ItemSelecting,
-    CommandSelection,
-}
-
 export class VItemListDialog extends VItemListDialogBase {
     private _model: SItemListDialog;
-    private _phase: VItemListDialogPhase;
     // _itemListWindow: VItemListWindow;// | undefined;
     // _commandWindow: VFlexCommandWindow | undefined;
     //_peekItemListWindow: VItemListWindow;
@@ -44,7 +38,6 @@ export class VItemListDialog extends VItemListDialogBase {
     constructor(model: SItemListDialog) {
         super(model.inventory, model, VItemListMode.Use);
         this._model = model;
-        this._phase = VItemListDialogPhase.ItemSelecting;
 
         
         // const y = 100;
@@ -81,16 +74,6 @@ export class VItemListDialog extends VItemListDialogBase {
 
     }
 
-    onStart() {
-        switch (this._phase) {
-            case VItemListDialogPhase.ItemSelecting:
-                this.itemListWindow.activate();
-                break;
-            case VItemListDialogPhase.CommandSelection:
-                this.commandWindow.activate();
-                break;
-        }
-    }
     
     onUpdate() {
         if (Input.isTriggered("pagedown")) {

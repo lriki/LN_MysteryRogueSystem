@@ -33,19 +33,20 @@ export class VFeetDialog extends VDialog {
         this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, y, 200, 200));
         this._commandWindow.setupFromCommandList(this._model.makeActionList());
         this._commandWindow.setHandler("cancel", () => this.cancel());
-        this.addWindow(this._commandWindow);
         this._commandWindow.refresh();
         this._commandWindow.open();
+        this.addWindow(this._commandWindow);
+        this.activateWindow(this._commandWindow);
     }
 
-    private handleAction(actionId: DActionId) {
-        const entity = RESystem.dialogContext.causeEntity();
-        assert(entity);
+    // private handleAction(actionId: DActionId) {
+    //     const entity = RESystem.dialogContext.causeEntity();
+    //     assert(entity);
 
-        // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
-        const activity =(new LActivity).setup(actionId, entity, this._model.targetEntity(), entity.dir);
+    //     // TODO: 壺に "入れる" とかはここで actionId をチェックして実装する
+    //     const activity =(new LActivity).setup(actionId, entity, this._model.targetEntity(), entity.dir);
 
-        RESystem.dialogContext.postActivity(activity);
-        this._model.submit();
-    }
+    //     RESystem.dialogContext.postActivity(activity);
+    //     this._model.submit();
+    // }
 }
