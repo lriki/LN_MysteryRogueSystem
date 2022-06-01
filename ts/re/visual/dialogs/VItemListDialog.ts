@@ -42,7 +42,7 @@ export class VItemListDialog extends VItemListDialogBase {
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
     constructor(model: SItemListDialog) {
-        super(model.inventory(), model, VItemListMode.Use);
+        super(model.inventory, model, VItemListMode.Use);
         this._model = model;
         this._phase = VItemListDialogPhase.ItemSelecting;
 
@@ -64,7 +64,7 @@ export class VItemListDialog extends VItemListDialogBase {
         this.addWindow(this._itemListWindow);
         */
 
-        const equipmentUser = this._model.entity().findEntityBehavior(LEquipmentUserBehavior);
+        const equipmentUser = this._model.actor.findEntityBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
             this.itemListWindow.setEquipmentUser(equipmentUser);
         }
@@ -94,7 +94,7 @@ export class VItemListDialog extends VItemListDialogBase {
     
     onUpdate() {
         if (Input.isTriggered("pagedown")) {
-            UInventory.sort(this._model.inventory());
+            UInventory.sort(this._model.inventory);
             this.itemListWindow.refreshItems();
             this.itemListWindow.playCursorSound();
         }

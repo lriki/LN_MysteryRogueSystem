@@ -67,5 +67,17 @@ export class SDialogCommand {
         assert(this._systemCommandIdHandler);
         return this._systemCommandIdHandler;
     }
+
+    public execute(): void {
+        if (this._activityCommandHandler) {
+            this._activityCommandHandler(this._actionId);
+        }
+        else if (this._systemCommandIdHandler) {
+            this._systemCommandIdHandler(this._systemCommandId);
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
+    }
 }
 

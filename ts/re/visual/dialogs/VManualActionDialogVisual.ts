@@ -7,7 +7,7 @@ import { REVisual } from "../REVisual";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { SDialogContext } from "ts/re/system/SDialogContext";
-import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { SFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { UMovement } from "ts/re/usecases/UMovement";

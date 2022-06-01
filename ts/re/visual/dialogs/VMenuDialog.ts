@@ -5,7 +5,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";
-import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { SFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { tr2 } from "ts/re/Common";
 import { VMainStatusWindow } from "../windows/VMainStatusWindow";
 import { VLayout } from "../ui/VUIElement";
@@ -55,7 +55,7 @@ export class VMainMenuDialog extends VDialog {
     private handleFeet() {
         const feetEntity = REGame.map.firstFeetEntity(this._model.entity());
         if (feetEntity) {
-            this.openSubDialog(new LFeetDialog(this._model.entity(), feetEntity), d => {
+            this.openSubDialog(new SFeetDialog(this._model.entity(), feetEntity), d => {
                 //if (d.isSubmitted()) this.submit();
                 return false;
             });

@@ -11,7 +11,7 @@ import { SCommonCommand } from "./SCommonCommand";
 import { SDialogCommand } from "./SDialogCommand";
 import { SItemListDialog } from "./SItemListDialog";
 
-export class LFeetDialog extends SDialog {
+export class SFeetDialog extends SDialog {
     private _actorEntityId: LEntityId;
     private _targetEntityId: LEntityId;
 

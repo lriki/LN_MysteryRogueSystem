@@ -118,9 +118,9 @@ export class SDialog {
     //     return this._dialogResult.action == SDialogAction.Cancel;
     // }
 
-    public openSubDialog<T extends SDialog>(dialog: T, onResult: (model: T) => boolean) {
+    public openSubDialog<T extends SDialog>(dialog: T, onResult?: ((model: T) => boolean | void) | undefined) {
         dialog._resultCallbackVisual = (model: T) => {
-            const handled = onResult(model);
+            const handled = (onResult) ? onResult(model) : false;
             if (!handled) {
                 switch (model.resultAction) {
                     case SDialogAction.Submit:

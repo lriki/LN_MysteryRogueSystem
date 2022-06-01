@@ -31,7 +31,7 @@ import { USearch } from "ts/re/usecases/USearch";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { ULimitations } from "ts/re/usecases/ULimitations";
 import { LTrapBehavior } from "./LTrapBehavior";
-import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { SFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { RESystem } from "ts/re/system/RESystem";
 
 enum LFeetProcess {
@@ -543,7 +543,7 @@ export class LUnitBehavior extends LBehavior {
                 break;
             case LFeetProcess.Dialog:
                 if (targetEntity) {
-                    cctx.openDialog(self, new LFeetDialog(self, targetEntity), false);
+                    cctx.openDialog(self, new SFeetDialog(self, targetEntity), false);
                 }
                 break;
             case LFeetProcess.RideOnMessage:

@@ -27,11 +27,11 @@ export class SItemListDialog extends SDialog {
         this._inventoryBehaviorId = inventory.id();
     }
 
-    public entity(): LEntity {
+    public get actor(): LEntity {
         return REGame.world.entity(this._actorEntityId);
     }
 
-    public inventory(): LInventoryBehavior {
+    public get inventory(): LInventoryBehavior {
         return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
@@ -45,7 +45,7 @@ export class SItemListDialog extends SDialog {
     }
 
     public makeActionList(item: LEntity): SDialogCommand[] {
-        const actor = this.entity();
+        const actor = this.actor;
         let commands: SDialogCommand[] = [];
 
         
@@ -128,19 +128,19 @@ export class SItemListDialog extends SDialog {
 
     private handleAction(actionId: DActionId): void {
         const itemEntity = this.selectedEntity();
-        SCommonCommand.handleAction(this, this.entity(), this.inventory(), itemEntity, actionId);
+        SCommonCommand.handleAction(this, this.actor, this.inventory, itemEntity, actionId);
     }
 
     private handleShortcutSet(): void {
         const itemEntity = this.selectedEntity();
-        const equipmentUser = this.entity().getEntityBehavior(LEquipmentUserBehavior);
+        const equipmentUser = this.actor.getEntityBehavior(LEquipmentUserBehavior);
         equipmentUser.equipOnShortcut(RESystem.commandContext, itemEntity);
         this.closeAllSubDialogs();
     }
 
     private handleShortcutUnset(): void {
         const itemEntity = this.selectedEntity();
-        const equipmentUser = this.entity().getEntityBehavior(LEquipmentUserBehavior);
+        const equipmentUser = this.actor.getEntityBehavior(LEquipmentUserBehavior);
         equipmentUser.equipOffShortcut(RESystem.commandContext, itemEntity);
         this.closeAllSubDialogs();
     }
@@ -148,7 +148,7 @@ export class SItemListDialog extends SDialog {
     private handlePeek(): void {
         const itemEntity = this.selectedEntity();
         const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SItemSelectionDialog(this.entity(), inventory), (result: SItemSelectionDialog) => {
+        this.openSubDialog(new SItemSelectionDialog(this.actor, inventory), (result: SItemSelectionDialog) => {
             //this.submit();
             return false;
         });
@@ -156,11 +156,11 @@ export class SItemListDialog extends SDialog {
 
     private handlePutIn(): void {
         const storage = this.selectedEntity();
-        const model = new SItemSelectionDialog(this.entity(), this.inventory());
+        const model = new SItemSelectionDialog(this.actor, this.inventory);
         this.openSubDialog(model, (result: SItemSelectionDialog) => {
             const item = model.selectedEntity();
             assert(item);
-            const activity = LActivity.makePutIn(this.entity(), storage, item);
+            const activity = LActivity.makePutIn(this.actor, storage, item);
             RESystem.dialogContext.postActivity(activity);
             this.submit();
             return false;

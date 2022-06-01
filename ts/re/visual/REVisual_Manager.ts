@@ -22,7 +22,7 @@ import { VDropSequel } from "./sequels/VDropSequel";
 import { SMainMenuDialog } from "ts/re/system/dialogs/SMainMenuDialog";
 import { VMainMenuDialog } from "./dialogs/VMenuDialog";
 import { SDialogContext } from "ts/re/system/SDialogContext";
-import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { SFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { VFeetDialog } from "./dialogs/VFeetDialog";
 import { SDialog } from "ts/re/system/SDialog";
 import { SWarehouseStoreDialog } from "ts/re/system/dialogs/SWarehouseStoreDialog";
@@ -109,7 +109,7 @@ export class REVisual_Manager
             this._dialogNavigator._openDialog(new VWarehouseWithdrawDialog(model));
         else if (model instanceof SMainMenuDialog)
             this._dialogNavigator._openDialog(new VMainMenuDialog(model));
-        else if (model instanceof LFeetDialog)
+        else if (model instanceof SFeetDialog)
             this._dialogNavigator._openDialog(new VFeetDialog(model));
         else if (model instanceof SItemListDialog)
             this._dialogNavigator._openDialog(new VItemListDialog(model));

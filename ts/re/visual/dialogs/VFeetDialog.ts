@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
-import { LFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
+import { SFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
 import { RESystem } from "ts/re/system/RESystem";
 import { VDialog } from "./VDialog";
 import { LActivity } from "ts/re/objects/activities/LActivity";
@@ -13,11 +13,11 @@ import { VEntityCaptionWindow } from "../windows/VEntityCaptionWindow";
 export class VFeetDialog extends VDialog {
     //_targetEntity: LEntity;
    // _actions: DActionId[];
-    _model: LFeetDialog;
+    _model: SFeetDialog;
     _entityNameWindow: VEntityCaptionWindow | undefined;
     _commandWindow: VFlexCommandWindow | undefined;
 
-    constructor(model: LFeetDialog) {
+    constructor(model: SFeetDialog) {
         super(model);
         this._model = model;
     }
