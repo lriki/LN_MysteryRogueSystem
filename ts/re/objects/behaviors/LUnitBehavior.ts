@@ -159,6 +159,8 @@ export class LUnitBehavior extends LBehavior {
             //DBasics.actions.ExchangeActionId,
             REBasics.actions.ThrowActionId,
             REBasics.actions.ReadActionId,
+            REBasics.actions.ForwardFloorActionId,
+            REBasics.actions.BackwardFloorActionId,
         ]);
     }
 

@@ -53,3 +53,23 @@ test("concretes.dialogs.FeetDialog.test", () => {
     expect(inventory.items.length).toBe(1);
     expect(inventory.items[0]).toBe(item1);
 });
+
+test("concretes.dialogs.FeetDialog.ExitPoint", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    
+    const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ExitPoint_A").id, [], "exitPoint1"));
+    REGame.world.transferEntity(exitPoint1, floorId, 10, 10);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const dialog = new SFeetDialog(player1, exitPoint1);
+    RESystem.dialogContext.activeDialog().openSubDialog(dialog);
+
+    const commands = dialog.makeActionList();
+    expect(commands.length).toBe(1);
+    expect(commands[0].actionId).toBe(REBasics.actions.ForwardFloorActionId);   // [進む]
+});
+
