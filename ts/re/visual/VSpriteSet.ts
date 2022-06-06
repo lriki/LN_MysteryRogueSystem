@@ -1,5 +1,6 @@
 import { TilemapRendererId } from "ts/re/rmmz/Tilemap";
 import { RESystem } from "ts/re/system/RESystem";
+import { SView } from "../system/SView";
 import { VDirectionArrow } from "./VDirectionArrow";
 import { VHudWindow } from "./VHudWindow";
 import { VVisibilityShadow } from "./VVisibilityShadow";
@@ -69,6 +70,13 @@ export class VSpriteSet {
             minimap.clearTilemapResetNeeded();
         }
         this._minimapTilemap.refresh();
+
+        this._minimapTilemap.selfVisible = this._spritesetMap._tilemap.selfVisible = SView.getTilemapView().visible;
+        // if (!) {
+        //     this._minimapTilemap.visible = false;
+        //     return;
+        // }
+        
 
         
         this._visibilityShadow._update();

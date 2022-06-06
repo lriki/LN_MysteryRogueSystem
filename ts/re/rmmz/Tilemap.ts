@@ -288,6 +288,7 @@ declare global {
     interface Tilemap {
         setRendererId(id: number): void;
         _lowerLayer: Tilemap.Layer;
+        selfVisible: boolean;
     }
 
     namespace Tilemap {
@@ -302,6 +303,12 @@ declare global {
 // 通常のマップとは別に、ミニマップ描画用の Tilemap.Renderer を使うことで回避する。
 PIXI.Renderer.registerPlugin("rpgtilemap2", Tilemap.Renderer as any);
 
+const _Tilemap_initialize = Tilemap.prototype.initialize;
+Tilemap.prototype.initialize = function() {
+    _Tilemap_initialize.apply(this);
+    this.selfVisible = true;
+}
+
 Tilemap.prototype.setRendererId = function(id) {
     this._lowerLayer._rendererId = id;
 };
@@ -315,13 +322,9 @@ Tilemap.Layer.prototype.render = function(renderer: any) {
     // "めつぶし" 状態の対応。
     // Tilemap.visible は子 Sprite すべてを非表示にするためキャラクターが消えてしまう。
     // そのため Tilemap だけを表示しないように、ここで対策する。
-    if (this._rendererId == TilemapRendererId.Default) {
-        if (!SView.getTilemapView().visible) {
-            return;
-        }
+    if (this.parent instanceof Tilemap && !this.parent.selfVisible) {
+        return false;
     }
-
-
     
     renderer.batch.setObjectRenderer(tilemapRenderer);
     renderer.projection.projectionMatrix.copyTo(matrix);
