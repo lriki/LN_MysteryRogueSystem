@@ -21,23 +21,18 @@ import { DActionId } from "../data/DAction";
 export type MCEntryProc = () => SCommandResponse;
 export type CommandResultCallback = () => boolean;
 
-/*
-export class SMCResult {
-    _result: REResponse = REResponse.Succeeded;
-
-    public reject(): void {
-        this._result = 
-    }
-}
-*/
+// export enum STaskResult {
+//     Succeeded,
+//     Rejected,
+// }
 
 export class RECCMessageCommand {
 
     _name: string;   // for debug
     _entryFunc: MCEntryProc | undefined;
     _chainFunc: CommandResultCallback | undefined;
-    _then: RECCMessageCommand | undefined;
-    _rejected: RECCMessageCommand | undefined;
+    _nextTask: RECCMessageCommand | undefined;
+    _rejected: CommandResultCallback | undefined;
     
     _result: boolean;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
     //_prev: RECCMessageCommand | undefined;
@@ -52,19 +47,20 @@ export class RECCMessageCommand {
     }
 
     public then(func: CommandResultCallback): RECCMessageCommand {
-        assert(!this._then);
-        this._then = new RECCMessageCommand("then", undefined, func);
-        return this._then;
+        assert(!this._nextTask);
+        this._nextTask = new RECCMessageCommand("then", undefined, func);
+        return this._nextTask;
     }
 
     public rejected(func: CommandResultCallback): void {
-        throw new Error("Not implemented.");
-        assert(!this._rejected);
-        this._rejected = new RECCMessageCommand("rejected", undefined, func);
-        //return this._rejected;
+        this._rejected = func;
+        // throw new Error("Not implemented.");
+        // assert(!this._rejected);
+        // this._rejected = new RECCMessageCommand("rejected", undefined, func);
+        // //return this._rejected;
     }
 
-    public call(cctx: SCommandContext): void {
+    public call(cctx: SCommandContext): boolean {
         
         if (this._entryFunc) {
             this._result = this._entryFunc() != SCommandResponse.Canceled;
@@ -76,20 +72,22 @@ export class RECCMessageCommand {
            // }
         }
 
-        if (this._entryFunc || this._chainFunc) {
-            if (this._result) {
-                if (this._then) {
-                    this._then.call(cctx);
-                    //context._recodingCommandList.push(this._then);
-                }
-            }
-            else {
-                if (this._rejected) {
-                    this._rejected.call(cctx);
-                    //context._recodingCommandList.push(this._then);
-                }
-            }
-        }
+        // if (this._entryFunc || this._chainFunc) {
+        //     if (this._result) {
+        //         if (this._then) {
+        //             this._then.call(cctx);
+        //             //context._recodingCommandList.push(this._then);
+        //         }
+        //     }
+        //     else {
+        //         if (this._rejected) {
+        //             this._rejected.call(cctx);
+        //             //context._recodingCommandList.push(this._then);
+        //         }
+        //     }
+        // }
+
+        return this._result;
     }
 }
 
@@ -122,11 +120,10 @@ export class SCommandContext
     private _sequelContext: SSequelContext;
     private _visualAnimationWaiting: boolean = false;   // 不要かも
     _recodingCommandList: RECCMessageCommand[] = [];
+    private _nextPriorityTask: RECCMessageCommand | undefined;
     private _runningCommandList: RECCMessageCommand[] = [];
     private _afterChainCommandList: RECCMessageCommand[] = [];
     private _messageIndex: number = 0;
-    private _lastActorResponce: SCommandResponse = SCommandResponse.Pass;
-    private _lastReactorResponce: SCommandResponse = SCommandResponse.Pass;
     private _commandChainRunning: boolean = false;
 
     constructor(sequelContext: SSequelContext) {
@@ -140,8 +137,6 @@ export class SCommandContext
         this._recodingCommandList = [];
         this._runningCommandList = [];
         this._messageIndex = 0;
-        this._lastActorResponce = SCommandResponse.Pass;
-        this._lastReactorResponce = SCommandResponse.Pass;
         this._commandChainRunning = false;
     }
 
@@ -562,7 +557,10 @@ export class SCommandContext
     }
     
     isRunning(): boolean {
-        return this._messageIndex < this._runningCommandList.length || this._recodingCommandList.length != 0 || this._afterChainCommandList.length != 0;
+        return this._nextPriorityTask != undefined ||
+            this._messageIndex < this._runningCommandList.length ||
+            this._recodingCommandList.length != 0 ||
+            this._afterChainCommandList.length != 0;
     }
 
     isRecordingListEmpty(): boolean {
@@ -573,63 +571,62 @@ export class SCommandContext
         return !this.isRunning() && this.isRecordingListEmpty();
     }
 
-    /*
-    _process(): boolean {
-        if (this.isRunning()) {
-            // コマンドリスト実行中
-            this._processCommand();
-            
-            if (!this.isRunning()) {
-                // 実行終了。
-                this._owner.
-            }
-        }
-
-        
-        if (!this.isRunning() && this._recodingCommandList.length > 0) {
-            // _runningCommandList は終了したが、_recodingCommandList に次のコマンドチェーンが溜まっていればそれの実行を始める
-            this._submit();
-        }
-
-        // _runningCommandList にも _recodingCommandList にもコマンドが無ければ false を返して、スケジューリングフェーズを次に進める
-        return this.isRunning();
-    }
-    */
-
     _processCommand() {
-        if (this._messageIndex >= this._runningCommandList.length) {
-            if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
-                this._submit();
+        if (this._nextPriorityTask) {
+            // 優先タスクがあるので、swap は今回は待つ
+        }
+        else {
+            if (this._messageIndex >= this._runningCommandList.length) {
+                if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
+                    this._submit();
+                }
             }
         }
 
 
         if (this.isRunning()) {
-            const message = this._runningCommandList[this._messageIndex];
-            message.call(this);
-            //const response = message._func();
+            // 今回実行したい Task は？
+            const task = this._nextPriorityTask ? this._nextPriorityTask : this._runningCommandList[this._messageIndex];
+            this._nextPriorityTask = undefined;
+
+            // Task 実行
+            const result = task.call(this);
+            if (result) {
+                // つながっている Task があれば、次にそれを実行してみる
+                if (task._nextTask) {
+                    this._nextPriorityTask = task._nextTask;
+                }
+            }
+            else {
+                // Task につながっている直近の catch を探してみる
+                let t = task._nextTask;
+                while (t) {
+                    if (t._rejected) {
+                        this._nextPriorityTask = t;
+                    }
+                    t = t._nextTask;
+                }
+                if (this._nextPriorityTask) {
+                    // 次の call で reject 側が実行されるようにする。
+                    // 変数を使いまわしているのであんまりよくないかもしれない。
+                    this._nextPriorityTask._result = false;
+                }
+            }
+
+            // ここまでで、最後に実行した Task の nextTask が無ければ、TaskList にある次の Task へ進む
+            if (!this._nextPriorityTask) {
+                assert(this._commandChainRunning);
+                this._messageIndex++;
     
-            //if (RESystem.dialogContext._hasDialogModel()) {
-                // もし command の実行で Dialog が表示されたときは index を進めない。
-                // Dialog が閉じたときに進める。
-            //}
-            //else {
-                this._next();
-            //}
-        }
-    }
-
-    _next() {
-        assert(this._commandChainRunning);
-        this._messageIndex++;
-
-        if (this._messageIndex >= this._runningCommandList.length) {
-            this._commandChainRunning = false;
-            Log.d("<<<<[End CommandChain]");
-
-            // CommandChain 中に post されたものがあれば、続けて swap して実行開始してみる
-            if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
-                this._submit();
+                if (this._messageIndex >= this._runningCommandList.length) {
+                    this._commandChainRunning = false;
+                    Log.d("<<<<[End CommandChain]");
+    
+                    // CommandChain 中に post されたものがあれば、続けて swap して実行開始してみる
+                    if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
+                        this._submit();
+                    }
+                }
             }
         }
     }
