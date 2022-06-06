@@ -22,7 +22,7 @@ import { USearch } from "../usecases/USearch";
 import { LBlock } from "../objects/LBlock";
 import { UAction } from "../usecases/UAction";
 import { UName } from "../usecases/UName";
-import { SCommandResponse } from "./RECommand";
+import { SCommandResponse } from "./SCommand";
 
 export type SOnPerformedFunc = (targets: LEntity[]) => void;
 

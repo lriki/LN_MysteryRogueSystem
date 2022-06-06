@@ -1,6 +1,6 @@
 import { RESerializable, tr2 } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";

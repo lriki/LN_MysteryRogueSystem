@@ -3,7 +3,7 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { LStructureId } from "../LCommon";
 import { LEnemyBehavior } from "./LEnemyBehavior";
 import { LDecisionBehavior } from "./LDecisionBehavior";

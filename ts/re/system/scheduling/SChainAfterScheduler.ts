@@ -1,6 +1,6 @@
 import { SCommandContext } from "../SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
-import { SCommandResponse } from "../RECommand";
+import { SCommandResponse } from "../SCommand";
 import { REBasics } from "ts/re/data/REBasics";
 import { UAction } from "ts/re/usecases/UAction";
 import { LGenerateDropItemCause } from "ts/re/objects/internal";

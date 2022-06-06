@@ -389,6 +389,10 @@ export class REDataManager {
             performSkill: REData.addAction("PerformSkill"),
             AttackActionId: REData.addAction("Attack"),
         };
+
+        REBasics.commands = {
+            testPickOutItem: REData.newCommand("testPickOutItem").id,
+        };
         
 
         // Sequels

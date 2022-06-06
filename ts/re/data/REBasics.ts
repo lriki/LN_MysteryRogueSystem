@@ -1,6 +1,7 @@
 import { DClassId } from "./DClass";
 import { DAttackElementId, DSpecificEffectId as DSpecialEffectId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DBasicActions } from "./predefineds/DBasicActions";
+import { DBasicCommands } from "./predefineds/DBasicCommands";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
 import { DBasicItemShops } from "./predefineds/DBasicItemShops";
@@ -62,6 +63,7 @@ export class REBasics {
     static elements: DBasicElements;
     static events: DBasicEvents;
     static actions: DBasicActions;
+    static commands: DBasicCommands;
     static entityKinds: BasicEntityKinds;
     //static stateTraits: DBasicStateTraits;
     static states: DBasicStates;

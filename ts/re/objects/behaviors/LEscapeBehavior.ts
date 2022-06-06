@@ -1,5 +1,5 @@
 import { DParameterId } from "ts/re/data/DParameter";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "../internal";

@@ -58,3 +58,5 @@ export function checkContinuousResponse(r: SCommandResponse): boolean {
     return r == SCommandResponse.Pass;
 }
 
+
+

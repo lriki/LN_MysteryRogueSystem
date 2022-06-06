@@ -1,7 +1,7 @@
 import { REBasics } from "ts/re/data/REBasics";
 import { DEventId, RoomEventArgs, SkillEmittedArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { Helpers } from "ts/re/system/Helpers";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";

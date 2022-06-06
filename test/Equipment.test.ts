@@ -196,6 +196,7 @@ test("Equipment.Curse", () => {
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
+    const message = REGame.messageHistory;
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 外れないこと。
     expect(weapon1.isOnGround()).toBe(false);           // 地面に置かれたりしていないこと。
 });

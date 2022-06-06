@@ -1,7 +1,7 @@
 import { REGame } from "ts/re/objects/REGame";
 import { DecisionPhase, LBehavior } from "ts/re/objects/behaviors/LBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { MovingMethod } from "../LMap";
 import { LActivity } from "../activities/LActivity";

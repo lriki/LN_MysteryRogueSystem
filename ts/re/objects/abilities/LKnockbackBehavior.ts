@@ -1,4 +1,4 @@
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LProjectileBehavior } from "../behaviors/activities/LProjectileBehavior";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction } from "../behaviors/LBehavior";

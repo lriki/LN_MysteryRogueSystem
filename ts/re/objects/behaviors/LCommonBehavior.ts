@@ -4,7 +4,7 @@ import { LEntity } from "../LEntity";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SActivityContext } from "ts/re/system/SActivityContext";
-import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { REBasics } from "ts/re/data/REBasics";
 import { USearch } from "ts/re/usecases/USearch";
 import { DEmittor } from "ts/re/data/DEmittor";

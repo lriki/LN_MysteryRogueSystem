@@ -1,7 +1,7 @@
 import { RESerializable, tr2 } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { SCommandContext } from "ts/re/system/SCommandContext";

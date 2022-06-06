@@ -9,6 +9,7 @@ export type DRaceId = number;
 export type DTerrainShapeId = number;
 export type DTerrainSettingId = number;
 export type DTerrainPresetId = number;
+export type DCommandId = number;
 
 // /**
 //  * システムに基づいた根本的な分類。

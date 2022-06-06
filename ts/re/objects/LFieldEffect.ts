@@ -1,6 +1,6 @@
 import { RESerializable } from "../Common";
 import { REBasics } from "../data/REBasics";
-import { SCommandResponse } from "../system/RECommand";
+import { SCommandResponse } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
 import { LEntity } from "./LEntity";

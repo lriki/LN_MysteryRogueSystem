@@ -1,7 +1,7 @@
 import { RESerializable, tr2 } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { paramFPLoss } from "ts/re/PluginParameters";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";

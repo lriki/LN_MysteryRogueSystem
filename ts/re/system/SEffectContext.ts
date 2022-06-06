@@ -7,13 +7,13 @@ import { Helpers } from "./Helpers";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { DParameterId } from "ts/re/data/DParameter";
 import { LEnemyBehavior } from "ts/re/objects/behaviors/LEnemyBehavior";
-import { RECCMessageCommand, SCommandContext } from "./SCommandContext";
+import { STask, SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
 import { LRandom } from "ts/re/objects/LRandom";
 import { DStateId } from "ts/re/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
 import { onEffectResult } from "../objects/internal";
-import { SCommandResponse } from "./RECommand";
+import { SCommandResponse } from "./SCommand";
 import { RESystem } from "./RESystem";
 import { assert } from "../Common";
 import { LObject, LObjectType } from "../objects/LObject";
@@ -105,7 +105,7 @@ export class SEffectContext {
         return this._effectorFact;
     }
 
-    public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): RECCMessageCommand {
+    public applyWithWorth(cctx: SCommandContext, targets: LEntity[]): STask {
 
         const applies = UEffect.resolveApplyEffects(this._effectorFact.effects(), targets, cctx.random());
 
@@ -243,7 +243,7 @@ export class SEffectContext {
     }
     
     // Game_Action.prototype.apply
-    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): RECCMessageCommand {
+    private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): STask {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
         const result = target._effectResult;
         result.clear();

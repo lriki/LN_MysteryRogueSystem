@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
-import { checkContinuousResponse, SCommandResponse } from "ts/re/system/RECommand";
+import { checkContinuousResponse, SCommandResponse } from "ts/re/system/SCommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";

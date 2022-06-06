@@ -1,4 +1,4 @@
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";

@@ -1,5 +1,5 @@
 import { REBasics } from "ts/re/data/REBasics";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UMovement } from "ts/re/usecases/UMovement";

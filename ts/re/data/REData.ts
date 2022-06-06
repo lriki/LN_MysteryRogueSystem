@@ -29,6 +29,7 @@ import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
 import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
+import { DCommand } from "./DCommand";
 // import { DPreset } from "./DPreset";
 
 
@@ -176,6 +177,7 @@ export class REData
     static templateMaps: DTemplateMap[] = [];
     static factions: REData_Faction[] = [];
     static actions: DAction[] = [];
+    static commands: DCommand[] = [];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
     static parameters: REData_Parameter[] = [];
     static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
@@ -222,6 +224,7 @@ export class REData
         this.templateMaps = [new DTemplateMap(0)];
         this.factions = [];
         this.actions = [{id: 0, displayName: 'null', priority: 0}];
+        this.commands = [new DCommand(0, "null")];
         this.sequels = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
         this.parameters = [];
         this.attributes = [{id: 0, name: 'null'}];
@@ -325,6 +328,18 @@ export class REData
         });
         return newId;
     }
+
+    //--------------------
+
+    static newCommand(name: string): DCommand {
+        const newId = this.commands.length;
+        const newData = new DCommand(newId, name);
+        this.commands.push(newData);
+        return newData;
+    }
+
+
+    //--------------------
 
     /*
     static addParameter(name: string): number {

@@ -1,4 +1,4 @@
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SSequelContext } from "ts/re/system/SSequelContext";
 

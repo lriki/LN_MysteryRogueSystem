@@ -5,7 +5,7 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
-import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { UAction } from "ts/re/usecases/UAction";
 import { SCommandContext } from "ts/re/system/SCommandContext";

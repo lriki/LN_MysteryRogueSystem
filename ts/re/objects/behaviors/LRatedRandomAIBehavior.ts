@@ -1,5 +1,5 @@
 import { RESerializable } from "ts/re/Common";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LRatedRandomAI } from "../ai/LRatedRandomAI";

@@ -1,4 +1,4 @@
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "./../LEntity";
 import { LCharacterAI } from "./LCharacterAI";

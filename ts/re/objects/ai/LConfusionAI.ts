@@ -1,6 +1,6 @@
 import { DSkillId } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UAction } from "ts/re/usecases/UAction";

@@ -354,6 +354,7 @@ export class Tilemap extends PIXI.Container {
 
     constructor();
 
+	public initialize(): void;
     public destroy(): void;
     public isReady(): boolean;
     public setBitmaps(bitmaps: Bitmap[]): void;

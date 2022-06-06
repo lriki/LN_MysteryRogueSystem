@@ -1,4 +1,4 @@
-import { checkContinuousResponse, SCommandResponse } from "./RECommand";
+import { checkContinuousResponse, SCommandResponse } from "./SCommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/re/Common";
@@ -17,6 +17,7 @@ import { LRandom } from "ts/re/objects/LRandom";
 import { LActionTokenType } from "../objects/LActionToken";
 import { SActivityContext } from "./SActivityContext";
 import { DActionId } from "../data/DAction";
+import { DCommandId } from "../data/DCommon";
 
 
 export enum STaskResult {
@@ -42,12 +43,12 @@ export type TaskCatchFunc = (c: SSubTaskChain) => void;
 export type TaskFinallyFunc = (c: SSubTaskChain) => void;
 export type CommandResultCallback = () => boolean;
 
-export class RECCMessageCommand {
+export class STask {
 
     _name: string;   // for debug
     _entryFunc: MCEntryProc | undefined;
     _chainFunc: CommandResultCallback | undefined;//TaskThenFunc | undefined;
-    _nextTask: RECCMessageCommand | undefined;
+    _nextTask: STask | undefined;
     
     _result: STaskResult;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
     //_prev: RECCMessageCommand | undefined;
@@ -58,7 +59,7 @@ export class RECCMessageCommand {
     _finallyFunc: TaskFinallyFunc | undefined;
     _callMethod: STaskCallMethod = STaskCallMethod.Default;
 
-    constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: RECCMessageCommand | undefined) {
+    constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: STask | undefined) {
         assert(!(entryFunc && chainFunc));
         this._name = name;
         this._entryFunc = entryFunc;
@@ -67,16 +68,16 @@ export class RECCMessageCommand {
         //this._prev = prev;
     }
 
-    public then(func: CommandResultCallback): RECCMessageCommand {
+    public then(func: CommandResultCallback): STask {
         assert(!this._nextTask);
-        this._nextTask = new RECCMessageCommand("then", undefined, func);
+        this._nextTask = new STask("then", undefined, func);
         return this._nextTask;
     }
 
-    public then2(func: TaskThenFunc): RECCMessageCommand {
+    public then2(func: TaskThenFunc): STask {
         assert(this._subChain);
         assert(!this._nextTask);
-        this._nextTask = new RECCMessageCommand("then", undefined, undefined);
+        this._nextTask = new STask("then", undefined, undefined);
         this._nextTask._subChain = this._subChain;
         this._nextTask._thenFunc2 = func;
         return this._nextTask;
@@ -88,10 +89,10 @@ export class RECCMessageCommand {
         return this;
     }
 
-    public finally(func: TaskFinallyFunc): RECCMessageCommand {
+    public finally(func: TaskFinallyFunc): STask {
         assert(this._subChain);
         assert(!this._nextTask);
-        this._nextTask = new RECCMessageCommand("finally", undefined, undefined);
+        this._nextTask = new STask("finally", undefined, undefined);
         this._nextTask._subChain = this._subChain;
         this._nextTask._finallyFunc = func;
         return this._nextTask;
@@ -184,14 +185,14 @@ enum STaskChainMethod {
 
 export class SSubTaskChain {
     private _ctx: SCommandContext;
-    private _firstTask: RECCMessageCommand;
-    private _currentTask: RECCMessageCommand | undefined;
+    private _firstTask: STask;
+    private _currentTask: STask | undefined;
     private _error: boolean;
     private _errorHandled: boolean;
     private _postedMethod: STaskChainMethod;
     private _postedChain: SSubTaskChain | undefined;
 
-    public constructor(ctx: SCommandContext, first: RECCMessageCommand) {
+    public constructor(ctx: SCommandContext, first: STask) {
         this._ctx = ctx;
         this._firstTask = first;
         this._currentTask = first;
@@ -239,7 +240,7 @@ export class SSubTaskChain {
             assert(this._currentTask._catchFunc || this._currentTask._finallyFunc); // catch または finally から実行できる
 
             // 次の finally へ
-            let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
+            let t: STask | undefined = this._currentTask._nextTask;
             this._currentTask = undefined;
             while (t) {
                 if (t._finallyFunc) {
@@ -282,7 +283,7 @@ export class SSubTaskChain {
         this._error = true;
 
         // Task につながっている直近の catch を探してみる
-        let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
+        let t: STask | undefined = this._currentTask._nextTask;
         this._currentTask = undefined;
         while (t) {
             if (t._finallyFunc) {
@@ -480,10 +481,10 @@ export class SCommandContext
 {
     private _sequelContext: SSequelContext;
     private _visualAnimationWaiting: boolean = false;   // 不要かも
-    _recodingCommandList: RECCMessageCommand[] = [];
-    private _nextPriorityTask: RECCMessageCommand | undefined;
-    private _runningCommandList: RECCMessageCommand[] = [];
-    private _afterChainCommandList: RECCMessageCommand[] = [];
+    _recodingCommandList: STask[] = [];
+    private _nextPriorityTask: STask | undefined;
+    private _runningCommandList: STask[] = [];
+    private _afterChainCommandList: STask[] = [];
     private _messageIndex: number = 0;
     private _commandChainRunning: boolean = false;
     
@@ -521,12 +522,26 @@ export class SCommandContext
         return this._recodingCommandList.find(x => x._name == "openDialog") !== undefined;
     }
 
-    public postTask(func: TaskThenFunc): RECCMessageCommand {
-        const task = new RECCMessageCommand("Task", undefined);
+    public postTask(func: TaskThenFunc): STask {
+        const task = new STask("Task", undefined);
         task._callMethod = STaskCallMethod.Then;
         task._thenFunc2 = func;
         task._subChain = new SSubTaskChain(this, task);
         this._recodingCommandList.push(task);
+        return task;
+    }
+
+    public postCommand(entity: LEntity, commandId: DCommandId): STask {
+        const task = this.postTask((c) => {
+            let result = SCommandResponse.Pass;
+            entity.iterateBehaviorsReverse(b => {
+                result = b.onCommand(entity, this, c, commandId);
+                return result == SCommandResponse.Pass;
+            });
+            if (result == SCommandResponse.Pass) {
+                c.next();
+            }
+        });
         return task;
     }
 
@@ -543,7 +558,7 @@ export class SCommandContext
 
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("ConsumeActionToken", m1));
+        this._recodingCommandList.push(new STask("ConsumeActionToken", m1));
         Log.postCommand("ConsumeActionToken");
     }
 
@@ -610,7 +625,7 @@ export class SCommandContext
             }
             return r;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Activity", m1));
+        this._recodingCommandList.push(new STask("Activity", m1));
 
         Log.postCommand("Activity");
         return actx;
@@ -675,7 +690,7 @@ export class SCommandContext
     // TODO: sender っていうのがすごくわかりづらい。
     // target と sender は基本的に self で同一なのでそうして、
     // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
-    post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): RECCMessageCommand {
+    post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): STask {
         const m1 = () => {
             const response = this.callSymbol(target, sender, subject, args, symbol);
             if (response != SCommandResponse.Canceled) {
@@ -688,18 +703,18 @@ export class SCommandContext
             return response;
 
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Post", m1));
+        this._recodingCommandList.push(new STask("Post", m1));
         Log.postCommand("Post");
         return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
 
-    postCall(func: () => void): RECCMessageCommand {
+    postCall(func: () => void): STask {
         const m1 = () => {
             Log.doCommand("Call");
             func();
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Call", m1));
+        this._recodingCommandList.push(new STask("Call", m1));
         Log.postCommand("Call");
         return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
@@ -730,9 +745,9 @@ export class SCommandContext
         };
 
         if (afterChain)
-            this._afterChainCommandList.push(new RECCMessageCommand("openDialog", m1));
+            this._afterChainCommandList.push(new STask("openDialog", m1));
         else
-            this._recodingCommandList.push(new RECCMessageCommand("openDialog", m1));
+            this._recodingCommandList.push(new STask("openDialog", m1));
         Log.postCommand("openDialog");
         return dialogModel;
     }
@@ -748,7 +763,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Sequel", m1));
+        this._recodingCommandList.push(new STask("Sequel", m1));
         Log.postCommand("Sequel");
         return s;
     }
@@ -763,7 +778,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Animation", m1));
+        this._recodingCommandList.push(new STask("Animation", m1));
         Log.postCommand("Animation");
     }
 
@@ -776,7 +791,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Balloon", m1));
+        this._recodingCommandList.push(new STask("Balloon", m1));
         Log.postCommand("Balloon");
     }
 
@@ -790,7 +805,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("WaitSequel", m1));
+        this._recodingCommandList.push(new STask("WaitSequel", m1));
         Log.postCommand("WaitSequel");
     }
 
@@ -801,7 +816,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Wait", m1));
+        this._recodingCommandList.push(new STask("Wait", m1));
         Log.postCommand("Wait");
     }
 
@@ -813,7 +828,7 @@ export class SCommandContext
             });
             return SCommandResponse.Pass;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("ApplyEffect", m1));
+        this._recodingCommandList.push(new STask("ApplyEffect", m1));
         Log.postCommand("ApplyEffect");
     }
 
@@ -828,7 +843,7 @@ export class SCommandContext
             entity.destroy();
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Destroy", m1));
+        this._recodingCommandList.push(new STask("Destroy", m1));
         Log.postCommand("Destroy");
     }
 
@@ -840,7 +855,7 @@ export class SCommandContext
             REGame.messageHistory.add(text);
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("Message", m1));
+        this._recodingCommandList.push(new STask("Message", m1));
         Log.postCommand("Message");
     }
 
@@ -852,7 +867,7 @@ export class SCommandContext
                 RESystem.integration.flushEffectResult();
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("EffectResult", m1));
+        this._recodingCommandList.push(new STask("EffectResult", m1));
     }
 
     /**
@@ -869,7 +884,7 @@ export class SCommandContext
             REGame.world.transferEntity(entity, floorId, x, y);
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("TransferFloor", m1));
+        this._recodingCommandList.push(new STask("TransferFloor", m1));
         Log.postCommand("TransferFloor");
     }
     
@@ -896,7 +911,7 @@ export class SCommandContext
 
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new RECCMessageCommand("SkipPart", m1));
+        this._recodingCommandList.push(new STask("SkipPart", m1));
         Log.postCommand("SkipPart");
     }
     
@@ -1045,7 +1060,7 @@ export class SCommandContext
         }
     }
 
-    _setNextPriorityTask(task: RECCMessageCommand): void {
+    _setNextPriorityTask(task: STask): void {
         assert(!this._nextPriorityTask);
         this._nextPriorityTask = task;
     }

@@ -1,4 +1,4 @@
-import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";

@@ -5,7 +5,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
 import { Helpers } from "ts/re/system/Helpers";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "ts/re/system/SEffectContext";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UMovement } from "ts/re/usecases/UMovement";

@@ -3,7 +3,7 @@ import { LandExitResult, REData } from "ts/re/data/REData";
 import { REGame } from "../REGame";
 import { LBehavior, LGenerateDropItemCause } from "ts/re/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { REBasics } from "ts/re/data/REBasics";

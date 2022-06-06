@@ -1,7 +1,7 @@
 import { LActivity } from "../objects/activities/LActivity";
 import { LEntity } from "../objects/LEntity";
-import { SCommandResponse } from "./RECommand";
-import { HandleActivityCommand, RECCMessageCommand, SCommandContext, SHandleCommandResult } from "./SCommandContext";
+import { SCommandResponse } from "./SCommand";
+import { HandleActivityCommand, STask, SCommandContext, SHandleCommandResult } from "./SCommandContext";
 
 /**
  * Activity の 3Way-Handshake
@@ -83,7 +83,7 @@ export class SActivityContext {
                     }
                     return SCommandResponse.Pass;
                 };
-                cctx._recodingCommandList.push(new RECCMessageCommand("HandleActivity.2", m2));
+                cctx._recodingCommandList.push(new STask("HandleActivity.2", m2));
                 //}
             }
             else {
@@ -94,7 +94,7 @@ export class SActivityContext {
 
             return SCommandResponse.Pass;
         };
-        cctx._recodingCommandList.push(new RECCMessageCommand("HandleActivity", m1));
+        cctx._recodingCommandList.push(new STask("HandleActivity", m1));
         return command;
     }
 

@@ -1,6 +1,6 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
-import { SCommandResponse, SPhaseResult } from "ts/re/system/RECommand";
+import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LRatedRandomAI } from "../ai/LRatedRandomAI";

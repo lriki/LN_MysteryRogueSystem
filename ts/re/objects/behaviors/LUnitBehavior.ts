@@ -1,4 +1,4 @@
-import { SCommandResponse, SPhaseResult } from "../../system/RECommand";
+import { SCommandResponse, SPhaseResult } from "../../system/SCommand";
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
 import { REGame } from "../REGame";
@@ -289,18 +289,18 @@ export class LUnitBehavior extends LBehavior {
             const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
-                cctx.post(itemEntity, self, subject, undefined, testPickOutItem)
-                    .then(() => {
+                //cctx.post(itemEntity, self, subject, undefined, testPickOutItem)
+                //    .then(() => {
+                cctx.postCommand(itemEntity, REBasics.commands.testPickOutItem)
+                    .then2(() => {
                         if (ULimitations.isItemCountFullyInMap()) {
                             cctx.postMessage(tr2("不思議な力で行動できなかった。"));
                             return true;
                         }
                         else {
                             itemEntity.removeFromParent();
-                            //cctx.remo
-                            //inventory.removeEntity(itemEntity);
                             REGame.map.appearEntity(itemEntity, self.mx, self.my);
-    
+
                             cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
                             cctx.post(itemEntity, self, subject, undefined, onGrounded);
                             return true;

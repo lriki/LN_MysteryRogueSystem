@@ -9,7 +9,7 @@ import { LScheduler2, LSchedulerPhase } from "ts/re/objects/LScheduler";
 import { REBasics } from "../../data/REBasics";
 import { SStepPhase } from "../SCommon";
 import { SStepScheduler2 } from "./SStepScheduler";
-import { SCommandResponse } from "../RECommand";
+import { SCommandResponse } from "../SCommand";
 import { LGenerateDropItemCause } from "../../objects/internal";
 import { SChainAfterScheduler } from "./SChainAfterScheduler";
 

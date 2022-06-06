@@ -4,8 +4,8 @@ import { REBasics } from "ts/re/data/REBasics";
 import { DEquipmentPartId } from "ts/re/data/DEquipmentPart";
 import { DItem } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
-import { SCommandResponse } from "ts/re/system/RECommand";
-import { RECCMessageCommand, SCommandContext } from "ts/re/system/SCommandContext";
+import { SCommandResponse } from "ts/re/system/SCommand";
+import { STask, SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -278,7 +278,7 @@ NOTE:
         }
     }
 
-    private equipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): RECCMessageCommand {
+    private equipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): STask {
         return cctx.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
             .then(() => {
                 const removed = this.removeEquitment(itemEntity);

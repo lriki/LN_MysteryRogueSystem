@@ -3,7 +3,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext, SHandleCommandResult } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";

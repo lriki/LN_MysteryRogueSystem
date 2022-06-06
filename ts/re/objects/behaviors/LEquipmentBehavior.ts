@@ -1,8 +1,9 @@
 import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
+import { DCommandId } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
-import { SCommandResponse } from "ts/re/system/RECommand";
-import { SCommandContext } from "ts/re/system/SCommandContext";
+import { SCommandResponse } from "ts/re/system/SCommand";
+import { SCommandContext, SSubTaskChain } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { LObject } from "../LObject";
 import { REGame } from "../REGame";
@@ -127,6 +128,18 @@ export class LEquipmentBehavior extends LBehavior {
         else {
             return SCommandResponse.Handled;
         }
+    }
+
+    
+    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, commandId: DCommandId): SCommandResponse {
+        if (commandId == REBasics.commands.testPickOutItem) {
+            if (self.isCursed()) {
+                cctx.postMessage(tr2("呪われている！"));
+                chain.reject();
+                return SCommandResponse.Handled;
+            }
+        }
+        return SCommandResponse.Pass;
     }
     
 }

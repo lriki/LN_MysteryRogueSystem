@@ -4,7 +4,7 @@ import { REBasics } from "ts/re/data/REBasics";
 import {  DEnemy, DDropItem } from "ts/re/data/DEnemy";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { DParameterId } from "ts/re/data/DParameter";
-import {  SPhaseResult } from "ts/re/system/RECommand";
+import {  SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { USpawner } from "ts/re/usecases/USpawner";

@@ -2,7 +2,7 @@ import { RESerializable } from "ts/re/Common";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { Helpers } from "ts/re/system/Helpers";
-import { SPhaseResult } from "ts/re/system/RECommand";
+import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { UMovement } from "ts/re/usecases/UMovement";

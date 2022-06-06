@@ -2,7 +2,7 @@ import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";

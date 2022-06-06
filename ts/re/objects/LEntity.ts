@@ -1,6 +1,6 @@
 import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView, LParamMinMaxInfo, SRejectionInfo } from "./behaviors/LBehavior";
 import { REGame } from "./REGame";
-import { SCommandResponse, SPhaseResult } from "../system/RECommand";
+import { SCommandResponse, SPhaseResult } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { DState, DStateId } from "ts/re/data/DState";

@@ -1,5 +1,5 @@
 import { tr2 } from "ts/re/Common";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";

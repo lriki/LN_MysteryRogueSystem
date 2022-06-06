@@ -14,7 +14,7 @@ import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DescriptionHighlightLevel, LEntityDescription } from "../objects/LIdentifyer";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
-import { RECCMessageCommand, SCommandContext } from "../system/SCommandContext";
+import { STask, SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
 import { SSoundManager } from "../system/SSoundManager";
 import { UBlock } from "./UBlock";
@@ -147,7 +147,7 @@ export class UAction {
     }
 
     /** @deprecated */
-    public static postPickItem(cctx: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): RECCMessageCommand {
+    public static postPickItem(cctx: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): STask {
         return cctx.post(
             self, itemEntity, new SEffectSubject(self), undefined, testPutInItem,
             () => {

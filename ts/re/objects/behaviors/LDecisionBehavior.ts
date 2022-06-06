@@ -1,5 +1,5 @@
 import { SManualActionDialog } from "ts/re/system/dialogs/SManualDecisionDialog";
-import { SPhaseResult } from "../../system/RECommand";
+import { SPhaseResult } from "../../system/SCommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/re/objects/LEntity";

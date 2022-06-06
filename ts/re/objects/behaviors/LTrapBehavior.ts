@@ -2,7 +2,7 @@ import { assert, RESerializable, tr } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
-import { SCommandResponse } from "ts/re/system/RECommand";
+import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
