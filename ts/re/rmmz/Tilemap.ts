@@ -326,10 +326,6 @@ Tilemap.Layer.prototype.render = function(renderer: any) {
         return false;
     }
     
-    if (this._rendererId == TilemapRendererId.Default) {
-        console.log("rendeer");
-    }
-    
     renderer.batch.setObjectRenderer(tilemapRenderer);
     renderer.projection.projectionMatrix.copyTo(matrix);
     matrix.append(this.worldTransform);
