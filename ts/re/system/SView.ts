@@ -10,6 +10,8 @@ import { LNameView } from "../objects/internal";
 import { LEntity } from "../objects/LEntity";
 import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
 import { USearch } from "../usecases/USearch";
+import { UMovement } from "../usecases/UMovement";
+import { Helpers } from "./Helpers";
 
 export interface TilemapViewInfo {
     visible: boolean;
@@ -100,6 +102,30 @@ export class SView {
                 }
             }
 
+            if (!Helpers.isHostile(subject, entity)) {
+                const targetBlock = REGame.map.block(entity.mx, entity.my);
+
+                // 中立 target は、踏破済みの Block 上なら見える
+                if (!targetBlock._passed) {
+                    return { visible: false, translucent: false };
+                }
+            }
+            else if (UMovement.checkAdjacentEntities(subject, entity)) {
+                // 隣接している相手は、基本的に見える
+            }
+            else {
+                // 部屋内？
+                if (subject.isOnRoom()) {
+                    if (subject.roomId() != entity.roomId()) {
+                        return { visible: false, translucent: false };
+                    }
+                }
+                else {
+                }
+            }
+
+
+            // subject が惑わし状態？
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
                 if (entity.findEntityBehavior(LUnitBehavior)) {
                     return { visible: true, translucent: false, image: REData.prefabs[REBasics.prefabs.illusionActor].image };
@@ -110,7 +136,7 @@ export class SView {
             }
         }
         else {
-            // entity は操作中キャラ
+            // entity は操作中キャラ (自分自身は基本的に見える)
 
             // 透明状態
             if (entity.traits(REBasics.traits.Invisible).length > 0) {

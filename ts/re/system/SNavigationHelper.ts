@@ -27,6 +27,8 @@ export class SNavigationHelper {
      * subject から見て target は可視であるか
      * 
      * ミニマップ表示に使う。AIでは想定していない
+     * 
+     * @deprecated SView.getEntityVisibility
      */
     public static testVisibilityForMinimap(subject: LEntity, target: LEntity): boolean {
         const map = REGame.map;
