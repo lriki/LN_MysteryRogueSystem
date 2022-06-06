@@ -72,21 +72,6 @@ export class RECCMessageCommand {
            // }
         }
 
-        // if (this._entryFunc || this._chainFunc) {
-        //     if (this._result) {
-        //         if (this._then) {
-        //             this._then.call(cctx);
-        //             //context._recodingCommandList.push(this._then);
-        //         }
-        //     }
-        //     else {
-        //         if (this._rejected) {
-        //             this._rejected.call(cctx);
-        //             //context._recodingCommandList.push(this._then);
-        //         }
-        //     }
-        // }
-
         return this._result;
     }
 }
@@ -113,6 +98,78 @@ export class HandleActivityCommand {
 
 /**
  * 
+ * 基本的な使い方
+ * ----------
+ * 
+ * 次のようにすることで、 Task を積むことができる。
+ * ```
+ * ctx.post(...);
+ * ctx.post(...);
+ * ctx.post(...);
+ * ```
+ * 
+ * post の実行順序
+ * ----------
+ * 
+ * ```
+ * ctx.post(_ => {      // A
+ *   ctx.post(...);     // B
+ * });
+ * ctx.post(_ => {      // C
+ *   ctx.post(...);     // D
+ * });
+ * ctx.post(...);       // E
+ * ```
+ * 
+ * この場合、まず [A, C, E] のような TaskList ができる。
+ * これを実行した結果、次に [B, D] のような TaskList ができる。
+ * 結果的に Task の実行順は A > C > E > B > D となる。
+ * 
+ * このケースの場合、事前の Task の結果によって実行の可否を制御することはできない。
+ * つまり一度 TaskList に積まれた Task は、必ず実行される。
+ * 
+ * 条件を付けたい場合は次の then, catch を使用する。
+ * 
+ * then, catch
+ * ----------
+ * 
+ * then, catch を使うことで、post した Task の成否に応じて実行する処理をチェーンできる。
+ * ```
+ * ctx.post(...)
+ *   .then()        // 1つ目の post の処理が成功したら実行される
+ *   .catch();      // 1つ目の post の処理が失敗したら実行される
+ * ctx.post(...);   // 上記成否にかかわらず実行される。
+ * ctx.post(...);
+ * ```
+ * then, catch の処理は、起点となる Task と同一の TaskList 上で実行される。
+ * 例えば上記の場合、2つ目の post の前に実行される。
+ * 
+ * then は新たな Task を生成して返すが、catch は this を返す。
+ * メソッドチェーンを書きたい場合は、catch を先に書くのが無難。
+ * 
+ * ```
+ * ctx.post(A)
+ *   .catch(A失敗)
+ *   .then(B)
+ *   .catch(B失敗)
+ *   .then(C)
+ * ```
+ * 
+ * エラー時に実行される then と catch
+ * ----------
+ * 
+ * エラーした場合、
+ * - 以降の then は呼ばれない。
+ * - 以降の、直近の catch 1つが呼ばれる。
+ * 
+ * ```
+ * ctx.post(A)
+ *   .catch(A失敗)
+ *   .then(B)      // ここで失敗したら、
+ *   .then(C)
+ *   .catch(B失敗)  // この catch だけが実行される。
+ *   .then(D)       // これは呼ばれない。
+ *   .catch(失敗)   // これは呼ばれない。
  * 
  */
 export class SCommandContext
@@ -589,6 +646,9 @@ export class SCommandContext
             const task = this._nextPriorityTask ? this._nextPriorityTask : this._runningCommandList[this._messageIndex];
             this._nextPriorityTask = undefined;
 
+            // 次の call で catch を呼ぼうとしている？
+            const callingCatch = !task._result;
+
             // Task 実行
             const result = task.call(this);
             if (result) {
@@ -597,7 +657,7 @@ export class SCommandContext
                     this._nextPriorityTask = task._nextTask;
                 }
             }
-            else {
+            else if (!callingCatch) {   // SubTasckChain の中で catch はひとつしか呼びたくない
                 // Task につながっている直近の catch を探してみる
                 let t = task._nextTask;
                 while (t) {
