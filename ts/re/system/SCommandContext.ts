@@ -128,7 +128,10 @@ export class RECCMessageCommand {
             }
         }
         else {
+
+
             assert(this._subChain);
+            cctx.pushSubTaskChain(this._subChain);
             if (this._callMethod == STaskCallMethod.Then) {
                 if (this._finallyFunc) {
                     this._finallyFunc(this._subChain);
@@ -142,6 +145,7 @@ export class RECCMessageCommand {
                 assert(this._catchFunc);
                 this._catchFunc(this._subChain);
             }
+            cctx.popSubTaskChain(this._subChain);
             return STaskResult.Succeeded;
         }
     }
@@ -173,12 +177,19 @@ export class HandleActivityCommand {
     }
 }
 
+enum STaskChainMethod {
+    Next,
+    Reject,
+}
+
 export class SSubTaskChain {
     private _ctx: SCommandContext;
     private _firstTask: RECCMessageCommand;
     private _currentTask: RECCMessageCommand | undefined;
     private _error: boolean;
     private _errorHandled: boolean;
+    private _postedMethod: STaskChainMethod;
+    private _postedChain: SSubTaskChain | undefined;
 
     public constructor(ctx: SCommandContext, first: RECCMessageCommand) {
         this._ctx = ctx;
@@ -186,50 +197,50 @@ export class SSubTaskChain {
         this._currentTask = first;
         this._error = false;
         this._errorHandled = false;
-    }
-
-    public resolve(): void {
-        assert(this._currentTask);
-        const next = this._currentTask._nextTask;
-        if (next && next._thenFunc2) {
-            next._callMethod = STaskCallMethod.Then;
-            this._ctx._setNextPriorityTask(next);
-            this._currentTask = next;
-        }
-    }
-    
-    public reject(): void {
-        assert(this._currentTask);
-        assert(!this._errorHandled);
-        this._error = true;
-
-        // Task につながっている直近の catch を探してみる
-        let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
-        while (t) {
-            if (t._finallyFunc) {
-                t._callMethod = STaskCallMethod.Then;
-                this._ctx._setNextPriorityTask(t);
-                this._currentTask = t;
-                break;
-            }
-            if (t._catchFunc) {
-                t._callMethod = STaskCallMethod.Catch;
-                this._ctx._setNextPriorityTask(t);
-                this._currentTask = t;
-                this._errorHandled = true;
-                break;
-            }
-            t = t._nextTask;
-        }
+        this._postedMethod = STaskChainMethod.Next;
     }
 
     public next(): void {
+        this._postedMethod = STaskChainMethod.Next;
+        this.processOrPost();
+    }
+    
+    public reject(): void {
+        this._postedMethod = STaskChainMethod.Reject;
+        this.processOrPost();
+    }
+
+    private processOrPost(): void {
+        const last = this._ctx._subTaskChainStack[this._ctx._subTaskChainStack.length - 1];
+        if (last != this) {
+            last._postedChain = this;
+        }
+        else {
+            this.processInternal();
+        }
+    }
+
+    private processInternal(): void {
+        if (this._postedMethod == STaskChainMethod.Next) {
+            this.nextInternal();
+        }
+        else if (this._postedMethod == STaskChainMethod.Reject) {
+            this.rejectInternal();
+        }
+        else {
+            throw new Error("Unreachable.");
+        }
+    }
+
+    private nextInternal(): void {
         assert(this._currentTask);
-        assert(this._currentTask._catchFunc || this._currentTask._finallyFunc); // catch または finally から実行できる
 
         if (this._error) {
+            assert(this._currentTask._catchFunc || this._currentTask._finallyFunc); // catch または finally から実行できる
+
             // 次の finally へ
             let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
+            this._currentTask = undefined;
             while (t) {
                 if (t._finallyFunc) {
                     t._callMethod = STaskCallMethod.Then;
@@ -250,7 +261,56 @@ export class SSubTaskChain {
             }
         }
         else {
-            this.resolve();
+            // いわゆる resolve()
+            const next = this._currentTask._nextTask;
+            this._currentTask = undefined;
+            if (next && next._thenFunc2 || next?._finallyFunc) {
+                next._callMethod = STaskCallMethod.Then;
+                this._ctx._setNextPriorityTask(next);
+                this._currentTask = next;
+            }
+        }
+
+        if (!this._currentTask) {
+            this.close();
+        }
+    }
+    
+    private rejectInternal(): void {
+        assert(this._currentTask);
+        assert(!this._errorHandled);
+        this._error = true;
+
+        // Task につながっている直近の catch を探してみる
+        let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
+        this._currentTask = undefined;
+        while (t) {
+            if (t._finallyFunc) {
+                t._callMethod = STaskCallMethod.Then;
+                this._ctx._setNextPriorityTask(t);
+                this._currentTask = t;
+                break;
+            }
+            if (t._catchFunc) {
+                t._callMethod = STaskCallMethod.Catch;
+                this._ctx._setNextPriorityTask(t);
+                this._currentTask = t;
+                this._errorHandled = true;
+                break;
+            }
+            t = t._nextTask;
+        }
+
+        if (!this._currentTask) {
+            this.close();
+        }
+    }
+
+    private close(): void {
+        // assert(this._ctx._subTaskChainStack[this._ctx._subTaskChainStack.length - 1] == this);
+        // this._ctx._subTaskChainStack.pop();
+        if (this._postedChain) {
+            this._postedChain.processInternal();
         }
     }
 }
@@ -387,7 +447,7 @@ export class SSubTaskChain {
  *         c.resolve();
  *         return Handled;
  *     }
- *     else else {
+ *     else {
  *         c.reject();
  *         return Handled;
  *     }
@@ -426,6 +486,18 @@ export class SCommandContext
     private _afterChainCommandList: RECCMessageCommand[] = [];
     private _messageIndex: number = 0;
     private _commandChainRunning: boolean = false;
+    
+    _subTaskChainStack: SSubTaskChain[] = [];
+    public pushSubTaskChain(c: SSubTaskChain) {
+        this._subTaskChainStack.push(c);
+    }
+    public popSubTaskChain(c: SSubTaskChain) {
+        assert(this._subTaskChainStack[this._subTaskChainStack.length - 1] == c);
+        this._subTaskChainStack.push(c);
+    }
+    public get currentSubTaskChain(): SSubTaskChain | undefined {
+        return this._subTaskChainStack.length > 0 ? this._subTaskChainStack[this._subTaskChainStack.length - 1] : undefined;
+    }
 
     constructor(sequelContext: SSequelContext) {
         this._sequelContext = sequelContext;
@@ -928,17 +1000,23 @@ export class SCommandContext
 
             // ここまでで、最後に実行した Task の nextTask が無ければ、TaskList にある次の Task へ進む
             if (!this._nextPriorityTask) {
-                assert(this._commandChainRunning);
-                this._messageIndex++;
-    
-                if (this._messageIndex >= this._runningCommandList.length) {
-                    this._commandChainRunning = false;
-                    Log.d("<<<<[End CommandChain]");
-    
-                    // CommandChain 中に post されたものがあれば、続けて swap して実行開始してみる
-                    if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
-                        this._submit();
+                //assert(this._commandChainRunning);
+
+                if (this._commandChainRunning) {
+                    this._messageIndex++;
+        
+                    if (this._messageIndex >= this._runningCommandList.length) {
+                        this._commandChainRunning = false;
+                        Log.d("<<<<[End CommandChain]");
+        
+                        // CommandChain 中に post されたものがあれば、続けて swap して実行開始してみる
+                        if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
+                            this._submit();
+                        }
                     }
+                }
+                else {
+                    // _runningCommandList はすべて実行済みだが、外部から _nextPriorityTask が指定されていた
                 }
             }
         }
