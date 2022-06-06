@@ -121,11 +121,7 @@ Scene_Map.prototype.update = function() {
     else {
     }
     
-
-
     REVisual.update();
-
-    REVisual.postUpdate();
 
     // Entity と Game_Player の位置を合わせるときは、↑で先に REVisual の座標を更新した後、
     // Scene_Map.update の前に同期をかける必要がある。

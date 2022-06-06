@@ -14,6 +14,7 @@ export class VVisibilityShadow {
         
         this._visibilityShadowBitmap = ImageManager.loadSystem("MR-VisibilityShadow");
         //this._visibilityShadowBitmap = ImageManager.loadSystem("MR-VisibilityShadow-Grid");
+
         this._visibilityShadowInnerSprites = [];
         this._visibilityShadowInnerSprites[1] = this.createVisibilityShadowPart(16, 0.5, 0.5);
         this._visibilityShadowInnerSprites[2] = this.createVisibilityShadowPart(17, 0.5, 0.5);
@@ -63,31 +64,37 @@ export class VVisibilityShadow {
                     //let ty1 = event.screenY() - VisibilityShadowTileSize;         // タイル上辺
                     //let ty2 = event.screenY();         // タイル下辺
     
-                    let tx1 = (unit._realX - htw);// - VisibilityShadowTileSize;  // タイル左辺
-                    let tx2 = (unit._realX - htw) + VisibilityShadowTileSize;  // タイル右辺
-                    let ty1 = unit._realY - VisibilityShadowTileSize;         // タイル上辺
-                    let ty2 = unit._realY;         // タイル下辺
+                    let tx1 = 0;//(unit._realX - htw);// - VisibilityShadowTileSize;  // タイル左辺
+                    let tx2 = 0;//(unit._realX - htw) + VisibilityShadowTileSize;  // タイル右辺
+                    let ty1 = 0;//unit._realY - VisibilityShadowTileSize;         // タイル上辺
+                    let ty2 = 0;//unit._realY;         // タイル下辺
     
                     // test
-                    tx1 -= VisibilityShadowTileSize / 2.0;
-                    tx2 += VisibilityShadowTileSize / 2.0;
-                    ty1 -= VisibilityShadowTileSize / 2.0;
-                    ty2 += VisibilityShadowTileSize / 2.0;
+                    // tx1 -= VisibilityShadowTileSize / 2.0;
+                    // tx2 += VisibilityShadowTileSize / 2.0;
+                    // ty1 -= VisibilityShadowTileSize / 2.0;
+                    // ty2 += VisibilityShadowTileSize / 2.0;
+
+                    // const unitX = unit._x;
+                    // const unitY = unit._y;
+                    const unitX = unit._realX;
+                    const unitY = unit._realY;
     
-                    const room = REGame.map.rooms().find(room => room.contains(unit._x, unit._y));
-                    //const roomId = focusedEntity.roomId();
-                    //if (roomId > 0) {
+                    const tileWidth = $gameMap.tileWidth();
+                    const tileHeight = $gameMap.tileHeight();
+                    const room = REGame.map.rooms().find(room => room.contains(unitX, unitY));
                     if (room) {
-                        const tw = $gameMap.tileWidth();
-                        //const room = REGame.map.rooms()[roomId];
-                        tx1 = $gameMap.adjustX(room.mx1) * tw;
-                        tx2 = $gameMap.adjustX(room.mx2) * tw + tw;
-                        ty1 = $gameMap.adjustY(room.my1) * tw;
-                        ty2 = $gameMap.adjustY(room.my2) * tw + tw;
+                        tx1 = $gameMap.adjustX(room.mx1) * tileWidth;
+                        tx2 = $gameMap.adjustX(room.mx2) * tileWidth + tileWidth;
+                        ty1 = $gameMap.adjustY(room.my1) * tileHeight;
+                        ty2 = $gameMap.adjustY(room.my2) * tileHeight + tileHeight;
                     }
-    
-    
-    
+                    else {
+                        tx1 = $gameMap.adjustX(unitX) * tileWidth;
+                        tx2 = $gameMap.adjustX(unitX) * tileWidth + tileWidth;
+                        ty1 = $gameMap.adjustY(unitY) * tileHeight;
+                        ty2 = $gameMap.adjustY(unitY) * tileHeight + tileHeight;
+                    }
     
                     const tw = tx2 - tx1;
                     const th = ty2 - ty1;

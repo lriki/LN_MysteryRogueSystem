@@ -57,7 +57,9 @@ Spriteset_Map.prototype.createCharacters = function() {
 var _Spriteset_Map_prototype_updateTilemap = Spriteset_Map.prototype.updateTilemap;
 Spriteset_Map.prototype.updateTilemap = function() {
     _Spriteset_Map_prototype_updateTilemap.call(this);
-    
+
+    // SpriteSet、特に VisibilityShadow の更新は Tilemap のタイミングと合わせないと微妙に位置がずれたりする。
+    REVisual.spriteSet2?.update();
 }
 
 /*

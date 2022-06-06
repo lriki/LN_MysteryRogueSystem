@@ -72,9 +72,5 @@ export class REVisual
         this._messageWindowSet?.update();
         VAnimation.update();
     }
-    
-    static postUpdate() {
-        this.spriteSet2?.update();
-    }
 }
 
