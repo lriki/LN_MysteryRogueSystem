@@ -24,15 +24,22 @@ export enum STaskResult {
     Rejected,
 }
 
-export interface STaskChain {
-    resolve: () => void;
-    reject: () => void;
-    _command: RECCMessageCommand;
+export enum STaskCallMethod {
+    Default,
+    Then,
+    Catch,
 }
 
+// export class STaskChain {
+//     resolve: () => void;
+//     reject: () => void;
+//     _command: RECCMessageCommand;
+// }
+
 export type MCEntryProc = () => SCommandResponse;
-export type TaskThenFunc = (c: STaskChain) => void;
-export type TaskCatchFunc = () => void;
+export type TaskThenFunc = (c: SSubTaskChain) => void;
+export type TaskCatchFunc = (c: SSubTaskChain) => void;
+export type TaskFinallyFunc = (c: SSubTaskChain) => void;
 export type CommandResultCallback = () => boolean;
 
 export class RECCMessageCommand {
@@ -41,10 +48,15 @@ export class RECCMessageCommand {
     _entryFunc: MCEntryProc | undefined;
     _chainFunc: CommandResultCallback | undefined;//TaskThenFunc | undefined;
     _nextTask: RECCMessageCommand | undefined;
-    _catchFunc: CommandResultCallback | undefined; // TaskCatchFunc | undefined;
     
     _result: STaskResult;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
     //_prev: RECCMessageCommand | undefined;
+
+    _subChain: SSubTaskChain | undefined;
+    _thenFunc2: TaskThenFunc | undefined;
+    _catchFunc: TaskCatchFunc | undefined;
+    _finallyFunc: TaskFinallyFunc | undefined;
+    _callMethod: STaskCallMethod = STaskCallMethod.Default;
 
     constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: RECCMessageCommand | undefined) {
         assert(!(entryFunc && chainFunc));
@@ -61,37 +73,76 @@ export class RECCMessageCommand {
         return this._nextTask;
     }
 
-    public catch(func: CommandResultCallback): void {
+    public then2(func: TaskThenFunc): RECCMessageCommand {
+        assert(this._subChain);
+        assert(!this._nextTask);
+        this._nextTask = new RECCMessageCommand("then", undefined, undefined);
+        this._nextTask._subChain = this._subChain;
+        this._nextTask._thenFunc2 = func;
+        return this._nextTask;
+    }
+
+    public catch(func: TaskCatchFunc): this {
         assert(!this._catchFunc);
         this._catchFunc = func;
+        return this;
+    }
+
+    public finally(func: TaskFinallyFunc): RECCMessageCommand {
+        assert(this._subChain);
+        assert(!this._nextTask);
+        this._nextTask = new RECCMessageCommand("finally", undefined, undefined);
+        this._nextTask._subChain = this._subChain;
+        this._nextTask._finallyFunc = func;
+        return this._nextTask;
     }
 
     public call(cctx: SCommandContext): STaskResult {
-        if (this._result == STaskResult.Rejected) {
-            if (this._catchFunc) {
-                this._catchFunc();
+        if (this._callMethod == STaskCallMethod.Default) {
+            if (this._result == STaskResult.Rejected) {
+                // if (this._catchFunc) {
+                //     this._catchFunc();
+                // }
+                throw new Error();
+                return STaskResult.Rejected;
             }
-            return STaskResult.Rejected;
+            else {
+                // const c: STaskChain = {
+                //     resolve: () => {
+                //         this._result = STaskResult.Succeeded;
+                //         this.setNextPriorityTaskIfNeeded(cctx);
+                //     },
+                //     reject: () => {
+                //         this._result = STaskResult.Rejected;
+                //     },
+                //     _command: this,
+                // };
+    
+                if (this._entryFunc) {
+                    this._result = (this._entryFunc() != SCommandResponse.Canceled) ? STaskResult.Succeeded : STaskResult.Rejected;
+                }
+                else if (this._chainFunc) {
+                    this._result = (this._chainFunc()) ? STaskResult.Succeeded : STaskResult.Rejected;
+                }
+                return this._result;
+            }
         }
         else {
-            const c: STaskChain = {
-                resolve: () => {
-                    this._result = STaskResult.Succeeded;
-                    this.setNextPriorityTaskIfNeeded(cctx);
-                },
-                reject: () => {
-                    this._result = STaskResult.Rejected;
-                },
-                _command: this,
-            };
-
-            if (this._entryFunc) {
-                this._result = (this._entryFunc() != SCommandResponse.Canceled) ? STaskResult.Succeeded : STaskResult.Rejected;
+            assert(this._subChain);
+            if (this._callMethod == STaskCallMethod.Then) {
+                if (this._finallyFunc) {
+                    this._finallyFunc(this._subChain);
+                }
+                else {
+                    assert(this._thenFunc2);
+                    this._thenFunc2(this._subChain);
+                }
             }
-            else if (this._chainFunc) {
-                this._result = (this._chainFunc()) ? STaskResult.Succeeded : STaskResult.Rejected;
+            else {
+                assert(this._catchFunc);
+                this._catchFunc(this._subChain);
             }
-            return this._result;
+            return STaskResult.Succeeded;
         }
     }
 
@@ -119,6 +170,88 @@ export class HandleActivityCommand {
     public catch(func: () => void): this {
         this._catchFunc = func;
         return this;
+    }
+}
+
+export class SSubTaskChain {
+    private _ctx: SCommandContext;
+    private _firstTask: RECCMessageCommand;
+    private _currentTask: RECCMessageCommand | undefined;
+    private _error: boolean;
+    private _errorHandled: boolean;
+
+    public constructor(ctx: SCommandContext, first: RECCMessageCommand) {
+        this._ctx = ctx;
+        this._firstTask = first;
+        this._currentTask = first;
+        this._error = false;
+        this._errorHandled = false;
+    }
+
+    public resolve(): void {
+        assert(this._currentTask);
+        const next = this._currentTask._nextTask;
+        if (next && next._thenFunc2) {
+            next._callMethod = STaskCallMethod.Then;
+            this._ctx._setNextPriorityTask(next);
+            this._currentTask = next;
+        }
+    }
+    
+    public reject(): void {
+        assert(this._currentTask);
+        assert(!this._errorHandled);
+        this._error = true;
+
+        // Task につながっている直近の catch を探してみる
+        let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
+        while (t) {
+            if (t._finallyFunc) {
+                t._callMethod = STaskCallMethod.Then;
+                this._ctx._setNextPriorityTask(t);
+                this._currentTask = t;
+                break;
+            }
+            if (t._catchFunc) {
+                t._callMethod = STaskCallMethod.Catch;
+                this._ctx._setNextPriorityTask(t);
+                this._currentTask = t;
+                this._errorHandled = true;
+                break;
+            }
+            t = t._nextTask;
+        }
+    }
+
+    public next(): void {
+        assert(this._currentTask);
+        assert(this._currentTask._catchFunc || this._currentTask._finallyFunc); // catch または finally から実行できる
+
+        if (this._error) {
+            // 次の finally へ
+            let t: RECCMessageCommand | undefined = this._currentTask._nextTask;
+            while (t) {
+                if (t._finallyFunc) {
+                    t._callMethod = STaskCallMethod.Then;
+                    this._ctx._setNextPriorityTask(t);
+                    this._currentTask = t;
+                    break;
+                }
+                if (!this._errorHandled) {
+                    if (t._catchFunc) {
+                        t._callMethod = STaskCallMethod.Catch;
+                        this._ctx._setNextPriorityTask(t);
+                        this._currentTask = t;
+                        this._errorHandled = true;
+                        break;
+                    }
+                }
+                t = t._nextTask;
+            }
+        }
+        else {
+            this.resolve();
+        }
     }
 }
 
@@ -314,6 +447,15 @@ export class SCommandContext
 
     public checkOpenDialogRequired(): boolean {
         return this._recodingCommandList.find(x => x._name == "openDialog") !== undefined;
+    }
+
+    public postTask(func: TaskThenFunc): RECCMessageCommand {
+        const task = new RECCMessageCommand("Task", undefined);
+        task._callMethod = STaskCallMethod.Then;
+        task._thenFunc2 = func;
+        task._subChain = new SSubTaskChain(this, task);
+        this._recodingCommandList.push(task);
+        return task;
     }
 
     postConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
@@ -758,31 +900,31 @@ export class SCommandContext
             this._nextPriorityTask = undefined;
 
             // 次の call で catch を呼ぼうとしている？
-            const callingCatch = !task._result;
+            // const callingCatch = !task._result;
 
             // Task 実行
             const result = task.call(this);
             if (result != STaskResult.Rejected) {
                 // つながっている Task があれば、次にそれを実行してみる
-                if (task._nextTask) {
+                if (task._nextTask && !task._subChain) {
                     this._nextPriorityTask = task._nextTask;
                 }
             }
-            else if (!callingCatch) {   // SubTasckChain の中で catch はひとつしか呼びたくない
-                // Task につながっている直近の catch を探してみる
-                let t = task._nextTask;
-                while (t) {
-                    if (t._catchFunc) {
-                        this._nextPriorityTask = t;
-                    }
-                    t = t._nextTask;
-                }
-                if (this._nextPriorityTask) {
-                    // 次の call で reject 側が実行されるようにする。
-                    // 変数を使いまわしているのであんまりよくないかもしれない。
-                    this._nextPriorityTask._result = STaskResult.Rejected;
-                }
-            }
+            // else if (!callingCatch) {   // SubTasckChain の中で catch はひとつしか呼びたくない
+            //     // Task につながっている直近の catch を探してみる
+            //     let t = task._nextTask;
+            //     while (t) {
+            //         if (t._catchFunc) {
+            //             this._nextPriorityTask = t;
+            //         }
+            //         t = t._nextTask;
+            //     }
+            //     if (this._nextPriorityTask) {
+            //         // 次の call で reject 側が実行されるようにする。
+            //         // 変数を使いまわしているのであんまりよくないかもしれない。
+            //         this._nextPriorityTask._result = STaskResult.Rejected;
+            //     }
+            // }
 
             // ここまでで、最後に実行した Task の nextTask が無ければ、TaskList にある次の Task へ進む
             if (!this._nextPriorityTask) {
