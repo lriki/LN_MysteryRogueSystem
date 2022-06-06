@@ -18,23 +18,32 @@ import { LActionTokenType } from "../objects/LActionToken";
 import { SActivityContext } from "./SActivityContext";
 import { DActionId } from "../data/DAction";
 
-export type MCEntryProc = () => SCommandResponse;
-export type CommandResultCallback = () => boolean;
 
-// export enum STaskResult {
-//     Succeeded,
-//     Rejected,
-// }
+export enum STaskResult {
+    Succeeded,
+    Rejected,
+}
+
+export interface STaskChain {
+    resolve: () => void;
+    reject: () => void;
+    _command: RECCMessageCommand;
+}
+
+export type MCEntryProc = () => SCommandResponse;
+export type TaskThenFunc = (c: STaskChain) => void;
+export type TaskCatchFunc = () => void;
+export type CommandResultCallback = () => boolean;
 
 export class RECCMessageCommand {
 
     _name: string;   // for debug
     _entryFunc: MCEntryProc | undefined;
-    _chainFunc: CommandResultCallback | undefined;
+    _chainFunc: CommandResultCallback | undefined;//TaskThenFunc | undefined;
     _nextTask: RECCMessageCommand | undefined;
-    _rejected: CommandResultCallback | undefined;
+    _catchFunc: CommandResultCallback | undefined; // TaskCatchFunc | undefined;
     
-    _result: boolean;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
+    _result: STaskResult;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
     //_prev: RECCMessageCommand | undefined;
 
     constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: RECCMessageCommand | undefined) {
@@ -42,7 +51,7 @@ export class RECCMessageCommand {
         this._name = name;
         this._entryFunc = entryFunc;
         this._chainFunc = chainFunc;
-        this._result = true;
+        this._result = STaskResult.Succeeded;
         //this._prev = prev;
     }
 
@@ -52,27 +61,44 @@ export class RECCMessageCommand {
         return this._nextTask;
     }
 
-    public rejected(func: CommandResultCallback): void {
-        this._rejected = func;
-        // throw new Error("Not implemented.");
-        // assert(!this._rejected);
-        // this._rejected = new RECCMessageCommand("rejected", undefined, func);
-        // //return this._rejected;
+    public catch(func: CommandResultCallback): void {
+        assert(!this._catchFunc);
+        this._catchFunc = func;
     }
 
-    public call(cctx: SCommandContext): boolean {
-        
-        if (this._entryFunc) {
-            this._result = this._entryFunc() != SCommandResponse.Canceled;
+    public call(cctx: SCommandContext): STaskResult {
+        if (this._result == STaskResult.Rejected) {
+            if (this._catchFunc) {
+                this._catchFunc();
+            }
+            return STaskResult.Rejected;
         }
-        else if (this._chainFunc) {
-            //assert(this._prev);
-            //if (this._prev._result) {
-                this._result = this._chainFunc();
-           // }
-        }
+        else {
+            const c: STaskChain = {
+                resolve: () => {
+                    this._result = STaskResult.Succeeded;
+                    this.setNextPriorityTaskIfNeeded(cctx);
+                },
+                reject: () => {
+                    this._result = STaskResult.Rejected;
+                },
+                _command: this,
+            };
 
-        return this._result;
+            if (this._entryFunc) {
+                this._result = (this._entryFunc() != SCommandResponse.Canceled) ? STaskResult.Succeeded : STaskResult.Rejected;
+            }
+            else if (this._chainFunc) {
+                this._result = (this._chainFunc()) ? STaskResult.Succeeded : STaskResult.Rejected;
+            }
+            return this._result;
+        }
+    }
+
+    private setNextPriorityTaskIfNeeded(ctx: SCommandContext) {
+        if (this._nextTask) {
+            ctx._setNextPriorityTask(this._nextTask);
+        }
     }
 }
 
@@ -155,6 +181,19 @@ export class HandleActivityCommand {
  *   .then(C)
  * ```
  * 
+ * finally
+ * ----------
+ * 
+ * 成否にかかわらず、SubTaskChain の最後に必ず実行したい処理を finally で追加できる。
+ * ```
+ * ctx.post(onAnyAction)
+ *     .then(...)
+ *     .catch(...)
+ *     .finally(_ => {
+ *         
+ *     });
+ * ```
+ * 
  * エラー時に実行される then と catch
  * ----------
  * 
@@ -170,6 +209,78 @@ export class HandleActivityCommand {
  *   .catch(B失敗)  // この catch だけが実行される。
  *   .then(D)       // これは呼ばれない。
  *   .catch(失敗)   // これは呼ばれない。
+ * 
+ * resolve と reject
+ * ----------
+ * 
+ * Promise 同様、実行関数は次の形が基本となる。
+ * 
+ * ```
+ * (c) => {
+ *   if (成功) {
+ *     c.resolve();
+ *   }
+ *   else {
+ *     c.reject();
+ *   }
+ * }
+ * ```
+ * 
+ * デフォルトは resolve とする。 Behavior 側にコマンドハンドラが1つも無い場合はエラーにせず先に進みたい。
+ * resolve() したら、その時点でチェインされている Task を Priority に設定する。
+ * つまり、
+ * ```
+ * ctx.post(...)    // A
+ * c.resolve();      // B(呼び出し元の then)
+ * ctx.post(...)    // C
+ * ```
+ * このような場合、実行順は B > A > C となる。
+ * 
+ * 順序通りにしたい場合、次のような postResolve を作るのもありかもしれない。（使うかわからないので未対応）
+ * ```
+ * ctx.post(...)    // A
+ * ctx.postResolve(c);  // B(呼び出し元の then)
+ * ctx.post(...)    // C
+ * ```
+ * 
+ * Behavior 側のコマンドハンドラ側の制限事項・注意点
+ * ----------
+ * 
+ * 誤用防止のため、resolve, reject は1度しか呼び出すことはできない。
+ * コマンドハンドラは次のように Handled を返し、後続のコマンドハンドラの呼び出しを抑制しなければならない。
+ * ```
+ * onAnyAction(c) {
+ *     if (...) {
+ *         c.resolve();
+ *         return Handled;
+ *     }
+ *     else else {
+ *         c.reject();
+ *         return Handled;
+ *     }
+ *     else {
+ *         return Pass;
+ *     }
+ * }
+ * ```
+ * 
+ * コマンドハンドラ側で Dialog 表示を伴う際の基本的な書き方は次のようになる。
+ * ```
+ * onAnyAction(c) {
+ *     ctx.postDialog(..., _ => {
+ *         if (...) {
+ *             c.resolve();
+ *         }
+ *         else {
+ *             c.reject();
+ *         }
+ *     });
+ *     return Handled;
+ * }
+ * ```
+ * resolve() や reject() は遅延実行の形になるが実行はされるので、 Handled を返すべきである。
+ * 
+ * 
  * 
  */
 export class SCommandContext
@@ -651,7 +762,7 @@ export class SCommandContext
 
             // Task 実行
             const result = task.call(this);
-            if (result) {
+            if (result != STaskResult.Rejected) {
                 // つながっている Task があれば、次にそれを実行してみる
                 if (task._nextTask) {
                     this._nextPriorityTask = task._nextTask;
@@ -661,7 +772,7 @@ export class SCommandContext
                 // Task につながっている直近の catch を探してみる
                 let t = task._nextTask;
                 while (t) {
-                    if (t._rejected) {
+                    if (t._catchFunc) {
                         this._nextPriorityTask = t;
                     }
                     t = t._nextTask;
@@ -669,7 +780,7 @@ export class SCommandContext
                 if (this._nextPriorityTask) {
                     // 次の call で reject 側が実行されるようにする。
                     // 変数を使いまわしているのであんまりよくないかもしれない。
-                    this._nextPriorityTask._result = false;
+                    this._nextPriorityTask._result = STaskResult.Rejected;
                 }
             }
 
@@ -712,6 +823,11 @@ export class SCommandContext
             this._afterChainCommandList.splice(0);
             this._commandChainRunning = true;
         }
+    }
+
+    _setNextPriorityTask(task: RECCMessageCommand): void {
+        assert(!this._nextPriorityTask);
+        this._nextPriorityTask = task;
     }
 
     dumpCommands() {
