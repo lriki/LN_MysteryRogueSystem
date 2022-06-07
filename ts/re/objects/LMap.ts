@@ -216,6 +216,11 @@ export class LMap extends LObject {
         return this._rooms[roomId];
     }
 
+    public get isSingleRoomMap(): boolean {
+        // [0] はダミー要素なので、 2 でチェック
+        return this._rooms.length == 2;
+    }
+
     public structures(): readonly LStructure[] {
         return this._structures;
     }

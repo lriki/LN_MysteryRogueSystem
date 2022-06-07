@@ -205,12 +205,17 @@ export class USearch {
         const py = player.my;
 
         // まず操作キャラのすぐ近くは避けて検索してみる
-        const candidateBlocks = spawnableBlocks.filter(b => {
-            if (b._roomId == player.roomId()) return false;
+        let candidateBlocks = spawnableBlocks.filter(b => {
             const dx = Math.abs(b.mx - px);
             const dy = Math.abs(b.my - py);
             return dx > paramEnemySpawnInvalidArea || dy > paramEnemySpawnInvalidArea;
         });
+
+        // 部屋が複数ある場合、Player 以外の部屋を選ぶ
+        if (!REGame.map.isSingleRoomMap) {
+            candidateBlocks = candidateBlocks.filter(b =>(b._roomId != player.roomId()));
+        }
+
         if (candidateBlocks.length > 0) {
             return candidateBlocks[rand.nextIntWithMax(candidateBlocks.length)];
         }

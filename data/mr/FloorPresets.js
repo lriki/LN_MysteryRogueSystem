@@ -130,6 +130,12 @@ db.floorPresets = {
             "kTerrainSetting_GreatHall": 1,
         }
     },
+    // テスト用。中部屋のみが発生するフロア。
+    "kFloorPreset_HalfHall": {
+        terrains: {
+            "kTerrainSetting_HalfHall": 1,
+        }
+    },
     // テスト用。大部屋モンスターハウスのみが発生するフロア。
     "kFloorPreset_GreatHallMH": {
         terrains: {
