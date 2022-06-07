@@ -1,5 +1,5 @@
 import { assert, tr2 } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
+import { DActionId } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";

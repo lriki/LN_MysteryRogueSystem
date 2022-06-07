@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { DAction, DActionId } from "ts/re/data/DAction";
+import { DAction } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
-import { DSkillId } from "ts/re/data/DCommon";
+import { DActionId, DSkillId } from "ts/re/data/DCommon";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LActionTokenType } from "../LActionToken";

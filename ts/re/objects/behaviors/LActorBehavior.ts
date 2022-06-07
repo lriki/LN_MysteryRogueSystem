@@ -1,10 +1,9 @@
 import { assert } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { DActor } from "ts/re/data/DActor";
 import { REBasics } from "ts/re/data/REBasics";
 import { DClass } from "ts/re/data/DClass";
 import { DParameterId } from "ts/re/data/DParameter";
-import { DSkillId } from "ts/re/data/DCommon";
+import { DActionId, DSkillId } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";

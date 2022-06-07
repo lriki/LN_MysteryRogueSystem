@@ -1,6 +1,5 @@
 import { assert, RESerializable, tr2 } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
-import { DCommandId } from "ts/re/data/DCommon";
+import { DActionId, DCommandId } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext, SSubTaskChain } from "ts/re/system/SCommandContext";

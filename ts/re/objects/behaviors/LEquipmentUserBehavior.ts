@@ -1,8 +1,6 @@
 import { assert, tr2 } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { DEquipmentPartId } from "ts/re/data/DEquipmentPart";
-import { DItem } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { STask, SCommandContext } from "ts/re/system/SCommandContext";
@@ -19,7 +17,7 @@ import { UIdentify } from "ts/re/usecases/UIdentify";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { UName } from "ts/re/usecases/UName";
 import { SActivityContext } from "ts/re/system/SActivityContext";
-import { DSubComponentEffectTargetKey } from "ts/re/data/DCommon";
+import { DActionId, DSubComponentEffectTargetKey } from "ts/re/data/DCommon";
 import { LEventResult } from "../LEventServer";
 import { DEventId, ItemRemovedFromInventoryArgs } from "ts/re/data/predefineds/DBasicEvents";
 

@@ -1,4 +1,3 @@
-import { DActionId } from "ts/re/data/DAction";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { DecisionPhase, LBehavior } from "./LBehavior";
@@ -12,6 +11,7 @@ import { DCounterAction } from "ts/re/data/DEntity";
 import { LEffectResult } from "../LEffectResult";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { REData } from "ts/re/data/REData";
+import { DActionId } from "ts/re/data/DCommon";
 
 
 

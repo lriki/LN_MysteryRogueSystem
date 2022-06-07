@@ -15,9 +15,8 @@ import { LEntity, LParamMinMax } from "../LEntity";
 import { REGame } from "../REGame";
 import { CollideActionArgs, CommandArgs, LBehavior, LParamMinMaxInfo, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
 import { UAction } from "ts/re/usecases/UAction";
-import { DParameterId } from "ts/re/data/DParameter";
 import { SActivityContext } from "ts/re/system/SActivityContext";
-import { DActionId } from "ts/re/data/DAction";
+import { DActionId } from "ts/re/data/DCommon";
 
 
 /**

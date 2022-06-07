@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
+import { DActionId } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 
 export type SActivityCommandHandler = (actionId: DActionId) => void;

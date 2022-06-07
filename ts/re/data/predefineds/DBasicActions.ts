@@ -1,5 +1,4 @@
-import { DAction, DActionId } from "../DAction";
-
+import { DActionId } from "../DCommon";
 
 export interface DBasicActions {
     //----------------------------------------

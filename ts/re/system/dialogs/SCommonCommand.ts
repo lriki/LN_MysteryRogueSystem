@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
+import { DActionId } from "ts/re/data/DCommon";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/re/objects/LEntity";

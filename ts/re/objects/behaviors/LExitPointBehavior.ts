@@ -1,5 +1,3 @@
-
-import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/re/objects/behaviors/LBehavior";
 import { SCommandResponse } from "ts/re/system/SCommand";
@@ -8,7 +6,7 @@ import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialo
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
 
 /**
  * [2021/8/14] 「戻る」の実装について

@@ -16,8 +16,7 @@ import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LActionTokenType } from "../objects/LActionToken";
 import { SActivityContext } from "./SActivityContext";
-import { DActionId } from "../data/DAction";
-import { DCommandId } from "../data/DCommon";
+import { DActionId, DCommandId } from "../data/DCommon";
 
 
 export enum STaskResult {

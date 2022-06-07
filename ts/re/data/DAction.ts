@@ -1,5 +1,4 @@
-
-export type DActionId = number;
+import { DActionId } from "./DCommon";
 
 /**
  * 拾う、投げる、などの行動の種類
@@ -9,13 +8,19 @@ export type DActionId = number;
  * 
  * Command は dynamic なデータ構造だが、こちらは static.
  */
-export interface DAction {
+export class DAction {
     /** ID (0 is Invalid). */
-    id: number;
+    id: DActionId;
 
     /** Name */
     displayName: string;
 
     /** GUI への表示優先度 (値が大きいほうが先頭に来る) */
     priority: number;
+
+    public constructor(id: DActionId) {
+        this.id = id;
+        this.displayName = "null";
+        this.priority = 0;
+    }
 }

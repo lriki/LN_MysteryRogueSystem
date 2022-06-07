@@ -9,6 +9,7 @@ export type DRaceId = number;
 export type DTerrainShapeId = number;
 export type DTerrainSettingId = number;
 export type DTerrainPresetId = number;
+export type DActionId = number;
 export type DCommandId = number;
 
 // /**

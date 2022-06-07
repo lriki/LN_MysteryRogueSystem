@@ -1,10 +1,8 @@
 import { assert, RESerializable, tr } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SEffectContext, SEffectIncidentType } from "ts/re/system/SEffectContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { CommandArgs, LBehavior, onPerformStepFeetProcess, onPreStepFeetProcess } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
@@ -13,13 +11,13 @@ import { REGame } from "../REGame";
 import { DEventId, SkillEmittedArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/re/usecases/UMovement";
-import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEmittor } from "ts/re/data/DEmittor";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { DCounterAction } from "ts/re/data/DEntity";
 import { paramExposedTrapTriggerRate, paramHiddenTrapTriggerRate } from "ts/re/PluginParameters";
 import { LRandom } from "../LRandom";
+import { DActionId } from "ts/re/data/DCommon";
 
 
 /**

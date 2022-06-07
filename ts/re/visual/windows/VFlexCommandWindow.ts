@@ -1,4 +1,4 @@
-import { DActionId } from "ts/re/data/DAction";
+import { DActionId } from "ts/re/data/DCommon";
 import { REData } from "ts/re/data/REData";
 import { SDialogCommand } from "ts/re/system/dialogs/SDialogCommand";
 

@@ -1,9 +1,8 @@
 import { assert } from "ts/re/Common";
-import { DActionId } from "./DAction";
 import { DActor } from "./DActor";
 import { DAnnotationReader } from "./DAttributeReader";
 import { DClassId } from "./DClass";
-import { DAttackElementId, DEntityKindId, DRaceId } from "./DCommon";
+import { DActionId, DAttackElementId, DEntityKindId, DRaceId } from "./DCommon";
 import { DEmittorId, DEmittor } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";

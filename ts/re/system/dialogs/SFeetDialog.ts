@@ -1,5 +1,5 @@
 import { tr2 } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
+import { DActionId } from "ts/re/data/DCommon";
 import { REBasics } from "ts/re/data/REBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";

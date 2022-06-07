@@ -223,7 +223,7 @@ export class REData
         this.maps = [new DMap(0)];
         this.templateMaps = [new DTemplateMap(0)];
         this.factions = [];
-        this.actions = [{id: 0, displayName: 'null', priority: 0}];
+        this.actions = [new DAction(0)];
         this.commands = [new DCommand(0, "null")];
         this.sequels = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
         this.parameters = [];
@@ -319,14 +319,13 @@ export class REData
 
     //--------------------
     
-    static addAction(displayName: string, priority?: number): number {
+    static newAction(displayName: string, priority?: number): DAction {
         const newId = this.actions.length;
-        this.actions.push({
-            id: newId,
-            displayName: displayName,
-            priority: priority ?? 0,
-        });
-        return newId;
+        const newData = new DAction(newId);
+        newData.displayName = displayName;
+        newData.priority = priority ?? 0;
+        this.actions.push(newData);
+        return newData;
     }
 
     //--------------------

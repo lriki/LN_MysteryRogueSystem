@@ -1,5 +1,4 @@
 import { assert } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
@@ -16,7 +15,7 @@ import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LState } from "../states/LState";
 import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } from "./LBehavior";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
 import { LMap } from "../LMap";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 

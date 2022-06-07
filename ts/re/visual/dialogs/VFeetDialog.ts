@@ -1,9 +1,5 @@
-import { assert } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { SFeetDialog } from "ts/re/system/dialogs/SFeetDialog";
-import { RESystem } from "ts/re/system/RESystem";
 import { VDialog } from "./VDialog";
-import { LActivity } from "ts/re/objects/activities/LActivity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VEntityCaptionWindow } from "../windows/VEntityCaptionWindow";
 

@@ -1,5 +1,4 @@
 import { assert, tr, tr2 } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/re/data/DEffect";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
@@ -9,7 +8,7 @@ import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "../data/REBasics";
-import { DBlockLayerKind } from "../data/DCommon";
+import { DActionId, DBlockLayerKind } from "../data/DCommon";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DescriptionHighlightLevel, LEntityDescription } from "../objects/LIdentifyer";
 import { Helpers } from "../system/Helpers";

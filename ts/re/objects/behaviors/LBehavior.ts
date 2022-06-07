@@ -27,7 +27,6 @@
  */
 
 import { assert } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { SCommandResponse, SPhaseResult } from "../../system/SCommand";
@@ -41,7 +40,7 @@ import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DCounterAction, DEntityNamePlate } from "ts/re/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/re/system/SEffectApplyer";
-import { DBlockLayerKind, DSpecificEffectId, DSkillId, DSubComponentEffectTargetKey, DCommandId } from "ts/re/data/DCommon";
+import { DBlockLayerKind, DSpecificEffectId, DSkillId, DSubComponentEffectTargetKey, DCommandId, DActionId } from "ts/re/data/DCommon";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DEffect } from "ts/re/data/DEffect";

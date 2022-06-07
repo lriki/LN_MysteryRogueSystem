@@ -1,5 +1,4 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -15,7 +14,7 @@ import { UAction } from "ts/re/usecases/UAction";
 import { REData } from "ts/re/data/REData";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEffectHitType, DEffectSet } from "ts/re/data/DEffect";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
+import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
 import { SActionHitTest } from "ts/re/system/SActionHitTest";
 import { paramThrowingDistance } from "ts/re/PluginParameters";
 

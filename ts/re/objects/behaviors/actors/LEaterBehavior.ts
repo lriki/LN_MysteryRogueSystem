@@ -1,4 +1,3 @@
-import { DActionId } from "ts/re/data/DAction";
 import { REBasics } from "ts/re/data/REBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -8,6 +7,7 @@ import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { RESerializable } from "ts/re/Common";
 import { SActivityContext } from "ts/re/system/SActivityContext";
+import { DActionId } from "ts/re/data/DCommon";
 
 /**
  * @deprecated see kEntity_スピードドラッグ_A
