@@ -5,6 +5,7 @@ import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPas
 import { FMakeTileKindPass } from "./passes/FMakeTileKindPass";
 import { FMakeMonsterHouseForFixedMapPass, FMakeMonsterHouseForRandomMapPass } from "./passes/FMakeMonsterHousePass";
 import { FMakeItemShopPass } from "./passes/FMakeItemShopPass";
+import { FDecorationPass } from "./passes/FDecorationPass";
 
 
 export class FMapBuilder {
@@ -17,6 +18,7 @@ export class FMapBuilder {
             new FEntryPointAndExitPointPass(),
             new FMakeMonsterHouseForRandomMapPass(),
             new FMakeItemShopPass(),
+            new FDecorationPass(),
         ];
         // Apply passes
         passes.forEach(pass => pass.execute(data));
