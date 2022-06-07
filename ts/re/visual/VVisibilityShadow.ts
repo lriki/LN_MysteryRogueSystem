@@ -189,6 +189,15 @@ export class VVisibilityShadow {
         this._visibilityShadowInnerSprites[8].scale.x = tw / VisibilityShadowTileSize;
 
         // Outer
+        // +------------------+
+        // |        [8]       |
+        // +---+----------+---+
+        // |   |          |   |
+        // |[4]|   Inner  |[6]|
+        // |   |          |   |
+        // +---+----------+---+
+        // |        [2]       |
+        // +------------------+
         const osx1 = tx1 - VisibilityShadowTileSize;
         const osx2 = tx2 + VisibilityShadowTileSize;
         const osy1 = ty1 - VisibilityShadowTileSize;
@@ -200,7 +209,7 @@ export class VVisibilityShadow {
         this._visibilityShadowOuterSprites[6].position.set(osx2, osy1 + osh / 2.0);
         this._visibilityShadowOuterSprites[8].position.set(osx1 + osw / 2.0, osy1);
 
-        const scale = 30.0;
+        const scale = (this._mx2 - this._mx1) + (this._spritesetMap._tilemap.width / this._spritesetMap._tilemap._tileWidth);
         this._visibilityShadowOuterSprites[2].scale.set(scale * 2, scale);
         this._visibilityShadowOuterSprites[4].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整
         this._visibilityShadowOuterSprites[6].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整

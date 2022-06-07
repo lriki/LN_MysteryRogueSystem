@@ -12,6 +12,7 @@ import { PerlinNoise } from "ts/re/math/Noise";
  */
 export class FDecorationPass extends FMapBuildPass {
     public execute(map: FMap): void {
+        /*
         const noise = new PerlinNoise(map.random().nextInt());
 
         for (let y = 0; y < map.fullHeight; y++) {
@@ -20,6 +21,7 @@ export class FDecorationPass extends FMapBuildPass {
                 console.log("v", v);
             }
         }
+        */
 
     }
 
