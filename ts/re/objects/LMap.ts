@@ -21,6 +21,7 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { UBlock } from "../usecases/UBlock";
 import { paramDefaultVisibiltyLength } from "../PluginParameters";
 import { LRoomId } from "./LCommon";
+import { USearch } from "../usecases/USearch";
 
 export enum MovingMethod {
     Walk,
@@ -376,31 +377,21 @@ export class LMap extends LObject {
 
     /** entity の視界内の Entity を取得する */
     public getInsightEntities(subject: LEntity): LEntity[] {
-        if (subject.isOnRoom()) {
-            const room = this.room(subject.roomId());
-            let entities = this.entitiesInRoom(subject.roomId(), true).filter(x => x != subject);
-            if (room.poorVisibility) {
-                entities = entities.filter(x => UMovement.blockDistance(subject.mx, subject.my, x.mx, x.my) <= paramDefaultVisibiltyLength);
-            }
-            return entities;
-        }
-        else {
-            return this.entities().filter(entity => UMovement.checkAdjacentEntities(entity, subject) && entity != subject);
-        }
+        return this.entities().filter(x => USearch.checkInSightEntity(subject, x));
     }
 
     // withOuter: 部屋の外周1マスも含むかどうか
-    public entitiesInRoom(roomId: LRoomId, withOuter: boolean): LEntity[] {
-        if (withOuter) {
-            const room = this.room(roomId);
-            const outers: LBlock[] = [];
-            room.forEachEdgeBlocks(b => outers.push(b));
-            return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.mx == entity.mx && b.my == entity.my) != undefined));
-        }
-        else {
-            return this.entities().filter(entity => this.roomId(entity) == roomId);
-        }
-    }
+    // public entitiesInRoom(roomId: LRoomId, withOuter: boolean): LEntity[] {
+    //     if (withOuter) {
+    //         const room = this.room(roomId);
+    //         const outers: LBlock[] = [];
+    //         room.forEachEdgeBlocks(b => outers.push(b));
+    //         return this.entities().filter(entity => this.roomId(entity) == roomId || (outers.find(b => b.mx == entity.mx && b.my == entity.my) != undefined));
+    //     }
+    //     else {
+    //         return this.entities().filter(entity => this.roomId(entity) == roomId);
+    //     }
+    // }
 
     _addEntityInternal(entity: LEntity): void {
         // 新規で追加するほか、マップロード時に、そのマップに存在することになっている Entity の追加でも使うので、

@@ -14,7 +14,7 @@ import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
 import { LRoom } from "../objects/LRoom";
 import { REGame } from "../objects/REGame";
-import { paramEnemySpawnInvalidArea } from "../PluginParameters";
+import { paramDefaultVisibiltyLength, paramEnemySpawnInvalidArea } from "../PluginParameters";
 import { Helpers } from "../system/Helpers";
 import { UMovement } from "./UMovement";
 
@@ -39,7 +39,8 @@ export class USearch {
     }
 
     /**
-     * subject から見て target は可視であるか (視界内か、ではない点に注意)
+     * subject から見て target は可視であるか
+     * ※視界内か、ではない点に注意
      */
     public static isVisibleFromSubject(subject: LEntity, target: LEntity): boolean {
         // あかりの巻物など、フロア自体に可視効果がある
@@ -52,6 +53,32 @@ export class USearch {
         if (target.hasTrait(REBasics.traits.Invisible)) return false;
 
         return true;
+    }
+
+    /**
+     * subject から見て、 target は視界内であるか。
+     * ※可視であるか、ではない点に注意。この関数は地形や位置関係による視界チェックとなる。
+     */
+    public static checkInSightEntity(subject: LEntity, target: LEntity): boolean {
+        if (subject.isOnRoom()) {
+            const map = REGame.map;
+            const subjectRoom = map.room(subject.roomId());
+
+            // 部屋の外周にも含まれず、部屋の外にいる target を見ることはできない。
+            if (!subjectRoom.containsWithEdge(target.mx, target.my)) return false;
+
+            // 視界不明瞭部屋の場合、遠いところにいる target は見えない。
+            if (subjectRoom.poorVisibility) {
+                if (UMovement.blockDistance(subject.mx, subject.my, target.mx, target.my) > paramDefaultVisibiltyLength) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            // 通路内では隣接している場合のみ見える。
+            return UMovement.checkAdjacentEntities(subject, target);
+        }
     }
 
     /**

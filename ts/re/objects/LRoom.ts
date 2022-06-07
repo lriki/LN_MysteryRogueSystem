@@ -58,6 +58,11 @@ export class LRoom {
     public contains(mx: number, my: number): boolean {
         return this._mx1 <= mx && mx <= this._mx2 && this._my1 <= my && my <= this._my2;
     }
+
+    /** 外周1マスも考慮し、mx,my が部屋に含まれているか確認する */
+    public containsWithEdge(mx: number, my: number): boolean {
+        return this._mx1 - 1 <= mx && mx <= this._mx2 + 1 && this._my1 - 1 <= my && my <= this._my2 + 1;
+    }
     
     public forEachEntities(func: (entity: LEntity) => void): void {
         for (const entity of REGame.map.entities()) {

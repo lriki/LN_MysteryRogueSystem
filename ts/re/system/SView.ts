@@ -1,4 +1,4 @@
-import { tr2 } from "ts/re/Common";
+import { assert, tr2 } from "ts/re/Common";
 import { REBasics } from "ts/re/data/REBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DStateRestriction } from "ts/re/data/DState";
@@ -73,6 +73,16 @@ export class SView {
         return { visible: true, tilesetId: undefined };
     }
     
+    /**
+     * subject から entity が可視であるか。
+     * 
+     * 基本的にプレイヤーから見た視界の表示で使用する。
+     * AI 用の視界判定処理とは微妙に異なるので注意。
+     * 例えば、部屋の外であっても、一度通過したブロックにあるアイテムは可視である。
+     * 
+     * ミニマップの処理とも微妙に違う点に注意。
+     * 影無しフロアでは、ミニマップには表示されないが、タイルマップ上に表示されるものもある。
+     */
     public static getEntityVisibility(entity: LEntity): SEntityVisibility {
         const subject = REGame.camera.focusedEntity();
 
@@ -83,46 +93,56 @@ export class SView {
         if (subject && !subject.entityId().equals(entity.entityId())) {
             // entity は操作中キャラ以外
             
-            // subject が目つぶし状態なら見えない
-            if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
-                return { visible: false, translucent: false };
-            }
+            // // subject が目つぶし状態なら見えない
+            // if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
+            //     return { visible: false, translucent: false };
+            // }
             
-            // entity が透明状態なら見えない
-            //if (entity.traits(REBasics.traits.Invisible).length > 0) {
-            if (!USearch.isVisibleFromSubject(subject, entity)) {
+            // // entity が透明状態なら見えない
+            // //if (entity.traits(REBasics.traits.Invisible).length > 0) {
+            // if (!USearch.isVisibleFromSubject(subject, entity)) {
+            //     return { visible: false, translucent: false };
+            // }
+
+            // // entity が露出していない罠なら見えない
+            // const trap = entity.findEntityBehavior(LTrapBehavior);
+            // if (trap) {
+            //     if (!trap.isExposedFor(subject)) {
+            //         return { visible: false, translucent: false };
+            //     }
+            // }
+
+            // 見えないものを先にはじく
+            if (this.checkEntityInvisible(subject, entity)) {
                 return { visible: false, translucent: false };
             }
 
-            // entity が露出していない罠なら見えない
-            const trap = entity.findEntityBehavior(LTrapBehavior);
-            if (trap) {
-                if (!trap.isExposedFor(subject)) {
-                    return { visible: false, translucent: false };
-                }
+            // 次に見えるべきをチェック
+            if (!this.checkEntityVisible(subject, entity)) {
+                return { visible: false, translucent: false };
             }
 
-            if (!Helpers.isHostile(subject, entity)) {
-                const targetBlock = REGame.map.block(entity.mx, entity.my);
+            // if (!Helpers.isHostile(subject, entity)) {
+            //     const targetBlock = REGame.map.block(entity.mx, entity.my);
 
-                // 中立 target は、踏破済みの Block 上なら見える
-                if (!targetBlock._passed) {
-                    return { visible: false, translucent: false };
-                }
-            }
-            else if (UMovement.checkAdjacentEntities(subject, entity)) {
-                // 隣接している相手は、基本的に見える
-            }
-            else {
-                // 部屋内？
-                if (subject.isOnRoom()) {
-                    if (subject.roomId() != entity.roomId()) {
-                        return { visible: false, translucent: false };
-                    }
-                }
-                else {
-                }
-            }
+            //     // 中立 target は、踏破済みの Block 上なら見える
+            //     if (!targetBlock._passed) {
+            //         return { visible: false, translucent: false };
+            //     }
+            // }
+            // else if (UMovement.checkAdjacentEntities(subject, entity)) {
+            //     // 隣接している相手は、基本的に見える
+            // }
+            // else {
+            //     // 部屋内？
+            //     if (subject.isOnRoom()) {
+            //         if (subject.roomId() != entity.roomId()) {
+            //             return { visible: false, translucent: false };
+            //         }
+            //     }
+            //     else {
+            //     }
+            // }
 
 
             // subject が惑わし状態？
@@ -145,5 +165,53 @@ export class SView {
         }
 
         return { visible: true, translucent: false };
+    }
+
+    /** 見えなくなる条件をチェックする */
+    private static checkEntityInvisible(subject: LEntity, target: LEntity): boolean {
+        // 自分自身は常に見える
+        //if (subject.entityId().equals(target.entityId())) return true;
+
+        // subject が目つぶし状態なら見えない
+        if (USearch.hasBlindness(subject)) return true;
+
+        // target が透明状態
+        if (!USearch.isVisibleFromSubject(subject, target)) return true;
+
+        // target が露出していない罠なら見えない
+        const trap = target.findEntityBehavior(LTrapBehavior);
+        if (trap) {
+            if (!trap.isExposedFor(subject)) {
+                return true;
+            }
+        }
+
+        // 見える
+        return false;
+    }
+    
+    /** 見える条件をチェックする */
+    private static checkEntityVisible(subject: LEntity, target: LEntity): boolean {
+        // 自分自身は常に見える
+        //if (subject.entityId().equals(target.entityId())) return true;
+
+        // あかりの巻物など、フロア自体に可視効果がある
+        if (REGame.map.unitClarity) return true;
+        
+        // 中立 target は、踏破済みの Block 上なら見える
+        if (!Helpers.isHostile(subject, target)) {
+            const targetBlock = REGame.map.block(target.mx, target.my);
+            if (targetBlock._passed) {
+                return true;
+            }
+        }
+
+        // 地形やマップの状態的に見える
+        if (USearch.checkInSightEntity(subject, target)) {
+            return true;
+        }
+
+        // 見えない
+        return false;
     }
 }

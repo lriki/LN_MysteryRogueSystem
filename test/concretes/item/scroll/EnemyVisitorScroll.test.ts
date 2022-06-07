@@ -47,11 +47,16 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    // 別の部屋の Enemy も見えるようになっている
     expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeTruthy();
+    const enemy1Visibility1 = SView.getEntityVisibility(enemy2);
+    expect(enemy1Visibility1.visible).toBeTruthy();
 
+    // 透明状態の Enemy は見えるようになっている
     const enemy2Visibility1 = SView.getEntityVisibility(enemy2);
     expect(enemy2Visibility1.visible).toBeTruthy();
 
+    // アイテム擬態が解けている
     expect(enemy3.isStateAffected(REData.getState("kState_UTアイテム擬態").id)).toBeFalsy();
 });
 
