@@ -162,6 +162,7 @@ export class LMap extends LObject {
                     mapBlock._blockComponent = dataBlock.component();
                     mapBlock._continuation = dataBlock.isContinuation();
                     mapBlock._doorway = dataBlock.isDoorway();
+                    mapBlock._templatePartIndex = dataBlock.templatePartIndex;
                 }
             }
 

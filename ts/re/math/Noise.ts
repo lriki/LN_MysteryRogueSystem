@@ -49,6 +49,10 @@ export class PerlinNoise {
         if (seed < 256) {
             seed |= seed << 8;
         }
+        if (seed > 65535) {
+            seed %= 65535;
+        }
+        console.log("seed", seed);
 
         this.perm = new Array<number>(512);
         this.gradP = new Array<Grad>(512);
@@ -107,6 +111,9 @@ export class SimplexNoise {
         if (seed < 256) {
             seed |= seed << 8;
         }
+        if (seed > 65535) {
+            seed %= 65535;
+        }
 
         this.perm = new Array<number>(512);
         this.gradP = new Array<Grad>(512);
@@ -122,7 +129,7 @@ export class SimplexNoise {
         }
     }
 
-    public simplex2(xin: number, yin: number) {
+    public noise2D(xin: number, yin: number) {
         var n0, n1, n2; // Noise contributions from the three corners
         // Skew the input space to determine which simplex cell we're in
         var s = (xin+yin)*F2; // Hairy factor for 2D
