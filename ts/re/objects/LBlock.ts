@@ -7,6 +7,7 @@ import { LRoom } from "./LRoom";
 import { RESystem } from "ts/re/system/RESystem";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LRoomId } from "./LCommon";
+import { DTemplateMapPartIndex } from "../data/DTemplateMap";
 
 /** Tile の本質的な形状 */
 export enum LTileShape {
@@ -75,6 +76,7 @@ export class LBlock {
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     
     _tileShape: LTileShape = LTileShape.Floor;
+    _templatePartIndex: DTemplateMapPartIndex;
 
     // お店の床など、ゲームシステムとして明示したい装飾
     _systemDecoration: LBlockSystemDecoration = LBlockSystemDecoration.None;
@@ -87,6 +89,7 @@ export class LBlock {
         this._mx = x;
         this._my = y;
         this._layers = [new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer()];
+        this._templatePartIndex = 0;
     }
 
     /** 絶対座標 X */
@@ -125,6 +128,10 @@ export class LBlock {
         //const attr = this.tile().findAttribute(RETileAttribute);
         //return attr ? attr.tileKind() : TileKind.Void;
         return this._tileShape;
+    }
+
+    public get templatePartIndex(): DTemplateMapPartIndex {
+        return this._templatePartIndex;
     }
 
     public setSystemDecoration(value: LBlockSystemDecoration): void {

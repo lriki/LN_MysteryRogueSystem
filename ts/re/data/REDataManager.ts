@@ -8,7 +8,6 @@ import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
 import { DLand, DLandIdentificationLevel, DMapId, DTerrainSettingRef } from "./DLand";
-import { buildTemplateMapData } from "./DTemplateMap";
 import { DHelpers } from "./DHelper";
 import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
 import { DActor } from './DActor';
@@ -1198,7 +1197,7 @@ export class REDataManager {
         for (let iMap = 0; iMap < validMaps.length; iMap++) {
             const templateMap = validMaps[iMap];
             this.beginLoadMapData(templateMap.mapId, (obj: any) => { 
-                buildTemplateMapData(obj, templateMap);
+                templateMap.import(obj);
 
                 if (iMap == validMaps.length - 1) {
                     next();

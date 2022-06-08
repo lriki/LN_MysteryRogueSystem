@@ -6,6 +6,9 @@ import { LTileShape } from "ts/re/objects/LBlock";
 import { FStructure } from "./FStructure";
 import { DItemShopTypeId } from "ts/re/data/DItemShop";
 import { FSector, FSectorAdjacency, FSectorConnection } from "./data/FSector";
+import { FMapBlock } from "./data/FMapBlock";
+import { DTemplateMapId } from "../data/DTemplateMap";
+import { REData } from "../data/REData";
 
 
 export enum FDirection {
@@ -144,118 +147,6 @@ export class FSectorEdge {
     }
 }
 
-export class FMapBlock {
-    private _mx;
-    private _my;
-    private _tileShape: LTileShape;
-    private _blockComponent: FBlockComponent;
-    private _sectorId: FSectorId;
-    private _roomId: FRoomId;
-    private _doorway: boolean;  // 部屋の入口
-    private _continuation: boolean; // ゴールとなる階段から地続きであるか
-    private _fixedMapMonsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
-    private _fixedMapItemShopTypeId: DItemShopTypeId;
-
-    public constructor(mx: number, my: number) {
-        this._mx = mx;
-        this._my = my;
-        this._tileShape = LTileShape.Wall;
-        this._blockComponent = FBlockComponent.None;
-        this._sectorId = 0;
-        this._roomId = 0;
-        this._doorway = false;
-        this._continuation = false;
-        this._fixedMapMonsterHouseTypeId = 0;
-        this._fixedMapItemShopTypeId = 0;
-    }
-
-    public get mx(): number {
-        return this._mx;
-    }
-
-    public get my(): number {
-        return this._my;
-    }
-
-    public setTileShape(value: LTileShape): void {
-        this._tileShape = value;
-    }
-
-    public tileShape(): LTileShape {
-        return this._tileShape;
-    }
-
-    public setComponent(value: FBlockComponent): void {
-        this._blockComponent = value;
-    }
-
-    public component(): FBlockComponent {
-        return this._blockComponent;
-    }
-
-    public setFixedMapMonsterHouseTypeId(value: DMonsterHouseTypeId): void {
-        this._fixedMapMonsterHouseTypeId = value;
-    }
-
-    public fixedMapMonsterHouseTypeId(): DMonsterHouseTypeId {
-        return this._fixedMapMonsterHouseTypeId;
-    }
-
-    public setFixedMapItemShopTypeId(value: DItemShopTypeId): void {
-        this._fixedMapItemShopTypeId = value;
-    }
-
-    public fixedMapItemShopTypeId(): DItemShopTypeId {
-        return this._fixedMapItemShopTypeId;
-    }
-    
-    public setSectorId(value: FSectorId): void {
-        this._sectorId = value;
-    }
-
-    public sectorId(): FSectorId {
-        return this._sectorId;
-    }
-
-    public setRoomId(value: FRoomId): void {
-        this._roomId = value;
-    }
-
-    // TODO: 水路かつ部屋、水路かつ通路、みたいなこともあるので分ける必要がある
-    public isRoom(): boolean {
-        return this._blockComponent == FBlockComponent.Room;
-    }
-    
-    /**
-     * 本質的なものとして通行可能であるか。
-     * 例えば隠し通路 (通常攻撃で通路が姿を現す) の場合、tileKind は Wall であるが、Component は Passageway となる。
-     */
-    public isPassagableComponent(): boolean {
-        return this._blockComponent == FBlockComponent.Room || this._blockComponent == FBlockComponent.Passageway;
-    }
-
-    public roomId(): FRoomId {
-        return this._roomId;
-    }
-
-    public setDoorway(value: boolean) {
-        this._doorway = value;
-    }
-
-    public isDoorway(): boolean {
-        return this._doorway;
-    }
-
-    public setContinuation(value: boolean) {
-        this._continuation = value;
-    }
-
-    public isContinuation(): boolean {
-        return this._continuation;
-    }
-
-    
-}
 
 export class FRoom {
     private _map: FMap;
@@ -415,6 +306,7 @@ export class FMap {
     private _structures: FStructure[];
     private _entryPoint: FEntryPont | undefined;
     private _exitPont: FExitPont | undefined;
+    private _templateId: DTemplateMapId;
 
     public constructor(floorId: LFloorId, randSeed: number) {
         this._floorId = floorId;
@@ -433,6 +325,9 @@ export class FMap {
         this._sectors = [];
         this._rooms = [];
         this._structures = [];
+        const floorData = floorId.floorInfo();
+        const tempateData = floorData.template ? REData.templateMaps.find(x => x.name == floorData.template) : undefined;
+        this._templateId = (tempateData ?? REData.templateMaps[1]).id;
     }
 
     public resetFromInnerSize(innerWidth: number, innerHeight: number, paddingX: number, paddingY: number): void {
@@ -616,6 +511,10 @@ export class FMap {
     public rmmzFixedMapData(): IDataMap {
         assert(this._floorId.isFixedMap());
         return $dataMap;
+    }
+
+    public get templateId(): DTemplateMapId {
+        return this._templateId;
     }
 
     // For Debug

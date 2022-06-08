@@ -1,16 +1,18 @@
 import { assert } from "ts/re/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
-import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock } from "../FMapData";
+import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/re/data/DHelper";
 import { REData } from "ts/re/data/REData";
 import { DAnnotationReader } from "ts/re/data/DAttributeReader";
 import { DEntityKind } from "ts/re/data/DEntityKind";
 import { PerlinNoise } from "ts/re/math/Noise";
+import { DTemplateMap } from "ts/re/data/DTemplateMap";
 
 /**
  * ランダムマップの装飾
  */
 export class FDecorationPass extends FMapBuildPass {
+    
     public execute(map: FMap): void {
         /*
         const noise = new PerlinNoise(map.random().nextInt());
@@ -23,6 +25,12 @@ export class FDecorationPass extends FMapBuildPass {
         }
         */
 
+        const template = REData.templateMaps[map.templateId];
+        this.makeFloorDecoration(map, template);
+    }
+
+    public makeFloorDecoration(map: FMap, template: DTemplateMap): void {
+        
     }
 
 }

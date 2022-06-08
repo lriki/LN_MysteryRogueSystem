@@ -1,11 +1,12 @@
 import { FMapBuildPass } from "./passes/FMapBuildPass";
-import { FMap, FMapBlock } from "./FMapData";
+import { FMap } from "./FMapData";
 import { FMarkContinuationPass } from "./passes/FMarkContinuationPass";
 import { FEntryPointAndExitPointPass } from "./passes/FEntryPointAndExitPointPass";
 import { FMakeTileKindPass } from "./passes/FMakeTileKindPass";
 import { FMakeMonsterHouseForFixedMapPass, FMakeMonsterHouseForRandomMapPass } from "./passes/FMakeMonsterHousePass";
 import { FMakeItemShopPass } from "./passes/FMakeItemShopPass";
 import { FDecorationPass } from "./passes/FDecorationPass";
+import { FMapBlock } from "./data/FMapBlock";
 
 
 export class FMapBuilder {

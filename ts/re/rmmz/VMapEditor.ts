@@ -6,7 +6,7 @@ import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { LMap } from "ts/re/objects/LMap";
 import { SMinimapData } from "ts/re/system/SMinimapData";
 import { LBlock, LBlockSystemDecoration, LTileShape } from "ts/re/objects/LBlock";
-import { DTemplateMap } from "ts/re/data/DTemplateMap";
+import { DTemplateMap, DTemplateMapPartTileType } from "ts/re/data/DTemplateMap";
 
 
 interface Point {
@@ -82,25 +82,23 @@ export class VMapEditor {
             default:
                 throw new Error("Not implemented.");
         }
-        
-        /*
-        switch (block._blockComponent) {
-            case FBlockComponent.None:
-                if (this.isValidPos(x, y + 1) && coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
-                    this.putAutoTile(x, y, 0, templateMap.wallEdgeAutoTileKind);
+
+        const templatePartIndex = block.templatePartIndex;
+        if (templatePartIndex > 0) {
+            const part = this._templateMap.parts[templatePartIndex];
+            assert(part);
+            if (part.tileType == DTemplateMapPartTileType.Normal) {
+                for (let i = 0 ; i < part.height; i++) {
+                    const cy = y - i;
+                    if (this.isValidPos(x, cy)) {
+                        this.setTileId(x, y, 2, part.tiles[i]);
+                    }
                 }
-                else {
-                    this.putAutoTile(x, y, 0, templateMap.wallHeadAutoTileKind);
-                }
-                break;
-            case FBlockComponent.Room:
-                this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
-                break;
-            case FBlockComponent.Passageway:
-                this.putAutoTile(x, y, 0, templateMap.floorAutoTileKind);
-                break;
+            }
+            else {
+                throw new Error("Not implemented.");
+            }
         }
-        */
     }
 
     private width(): number {

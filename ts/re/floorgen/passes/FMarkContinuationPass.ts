@@ -1,10 +1,11 @@
 import { assert } from "ts/re/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
-import { FBlockComponent, FEntryPont, FExitPont, FMap, FMapBlock } from "../FMapData";
+import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/re/data/DHelper";
 import { REData } from "ts/re/data/REData";
 import { DAnnotationReader } from "ts/re/data/DAttributeReader";
 import { DEntityKind } from "ts/re/data/DEntityKind";
+import { FMapBlock } from "../data/FMapBlock";
 
 
 

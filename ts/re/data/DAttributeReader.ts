@@ -116,6 +116,12 @@ export interface RmmzREEventAttribute {
     //}
 }
 
+export interface RmmzMRTemplatePartAttribute {
+    type?: string;
+    height?: number;
+    placement?: string;
+}
+
 export class DAnnotationReader {
 
     public static findFirstAnnotationFromEvent(annotation: string, event: IDataMapEvent): string | undefined {
@@ -262,5 +268,14 @@ export class DAnnotationReader {
             trigger: rawData_.trigger,
             condition_state: rawData_.condition_state,
         };
+    }
+
+    static readTemplatePartAttributeFromPage(page: IDataMapEventPage): RmmzMRTemplatePartAttribute | undefined {
+        const block = this.findFirstAnnotationFromPage("@MR-TemplatePart", page);
+        if (!block) return undefined;
+        let rawData: RmmzMRTemplatePartAttribute | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
     }
 }
