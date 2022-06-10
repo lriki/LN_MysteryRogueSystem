@@ -75,7 +75,7 @@ export class FDecorationPass extends FMapBuildPass {
         const thr = 50;
 
         const parts = template.partIndex[DTemplateMapPartType.WallDecoration].map(x => template.parts[x]);
-        console.log("wall", parts);
+        //console.log("wall", parts);
         const noises = parts.map(x => new SimplexNoise(map.random().nextInt()));
 
         for (const block of map.blocks()) {

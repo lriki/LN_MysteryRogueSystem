@@ -25,10 +25,15 @@ test("system.Property.basic", () => {
     const state = UProperty.getValueFromEntity(player1, "State[kState_UTかなしばり]");
     expect(state).toBe(1);
 
-    // アイテム数
-    player1.getEntityBehavior(LInventoryBehavior).addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
+    // アイテム数を取得してみる
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+    inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
     const count = UProperty.getValueFromEntity(player1, "Entity:Inventory.items.length");
     expect(count).toBe(1);
+
+    // 値を設定してみる
+    UProperty.setValue("${Player}", "Entity:Inventory.capacity", 100);
+    expect(inventory.capacity).toBe(100);
 });
 
 test("system.Property.PathParser", () => {

@@ -231,7 +231,7 @@ test("system.Warehouse.ChangeCapacity", () => {
     const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    UProperty.setValue("kEntity_Warehouse_A", "inventory.capacity", 100);
+    UProperty.setValue("kEntity_Warehouse_A", "Entity:Inventory.capacity", 100);
 
     expect(inventory2.capacity).toBe(100);
 });

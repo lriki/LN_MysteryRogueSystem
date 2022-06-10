@@ -3,13 +3,36 @@ import { LEntity } from "../objects/LEntity";
 import { LObject } from "../objects/LObject";
 import { REGame } from "../objects/REGame";
 import { SFormulaOperand } from "../system/SFormulaOperand";
+import { USearch } from "./USearch";
 
 export class UProperty {
 
-    public static setValue(key: string, path: string, value: any): any {
+    public static setValue(key: string, path: string, value: any): void {
+        const entity = USearch.getEntityByKeyPattern(key);
+        //const entity = REGame.world.getFirstEntityByKey(key);
         const propPath = new UPropertyPath(path);
-        const entity = REGame.world.getFirstEntityByKey(key);
+        const obj = this.getObject(entity, propPath);
         
+        if (!propPath.propertyName) {
+            throw new Error("Invalid property name.");
+        }
+        
+        if (obj) {
+            if (propPath.behaviorName) {
+                const behavior = entity.findEntityBehaviorByName(propPath.behaviorName);
+                if (!behavior) new Error(`Behavior not found. ${path}`);
+                (behavior as any)[propPath.propertyName] = value;
+            }
+            // else if (propPath.propertyName) {
+            //     let value: any = undefined;
+            //     eval(`value = obj.${propPath.propertyName}`);
+            //     return value;
+            // }
+        }
+        else {
+            throw new Error(`Invalid property path. ${path}`);
+        }
+
         // if (propPath.componentType == UComponentType.Behavior) {
         //     assert(propPath.behaviorName);
         //     assert(propPath.propertyName);
@@ -37,6 +60,7 @@ export class UProperty {
         const propPath = new UPropertyPath(path);
         const obj = this.getObject(entity, propPath);
 
+        // プロパティ名が指定されていない場合、 Object の存在自体を 1 or 0 で返す
         if (!propPath.propertyName) {
             return (obj !== undefined) ? 1 : 0;
         }
@@ -84,6 +108,32 @@ export class UProperty {
         else {
             throw new Error("Not implemented.");
         }
+    }
+
+    public static getValueByVariablePattern(pattern: string): any {
+        if (pattern.startsWith("${")) {
+            const i = pattern.indexOf("}");
+            if (i >= 0) {
+                const name = pattern.substring(2, i);
+                const id = parseInt(pattern);
+                if (!isNaN(id)) {
+                    return $gameVariables.value(id);
+                }
+                else {
+                    const id = $dataSystem.variables.findIndex(x => x && x == pattern);
+                    if (id >= 0) {
+                        return $gameVariables.value(id);
+                    }
+                    else {
+                        throw new Error(`${pattern} not found.`);
+                    }
+                }
+            }
+            else {
+                return eval(pattern);
+            }
+        }
+
     }
 }
 
