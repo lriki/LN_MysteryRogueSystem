@@ -9,6 +9,7 @@ import { TestUtils } from "test/TestUtils";
 import { REGame } from "ts/re/objects/REGame";
 import { REBasics } from "ts/re/data/REBasics";
 import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
+import { SView } from "ts/re/system/SView";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -29,11 +30,15 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
 
     // item
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイテムスクロール_A").id, [], "item1"));
-    REGame.world.transferEntity(item2, floorId, 19,4);  
-
-    expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeFalsy();
+    REGame.world.transferEntity(item2, floorId, 19, 4);  
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const minimap = RESystem.minimapData;
+    minimap.update();
+    expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeFalsy();
+    expect(SView.getMinimapVisibility(item2).visible).toBeFalsy();
+    expect(minimap.getData(19, 4, 1)).toBe(0);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -43,6 +48,9 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    minimap.update();
     expect(SNavigationHelper.testVisibilityForMinimap(player1, item2)).toBeTruthy();
+    expect(SView.getMinimapVisibility(item2).visible).toBeTruthy();
+    expect(minimap.getData(19, 4, 1)).toBe(minimap.itemMarkerTileId());
 });
 

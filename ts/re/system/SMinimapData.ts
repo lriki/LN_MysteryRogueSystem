@@ -8,6 +8,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { Helpers } from "./Helpers";
 import { SNavigationHelper } from "./SNavigationHelper";
 import { SView } from "./SView";
+import { DHelpers } from "../data/DHelper";
 
 enum SubTile {
     UL,
@@ -57,10 +58,13 @@ export class SMinimapData {
     }
 
     public setData(x: number, y: number, z: number, value: number): void {
-        if (!this.isValid(x, y, z)) throw new Error();
+        assert(this.isValid(x, y, z));
         this._data[(z * this._height + y) * this._width + x] = value;
-        
-        //$gameMap.data()[(z * this._height + y) * this._width + x] = value;
+    }
+
+    public getData(x: number, y: number, z: number): number {
+        assert(this.isValid(x, y, z));
+        return this._data[(z * this._height + y) * this._width + x];
     }
 
     public isValid(x: number, y: number, z: number): boolean {
@@ -87,6 +91,10 @@ export class SMinimapData {
     //    return this._tilemapResetNeeded;
     //}
 
+    public itemMarkerTileId(): number {
+        return DHelpers.TILE_ID_A5 + 10;
+    }
+
     // 地形表示の更新
     public refresh(): void {
         const map = REGame.map;
@@ -102,14 +110,14 @@ export class SMinimapData {
                         const tileId = this.getAutotileShape(x, y, FBlockComponent.None);
 
                         if (block._passed)
-                            this.setData(x, y, 0, Tilemap.TILE_ID_A2 + tileId);
+                            this.setData(x, y, 0, DHelpers.TILE_ID_A2 + tileId);
                         else
                             this.setData(x, y, 0, 0);
                         break;
                     case FBlockComponent.Room:
                     case FBlockComponent.Passageway:
                         if (block._passed)
-                            this.setData(x, y, 0, Tilemap.TILE_ID_A5 + 1);
+                            this.setData(x, y, 0, DHelpers.TILE_ID_A5 + 1);
                         else
                             this.setData(x, y, 0, 0);
                         break;
@@ -142,32 +150,32 @@ export class SMinimapData {
         }
 
         for (const entity of map.entities()) {
-            if (!SView.getEntityVisibility(entity).visible) {
+            if (!SView.getMinimapVisibility(entity).visible) {
                 // 何も表示しない
             }
             else if (entity.entityId().equals(subject.entityId())) {
-                this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 9);
+                this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 9);
             }
             else {
                 if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
                     if (entity.findEntityBehavior(LTrapBehavior)) {
-                        this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 13);
+                        this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 13);
                     }
                     else if (entity.findEntityBehavior(LBattlerBehavior)) {
                         if (Helpers.isHostile(subject, entity)) {
                             // 敵対勢力
-                            this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 11);
+                            this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 11);
                         }
                         else {
                             // 中立 or 味方
-                            this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 12);
+                            this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 12);
                         }
                     }
                     else if (entity.findEntityBehavior(LItemBehavior)) {
-                        this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + 10);
+                        this.setData(entity.mx, entity.my, 1, this.itemMarkerTileId());
                     }
                     else if (entity.findEntityBehavior(LExitPointBehavior)) {
-                        this.setData(entity.mx, entity.my, 1, Tilemap.TILE_ID_A5 + ExitPointTileIdOffset);
+                        this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + ExitPointTileIdOffset);
                     }
                 }
             }

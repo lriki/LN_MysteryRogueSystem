@@ -12,6 +12,7 @@ import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
 import { USearch } from "../usecases/USearch";
 import { UMovement } from "../usecases/UMovement";
 import { Helpers } from "./Helpers";
+import { LExitPointBehavior } from "../objects/behaviors/LExitPointBehavior";
 
 export interface TilemapViewInfo {
     visible: boolean;
@@ -72,18 +73,8 @@ export class SView {
 
         return { visible: true, tilesetId: undefined };
     }
-    
-    /**
-     * subject から entity が可視であるか。
-     * 
-     * 基本的にプレイヤーから見た視界の表示で使用する。
-     * AI 用の視界判定処理とは微妙に異なるので注意。
-     * 例えば、部屋の外であっても、一度通過したブロックにあるアイテムは可視である。
-     * 
-     * ミニマップの処理とも微妙に違う点に注意。
-     * 影無しフロアでは、ミニマップには表示されないが、タイルマップ上に表示されるものもある。
-     */
-    public static getEntityVisibility(entity: LEntity): SEntityVisibility {
+
+    public static getMinimapVisibility(entity: LEntity): SEntityVisibility {
         const subject = REGame.camera.focusedEntity();
 
         // if (!entity.floorId.equals(REGame.map.floorId())) {
@@ -166,6 +157,21 @@ export class SView {
 
         return { visible: true, translucent: false };
     }
+    
+    /**
+     * subject から entity が可視であるか。
+     * 
+     * 基本的にプレイヤーから見た視界の表示で使用する。
+     * AI 用の視界判定処理とは微妙に異なるので注意。
+     * 例えば、部屋の外であっても、一度通過したブロックにあるアイテムは可視である。
+     * 
+     * ミニマップの処理とも微妙に違う点に注意。
+     * 影無しフロアでは、ミニマップには表示されないが、タイルマップ上に表示されるものもある。
+     * つまり、基本的にミニマップ表示判定よりもタイルマップ表示判定の方が強い。
+     */
+    public static getEntityVisibility(entity: LEntity): SEntityVisibility {
+        return this.getMinimapVisibility(entity);
+    }
 
     /** 見えなくなる条件をチェックする */
     private static checkEntityInvisible(subject: LEntity, target: LEntity): boolean {
@@ -195,8 +201,27 @@ export class SView {
         // 自分自身は常に見える
         //if (subject.entityId().equals(target.entityId())) return true;
 
+        //if (REGame.map.unitClarity) return true;
+        const map = REGame.map;
+
         // あかりの巻物など、フロア自体に可視効果がある
-        if (REGame.map.unitClarity) return true;
+        if (map.unitClarity) {
+            if (target.isUnit()) {
+                return true;
+            }
+        }
+
+        if (map.itemClarity) {
+            if (this.isItem(target)) {
+                return true;
+            }
+        }
+
+
+        // 味方は常に視認可能
+        if (Helpers.isFriend(subject, target)) {
+            return true;
+        }
         
         // 中立 target は、踏破済みの Block 上なら見える
         if (!Helpers.isHostile(subject, target)) {
@@ -212,6 +237,16 @@ export class SView {
         }
 
         // 見えない
+        return false;
+    }
+    
+
+    private static isItem(entity: LEntity): boolean {
+        if (!!entity.data.itemData) {
+            if (!entity.findEntityBehavior(LExitPointBehavior)) {
+                return true;
+            }
+        }
         return false;
     }
 }
