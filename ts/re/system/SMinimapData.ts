@@ -9,6 +9,8 @@ import { Helpers } from "./Helpers";
 import { SNavigationHelper } from "./SNavigationHelper";
 import { SView } from "./SView";
 import { DHelpers } from "../data/DHelper";
+import { LEntity } from "../objects/LEntity";
+import { LMinimapMarkerClass } from "../objects/LCommon";
 
 enum SubTile {
     UL,
@@ -150,36 +152,59 @@ export class SMinimapData {
         }
 
         for (const entity of map.entities()) {
-            if (!SView.getMinimapVisibility(entity).visible) {
-                // 何も表示しない
-            }
-            else if (entity.entityId().equals(subject.entityId())) {
-                this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 9);
+            const markerClass = entity.queryMinimapMarkerClass();
+            if (markerClass != LMinimapMarkerClass.None) {
+                switch (markerClass) {
+                    case LMinimapMarkerClass.Item:
+                        this.setData(entity.mx, entity.my, 1, this.itemMarkerTileId());
+                        break;
+                    default:
+                        throw new Error("Not implemetend.");
+                }
             }
             else {
-                if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
-                    if (entity.findEntityBehavior(LTrapBehavior)) {
-                        this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 13);
-                    }
-                    else if (entity.findEntityBehavior(LBattlerBehavior)) {
-                        if (Helpers.isHostile(subject, entity)) {
-                            // 敵対勢力
-                            this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 11);
-                        }
-                        else {
-                            // 中立 or 味方
-                            this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + 12);
-                        }
-                    }
-                    else if (entity.findEntityBehavior(LItemBehavior)) {
-                        this.setData(entity.mx, entity.my, 1, this.itemMarkerTileId());
-                    }
-                    else if (entity.findEntityBehavior(LExitPointBehavior)) {
-                        this.setData(entity.mx, entity.my, 1, DHelpers.TILE_ID_A5 + ExitPointTileIdOffset);
-                    }
+                const tileId = this.getDefiniteMarkerTileId(subject, entity);
+                if (tileId) {
+                    this.setData(entity.mx, entity.my, 1, tileId);
+                }
+                else {
                 }
             }
         }
+    }
+
+    private getDefiniteMarkerTileId(subject: LEntity, entity: LEntity): number {
+        if (!SView.getMinimapVisibility(entity).visible) {
+            // 何も表示しない
+            return 0;
+        }
+        else if (entity.entityId().equals(subject.entityId())) {
+            return DHelpers.TILE_ID_A5 + 9;
+        }
+        else {
+            if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
+                if (entity.findEntityBehavior(LTrapBehavior)) {
+                   return DHelpers.TILE_ID_A5 + 13;
+                }
+                else if (entity.findEntityBehavior(LBattlerBehavior)) {
+                    if (Helpers.isHostile(subject, entity)) {
+                        // 敵対勢力
+                        return DHelpers.TILE_ID_A5 + 11;
+                    }
+                    else {
+                        // 中立 or 味方
+                        return DHelpers.TILE_ID_A5 + 12;
+                    }
+                }
+                else if (entity.findEntityBehavior(LItemBehavior)) {
+                    return this.itemMarkerTileId();
+                }
+                else if (entity.findEntityBehavior(LExitPointBehavior)) {
+                    return DHelpers.TILE_ID_A5 + ExitPointTileIdOffset;
+                }
+            }
+        }
+        return 0;
     }
 
 

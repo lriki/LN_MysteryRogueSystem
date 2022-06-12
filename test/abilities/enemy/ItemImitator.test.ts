@@ -25,6 +25,11 @@ test("abilities.enemy.ItemImitator", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
+    // MiniMap の表示はアイテムになっている
+    const minimap = RESystem.minimapData;
+    minimap.update();
+    expect(minimap.getData(11, 10, 1)).toBe(minimap.itemMarkerTileId());
+
     //----------------------------------------------------------------------------------------------------
 
     // Enemy の上に移動してみる

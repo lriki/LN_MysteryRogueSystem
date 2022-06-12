@@ -18,6 +18,7 @@ import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } fro
 import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
 import { LMap } from "../LMap";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
+import { LMinimapMarkerClass } from "../LCommon";
 
 
 /**
@@ -62,7 +63,7 @@ export class LItemImitatorBehavior extends LBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LItemImitatorBehavior);
         b._itemEntityId = this._itemEntityId.clone();
-        return b
+        return b;
     }
 
     public constructor() {
@@ -111,6 +112,10 @@ export class LItemImitatorBehavior extends LBehavior {
 
     queryHomeLayer(): DBlockLayerKind | undefined {
         return DBlockLayerKind.Ground;
+    }
+
+    queryMinimapMarkerClass(): LMinimapMarkerClass | undefined {
+        return LMinimapMarkerClass.Item;
     }
     
     onQueryReactions(self: LEntity, actions: DActionId[]): DActionId[] {

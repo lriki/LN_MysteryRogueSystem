@@ -30,7 +30,7 @@ import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
-import { LPriceInfo, LRoomId, LStructureId } from "./LCommon";
+import { LMinimapMarkerClass, LPriceInfo, LRoomId, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
@@ -788,6 +788,15 @@ export class LEntity extends LObject
             if (v) return v;
         }
         return DBlockLayerKind.Ground;
+    }
+    
+    public queryMinimapMarkerClass(): LMinimapMarkerClass {
+        let value = undefined;
+        this.iterateBehaviorsReverse(b => {
+            value = b.queryMinimapMarkerClass();
+            return value === undefined;
+        });
+        return value ?? LMinimapMarkerClass.None;
     }
 
     public getIdealParamBase(paramId: DParameterId): number {

@@ -45,7 +45,7 @@ import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DEffect } from "ts/re/data/DEffect";
 import { DFactionId } from "ts/re/data/REData";
-import { LPriceInfo } from "../LCommon";
+import { LMinimapMarkerClass, LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
 import { DEmittor } from "ts/re/data/DEmittor";
 import { SActivityContext } from "ts/re/system/SActivityContext";
@@ -299,6 +299,8 @@ export abstract class LBehavior extends LObject {
     //       - アイテム擬態モンスターは正体を現しているかによってレイヤーが変わる。
     //       - 土偶は落とすとアイテム、立てるとUnitのようにふるまう
     public queryHomeLayer(): DBlockLayerKind | undefined { return undefined; }
+
+    public queryMinimapMarkerClass(): LMinimapMarkerClass | undefined { return undefined; }
 
 
     public onQueryIdealParamBase(paramId: DParameterId, base: number): number {
