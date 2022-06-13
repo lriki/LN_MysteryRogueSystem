@@ -409,6 +409,12 @@ export class DEntityCreateInfo {
         if (debugName) data.debugName = debugName;
         return data;
     }
+    
+
+    public withStackCount(value: number): this {
+        this.stackCount = value;
+        return this;
+    }
 }
 
 // こっちは Event の metadata としての情報

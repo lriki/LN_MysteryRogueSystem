@@ -58,8 +58,8 @@ test("system.Inventory.Sort", () => {
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
     const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴールドソード_A").id, [], "weapon2"));
     const weapon3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_セイクリッドセイバー_A").id, [], "weapon3"));
-    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "arrow1"));
-    const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "arrow2"));
+    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "arrow1").withStackCount(1));
+    const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "arrow2").withStackCount(2));
 
     inventory.addEntity(grass1);
     inventory.addEntity(weapon2);
@@ -83,6 +83,7 @@ test("system.Inventory.Sort", () => {
         expect(items[4]).toBe(grass1);
         expect(items[5]).toBe(grass2);
         expect(items[6]).toBe(grass3);
-        expect(arrow1._stackCount).toBeGreaterThan(4); // Stack 可能なものはまとめられる
+        expect(arrow1._stackCount).toBe(3);         // Stack 可能なものはまとめられる
+        expect(arrow2.isDestroyed()).toBeTruthy();    // arrow2 は arrow1 へまとめられるため消滅
     }
 });
