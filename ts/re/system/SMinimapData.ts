@@ -93,8 +93,20 @@ export class SMinimapData {
     //    return this._tilemapResetNeeded;
     //}
 
+    public playerMarkerTileId(): number {
+        return DHelpers.TILE_ID_A5 + 9;
+    }
+
     public itemMarkerTileId(): number {
         return DHelpers.TILE_ID_A5 + 10;
+    }
+
+    public enemyMarkerTileId(): number {
+        return DHelpers.TILE_ID_A5 + 11;
+    }
+
+    public exitMarkerTileId(): number {
+        return DHelpers.TILE_ID_A5 + ExitPointTileIdOffset;
     }
 
     // 地形表示の更新
@@ -179,7 +191,7 @@ export class SMinimapData {
             return 0;
         }
         else if (entity.entityId().equals(subject.entityId())) {
-            return DHelpers.TILE_ID_A5 + 9;
+            return this.playerMarkerTileId();
         }
         else {
             if (SNavigationHelper.testVisibilityForMinimap(subject, entity)) {
@@ -189,7 +201,7 @@ export class SMinimapData {
                 else if (entity.findEntityBehavior(LBattlerBehavior)) {
                     if (Helpers.isHostile(subject, entity)) {
                         // 敵対勢力
-                        return DHelpers.TILE_ID_A5 + 11;
+                        return this.enemyMarkerTileId();
                     }
                     else {
                         // 中立 or 味方
@@ -200,7 +212,7 @@ export class SMinimapData {
                     return this.itemMarkerTileId();
                 }
                 else if (entity.findEntityBehavior(LExitPointBehavior)) {
-                    return DHelpers.TILE_ID_A5 + ExitPointTileIdOffset;
+                    return this.exitMarkerTileId();
                 }
             }
         }
