@@ -59,10 +59,10 @@ export class SItemListDialog extends SDialog {
             const equipments = actor.getEntityBehavior(LEquipmentUserBehavior);
             const shorcutItem = equipments.shortcutItem;
             if (shorcutItem && shorcutItem == item) {
-                commands.push(SDialogCommand.makeSystemCommand("UnsetShortcutSet", tr2("はずす"), _ => this.handleShortcutUnset()));
+                commands.push(SDialogCommand.makeSystemCommand(tr2("はずす"), "UnsetShortcutSet", _ => this.handleShortcutUnset()));
             }
             else {
-                commands.push(SDialogCommand.makeSystemCommand("SetShortcutSet", tr2("セット"), _ => this.handleShortcutSet()));
+                commands.push(SDialogCommand.makeSystemCommand(tr2("セット"), "SetShortcutSet", _ => this.handleShortcutSet()));
             }
         }
         
