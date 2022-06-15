@@ -16,8 +16,8 @@ test("ai.Escape.1", () => {
     const stateId = REData.getState("kState_UTまどわし").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 4);
-    actor1.addState(stateId);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 4);
+    player1.addState(stateId);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
@@ -28,7 +28,7 @@ test("ai.Escape.1", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -40,9 +40,9 @@ test("ai.Escape.1", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Player が通路側に立ちはだかる
-    REGame.world.transferEntity(actor1, floorId, 11, 4);
+    REGame.world.transferEntity(player1, floorId, 11, 4);
     REGame.world.transferEntity(enemy1, floorId, 10, 4);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -56,9 +56,9 @@ test("ai.Escape.1", () => {
     // - Player が通路側に立ちはだかる
     // - Enemy の後ろが壁
     // - Player と Enemy は隣接していない
-    REGame.world.transferEntity(actor1, floorId, 11, 4);
+    REGame.world.transferEntity(player1, floorId, 11, 4);
     REGame.world.transferEntity(enemy1, floorId, 9, 4);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -72,9 +72,9 @@ test("ai.Escape.1", () => {
     // - Player が通路側に立ちはだかる
     // - Enemy の後ろが壁
     // - Player と Enemy は隣接している
-    REGame.world.transferEntity(actor1, floorId, 10, 4);
+    REGame.world.transferEntity(player1, floorId, 10, 4);
     REGame.world.transferEntity(enemy1, floorId, 9, 4);
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -90,8 +90,8 @@ test("ai.Escape.2", () => {
     const stateId = REData.getState("kState_UTまどわし").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 14, 4); // 部屋入り口の通路へ配置
-    actor1.addState(stateId);
+    const player1 = TestEnv.setupPlayer(floorId, 14, 4); // 部屋入り口の通路へ配置
+    player1.addState(stateId);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
@@ -102,7 +102,7 @@ test("ai.Escape.2", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -114,7 +114,7 @@ test("ai.Escape.2", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Player を部屋の入口へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 4).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -131,8 +131,8 @@ test("ai.Escape.3", () => {
     const stateId = REData.getState("kState_UTまどわし").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
-    actor1.addState(stateId);
+    const player1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
+    player1.addState(stateId);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
@@ -143,7 +143,7 @@ test("ai.Escape.3", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -156,7 +156,7 @@ test("ai.Escape.3", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -167,6 +167,33 @@ test("ai.Escape.3", () => {
     expect(enemy1.my).toBe(4);
 });
 
+
+// 倍速1回行動エネミーが、通路へ逃げ込もうとしたが、そこへ移動不可能だったときにクラッシュする問題の修正確認
+test("ai.Escape.SpeedLevel2", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_CharacterAI;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 4);
+    
+    // enemy1
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [], "enemy1"));
+    REGame.world.transferEntity(enemy1, floorId, 12, 4);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // 待機
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // 通路方向へ倍速で逃げてほしい
+    expect(enemy1.mx).toBe(14);
+});
+
 // 倍速1回行動エネミーが、通路へ逃げ込もうとしたが、そこへ移動不可能だったときにクラッシュする問題の修正確認
 test("ai.Escape.Issue1", () => {
     TestEnv.newGame();
@@ -174,7 +201,7 @@ test("ai.Escape.Issue1", () => {
     const stateId = REData.getState("kState_UTかなしばり").id;
 
     // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
+    const player1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [], "enemy1"));
@@ -187,7 +214,7 @@ test("ai.Escape.Issue1", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -195,28 +222,29 @@ test("ai.Escape.Issue1", () => {
     // クラッシュせずに終了すればOK
 });
 
-// 倍速1回行動エネミーが、通路へ逃げ込もうとしたが、そこへ移動不可能だったときにクラッシュする問題の修正確認
-test("ai.Escape.SpeedLevel2", () => {
+// 倍速1回行動エネミーが、通路で他エネミーと向き合い、移動しようとしたときにクラッシュする問題の修正確認
+test("ai.Escape.Issue2", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_CharacterAI;
 
-    // Player
-    const actor1 = TestEnv.setupPlayer(floorId, 10, 4);
+    const player1 = TestEnv.setupPlayer(floorId, 7, 13);
     
-    // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_キングプレゼンにゃーA").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 12, 4);
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    REGame.world.transferEntity(enemy1, floorId, 7, 13);
+    REGame.world.transferEntity(enemy2, floorId, 8, 13);
+    enemy1.dir = 6;
+    enemy2.dir = 4;
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    // 通路方向へ倍速で逃げてほしい
-    expect(enemy1.mx).toBe(14);
+    // クラッシュせずに終了すればOK
 });

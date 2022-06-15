@@ -50,6 +50,7 @@ function addState(entityId: number, pattern: string) {
 function visitAll() {
     addState(REGame.system.mainPlayerEntityId.index2(), "UT気配察知");
     addState(REGame.system.mainPlayerEntityId.index2(), "UT道具感知");
+    REGame.map.unitClarity = true;
     REGame.map.blocks().forEach(b => b._passed = true);
     RESystem.minimapData.setRefreshNeeded();
 }
