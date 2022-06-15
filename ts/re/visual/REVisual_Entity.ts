@@ -13,6 +13,7 @@ import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { REBasics } from "../data/REBasics";
 import { DColorIndex } from "../data/DCommon";
+import { REData } from "../data/REData";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -272,11 +273,20 @@ export class REVisual_Entity
     }
 
     public getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabActualImage | undefined {
+        // 視点となる人の都合で見え方が変わるようであれば、それが最優先
         if (visibility.image) {
             return visibility.image;
         }
         
-        return entity.getCharacterImage();
+        // ステートなどで上書きされているもの
+        const overridenImage = entity.getCharacterImage();
+        if (overridenImage) {
+            return overridenImage;
+        }
+        
+        // デフォルトはプレハブから
+        const prefab = REData.prefabs[ entity.data.prefabId];
+        return prefab.image;
     }
 
     private getActualOpacity(entity: LEntity, visibility: SEntityVisibility): number {
