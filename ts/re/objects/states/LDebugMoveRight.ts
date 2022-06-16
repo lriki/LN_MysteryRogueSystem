@@ -6,6 +6,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { MovingMethod } from "../LMap";
 import { LActivity } from "../activities/LActivity";
 import { LActionTokenType } from "../LActionToken";
+import { LActionTokenConsumeType } from "../LCommon";
 
 export class LDebugMoveRightBehavior extends LBehavior {
 
@@ -29,7 +30,7 @@ export class LDebugMoveRightBehavior extends LBehavior {
                 cctx.postActivity(LActivity.makeDirectionChange(self, dir));
                 cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }
-            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postConsumeActionToken(self, LActionTokenConsumeType.MinorActed);
             return SPhaseResult.Handled;
         }
 

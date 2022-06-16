@@ -50,7 +50,7 @@ test("concretes.item.grass.PowerGrass.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [食べる] 2個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------

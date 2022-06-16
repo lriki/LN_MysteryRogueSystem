@@ -17,6 +17,7 @@ import { UName } from "ts/re/usecases/UName";
 import { Helpers } from "ts/re/system/Helpers";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
+import { LActionTokenConsumeType } from "ts/re/objects/LCommon";
 
 enum UpdateMode {
     Normal,
@@ -85,7 +86,7 @@ export class VManualActionDialogVisual extends VDialog {
         // 足踏み
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
             entity.getEntityBehavior(LUnitBehavior)._fastforwarding = true;
-            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenType.Major));
+            this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenConsumeType.MajorActed));
             this._model.submit();
             return;
         }
@@ -330,7 +331,7 @@ export class VManualActionDialogVisual extends VDialog {
         if (this.isMoveButtonPressed() &&
             UMovement.checkPassageToDir(entity, dir)) {
 
-            const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction(LActionTokenType.Minor);
+            const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction(LActionTokenConsumeType.MinorActed);
             
             if (this.isDashButtonPressed()) {
                 //const behavior = entity.findBehavior(LUnitBehavior);
@@ -360,14 +361,14 @@ export class VManualActionDialogVisual extends VDialog {
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
             if (frontTarget.queryReactions().includes(REBasics.actions.talk)) {
-                context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenType.Major));
+                context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenConsumeType.MajorActed));
                 this._model.submit();
                 return true;
             }
         }
         
         // [通常攻撃] スキル発動
-        context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction(LActionTokenType.Major));
+        context.postActivity(LActivity.makePerformSkill(entity, RESystem.skills.normalAttack).withConsumeAction(LActionTokenConsumeType.MajorActed));
         this._model.submit();
         
         return true;

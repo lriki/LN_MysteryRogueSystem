@@ -13,6 +13,7 @@ import { LSaunteringAIHelper } from "./LSaunteringAIHelper";
 import { RESerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
 import { LMoveDeterminer } from "./LMoveDeterminer";
+import { LActionTokenConsumeType } from "../LCommon";
 
 @RESerializable
 export class LEscapeAI extends LCharacterAI {
@@ -131,7 +132,7 @@ export class LEscapeAI extends LCharacterAI {
                         cctx.postActivity(
                             LActivity.make(self)
                             .withEntityDirection(dir)
-                            .withConsumeAction(LActionTokenType.Minor));
+                            .withConsumeAction(LActionTokenConsumeType.MinorActed));
                         return SPhaseResult.Handled;
                     }
                     else {
@@ -153,7 +154,7 @@ export class LEscapeAI extends LCharacterAI {
                         cctx.postActivity(
                             LActivity.makeMoveToAdjacentBlock(self, block2)
                             .withEntityDirection(rdir)
-                            .withConsumeAction(LActionTokenType.Minor));
+                            .withConsumeAction(LActionTokenConsumeType.MinorActed));
                         return SPhaseResult.Handled;
                     }
                     else {
@@ -189,7 +190,7 @@ export class LEscapeAI extends LCharacterAI {
         // ここまで来てしまったら待機。
         cctx.postActivity(
             LActivity.make(self)
-            .withConsumeAction(LActionTokenType.Major));
+            .withConsumeAction(LActionTokenConsumeType.WaitActed));
         return SPhaseResult.Handled;
     }
     

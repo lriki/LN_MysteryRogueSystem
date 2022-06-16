@@ -30,7 +30,7 @@ test("concretes.states.混乱.move", () => {
         // 10 ターンの間はステートが追加されている
         expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
 
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
 
         RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -96,7 +96,7 @@ test("concretes.states.混乱.movePlayer", () => {
     RESystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
         // 右へ移動しようとする
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction(LActionTokenType.Minor));
+        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
 
         RESystem.scheduler.stepSimulation();
@@ -153,7 +153,7 @@ test("concretes.states.混乱.throw", () => {
         enemy1.setActualParam(REBasics.params.hp, 1);
 
         // 投げる
-        RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
+        RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();
 

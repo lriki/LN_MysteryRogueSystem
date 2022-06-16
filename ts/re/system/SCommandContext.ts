@@ -17,6 +17,7 @@ import { LRandom } from "ts/re/objects/LRandom";
 import { LActionTokenType } from "../objects/LActionToken";
 import { SActivityContext } from "./SActivityContext";
 import { DActionId, DCommandId } from "../data/DCommon";
+import { LActionTokenConsumeType } from "../objects/LCommon";
 
 
 export enum STaskResult {
@@ -544,7 +545,7 @@ export class SCommandContext
         return task;
     }
 
-    postConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
+    postConsumeActionToken(entity: LEntity, tokenType: LActionTokenConsumeType): void {
         const behavior = entity.findEntityBehavior(LUnitBehavior);
         assert(behavior);
         entity._actionToken.verify(tokenType);
@@ -631,9 +632,9 @@ export class SCommandContext
     }
 
 
-    private attemptConsumeActionToken(entity: LEntity, tokenType: LActionTokenType): void {
-        entity._actionToken.consume(tokenType);
-        entity._schedulingResult.setConsumedActionTokeInCurrentPhase(tokenType);
+    private attemptConsumeActionToken(entity: LEntity, tokenType: LActionTokenConsumeType): void {
+        const consumedType = entity._actionToken.consume(tokenType);
+        entity._schedulingResult.setConsumedActionTokeInCurrentPhase(consumedType);
         
             // ターンエンド
             {

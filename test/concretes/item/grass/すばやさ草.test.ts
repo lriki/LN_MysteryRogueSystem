@@ -43,7 +43,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [食べる] 1個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -56,7 +56,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [食べる] 2個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -67,7 +67,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [食べる] 3個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item3).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item3).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -98,7 +98,7 @@ test("concretes.item.grass.すばやさ草.throw", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------

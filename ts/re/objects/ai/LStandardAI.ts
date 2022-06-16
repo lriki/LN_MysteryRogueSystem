@@ -8,6 +8,7 @@ import { RESerializable } from "ts/re/Common";
 import { DPrefabMoveType } from "ts/re/data/DPrefab";
 import { LMovingTargetFinder, LMovingTargetFinder_Item } from "./LMovingTargetFinder";
 import { LActionTokenType } from "../LActionToken";
+import { LActionTokenConsumeType } from "../LCommon";
 
 /**
  * https://yttm-work.jp/game_ai/game_ai_0001.html
@@ -75,12 +76,7 @@ export class LCharacterAI_Normal extends LCharacterAI {
         // FIXME: ここでやるのが最善かわからないが、攻撃対象が決められていない場合は
         // Major Phase でも行動消費するアクションがとれないので、ハングアップしてしまう。
         // ここで消費しておく。
-        if (self._actionToken.canMajorAction()) {
-            cctx.postConsumeActionToken(self, LActionTokenType.Major);
-        }
-        else {
-            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
-        }
+        cctx.postConsumeActionToken(self, LActionTokenConsumeType.WaitActed);
         return SPhaseResult.Handled;
     }
 

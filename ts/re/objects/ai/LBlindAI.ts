@@ -12,6 +12,7 @@ import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
+import { LActionTokenConsumeType } from "../LCommon";
 
 interface SkillAction {
     skillId: DSkillId;
@@ -39,7 +40,7 @@ export class LBlindAI extends LCharacterAI {
         if (UMovement.checkPassageToDir(self, frontDir)) {
             cctx.postActivity(
                 LActivity.makeMoveToAdjacent(self, frontDir)
-                .withConsumeAction(LActionTokenType.Minor));
+                .withConsumeAction(LActionTokenConsumeType.MinorActed));
             return SPhaseResult.Handled;
         }
 
@@ -60,14 +61,14 @@ export class LBlindAI extends LCharacterAI {
             cctx.postActivity(
                 LActivity.makeMoveToAdjacent(self, newDir)
                 .withEntityDirection(newDir)
-                .withConsumeAction(LActionTokenType.Minor));
+                .withConsumeAction(LActionTokenConsumeType.MinorActed));
             return SPhaseResult.Handled;
         }
         
         // ここまで来てしまったら向きだけ変えて待機。
         cctx.postActivity(
             LActivity.makeDirectionChange(self, newDir)
-            .withConsumeAction(LActionTokenType.Major));
+            .withConsumeAction(LActionTokenConsumeType.MajorActed));
         return SPhaseResult.Handled;
     }
     
@@ -87,7 +88,7 @@ export class LBlindAI extends LCharacterAI {
         }
         
         // 攻撃の成否に関わらず行動を消費する。
-        cctx.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenConsumeType.MajorActed);
         return SPhaseResult.Handled;
     }
 }

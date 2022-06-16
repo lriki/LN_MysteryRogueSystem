@@ -10,6 +10,7 @@ import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { REData } from "ts/re/data/REData";
+import { LActionTokenConsumeType } from "../LCommon";
 
 export interface LEntityIdData {
     index: number;
@@ -27,7 +28,7 @@ export interface LActivityData {
     skillId: DSkillId,
     direction: number;
     entityDirection: number;
-    consumeActionType: LActionTokenType | undefined;
+    actionTokenConsumeType: LActionTokenConsumeType | undefined;
     fastForward: boolean;
     selectedAction: string;
 }
@@ -53,7 +54,7 @@ export class LActivity {
     private _skillId: DSkillId;
     private _effectDirection: number;     // 行動に伴う向き。0 の場合は未指定。
     private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
-    private _consumeActionType: (LActionTokenType | undefined);
+    private _actionTokenConsumeType: (LActionTokenConsumeType | undefined);
     private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
     private _selectedAction: string;    // yes, no などの DialogResult
     //private _selectedItems: LEntityId[];
@@ -67,7 +68,7 @@ export class LActivity {
         this._skillId = 0;
         this._effectDirection = 0;
         this._entityDirection = 0;
-        this._consumeActionType = undefined;
+        this._actionTokenConsumeType = undefined;
         this._fastForward = false;
         this._selectedAction = "";
     }
@@ -80,7 +81,7 @@ export class LActivity {
         this._objects2 = [];
         this._effectDirection = dir ?? 0;
         this._entityDirection = 0;
-        this._consumeActionType = undefined;
+        this._actionTokenConsumeType = undefined;
         this._fastForward = false;
         this._selectedAction = "";
         return this;
@@ -153,32 +154,32 @@ export class LActivity {
         return this;
     }
 
-    public withConsumeAction(tokenType?: LActionTokenType | undefined): this {
-        if (tokenType !== undefined) {
-            this._consumeActionType = tokenType;
+    public withConsumeAction(consumeType?: LActionTokenConsumeType | undefined): this {
+        if (consumeType !== undefined) {
+            this._actionTokenConsumeType = consumeType;
         }
         else {
             if (this._actionId == REBasics.actions.MoveToAdjacentActionId) {
-                this._consumeActionType = LActionTokenType.Minor;
+                this._actionTokenConsumeType = LActionTokenConsumeType.MinorActed;
             }
             else {
-                this._consumeActionType = LActionTokenType.Major;
+                this._actionTokenConsumeType = LActionTokenConsumeType.MajorActed;
             }
         }
         return this;
     }
 
     public isConsumeAction(): boolean {
-        return this._consumeActionType != undefined;
+        return this._actionTokenConsumeType != undefined;
     }
 
-    public consumeActionTokenType(): LActionTokenType | undefined {
-        return this._consumeActionType;
+    public consumeActionTokenType(): LActionTokenConsumeType | undefined {
+        return this._actionTokenConsumeType;
     }
 
-    public getConsumeActionTokenType(): LActionTokenType {
-        assert(this._consumeActionType !== undefined);
-        return this._consumeActionType;
+    public getConsumeActionTokenType(): LActionTokenConsumeType {
+        assert(this._actionTokenConsumeType !== undefined);
+        return this._actionTokenConsumeType;
     }
 
     public withFastForward(): this {
@@ -204,7 +205,7 @@ export class LActivity {
             skillId: this._skillId,
             direction: this._effectDirection,
             entityDirection: this._entityDirection,
-            consumeActionType: this._consumeActionType,
+            actionTokenConsumeType: this._actionTokenConsumeType,
             fastForward: this._fastForward,
             selectedAction: this._selectedAction,
         }
@@ -220,7 +221,7 @@ export class LActivity {
         i._skillId = data.skillId;
         i._effectDirection = data.direction;
         i._entityDirection = data.entityDirection;
-        i._consumeActionType = data.consumeActionType;
+        i._actionTokenConsumeType = data.actionTokenConsumeType;
         i._fastForward = data.fastForward;
         i._selectedAction = data.selectedAction;
         return i;

@@ -6,6 +6,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LActionTokenType } from "../LActionToken";
 import { LBlock } from "../LBlock";
+import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { LRandom } from "../LRandom";
 import { REGame } from "../REGame";
@@ -204,7 +205,7 @@ export class LMoveDeterminer {
             cctx.postActivity(LActivity.makeDirectionChange(self, dir));
             cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             //this.moveToAdjacent(self, block, cctx);
-            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postConsumeActionToken(self, LActionTokenConsumeType.MinorActed);
             return true;
         }
         else {
@@ -216,7 +217,7 @@ export class LMoveDeterminer {
         const dir = Helpers.offsetToDir(block.mx - self.mx, block.my - self.my);
         cctx.postActivity(LActivity.makeDirectionChange(self, dir));
         cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-        cctx.postConsumeActionToken(self, LActionTokenType.Minor);
+        cctx.postConsumeActionToken(self, LActionTokenConsumeType.MinorActed);
     }
 
     // 目的地あり？

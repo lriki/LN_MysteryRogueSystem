@@ -44,7 +44,7 @@ test("concretes.item.grass.火炎草.test", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -63,7 +63,7 @@ test("concretes.item.grass.火炎草.test", () => {
     enemy1.setActualParam(REBasics.params.hp, 500);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

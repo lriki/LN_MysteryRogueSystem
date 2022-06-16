@@ -7,6 +7,7 @@ import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
 import { LCandidateSkillAction, UAction } from "ts/re/usecases/UAction";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LActionTokenType } from "../LActionToken";
+import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -158,12 +159,12 @@ export class LActionDeterminer {
                     self.dir = UMovement.getLookAtDirFromPos(self.mx, self.my, pos.x, pos.y);
                     
                     SEmittorPerformer.makeWithSkill(self, self, this._requiredSkillAction.action.skillId).perform(cctx);
-                    cctx.postConsumeActionToken(self, LActionTokenType.Major);
+                    cctx.postConsumeActionToken(self, LActionTokenConsumeType.MajorActed);
                     return true;
                 }
                 else {
                     // 別の Unit のアクションでマップ上から対象が消えた、など
-                    cctx.postConsumeActionToken(self, LActionTokenType.Major);
+                    cctx.postConsumeActionToken(self, LActionTokenConsumeType.MajorActed);
                     return true;
                 }
                 

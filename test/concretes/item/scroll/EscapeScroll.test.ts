@@ -43,7 +43,7 @@ test("concretes.item.EscapeScroll.Basic", () => {
         player1.dir = 6;
 
         // [投げる]
-        const activity = LActivity.makeThrow(player1, item2).withConsumeAction(LActionTokenType.Major);
+        const activity = LActivity.makeThrow(player1, item2).withConsumeAction();
         RESystem.dialogContext.postActivity(activity);
         RESystem.dialogContext.activeDialog().submit();
         
@@ -57,7 +57,7 @@ test("concretes.item.EscapeScroll.Basic", () => {
 
     {
         // [読む]
-        const activity = LActivity.makeRead(player1, item1).withConsumeAction(LActionTokenType.Major);
+        const activity = LActivity.makeRead(player1, item1).withConsumeAction();
         RESystem.dialogContext.postActivity(activity);
         RESystem.dialogContext.activeDialog().submit();
         

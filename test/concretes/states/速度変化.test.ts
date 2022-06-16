@@ -105,7 +105,7 @@ test("concretes.states.速度変化.remove", () => {
         expect(param.getAddBuff().level > 0).toBe(true);
 
         // 待機
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
 
         RESystem.scheduler.stepSimulation();
@@ -140,7 +140,7 @@ test("concretes.states.速度変化.Issue1", () => {
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
 
     const wait = () => {
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
     }
 
@@ -149,7 +149,7 @@ test("concretes.states.速度変化.Issue1", () => {
     //----------
     // Round
     expect(enemy1.mx).toBe(30);
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 

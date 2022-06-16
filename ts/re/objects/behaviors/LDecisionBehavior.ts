@@ -11,6 +11,7 @@ import { LActivity } from "../activities/LActivity";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { RESerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
+import { LActionTokenConsumeType } from "../LCommon";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -44,7 +45,7 @@ export class LDecisionBehavior extends LBehavior {
             unit._fastforwarding = false;
 
             if (unit._straightDashing && UMovement.checkDashStopBlock(self)) {
-                cctx.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction(LActionTokenType.Minor));
+                cctx.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction(LActionTokenConsumeType.MinorActed));
                 return SPhaseResult.Handled;
             }
             else {

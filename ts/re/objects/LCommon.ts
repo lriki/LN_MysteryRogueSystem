@@ -22,3 +22,18 @@ export enum LMinimapMarkerClass {
 
     ExitPoint,
 }
+
+
+
+
+export enum LActionTokenConsumeType {
+    /** MinorAction を実行した。 MinorToken を1つ消費する。 */
+    MinorActed,
+
+    /** MajorAction を実行した。 MajorToken を1つ消費する。 */
+    MajorActed,
+
+    /** 待機した。Major を優先的に消費する。 */
+    WaitActed,
+}
+

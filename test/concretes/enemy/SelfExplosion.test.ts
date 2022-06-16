@@ -35,7 +35,7 @@ test("concretes.enemy.SelfExplosion.NotExplosion", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [攻撃]
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -114,7 +114,7 @@ test("concretes.enemy.SelfExplosion.Explosion.Dead", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [攻撃]
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

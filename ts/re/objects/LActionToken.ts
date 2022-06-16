@@ -1,4 +1,5 @@
 import { assert, RESerializable } from "../Common";
+import { LActionTokenConsumeType } from "./LCommon";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 
@@ -64,24 +65,37 @@ export class LActionToken {
         this._majorActionTokenCount += count;
     }
 
-    public consume(tokenType: LActionTokenType): void {
-        this.verify(tokenType);
-        if (tokenType == LActionTokenType.Minor) {
+    public consume(type: LActionTokenConsumeType): LActionTokenType {
+        this.verify(type);
+        if (type == LActionTokenConsumeType.MinorActed) {
             this._minorActionTokenCount = Math.max(this._minorActionTokenCount - 1, 0);
+            return LActionTokenType.Minor;
         }
-        else {
+        else if (type == LActionTokenConsumeType.MajorActed) {
             this._minorActionTokenCount = Math.max(this._minorActionTokenCount - 1, 0);
             this._majorActionTokenCount = Math.max(this._majorActionTokenCount - 1, 0);
+            return LActionTokenType.Major;
+        }
+        else {
+            if (this.canMajorAction()) {
+                return this.consume(LActionTokenConsumeType.MajorActed);
+            }
+            else {
+                return this.consume(LActionTokenConsumeType.MinorActed);
+            }
         }
     }
 
-    public verify(tokenType: LActionTokenType): void {
-        if (tokenType == LActionTokenType.Minor) {
+    public verify(type: LActionTokenConsumeType): void {
+        if (type == LActionTokenConsumeType.MinorActed) {
             assert(this._minorActionTokenCount > 0);
         }
-        else {
+        else if (type == LActionTokenConsumeType.MajorActed) {
             assert(this._minorActionTokenCount > 0);
             assert(this._majorActionTokenCount > 0);
+        }
+        else {
+            assert(this._minorActionTokenCount >= 0 || this._majorActionTokenCount >= 0);
         }
     }
 

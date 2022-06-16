@@ -41,7 +41,7 @@ test("concretes.states.透明.EnemyMove", () => {
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
 
         RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -70,7 +70,7 @@ test("concretes.states.透明.Enemy", () => {
     actor1.addState(stateId);
 
     // 足踏み
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

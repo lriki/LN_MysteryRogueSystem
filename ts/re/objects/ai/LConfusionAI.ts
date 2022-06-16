@@ -14,6 +14,7 @@ import { REGame } from "../REGame";
 import { RESerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
 import { Helpers } from "ts/re/system/Helpers";
+import { LActionTokenConsumeType } from "../LCommon";
 
 interface SkillAction {
     skillId: DSkillId;
@@ -71,7 +72,7 @@ export class LConfusionAI extends LCharacterAI {
         // 移動してみる。移動出来たら行動を消費する。
         if (UMovement.checkPassageToDir(self, dir)) {
             cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
-            cctx.postConsumeActionToken(self, LActionTokenType.Minor);
+            cctx.postConsumeActionToken(self, LActionTokenConsumeType.MinorActed);
             return SPhaseResult.Handled;
         }
 
@@ -96,7 +97,7 @@ export class LConfusionAI extends LCharacterAI {
         }
         
         // ここまで来てしまったら何もせず待機行動。
-        cctx.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenConsumeType.MajorActed);
         return SPhaseResult.Handled;
     }
     
@@ -116,7 +117,7 @@ export class LConfusionAI extends LCharacterAI {
         }
         
         // 攻撃の成否に関わらず行動を消費する。
-        cctx.postConsumeActionToken(self, LActionTokenType.Major);
+        cctx.postConsumeActionToken(self, LActionTokenConsumeType.MajorActed);
         return SPhaseResult.Handled;
     }
 }

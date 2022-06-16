@@ -39,7 +39,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy の目の前へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction(LActionTokenType.Minor));
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
     
     REGame.world.random().resetSeed(9);     // 乱数調整
@@ -58,7 +58,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     // Enemy を攻撃して倒す
     enemy1.setActualParam(REBasics.params.hp, 1);
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -97,7 +97,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -109,7 +109,7 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     enemy1.dir = 6; // TODO: 今はAIにバグがあるので
@@ -151,7 +151,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -163,7 +163,7 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 置く
-    RESystem.dialogContext.postActivity(LActivity.makePut(player1, item2).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.makePut(player1, item2).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -270,7 +270,7 @@ test("concretes.enemy.ItemThief.Issue2", () => {
     //----------------------------------------------------------------------------------------------------
     
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -304,7 +304,7 @@ test("concretes.enemy.ItemThief.Issue3_Seal", () => {
     //----------------------------------------------------------------------------------------------------
     
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -332,7 +332,7 @@ test("concretes.enemy.ItemThief.Issue4_IgnoreExitPoint", () => {
     //----------------------------------------------------------------------------------------------------
     
     // [待機]
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction(LActionTokenType.Major));
+    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
