@@ -13,7 +13,7 @@ import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { MRBasics } from "../data/MRBasics";
 import { DColorIndex } from "../data/DCommon";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 
 /**
  * Entity の「見た目」を表現するためのクラス。

@@ -1,6 +1,6 @@
 import { DHelpers } from "./DHelper";
 import { DLand } from "./DLand";
-import { DMap, REData } from "./REData";
+import { DMap, MRData } from "./MRData";
 
 export class DDataImporter {
 
@@ -59,7 +59,7 @@ export class DDataImporter {
 
     private static findLand(data: IDataMapInfo | undefined): DLand | undefined {
         if (!data) return undefined;
-        return REData.lands.find(x => data && x.rmmzMapId == data.id);
+        return MRData.lands.find(x => data && x.rmmzMapId == data.id);
     }
 }
 

@@ -1,7 +1,7 @@
 import { TestJsonEx } from "test/TestJsonEx";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
@@ -26,7 +26,7 @@ test("system.SaveLoad.EventServerIssue", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ウッドアロー_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ウッドアロー_A").id, [], "item1"));
     inventory.addEntity(item1);
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

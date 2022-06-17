@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { MRBasics } from "ts/re/data/MRBasics";
@@ -22,12 +22,12 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     const player1HP1 = player1.actualParam(MRBasics.params.hp);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ストームスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ストームスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
     REGame.world.transferEntity(enemy2, floorId, 10, 15);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);

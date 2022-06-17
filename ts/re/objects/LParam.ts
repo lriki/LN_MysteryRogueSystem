@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DParameterId, REData_Parameter } from "ts/re/data/DParameter";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
 import { REGame } from "./REGame";
@@ -51,7 +51,7 @@ export class LParam {
     }
 
     public data(): REData_Parameter {
-        return REData.parameters[this._dataId];
+        return MRData.parameters[this._dataId];
     }
 
     public actualParamDamge(): number {
@@ -91,11 +91,11 @@ export class LParam {
     }
 
     public buffPlus(): number {
-        return this._addBuff.level * REData.parameters[this._dataId].addBuffCoe;
+        return this._addBuff.level * MRData.parameters[this._dataId].addBuffCoe;
     }
 
     public buffRate(): number {
-        return this._mulBuff.level * REData.parameters[this._dataId].mulBuffCore + 1.0;
+        return this._mulBuff.level * MRData.parameters[this._dataId].mulBuffCore + 1.0;
     }
 
     public clearDamage(owner: LEntity): void {

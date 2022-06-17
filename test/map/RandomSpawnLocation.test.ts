@@ -1,6 +1,6 @@
 import { TestEnv } from "../TestEnv";
 import { REGame } from "ts/re/objects/REGame";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { RESystem } from "ts/re/system/RESystem";
 import { assert } from "ts/re/Common";
 import { USearch } from "ts/re/usecases/USearch";
@@ -15,7 +15,7 @@ test("map/RandomSpawnLocation.NearPlayer", () => {
 
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_HalfHall").id;
+    floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_HalfHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
 

@@ -1,6 +1,6 @@
 
 import { DEntity, DEntityId } from "./DEntity";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export type DEnemyId = number;
 
@@ -26,11 +26,11 @@ export class DDropItem {
     public static makeFromRmmzDropItem(data: IDataDropItem): DDropItem {
         const d = new DDropItem();
         if (data.kind === 1) {
-            d.entityId = REData.items[REData.itemDataIdOffset + data.dataId];
+            d.entityId = MRData.items[MRData.itemDataIdOffset + data.dataId];
         } else if (data.kind === 2) {
-            d.entityId = REData.items[REData.weaponDataIdOffset + data.dataId];
+            d.entityId = MRData.items[MRData.weaponDataIdOffset + data.dataId];
         } else if (data.kind === 3) {
-            d.entityId = REData.items[REData.armorDataIdOffset + data.dataId];
+            d.entityId = MRData.items[MRData.armorDataIdOffset + data.dataId];
         } else {
             throw new Error("Unreachable.");
         }
@@ -83,7 +83,7 @@ export class DEnemy {
     }
 
     public entity(): DEntity {
-        return REData.entities[this.entityId];
+        return MRData.entities[this.entityId];
     }
 }
 

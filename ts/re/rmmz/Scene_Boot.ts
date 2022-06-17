@@ -2,7 +2,7 @@ import { REDataManager } from "../data/REDataManager";
 import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "../system/RESystem";
 import { REVisual } from "../visual/REVisual";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 
 /*
 import { ImGuiIO } from "../imgui-js/imgui";
@@ -89,7 +89,7 @@ Scene_Boot.prototype.isReady = function() {
         return false;
     }
     else {
-        REData.verify();
+        MRData.verify();
         // Database マップの読み込みが完了
         return result;
     }

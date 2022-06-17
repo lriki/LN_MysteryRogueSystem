@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
@@ -19,7 +19,7 @@ test("Trap.TriggerRate", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_地雷_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
     
@@ -73,7 +73,7 @@ test("Trap.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.addState(REData.getState("kState_UT罠必中").id);
+    player1.addState(MRData.getState("kState_UT罠必中").id);
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
@@ -105,7 +105,7 @@ test("Trap.Enemy", () => {
     // TODO: 罠state:必ず発動
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -133,7 +133,7 @@ test("Trap.Attack", () => {
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
     const hp1 = enemy1.actualParam(MRBasics.params.hp);
 

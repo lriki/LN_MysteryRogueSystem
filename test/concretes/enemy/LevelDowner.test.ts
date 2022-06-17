@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { MRBasics } from "ts/re/data/MRBasics";
@@ -27,8 +27,8 @@ test("concretes.enemy.LevelDowner", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // Enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミステリーインプA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_UTからぶり").id);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ミステリーインプA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_UTからぶり").id);
     REGame.world.transferEntity(enemy1, floorId, 11, 4);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------

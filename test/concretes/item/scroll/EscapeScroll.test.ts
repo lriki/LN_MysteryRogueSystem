@@ -4,7 +4,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
@@ -23,15 +23,15 @@ test("concretes.item.EscapeScroll.Basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エスケープスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_エスケープスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // item2
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エスケープスクロール_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_エスケープスクロール_A").id, [], "item1"));
     inventory.addEntity(item2);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     const initialHP = enemy1.actualParam(MRBasics.params.hp);
 
@@ -77,10 +77,10 @@ test("concretes.item.EscapeScroll.Identification", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_エスケープスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_エスケープスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フランスパンスクロール_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_フランスパンスクロール_A").id, [], "item1"));
     inventory.addEntity(item2);
 
     // 他の巻物が未識別であるような環境でも、脱出の巻物は名前がわかる。

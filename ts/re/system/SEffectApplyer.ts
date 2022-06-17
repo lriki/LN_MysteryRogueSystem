@@ -4,7 +4,7 @@ import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff
 import { DItemEffect } from "../data/DItemEffect";
 import { DParameterId } from "../data/DParameter";
 import { DSpecialEffect, DSkill } from "../data/DSkill";
-import { LandExitResult, REData } from "../data/REData";
+import { LandExitResult, MRData } from "../data/MRData";
 import { LProjectileBehavior } from "../objects/behaviors/activities/LProjectileBehavior";
 import { LBattlerBehavior } from "../objects/behaviors/LBattlerBehavior";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
@@ -879,7 +879,7 @@ export class SEffectApplyer {
 
     // Game_Action.prototype.itemEffectAddNormalState
     private itemEffectAddNormalState(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
-        const stateData = REData.states[effect.dataId];
+        const stateData = MRData.states[effect.dataId];
 
         // そもそもステート無効化を持っている場合は追加自体行わない。
         // RMMZ標準では、一度追加した後の refresh で remove している。
@@ -906,7 +906,7 @@ export class SEffectApplyer {
         target.addState(stateId);
         result.makeSuccess();
 
-        const stateData = REData.states[stateId];
+        const stateData = MRData.states[stateId];
         if (stateData.deadState) {
             result.clearParamEffects();
         }

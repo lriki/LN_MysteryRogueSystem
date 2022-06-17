@@ -1,5 +1,5 @@
 
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DLand, DLandId } from "ts/re/data/DLand";
 import { RESerializable } from "../Common";
 
@@ -12,7 +12,7 @@ export class LLand {
     }
 
     public landData(): DLand {
-        return REData.lands[this._landDataId];
+        return MRData.lands[this._landDataId];
     }
 
     public maxFloorNumber(): number {

@@ -2,7 +2,7 @@ import { assert } from "ts/re/Common";
 import { LStateLevelType } from "ts/re/data/DEffect";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
 import { DStateGroup } from "ts/re/data/DStateGroup";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LState } from "ts/re/objects/states/LState";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -30,7 +30,7 @@ export class UState {
 
     private static effect(state: WorkState): DStateEffect {
         if (state.submatchEffectIndex >= 0)
-            return REData.states[state.submatchEffectIndex].effect;
+            return MRData.states[state.submatchEffectIndex].effect;
         else
             return state.data.effect;
     }
@@ -48,7 +48,7 @@ export class UState {
     public static resolveStates(entity: LEntity, newStates: StateAddition[], removeStateIds: DStateId[]): LState[] {
         const entityData = entity.data;
         const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), submatchEffectIndex: s.submatchEffectIndex(), removing: false, new: false, level: s.level() }; });
-        const stateGroups: WorkStateGroup[] = REData.stateGroups.map(sg => { return { data: sg, states: [] }; });
+        const stateGroups: WorkStateGroup[] = MRData.stateGroups.map(sg => { return { data: sg, states: [] }; });
 
         // 新規ステート
         for (const newState of newStates) {
@@ -62,8 +62,8 @@ export class UState {
             }
             else {
                 state = {
-                    data: REData.states[newState.stateId],
-                    submatchEffectIndex: this.selectEffectIndex(entity, REData.states[newState.stateId]),
+                    data: MRData.states[newState.stateId],
+                    submatchEffectIndex: this.selectEffectIndex(entity, MRData.states[newState.stateId]),
                     removing: false,
                     new: true,
                     level: 0 };
@@ -113,7 +113,7 @@ export class UState {
         }
 
         // 自動付加条件を満たすステートを、いったんすべて追加する
-        for (const data of REData.states) {
+        for (const data of MRData.states) {
             if (data.autoAdditionCondition && !currentStates.find(s => s.data.id == data.id)) {
                 const a = entity;
                 const cond = eval(data.autoAdditionCondition);
@@ -132,8 +132,8 @@ export class UState {
                 const cond = eval(data.condition);
                 if (cond === true) {
                     currentStates.push({
-                        data: REData.states[data.stateId],
-                        submatchEffectIndex: this.selectEffectIndex(entity, REData.states[data.stateId]),
+                        data: MRData.states[data.stateId],
+                        submatchEffectIndex: this.selectEffectIndex(entity, MRData.states[data.stateId]),
                         removing: false, new: true, level: 1 });
                 }
             }
@@ -224,7 +224,7 @@ export class UState {
     private static selectEffectIndex(entity: LEntity, state: DState): number {
         for (let i = state.submatchStates.length - 1; i >= 0; i--) {
             const stateId = state.submatchStates[i];
-            const effect = REData.states[stateId].effect;
+            const effect = MRData.states[stateId].effect;
             if (this.meetsConditions(entity, effect)) {
                 return i;
             }

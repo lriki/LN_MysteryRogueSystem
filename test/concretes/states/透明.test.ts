@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SView } from "ts/re/system/SView";
@@ -14,7 +14,7 @@ beforeAll(() => {
 
 test("concretes.states.透明.Player", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT透明").id;
+    const stateId = MRData.getState("kState_UT透明").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 11, 3);
@@ -26,13 +26,13 @@ test("concretes.states.透明.Player", () => {
 
 test("concretes.states.透明.EnemyMove", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT透明").id;
+    const stateId = MRData.getState("kState_UT透明").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // Minimap には表示されない
@@ -54,13 +54,13 @@ test("concretes.states.透明.EnemyMove", () => {
 
 test("concretes.states.透明.Enemy", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT透明").id;
+    const stateId = MRData.getState("kState_UT透明").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 11, 3);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
 
 

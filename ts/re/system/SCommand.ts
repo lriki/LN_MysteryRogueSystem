@@ -1,5 +1,5 @@
 import { DAction } from "ts/re/data/DAction";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 import { LEntity } from "../objects/LEntity";
 import { SEffectContext } from "./SEffectContext";
 

@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
@@ -18,7 +18,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ウルフA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 14, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -49,7 +49,7 @@ test("concretes.enemy.X2Speed1Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy を封印
-    enemy1.addState(REData.getState("kState_System_Seal").id);
+    enemy1.addState(MRData.getState("kState_System_Seal").id);
     
     // [←]
     RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());

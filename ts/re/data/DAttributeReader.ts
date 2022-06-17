@@ -1,6 +1,6 @@
 import { assert, tr2 } from "../Common";
 import { DTroopId } from "./DTroop";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 
 export interface RmmzLandAttribute {
@@ -231,7 +231,7 @@ export class DAnnotationReader {
         return {
             entity: rawData.entity ? (rawData.entity ?? "") : (rawData.data ?? ""),
             states: rawData.states ?? [],
-            troopId: rawData.troop ? REData.troops.findIndex(x => x.key == rawData_.troop) : 0,
+            troopId: rawData.troop ? MRData.troops.findIndex(x => x.key == rawData_.troop) : 0,
             stackCount: rawData.stack,
             override: rawData.override ?? false,
             overrideEvent: rawData.overrideEvent ?? false,

@@ -7,7 +7,7 @@ import { LItemBehavior } from "../behaviors/LItemBehavior";
 import { assert } from "ts/re/Common";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntityId } from "../LObject";
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { LRoomId } from "../LCommon";
 
 // 店の入り口情報
@@ -73,7 +73,7 @@ export class LItemShopStructure extends LStructure {
     }
 
     public clientFaction(): DFactionId {
-        return REData.system.factions.player;
+        return MRData.system.factions.player;
     }
 
     public addShopEntrance(homeX: number, homeY: number, gateX: number, gateY: number): LShopEntrance {

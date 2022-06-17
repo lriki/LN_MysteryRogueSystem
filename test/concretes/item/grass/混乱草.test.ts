@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
@@ -19,12 +19,12 @@ test("concretes.item.grass.混乱草", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックドラッグ_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックドラッグ_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_パニックドラッグ_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_パニックドラッグ_A").id, [], "item2"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
@@ -39,7 +39,7 @@ test("concretes.item.grass.混乱草", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 混乱状態になる
-    expect(!!player1.states().find(x => x.stateDataId() == REData.getState("kState_UT混乱").id)).toBe(true);
+    expect(!!player1.states().find(x => x.stateDataId() == MRData.getState("kState_UT混乱").id)).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -50,6 +50,6 @@ test("concretes.item.grass.混乱草", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 混乱状態になる
-    expect(!!enemy1.states().find(x => x.stateDataId() == REData.getState("kState_UT混乱").id)).toBe(true);
+    expect(!!enemy1.states().find(x => x.stateDataId() == MRData.getState("kState_UT混乱").id)).toBe(true);
 });
 

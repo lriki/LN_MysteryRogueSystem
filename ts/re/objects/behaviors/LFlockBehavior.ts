@@ -1,7 +1,7 @@
 import { RESerializable } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
 import { LEventResult } from "../LEventServer";
@@ -30,7 +30,7 @@ export class LFlockBehavior extends LBehavior {
     
     onPartyEvent(eventId: DEventId, args: any): LEventResult {
         if (eventId == MRBasics.events.effectReacted) {
-            this.ownerEntity().removeState(REData.getState("kState_仮眠2").id);
+            this.ownerEntity().removeState(MRData.getState("kState_仮眠2").id);
         }
         return LEventResult.Pass;
     }

@@ -1,7 +1,7 @@
 import { assert, tr2 } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DEquipmentPartId } from "ts/re/data/DEquipmentPart";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { STask, SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
@@ -152,7 +152,7 @@ NOTE:
     onQueryProperty(propertyId: number): any {
         if (propertyId == RESystem.properties.equipmentSlots) {
             // TODO: とりあえず全部有効にして返してみる
-            return REData.equipmentParts
+            return MRData.equipmentParts
                 .filter(x => x.id != 0)
                 .map((x) => x.id);
         }

@@ -1,7 +1,7 @@
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope, DEffectSet } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LProjectileBehavior } from "ts/re/objects/behaviors/activities/LProjectileBehavior";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { onAttackReaction } from "ts/re/objects/internal";
@@ -135,7 +135,7 @@ export class SEmittorPerformer {
      */
     private performeSkill(cctx: SCommandContext, performer: LEntity, skillId: DSkillId): void {
 
-        const skill = REData.skills[skillId];
+        const skill = MRData.skills[skillId];
         ///const effector = new SEffectorFact(entity, skill.effect);
         
 
@@ -455,7 +455,7 @@ export class SEmittorPerformer {
         startY: number,
         dir: number)
     {
-        const bullet = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(emittor.scope.projectilePrefabKey).id));
+        const bullet = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity(emittor.scope.projectilePrefabKey).id));
         REGame.map.appearEntity(bullet, startX, startY);
         bullet.dir = dir;
 

@@ -1,6 +1,6 @@
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { REGame } from "ts/re/objects/REGame";
@@ -21,8 +21,8 @@ test("system.BDash.ArrowDamageStop", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

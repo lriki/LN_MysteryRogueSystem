@@ -9,7 +9,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LProjectileBehavior } from "ts/re/objects/behaviors/activities/LProjectileBehavior";
 import { SEffectSubject } from "ts/re/system/SEffectContext";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -20,7 +20,7 @@ test("Survival.FP", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
+    player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
     expect(player1.actualParam(MRBasics.params.fp)).toBe(10000); // 初期 FP は 10000
     

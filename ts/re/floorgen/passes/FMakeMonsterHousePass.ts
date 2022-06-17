@@ -1,5 +1,5 @@
 import { DFloorMonsterHousePattern } from "ts/re/data/DLand";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LRandom } from "ts/re/objects/LRandom";
 import { UEffect } from "ts/re/usecases/UEffect";
 import { FMap } from "../FMapData";
@@ -82,7 +82,7 @@ export class FMakeMonsterHouseForRandomMapPass extends FMapBuildPass {
                     const candidates = map.rooms().filter(x => x.structures().length == 0);
                     const room = map.random().selectOrUndefined(candidates);
                     if (room) {
-                        const data = REData.getMonsterHouse(pattern.name);
+                        const data = MRData.getMonsterHouse(pattern.name);
         
                         const s = new FMonsterHouseStructure(room.id(), data.id);
                         map.addStructure(s);

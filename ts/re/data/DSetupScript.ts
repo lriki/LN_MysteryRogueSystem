@@ -1,7 +1,7 @@
 import { assert } from "../Common";
 import { DEntity } from "./DEntity";
 import { MRBasics } from "./MRBasics";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 
 
@@ -48,7 +48,7 @@ export class DSetupScript {
 
             if (data.equipmentTraits) {
                 for (const t of data.equipmentTraits) {
-                    const traitData = REData.getTrait(t.code);
+                    const traitData = MRData.getTrait(t.code);
                     const trait: IDataTrait = {
                         code: traitData.id,
                         dataId: 0,
@@ -59,7 +59,7 @@ export class DSetupScript {
                     if (t.data) {
                         switch (traitData.id) {
                             case MRBasics.traits.RaceRate:
-                                trait.dataId = REData.getRace(t.data).id;
+                                trait.dataId = MRData.getRace(t.data).id;
                                 break;
                         }
                     }

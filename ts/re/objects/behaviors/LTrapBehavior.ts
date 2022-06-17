@@ -1,6 +1,6 @@
 import { assert, RESerializable, tr } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
@@ -114,7 +114,7 @@ export class LTrapBehavior extends LBehavior {
     }
     
     private checkValidTarget(entity: LEntity): boolean {
-        return entity.getOutwardFactionId() === REData.system.trapTargetFactionId;
+        return entity.getOutwardFactionId() === MRData.system.trapTargetFactionId;
     }
 
     private triggerRate(target: LEntity): number {

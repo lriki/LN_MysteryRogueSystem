@@ -2,7 +2,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
@@ -24,13 +24,13 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_モンスタースクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_モンスタースクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy2"));
-    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミミックA").id, [REData.getState("kState_UTアイテム擬態").id], "enemy3"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy2"));
+    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ミミックA").id, [MRData.getState("kState_UTアイテム擬態").id], "enemy3"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
     REGame.world.transferEntity(enemy2, floorId, 20, 4);
     REGame.world.transferEntity(enemy3, floorId, 20, 5);
@@ -57,6 +57,6 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     expect(enemy2Visibility1.visible).toBeTruthy();
 
     // アイテム擬態が解けている
-    expect(enemy3.isStateAffected(REData.getState("kState_UTアイテム擬態").id)).toBeFalsy();
+    expect(enemy3.isStateAffected(MRData.getState("kState_UTアイテム擬態").id)).toBeFalsy();
 });
 

@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DTerrainSettingRef } from "../DLand";
-import { REData } from "../REData";
+import { MRData } from "../MRData";
 
 interface DBFloorPreset {
     terrains: Map<string, number>;   // TerrainSettingKey, rate
@@ -26,11 +26,11 @@ export class DFloorPresetImporter {
         for (const pair1 of Object.entries(this._db.floorPresets)) {
             const key = pair1[0] as string;
             const preset = pair1[1] as DBFloorPreset;
-            const data = REData.newFloorPreset(key);
+            const data = MRData.newFloorPreset(key);
 
             // terrains
             for (const [terrainSettingKey, rate] of Object.entries(preset.terrains)) {
-                const terraintSettingId = REData.getTerrainSetting(terrainSettingKey).id;
+                const terraintSettingId = MRData.getTerrainSetting(terrainSettingKey).id;
                 data.terrains.push(new DTerrainSettingRef(terraintSettingId, rate)); 
             }
 

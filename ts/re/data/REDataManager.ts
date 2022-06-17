@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { RESystem } from "ts/re/system/RESystem";
 import { assert, RESerializable, tr, tr2 } from "../Common";
-import { DMap, REData, REFloorMapKind } from "./REData";
+import { DMap, MRData, REFloorMapKind } from "./MRData";
 import { MRBasics } from "./MRBasics";
 import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
@@ -115,7 +115,7 @@ export class REDataManager {
 
 
     private static setupCommonData(next: NextFunc) {
-        REData.reset();
+        MRData.reset();
 
         // Events
         {
@@ -132,7 +132,7 @@ export class REDataManager {
         }
 
         // Parameters
-        REData.parameters = [
+        MRData.parameters = [
             REData_Parameter.makeBuiltin(0, "null", "null", "null", -1, 0, 0, Infinity),
             REData_Parameter.makeBuiltin(1, "hp", "HP", tr2("最大HP"), 0, 0, 0, Infinity),
             REData_Parameter.makeBuiltin(2, "mp", "MP", tr2("最大MP"), 1, 0, 0, Infinity),
@@ -154,77 +154,77 @@ export class REDataManager {
             REData_Parameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 999999, 0, Infinity),
         ];
         MRBasics.params = {
-            hp: REData.parameters.findIndex(x => x.code == "hp"),
-            mp: REData.parameters.findIndex(x => x.code == "mp"),
-            atk: REData.parameters.findIndex(x => x.code == "atk"),
-            def: REData.parameters.findIndex(x => x.code == "def"),
-            mat: REData.parameters.findIndex(x => x.code == "mat"),
-            mdf: REData.parameters.findIndex(x => x.code == "mdf"),
-            agi: REData.parameters.findIndex(x => x.code == "agi"),
-            luk: REData.parameters.findIndex(x => x.code == "luk"),
-            tp: REData.parameters.findIndex(x => x.code == "tp"),
-            fp: REData.parameters.findIndex(x => x.code == "fp"),
-            pow: REData.parameters.findIndex(x => x.code == "pow"),
-            upgradeValue: REData.parameters.findIndex(x => x.code == "up"),
-            remaining: REData.parameters.findIndex(x => x.code == "rem"),
-            capacity: REData.parameters.findIndex(x => x.code == "cap"),
-            gold: REData.parameters.findIndex(x => x.code == "gold"),
-            level: REData.parameters.findIndex(x => x.code == "level"),
-            exp: REData.parameters.findIndex(x => x.code == "exp"),
+            hp: MRData.parameters.findIndex(x => x.code == "hp"),
+            mp: MRData.parameters.findIndex(x => x.code == "mp"),
+            atk: MRData.parameters.findIndex(x => x.code == "atk"),
+            def: MRData.parameters.findIndex(x => x.code == "def"),
+            mat: MRData.parameters.findIndex(x => x.code == "mat"),
+            mdf: MRData.parameters.findIndex(x => x.code == "mdf"),
+            agi: MRData.parameters.findIndex(x => x.code == "agi"),
+            luk: MRData.parameters.findIndex(x => x.code == "luk"),
+            tp: MRData.parameters.findIndex(x => x.code == "tp"),
+            fp: MRData.parameters.findIndex(x => x.code == "fp"),
+            pow: MRData.parameters.findIndex(x => x.code == "pow"),
+            upgradeValue: MRData.parameters.findIndex(x => x.code == "up"),
+            remaining: MRData.parameters.findIndex(x => x.code == "rem"),
+            capacity: MRData.parameters.findIndex(x => x.code == "cap"),
+            gold: MRData.parameters.findIndex(x => x.code == "gold"),
+            level: MRData.parameters.findIndex(x => x.code == "level"),
+            exp: MRData.parameters.findIndex(x => x.code == "exp"),
         };
         // RMMZ のパラメータID との一致を検証
-        assert(REData.parameters[MRBasics.params.hp].battlerParamId === 0);
-        assert(REData.parameters[MRBasics.params.mp].battlerParamId === 1);
-        assert(REData.parameters[MRBasics.params.atk].battlerParamId === 2);
-        assert(REData.parameters[MRBasics.params.def].battlerParamId === 3);
-        assert(REData.parameters[MRBasics.params.mat].battlerParamId === 4);
-        assert(REData.parameters[MRBasics.params.mdf].battlerParamId === 5);
-        assert(REData.parameters[MRBasics.params.agi].battlerParamId === 6);
-        assert(REData.parameters[MRBasics.params.luk].battlerParamId === 7);
+        assert(MRData.parameters[MRBasics.params.hp].battlerParamId === 0);
+        assert(MRData.parameters[MRBasics.params.mp].battlerParamId === 1);
+        assert(MRData.parameters[MRBasics.params.atk].battlerParamId === 2);
+        assert(MRData.parameters[MRBasics.params.def].battlerParamId === 3);
+        assert(MRData.parameters[MRBasics.params.mat].battlerParamId === 4);
+        assert(MRData.parameters[MRBasics.params.mdf].battlerParamId === 5);
+        assert(MRData.parameters[MRBasics.params.agi].battlerParamId === 6);
+        assert(MRData.parameters[MRBasics.params.luk].battlerParamId === 7);
 
-        REData.parameters[MRBasics.params.fp].magnification = 0.01;
-        REData.parameters[MRBasics.params.fp].friendlySideMessages = [
+        MRData.parameters[MRBasics.params.fp].magnification = 0.01;
+        MRData.parameters[MRBasics.params.fp].friendlySideMessages = [
             { condition: "value >= max", message: tr("%1はおなかがいっぱいになった。") },
             { condition: "value < max", message: tr("%1はおなかがふくれた。") }
         ];
-        REData.parameters[MRBasics.params.pow].selfGainMessage = DTextManager.actorGain;
-        REData.parameters[MRBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
-        REData.parameters[MRBasics.params.pow].targetGainMessage = DTextManager.actorGain;
-        REData.parameters[MRBasics.params.pow].targetLossMessage = DTextManager.enemyLoss;
-        REData.parameters[MRBasics.params.upgradeValue].selfGainMessage = DTextManager.actorGain;
-        REData.parameters[MRBasics.params.upgradeValue].selfLossMessage = DTextManager.actorLoss;
-        REData.parameters[MRBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
-        REData.parameters[MRBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
-        REData.parameters[MRBasics.params.level].initialValue = 1;
-        REData.parameters[MRBasics.params.exp].initialValue = 0;
-        REData.parameters[MRBasics.params.level].selfGainMessage = DTextManager.levelUp;
+        MRData.parameters[MRBasics.params.pow].selfGainMessage = DTextManager.actorGain;
+        MRData.parameters[MRBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
+        MRData.parameters[MRBasics.params.pow].targetGainMessage = DTextManager.actorGain;
+        MRData.parameters[MRBasics.params.pow].targetLossMessage = DTextManager.enemyLoss;
+        MRData.parameters[MRBasics.params.upgradeValue].selfGainMessage = DTextManager.actorGain;
+        MRData.parameters[MRBasics.params.upgradeValue].selfLossMessage = DTextManager.actorLoss;
+        MRData.parameters[MRBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
+        MRData.parameters[MRBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
+        MRData.parameters[MRBasics.params.level].initialValue = 1;
+        MRData.parameters[MRBasics.params.exp].initialValue = 0;
+        MRData.parameters[MRBasics.params.level].selfGainMessage = DTextManager.levelUp;
         //REData.parameters[REBasics.params.level].selfLossMessage = DTextManager.actorLoss;
-        REData.parameters[MRBasics.params.level].targetGainMessage = DTextManager.levelUp;
+        MRData.parameters[MRBasics.params.level].targetGainMessage = DTextManager.levelUp;
         //REData.parameters[REBasics.params.level].targetLossMessage = DTextManager.enemyLoss;
-        REData.parameters[MRBasics.params.level].messageValueSource = DParamMessageValueSource.Absolute;
+        MRData.parameters[MRBasics.params.level].messageValueSource = DParamMessageValueSource.Absolute;
         
         
         MRBasics.entityKinds = {
-            actor: REData.addEntityKind("Actor", "Actor"),
-            WeaponKindId: REData.addEntityKind("武器", "Weapon"),
-            ShieldKindId: REData.addEntityKind("盾", "Shield"),
-            ArrowKindId: REData.addEntityKind("矢", "Arrow"),
+            actor: MRData.addEntityKind("Actor", "Actor"),
+            WeaponKindId: MRData.addEntityKind("武器", "Weapon"),
+            ShieldKindId: MRData.addEntityKind("盾", "Shield"),
+            ArrowKindId: MRData.addEntityKind("矢", "Arrow"),
             //RE_Data.addEntityKind("石"),
             //RE_Data.addEntityKind("弾"),
-            BraceletKindId: REData.addEntityKind("腕輪", "Ring"),
-            FoodKindId: REData.addEntityKind("食料", "Food"),
-            grass: REData.addEntityKind("草", "Grass"),
-            ScrollKindId: REData.addEntityKind("巻物", "Scroll"),
-            WandKindId: REData.addEntityKind("杖", "Staff"),
-            PotKindId: REData.addEntityKind("壺", "Pot"),
-            DiscountTicketKindId: REData.addEntityKind("割引券", "DiscountTicket"),
-            BuildingMaterialKindId: REData.addEntityKind("材料", "BuildingMaterial"),
-            TrapKindId: REData.addEntityKind("罠", "Trap"),
-            FigurineKindId: REData.addEntityKind("土偶", "Figurine"),
-            MonsterKindId: REData.addEntityKind("モンスター", "Monster"),
-            entryPoint: REData.addEntityKind("入り口", "EntryPoint"),
-            exitPoint: REData.addEntityKind("出口", "ExitPoint"),
-            Ornament: REData.addEntityKind("Ornament", "Ornament"),
+            BraceletKindId: MRData.addEntityKind("腕輪", "Ring"),
+            FoodKindId: MRData.addEntityKind("食料", "Food"),
+            grass: MRData.addEntityKind("草", "Grass"),
+            ScrollKindId: MRData.addEntityKind("巻物", "Scroll"),
+            WandKindId: MRData.addEntityKind("杖", "Staff"),
+            PotKindId: MRData.addEntityKind("壺", "Pot"),
+            DiscountTicketKindId: MRData.addEntityKind("割引券", "DiscountTicket"),
+            BuildingMaterialKindId: MRData.addEntityKind("材料", "BuildingMaterial"),
+            TrapKindId: MRData.addEntityKind("罠", "Trap"),
+            FigurineKindId: MRData.addEntityKind("土偶", "Figurine"),
+            MonsterKindId: MRData.addEntityKind("モンスター", "Monster"),
+            entryPoint: MRData.addEntityKind("入り口", "EntryPoint"),
+            exitPoint: MRData.addEntityKind("出口", "ExitPoint"),
+            Ornament: MRData.addEntityKind("Ornament", "Ornament"),
         };
 
         MRBasics.xparams = { // RMMZ と同じ配列
@@ -255,95 +255,95 @@ export class REDataManager {
 
         // StateTraits
         {
-            REData.traits = [];
+            MRData.traits = [];
             MRBasics.traits = {} as any;
-            REData.traits[11] = new DTrait(11, "TRAIT_ELEMENT_RATE");
+            MRData.traits[11] = new DTrait(11, "TRAIT_ELEMENT_RATE");
             MRBasics.traits.TRAIT_ELEMENT_RATE = 11;
-            REData.traits[12] = new DTrait(12, "TRAIT_DEBUFF_RATE");
+            MRData.traits[12] = new DTrait(12, "TRAIT_DEBUFF_RATE");
             MRBasics.traits.TRAIT_DEBUFF_RATE = 12;
-            REData.traits[13] = new DTrait(13, "TRAIT_STATE_RATE");
+            MRData.traits[13] = new DTrait(13, "TRAIT_STATE_RATE");
             MRBasics.traits.TRAIT_STATE_RATE = 13;
-            REData.traits[14] = new DTrait(14, "TRAIT_STATE_RESIST");
+            MRData.traits[14] = new DTrait(14, "TRAIT_STATE_RESIST");
             MRBasics.traits.TRAIT_STATE_RESIST = 14;
-            REData.traits[21] = new DTrait(21, "TRAIT_PARAM");
+            MRData.traits[21] = new DTrait(21, "TRAIT_PARAM");
             MRBasics.traits.TRAIT_PARAM = 21;
-            REData.traits[22] = new DTrait(22, "TRAIT_XPARAM");
+            MRData.traits[22] = new DTrait(22, "TRAIT_XPARAM");
             MRBasics.traits.TRAIT_XPARAM = 22;
-            REData.traits[23] = new DTrait(23, "TRAIT_SPARAM");
+            MRData.traits[23] = new DTrait(23, "TRAIT_SPARAM");
             MRBasics.traits.TRAIT_SPARAM = 23;
-            REData.traits[31] = new DTrait(31, "TRAIT_ATTACK_ELEMENT");
+            MRData.traits[31] = new DTrait(31, "TRAIT_ATTACK_ELEMENT");
             MRBasics.traits.TRAIT_ATTACK_ELEMENT = 31;
-            REData.traits[32] = new DTrait(32, "TRAIT_ATTACK_STATE");
+            MRData.traits[32] = new DTrait(32, "TRAIT_ATTACK_STATE");
             MRBasics.traits.TRAIT_ATTACK_STATE = 32;
-            REData.traits[33] = new DTrait(33, "TRAIT_ATTACK_SPEED");
+            MRData.traits[33] = new DTrait(33, "TRAIT_ATTACK_SPEED");
             MRBasics.traits.TRAIT_ATTACK_SPEED = 33;
-            REData.traits[34] = new DTrait(34, "TRAIT_ATTACK_TIMES");
+            MRData.traits[34] = new DTrait(34, "TRAIT_ATTACK_TIMES");
             MRBasics.traits.TRAIT_ATTACK_TIMES = 34;
-            REData.traits[35] = new DTrait(35, "TRAIT_ATTACK_SKILL");
+            MRData.traits[35] = new DTrait(35, "TRAIT_ATTACK_SKILL");
             MRBasics.traits.TRAIT_ATTACK_SKILL = 35;
-            REData.traits[41] = new DTrait(41, "TRAIT_STYPE_ADD");
+            MRData.traits[41] = new DTrait(41, "TRAIT_STYPE_ADD");
             MRBasics.traits.TRAIT_STYPE_ADD = 41;
-            REData.traits[42] = new DTrait(42, "TRAIT_STYPE_SEAL");
+            MRData.traits[42] = new DTrait(42, "TRAIT_STYPE_SEAL");
             MRBasics.traits.TRAIT_STYPE_SEAL = 42;
-            REData.traits[43] = new DTrait(43, "TRAIT_SKILL_ADD");
+            MRData.traits[43] = new DTrait(43, "TRAIT_SKILL_ADD");
             MRBasics.traits.TRAIT_SKILL_ADD = 43;
-            REData.traits[44] = new DTrait(44, "TRAIT_SKILL_SEAL");
+            MRData.traits[44] = new DTrait(44, "TRAIT_SKILL_SEAL");
             MRBasics.traits.TRAIT_SKILL_SEAL = 44;
-            REData.traits[51] = new DTrait(51, "TRAIT_EQUIP_WTYPE");
+            MRData.traits[51] = new DTrait(51, "TRAIT_EQUIP_WTYPE");
             MRBasics.traits.TRAIT_EQUIP_WTYPE = 51;
-            REData.traits[52] = new DTrait(52, "TRAIT_EQUIP_ATYPE");
+            MRData.traits[52] = new DTrait(52, "TRAIT_EQUIP_ATYPE");
             MRBasics.traits.TRAIT_EQUIP_ATYPE = 52;
-            REData.traits[53] = new DTrait(53, "TRAIT_EQUIP_LOCK");
+            MRData.traits[53] = new DTrait(53, "TRAIT_EQUIP_LOCK");
             MRBasics.traits.TRAIT_EQUIP_LOCK = 53;
-            REData.traits[54] = new DTrait(54, "TRAIT_EQUIP_SEAL");
+            MRData.traits[54] = new DTrait(54, "TRAIT_EQUIP_SEAL");
             MRBasics.traits.TRAIT_EQUIP_SEAL = 54;
-            REData.traits[55] = new DTrait(55, "TRAIT_SLOT_TYPE");
+            MRData.traits[55] = new DTrait(55, "TRAIT_SLOT_TYPE");
             MRBasics.traits.TRAIT_SLOT_TYPE = 55;
-            REData.traits[61] = new DTrait(61, "TRAIT_ACTION_PLUS");
+            MRData.traits[61] = new DTrait(61, "TRAIT_ACTION_PLUS");
             MRBasics.traits.TRAIT_ACTION_PLUS = 61;
-            REData.traits[62] = new DTrait(62, "TRAIT_SPECIAL_FLAG");
+            MRData.traits[62] = new DTrait(62, "TRAIT_SPECIAL_FLAG");
             MRBasics.traits.TRAIT_SPECIAL_FLAG = 62;
-            REData.traits[63] = new DTrait(63, "TRAIT_COLLAPSE_TYPE");
+            MRData.traits[63] = new DTrait(63, "TRAIT_COLLAPSE_TYPE");
             MRBasics.traits.TRAIT_COLLAPSE_TYPE = 63;
-            REData.traits[64] = new DTrait(64, "TRAIT_PARTY_ABILITY");
+            MRData.traits[64] = new DTrait(64, "TRAIT_PARTY_ABILITY");
             MRBasics.traits.TRAIT_PARTY_ABILITY = 64;
 
-            MRBasics.traits._separator = REData.newTrait("_separator").id;
-            MRBasics.traits.CertainDirectAttack = REData.newTrait("CertainDirectAttack").id;
-            MRBasics.traits.DodgePhysicalIndirectAttack = REData.newTrait("CartailDodgePhysicalAttack").id;
-            MRBasics.traits.AwfulPhysicalIndirectAttack = REData.newTrait("AwfulPhysicalIndirectAttack").id;
-            MRBasics.traits.UnitVisitor = REData.newTrait("UnitVisitor").id;
-            MRBasics.traits.StateRemoveByEffect = REData.newTrait("StateRemoveByEffect").id;
-            MRBasics.traits.Stackable = REData.newTrait("Stackable").id;
-            MRBasics.traits.EffectProficiency = REData.newTrait("EffectProficiency").id;
-            MRBasics.traits.EquipmentProficiency = REData.newTrait("EquipmentProficiency").id;
-            MRBasics.traits.SealActivity = REData.newTrait("SealActivity").id;
-            MRBasics.traits.SealSpecialAbility = REData.newTrait("SealSpecialAbility").id;
-            MRBasics.traits.Invisible = REData.newTrait("Invisible").id;
-            MRBasics.traits.ForceVisible = REData.newTrait("ForceVisible").id;
-            MRBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
-            MRBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
-            MRBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
-            MRBasics.traits.AwakeStep = REData.newTrait("AwakeStep").id;
-            MRBasics.traits.SilentStep = REData.newTrait("SilentStep").id;
-            MRBasics.traits.SuddenSkillEffect = REData.newTrait("AutoSkillEffect").id;
-            MRBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
-            MRBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
-            MRBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
-            MRBasics.traits.DisableTrap = REData.newTrait("DisableTrap").id;
+            MRBasics.traits._separator = MRData.newTrait("_separator").id;
+            MRBasics.traits.CertainDirectAttack = MRData.newTrait("CertainDirectAttack").id;
+            MRBasics.traits.DodgePhysicalIndirectAttack = MRData.newTrait("CartailDodgePhysicalAttack").id;
+            MRBasics.traits.AwfulPhysicalIndirectAttack = MRData.newTrait("AwfulPhysicalIndirectAttack").id;
+            MRBasics.traits.UnitVisitor = MRData.newTrait("UnitVisitor").id;
+            MRBasics.traits.StateRemoveByEffect = MRData.newTrait("StateRemoveByEffect").id;
+            MRBasics.traits.Stackable = MRData.newTrait("Stackable").id;
+            MRBasics.traits.EffectProficiency = MRData.newTrait("EffectProficiency").id;
+            MRBasics.traits.EquipmentProficiency = MRData.newTrait("EquipmentProficiency").id;
+            MRBasics.traits.SealActivity = MRData.newTrait("SealActivity").id;
+            MRBasics.traits.SealSpecialAbility = MRData.newTrait("SealSpecialAbility").id;
+            MRBasics.traits.Invisible = MRData.newTrait("Invisible").id;
+            MRBasics.traits.ForceVisible = MRData.newTrait("ForceVisible").id;
+            MRBasics.traits.ItemDropRate = MRData.newTrait("ItemDropRate").id;
+            MRBasics.traits.FixedDamage = MRData.newTrait("FixedDamage").id;
+            MRBasics.traits.DrawInTrap = MRData.newTrait("DrawInTrap").id;
+            MRBasics.traits.AwakeStep = MRData.newTrait("AwakeStep").id;
+            MRBasics.traits.SilentStep = MRData.newTrait("SilentStep").id;
+            MRBasics.traits.SuddenSkillEffect = MRData.newTrait("AutoSkillEffect").id;
+            MRBasics.traits.SurvivalParamLossRate = MRData.newTrait("SurvivalParamLossRate").id;
+            MRBasics.traits.ParamDamageRate = MRData.newTrait("ParamDamageRate").id;
+            MRBasics.traits.SkillGuard = MRData.newTrait("SkillGuard").id;
+            MRBasics.traits.DisableTrap = MRData.newTrait("DisableTrap").id;
             //REBasics.traits.RecoverRate = REData.newTrait("RecoverRate").id;
             //REBasics.traits.ElementedRecoverRate = REData.newTrait("ElementedRecoverRate").id;
-            MRBasics.traits.ElementedRecoveryRate = REData.newTrait("ElementedRecoverRate").id;
-            MRBasics.traits.RaceRate = REData.newTrait("RaceRate").id;
-            MRBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
-            MRBasics.traits.PenetrationItem = REData.newTrait("PenetrationItem").id;
-            MRBasics.traits.PenetrationThrower = REData.newTrait("PenetrationThrower").id;
-            MRBasics.traits.DeathVulnerableElement = REData.newTrait("DeathVulnerableElement").id;
+            MRBasics.traits.ElementedRecoveryRate = MRData.newTrait("ElementedRecoverRate").id;
+            MRBasics.traits.RaceRate = MRData.newTrait("RaceRate").id;
+            MRBasics.traits.PhysicalProjectileReflector = MRData.newTrait("PhysicalProjectileReflector").id;
+            MRBasics.traits.PenetrationItem = MRData.newTrait("PenetrationItem").id;
+            MRBasics.traits.PenetrationThrower = MRData.newTrait("PenetrationThrower").id;
+            MRBasics.traits.DeathVulnerableElement = MRData.newTrait("DeathVulnerableElement").id;
         }
 
         // Factions
         {
-            REData.factions = [
+            MRData.factions = [
                 { id: 0, name: '', schedulingOrder: 9999, hostileBits: 0, friendBits: 0 },
                 { id: 1, name: 'Friends', schedulingOrder: 1, hostileBits: 0b0100, friendBits: 0 },
                 { id: 2, name: 'Enemy', schedulingOrder: 2, hostileBits: 0b0010, friendBits: 0 },
@@ -353,79 +353,79 @@ export class REDataManager {
 
         // Actions
         MRBasics.actions = {
-            DirectionChangeActionId: REData.newAction("DirectionChange").id,
-            MoveToAdjacentActionId: REData.newAction("MoveToAdjacent").id,
-            PickActionId: REData.newAction("拾う").id,
-            PutActionId: REData.newAction("置く").id,
-            ExchangeActionId: REData.newAction("交換").id,
-            ThrowActionId: REData.newAction("投げる").id,
-            FlungActionId: REData.newAction("Flung").id,
-            ShootingActionId: REData.newAction("撃つ", 1000).id,
-            AffectActionId: REData.newAction("Affect").id,
-            RollActionId: REData.newAction("Roll").id,
-            FallActionId: REData.newAction("Fall").id,
-            DropActionId: REData.newAction("Drop").id,
-            trample: REData.newAction("trample").id,
-            TrashActionId: REData.newAction("Trash").id,
-            ForwardFloorActionId: REData.newAction("すすむ").id,
-            BackwardFloorActionId: REData.newAction("戻る").id,
-            EquipActionId: REData.newAction("装備", 1000).id,
-            EquipOffActionId: REData.newAction("はずす").id,
-            EatActionId: REData.newAction("食べる", 1000).id,
-            TakeActionId: REData.newAction("Take").id,
-            BiteActionId: REData.newAction("Bite").id,
-            ReadActionId: REData.newAction("読む", 1000).id,
-            WaveActionId: REData.newAction("振る", 1000).id,
-            PushActionId: REData.newAction("Push").id,
-            PutInActionId: REData.newAction("PickIn").id,
-            PickOutActionId: REData.newAction("PickOut").id,
-            IdentifyActionId: REData.newAction("Identify").id,
-            talk: REData.newAction("talk").id,
-            collide: REData.newAction("collide").id,
-            dialogResult: REData.newAction("dialogResult").id,
-            stumble: REData.newAction("stumble").id,
-            dead: REData.newAction("dead").id,
-            performSkill: REData.newAction("PerformSkill").id,
-            AttackActionId: REData.newAction("Attack").id,
+            DirectionChangeActionId: MRData.newAction("DirectionChange").id,
+            MoveToAdjacentActionId: MRData.newAction("MoveToAdjacent").id,
+            PickActionId: MRData.newAction("拾う").id,
+            PutActionId: MRData.newAction("置く").id,
+            ExchangeActionId: MRData.newAction("交換").id,
+            ThrowActionId: MRData.newAction("投げる").id,
+            FlungActionId: MRData.newAction("Flung").id,
+            ShootingActionId: MRData.newAction("撃つ", 1000).id,
+            AffectActionId: MRData.newAction("Affect").id,
+            RollActionId: MRData.newAction("Roll").id,
+            FallActionId: MRData.newAction("Fall").id,
+            DropActionId: MRData.newAction("Drop").id,
+            trample: MRData.newAction("trample").id,
+            TrashActionId: MRData.newAction("Trash").id,
+            ForwardFloorActionId: MRData.newAction("すすむ").id,
+            BackwardFloorActionId: MRData.newAction("戻る").id,
+            EquipActionId: MRData.newAction("装備", 1000).id,
+            EquipOffActionId: MRData.newAction("はずす").id,
+            EatActionId: MRData.newAction("食べる", 1000).id,
+            TakeActionId: MRData.newAction("Take").id,
+            BiteActionId: MRData.newAction("Bite").id,
+            ReadActionId: MRData.newAction("読む", 1000).id,
+            WaveActionId: MRData.newAction("振る", 1000).id,
+            PushActionId: MRData.newAction("Push").id,
+            PutInActionId: MRData.newAction("PickIn").id,
+            PickOutActionId: MRData.newAction("PickOut").id,
+            IdentifyActionId: MRData.newAction("Identify").id,
+            talk: MRData.newAction("talk").id,
+            collide: MRData.newAction("collide").id,
+            dialogResult: MRData.newAction("dialogResult").id,
+            stumble: MRData.newAction("stumble").id,
+            dead: MRData.newAction("dead").id,
+            performSkill: MRData.newAction("PerformSkill").id,
+            AttackActionId: MRData.newAction("Attack").id,
         };
 
         MRBasics.commands = {
-            testPickOutItem: REData.newCommand("testPickOutItem").id,
+            testPickOutItem: MRData.newCommand("testPickOutItem").id,
         };
         
 
         // Sequels
         MRBasics.sequels = {
-            idle: REData.addSequel("idle"),
-            MoveSequel: REData.addSequel("Move"),
-            blowMoveSequel: REData.addSequel("BlowMove"),
-            dropSequel: REData.addSequel("BlowMove"),
-            attack: REData.addSequel("attack"),
-            CollapseSequel: REData.addSequel("Collapse"),
-            commonStopped: REData.addSequel("commonStopped"),
-            asleep: REData.addSequel("asleep"),
-            escape: REData.addSequel("escape"),
-            earthquake2: REData.addSequel("earthquake2"),
-            useItem: REData.addSequel("useItem"),
-            explosion: REData.addSequel("explosion"),
-            down: REData.addSequel("down"),
-            warp: REData.addSequel("warp"),
-            stumble: REData.addSequel("stumble"),
-            jump: REData.addSequel("stumble"),
+            idle: MRData.addSequel("idle"),
+            MoveSequel: MRData.addSequel("Move"),
+            blowMoveSequel: MRData.addSequel("BlowMove"),
+            dropSequel: MRData.addSequel("BlowMove"),
+            attack: MRData.addSequel("attack"),
+            CollapseSequel: MRData.addSequel("Collapse"),
+            commonStopped: MRData.addSequel("commonStopped"),
+            asleep: MRData.addSequel("asleep"),
+            escape: MRData.addSequel("escape"),
+            earthquake2: MRData.addSequel("earthquake2"),
+            useItem: MRData.addSequel("useItem"),
+            explosion: MRData.addSequel("explosion"),
+            down: MRData.addSequel("down"),
+            warp: MRData.addSequel("warp"),
+            stumble: MRData.addSequel("stumble"),
+            jump: MRData.addSequel("stumble"),
         };
-        REData.sequels[MRBasics.sequels.MoveSequel].parallel = true;
-        REData.sequels[MRBasics.sequels.MoveSequel].fluidSequence = true;
-        REData.sequels[MRBasics.sequels.CollapseSequel].parallel = true;
-        REData.sequels[MRBasics.sequels.stumble].parallel = true;
-        REData.sequels[MRBasics.sequels.dropSequel].parallel = true;    // 転倒とアイテムドロップを並列実行したい
-        REData.sequels[MRBasics.sequels.jump].parallel = true;
+        MRData.sequels[MRBasics.sequels.MoveSequel].parallel = true;
+        MRData.sequels[MRBasics.sequels.MoveSequel].fluidSequence = true;
+        MRData.sequels[MRBasics.sequels.CollapseSequel].parallel = true;
+        MRData.sequels[MRBasics.sequels.stumble].parallel = true;
+        MRData.sequels[MRBasics.sequels.dropSequel].parallel = true;    // 転倒とアイテムドロップを並列実行したい
+        MRData.sequels[MRBasics.sequels.jump].parallel = true;
         
         RESystem.skills = {
             move: 3,
             normalAttack: 1,
         };
 
-        REData.monsterHouses = [
+        MRData.monsterHouses = [
             { id: 0, name: "null", bgm: { name: "", pan: 0, pitch: 100, volume: 90 } },
             { id: 1, name: "Fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
             { id: 2, name: "Default", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
@@ -435,7 +435,7 @@ export class REDataManager {
             normal: 2,
         };
 
-        REData.itemShops = [
+        MRData.itemShops = [
             { id: 0, name: "null", bgm: { name: "", pan: 0, pitch: 100, volume: 90 } },
             { id: 1, name: "Fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
             { id: 2, name: "Default", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
@@ -446,34 +446,34 @@ export class REDataManager {
         };
 
         MRBasics.effectBehaviors = {
-            itemSteal: REData.newEffectBehavior("ItemSteal").id,
-            goldSteal: REData.newEffectBehavior("GoldSteal").id,
-            levelDown: REData.newEffectBehavior("LevelDown").id,
-            warp: REData.newEffectBehavior("Warp").id,
-            stumble: REData.newEffectBehavior("Stumble").id,
-            transferToNextFloor: REData.newEffectBehavior("TransferToNextFloor").id,
-            transferToLowerFloor: REData.newEffectBehavior("TransferToLowerFloor").id,
-            trapProliferation: REData.newEffectBehavior("TrapProliferation").id,
-            dispelEquipments: REData.newEffectBehavior("DispelEquipments").id,
-            changeInstance: REData.newEffectBehavior("ChangeInstance").id,
-            restartFloor: REData.newEffectBehavior("RestartFloor").id,
-            clarification: REData.newEffectBehavior("Clarification").id,
-            division: REData.newEffectBehavior("Division").id,
-            removeStatesByIntentions: REData.newEffectBehavior("RemoveStatesByIntentions").id,
-            performeSkill: REData.newEffectBehavior("PerformeSkill").id,
+            itemSteal: MRData.newEffectBehavior("ItemSteal").id,
+            goldSteal: MRData.newEffectBehavior("GoldSteal").id,
+            levelDown: MRData.newEffectBehavior("LevelDown").id,
+            warp: MRData.newEffectBehavior("Warp").id,
+            stumble: MRData.newEffectBehavior("Stumble").id,
+            transferToNextFloor: MRData.newEffectBehavior("TransferToNextFloor").id,
+            transferToLowerFloor: MRData.newEffectBehavior("TransferToLowerFloor").id,
+            trapProliferation: MRData.newEffectBehavior("TrapProliferation").id,
+            dispelEquipments: MRData.newEffectBehavior("DispelEquipments").id,
+            changeInstance: MRData.newEffectBehavior("ChangeInstance").id,
+            restartFloor: MRData.newEffectBehavior("RestartFloor").id,
+            clarification: MRData.newEffectBehavior("Clarification").id,
+            division: MRData.newEffectBehavior("Division").id,
+            removeStatesByIntentions: MRData.newEffectBehavior("RemoveStatesByIntentions").id,
+            performeSkill: MRData.newEffectBehavior("PerformeSkill").id,
         };
 
         {
             {
-                const shape = REData.newTerrainShape("kTerrainShape_Default");
+                const shape = MRData.newTerrainShape("kTerrainShape_Default");
                 shape.wayConnectionMode = FGenericRandomMapWayConnectionMode.SectionEdge;
             }
             {
-                const shape = REData.newTerrainShape("kTerrainShape_SimpleDefault");
+                const shape = MRData.newTerrainShape("kTerrainShape_SimpleDefault");
                 shape.wayConnectionMode = FGenericRandomMapWayConnectionMode.RoomEdge;
             }
             {
-                const shape = REData.newTerrainShape("kTerrainShape_Small2x2");
+                const shape = MRData.newTerrainShape("kTerrainShape_Small2x2");
                 shape.width = Math.floor(paramRandomMapDefaultWidth * (2 / 3));
                 shape.height = Math.floor(paramRandomMapDefaultHeight * (2 / 3));
                 shape.divisionCountX = 2;
@@ -482,25 +482,25 @@ export class REDataManager {
                 shape.roomCountMax = 4;
             }
             {
-                const shape = REData.newTerrainShape("kTerrainShape_GreatHall");
+                const shape = MRData.newTerrainShape("kTerrainShape_GreatHall");
                 shape.divisionCountX = 1;
                 shape.divisionCountY = 1;
                 shape.forceRoomShapes = [{typeName: "FullPlane"}];
             }
             {
-                const shape = REData.newTerrainShape("kTerrainShape_HalfHall");
+                const shape = MRData.newTerrainShape("kTerrainShape_HalfHall");
                 shape.divisionCountX = 1;
                 shape.divisionCountY = 1;
                 shape.forceRoomShapes = [{typeName: "HalfPlane"}];
             }
             {
-                const shape = REData.newTerrainShape("kTerrainShape_C");
+                const shape = MRData.newTerrainShape("kTerrainShape_C");
                 shape.divisionCountX = 3;
                 shape.divisionCountY = 3;
                 shape.connectionPreset = DSectorConnectionPreset.C;
             }
             {
-                const shape = REData.newTerrainShape("kTerrainShape_H");
+                const shape = MRData.newTerrainShape("kTerrainShape_H");
                 shape.divisionCountX = 3;
                 shape.divisionCountY = 3;
                 shape.connectionPreset = DSectorConnectionPreset.H;
@@ -557,13 +557,13 @@ export class REDataManager {
 
     private static loadData(next: NextFunc): void {
 
-        REData.system = new DSystem();
+        MRData.system = new DSystem();
 
         // Import AttackElements
-        REData.attackElements = [];
+        MRData.attackElements = [];
         for (const x of $dataSystem.elements) {
-            const e = new DAttackElement(REData.attackElements.length);
-            REData.attackElements.push(e);
+            const e = new DAttackElement(MRData.attackElements.length);
+            MRData.attackElements.push(e);
             if (x) {
                 e.parseNameAndKey(x);
             }
@@ -576,12 +576,12 @@ export class REDataManager {
         };
 
         MRBasics.elements = {
-            explosion: REData.getAttackElement("kElement_Explosion").id,
+            explosion: MRData.getAttackElement("kElement_Explosion").id,
         };
         
         
         if ($dataSystem.equipTypes) {
-            REData.equipmentParts = $dataSystem.equipTypes.map((x, i) => {
+            MRData.equipmentParts = $dataSystem.equipTypes.map((x, i) => {
                 if (x) {
                     return {
                         id: i,
@@ -597,18 +597,18 @@ export class REDataManager {
 
         // Import States
         {
-            REData.stateGroups = [new DStateGroup(0)];  // dummy
+            MRData.stateGroups = [new DStateGroup(0)];  // dummy
             for (const x of $dataStates) {
-                const state = new DState(REData.states.length);
-                REData.states.push(state);
+                const state = new DState(MRData.states.length);
+                MRData.states.push(state);
                 if (x) {
                     const meta = DMetadataParser.parse(x.meta);
 
                     if (meta.type == "StateGroup") {
-                        const stateGroup = new DStateGroup(REData.stateGroups.length);
+                        const stateGroup = new DStateGroup(MRData.stateGroups.length);
                         stateGroup.name = x.name;
                         stateGroup.key = meta.key;
-                        REData.stateGroups.push(stateGroup);
+                        MRData.stateGroups.push(stateGroup);
                         RESetup.setupDirectly_StateGroup(stateGroup);
                     }
                     else {
@@ -629,20 +629,20 @@ export class REDataManager {
                     }
                 }
             }
-            for (const state of REData.states) {
+            for (const state of MRData.states) {
                 RESetup.setupDirectly_State(state);
             }
 
             MRBasics.states = {
                 dead: 1,
-                nap: REData.getState("kState_System_kNap").id,
-                trapPerformed: REData.getState("kState_System_TrapPerformed").id,
+                nap: MRData.getState("kState_System_kNap").id,
+                trapPerformed: MRData.getState("kState_System_TrapPerformed").id,
             };
         }
         
         // Import Abilities
         {
-            REData.abilities = $dataStates
+            MRData.abilities = $dataStates
                 .filter(state => !state || (state.meta && state.meta["MR-Type"] == "Ability"))
                 .map((state, index) => {
                     if (state) {
@@ -672,14 +672,14 @@ export class REDataManager {
             if (x) {
                 const meta = DMetadataParser.parse(x.meta);
                 if (meta.type == "Race") {
-                    const race = REData.newRace();
+                    const race = MRData.newRace();
                     race.key = meta.key;
                     race.name = x.name;
                     race.traits = x.traits ?? [];
                 }
                 else {
-                    const id = REData.newClass(x.name ?? "null");
-                    const c = REData.classes[id];
+                    const id = MRData.newClass(x.name ?? "null");
+                    const c = MRData.classes[id];
                     c.expParams = x.expParams ?? [];
                     c.params = x.params ?? [];
                     c.traits = x.traits ?? [];
@@ -687,36 +687,36 @@ export class REDataManager {
                 }
             }
         });
-        MRBasics.defaultEnemyClass = REData.classes[9].id;  // TODO:
-        for (const race of REData.races) RESetup.setupRace(race);
+        MRBasics.defaultEnemyClass = MRData.classes[9].id;  // TODO:
+        for (const race of MRData.races) RESetup.setupRace(race);
 
         // Import Actors
         //REData.actors = [];
         $dataActors.forEach(x => {
             if (x) {
-                const [entity, actor] = REData.newActor();
+                const [entity, actor] = MRData.newActor();
                 entity.display.name = x.name;
                 entity.entity = parseMetaToEntityProperties(x.meta);
-                entity.factionId = REData.system.factions.neutral;
+                entity.factionId = MRData.system.factions.neutral;
                 entity.selfTraits = x.traits.slice();
                 entity.classId = x.classId;
                 actor.setup(x);
                 this.setupDirectly_Actor(actor);
             }
         });
-        REData.entities[REData.actors[1]].factionId = REData.system.factions.player;    // #1 はデフォルトで Player
+        MRData.entities[MRData.actors[1]].factionId = MRData.system.factions.player;    // #1 はデフォルトで Player
         
 
         // Import Skills
         //   Item から Skill を参照することがある。逆は無いため、Item より先に Skill を構築する。
-        REData.skills = [];
+        MRData.skills = [];
         $dataSkills.forEach(x => {
-            const skill = new DSkill(REData.skills.length);
-            REData.skills.push(skill);
+            const skill = new DSkill(MRData.skills.length);
+            MRData.skills.push(skill);
             if (x) {
                 skill.parseMetadata(x.meta);
 
-                const emittor = REData.newEmittor(skill.key);
+                const emittor = MRData.newEmittor(skill.key);
                 const effect = new DEffect(skill.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
@@ -746,10 +746,10 @@ export class REDataManager {
         });
         
         // Import Item
-        REData.items = [];
-        REData.itemDataIdOffset = REData.items.length;
+        MRData.items = [];
+        MRData.itemDataIdOffset = MRData.items.length;
         $dataItems.forEach(x => {
-            const [entity, item] = REData.newItem();
+            const [entity, item] = MRData.newItem();
             if (x) {
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.display.name = x.name;
@@ -758,7 +758,7 @@ export class REDataManager {
                 entity.sellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
 
-                const emittor = REData.newEmittor(entity.entity.key);
+                const emittor = MRData.newEmittor(entity.entity.key);
                 const effect = new DEffect(entity.entity.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
@@ -795,9 +795,9 @@ export class REDataManager {
                 }
             }
         });
-        REData.weaponDataIdOffset = REData.items.length;
+        MRData.weaponDataIdOffset = MRData.items.length;
         $dataWeapons.forEach(x => {
-            const [entity, item] = REData.newItem();
+            const [entity, item] = MRData.newItem();
             if (x) {
                 entity.display.name = DHelpers.parseDisplayName(x.name);
                 entity.display.iconIndex = x.iconIndex ?? 0;
@@ -839,9 +839,9 @@ export class REDataManager {
                 // entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
             }
         });
-        REData.armorDataIdOffset = REData.items.length;
+        MRData.armorDataIdOffset = MRData.items.length;
         $dataArmors.forEach(x => {
-            const [entity, item] = REData.newItem();
+            const [entity, item] = MRData.newItem();
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
@@ -865,16 +865,16 @@ export class REDataManager {
         RESystem.items = {
             autoSupplyFood: 2,
         };
-        REData.system.initialPartyMembers = [];
+        MRData.system.initialPartyMembers = [];
         for (const actorId of $dataSystem.partyMembers) {
-            const entity = REData.entities.find(x => x.actor && x.actor.rmmzActorId == actorId);
+            const entity = MRData.entities.find(x => x.actor && x.actor.rmmzActorId == actorId);
             assert(entity);
-            REData.system.initialPartyMembers.push(entity.id);
+            MRData.system.initialPartyMembers.push(entity.id);
         }
 
         // Import Enemies
         $dataEnemies.forEach(x => {
-            const [entity, enemy] = REData.newEnemy();
+            const [entity, enemy] = MRData.newEnemy();
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = 71;
@@ -897,36 +897,36 @@ export class REDataManager {
                 enemy.dropItems = DDropItem.makeFromRmmzDropItemList(x.dropItems, x.gold);
                 entity.entity = parseMetaToEntityProperties(x.meta);    // TODO: ↓DMetadataParserを使う
                 entity.entity.kindId = MRBasics.entityKinds.MonsterKindId;
-                entity.factionId = REData.system.factions.enemy;
+                entity.factionId = MRData.system.factions.enemy;
                 entity.classId =  MRBasics.defaultEnemyClass;
 
                 enemy.traits = enemy.traits.concat(DTrait.parseTraitMetadata(x.meta));
 
                 const meta = DMetadataParser.parse(x.meta);
-                entity.raceIds = meta.races.map(x => REData.getRace(x).id);
+                entity.raceIds = meta.races.map(x => MRData.getRace(x).id);
 
                 RESetup.setupEnemy(entity);
             }
         });
 
         // Import Troop
-        REData.troops = [];
+        MRData.troops = [];
         for (const x of $dataTroops) {
-            const troop = new DTroop(REData.troops.length);
-            REData.troops.push(troop);
+            const troop = new DTroop(MRData.troops.length);
+            MRData.troops.push(troop);
             if (x) {
                 troop.key = x.name;
-                troop.members = x.members.map(m => REData.enemies[m.enemyId]);
+                troop.members = x.members.map(m => MRData.enemies[m.enemyId]);
             }
         }
 
         // Link
         {
-            REData.system.link(this.testMode);
+            MRData.system.link(this.testMode);
 
-            for (const state of REData.states) {
+            for (const state of MRData.states) {
                 for (const key of state.stateGroupKeys) {
-                    const id = REData.stateGroups.findIndex(x => x.key == key);
+                    const id = MRData.stateGroups.findIndex(x => x.key == key);
                     if (id > 0) {
                         state.stateGroupIds.push(id);
                     }
@@ -959,16 +959,16 @@ export class REDataManager {
     private static importLandAndFloors(next: NextFunc) {
         // Import Lands
         // 最初に Land を作る
-        REData.lands = [];
-        REData.lands.push(new DLand(0)); // [0] dummy
+        MRData.lands = [];
+        MRData.lands.push(new DLand(0)); // [0] dummy
 
         
         const defaltLand = new DLand(1);
-        REData.lands.push(defaltLand); // [1] REシステム管理外の RMMZ マップを表す Land
+        MRData.lands.push(defaltLand); // [1] REシステム管理外の RMMZ マップを表す Land
         
         {
             const level = DLandIdentificationLevel.Entity;
-            for (const kind of REData.entityKinds) {
+            for (const kind of MRData.entityKinds) {
                 defaltLand.identifiedKinds[kind.id] = level;
             }
         }
@@ -976,10 +976,10 @@ export class REDataManager {
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
             if (info && info.name?.startsWith("MR-Land:")) {
-                const land = new DLand(REData.lands.length);
+                const land = new DLand(MRData.lands.length);
                 land.name = info.name;
                 land.rmmzMapId = i;
-                REData.lands.push(land);
+                MRData.lands.push(land);
             }
         }
 
@@ -993,7 +993,7 @@ export class REDataManager {
             for (let i = 1; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
                 
-                const mapData = REData.newMap();
+                const mapData = MRData.newMap();
                 mapData.landId = DHelpers.RmmzNormalMapLandId;
                 // DMap = {
                 //     id: i, landId: , mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false,
@@ -1023,18 +1023,18 @@ export class REDataManager {
                     if (parentInfo) {
                         if (info.parentId > 0 && parentInfo.name.includes("MR-MapTemplates")) {
                             mapData.mapKind = REFloorMapKind.TemplateMap;
-                            const templateMap = REData.newTemplateMap();
+                            const templateMap = MRData.newTemplateMap();
                             templateMap.name = info.name;
                             templateMap.mapId = mapData.id;
                         }
                         else if (info.name?.startsWith("MR-Land:")) {
-                            const land = REData.lands.find(x => x.rmmzMapId == i);
+                            const land = MRData.lands.find(x => x.rmmzMapId == i);
                             assert(land);
                             mapData.landId = land.id;
                             mapData.mapKind = REFloorMapKind.Land;
                         }
                         else if (info.parentId) {
-                            const land = REData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
+                            const land = MRData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
                             if (land) {
                                 mapData.landId = land.id;
                                 if (parentInfo.name.includes("[Random]")) {
@@ -1064,7 +1064,7 @@ export class REDataManager {
 
                 // null 回避のため、REシステム管理外のマップの FloorInfo を作っておく
                 if (mapData.landId == DHelpers.RmmzNormalMapLandId) {
-                    REData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.mapId] = {
+                    MRData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.mapId] = {
                         key: "",
                         template: undefined,
                         displayName: undefined,
@@ -1076,7 +1076,7 @@ export class REDataManager {
         }
 
         // 検証
-        for (const land of REData.lands) {
+        for (const land of MRData.lands) {
             if (land.id > 0 && land.id != DHelpers.RmmzNormalMapLandId) {
                 if (land.exitRMMZMapId == 0) {
                     throw new Error(`Land[${land.name}] is MR-ExitMap not defined.`);
@@ -1089,7 +1089,7 @@ export class REDataManager {
 
     private static importPseudonymous(next: NextFunc) : void{
         this.loadDataFile("mr/Pseudonymous.json", (obj) => {
-            REData.pseudonymous.setup(obj);
+            MRData.pseudonymous.setup(obj);
             next();
         });
     }
@@ -1103,7 +1103,7 @@ export class REDataManager {
                 const data = DAnnotationReader.readPrefabMetadata(event, this.databaseMapId);
                 if (!data) continue;
 
-                const prefab =  REData.newPrefab();
+                const prefab =  MRData.newPrefab();
                 prefab.key = event.name;
                 prefab.rmmzMapId = this.databaseMapId;
                 prefab.rmmzEventData = event;
@@ -1116,29 +1116,29 @@ export class REDataManager {
                 prefab.image.stepAnime = event.pages[0].stepAnime;
                 prefab.image.walkAnime = event.pages[0].walkAnime;
                 if (data.stateImages) {
-                    prefab.stateImages = data.stateImages.map(x => { return { stateId: REData.getState(x[0]).id, characterName: x[1], characterIndex: x[2]}; });
+                    prefab.stateImages = data.stateImages.map(x => { return { stateId: MRData.getState(x[0]).id, characterName: x[1], characterIndex: x[2]}; });
                 }
                 if (event.pages[0].moveType == 3) { // TODO: 仮
                     prefab.moveType = DPrefabMoveType.Fix;
                 }
 
-                REData.prefabs.push(prefab);
+                MRData.prefabs.push(prefab);
 
                 for (let i = 1; i < event.pages.length; i++) {
                     const pageData = DAnnotationReader.readPrefabSubPageMetadata(event.pages[i]);
                     if (pageData) {
                         if (pageData.state === undefined) throw new Error(`@MR-PrefabSubPage requires state field.`);
-                        prefab.subPages.push({ stateId: REData.getState(pageData.state).id, rmmzEventPageIndex: i });
+                        prefab.subPages.push({ stateId: MRData.getState(pageData.state).id, rmmzEventPageIndex: i });
                     }
                 }
             }
 
             // Link Prefab and Entity
             {
-                for (const entity of REData.entities) {
+                for (const entity of MRData.entities) {
                     if (entity.entity.key != "") {
                         if (entity.entity.meta_prefabName) {
-                            const prefab = REData.prefabs.find(x => x.key == entity.entity.meta_prefabName);
+                            const prefab = MRData.prefabs.find(x => x.key == entity.entity.meta_prefabName);
                             if (prefab) {
                                 entity.prefabId = prefab.id;
                                 RESetup.setupPrefab(prefab);
@@ -1157,8 +1157,8 @@ export class REDataManager {
             }
 
             MRBasics.prefabs = {
-                illusionActor: REData.getPrefab("pまどわしUnit").id,
-                illusionItem: REData.getPrefab("pまどわしItem").id,
+                illusionActor: MRData.getPrefab("pまどわしUnit").id,
+                illusionItem: MRData.getPrefab("pまどわしItem").id,
             };
 
             next();
@@ -1166,7 +1166,7 @@ export class REDataManager {
     }
 
     private static importLandDatabase(next: NextFunc): void {
-        const validLands = REData.lands.filter(x => x.rmmzMapId > 0);
+        const validLands = MRData.lands.filter(x => x.rmmzMapId > 0);
         for (let iLand = 0; iLand < validLands.length; iLand++) {
             const land = validLands[iLand];
             REDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { 
@@ -1193,7 +1193,7 @@ export class REDataManager {
     }
 
     private static importTemplateMaps(next: NextFunc): void {
-        const validMaps = REData.templateMaps.filter(x => x.mapId > 0);
+        const validMaps = MRData.templateMaps.filter(x => x.mapId > 0);
         for (let iMap = 0; iMap < validMaps.length; iMap++) {
             const templateMap = validMaps[iMap];
             this.beginLoadMapData(templateMap.mapId, (obj: any) => { 
@@ -1211,26 +1211,26 @@ export class REDataManager {
             const scriptDB = new DSetupScript(obj);
             
             // SystemState 等を参照したいので、System の Link の後で。
-            for (const skill of REData.skills) {
+            for (const skill of MRData.skills) {
                 RESetup.setupDirectly_Skill(skill)
             }
-            REData.skills.forEach(x => RESetup.linkSkill(x));
+            MRData.skills.forEach(x => RESetup.linkSkill(x));
 
-            for (const item of REData.items) {
-                scriptDB.setupItem(REData.entities[item]);
+            for (const item of MRData.items) {
+                scriptDB.setupItem(MRData.entities[item]);
             }
 
-            for (const item of REData.items) {
-                RESetup.setupDirectly_DItem(REData.entities[item]);
+            for (const item of MRData.items) {
+                RESetup.setupDirectly_DItem(MRData.entities[item]);
             }
 
-            for (const id of REData.actors) {
-                if (id > 0) RESetup.setupActor(REData.entities[id]);
+            for (const id of MRData.actors) {
+                if (id > 0) RESetup.setupActor(MRData.entities[id]);
             }
 
             // Skill を参照するので、Skill の Link の後で。
-            for (const id of REData.items) {
-                RESetup.linkItem(REData.entities[id]);
+            for (const id of MRData.items) {
+                RESetup.linkItem(MRData.entities[id]);
             }
 
             console.log("importSetupScript end.");
@@ -1246,7 +1246,7 @@ export class REDataManager {
     private static findLand(rmmzMapId: number): DLand | undefined {
         let mapId = rmmzMapId;
         while (mapId > 0) {
-            const land = REData.lands.find(x => x.rmmzMapId == mapId);
+            const land = MRData.lands.find(x => x.rmmzMapId == mapId);
             if (land) return land;
             const parentInfo = $dataMapInfos[mapId];
             if (!parentInfo) break;
@@ -1312,7 +1312,7 @@ export class REDataManager {
     }
 
     static floor(mapId: number): DMap {
-        return REData.maps[mapId];
+        return MRData.maps[mapId];
     }
 
     static isDatabaseMap(mapId: DMapId) : boolean {
@@ -1332,13 +1332,13 @@ export class REDataManager {
     }
 
     static isRESystemMap(mapId: DMapId) : boolean {
-        const map = REData.maps[mapId];
+        const map = MRData.maps[mapId];
         if (map.eventMap) return false;
         return map.landId > DHelpers.RmmzNormalMapLandId;
     }
 
     static isFloorMap(mapId: DMapId) : boolean {
-        return REData.maps[mapId].landId > 0;
+        return MRData.maps[mapId].landId > 0;
         /*
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("REFloor:"))

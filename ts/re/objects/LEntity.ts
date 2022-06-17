@@ -18,7 +18,7 @@ import { LParty, LPartyId } from "./LParty";
 import { isThisTypeNode, LanguageServiceMode } from "typescript";
 import { DParameterId, DSParamId, DXParamId } from "ts/re/data/DParameter";
 import { SAbilityFactory } from "ts/re/system/SAbilityFactory";
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { DEntity, DEntityId, DEntityNamePlate, DIdentificationDifficulty } from "ts/re/data/DEntity";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
@@ -173,7 +173,7 @@ export class LEntity extends LObject
     }
 
     public get data(): DEntity {
-        return REData.entities[this._entityDataId];
+        return MRData.entities[this._entityDataId];
     }
 
     public kindDataId(): DEntityKindId {
@@ -181,7 +181,7 @@ export class LEntity extends LObject
     }
 
     public kindData(): DEntityKind {
-        return REData.entityKinds[this.data.entity.kindId];
+        return MRData.entityKinds[this.data.entity.kindId];
     }
 
     public entityId(): LEntityId {
@@ -442,7 +442,7 @@ export class LEntity extends LObject
     // 例えば FP だと常に 100. バフやアイテムによる最大 FP 上昇量は含まない。
     // Game_BattlerBase.prototype.paramBase
     private idealParamBase(paramId: DParameterId): number {
-        const data = REData.parameters[paramId];
+        const data = MRData.parameters[paramId];
         const battlerParam = data.battlerParamId;
         if (battlerParam >= 0) {
             return this.getIdealParamBase(paramId);
@@ -491,7 +491,7 @@ export class LEntity extends LObject
     // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMin
     public paramMin(paramId: DParameterId): number {
-        const data = REData.parameters[paramId];
+        const data = MRData.parameters[paramId];
         return data ? data.minValue : 0;
     };
     
@@ -499,7 +499,7 @@ export class LEntity extends LObject
     // 現在の上限値を取得したいときは idealParam() を使うこと。
     // Game_BattlerBase.prototype.paramMax
     public paramMax(paramId: DParameterId): number {
-        const data = REData.parameters[paramId];
+        const data = MRData.parameters[paramId];
         return data ? data.maxValue : Infinity;
     };
 
@@ -770,7 +770,7 @@ export class LEntity extends LObject
             const v = b.queryInnermostFactionId();
             if (v) return v;
         }
-        return REData.system.factions.neutral;
+        return MRData.system.factions.neutral;
     }
 
     // 対外的な Faction。モンスターがアイテムに化けているといった場合、InnermostFactionId とは異なる値を返す。
@@ -779,7 +779,7 @@ export class LEntity extends LObject
             const v = b.queryOutwardFactionId();
             if (v) return v;
         }
-        return REData.system.factions.neutral;
+        return MRData.system.factions.neutral;
     }
 
     public getHomeLayer(): DBlockLayerKind {
@@ -818,7 +818,7 @@ export class LEntity extends LObject
     }
 
     public queryParamMinMax(paramId: DParameterId): LParamMinMax {
-        const param = REData.parameters[paramId];
+        const param = MRData.parameters[paramId];
         const result: LParamMinMax = { min: param.minValue, max: param.maxValue };
         if (paramId == MRBasics.params.upgradeValue) {
             const data = this.data;
@@ -969,15 +969,15 @@ export class LEntity extends LObject
     }
     
     public isBlessed(): boolean {
-        return this.isStateAffected(REData.system.states.bless);
+        return this.isStateAffected(MRData.system.states.bless);
     }
 
     public isCursed(): boolean {
-        return this.isStateAffected(REData.system.states.curse);
+        return this.isStateAffected(MRData.system.states.curse);
     }
 
     public isSealed(): boolean {
-        return this.isStateAffected(REData.system.states.seal);
+        return this.isStateAffected(MRData.system.states.seal);
     }
 
     // Game_BattlerBase.prototype.isDeathStateAffected

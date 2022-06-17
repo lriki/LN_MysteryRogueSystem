@@ -1,6 +1,6 @@
 import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DState, DStateId } from "ts/re/data/DState";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/re/objects/LIdentifyer";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
@@ -32,7 +32,7 @@ export class LParamEffectResult {
     }
 
     public paramDisplayName(): string {
-        const data = REData.parameters[this.paramId];
+        const data = MRData.parameters[this.paramId];
         if (this.qualifying.applyTarget == DParameterApplyTarget.Maximum) {
             return data.displayNameMaximum;
         }
@@ -42,7 +42,7 @@ export class LParamEffectResult {
     }
 
     public getValue(entity: LEntity, recover: boolean): number {
-        const paramData = REData.parameters[this.paramId];
+        const paramData = MRData.parameters[this.paramId];
         if (paramData.messageValueSource == DParamMessageValueSource.Relative) {
             if (recover)
                 return -this.damage;
@@ -230,7 +230,7 @@ export class LEffectResult {
 
     // Game_ActionResult.prototype.addedStateObjects
     addedStateObjects(): DState[] {
-        return this.addedStates.map(id => REData.states[id]);
+        return this.addedStates.map(id => MRData.states[id]);
     }
 
     // Game_Action.prototype.makeSuccess
@@ -272,7 +272,7 @@ export class LEffectResult {
             const targetName = UName.makeUnitName(entity);
 
             if (this.instanceChangedFrom) {
-                cctx.postMessage(tr2("%1は%2に変化した。").format(REData.entities[this.instanceChangedFrom].makeDisplayName(0), targetName));
+                cctx.postMessage(tr2("%1は%2に変化した。").format(MRData.entities[this.instanceChangedFrom].makeDisplayName(0), targetName));
             }
             
             if (this.missed) {
@@ -289,7 +289,7 @@ export class LEffectResult {
             // Game_Actor.prototype.showAddedStates
             {
                 for (const stateId of this.addedStates) {
-                    const state = REData.states[stateId];
+                    const state = MRData.states[stateId];
                     const stateText = isActor ? state.message1 : state.message2;
                     if (stateText) {
                         cctx.postMessage(stateText.format(targetName));
@@ -299,7 +299,7 @@ export class LEffectResult {
             // Game_Actor.prototype.showRemovedStates
             {
                 for (const stateId of this.removedStates) {
-                    const state = REData.states[stateId];
+                    const state = MRData.states[stateId];
                     if (state.message4) {
                         cctx.postMessage(state.message4.format(targetName));
                     }
@@ -308,15 +308,15 @@ export class LEffectResult {
             // Window_BattleLog.prototype.displayChangedBuffs
             {
                 for (const paramId of this.addedBuffs) {
-                    const text = DTextManager.buffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
+                    const text = DTextManager.buffAdd.format(targetName, DTextManager.param(MRData.parameters[paramId].battlerParamId));
                     cctx.postMessage(text);
                 }
                 for (const paramId of this.addedDebuffs) {
-                    const text = DTextManager.debuffAdd.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
+                    const text = DTextManager.debuffAdd.format(targetName, DTextManager.param(MRData.parameters[paramId].battlerParamId));
                     cctx.postMessage(text);
                 }
                 for (const paramId of this.removedBuffs) {
-                    const text = DTextManager.buffRemove.format(targetName, DTextManager.param(REData.parameters[paramId].battlerParamId));
+                    const text = DTextManager.buffRemove.format(targetName, DTextManager.param(MRData.parameters[paramId].battlerParamId));
                     cctx.postMessage(text);
                 }
             }
@@ -355,7 +355,7 @@ export class LEffectResult {
 
     // Window_BattleLog.prototype.makeHpDamageText
     private makeParamDamageText(entity: LEntity, entityName: string, paramResult: LParamEffectResult): string {
-        const paramData = REData.parameters[paramResult.paramId];
+        const paramData = MRData.parameters[paramResult.paramId];
         const damage = paramResult.damage;
         const isFliendly = this.focusedFriendly;
         let fmt;

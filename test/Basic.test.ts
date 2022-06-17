@@ -8,7 +8,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
 //import "js/rmmz_objects.js"

@@ -1,6 +1,6 @@
 import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DMonsterHouseType, DMonsterHouseTypeId } from "ts/re/data/DMonsterHouse";
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { Helpers } from "ts/re/system/Helpers";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { MonsterHouseState } from "../LRoom";
@@ -21,7 +21,7 @@ export class LMonsterHouseStructure extends LStructure {
     public setup(roomId: LRoomId, monsterHouseTypeId: DMonsterHouseTypeId): void {
         this._roomId = roomId;
         this._monsterHouseTypeId = monsterHouseTypeId;
-        this._monsterHouseFactionId = REData.system.factions.enemy;
+        this._monsterHouseFactionId = MRData.system.factions.enemy;
         this._monsterHouseState = MonsterHouseState.Sleeping;
     }
 
@@ -34,7 +34,7 @@ export class LMonsterHouseStructure extends LStructure {
     }
 
     public monsterHouseData(): DMonsterHouseType {
-        return REData.monsterHouses[this._monsterHouseTypeId];
+        return MRData.monsterHouses[this._monsterHouseTypeId];
     }
 
     public monsterHouseFactionId(): DFactionId {

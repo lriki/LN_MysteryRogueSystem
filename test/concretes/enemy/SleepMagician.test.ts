@@ -1,5 +1,5 @@
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
@@ -18,7 +18,7 @@ test("concretes.enemies.SleepMagician", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_メイジA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_メイジA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();
@@ -33,7 +33,7 @@ test("concretes.enemies.SleepMagician", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Player は睡眠状態になっている
-    const stateId = REData.getState("kState_睡眠").id;
+    const stateId = MRData.getState("kState_睡眠").id;
     expect(player1.hasState(stateId)).toBe(true);
 });
 

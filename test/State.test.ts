@@ -8,7 +8,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -100,7 +100,7 @@ test("State.Proficiency", () => {
     const def1 = actor1.def;
     
     // 武器と防具の強さが 50% になる Trait を持つ State 
-    actor1.addState(REData.getState("kState_UT魔法使い").id);
+    actor1.addState(MRData.getState("kState_UT魔法使い").id);
 
     const atk2 = actor1.atk;
     const def2 = actor1.def;

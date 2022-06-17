@@ -1,6 +1,6 @@
 import { assert, tr2 } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
-import { LandExitResult, REData } from "ts/re/data/REData";
+import { LandExitResult, MRData } from "ts/re/data/MRData";
 import { REDataManager } from "ts/re/data/REDataManager";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -16,8 +16,8 @@ export class UTransfer {
      * ニューゲーム時や [場所移動] イベントなどで使用する。
      */
     public static transterRmmzDirectly(newMapId: number, newX: number, newY: number): void {
-        const landId = REData.maps[newMapId].landId;
-        const mapData = REData.maps[newMapId];
+        const landId = MRData.maps[newMapId].landId;
+        const mapData = MRData.maps[newMapId];
         //let actualMapId = 0;
         let actualFloorNumber = 0;
         let actualX = -1;
@@ -33,7 +33,7 @@ export class UTransfer {
         else if (REDataManager.isLandMap(newMapId)) {
             assert(newY === 0);
             const floorNumber = newX;
-            const land = REData.lands[landId];
+            const land = MRData.lands[landId];
             const info = land.floorInfos[floorNumber];
             const fixedMap = land.findFixedMapByName(info.fixedMapName);
             //if ()
@@ -60,7 +60,7 @@ export class UTransfer {
             const mapInfo = $dataMapInfos[newMapId];
             assert(mapInfo);
             const fixedMapName = mapInfo.name;
-            const land = REData.lands[landId];
+            const land = MRData.lands[landId];
             //actualMapId = newMapId;
             actualFloorNumber = land.floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
             actualX = newX;

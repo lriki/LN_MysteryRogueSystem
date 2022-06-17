@@ -44,7 +44,7 @@ import { DBlockLayerKind, DSpecificEffectId, DSkillId, DSubComponentEffectTarget
 import { DSequelId } from "ts/re/data/DSequel";
 import { LCandidateSkillAction } from "ts/re/usecases/UAction";
 import { DEffect } from "ts/re/data/DEffect";
-import { DFactionId } from "ts/re/data/REData";
+import { DFactionId } from "ts/re/data/MRData";
 import { LMinimapMarkerClass, LPriceInfo } from "../LCommon";
 import { LMap } from "../LMap";
 import { DEmittor } from "ts/re/data/DEmittor";

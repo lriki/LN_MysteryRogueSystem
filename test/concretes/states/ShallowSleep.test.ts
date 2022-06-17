@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
@@ -20,7 +20,7 @@ test("concretes.states.ShallowSleep.RoomIn", () => {
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(MRBasics.states.nap)).toBe(true);
 
@@ -58,7 +58,7 @@ test("concretes.states.ShallowSleep.AdjacentMove", () => {
     const player1 = TestEnv.setupPlayer(floorId, 17, 4);
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(MRBasics.states.nap)).toBe(true);
 
@@ -92,7 +92,7 @@ test("concretes.states.ShallowSleep.AwayMove", () => {
     const player1 = TestEnv.setupPlayer(floorId, 17, 6);
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(MRBasics.states.nap)).toBe(true);
 
@@ -126,7 +126,7 @@ test("concretes.states.ShallowSleep.Skill", () => {
     const player1 = TestEnv.setupPlayer(floorId, 17, 4);
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(MRBasics.states.nap)).toBe(true);
 
@@ -160,7 +160,7 @@ test("concretes.states.ShallowSleep.Issue1", () => {
     const player1 = TestEnv.setupPlayer(floorId, 15, 4);
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
     expect(enemy1.isStateAffected(MRBasics.states.nap)).toBe(true);
 

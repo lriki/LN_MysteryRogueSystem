@@ -4,7 +4,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
@@ -15,13 +15,13 @@ beforeAll(() => {
 
 test("concretes.states.混乱.move", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UT混乱").id;
+    const stateId = MRData.getState("kState_UT混乱").id;
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 10 ターン分 シミュレーション実行
@@ -50,19 +50,19 @@ test("concretes.states.混乱.attack", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UT混乱").id, REData.getState("kState_UTからぶり").id], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_UT混乱").id, MRData.getState("kState_UTからぶり").id], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 周りを移動できない Enemy で囲ってみる
     const enemies = [
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
     ];
     REGame.world.transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
     REGame.world.transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
@@ -90,7 +90,7 @@ test("concretes.states.混乱.movePlayer", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getState("kState_UT混乱").id);
+    actor1.addState(MRData.getState("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();
@@ -111,7 +111,7 @@ test("concretes.states.混乱.attackPlayer", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getState("kState_UT混乱").id);
+    actor1.addState(MRData.getState("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
     RESystem.scheduler.stepSimulation();
@@ -135,16 +135,16 @@ test("concretes.states.混乱.throw", () => {
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.addState(REData.getState("kState_UnitTest_投擲必中").id);
+    actor1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
     const items = [];
     for (let i = 0; i < 5; i++) {
-        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "enemy1"));
+        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "enemy1"));
         inventory.addEntity(items[i]);
     }
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     RESystem.scheduler.stepSimulation();

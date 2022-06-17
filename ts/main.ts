@@ -11,7 +11,7 @@ import "./re/rmmz/Game_Message";
 import "./re/rmmz/PrefabEvent";
 import "./re/visual/ui/Window_Base";
 
-import "./re/data/REData";
+import "./re/data/MRData";
 import "./re/data/REDataManager";
 import "./re/data/DTextManager";
 import "./re/objects/internal";

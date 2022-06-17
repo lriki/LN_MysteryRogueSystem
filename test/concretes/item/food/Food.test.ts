@@ -1,7 +1,7 @@
 import { TestUtils } from "test/TestUtils";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
@@ -22,8 +22,8 @@ test("concretes.item.food.LittleFood", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_クロワッサン_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_クロワッサン_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_クロワッサン_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_クロワッサン_A").id, [], "item2"));
     inventory1.addEntity(item1);
     inventory1.addEntity(item2);
     
@@ -83,13 +83,13 @@ test("concretes.item.food.CorrodedFood", () => {
     const pow1 = player1.actualParam(MRBasics.params.pow);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_腐食したフランスパン_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_腐食したフランスパン_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_腐食したフランスパン_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_腐食したフランスパン_A").id, [], "item2"));
     inventory1.addEntity(item1);
     inventory1.addEntity(item2);
     
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
     const enemy1Pow1 = enemy1.actualParam(MRBasics.params.pow);

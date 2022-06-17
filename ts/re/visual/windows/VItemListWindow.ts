@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
@@ -302,7 +302,7 @@ export class VItemListWindow extends Window_Selectable {
                 }
 
                 // メッキ状態アイコンを表示する
-                if (entity.isStateAffected(REData.system.states.plating)) {
+                if (entity.isStateAffected(MRData.system.states.plating)) {
                     this.drawIcon(13, nameX, iconY);
                 }
             }

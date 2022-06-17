@@ -1,6 +1,6 @@
 import { RESerializable } from "ts/re/Common";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { Helpers } from "ts/re/system/Helpers";
 import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -103,7 +103,7 @@ export class LItemThiefBehavior extends LBehavior {
                 if (inventory) {
                     if (inventory.items.length > 0) {
                         candidates.push({
-                            action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
+                            action: { rating: 100, skillId: MRData.getSkill("kSkill_アイテム盗み").id },
                             targets: [target.entityId()],
                         });
                     }
@@ -121,7 +121,7 @@ export class LItemThiefBehavior extends LBehavior {
                 // 隣接するアイテムを見つけた
                 if (item == USearch.findLatestItemInVisibilityBlocks(self)) {   // それは視界内の最も新しいアイテム？
                     candidates.push({
-                        action: { rating: 100, skillId: REData.getSkill("kSkill_アイテム盗み").id },
+                        action: { rating: 100, skillId: MRData.getSkill("kSkill_アイテム盗み").id },
                         targets: [item.entityId()],
                     });
                 }

@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -24,11 +24,11 @@ test("concretes.item.shield.ElementGuardShield", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ドラゴンシールド_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
 
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ドラゴンA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_Anger").id);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ドラゴンA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_Anger").id);
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

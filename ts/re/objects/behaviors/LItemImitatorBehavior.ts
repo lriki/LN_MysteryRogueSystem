@@ -2,7 +2,7 @@ import { assert } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { Helpers } from "ts/re/system/Helpers";
 import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
@@ -93,7 +93,7 @@ export class LItemImitatorBehavior extends LBehavior {
 
             const item = (data) ?
                 SEntityFactory.newEntity(data.spawiInfo, floorId) :
-                SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.system.fallbackItemEntityId));
+                SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.system.fallbackItemEntityId));
 
             item.setParent(this);
             this._itemEntityId = item.entityId();
@@ -106,7 +106,7 @@ export class LItemImitatorBehavior extends LBehavior {
     
     queryCharacterFileName(): DPrefabActualImage | undefined {
         const e = this.itemEntity().data;
-        const p = REData.prefabs[e.prefabId];
+        const p = MRData.prefabs[e.prefabId];
         return p.image;
     }
 
@@ -130,7 +130,7 @@ export class LItemImitatorBehavior extends LBehavior {
     }
 
     queryOutwardFactionId(): DFactionId | undefined {
-        return REData.system.factions.neutral;
+        return MRData.system.factions.neutral;
     }
 
     [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

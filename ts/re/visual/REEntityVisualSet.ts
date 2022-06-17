@@ -6,7 +6,7 @@ import { REVisualSequelManager } from "./REVisualSequelManager";
 import { REVisual_Entity } from "./REVisual_Entity";
 import { assert } from "ts/re/Common";
 import { SRmmzHelpers } from "../system/SRmmzHelpers";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 
 
 /**
@@ -151,7 +151,7 @@ export class REEntityVisualSet {
         }
 
 
-        const prefab = REData.prefabs[entity.data.prefabId];
+        const prefab = MRData.prefabs[entity.data.prefabId];
 
         if (entity.inhabitsCurrentFloor) {
             // entity は、RMMZ のマップ上に初期配置されているイベントを元に作成された。

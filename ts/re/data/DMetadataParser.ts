@@ -2,7 +2,7 @@ import { assert, tr2 } from "../Common";
 import { DBehaviorInstantiation } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
 import { DTroopId } from "./DTroop";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export class DMetadata {
     key: string;
@@ -73,7 +73,7 @@ export class DMetadataParser {
             for (const data of list) {
                 const c = DHelpers.parseConstructionExpr(data);
                 result.traits.push({
-                    code: REData.getTrait(c.name).id,
+                    code: MRData.getTrait(c.name).id,
                     dataId: this.parseTraitDataId(c.args[0]),
                     value: Number(c.args[1]),
                 });
@@ -104,7 +104,7 @@ export class DMetadataParser {
         if (typeof value == 'string') {
             // 今のところ Param 名だけなのでそれを検索してみる
             const code = value.toLowerCase();
-            const param = REData.parameters.find(x => x.code == code);
+            const param = MRData.parameters.find(x => x.code == code);
             if (param) {
                 return param.id;
             }

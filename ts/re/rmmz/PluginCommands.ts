@@ -1,5 +1,5 @@
 import { assert, tr2 } from "ts/re/Common";
-import { LandExitResult, REData } from "ts/re/data/REData";
+import { LandExitResult, MRData } from "ts/re/data/MRData";
 import { SWarehouseDialog } from "ts/re/system/dialogs/SWarehouseDialog";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
@@ -25,7 +25,7 @@ PluginManager.registerCommand(pluginName, "RE.ShowChallengeResult", (args: any) 
 
 PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
     const actorId: number = args.actorId;
-    if (!args.actorId || args.actorId < 0 || REData.actors.length <= actorId) {
+    if (!args.actorId || args.actorId < 0 || MRData.actors.length <= actorId) {
         throw new Error("RE.ShowWarehouse - Invalid 'actorId'.");
     }
     
@@ -134,7 +134,7 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
     }
 
     if (actor) {
-        const stateId = REData.getState(stateKey).id;
+        const stateId = MRData.getState(stateKey).id;
         const has = actor._deathResult.states().includes(stateId);
         $gameVariables.setValue(MRBasics.variables.result, has ? 1 : 0);
     }

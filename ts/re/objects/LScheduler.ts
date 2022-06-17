@@ -1,6 +1,6 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { DStateRestriction } from "../data/DState";
 import { SSchedulerPhase } from "../system/scheduling/SSchedulerPhase";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
@@ -245,7 +245,7 @@ export class LScheduler2 {
 
         // 勢力順にソートしておく。
         // これによって Player を優先的に検索できるようになる。
-        const sortedUnits = this._schedulingUnits.immutableSort((a, b) => { return REData.factions[a.factionId()].schedulingOrder - REData.factions[b.factionId()].schedulingOrder; });
+        const sortedUnits = this._schedulingUnits.immutableSort((a, b) => { return MRData.factions[a.factionId()].schedulingOrder - MRData.factions[b.factionId()].schedulingOrder; });
     }
 
     public schedulingUnits(): readonly LSchedulingUnit[] {

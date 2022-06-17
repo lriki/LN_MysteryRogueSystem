@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { REDataManager } from "ts/re/data/REDataManager";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { REGame } from "ts/re/objects/REGame";
@@ -48,7 +48,7 @@ export class SRmmzHelpers {
                 const data = DEntitySpawner2.makeFromEventData(e);
                 if (data) {
                     if (data.troopId > 0) {
-                        SEntityFactory.spawnTroopAndMembers( REData.troops[data.troopId], e.x, e.y,data.stateIds);
+                        SEntityFactory.spawnTroopAndMembers( MRData.troops[data.troopId], e.x, e.y,data.stateIds);
                     }
                     else {
                         if (data.entityId < 0) {

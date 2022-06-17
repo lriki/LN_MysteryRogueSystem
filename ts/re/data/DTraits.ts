@@ -1,6 +1,6 @@
 import { tr2 } from "../Common";
 import { DHelpers } from "./DHelper";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export type DTraitId = number;
 
@@ -44,7 +44,7 @@ export class DTrait {
         for (const data of list) {
             const c = DHelpers.parseConstructionExpr(data);
             result.push({
-                code: REData.getTrait(c.name).id,
+                code: MRData.getTrait(c.name).id,
                 dataId: this.parseDataId(c.args[0]),
                 value: Number(c.args[1]),
             });
@@ -56,7 +56,7 @@ export class DTrait {
         if (typeof value == 'string') {
             // 今のところ Param 名だけなのでそれを検索してみる
             const code = value.toLowerCase();
-            const param = REData.parameters.find(x => x.code == code);
+            const param = MRData.parameters.find(x => x.code == code);
             if (param) {
                 return param.id;
             }

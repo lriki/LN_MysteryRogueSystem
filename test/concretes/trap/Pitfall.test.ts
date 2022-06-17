@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DLandForwardDirection } from "ts/re/data/DLand";
@@ -22,7 +22,7 @@ test("concretes.trap.Pitfall.Uphill.OnFirstFloor", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -45,10 +45,10 @@ test("concretes.trap.Pitfall.Downhill", () => {
     floorId.landData().forwardDirection = DLandForwardDirection.Downhill;
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    player1.addState(REData.getState("kState_UT罠必中").id);
+    player1.addState(MRData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -74,7 +74,7 @@ test("concretes.trap.Pitfall.Flat", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

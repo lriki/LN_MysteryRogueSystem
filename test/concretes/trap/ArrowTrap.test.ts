@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { MRBasics } from "ts/re/data/MRBasics";
@@ -20,11 +20,11 @@ test("concretes.trap.ArrowTrap.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.addState(REData.getState("kState_UT罠必中").id);
+    player1.addState(MRData.getState("kState_UT罠必中").id);
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -51,11 +51,11 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
     const enemyhp1 = enemy1.actualParam(MRBasics.params.hp);
 
@@ -90,11 +90,11 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // アイテム入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_パワードラッグ_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     // 右下に移動できないような壁を作る
@@ -112,7 +112,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
-    const itemData2 = REData.getEntity("kEntity_ウッドアロー_A");
+    const itemData2 = MRData.getEntity("kEntity_ウッドアロー_A");
 
     const item2 = REGame.map.entities().find(e => e.dataId == itemData2.id);
     assert(item2);

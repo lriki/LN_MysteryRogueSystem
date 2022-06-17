@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 
 export type SActivityCommandHandler = (actionId: DActionId) => void;
 export type SSystemCommandHandler = (commandId: string) => void;
@@ -18,7 +18,7 @@ export class SDialogCommand {
 
     public static makeActivityCommand(actionId: DActionId, handler: SActivityCommandHandler): SDialogCommand {
         const cmd = new SDialogCommand();
-        cmd._displayName = REData.actions[actionId].displayName;
+        cmd._displayName = MRData.actions[actionId].displayName;
         cmd._actionId = actionId;
         cmd._activityCommandHandler = handler;
         return cmd;

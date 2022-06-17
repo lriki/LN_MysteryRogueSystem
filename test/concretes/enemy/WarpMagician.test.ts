@@ -1,5 +1,5 @@
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
@@ -18,7 +18,7 @@ test("concretes.enemies.WarpMagician", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アークメイジA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_アークメイジA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();

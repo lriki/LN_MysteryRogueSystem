@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -23,16 +23,16 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const pow1 = player1.actualParam(MRBasics.params.pow);
-    player1.addState(REData.getState("kState_UT罠必中").id);
+    player1.addState(MRData.getState("kState_UT罠必中").id);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンシールド_A").id, [], "shield1"));
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒草_B").id, [], "item1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ポイズンシールド_A").id, [], "shield1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒草_B").id, [], "item1"));
     inventory.addEntity(shield1);
     inventory.addEntity(item1);
     equipmentUser.equipOnUtil(shield1);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, floorId, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -69,12 +69,12 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const pow1 = player1.actualParam(MRBasics.params.pow);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンシールド_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ポイズンシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
     equipmentUser.equipOnUtil(shield1);
 
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_Anger").id);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_Anger").id);
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

@@ -1,7 +1,7 @@
 import { DEntityKindId } from "./DCommon";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 
 
@@ -57,7 +57,7 @@ export function DEntityProperties_Default(): DEntityProperties {
 export function parseMetaToEntityProperties(meta: any | undefined): DEntityProperties {
     if (meta) {
         const kindName = meta["MR-Category"];
-        const kind = kindName ? REData.findEntityKind(kindName.trim()) : undefined;
+        const kind = kindName ? MRData.findEntityKind(kindName.trim()) : undefined;
         const data: DEntityProperties = {
             key: (meta["MR-Key"] ?? "").trim(),
             kindId: kind ? kind.id : 0,

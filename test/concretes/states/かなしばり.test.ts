@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { assert } from "ts/re/Common";
@@ -15,7 +15,7 @@ beforeAll(() => {
 // 空腹による解除チェック
 test("concretes.states.Paralysis.FP", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UTかなしばり").id;
+    const stateId = MRData.getState("kState_UTかなしばり").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -42,7 +42,7 @@ test("concretes.states.Paralysis.FP", () => {
 // 攻撃による解除チェック
 test("concretes.states.Paralysis.Attack", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UTかなしばり").id;
+    const stateId = MRData.getState("kState_UTかなしばり").id;
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
@@ -50,7 +50,7 @@ test("concretes.states.Paralysis.Attack", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -62,13 +62,13 @@ test("concretes.states.Paralysis.Attack", () => {
 
 test("concretes.states.Paralysis.Pos", () => {
     TestEnv.newGame();
-    const stateId = REData.getState("kState_UTかなしばり").id;
+    const stateId = MRData.getState("kState_UTかなしばり").id;
     
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     enemy1.dir = 2;
 

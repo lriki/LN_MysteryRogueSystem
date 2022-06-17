@@ -6,7 +6,7 @@ import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
-import { DMap, REData } from "./REData";
+import { DMap, MRData } from "./MRData";
 
 
 export type DLandId = number;
@@ -219,9 +219,9 @@ export class DLand {
 
     public findFixedMapByName(name: string): DMap | undefined {
         if (!name) return undefined;
-        const mapId = this.fixedMapIds.find(x => REData.maps[x].name == name);
+        const mapId = this.fixedMapIds.find(x => MRData.maps[x].name == name);
         if (!mapId) return undefined;
-        return REData.maps[mapId];
+        return MRData.maps[mapId];
     }
 
     // public getFixedMapByName(name: string): DMap {
@@ -246,12 +246,12 @@ export class DLand {
 
                         if (key.toLowerCase() == "all") {
                             const level = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
-                            for (const kind of REData.entityKinds) {
+                            for (const kind of MRData.entityKinds) {
                                 this.identifiedKinds[kind.id] = level;
                             }
                         }
                         else {
-                            const kind = REData.getEntityKind(key.toLowerCase());
+                            const kind = MRData.getEntityKind(key.toLowerCase());
                             this.identifiedKinds[kind.id] = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
                         }
                     }
@@ -265,7 +265,7 @@ export class DLand {
             if (event) {
                 const prefabData = DAnnotationReader.readPrefabMetadata(event, this.rmmzMapId);
                 if (prefabData) {
-                    const prefab = REData.newPrefab();
+                    const prefab = MRData.newPrefab();
                     prefab.rmmzMapId = this.rmmzMapId;
                     prefab.rmmzEventData = event;
                 }
@@ -313,7 +313,7 @@ export class DLand {
                     bgmName: floorData.bgm ? floorData.bgm[0] : "",
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
-                    presetId: floorData.preset ? REData.getFloorPreset(floorData.preset).id : 1,
+                    presetId: floorData.preset ? MRData.getFloorPreset(floorData.preset).id : 1,
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);

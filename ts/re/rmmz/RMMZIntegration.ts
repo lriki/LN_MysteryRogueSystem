@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { LandExitResult, REData } from "../data/REData";
+import { LandExitResult, MRData } from "../data/MRData";
 import { REDataManager } from "../data/REDataManager";
 import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
@@ -32,7 +32,7 @@ export class RMMZIntegration extends SIntegration {
 
         // 主に演出のため ExitMap への遷移時にプレイヤーの表示をOFFにする。
         // 対策しないと、ExitMap へ移動したときに一瞬プレイヤーが見えてしまう。
-        if (REData.maps[mapId].exitMap) {
+        if (MRData.maps[mapId].exitMap) {
             $gamePlayer.setTransparent(true);
         }
 
@@ -68,7 +68,7 @@ export class RMMZIntegration extends SIntegration {
             const data = SRmmzHelpers.readEntityMetadata(e);
             if (e && data) {
                 if (data.troopId > 0) {
-                    SEntityFactory.spawnTroopAndMembers(REData.troops[data.troopId], e.x, e.y,data.stateIds);
+                    SEntityFactory.spawnTroopAndMembers(MRData.troops[data.troopId], e.x, e.y,data.stateIds);
                     e.setTransparent(true);
                 }
                 else {

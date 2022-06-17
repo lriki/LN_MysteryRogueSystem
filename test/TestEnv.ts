@@ -1,6 +1,6 @@
 
 import fs from "fs";
-import { LandExitResult, REData, REFloorMapKind } from "ts/re/data/REData";
+import { LandExitResult, MRData, REFloorMapKind } from "ts/re/data/MRData";
 import { REDataManager } from "ts/re/data/REDataManager";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { REGame } from "ts/re/objects/REGame";
@@ -73,9 +73,9 @@ export class TestEnv {
     static activeSequelSet: SSequelSet;
 
     static setupDatabase() {
-        REData.testMode = true;
+        MRData.testMode = true;
         this.loadRmmzDatabase();
-        REData.reset();
+        MRData.reset();
         REDataManager.testMode = true;
         REDataManager.load();
         this.integration = new TestEnvIntegration();
@@ -88,19 +88,19 @@ export class TestEnv {
             this.loadDataFile("RE_databaseMap", filename);
         }
 
-        this.UnitTestLandId = REData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
-        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(REData.getMap("MR-Safety:テスト拠点").mapId);
+        this.UnitTestLandId = MRData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
+        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(MRData.getMap("MR-Safety:テスト拠点").mapId);
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
         this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
-        this.StateId_debug_MoveRight = REData.getState("kState_Test_MoveRight").id
-        this.StateId_Sleep = REData.getState("kState_睡眠").id;
-        this.StateId_CertainDirectAttack = REData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
-        this.EntityId_Herb = REData.getEntity("kEntity_キュアリーフ_A").id;
-        this.EntityId_Weapon1 = REData.getEntity("kEntity_ゴブリンのこん棒_A").id;
-        this.EntityId_Shield1 = REData.getEntity("kEntity_レザーシールド_A").id;
-        this.EntityId_SleepTrap = REData.getEntity("kEntity_眠りガス_A").id;
+        this.StateId_debug_MoveRight = MRData.getState("kState_Test_MoveRight").id
+        this.StateId_Sleep = MRData.getState("kState_睡眠").id;
+        this.StateId_CertainDirectAttack = MRData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
+        this.EntityId_Herb = MRData.getEntity("kEntity_キュアリーフ_A").id;
+        this.EntityId_Weapon1 = MRData.getEntity("kEntity_ゴブリンのこん棒_A").id;
+        this.EntityId_Shield1 = MRData.getEntity("kEntity_レザーシールド_A").id;
+        this.EntityId_SleepTrap = MRData.getEntity("kEntity_眠りガス_A").id;
         
         // デバッグしやすいように共通の名前を付けておく
         //const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -119,7 +119,7 @@ export class TestEnv {
     }
 
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
-        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_投擲反射石_A").id, [REData.getState("kState_System_ItemStanding").id], "object1"));
+        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_投擲反射石_A").id, [MRData.getState("kState_System_ItemStanding").id], "object1"));
         REGame.world.transferEntity(object1, floorId, 13, 10);
         return object1;
     }

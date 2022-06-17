@@ -2,7 +2,7 @@ import { assert } from "ts/re/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
 import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/re/data/DHelper";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DAnnotationReader } from "ts/re/data/DAttributeReader";
 import { DEntityKind } from "ts/re/data/DEntityKind";
 import { PerlinNoise, SimplexNoise } from "ts/re/math/Noise";
@@ -26,7 +26,7 @@ export class FDecorationPass extends FMapBuildPass {
         }
         */
 
-        const template = REData.templateMaps[map.templateId];
+        const template = MRData.templateMaps[map.templateId];
         this.makeFloorDecoration(map, template);
         this.makeWallDecoration(map, template);
     }

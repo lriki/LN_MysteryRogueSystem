@@ -11,7 +11,7 @@ import { UMovement } from "ts/re/usecases/UMovement";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction, onCollidePreReaction, onMoveAsProjectile, onThrowReaction } from "../LBehavior";
 import { MovingMethod } from "ts/re/objects/LMap";
 import { UAction } from "ts/re/usecases/UAction";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
 import { DEffectHitType, DEffectSet } from "ts/re/data/DEffect";
 import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
@@ -66,7 +66,7 @@ export class LProjectileBehavior extends LBehavior {
             common.blowMoveCount = Infinity;
         }
 
-        entity.addState(REData.getState("kState_System_Projectile").id, false);
+        entity.addState(MRData.getState("kState_System_Projectile").id, false);
         
         cctx.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -80,7 +80,7 @@ export class LProjectileBehavior extends LBehavior {
         common.blowDirection = dir;
         common.blowMoveCount = length;
         
-        entity.addState(REData.getState("kState_System_Projectile").id, false);
+        entity.addState(MRData.getState("kState_System_Projectile").id, false);
         
         cctx.post(entity, entity, subject, undefined, onMoveAsProjectile);
     }
@@ -325,7 +325,7 @@ export class LProjectileBehavior extends LBehavior {
         }
         else {
             // 表示変更用のステート解除
-            self.removeState(REData.getState("kState_System_Projectile").id);
+            self.removeState(MRData.getState("kState_System_Projectile").id);
 
             UAction.postFall(cctx, self);
     

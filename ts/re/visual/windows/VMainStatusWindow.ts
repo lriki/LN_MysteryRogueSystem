@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DTextManager } from "ts/re/data/DTextManager";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
@@ -248,7 +248,7 @@ export class VMainStatusWindow extends Window_Base {
         }
         
         // 満腹度
-        const fpData = REData.parameters[MRBasics.params.fp];
+        const fpData = MRData.parameters[MRBasics.params.fp];
         const cfp = Math.ceil(fpData.makeDisplayValue(this._entity.actualParam(MRBasics.params.fp)));
         const mfp = Math.ceil(fpData.makeDisplayValue(this._entity.idealParam(MRBasics.params.fp)));
         this._fpValue.setText(`${cfp}/${mfp}`);

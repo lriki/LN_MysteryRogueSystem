@@ -14,7 +14,7 @@ import { SWarehouseDialog } from "ts/re/system/dialogs/SWarehouseDialog";
 import { VWarehouseDialog } from "./dialogs/VWarehouseDialog";
 import { DSequel, DSequelId } from "ts/re/data/DSequel";
 import { VIdleSequel } from "./sequels/VIdleSequel";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { VAsleepSequel } from "./sequels/VAsleepSequel";
 import { VCommonStoppedSequel } from "./sequels/VCommonStoppedSequel";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
@@ -92,7 +92,7 @@ export class REVisual_Manager
             return factory();
         }
         else {
-            throw new Error(`Visual Sequel not registerd. (id: ${sequelId}, name: ${REData.sequels[sequelId].name})`);
+            throw new Error(`Visual Sequel not registerd. (id: ${sequelId}, name: ${MRData.sequels[sequelId].name})`);
         }
     }
 

@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
@@ -20,8 +20,8 @@ test("Abilities.Enemy.Division", () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_スピリットスライムA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_UTからぶり").id);   // Player を倒さないように
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_スピリットスライムA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_UTからぶり").id);   // Player を倒さないように
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

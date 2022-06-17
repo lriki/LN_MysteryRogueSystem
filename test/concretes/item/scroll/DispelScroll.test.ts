@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -20,7 +20,7 @@ beforeAll(() => {
 test("concretes.item.scroll.DispelScroll", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
-    const stateId = REData.system.states.curse;
+    const stateId = MRData.system.states.curse;
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
@@ -28,7 +28,7 @@ test("concretes.item.scroll.DispelScroll", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ディスペルスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ディスペルスクロール_A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // 装備 (呪い付き)

@@ -1,7 +1,7 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DFloorInfo, DLand, DLandId } from "ts/re/data/DLand";
-import { DMap, REData } from "ts/re/data/REData";
+import { DMap, MRData } from "ts/re/data/MRData";
 import { REDataManager } from "ts/re/data/REDataManager";
 import { DFloorPreset } from "../data/DTerrainPreset";
 
@@ -52,7 +52,7 @@ export class LFloorId {
     public get preset(): DFloorPreset {
         const id = this.floorInfo().presetId;
         assert(id > 0);
-        return REData.floorPresets[id];
+        return MRData.floorPresets[id];
     }
 
     public isEmpty(): boolean {
@@ -80,7 +80,7 @@ export class LFloorId {
     }
 
     public static makeFromKeys(landKey: string, floorKey: string): LFloorId {
-        const land = REData.lands.find(x => x.name == landKey);
+        const land = MRData.lands.find(x => x.name == landKey);
         if (!land) throw new Error(`Land "${landKey}" not found.`);
         const floorNumber = land.floorInfos.findIndex(x => x && x.key == floorKey);
         if (floorNumber <= 0) throw new Error(`Floor "${floorKey}" not found.`);
@@ -89,8 +89,8 @@ export class LFloorId {
 
     public static makeByRmmzFixedMapName(fixedMapName: string): LFloorId {
         const mapId = $dataMapInfos.findIndex(x => x && x.name == fixedMapName);
-        const landId = REData.maps[mapId].landId;
-        const floorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+        const landId = MRData.maps[mapId].landId;
+        const floorNumber = MRData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
         assert(floorNumber > 0);
         return new LFloorId(landId, floorNumber);
     }
@@ -99,8 +99,8 @@ export class LFloorId {
         const mapInfo = $dataMapInfos[mapId];
         assert(mapInfo);
         const fixedMapName = mapInfo.name;
-        const landId = REData.maps[mapId].landId;
-        const floorNumber = REData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+        const landId = MRData.maps[mapId].landId;
+        const floorNumber = MRData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
         assert(floorNumber > 0);
         return new LFloorId(landId, floorNumber);
     }
@@ -112,7 +112,7 @@ export class LFloorId {
     public static makeFromMapTransfarInfo(mapId: number, x: number) {
         let floorId: LFloorId;
         if (REDataManager.isLandMap(mapId)) {
-            floorId = new LFloorId(REData.lands.findIndex(x => x.rmmzMapId == mapId), x);
+            floorId = new LFloorId(MRData.lands.findIndex(x => x.rmmzMapId == mapId), x);
         }
         else if (REDataManager.isRESystemMap(mapId)) {
             // 固定マップへの遷移
@@ -126,12 +126,12 @@ export class LFloorId {
     }
 
     public landData(): DLand {
-        return REData.lands[this._landId];
+        return MRData.lands[this._landId];
     }
 
     public floorInfo(): DFloorInfo {
         assert(this.hasAny());
-        const info = REData.lands[this._landId].floorInfos[this._floorNumber];
+        const info = MRData.lands[this._landId].floorInfos[this._floorNumber];
         assert(info);
         return info;
     }
@@ -149,7 +149,7 @@ export class LFloorId {
                 return fixedMapId;
             }
             else {
-                return REData.lands[this._landId].rmmzMapId;
+                return MRData.lands[this._landId].rmmzMapId;
             }
         }
     }
@@ -182,7 +182,7 @@ export class LFloorId {
     public isSafetyMap(): boolean {
         if (this._landId == DHelpers.RmmzNormalMapLandId) {
             const mapId = this.rmmzMapId();
-            if (REData.maps[mapId].safetyMap) {
+            if (MRData.maps[mapId].safetyMap) {
                 return true;
             }
         }
@@ -198,7 +198,7 @@ export class LFloorId {
 
     public isRMMZDefaultSystemMap(): boolean {
         if (this._landId != DHelpers.RmmzNormalMapLandId) return false;
-        return REData.maps[this._floorNumber].defaultSystem;
+        return MRData.maps[this._floorNumber].defaultSystem;
     }
 }
 

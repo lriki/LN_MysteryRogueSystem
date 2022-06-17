@@ -7,7 +7,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 

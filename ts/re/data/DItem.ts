@@ -1,7 +1,7 @@
 import { DRmmzEffectScope } from "./DEffect";
 import { DEntity, DEntityId } from "./DEntity";
 import { DEquipmentPartId } from "./DEquipmentPart";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export type DItemDataId = number;
 
@@ -80,7 +80,7 @@ export class DItem {
     }
 
     public entityData(): DEntity {
-        return REData.entities[this.entityId];
+        return MRData.entities[this.entityId];
     }
 }
 

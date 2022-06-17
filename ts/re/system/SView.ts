@@ -2,7 +2,7 @@ import { assert, tr2 } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DStateRestriction } from "ts/re/data/DState";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { REGame } from "ts/re/objects/REGame";
 import { LIllusionStateBehavior } from "ts/re/objects/states/LIllusionStateBehavior";
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
@@ -139,10 +139,10 @@ export class SView {
             // subject が惑わし状態？
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
                 if (entity.findEntityBehavior(LUnitBehavior)) {
-                    return { visible: true, translucent: false, image: REData.prefabs[MRBasics.prefabs.illusionActor].image };
+                    return { visible: true, translucent: false, image: MRData.prefabs[MRBasics.prefabs.illusionActor].image };
                 }
                 else {
-                    return { visible: true, translucent: false, image: REData.prefabs[MRBasics.prefabs.illusionItem].image };
+                    return { visible: true, translucent: false, image: MRData.prefabs[MRBasics.prefabs.illusionItem].image };
                 }
             }
         }

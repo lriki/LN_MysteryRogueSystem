@@ -2,7 +2,7 @@ import { TestEnv } from "./../TestEnv";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
 import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/re/PluginParameters";
 import { assert } from "ts/re/Common";
 import { REGame } from "ts/re/objects/REGame";
@@ -18,7 +18,7 @@ test("RandomMap.1001562234", () => {
 
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
         // map.resetFromFullSize(60, 48, 0, 0);
-        (new FGenericRandomMapGenerator(map, REData.terrainSettings[1])).generate();
+        (new FGenericRandomMapGenerator(map, MRData.terrainSettings[1])).generate();
         (new FMapBuilder()).buildForRandomMap(map);
     
         //map.print();
@@ -53,7 +53,7 @@ test("RandomMap.1001562234", () => {
 test("RandomMap.967875183", () => {
     const seed = 967875183;
     const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
-    const setting = REData.getTerrainSetting("kTerrainSetting_Small2x2");
+    const setting = MRData.getTerrainSetting("kTerrainSetting_Small2x2");
     (new FGenericRandomMapGenerator(map, setting)).generate();
     (new FMapBuilder()).buildForRandomMap(map);
 });
@@ -65,7 +65,7 @@ test("RandomMap.ValidationStartIssue", () => {
     for (let i = 0; i < 100; i++) {
         const seed = i==0 ? 1504087190 : REGame.world.random().nextInt();
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
-        const setting = REData.getTerrainSetting("kTerrainSetting_Small2x2");
+        const setting = MRData.getTerrainSetting("kTerrainSetting_Small2x2");
         (new FGenericRandomMapGenerator(map, setting)).generate();
         (new FMapBuilder()).buildForRandomMap(map);
     }

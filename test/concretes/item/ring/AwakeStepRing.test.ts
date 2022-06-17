@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -23,14 +23,14 @@ test("concretes.item.ring.AwakeStepRing", () => {
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アウェイクリング_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アウェイクリング_A").id, [], "ring1"));
     inventory.addEntity(ring1);
     
     const name = UName.makeNameAsItem(ring1);
     expect(name.includes("+")).toBe(false); // Issue 修正確認。修正値は持たない
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 19, 4);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------

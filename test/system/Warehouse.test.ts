@@ -4,7 +4,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SWarehouseStoreDialog } from "ts/re/system/dialogs/SWarehouseStoreDialog";
 import { SWarehouseWithdrawDialog } from "ts/re/system/dialogs/SWarehouseWithdrawDialog";
@@ -21,8 +21,8 @@ test("system.Warehouse.Store", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
 
@@ -62,8 +62,8 @@ test("system.Warehouse.Store.Fully", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
 
@@ -72,7 +72,7 @@ test("system.Warehouse.Store.Fully", () => {
 
     // 容量-1 までアイテムを詰め込む
     for (let i = 0; i < inventory2.capacity - 1; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item"));
         inventory2.addEntity(item);
     }
 
@@ -109,8 +109,8 @@ test("system.Warehouse.Withdraw", () => {
     const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
     inventory2.addEntity(weapon1);
     inventory2.addEntity(grass1);
 
@@ -153,12 +153,12 @@ test("system.Warehouse.Withdraw.Fully", () => {
     
     // 容量-1 までアイテムを詰め込む
     for (let i = 0; i < inventory2.capacity - 1; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item"));
         inventory1.addEntity(item);
     }
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
     inventory2.addEntity(weapon1);
     inventory2.addEntity(grass1);
 
@@ -195,8 +195,8 @@ test("system.Warehouse.Sell", () => {
     const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
     inventory2.addEntity(weapon1);
     inventory2.addEntity(grass1);
 

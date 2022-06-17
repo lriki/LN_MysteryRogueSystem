@@ -1,7 +1,7 @@
 import { assert, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DCommon";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -119,8 +119,8 @@ export class SItemListDialog extends SDialog {
         return actions
             .distinct()
             .immutableSort((a, b) => {
-                const ad = REData.actions[a];
-                const bd = REData.actions[b];
+                const ad = MRData.actions[a];
+                const bd = MRData.actions[b];
                 if (ad.priority == bd.priority) return ad.id - bd.id;
                 return bd.priority - ad.priority;   // 降順
             });

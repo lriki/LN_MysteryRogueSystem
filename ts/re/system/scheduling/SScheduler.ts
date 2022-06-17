@@ -2,7 +2,7 @@ import { assert, Log, tr2 } from "../../Common";
 import { REGame } from "../../objects/REGame";
 import { RESystem } from "../RESystem";
 import { UAction } from "../../usecases/UAction";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { UName } from "ts/re/usecases/UName";
 import { LScheduler2, LSchedulerPhase } from "ts/re/objects/LScheduler";

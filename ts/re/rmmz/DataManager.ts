@@ -1,7 +1,7 @@
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
-import { REData, REFloorMapKind } from "../data/REData";
+import { MRData, REFloorMapKind } from "../data/MRData";
 import { assert } from "../Common";
 import { DHelpers } from "../data/DHelper";
 

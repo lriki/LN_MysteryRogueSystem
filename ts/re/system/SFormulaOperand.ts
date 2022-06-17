@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { MRBasics } from "../data/MRBasics";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 import { LEntity } from "../objects/LEntity";
 import { paramPowerToAtk } from "../PluginParameters";
 
@@ -18,7 +18,7 @@ export class SFormulaOperand {
 
     public constructor() {
         var prop: any = {};
-        for (const param of REData.parameters) {
+        for (const param of MRData.parameters) {
             prop[param.code] = {
                 get: () => {
 

@@ -9,7 +9,7 @@ import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActionTokenConsumeType } from "../LCommon";
 
 export interface LEntityIdData {
@@ -92,7 +92,7 @@ export class LActivity {
     }
 
     public get action(): DAction {
-        return REData.actions[this._actionId];
+        return MRData.actions[this._actionId];
     }
 
     public actor(): LEntity {

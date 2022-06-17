@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
@@ -24,17 +24,17 @@ test("concretes.item.Gold", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     
     // gold1 - 地面に配置
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold_A").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     REGame.world.transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // gold2 - インベントリに入れる
-    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold_A").id, [], "gold2"));
+    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold2"));
     gold2.getEntityBehavior(LGoldBehavior).setGold(200);
     inventory1.addEntity(gold2);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
     const hp1 = enemy1.actualParam(MRBasics.params.hp);
 

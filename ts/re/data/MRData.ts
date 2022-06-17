@@ -33,8 +33,7 @@ import { DCommand } from "./DCommand";
 // import { DPreset } from "./DPreset";
 
 
-export enum REFloorMapKind
-{
+export enum REFloorMapKind {
     // データ定義用のマップ。ここへの遷移は禁止
     Land,
 
@@ -48,8 +47,7 @@ export enum REFloorMapKind
 
 
 // NOTE: これをもとに Behavior を作る仕組みが必要そう。
-export interface RE_Data_EntityFeature
-{
+export interface RE_Data_EntityFeature {
     /** ID (0 is Invalid). */
     id: number;
 
@@ -67,8 +65,7 @@ export interface RE_Data_EntityFeature
  * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
  * FloorInfo と似ているが、こちらは RMMZ Map に対する直接の追加情報を意味する。
  */
-export class DMap
-{
+export class DMap {
     /** ID (0 is Invalid). */
     id: number;
 
@@ -152,7 +149,7 @@ export enum LandExitResult {
     InvalidSuspend = 402,
 }
 
-export class REData
+export class MRData
 {
     static readonly MAX_DUNGEON_FLOORS = 100;
     static testMode = false;
@@ -265,7 +262,7 @@ export class REData
 
     static findEntityKind(pattern: string): DEntityKind | undefined {
         const k = pattern.toLowerCase();
-        const kind = REData.entityKinds.find(x => x.name.toLowerCase() === k);
+        const kind = MRData.entityKinds.find(x => x.name.toLowerCase() === k);
         return kind;
     }
 
@@ -535,9 +532,9 @@ export class REData
     //--------------------
 
     static newActor(): [DEntity, DActor] {
-        const entity = REData.newEntity();
-        const data = new DActor(REData.actors.length);
-        REData.actors.push(data.id);
+        const entity = MRData.newEntity();
+        const data = new DActor(MRData.actors.length);
+        MRData.actors.push(data.id);
         entity.actor = data;
         return [entity, data];
     }
@@ -591,9 +588,9 @@ export class REData
     //--------------------
     
     static newItem(): [DEntity, DItem] {
-        const entity = REData.newEntity();
-        const data = new DItem(REData.items.length, entity.id);
-        REData.items.push(entity.id);
+        const entity = MRData.newEntity();
+        const data = new DItem(MRData.items.length, entity.id);
+        MRData.items.push(entity.id);
         entity.itemData = data;
         return [entity, data];
     }
@@ -631,9 +628,9 @@ export class REData
     //--------------------
 
     static newEnemy(): [DEntity, DEnemy] {
-        const entity = REData.newEntity();
-        const data = new DEnemy(REData.enemies.length, entity.id);
-        REData.enemies.push(entity.id);
+        const entity = MRData.newEntity();
+        const data = new DEnemy(MRData.enemies.length, entity.id);
+        MRData.enemies.push(entity.id);
         entity.enemy = data;
         return [entity, data];
     }
@@ -672,12 +669,12 @@ export class REData
     
     public static newTrait(key: string): DTrait {
         const data = new DTrait(this.traits.length, key);
-        REData.traits.push(data);
+        MRData.traits.push(data);
         return data;
     }
 
     public static getTrait(pattern: string): DTrait {
-        const data = REData.traits.find(x => x && x.key == pattern);
+        const data = MRData.traits.find(x => x && x.key == pattern);
         if (data) return data;
         throw new Error(`Trait "${pattern}" not found.`);
     }

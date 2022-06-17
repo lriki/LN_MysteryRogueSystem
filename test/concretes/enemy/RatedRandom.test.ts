@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
@@ -22,7 +22,7 @@ test("concretes.states.RatedRandom", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_バットA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 20, 10);
 
     REGame.world.random().resetSeed(9);     // 乱数調整
@@ -53,7 +53,7 @@ test("concretes.states.RatedRandom.Issue1", () => {
     　■■　
     */
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_バットA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     REGame.map.block(10, 9)._tileShape = LTileShape.Wall;
     REGame.map.block(11, 9)._tileShape = LTileShape.Wall;

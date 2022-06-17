@@ -1,6 +1,6 @@
 import { TestEnv } from "../TestEnv";
 import { REGame } from "ts/re/objects/REGame";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DTerrainSettingRef } from "ts/re/data/DLand";
 import { RESystem } from "ts/re/system/RESystem";
 import { LTileShape } from "ts/re/objects/LBlock";
@@ -22,7 +22,7 @@ test("Preset.GreatHall", () => {
     // 適当なフロアの Preset を強制的に変更
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHall").id;
+    floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_GreatHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
 
@@ -41,11 +41,11 @@ test("Preset.GreatHallMonsterHouse", () => {
     TestEnv.newGame();
 
     // 大部屋モンスターハウス
-    const landId = REData.lands.findIndex(x => x.name.includes("RandomMaps"));
+    const landId = MRData.lands.findIndex(x => x.name.includes("RandomMaps"));
     const floorId = new LFloorId(landId, 1);
     const floorInfo = floorId.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHallMH").id;
+    floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_GreatHallMH").id;
 
     const player1 = TestEnv.setupPlayer(floorId);
 
@@ -66,7 +66,7 @@ test("Preset.PoorVisibility", () => {
     // 適当なフロアの Preset を強制的に変更
     const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_GreatHall").id;
+    floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_GreatHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
     const map = REGame.map;
@@ -90,7 +90,7 @@ test("Preset.PoorVisibility", () => {
     REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, room.mx1, room.my1);
 
     // Enemy を右上に配置 (下向き)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.dir = 2;
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, room.mx2, room.my1);
 
@@ -110,11 +110,11 @@ test("Preset.PoorVisibility", () => {
 test("Preset.DefaultMonsterHouse", () => {
     TestEnv.newGame();
 
-    const landId = REData.lands.findIndex(x => x.name.includes("RandomMaps"));
+    const landId = MRData.lands.findIndex(x => x.name.includes("RandomMaps"));
     const floorId = new LFloorId(landId, 1);
     const floorInfo = floorId.floorInfo();
     floorInfo.fixedMapName = "";
-    floorInfo.presetId = REData.getFloorPreset("kFloorPreset_Test_DefaultMH").id;
+    floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_Test_DefaultMH").id;
 
     const player1 = TestEnv.setupPlayer(floorId);
 

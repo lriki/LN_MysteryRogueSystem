@@ -1,7 +1,7 @@
 import { TestEnv } from "../TestEnv";
 import { UComponentType, UProperty, UPropertyPath } from "ts/re/usecases/UProperty";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
@@ -15,7 +15,7 @@ test("system.Property.basic", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const hp1 = player1.actualParam(MRBasics.params.hp);
     const max_hp1 = player1.idealParam(MRBasics.params.hp);
-    const stateId = REData.getState("kState_UTかなしばり").id;
+    const stateId = MRData.getState("kState_UTかなしばり").id;
     player1.addState(stateId);
 
     const hp2 = UProperty.getValueFromEntity(player1, "hp");
@@ -27,7 +27,7 @@ test("system.Property.basic", () => {
 
     // アイテム数を取得してみる
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
+    inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
     const count = UProperty.getValueFromEntity(player1, "Entity:Inventory.items.length");
     expect(count).toBe(1);
 

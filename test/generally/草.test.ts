@@ -4,7 +4,7 @@ import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./../TestEnv";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { UName } from "ts/re/usecases/UName";
@@ -26,8 +26,8 @@ test("generally.草", () => {
     TestEnv.performFloorTransfer();
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

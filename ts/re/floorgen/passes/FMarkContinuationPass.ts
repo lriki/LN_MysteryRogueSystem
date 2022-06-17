@@ -2,7 +2,7 @@ import { assert } from "ts/re/Common";
 import { FMapBuildPass } from "./FMapBuildPass";
 import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/re/data/DHelper";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DAnnotationReader } from "ts/re/data/DAttributeReader";
 import { DEntityKind } from "ts/re/data/DEntityKind";
 import { FMapBlock } from "../data/FMapBlock";
@@ -124,7 +124,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
                 if (!e) return false;
                 const metadata = DAnnotationReader.readEntityMetadataFromPage(e.pages[0]);
                 if (!metadata) return false;
-                const entity = REData.findEntity(metadata.entity);
+                const entity = MRData.findEntity(metadata.entity);
                 if (!entity) return false;
                 return DEntityKind.isEntryPoint(entity);
             });

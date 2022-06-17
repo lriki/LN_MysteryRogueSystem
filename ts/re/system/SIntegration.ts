@@ -1,5 +1,5 @@
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
-import { LandExitResult } from "ts/re/data/REData";
+import { LandExitResult } from "ts/re/data/MRData";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { LBlock } from "ts/re/objects/LBlock";
 import { LEntity } from "ts/re/objects/LEntity";

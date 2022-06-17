@@ -1,5 +1,5 @@
 import { DSkillId } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SPhaseResult } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -81,7 +81,7 @@ export class LConfusionAI extends LCharacterAI {
         // 攻撃候補を覚えておく。
         if (this._restriction != LConfusionAIRestriction.None) {
             const block = UMovement.getAdjacentBlock(self, dir);
-            let targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.mx == block.mx && e.my == block.my);
+            let targets = UAction.getSkillEffectiveTargets(self, MRData.skills[RESystem.skills.normalAttack], false).filter(e => e.mx == block.mx && e.my == block.my);
     
             if (this._restriction == LConfusionAIRestriction.AttcakToFriend) {
                 targets = targets.filter(x => Helpers.isFriend(self, x));
@@ -108,7 +108,7 @@ export class LConfusionAI extends LCharacterAI {
             const target = REGame.world.entity(action.target);
             
             // 攻撃候補が有効なまま存在していれば、相手の方を向いて攻撃
-            if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[action.skillId], false, [target])) {
+            if (UAction.checkEntityWithinSkillActionRange(self, MRData.skills[action.skillId], false, [target])) {
                 cctx.postActivity(LActivity.makeDirectionChange(self,  UMovement.getLookAtDir(self, target)));
                 cctx.postActivity(LActivity.makePerformSkill(self, RESystem.skills.normalAttack));
             }

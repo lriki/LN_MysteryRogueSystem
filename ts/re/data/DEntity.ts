@@ -13,7 +13,7 @@ import { DPrefab, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroopId } from "./DTroop";
 import { MRBasics } from "./MRBasics";
-import { DFactionId, REData } from "./REData";
+import { DFactionId, MRData } from "./MRData";
 
 export type DEntityId = number;
 
@@ -137,7 +137,7 @@ export class DReaction {
     }
 
     public emittors(): DEmittor[] {
-        return this._emittorIds.map(x => REData.getEmittorById(x));
+        return this._emittorIds.map(x => MRData.getEmittorById(x));
     }
 }
 
@@ -306,7 +306,7 @@ export class DEntity {
     }
 
     public prefab(): DPrefab {
-        return REData.prefabs[this.prefabId];
+        return MRData.prefabs[this.prefabId];
     }
     
     public actorData(): DActor {
@@ -364,7 +364,7 @@ export class DEntity {
 
     public mainEmittor(): DEmittor {
         assert(this._mainEmittorId > 0);
-        return REData.emittors[this._mainEmittorId];
+        return MRData.emittors[this._mainEmittorId];
     }
 
     public makeDisplayName(stackCont: number): string {
@@ -447,7 +447,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
 
     public entityData(): DEntity {
         assert(this.entityId > 0);
-        return REData.entities[this.entityId];
+        return MRData.entities[this.entityId];
     }
     
     // public isEnemyKind(): boolean {
@@ -485,7 +485,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         
         const entity = new DEntitySpawner2();
         entity.troopId = entityMetadata.troopId;
-        entity.entityId = REData.entities.findIndex(x => x.entity.key == entityMetadata.entity);
+        entity.entityId = MRData.entities.findIndex(x => x.entity.key == entityMetadata.entity);
         entity.stackCount = entityMetadata.stackCount;
         entity.override = entityMetadata.override;
         entity.gold = entityMetadata.gold;
@@ -495,7 +495,7 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.rate = entityMetadata.rate ?? 100;
 
         for (const stateKey of entityMetadata.states) {
-            const index = REData.states.findIndex(s => s.key == stateKey);
+            const index = MRData.states.findIndex(s => s.key == stateKey);
             if (index > 0) {
                 entity.stateIds.push(index);
             }

@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DSequel, DSequelId } from "ts/re/data/DSequel";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 import { LEntity } from "../objects/LEntity";
 
 /**
@@ -58,7 +58,7 @@ export class SMotionSequel extends SSequelUnit {
     private _relatedSequels: SMotionSequel[];
 
     constructor(entity: LEntity, sequelId: DSequelId, targetX: number, targetY: number, args: any | undefined) {
-        super(entity, REData.sequels[sequelId].parallel, args);
+        super(entity, MRData.sequels[sequelId].parallel, args);
         this._sequelId = sequelId;
         this._targetX = targetX;
         this._targetY = targetY;
@@ -70,7 +70,7 @@ export class SMotionSequel extends SSequelUnit {
     }
 
     data(): DSequel {
-        return REData.sequels[this._sequelId];
+        return MRData.sequels[this._sequelId];
     }
 
     public setStartPosition(x: number, y: number): void {

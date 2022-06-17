@@ -4,7 +4,7 @@ import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -22,7 +22,7 @@ test("Equipment.EquipOnOff", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10); 
 
     // Enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
@@ -142,7 +142,7 @@ test("Equipment.Curse", () => {
     inventory.addEntity(weapon2);
 
     // 武器 入手 (呪い付き)
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [REData.getState("kState_System_Curse").id]));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [MRData.getState("kState_System_Curse").id]));
     REGame.world.transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
@@ -256,7 +256,7 @@ test("Equipment.IdentifyUpgradeValue", () => {
     const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "item1"));
 
     // 修正値+2
     item1.setActualParam(MRBasics.params.upgradeValue, 2);

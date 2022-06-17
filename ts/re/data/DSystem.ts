@@ -1,7 +1,7 @@
 import { DClassId } from "./DClass";
 import { DEntityId } from "./DEntity";
 import { DStateId } from "./DState";
-import { DFactionId, REData } from "./REData";
+import { DFactionId, MRData } from "./MRData";
 
 export interface DSystemFactions {
     
@@ -71,9 +71,9 @@ export class DSystem {
 
     public link(testMode: boolean): void {
 
-        const bless = REData.getState("kState_System_Bless");
-        const curse = REData.getState("kState_System_Curse")
-        const seal = REData.getState("kState_System_Seal");
+        const bless = MRData.getState("kState_System_Bless");
+        const curse = MRData.getState("kState_System_Curse")
+        const seal = MRData.getState("kState_System_Seal");
 
         bless.displayNameIcon = true;
         curse.displayNameIcon = true;
@@ -82,15 +82,15 @@ export class DSystem {
         this.states.bless = bless.id;
         this.states.curse = curse.id;
         this.states.seal = seal.id;
-        this.states.plating = REData.getState("kState_System_Plating").id;
+        this.states.plating = MRData.getState("kState_System_Plating").id;
 
-        this.fallbackEnemyEntityId = REData.getEnemy("kEntity_スライム_A").entityId;
-        this.fallbackItemEntityId = REData.getItem("kEntity_雑草_A").id;
-        this.fallbackGoldEntityId = REData.getItem("kEntity_Gold_A").id;
+        this.fallbackEnemyEntityId = MRData.getEnemy("kEntity_スライム_A").entityId;
+        this.fallbackItemEntityId = MRData.getItem("kEntity_雑草_A").id;
+        this.fallbackGoldEntityId = MRData.getItem("kEntity_Gold_A").id;
         //this.fallbackTrapEntityId = REData.getItem("kEntity_トラバサミ_A").id;
 
-        for (let i = 1; i < REData.enemies.length; i++) {
-            const data = REData.enemyData(i);
+        for (let i = 1; i < MRData.enemies.length; i++) {
+            const data = MRData.enemyData(i);
             for (const item of data.dropItems) {
                 if (item.gold > 0 && item.entityId == 0) {
                     item.entityId = this.fallbackGoldEntityId;

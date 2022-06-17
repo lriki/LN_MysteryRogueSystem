@@ -4,7 +4,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LTileShape } from "ts/re/objects/LBlock";
@@ -21,14 +21,14 @@ test("concretes.item.arrow.IronArrow", () => {
     // player1 配置
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
+    player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンアロー_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アイアンアロー_A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.actualParam(MRBasics.params.hp);
 

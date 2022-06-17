@@ -2,7 +2,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
@@ -24,7 +24,7 @@ test("system.Visibility.Basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1 (同じ部屋)
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_モンスタースクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_モンスタースクロール_A").id, [], "item1"));
     REGame.world.transferEntity(item1, floorId, 11, 3);
 
     // trap1 (同じ部屋・露出していない)
@@ -32,15 +32,15 @@ test("system.Visibility.Basic", () => {
     REGame.world.transferEntity(trap1, floorId, 12, 4);
 
     // enemy1 (同じ部屋)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 10, 4);
 
     // exit1 (同じ部屋)
-    const exit1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ExitPoint_A").id, [], "exit1"));
+    const exit1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPoint_A").id, [], "exit1"));
     REGame.world.transferEntity(exit1, floorId, 12, 5);
 
     // item2 (踏破していない別の部屋)
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_モンスタースクロール_A").id, [], "item2"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_モンスタースクロール_A").id, [], "item2"));
     REGame.world.transferEntity(item2, floorId, 19, 9);
 
     // trap2 (踏破していない別の部屋)
@@ -48,11 +48,11 @@ test("system.Visibility.Basic", () => {
     REGame.world.transferEntity(trap2, floorId, 19, 10);
 
     // enemy2 (踏破していない別の部屋)
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     REGame.world.transferEntity(enemy2, floorId, 19, 4);
 
     // exit2 (踏破していない別の部屋)
-    const exit2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ExitPoint_A").id, [], "exit2"));
+    const exit2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPoint_A").id, [], "exit2"));
     REGame.world.transferEntity(exit2, floorId, 18, 9);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

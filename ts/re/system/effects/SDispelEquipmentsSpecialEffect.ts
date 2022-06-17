@@ -1,6 +1,6 @@
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
@@ -19,8 +19,8 @@ export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
             const items = equipmentUser.equippedItemEntities();
             if (this.testApply(items)) {
                 for (const item of items) {
-                    if (item.isStateAffected(REData.system.states.curse)) {
-                        item.removeState(REData.system.states.curse);
+                    if (item.isStateAffected(MRData.system.states.curse)) {
+                        item.removeState(MRData.system.states.curse);
                         result.makeSuccess();
                         item._effectResult._revision++;
                     }
@@ -33,6 +33,6 @@ export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
     }
 
     public testApply(items: LEntity[]): boolean {
-        return !!items.find(x => x.isStateAffected(REData.system.states.curse));
+        return !!items.find(x => x.isStateAffected(MRData.system.states.curse));
     }
 }

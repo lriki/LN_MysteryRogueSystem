@@ -10,7 +10,7 @@ import { DEmittor } from "ts/re/data/DEmittor";
 import { DCounterAction } from "ts/re/data/DEntity";
 import { LEffectResult } from "../LEffectResult";
 import { SEmittorPerformer } from "ts/re/system/SEmittorPerformer";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DActionId } from "ts/re/data/DCommon";
 
 
@@ -53,7 +53,7 @@ export class LCommonBehavior extends LBehavior {
             for (const trait of self.traits(MRBasics.traits.SuddenSkillEffect)) {
                 const chance = trait.value;
                 if (cctx.random().nextIntWithMax(100) < (chance * 100)) {
-                    const skill = REData.skills[trait.dataId];
+                    const skill = MRData.skills[trait.dataId];
                     SEmittorPerformer.makeWithEmitor(self, self, skill.emittor())
                     .perform(cctx);
                 }

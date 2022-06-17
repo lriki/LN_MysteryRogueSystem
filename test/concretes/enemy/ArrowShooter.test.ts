@@ -1,6 +1,6 @@
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { MRBasics } from "ts/re/data/MRBasics";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
@@ -20,8 +20,8 @@ test("concretes.enemies.ArrowShooter", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -62,7 +62,7 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     const player1 = TestEnv.setupPlayer(floorId, 3, 4);
     
     // enemy1 (Player とは別の部屋に配置)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 9, 4);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

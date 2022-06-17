@@ -1,7 +1,7 @@
 
 import { assert } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { LMap } from "ts/re/objects/LMap";
 import { SMinimapData } from "ts/re/system/SMinimapData";
@@ -31,7 +31,7 @@ export class VMapEditor {
     public constructor(coreMap: LMap) {
         this._coreMap = coreMap;
         const floorData = coreMap.floorData();
-        const templateMap = floorData.template ? REData.templateMaps.find(x => x.name == floorData.template) : REData.templateMaps[1];
+        const templateMap = floorData.template ? MRData.templateMaps.find(x => x.name == floorData.template) : MRData.templateMaps[1];
         assert(templateMap);
         this._templateMap = templateMap;
     }

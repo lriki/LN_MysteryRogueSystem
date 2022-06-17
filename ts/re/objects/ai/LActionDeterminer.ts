@@ -1,5 +1,5 @@
 import { RESerializable } from "ts/re/Common";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { RESystem } from "ts/re/system/RESystem";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -150,7 +150,7 @@ export class LActionDeterminer {
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
                 const targetEntites = this._requiredSkillAction.targets.map(e => REGame.world.entity(e));
-                if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[this._requiredSkillAction.action.skillId], false, targetEntites)) {
+                if (UAction.checkEntityWithinSkillActionRange(self, MRData.skills[this._requiredSkillAction.action.skillId], false, targetEntites)) {
                     
                     // AI は移動後に PrimaryTarget の方向を向くようになっているため、
                     // このままスキルを発動しようとすると空振りしてしまう。

@@ -1,7 +1,7 @@
 import { RESystem } from "ts/re/system/RESystem";
 import { SView } from "ts/re/system/SView";
 import { Log } from "../Common";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 import { REDataManager } from "../data/REDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";

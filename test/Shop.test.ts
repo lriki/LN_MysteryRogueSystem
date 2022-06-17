@@ -8,7 +8,7 @@ import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
@@ -33,8 +33,8 @@ test("Shop.Basic", () => {
     keeper1._name = "keeper1";
     keeper2._name = "keeper2";
 
-    expect(keeper1.getInnermostFactionId()).toBe(REData.system.factions.neutral);
-    expect(keeper1.getOutwardFactionId()).toBe(REData.system.factions.neutral);
+    expect(keeper1.getInnermostFactionId()).toBe(MRData.system.factions.neutral);
+    expect(keeper1.getOutwardFactionId()).toBe(MRData.system.factions.neutral);
 
     // 商品の陳列を確認
     const getItem = (x: number, y: number) => { const e = REGame.map.block(22, 9).getFirstEntity(); assert(e); return e; };

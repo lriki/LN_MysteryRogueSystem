@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
@@ -25,12 +25,12 @@ test("concretes.enemy.ItemThief.Basic", () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);
 
     // Item1作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     inventory1.addEntity(item1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
@@ -79,12 +79,12 @@ test("concretes.enemy.ItemThief.GroundItem", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
     // Item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     REGame.world.transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
@@ -130,16 +130,16 @@ test("concretes.enemy.ItemThief.NewGroundItem", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
     // item2
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item2"));
     inventory1.addEntity(item2);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
 
     // Item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     REGame.world.transferEntity(item1, floorId, 14, 10);
 
     // □□□□□
@@ -182,7 +182,7 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -216,7 +216,7 @@ test("concretes.enemy.ItemThief.Equipment", () => {
     inventory1.addEntity(weapon1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
@@ -247,15 +247,15 @@ test("concretes.enemy.ItemThief.Issue2", () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
 
     // enemy2
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy2, floorId, 15, 11);
     
     // Item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     REGame.world.transferEntity(item1, floorId, 16, 11);
 
     /*
@@ -290,13 +290,13 @@ test("concretes.enemy.ItemThief.Issue3_Seal", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     
     // enemy1 (封印)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_System_Seal").id);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_System_Seal").id);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
 
     // Item1作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     inventory1.addEntity(item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -324,7 +324,7 @@ test("concretes.enemy.ItemThief.Issue4_IgnoreExitPoint", () => {
     const player1 = TestEnv.setupPlayer(floorId, 15, 10);
     player1.addState(TestEnv.StateId_CertainDirectAttack);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_プレゼンにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 10, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------

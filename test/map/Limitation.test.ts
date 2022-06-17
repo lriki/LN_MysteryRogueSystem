@@ -10,7 +10,7 @@ import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { paramMaxItemsInMap } from "ts/re/PluginParameters";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { ULimitations } from "ts/re/usecases/ULimitations";
@@ -35,11 +35,11 @@ test("map.Limitation.Item", () => {
     for (let i = 0; i < (paramMaxItemsInMap - existsItems); i++) {
         const x = i % 20;
         const y = Math.floor(i / 20);
-        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
         REGame.world.transferEntity(item1, floorId, 10 + x, 10 + y);
     }
     
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
     inventory.addEntity(item1);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

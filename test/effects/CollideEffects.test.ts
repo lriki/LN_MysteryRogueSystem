@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
@@ -21,15 +21,15 @@ test("effects.CollideEffects.Weapon", () => {
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
+    player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ダミードラゴンキラー_A").id, [], "weapon1"));
-    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ドラゴンキラー_A").id, [], "weapon2"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ダミードラゴンキラー_A").id, [], "weapon1"));
+    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンキラー_A").id, [], "weapon2"));
     inventory.addEntity(weapon1);
     inventory.addEntity(weapon2);
 
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_UTからぶり").id);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_UTからぶり").id);
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
@@ -73,13 +73,13 @@ test("effects.CollideEffects.Shield", () => {
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
+    player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_レザーシールド_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_レザーシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
 
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
-    enemy1.addState(REData.getState("kState_UTからぶり").id);
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_UTからぶり").id);
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 

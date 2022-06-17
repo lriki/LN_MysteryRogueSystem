@@ -1,5 +1,5 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -17,7 +17,7 @@ export class LRaceBehavior extends LBattlerBehavior {
     }
     
     private races(self: LEntity): readonly DRace[] {
-        return self.data.raceIds.map(x => REData.races[x]);   // TODO: data レイヤーの分は、先に結合しておいていいかも。速度的な理由で。
+        return self.data.raceIds.map(x => MRData.races[x]);   // TODO: data レイヤーの分は、先に結合しておいていいかも。速度的な理由で。
     }
 
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {

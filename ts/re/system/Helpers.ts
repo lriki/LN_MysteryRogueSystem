@@ -1,4 +1,4 @@
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { Vector2 } from "ts/re/math/Vector2";
 import { LEntity } from "ts/re/objects/LEntity";
 
@@ -80,12 +80,12 @@ export class Helpers {
     }
 
     public static isHostileFactionId(subject: DFactionId, target: DFactionId): boolean {
-        return (REData.factions[subject].hostileBits & (1 << target)) != 0;
+        return (MRData.factions[subject].hostileBits & (1 << target)) != 0;
     }
 
     public static isFriendFactionId(subject: DFactionId, target: DFactionId): boolean {
         if (subject == target) return true;
-        return (REData.factions[subject].friendBits & (1 << target)) != 0;
+        return (MRData.factions[subject].friendBits & (1 << target)) != 0;
     }
 
     // public static isAdjacent(entity1: LEntity, entity2: LEntity): boolean {

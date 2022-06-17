@@ -1,5 +1,5 @@
 import { DSkillId } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SPhaseResult } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -48,7 +48,7 @@ export class LBlindAI extends LCharacterAI {
         // 実際の攻撃は Major フェーズで行いたいので、ここでは行動は消費しない。
         // 攻撃候補を覚えておく。
         const block = UMovement.getAdjacentBlock(self, frontDir);
-        const targets = UAction.getSkillEffectiveTargets(self, REData.skills[RESystem.skills.normalAttack], false).filter(e => e.mx == block.mx && e.my == block.my);
+        const targets = UAction.getSkillEffectiveTargets(self, MRData.skills[RESystem.skills.normalAttack], false).filter(e => e.mx == block.mx && e.my == block.my);
         if (targets.length > 0) {
             this._candidateSkillActions.push({ skillId: RESystem.skills.normalAttack, target: targets[0].entityId() });
             return SPhaseResult.Handled;
@@ -79,7 +79,7 @@ export class LBlindAI extends LCharacterAI {
             const target = REGame.world.entity(action.target);
             
             // 攻撃候補が有効なまま存在していれば、相手の方を向いて攻撃
-            if (UAction.checkEntityWithinSkillActionRange(self, REData.skills[action.skillId], false, [target])) {
+            if (UAction.checkEntityWithinSkillActionRange(self, MRData.skills[action.skillId], false, [target])) {
                 cctx.postActivity(LActivity.makeDirectionChange(self,  UMovement.getLookAtDir(self, target)));
                 cctx.postActivity(LActivity.makePerformSkill(self, RESystem.skills.normalAttack));
             }

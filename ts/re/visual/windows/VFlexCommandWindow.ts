@@ -1,5 +1,5 @@
 import { DActionId } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SDialogCommand } from "ts/re/system/dialogs/SDialogCommand";
 
 export type ActionCommandHandler = (actionId: DActionId) => void;
@@ -55,7 +55,7 @@ export class VFlexCommandWindow extends Window_Command {
     public addActionCommand(actionId: DActionId, commandId: string, handler: ActionCommandHandler): void {
         this._commands.push({
             actionId: actionId,
-            displayText: REData.actions[actionId].displayName,
+            displayText: MRData.actions[actionId].displayName,
             commandId: commandId,
             actionHandler: handler,
             systemHandler: undefined,

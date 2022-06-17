@@ -6,7 +6,7 @@ import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onEffectResult } from "./LBehavior";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 
 /**
  */
@@ -70,13 +70,13 @@ export class LSelfExplosionBehavior extends LBehavior {
         const mhp = self.idealParam(MRBasics.params.hp);
         const hp = self.actualParam(MRBasics.params.hp);
         if (hp < 10) {          // 残り1桁で爆発
-            const skill = REData.getSkill("kSkill_大爆発");
+            const skill = MRData.getSkill("kSkill_大爆発");
             cctx.postActivity(LActivity.makePerformSkill(self, skill.id));
             cctx.postCall(() => cctx.postDestroy(self));
             return SCommandResponse.Handled;
         }
         if (hp < mhp * 0.5) {   // 残り 50% で着火状態
-            const stateId = REData.getState("kState_UT自爆着火").id;
+            const stateId = MRData.getState("kState_UT自爆着火").id;
             if (!self.hasState(stateId)) {
                 self.addState(stateId);
             }

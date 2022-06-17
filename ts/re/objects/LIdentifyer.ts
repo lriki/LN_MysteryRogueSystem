@@ -1,7 +1,7 @@
 import { RESerializable, tr2 } from "ts/re/Common";
 import { DEntityId, DIdentificationDifficulty } from "ts/re/data/DEntity";
 import { DLand } from "ts/re/data/DLand";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { SView } from "ts/re/system/SView";
 import { LEntity } from "./LEntity";
 
@@ -127,13 +127,13 @@ export class LIdentifyer {
     public reset(land: DLand): void {
         this._identificationStates = [];
 
-        for (const kind of REData.pseudonymous.kinds()) {
+        for (const kind of MRData.pseudonymous.kinds()) {
             if (land.checkIdentifiedKind(kind)) {
                 // land 内では、この kind は常に識別状態
             }
             else {
-                const names = REData.pseudonymous.getNameList(kind.id);
-                const entities = REData.entities.filter(x => x.entity.kindId == kind.id && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
+                const names = MRData.pseudonymous.getNameList(kind.id);
+                const entities = MRData.entities.filter(x => x.entity.kindId == kind.id && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
                 if (names.length < entities.length) {
                     throw new Error(tr2(`Kind:${kind.name} の pseudonym が不足しています。(c: ${names.length})`));
                 }

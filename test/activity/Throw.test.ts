@@ -7,7 +7,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../TestEnv";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 
@@ -81,7 +81,7 @@ test("activity.ThrowAndHit", () => {
     TestEnv.performFloorTransfer();
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     SDebugHelpers.setHP(enemy1, 1); // HP1
 

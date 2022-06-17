@@ -6,7 +6,7 @@ import { LEntityId, LObject, LObjectType, LObjectId, LBehaviorId } from "./LObje
 import { LBehavior } from "./behaviors/LBehavior";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { LFloorId } from "./LFloorId";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LLand } from "./LLand";
 import { DLandId } from "ts/re/data/DLand";
 import { LParty, LPartyId } from "./LParty";
@@ -27,7 +27,7 @@ export class LWorld {
 
     constructor() {
         this._objects = [undefined];   // [0] is dummy
-        this._lands = REData.lands.map(x => {
+        this._lands = MRData.lands.map(x => {
             const land = new LLand();
             land.setup_(x.id);
             return land;

@@ -1,6 +1,6 @@
 import { DEntityCreateInfo } from "./data/DEntity";
 import { MRBasics } from "./data/MRBasics";
-import { REData } from "./data/REData";
+import { MRData } from "./data/MRData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
 import { LInventoryBehavior } from "./objects/behaviors/LInventoryBehavior";
 import { LTileShape } from "./objects/LBlock";
@@ -47,7 +47,7 @@ function setVariable(id: number, value: number) {
  */
 function addState(entityId: number, pattern: string) {
     const e = REGame.world.entityByIndex(entityId);
-    e.addState(REData.getState(pattern).id);
+    e.addState(MRData.getState(pattern).id);
 }
 
 function visitAll() {
@@ -76,7 +76,7 @@ function moveToExit() {
 }
 
 function getItem(itemKey: string) {
-    const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(itemKey).id));
+    const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity(itemKey).id));
     const player = REGame.camera.focusedEntity();
     if (!player) return;
     player.getEntityBehavior(LInventoryBehavior).addEntity(item);

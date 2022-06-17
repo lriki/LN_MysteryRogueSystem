@@ -5,7 +5,7 @@ import { LMap } from "ts/re/objects/LMap";
 import { SEntityFactory } from "./internal";
 import { assert, Log } from "ts/re/Common";
 import { FMap } from "ts/re/floorgen/FMapData";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LObjectType } from "ts/re/objects/LObject";
 import { LBlock } from "ts/re/objects/LBlock";
 import { UMovement } from "../usecases/UMovement";
@@ -80,7 +80,7 @@ export class SMapManager {
         {
             const exitPoint = initialMap.exitPont();
             if (exitPoint) {
-                const appearanceTable = REData.lands[floorId.landId()].appearanceTable;
+                const appearanceTable = MRData.lands[floorId.landId()].appearanceTable;
                 const prefab = appearanceTable.system[floorId.floorNumber()].find(e => {
                     return DEntityKind.isExitPoint(e.spawiInfo.entityData());
                 });
@@ -293,7 +293,7 @@ export class SMapManager {
         const data = UEffect.selectRatingForce<DAppearanceTableEntity>(this.rand(), list, 100, x => x.spawiInfo.rate);
         let entites: LEntity[];
         if (data.spawiInfo.troopId > 0) {
-            entites = SEntityFactory.spawnTroopAndMembers( REData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
+            entites = SEntityFactory.spawnTroopAndMembers( MRData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
         }
         else {
             const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);

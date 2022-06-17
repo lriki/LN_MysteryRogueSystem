@@ -8,7 +8,7 @@ import { DItemShopTypeId } from "ts/re/data/DItemShop";
 import { FSector, FSectorAdjacency, FSectorConnection } from "./data/FSector";
 import { FMapBlock } from "./data/FMapBlock";
 import { DTemplateMapId } from "../data/DTemplateMap";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 
 
 export enum FDirection {
@@ -326,8 +326,8 @@ export class FMap {
         this._rooms = [];
         this._structures = [];
         const floorData = floorId.floorInfo();
-        const tempateData = floorData.template ? REData.templateMaps.find(x => x.name == floorData.template) : undefined;
-        this._templateId = (tempateData ?? REData.templateMaps[1]).id;
+        const tempateData = floorData.template ? MRData.templateMaps.find(x => x.name == floorData.template) : undefined;
+        this._templateId = (tempateData ?? MRData.templateMaps[1]).id;
     }
 
     public resetFromInnerSize(innerWidth: number, innerHeight: number, paddingX: number, paddingY: number): void {

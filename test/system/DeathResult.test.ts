@@ -5,7 +5,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { LTileShape } from "ts/re/objects/LBlock";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
 beforeAll(() => {
@@ -22,7 +22,7 @@ test("system.DeathResult.State", () => {
     player1.setActualParam(MRBasics.params.hp, 1);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);
 

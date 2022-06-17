@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -29,7 +29,7 @@ test("concretes.item.scroll.TrapScroll", () => {
     // item1
     let items = [];
     for (let i = 0; i < 4; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_トラップスクロール_A").id, [], `item${i}`));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_トラップスクロール_A").id, [], `item${i}`));
         inventory.addEntity(item);
         items.push(item);
     }

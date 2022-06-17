@@ -2,7 +2,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
@@ -25,11 +25,11 @@ test("concretes.enemy.GoldThief.Basic", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     inventory1.gainGold(10000);
 
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_Gold_A").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     REGame.world.transferEntity(gold1, floorId, 13, 10);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
@@ -96,7 +96,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゴールドにゃーA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

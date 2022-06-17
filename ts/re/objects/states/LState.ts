@@ -1,6 +1,6 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { checkContinuousResponse, SCommandResponse } from "ts/re/system/SCommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
@@ -280,7 +280,7 @@ export class LState extends LObject {
     }
 
     public stateData(): DState {
-        return REData.states[this._stateId];
+        return MRData.states[this._stateId];
     }
 
     public get isDeathState(): boolean {
@@ -292,7 +292,7 @@ export class LState extends LObject {
         const data = this.stateData();
         
         if (this._submatchEffectIndex >= 0)
-            return REData.states[data.submatchStates[this._submatchEffectIndex]].effect;
+            return MRData.states[data.submatchStates[this._submatchEffectIndex]].effect;
         else
             return data.effect;
     }

@@ -1,6 +1,6 @@
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -16,7 +16,7 @@ export class SChangeInstanceSpecialEffect extends SSpecialEffect {
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
         const entityData = (() => {
             if (data.entityId)
-                return REData.entities[data.entityId];
+                return MRData.entities[data.entityId];
             else
                 return cctx.random().select(USpawner.getEnemiesFromSpawnTable(target.floorId));
         })();

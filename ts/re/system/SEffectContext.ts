@@ -1,6 +1,6 @@
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DItemEffect } from "ts/re/data/DItemEffect";
-import { LandExitResult, REData } from "ts/re/data/REData";
+import { LandExitResult, MRData } from "ts/re/data/MRData";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { Helpers } from "./Helpers";

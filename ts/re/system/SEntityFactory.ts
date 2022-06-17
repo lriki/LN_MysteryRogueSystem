@@ -1,5 +1,5 @@
 import { LEntity } from "../objects/LEntity";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 import { REGame } from "../objects/REGame";
 import { LDecisionBehavior } from "../objects/behaviors/LDecisionBehavior";
 import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
@@ -66,7 +66,7 @@ export class SEntityFactory {
         assert(e.behaviorIds().length === 0);
         this.setupCommon(e);
         e.addBehavior(LDecisionBehavior);
-        e.addBehavior(LUnitBehavior).setFactionId(REData.system.factions.player);
+        e.addBehavior(LUnitBehavior).setFactionId(MRData.system.factions.player);
         e.addBehavior(LInventoryBehavior);
         e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
@@ -106,7 +106,7 @@ export class SEntityFactory {
         SBehaviorFactory.attachBehaviors(e, entityData.entity.behaviors);
 
         for (const name of entityData.entity.abilityNames) {
-            const data = REData.abilities.find(x => x.key == name);
+            const data = MRData.abilities.find(x => x.key == name);
             if (!data) throw new Error(`Ability "${name}" not found.`);
             e.addAbility(data.id);
         }
@@ -123,13 +123,13 @@ export class SEntityFactory {
     // }
     
     public static buildTrap(e: LEntity, itemId: DItemDataId): void {
-        const item = REData.itemData(itemId);
+        const item = MRData.itemData(itemId);
         this.setupCommon(e);
         e.addBehavior(LTrapBehavior);
     }
 
     public static newBasicExitPoint(): LEntity {
-        const e = REGame.world.spawnEntity(REData.getEntity("kEntity_ExitPoint_A").id);
+        const e = REGame.world.spawnEntity(MRData.getEntity("kEntity_ExitPoint_A").id);
         this.buildExitPoint(e);
         return e;
     }
@@ -169,7 +169,7 @@ export class SEntityFactory {
     }
 
     public static newEntity(createInfo: DEntityCreateInfo, floorId?: LFloorId): LEntity {
-        const entityData = REData.entities[createInfo.entityId];
+        const entityData = MRData.entities[createInfo.entityId];
         const entity = REGame.world.spawnEntity(entityData.id);
         this.buildEntity(entity);
 
@@ -212,8 +212,8 @@ export class SEntityFactory {
     public static buildEntity(entity: LEntity) {
         const dataId = entity.dataId;
         assert(dataId > 0);
-        const entityData = REData.entities[dataId];
-        const prefab = REData.prefabs[entityData.prefabId];
+        const entityData = MRData.entities[dataId];
+        const prefab = MRData.prefabs[entityData.prefabId];
         
         if (DEntityKind.isMonster(entityData)) {
             this.buildMonster(entity, entityData);
@@ -307,7 +307,7 @@ export class SEntityFactory {
                 
             case "kEnemy_NPC汎用A":
                 const b = entity.getEntityBehavior(LUnitBehavior);
-                b.setFactionId(REData.system.factions.neutral);
+                b.setFactionId(MRData.system.factions.neutral);
                 break;
             case "kEnemy_プレゼンにゃーA":
                 entity.addBehavior(LItemThiefBehavior);

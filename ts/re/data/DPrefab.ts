@@ -1,6 +1,6 @@
 import { MRBasics } from "./MRBasics";
 import { DStateId } from "./DState";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export type DPrefabId = number;
 

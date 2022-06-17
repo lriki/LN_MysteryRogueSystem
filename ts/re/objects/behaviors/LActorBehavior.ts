@@ -4,7 +4,7 @@ import { MRBasics } from "ts/re/data/MRBasics";
 import { DClass } from "ts/re/data/DClass";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DActionId, DSkillId } from "ts/re/data/DCommon";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
@@ -82,7 +82,7 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.currentClass
     currentClass(): DClass {
-        return REData.classes[this._classId];
+        return MRData.classes[this._classId];
     }
 
         
@@ -113,7 +113,7 @@ export class LActorBehavior extends LBattlerBehavior {
     // Game_Actor.prototype.paramBase 
     onQueryIdealParamBase(paramId: DParameterId, base: number): number {
         const level = this.ownerEntity().actualParam(MRBasics.params.level);
-        const p = this.currentClass().params[REData.parameters[paramId].battlerParamId];
+        const p = this.currentClass().params[MRData.parameters[paramId].battlerParamId];
         return base + (p ? p[level] : 0);
     }
 

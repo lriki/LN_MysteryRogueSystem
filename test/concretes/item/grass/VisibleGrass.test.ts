@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
@@ -21,11 +21,11 @@ test("concretes.item.grass.VisibleGrass", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インビジブルバットA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ビジブルドラッグ_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ビジブルドラッグ_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // trap1 生成&配置
@@ -49,7 +49,7 @@ test("concretes.item.grass.VisibleGrass", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // よくみえ状態になる
-    expect(player1.isStateAffected(REData.getState("kState_UTよくみえ").id)).toBeTruthy();
+    expect(player1.isStateAffected(MRData.getState("kState_UTよくみえ").id)).toBeTruthy();
     TestUtils.testCommonGrassEnd(player1, item1);
 
     const visibility2 = SView.getEntityVisibility(enemy1);

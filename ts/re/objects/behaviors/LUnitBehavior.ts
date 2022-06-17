@@ -12,7 +12,7 @@ import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
 import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/re/system/SSoundManager";
-import { DFactionId, REData } from "ts/re/data/REData";
+import { DFactionId, MRData } from "ts/re/data/MRData";
 import { MovingMethod } from "../LMap";
 import { DecisionPhase, onGrounded, onPreStepFeetProcess, onPreStepFeetProcess_Actor, testPutInItem } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
@@ -46,7 +46,7 @@ enum LFeetProcess {
 @RESerializable
 export class LUnitBehavior extends LBehavior {
     
-    private _factionId: DFactionId = REData.system.factions.neutral;
+    private _factionId: DFactionId = MRData.system.factions.neutral;
     _speedLevel: number = 0;     // ユニットテスト用。 1 が基本, 0は無効値。2は倍速。3は3倍速。-1は鈍足。
     _waitTurnCount: number = 0;  // 内部パラメータ。待ち数。次のターン、行動できるかどうか。
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
@@ -129,7 +129,7 @@ export class LUnitBehavior extends LBehavior {
     queryCharacterFileName(): DPrefabActualImage | undefined {
         const self = this.ownerEntity();
         const e = self.data;
-        const p = REData.prefabs[e.prefabId];
+        const p = MRData.prefabs[e.prefabId];
         
         const image = { ...p.image };
         if (p.stateImages.length > 0) {

@@ -2,7 +2,7 @@ import { assert, tr, tr2 } from "ts/re/Common";
 import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/re/data/DEffect";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DSkill } from "ts/re/data/DSkill";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LGenerateDropItemCause, onPerformStepFeetProcess, onPreStepFeetProcess, onPreStepFeetProcess_Actor, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/re/objects/internal";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
@@ -322,7 +322,7 @@ export class UAction {
 
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
         for (const action of actions) {
-            const targets = this.getSkillEffectiveTargets(performer, REData.skills[action.skillId], true);
+            const targets = this.getSkillEffectiveTargets(performer, MRData.skills[action.skillId], true);
             if (targets.length > 0) {
                 result.push({ action: action, targets: targets.map(e => e.entityId()) });
             }

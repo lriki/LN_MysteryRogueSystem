@@ -1,5 +1,5 @@
 import { DState, DStateId, DStateRestriction } from "ts/re/data/DState";
-import { LandExitResult, REData } from "ts/re/data/REData";
+import { LandExitResult, MRData } from "ts/re/data/MRData";
 import { REGame } from "../REGame";
 import { LBehavior, LGenerateDropItemCause } from "ts/re/objects/behaviors/LBehavior";
 import { LEntity } from "../LEntity";

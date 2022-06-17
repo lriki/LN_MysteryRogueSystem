@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DEntityKindId } from "./DCommon";
 import { DEntityKind } from "./DEntityKind";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 interface NameEntry
 {
@@ -23,7 +23,7 @@ export class DPseudonymous {
     public setup(data: any): void {
         const list = data as NameEntry[];
         for (const e of list) {
-            const kind = REData.getEntityKind(e.kind);
+            const kind = MRData.getEntityKind(e.kind);
             this._names[kind.id] = { names: e.names };
         }
     }
@@ -32,7 +32,7 @@ export class DPseudonymous {
         const result = [];
         for (let i = 0; i < this._names.length; i++) {
             if (this._names[i]) {
-                result.push(REData.entityKinds[i]);
+                result.push(MRData.entityKinds[i]);
             }
         }
         return result;

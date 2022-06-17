@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
 import { LTileShape } from "ts/re/objects/LBlock";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { MRBasics } from "ts/re/data/MRBasics";
@@ -21,12 +21,12 @@ test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
     REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -62,11 +62,11 @@ test("concretes.item.scroll.Sanctuary.Basic", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // item1: 持たせる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
     inventory1.addEntity(item1);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -103,11 +103,11 @@ test("concretes.item.scroll.Sanctuary.ForceDeth", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 4);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_サンクチュアリスクロール_A").id, [], "item1"));
     item1.getEntityBehavior(LGlueToGroundBehavior).glued = true;    // 張り付き状態にする
     REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
     
@@ -119,7 +119,7 @@ test("concretes.item.scroll.Sanctuary.ForceDeth", () => {
 
     // 壁 聖 敵 のような並びを作り、←方向へ敵を吹き飛ばす
     //LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, enemy1, new SEffectSubject(player1), 4, 10);
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, REData.getSkill("kSkill_KnockbackAttack").id).withConsumeAction());
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.getSkill("kSkill_KnockbackAttack").id).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------

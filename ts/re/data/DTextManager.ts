@@ -1,5 +1,5 @@
 import { tr2 } from "../Common";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export class DTextManager {
     static score: string = "スコア";
@@ -14,7 +14,7 @@ export class DTextManager {
             return $dataSystem.terms.params[paramId];
         }
         else {
-            const param = REData.parameters[paramId];
+            const param = MRData.parameters[paramId];
             return param ? param.displayName : "";
         }
     }

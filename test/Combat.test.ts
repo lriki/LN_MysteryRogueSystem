@@ -5,7 +5,7 @@ import { TestEnv } from "./TestEnv";
 import "./Extension";
 import "./../ts/re/objects/Extensions";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { REData } from "ts/re/data/REData";
+import { MRData } from "ts/re/data/MRData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 
@@ -28,7 +28,7 @@ test("Combat.DamageAndCollapse", () => {
     REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
@@ -59,7 +59,7 @@ test("Combat.DamageAndGameover", () => {
     SDebugHelpers.setHP(actor1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置
 

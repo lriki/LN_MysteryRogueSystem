@@ -3,7 +3,7 @@ import { SEntityFactory } from "./internal";
 import { LMap } from "../objects/LMap";
 import { LWorld } from "../objects/LWorld";
 import { LSystem } from "../objects/LSystem";
-import { REData } from "../data/REData";
+import { MRData } from "../data/MRData";
 import { SScheduler } from "./scheduling/SScheduler";
 import { LCamera } from "../objects/LCamera";
 import { RESystem } from "./RESystem";
@@ -80,9 +80,9 @@ export class SGameManager {
         REGame.world._registerObject(REGame.map);
 
         // Create unique units
-        for (const entityId of REData.actors) {
+        for (const entityId of MRData.actors) {
             if (entityId > 0) {
-                const actor = REData.entities[entityId].actorData();
+                const actor = MRData.entities[entityId].actorData();
                 if (actor.id > 0) {
                     const unit = SEntityFactory.newActor(entityId);
                     //unit.prefabKey = `Actor:${actor.id}`;
@@ -114,7 +114,7 @@ export class SGameManager {
         //     firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         // }
         REGame.world.iterateEntity(x => {
-            if ( x.dataId == REData.system.initialPartyMembers[0]) {
+            if ( x.dataId == MRData.system.initialPartyMembers[0]) {
                 firstActor = x;
                 return false;
             }
@@ -143,19 +143,19 @@ export class SGameManager {
         if (0) {
             const inventory = firstActor.getEntityBehavior(LInventoryBehavior);
             //const inventory = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_グロースドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ブラインドドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ワープドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_パニックドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ビジブルドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_マッドドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ポイズンドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アンチポイズン_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_パワードラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_グロースドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ブラインドドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ワープドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_パニックドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ビジブルドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_マッドドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ポイズンドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アンチポイズン_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1")));
             
         }
     }
@@ -191,13 +191,13 @@ export class SGameManager {
                 else {
                     const floorInto = newFloorId.floorInfo();
 
-                    const preset = floorInto.presetId ? REData.floorPresets[floorInto.presetId] : REData.floorPresets[MRBasics.defaultTerrainPresetId];
+                    const preset = floorInto.presetId ? MRData.floorPresets[floorInto.presetId] : MRData.floorPresets[MRBasics.defaultTerrainPresetId];
                     console.log("preset", preset);
                     const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.terrains, x => x.rating);
                     console.log("settingId", settingId);
                     assert(settingId);
                     
-                    const setting = REData.terrainSettings[settingId.terrainSettingsId];
+                    const setting = MRData.terrainSettings[settingId.terrainSettingsId];
                     (new FGenericRandomMapGenerator(mapData, setting).generate());
                     const builder = new FMapBuilder();
                     builder.buildForRandomMap(mapData);

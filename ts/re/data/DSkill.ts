@@ -2,7 +2,7 @@ import { DSpecificEffectId as DSpecialEffectId, DSkillId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DParameterId } from "./DParameter";
-import { REData } from "./REData";
+import { MRData } from "./MRData";
 
 export class DSkill {
     /** ID (0 is Invalid). */
@@ -58,7 +58,7 @@ export class DSkill {
     }
 
     public emittor(): DEmittor {
-        return REData.getEmittorById(this.emittorId);
+        return MRData.getEmittorById(this.emittorId);
     }
 }
 

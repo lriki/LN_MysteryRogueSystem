@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REData } from "../REData";
+import { MRData } from "../MRData";
 
 // interface DBTerrainSettingRef {
 //     terrainSettingsKey: string;
@@ -30,11 +30,11 @@ export class DTerrainSettingImporter {
         for (const pair1 of Object.entries(this._db.terrainSettings)) {
             const key = pair1[0] as string;
             const preset = pair1[1] as DBTerrainSetting;
-            const data = REData.newTerrainSetting(key);
+            const data = MRData.newTerrainSetting(key);
             
             // shapes
             for (const [shapeKey, rate] of Object.entries(preset.shapes)) {
-                const dataId = REData.getTerrainShape(shapeKey).id;
+                const dataId = MRData.getTerrainShape(shapeKey).id;
                 data.shapeRefs.push({dataId: dataId, rate: rate}); 
             }
 
