@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 
@@ -22,7 +22,7 @@ test("concretes.item.shield.ElementGuardShield", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ドラゴンシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
@@ -42,12 +42,12 @@ test("concretes.item.shield.ElementGuardShield", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp2 = player1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
 
     //----------------------------------------------------------------------------------------------------
     // 盾装備でダメージを受けてみる
 
-    player1.setActualParam(REBasics.params.hp, hp1);    // 回復
+    player1.setActualParam(MRBasics.params.hp, hp1);    // 回復
     equipmentUser.equipOnUtil(shield1);
 
     // [待機]
@@ -56,7 +56,7 @@ test("concretes.item.shield.ElementGuardShield", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp3 = player1.actualParam(REBasics.params.hp);
+    const hp3 = player1.actualParam(MRBasics.params.hp);
 
     const damage1 = hp1 - hp2;
     const damage2 = hp1 - hp3;

@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
@@ -36,5 +36,5 @@ test("Dialog.FeetDialogSequelTiming", () => {
     // Dialog 表示と同時に、Sequel も Flush されること。
     const set = TestEnv.activeSequelSet;
     const sequel = set.runs()[0].clips()[0].sequels()[0] as SMotionSequel;
-    expect(sequel.sequelId()).toBe(REBasics.sequels.MoveSequel);
+    expect(sequel.sequelId()).toBe(MRBasics.sequels.MoveSequel);
 });

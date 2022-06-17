@@ -8,7 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SFormulaOperand } from "ts/re/system/SFormulaOperand";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 
@@ -36,7 +36,7 @@ test("concretes.item.Gold", () => {
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
-    const hp1 = enemy1.actualParam(REBasics.params.hp);
+    const hp1 = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -57,7 +57,7 @@ test("concretes.item.Gold", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 投げ当てた時は、1/10 の固定ダメージ
-    const hp2 = enemy1.actualParam(REBasics.params.hp);
+    const hp2 = enemy1.actualParam(MRBasics.params.hp);
     expect(hp1 - hp2).toBe(20);
     expect(gold2.isDestroyed()).toBe(true);
 });

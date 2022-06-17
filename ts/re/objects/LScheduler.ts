@@ -1,5 +1,5 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DFactionId, REData } from "ts/re/data/REData";
 import { DStateRestriction } from "../data/DState";
 import { SSchedulerPhase } from "../system/scheduling/SSchedulerPhase";
@@ -267,7 +267,7 @@ export class LScheduler2 {
         const b = entity.findEntityBehavior(LUnitBehavior);
         if (b && b._speedLevel != 0) return b._speedLevel;
 
-        const agi = entity.actualParam(REBasics.params.agi);
+        const agi = entity.actualParam(MRBasics.params.agi);
         const v = (agi >= 0) ? (Math.floor(agi / 100) + 1) : Math.floor(agi / 100);
         return v;
     }

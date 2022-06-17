@@ -1,5 +1,5 @@
 import { assert, RESerializable } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
@@ -57,9 +57,9 @@ export class LProjectileBehavior extends LBehavior {
         
         //entity.dir = args.sender.dir;
 
-        common._penetration = entity.hasTrait(REBasics.traits.PenetrationItem);
+        common._penetration = entity.hasTrait(MRBasics.traits.PenetrationItem);
         if (!common._penetration) {
-            common._penetration = subject.entity().hasTrait(REBasics.traits.PenetrationThrower);
+            common._penetration = subject.entity().hasTrait(MRBasics.traits.PenetrationThrower);
         }
 
         if (common._penetration) {
@@ -98,7 +98,7 @@ export class LProjectileBehavior extends LBehavior {
 
     
     onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.push(REBasics.actions.ThrowActionId);
+        actions.push(MRBasics.actions.ThrowActionId);
     }
     
     // 投げられた
@@ -135,7 +135,7 @@ export class LProjectileBehavior extends LBehavior {
 
 
         if (UMovement.moveEntity(cctx, self, tx, ty, this._penetration ? MovingMethod.Penetration : MovingMethod.Projectile, DBlockLayerKind.Projectile)) {
-            cctx.postSequel(self, REBasics.sequels.blowMoveSequel);
+            cctx.postSequel(self, MRBasics.sequels.blowMoveSequel);
             
             common.blowMoveCount--;
 
@@ -197,7 +197,7 @@ export class LProjectileBehavior extends LBehavior {
         // 他 Unit との衝突判定
         const hitTarget = REGame.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
         if (hitTarget) {
-            if (hitTarget.hasTrait(REBasics.traits.PhysicalProjectileReflector)) {
+            if (hitTarget.hasTrait(MRBasics.traits.PhysicalProjectileReflector)) {
                 // 跳ね返し
                 this.blowDirection = UMovement.reverseDir(this.blowDirection);
                 this.blowMoveCount++; // 水晶オブジェクトの下に落ちても困るので、移動数を+1
@@ -267,7 +267,7 @@ export class LProjectileBehavior extends LBehavior {
                 throw new Error("Not implemented.");
             }
             else {
-                cctx.postEmitEffect(self, REBasics.actions.collide, subject.entity(), hitTarget, this.blowDirection);
+                cctx.postEmitEffect(self, MRBasics.actions.collide, subject.entity(), hitTarget, this.blowDirection);
             }
         }
     

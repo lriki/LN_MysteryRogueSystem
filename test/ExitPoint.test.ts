@@ -3,7 +3,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -30,5 +30,5 @@ test("ExitPoint.Reactions", () => {
     assert(exitpoint);
     const reactions = exitpoint.queryReactions();
     expect(reactions.length).toBe(1);
-    expect(reactions[0]).toBe(REBasics.actions.ForwardFloorActionId);
+    expect(reactions[0]).toBe(MRBasics.actions.ForwardFloorActionId);
 });

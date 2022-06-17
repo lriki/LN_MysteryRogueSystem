@@ -1,5 +1,5 @@
 import { DEffectHitType } from "../data/DEffect";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { LEntity } from "../objects/LEntity";
 import { LRandom } from "../objects/LRandom";
 import { paraIndirectPhysicalHitRate } from "../PluginParameters";
@@ -32,10 +32,10 @@ export class SActionHitTest {
 
     private static evaRate(target: LEntity, hitType: DEffectHitType): number {
         if (hitType == DEffectHitType.Physical) {
-            return target.xparam(REBasics.xparams.eva);
+            return target.xparam(MRBasics.xparams.eva);
         }
         else if (hitType == DEffectHitType.Magical) {
-            return target.xparam(REBasics.xparams.mev);
+            return target.xparam(MRBasics.xparams.mev);
         }
         else {
             return 0;
@@ -43,9 +43,9 @@ export class SActionHitTest {
     }
 
     private static testCertainIndirectHits(subject: LEntity, projectile: LEntity, target: LEntity): boolean | undefined {
-        const awful = subject.hasTrait(REBasics.traits.AwfulPhysicalIndirectAttack);
-        const hit = subject.hasTrait(REBasics.traits.CertainIndirectAttack);
-        const avoid = target.hasTrait(REBasics.traits.DodgePhysicalIndirectAttack);
+        const awful = subject.hasTrait(MRBasics.traits.AwfulPhysicalIndirectAttack);
+        const hit = subject.hasTrait(MRBasics.traits.CertainIndirectAttack);
+        const avoid = target.hasTrait(MRBasics.traits.DodgePhysicalIndirectAttack);
         if (hit && avoid) {
             // 絶対命中と絶対回避がコンフリクトしている場合は通常の判定を行う
             return undefined;

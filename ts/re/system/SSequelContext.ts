@@ -1,7 +1,7 @@
 import { Log } from "ts/re/Common";
 import { REGame } from "ts/re/objects/REGame";
 import { SSequelUnit, SSequelSet, SMotionSequel } from "ts/re/system/SSequel";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { RESystem } from "./RESystem";
 
 export class SSequelContext {
@@ -21,7 +21,7 @@ export class SSequelContext {
         for (const run of this._sequelSet.runs()) {
             for (const clip of run.clips()) {
                 for (const s of clip.sequels()) {
-                    if (s instanceof SMotionSequel && s.sequelId() == REBasics.sequels.MoveSequel) {
+                    if (s instanceof SMotionSequel && s.sequelId() == MRBasics.sequels.MoveSequel) {
                         
                     }
                     else {

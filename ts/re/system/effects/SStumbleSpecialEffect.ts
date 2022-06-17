@@ -1,6 +1,6 @@
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -20,7 +20,7 @@ export class SStumbleSpecialEffect extends SSpecialEffect {
         result.makeSuccess();
 
         if (target.previewRejection(cctx, { kind: "EffectBehavior", id: data.specialEffectId })) {
-            const activity = (new LActivity()).setup(REBasics.actions.stumble, target);
+            const activity = (new LActivity()).setup(MRBasics.actions.stumble, target);
             cctx.postActivity(activity);
         }
       

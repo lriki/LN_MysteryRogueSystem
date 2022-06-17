@@ -4,7 +4,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { assert } from "ts/re/Common";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 
@@ -19,7 +19,7 @@ test("concretes.states.Paralysis.FP", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    player1.setActualParam(REBasics.params.fp, 40);
+    player1.setActualParam(MRBasics.params.fp, 40);
     player1.addState(stateId);
 
     let count = 0;
@@ -34,7 +34,7 @@ test("concretes.states.Paralysis.FP", () => {
         assert(count < 10); // 不具合でハングしないように
     }
    
-    const fp = player1.actualParam(REBasics.params.fp);
+    const fp = player1.actualParam(MRBasics.params.fp);
     expect(fp).toBe(0);    // 空腹になっている
     //expect(count > 10).toBe(true);  // 10ターンとかその程度では解除されない
 });
@@ -47,7 +47,7 @@ test("concretes.states.Paralysis.Attack", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.addState(stateId);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
@@ -56,7 +56,7 @@ test("concretes.states.Paralysis.Attack", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 被ダメージにかかわらず、攻撃試行されればステートは解除されている
-    const hp2 = player1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
     expect(!player1.states().find(x => x.stateDataId() == stateId)).toBe(true);
 });
 

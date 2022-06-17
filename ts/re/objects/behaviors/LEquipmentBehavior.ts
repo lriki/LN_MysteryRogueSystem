@@ -1,6 +1,6 @@
 import { assert, RESerializable, tr2 } from "ts/re/Common";
 import { DActionId, DCommandId } from "ts/re/data/DCommon";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext, SSubTaskChain } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
@@ -92,14 +92,14 @@ export class LEquipmentBehavior extends LBehavior {
         const data = self.data;
 
         if (data.upgradeMax > 0) {
-            self.params().acquireParam(REBasics.params.upgradeValue);
+            self.params().acquireParam(MRBasics.params.upgradeValue);
         }
     }
     
     onQueryReactions(self: LEntity, actions: DActionId[]): void {
         if (self.parentAs(LInventoryBehavior)) {
-            actions.push(REBasics.actions.EquipActionId);
-            actions.push(REBasics.actions.EquipOffActionId);
+            actions.push(MRBasics.actions.EquipActionId);
+            actions.push(MRBasics.actions.EquipOffActionId);
         }
     }
     
@@ -131,7 +131,7 @@ export class LEquipmentBehavior extends LBehavior {
 
     
     onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, commandId: DCommandId): SCommandResponse {
-        if (commandId == REBasics.commands.testPickOutItem) {
+        if (commandId == MRBasics.commands.testPickOutItem) {
             if (self.isCursed()) {
                 cctx.postMessage(tr2("呪われている！"));
                 chain.reject();

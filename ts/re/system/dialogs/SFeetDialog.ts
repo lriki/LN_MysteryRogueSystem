@@ -1,6 +1,6 @@
 import { tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DCommon";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -45,8 +45,8 @@ export class SFeetDialog extends SDialog {
 
         // [撃つ] があれば [投げる] を除く
         {
-            if (actualActions.includes(REBasics.actions.ShootingActionId)) {
-                actualActions.mutableRemove(x => x == REBasics.actions.ThrowActionId);
+            if (actualActions.includes(MRBasics.actions.ShootingActionId)) {
+                actualActions.mutableRemove(x => x == MRBasics.actions.ThrowActionId);
             }
         }
         

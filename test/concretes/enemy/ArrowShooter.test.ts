@@ -1,5 +1,5 @@
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { REGame } from "ts/re/objects/REGame";
@@ -17,7 +17,7 @@ test("concretes.enemies.ArrowShooter", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
@@ -37,7 +37,7 @@ test("concretes.enemies.ArrowShooter", () => {
     const a = TestEnv.integration.skillEmittedCount;
 
     // 離れていれば 100% 矢を撃ってくる
-    const hp2 = player1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ test("concretes.enemies.ArrowShooter", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 隣接していても 100% 矢を撃ってくる
-    const hp3 = player1.actualParam(REBasics.params.hp);
+    const hp3 = player1.actualParam(MRBasics.params.hp);
     expect(hp3 < hp2).toBe(true);
 });
 

@@ -7,7 +7,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { TestEnv } from "./TestEnv";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 

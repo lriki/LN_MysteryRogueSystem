@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
@@ -16,7 +16,7 @@ test("abilities.enemy.ItemImitator", () => {
 
     // player1
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const initialHP = player1.actualParam(REBasics.params.hp);
+    const initialHP = player1.actualParam(MRBasics.params.hp);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UTアイテム擬態").id], "enemy1"));
@@ -41,7 +41,7 @@ test("abilities.enemy.ItemImitator", () => {
     // 移動は失敗している
     expect(player1.mx).toBe(10);
     
-    const hp = player1.actualParam(REBasics.params.hp);
+    const hp = player1.actualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

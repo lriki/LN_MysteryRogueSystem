@@ -8,7 +8,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -25,12 +25,12 @@ test("concretes.enemy.Rust", () => {
     // 武器 入手
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
     inventory2.addEntity(weapon1);
-    const weapon1_UP1 = weapon1.actualParam(REBasics.params.upgradeValue);
+    const weapon1_UP1 = weapon1.actualParam(MRBasics.params.upgradeValue);
 
     // 盾 入手
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_アイアンシールド_A").id, [], "shield1"));
     inventory2.addEntity(shield1);
-    const shield1_UP1 = shield1.actualParam(REBasics.params.upgradeValue);
+    const shield1_UP1 = shield1.actualParam(MRBasics.params.upgradeValue);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_グールA").id, [], "enemy1"));
@@ -49,8 +49,8 @@ test("concretes.enemy.Rust", () => {
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const weapon1_UP2 = weapon1.actualParam(REBasics.params.upgradeValue);
-    const shield1_UP2 = shield1.actualParam(REBasics.params.upgradeValue);
+    const weapon1_UP2 = weapon1.actualParam(MRBasics.params.upgradeValue);
+    const shield1_UP2 = shield1.actualParam(MRBasics.params.upgradeValue);
 
     expect(weapon1_UP2).toBe(weapon1_UP1 - 1);
     expect(shield1_UP2).toBe(shield1_UP1 - 1);

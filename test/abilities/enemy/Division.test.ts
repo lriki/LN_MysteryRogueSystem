@@ -5,7 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { LEntityDivisionBehavior } from "ts/re/objects/abilities/LEntityDivisionBehavior";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 
 beforeAll(() => {

@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEventId, RoomEventArgs, SkillEmittedArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { Helpers } from "ts/re/system/Helpers";
 import { SPhaseResult } from "ts/re/system/SCommand";
@@ -31,35 +31,35 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     onAttached(self: LEntity): void {
-        REGame.eventServer.subscribe(REBasics.events.roomEnterd, this);
-        REGame.eventServer.subscribe(REBasics.events.walked, this);
-        REGame.eventServer.subscribe(REBasics.events.skillEmitted, this);
+        REGame.eventServer.subscribe(MRBasics.events.roomEnterd, this);
+        REGame.eventServer.subscribe(MRBasics.events.walked, this);
+        REGame.eventServer.subscribe(MRBasics.events.skillEmitted, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(REBasics.events.roomEnterd, this);
-        REGame.eventServer.unsubscribe(REBasics.events.walked, this);
-        REGame.eventServer.unsubscribe(REBasics.events.skillEmitted, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.roomEnterd, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.walked, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.skillEmitted, this);
     }
 
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
         // handleRoomEnterd
-        if (eventId == REBasics.events.roomEnterd) {
+        if (eventId == MRBasics.events.roomEnterd) {
             const e = (args as RoomEventArgs);
             const block = REGame.map.block(self.mx, self.my);
             if (block._roomId == e.newRoomId) {
                 this.attemptReserveGetUp(self, e.entity);
             }
         }
-        else if (eventId == REBasics.events.walked) {
+        else if (eventId == MRBasics.events.walked) {
             const e = (args as WalkEventArgs);
             if (UMovement.checkAdjacentEntities(self, e.walker)) {
                 this.attemptReserveGetUp(self, e.walker);
             }
         }
-        else if (eventId == REBasics.events.skillEmitted) {
+        else if (eventId == MRBasics.events.skillEmitted) {
             const e = (args as SkillEmittedArgs);
             const block = REGame.map.block(self.mx, self.my);
             if (block._roomId == e.performer.roomId()) {
@@ -75,10 +75,10 @@ export class LNapStateBehavior extends LBehavior {
 
         // 忍び足の場合は起きる判定を発生させない
         const traits = target.allTraits();
-        if (traits.find(t => t.code == REBasics.traits.SilentStep)) return;
+        if (traits.find(t => t.code == MRBasics.traits.SilentStep)) return;
 
         if (Helpers.isHostile(target, self)) {
-            if (traits.find(t => t.code == REBasics.traits.AwakeStep)) {
+            if (traits.find(t => t.code == MRBasics.traits.AwakeStep)) {
                 this._getUpReserved = GetUpReserved.Certainly;
             }
             else {
@@ -88,7 +88,7 @@ export class LNapStateBehavior extends LBehavior {
     }
 
     onQueryIdleSequelId(): DSequelId {
-        return REBasics.sequels.asleep;
+        return MRBasics.sequels.asleep;
     }
     
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {

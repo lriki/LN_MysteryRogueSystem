@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LActivity } from "../activities/LActivity";
@@ -33,7 +33,7 @@ export class LSanctuaryBehavior extends LBehavior {
     }
 
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
-        if (activity.actionId() == REBasics.actions.ReadActionId) {
+        if (activity.actionId() == MRBasics.actions.ReadActionId) {
             cctx.postMessage(tr2("しかしなにもおこらなかった。"));
         }
         return SCommandResponse.Pass;

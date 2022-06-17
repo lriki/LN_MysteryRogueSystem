@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DItemEffect } from "ts/re/data/DItemEffect";
 import { LandExitResult, REData } from "ts/re/data/REData";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
@@ -386,7 +386,7 @@ export class SEffectContext {
     private static judgeCertainHits(subject: LEntity, effect: SEffect, type: SEffectIncidentType, target: LEntity, result: LEffectResult): boolean {
 
         if (type == SEffectIncidentType.DirectAttack) {
-            if (subject.traits(REBasics.traits.CertainDirectAttack).length > 0) {
+            if (subject.traits(MRBasics.traits.CertainDirectAttack).length > 0) {
                 // 直接攻撃必中
                 result.missed = false;
                 result.evaded = false;
@@ -394,9 +394,9 @@ export class SEffectContext {
             }
         }
         else if (type == SEffectIncidentType.IndirectAttack) {
-            const awful = (subject.traits(REBasics.traits.AwfulPhysicalIndirectAttack).length > 0);
-            const hit = (subject.traits(REBasics.traits.CertainIndirectAttack).length > 0);
-            const avoid = (target.traits(REBasics.traits.DodgePhysicalIndirectAttack).length > 0);
+            const awful = (subject.traits(MRBasics.traits.AwfulPhysicalIndirectAttack).length > 0);
+            const hit = (subject.traits(MRBasics.traits.CertainIndirectAttack).length > 0);
+            const avoid = (target.traits(MRBasics.traits.DodgePhysicalIndirectAttack).length > 0);
             if (hit && avoid) {
                 // 絶対命中と絶対回避がコンフリクトしている場合は通常の判定を行う
                 return false;

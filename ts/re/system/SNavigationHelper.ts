@@ -1,7 +1,7 @@
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
 import { LEntity } from "ts/re/objects/LEntity";
 import { REGame } from "ts/re/objects/REGame";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { LExitPointBehavior } from "../objects/behaviors/LExitPointBehavior";
 import { paramDefaultVisibiltyLength } from "../PluginParameters";
 import { UMovement } from "../usecases/UMovement";
@@ -83,7 +83,7 @@ export class SNavigationHelper {
 
         if (Helpers.isHostile(subject, target)) {
 
-            if (subject.collectTraits().find(t => t.code == REBasics.traits.UnitVisitor)) {
+            if (subject.collectTraits().find(t => t.code == MRBasics.traits.UnitVisitor)) {
                 return true;
             }
 

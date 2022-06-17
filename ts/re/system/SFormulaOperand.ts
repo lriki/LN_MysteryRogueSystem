@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { REData } from "../data/REData";
 import { LEntity } from "../objects/LEntity";
 import { paramPowerToAtk } from "../PluginParameters";
@@ -22,11 +22,11 @@ export class SFormulaOperand {
             prop[param.code] = {
                 get: () => {
 
-                    if (paramPowerToAtk && param.id == REBasics.params.atk) {
+                    if (paramPowerToAtk && param.id == MRBasics.params.atk) {
                         const entity = this.entity();
-                        const atk = entity.actualParam(REBasics.params.atk);
-                        const pow = entity.actualParam(REBasics.params.pow);
-                        const eatk =  entity.queryIdealParameterPlus(REBasics.params.atk);  // Equipments ATK
+                        const atk = entity.actualParam(MRBasics.params.atk);
+                        const pow = entity.actualParam(MRBasics.params.pow);
+                        const eatk =  entity.queryIdealParameterPlus(MRBasics.params.atk);  // Equipments ATK
                         const baseAtk = Math.max(atk - eatk, 1);
 
                         // http://twist.jpn.org/sfcsiren/index.php?%E3%83%80%E3%83%A1%E3%83%BC%E3%82%B8%E8%A8%88%E7%AE%97%E5%BC%8F

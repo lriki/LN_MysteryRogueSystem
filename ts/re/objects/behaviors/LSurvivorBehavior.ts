@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { paramFPLoss } from "ts/re/PluginParameters";
 import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -59,16 +59,16 @@ export class LSurvivorBehavior extends LBehavior {
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
-            const prevFP = self.actualParam(REBasics.params.fp);
+            const prevFP = self.actualParam(MRBasics.params.fp);
 
             var loss = this._basicLoss;
-            loss *= self.traitsPi(REBasics.traits.SurvivalParamLossRate, REBasics.params.fp);
+            loss *= self.traitsPi(MRBasics.traits.SurvivalParamLossRate, MRBasics.params.fp);
 
             // FP 減少
-            self.gainActualParam(REBasics.params.fp, -loss, true);
+            self.gainActualParam(MRBasics.params.fp, -loss, true);
 
             
-            const fp = self.actualParam(REBasics.params.fp);
+            const fp = self.actualParam(MRBasics.params.fp);
 
             if (prevFP > 0 && fp <= 0) {
                 // 今回の更新で FP が 0 になったのであれば、メッセージを表示する
@@ -96,7 +96,7 @@ export class LSurvivorBehavior extends LBehavior {
 
             if (fp <= 0) {
                 // 満腹度 0 による HP 減少
-                self.gainActualParam(REBasics.params.hp, -1, true);
+                self.gainActualParam(MRBasics.params.hp, -1, true);
 
                 if (self.isDeathStateAffected()) {
                     cctx.postMessage(tr2("おなかがすいて倒れた・・・"));
@@ -104,7 +104,7 @@ export class LSurvivorBehavior extends LBehavior {
             }
             else {
                 // HP自動回復
-                self.gainActualParam(REBasics.params.hp, 1, true);
+                self.gainActualParam(MRBasics.params.hp, 1, true);
             }
 
 

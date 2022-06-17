@@ -6,7 +6,7 @@ import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { REVisual } from "ts/re/visual/REVisual";
 import { UTransfer } from "ts/re/usecases/UTransfer";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { LEntityId } from "../objects/LObject";
 import { LEntity } from "../objects/LEntity";
 import { SWarehouseStoreDialog } from "../system/dialogs/SWarehouseStoreDialog";
@@ -44,7 +44,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
         const player = REGame.camera.getFocusedEntity();
         RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseStoreDialog) => {
-            $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
+            $gameVariables.setValue(MRBasics.variables.result, d.resultItems().length);
         });
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }
@@ -57,7 +57,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (arg
         const player = REGame.camera.getFocusedEntity();
         RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
-            $gameVariables.setValue(REBasics.variables.result, d.resultItems().length);
+            $gameVariables.setValue(MRBasics.variables.result, d.resultItems().length);
         });
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }
@@ -71,7 +71,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) =
         const player = REGame.camera.getFocusedEntity();
         RESystem.commandContext.openDialog(player, new SItemSellDialog(USearch.getEntityByKeyPattern(serviceProviderKey), USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(inventoryOwnerKey)), false)
         .then((d: SItemSellDialog) => {
-            $gameVariables.setValue(REBasics.variables.result, d.resultItems.length);
+            $gameVariables.setValue(MRBasics.variables.result, d.resultItems.length);
         });
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }
@@ -136,10 +136,10 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
     if (actor) {
         const stateId = REData.getState(stateKey).id;
         const has = actor._deathResult.states().includes(stateId);
-        $gameVariables.setValue(REBasics.variables.result, has ? 1 : 0);
+        $gameVariables.setValue(MRBasics.variables.result, has ? 1 : 0);
     }
     else {
-        $gameVariables.setValue(REBasics.variables.result, -1);
+        $gameVariables.setValue(MRBasics.variables.result, -1);
     }
 });
 

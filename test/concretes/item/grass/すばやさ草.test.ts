@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { LScheduler2 } from "ts/re/objects/LScheduler";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";

@@ -1,5 +1,5 @@
 import { tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -42,7 +42,7 @@ export class SGoldStealSpecialEffect extends SSpecialEffect {
         const steal = Math.min(damage, gold);
 
         const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.system.fallbackGoldEntityId, []));
-        entity.setActualParam(REBasics.params.gold, steal);
+        entity.setActualParam(MRBasics.params.gold, steal);
 
         inventory.gainGold(-steal);
         return entity;

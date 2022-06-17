@@ -51,14 +51,10 @@ export enum DClarificationType {
     Sight,
 }
 
-// export interface DBasicPresets {
-//     trap: DPresetId,
-// }
-
 /**
  * ゲームシステムとして重要な定義済みデータを保持する
  */
-export class REBasics {
+export class MRBasics {
     static variables: DBasicVariables;
     static elements: DBasicElements;
     static events: DBasicEvents;

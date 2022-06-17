@@ -1,6 +1,6 @@
 import { TestEnv } from "../TestEnv";
 import { UComponentType, UProperty, UPropertyPath } from "ts/re/usecases/UProperty";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -13,8 +13,8 @@ beforeAll(() => {
 test("system.Property.basic", () => {
     TestEnv.newGame();
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(REBasics.params.hp);
-    const max_hp1 = player1.idealParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const max_hp1 = player1.idealParam(MRBasics.params.hp);
     const stateId = REData.getState("kState_UTかなしばり").id;
     player1.addState(stateId);
 

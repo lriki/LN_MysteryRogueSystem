@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
@@ -30,7 +30,7 @@ export class LGlueToGroundBehavior extends LBehavior {
     }
 
     onActivityPreReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
-        if (activity.actionId() == REBasics.actions.PickActionId) {
+        if (activity.actionId() == MRBasics.actions.PickActionId) {
             if (this._glued) {
                 cctx.postMessage(tr2("%1は地面にはりついている。").format(UName.makeNameAsItem(self)));
                 return SCommandResponse.Canceled;

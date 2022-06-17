@@ -1,6 +1,6 @@
 import { assert, tr2 } from "ts/re/Common";
 import { DActionId } from "ts/re/data/DCommon";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
@@ -85,25 +85,25 @@ export class SItemListDialog extends SDialog {
             {
                 const equipments = actor.getEntityBehavior(LEquipmentUserBehavior);
                 if (equipments.isEquipped(item))
-                    actualActions.mutableRemove(x => x == REBasics.actions.EquipActionId);   // [装備] を除く
+                    actualActions.mutableRemove(x => x == MRBasics.actions.EquipActionId);   // [装備] を除く
                 else
-                    actualActions.mutableRemove(x => x == REBasics.actions.EquipOffActionId);  // [はずす] を除く
+                    actualActions.mutableRemove(x => x == MRBasics.actions.EquipOffActionId);  // [はずす] を除く
             }
 
             // 足元に何かあれば [置く] を [交換] にする
             {
                 const feetEntity = REGame.map.firstFeetEntity(actor);
                 if (feetEntity) {
-                    if (actualActions.mutableRemove(x => x == REBasics.actions.PutActionId)) {
-                        actualActions.push(REBasics.actions.ExchangeActionId);
+                    if (actualActions.mutableRemove(x => x == MRBasics.actions.PutActionId)) {
+                        actualActions.push(MRBasics.actions.ExchangeActionId);
                     }
                 }
             }
 
             // [撃つ] があれば [投げる] を除く
             {
-                if (actualActions.includes(REBasics.actions.ShootingActionId)) {
-                    actualActions.mutableRemove(x => x == REBasics.actions.ThrowActionId);
+                if (actualActions.includes(MRBasics.actions.ShootingActionId)) {
+                    actualActions.mutableRemove(x => x == MRBasics.actions.ThrowActionId);
                 }
             }
         }

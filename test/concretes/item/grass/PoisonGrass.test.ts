@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -24,15 +24,15 @@ test("concretes.item.grass.PoisonGrass", () => {
     player1.addState(state1);
     player1.addState(state2);
     player1.addState(REData.getState("kState_UnitTest_投擲必中").id);
-    const hp1 = player1.actualParam(REBasics.params.hp);
-    const pow1 = player1.actualParam(REBasics.params.pow);
-    const player1Atk1 = player1.actualParam(REBasics.params.atk);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const player1Atk1 = player1.actualParam(MRBasics.params.atk);
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
-    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
-    const enemy1Pow1 = enemy1.actualParam(REBasics.params.pow);
+    const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1Pow1 = enemy1.actualParam(MRBasics.params.pow);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_毒草_B").id, [], "item1"));
@@ -52,9 +52,9 @@ test("concretes.item.grass.PoisonGrass", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    const hp2 = player1.actualParam(REBasics.params.hp);
-    const pow2 = player1.actualParam(REBasics.params.pow);
-    const player1Atk2 = player1.actualParam(REBasics.params.atk);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const pow2 = player1.actualParam(MRBasics.params.pow);
+    const player1Atk2 = player1.actualParam(MRBasics.params.atk);
     expect(hp2).toBeLessThan(hp1);          // ダメージをうける
     expect(pow2).toBeLessThan(pow1);        // ちからが減る
     expect(player1.isStateAffected(state1)).toBeFalsy();
@@ -69,9 +69,9 @@ test("concretes.item.grass.PoisonGrass", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
-    const enemy1Atk2 = enemy1.actualParam(REBasics.params.atk);
-    const enemy1Pow2 = enemy1.actualParam(REBasics.params.pow);
+    const enemy1Hp2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1Atk2 = enemy1.actualParam(MRBasics.params.atk);
+    const enemy1Pow2 = enemy1.actualParam(MRBasics.params.pow);
     expect(enemy1Hp2).toBeLessThan(enemy1Hp1);  // ダメージをうける
     expect(enemy1Atk2).toBe(0);                 // 攻撃力 0
     expect(enemy1Pow2).toBe(enemy1Pow1);        // ちからは減らない

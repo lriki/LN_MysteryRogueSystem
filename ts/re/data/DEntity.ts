@@ -12,7 +12,7 @@ import { DEquipment, DItem } from "./DItem";
 import { DPrefab, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroopId } from "./DTroop";
-import { REBasics } from "./REBasics";
+import { MRBasics } from "./MRBasics";
 import { DFactionId, REData } from "./REData";
 
 export type DEntityId = number;

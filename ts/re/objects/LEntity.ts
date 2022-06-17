@@ -5,7 +5,7 @@ import { SCommandContext } from "../system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
 import { DState, DStateId } from "ts/re/data/DState";
 import { assert, RESerializable } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LBehaviorId, LEntityId, LObject, LObjectId, LObjectType } from "./LObject";
 import { LState, LStateId } from "./states/LState";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
@@ -467,7 +467,7 @@ export class LEntity extends LObject
     
     // Game_BattlerBase.prototype.paramRate
     public idealParamRate(paramId: DParameterId): number {
-        return this.traitsPi(REBasics.traits.TRAIT_PARAM, paramId);
+        return this.traitsPi(MRBasics.traits.TRAIT_PARAM, paramId);
     }
 
     // Game_BattlerBase.prototype.paramBuffRate
@@ -565,10 +565,10 @@ export class LEntity extends LObject
     }
 
     public refreshConditions(): void {
-        const hpParam = this._params.param(REBasics.params.hp);
+        const hpParam = this._params.param(MRBasics.params.hp);
         if (hpParam) {
-            const dead = !!this.states().find(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState);//this.isDeathStateAffected();
-            const hp = this.actualParam(REBasics.params.hp);
+            const dead = !!this.states().find(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState);//this.isDeathStateAffected();
+            const hp = this.actualParam(MRBasics.params.hp);
 
             // DeadState が外れた直後など、HP0 なのに DeadState がついていなければ HP1 にする。
             // if (!dead && hp == 0) {
@@ -577,7 +577,7 @@ export class LEntity extends LObject
 
             // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
             if (dead && hp != 0) {
-                hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp));
+                hpParam.setActualDamgeParam(this.idealParam(MRBasics.params.hp));
                 this.removeAllStates(true);
             }
         }
@@ -589,14 +589,14 @@ export class LEntity extends LObject
         
     
         // refresh 後、HP が 0 なら DeadState を付加する
-        if (this.idealParam(REBasics.params.hp) !== 0) {
-            if (this.actualParam(REBasics.params.hp) === 0) {
+        if (this.idealParam(MRBasics.params.hp) !== 0) {
+            if (this.actualParam(MRBasics.params.hp) === 0) {
                 if (!this.isDeathStateAffected()) {
-                    this.addState(REBasics.states.dead, false);
+                    this.addState(MRBasics.states.dead, false);
                 }
             } else {
                 if (this.isDeathStateAffected()) {   // removeState() はけっこういろいろやるので、不要なら実行しない
-                    this.removeState(REBasics.states.dead);
+                    this.removeState(MRBasics.states.dead);
                 }
             }
         }
@@ -686,32 +686,32 @@ export class LEntity extends LObject
 
     // Game_BattlerBase.prototype.xparam
     public xparam(xparamId: DXParamId): number {
-        return this.traitsSum(REBasics.traits.TRAIT_XPARAM, xparamId);
+        return this.traitsSum(MRBasics.traits.TRAIT_XPARAM, xparamId);
     }
 
     public xparamOrDefault(xparamId: DXParamId, defaultValue: number): number {
-        return this.traitsSumOrDefault(REBasics.traits.TRAIT_XPARAM, xparamId, defaultValue);
+        return this.traitsSumOrDefault(MRBasics.traits.TRAIT_XPARAM, xparamId, defaultValue);
     }
     
     // Game_BattlerBase.prototype.sparam
     public sparam(sparamId: DSParamId): number  {
-        return this.traitsPi(REBasics.traits.TRAIT_SPARAM, sparamId);
+        return this.traitsPi(MRBasics.traits.TRAIT_SPARAM, sparamId);
     }
 
     // Game_BattlerBase.prototype.elementRate
     public elementRate(elementId: number): number {
-        return this.traitsPi(REBasics.traits.TRAIT_ELEMENT_RATE, elementId);
+        return this.traitsPi(MRBasics.traits.TRAIT_ELEMENT_RATE, elementId);
     }
 
     // ステート有効度
     // Game_BattlerBase.prototype.stateRate
     public stateRate(stateId: DStateId): number {
-        return this.traitsPi(REBasics.traits.TRAIT_STATE_RATE, stateId);
+        return this.traitsPi(MRBasics.traits.TRAIT_STATE_RATE, stateId);
     };
     
     // Game_BattlerBase.prototype.attackElements
     public attackElements(): number[] {
-        return this.traitsSet(REBasics.traits.TRAIT_ATTACK_ELEMENT);
+        return this.traitsSet(MRBasics.traits.TRAIT_ATTACK_ELEMENT);
     }
 
     //----------------------------------------
@@ -741,15 +741,15 @@ export class LEntity extends LObject
 
         const result: LNameView = { name: name, iconIndex: data.display.iconIndex, upgrades: 0 };
 
-        const upgrades = this._params.param(REBasics.params.upgradeValue);
+        const upgrades = this._params.param(MRBasics.params.upgradeValue);
         if (upgrades) {
-            result.upgrades = this.actualParam(REBasics.params.upgradeValue);
+            result.upgrades = this.actualParam(MRBasics.params.upgradeValue);
         }
 
         // TODO: test
-        const remaining = this._params.param(REBasics.params.remaining);
+        const remaining = this._params.param(MRBasics.params.remaining);
         if (remaining) {
-            result.capacity = this.actualParam(REBasics.params.remaining);
+            result.capacity = this.actualParam(MRBasics.params.remaining);
             result.initialCapacity = remaining.initialActualValue();
         }
 
@@ -820,7 +820,7 @@ export class LEntity extends LObject
     public queryParamMinMax(paramId: DParameterId): LParamMinMax {
         const param = REData.parameters[paramId];
         const result: LParamMinMax = { min: param.minValue, max: param.maxValue };
-        if (paramId == REBasics.params.upgradeValue) {
+        if (paramId == MRBasics.params.upgradeValue) {
             const data = this.data;
             result.min = data.upgradeMin;
             result.max = data.upgradeMax;
@@ -986,7 +986,7 @@ export class LEntity extends LObject
     }
 
     public removeDeadStates(): void {
-        const stateIds = this.states().filter(s => s.stateDataId() == REBasics.states.dead || s.stateData().deadState).map(s => s.stateDataId());
+        const stateIds = this.states().filter(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState).map(s => s.stateDataId());
         this.removeStates(stateIds);
     }
 
@@ -1003,7 +1003,7 @@ export class LEntity extends LObject
 
     // Game_BattlerBase.prototype.stateResistSet
     public stateResistSet(): DStateId[] {
-        return this.traitsSet(REBasics.traits.TRAIT_STATE_RESIST);
+        return this.traitsSet(MRBasics.traits.TRAIT_STATE_RESIST);
     }
     
     public isStateResist(stateId: DStateId): boolean {
@@ -1199,7 +1199,7 @@ export class LEntity extends LObject
             id = b.onQueryIdleSequelId();
             return !id;
         });
-        return id ? id : REBasics.sequels.idle;
+        return id ? id : MRBasics.sequels.idle;
     }
 
     queryActions(): DActionId[] {
@@ -1218,17 +1218,17 @@ export class LEntity extends LObject
         let result: DActionId[] = this.data.reactions.map(x => x.actionId).concat(
         [
             //DBasics.actions.ExchangeActionId,
-            REBasics.actions.ThrowActionId,
-            REBasics.actions.FallActionId,
-            REBasics.actions.DropActionId,
+            MRBasics.actions.ThrowActionId,
+            MRBasics.actions.FallActionId,
+            MRBasics.actions.DropActionId,
         ]);
 
         if (this.isOnGround()) {
             // Ground Layer 上に存在していれば、拾われる可能性がある
-            result.push(REBasics.actions.PickActionId);
+            result.push(MRBasics.actions.PickActionId);
         }
         else {
-            result.push(REBasics.actions.PutActionId);
+            result.push(MRBasics.actions.PutActionId);
         }
 
 
@@ -1342,7 +1342,7 @@ export class LEntity extends LObject
     }
 
     public iterateBehaviors2(func: (b: LBehavior) => boolean): boolean {
-        const sealedSpecialAbility = this.traits(REBasics.traits.SealSpecialAbility).length > 0;
+        const sealedSpecialAbility = this.traits(MRBasics.traits.SealSpecialAbility).length > 0;
         for (let i = 0; i < this._basicBehaviors.length; i++) {
             const j = REGame.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
@@ -1381,7 +1381,7 @@ export class LEntity extends LObject
         }
 
         const sealedSpecialAbility = (!fromTraits) ?
-            this.traits(REBasics.traits.SealSpecialAbility).length > 0 :
+            this.traits(MRBasics.traits.SealSpecialAbility).length > 0 :
             false;
 
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
@@ -1601,12 +1601,12 @@ export class LEntity extends LObject
     _stackCount: number = 1;
 
     public canStack(): boolean {
-        return !!this.collectTraits().find(x => x.code == REBasics.traits.Stackable);
+        return !!this.collectTraits().find(x => x.code == MRBasics.traits.Stackable);
     }
 
     public checkStackable(other: LEntity): boolean {
-        if (!this.collectTraits().find(x => x.code == REBasics.traits.Stackable)) return false;
-        if (!other.collectTraits().find(x => x.code == REBasics.traits.Stackable)) return false;
+        if (!this.collectTraits().find(x => x.code == MRBasics.traits.Stackable)) return false;
+        if (!other.collectTraits().find(x => x.code == MRBasics.traits.Stackable)) return false;
 
         // TODO: 今は矢だけなのでこれでよいが、アタッチされているAbilityなども見るべき
         return this.dataId == other.dataId;
@@ -1649,19 +1649,19 @@ export class LEntity extends LObject
     // Fomula properties
 
     public get hp(): number {
-        return this.actualParam(REBasics.params.hp);
+        return this.actualParam(MRBasics.params.hp);
     }
     public get atk(): number {
-        return this.actualParam(REBasics.params.atk);
+        return this.actualParam(MRBasics.params.atk);
     }
     public get def(): number {
-        return this.actualParam(REBasics.params.def);
+        return this.actualParam(MRBasics.params.def);
     }
     public get agi(): number {
-        return this.actualParam(REBasics.params.agi);
+        return this.actualParam(MRBasics.params.agi);
     }
     public get fp(): number {
-        return this.actualParam(REBasics.params.fp);
+        return this.actualParam(MRBasics.params.fp);
     }
 }
 

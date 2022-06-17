@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
 import { RESystem } from "ts/re/system/RESystem";
@@ -15,14 +15,14 @@ export class TestUtils {
         const data = item.data;
 
         // [食べる] ができる？
-        expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBeTruthy();
+        expect(item.queryReactions().includes(MRBasics.actions.EatActionId)).toBeTruthy();
 
         // [食べる] に対応する Emittor がある？
-        const reaction = data.getReaction(REBasics.actions.EatActionId);
+        const reaction = data.getReaction(MRBasics.actions.EatActionId);
         assert(!!reaction.hasEmittor());
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp)));
+        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == MRBasics.params.fp)));
     }
 
     public static testCommonGrassBegin(actor: LEntity, item: LEntity) {
@@ -33,18 +33,18 @@ export class TestUtils {
         expect(name.includes(data.display.name)).toBe(false);
         
         // [食べる] ができる？
-        expect(item.queryReactions().includes(REBasics.actions.EatActionId)).toBeTruthy();
+        expect(item.queryReactions().includes(MRBasics.actions.EatActionId)).toBeTruthy();
 
         // [食べる] に対応する Emittor がある？
-        const reaction = data.getReaction(REBasics.actions.EatActionId);
+        const reaction = data.getReaction(MRBasics.actions.EatActionId);
         assert(!!reaction.hasEmittor());
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500")));
+        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == MRBasics.params.fp && x.formula == "500")));
         //expect(!!emittor.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500"));
 
         // おなかを減らしておく
-        actor.setActualParam(REBasics.params.fp, 5000);
+        actor.setActualParam(MRBasics.params.fp, 5000);
     }
     
     public static testCommonGrassEnd(actor: LEntity, item: LEntity) {
@@ -52,7 +52,7 @@ export class TestUtils {
         expect(item.isDestroyed()).toBeTruthy();
 
         // FP が回復しているはず
-        expect(actor.actualParam(REBasics.params.fp) > 5000).toBeTruthy();
+        expect(actor.actualParam(MRBasics.params.fp) > 5000).toBeTruthy();
 
         // 食べられたら識別済みになる
         const name = UName.makeNameAsItem(item);
@@ -68,10 +68,10 @@ export class TestUtils {
         expect(name.includes(data.display.name)).toBe(false);
         
         // [読む] ができる？
-        expect(item.queryReactions().includes(REBasics.actions.ReadActionId)).toBeTruthy();
+        expect(item.queryReactions().includes(MRBasics.actions.ReadActionId)).toBeTruthy();
 
         // [読む] に対応する Emittor がある？
-        const reaction = data.getReaction(REBasics.actions.ReadActionId);
+        const reaction = data.getReaction(MRBasics.actions.ReadActionId);
         assert(reaction);
         assert(!!reaction.hasEmittor());
     }
@@ -88,10 +88,10 @@ export class TestUtils {
 
     public static testCommonArrow(item: LEntity): void {
         // [撃つ] ことができる
-        expect(item.queryReactions().includes(REBasics.actions.ShootingActionId)).toBeTruthy();
+        expect(item.queryReactions().includes(MRBasics.actions.ShootingActionId)).toBeTruthy();
 
         // スタックできる
-        expect(item.hasTrait(REBasics.traits.Stackable)).toBeTruthy();
+        expect(item.hasTrait(MRBasics.traits.Stackable)).toBeTruthy();
     }
 }
 

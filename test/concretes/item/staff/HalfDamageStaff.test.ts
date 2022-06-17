@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { assert } from "ts/re/Common";
 
 beforeAll(() => {
@@ -27,7 +27,7 @@ test("concretes.item.staff.HalfDamageStaff.basic", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
-    const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -39,13 +39,13 @@ test("concretes.item.staff.HalfDamageStaff.basic", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1HP2 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
     expect(enemy1HP2).toBe(Math.floor(enemy1HP1 / 2));
 
     //----------------------------------------------------------------------------------------------------
 
     // HP1 にしておく
-    enemy1.setActualParam(REBasics.params.hp, 1);
+    enemy1.setActualParam(MRBasics.params.hp, 1);
 
     // [振る]
     RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
@@ -54,7 +54,7 @@ test("concretes.item.staff.HalfDamageStaff.basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // HP1 で効果を受けたら戦闘不能
-    const enemy1HP3 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1HP3 = enemy1.actualParam(MRBasics.params.hp);
     expect(enemy1HP3).toBe(0);
     expect(enemy1.isDestroyed()).toBeTruthy();
 });

@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";
@@ -19,12 +19,12 @@ test("concretes.states.からぶり", () => {
     REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     actor1.addState(REData.getState("kState_UTからぶり").id);
-    const actorHP1 = actor1.actualParam(REBasics.params.hp);
+    const actorHP1 = actor1.actualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [REData.getState("kState_UTからぶり").id], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    const enemyHP1 = enemy1.actualParam(REBasics.params.hp);
+    const enemyHP1 = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -39,8 +39,8 @@ test("concretes.states.からぶり", () => {
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
         // 互いに HP 減少は無い
-        const actorHP2 = actor1.actualParam(REBasics.params.hp);
-        const enemyHP2 = enemy1.actualParam(REBasics.params.hp);
+        const actorHP2 = actor1.actualParam(MRBasics.params.hp);
+        const enemyHP2 = enemy1.actualParam(MRBasics.params.hp);
         expect(actorHP2).toBe(actorHP1);
         expect(enemyHP2).toBe(enemyHP1);
     }

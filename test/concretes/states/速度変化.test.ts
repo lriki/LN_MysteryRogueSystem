@@ -5,7 +5,7 @@ import { REData } from "ts/re/data/REData";
 import { assert } from "ts/re/Common";
 import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -21,7 +21,7 @@ test("concretes.states.速度変化", () => {
     TestEnv.newGame();
     //const stateId = REData.getStateFuzzy("kState_UT速度バフ").id;
     const buff1: DParamBuff = {
-        paramId: REBasics.params.agi,
+        paramId: MRBasics.params.agi,
         mode: DBuffMode.Strength,
         level: 1,
         levelType: LStateLevelType.RelativeValue,
@@ -29,7 +29,7 @@ test("concretes.states.速度変化", () => {
         turn: 10,
     };
     const buff2: DParamBuff = {
-        paramId: REBasics.params.agi,
+        paramId: MRBasics.params.agi,
         mode: DBuffMode.Strength,
         level: -1,
         levelType: LStateLevelType.AbsoluteValue,
@@ -47,7 +47,7 @@ test("concretes.states.速度変化", () => {
 
     // 倍速化
     actor1.addBuff(buff1);
-    const param = actor1.params().param(REBasics.params.agi);
+    const param = actor1.params().param(MRBasics.params.agi);
     assert(param);
     expect(param.getAddBuff().level).toBe(1);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(2);
@@ -72,7 +72,7 @@ test("concretes.states.速度変化", () => {
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT3倍速").id)).toBe(false);
 
     // 解除
-    actor1.removeBuff(REBasics.params.agi);
+    actor1.removeBuff(MRBasics.params.agi);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(1);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT鈍足").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == REData.getState("kState_UT倍速").id)).toBe(false);
@@ -84,7 +84,7 @@ test("concretes.states.速度変化", () => {
 test("concretes.states.速度変化.remove", () => {
     TestEnv.newGame();
     const buff1: DParamBuff = {
-        paramId: REBasics.params.agi,
+        paramId: MRBasics.params.agi,
         mode: DBuffMode.Strength,
         level: 1,
         levelType: LStateLevelType.RelativeValue,
@@ -95,7 +95,7 @@ test("concretes.states.速度変化.remove", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addBuff(buff1);
-    const param = actor1.params().param(REBasics.params.agi);
+    const param = actor1.params().param(MRBasics.params.agi);
     assert(param);
 
     // 10 ターン分 シミュレーション実行
@@ -119,7 +119,7 @@ test("concretes.states.速度変化.remove", () => {
 test("concretes.states.速度変化.Issue1", () => {
     TestEnv.newGame();
     const buff1: DParamBuff = {
-        paramId: REBasics.params.agi,
+        paramId: MRBasics.params.agi,
         mode: DBuffMode.Strength,
         level: 1,
         levelType: LStateLevelType.RelativeValue,
@@ -154,7 +154,7 @@ test("concretes.states.速度変化.Issue1", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     expect(enemy1.mx).toBe(30);
-    const buf = actor1.params().params()[REBasics.params.agi];
+    const buf = actor1.params().params()[MRBasics.params.agi];
     assert(buf);
     buf.getAddBuff().turn = 2;  // テスト用に残りターン数調整。あと2回ManualAction取ると通常速度に戻るイメージ。
     wait();

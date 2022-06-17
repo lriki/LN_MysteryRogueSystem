@@ -11,7 +11,7 @@ import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 import { SEntityVisibility, SView } from "ts/re/system/SView";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { DColorIndex } from "../data/DCommon";
 import { REData } from "../data/REData";
 
@@ -337,7 +337,7 @@ export class REVisual_Entity
             const event = $gameMap.event(this._rmmzEventId);
 
 
-            const hpParams = result.paramEffects2.filter(i => i.paramId == REBasics.params.hp);
+            const hpParams = result.paramEffects2.filter(i => i.paramId == MRBasics.params.hp);
             if (hpParams.length > 0) {
                 const hpDamage = hpParams.reduce((r, i) => r + i.damage, 0);
                 event.popupDamage_RE(hpDamage, DColorIndex.Default);

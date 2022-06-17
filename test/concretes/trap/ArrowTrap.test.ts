@@ -5,7 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LTileShape } from "ts/re/objects/LBlock";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -21,7 +21,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.addState(REData.getState("kState_UT罠必中").id);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
@@ -38,7 +38,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);  // ダメージを受けている
 });
 
@@ -48,7 +48,7 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.dir = 6;
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
@@ -57,7 +57,7 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
-    const enemyhp1 = enemy1.actualParam(REBasics.params.hp);
+    const enemyhp1 = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -69,8 +69,8 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(REBasics.params.hp);
-    const enemyhp2 = enemy1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const enemyhp2 = enemy1.actualParam(MRBasics.params.hp);
     expect(hp2 == hp1).toBe(true);          // Player はダメージを受けていない
     expect(enemyhp2 < enemyhp1).toBe(true); // Enemy はダメージを受けている
 });
@@ -87,7 +87,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.dir = 6;
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // アイテム入手
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( REData.getEntity("kEntity_パワードラッグ_A").id, [], "item1"));

@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -18,7 +18,7 @@ test("concretes.enemy.GrabFooter", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
-    const hp1 = actor1.actualParam(REBasics.params.hp);
+    const hp1 = actor1.actualParam(MRBasics.params.hp);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミニゴーレムA").id, [], "enemy1"));
@@ -34,7 +34,7 @@ test("concretes.enemy.GrabFooter", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    const hp2 = actor1.actualParam(REBasics.params.hp);
+    const hp2 = actor1.actualParam(MRBasics.params.hp);
     expect(actor1.mx).toBe(11);      // 移動できている
     expect(hp2 < hp1).toBe(true);   // 攻撃を受けている
 
@@ -44,7 +44,7 @@ test("concretes.enemy.GrabFooter", () => {
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
-    const hp3 = actor1.actualParam(REBasics.params.hp);
+    const hp3 = actor1.actualParam(MRBasics.params.hp);
     expect(actor1.my).toBe(10);      // 移動できない (キャンセルされる)
     expect(hp3 < hp2).toBe(true);   // モンスターにターンが回り、攻撃を受けている
 

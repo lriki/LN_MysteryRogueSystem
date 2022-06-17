@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DActor } from "ts/re/data/DActor";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DClass } from "ts/re/data/DClass";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DActionId, DSkillId } from "ts/re/data/DCommon";
@@ -59,17 +59,17 @@ export class LActorBehavior extends LBattlerBehavior {
         //this._nickname = actor.nickname;
         //this._profile = actor.profile;
         this.initSkills();
-        const a1= self.actualParam(REBasics.params.level);
-        const b1= self.actualParam(REBasics.params.exp);
+        const a1= self.actualParam(MRBasics.params.level);
+        const b1= self.actualParam(MRBasics.params.exp);
         //this.initEquips(actor.equips);
         this.paramSet().clearParamPlus();
-        const a2 = self.actualParam(REBasics.params.level);
-        const b2= self.actualParam(REBasics.params.exp);
+        const a2 = self.actualParam(MRBasics.params.level);
+        const b2= self.actualParam(MRBasics.params.exp);
         this.recoverAll();
         
 
-        const a = self.actualParam(REBasics.params.level);
-        const b= self.actualParam(REBasics.params.exp);
+        const a = self.actualParam(MRBasics.params.level);
+        const b= self.actualParam(MRBasics.params.exp);
 
     }
 
@@ -88,7 +88,7 @@ export class LActorBehavior extends LBattlerBehavior {
         
     // Game_Actor.prototype.initSkills
     initSkills(): void {
-        const level = this.ownerEntity().actualParam(REBasics.params.level);
+        const level = this.ownerEntity().actualParam(MRBasics.params.level);
         this._skills = [];
         for (const learning of this.currentClass().learnings) {
             if (learning.level <= level) {
@@ -112,16 +112,16 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.paramBase 
     onQueryIdealParamBase(paramId: DParameterId, base: number): number {
-        const level = this.ownerEntity().actualParam(REBasics.params.level);
+        const level = this.ownerEntity().actualParam(MRBasics.params.level);
         const p = this.currentClass().params[REData.parameters[paramId].battlerParamId];
         return base + (p ? p[level] : 0);
     }
 
     
     onQueryActions(actions: DActionId[]): DActionId[] {
-        actions.push(REBasics.actions.ShootingActionId);
-        actions.push(REBasics.actions.EatActionId);
-        actions.push(REBasics.actions.WaveActionId);
+        actions.push(MRBasics.actions.ShootingActionId);
+        actions.push(MRBasics.actions.EatActionId);
+        actions.push(MRBasics.actions.WaveActionId);
         return actions;
     }
 

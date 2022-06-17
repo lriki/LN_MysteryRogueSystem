@@ -8,7 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LGoldBehavior } from "ts/re/objects/behaviors/LGoldBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SFormulaOperand } from "ts/re/system/SFormulaOperand";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 

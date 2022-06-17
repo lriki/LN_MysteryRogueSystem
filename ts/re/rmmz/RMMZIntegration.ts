@@ -16,7 +16,7 @@ import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { REGame } from "../objects/REGame";
 import { FloorRestartSequence } from "./FloorRestartSequence";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 
 export class RMMZIntegration extends SIntegration {
 
@@ -195,8 +195,8 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onSetLandExitResult(result: LandExitResult): void {
-        $gameVariables.setValue(REBasics.variables.landExitResultDetail, result);
-        $gameVariables.setValue(REBasics.variables.landExitResult, Math.floor(result / 100));
+        $gameVariables.setValue(MRBasics.variables.landExitResultDetail, result);
+        $gameVariables.setValue(MRBasics.variables.landExitResult, Math.floor(result / 100));
     }
 
 }

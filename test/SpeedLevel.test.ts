@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 import { RESystem } from "ts/re/system/RESystem";

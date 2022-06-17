@@ -1,5 +1,5 @@
 import { RESerializable, tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";

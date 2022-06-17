@@ -106,7 +106,7 @@ import { UAction } from "ts/re/usecases/UAction";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { DEffect } from "ts/re/data/DEffect";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { RESystem } from "ts/re/system/RESystem";
 import { ItemRemovedFromInventoryArgs } from "ts/re/data/predefineds/DBasicEvents";
 
@@ -205,7 +205,7 @@ export class LInventoryBehavior extends LBehavior {
             const args: ItemRemovedFromInventoryArgs = {
                 item: entity,
             };
-            REGame.eventServer.publish(RESystem.commandContext, REBasics.events.itemRemovedFromInventory, args);
+            REGame.eventServer.publish(RESystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
         }
     }
 

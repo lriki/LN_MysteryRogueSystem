@@ -30,7 +30,7 @@ import { UMovement } from "../usecases/UMovement";
 import { LFlockBehavior } from "ts/re/objects/behaviors/LFlockBehavior";
 import { assert } from "ts/re/Common";
 import { LStorageBehavior } from "ts/re/objects/behaviors/LStorageBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/re/objects/behaviors/LRatedRandomAIBehavior";
 import { RESystem } from "./RESystem";
@@ -98,8 +98,8 @@ export class SEntityFactory {
         this.setupCommon(e);
         const entityData = e.data;
 
-        if (entityData.entity.kindId == REBasics.entityKinds.WeaponKindId ||
-            entityData.entity.kindId == REBasics.entityKinds.ShieldKindId) {
+        if (entityData.entity.kindId == MRBasics.entityKinds.WeaponKindId ||
+            entityData.entity.kindId == MRBasics.entityKinds.ShieldKindId) {
             e.addBehavior(LEquipmentBehavior);
         }
 
@@ -293,7 +293,7 @@ export class SEntityFactory {
                 entity.addBehavior(LRatedRandomAIBehavior);
                 break;
             case "kEnemy_ウルフA":
-                entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
+                entity.addBehavior(LParamBehavior).setParamBase(MRBasics.params.agi, 100);
                 break;
             case "kEnemy_スピリットスライムA":
                 entity.addBehavior(LEntityDivisionBehavior);
@@ -317,7 +317,7 @@ export class SEntityFactory {
                 break;
             case "kEnemy_キングプレゼンにゃーA":
                 entity.addBehavior(LEscapeBehavior);
-                entity.addBehavior(LParamBehavior).setParamBase(REBasics.params.agi, 100);
+                entity.addBehavior(LParamBehavior).setParamBase(MRBasics.params.agi, 100);
                 break;
             case "kEnemy_店主A":
                 entity.addBehavior(LShopkeeperBehavior);

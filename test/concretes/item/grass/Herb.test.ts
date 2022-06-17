@@ -8,7 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -111,7 +111,7 @@ test("concretes.item.grass.Herb.player", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    const player1HpMax1 = player1.idealParam(REBasics.params.hp);
+    const player1HpMax1 = player1.idealParam(MRBasics.params.hp);
     
     // [食べる] (HP Max)
     RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
@@ -120,7 +120,7 @@ test("concretes.item.grass.Herb.player", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大HPが増えている
-    const player1HpMax2 = player1.idealParam(REBasics.params.hp);
+    const player1HpMax2 = player1.idealParam(MRBasics.params.hp);
     expect(player1HpMax2).toBeGreaterThan(player1HpMax1);
     expect(REGame.messageHistory.includesText("最大HP")).toBeTruthy();
     expect(REGame.messageHistory.includesText("増えた")).toBeTruthy();  // "回復した" ではないこと
@@ -130,8 +130,8 @@ test("concretes.item.grass.Herb.player", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 適当に HP を減らしておく
-    player1.setActualParam(REBasics.params.hp, Math.max(player1HpMax1 - 50, 1));
-    const player1Hp1 = player1.actualParam(REBasics.params.hp);
+    player1.setActualParam(MRBasics.params.hp, Math.max(player1HpMax1 - 50, 1));
+    const player1Hp1 = player1.actualParam(MRBasics.params.hp);
     
     // [食べる]
     RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
@@ -140,7 +140,7 @@ test("concretes.item.grass.Herb.player", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // HPが回復している
-    const player1Hp2 = player1.actualParam(REBasics.params.hp);
+    const player1Hp2 = player1.actualParam(MRBasics.params.hp);
     expect(player1Hp2).toBeGreaterThan(player1Hp1 + 5); // 自動回復も行われるので、少し offset つける
 });
 
@@ -165,7 +165,7 @@ test("concretes.item.grass.Herb.enemy", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    const enemy1HpMax1 = enemy1.idealParam(REBasics.params.hp);
+    const enemy1HpMax1 = enemy1.idealParam(MRBasics.params.hp);
     
     // [投げる] (HP Max)
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
@@ -174,14 +174,14 @@ test("concretes.item.grass.Herb.enemy", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大HPは変わらない
-    const enemy1HpMax2 = enemy1.idealParam(REBasics.params.hp);
+    const enemy1HpMax2 = enemy1.idealParam(MRBasics.params.hp);
     expect(enemy1HpMax2).toBe(enemy1HpMax1);
 
     //----------------------------------------------------------------------------------------------------
 
     // 適当に HP を減らしておく
-    enemy1.setActualParam(REBasics.params.hp, Math.max(enemy1HpMax1 - 50, 1));
-    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
+    enemy1.setActualParam(MRBasics.params.hp, Math.max(enemy1HpMax1 - 50, 1));
+    const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
     
     // [投げる]
     RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
@@ -190,7 +190,7 @@ test("concretes.item.grass.Herb.enemy", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // HPが回復している
-    const enemy1Hp2 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1Hp2 = enemy1.actualParam(MRBasics.params.hp);
     expect(enemy1Hp2).toBeGreaterThan(enemy1Hp1);
 });
 
@@ -204,7 +204,7 @@ test("concretes.item.grass.Herb.undead", () => {
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
-    const enemy1Hp1 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
@@ -221,7 +221,7 @@ test("concretes.item.grass.Herb.undead", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // ダメージを受けている
-    const enemy2Hp1 = enemy1.actualParam(REBasics.params.hp);
+    const enemy2Hp1 = enemy1.actualParam(MRBasics.params.hp);
     expect(enemy2Hp1).toBeLessThan(enemy1Hp1);
 });
 

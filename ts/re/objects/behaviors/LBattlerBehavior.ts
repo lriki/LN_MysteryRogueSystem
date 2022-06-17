@@ -6,7 +6,7 @@ import { LEntity } from "../LEntity";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { LParamSet } from "../LParam";
 import { SEffectorFact } from "ts/re/system/SEffectApplyer";
@@ -47,22 +47,22 @@ export class LBattlerBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         const params = this.paramSet();
-        params.acquireParam(REBasics.params.hp);
-        params.acquireParam(REBasics.params.mp);
-        params.acquireParam(REBasics.params.atk);
-        params.acquireParam(REBasics.params.def);
-        params.acquireParam(REBasics.params.mat);
-        params.acquireParam(REBasics.params.mdf);
-        params.acquireParam(REBasics.params.agi);
-        params.acquireParam(REBasics.params.luk);
-        params.acquireParam(REBasics.params.tp);
-        params.acquireParam(REBasics.params.fp);
-        params.acquireParam(REBasics.params.pow);
+        params.acquireParam(MRBasics.params.hp);
+        params.acquireParam(MRBasics.params.mp);
+        params.acquireParam(MRBasics.params.atk);
+        params.acquireParam(MRBasics.params.def);
+        params.acquireParam(MRBasics.params.mat);
+        params.acquireParam(MRBasics.params.mdf);
+        params.acquireParam(MRBasics.params.agi);
+        params.acquireParam(MRBasics.params.luk);
+        params.acquireParam(MRBasics.params.tp);
+        params.acquireParam(MRBasics.params.fp);
+        params.acquireParam(MRBasics.params.pow);
     }
     
     onQueryReactions(self: LEntity, actions: DActionId[]): void {
         // 敵味方を問わず、話しかけることは可能。
-        actions.push(REBasics.actions.talk);
+        actions.push(MRBasics.actions.talk);
     }
     
 
@@ -116,7 +116,7 @@ export class LBattlerBehavior extends LBehavior {
         const entity = this.ownerEntity();
         if (entity.isUnique()) {
             if (entity == REGame.camera.focusedEntity()) {
-                cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
+                cctx.postSequel(entity, MRBasics.sequels.CollapseSequel);
                 cctx.postWait(entity, 100);
                 cctx.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
                 

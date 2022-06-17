@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseStructure";
 import { paramMonsterHouseEnemiesMax, paramMonsterHouseEnemiesMin, paramMonsterHouseItemsMax, paramMonsterHouseItemsMin } from "ts/re/PluginParameters";
@@ -18,7 +18,7 @@ export class SMonsterHouseBuilder {
             const my = room.my1 + Math.floor(id / room.width);
             const entities = manager.spawnEnemy(mx, my);
             for (const entity of entities) {
-                entity.addState(REBasics.states.nap);
+                entity.addState(MRBasics.states.nap);
             }
         }
 

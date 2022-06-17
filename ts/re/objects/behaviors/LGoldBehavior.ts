@@ -1,6 +1,6 @@
 import { RESerializable } from "ts/re/Common";
 import { DTextManager } from "ts/re/data/DTextManager";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBehavior, LNameView } from "./LBehavior";
@@ -41,7 +41,7 @@ export class LGoldBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         const params = self.params();
-        params.acquireParam(REBasics.params.gold);
+        params.acquireParam(MRBasics.params.gold);
     }
 
     queryDisplayName(): LNameView | undefined {
@@ -58,11 +58,11 @@ export class LGoldBehavior extends LBehavior {
     }
     
     public gold(): number {
-        return this.ownerEntity().actualParam(REBasics.params.gold);
+        return this.ownerEntity().actualParam(MRBasics.params.gold);
     }
 
     public setGold(value: number) {
-        this.ownerEntity().setActualParam(REBasics.params.gold, value);
+        this.ownerEntity().setActualParam(MRBasics.params.gold, value);
     }
 }
 

@@ -7,7 +7,7 @@ import { LGenerateDropItemCause, onPerformStepFeetProcess, onPreStepFeetProcess,
 import { LEntity } from "ts/re/objects/LEntity";
 import { LEntityId } from "ts/re/objects/LObject";
 import { REGame } from "ts/re/objects/REGame";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { DActionId, DBlockLayerKind } from "../data/DCommon";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DescriptionHighlightLevel, LEntityDescription } from "../objects/LIdentifyer";
@@ -187,7 +187,7 @@ export class UAction {
                 //context.postCall(() => {
                     UMovement.locateEntity(entity, block.mx, block.my, targetLayer);
                     //REGame.world._transferEntity(entity, REGame.map.floorId(), block.x(), block.y());
-                    cctx.postSequel(entity, REBasics.sequels.dropSequel);
+                    cctx.postSequel(entity, MRBasics.sequels.dropSequel);
                 //});
                 return;
             }
@@ -205,7 +205,7 @@ export class UAction {
         const block = USearch.selectUnitSpawnableBlock(cctx.random());
         if (block) {
             cctx.postTransferFloor(entity, entity.floorId, block.mx, block.my);   // SpecialEffect として実行される場合は事前にpostされる発動側Animationを待ちたいので post.
-            cctx.postSequel(entity, REBasics.sequels.warp);
+            cctx.postSequel(entity, MRBasics.sequels.warp);
         }
         else {
             throw new Error("Not implemented.");
@@ -222,7 +222,7 @@ export class UAction {
             this.postStumbleForPlayer(cctx, entity, dir);
         else
             this.postStumbleForNPC(cctx, entity);
-        cctx.postSequel(entity, REBasics.sequels.stumble);
+        cctx.postSequel(entity, MRBasics.sequels.stumble);
     }
 
     /** 操作中 Unit 用の転倒時アイテムバラまき。インベントリからランダムに選択されたアイテムを、足元ではなく前方にバラまく。 */
@@ -248,7 +248,7 @@ export class UAction {
                     item.removeFromParent();
                     REGame.world.transferEntity(item, REGame.map.floorId(), entity.mx, entity.my);
                     cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
-                    cctx.postSequel(item, REBasics.sequels.jump);
+                    cctx.postSequel(item, MRBasics.sequels.jump);
                     iItem++;
                 }
             }
@@ -348,7 +348,7 @@ export class UAction {
             b.onPostMakeSkillActions(result);
         });
 
-        if (performer.hasTrait(REBasics.traits.UseSkillForced)) {
+        if (performer.hasTrait(MRBasics.traits.UseSkillForced)) {
             result.mutableRemove(x => x.action.skillId == RESystem.skills.normalAttack);
         }
 
@@ -571,7 +571,7 @@ export class UAction {
     public static findTalkableFront(entity: LEntity): LEntity | undefined {
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
-            if (frontTarget.queryReactions().includes(REBasics.actions.talk)) {
+            if (frontTarget.queryReactions().includes(MRBasics.actions.talk)) {
                 return frontTarget;
             }
         }

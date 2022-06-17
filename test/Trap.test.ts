@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LTrapBehavior } from "ts/re/objects/behaviors/LTrapBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
@@ -17,7 +17,7 @@ test("Trap.TriggerRate", () => {
     TestEnv.newGame();
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_地雷_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
@@ -38,10 +38,10 @@ test("Trap.TriggerRate", () => {
         trapBehavior.setExposed(false);
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        const hp2 = player1.actualParam(REBasics.params.hp);
+        const hp2 = player1.actualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd1++;
         REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-        player1.setActualParam(REBasics.params.hp, hp1);
+        player1.setActualParam(MRBasics.params.hp, hp1);
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -56,10 +56,10 @@ test("Trap.TriggerRate", () => {
 
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        const hp2 = player1.actualParam(REBasics.params.hp);
+        const hp2 = player1.actualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd2++;
         REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-        player1.setActualParam(REBasics.params.hp, hp1);
+        player1.setActualParam(MRBasics.params.hp, hp1);
     }
 
     // paramHiddenTrapTriggerRate, paramExposedTrapTriggerRate の関係から、振れ幅大きめに基準を作っておく
@@ -135,7 +135,7 @@ test("Trap.Attack", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
-    const hp1 = enemy1.actualParam(REBasics.params.hp);
+    const hp1 = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -148,7 +148,7 @@ test("Trap.Attack", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy がダメージを受けていることを確認
-    const hp2 = enemy1.actualParam(REBasics.params.hp);
+    const hp2 = enemy1.actualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);
 
     // 敵に効果がある状態では、罠は露出しない

@@ -1,7 +1,7 @@
 import { SCommandContext } from "../SCommandContext";
 import { REGame } from "ts/re/objects/REGame";
 import { SCommandResponse } from "../SCommand";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UAction } from "ts/re/usecases/UAction";
 import { LGenerateDropItemCause } from "ts/re/objects/internal";
 import { assert } from "ts/re/Common";
@@ -94,7 +94,7 @@ export class SChainAfterScheduler {
 
         for (const entity of REGame.map.entities()) {
             if (entity.isDeathStateAffected()) {
-                cctx.postActivity( (new LActivity()).setup(REBasics.actions.dead, entity));
+                cctx.postActivity( (new LActivity()).setup(MRBasics.actions.dead, entity));
             }
         }
 
@@ -114,7 +114,7 @@ export class SChainAfterScheduler {
                 });
 
                 if (result == SCommandResponse.Pass) {
-                    cctx.postSequel(entity, REBasics.sequels.CollapseSequel);
+                    cctx.postSequel(entity, MRBasics.sequels.CollapseSequel);
                     UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
                     cctx.postDestroy(entity);
                 }

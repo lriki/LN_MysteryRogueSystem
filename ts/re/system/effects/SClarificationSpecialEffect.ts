@@ -1,6 +1,6 @@
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
-import { DClarificationType } from "ts/re/data/REBasics";
+import { DClarificationType } from "ts/re/data/MRBasics";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";

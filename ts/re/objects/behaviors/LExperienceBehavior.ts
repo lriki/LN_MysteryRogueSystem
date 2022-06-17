@@ -6,7 +6,7 @@ import { LEntity } from "../LEntity";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { RESystem } from "ts/re/system/RESystem";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DClass } from "ts/re/data/DClass";
 import { DActor } from "ts/re/data/DActor";
@@ -116,16 +116,16 @@ export class LExperienceBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         const params = self.params();
-        params.acquireParam(REBasics.params.level);
-        params.acquireParam(REBasics.params.exp);
+        params.acquireParam(MRBasics.params.level);
+        params.acquireParam(MRBasics.params.exp);
         this.resetLevel(self);
     }
 
     onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
-        if (paramId == REBasics.params.level) {
-            self.setActualParam(REBasics.params.exp, this.expForLevel(self, newValue));
+        if (paramId == MRBasics.params.level) {
+            self.setActualParam(MRBasics.params.exp, this.expForLevel(self, newValue));
         }
-        else if (paramId == REBasics.params.exp) {
+        else if (paramId == MRBasics.params.exp) {
             this.refreshLevel(self);
         }
     }
@@ -135,21 +135,21 @@ export class LExperienceBehavior extends LBehavior {
     }
 
     private resetLevel(self: LEntity): void {
-        self.setActualParam(REBasics.params.level, this.actor(self).initialLevel);
+        self.setActualParam(MRBasics.params.level, this.actor(self).initialLevel);
     }
 
     public level(self: LEntity): number {
-        return self.actualParam(REBasics.params.level);
+        return self.actualParam(MRBasics.params.level);
     }
 
     // for test
     public setLevel(self: LEntity, value: number): void {
-        self.setActualParam(REBasics.params.level, value);
+        self.setActualParam(MRBasics.params.level, value);
     }
 
     // Game_Actor.prototype.currentExp
     public currentExp(self: LEntity): number {
-        return self.actualParam(REBasics.params.exp);
+        return self.actualParam(MRBasics.params.exp);
     }
     
     // Game_Actor.prototype.nextLevelExp
@@ -213,7 +213,7 @@ export class LExperienceBehavior extends LBehavior {
 
     // Game_Actor.prototype.levelUp
     private levelUp(self: LEntity): void {
-        self.gainActualParam(REBasics.params.level, 1, false);
+        self.gainActualParam(MRBasics.params.level, 1, false);
         this.ownerEntity()._effectResult.levelup = true;
         //for (const learning of this.currentClass().learnings) {
         //    if (learning.level === this._level) {
@@ -224,7 +224,7 @@ export class LExperienceBehavior extends LBehavior {
 
     // Game_Actor.prototype.levelDown
     private levelDown(self: LEntity): void {
-        self.gainActualParam(REBasics.params.level, -1, false);
+        self.gainActualParam(MRBasics.params.level, -1, false);
         this.ownerEntity()._effectResult.leveldown = true;
     }
 

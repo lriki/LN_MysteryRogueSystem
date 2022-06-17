@@ -1,5 +1,5 @@
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
@@ -18,7 +18,7 @@ test("system.BDash.ArrowDamageStop", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_アローインプA").id, [], "enemy1"));
@@ -37,7 +37,7 @@ test("system.BDash.ArrowDamageStop", () => {
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
-    const hp2 = player1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
     const unit = player1.getEntityBehavior(LUnitBehavior);
     expect(hp2).toBeLessThan(hp1);              // ダメージを受けている
     expect(unit._straightDashing).toBeFalsy();  // ダッシュ状態は解除されている

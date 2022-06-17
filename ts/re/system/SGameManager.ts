@@ -38,7 +38,7 @@ import { DEntityCreateInfo } from "../data/DEntity";
 import { UEffect } from "../usecases/UEffect";
 import { DTerrainSetting } from "../data/DTerrainPreset";
 import { DTerrainSettingRef } from "../data/DLand";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -191,7 +191,7 @@ export class SGameManager {
                 else {
                     const floorInto = newFloorId.floorInfo();
 
-                    const preset = floorInto.presetId ? REData.floorPresets[floorInto.presetId] : REData.floorPresets[REBasics.defaultTerrainPresetId];
+                    const preset = floorInto.presetId ? REData.floorPresets[floorInto.presetId] : REData.floorPresets[MRBasics.defaultTerrainPresetId];
                     console.log("preset", preset);
                     const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.terrains, x => x.rating);
                     console.log("settingId", settingId);

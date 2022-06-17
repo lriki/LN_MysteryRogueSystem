@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/re/objects/behaviors/LBehavior";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -52,7 +52,7 @@ export class LExitPointBehavior extends LBehavior {
 
     onQueryReactions(self: LEntity, actions: DActionId[]): void {
         actions.splice(0);
-        actions.push(REBasics.actions.ForwardFloorActionId);
+        actions.push(MRBasics.actions.ForwardFloorActionId);
     }
     
     [onProceedFloorReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

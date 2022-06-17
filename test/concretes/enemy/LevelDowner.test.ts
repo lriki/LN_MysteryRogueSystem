@@ -6,7 +6,7 @@ import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBe
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { TestEnv } from "test/TestEnv";
 import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
 
@@ -24,7 +24,7 @@ test("concretes.enemy.LevelDowner", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const experience = player1.getEntityBehavior(LExperienceBehavior);
     experience.setLevel(player1, 99);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ミステリーインプA").id, [], "enemy1"));
@@ -35,7 +35,7 @@ test("concretes.enemy.LevelDowner", () => {
 
     const message = REGame.messageHistory;
     for (let i = 0; i < 50; i++) {
-        player1.setActualParam(REBasics.params.hp, hp1);
+        player1.setActualParam(MRBasics.params.hp, hp1);
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         

@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -27,7 +27,7 @@ test("concretes.trap.RustTrap", () => {
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    const shield1_UP1 = shield1.actualParam(REBasics.params.upgradeValue);
+    const shield1_UP1 = shield1.actualParam(MRBasics.params.upgradeValue);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -43,6 +43,6 @@ test("concretes.trap.RustTrap", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 装備が錆びる
-    const shield1_UP2 = shield1.actualParam(REBasics.params.upgradeValue);
+    const shield1_UP2 = shield1.actualParam(MRBasics.params.upgradeValue);
     expect(shield1_UP2 == shield1_UP1 - 1).toBe(true);
 });

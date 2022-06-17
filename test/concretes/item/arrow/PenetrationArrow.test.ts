@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -33,8 +33,8 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     REGame.world.transferEntity(enemy1, floorId, 15, 10);
     REGame.world.transferEntity(enemy2, floorId, 17, 10);
-    const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
-    const enemy2HP1 = enemy2.actualParam(REBasics.params.hp);
+    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy2HP1 = enemy2.actualParam(MRBasics.params.hp);
 
     // Player の右に壁を作る
     REGame.map.block(11, 10)._tileShape = LTileShape.Wall;
@@ -51,8 +51,8 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 壁を貫通し、2体の Enemy にダメージが出ている
-    const enemy1HP2 = enemy1.actualParam(REBasics.params.hp);
-    const enemy2HP2 = enemy2.actualParam(REBasics.params.hp);
+    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy2HP2 = enemy2.actualParam(MRBasics.params.hp);
     expect(enemy1HP2).toBeLessThan(enemy1HP1);
     expect(enemy2HP2).toBeLessThan(enemy2HP1);
 

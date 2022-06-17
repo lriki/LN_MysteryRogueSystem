@@ -11,7 +11,7 @@ import { LBehaviorId } from "../LObject";
 import { LItemShopStructure, LShopEntrance } from "../structures/LItemShopStructure";
 import { LMovingTargetFinder } from "../ai/LMovingTargetFinder";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 
@@ -93,7 +93,7 @@ export class LShopkeeperBehavior extends LBehavior {
     
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         
-        if (activity.actionId() == REBasics.actions.dialogResult) {
+        if (activity.actionId() == MRBasics.actions.dialogResult) {
             if (activity.selectedAction() == "yes") {
                 const billingPrice = this.shop().getBillingPrice();
                 const subject = activity.subject();

@@ -1,7 +1,7 @@
 import { tr2 } from "ts/re/Common";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";

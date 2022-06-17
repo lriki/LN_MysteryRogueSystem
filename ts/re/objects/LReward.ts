@@ -1,5 +1,5 @@
 import { RESerializable } from "../Common";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LEntity } from "./LEntity";
 
@@ -32,8 +32,8 @@ export class LReward {
         // if (b) {
         //     b.gainExp(this._exp);
         // }
-        if (entity.params().hasParam(REBasics.params.exp)) {
-            entity.gainActualParam(REBasics.params.exp, this._exp, true);
+        if (entity.params().hasParam(MRBasics.params.exp)) {
+            entity.gainActualParam(MRBasics.params.exp, this._exp, true);
         }
 
         this.clear();

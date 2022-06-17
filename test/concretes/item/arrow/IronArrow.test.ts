@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -30,7 +30,7 @@ test("concretes.item.arrow.IronArrow", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 13, 10);
-    const initialHP = enemy1.actualParam(REBasics.params.hp);
+    const initialHP = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -45,7 +45,7 @@ test("concretes.item.arrow.IronArrow", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp = enemy1.actualParam(REBasics.params.hp);
+    const hp = enemy1.actualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
 });
 

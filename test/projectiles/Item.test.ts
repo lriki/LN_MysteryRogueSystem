@@ -8,7 +8,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LTileShape } from "ts/re/objects/LBlock";
 
 beforeAll(() => {
@@ -202,8 +202,8 @@ test("Item.ReflectionObject", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 適当に HP を減らしておく
-    const player1HpMax1 = player1.idealParam(REBasics.params.hp);
-    player1.setActualParam(REBasics.params.hp, Math.max(player1HpMax1 - 10, 1));
+    const player1HpMax1 = player1.idealParam(MRBasics.params.hp);
+    player1.setActualParam(MRBasics.params.hp, Math.max(player1HpMax1 - 10, 1));
     //const player1Hp1 = player1.actualParam(REBasics.params.hp);
     
     // [投げる]
@@ -213,6 +213,6 @@ test("Item.ReflectionObject", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // HPが回復している
-    const player1Hp2 = player1.actualParam(REBasics.params.hp);
+    const player1Hp2 = player1.actualParam(MRBasics.params.hp);
     expect(player1Hp2).toBe(player1HpMax1);
 });

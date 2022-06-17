@@ -8,7 +8,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 
 beforeAll(() => {
@@ -225,25 +225,25 @@ test("Equipment.UpgradeValue", () => {
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const atk1 = player1.actualParam(REBasics.params.atk);
-    const def1 = player1.actualParam(REBasics.params.def);
+    const atk1 = player1.actualParam(MRBasics.params.atk);
+    const def1 = player1.actualParam(MRBasics.params.def);
     
     //----------------------------------------------------------------------------------------------------
 
     // 武器修正値+1
-    weapon1.setActualParam(REBasics.params.upgradeValue, 1);
+    weapon1.setActualParam(MRBasics.params.upgradeValue, 1);
 
-    const atk2 = player1.actualParam(REBasics.params.atk);
-    const def2 = player1.actualParam(REBasics.params.def);
+    const atk2 = player1.actualParam(MRBasics.params.atk);
+    const def2 = player1.actualParam(MRBasics.params.def);
 
     expect(atk2 > atk1).toBe(true);
     expect(def2 == def1).toBe(true);    // def には影響していないはず
 
     // 盾修正値+1
-    shield1.setActualParam(REBasics.params.upgradeValue, 1);
+    shield1.setActualParam(MRBasics.params.upgradeValue, 1);
 
-    const atk3 = player1.actualParam(REBasics.params.atk);
-    const def3 = player1.actualParam(REBasics.params.def);
+    const atk3 = player1.actualParam(MRBasics.params.atk);
+    const def3 = player1.actualParam(MRBasics.params.def);
 
     expect(atk3 == atk2).toBe(true);    // atk には影響していないはず
     expect(def3 > def2).toBe(true); 
@@ -259,7 +259,7 @@ test("Equipment.IdentifyUpgradeValue", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "item1"));
 
     // 修正値+2
-    item1.setActualParam(REBasics.params.upgradeValue, 2);
+    item1.setActualParam(MRBasics.params.upgradeValue, 2);
 
     // 識別前は表示名に +2 が含まれない
     const name1 = UName.makeNameAsItem(item1);
@@ -295,7 +295,7 @@ test("Equipment.EquipReaction", () => {
     //----------------------------------------------------------------------------------------------------
 
     // インベントリに入っているものに対してのみ、[装備] を実行できる
-    expect(weapon1.queryReactions().includes(REBasics.actions.EquipActionId)).toBeTruthy();
-    expect(shield1.queryReactions().includes(REBasics.actions.EquipActionId)).toBeFalsy();
+    expect(weapon1.queryReactions().includes(MRBasics.actions.EquipActionId)).toBeTruthy();
+    expect(shield1.queryReactions().includes(MRBasics.actions.EquipActionId)).toBeFalsy();
 });
 

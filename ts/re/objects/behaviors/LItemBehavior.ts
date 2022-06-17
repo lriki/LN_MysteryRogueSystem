@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DIdentifiedTiming } from "ts/re/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/re/data/DItem";
 import { REData } from "ts/re/data/REData";
@@ -73,14 +73,14 @@ export class LItemBehavior extends LBehavior {
 
     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
-        if (activity.actionId() == REBasics.actions.collide) {
+        if (activity.actionId() == MRBasics.actions.collide) {
     
             
             const target = activity.objects2()[0];
             const subject = new SEffectSubject(activity.subject());
             actx.postHandleActivity(cctx, target)
             .then(() => {
-                this.applyHitEffect(cctx, self, REBasics.actions.collide, target, subject.entity(), activity.effectDirection(), (targets: LEntity[]) => {
+                this.applyHitEffect(cctx, self, MRBasics.actions.collide, target, subject.entity(), activity.effectDirection(), (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {
                         // ここは postDestroy() ではなく普通の destroy().
                         // 上記 applyEffect() の中から postAnimation() が実行されるが、
@@ -105,9 +105,9 @@ export class LItemBehavior extends LBehavior {
 
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]
-        if (activity.actionId() == REBasics.actions.WaveActionId) {
+        if (activity.actionId() == MRBasics.actions.WaveActionId) {
             const actor = activity.actor();
-            const reaction = self.data.getReaction(REBasics.actions.WaveActionId);
+            const reaction = self.data.getReaction(MRBasics.actions.WaveActionId);
             for (const emittor of reaction.emittors()) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
                     .setItemEntity(self)
@@ -115,10 +115,10 @@ export class LItemBehavior extends LBehavior {
             }
         }
         // [読まれた]
-        else if (activity.actionId() == REBasics.actions.ReadActionId) {
+        else if (activity.actionId() == MRBasics.actions.ReadActionId) {
             const actor = activity.actor();
             UIdentify.identifyByTiming(cctx, actor, self, DIdentifiedTiming.Read);
-            const reaction = self.data.getReaction(REBasics.actions.ReadActionId);
+            const reaction = self.data.getReaction(MRBasics.actions.ReadActionId);
             for (const emittor of reaction.emittors()) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
                     .setItemEntity(self)
@@ -128,7 +128,7 @@ export class LItemBehavior extends LBehavior {
             }
         }
         // [食べられた]
-        else if (activity.actionId() == REBasics.actions.EatActionId) {
+        else if (activity.actionId() == MRBasics.actions.EatActionId) {
             
             const subject = activity.actor();
             const reactor = activity.object();
@@ -136,7 +136,7 @@ export class LItemBehavior extends LBehavior {
                 UIdentify.identifyByTiming(cctx, subject, reactor, DIdentifiedTiming.Eat);
 
 
-                const reaction = self.data.getReaction(REBasics.actions.EatActionId);
+                const reaction = self.data.getReaction(MRBasics.actions.EatActionId);
                 for (const emittor of reaction.emittors()) {
                     SEmittorPerformer.makeWithEmitor(subject, subject, emittor)
                         .setItemEntity(self)

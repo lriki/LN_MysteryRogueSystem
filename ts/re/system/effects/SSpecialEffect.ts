@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DSpecificEffectId, DSkillId } from "ts/re/data/DCommon";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SCommandContext } from "../SCommandContext";

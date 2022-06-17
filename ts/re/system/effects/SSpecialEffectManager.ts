@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { SSpecialEffect } from "./SSpecialEffect";
 import { SGoldStealSpecialEffect } from "./SGoldStealSpecialEffect";
@@ -40,21 +40,21 @@ export class SSpecialEffectManager {
     }
 
     private setupBuiltins(): void {
-        this.register(REBasics.effectBehaviors.itemSteal, new SItemStealSpecialEffect());
-        this.register(REBasics.effectBehaviors.goldSteal, new SGoldStealSpecialEffect());
-        this.register(REBasics.effectBehaviors.levelDown, new SLevelDownSpecialEffect());
-        this.register(REBasics.effectBehaviors.warp, new SWarpSpecialEffect());
-        this.register(REBasics.effectBehaviors.stumble, new SStumbleSpecialEffect());
-        this.register(REBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorSpecialEffect());
-        this.register(REBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorSpecialEffect());
-        this.register(REBasics.effectBehaviors.trapProliferation, new STrapProliferationSpecialEffect());
-        this.register(REBasics.effectBehaviors.dispelEquipments, new SDispelEquipmentsSpecialEffect());
-        this.register(REBasics.effectBehaviors.changeInstance, new SChangeInstanceSpecialEffect());
-        this.register(REBasics.effectBehaviors.restartFloor, new SRestartFloorSpecialEffect());
-        this.register(REBasics.effectBehaviors.clarification, new SClarificationSpecialEffect());
-        this.register(REBasics.effectBehaviors.division, new SDivisionSpecialEffect());
-        this.register(REBasics.effectBehaviors.removeStatesByIntentions, new SRemoveStatesByIntentionsSpecialEffect());
-        this.register(REBasics.effectBehaviors.performeSkill, new SPerformeSkillSpecialEffect());
+        this.register(MRBasics.effectBehaviors.itemSteal, new SItemStealSpecialEffect());
+        this.register(MRBasics.effectBehaviors.goldSteal, new SGoldStealSpecialEffect());
+        this.register(MRBasics.effectBehaviors.levelDown, new SLevelDownSpecialEffect());
+        this.register(MRBasics.effectBehaviors.warp, new SWarpSpecialEffect());
+        this.register(MRBasics.effectBehaviors.stumble, new SStumbleSpecialEffect());
+        this.register(MRBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorSpecialEffect());
+        this.register(MRBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorSpecialEffect());
+        this.register(MRBasics.effectBehaviors.trapProliferation, new STrapProliferationSpecialEffect());
+        this.register(MRBasics.effectBehaviors.dispelEquipments, new SDispelEquipmentsSpecialEffect());
+        this.register(MRBasics.effectBehaviors.changeInstance, new SChangeInstanceSpecialEffect());
+        this.register(MRBasics.effectBehaviors.restartFloor, new SRestartFloorSpecialEffect());
+        this.register(MRBasics.effectBehaviors.clarification, new SClarificationSpecialEffect());
+        this.register(MRBasics.effectBehaviors.division, new SDivisionSpecialEffect());
+        this.register(MRBasics.effectBehaviors.removeStatesByIntentions, new SRemoveStatesByIntentionsSpecialEffect());
+        this.register(MRBasics.effectBehaviors.performeSkill, new SPerformeSkillSpecialEffect());
     }
 }
 

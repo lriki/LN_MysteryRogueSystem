@@ -5,7 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -17,8 +17,8 @@ test("concretes.trap.PoisonArrowTrap.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const hp1 = player1.actualParam(REBasics.params.hp);
-    const pow1 = player1.actualParam(REBasics.params.pow);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const pow1 = player1.actualParam(MRBasics.params.pow);
     player1.addState(REData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
@@ -36,8 +36,8 @@ test("concretes.trap.PoisonArrowTrap.Basic", () => {
     REGame.world.random().resetSeed(5);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(REBasics.params.hp);
-    const pow2 = player1.actualParam(REBasics.params.pow);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const pow2 = player1.actualParam(MRBasics.params.pow);
     expect(hp2 < hp1).toBe(true);  // ダメージを受けている
     expect(pow2).toBe(pow1 - 1);    // ちからが減っている
 });

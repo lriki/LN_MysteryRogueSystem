@@ -7,7 +7,7 @@ import { REGame } from "../REGame";
 import { CommandArgs, LBehavior } from "../behaviors/LBehavior";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LEntityId } from "../LObject";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEventId, RoomEventArgs, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
 import { Helpers } from "ts/re/system/Helpers";
@@ -51,17 +51,17 @@ export class LGrabFootBehavior extends LBehavior {
         //     this._targetId  = target.entityId();
         // }
         
-        REGame.eventServer.subscribe(REBasics.events.preWalk, this);
+        REGame.eventServer.subscribe(MRBasics.events.preWalk, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(REBasics.events.preWalk, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.preWalk, this);
     }
 
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
-        if (eventId == REBasics.events.preWalk) {
+        if (eventId == MRBasics.events.preWalk) {
             const e = (args as WalkEventArgs);
 
             if (this._targetId.isEmpty()) {
@@ -80,7 +80,7 @@ export class LGrabFootBehavior extends LBehavior {
 
             if (e.walker.entityId().equals(this._targetId)) {
                 self.dir = UMovement.getLookAtDir(self, e.walker);
-                cctx.postSequel(self, REBasics.sequels.attack);
+                cctx.postSequel(self, MRBasics.sequels.attack);
                 cctx.postMessage(tr2("%1は身動きが取れない！").format(UName.makeUnitName(e.walker)));
                 return LEventResult.Handled;
             }

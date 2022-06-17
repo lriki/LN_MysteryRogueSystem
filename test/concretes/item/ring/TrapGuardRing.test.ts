@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 

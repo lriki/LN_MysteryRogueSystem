@@ -1,6 +1,6 @@
 import { DEntityKindId } from "./DCommon";
 import { DEntity } from "./DEntity";
-import { REBasics } from "./REBasics";
+import { MRBasics } from "./MRBasics";
 
 /**
  * Entity の種別
@@ -37,23 +37,23 @@ export class DEntityKind {
     // Enemy は敵対という意味も含むため。
     // Monster は仲間になることもある。
     public static isMonster(entity: DEntity): boolean {
-        return entity.entity.kindId == REBasics.entityKinds.MonsterKindId;
+        return entity.entity.kindId == MRBasics.entityKinds.MonsterKindId;
     }
 
     public static isTrap(entity: DEntity): boolean {
-        return entity.entity.kindId == REBasics.entityKinds.TrapKindId;
+        return entity.entity.kindId == MRBasics.entityKinds.TrapKindId;
     }
 
     public static isEntryPoint(entity: DEntity): boolean {
-        return entity.entity.kindId == REBasics.entityKinds.entryPoint;
+        return entity.entity.kindId == MRBasics.entityKinds.entryPoint;
     }
 
     public static isExitPoint(entity: DEntity): boolean {
-        return entity.entity.kindId == REBasics.entityKinds.exitPoint;
+        return entity.entity.kindId == MRBasics.entityKinds.exitPoint;
     }
 
     public static isOrnament(entity: DEntity): boolean {
-        return entity.entity.kindId == REBasics.entityKinds.Ornament;
+        return entity.entity.kindId == MRBasics.entityKinds.Ornament;
     }
 
     public static isItem(entity: DEntity): boolean {

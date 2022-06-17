@@ -10,7 +10,7 @@ import { REGame } from "../REGame";
 import { LConfusionAI, LConfusionAIRestriction } from "../ai/LConfusionAI";
 import { LActivity } from "../activities/LActivity";
 import { LUnitBehavior } from "../behaviors/LUnitBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { LBlindAI } from "../ai/LBlindAI";
 import { LCharacterAI } from "../ai/LCharacterAI";
@@ -182,7 +182,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         state.collectTraits(self, traits);
 
         //if (self.traitsWithId(REBasics.traits.SealActivity, activity.actionId()).length > 0) {
-        if (traits.find(t => t.code == REBasics.traits.SealActivity && t.dataId == actx.activity().actionId())) {
+        if (traits.find(t => t.code == MRBasics.traits.SealActivity && t.dataId == actx.activity().actionId())) {
             const data = this.stateData();
             const targetName = UName.makeUnitName(self);
             cctx.postMessage(data.message3.format(targetName));
@@ -198,7 +198,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             if (unit && unit.manualMovement()) {    // Player?
 
                 // 歩行移動であれば、方向をランダムにする
-                if (activity.actionId() == REBasics.actions.MoveToAdjacentActionId) {
+                if (activity.actionId() == MRBasics.actions.MoveToAdjacentActionId) {
                     const dir = cctx.random().select(UMovement.directions);
                     activity
                         .withEffectDirection(dir)
@@ -207,7 +207,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
                 }
 
                 // 通常攻撃であれば、方向をランダムにする
-                if (activity.actionId() == REBasics.actions.performSkill && activity.skillId() == RESystem.skills.normalAttack) {
+                if (activity.actionId() == MRBasics.actions.performSkill && activity.skillId() == RESystem.skills.normalAttack) {
                     const dir = cctx.random().select(UMovement.directions);
                     activity.withEntityDirection(dir);
                     return activity;

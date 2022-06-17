@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { REDataManager } from "ts/re/data/REDataManager";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
@@ -136,11 +136,11 @@ export class SRmmzHelpers {
                 }
                 else if (regionId == paramFixedMapMonsterHouseRoomRegionId) {
                     block.setComponent(FBlockComponent.Room);
-                    block.setFixedMapMonsterHouseTypeId(REBasics.monsterHouses.fixed);
+                    block.setFixedMapMonsterHouseTypeId(MRBasics.monsterHouses.fixed);
                 }
                 else if (regionId == paramFixedMapItemShopRoomRegionId) {
                     block.setComponent(FBlockComponent.Room);
-                    block.setFixedMapItemShopTypeId(REBasics.itemShops.fixed);
+                    block.setFixedMapItemShopTypeId(MRBasics.itemShops.fixed);
                 }
                 else if (regionId == paramFixedMapPassagewayRegionId) {
                     block.setComponent(FBlockComponent.Passageway);

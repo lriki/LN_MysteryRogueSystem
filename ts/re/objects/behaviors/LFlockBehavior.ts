@@ -1,5 +1,5 @@
 import { RESerializable } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { REData } from "ts/re/data/REData";
 import { LBehavior } from "../internal";
@@ -24,12 +24,12 @@ export class LFlockBehavior extends LBehavior {
 
     onPertyChanged(self: LEntity): void {
         if (self.partyId() > 0) {
-            REGame.world.party(self.partyId()).subscribe(REBasics.events.effectReacted, this);
+            REGame.world.party(self.partyId()).subscribe(MRBasics.events.effectReacted, this);
         }
     }
     
     onPartyEvent(eventId: DEventId, args: any): LEventResult {
-        if (eventId == REBasics.events.effectReacted) {
+        if (eventId == MRBasics.events.effectReacted) {
             this.ownerEntity().removeState(REData.getState("kState_仮眠2").id);
         }
         return LEventResult.Pass;

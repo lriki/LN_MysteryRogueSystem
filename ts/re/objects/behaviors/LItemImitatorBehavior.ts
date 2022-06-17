@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { DFactionId, REData } from "ts/re/data/REData";
@@ -73,14 +73,14 @@ export class LItemImitatorBehavior extends LBehavior {
     onAttached(self: LEntity): void {
         assert(this._itemEntityId.isEmpty());
 
-        REGame.eventServer.subscribe(REBasics.events.preWalk, this);
-        REGame.eventServer.subscribe(REBasics.events.prePut, this);
+        REGame.eventServer.subscribe(MRBasics.events.preWalk, this);
+        REGame.eventServer.subscribe(MRBasics.events.prePut, this);
     }
     
     onDetached(self: LEntity): void {
         assert(this._itemEntityId.hasAny());
-        REGame.eventServer.unsubscribe(REBasics.events.preWalk, this);
-        REGame.eventServer.unsubscribe(REBasics.events.prePut, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.preWalk, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.prePut, this);
         this.itemEntity().clearParent();
     }
 
@@ -151,7 +151,7 @@ export class LItemImitatorBehavior extends LBehavior {
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
         const self = this.ownerEntity();
 
-        if (eventId == REBasics.events.preWalk) {
+        if (eventId == MRBasics.events.preWalk) {
             const e = args as WalkEventArgs;
 
             // 敵対 Entity が、歩行によって同じ座標に移動しようとしたらステート解除
@@ -162,7 +162,7 @@ export class LItemImitatorBehavior extends LBehavior {
             }
             
         }
-        else if (eventId == REBasics.events.prePut) {
+        else if (eventId == MRBasics.events.prePut) {
             /*
             const e = args as PutEventArgs;
             if (Helpers.isHostileFactionId(e.actor.getOutwardFactionId(), self.getInnermostFactionId())) {

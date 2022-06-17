@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 import { paramFPLoss } from "ts/re/PluginParameters";
@@ -24,7 +24,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
     player1.addState(REData.getState("kState_UT罠必中").id);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const fp1 = player1.actualParam(REBasics.params.fp);
+    const fp1 = player1.actualParam(MRBasics.params.fp);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_レザーシールド_A").id, [], "shield1"));
     inventory.addEntity(shield1);
@@ -33,7 +33,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
     REGame.world.transferEntity(trap1, floorId, 11, 10);
-    const shield1_UP1 = shield1.actualParam(REBasics.params.upgradeValue);
+    const shield1_UP1 = shield1.actualParam(MRBasics.params.upgradeValue);
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -46,10 +46,10 @@ test("concretes.item.shield.LeatherShield.test", () => {
 
     RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
-    const fp2 = player1.actualParam(REBasics.params.fp);
+    const fp2 = player1.actualParam(MRBasics.params.fp);
     expect(fp2).toBe(fp1 - (paramFPLoss / 2));  // FP が基本値の半分、減少していること
 
     // 装備はさびない
-    const shield1_UP2 = shield1.actualParam(REBasics.params.upgradeValue);
+    const shield1_UP2 = shield1.actualParam(MRBasics.params.upgradeValue);
     expect(shield1_UP2).toBe(shield1_UP1);
 });

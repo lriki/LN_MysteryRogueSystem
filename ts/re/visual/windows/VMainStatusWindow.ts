@@ -1,6 +1,6 @@
 import { assert } from "ts/re/Common";
 import { DTextManager } from "ts/re/data/DTextManager";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
@@ -65,7 +65,7 @@ export class VMainStatusWindow extends Window_Base {
             .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
-        this._fpText = new VUITextElement(DTextManager.param(REBasics.params.fp))
+        this._fpText = new VUITextElement(DTextManager.param(MRBasics.params.fp))
             .setGrid(0, 1)
             .setColor(this.systemColor())
             .addTo(this._layout);
@@ -75,7 +75,7 @@ export class VMainStatusWindow extends Window_Base {
             .margin(0, 0, 0, 10)
             .addTo(this._layout);
 
-        this._powText = new VUITextElement(DTextManager.param(REBasics.params.pow))
+        this._powText = new VUITextElement(DTextManager.param(MRBasics.params.pow))
             .setGrid(2, 1)
             .setColor(this.systemColor())
             .addTo(this._layout);
@@ -228,8 +228,8 @@ export class VMainStatusWindow extends Window_Base {
             for (const item of equipmentUser.equippedItemEntities()) {
                 const data = item.data;
                 assert(data.equipment);
-                atk += LEquipmentUserBehavior.calcEquipmentParam(item, REBasics.params.atk);//data.equipment.parameters[REBasics.params.atk];
-                def += LEquipmentUserBehavior.calcEquipmentParam(item, REBasics.params.def);//data.equipment.parameters[REBasics.params.def];
+                atk += LEquipmentUserBehavior.calcEquipmentParam(item, MRBasics.params.atk);//data.equipment.parameters[REBasics.params.atk];
+                def += LEquipmentUserBehavior.calcEquipmentParam(item, MRBasics.params.def);//data.equipment.parameters[REBasics.params.def];
 
 
                 // item.iterateBehaviorsReverse(b => {
@@ -248,14 +248,14 @@ export class VMainStatusWindow extends Window_Base {
         }
         
         // 満腹度
-        const fpData = REData.parameters[REBasics.params.fp];
-        const cfp = Math.ceil(fpData.makeDisplayValue(this._entity.actualParam(REBasics.params.fp)));
-        const mfp = Math.ceil(fpData.makeDisplayValue(this._entity.idealParam(REBasics.params.fp)));
+        const fpData = REData.parameters[MRBasics.params.fp];
+        const cfp = Math.ceil(fpData.makeDisplayValue(this._entity.actualParam(MRBasics.params.fp)));
+        const mfp = Math.ceil(fpData.makeDisplayValue(this._entity.idealParam(MRBasics.params.fp)));
         this._fpValue.setText(`${cfp}/${mfp}`);
 
         // ちから
-        const c = this._entity.actualParam(REBasics.params.pow);
-        const m = this._entity.idealParam(REBasics.params.pow);
+        const c = this._entity.actualParam(MRBasics.params.pow);
+        const m = this._entity.idealParam(MRBasics.params.pow);
         this._powValue.setText(`${c}/${m}`);
         
         // 経験値

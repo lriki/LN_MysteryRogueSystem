@@ -22,7 +22,7 @@ import { SDialog } from "ts/re/system/SDialog";
 import { DEntityCreateInfo, DEntityId } from "ts/re/data/DEntity";
 import { LBlock } from "ts/re/objects/LBlock";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
 
 declare global {
@@ -212,7 +212,7 @@ export class TestEnvIntegration extends SIntegration {
     public records: SIntegrationRecord[] = [];
 
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
-        if (eventId == REBasics.events.skillEmitted) {
+        if (eventId == MRBasics.events.skillEmitted) {
             this.skillEmittedCount++;
         }
     }

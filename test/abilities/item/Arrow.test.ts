@@ -1,6 +1,6 @@
 
 
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -39,7 +39,7 @@ test("Items.Arrow", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_レッドスライムA").id, [], "enemy1"));
     REGame.world.transferEntity(enemy1, floorId, 13, 10);
-    const initialHP = enemy1.actualParam(REBasics.params.hp);
+    const initialHP = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -57,7 +57,7 @@ test("Items.Arrow", () => {
     //----------------------------------------------------------------------------------------------------
 
     // item1 は [撃つ] ことができる
-    expect(item1.queryReactions().includes(REBasics.actions.ShootingActionId)).toBeTruthy();
+    expect(item1.queryReactions().includes(MRBasics.actions.ShootingActionId)).toBeTruthy();
     
     // [撃つ]
     const activity1 = LActivity.makeShooting(player1, item1).withConsumeAction();
@@ -66,7 +66,7 @@ test("Items.Arrow", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp = enemy1.actualParam(REBasics.params.hp);
+    const hp = enemy1.actualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
     expect(item1._stackCount).toBe(stack1 + stack2 - 1);      // スタックが減っている
 });

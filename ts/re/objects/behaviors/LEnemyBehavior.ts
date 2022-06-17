@@ -1,6 +1,6 @@
 
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import {  DEnemy, DDropItem } from "ts/re/data/DEnemy";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { DParameterId } from "ts/re/data/DParameter";
@@ -88,7 +88,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
             const rand = REGame.world.random();
             switch (cause) {
                 case LGenerateDropItemCause.Dead:
-                    const rate = self.traitsSumOrDefault(REBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
+                    const rate = self.traitsSumOrDefault(MRBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
                     if (rand.nextIntWithMax(100) < rate * 100) {
         
                         // Enemy 固有のドロップアイテム

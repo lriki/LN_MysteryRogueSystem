@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 import { SView } from "ts/re/system/SView";
@@ -19,7 +19,7 @@ beforeAll(() => {
 test("concretes.item.ring.VisibleRing", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
-    const stateId = REBasics.states.nap;
+    const stateId = MRBasics.states.nap;
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);

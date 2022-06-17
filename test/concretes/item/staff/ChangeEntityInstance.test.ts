@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { REGame } from "ts/re/objects/REGame";
 import { SEntityFactory } from "ts/re/system/SEntityFactory";
@@ -35,7 +35,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // item1 は [振る] ことができる
-    expect(item1.queryReactions().includes(REBasics.actions.WaveActionId)).toBe(true);
+    expect(item1.queryReactions().includes(MRBasics.actions.WaveActionId)).toBe(true);
     
     // [振る]
     const activity1 = LActivity.makeWave(actor1, item1).withConsumeAction();

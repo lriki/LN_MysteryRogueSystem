@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
 
@@ -20,7 +20,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // アイテム作成 & インベントリに入れる
@@ -36,7 +36,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    player1.setActualParam(REBasics.params.hp, 1);
+    player1.setActualParam(MRBasics.params.hp, 1);
 
     // 待機
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
@@ -46,7 +46,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     // 倒されるが、復活して HP が回復している。
     // また Enemy は倍速であるが復活した直後はターンは回らず、Scheduler はリセットされる。
-    const hp2 = player1.actualParam(REBasics.params.hp);
+    const hp2 = player1.actualParam(MRBasics.params.hp);
     expect(hp2).toBe(hp1);
 
     //expect(inventory.entities()[0].dataId() == REData.getEntity("kEntity_雑草_A").id).toBe(true);

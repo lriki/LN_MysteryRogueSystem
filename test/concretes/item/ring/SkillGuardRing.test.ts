@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
@@ -27,7 +27,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const experience = player1.getEntityBehavior(LExperienceBehavior);
     experience.setLevel(player1, 99);
-    const hp1 = player1.actualParam(REBasics.params.hp);
+    const hp1 = player1.actualParam(MRBasics.params.hp);
 
     // Item
     const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_インプリング_A").id, [], "ring1"));
@@ -43,7 +43,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     //----------------------------------------------------------------------------------------------------
     // 先にレベル下げが働くことをチェックしておく
     for (let i = 0; i < 50; i++) {
-        player1.setActualParam(REBasics.params.hp, hp1);
+        player1.setActualParam(MRBasics.params.hp, hp1);
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         
@@ -59,7 +59,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
 
     let count = 0;
     for (let i = 0; i < 50; i++) {
-        player1.setActualParam(REBasics.params.hp, hp1);
+        player1.setActualParam(MRBasics.params.hp, hp1);
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         const level1 = experience.level(player1);

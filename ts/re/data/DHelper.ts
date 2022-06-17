@@ -1,14 +1,9 @@
-import { assert } from "ts/re/Common";
 import { DRmmzEffectScope } from "./DEffect";
-import { DMapId } from "./DLand";
-import { DTroopId } from "./DTroop";
-import { REData } from "./REData";
 
 export interface DConstructionExpr {
     name: string;
     args: any[];
 }
-
 
 export class DHelpers {
     public static TILE_ID_E = 768;

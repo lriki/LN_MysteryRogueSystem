@@ -1,7 +1,7 @@
 import { RESerializable, tr2 } from "ts/re/Common";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DEffect } from "ts/re/data/DEffect";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";
@@ -27,7 +27,7 @@ export class LStumblePreventionBehavior extends LBehavior {
             }
         }
         else if (rejection.kind == "EffectBehavior") {
-            if (rejection.id == REBasics.effectBehaviors.stumble) {
+            if (rejection.id == MRBasics.effectBehaviors.stumble) {
                 return this.rejectStumble(cctx, self);
             }
         }
@@ -35,11 +35,11 @@ export class LStumblePreventionBehavior extends LBehavior {
     }
 
     private rejectStumble(cctx: SCommandContext, self: LEntity): SCommandResponse {
-        if (self.actualParam(REBasics.params.remaining) > 0) {
+        if (self.actualParam(MRBasics.params.remaining) > 0) {
             cctx.postMessage(tr2("%1の効果で転ばなかった。").format(UName.makeNameAsItem(self)));
 
             // 使用回数を減らして効果を防止する
-            self.gainActualParam(REBasics.params.remaining, -1, true);
+            self.gainActualParam(MRBasics.params.remaining, -1, true);
             return SCommandResponse.Canceled;
         }
         return SCommandResponse.Pass;

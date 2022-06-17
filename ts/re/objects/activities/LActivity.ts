@@ -1,6 +1,6 @@
 import { assert, RESerializable } from "ts/re/Common";
 import { DAction } from "ts/re/data/DAction";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DActionId, DSkillId } from "ts/re/data/DCommon";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { UMovement } from "ts/re/usecases/UMovement";
@@ -159,7 +159,7 @@ export class LActivity {
             this._actionTokenConsumeType = consumeType;
         }
         else {
-            if (this._actionId == REBasics.actions.MoveToAdjacentActionId) {
+            if (this._actionId == MRBasics.actions.MoveToAdjacentActionId) {
                 this._actionTokenConsumeType = LActionTokenConsumeType.MinorActed;
             }
             else {
@@ -235,18 +235,18 @@ export class LActivity {
     }
 
     public static makeDirectionChange(actor: LEntity, dir: number): LActivity {
-        return (new LActivity()).setup(REBasics.actions.DirectionChangeActionId, actor, undefined, dir).withEntityDirection(dir);
+        return (new LActivity()).setup(MRBasics.actions.DirectionChangeActionId, actor, undefined, dir).withEntityDirection(dir);
     }
 
     public static makeMoveToAdjacent(actor: LEntity, dir: number): LActivity {
-        return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
+        return (new LActivity()).setup(MRBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
     }
 
     public static makeMoveToAdjacentBlock(actor: LEntity, block: LBlock): LActivity {
         //assert(UMovement.blockDistance(actor.x, actor.y, block.x(), block.y()) <= 1);    // 隣接ブロックであること
         assert(UMovement.checkAdjacentPositions(actor.mx, actor.my, block.mx, block.my));    // 隣接ブロックであること
         const dir = SAIHelper.distanceToDir(actor.mx, actor.my, block.mx, block.my);
-        return (new LActivity()).setup(REBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
+        return (new LActivity()).setup(MRBasics.actions.MoveToAdjacentActionId, actor, undefined, dir);
     }
 
     public static makePrimaryUse(subject: LEntity, object: LEntity): LActivity {
@@ -261,82 +261,82 @@ export class LActivity {
     }
 
     public static makePick(actor: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.PickActionId, actor);
+        return (new LActivity()).setup(MRBasics.actions.PickActionId, actor);
     }
 
     public static makePut(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.PutActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.PutActionId, actor, object);
     }
 
     public static makeThrow(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.ThrowActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.ThrowActionId, actor, object);
     }
 
     public static makeShooting(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.ShootingActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.ShootingActionId, actor, object);
     }
     
     public static makeFall(actor: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.FallActionId, actor);
+        return (new LActivity()).setup(MRBasics.actions.FallActionId, actor);
     }
 
     public static makeTrample(actor: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.trample, actor);
+        return (new LActivity()).setup(MRBasics.actions.trample, actor);
     }
 
     public static makeExchange(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.ExchangeActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.ExchangeActionId, actor, object);
     }
 
     public static makeEquip(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.EquipActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.EquipActionId, actor, object);
     }
 
     public static makeEquipOff(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.EquipOffActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.EquipOffActionId, actor, object);
     }
     
     public static makeEat(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.EatActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.EatActionId, actor, object);
     }
 
     public static makeWave(actor: LEntity, object: LEntity): LActivity {
-        return (new LActivity()).setup(REBasics.actions.WaveActionId, actor, object);
+        return (new LActivity()).setup(MRBasics.actions.WaveActionId, actor, object);
     }
 
     public static makeRead(actor: LEntity, object: LEntity, targets?: LEntity[]): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.ReadActionId, actor, object);
+        const a = (new LActivity()).setup(MRBasics.actions.ReadActionId, actor, object);
         if (targets) a.setObjects2(targets);
         return a;
     }
 
     public static makePutIn(actor: LEntity, storage: LEntity, item: LEntity): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.PutInActionId, actor, storage);
+        const a = (new LActivity()).setup(MRBasics.actions.PutInActionId, actor, storage);
         a._objects2 = [item.entityId()];
         return a;
     }
 
     public static makeTalk(actor: LEntity): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.talk, actor);
+        const a = (new LActivity()).setup(MRBasics.actions.talk, actor);
         return a;
     }
 
     public static makeCollide(subject: LEntity, target: LEntity): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.collide, subject);
+        const a = (new LActivity()).setup(MRBasics.actions.collide, subject);
         a.setObjects2([target]);
         return a;
     }
 
     public static makePerformSkill(actor: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
         assert(skillId > 0);
-        const a = (new LActivity()).setup(REBasics.actions.performSkill, actor);
+        const a = (new LActivity()).setup(MRBasics.actions.performSkill, actor);
         if (dirToFace !== undefined) a._effectDirection = dirToFace;
         a._skillId = skillId;
         return a;
     }
 
     public static makeDialogResult(actor: LEntity, target: LEntity, selectedAction: string): LActivity {
-        const a = (new LActivity()).setup(REBasics.actions.dialogResult, actor, target);
+        const a = (new LActivity()).setup(MRBasics.actions.dialogResult, actor, target);
         a._selectedAction = selectedAction;
         return a;
     }

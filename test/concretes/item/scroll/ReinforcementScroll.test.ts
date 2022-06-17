@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SAnumationSequel } from "ts/re/system/SSequel";
 
 beforeAll(() => {
@@ -48,8 +48,8 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 武器だけ +1 と解呪
-    expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(1);
-    expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(0);
+    expect(weapon1.actualParam(MRBasics.params.upgradeValue)).toBe(1);
+    expect(shield1.actualParam(MRBasics.params.upgradeValue)).toBe(0);
     expect(weapon1.isStateAffected(stateId)).toBe(false);
     expect(shield1.isStateAffected(stateId)).toBe(true);
     expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);
@@ -115,7 +115,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    let last = weapon1.actualParam(REBasics.params.upgradeValue);
+    let last = weapon1.actualParam(MRBasics.params.upgradeValue);
     let total = 0;
     for (let i = 0; i < count; i++) {
         const item = items[i];
@@ -126,7 +126,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
         
         RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        const v = weapon1.actualParam(REBasics.params.upgradeValue);
+        const v = weapon1.actualParam(MRBasics.params.upgradeValue);
         const d = v - last;
         expect(d == 1 || d == 3).toBe(true);    // +1 または +3 で増加
         total += d;
@@ -171,8 +171,8 @@ test("concretes.item.scroll.ReinforcementScroll.Shield.basic", () => {
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 防具だけ +1 と解呪
-    expect(weapon1.actualParam(REBasics.params.upgradeValue)).toBe(0);
-    expect(shield1.actualParam(REBasics.params.upgradeValue)).toBe(1);
+    expect(weapon1.actualParam(MRBasics.params.upgradeValue)).toBe(0);
+    expect(shield1.actualParam(MRBasics.params.upgradeValue)).toBe(1);
     expect(weapon1.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(false);
     expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);

@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { UTransfer } from "ts/re/usecases/UTransfer";
 import { UName } from "ts/re/usecases/UName";
 import { LScheduler2, LSchedulerPhase } from "ts/re/objects/LScheduler";
-import { REBasics } from "../../data/REBasics";
+import { MRBasics } from "../../data/MRBasics";
 import { SStepPhase } from "../SCommon";
 import { SStepScheduler2 } from "./SStepScheduler";
 import { SCommandResponse } from "../SCommand";

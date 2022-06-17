@@ -1,7 +1,7 @@
 import { assert, tr2 } from "ts/re/Common";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SManualActionDialog } from "ts/re/system/dialogs/SManualDecisionDialog";
 import { REVisual } from "../REVisual";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -360,7 +360,7 @@ export class VManualActionDialogVisual extends VDialog {
         // 正面に、少なくとも敵対していない Entity がいれば、話しかけてみる
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
-            if (frontTarget.queryReactions().includes(REBasics.actions.talk)) {
+            if (frontTarget.queryReactions().includes(MRBasics.actions.talk)) {
                 context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenConsumeType.MajorActed));
                 this._model.submit();
                 return true;

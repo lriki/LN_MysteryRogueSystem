@@ -1,5 +1,5 @@
 import { RESerializable } from "../Common";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { SCommandResponse } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
@@ -57,7 +57,7 @@ export class LSanctuaryFieldEffect extends LFieldEffect {
             for (const entity of block.getEntities()) {
                 // 戦闘不能ステート 付加
                 if (entity.findEntityBehavior(LEnemyBehavior)) {
-                    entity.addState(REBasics.states.dead);
+                    entity.addState(MRBasics.states.dead);
                 }
             }
         }

@@ -1,5 +1,5 @@
 import { assert } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { RoomEventArgs } from "ts/re/data/predefineds/DBasicEvents";
 import { REGame } from "ts/re/objects/REGame";
 import { LBlock } from "ts/re/objects/LBlock";
@@ -647,8 +647,8 @@ export class UMovement {
                     oldRoomId: oldBlock._roomId,
                 };
             
-                REGame.eventServer.publish(cctx, REBasics.events.roomEnterd, args);
-                REGame.eventServer.publish(cctx, REBasics.events.roomLeaved, args);
+                REGame.eventServer.publish(cctx, MRBasics.events.roomEnterd, args);
+                REGame.eventServer.publish(cctx, MRBasics.events.roomLeaved, args);
             }
         }
 

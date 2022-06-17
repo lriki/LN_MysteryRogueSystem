@@ -1,4 +1,4 @@
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey, DAttackElementId } from "../data/DCommon";
 import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterApplyTarget, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSpecialEffectRef } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
@@ -78,7 +78,7 @@ export class SEffect {
         const successRate = this._successRate;
         if (this.isPhysical()) {
             const subject = this.subject();
-            const hit = (subject) ? subject.xparamOrDefault(REBasics.xparams.hit, 1.0) : 1.0;
+            const hit = (subject) ? subject.xparamOrDefault(MRBasics.xparams.hit, 1.0) : 1.0;
             return successRate * 0.01 * hit;
         } else {
             return successRate * 0.01;
@@ -88,9 +88,9 @@ export class SEffect {
     // Game_Action.prototype.itemEva
     public evaRate(target: LEntity): number {
         if (this.isPhysical()) {
-            return target.xparam(REBasics.xparams.eva);
+            return target.xparam(MRBasics.xparams.eva);
         } else if (this.isMagical()) {
-            return target.xparam(REBasics.xparams.mev);
+            return target.xparam(MRBasics.xparams.mev);
         } else {
             return 0;
         }
@@ -99,18 +99,18 @@ export class SEffect {
     // Game_Action.prototype.itemCri
     public criRate(target: LEntity): number {
         const subject = this.subject();
-        const cri = (subject) ? subject.xparam(REBasics.xparams.cri) : 1.0;
+        const cri = (subject) ? subject.xparam(MRBasics.xparams.cri) : 1.0;
 
         return this._data.critical
-            ? cri * (1 - target.xparam(REBasics.xparams.cev))
+            ? cri * (1 - target.xparam(MRBasics.xparams.cev))
             : 0;
     }
 
     // Game_Action.prototype.lukEffectRate
     public lukEffectRate(target: LEntity): number {
         const subject = this.subject();
-        const subject_luk = subject ? subject.actualParam(REBasics.params.luk) : 0.0;
-        const target_luk = target.actualParam(REBasics.params.luk);
+        const subject_luk = subject ? subject.actualParam(MRBasics.params.luk) : 0.0;
+        const target_luk = target.actualParam(MRBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     }
 }
@@ -184,7 +184,7 @@ export class SEffectorFact {
 
         // この種類を扱うのは得意？
         if (this._incidentEntityKind > 0) {
-            this._genericEffectRate = this._subject.traitsPi(REBasics.traits.EffectProficiency, this._incidentEntityKind);
+            this._genericEffectRate = this._subject.traitsPi(MRBasics.traits.EffectProficiency, this._incidentEntityKind);
         }
         else {
             this._incidentEntityKind = 1.0;
@@ -395,7 +395,7 @@ export class SEffectModifier {
             this._parameterEffects2.push(paramEffect);
 
             // Check fixed damage.
-            const trait = subject.traitsWithId(REBasics.traits.FixedDamage, p._parameterId).backOrUndefined();
+            const trait = subject.traitsWithId(MRBasics.traits.FixedDamage, p._parameterId).backOrUndefined();
             if (trait) {
                 paramEffect.fixedDamage = trait.value;
             }
@@ -459,7 +459,7 @@ export class SEffectApplyer {
 
         const sourceSkillId = this._effect.fact().sourceSkill();
         if (sourceSkillId) {
-            if (target.traitsWithId(REBasics.traits.SkillGuard, sourceSkillId).length > 0) {
+            if (target.traitsWithId(MRBasics.traits.SkillGuard, sourceSkillId).length > 0) {
                 return;
             }
         }
@@ -493,7 +493,7 @@ export class SEffectApplyer {
                 // applyDeathVulnerable
                 // Item に対して致死爆発を適用するときなど、 Param を持っていない者に対しても処理したいので、isValid は考慮しない。
                 for (const elementId of paramEffect.elementIds) {
-                    for (const trait of target.traitsWithId(REBasics.traits.DeathVulnerableElement, elementId)) {
+                    for (const trait of target.traitsWithId(MRBasics.traits.DeathVulnerableElement, elementId)) {
                         this.addState(target, trait.value, result);
                     }
                 }
@@ -539,16 +539,16 @@ export class SEffectApplyer {
         const baseValue = this.evalDamageFormula(paramEffect, target);
         let value = baseValue * this.calcElementRate(paramEffect, target);
         if (this._effect.isPhysical()) {
-            value *= target.sparam(REBasics.sparams.pdr);
+            value *= target.sparam(MRBasics.sparams.pdr);
         }
         if (this._effect.isMagical()) {
-            value *= target.sparam(REBasics.sparams.mdr);
+            value *= target.sparam(MRBasics.sparams.mdr);
         }
         if (baseValue < 0) {
             value *= this.elemetedRecoverRate(target, paramEffect);
         }
         if (baseValue < 0) {
-            value *= target.sparam(REBasics.sparams.rec);
+            value *= target.sparam(MRBasics.sparams.rec);
         }
         if (critical) {
             value = this.applyCritical(value);
@@ -568,7 +568,7 @@ export class SEffectApplyer {
 
         let rate = 1.0;
         for (const elementId of paramEffect.elementIds) {
-            rate *= target.traitsPi(REBasics.traits.ElementedRecoveryRate, elementId);
+            rate *= target.traitsPi(MRBasics.traits.ElementedRecoveryRate, elementId);
         }
         return rate;
     }
@@ -651,7 +651,7 @@ export class SEffectApplyer {
         const isGuard = false;//(targetBehavior) ? targetBehavior.isGuard() : false;
         // TODO: guard
 
-        return damage / (damage > 0 && isGuard ? 2 * target.sparam(REBasics.sparams.grd) : 1);
+        return damage / (damage > 0 && isGuard ? 2 * target.sparam(MRBasics.sparams.grd) : 1);
     }
 
     private applyProficiency(damage: number): number {
@@ -660,7 +660,7 @@ export class SEffectApplyer {
     
     private applyDamageRate(damage: number, paramId: DParameterId, target: LEntity): number {
         if (damage > 0) {
-            return damage * target.traitsPi(REBasics.traits.ParamDamageRate, paramId)
+            return damage * target.traitsPi(MRBasics.traits.ParamDamageRate, paramId)
         }
         // else if (damage < 0) {
         //     target.traitsPi(REBasics.traits.RecoverRate);
@@ -679,7 +679,7 @@ export class SEffectApplyer {
     }
 
     private applyRaceRate(damage: number, target: LEntity): number {
-        const traits = this._effect.subject().traits(REBasics.traits.RaceRate);
+        const traits = this._effect.subject().traits(MRBasics.traits.RaceRate);
         if (traits.length > 0) {
             const points: { value: number, count: number }[] = [];
 
@@ -763,7 +763,7 @@ export class SEffectApplyer {
 
 
         //console.log("damage", paramEffect.paramId, value);
-        if (paramEffect.paramId == REBasics.params.hp) {
+        if (paramEffect.paramId == MRBasics.params.hp) {
             result.hpAffected = true;
         }
     }
@@ -845,7 +845,7 @@ export class SEffectApplyer {
                 LProjectileBehavior.startMoveAsProjectile(cctx, targetEntity, new SEffectSubject(subject), this._effect.fact().direction(), paramThrowingDistance);
                 break;
             case "kSystemEffect_脱出":
-                cctx.postSequel(targetEntity, REBasics.sequels.escape);
+                cctx.postSequel(targetEntity, MRBasics.sequels.escape);
                 UTransfer.exitLand(cctx, targetEntity, LandExitResult.Escape);
                 break;
             case "kSystemEffect_識別":

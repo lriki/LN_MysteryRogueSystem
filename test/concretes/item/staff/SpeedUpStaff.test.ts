@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { assert } from "ts/re/Common";
 import { LScheduler2 } from "ts/re/objects/LScheduler";
 

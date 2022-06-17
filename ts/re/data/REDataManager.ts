@@ -2,7 +2,7 @@ import fs from 'fs';
 import { RESystem } from "ts/re/system/RESystem";
 import { assert, RESerializable, tr, tr2 } from "../Common";
 import { DMap, REData, REFloorMapKind } from "./REData";
-import { REBasics } from "./REBasics";
+import { MRBasics } from "./MRBasics";
 import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
@@ -119,7 +119,7 @@ export class REDataManager {
 
         // Events
         {
-            REBasics.events = {
+            MRBasics.events = {
                 roomEnterd: 1,
                 roomLeaved: 2,
                 preWalk: 3,
@@ -153,7 +153,7 @@ export class REDataManager {
             REData_Parameter.makeBuiltin(16, "level", tr2("レベル"), tr2("最大レベル"), -1, 99, 1, Infinity),
             REData_Parameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 999999, 0, Infinity),
         ];
-        REBasics.params = {
+        MRBasics.params = {
             hp: REData.parameters.findIndex(x => x.code == "hp"),
             mp: REData.parameters.findIndex(x => x.code == "mp"),
             atk: REData.parameters.findIndex(x => x.code == "atk"),
@@ -173,38 +173,38 @@ export class REDataManager {
             exp: REData.parameters.findIndex(x => x.code == "exp"),
         };
         // RMMZ のパラメータID との一致を検証
-        assert(REData.parameters[REBasics.params.hp].battlerParamId === 0);
-        assert(REData.parameters[REBasics.params.mp].battlerParamId === 1);
-        assert(REData.parameters[REBasics.params.atk].battlerParamId === 2);
-        assert(REData.parameters[REBasics.params.def].battlerParamId === 3);
-        assert(REData.parameters[REBasics.params.mat].battlerParamId === 4);
-        assert(REData.parameters[REBasics.params.mdf].battlerParamId === 5);
-        assert(REData.parameters[REBasics.params.agi].battlerParamId === 6);
-        assert(REData.parameters[REBasics.params.luk].battlerParamId === 7);
+        assert(REData.parameters[MRBasics.params.hp].battlerParamId === 0);
+        assert(REData.parameters[MRBasics.params.mp].battlerParamId === 1);
+        assert(REData.parameters[MRBasics.params.atk].battlerParamId === 2);
+        assert(REData.parameters[MRBasics.params.def].battlerParamId === 3);
+        assert(REData.parameters[MRBasics.params.mat].battlerParamId === 4);
+        assert(REData.parameters[MRBasics.params.mdf].battlerParamId === 5);
+        assert(REData.parameters[MRBasics.params.agi].battlerParamId === 6);
+        assert(REData.parameters[MRBasics.params.luk].battlerParamId === 7);
 
-        REData.parameters[REBasics.params.fp].magnification = 0.01;
-        REData.parameters[REBasics.params.fp].friendlySideMessages = [
+        REData.parameters[MRBasics.params.fp].magnification = 0.01;
+        REData.parameters[MRBasics.params.fp].friendlySideMessages = [
             { condition: "value >= max", message: tr("%1はおなかがいっぱいになった。") },
             { condition: "value < max", message: tr("%1はおなかがふくれた。") }
         ];
-        REData.parameters[REBasics.params.pow].selfGainMessage = DTextManager.actorGain;
-        REData.parameters[REBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
-        REData.parameters[REBasics.params.pow].targetGainMessage = DTextManager.actorGain;
-        REData.parameters[REBasics.params.pow].targetLossMessage = DTextManager.enemyLoss;
-        REData.parameters[REBasics.params.upgradeValue].selfGainMessage = DTextManager.actorGain;
-        REData.parameters[REBasics.params.upgradeValue].selfLossMessage = DTextManager.actorLoss;
-        REData.parameters[REBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
-        REData.parameters[REBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
-        REData.parameters[REBasics.params.level].initialValue = 1;
-        REData.parameters[REBasics.params.exp].initialValue = 0;
-        REData.parameters[REBasics.params.level].selfGainMessage = DTextManager.levelUp;
+        REData.parameters[MRBasics.params.pow].selfGainMessage = DTextManager.actorGain;
+        REData.parameters[MRBasics.params.pow].selfLossMessage = DTextManager.actorLoss;
+        REData.parameters[MRBasics.params.pow].targetGainMessage = DTextManager.actorGain;
+        REData.parameters[MRBasics.params.pow].targetLossMessage = DTextManager.enemyLoss;
+        REData.parameters[MRBasics.params.upgradeValue].selfGainMessage = DTextManager.actorGain;
+        REData.parameters[MRBasics.params.upgradeValue].selfLossMessage = DTextManager.actorLoss;
+        REData.parameters[MRBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
+        REData.parameters[MRBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
+        REData.parameters[MRBasics.params.level].initialValue = 1;
+        REData.parameters[MRBasics.params.exp].initialValue = 0;
+        REData.parameters[MRBasics.params.level].selfGainMessage = DTextManager.levelUp;
         //REData.parameters[REBasics.params.level].selfLossMessage = DTextManager.actorLoss;
-        REData.parameters[REBasics.params.level].targetGainMessage = DTextManager.levelUp;
+        REData.parameters[MRBasics.params.level].targetGainMessage = DTextManager.levelUp;
         //REData.parameters[REBasics.params.level].targetLossMessage = DTextManager.enemyLoss;
-        REData.parameters[REBasics.params.level].messageValueSource = DParamMessageValueSource.Absolute;
+        REData.parameters[MRBasics.params.level].messageValueSource = DParamMessageValueSource.Absolute;
         
         
-        REBasics.entityKinds = {
+        MRBasics.entityKinds = {
             actor: REData.addEntityKind("Actor", "Actor"),
             WeaponKindId: REData.addEntityKind("武器", "Weapon"),
             ShieldKindId: REData.addEntityKind("盾", "Shield"),
@@ -227,7 +227,7 @@ export class REDataManager {
             Ornament: REData.addEntityKind("Ornament", "Ornament"),
         };
 
-        REBasics.xparams = { // RMMZ と同じ配列
+        MRBasics.xparams = { // RMMZ と同じ配列
             hit: 0,
             eva: 1,
             cri: 2,
@@ -240,7 +240,7 @@ export class REDataManager {
             trg: 9,
         };
 
-        REBasics.sparams = { // RMMZ と同じ配列
+        MRBasics.sparams = { // RMMZ と同じ配列
             tgr: 0,
             grd: 1,
             rec: 2,
@@ -256,89 +256,89 @@ export class REDataManager {
         // StateTraits
         {
             REData.traits = [];
-            REBasics.traits = {} as any;
+            MRBasics.traits = {} as any;
             REData.traits[11] = new DTrait(11, "TRAIT_ELEMENT_RATE");
-            REBasics.traits.TRAIT_ELEMENT_RATE = 11;
+            MRBasics.traits.TRAIT_ELEMENT_RATE = 11;
             REData.traits[12] = new DTrait(12, "TRAIT_DEBUFF_RATE");
-            REBasics.traits.TRAIT_DEBUFF_RATE = 12;
+            MRBasics.traits.TRAIT_DEBUFF_RATE = 12;
             REData.traits[13] = new DTrait(13, "TRAIT_STATE_RATE");
-            REBasics.traits.TRAIT_STATE_RATE = 13;
+            MRBasics.traits.TRAIT_STATE_RATE = 13;
             REData.traits[14] = new DTrait(14, "TRAIT_STATE_RESIST");
-            REBasics.traits.TRAIT_STATE_RESIST = 14;
+            MRBasics.traits.TRAIT_STATE_RESIST = 14;
             REData.traits[21] = new DTrait(21, "TRAIT_PARAM");
-            REBasics.traits.TRAIT_PARAM = 21;
+            MRBasics.traits.TRAIT_PARAM = 21;
             REData.traits[22] = new DTrait(22, "TRAIT_XPARAM");
-            REBasics.traits.TRAIT_XPARAM = 22;
+            MRBasics.traits.TRAIT_XPARAM = 22;
             REData.traits[23] = new DTrait(23, "TRAIT_SPARAM");
-            REBasics.traits.TRAIT_SPARAM = 23;
+            MRBasics.traits.TRAIT_SPARAM = 23;
             REData.traits[31] = new DTrait(31, "TRAIT_ATTACK_ELEMENT");
-            REBasics.traits.TRAIT_ATTACK_ELEMENT = 31;
+            MRBasics.traits.TRAIT_ATTACK_ELEMENT = 31;
             REData.traits[32] = new DTrait(32, "TRAIT_ATTACK_STATE");
-            REBasics.traits.TRAIT_ATTACK_STATE = 32;
+            MRBasics.traits.TRAIT_ATTACK_STATE = 32;
             REData.traits[33] = new DTrait(33, "TRAIT_ATTACK_SPEED");
-            REBasics.traits.TRAIT_ATTACK_SPEED = 33;
+            MRBasics.traits.TRAIT_ATTACK_SPEED = 33;
             REData.traits[34] = new DTrait(34, "TRAIT_ATTACK_TIMES");
-            REBasics.traits.TRAIT_ATTACK_TIMES = 34;
+            MRBasics.traits.TRAIT_ATTACK_TIMES = 34;
             REData.traits[35] = new DTrait(35, "TRAIT_ATTACK_SKILL");
-            REBasics.traits.TRAIT_ATTACK_SKILL = 35;
+            MRBasics.traits.TRAIT_ATTACK_SKILL = 35;
             REData.traits[41] = new DTrait(41, "TRAIT_STYPE_ADD");
-            REBasics.traits.TRAIT_STYPE_ADD = 41;
+            MRBasics.traits.TRAIT_STYPE_ADD = 41;
             REData.traits[42] = new DTrait(42, "TRAIT_STYPE_SEAL");
-            REBasics.traits.TRAIT_STYPE_SEAL = 42;
+            MRBasics.traits.TRAIT_STYPE_SEAL = 42;
             REData.traits[43] = new DTrait(43, "TRAIT_SKILL_ADD");
-            REBasics.traits.TRAIT_SKILL_ADD = 43;
+            MRBasics.traits.TRAIT_SKILL_ADD = 43;
             REData.traits[44] = new DTrait(44, "TRAIT_SKILL_SEAL");
-            REBasics.traits.TRAIT_SKILL_SEAL = 44;
+            MRBasics.traits.TRAIT_SKILL_SEAL = 44;
             REData.traits[51] = new DTrait(51, "TRAIT_EQUIP_WTYPE");
-            REBasics.traits.TRAIT_EQUIP_WTYPE = 51;
+            MRBasics.traits.TRAIT_EQUIP_WTYPE = 51;
             REData.traits[52] = new DTrait(52, "TRAIT_EQUIP_ATYPE");
-            REBasics.traits.TRAIT_EQUIP_ATYPE = 52;
+            MRBasics.traits.TRAIT_EQUIP_ATYPE = 52;
             REData.traits[53] = new DTrait(53, "TRAIT_EQUIP_LOCK");
-            REBasics.traits.TRAIT_EQUIP_LOCK = 53;
+            MRBasics.traits.TRAIT_EQUIP_LOCK = 53;
             REData.traits[54] = new DTrait(54, "TRAIT_EQUIP_SEAL");
-            REBasics.traits.TRAIT_EQUIP_SEAL = 54;
+            MRBasics.traits.TRAIT_EQUIP_SEAL = 54;
             REData.traits[55] = new DTrait(55, "TRAIT_SLOT_TYPE");
-            REBasics.traits.TRAIT_SLOT_TYPE = 55;
+            MRBasics.traits.TRAIT_SLOT_TYPE = 55;
             REData.traits[61] = new DTrait(61, "TRAIT_ACTION_PLUS");
-            REBasics.traits.TRAIT_ACTION_PLUS = 61;
+            MRBasics.traits.TRAIT_ACTION_PLUS = 61;
             REData.traits[62] = new DTrait(62, "TRAIT_SPECIAL_FLAG");
-            REBasics.traits.TRAIT_SPECIAL_FLAG = 62;
+            MRBasics.traits.TRAIT_SPECIAL_FLAG = 62;
             REData.traits[63] = new DTrait(63, "TRAIT_COLLAPSE_TYPE");
-            REBasics.traits.TRAIT_COLLAPSE_TYPE = 63;
+            MRBasics.traits.TRAIT_COLLAPSE_TYPE = 63;
             REData.traits[64] = new DTrait(64, "TRAIT_PARTY_ABILITY");
-            REBasics.traits.TRAIT_PARTY_ABILITY = 64;
+            MRBasics.traits.TRAIT_PARTY_ABILITY = 64;
 
-            REBasics.traits._separator = REData.newTrait("_separator").id;
-            REBasics.traits.CertainDirectAttack = REData.newTrait("CertainDirectAttack").id;
-            REBasics.traits.DodgePhysicalIndirectAttack = REData.newTrait("CartailDodgePhysicalAttack").id;
-            REBasics.traits.AwfulPhysicalIndirectAttack = REData.newTrait("AwfulPhysicalIndirectAttack").id;
-            REBasics.traits.UnitVisitor = REData.newTrait("UnitVisitor").id;
-            REBasics.traits.StateRemoveByEffect = REData.newTrait("StateRemoveByEffect").id;
-            REBasics.traits.Stackable = REData.newTrait("Stackable").id;
-            REBasics.traits.EffectProficiency = REData.newTrait("EffectProficiency").id;
-            REBasics.traits.EquipmentProficiency = REData.newTrait("EquipmentProficiency").id;
-            REBasics.traits.SealActivity = REData.newTrait("SealActivity").id;
-            REBasics.traits.SealSpecialAbility = REData.newTrait("SealSpecialAbility").id;
-            REBasics.traits.Invisible = REData.newTrait("Invisible").id;
-            REBasics.traits.ForceVisible = REData.newTrait("ForceVisible").id;
-            REBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
-            REBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
-            REBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
-            REBasics.traits.AwakeStep = REData.newTrait("AwakeStep").id;
-            REBasics.traits.SilentStep = REData.newTrait("SilentStep").id;
-            REBasics.traits.SuddenSkillEffect = REData.newTrait("AutoSkillEffect").id;
-            REBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
-            REBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
-            REBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
-            REBasics.traits.DisableTrap = REData.newTrait("DisableTrap").id;
+            MRBasics.traits._separator = REData.newTrait("_separator").id;
+            MRBasics.traits.CertainDirectAttack = REData.newTrait("CertainDirectAttack").id;
+            MRBasics.traits.DodgePhysicalIndirectAttack = REData.newTrait("CartailDodgePhysicalAttack").id;
+            MRBasics.traits.AwfulPhysicalIndirectAttack = REData.newTrait("AwfulPhysicalIndirectAttack").id;
+            MRBasics.traits.UnitVisitor = REData.newTrait("UnitVisitor").id;
+            MRBasics.traits.StateRemoveByEffect = REData.newTrait("StateRemoveByEffect").id;
+            MRBasics.traits.Stackable = REData.newTrait("Stackable").id;
+            MRBasics.traits.EffectProficiency = REData.newTrait("EffectProficiency").id;
+            MRBasics.traits.EquipmentProficiency = REData.newTrait("EquipmentProficiency").id;
+            MRBasics.traits.SealActivity = REData.newTrait("SealActivity").id;
+            MRBasics.traits.SealSpecialAbility = REData.newTrait("SealSpecialAbility").id;
+            MRBasics.traits.Invisible = REData.newTrait("Invisible").id;
+            MRBasics.traits.ForceVisible = REData.newTrait("ForceVisible").id;
+            MRBasics.traits.ItemDropRate = REData.newTrait("ItemDropRate").id;
+            MRBasics.traits.FixedDamage = REData.newTrait("FixedDamage").id;
+            MRBasics.traits.DrawInTrap = REData.newTrait("DrawInTrap").id;
+            MRBasics.traits.AwakeStep = REData.newTrait("AwakeStep").id;
+            MRBasics.traits.SilentStep = REData.newTrait("SilentStep").id;
+            MRBasics.traits.SuddenSkillEffect = REData.newTrait("AutoSkillEffect").id;
+            MRBasics.traits.SurvivalParamLossRate = REData.newTrait("SurvivalParamLossRate").id;
+            MRBasics.traits.ParamDamageRate = REData.newTrait("ParamDamageRate").id;
+            MRBasics.traits.SkillGuard = REData.newTrait("SkillGuard").id;
+            MRBasics.traits.DisableTrap = REData.newTrait("DisableTrap").id;
             //REBasics.traits.RecoverRate = REData.newTrait("RecoverRate").id;
             //REBasics.traits.ElementedRecoverRate = REData.newTrait("ElementedRecoverRate").id;
-            REBasics.traits.ElementedRecoveryRate = REData.newTrait("ElementedRecoverRate").id;
-            REBasics.traits.RaceRate = REData.newTrait("RaceRate").id;
-            REBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
-            REBasics.traits.PenetrationItem = REData.newTrait("PenetrationItem").id;
-            REBasics.traits.PenetrationThrower = REData.newTrait("PenetrationThrower").id;
-            REBasics.traits.DeathVulnerableElement = REData.newTrait("DeathVulnerableElement").id;
+            MRBasics.traits.ElementedRecoveryRate = REData.newTrait("ElementedRecoverRate").id;
+            MRBasics.traits.RaceRate = REData.newTrait("RaceRate").id;
+            MRBasics.traits.PhysicalProjectileReflector = REData.newTrait("PhysicalProjectileReflector").id;
+            MRBasics.traits.PenetrationItem = REData.newTrait("PenetrationItem").id;
+            MRBasics.traits.PenetrationThrower = REData.newTrait("PenetrationThrower").id;
+            MRBasics.traits.DeathVulnerableElement = REData.newTrait("DeathVulnerableElement").id;
         }
 
         // Factions
@@ -352,7 +352,7 @@ export class REDataManager {
         }
 
         // Actions
-        REBasics.actions = {
+        MRBasics.actions = {
             DirectionChangeActionId: REData.newAction("DirectionChange").id,
             MoveToAdjacentActionId: REData.newAction("MoveToAdjacent").id,
             PickActionId: REData.newAction("拾う").id,
@@ -389,13 +389,13 @@ export class REDataManager {
             AttackActionId: REData.newAction("Attack").id,
         };
 
-        REBasics.commands = {
+        MRBasics.commands = {
             testPickOutItem: REData.newCommand("testPickOutItem").id,
         };
         
 
         // Sequels
-        REBasics.sequels = {
+        MRBasics.sequels = {
             idle: REData.addSequel("idle"),
             MoveSequel: REData.addSequel("Move"),
             blowMoveSequel: REData.addSequel("BlowMove"),
@@ -413,12 +413,12 @@ export class REDataManager {
             stumble: REData.addSequel("stumble"),
             jump: REData.addSequel("stumble"),
         };
-        REData.sequels[REBasics.sequels.MoveSequel].parallel = true;
-        REData.sequels[REBasics.sequels.MoveSequel].fluidSequence = true;
-        REData.sequels[REBasics.sequels.CollapseSequel].parallel = true;
-        REData.sequels[REBasics.sequels.stumble].parallel = true;
-        REData.sequels[REBasics.sequels.dropSequel].parallel = true;    // 転倒とアイテムドロップを並列実行したい
-        REData.sequels[REBasics.sequels.jump].parallel = true;
+        REData.sequels[MRBasics.sequels.MoveSequel].parallel = true;
+        REData.sequels[MRBasics.sequels.MoveSequel].fluidSequence = true;
+        REData.sequels[MRBasics.sequels.CollapseSequel].parallel = true;
+        REData.sequels[MRBasics.sequels.stumble].parallel = true;
+        REData.sequels[MRBasics.sequels.dropSequel].parallel = true;    // 転倒とアイテムドロップを並列実行したい
+        REData.sequels[MRBasics.sequels.jump].parallel = true;
         
         RESystem.skills = {
             move: 3,
@@ -430,7 +430,7 @@ export class REDataManager {
             { id: 1, name: "Fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
             { id: 2, name: "Default", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
         ];
-        REBasics.monsterHouses = {
+        MRBasics.monsterHouses = {
             fixed: 1,
             normal: 2,
         };
@@ -440,12 +440,12 @@ export class REDataManager {
             { id: 1, name: "Fixed", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
             { id: 2, name: "Default", bgm: { name: "Battle4", pan: 0, pitch: 100, volume: 90 } },
         ];
-        REBasics.itemShops = {
+        MRBasics.itemShops = {
             fixed: 1,
             normal: 2,
         };
 
-        REBasics.effectBehaviors = {
+        MRBasics.effectBehaviors = {
             itemSteal: REData.newEffectBehavior("ItemSteal").id,
             goldSteal: REData.newEffectBehavior("GoldSteal").id,
             levelDown: REData.newEffectBehavior("LevelDown").id,
@@ -545,7 +545,7 @@ export class REDataManager {
             // }
 
 
-            REBasics.defaultTerrainPresetId = 1;
+            MRBasics.defaultTerrainPresetId = 1;
         }
 
         
@@ -569,13 +569,13 @@ export class REDataManager {
             }
         }
 
-        REBasics.variables = {
+        MRBasics.variables = {
             result: $dataSystem.variables.findIndex(x => x == "MR-CommndResult1"),
             landExitResult: $dataSystem.variables.findIndex(x => x == "MR-ExitResult"),
             landExitResultDetail: $dataSystem.variables.findIndex(x => x == "MR-ExitResultDetail"),
         };
 
-        REBasics.elements = {
+        MRBasics.elements = {
             explosion: REData.getAttackElement("kElement_Explosion").id,
         };
         
@@ -633,7 +633,7 @@ export class REDataManager {
                 RESetup.setupDirectly_State(state);
             }
 
-            REBasics.states = {
+            MRBasics.states = {
                 dead: 1,
                 nap: REData.getState("kState_System_kNap").id,
                 trapPerformed: REData.getState("kState_System_TrapPerformed").id,
@@ -687,7 +687,7 @@ export class REDataManager {
                 }
             }
         });
-        REBasics.defaultEnemyClass = REData.classes[9].id;  // TODO:
+        MRBasics.defaultEnemyClass = REData.classes[9].id;  // TODO:
         for (const race of REData.races) RESetup.setupRace(race);
 
         // Import Actors
@@ -724,8 +724,8 @@ export class REDataManager {
                 effect.rmmzAnimationId = x.animationId;
                 effect.rmmzSpecialEffectQualifyings = x.effects;
 
-                emittor.costs.setParamCost(DSkillCostSource.Actor, REBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
-                emittor.costs.setParamCost(DSkillCostSource.Actor, REBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
+                emittor.costs.setParamCost(DSkillCostSource.Actor, MRBasics.params.mp, {type: DParamCostType.Decrease, value: x.mpCost});
+                emittor.costs.setParamCost(DSkillCostSource.Actor, MRBasics.params.tp, {type: DParamCostType.Decrease, value: x.tpCost});
 
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
@@ -805,14 +805,14 @@ export class REDataManager {
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentPart = x.etypeId;
-                entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.atk] = { value: x.params[2], upgradeRate: 1.0 };
-                entity.equipment.parameters[REBasics.params.def] = { value: x.params[3], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.mat] = { value: x.params[4], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.atk] = { value: x.params[2], upgradeRate: 1.0 };
+                entity.equipment.parameters[MRBasics.params.def] = { value: x.params[3], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.mat] = { value: x.params[4], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
                 entity.equipmentTraits = x.traits.slice();
                 entity.equipmentTraits = entity.equipmentTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
@@ -849,14 +849,14 @@ export class REDataManager {
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
                 entity.equipment.equipmentPart = x.etypeId;
-                entity.equipment.parameters[REBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.atk] = { value: x.params[2], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.def] = { value: x.params[3], upgradeRate: 1.0 };
-                entity.equipment.parameters[REBasics.params.mat] = { value: x.params[4], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
-                entity.equipment.parameters[REBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.hp] = { value: x.params[0], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.mp] = { value: x.params[1], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.atk] = { value: x.params[2], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.def] = { value: x.params[3], upgradeRate: 1.0 };
+                entity.equipment.parameters[MRBasics.params.mat] = { value: x.params[4], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.mdf] = { value: x.params[5], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.agi] = { value: x.params[6], upgradeRate: 0 };
+                entity.equipment.parameters[MRBasics.params.luk] = { value: x.params[7], upgradeRate: 0 };
                 entity.equipmentTraits = x.traits.slice();
                 entity.equipmentTraits = entity.equipmentTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
@@ -882,23 +882,23 @@ export class REDataManager {
                 if (x.params) {
                     //enemy.idealParams = x.params;
                     
-                    entity.idealParams[REBasics.params.hp] = x.params[0];
-                    entity.idealParams[REBasics.params.mp] = x.params[1];
-                    entity.idealParams[REBasics.params.atk] = x.params[2];
-                    entity.idealParams[REBasics.params.def] = x.params[3];
-                    entity.idealParams[REBasics.params.mat] = x.params[4];
-                    entity.idealParams[REBasics.params.mdf] = x.params[5];
-                    entity.idealParams[REBasics.params.agi] = x.params[6];
-                    entity.idealParams[REBasics.params.luk] = x.params[7];
+                    entity.idealParams[MRBasics.params.hp] = x.params[0];
+                    entity.idealParams[MRBasics.params.mp] = x.params[1];
+                    entity.idealParams[MRBasics.params.atk] = x.params[2];
+                    entity.idealParams[MRBasics.params.def] = x.params[3];
+                    entity.idealParams[MRBasics.params.mat] = x.params[4];
+                    entity.idealParams[MRBasics.params.mdf] = x.params[5];
+                    entity.idealParams[MRBasics.params.agi] = x.params[6];
+                    entity.idealParams[MRBasics.params.luk] = x.params[7];
                     
                 }
                 enemy.traits = x.traits;
                 enemy.actions = x.actions;
                 enemy.dropItems = DDropItem.makeFromRmmzDropItemList(x.dropItems, x.gold);
                 entity.entity = parseMetaToEntityProperties(x.meta);    // TODO: ↓DMetadataParserを使う
-                entity.entity.kindId = REBasics.entityKinds.MonsterKindId;
+                entity.entity.kindId = MRBasics.entityKinds.MonsterKindId;
                 entity.factionId = REData.system.factions.enemy;
-                entity.classId =  REBasics.defaultEnemyClass;
+                entity.classId =  MRBasics.defaultEnemyClass;
 
                 enemy.traits = enemy.traits.concat(DTrait.parseTraitMetadata(x.meta));
 
@@ -1156,7 +1156,7 @@ export class REDataManager {
                 }
             }
 
-            REBasics.prefabs = {
+            MRBasics.prefabs = {
                 illusionActor: REData.getPrefab("pまどわしUnit").id,
                 illusionItem: REData.getPrefab("pまどわしItem").id,
             };
@@ -1270,27 +1270,27 @@ export class REDataManager {
         let applyType = DParameterEffectApplyType.None;
         switch (damage.type) {
             case 1: // HPダメージ
-                parameterId = REBasics.params.hp;
+                parameterId = MRBasics.params.hp;
                 applyType = DParameterEffectApplyType.Damage;
                 break;
             case 2: // MPダメージ
-                parameterId = REBasics.params.mp;
+                parameterId = MRBasics.params.mp;
                 applyType = DParameterEffectApplyType.Damage;
                 break;
             case 3: // HP回復
-                parameterId = REBasics.params.hp;
+                parameterId = MRBasics.params.hp;
                 applyType = DParameterEffectApplyType.Recover;
                 break;
             case 4: // MP回復
-                parameterId = REBasics.params.mp;
+                parameterId = MRBasics.params.mp;
                 applyType = DParameterEffectApplyType.Recover;
                 break;
             case 5: // HP吸収
-                parameterId = REBasics.params.hp;
+                parameterId = MRBasics.params.hp;
                 applyType = DParameterEffectApplyType.Drain;
                 break;
             case 6: // MP吸収
-                parameterId = REBasics.params.mp;
+                parameterId = MRBasics.params.mp;
                 applyType = DParameterEffectApplyType.Drain;
                 break;
             default:

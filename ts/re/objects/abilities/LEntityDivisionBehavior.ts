@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -31,7 +31,7 @@ export class LEntityDivisionBehavior extends LBehavior {
             const newEntity = self.clone();
             REGame.world.transferEntity(newEntity, self.floorId, newBlock.mx, newBlock.my);
 
-            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(self.mx, self.my);
+            cctx.postSequel(newEntity, MRBasics.sequels.MoveSequel).setStartPosition(self.mx, self.my);
             cctx.postWaitSequel();
         }
         else {

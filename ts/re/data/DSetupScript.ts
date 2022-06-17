@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { DEntity } from "./DEntity";
-import { REBasics } from "./REBasics";
+import { MRBasics } from "./MRBasics";
 import { REData } from "./REData";
 
 
@@ -58,7 +58,7 @@ export class DSetupScript {
                     // Convert data
                     if (t.data) {
                         switch (traitData.id) {
-                            case REBasics.traits.RaceRate:
+                            case MRBasics.traits.RaceRate:
                                 trait.dataId = REData.getRace(t.data).id;
                                 break;
                         }

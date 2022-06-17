@@ -12,7 +12,7 @@ import { UName } from "ts/re/usecases/UName";
 import { DTextManager } from "../data/DTextManager";
 import { DEffect, DParameterApplyTarget, DParameterQualifying } from "../data/DEffect";
 import { REGame } from "./REGame";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { DEntityId } from "../data/DEntity";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
@@ -339,7 +339,7 @@ export class LEffectResult {
                 // Game_Actor.prototype.displayLevelUp
                 if (this.levelup || this.leveldown) {
                     if (this.levelup) {
-                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, entity.actualParam(REBasics.params.level));
+                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, entity.actualParam(MRBasics.params.level));
                         cctx.postMessage(text);
                         SSoundManager.playLevelUp();
                     }
@@ -375,7 +375,7 @@ export class LEffectResult {
         } else if (damage < 0) {
             return this.makeRecoveryOrGainMessage(entity, paramResult, entityName, paramData, isFliendly);
         } else {
-            if (paramResult.paramId == REBasics.params.hp) {
+            if (paramResult.paramId == MRBasics.params.hp) {
                 fmt = isFliendly ? DTextManager.actorNoDamage : DTextManager.enemyNoDamage;
                 return fmt.format(entityName);
             }

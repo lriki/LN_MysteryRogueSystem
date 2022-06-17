@@ -1,6 +1,6 @@
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DSpecialEffectRef } from "ts/re/data/DEffect";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LBattlerBehavior } from "ts/re/objects/behaviors/LBattlerBehavior";
 import { LEffectResult } from "ts/re/objects/LEffectResult";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -26,7 +26,7 @@ export class SDivisionSpecialEffect extends SSpecialEffect {
             const newEntity = target.clone();
             REGame.world.transferEntity(newEntity, target.floorId, newBlock.mx, newBlock.my);
 
-            cctx.postSequel(newEntity, REBasics.sequels.MoveSequel).setStartPosition(target.mx, target.my);
+            cctx.postSequel(newEntity, MRBasics.sequels.MoveSequel).setStartPosition(target.mx, target.my);
             cctx.postWaitSequel();
         }
         else {

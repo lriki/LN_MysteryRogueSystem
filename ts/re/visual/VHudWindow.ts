@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/re/objects/LFloorId";
@@ -36,10 +36,10 @@ export class VHudWindow extends Window_Base {
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return;
 
-        const hp = entity.actualParam(REBasics.params.hp);
-        const mhp = entity.idealParam(REBasics.params.hp);
-        const fp = entity.actualParam(REBasics.params.fp);
-        const mfp = entity.idealParam(REBasics.params.fp);
+        const hp = entity.actualParam(MRBasics.params.hp);
+        const mhp = entity.idealParam(MRBasics.params.hp);
+        const fp = entity.actualParam(MRBasics.params.fp);
+        const mfp = entity.idealParam(MRBasics.params.fp);
 
         const level = experience.level(entity);
         const prevExp = experience.expForLevel(entity, experience.level(entity));

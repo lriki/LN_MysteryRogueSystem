@@ -7,7 +7,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { REGame } from "ts/re/objects/REGame";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { SView } from "ts/re/system/SView";
 import { SNavigationHelper } from "ts/re/system/SNavigationHelper";
 

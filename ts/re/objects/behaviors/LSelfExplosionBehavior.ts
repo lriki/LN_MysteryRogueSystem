@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { CommandArgs, LBehavior, onEffectResult } from "./LBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
 import { REData } from "ts/re/data/REData";
 
@@ -67,8 +67,8 @@ export class LSelfExplosionBehavior extends LBehavior {
         // 既に戦闘不能なら処理不要
         if (self.isDeathStateAffected()) return SCommandResponse.Pass;
 
-        const mhp = self.idealParam(REBasics.params.hp);
-        const hp = self.actualParam(REBasics.params.hp);
+        const mhp = self.idealParam(MRBasics.params.hp);
+        const hp = self.actualParam(MRBasics.params.hp);
         if (hp < 10) {          // 残り1桁で爆発
             const skill = REData.getSkill("kSkill_大爆発");
             cctx.postActivity(LActivity.makePerformSkill(self, skill.id));

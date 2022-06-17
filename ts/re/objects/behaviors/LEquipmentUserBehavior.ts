@@ -1,5 +1,5 @@
 import { assert, tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEquipmentPartId } from "ts/re/data/DEquipmentPart";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/SCommand";
@@ -58,15 +58,15 @@ NOTE:
     }
 
     onAttached(self: LEntity): void {
-        REGame.eventServer.subscribe(REBasics.events.itemRemovedFromInventory, this);
+        REGame.eventServer.subscribe(MRBasics.events.itemRemovedFromInventory, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(REBasics.events.itemRemovedFromInventory, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.itemRemovedFromInventory, this);
     }
     
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
-        if (eventId == REBasics.events.itemRemovedFromInventory) {
+        if (eventId == MRBasics.events.itemRemovedFromInventory) {
             this.onRemoveItemFromInventory((args as ItemRemovedFromInventoryArgs).item);
         }
         return LEventResult.Pass;
@@ -134,7 +134,7 @@ NOTE:
         const data = item.data;
         const equipmentData = data.equipment;
         if (equipmentData) {
-            const upgrade = item.actualParam(REBasics.params.upgradeValue);
+            const upgrade = item.actualParam(MRBasics.params.upgradeValue);
             const ep = equipmentData.parameters[paramId];
             if (ep) {
                 return (ep.value + (upgrade * ep.upgradeRate));
@@ -164,7 +164,7 @@ NOTE:
     onQueryIdealParameterPlus(paramId: DParameterId): number {
         const self = this.ownerEntity();
         const a = this.equippedItemEntities().reduce((r, e) => {
-            const proficiency = self.traitsPi(REBasics.traits.EquipmentProficiency, e.kindDataId());
+            const proficiency = self.traitsPi(MRBasics.traits.EquipmentProficiency, e.kindDataId());
             return r + LEquipmentUserBehavior.calcEquipmentParam(e, paramId) * proficiency;
         }, 0);
 
@@ -172,8 +172,8 @@ NOTE:
     }
     
     onQueryActions(actions: DActionId[]): DActionId[] {
-        actions.push(REBasics.actions.EquipActionId);
-        actions.push(REBasics.actions.EquipOffActionId);
+        actions.push(MRBasics.actions.EquipActionId);
+        actions.push(MRBasics.actions.EquipOffActionId);
         return actions;
     }
 
@@ -190,7 +190,7 @@ NOTE:
     
     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
-        if (activity.actionId() == REBasics.actions.EquipActionId) {
+        if (activity.actionId() == MRBasics.actions.EquipActionId) {
             this.refreshSlots();
 
             const itemEntity = activity.object();
@@ -235,7 +235,7 @@ NOTE:
             
             return SCommandResponse.Handled;
         }
-        else if (activity.actionId() == REBasics.actions.EquipOffActionId) {
+        else if (activity.actionId() == MRBasics.actions.EquipOffActionId) {
             const itemEntity = activity.object();
             if (this._shortcutItemEntityId.equals(itemEntity.entityId())) {
                 this.equipOffShortcut(cctx, itemEntity);

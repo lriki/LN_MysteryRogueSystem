@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LItemBehavior } from "ts/re/objects/behaviors/LItemBehavior";
@@ -20,7 +20,7 @@ test("concretes.states.Anger", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const pow1 = player1.actualParam(REBasics.params.pow);
+    const pow1 = player1.actualParam(MRBasics.params.pow);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
@@ -33,7 +33,7 @@ test("concretes.states.Anger", () => {
 
     for (let i = 0; i < 100; i++) {
         // ちからを戻しておく
-        player1.setActualParam(REBasics.params.pow, pow1);
+        player1.setActualParam(MRBasics.params.pow, pow1);
 
         // 待機
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
@@ -42,7 +42,7 @@ test("concretes.states.Anger", () => {
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
         // ちからが減っている
-        const pow2 = player1.actualParam(REBasics.params.pow);
+        const pow2 = player1.actualParam(MRBasics.params.pow);
         expect(pow2).toBe(pow1 - 1);
     }
 });

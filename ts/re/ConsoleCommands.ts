@@ -1,5 +1,5 @@
 import { DEntityCreateInfo } from "./data/DEntity";
-import { REBasics } from "./data/REBasics";
+import { MRBasics } from "./data/MRBasics";
 import { REData } from "./data/REData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
 import { LInventoryBehavior } from "./objects/behaviors/LInventoryBehavior";
@@ -61,12 +61,12 @@ function visitAll() {
 function levelMax() {
     const player = REGame.camera.focusedEntity();
     if (player) {
-        player.setActualParam(REBasics.params.level, 99);
+        player.setActualParam(MRBasics.params.level, 99);
     }
 }
 
 function moveToExit() {
-    const exitPoint = REGame.map.entities().find(x => x.kindDataId() == REBasics.entityKinds.exitPoint);
+    const exitPoint = REGame.map.entities().find(x => x.kindDataId() == MRBasics.entityKinds.exitPoint);
     if (!exitPoint) return;
 
     const player = REGame.camera.focusedEntity();

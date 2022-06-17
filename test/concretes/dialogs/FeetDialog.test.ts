@@ -1,6 +1,6 @@
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
@@ -30,8 +30,8 @@ test("concretes.dialogs.FeetDialog.test", () => {
 
     const commands = dialog.makeActionList();
     expect(commands.length).toBe(2);
-    expect(commands[0].actionId).toBe(REBasics.actions.PickActionId);   // [拾う]
-    expect(commands[1].actionId).toBe(REBasics.actions.ThrowActionId);  // [投げる]
+    expect(commands[0].actionId).toBe(MRBasics.actions.PickActionId);   // [拾う]
+    expect(commands[1].actionId).toBe(MRBasics.actions.ThrowActionId);  // [投げる]
 
     //----------------------------------------------------------------------------------------------------
 
@@ -70,6 +70,6 @@ test("concretes.dialogs.FeetDialog.ExitPoint", () => {
 
     const commands = dialog.makeActionList();
     expect(commands.length).toBe(1);
-    expect(commands[0].actionId).toBe(REBasics.actions.ForwardFloorActionId);   // [進む]
+    expect(commands[0].actionId).toBe(MRBasics.actions.ForwardFloorActionId);   // [進む]
 });
 

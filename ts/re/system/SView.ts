@@ -1,5 +1,5 @@
 import { assert, tr2 } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DPrefabActualImage } from "ts/re/data/DPrefab";
 import { DStateRestriction } from "ts/re/data/DState";
 import { REData } from "ts/re/data/REData";
@@ -139,10 +139,10 @@ export class SView {
             // subject が惑わし状態？
             if (subject.collectBehaviors().find(s => s instanceof LIllusionStateBehavior)) {
                 if (entity.findEntityBehavior(LUnitBehavior)) {
-                    return { visible: true, translucent: false, image: REData.prefabs[REBasics.prefabs.illusionActor].image };
+                    return { visible: true, translucent: false, image: REData.prefabs[MRBasics.prefabs.illusionActor].image };
                 }
                 else {
-                    return { visible: true, translucent: false, image: REData.prefabs[REBasics.prefabs.illusionItem].image };
+                    return { visible: true, translucent: false, image: REData.prefabs[MRBasics.prefabs.illusionItem].image };
                 }
             }
         }
@@ -150,7 +150,7 @@ export class SView {
             // entity は操作中キャラ (自分自身は基本的に見える)
 
             // 透明状態
-            if (entity.traits(REBasics.traits.Invisible).length > 0) {
+            if (entity.traits(MRBasics.traits.Invisible).length > 0) {
                 return { visible: true, translucent: true };
             }
         }

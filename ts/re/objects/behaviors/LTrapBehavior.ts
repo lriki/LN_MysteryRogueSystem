@@ -1,5 +1,5 @@
 import { assert, RESerializable, tr } from "ts/re/Common";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REData } from "ts/re/data/REData";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -75,7 +75,7 @@ export class LTrapBehavior extends LBehavior {
 
     public isExposedFor(target: LEntity): boolean {
         if (REGame.map.trapClarity) return true;
-        if (target.hasTrait(REBasics.traits.ForceVisible)) return true;
+        if (target.hasTrait(MRBasics.traits.ForceVisible)) return true;
         return this.exposed();
     }
 
@@ -85,20 +85,20 @@ export class LTrapBehavior extends LBehavior {
 
     
     onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.mutableRemove(x => x == REBasics.actions.PickActionId);
+        actions.mutableRemove(x => x == MRBasics.actions.PickActionId);
     }
 
     onAttached(self: LEntity): void {
         assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
-        REGame.eventServer.subscribe(REBasics.events.skillEmitted, this);
+        REGame.eventServer.subscribe(MRBasics.events.skillEmitted, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(REBasics.events.skillEmitted, this);
+        REGame.eventServer.unsubscribe(MRBasics.events.skillEmitted, this);
     }
 
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
-        if (eventId == REBasics.events.skillEmitted) {
+        if (eventId == MRBasics.events.skillEmitted) {
             const entity = this.ownerEntity();
             const e = args as SkillEmittedArgs;
             if (this.checkValidTarget(e.performer) &&           // 攻撃者はこの罠にかかることができる？
@@ -126,10 +126,10 @@ export class LTrapBehavior extends LBehavior {
 
     private testTrigger(target: LEntity, rand: LRandom): boolean {
         // 罠回避の方がプラスステートなので優先してみる
-        if (target.hasTrait(REBasics.traits.DisableTrap)) return false;
+        if (target.hasTrait(MRBasics.traits.DisableTrap)) return false;
 
         // 罠必中はどちらかというとマイナスステート
-        if (target.hasTrait(REBasics.traits.DrawInTrap)) return true;
+        if (target.hasTrait(MRBasics.traits.DrawInTrap)) return true;
         
         const r = rand.nextIntWithMax(100);
         return (r < this.triggerRate(target));
@@ -201,10 +201,10 @@ export class LTrapBehavior extends LBehavior {
 
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         // [踏まれた]
-        if (activity.actionId() == REBasics.actions.trample) {
+        if (activity.actionId() == MRBasics.actions.trample) {
             this.performTrapEffect(self, cctx, activity.actor().dir);
         }
-        else if (activity.actionId() == REBasics.actions.FallActionId) {
+        else if (activity.actionId() == MRBasics.actions.FallActionId) {
             this.performTrapEffect(self, cctx, activity.actor().dir);
         }
         return SCommandResponse.Pass;
@@ -260,7 +260,7 @@ export class LTrapBehavior extends LBehavior {
 
         this._recharging = true;
         this._exposed = true;
-        self.addState(REBasics.states.trapPerformed);
+        self.addState(MRBasics.states.trapPerformed);
 
     }
     

@@ -8,7 +8,7 @@ import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
 import { LTileShape } from "ts/re/objects/LBlock";
 import { USearch } from "ts/re/usecases/USearch";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -66,7 +66,7 @@ test("concretes.states.RatedRandom.Issue1", () => {
 
     // シミュレーション実行
     for (let i = 0; i < 20; i++) {
-        player1.setActualDamgeParam(REBasics.params.hp, 0);
+        player1.setActualDamgeParam(MRBasics.params.hp, 0);
         RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         RESystem.dialogContext.activeDialog().submit();
         RESystem.scheduler.stepSimulation();    // Advance Simulation ----------

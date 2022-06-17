@@ -7,7 +7,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LFloorId } from "ts/re/objects/LFloorId";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { UName } from "ts/re/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 
@@ -32,7 +32,7 @@ test("concretes.item.weapon.DragonKiller", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(REData.getState("kState_UTからぶり").id);
     REGame.world.transferEntity(enemy1, floorId, 11, 10);
-    const enemy1HP1 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -47,7 +47,7 @@ test("concretes.item.weapon.DragonKiller", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1HP2 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
     
     //----------------------------------------------------------------------------------------------------
     // 特攻有りダメージと比較する
@@ -60,7 +60,7 @@ test("concretes.item.weapon.DragonKiller", () => {
     
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1HP3 = enemy1.actualParam(REBasics.params.hp);
+    const enemy1HP3 = enemy1.actualParam(MRBasics.params.hp);
 
     const damage1 = enemy1HP1 - enemy1HP2;
     const damage2 = enemy1HP2 - enemy1HP3;

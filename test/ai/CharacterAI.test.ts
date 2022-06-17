@@ -1,5 +1,5 @@
 import { TestEnv } from "../TestEnv";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
@@ -84,7 +84,7 @@ test("ai.CharacterAI.ActionPattern", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 2, 4);
-    const initialHP = player1.actualParam(REBasics.params.hp);
+    const initialHP = player1.actualParam(MRBasics.params.hp);
 
     // enemy1 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEnemy_ドラゴンA").id));
@@ -102,7 +102,7 @@ test("ai.CharacterAI.ActionPattern", () => {
     REGame.world.random().resetSeed(4);     // 炎を吐く乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp = player1.actualParam(REBasics.params.hp);
+    const hp = player1.actualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

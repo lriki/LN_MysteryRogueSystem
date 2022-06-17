@@ -2,7 +2,7 @@ import { assert, tr2 } from "../Common";
 import { DBlockLayerKind } from "../data/DCommon";
 import { DEffectFieldScope } from "../data/DEffect";
 import { DStateRestriction } from "../data/DState";
-import { REBasics } from "../data/REBasics";
+import { MRBasics } from "../data/MRBasics";
 import { FBlockComponent } from "../floorgen/FMapData";
 import { LEntryPointBehavior } from "../objects/behaviors/LEntryPointBehavior";
 import { LExitPointBehavior } from "../objects/behaviors/LExitPointBehavior";
@@ -35,7 +35,7 @@ export class USearch {
      * 可視であるか
      */
     public static isVisible(target: LEntity): boolean {
-         return !target.hasTrait(REBasics.traits.Invisible);
+         return !target.hasTrait(MRBasics.traits.Invisible);
     }
 
     /**
@@ -47,10 +47,10 @@ export class USearch {
         if (REGame.map.unitClarity) return true;
         
         // よく見え状態なら、相手が透明状態でも見える
-        if (subject.hasTrait(REBasics.traits.ForceVisible)) return true;
+        if (subject.hasTrait(MRBasics.traits.ForceVisible)) return true;
 
         // 相手が透明状態なので、見えない
-        if (target.hasTrait(REBasics.traits.Invisible)) return false;
+        if (target.hasTrait(MRBasics.traits.Invisible)) return false;
 
         return true;
     }

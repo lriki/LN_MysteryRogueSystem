@@ -6,7 +6,7 @@ import { REData } from "ts/re/data/REData";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -29,7 +29,7 @@ test("concretes.activity.Stumble.player", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [転ぶ]
-    const act = (new LActivity()).setup(REBasics.actions.stumble, player1);
+    const act = (new LActivity()).setup(MRBasics.actions.stumble, player1);
     RESystem.dialogContext.postActivity(act.withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -65,7 +65,7 @@ test("concretes.activity.Stumble.player.wall", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [転ぶ]
-    const act = (new LActivity()).setup(REBasics.actions.stumble, player1);
+    const act = (new LActivity()).setup(MRBasics.actions.stumble, player1);
     RESystem.dialogContext.postActivity(act.withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -113,7 +113,7 @@ test("concretes.activity.Stumble.player.onItem", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [転ぶ]
-    const act = (new LActivity()).setup(REBasics.actions.stumble, player1);
+    const act = (new LActivity()).setup(MRBasics.actions.stumble, player1);
     RESystem.dialogContext.postActivity(act.withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
 
@@ -139,7 +139,7 @@ test("concretes.activity.Stumble.enemy", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy を転ばせて自分は待機
-    const act1 = (new LActivity()).setup(REBasics.actions.stumble, enemy1);
+    const act1 = (new LActivity()).setup(MRBasics.actions.stumble, enemy1);
     RESystem.dialogContext.postActivity(act1);
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();
@@ -154,7 +154,7 @@ test("concretes.activity.Stumble.enemy", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy を転ばせて自分は待機
-    const act2 = (new LActivity()).setup(REBasics.actions.stumble, enemy1);
+    const act2 = (new LActivity()).setup(MRBasics.actions.stumble, enemy1);
     RESystem.dialogContext.postActivity(act2);
     RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     RESystem.dialogContext.activeDialog().submit();

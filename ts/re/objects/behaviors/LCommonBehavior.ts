@@ -4,7 +4,7 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { USearch } from "ts/re/usecases/USearch";
 import { DEmittor } from "ts/re/data/DEmittor";
 import { DCounterAction } from "ts/re/data/DEntity";
@@ -37,7 +37,7 @@ export class LCommonBehavior extends LBehavior {
     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
         
-        if (activity.actionId() == REBasics.actions.FallActionId) {
+        if (activity.actionId() == MRBasics.actions.FallActionId) {
             const target = USearch.getFirstUnderFootEntity(self);
             if (target) {
                 actx.postHandleActivity(cctx, target);
@@ -50,7 +50,7 @@ export class LCommonBehavior extends LBehavior {
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
-            for (const trait of self.traits(REBasics.traits.SuddenSkillEffect)) {
+            for (const trait of self.traits(MRBasics.traits.SuddenSkillEffect)) {
                 const chance = trait.value;
                 if (cctx.random().nextIntWithMax(100) < (chance * 100)) {
                     const skill = REData.skills[trait.dataId];

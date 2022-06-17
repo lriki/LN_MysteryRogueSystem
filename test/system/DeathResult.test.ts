@@ -1,5 +1,5 @@
 import { TestEnv } from "../TestEnv";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { REGame } from "ts/re/objects/REGame";
 import { RESystem } from "ts/re/system/RESystem";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
@@ -19,7 +19,7 @@ test("system.DeathResult.State", () => {
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     player1.addState(TestEnv.StateId_Sleep);
-    player1.setActualParam(REBasics.params.hp, 1);
+    player1.setActualParam(MRBasics.params.hp, 1);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity("kEntity_スライム_A").id, [], "enemy1"));

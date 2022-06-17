@@ -8,7 +8,7 @@ import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -22,7 +22,7 @@ test("concretes.item.grass.FullRecoveryGrass", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    player1.setActualParam(REBasics.params.hp, 1);
+    player1.setActualParam(MRBasics.params.hp, 1);
     player1.addState(positiveState1);
     player1.addState(negativeState1);
     player1.addState(negativeState2);
@@ -49,8 +49,8 @@ test("concretes.item.grass.FullRecoveryGrass", () => {
     
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-    const player1MHP = player1.idealParam(REBasics.params.hp);
-    const player1HP = player1.actualParam(REBasics.params.hp);
+    const player1MHP = player1.idealParam(MRBasics.params.hp);
+    const player1HP = player1.actualParam(MRBasics.params.hp);
     expect(player1HP).toBe(player1MHP);
     expect(player1.isStateAffected(positiveState1)).toBeTruthy();
     expect(player1.isStateAffected(negativeState1)).toBeFalsy();

@@ -1,4 +1,4 @@
-import { REBasics } from "ts/re/data/REBasics";
+import { MRBasics } from "ts/re/data/MRBasics";
 import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope, DEffectSet } from "ts/re/data/DEffect";
 import { DEntityCreateInfo } from "ts/re/data/DEntity";
 import { REData } from "ts/re/data/REData";
@@ -241,7 +241,7 @@ export class SEmittorPerformer {
             targets: targets,
             skillId: skillId,
         };
-        REGame.eventServer.publish(cctx, REBasics.events.skillEmitted, args)
+        REGame.eventServer.publish(cctx, MRBasics.events.skillEmitted, args)
     }
 
     private onPerformed(cctx: SCommandContext, targets: LEntity[]): void {
@@ -330,7 +330,7 @@ export class SEmittorPerformer {
         else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
 
             // TODO: ユーザー側モーション
-            cctx.postSequel(performer, REBasics.sequels.attack);
+            cctx.postSequel(performer, MRBasics.sequels.attack);
             
             // TODO: 正面3方向攻撃とかの場合はここをループする
             //for ()
@@ -462,7 +462,7 @@ export class SEmittorPerformer {
         // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。
         // そのため、Projectile の発生原因となった item から Hit 時の Effect を取り出し、Projectile 衝突時にこれを発動する。
         //const emittorEffects = itemEntity?.data().emittorSet.emittors(DEffectCause.Hit);
-        const itemEmittors = itemEntity?.data.getReaction(REBasics.actions.collide).emittors();
+        const itemEmittors = itemEntity?.data.getReaction(MRBasics.actions.collide).emittors();
         // ↑今は杖用。杖を投げ当てた時と同じ効果を取り出す。
 
         //const actualEmittor = emittorEffects ?? emittor;
