@@ -45,6 +45,7 @@ export class REVisual_Entity
     private _visibility: SEntityVisibility | undefined;
     private _actualImage: DPrefabActualImage | undefined;
 
+
     private _sequelOpacity: number;
 
     reservedDestroy = false;
@@ -145,6 +146,10 @@ export class REVisual_Entity
         this._sequelOpacity = value;
     }
 
+    private imageOverriden(): boolean {
+        return this._actualImage !== undefined;
+    }
+
     _update() {
         assert(REVisual.manager);
 
@@ -159,20 +164,36 @@ export class REVisual_Entity
             this._visibility = SView.getEntityVisibility(entity);
 
 
-                
-            this._actualImage = this.getCharacterImage(entity, this._visibility);
-            if (this._actualImage) {
-                event.setImage(this._actualImage.characterName, this._actualImage.characterIndex);
-
-                if (event.isDirectionFixed() != this._actualImage.directionFix) {
-                    event.setDirection(this._actualImage.direction);
-                    event.setDirectionFix(this._actualImage.directionFix);
+            {
+                const oldOverriden = this.imageOverriden();
+                this._actualImage = this.getCharacterImage(entity, this._visibility);
+                if (this._actualImage) {
+                    event.setImage(this._actualImage.characterName, this._actualImage.characterIndex);
+    
+                    if (event.isDirectionFixed() != this._actualImage.directionFix) {
+                        event.setDirection(this._actualImage.direction);
+                        event.setDirectionFix(this._actualImage.directionFix);
+                    }
+    
+                    event.setStepAnime(this._actualImage.stepAnime);
+                    event.setWalkAnime(this._actualImage.walkAnime);
+                    if (!this._actualImage.stepAnime && !this._actualImage.walkAnime) {
+                        event.setPattern(this._actualImage.pattern);
+                    }
                 }
 
-                event.setStepAnime(this._actualImage.stepAnime);
-                event.setWalkAnime(this._actualImage.walkAnime);
-                if (!this._actualImage.stepAnime && !this._actualImage.walkAnime) {
-                    event.setPattern(this._actualImage.pattern);
+                // 優先表示 Image が無くなった？ (Prefab のものに戻したい)
+                const newOverriden = this.imageOverriden();
+                if (!newOverriden && newOverriden != oldOverriden) {
+                    // - event.refresh() では、pageIndex に変化が無い場合、実際に元に戻そうとはしない。
+                    //   event.setupPage() を呼ぶことで強制的に元に戻せる。
+                    // - 単に  event.setupPage() を呼ぶだけだと、event.setDirection() した状態が維持されてしまう。
+                    //   完全に戻すには event._originalDirection などもリセットしてからにする必要がある。
+                    //   ちょっとハックなので本当は event.initMembers() とかで戻したいのだが、
+                    //   initMembers() は MR システム側で必要な変数の初期化も行われるためそれはやりたくない。
+                    event._originalPattern = 1;
+                    event._originalDirection = 2;
+                    event.setupPage();
                 }
             }
 
@@ -284,9 +305,10 @@ export class REVisual_Entity
             return overridenImage;
         }
         
+        return undefined;
         // デフォルトはプレハブから
-        const prefab = REData.prefabs[ entity.data.prefabId];
-        return prefab.image;
+        // const prefab = REData.prefabs[ entity.data.prefabId];
+        // return prefab.image;
     }
 
     private getActualOpacity(entity: LEntity, visibility: SEntityVisibility): number {

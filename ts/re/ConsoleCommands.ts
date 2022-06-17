@@ -1,10 +1,13 @@
+import { DEntityCreateInfo } from "./data/DEntity";
 import { REBasics } from "./data/REBasics";
 import { REData } from "./data/REData";
 import { LBattlerBehavior } from "./objects/behaviors/LBattlerBehavior";
+import { LInventoryBehavior } from "./objects/behaviors/LInventoryBehavior";
 import { LTileShape } from "./objects/LBlock";
 import { LEntity } from "./objects/LEntity";
 import { LMap } from "./objects/LMap";
 import { REGame } from "./objects/REGame";
+import { SEntityFactory } from "./system/internal";
 import { RESystem } from "./system/RESystem";
 import { SDebugHelpers } from "./system/SDebugHelpers";
 
@@ -72,6 +75,13 @@ function moveToExit() {
     REGame.world.transferEntity(player, player.floorId, exitPoint.mx, exitPoint.my);
 }
 
+function getItem(itemKey: string) {
+    const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(REData.getEntity(itemKey).id));
+    const player = REGame.camera.focusedEntity();
+    if (!player) return;
+    player.getEntityBehavior(LInventoryBehavior).addEntity(item);
+
+}
 
 (window as any).MR = {
     entities: entities,
@@ -83,6 +93,7 @@ function moveToExit() {
     setVariable: setVariable,
     levelMax: levelMax,
     moveToExit: moveToExit,
+    getItem: getItem,
 };
 
 export {}
