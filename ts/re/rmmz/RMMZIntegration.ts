@@ -162,10 +162,6 @@ export class RMMZIntegration extends SIntegration {
     }
     
     onEntityEnteredMap(entity: LEntity): void {
-        const databaseMap = MRDataManager.databaseMap();
-        assert(databaseMap);
-        assert(databaseMap.events);
-        
         if (REVisual.entityVisualSet) {
             REVisual.entityVisualSet.createVisual2(entity);
         }

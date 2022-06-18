@@ -180,11 +180,6 @@ export class REEntityVisualSet {
     }
 
     private createVisual(entity: LEntity) {
-        const databaseMap = MRDataManager.databaseMap();
-        if (!databaseMap || !databaseMap.events) {
-            throw new Error();
-        }
-
         let event: Game_Event | undefined = undefined;
         if (entity.rmmzEventId > 0) {
             event = $gameMap.event(entity.rmmzEventId);
@@ -196,57 +191,6 @@ export class REEntityVisualSet {
         else {
             // Tile などは Visual を作らない
             return;
-            /*
-            eventData = {
-                id: 0,
-                name: "null",
-                note: "",
-                pages: [
-                    {
-                        conditions: {
-                            actorId: 1,
-                            actorValid: false,
-                            itemId: 1,
-                            itemValid: false,
-                            selfSwitchCh: "A",
-                            selfSwitchValid: false,
-                            switch1Id: 1,
-                            switch1Valid: false,
-                            switch2Id: 1,
-                            switch2Valid: false,
-                            variableId: 1,
-                            variableValid: false,
-                            variableValue: 1,
-                        },
-                        directionFix: false,
-                        image: {
-                            tileId: 0,
-                            characterName: "",
-                            direction: 2,
-                            pattern: 0,
-                            characterIndex: 1
-                        },
-                        list: [],
-                        moveFrequency: 3,
-                        moveRoute: {
-                            list: [],
-                            repeat: true,
-                            skippable: false,
-                            wait: false,
-                        },
-                        moveSpeed: 3,
-                        moveType: 0,
-                        priorityType: 1,
-                        stepAnime: false,
-                        through: false,
-                        trigger: 0,
-                        walkAnime: true,
-                    }
-                ],
-                x: 0,
-                y: 0,
-            };
-            */
         }
 
         if (!event) {
@@ -254,7 +198,6 @@ export class REEntityVisualSet {
         }
 
         assert(event.isREEvent());
-
 
         const visual = new REVisual_Entity(entity, event.eventId());
         //event._visualId = this._visualEntities.length;

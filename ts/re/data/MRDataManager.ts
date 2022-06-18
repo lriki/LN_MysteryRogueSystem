@@ -32,13 +32,6 @@ import { paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from '../Plug
 import { DTerrainSettingImporter } from './importers/DTerrainSettingImporter';
 import { DFloorPresetImporter } from './importers/DFloorPresetImporter';
 
-
-declare global {  
-    interface Window {
-        RE_databaseMap: IDataMap | undefined,
-    }
-}
-
 type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
 
@@ -696,7 +689,6 @@ export class MRDataManager {
                 entity.selfTraits = x.traits.slice();
                 entity.classId = x.classId;
                 actor.setup(x);
-                this.setupDirectly_Actor(actor);
             }
         });
         MRData.entities[MRData.actors[1]].factionId = MRData.system.factions.player;    // #1 はデフォルトで Player
@@ -1250,12 +1242,6 @@ export class MRDataManager {
         return undefined;
     }
 
-    public static loadPrefabDatabaseMap(): void {
-        // Database マップ読み込み開始
-        const filename = `Map${this.padZero(MRDataManager.databaseMapId, 3)}.json`;
-        DataManager.loadDataFile("RE_databaseMap", filename);
-    }
-
     public static padZero(v: number, length: number) {
         return String(v).padStart(length, "0");
     }
@@ -1343,10 +1329,6 @@ export class MRDataManager {
         */
     }
 
-    static databaseMap(): IDataMap | undefined {
-        return window["RE_databaseMap"];
-    }
-
     static loadingDataFileCount = 0;
     static loadedDataFileCount = 0;
     
@@ -1391,15 +1373,4 @@ export class MRDataManager {
             DataManager.onXhrError(src, src, url);
         }
     }
-
-    static setupDirectly_Actor(data: DActor) {
-        switch (data.id) {
-            case 1:
-                //data.traits.push({ code: DTraits.Proficiency, dataId: REData.getEntityKind("Grass").id, value: 2.0 });
-                //data.traits.push({ code: DTraits.EquipmentProficiency, dataId: REData.getEntityKind("Shield").id, value: 0.1 });
-                break;
-        }
-    }
-
-
 }

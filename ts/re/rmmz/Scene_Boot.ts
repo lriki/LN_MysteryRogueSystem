@@ -85,7 +85,7 @@ Scene_Boot.prototype.isReady = function() {
     // ベースの isReady の中から onDatabaseLoaded が呼び出される
     const result = _Scene_Boot_isReady.call(this);
 
-    if (!window["RE_databaseMap"] && !MRDataManager.isImportCompleted()) {
+    if (!MRDataManager.isImportCompleted()) {
         return false;
     }
     else {
@@ -102,8 +102,4 @@ Scene_Boot.prototype.onDatabaseLoaded = function() {
     
     REVisual.initialize();
     RESystem.integration = new RMMZIntegration();
-
-    MRDataManager.loadPrefabDatabaseMap();
-
-    //_init();
 }

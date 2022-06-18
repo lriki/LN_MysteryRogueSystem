@@ -81,12 +81,6 @@ export class TestEnv {
         this.integration = new TestEnvIntegration();
         RESystem.integration = this.integration;
         RESystem.unittest = true;
-        //REDataManager.loadPrefabDatabaseMap();
-        {
-            // Database マップ読み込み開始
-            const filename = `Map${this.padZero(MRDataManager.databaseMapId, 3)}.json`;
-            this.loadDataFile("RE_databaseMap", filename);
-        }
 
         this.UnitTestLandId = MRData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
         this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(MRData.getMap("MR-Safety:テスト拠点").mapId);

@@ -82,29 +82,6 @@ export class SRmmzHelpers {
         return entity;
     }
 
-    public static getPrefabEventDataId(prefabName: string): number {
-        const databaseMap = MRDataManager.databaseMap();
-        assert(databaseMap);
-        assert(databaseMap.events);
-
-        const index = databaseMap.events.findIndex(x => (x) ? x.name == prefabName : false);
-        if (index >= 0) {
-            return index;
-        }
-        else {
-            throw new Error(`${prefabName} not found in MR-Prefabs map.`);
-        }
-    }
-    
-    public static getPrefabEventDataById(rmmzEventId: number): IDataMapEvent {
-        const databaseMap = MRDataManager.databaseMap();
-        assert(databaseMap);
-        assert(databaseMap.events);
-        const event = databaseMap.events[rmmzEventId];
-        if (event) return event;
-        throw new Error(`${rmmzEventId} not found in MR-Prefabs map.`);
-    }
-
     public static getRegionId(x: number, y: number): number {
         if ($dataMap.data) {
             const width = $dataMap.width ?? 0;
