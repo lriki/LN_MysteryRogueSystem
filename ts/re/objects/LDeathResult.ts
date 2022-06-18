@@ -1,7 +1,7 @@
-import { RESerializable } from "../Common";
+import { MRSerializable } from "../Common";
 import { DStateId } from "../data/DState";
 
-@RESerializable
+@MRSerializable
 export class LDeathResult {
     private _states: DStateId[];
 

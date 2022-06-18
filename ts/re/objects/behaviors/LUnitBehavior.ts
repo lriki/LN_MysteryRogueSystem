@@ -5,7 +5,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { Helpers } from "ts/re/system/Helpers";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { assert, RESerializable, tr, tr2 } from "ts/re/Common";
+import { assert, MRSerializable, tr, tr2 } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { UMovement } from "ts/re/usecases/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/re/system/SEffectContext";
@@ -43,7 +43,7 @@ enum LFeetProcess {
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LUnitBehavior extends LBehavior {
     
     private _factionId: DFactionId = MRData.system.factions.neutral;

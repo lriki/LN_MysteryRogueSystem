@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
 import { DParameterId, REData_Parameter } from "ts/re/data/DParameter";
 import { MRData } from "ts/re/data/MRData";
@@ -12,7 +12,7 @@ interface LParamBuff {
     turn: number;
 }
 
-@RESerializable
+@MRSerializable
 export class LParam {
     private _dataId: DParameterId;
     private _actualParamDamge: number;       // ダメージ値
@@ -163,7 +163,7 @@ export class LParam {
     }
 }
 
-@RESerializable
+@MRSerializable
 export class LParamSet {
     //_ownerId: LEntityId | undefined;
 

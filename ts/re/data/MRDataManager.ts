@@ -1,24 +1,24 @@
 import fs from 'fs';
 import { RESystem } from "ts/re/system/RESystem";
-import { assert, RESerializable, tr, tr2 } from "../Common";
+import { assert, tr, tr2 } from "../Common";
 import { DMap, MRData, REFloorMapKind } from "./MRData";
 import { MRBasics } from "./MRBasics";
-import { DState, DStateRestriction, makeStateBehaviorsFromMeta } from "./DState";
+import { DState, DStateRestriction } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DLand, DLandIdentificationLevel, DMapId, DTerrainSettingRef } from "./DLand";
+import { DLand, DLandIdentificationLevel, DMapId } from "./DLand";
 import { DHelpers } from "./DHelper";
-import { DPrefab, DPrefabMoveType, DSystemPrefabKind } from "./DPrefab";
+import { DPrefabMoveType } from "./DPrefab";
 import { DActor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTrait } from './DTraits';
-import { DEffectHitType, DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect, DParameterApplyTarget } from './DEffect';
+import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
-import { RESetup } from './RESetup';
+import { MRSetup } from './MRSetup';
 import { DAttackElement } from './DAttackElement';
 import { DParamMessageValueSource, REData_Parameter } from './DParameter';
 import { DDataImporter } from './DDataImporter';
@@ -36,18 +36,13 @@ import { DFloorPresetImporter } from './importers/DFloorPresetImporter';
 declare global {  
     interface Window {
         RE_databaseMap: IDataMap | undefined,
-        RE_dataLandMap: IDataMap | undefined,
-        RE_dataEventTableMap: IDataMap | undefined,
-        RE_dataItemTableMap: IDataMap | undefined,
-        RE_dataEnemyTableMap: IDataMap | undefined,
-        RE_dataTrapTableMap: IDataMap | undefined,
     }
 }
 
 type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
 
-export class REDataManager {
+export class MRDataManager {
     static testMode: boolean;
     static databaseMapId: number = 0;
     static loadedLandId: number = 0;
@@ -609,7 +604,7 @@ export class REDataManager {
                         stateGroup.name = x.name;
                         stateGroup.key = meta.key;
                         MRData.stateGroups.push(stateGroup);
-                        RESetup.setupDirectly_StateGroup(stateGroup);
+                        MRSetup.setupDirectly_StateGroup(stateGroup);
                     }
                     else {
                         state.key = meta.key;
@@ -630,7 +625,7 @@ export class REDataManager {
                 }
             }
             for (const state of MRData.states) {
-                RESetup.setupDirectly_State(state);
+                MRSetup.setupDirectly_State(state);
             }
 
             MRBasics.states = {
@@ -688,7 +683,7 @@ export class REDataManager {
             }
         });
         MRBasics.defaultEnemyClass = MRData.classes[9].id;  // TODO:
-        for (const race of MRData.races) RESetup.setupRace(race);
+        for (const race of MRData.races) MRSetup.setupRace(race);
 
         // Import Actors
         //REData.actors = [];
@@ -905,7 +900,7 @@ export class REDataManager {
                 const meta = DMetadataParser.parse(x.meta);
                 entity.raceIds = meta.races.map(x => MRData.getRace(x).id);
 
-                RESetup.setupEnemy(entity);
+                MRSetup.setupEnemy(entity);
             }
         });
 
@@ -1141,7 +1136,7 @@ export class REDataManager {
                             const prefab = MRData.prefabs.find(x => x.key == entity.entity.meta_prefabName);
                             if (prefab) {
                                 entity.prefabId = prefab.id;
-                                RESetup.setupPrefab(prefab);
+                                MRSetup.setupPrefab(prefab);
                             }
                             else {
                                 throw new Error(`Unknown Prefab "${entity.entity.meta_prefabName}".`);
@@ -1169,19 +1164,19 @@ export class REDataManager {
         const validLands = MRData.lands.filter(x => x.rmmzMapId > 0);
         for (let iLand = 0; iLand < validLands.length; iLand++) {
             const land = validLands[iLand];
-            REDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { 
+            MRDataManager.beginLoadMapData(land.rmmzMapId, (data: any) => { 
                 land.import(data);
                 
-                if (land.enemyTableMapId > 0) REDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => {
+                if (land.enemyTableMapId > 0) MRDataManager.beginLoadMapData(land.enemyTableMapId, (data: any) => {
                     DLand.buildSubAppearanceTable(land, data, land.enemyTableMapId, land.appearanceTable, land.appearanceTable.enemies);
                 });
-                if (land.itemTableMapId > 0) REDataManager.beginLoadMapData(land.itemTableMapId, (data: any) => {
+                if (land.itemTableMapId > 0) MRDataManager.beginLoadMapData(land.itemTableMapId, (data: any) => {
                     DLand.buildSubAppearanceTable(land, data, land.itemTableMapId, land.appearanceTable, land.appearanceTable.items);
                 });
-                if (land.trapTableMapId > 0) REDataManager.beginLoadMapData(land.trapTableMapId, (data: any) => {
+                if (land.trapTableMapId > 0) MRDataManager.beginLoadMapData(land.trapTableMapId, (data: any) => {
                     DLand.buildSubAppearanceTable(land, data, land.trapTableMapId, land.appearanceTable, land.appearanceTable.traps);
                 });
-                if (land.shopTableMapId > 0) REDataManager.beginLoadMapData(land.shopTableMapId, (data: any) => {
+                if (land.shopTableMapId > 0) MRDataManager.beginLoadMapData(land.shopTableMapId, (data: any) => {
                     DLand.buildSubAppearanceTable(land, data, land.shopTableMapId, land.appearanceTable, land.appearanceTable.shop);
                 });
 
@@ -1212,25 +1207,25 @@ export class REDataManager {
             
             // SystemState 等を参照したいので、System の Link の後で。
             for (const skill of MRData.skills) {
-                RESetup.setupDirectly_Skill(skill)
+                MRSetup.setupDirectly_Skill(skill)
             }
-            MRData.skills.forEach(x => RESetup.linkSkill(x));
+            MRData.skills.forEach(x => MRSetup.linkSkill(x));
 
             for (const item of MRData.items) {
                 scriptDB.setupItem(MRData.entities[item]);
             }
 
             for (const item of MRData.items) {
-                RESetup.setupDirectly_DItem(MRData.entities[item]);
+                MRSetup.setupDirectly_DItem(MRData.entities[item]);
             }
 
             for (const id of MRData.actors) {
-                if (id > 0) RESetup.setupActor(MRData.entities[id]);
+                if (id > 0) MRSetup.setupActor(MRData.entities[id]);
             }
 
             // Skill を参照するので、Skill の Link の後で。
             for (const id of MRData.items) {
-                RESetup.linkItem(MRData.entities[id]);
+                MRSetup.linkItem(MRData.entities[id]);
             }
 
             console.log("importSetupScript end.");
@@ -1257,7 +1252,7 @@ export class REDataManager {
 
     public static loadPrefabDatabaseMap(): void {
         // Database マップ読み込み開始
-        const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
+        const filename = `Map${this.padZero(MRDataManager.databaseMapId, 3)}.json`;
         DataManager.loadDataFile("RE_databaseMap", filename);
     }
 
@@ -1346,26 +1341,6 @@ export class REDataManager {
         else
             return false;
         */
-    }
-
-    static dataLandDefinitionMap(): IDataMap | undefined {
-        return window["RE_dataLandMap"];
-    }
-
-    static dataEventTableMap(): IDataMap | undefined {
-        return window["RE_dataEventTableMap"];
-    }
-
-    static dataItemTableMap(): IDataMap | undefined {
-        return window["RE_dataItemTableMap"];
-    }
-
-    static dataEnemyTableMap(): IDataMap | undefined {
-        return window["RE_dataEnemyTableMap"];
-    }
-
-    static dataTrapTableMap(): IDataMap | undefined {
-        return window["RE_dataTrapTableMap"];
     }
 
     static databaseMap(): IDataMap | undefined {

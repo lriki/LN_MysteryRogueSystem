@@ -1,4 +1,4 @@
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { DBlockLayerKind } from "ts/re/data/DCommon";
 import { MRData } from "ts/re/data/MRData";
 import { Helpers } from "ts/re/system/Helpers";
@@ -23,7 +23,7 @@ import { LItemBehavior } from "./LItemBehavior";
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LGoldThiefBehavior extends LBehavior {
     private _standardAI: LCharacterAI_Normal;
     private _escapeAI: LEscapeAI;

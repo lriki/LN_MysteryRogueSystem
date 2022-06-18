@@ -1,4 +1,4 @@
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { MRData } from "ts/re/data/MRData";
@@ -8,7 +8,7 @@ import { LEventResult } from "../LEventServer";
 import { REGame } from "../REGame";
 
 
-@RESerializable
+@MRSerializable
 export class LFlockBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

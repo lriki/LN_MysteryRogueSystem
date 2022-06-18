@@ -1,10 +1,10 @@
-import { assert, RESerializable, tr2 } from "ts/re/Common";
+import { assert, MRSerializable, tr2 } from "ts/re/Common";
 import { SStepPhase } from "../system/SCommon";
 import { LActionTokenType } from "./LActionToken";
 import { REGame } from "./REGame";
 
 
-@RESerializable
+@MRSerializable
 export class LPhaseResult {
     // この Phase で消費されたトークンの種類 (Major は Minor を兼ねる)
     consumedActionToken: LActionTokenType | undefined;
@@ -15,7 +15,7 @@ export class LPhaseResult {
 }
 
 
-@RESerializable
+@MRSerializable
 export class LSchedulingResult {
     private _phaseResults: (LPhaseResult | undefined)[];
 

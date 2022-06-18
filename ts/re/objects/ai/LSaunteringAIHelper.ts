@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { Helpers } from "ts/re/system/Helpers";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -10,7 +10,7 @@ import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 
-@RESerializable
+@MRSerializable
 export class LSaunteringAIHelper {
     // モンスターの移動と目的地
     // http://twist.jpn.org/sfcsiren/index.php?%E3%83%A2%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%AE%E7%A7%BB%E5%8B%95%E3%81%A8%E7%9B%AE%E7%9A%84%E5%9C%B0

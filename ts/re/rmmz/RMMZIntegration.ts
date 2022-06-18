@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { LandExitResult, MRData } from "../data/MRData";
-import { REDataManager } from "../data/REDataManager";
+import { MRDataManager } from "../data/MRDataManager";
 import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../objects/LEntity";
 import { SSequelSet } from "../system/SSequel";
@@ -162,7 +162,7 @@ export class RMMZIntegration extends SIntegration {
     }
     
     onEntityEnteredMap(entity: LEntity): void {
-        const databaseMap = REDataManager.databaseMap();
+        const databaseMap = MRDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
         

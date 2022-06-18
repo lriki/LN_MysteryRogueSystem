@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
 import { RESystem } from "ts/re/system/RESystem";
 import { SCommandContext } from "../system/SCommandContext";
@@ -48,7 +48,7 @@ export enum LEventResult {
  * - Command: 特定の Entity や攻撃対象など、行いたい動作に対して関係者が決まっているメソッドとして使う。
  * - Event: Commandの前後のタイミングを他に通知して、未知の割り込み動作を許可するタイミングとして使う。
  */
-@RESerializable
+@MRSerializable
 export class LEventServer {
     private _entries: EventSubscriber[] = [];
     

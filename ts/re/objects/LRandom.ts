@@ -1,7 +1,7 @@
-import { assert, RESerializable } from "../Common";
+import { assert, MRSerializable } from "../Common";
 
 
-@RESerializable
+@MRSerializable
 export class LRandom {
     private _x: number;
     private _y: number;

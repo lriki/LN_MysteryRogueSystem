@@ -1,4 +1,4 @@
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { MRData } from "ts/re/data/MRData";
 import { RESystem } from "ts/re/system/RESystem";
 import { SAIHelper } from "ts/re/system/SAIHelper";
@@ -12,7 +12,7 @@ import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 
-@RESerializable
+@MRSerializable
 export class LActionDeterminer {
     
     // 最初のフェーズで決定する、メインの行動対象 Entity.

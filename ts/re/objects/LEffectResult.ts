@@ -1,4 +1,4 @@
-import { assert, RESerializable, tr2 } from "ts/re/Common";
+import { assert, MRSerializable, tr2 } from "ts/re/Common";
 import { DState, DStateId } from "ts/re/data/DState";
 import { MRData } from "ts/re/data/MRData";
 import { DescriptionHighlightLevel, LEntityDescription } from "ts/re/objects/LIdentifyer";
@@ -16,7 +16,7 @@ import { MRBasics } from "../data/MRBasics";
 import { DEntityId } from "../data/DEntity";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
-@RESerializable
+@MRSerializable
 export class LParamEffectResult {
     paramId: DParameterId;
     damage: number = 0;    // REData.parameters の要素数分の配列。それぞれのパラメータをどれだけ変動させるか。負値はダメージ。
@@ -62,7 +62,7 @@ export class LParamEffectResult {
  * 一度の Effect の適用結果。Visual で表示したいコンテンツのソースデータとなる。
  * メッセージに限らず、ポップアップやイメージ表情差分表示など、様々な Visual 表現に必要なすべてのデータを含む。
  */
-@RESerializable
+@MRSerializable
 export class LEffectResult {
     sourceEffect: DEffect | undefined;  // TODO: ID 使った方がいいだろう
 

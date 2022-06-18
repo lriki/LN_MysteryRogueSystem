@@ -10,9 +10,9 @@ import { MRBasics } from "ts/re/data/MRBasics";
 import { DParameterId } from "ts/re/data/DParameter";
 import { DClass } from "ts/re/data/DClass";
 import { DActor } from "ts/re/data/DActor";
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 
-@RESerializable
+@MRSerializable
 export class LExperienceBehavior extends LBehavior {
 
     /*

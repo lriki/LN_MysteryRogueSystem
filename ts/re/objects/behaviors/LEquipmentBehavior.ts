@@ -1,4 +1,4 @@
-import { assert, RESerializable, tr2 } from "ts/re/Common";
+import { assert, MRSerializable, tr2 } from "ts/re/Common";
 import { DActionId, DCommandId } from "ts/re/data/DCommon";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
@@ -12,7 +12,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
-@RESerializable
+@MRSerializable
 export class LEquipmentBehavior extends LBehavior {
 
     /*

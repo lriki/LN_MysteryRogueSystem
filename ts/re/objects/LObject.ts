@@ -1,8 +1,8 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { REGame } from "./REGame";
 
 
-@RESerializable
+@MRSerializable
 export class LEntityId {
     private _index: number;  // 0 is Invalid (dummy entity)
     private _key: number;

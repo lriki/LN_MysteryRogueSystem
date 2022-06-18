@@ -1,4 +1,4 @@
-import { assert, RESerializable, tr } from "ts/re/Common";
+import { assert, MRSerializable, tr } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { MRData } from "ts/re/data/MRData";
 import { SCommandResponse } from "ts/re/system/SCommand";
@@ -42,7 +42,7 @@ import { DActionId } from "ts/re/data/DCommon";
  * 強化バネやワープポイント、ポイントスイッチは罠に見えるが罠ではない。どちらかというと階段に近いオブジェクト。
  * 
  */
-@RESerializable
+@MRSerializable
 export class LTrapBehavior extends LBehavior {
     /*
     効果は Trap を performer とした Emittor として発動する

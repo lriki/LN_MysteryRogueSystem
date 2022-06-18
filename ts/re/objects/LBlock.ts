@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { LEntity } from "./LEntity";
 import { FBlockComponent } from "ts/re/floorgen/FMapData";
 import { REGame } from "./REGame";
@@ -41,7 +41,7 @@ export enum LBlockSystemDecoration {
  * Block 内の同一レイヤーには、複数の Entity が同時に存在することがありえる。
  * 貫通属性を持ち、複数同時発射されれる Projectile など。（シレン2のかまいたちの矢等）
  */
- @RESerializable
+ @MRSerializable
 export class LBlock {
     // Block は Entity 扱いしない
     // ----------

@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/re/data/DState";
 import { MRData } from "ts/re/data/MRData";
 import { checkContinuousResponse, SCommandResponse } from "ts/re/system/SCommand";
@@ -239,7 +239,7 @@ Traitでダメージ計算式みたいに評価式指定かな。
  * 振舞いは Ability と非常によく似ているが、State は RMMZ のステートと同じく状態異常を主に表すものであり、
  * 特徴的なところだと "全快" するアイテムやイベントによってすべてでタッチされたりする。
  */
-@RESerializable
+@MRSerializable
 export class LState extends LObject {
     //private _ownerEntity: LEntity | undefined;    // シリアライズしない
     _stateId: DStateId = 0;

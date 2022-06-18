@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DFactionId, MRData } from "ts/re/data/MRData";
 import { DStateRestriction } from "../data/DState";
@@ -77,7 +77,7 @@ export enum LSchedulerPhase
     RoundEnding,
 }
 
-@RESerializable
+@MRSerializable
 export class LSchedulingUnit {
     private _index: number;
     private _entityId: LEntityId;
@@ -188,7 +188,7 @@ export class LSchedulingUnit {
 }
 
 // - Round 中に新たに発生した Unit は、今回 round では行動しない
-@RESerializable
+@MRSerializable
 export class LScheduler2 {
     /*
     [2021/11/3] 行動順テーブル廃止

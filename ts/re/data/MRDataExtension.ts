@@ -1,6 +1,6 @@
 
 
-export class REDataExtension {
+export class MRDataExtension {
     public onDatabaseLoaded(): void {
         
     }

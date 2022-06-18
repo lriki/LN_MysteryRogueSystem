@@ -11,11 +11,9 @@ import { DAutoRemovalTiming, DState, DStateIntentions, DStateRestriction } from 
 import { DStateGroup } from "./DStateGroup";
 import { MRData } from "./MRData";
 import { assert, tr2 } from "../Common";
-import { DItem } from "./DItem";
 import { DRace } from "./DRace";
-import { RESystem } from "../system/RESystem";
 
-export class RESetup {
+export class MRSetup {
 
     public static setupPrefab(data: DPrefab): void {
         

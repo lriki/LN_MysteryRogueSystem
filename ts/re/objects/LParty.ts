@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { REGame } from "./REGame";
 import { LEntity } from "./LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";
@@ -19,7 +19,7 @@ interface LPartyEventSubscriber {
  * RMMZ の Party と Troop を合わせたようなもの。
  * member がいなくなると、GC される。
  */
-@RESerializable
+@MRSerializable
 export class LParty {
     private _id: LPartyId = 0;
     private _members: LEntityId[] = [];

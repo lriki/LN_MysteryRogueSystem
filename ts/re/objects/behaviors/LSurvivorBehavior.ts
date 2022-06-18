@@ -1,4 +1,4 @@
-import { RESerializable, tr2 } from "ts/re/Common";
+import { MRSerializable, tr2 } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { paramFPLoss } from "ts/re/PluginParameters";
 import { SPhaseResult } from "ts/re/system/SCommand";
@@ -10,7 +10,7 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LSurvivorBehavior extends LBehavior {
 
     /*

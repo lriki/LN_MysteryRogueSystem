@@ -1,5 +1,4 @@
 import { LBehavior } from "ts/re/objects/behaviors/LBehavior";
-import { REData_Attribute, REData_Behavior } from "./REDataTypes";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
 import { DSpecialEffect, DSkill } from "./DSkill";
@@ -23,7 +22,7 @@ import { DTroop } from "./DTroop";
 import { DStateGroup } from "./DStateGroup";
 import { DPseudonymous } from "./DPseudonymous";
 import { DItemShopType } from "./DItemShop";
-import { REDataExtension } from "./REDataExtension";
+import { MRDataExtension } from "./MRDataExtension";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DAttackElement } from "./DAttackElement";
 import { assert } from "../Common";
@@ -158,7 +157,7 @@ export class MRData
     // Common defineds.
     static NormalAttackSkillId: number = 1;
 
-    static ext: REDataExtension = new REDataExtension();
+    static ext: MRDataExtension = new MRDataExtension();
 
     static system: DSystem;
     //static equipTypes: DEquipmentType[] = [];
@@ -177,8 +176,6 @@ export class MRData
     static commands: DCommand[] = [];
     static sequels: DSequel[] = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
     static parameters: REData_Parameter[] = [];
-    static attributes: REData_Attribute[] = [{id: 0, name: 'null'}];
-    static behaviors: REData_Behavior[] = [{id: 0, name: 'null'}];
     static effectBehaviors: DSpecialEffect[] = [];
     // static presets: DPreset[] = [];
     static skills: DSkill[] = [];
@@ -224,16 +221,12 @@ export class MRData
         this.commands = [new DCommand(0, "null")];
         this.sequels = [{id: 0, name: 'null', parallel: false, fluidSequence: false}];
         this.parameters = [];
-        this.attributes = [{id: 0, name: 'null'}];
-        this.behaviors = [{id: 0, name: 'null'}];
 
         this.effectBehaviors = [new DSpecialEffect(0, "null")];
-        // this.presets = [new DPreset(0, "null")];
         this.skills = [];
         this.items = [];
 
         this.states = [];
-        //this._behaviorFactories = [() => new LBehavior()];
         this.prefabs = [new DPrefab(0)];
         this.entities = [new DEntity(0)];
         this.emittors = [new DEmittor(0, "null")];
@@ -334,29 +327,7 @@ export class MRData
         return newData;
     }
 
-
     //--------------------
-
-    /*
-    static addParameter(name: string): number {
-        const newId = this.parameters.length;
-        this.parameters.push({
-            id: newId,
-            name: name
-        });
-        return newId;
-    }
-    */
-
-    static addBehavior(name: string, factory: (() => LBehavior)): number {
-        const newId = this.behaviors.length;
-        this.behaviors.push({
-            id: newId,
-            name: name,
-        });
-        this._behaviorFactories.push(factory);
-        return newId;
-    }
     
     static addSequel(name: string): DSequelId {
         const newId = this.sequels.length;

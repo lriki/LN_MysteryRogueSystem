@@ -4,7 +4,7 @@ import { LEntity } from "./../LEntity";
 import { LCharacterAI } from "./LCharacterAI";
 import { LActionDeterminer } from "./LActionDeterminer";
 import { LMoveDeterminer, LMovingMethod } from "./LMoveDeterminer";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { DPrefabMoveType } from "ts/re/data/DPrefab";
 import { LMovingTargetFinder, LMovingTargetFinder_Item } from "./LMovingTargetFinder";
 import { LActionTokenType } from "../LActionToken";
@@ -14,7 +14,7 @@ import { LActionTokenConsumeType } from "../LCommon";
  * https://yttm-work.jp/game_ai/game_ai_0001.html
  * https://wiki.denfaminicogamer.jp/ai_wiki/%E3%82%AD%E3%83%A3%E3%83%A9%E3%82%AF%E3%82%BF%E3%83%BCAI
  */
-@RESerializable
+@MRSerializable
 export class LCharacterAI_Normal extends LCharacterAI {
     
 

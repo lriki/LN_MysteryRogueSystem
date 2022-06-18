@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "../Common";
+import { assert, MRSerializable } from "../Common";
 import { LActionTokenConsumeType } from "./LCommon";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
@@ -8,7 +8,7 @@ export enum LActionTokenType {
     Major,
 }
 
-@RESerializable
+@MRSerializable
 export class LActionToken {
     /*
     トークンの借金について

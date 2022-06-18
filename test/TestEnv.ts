@@ -1,7 +1,7 @@
 
 import fs from "fs";
 import { LandExitResult, MRData, REFloorMapKind } from "ts/re/data/MRData";
-import { REDataManager } from "ts/re/data/REDataManager";
+import { MRDataManager } from "ts/re/data/MRDataManager";
 import { FMap } from "ts/re/floorgen/FMapData";
 import { REGame } from "ts/re/objects/REGame";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -76,15 +76,15 @@ export class TestEnv {
         MRData.testMode = true;
         this.loadRmmzDatabase();
         MRData.reset();
-        REDataManager.testMode = true;
-        REDataManager.load();
+        MRDataManager.testMode = true;
+        MRDataManager.load();
         this.integration = new TestEnvIntegration();
         RESystem.integration = this.integration;
         RESystem.unittest = true;
         //REDataManager.loadPrefabDatabaseMap();
         {
             // Database マップ読み込み開始
-            const filename = `Map${this.padZero(REDataManager.databaseMapId, 3)}.json`;
+            const filename = `Map${this.padZero(MRDataManager.databaseMapId, 3)}.json`;
             this.loadDataFile("RE_databaseMap", filename);
         }
 

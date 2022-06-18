@@ -2,7 +2,7 @@ import { RESystem } from "ts/re/system/RESystem";
 import { SView } from "ts/re/system/SView";
 import { Log } from "../Common";
 import { MRData } from "../data/MRData";
-import { REDataManager } from "../data/REDataManager";
+import { MRDataManager } from "../data/MRDataManager";
 import { REGame } from "../objects/REGame";
 import { SGameManager } from "../system/SGameManager";
 import { RMMZHelper } from "./RMMZHelper";
@@ -80,7 +80,7 @@ Game_Map.prototype.setup = function(mapId: number) {
         if (REGame.camera.transferingNewFloorId().isTacticsMap()) {
             // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
             // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
-            if (REDataManager.isLandMap(mapId)) {
+            if (MRDataManager.isLandMap(mapId)) {
                 this.events().forEach(e => e.setTransparent(true));
             }
 

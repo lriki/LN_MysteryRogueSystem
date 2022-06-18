@@ -1,7 +1,7 @@
 import { assert } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { MRData } from "ts/re/data/MRData";
-import { REDataManager } from "ts/re/data/REDataManager";
+import { MRDataManager } from "ts/re/data/MRDataManager";
 import { FBlockComponent, FMap } from "ts/re/floorgen/FMapData";
 import { REGame } from "ts/re/objects/REGame";
 import { LTileShape } from "ts/re/objects/LBlock";
@@ -83,7 +83,7 @@ export class SRmmzHelpers {
     }
 
     public static getPrefabEventDataId(prefabName: string): number {
-        const databaseMap = REDataManager.databaseMap();
+        const databaseMap = MRDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
 
@@ -97,7 +97,7 @@ export class SRmmzHelpers {
     }
     
     public static getPrefabEventDataById(rmmzEventId: number): IDataMapEvent {
-        const databaseMap = REDataManager.databaseMap();
+        const databaseMap = MRDataManager.databaseMap();
         assert(databaseMap);
         assert(databaseMap.events);
         const event = databaseMap.events[rmmzEventId];

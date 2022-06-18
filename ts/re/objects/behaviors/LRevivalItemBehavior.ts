@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse, SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -11,7 +11,7 @@ import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LRevivalItemBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

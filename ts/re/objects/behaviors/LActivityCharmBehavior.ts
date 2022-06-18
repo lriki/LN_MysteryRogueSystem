@@ -1,4 +1,4 @@
-import { RESerializable, tr2 } from "ts/re/Common";
+import { MRSerializable, tr2 } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { MRData } from "ts/re/data/MRData";
 import { SCommandResponse } from "ts/re/system/SCommand";
@@ -15,7 +15,7 @@ import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LActivityCharmBehavior extends LBehavior {
 
     clone(newOwner: LEntity): LBehavior {

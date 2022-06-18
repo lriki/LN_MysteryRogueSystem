@@ -1,4 +1,4 @@
-import { RESerializable } from "../Common";
+import { MRSerializable } from "../Common";
 import { MRBasics } from "../data/MRBasics";
 import { LBattlerBehavior } from "./behaviors/LBattlerBehavior";
 import { LEntity } from "./LEntity";
@@ -7,7 +7,7 @@ import { LEntity } from "./LEntity";
  * 特に経験値はステップ終了時にまとめて取得できる。
  * そういった遅延取得に関係するデータをまとめておくクラス。
  */
-@RESerializable
+@MRSerializable
 export class LReward {
     private _exp: number;
 

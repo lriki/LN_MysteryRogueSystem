@@ -11,7 +11,7 @@ import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
 import { DSequelId } from "ts/re/data/DSequel";
 import { LActionTokenType } from "../LActionToken";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { LEntityId } from "../LObject";
 import { UMovement } from "ts/re/usecases/UMovement";
 
@@ -20,7 +20,7 @@ enum GetUpReserved {
     Random,
     Certainly,
 }
-@RESerializable
+@MRSerializable
 export class LNapStateBehavior extends LBehavior {
     private _getUpReserved: GetUpReserved = GetUpReserved.None;
     

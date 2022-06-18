@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { MRData } from "ts/re/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
@@ -9,7 +9,7 @@ import { DRace } from "ts/re/data/DRace";
 /**
  * LEntity の持つ Race に基づいて種族を表現する Behavior。
  */
-@RESerializable
+@MRSerializable
 export class LRaceBehavior extends LBattlerBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LRaceBehavior);

@@ -70,6 +70,6 @@ export class TypeStore {
     }
 }
 
-export function RESerializable(constructor: Function) {
+export function MRSerializable(constructor: Function) {
     TypeStore.register(constructor);
 }

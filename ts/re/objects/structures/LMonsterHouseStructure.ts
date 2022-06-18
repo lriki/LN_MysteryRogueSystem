@@ -1,4 +1,4 @@
-import { assert, RESerializable, tr2 } from "ts/re/Common";
+import { assert, MRSerializable, tr2 } from "ts/re/Common";
 import { DMonsterHouseType, DMonsterHouseTypeId } from "ts/re/data/DMonsterHouse";
 import { DFactionId, MRData } from "ts/re/data/MRData";
 import { Helpers } from "ts/re/system/Helpers";
@@ -10,7 +10,7 @@ import { LStructure } from "./LStructure";
 import { SSoundManager } from "ts/re/system/SSoundManager";
 import { LRoomId } from "../LCommon";
 
-@RESerializable
+@MRSerializable
 export class LMonsterHouseStructure extends LStructure {
     private _roomId: LRoomId = 0
     private _monsterHouseTypeId: DMonsterHouseTypeId = 0;

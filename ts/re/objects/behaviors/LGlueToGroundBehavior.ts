@@ -1,4 +1,4 @@
-import { RESerializable, tr2 } from "ts/re/Common";
+import { MRSerializable, tr2 } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -11,7 +11,7 @@ import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior
 /**
  * 置くと床に張り付く
  */
-@RESerializable
+@MRSerializable
 export class LGlueToGroundBehavior extends LBehavior {
 
     private _glued: boolean = false;

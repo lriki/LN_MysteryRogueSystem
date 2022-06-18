@@ -1,4 +1,4 @@
-import { REDataManager } from "../data/REDataManager";
+import { MRDataManager } from "../data/MRDataManager";
 import { RMMZIntegration } from "./RMMZIntegration";
 import { RESystem } from "../system/RESystem";
 import { REVisual } from "../visual/REVisual";
@@ -85,7 +85,7 @@ Scene_Boot.prototype.isReady = function() {
     // ベースの isReady の中から onDatabaseLoaded が呼び出される
     const result = _Scene_Boot_isReady.call(this);
 
-    if (!window["RE_databaseMap"] && !REDataManager.isImportCompleted()) {
+    if (!window["RE_databaseMap"] && !MRDataManager.isImportCompleted()) {
         return false;
     }
     else {
@@ -98,12 +98,12 @@ Scene_Boot.prototype.isReady = function() {
 var _Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
 Scene_Boot.prototype.onDatabaseLoaded = function() {
     _Scene_Boot_onDatabaseLoaded.call(this);
-    REDataManager.load();
+    MRDataManager.load();
     
     REVisual.initialize();
     RESystem.integration = new RMMZIntegration();
 
-    REDataManager.loadPrefabDatabaseMap();
+    MRDataManager.loadPrefabDatabaseMap();
 
     //_init();
 }

@@ -1,4 +1,4 @@
-import { REDataManager } from "ts/re/data/REDataManager";
+import { MRDataManager } from "ts/re/data/MRDataManager";
 import { REGame } from "ts/re/objects/REGame";
 import { REVisual } from "ts/re/visual/REVisual";
 
@@ -6,7 +6,7 @@ import { REVisual } from "ts/re/visual/REVisual";
 export class RMMZHelper {
 
     public static isRESystemMap(): boolean {
-        return REDataManager.isRESystemMap($gameMap.mapId());
+        return MRDataManager.isRESystemMap($gameMap.mapId());
     }
 
     public static setRegionId(x: number, y: number, regionId: number): void {

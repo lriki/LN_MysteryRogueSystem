@@ -1,4 +1,4 @@
-import { REDataManager } from "ts/re/data/REDataManager";
+import { MRDataManager } from "ts/re/data/MRDataManager";
 import { REGame } from "ts/re/objects/REGame";
 import { LEntity } from "ts/re/objects/LEntity";
 import { SSequelSet } from "ts/re/system/SSequel";
@@ -180,7 +180,7 @@ export class REEntityVisualSet {
     }
 
     private createVisual(entity: LEntity) {
-        const databaseMap = REDataManager.databaseMap();
+        const databaseMap = MRDataManager.databaseMap();
         if (!databaseMap || !databaseMap.events) {
             throw new Error();
         }

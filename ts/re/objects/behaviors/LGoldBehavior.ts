@@ -1,4 +1,4 @@
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { DTextManager } from "ts/re/data/DTextManager";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { LEntity } from "../LEntity";
@@ -11,7 +11,7 @@ import { LBehavior, LNameView } from "./LBehavior";
 /**
  * お金
  */
-@RESerializable
+@MRSerializable
 export class LGoldBehavior extends LBehavior {
     /*
     [2021/9/29] 金額の持ち方

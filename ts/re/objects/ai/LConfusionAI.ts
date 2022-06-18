@@ -11,7 +11,7 @@ import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
 import { Helpers } from "ts/re/system/Helpers";
 import { LActionTokenConsumeType } from "../LCommon";
@@ -35,7 +35,7 @@ export enum LConfusionAIRestriction {
     AttcakToFriend = 3,
 }
 
-@RESerializable
+@MRSerializable
 export class LConfusionAI extends LCharacterAI {
 
     /*

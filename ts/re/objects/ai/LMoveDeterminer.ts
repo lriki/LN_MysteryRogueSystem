@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { Helpers } from "ts/re/system/Helpers";
 import { SAIHelper } from "ts/re/system/SAIHelper";
 import { SCommandContext } from "ts/re/system/SCommandContext";
@@ -21,7 +21,7 @@ export interface LUpdateMovingTargetResult {
     passageway?: LBlock;
 }
 
-@RESerializable
+@MRSerializable
 export class LMoveDeterminer {
     
     // 移動ターゲットとなる座標。

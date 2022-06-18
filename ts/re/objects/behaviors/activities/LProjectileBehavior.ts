@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { LActivity } from "ts/re/objects/activities/LActivity";
 import { LEntity } from "ts/re/objects/LEntity";
@@ -28,7 +28,7 @@ import { paramThrowingDistance } from "ts/re/PluginParameters";
  * - 自然落下することができる。
  * - 壁に当たって落下することができる。
  */
-@RESerializable
+@MRSerializable
 export class LProjectileBehavior extends LBehavior {
     
     blowDirection: number = 0;      // 吹き飛ばし方向

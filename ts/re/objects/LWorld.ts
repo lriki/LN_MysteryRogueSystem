@@ -1,5 +1,5 @@
 import { LEntity } from "./LEntity";
-import { assert, RESerializable } from "../Common";
+import { assert, MRSerializable } from "../Common";
 import { REGame } from "./REGame";
 import { LRandom } from "ts/re/objects/LRandom";
 import { LEntityId, LObject, LObjectType, LObjectId, LBehaviorId } from "./LObject";
@@ -18,7 +18,7 @@ import { UState } from "ts/re/usecases/UState";
 /**
  * 1ゲーム内に1インスタンス存在する。
  */
-@RESerializable
+@MRSerializable
 export class LWorld {
     private _objects: (LObject | undefined)[] = [];
     private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);

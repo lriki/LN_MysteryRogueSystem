@@ -5,14 +5,14 @@ import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LBehavior } from "../LBehavior";
 import { REGame } from "ts/re/objects/REGame";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { SActivityContext } from "ts/re/system/SActivityContext";
 import { DActionId } from "ts/re/data/DCommon";
 
 /**
  * @deprecated see kEntity_スピードドラッグ_A
  */
-@RESerializable
+@MRSerializable
 export class LEaterBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

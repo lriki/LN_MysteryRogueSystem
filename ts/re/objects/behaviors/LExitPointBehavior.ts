@@ -5,7 +5,7 @@ import { SCommandContext } from "ts/re/system/SCommandContext";
 import { SEventExecutionDialog } from "ts/re/system/dialogs/SEventExecutionDialog";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
 
 /**
@@ -38,7 +38,7 @@ import { DActionId, DBlockLayerKind } from "ts/re/data/DCommon";
  * HC4 の時に実装したリアクションコマンド形式がいいかも。
  * Behavior に問い合わせ用のメソッド追加する必要があるけど、Entity に対してどんなアクションをとれるか聞く仕組みがあると自然。
  */
-@RESerializable
+@MRSerializable
 export class LExitPointBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

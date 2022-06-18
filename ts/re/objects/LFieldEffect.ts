@@ -1,4 +1,4 @@
-import { RESerializable } from "../Common";
+import { MRSerializable } from "../Common";
 import { MRBasics } from "../data/MRBasics";
 import { SCommandResponse } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
@@ -22,7 +22,7 @@ export class LFieldEffect {
 }
 
 /** 聖域の効果 */
-@RESerializable
+@MRSerializable
 export class LSanctuaryFieldEffect extends LFieldEffect {
     private _ownerEntityId: LEntityId;
 

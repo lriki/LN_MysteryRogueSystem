@@ -3,7 +3,7 @@ import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
 import { DAnnotationReader, RmmzREEventAttribute } from "../data/DAttributeReader";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
-import { REDataManager } from "../data/REDataManager";
+import { MRDataManager } from "../data/MRDataManager";
 import { LState } from "../objects/states/LState";
 import { REVisual } from "../visual/REVisual";
 
@@ -67,7 +67,7 @@ Game_Event.prototype.initMembers = function() {
 
 var _Game_Event_event = Game_Event.prototype.event;
 Game_Event.prototype.event = function(): IDataMapEvent {
-    if (this.isREEvent() || this._mapId == REDataManager.databaseMapId) {
+    if (this.isREEvent() || this._mapId == MRDataManager.databaseMapId) {
         // Game_Event のコンストラクタは event() を呼び出し、初期座標を決めようとする。
         // その時点では this._eventData をセットすることは TypeScript の仕様上不可能なので、ダミーを参照させる。
         // 実際のところ Entity と Event の座標同期は update で常に行われるため、初期座標が (0,0) でも問題はない。

@@ -14,7 +14,7 @@
 import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
 import { assert } from "../Common";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
-import { REDataManager } from "../data/REDataManager";
+import { MRDataManager } from "../data/MRDataManager";
 import { REVisual } from "../visual/REVisual";
 
 //==============================================================================

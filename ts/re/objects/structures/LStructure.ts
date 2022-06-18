@@ -1,10 +1,10 @@
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LStructureId } from "../LCommon";
 import { LEntity } from "../LEntity";
 
 
-@RESerializable
+@MRSerializable
 export class LStructure {
     _id: LStructureId;
 

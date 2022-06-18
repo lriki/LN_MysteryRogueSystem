@@ -1,7 +1,7 @@
 import { assert, tr2 } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
 import { LandExitResult, MRData } from "ts/re/data/MRData";
-import { REDataManager } from "ts/re/data/REDataManager";
+import { MRDataManager } from "ts/re/data/MRDataManager";
 import { LEntity } from "ts/re/objects/LEntity";
 import { LFloorId } from "ts/re/objects/LFloorId";
 import { REGame } from "ts/re/objects/REGame";
@@ -30,7 +30,7 @@ export class UTransfer {
             actualX = newX;
             actualY = newY;
         }
-        else if (REDataManager.isLandMap(newMapId)) {
+        else if (MRDataManager.isLandMap(newMapId)) {
             assert(newY === 0);
             const floorNumber = newX;
             const land = MRData.lands[landId];
@@ -55,7 +55,7 @@ export class UTransfer {
                 actualY = -1;
             }
         }
-        else if (REDataManager.isRESystemMap(newMapId)) {
+        else if (MRDataManager.isRESystemMap(newMapId)) {
             // 固定マップへの直接遷移
             const mapInfo = $dataMapInfos[newMapId];
             assert(mapInfo);

@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { DAction } from "ts/re/data/DAction";
 import { MRBasics } from "ts/re/data/MRBasics";
 import { DActionId, DSkillId } from "ts/re/data/DCommon";
@@ -44,7 +44,7 @@ export interface LActivityData {
  * ----------
  * ### 未知の拡張機能により、行動がリジェクトされることを想定するか？
  */
-@RESerializable
+@MRSerializable
 export class LActivity {
     private _actionId: DActionId;
     private _actor: LEntityId;      // Command 送信対象。明示されない場合は subject と等しい。

@@ -4,7 +4,7 @@ import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { SBehaviorFactory } from "ts/re/system/SBehaviorFactory";
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 
 export type LAbilityId = LObjectId;
 
@@ -24,7 +24,7 @@ export type LAbilityId = LObjectId;
  * あと Entity としたとき、Behavior から ownerEntity をとるときにちょっと細工する必要があるのが不自然かも。
  * 
  */
-@RESerializable
+@MRSerializable
 export class LAbility extends LObject {
     private _abilityId: DAbilityId = 0;
     //private _ownerEntityId: LEntityId = { index: 0, key: 0 };

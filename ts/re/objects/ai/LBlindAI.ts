@@ -10,7 +10,7 @@ import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
 import { LActionTokenConsumeType } from "../LCommon";
 
@@ -19,7 +19,7 @@ interface SkillAction {
     target: LEntityId;
 };
 
-@RESerializable
+@MRSerializable
 export class LBlindAI extends LCharacterAI {
     private _candidateSkillActions: SkillAction[];
 

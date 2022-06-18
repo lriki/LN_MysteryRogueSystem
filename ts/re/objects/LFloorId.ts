@@ -1,8 +1,8 @@
-import { assert, RESerializable } from "ts/re/Common";
+import { assert, MRSerializable } from "ts/re/Common";
 import { DHelpers } from "ts/re/data/DHelper";
 import { DFloorInfo, DLand, DLandId } from "ts/re/data/DLand";
 import { DMap, MRData } from "ts/re/data/MRData";
-import { REDataManager } from "ts/re/data/REDataManager";
+import { MRDataManager } from "ts/re/data/MRDataManager";
 import { DFloorPreset } from "../data/DTerrainPreset";
 
 /**
@@ -29,7 +29,7 @@ import { DFloorPreset } from "../data/DTerrainPreset";
  * - LFloorId.rmmzMapId() で、ロードするべきマップを取得 (ランダムマップならLand定義マップID, 固定マップならそのマップID)
  * - その後、RMMZIntegration 経由で $gamePlayer.reserveTransfer に流して、実際にマップ移動する。
  */
-@RESerializable
+@MRSerializable
 export class LFloorId {
     /** LandId==DHelpers.RmmzNormalMapLandId は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
     private readonly _landId: DLandId;
@@ -111,10 +111,10 @@ export class LFloorId {
 
     public static makeFromMapTransfarInfo(mapId: number, x: number) {
         let floorId: LFloorId;
-        if (REDataManager.isLandMap(mapId)) {
+        if (MRDataManager.isLandMap(mapId)) {
             floorId = new LFloorId(MRData.lands.findIndex(x => x.rmmzMapId == mapId), x);
         }
-        else if (REDataManager.isRESystemMap(mapId)) {
+        else if (MRDataManager.isRESystemMap(mapId)) {
             // 固定マップへの遷移
             floorId = LFloorId.makeByRmmzFixedMapId(mapId);
         }

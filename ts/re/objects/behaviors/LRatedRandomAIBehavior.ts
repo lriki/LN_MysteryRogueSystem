@@ -1,4 +1,4 @@
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { SPhaseResult } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { LCharacterAI } from "../ai/LCharacterAI";
@@ -10,7 +10,7 @@ import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LRatedRandomAIBehavior extends LBehavior {
 
     /*

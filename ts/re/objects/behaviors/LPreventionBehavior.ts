@@ -1,4 +1,4 @@
-import { RESerializable, tr2 } from "ts/re/Common";
+import { MRSerializable, tr2 } from "ts/re/Common";
 import { DSpecificEffectId } from "ts/re/data/DCommon";
 import { DEffect } from "ts/re/data/DEffect";
 import { MRBasics } from "ts/re/data/MRBasics";
@@ -12,7 +12,7 @@ import { CommandArgs, LBehavior, onGrounded, SRejectionInfo, testPickOutItem } f
 /**
  * 
  */
-@RESerializable
+@MRSerializable
 export class LStumblePreventionBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

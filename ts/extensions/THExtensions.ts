@@ -1,9 +1,9 @@
-import { REDataExtension } from "ts/re/data/REDataExtension";
+import { MRDataExtension } from "ts/re/data/MRDataExtension";
 import { REGameExtension } from "ts/re/objects/REGameExtension";
 import { RESystemExtension } from "ts/re/system/RESystemExtension";
 import { REVisualExtension } from "ts/re/visual/REVisualExtension";
 
-export class THDataExtension extends REDataExtension {
+export class THDataExtension extends MRDataExtension {
 
 }
 

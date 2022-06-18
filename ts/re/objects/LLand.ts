@@ -1,9 +1,9 @@
 
 import { MRData } from "ts/re/data/MRData";
 import { DLand, DLandId } from "ts/re/data/DLand";
-import { RESerializable } from "../Common";
+import { MRSerializable } from "../Common";
 
-@RESerializable
+@MRSerializable
 export class LLand {
     private _landDataId: DLandId = 0;
 

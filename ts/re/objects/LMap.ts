@@ -1,4 +1,4 @@
-import { assert, RESerializable } from "../Common";
+import { assert, MRSerializable } from "../Common";
 import { LBlock, LTileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { REGame } from "./REGame";
@@ -63,7 +63,7 @@ export interface RE_Game_Data
  * https://give-up-easily.hatenadiary.org/entry/20120223/1330019652
  * ちょうど1画面分。
  */
-@RESerializable
+@MRSerializable
 export class LMap extends LObject {
     private _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;

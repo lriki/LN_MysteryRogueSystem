@@ -1,4 +1,4 @@
-import { RESerializable, tr2 } from "ts/re/Common";
+import { MRSerializable, tr2 } from "ts/re/Common";
 import { SCommandResponse } from "ts/re/system/SCommand";
 import { SCommandContext } from "ts/re/system/SCommandContext";
 import { UName } from "ts/re/usecases/UName";

@@ -10,12 +10,12 @@ import { MovingMethod } from "../LMap";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LSaunteringAIHelper } from "./LSaunteringAIHelper";
-import { RESerializable } from "ts/re/Common";
+import { MRSerializable } from "ts/re/Common";
 import { LActionTokenType } from "../LActionToken";
 import { LMoveDeterminer } from "./LMoveDeterminer";
 import { LActionTokenConsumeType } from "../LCommon";
 
-@RESerializable
+@MRSerializable
 export class LEscapeAI extends LCharacterAI {
     private _moveDeterminer = new LMoveDeterminer();
     // private _movingHelper: LSaunteringAIHelper;

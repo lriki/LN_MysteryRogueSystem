@@ -1,7 +1,7 @@
-import { RESerializable } from "../Common";
+import { MRSerializable } from "../Common";
 import { LStructureId } from "./LCommon";
 
-@RESerializable
+@MRSerializable
 export class LShopArticle {
     _ownerShopStructureId: LStructureId = 0;
     
