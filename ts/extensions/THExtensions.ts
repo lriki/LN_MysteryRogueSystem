@@ -1,19 +1,19 @@
 import { MRDataExtension } from "ts/mr/data/MRDataExtension";
-import { REGameExtension } from "ts/mr/objects/REGameExtension";
-import { RESystemExtension } from "ts/mr/system/RESystemExtension";
-import { REVisualExtension } from "ts/mr/visual/REVisualExtension";
+import { MRGameExtension } from "ts/mr/objects/MRGameExtension";
+import { MRSystemExtension } from "ts/mr/system/MRSystemExtension";
+import { MRVisualExtension } from "ts/mr/visual/MRVisualExtension";
 
 export class THDataExtension extends MRDataExtension {
 
 }
 
-export class THGameExtension extends REGameExtension {
+export class THGameExtension extends MRGameExtension {
 
 }
 
-export class THSystemExtension extends RESystemExtension {
+export class THSystemExtension extends MRSystemExtension {
 
 }
 
-export class THVisualExtension extends REVisualExtension {
+export class THVisualExtension extends MRVisualExtension {
 }

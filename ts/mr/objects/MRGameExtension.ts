@@ -1,5 +1,5 @@
 import { DEntity } from "../data/DEntity";
 import { LEntity } from "./LEntity";
 
-export class REGameExtension {
+export class MRGameExtension {
 }

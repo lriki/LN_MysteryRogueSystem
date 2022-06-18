@@ -1,7 +1,7 @@
 import { VMapEditor } from "ts/mr/rmmz/VMapEditor";
 import { VAnimation } from "./animation/VAnimation";
 import { REEntityVisualSet } from "./REEntityVisualSet";
-import { REVisualExtension } from "./REVisualExtension";
+import { MRVisualExtension } from "./MRVisualExtension";
 import { REVisual_Manager } from "./REVisual_Manager";
 import { VMapGuideGrid } from "./VMapGuideGrid";
 import { VMessageWindowSet } from "./VMessageWindowSet";
@@ -19,7 +19,7 @@ import { VChallengeResultWindow } from "./windows/VChallengeResultWindow";
 export class REVisual
 {
     // グローバルな情報
-    static ext: REVisualExtension = new REVisualExtension();
+    static ext: MRVisualExtension = new MRVisualExtension();
     static manager: REVisual_Manager | undefined;
     static mapBuilder: VMapEditor | undefined;
     

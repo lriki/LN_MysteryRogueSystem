@@ -7,7 +7,7 @@ import { LRoom } from "./LRoom";
 import { RESystem } from "ts/mr/system/RESystem";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LRoomId } from "./LCommon";
-import { DTemplateMapPartIndex } from "../data/DTemplateMap";
+import { DBlockVisualPartIndex } from "../data/DTemplateMap";
 
 /** Tile の本質的な形状 */
 export enum LTileShape {
@@ -76,20 +76,22 @@ export class LBlock {
     _passed: boolean = false;   // 通過フラグ。操作キャラクターが通過したか (Player が一度でも把握したか)
     
     _tileShape: LTileShape = LTileShape.Floor;
-    _templatePartIndex: DTemplateMapPartIndex;
+    _shapeVisualPartIndex: DBlockVisualPartIndex;
+    _decorationVisualPartIndex: DBlockVisualPartIndex;
 
     // お店の床など、ゲームシステムとして明示したい装飾
     _systemDecoration: LBlockSystemDecoration = LBlockSystemDecoration.None;
 
     // 小石など、ゲームシステムとか関係ない装飾
-    _visualDecorationType: number = 0;   // 0:invalid
-    _visualDecorationIndex: number = 0;  // 0~
+    // _visualDecorationType: number = 0;   // 0:invalid
+    // _visualDecorationIndex: number = 0;  // 0~
 
     constructor(x: number, y: number) {
         this._mx = x;
         this._my = y;
         this._layers = [new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer()];
-        this._templatePartIndex = 0;
+        this._shapeVisualPartIndex = 0;
+        this._decorationVisualPartIndex = 0;
     }
 
     /** 絶対座標 X */
@@ -124,14 +126,18 @@ export class LBlock {
     //    return this._layers[BlockLayerKind.Terrain].entities()[0];
     //}
 
-    tileShape(): LTileShape {
+    public tileShape(): LTileShape {
         //const attr = this.tile().findAttribute(RETileAttribute);
         //return attr ? attr.tileKind() : TileKind.Void;
         return this._tileShape;
     }
 
-    public get templatePartIndex(): DTemplateMapPartIndex {
-        return this._templatePartIndex;
+    public get shapeVisualPartIndex(): DBlockVisualPartIndex {
+        return this._shapeVisualPartIndex;
+    }
+    
+    public get decorationVisualPartIndex(): DBlockVisualPartIndex {
+        return this._decorationVisualPartIndex;
     }
 
     public setSystemDecoration(value: LBlockSystemDecoration): void {
@@ -143,10 +149,10 @@ export class LBlock {
         return this._systemDecoration;
     }
 
-    public setVisualDecoration(type: number, index: number): void {
-        this._visualDecorationType = type;
-        this._visualDecorationIndex = index;
-    }
+    // public setVisualDecoration(type: number, index: number): void {
+    //     this._visualDecorationType = type;
+    //     this._visualDecorationIndex = index;
+    // }
 
     /** 地面上で、歩行による移動が可能であるか。(中空や水地形ではない) */
     public isFloorLikeShape(): boolean {

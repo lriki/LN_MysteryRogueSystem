@@ -1,4 +1,4 @@
 
-export class REVisualExtension {
+export class MRVisualExtension {
     public onMapVisualSetup(): void {}
 }

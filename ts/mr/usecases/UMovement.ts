@@ -178,11 +178,11 @@ export class UMovement {
         if (layer == DBlockLayerKind.Projectile) {  
             // 矢の罠など、壁Blockを移動開始地点とする場合に備える。
             // この場合は移動先への侵入判定のみ行い、斜め移動のエッジ判定は不要。
-            if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
+            if (!map.canMoveEntering(newBlock, entity, method, actualLayer)) return false;
         }
         else {
             if (!map.canLeaving(oldBlock, entity)) return false;
-            if (!map.canWalkEntering(newBlock, entity, method, actualLayer)) return false;
+            if (!map.canMoveEntering(newBlock, entity, method, actualLayer)) return false;
 
             const d = Helpers.offsetToDir(dx, dy);
             if (this.isDiagonalMoving(d)) {

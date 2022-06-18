@@ -1,6 +1,6 @@
 import { DItemShopTypeId } from "ts/mr/data/DItemShop";
 import { DMonsterHouseTypeId } from "ts/mr/data/DMonsterHouse";
-import { DTemplateMapPartIndex } from "ts/mr/data/DTemplateMap";
+import { DBlockVisualPartIndex } from "ts/mr/data/DTemplateMap";
 import { LTileShape } from "ts/mr/objects/LBlock";
 import { FBlockComponent, FRoomId, FSectorId } from "../FMapData";
 
@@ -8,13 +8,14 @@ import { FBlockComponent, FRoomId, FSectorId } from "../FMapData";
 export class FMapBlock {
     private _mx;
     private _my;
-    private _tileShape: LTileShape; // deprecated
+    private _tileShape: LTileShape;
     private _blockComponent: FBlockComponent;
     private _sectorId: FSectorId;
     private _roomId: FRoomId;
     private _doorway: boolean;  // 部屋の入口
     private _continuation: boolean; // ゴールとなる階段から地続きであるか
-    private _templatePartIndex: DTemplateMapPartIndex;
+    private _shapeVisualPartIndex: DBlockVisualPartIndex;
+    private _decorationVisualPartIndex: DBlockVisualPartIndex;
     private _fixedMapMonsterHouseTypeId: DMonsterHouseTypeId;   // リージョンを使って MH をマークするために用意したもの。MH である Block をひとつでも含む Room は MH となる。
     private _fixedMapItemShopTypeId: DItemShopTypeId;
 
@@ -27,7 +28,8 @@ export class FMapBlock {
         this._roomId = 0;
         this._doorway = false;
         this._continuation = false;
-        this._templatePartIndex = 0;
+        this._shapeVisualPartIndex = 0;
+        this._decorationVisualPartIndex = 0;
         this._fixedMapMonsterHouseTypeId = 0;
         this._fixedMapItemShopTypeId = 0;
     }
@@ -40,12 +42,10 @@ export class FMapBlock {
         return this._my;
     }
 
-    /** @deprecated */
     public setTileShape(value: LTileShape): void {
         this._tileShape = value;
     }
 
-    /** @deprecated */
     public tileShape(): LTileShape {
         return this._tileShape;
     }
@@ -119,11 +119,19 @@ export class FMapBlock {
         return this._continuation;
     }
 
-    public get templatePartIndex(): DTemplateMapPartIndex {
-        return this._templatePartIndex;
+    public get shapeVisualPartIndex(): DBlockVisualPartIndex {
+        return this._shapeVisualPartIndex;
     }
 
-    public set templatePartIndex(value: DTemplateMapPartIndex) {
-        this._templatePartIndex = value;
+    public setShapeVisualPartIndex(value: DBlockVisualPartIndex) {
+        this._shapeVisualPartIndex = value;
+    }    
+
+    public get decorationVisualPartIndex(): DBlockVisualPartIndex {
+        return this._decorationVisualPartIndex;
+    }
+
+    public setDecorationVisualPartIndex(value: DBlockVisualPartIndex) {
+        this._decorationVisualPartIndex = value;
     }    
 }

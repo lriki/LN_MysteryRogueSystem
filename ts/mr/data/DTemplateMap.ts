@@ -2,11 +2,13 @@ import { DAnnotationReader } from "./DAttributeReader";
 import { DHelpers } from "./DHelper";
 import { DMapId } from "./DLand";
 
-export type DTemplateMapPartIndex = number;
+/** 0 is invalid. */
+export type DBlockVisualPartIndex = number;
+
+/** 0 is invalid. */
 export type DTemplateMapId = number;
 
-
-export enum DTemplateMapPartType {
+export enum DBlockVisualPartType {
     /** 床 */
     Floor,
 
@@ -65,30 +67,30 @@ export enum DTemplateMapPartType {
     // HardWallSide,
 }
 
-export enum DTemplateMapPartTileType {
+export enum DBlockVisualPartTileType {
     Normal,
     Autotile,
 }
 
-export enum DTemplateMapPartPlacementType {
+export enum DBlockVisualPartPlacementType {
     Random,
 }
 
-export class DTemplateMapPart {
-    index: DTemplateMapPartIndex;      // DTemplateMap.parts の index. 全体で一意ではないので id という名前ではない。
-    type: DTemplateMapPartType;
-    tileType: DTemplateMapPartTileType;
+export class DBlockVisualPart {
+    index: DBlockVisualPartIndex;      // DTemplateMap.parts の index. 全体で一意ではないので id という名前ではない。
+    type: DBlockVisualPartType;
+    tileType: DBlockVisualPartTileType;
     tiles: number[];    // 高さ1以上の場合、[0] が一番下のタイルになる。種類はすべて Normal or AutotileKind で統一されていなければならない。
     height: number;
-    placementType: DTemplateMapPartPlacementType;
+    placementType: DBlockVisualPartPlacementType;
 
     public constructor(index: number) {
         this.index = index;
-        this.type = DTemplateMapPartType.Floor;
-        this.tileType = DTemplateMapPartTileType.Normal;
+        this.type = DBlockVisualPartType.Floor;
+        this.tileType = DBlockVisualPartTileType.Normal;
         this.tiles = [];
         this.height = 1;
-        this.placementType = DTemplateMapPartPlacementType.Random;
+        this.placementType = DBlockVisualPartPlacementType.Random;
     }
 }
 
@@ -96,8 +98,8 @@ export class DTemplateMap {
     id: DTemplateMapId;
     name: string;
     mapId: DMapId;
-    parts: DTemplateMapPart[];
-    partIndex: DTemplateMapPartIndex[][];  // 要素番号は [DTemplateMapPartType][追加したもの]. 要素は parts のインデックスを示す。
+    parts: DBlockVisualPart[];
+    partIndex: DBlockVisualPartIndex[][];  // 要素番号は [DTemplateMapPartType][追加したもの]. 要素は parts のインデックスを示す。
 
     tilesetId: number;
     wallHeadAutoTileKind: number;
@@ -109,7 +111,7 @@ export class DTemplateMap {
         this.id = id;
         this.name = "null";
         this.mapId = 0;
-        this.parts = [new DTemplateMapPart(0)]; // [0] is dummy
+        this.parts = [new DBlockVisualPart(0)]; // [0] is dummy
         this.partIndex = [];
         this.tilesetId = 0;
         this.wallHeadAutoTileKind = 0;
@@ -138,7 +140,7 @@ export class DTemplateMap {
                 throw new Error("Invalid @MR-TemplatePart type");
             }
 
-            const part = new DTemplateMapPart(this.parts.length);
+            const part = new DBlockVisualPart(this.parts.length);
             this.parts.push(part);
             part.type = this.toTemplateMapPartType(attr.type);
             part.height = attr.height ?? 1;
@@ -147,19 +149,25 @@ export class DTemplateMap {
             }
 
             // タイル情報読み取り
-            let tileType: DTemplateMapPartTileType | undefined = undefined;
+            let tileType: DBlockVisualPartTileType | undefined = undefined;
             for (let i = 0; i < part.height; i++) {
                 const tileId = DHelpers.getMapTopTile(mapData, x, y - i);
-                const type = DHelpers.isAutotile(tileId) ? DTemplateMapPartTileType.Autotile : DTemplateMapPartTileType.Normal;
+                const type = DHelpers.isAutotile(tileId) ? DBlockVisualPartTileType.Autotile : DBlockVisualPartTileType.Normal;
                 if (tileType === undefined) {
                     tileType = type;
                 }
                 else if (tileType !== type) {
                     throw new Error("Invalid tile kinds.");
                 }
-                part.tiles.push(tileId);
+
+                if (type == DBlockVisualPartTileType.Autotile) {
+                    part.tiles.push(DHelpers.getAutotileKind(tileId));
+                }
+                else {
+                    part.tiles.push(tileId);
+                }
             }
-            part.tileType = tileType ?? DTemplateMapPartTileType.Normal;
+            part.tileType = tileType ?? DBlockVisualPartTileType.Normal;
 
             // 格納
             if (this.partIndex[part.type] === undefined) {
@@ -171,34 +179,34 @@ export class DTemplateMap {
         }
     }
 
-    public toTemplateMapPartType(type: string): DTemplateMapPartType {
+    public toTemplateMapPartType(type: string): DBlockVisualPartType {
         switch (type) {
             case "Floor":
-                return DTemplateMapPartType.Floor;
+                return DBlockVisualPartType.Floor;
             case "FloorDecoration":
-                return DTemplateMapPartType.FloorDecoration;
+                return DBlockVisualPartType.FloorDecoration;
             case "Footpath":
-                return DTemplateMapPartType.Footpath;
+                return DBlockVisualPartType.Footpath;
             case "FootpathDecoration":
-                return DTemplateMapPartType.FootpathDecoration;
+                return DBlockVisualPartType.FootpathDecoration;
             case "Passageway":
-                return DTemplateMapPartType.Passageway;
+                return DBlockVisualPartType.Passageway;
             case "PassagewayDecoration":
-                return DTemplateMapPartType.PassagewayDecoration;
+                return DBlockVisualPartType.PassagewayDecoration;
             case "Water":
-                return DTemplateMapPartType.Water;
+                return DBlockVisualPartType.Water;
             case "WaterDecoration":
-                return DTemplateMapPartType.WaterDecoration;
+                return DBlockVisualPartType.WaterDecoration;
             case "ShopFloor":
-                return DTemplateMapPartType.ShopFloor;
+                return DBlockVisualPartType.ShopFloor;
             case "ShopFloorDecoration":
-                return DTemplateMapPartType.ShopFloorDecoration;
+                return DBlockVisualPartType.ShopFloorDecoration;
             case "Wall":
-                return DTemplateMapPartType.Wall;
+                return DBlockVisualPartType.Wall;
             case "WallDecoration":
-                return DTemplateMapPartType.WallDecoration;
+                return DBlockVisualPartType.WallDecoration;
             case "HardWall":
-                return DTemplateMapPartType.HardWall;
+                return DBlockVisualPartType.HardWall;
             // case "WallHead":
             //     return DTemplateMapPartType.WallHead;
             // case "WallHeadDecoration":
@@ -216,10 +224,10 @@ export class DTemplateMap {
         }
     }
     
-    public toTemplateMapPartPlacementType(type: string): DTemplateMapPartPlacementType {
+    public toTemplateMapPartPlacementType(type: string): DBlockVisualPartPlacementType {
         switch (type) {
             case "Random":
-                return DTemplateMapPartPlacementType.Random;
+                return DBlockVisualPartPlacementType.Random;
         default:
             throw new Error(`Invalid type: ${type}.`);
         }

@@ -6,7 +6,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { DAnnotationReader } from "ts/mr/data/DAttributeReader";
 import { DEntityKind } from "ts/mr/data/DEntityKind";
 import { PerlinNoise, SimplexNoise } from "ts/mr/math/Noise";
-import { DTemplateMap, DTemplateMapPartType } from "ts/mr/data/DTemplateMap";
+import { DTemplateMap, DBlockVisualPartType } from "ts/mr/data/DTemplateMap";
 import { FMapBlock } from "../data/FMapBlock";
 
 /**
@@ -40,7 +40,7 @@ export class FDecorationPass extends FMapBuildPass {
         const basemag = 100.0;
         const thr = 50;
 
-        const parts = template.partIndex[DTemplateMapPartType.FloorDecoration].map(x => template.parts[x]);
+        const parts = template.partIndex[DBlockVisualPartType.FloorDecoration].map(x => template.parts[x]);
         const noises = parts.map(x => new SimplexNoise(map.random().nextInt()));
 
         for (const block of map.blocks()) {
@@ -51,7 +51,7 @@ export class FDecorationPass extends FMapBuildPass {
                     let v = Math.abs(noises[i].noise2D((block.mx) * freq, (block.my) * freq));
                     v = Math.floor(v * basemag);
                     if (v > thr) {
-                        block.templatePartIndex = part.index;
+                        block.setDecorationVisualPartIndex(part.index);
                     }
                 }
 
@@ -74,7 +74,7 @@ export class FDecorationPass extends FMapBuildPass {
         const basemag = 100.0;
         const thr = 50;
 
-        const parts = template.partIndex[DTemplateMapPartType.WallDecoration].map(x => template.parts[x]);
+        const parts = template.partIndex[DBlockVisualPartType.WallDecoration].map(x => template.parts[x]);
         //console.log("wall", parts);
         const noises = parts.map(x => new SimplexNoise(map.random().nextInt()));
 
@@ -86,7 +86,7 @@ export class FDecorationPass extends FMapBuildPass {
                     let v = Math.abs(noises[i].noise2D((block.mx) * freq, (block.my) * freq));
                     v = Math.floor(v * basemag);
                     if (v > thr) {
-                        block.templatePartIndex = part.index;
+                        block.setDecorationVisualPartIndex(part.index);
                     }
                 }
 

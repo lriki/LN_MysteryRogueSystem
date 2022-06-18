@@ -150,22 +150,21 @@ test("MoveDiagonal_CollideWalls", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer( TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // 右下に移動できないような壁を作る
     REGame.map.block(6, 5)._tileShape = LTileShape.Wall;
     REGame.map.block(5, 6)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
-    
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
     // player を右下へ移動
-    const dialogContext = RESystem.dialogContext;
-    dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 3).withConsumeAction());
-    dialogContext.activeDialog().submit();
+    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 3).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // 壁があるので移動できていない
     expect(actor1.mx).toBe(5);

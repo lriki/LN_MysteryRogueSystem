@@ -6,7 +6,7 @@ import { FBlockComponent, FMap } from "ts/mr/floorgen/FMapData";
 import { LMap } from "ts/mr/objects/LMap";
 import { SMinimapData } from "ts/mr/system/SMinimapData";
 import { LBlock, LBlockSystemDecoration, LTileShape } from "ts/mr/objects/LBlock";
-import { DTemplateMap, DTemplateMapPartTileType } from "ts/mr/data/DTemplateMap";
+import { DTemplateMap, DBlockVisualPartTileType, DBlockVisualPart } from "ts/mr/data/DTemplateMap";
 
 
 interface Point {
@@ -60,44 +60,66 @@ export class VMapEditor {
         const x = block.mx;
         const y = block.my;
 
-        switch (block.tileShape()) {
-            case LTileShape.Floor:
-                if (block.systemDecoration() == LBlockSystemDecoration.ItemShop) {
-                    // お店の床装飾
-                    this.putAutoTile(x, y, 0, this._templateMap.itemShopFloorAutoTileKind);
+        // Shape
+        {
+            const partIndex = block.shapeVisualPartIndex;
+            if (partIndex > 0) {
+                const part = this._templateMap.parts[partIndex];
+                this.putPart(x, y, 0, part);
+            }
+            // TODO: 古い方式
+            else {
+                switch (block.tileShape()) {
+                    case LTileShape.Floor:
+                        if (block.systemDecoration() == LBlockSystemDecoration.ItemShop) {
+                            // お店の床装飾
+                            this.putAutoTile(x, y, 0, this._templateMap.itemShopFloorAutoTileKind);
+                        }
+                        else {
+                            this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
+                        }
+                        break;
+                    case LTileShape.Wall:
+                        this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
+                        if (this.isValidPos(x, y + 1) && this._coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
+                            this.putAutoTile(x, y, 1, this._templateMap.wallEdgeAutoTileKind);
+                        }
+                        else {
+                            this.putAutoTile(x, y, 1, this._templateMap.wallHeadAutoTileKind);
+                        }
+                        break;
+                    default:
+                        throw new Error("Not implemented.");
                 }
-                else {
-                    this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
-                }
-                break;
-            case LTileShape.Wall:
-                this.putAutoTile(x, y, 0, this._templateMap.floorAutoTileKind);
-                if (this.isValidPos(x, y + 1) && this._coreMap.block(x, y + 1)._blockComponent != FBlockComponent.None) {
-                    this.putAutoTile(x, y, 1, this._templateMap.wallEdgeAutoTileKind);
-                }
-                else {
-                    this.putAutoTile(x, y, 1, this._templateMap.wallHeadAutoTileKind);
-                }
-                break;
-            default:
-                throw new Error("Not implemented.");
+            }
         }
 
-        const templatePartIndex = block.templatePartIndex;
-        if (templatePartIndex > 0) {
-            const part = this._templateMap.parts[templatePartIndex];
-            assert(part);
-            if (part.tileType == DTemplateMapPartTileType.Normal) {
+        // Decoration
+        {
+            const partIndex = block.decorationVisualPartIndex;
+            if (partIndex > 0) {
+                const part = this._templateMap.parts[partIndex];
+                this.putPart(x, y, 2, part);
+            }
+        }
+    }
+
+    private putPart(x: number, y: number, z: number, part: DBlockVisualPart): void {
+        assert(part);
+        switch (part.tileType) {
+            case DBlockVisualPartTileType.Normal:
                 for (let i = 0 ; i < part.height; i++) {
                     const cy = y - i;
                     if (this.isValidPos(x, cy)) {
-                        this.setTileId(x, y, 2, part.tiles[i]);
+                        this.setTileId(x, y, z, part.tiles[i]);
                     }
                 }
-            }
-            else {
-                throw new Error("Not implemented.");
-            }
+                break;
+            case DBlockVisualPartTileType.Autotile:
+                this.putAutoTile(x, y, z, part.tiles[0]);
+                break;
+            default:
+                throw new Error("Unreachable.");
         }
     }
 

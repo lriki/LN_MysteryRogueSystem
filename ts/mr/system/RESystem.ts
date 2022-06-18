@@ -10,7 +10,7 @@ import { SMinimapData } from "./SMinimapData";
 import { SMapManager } from "./SMapManager";
 import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
-import { RESystemExtension } from "./RESystemExtension";
+import { MRSystemExtension } from "./MRSystemExtension";
 import { STurnContext } from "./STurnContext";
 import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
@@ -29,7 +29,7 @@ export class RESystem {
     };
 
     // System
-    static ext: RESystemExtension = new RESystemExtension();
+    static ext: MRSystemExtension = new MRSystemExtension();
     static sequelContext: SSequelContext;
     static commandContext: SCommandContext;
     static dialogContext: SDialogContext;

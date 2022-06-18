@@ -297,8 +297,8 @@ export class FMap {
     private _fullHeight: number;
     private _paddingX: number;
     private _paddingY: number;
-    private _blocks: FMapBlock[];
-    private _innerBlocks: FMapBlock[];
+    private _blocks: FMapBlock[];       // All blocks
+    private _innerBlocks: FMapBlock[];  // _blocks のうち、Padding 用の外周を除いたもの
     private _sectors: FSector[];
     private _sectorAdjacencies: FSectorAdjacency[];
     private _sectorConnections: FSectorConnection[];

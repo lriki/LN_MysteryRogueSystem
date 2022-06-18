@@ -192,9 +192,7 @@ export class SGameManager {
                     const floorInto = newFloorId.floorInfo();
 
                     const preset = floorInto.presetId ? MRData.floorPresets[floorInto.presetId] : MRData.floorPresets[MRBasics.defaultTerrainPresetId];
-                    console.log("preset", preset);
                     const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.terrains, x => x.rating);
-                    console.log("settingId", settingId);
                     assert(settingId);
                     
                     const setting = MRData.terrainSettings[settingId.terrainSettingsId];

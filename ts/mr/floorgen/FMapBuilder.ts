@@ -7,6 +7,7 @@ import { FMakeMonsterHouseForFixedMapPass, FMakeMonsterHouseForRandomMapPass } f
 import { FMakeItemShopPass } from "./passes/FMakeItemShopPass";
 import { FDecorationPass } from "./passes/FDecorationPass";
 import { FMapBlock } from "./data/FMapBlock";
+import { FBackgroundWaterPass } from "./passes/FBackgroundWaterPass";
 
 
 export class FMapBuilder {
@@ -19,6 +20,7 @@ export class FMapBuilder {
             new FEntryPointAndExitPointPass(),
             new FMakeMonsterHouseForRandomMapPass(),
             new FMakeItemShopPass(),
+            new FBackgroundWaterPass(),
             new FDecorationPass(),
         ];
         // Apply passes

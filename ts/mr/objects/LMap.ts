@@ -157,7 +157,8 @@ export class LMap extends LObject {
                     mapBlock._blockComponent = dataBlock.component();
                     mapBlock._continuation = dataBlock.isContinuation();
                     mapBlock._doorway = dataBlock.isDoorway();
-                    mapBlock._templatePartIndex = dataBlock.templatePartIndex;
+                    mapBlock._shapeVisualPartIndex = dataBlock.shapeVisualPartIndex;
+                    mapBlock._decorationVisualPartIndex = dataBlock.decorationVisualPartIndex;
                 }
             }
 
@@ -488,18 +489,22 @@ export class LMap extends LObject {
 
 
     /**
-     * 指定した Block へ Entity が、"歩行" で侵入できるか。
+     * 指定した Block へ Entity が侵入できるか。
      */
-    public canWalkEntering(block: LBlock, entity: LEntity, method: MovingMethod, layer: DBlockLayerKind): boolean {
+    public canMoveEntering(block: LBlock, entity: LEntity, method: MovingMethod, layer: DBlockLayerKind): boolean {
         if (method == MovingMethod.Walk) {
             if (UBlock.checkPurifier(block, entity)) return false;  // 聖域の巻物とかがある
         }
 
-        if (method == MovingMethod.Penetration) {
-            return !block.layers()[layer].isOccupied();
-        }
-        else {
-            return !block.layers()[layer].isOccupied() && block.tileShape() == LTileShape.Floor;
+        switch (method) {
+            case MovingMethod.Walk:
+                return !block.layers()[layer].isOccupied() && block.tileShape() == LTileShape.Floor;
+            case MovingMethod.Projectile:
+                return !block.layers()[layer].isOccupied() && !block.isWallLikeShape();
+            case MovingMethod.Penetration:
+                return !block.layers()[layer].isOccupied();
+            default:
+                throw new Error("Not implemented.");
         }
     }
     
@@ -519,7 +524,7 @@ export class LMap extends LObject {
         const newBlock = this.block(entity.mx + offset.x, entity.my + offset.y);
         const layer = (toLayer) ? toLayer : entity.getHomeLayer();
 
-        if (this.canLeaving(oldBlock, entity) && this.canWalkEntering(newBlock, entity, method, layer)) {
+        if (this.canLeaving(oldBlock, entity) && this.canMoveEntering(newBlock, entity, method, layer)) {
             return true;
         }
         else {
