@@ -2,6 +2,7 @@ import { REGame } from "ts/mr/objects/REGame";
 import { VHudWindow } from "./VHudWindow";
 import { VFloorNameWindow } from "./windows/VFloorNameWindow";
 import { VMessageLogWindow } from "./windows/VMessageLogWindow";
+import { VWindowHelper } from "./windows/VWindowHelper";
 
 
 /**
@@ -60,18 +61,10 @@ export class VMessageWindowSet {
 
     }
 
-    private calcWindowHeight(numLines: number, selectable: boolean) {
-        if (selectable) {
-            return Window_Selectable.prototype.fittingHeight(numLines);
-        } else {
-            return Window_Base.prototype.fittingHeight(numLines);
-        }
-    }
-
     private messageWindowRect(): Rectangle {
         const padding = 30;
         const ww = Graphics.boxWidth;
-        const wh = this.calcWindowHeight(2, false) + 8;
+        const wh = VWindowHelper.calcWindowHeight(2, false) + 8;
         const wx = (Graphics.boxWidth - ww) / 2;
         const wy = Graphics.boxHeight - wh;
         return new Rectangle(wx + padding, wy - padding, ww - padding * 2, wh);

@@ -145,9 +145,9 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
 
 PluginManager.registerCommand(pluginName, "MR-SetProperty", function(this: Game_Interpreter, args: any) {
     const entityKey = args["entityKey"];
-    const propertyPath = args["propertyPath"];
+    const propertyPath = args["property"];
     const value = args["value"];
-    UProperty.setValue(entityKey, propertyPath, value);
+    UProperty.setValue(entityKey, propertyPath, UProperty.getValueByVariablePattern(value));
 });
 
 PluginManager.registerCommand(pluginName, "MR-GetProperty", function(this: Game_Interpreter, args: any) {

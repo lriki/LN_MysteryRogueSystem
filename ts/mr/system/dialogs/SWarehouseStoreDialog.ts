@@ -10,6 +10,7 @@ export class SWarehouseStoreDialog extends SDialog {
     private _userEntityId: LEntityId;
     private _inventoryBehaviorId: LBehaviorId;
     private _warehouseEntityId: LEntityId;
+    private _warehouseInventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
 
     public constructor(user: LEntity, warehouse: LEntity) {
@@ -17,6 +18,7 @@ export class SWarehouseStoreDialog extends SDialog {
         this._userEntityId = user.entityId();
         this._inventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
         this._warehouseEntityId = warehouse.entityId();
+        this._warehouseInventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
     }
 
@@ -30,6 +32,10 @@ export class SWarehouseStoreDialog extends SDialog {
 
     public get warehouseEntity(): LEntity {
         return REGame.world.entity(this._warehouseEntityId);
+    }
+
+    public get warehouseInventory(): LInventoryBehavior {
+        return REGame.world.behavior(this._warehouseInventoryBehaviorId) as LInventoryBehavior;
     }
 
     public setResultItems(items: LEntity[]) {

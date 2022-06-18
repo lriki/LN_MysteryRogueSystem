@@ -7,6 +7,14 @@ export class VWindowHelper {
     public static DefaultPadding = 12;
     public static LineHeight = 36;  // Window_Base.prototype.lineHeight
 
+    public static calcWindowHeight(numLines: number, selectable: boolean) {
+        if (selectable) {
+            return Window_Selectable.prototype.fittingHeight(numLines);
+        } else {
+            return Window_Base.prototype.fittingHeight(numLines);
+        }
+    }
+
     public static calcWindowSizeFromClinetSize(width: number, height: number): number[] {
         //const pad = this.calcOuterPadding(window);
         return [width + this.DefaultPadding * 2, height + this.DefaultPadding * 2];

@@ -8,20 +8,26 @@ import { SDialog } from "../SDialog";
 
 export class SWarehouseWithdrawDialog extends SDialog {
     private _userEntityId: LEntityId;
-    private _inventoryBehaviorId: LBehaviorId;
+    private _userInventoryBehaviorId: LBehaviorId;
     private _warehouseEntityId: LEntityId;
+    private _inventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
 
     public constructor(user: LEntity, warehouse: LEntity) {
         super();
         this._userEntityId = user.entityId();
-        this._inventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
+        this._userInventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
         this._warehouseEntityId = warehouse.entityId();
+        this._inventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
     }
 
     public get user(): LEntity {
         return REGame.world.entity(this._userEntityId);
+    }
+
+    public get userInventory(): LInventoryBehavior {
+        return REGame.world.behavior(this._userInventoryBehaviorId) as LInventoryBehavior;
     }
 
     public get inventory(): LInventoryBehavior {
