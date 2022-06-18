@@ -45,18 +45,6 @@ export enum REFloorMapKind {
 
 
 
-// NOTE: これをもとに Behavior を作る仕組みが必要そう。
-export interface RE_Data_EntityFeature {
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Name. */
-    name: string;
-
-
-}
-
-
 
 
 

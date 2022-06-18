@@ -36,14 +36,11 @@ type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
 
 export class MRDataManager {
-    static testMode: boolean;
-    static databaseMapId: number = 0;
-    static loadedLandId: number = 0;
-    static loadedFloorMapId: number = 0;
-    static loadingMapId: number = 0;
+    public static testMode: boolean;
+    public static databaseMapId: number = 0;
 
-    static _loadTasks: (TaskFunc)[];
-    static _currentTask: (TaskFunc) | undefined;
+    private static _loadTasks: (TaskFunc)[];
+    private static _currentTask: (TaskFunc) | undefined;
 
     public static load(): void {
         // 各種データファイルの読み込みは非同期で行われることを想定しなければならないが、
@@ -77,7 +74,7 @@ export class MRDataManager {
     }
 
     public static isImportCompleted(): boolean {
-        return this._currentTask == undefined && this.loadingDataFileCount == this.loadedDataFileCount;
+        return this._currentTask == undefined && this._loadingDataFileCount == this._loadedDataFileCount;
     }
 
     private static nextFunc() {
@@ -381,7 +378,6 @@ export class MRDataManager {
             testPickOutItem: MRData.newCommand("testPickOutItem").id,
         };
         
-
         // Sequels
         MRBasics.sequels = {
             idle: MRData.addSequel("idle"),
@@ -536,15 +532,10 @@ export class MRDataManager {
             MRBasics.defaultTerrainPresetId = 1;
         }
 
-        
-        // REBasics.presets = {
-        //     trap: REData.newPreset("Trap").id,
-        // }
         next();
     }
 
     private static loadData(next: NextFunc): void {
-
         MRData.system = new DSystem();
 
         // Import AttackElements
@@ -938,7 +929,6 @@ export class MRDataManager {
     private static importFloorPreset(next: NextFunc) {
         this.loadTextFile("mr/FloorPresets.js", (obj) => {
             new DFloorPresetImporter(obj);
-            console.log();
             next();
         });
     }
@@ -1220,33 +1210,20 @@ export class MRDataManager {
                 MRSetup.linkItem(MRData.entities[id]);
             }
 
-            console.log("importSetupScript end.");
             next();
         });
     }
-
     
-    public static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
+    private static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {
         const filename = `Map${this.padZero(rmmzMapId, 3)}.json`;
         this.loadDataFile(filename, onLoad);
     }
-    private static findLand(rmmzMapId: number): DLand | undefined {
-        let mapId = rmmzMapId;
-        while (mapId > 0) {
-            const land = MRData.lands.find(x => x.rmmzMapId == mapId);
-            if (land) return land;
-            const parentInfo = $dataMapInfos[mapId];
-            if (!parentInfo) break;
-            mapId = parentInfo.parentId;
-        }
-        return undefined;
-    }
 
-    public static padZero(v: number, length: number) {
+    private static padZero(v: number, length: number) {
         return String(v).padStart(length, "0");
     }
 
-    static makeParameterQualifying(damage: IDataDamage): DParameterQualifying {
+    private static makeParameterQualifying(damage: IDataDamage): DParameterQualifying {
         let parameterId = 0;
         let applyType = DParameterEffectApplyType.None;
         switch (damage.type) {
@@ -1292,11 +1269,7 @@ export class MRDataManager {
         // };
     }
 
-    static floor(mapId: number): DMap {
-        return MRData.maps[mapId];
-    }
-
-    static isDatabaseMap(mapId: DMapId) : boolean {
+    private static isDatabaseMap(mapId: DMapId) : boolean {
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("MR-Prefabs"))
             return true;
@@ -1304,7 +1277,7 @@ export class MRDataManager {
             return false;
     }
 
-    static isLandMap(mapId: DMapId) : boolean {
+    public static isLandMap(mapId: DMapId) : boolean {
         const info = $dataMapInfos[mapId];
         if (info && info.name && info.name.startsWith("MR-Land:"))
             return true;
@@ -1312,32 +1285,21 @@ export class MRDataManager {
             return false;
     }
 
-    static isRESystemMap(mapId: DMapId) : boolean {
+    public static isRESystemMap(mapId: DMapId) : boolean {
         const map = MRData.maps[mapId];
         if (map.eventMap) return false;
         return map.landId > DHelpers.RmmzNormalMapLandId;
     }
 
-    static isFloorMap(mapId: DMapId) : boolean {
-        return MRData.maps[mapId].landId > 0;
-        /*
-        const info = $dataMapInfos[mapId];
-        if (info && info.name && info.name.startsWith("REFloor:"))
-            return true;
-        else
-            return false;
-        */
-    }
-
-    static loadingDataFileCount = 0;
-    static loadedDataFileCount = 0;
-    
     //--------------------------------------------------
     // DataManager の実装
     //   コアスクリプトの DataManager は結果をグローバル変数へ格納するが、
     //   代わりにコールバックで受け取るようにしたもの。
     //   また UnitTest 環境では同期的にロードしたいので、必要に応じて FS を使うようにしている。
-    
+   
+    private static _loadingDataFileCount = 0;
+    private static _loadedDataFileCount = 0;
+
     private static loadDataFile(src: string, onLoad: (obj: any) => void) {
         if (DHelpers.isNode()) {
             const dataDir = "data/";//REData.testMode ? "../data/" : "data/";
@@ -1345,16 +1307,17 @@ export class MRDataManager {
             onLoad(data);
         }
         else {
-            this.loadingDataFileCount++;
+            this._loadingDataFileCount++;
             const xhr = new XMLHttpRequest();
             const url = "data/" + src;
             xhr.open("GET", url);
             xhr.overrideMimeType("application/json");
-            xhr.onload = () => this.onXhrLoad(xhr, src, url, (obj) => { onLoad(obj); this.loadedDataFileCount++; });
+            xhr.onload = () => this.onXhrLoad(xhr, src, url, (obj) => { onLoad(obj); this._loadedDataFileCount++; });
             xhr.onerror = () => DataManager.onXhrError(src, src, url);
             xhr.send();
         }
     }
+
     private static loadTextFile(src: string, onLoad: (obj: string) => void) {
         if (DHelpers.isNode()) {
             const dataDir = "data/";
@@ -1364,7 +1327,6 @@ export class MRDataManager {
             throw new Error("Not implemented.");
         }
     }
-
 
     private static onXhrLoad(xhr: XMLHttpRequest, src: string, url: string, onLoad: (obj: any) => void) {
         if (xhr.status < 400) {

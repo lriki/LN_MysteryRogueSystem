@@ -43,11 +43,6 @@ export enum MovingMethod {
 
 */
 
-// serializable
-export interface RE_Game_Data
-{
-
-}
 
 /**
  * アクティブなマップオブジェクト。インスタンスは1つだけ存在する。

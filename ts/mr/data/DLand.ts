@@ -175,7 +175,7 @@ export class DLand {
     /** @MR-Floor から読み取った Floor 情報 */
     floorInfos: DFloorInfo[];
 
-    /** Land に含まれるフロア ([0] is Invalid) 要素数は RE_Data.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
+    /** Land に含まれるフロア ([0] is Invalid) 要素数は MRData.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
     floorIds: DMapId[];
 
     fixedMapIds: DMapId[];
