@@ -1,7 +1,7 @@
-import { REGame } from "ts/re/objects/REGame";
-import { RESystem } from "ts/re/system/RESystem";
+import { REGame } from "ts/mr/objects/REGame";
+import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { LFloorId } from "ts/re/objects/LFloorId";
+import { LFloorId } from "ts/mr/objects/LFloorId";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

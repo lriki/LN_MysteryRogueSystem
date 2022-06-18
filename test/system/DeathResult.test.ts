@@ -1,12 +1,12 @@
 import { TestEnv } from "../TestEnv";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { REGame } from "ts/re/objects/REGame";
-import { RESystem } from "ts/re/system/RESystem";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { LTileShape } from "ts/re/objects/LBlock";
-import { MRData } from "ts/re/data/MRData";
-import { LActivity } from "ts/re/objects/activities/LActivity";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { REGame } from "ts/mr/objects/REGame";
+import { RESystem } from "ts/mr/system/RESystem";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { LTileShape } from "ts/mr/objects/LBlock";
+import { MRData } from "ts/mr/data/MRData";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

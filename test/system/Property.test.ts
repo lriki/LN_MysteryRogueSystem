@@ -1,10 +1,10 @@
 import { TestEnv } from "../TestEnv";
-import { UComponentType, UProperty, UPropertyPath } from "ts/re/usecases/UProperty";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { MRData } from "ts/re/data/MRData";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
+import { UComponentType, UProperty, UPropertyPath } from "ts/mr/usecases/UProperty";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { MRData } from "ts/mr/data/MRData";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

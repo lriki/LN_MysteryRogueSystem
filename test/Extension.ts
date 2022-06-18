@@ -1,5 +1,5 @@
 
-import "ts/re/objects/Extensions";
+import "ts/mr/objects/Extensions";
 
 export {};
 

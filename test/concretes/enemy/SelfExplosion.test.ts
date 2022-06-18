@@ -1,16 +1,16 @@
-import { REGame } from "ts/re/objects/REGame";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { RESystem } from "ts/re/system/RESystem";
+import { REGame } from "ts/mr/objects/REGame";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { MRData } from "ts/re/data/MRData";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { SDebugHelpers } from "ts/re/system/SDebugHelpers";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { assert } from "ts/re/Common";
-import { LTileShape } from "ts/re/objects/LBlock";
+import { MRData } from "ts/mr/data/MRData";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
+import { LActionTokenType } from "ts/mr/objects/LActionToken";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { assert } from "ts/mr/Common";
+import { LTileShape } from "ts/mr/objects/LBlock";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

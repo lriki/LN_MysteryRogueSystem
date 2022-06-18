@@ -1,17 +1,17 @@
-import { REGame } from "ts/re/objects/REGame";
-import { RESystem } from "ts/re/system/RESystem";
+import { REGame } from "ts/mr/objects/REGame";
+import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { MRData } from "ts/re/data/MRData";
-import { assert } from "ts/re/Common";
-import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/re/data/DEffect";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
-import { LActionTokenType } from "ts/re/objects/LActionToken";
-import { LScheduler2 } from "ts/re/objects/LScheduler";
+import { MRData } from "ts/mr/data/MRData";
+import { assert } from "ts/mr/Common";
+import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { LGenericRMMZStateBehavior } from "ts/mr/objects/states/LGenericRMMZStateBehavior";
+import { LActionTokenType } from "ts/mr/objects/LActionToken";
+import { LScheduler2 } from "ts/mr/objects/LScheduler";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

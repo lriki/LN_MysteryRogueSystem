@@ -1,5 +1,5 @@
-import { TypeStore } from "ts/re/Common";
-import { SBehaviorFactory } from "ts/re/system/SBehaviorFactory";
+import { TypeStore } from "ts/mr/Common";
+import { SBehaviorFactory } from "ts/mr/system/SBehaviorFactory";
 
 export class TestJsonEx {
     public static maxDepth = 100;

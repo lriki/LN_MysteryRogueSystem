@@ -1,9 +1,9 @@
-import { assert } from "ts/re/Common";
-import { REGame } from "ts/re/objects/REGame";
-import { RESystem } from "ts/re/system/RESystem";
+import { assert } from "ts/mr/Common";
+import { REGame } from "ts/mr/objects/REGame";
+import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { MRBasics } from "ts/re/data/MRBasics";
+import { LFloorId } from "ts/mr/objects/LFloorId";
+import { MRBasics } from "ts/mr/data/MRBasics";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

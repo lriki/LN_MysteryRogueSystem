@@ -1,10 +1,10 @@
 import { TestEnv } from "../TestEnv";
-import { REGame } from "ts/re/objects/REGame";
-import { MRData } from "ts/re/data/MRData";
-import { RESystem } from "ts/re/system/RESystem";
-import { assert } from "ts/re/Common";
-import { USearch } from "ts/re/usecases/USearch";
-import { paramEnemySpawnInvalidArea } from "ts/re/PluginParameters";
+import { REGame } from "ts/mr/objects/REGame";
+import { MRData } from "ts/mr/data/MRData";
+import { RESystem } from "ts/mr/system/RESystem";
+import { assert } from "ts/mr/Common";
+import { USearch } from "ts/mr/usecases/USearch";
+import { paramEnemySpawnInvalidArea } from "ts/mr/PluginParameters";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

@@ -1,6 +1,6 @@
-import { SCommandResponse } from "ts/re/system/SCommand";
-import { SCommandContext } from "ts/re/system/SCommandContext";
-import { SSequelContext } from "ts/re/system/SSequelContext";
+import { SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommandContext } from "ts/mr/system/SCommandContext";
+import { SSequelContext } from "ts/mr/system/SSequelContext";
 
 beforeAll(() => {
 });

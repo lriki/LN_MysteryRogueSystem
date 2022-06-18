@@ -1,10 +1,10 @@
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { MRData } from "ts/re/data/MRData";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { REGame } from "ts/re/objects/REGame";
-import { RESystem } from "ts/re/system/RESystem";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { MRData } from "ts/mr/data/MRData";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { REGame } from "ts/mr/objects/REGame";
+import { RESystem } from "ts/mr/system/RESystem";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../../TestEnv";
 
 beforeAll(() => {

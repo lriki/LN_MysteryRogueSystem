@@ -1,15 +1,15 @@
-import { assert } from "ts/re/Common";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REGame } from "ts/re/objects/REGame";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { RESystem } from "ts/re/system/RESystem";
+import { assert } from "ts/mr/Common";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { REGame } from "ts/mr/objects/REGame";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "./../TestEnv";
-import { MRData } from "ts/re/data/MRData";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { DBlockLayerKind } from "ts/re/data/DCommon";
-import { UInventory } from "ts/re/usecases/UInventory";
-import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
+import { MRData } from "ts/mr/data/MRData";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { DBlockLayerKind } from "ts/mr/data/DCommon";
+import { UInventory } from "ts/mr/usecases/UInventory";
+import { LEquipmentUserBehavior } from "ts/mr/objects/behaviors/LEquipmentUserBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

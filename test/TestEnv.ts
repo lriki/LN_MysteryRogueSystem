@@ -1,29 +1,29 @@
 
 import fs from "fs";
-import { LandExitResult, MRData, REFloorMapKind } from "ts/re/data/MRData";
-import { MRDataManager } from "ts/re/data/MRDataManager";
-import { FMap } from "ts/re/floorgen/FMapData";
-import { REGame } from "ts/re/objects/REGame";
-import { LEntity } from "ts/re/objects/LEntity";
-import { SSequelSet } from "ts/re/system/SSequel";
-import { SIntegration } from "ts/re/system/SIntegration";
-import { SGameManager } from "ts/re/system/SGameManager";
-import { SRmmzHelpers } from "ts/re/system/SRmmzHelpers";
+import { LandExitResult, MRData, REFloorMapKind } from "ts/mr/data/MRData";
+import { MRDataManager } from "ts/mr/data/MRDataManager";
+import { FMap } from "ts/mr/floorgen/FMapData";
+import { REGame } from "ts/mr/objects/REGame";
+import { LEntity } from "ts/mr/objects/LEntity";
+import { SSequelSet } from "ts/mr/system/SSequel";
+import { SIntegration } from "ts/mr/system/SIntegration";
+import { SGameManager } from "ts/mr/system/SGameManager";
+import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import "./Extension";
-import { RESystem } from "ts/re/system/RESystem";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { LMap } from "ts/re/objects/LMap";
-import { DHelpers } from "ts/re/data/DHelper";
-import { assert } from "ts/re/Common";
-import { DLandId } from "ts/re/data/DLand";
-import { DStateId } from "ts/re/data/DState";
-import { SDialogContext } from "ts/re/system/SDialogContext";
-import { SDialog } from "ts/re/system/SDialog";
-import { DEntityCreateInfo, DEntityId } from "ts/re/data/DEntity";
-import { LBlock } from "ts/re/objects/LBlock";
-import { DEventId } from "ts/re/data/predefineds/DBasicEvents";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
+import { RESystem } from "ts/mr/system/RESystem";
+import { LFloorId } from "ts/mr/objects/LFloorId";
+import { LMap } from "ts/mr/objects/LMap";
+import { DHelpers } from "ts/mr/data/DHelper";
+import { assert } from "ts/mr/Common";
+import { DLandId } from "ts/mr/data/DLand";
+import { DStateId } from "ts/mr/data/DState";
+import { SDialogContext } from "ts/mr/system/SDialogContext";
+import { SDialog } from "ts/mr/system/SDialog";
+import { DEntityCreateInfo, DEntityId } from "ts/mr/data/DEntity";
+import { LBlock } from "ts/mr/objects/LBlock";
+import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 
 declare global {
     interface Number {

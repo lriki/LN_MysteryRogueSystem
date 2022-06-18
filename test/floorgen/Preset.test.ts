@@ -1,16 +1,16 @@
 import { TestEnv } from "../TestEnv";
-import { REGame } from "ts/re/objects/REGame";
-import { MRData } from "ts/re/data/MRData";
-import { DTerrainSettingRef } from "ts/re/data/DLand";
-import { RESystem } from "ts/re/system/RESystem";
-import { LTileShape } from "ts/re/objects/LBlock";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { assert } from "ts/re/Common";
-import { LMonsterHouseStructure } from "ts/re/objects/structures/LMonsterHouseStructure";
-import { MonsterHouseState } from "ts/re/objects/LRoom";
+import { REGame } from "ts/mr/objects/REGame";
+import { MRData } from "ts/mr/data/MRData";
+import { DTerrainSettingRef } from "ts/mr/data/DLand";
+import { RESystem } from "ts/mr/system/RESystem";
+import { LTileShape } from "ts/mr/objects/LBlock";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { LFloorId } from "ts/mr/objects/LFloorId";
+import { assert } from "ts/mr/Common";
+import { LMonsterHouseStructure } from "ts/mr/objects/structures/LMonsterHouseStructure";
+import { MonsterHouseState } from "ts/mr/objects/LRoom";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

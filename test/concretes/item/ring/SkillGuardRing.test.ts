@@ -1,17 +1,17 @@
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { REGame } from "ts/re/objects/REGame";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { RESystem } from "ts/re/system/RESystem";
-import { LEquipmentUserBehavior } from "ts/re/objects/behaviors/LEquipmentUserBehavior";
-import { MRData } from "ts/re/data/MRData";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { UName } from "ts/re/usecases/UName";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { REGame } from "ts/mr/objects/REGame";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { RESystem } from "ts/mr/system/RESystem";
+import { LEquipmentUserBehavior } from "ts/mr/objects/behaviors/LEquipmentUserBehavior";
+import { MRData } from "ts/mr/data/MRData";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { LFloorId } from "ts/mr/objects/LFloorId";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { UName } from "ts/mr/usecases/UName";
 import { TestEnv } from "test/TestEnv";
-import { LActorBehavior } from "ts/re/objects/behaviors/LActorBehavior";
-import { LExperienceBehavior } from "ts/re/objects/behaviors/LExperienceBehavior";
+import { LActorBehavior } from "ts/mr/objects/behaviors/LActorBehavior";
+import { LExperienceBehavior } from "ts/mr/objects/behaviors/LExperienceBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

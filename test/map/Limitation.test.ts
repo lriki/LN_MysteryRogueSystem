@@ -1,19 +1,19 @@
-import { REGame } from "ts/re/objects/REGame";
+import { REGame } from "ts/mr/objects/REGame";
 import { TestEnv } from "./../TestEnv";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { UMovement } from "ts/re/usecases/UMovement";
-import { RESystem } from "ts/re/system/RESystem";
-import { LTileShape } from "ts/re/objects/LBlock";
-import { FMap } from "ts/re/floorgen/FMapData";
-import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
-import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { MRData } from "ts/re/data/MRData";
-import { paramMaxItemsInMap } from "ts/re/PluginParameters";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { ULimitations } from "ts/re/usecases/ULimitations";
+import { LFloorId } from "ts/mr/objects/LFloorId";
+import { UMovement } from "ts/mr/usecases/UMovement";
+import { RESystem } from "ts/mr/system/RESystem";
+import { LTileShape } from "ts/mr/objects/LBlock";
+import { FMap } from "ts/mr/floorgen/FMapData";
+import { FGenericRandomMapGenerator } from "ts/mr/floorgen/FGenericRandomMapGenerator";
+import { FMapBuilder } from "ts/mr/floorgen/FMapBuilder";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { MRData } from "ts/mr/data/MRData";
+import { paramMaxItemsInMap } from "ts/mr/PluginParameters";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { ULimitations } from "ts/mr/usecases/ULimitations";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

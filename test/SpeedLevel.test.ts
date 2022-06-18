@@ -1,16 +1,16 @@
-import { MRBasics } from "ts/re/data/MRBasics";
-import { REGame } from "ts/re/objects/REGame";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { RESystem } from "ts/re/system/RESystem";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { REGame } from "ts/mr/objects/REGame";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "./TestEnv";
-import { MRData } from "ts/re/data/MRData";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { assert } from "ts/re/Common";
-import { SMotionSequel } from "ts/re/system/SSequel";
-import { LGenericRMMZStateBehavior } from "ts/re/objects/states/LGenericRMMZStateBehavior";
+import { MRData } from "ts/mr/data/MRData";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { LUnitBehavior } from "ts/mr/objects/behaviors/LUnitBehavior";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { assert } from "ts/mr/Common";
+import { SMotionSequel } from "ts/mr/system/SSequel";
+import { LGenericRMMZStateBehavior } from "ts/mr/objects/states/LGenericRMMZStateBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

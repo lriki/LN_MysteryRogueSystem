@@ -1,9 +1,9 @@
-import { assert } from "ts/re/Common";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LEntity } from "ts/re/objects/LEntity";
-import { RESystem } from "ts/re/system/RESystem";
-import { UName } from "ts/re/usecases/UName";
+import { assert } from "ts/mr/Common";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { LEntity } from "ts/mr/objects/LEntity";
+import { RESystem } from "ts/mr/system/RESystem";
+import { UName } from "ts/mr/usecases/UName";
 
 export class TestUtils {
     public static submitActivity(activity: LActivity) {

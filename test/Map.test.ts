@@ -1,11 +1,11 @@
-import { REGame } from "ts/re/objects/REGame";
+import { REGame } from "ts/mr/objects/REGame";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
-import { LFloorId } from "ts/re/objects/LFloorId";
-import { UMovement } from "ts/re/usecases/UMovement";
-import { RESystem } from "ts/re/system/RESystem";
-import { LTileShape } from "ts/re/objects/LBlock";
-import { LActivity } from "ts/re/objects/activities/LActivity";
+import { LFloorId } from "ts/mr/objects/LFloorId";
+import { UMovement } from "ts/mr/usecases/UMovement";
+import { RESystem } from "ts/mr/system/RESystem";
+import { LTileShape } from "ts/mr/objects/LBlock";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

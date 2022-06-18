@@ -1,11 +1,11 @@
 import { TestEnv } from "./../TestEnv";
-import { FMap } from "ts/re/floorgen/FMapData";
-import { FGenericRandomMapGenerator } from "ts/re/floorgen/FGenericRandomMapGenerator";
-import { FMapBuilder } from "ts/re/floorgen/FMapBuilder";
-import { MRData } from "ts/re/data/MRData";
-import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/re/PluginParameters";
-import { assert } from "ts/re/Common";
-import { REGame } from "ts/re/objects/REGame";
+import { FMap } from "ts/mr/floorgen/FMapData";
+import { FGenericRandomMapGenerator } from "ts/mr/floorgen/FGenericRandomMapGenerator";
+import { FMapBuilder } from "ts/mr/floorgen/FMapBuilder";
+import { MRData } from "ts/mr/data/MRData";
+import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/mr/PluginParameters";
+import { assert } from "ts/mr/Common";
+import { REGame } from "ts/mr/objects/REGame";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

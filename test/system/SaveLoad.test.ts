@@ -1,14 +1,14 @@
 import { TestJsonEx } from "test/TestJsonEx";
-import { DEntityCreateInfo } from "ts/re/data/DEntity";
-import { MRBasics } from "ts/re/data/MRBasics";
-import { MRData } from "ts/re/data/MRData";
-import { LActivity } from "ts/re/objects/activities/LActivity";
-import { LInventoryBehavior } from "ts/re/objects/behaviors/LInventoryBehavior";
-import { LUnitBehavior } from "ts/re/objects/behaviors/LUnitBehavior";
-import { REGame } from "ts/re/objects/REGame";
-import { RESystem } from "ts/re/system/RESystem";
-import { SEntityFactory } from "ts/re/system/SEntityFactory";
-import { SGameManager } from "ts/re/system/SGameManager";
+import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { MRBasics } from "ts/mr/data/MRBasics";
+import { MRData } from "ts/mr/data/MRData";
+import { LActivity } from "ts/mr/objects/activities/LActivity";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
+import { LUnitBehavior } from "ts/mr/objects/behaviors/LUnitBehavior";
+import { REGame } from "ts/mr/objects/REGame";
+import { RESystem } from "ts/mr/system/RESystem";
+import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { SGameManager } from "ts/mr/system/SGameManager";
 import { TestEnv } from "../TestEnv";
 
 beforeAll(() => {
