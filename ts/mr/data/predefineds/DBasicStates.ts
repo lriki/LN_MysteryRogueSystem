@@ -13,6 +13,7 @@ export interface DBasicStates {
 
     trapPerformed: DStateId; // kState_System_TrapPerformed
     
+    monsterHouseSleepStateId: DStateId;
     /*
     speedDown: DStateId,    // 鈍足
     speedUp: DStateId,      // 倍速

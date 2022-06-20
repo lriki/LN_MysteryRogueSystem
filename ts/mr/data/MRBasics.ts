@@ -1,5 +1,6 @@
 import { DClassId } from "./DClass";
 import { DAttackElementId, DSpecificEffectId as DSpecialEffectId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
+import { DStateId } from "./DState";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { DBasicCommands } from "./predefineds/DBasicCommands";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";

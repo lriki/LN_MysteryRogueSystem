@@ -616,6 +616,7 @@ export class MRDataManager {
                 dead: 1,
                 nap: MRData.getState("kState_System_kNap").id,
                 trapPerformed: MRData.getState("kState_System_TrapPerformed").id,
+                monsterHouseSleepStateId: MRData.getState("kState_System_kNap").id,
             };
         }
         

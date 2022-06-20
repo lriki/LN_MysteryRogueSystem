@@ -3,12 +3,13 @@ import { DMonsterHouseType, DMonsterHouseTypeId } from "ts/mr/data/DMonsterHouse
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { MonsterHouseState } from "../LRoom";
+import { LRoom, MonsterHouseState } from "../LRoom";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { LRoomId } from "../LCommon";
+import { MRBasics } from "ts/mr/data/MRBasics";
 
 @MRSerializable
 export class LMonsterHouseStructure extends LStructure {
@@ -27,6 +28,10 @@ export class LMonsterHouseStructure extends LStructure {
 
     public roomId(): LRoomId {
         return this._roomId;
+    }
+
+    public get room(): LRoom {
+        return REGame.map.room(this._roomId);
     }
 
     public monsterHouseTypeId(): DMonsterHouseTypeId {
@@ -54,6 +59,12 @@ export class LMonsterHouseStructure extends LStructure {
         SSoundManager.playBgm(this.monsterHouseData().bgm);
 
         this._monsterHouseState = MonsterHouseState.Activated;
+
+        // 睡眠ステート解除。
+        // StateGroup で解除はしない。例えば部屋の外から睡眠の杖で眠ったモンスターは、モンスターハウスが発動しても直ちに目を覚まさない。
+        this.room.forEachEntities(entity => {
+            entity.removeState(MRBasics.states.monsterHouseSleepStateId);
+        });
     }
     
     onEntityLocated(cctx: SCommandContext, entity: LEntity): void {

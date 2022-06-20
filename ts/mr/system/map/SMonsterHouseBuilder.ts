@@ -18,7 +18,7 @@ export class SMonsterHouseBuilder {
             const my = room.my1 + Math.floor(id / room.width);
             const entities = manager.spawnEnemy(mx, my);
             for (const entity of entities) {
-                entity.addState(MRBasics.states.nap);
+                entity.addState(MRBasics.states.monsterHouseSleepStateId);
             }
         }
 
