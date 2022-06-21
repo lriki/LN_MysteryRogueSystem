@@ -158,7 +158,7 @@ export class SEffectorFact {
         this._direction = dir;
         this._genericEffectRate = 1.0;
 
-        for (const i of effects.effects) {
+        for (const i of effects.effects()) {
             this._effects.push(new SEffect(this, i));
         }
         // for (const i of effects.subEffects) {

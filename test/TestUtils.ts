@@ -22,7 +22,7 @@ export class TestUtils {
         assert(!!reaction.hasEmittor());
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == MRBasics.params.fp)));
+        expect(!!reaction.emittors().find(e => !!e.effectSet.effect(0).parameterQualifyings.find(x => x._parameterId == MRBasics.params.fp)));
     }
 
     public static testCommonGrassBegin(actor: LEntity, item: LEntity) {
@@ -40,7 +40,7 @@ export class TestUtils {
         assert(!!reaction.hasEmittor());
 
         // 食べた時に FP を回復する効果がある？
-        expect(!!reaction.emittors().find(e => !!e.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == MRBasics.params.fp && x.formula == "500")));
+        expect(!!reaction.emittors().find(e => !!e.effectSet.effect(0).parameterQualifyings.find(x => x._parameterId == MRBasics.params.fp && x.formula == "500")));
         //expect(!!emittor.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500"));
 
         // おなかを減らしておく

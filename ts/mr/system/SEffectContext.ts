@@ -245,11 +245,12 @@ export class SEffectContext {
     // Game_Action.prototype.apply
     private applyWithHitTest(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): STask {
         const targetBattlerBehavior = target.findEntityBehavior(LBattlerBehavior);
+        const effectData =  effect.data();
         const result = target._effectResult;
         result.clear();
-        result.sourceEffect = effect.data();
+        result.sourceEffectId = effectData.id;
 
-        if (result.sourceEffect.hasAnyValidEffect()) {
+        if (effectData.hasAnyValidEffect()) {
             result._revision++;
         }
         else {

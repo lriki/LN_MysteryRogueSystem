@@ -57,3 +57,4 @@ test("concretes.item.ring.SleepGuardRing", () => {
     // 全く寝ていない
     expect(count).toBe(0);
 });
+

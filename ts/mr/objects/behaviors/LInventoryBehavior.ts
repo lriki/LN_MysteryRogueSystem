@@ -102,10 +102,7 @@ import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LBehavior, SRejectionInfo } from "./LBehavior"
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UAction } from "ts/mr/usecases/UAction";
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
 import { SCommandResponse } from "ts/mr/system/SCommand";
-import { DEffect } from "ts/mr/data/DEffect";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { RESystem } from "ts/mr/system/RESystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";

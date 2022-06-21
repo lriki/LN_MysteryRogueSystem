@@ -11,6 +11,7 @@ export type DTerrainSettingId = number;
 export type DTerrainPresetId = number;
 export type DActionId = number;
 export type DCommandId = number;
+export type DEffectId = number & { readonly brand?: unique symbol } // Do not include in save data
 
 // /**
 //  * システムに基づいた根本的な分類。

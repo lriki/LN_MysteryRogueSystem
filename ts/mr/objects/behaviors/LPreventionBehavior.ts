@@ -1,13 +1,11 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
-import { DEffect } from "ts/mr/data/DEffect";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/usecases/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CommandArgs, LBehavior, onGrounded, SRejectionInfo, testPickOutItem } from "./LBehavior";
+import { LBehavior, SRejectionInfo } from "./LBehavior";
 
 /**
  * 
@@ -22,6 +20,8 @@ export class LStumblePreventionBehavior extends LBehavior {
 
     onPreviewRejection(self: LEntity, cctx: SCommandContext, rejection: SRejectionInfo): SCommandResponse {
         if (rejection.kind == "Effect") {
+            // Effect の発動自体を防ぎたい。
+            // もし EffectBehavior だけでガードすると、転び石のダメージは防げない。
             if (rejection.effect.sourceKey == "kEntity_転び石_A") {
                 return this.rejectStumble(cctx, self);
             }

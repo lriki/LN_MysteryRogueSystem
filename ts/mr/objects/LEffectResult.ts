@@ -14,6 +14,7 @@ import { DEffect, DParameterApplyTarget, DParameterQualifying } from "../data/DE
 import { REGame } from "./REGame";
 import { MRBasics } from "../data/MRBasics";
 import { DEntityId } from "../data/DEntity";
+import { DEffectId } from "../data/DCommon";
 
 // Game_ActionResult.hpDamage, mpDamage, tpDamage
 @MRSerializable
@@ -64,7 +65,7 @@ export class LParamEffectResult {
  */
 @MRSerializable
 export class LEffectResult {
-    sourceEffect: DEffect | undefined;  // TODO: ID 使った方がいいだろう
+    sourceEffectId: DEffectId | undefined;  // TODO: ID 使った方がいいだろう
 
     // 意味のある効果適用ができたかどうか。
     // 確率計算の前に、現状知りえる情報内で明らかに適用できるかどうかを判定する。
@@ -161,6 +162,11 @@ export class LEffectResult {
 
     public hasResult(): boolean {
         return true;
+    }
+
+    public get sourceEffect(): DEffect {
+        assert(this.sourceEffectId);
+        return MRData.effects[this.sourceEffectId];
     }
 
     // Game_ActionResult.prototype.isStateAdded

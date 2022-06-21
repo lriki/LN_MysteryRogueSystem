@@ -696,7 +696,7 @@ export class MRDataManager {
                 skill.parseMetadata(x.meta);
 
                 const emittor = MRData.newEmittor(skill.key);
-                const effect = new DEffect(skill.key);
+                const effect = MRData.newEffect(skill.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
@@ -709,7 +709,7 @@ export class MRDataManager {
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
-                emittor.effectSet.effects.push(effect);
+                emittor.effectSet.effectIds.push(effect.id);
 
                 skill.name = x.name;
                 skill.emittorId = emittor.id;
@@ -738,7 +738,7 @@ export class MRDataManager {
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
 
                 const emittor = MRData.newEmittor(entity.entity.key);
-                const effect = new DEffect(entity.entity.key);
+                const effect = MRData.newEffect(entity.entity.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
@@ -749,7 +749,7 @@ export class MRDataManager {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
-                emittor.effectSet.effects.push(effect);
+                emittor.effectSet.effectIds.push(effect.id);
 
                 entity.setMainEmittor(emittor);
                 // TODO:

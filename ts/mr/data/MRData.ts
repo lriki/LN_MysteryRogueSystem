@@ -29,6 +29,7 @@ import { assert } from "../Common";
 import { DRace } from "./DRace";
 import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
 import { DCommand } from "./DCommand";
+import { DEffect } from "./DEffect";
 // import { DPreset } from "./DPreset";
 
 
@@ -178,6 +179,7 @@ export class MRData
     static entities: DEntity[] = [];
     static troops: DTroop[] = [];
     static emittors: DEmittor[] = [];
+    static effects: DEffect[] = [];
     static terrainShapes: DTerrainShape[] = [];
     static terrainSettings: DTerrainSetting[] = [];
     static floorPresets: DFloorPreset[] = [];
@@ -218,6 +220,7 @@ export class MRData
         this.prefabs = [new DPrefab(0)];
         this.entities = [new DEntity(0)];
         this.emittors = [new DEmittor(0, "null")];
+        this.effects = [new DEffect(0, "null")];
         this.terrainSettings = [new DTerrainSetting(0)];
         this.floorPresets = [new DFloorPreset(0)];
     }
@@ -388,6 +391,22 @@ export class MRData
         const d = this.findMap(pattern);
         if (d) return d;
         throw new Error(`Map "${pattern}" not found.`);
+    }
+
+
+    //--------------------
+
+    static newEffect(key: string): DEffect {
+        const newId = this.effects.length;
+        const data = new DEffect(newId, key);
+        this.effects.push(data);
+        return data;
+    }
+
+    static cloneEffect(src: DEffect): DEffect {
+        const data = this.newEffect(src.sourceKey);
+        data.copyFrom(src);
+        return data;
     }
 
     //--------------------

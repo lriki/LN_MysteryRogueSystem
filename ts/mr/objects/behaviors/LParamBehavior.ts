@@ -1,3 +1,4 @@
+import { MRSerializable } from "ts/mr/Common";
 import { DParameterId } from "ts/mr/data/DParameter";
 import { LBehavior, LBehaviorGroup } from "../internal";
 import { LEntity } from "../LEntity";
@@ -7,6 +8,7 @@ import { REGame } from "../REGame";
 /**
  * パラメータの定数加算
  */
+@MRSerializable
 export class LParamBehavior extends LBehavior {
     private _values: (number | undefined)[];   // Index of DParamId
 

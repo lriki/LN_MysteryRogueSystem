@@ -1,8 +1,9 @@
 import { assert } from "ts/mr/Common";
-import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DAttackElementId } from "./DCommon";
+import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DAttackElementId, DEffectId } from "./DCommon";
 import { DEntityId } from "./DEntity";
 import { DParameterId } from "./DParameter";
 import { DSpecialEffect, DSkill } from "./DSkill";
+import { MRData } from "./MRData";
 
 
 
@@ -320,6 +321,7 @@ export interface DEffectConditions {
 }
 
 export class DEffect {
+    id: DEffectId;
     sourceKey: string;
 
 
@@ -387,7 +389,8 @@ export class DEffect {
     
 
 
-    constructor(sourceKey: string) {
+    constructor(id: DEffectId, sourceKey: string) {
+        this.id = id;
         this.sourceKey = sourceKey;
         //this.id = id;
         //this.scope = {
@@ -439,12 +442,6 @@ export class DEffect {
         //     buffQualifying: src.qualifyings.buffQualifying.slice(),
         // };
         //this.rejectionLevel = src.rejectionLevel;
-    }
-    
-    public clone(): DEffect {
-        const i = new DEffect(this.sourceKey);
-        i.copyFrom(this);
-        return i;
     }
 
     public hasAnyValidEffect(): boolean {
@@ -525,7 +522,7 @@ export class DEmittorCost {
 export class DEffectSet {
 
     /** 使用者に対して与える効果 */
-    selfEffect: DEffect;
+    selfEffectId: DEffectId;
 
     /**
      *  対象への効果が成功したときのみ、使用者に与える効果。
@@ -534,36 +531,43 @@ export class DEffectSet {
     succeededSelfEffect: DEffect | undefined;
     
     /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
-    effects: DEffect[];
-
-    /* NOTE:
-       もともと targetEffects は、対象自体に与えるものと、SubComponent に与えるものを分けて持っていた。
-       その方が確かに柔軟性がある (Effect の使いまわしがしやすい) が、メモ欄から設定するときに親 Skill や Item にたくさんの情報を書く必要がでてきてしまった。
-       エディタから条件を設定するときは子 Effect 側の情報として指定したほうがイメージがしやすいので、DEffect に統合することにした。
-    */
-
-    //subEffects: DSubEffect[];
+    effectIds: DEffectId[];
 
     public constructor(sourceKey: string) {
-        this.selfEffect = new DEffect(sourceKey);
-        this.effects = [];
-        //this.subEffects = [];
+        this.selfEffectId = MRData.newEffect(sourceKey).id;
+        this.effectIds = [];
+    }
+
+    public get selfEffect(): DEffect {
+        return MRData.effects[this.selfEffectId];
     }
     
+    public effects(): readonly DEffect[] {
+        return this.effectIds.map(x => MRData.effects[x]);
+    }
+
+    public effect(index: number): DEffect {
+        return MRData.effects[this.effectIds[index]];
+    }
+
+    public setEffect(index: number, value: DEffect): void {
+        this.effectIds[index] = value.id;
+    }
+
+    public addEffect(value: DEffect): void {
+        this.effectIds.push(value.id);
+    }
+
     public copyFrom(src: DEffectSet): void {
         this.selfEffect.copyFrom(src.selfEffect);
-        this.effects = [];
-        for (const e of src.effects) {
-            this.effects.push(e.clone());
+        this.effectIds = [];
+        for (const id of src.effectIds) {
+            this.effectIds.push(MRData.cloneEffect(MRData.effects[id]).id);
         }
-        // this.subEffects = [];
-        // for (const e of src.subEffects) {
-        //     this.subEffects.push(e.clone());
-        // }
     }
 
     public hitType(): DEffectHitType {
-        return this.effects[0].hitType;
+        return this.effect(0).hitType;
     }
 }
 

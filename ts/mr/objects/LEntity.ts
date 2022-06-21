@@ -25,7 +25,7 @@ import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LParamSet } from "./LParam";
 import { UState } from "ts/mr/usecases/UState";
-import { DEffect, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
+import { DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId } from "../data/DCommon";
