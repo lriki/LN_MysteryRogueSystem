@@ -45,6 +45,11 @@ export class SItemListDialog extends SDialog {
     }
 
     public makeActionList(item: LEntity): SDialogCommand[] {
+        // SafetyMap など、ダンジョンマップ以外では ActionList を生成しない
+        if (!REGame.map.floorId().isRESystem()) {
+            return [];
+        }
+
         const actor = this.actor;
         let commands: SDialogCommand[] = [];
 
